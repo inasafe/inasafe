@@ -1,3 +1,625 @@
+Changelog for version 3.0.0
+================================
+
+8559d23 (HEAD, develop) Updated metadata
+07a544f (origin/develop) Fixed failint rubber bands test in dock
+2ad5d29 (upstream/develop) Merge pull request #1597 from timlinux/develop
+79898e5 Fix for wizard layout issue on windows 7. Remove ugly hack. Place stackwidget in a scrollarea so overflow happens into sroll area and doesnt cause widget resize. Fix #1588
+eb9939d Merge pull request #1596 from ismailsunni/fix_test
+1286674 Update sha for test data.
+fc9a105 Update sha test_data and fix unit test in test_wizards.
+49101d9 Merge pull request #1593 from ismailsunni/fix_test
+50e1b49 Merge branch 'aifdr_develop' into fix_test
+9a72a70 Merge pull request #1592 from ismailsunni/remove_unit_continouous_wizard
+ad428b2 Make test_mouse_drag skipped or green.
+cf5137a Remove unit_continuous from Wizard.
+daec527 Merge remote-tracking branch 'upstream/develop' into develop
+46a24aa Merge pull request #1590 from ismailsunni/fix_test
+2e93750 Merge pull request #1591 from akbargumbira/develop
+f906600 Fix Classified IF on building docstring so the dock can recognise it.
+ee9d0f7 Fix failed unit test: test_post_processor_output.
+098333a Merge pull request #1589 from ismailsunni/translation
+1ab9f26 Update translation.
+8ed2f49 Merge remote-tracking branch 'aifdr/develop' into translation
+2c69e88 Update translation.
+b32ca34 Fixes for wizard placement on windows 7 (dirty hack) - see #1561
+c2c2a5a Merge pull request #1587 from akbargumbira/develop
+93ff447 Wrap a function to load HTML either from HTML string or a file.
+f8e2529 Fix to test_layer_changed
+ad7f161 Merge branch 'translation' into aifdr_develop
+d4c7958 Merge pull request #1586 from akbargumbira/develop
+1b8e8d0 Compatibility checks through QGIS 2.0 - QGIS 2.6
+f69122c Merge pull request #1584 from timlinux/develop
+b61dcf5 Updated characterisation images for tests
+d3cc173 Merge pull request #1583 from timlinux/develop
+3a6a71b All pep8 and pylint checks passing now
+cc2a1d9 Merge pull request #1582 from ismailsunni/develop
+960605f Merge remote-tracking branch 'aifdr/develop' into develop
+1d3158e Work on Wizard's font.
+3a5aaea Merge pull request #1581 from ismailsunni/develop
+1066e30 Pep8.
+8a92f12 Fix failed unit test.
+37c5c5c Merge pull request #1580 from ismailsunni/develop
+dc21d1c Close #1510
+5f5b69b Update translation.
+b18bd21 Merge pull request #1579 from ismailsunni/fix_unit_test
+5667bdd Fix unit test in test_wizard_dialog.py.
+d97fb1f Merge pull request #1577 from timlinux/develop
+aa19191 Merge remote-tracking branch 'borys/develop' into develop
+7a21a25 More pylint fixes
+4820ded [IFCW] Make pep8 happy
+6cb09e0 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+2c0ad6b [IFCW] Add a memo note about constaints of the layer we're looking for - Fixes #1465
+e79f32b Merge pull request #1575 from timlinux/develop
+6d093eb Merge remote-tracking branch 'borys/develop' into develop
+a779671 Fixes for pylint errors
+f74014d [Wizard] Update test
+1045cc2 Merge remote-tracking branch 'borys/develop' into develop
+4ed3b46 Pylint fixes
+1e6f519 [Wizard] Update test
+6d1467c Merge pull request #1573 from borysiasty/develop
+5bd6408 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+e8d70c2 [IFCW] Better formatting of the summary tab. Fixes #1453
+0691f00 Merge pull request #1572 from timlinux/develop
+035c4df Resolved merge conflicts
+b4f373c Merge pull request #1569 from cchristelis/develop
+2cb6a07 [IFCW] Minor gui tweaks
+d9e64de [IFCW] Display an information if the PostGIS connection list in the browser is empty
+5c3afe3 Pylint: Some suppress statements and a rename to tie up the last of the violations
+047428c [IFCW] Do not accept keywords without category (i.e. just the name)
+6eb11b0 removing unneeded pylint markers.
+f0afb2d Pylint: suppress redefining __doc__ warning
+5db24dd Pylint: supress scope warning W0621
+e7fb284 Pylint: supress scope warning W0621
+8c127c9 Comment out temporarily unused variables.
+aa14953 Include unspecified argument.
+cf5afe5  pylint: suppress unused import for QgsComposition
+9304fe2 Suppress pylint violation in wizard dialog
+6f20196 [Wizard] Remove the help button from the wizard, keeping the help file for a case. Brutally fixes #1452
+25829da [IFCW] Put a big dot to a selected cell of the constraint matrices
+3f8974e Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+f7ae6d3 suppress pylint
+228b855 Fixing and adding back previously excluded test. Also fixing undelying issue.
+e145f8e make pep8 happy
+0ad6387 [Keyword Wizard] Add a step to set the allow_resampling keyword. Fixes #1365
+f6fc6e1 update expected type to also allow expected type of super class.
+43098ad pylint: Suppress import message.
+b1dcf2b pylint: Remove unused imports.
+7fd5d60 pylint: Remove offending import from unused test.
+ea0dc59 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+90b1f16 [Keyword Wizard] Rollback commit cbed05c0a7ec - automatically set allow_resampling to false
+f891f2b Merge pull request #1567 from ismailsunni/fix_1554_no-layer-category
+406b125 [Wizard] Fix the wizard window geometry if overflows from the window. Hopefully fixes #1484 and #1561
+96431b7 Fix #1554
+14efcb5 Suppress qgis unused import lookup in test cases
+d2b4934 Suppress pylint check.
+80c935b Remove unneeded import
+7a70022 Suppress pylint check for argument number discrepancies between property and setter and base class
+3794433 Interpolation fixing pylint, re-introducing test which was masked by previous variable re-name
+1562765 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+46dec15 Merge pull request #1564 from timlinux/develop
+62812e6 Update input types screen on wizard to show more helpful text regarding continuous and classified data. See #1559
+22e7a9b Merge pull request #1560 from ismailsunni/translation
+11ef597 Fix typo in translation.
+514dc9f [IFCW] Added missing icon
+53d7e7f Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+b6b68c9 [IFCW] Validate analysis extent - fixes #1470
+8ba3c66 Merge pull request #1559 from timlinux/develop
+ccd7c87 Merge remote-tracking branch 'upstream/develop' into develop
+2c7c504 Updates to the text for wizards. Added descriptions to the different layer types in metadata. Try to have a single point of truth for metadata instead of duplicating it in different places.
+cbc015e [IFCW] Fix disjoint layers detection if OTFR enabled
+246fee0 Merge pull request #1558 from akbargumbira/remove_html_renderer
+7616442 Merge branch 'remove_html_renderer' of github.com:akbargumbira/inasafe into remove_html_renderer
+a99296a Remove control image for testing render_html_to_image.
+c28ac87 Remove control image for testing render_html_to_image
+b59200d Remove unused HTMLRenderer.
+56f37d7 Merge pull request #1557 from borysiasty/develop
+714bad4 [IFCW] Filter layers according to constraints set in the first two steps
+e70ce39 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+58ee44a Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+7caf15e Fix test keywords dialog
+52c49da Fix small issue on the IF docstring.
+50ec152 Merge pull request #1556 from akbargumbira/develop
+45bf024 Update Classified and Continuous IF docstrings so that dock can recognise it.
+02c35a9 Merge pull request #1555 from akbargumbira/develop
+3a25a80 [Impact Merge Tools] Put the temp file for html(s) generated temporarily on its own dir.
+64e8fb9 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+dde2bba [Keyword Wizard][IFCW] Add Keywords Continouous or Classified For Raster #1548
+014c14c Merge pull request #1551 from timlinux/develop
+ed65d5b Fix all pep8 issues
+bf11e57 Merge pull request #1545 from timlinux/develop
+f7ec118 Added missing license file for flood_on_population.tif added by Akbar in commit 476efbe518723
+d738ee2 Update checksum for district_osm_jakarta following changes made in af778b9fb0f33483
+fc208de Added license for IP checks for keywordless_layer
+851aa4a Extend filter list for data ip audit checker
+db35231 Added missing license file for bangunan
+694b9a1 Merge remote-tracking branch 'origin/develop' into develop
+cc6a512 Merge remote-tracking branch 'upstream/develop' into develop
+2fddd99 [IFCW] Update icon name
+5b79b47 [IFCW] Autofocus table widgets as inactive selection is hardly visible in Ubuntu
+570c2c8 Merge pull request #1550 from akbargumbira/develop
+9513294 Support QGIS < 2.4 for printing routines.
+a45f283 Merge pull request #1549 from ismailsunni/tephra_to_volcanic_ash
+7ed49c5 PEP8.
+6512da3 Fix merged conflict.
+f8e3e6f Change tephra to volcanic ash.
+40bc3fa Merge pull request #1531 from ismailsunni/fix_1471_categorical-vs-categorised
+60df1e8 Merge remote-tracking branch 'aifdr/develop' into fix_1471_categorical-vs-categorised
+cc7c901 Merge pull request #1547 from akbargumbira/develop
+f43bc79 [Realtime] Fix loading the translation file
+ffc39a2 Merge pull request #1526 from ismailsunni/fix_1441_minimum-needs-result
+7f72f8e Merge remote-tracking branch 'aifdr/develop' into fix_1441_minimum-needs-result
+4a4f5ca Pep8 and coding standard.
+4709319 Apply Tim's comment for classified_hazard_building output.
+3865489 Add layer_raster_continuous and layer_raster_classified.
+c08fa3c Merge pull request #1544 from cchristelis/develop
+687e6ea Merge remote-tracking branch 'upstream/develop' into develop
+72a91f3 Merge pull request #1546 from ismailsunni/translation
+830a206 (ismail/translation) Update translation.
+0dab91f better fix for Force aspect ratio to fix #1533 to support user logos too
+0161e44 Merge remote-tracking branch 'origin/develop' into develop
+7c3a3fc Force aspect ratio to fix #1533
+281fd6e Fixing bug #1491 - Allow unicode for StringParameter
+001b5a4 (ismail/fix_1471_categorical-vs-categorised) Merge remote-tracking branch 'aifdr/develop' into fix_1471_categorical-vs-categorised
+4a878be Change unit_categorical and unit_normalised to unit_class and unit_continuous.
+a1ffe9a Change IF Categorical population to IF Classified population.
+fba6256 Change IF Categorical building to IF Classified building.
+92a916b Change categorised IF to continuous IF.
+b401ad7 (ismail/develop) Merge pull request #1543 from ismailsunni/hot_fix
+289ce02 (ismail/hot_fix) Add uncatched exception in dock.py
+714f106 Merge pull request #1540 from ismailsunni/translation
+a8fd758 Translation files update.
+d0c4138 Update text regarding Tim's suggestion.
+3631943 (ismail/fix_1441_minimum-needs-result) Add extra notes and table header for impact report.
+83c99f2 Merge pull request #1538 from timlinux/develop
+0350183 Fixed syntax error in plugins.py
+867c0fb Resolved merge conflicts
+5dac4a4 Merge pull request #1537 from timlinux/develop
+df0904d Merge remote-tracking branch 'upstream/develop' into develop
+653c390 Remove unwanted import
+6eb3dea let logging rely on QGIS
+5865790 Remove unwanted print call in defaults
+d78eeef Import qgis for sip2
+ecd2c3e Updated changelog and version in metadata
+dbb00a5 Merge pull request #1536 from timlinux/develop
+5cbaea9 Updated plugin to have simple vs complete toolbar. Defaults to complete for now
+9819c0c Selectively port work from safe_refactor
+7ff6d44 Merge pull request #1534 from timlinux/develop
+0011c08 More fixes to make i18n work
+c52152d Fix translation loading
+1a1b60c Update metadata related to categorical building IF.
+eddfefe Merge remote-tracking branch 'aifdr/develop' into fix_1441_minimum-needs-result
+da5a1d9 (ismail/fix_1482_remove-IF-browser) Merge remote-tracking branch 'aifdr/develop' into fix_1482_remove-IF-browser
+8a5febe (ismail/remove_tephra) Merge remote-tracking branch 'aifdr/develop' into remove_tephra
+f84e1bc Fix merged conflict.
+329e7c6 Change docstring and metadata of IFs. For #1471.
+4ac7778 Merge pull request #1529 from ismailsunni/fix_test_IF_metadata
+8c963c8 (ismail/fix_test_IF_metadata) Add is_valid for checking IF's metadata's validity.
+c1bc274 Remove tephra from supported hazard.
+a444d18 Remove IF browser per #1482
+9d4b1d3 Merge remote-tracking branch 'aifdr/develop' into fix_1441_minimum-needs-result
+7cfd6a7 Merge pull request #1525 from borysiasty/develop
+e3797cd Add more notes for MinimumNeeds report
+19ad833 [IFCW] minor fixes
+3c8aecd Fix #1441
+08fbe1b Fix yellow dots.
+0c327c8 (borys/develop) [IFCW] After selecting a layer from browser, add it to map canvas
+32cae6d [IFCW] Fix layer names on the Summary tab
+1264b83 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+98d7416 Merge pull request #1524 from akbargumbira/develop
+895dcfe Use local HTML file to set HTML of QgsComposerHTML for QGIS < 2.6 compatibility.
+a7f62a0 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+3223a31 Merge pull request #1523 from akbargumbira/develop
+02c054d Move printing to pdf logic to avoid referring local var outside the scope .
+d3393b0 Merge pull request #1521 from akbargumbira/develop
+49157ac Save keywords of delimitedtext provider to keywords db.
+4132bae [IFCW] Update tests
+fa23995 [IRCW] Refactor IF matrices data backend, better texts in table headers and labels
+4b2ba48 [IFCW] Better formatting of the IF constraint matrix
+636d918 [IFCW] Doubleclick on the IF constraint matrix enters the next step
+e14bf5f Merge pull request #3 from ismailsunni/IF_API
+2c9c2b8 (ismail/IF_API) Add IF API get_available_exposures and get_functions_for_constraints.
+5670d0a [IFCW] Impact functions constraint matrices
+0747ed7 Merge pull request #1518 from akbargumbira/develop
+50fcb48 Update impact path to the message viewer every time user changes the active layer.
+beb7c78 Changed max QGIS version to qgisMaximumVersion=2.99
+d2cd24c Change version to 3.0.0
+fd7e35e Merge pull request #1515 from ismailsunni/fix_1492
+52b51d6 (ismail/fix_1492) Merge remote-tracking branch 'aifdr/develop' into fix_1492
+70f04d8 Merge pull request #1516 from akbargumbira/develop
+18a2e8c Change wording related to nearby cities to the earthquake.
+59d242a The mmi-nearest.tif generated has no "No Data" value set.
+f32c598 [Refactor] Move plugin.py to safe directory.
+5f08cd5 Merge remote-tracking branch 'aifdr/develop' into fix_1492
+ccbcd28 Change back None to undefined in load_layer.
+11e5ce1 [Makefile] Remove compile.
+e65fb8a Better docstring for unit test.
+f9cb015 Add unit test for keywordless layer.
+6b83071 Dirty hack for #1492.
+4558676 Merge pull request #1512 from akbargumbira/develop
+226a5df [Realtime] Fix failing tests except test_18n.
+72e47a9 [Realtime] Update the IF name for the assessment.
+5eaf6b0 Ensure that the text input to our tr is a string.
+bf2bbe2 Use urlparse to get layer path.
+3c42cf3 Merge pull request #1506 from akbargumbira/develop
+431fde6 Catch the unhandled case when user wants to print nonexistent template.
+21ce746 Merge pull request #1504 from akbargumbira/develop
+8bdddd4 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+ade24ae [Realtime] Pass shakemaps extract dir and web dir to make-public.sh
+0479497 Merge pull request #1503 from akbargumbira/develop
+5f8be7d Remove shakemaps_cache reference.
+f2e7dc8 Merge pull request #1502 from akbargumbira/develop
+2c8cd0b [Realtime] Pass shakemaps dir as argument for make-latest-shakemap.sh
+5b3911b Merge pull request #1497 from akbargumbira/develop
+3b3a978 Import tr function from safe.utilities.i18n.
+4a7e3de Merge pull request #1495 from akbargumbira/develop
+6e0a4c0 Remove unused qpt templates.
+9bf7442 Fix error on IF wizard when cancelling the impact report dialog.
+e9a0cd3 Merge pull request #1490 from akbargumbira/realtime_local
+46486a5 Use default QGIS installed prefix path for realtime.
+f84cab1 Merge pull request #1444 from akbargumbira/realtime_local
+95dbac6 Fix failing tests after merging develop to realtime.
+ebed9a8 Merge branch 'develop' of github.com:AIFDR/inasafe into realtime_local
+8a0ed6c Merge pull request #1485 from akbargumbira/legend_issue
+11dbc1a Remove unused import in AnalysisHandler class.
+31336ff Unintentionally committed run-env-linux.sh
+71c761e Remove redundant getter and setter for template
+7c6316d Make a wrapper function to print both the map and the table.
+0ca4e39 Use composition to print the pdf report in Batch Dialog.
+4746f2b Fix Batch Dialog in Develop
+914cf3d Print Impact Table using Composition.
+82018b2 Use TemplateComposition class in Impact Merge Dialog
+4b28b54 Remove Map class and update AnalysisHandler to use MapReport.
+13094dd Update Batch Dialog to use new Map Report class.
+3603ebf Various work on reporting and update plugin metadata.
+798f66d Reporting work.
+ed03b13 Feed QgsMapSettings as a param to QgsComposition.
+e123609 Merge pull request #1474 from ismailsunni/fix_1473
+d721687 (ismail/fix_1473) Pep8
+20d1eb3 Fix #1473
+6d33077 Add new class TemplateComposition.
+c3ecca0 Merge branch 'legend_issue' of github.com:akbargumbira/inasafe into legend_issue
+ec84995 fix compile doc typos
+e86f60e Merge pull request #1464 from akbargumbira/develop
+fc07131 Fix small issue and remove setup.py
+b0dfa35 Merge pull request #1462 from akbargumbira/test_data
+3e86c40 Fix tests related to changes on some functions.
+54e4f1b Merge pull request #1461 from akbargumbira/develop
+82d1908 Sort minimum needs profiles based on QGIS' locale.
+5d49701 Merge pull request #1460 from ismailsunni/fix_wizard
+ce0539d (ismail/fix_wizard) Make wizard to use parameter from user input.
+8012d62 Merge pull request #1459 from akbargumbira/develop
+6b88fe3 Update Jenkins Script.
+3c58c29 Merge pull request #1458 from ismailsunni/fix_wizard
+03860d4 Initialize analysis in init function.
+248bf01 Fix #1454 and #1456.
+c692b6e Remove needs parameter from non-population IF.
+060c2f7 Merge pull request #1451 from akbargumbira/test_data
+a06e413 Update some tests and add test data.
+165645d Fix failing tests in test_function_options_dialog.py
+03b3408 Merge pull request #1457 from ismailsunni/fix_test
+a86a269 (ismail/fix_test) Fix failed unit test in test_impact_function_manager.py.
+bb1a72f Merge branch 'develop' of github.com:AIFDR/inasafe into test_data
+5a115cf Pep8.
+9840802 Merge pull request #1450 from borysiasty/IFCW2
+7665cfb Fix test_issue_230 that was failed because load_layer has changed.
+2396ca7 Update test_project_interpretation to use data in source tree.
+af778b9 Update the tests and test data.
+669b8df Update the tests in test_keywords_dialog module.
+476efbe Update tests in test_map_legend.
+c23a113 Update tests in test_map module.
+398c6f6 Update test_print_impact_table.
+fd7e828 Use *test* dir in *temp_dir* for testing.
+ebd4b32 Update test_keyword_io to use data from source tree.
+6c193aa Remove DIRECTORY param in load_layer function.
+f78df19 Update test_get_keyword_from_file to use data from InaSAFE source.
+b1d62d3 (borys/IFCW2) [IFCW] IFCW unit test
+c656ff2 Fix safe.test.utilities.clone_raster_layer
+ed4239f [IFCW] Minor re-oder of the class
+c976845 [IFCW] Follow up the previous commit
+9bd716c [IFCW] Rename WizardAnalysisHandler to just AnalysisHandler
+dc1264f [IFCW] Vsual bugfixes
+05e5665 Merge branch 'develop' of github.com:AIFDR/inasafe into IFCW2
+2e5de8c [IFCW] Autoselect or disable layer origin radiobuttons according to available layers
+2e80016 Temporarily disable qgisMaximumVersion check to allow development on master
+d2a645a [IFCW] Fix for displaying summary of minimym needs
+35af63a Merge pull request #1447 from akbargumbira/fix_travis
+93bd7d5 Address Pylint Violation.
+81067b0 Update Travis Configuration.
+b4ce6ee Update Makefile
+8d22bbc [IFCW] Auto select source layers if there is only one item in a list
+311f7d5 [IFCW] pep8 fixes
+467f875 [IFCW] Manual merge develop to IFCW2
+3565fbc Merge branch 'develop' of github.com:AIFDR/inasafe into IFCW2
+873a70a Address Pep8 Violation
+addee87 Update Travis Configuration.
+2b7834b Merge branch 'develop' of github.com:AIFDR/inasafe into realtime_local
+cc7cd63 Merge pull request #1445 from akbargumbira/safe_refactor
+d6b759b [IFCW] Use the ExtentSelectorDialog for setting user extent
+2877353 Apply PR #1446 to safe_refactor branch.
+dbfb76e Merge branch 'fix_bug' of https://github.com/ismailsunni/inasafe into IFCW2
+a86ceb0 Remove safe.common.testing.
+00e95e8 Move variables that refer to inasafe_data from safe.common.testing to safe.test.utilities.
+f41bacb Move test_lines and test_polygon from safe.common.testing to safe.storage.test.test_polygon
+cedd14b Move GEOTRANSFORMS from safe.common.testing to safe.storage.test.test_io
+b70b3e0 Move FEATURE_COUNTS from safe.common.testing to safe.storage.test.test_io
+fac5667 Move get_qgis_app from safe.common.testing to safe.test.utilities.
+51e54d7 Move combine_coordinates froms safe.common.testing to safe.test.utilities.
+9e4814a Remove get_shake_test_data_path in safe.common.testing and rather use test_data_path directly.
+a86103e Hide busy.
+e05d022 Fix bugs from dock stripping.
+1ccd7c5 Test Impact Merge Tool: Update the test data dir in temp directory, not in our test data dir.
+24ca2fe Add test data that was deleted unintentionally.
+cbcdda5 Remove UNITDATA and its usage. Use test_data_path() instead.
+8f990ff pep8 fixes
+9b3c4f2 [IFCW] Add extent selection
+c435cc7 Utilise test_data_path in safe.gui
+ebc86e0 Remove test_safe_interface.
+0e163b2 Utilise test_data_path in test_dock
+f7a3def Update test_data_path function to return any data or dir path of test data.
+936f584 Tidy up control data and move utilities_for_testing to safe.test.utilities.
+980787d Legend workaround with base safe_refactor.
+98e8f3b [IFCW] minor fix
+cbed05c [IFCW] For exposure rasters with unit people_per_pixel automtically set allow_resampling to false (fixes #1078)
+66c877e [IFCW] minor fix
+48c487a Merge pull request #2 from ismailsunni/IFCW2
+8231c1c Fix path templates in Impact Report Dialog.
+3d14fd1 Change the way we load the ui files. Just pass it to get_ui_class.
+005cc06 (ismail/IFCW2) Fix path for to safe_extras.
+b0614a2 Remove the max qgis version, temporary.
+9a66dc2 Skip translation test.
+3e45fe8 Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+7524a0b Some fix on Makefile.
+f8debac [IFCW] Add extent selector step
+b9a65e4 [IFCW] Update the wizard to the recent API changes
+9c9d262 Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+483abb6 Update location to test data.
+839970c Fix save scenario dialog.
+827cd36 Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+8e6f245 [Safe Refactor] Update scripts and Makefile.
+272d36a Fix test data location in test_message_viewer.
+5076e49 Building type postprocessor needs to import tr.
+89998e9 Fix test data dir path in test_dock.
+8e0079f Fix test data dir path in test_osm_downloader.
+424d8d0 Fix resources location in Impact Merge Tool.
+cc8062f Fix missing import.
+6d0c113 Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+3291b3a Fix test for categorical hazard population IF.
+689adc0 Merge remote-tracking branch 'akbar/safe_refactor' into safe_refactor
+cf4fc87 Tidy up path generation in dynamic translation tests
+d93c0f1 Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+453319e Fix unit test, qgis.core will always be available.
+72fb891 Fix for failing report render test
+640712f Resolve merge conflicts with akbars code
+bccf14f Delete makefile for ui files.
+3b43a0d Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+3584d88 Dynamically load ui files for GUI.
+6e75b6c [Safe Refactor] Add some unit tests.
+3acfac8 Fixes for translation related test fails
+c065da2 Fix merged conflict.
+994539d [Safe Refactor] Fix merged conflict.
+af7d3c3 [Safe refactor, hack code to make it aware.]
+18242ac Resolved merge conflicts
+5876777 In progress updates for unified translation system
+840b78f [Travis] Remove --use-mirrors for pip command and only test safe package.
+5df5640 Change tests that are checking the output hash.
+74913a2 Fixed icons in toolbar
+68decd4 In progress refactoring
+6e5e8b4 [Safe Extras] Remove test from parameters.
+c1c0f04 Merge remote-tracking branch 'akbar/safe_refactor' into safe_refactor
+ce984bb Further progress on i18n consolidation to use only Qt translation framework and remove gettext. In progress.
+76b5a79 Update parameter.
+9c04982 Merge branch 'safe_refactor' of github.com:timlinux/inasafe into safe_refactor
+c65758d Renamed the test numeric module.
+c4be977 [Realtime] Update scripts.
+438fff7 [Realtime] Remove any references to ftp or sftp.
+dc0cae3 Realtime refactor
+e71ad88 Dont store generated python from ui files in source tree
+b8ae62e In progress updates for refactoring into one top level package
+3ecee8e [Refactor] Add test for resource paramter widget.
+4fb360c Merge remote-tracking branch 'akbar/safe_refactor' into safe_refactor
+1512829 Use directly shakemaps in sftp folder.
+08f1eb4 Further updates to resources and utilities refactoring
+8aa4cc8 Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+a9df6ed [Refactor] Add unit test for resource parameter and fix functionality.
+33fa3ce Resolved merge conflicts with akbar's branch
+4099482 Further refactor for utilities and move resources to top level
+28f4694 [Refactor] Add more rich in serialize and load_dictionary.
+6397155 [Refactor] Walk through safe_common, leave green dots.
+e12f069 Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+3d6f930 Add test for Categorised Hazard Population Impact Function.
+a21bc03 Add test for EarthquakeBuildingImpactFunction.
+6045598 Address FIXME Ole: Add test for Volcano Point on Population.
+550fbd7 Resolved merge conflicts with akbars branch
+63b9ac3 Move Volcano Polygon on Population IF from safe.engine to safe.impact_functions.
+e637030 [Refactor] Fix error when remove numerics.py
+d6e41df More refactoring resources
+bd47174 [Refactor] geometry to gis.
+0dd385f Add init file in safe.impact_functions.earthquake.test package.
+d1e066d Move test for Pager Earthquake Fatality Model from safe.engine to safe.impact_functions.
+cf096cc Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+7f129e4 [Refactor] Remove unused code.
+504412f Move test ITBEarthquakeFatalityModel IF from safe.engine module to safe.impact_functions.
+d187eff [Refactor] Fix segmentation fault on test_dock.py.
+c36c247 In progress refactor of inasafe
+251e75c Make public should be executable
+4053c65 [Refactor] Move test code to test directory.
+dec1a37 [Refactor] Delete tephra directory.
+ea7e3fb [Refactor] Move Ole's code to one directory.
+1c0b868 Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+dd8d908 [Refactor] Fix a failed test.
+c6166cc Delete test of impact function in test_dock.
+88b695b Add test on Volcano Building IF and delete it from test_engine.
+4a73bf1 Update the description of the module.
+672023b Fix the description of the module.
+1ae04cc Add test Flood Vector on Polygon and delete from test_engine.
+96c4f25 [Fix #392]
+1fba7ff Add test Flood Raster on Population IF and delete it from test_engine.
+ff10e0e Delete test on FloodBuildingIF in test_engine.
+725fa11 Add test for FloodOSMBuildingIF.
+cee74d5 Move i18n to top level.
+c50c2c7 Standardising test package in safe.storage.
+a3bc87a Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+6cda183 Delete safe.storage.clipping.
+5b88b1d Standardising test package in safe.messaging and safe.postprocessor.
+fea0c78 Removed monkey patching of minimum needs params for all IFs
+a49ebcd [Refactor] Add function to unload the unused impact function.
+e93f027 Merge conflict.
+2bf9a6c Standardising tests in safe.impact_functions package.
+4285c98 [Refactor] Fix merged conflict.
+f827cc1 [Refactor] Update unit test.
+ab36988 In progress removing monkey patching of minimum needs params for all IFs
+52bed14 Delete safe.api.
+f3d1216 [Refactor] Delete disabled impact functions.
+24cdec4 At last, remove safe_interface from the universe.
+cd122ef Added test for messaging styles
+b69de75 Refactored defaults into a single module
+26bd886 [Refactor] Move safe.exceptions to safe.common.exceptions.
+b82efb0 Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+6fc6962 Move write_keywords_to_file from safe_interface to safe.utilities.utilities
+0dfb610 Merge remote-tracking branch 'akbar/safe_refactor' into jaran
+ff7d5de Move read_file_keywords from safe_interface to safe.utilities.utilities.
+be770d0 [Refactor] Fix merge conflict.
+b852a7b Move convert_safe_layer to safe.utilities.utilities.
+ab2f9c1 [Refactor] Fix bug on running test related to os.environ['LANG'] == 'id'.
+0b5d253 Remove silly code.
+5d697f5 Remove get_style_info function in safe_interface.
+aafeab1 Use Qt Translation in dock.
+9261625 More implementation for removing qt resource usage
+7629718 More replacement or resources to use local files
+ecf2b6b Refactoring away resources
+826fd2d [Refactor] Remove unused code.
+436cd93 [Refactor] Some thought to commit.
+eaffe16 Remove available_functions in safe_interface and directly use get_admissible_plugins.
+639fba1 Refactor get_optimal_extent in safe_interface into safe.utilities.analysis.
+ccf783a Remove get_buffered_extent from safe_interface and use buffered_bounding_box from safe.storate.utilities instead.
+18c51f4 Remove calculate_safe_impact in safe_interface and use directly from safe.engine.core
+e346ec8 Remove verify function in safe_interface and use directly from safe.common
+a4a5555 Remove read_keywords_from_layer function in safe_interface as it only being used in the test.
+b1bd9e7 Remove read_safe_layer wrapper in safe_interface.
+2f7f5dd Get rid of safe_interface usage in safe.widgets and safe.test.
+2a54c60 Get rid of safe_interface usage in impact_statistics and utilities package.
+304cea0 Get rid of safe_interface usage in tools package.
+d9dd701 Get rid of safe_interface usage in report package.
+26db57b Get rid of safe_interface usage in postprocessor_manager.py.
+f4b634d Get rid of safe_interface usage in function_options_dialog.py.
+270c73b Get rid of safe_interface usages in aggregator.py.
+2204bd0 Delete Makefile in safe_qgis.
+2915ecd Move test package to safe.
+6457813 Move plugin.py and exceptions.py to safe package.
+bedde50 Fix some issues after moving utilities module.
+c02d33a [IFCW] Fix ui layout
+ccedec3 [IFCW] Fix pep8 and pylint
+dfcc227 [IFCW] Hide unsupported branches from the browser
+24bf9f4 [IFCW] Fix validation for PostGIS layers
+5dca411 [IFCW] Postgis support in the qgsBrowser
+5a659d4 [IFCW] Some obvious pylint.
+378769c [IFCW] Pep8.
+d1ed468 [IFCW] More code cleaning.
+a60465f [IFCW] Cleaning code.
+84853a3 [IFCW] Merge analysis branch and IFCW from borys.
+f2007c0 [IFCW] Clean code, comment for pydev line.
+ba04a87 [IFCW] Greener code.
+708b621 [IFCW] Fix unit tests in test_wizard_dialog.py
+61fbb92 [Wizard] Fix action icon
+86b9437 [Wizard] bugfixes
+59c87ed [Wizard] The Analysis tab
+aab5195 [Wizard] The Analysis tab
+972c4cd [Wizard] Embed the existing IF parameters tab widget
+7902703 [Wizard] Typo fix
+4548f6b [Wizard] Embed the keywords creation thread into the function centric thread
+0f0a5e7 [Wizard] First steps of the function centric workflow
+13842d9 [Wizard] Follow up f0b0a77e05c13
+762f6a2 [Wizard] Initial commit of the function centric part
+36a2c35 Pep8
+b14c6fb Add API for get_exposures_for_if. #1256
+830e25a Add API for #1256.
+2f19d2e Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+f05d3e4 Move utilities package to safe.
+2a0ca8b Merge remote-tracking branch 'akbar/safe_refactor' into safe_refactor
+8bf756d Move widgets and test data from safe_qgis to safe.
+6eb78a5 Merge remote-tracking branch 'akbar/safe_refactor' into safe_refactor
+866949f [Refactor] Move resource_parameters to safe from safe_extras.
+0e8398a Move resources package into safe.
+bb1033d Rollback ismailsunni lontongness.
+48391bb [Refacto] Fix unit test and update impact function.
+a478afc Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+9c8cd6b Merge remote-tracking branch 'akbar/safe_refactor' into safe_refactor
+8fabfbf Move report package under safe package.
+54bc845 [Refactor] Remove impact functions in safe/extras
+5726c62 Move impact_statistics to safe package.
+909fc59 Merge branch 'safe_refactor' of github.com:akbargumbira/inasafe into safe_refactor
+d2a178f [Refactor] Remove retired impact functions from code base.
+2c9f981 Move tools package to safe.
+7b375df Merge remote-tracking branch 'origin/develop' into safe_refactor
+ec453d1 Merge pull request #1440 from akbargumbira/develop
+4831761 Don't change run-env-linux configurations.
+9eeda05 Delete files directory.
+439c439 Merge branch 'develop' of git://github.com/AIFDR/inasafe into aifdr_develop
+f7007df Move minimum needs tests to a more propriate place.
+ce203d4 [Minimum Needs] Move profiles to resources.
+123130c Merge pull request #1439 from ismailsunni/develop
+57eb7a7 Merge remote-tracking branch 'aifdr/develop' into develop
+8c64a7a Merge remote-tracking branch 'aifdr/master' into develop
+26f5fe2 Merge remote-tracking branch 'aifdr/master' into aifdr_develop
+0d73dd6 Merge pull request #1431 from ismailsunni/fix_1429
+1ba54ed (ismail/fix_1429) Make sure to handle point building for raster hazard. See #334
+30f7742 Remove unused code.
+ae3b340 Set current status to alpha.
+f7c251a Fix #1429
+e624c49 Merge pull request #1362 from ismailsunni/analysis
+4123c9c (ismail/analysis) Fix unit test from merging.
+337426c Merge pull request #1344 from mbernasocchi/metadata
+2cdfff3 Fix merged conlict.
+353d597 Merge pull request #1421 from timlinux/develop
+e59e4c1 Added throughput graph on readme
+c1e4a10 allow upload in geonode, in case it will ever be needed :)
+bc7a234 remove the $ISO19115_LINEAGE placeholder if no source is defined
+d00e71f Pep8.
+4b7fb22 Merge remote-tracking branch 'aifdr/develop' into analysis
+032b260 [Analysis] Finnaly, all pass after refactor.
+1a4ac84 Fix unit test in save_scenario.
+46803eb A better one of dock.
+4059451 It works.
+13ab9c2 First step to strip the extent from dock.
+139f269 Update metadata's key of Impact Functions.
+c9bd306 More on fix conflicts.
+0c944c6 Fix merged conflict.
+8cf0194 Merge remote-tracking branch 'aifdr/develop' into analysis
+b1fcbcb [Analysis] Fix merged conflict.
+3ba4d06 [Analysis] Fix merged conflict.
+717bcb7 Merge remote-tracking branch 'aifdr/develop' into analysis
+cbe9364 [Analysis] Make metadata in IFs consistent.
+0a9de70 [Analysis] More removing unrelated code.
+29d7e75 [Analysis] Resolve merged conflicts and pep8.
+523d2f0 [Analysis] Insufficient Memory Warning.
+3290b84 [Analysis] Remove unused code.
+30440ad [Analysis] Green Code.
+ffb73c2 [Analysis] All Green.
+b6f24db [Analysis] Runtime keywords dialog.
+07cd3f2 Merge remote-tracking branch 'aifdr/develop' into dock_stripping
+e6ae062 [Analysis] Fix test_aggregator.py
+b3f6223 Fix merged conflict.
+d801958 (ismail/dock_striping) [Analysis] Fix unit test.
+3fd4316 [Analysis] Fix batch runner.
+408a43a [Analysis] All test_dock pass.
+a6a3c68 (refs/bisect/bad) Merge branch 'aifdr_develop' into dock_striping
+8fddedd (refs/bisect/good-8fddedd6e9c06df59e7f9700a7e41930d99887f5) [Analysis] Another test passed, test_rubber_band.
+c33e433 (refs/bisect/good-c33e433bc9a5589d42a99a2d9004c4f2d7814e17) [Analysis] Another test passed.
+bfd56e7 [Analysis] Add test_analysis.
+67a0097 (refs/bisect/good-67a00973c2dc37298ca821307f50dd2043d0c359) [Analysis] More works on passing the unit tests.
+164a47e [Analysis] Fix typo and double run_analysis.
+d51db82 [Analysis] Works but got double result.
+f8b8c8d More code to analysis.py
+ba833ea (refs/bisect/good-ba833eaf95dfe1dd2a7fd16ee1d9c81e097394b6) Work, but many failed tests.
+98b7f89 Almost working.
+6c9056b Initial not working version.
+08c70e0 Add new signals.
+80db796 Remove unused code.
+0bc018b Minor fix.
+daf80fa Coding Standard on impact_calculator.py
+19f0726 Coding Standard on test_impact_calculator.py
+
 Changelog for version 2.2.0
 ================================
 
