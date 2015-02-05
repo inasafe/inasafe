@@ -44,8 +44,9 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
     :author ESSC
     :rating 3
     :param requires category=='hazard' and \
-                    unit=='categorised' and \
-                    layertype=='raster'
+                    layertype=='raster' and \
+                    data_type=='classified' and \
+                    unit=='classes'
 
     :param requires category=='exposure' and \
                     subcategory=='structure' and \
@@ -271,11 +272,11 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
             table_body = [question,
                           TableRow([tr('Hazard Level'),
                                     tr('Number of Buildings')], header=True),
-                          TableRow([tr('Buildings in High risk areas'),
+                          TableRow([tr('High Hazard Class'),
                                     format_int(count3)]),
-                          TableRow([tr('Buildings in Medium risk areas'),
+                          TableRow([tr('Medium Hazard Class'),
                                     format_int(count2)]),
-                          TableRow([tr('Buildings in Low risk areas'),
+                          TableRow([tr('Low Hazard Class'),
                                     format_int(count1)]),
                           TableRow([tr('Total Buildings Affected'),
                                     format_int(count1 + count2 + count3)],
@@ -345,7 +346,7 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Map shows buildings affected in'
-                             ' low, medium and high risk areas.'))
+                             ' low, medium and high hazard class areas.'))
 
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()
