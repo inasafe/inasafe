@@ -35,7 +35,6 @@ from PyQt4.QtGui import (
     QListWidgetItem,
     QPixmap,
     QApplication,
-    QDesktopWidget,
     QSortFilterProxyModel)
 
 from qgis.core import (
