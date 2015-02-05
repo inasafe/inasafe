@@ -2706,8 +2706,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         if hasattr(imfunc, 'parameters'):
             self.if_params = imfunc.parameters
 
-        text = ('Please set impact functions parameters.<br/>Parameters for '
-                'impact function "%s" that can be modified are:' % imfunc_id)
+        text = self.tr(
+            'Please set impact functions parameters.<br/>Parameters for '
+            'impact function "%s" that can be modified are:' % imfunc_id)
         self.lblSelectIFParameters.setText(text)
 
         self.parameter_dialog = FunctionOptionsDialog(self)

@@ -653,11 +653,6 @@ class Plugin(object):
                 self.dock_widget)
         dialog.set_function_centric_mode()
         dialog.show()  # non-modal in order to hide for selecting user extent
-        # These lines are a dirty hack to fix
-        # https://github.com/AIFDR/inasafe/issues/1561 - do not remove without
-        # verifying that it does not break window placement on Windows 7
-        dialog.hide()
-        dialog.show()
 
     def show_shakemap_importer(self):
         """Show the converter dialog."""
