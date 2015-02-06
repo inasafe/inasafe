@@ -23,9 +23,9 @@ import os
 import sys
 import logging
 
+from qgis.core import QgsMessageLog
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
-from qgis.core import QgsMessageLog
 
 safe_extras_dir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../', 'safe_extras'))

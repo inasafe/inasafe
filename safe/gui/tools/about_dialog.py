@@ -18,6 +18,9 @@ __date__ = '26/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 from PyQt4 import QtGui
 
 from safe.common.version import get_version

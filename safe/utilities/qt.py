@@ -1,5 +1,8 @@
 # coding=utf-8
 """Qt related helpers."""
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 from PyQt4 import Qt
 
 

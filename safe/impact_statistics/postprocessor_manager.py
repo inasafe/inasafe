@@ -18,10 +18,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
+from collections import OrderedDict
+
+from qgis.core import QgsFeatureRequest
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
-from collections import OrderedDict
-from qgis.core import QgsFeatureRequest
 
 from safe.common.utilities import (
     unhumanize_number,

@@ -7,10 +7,14 @@ __date__ = '12/11/14'
 __copyright__ = 'kartoza.com'
 __doc__ = ''
 
-from safe_extras.parameters.qt_widgets.float_parameter_widget import (
-    FloatParameterWidget)
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLabel
+
+from safe_extras.parameters.qt_widgets.float_parameter_widget import (
+    FloatParameterWidget)
 
 
 class ResourceParameterWidget(FloatParameterWidget):

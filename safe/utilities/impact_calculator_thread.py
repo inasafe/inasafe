@@ -24,6 +24,9 @@ import traceback
 import sys
 import logging
 
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, pyqtSignal
 

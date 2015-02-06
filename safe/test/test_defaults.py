@@ -3,8 +3,13 @@
 
 import os
 import unittest
+
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QFile
+
 from safe.defaults import (
     disclaimer,
     get_defaults,

@@ -21,6 +21,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import ast
 from collections import OrderedDict
 
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements

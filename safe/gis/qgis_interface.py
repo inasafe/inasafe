@@ -27,9 +27,10 @@ __copyright__ = (
 )
 
 import logging
-from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
+
 from qgis.core import QgsMapLayerRegistry, QGis
 from qgis.gui import QgsMapCanvasLayer
+from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
 LOGGER = logging.getLogger('InaSAFE')
 
 

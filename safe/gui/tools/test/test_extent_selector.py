@@ -21,11 +21,10 @@ __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
 import unittest
 import logging
 
+from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 from PyQt4 import QtGui
-
 from PyQt4.QtCore import Qt, QPoint
 from PyQt4.QtTest import QTest
-from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 
 from safe.test.utilities import get_qgis_app
 

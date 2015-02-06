@@ -17,8 +17,6 @@ This will result in some standardised styling being applied to the important
 text element.
 
 """
-from safe.utilities.resources import resources_path
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '06/06/2013'
@@ -26,8 +24,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 from PyQt4.QtCore import QUrl
 # These all apply to heading elements
+
+from safe.utilities.resources import resources_path
 
 PROGRESS_UPDATE_STYLE = {
     'level': 5,

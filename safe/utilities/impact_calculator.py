@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.gis import convert_to_safe_layer
 
 __author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
 __revision__ = '$Format:%H$'
@@ -20,6 +19,9 @@ __date__ = '11/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject
 
@@ -32,6 +34,7 @@ from safe.utilities.utilities import (
 from safe.common.exceptions import (
     InsufficientParametersError,
     InvalidParameterError)
+from safe.utilities.gis import convert_to_safe_layer
 
 
 class ImpactCalculator(QObject):
