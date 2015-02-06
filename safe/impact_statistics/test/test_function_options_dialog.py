@@ -30,7 +30,7 @@ import logging
 from collections import OrderedDict
 
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
+import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLineEdit, QCheckBox
 

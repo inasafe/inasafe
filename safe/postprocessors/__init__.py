@@ -15,7 +15,7 @@ __copyright__ += 'Disaster Reduction'
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
+import qgis  # pylint: disable=unused-import
 
 from postprocessor_factory import get_postprocessors
 from postprocessor_factory import get_postprocessor_human_name

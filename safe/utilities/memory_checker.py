@@ -21,7 +21,7 @@ import logging
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
+import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QCoreApplication
 
 from safe.common.utilities import get_free_memory

@@ -20,7 +20,7 @@ import sys
 import os
 
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
+import qgis  # pylint: disable=unused-import
 from qgis.gui import QgsMapCanvas
 from PyQt4.QtGui import QWidget
 

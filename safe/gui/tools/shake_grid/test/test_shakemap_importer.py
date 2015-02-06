@@ -23,7 +23,7 @@ import os
 
 # This is to enable API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
+import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox
 

@@ -19,7 +19,7 @@ from os.path import expanduser, basename
 
 # This import must come first to force sip2 api
 # noinspection PyUnresolvedReferences
-# pylint: disable=W0611
+# pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
 
 # noinspection PyPackageRequirements
