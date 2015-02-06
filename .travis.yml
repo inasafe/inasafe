@@ -18,7 +18,9 @@ install:
   - sudo apt-get install -y python-software-properties
   - sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
   - sudo apt-get update
-  - sudo apt-get install -y git qgis python-qgis pylint pep8 xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
+  - sudo apt-get install -y git qgis python-qgis xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
+  - sudo pip install pep8
+  - sudo pip install pylint
   - echo "Checking out test data at" `date`
   - make testdata
 
