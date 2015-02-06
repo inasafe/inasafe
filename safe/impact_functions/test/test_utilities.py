@@ -11,8 +11,6 @@ from safe.impact_functions.utilities import (
     keywords_to_str,
     add_to_list,
     get_python_file)
-from safe.impact_functions.volcanic.volcano_building_impact import (
-    VolcanoBuildingImpact)
 
 
 class TestUtilities(unittest.TestCase):
