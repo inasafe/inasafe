@@ -12,6 +12,8 @@ branches:
     - develop
 
 -before_install:
+  - git status
+  - git clean -d -f
   - sudo apt-get -qq -y update
 
 install:
