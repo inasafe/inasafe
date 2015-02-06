@@ -21,8 +21,8 @@ import sys
 import os
 import logging
 
-LOGGER = logging.getLogger('InaSAFE')
-
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
 # Import the PyQt and QGIS libraries
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
@@ -40,9 +40,10 @@ from safe.common.exceptions import (
     InvalidParameterError,
     UnsupportedProviderError)
 from safe.utilities.resources import resources_path
-
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import is_raster_layer
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class Plugin(object):

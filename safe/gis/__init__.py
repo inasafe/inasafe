@@ -1,8 +1,4 @@
 # coding=utf-8
-"""Docstring for this file."""
-__author__ = 'ismailsunni'
-__project_name = 'inasafe-dev'
-__filename = '__init__.py'
-__date__ = '12/15/14'
-__copyright__ = 'ismail@kartoza.com'
-__doc__ = ''
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611

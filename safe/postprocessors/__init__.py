@@ -13,5 +13,9 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=W0611
+
 from postprocessor_factory import get_postprocessors
 from postprocessor_factory import get_postprocessor_human_name
