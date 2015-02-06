@@ -2,7 +2,7 @@
 """Tests for core.py
 
 InaSAFE Disaster risk assessment tool developed by AusAid -
-**Test Impact Function Metadata**
+**Test Core**
 
 Contact : ole.moller.nielsen@gmail.com
 

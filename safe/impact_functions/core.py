@@ -20,7 +20,8 @@ from safe.defaults import default_minimum_needs
 from utilities import (
     pretty_string,
     remove_double_spaces,
-    is_duplicate_impact_function)
+    is_duplicate_impact_function,
+    get_python_file)
 from safe.metadata import converter_dict
 
 
@@ -44,9 +45,12 @@ class PluginMount(type):
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
             if is_duplicate_impact_function(cls):
-                raise LookupError(
-                    "Duplicate impact function name %s" % cls.__name__)
-            cls.plugins.append(cls)
+                message = 'Duplicate impact function name %s\n' % cls.__name__
+                message += 'Impact function file %s\n' % get_python_file(cls)
+                message += [get_python_file(c) + '\n' for c in cls.plugins]
+                raise LookupError(message)
+            else:
+                cls.plugins.append(cls)
 # pylint: enable=W0613,C0203
 
 
