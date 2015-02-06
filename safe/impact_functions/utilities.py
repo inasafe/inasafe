@@ -1,6 +1,10 @@
+# coding=utf-8
 """Module to create damage curves from point data and additional logging
 utils relevant to impact_functions.
 """
+
+import sys
+import os
 
 
 def admissible_plugins_to_str(plugin_list):
@@ -120,3 +124,49 @@ def get_list_id(list_dictionary):
     :rtype: list
     """
     return [e['id'] for e in list_dictionary]
+
+
+def get_python_file(python_class):
+    """Obtain location where the python class is loaded from.
+
+    :param python_class: A valid python class.
+    :type python_class: class
+
+    :returns: A absolute path to python file.
+    :rtype: str
+    """
+
+    return os.path.abspath(sys.modules[python_class.__module__].__file__)
+
+
+def is_duplicate_impact_function(impact_function):
+    """Check whether the impact_function has been added or not.
+
+    Duplicate means:
+        - Same class name
+        - Different file (we can check based on .py or .pyc files)
+
+    :param impact_function: An impact function class
+    :type impact_function: FunctionProvider
+
+    :returns: True if duplicate, otherwise False
+    :rtype: bool
+    """
+
+    if_class_names = [c.__name__ for c in impact_function.plugins]
+    if_py_files = [get_python_file(c) for c in impact_function.plugins]
+    if_pyc_files = [get_python_file(c) + 'c' for c in impact_function.plugins]
+
+    impact_function_name = impact_function.__name__
+    impact_function_py = get_python_file(impact_function)
+    impact_function_pyc = impact_function_py + 'c'
+
+    if impact_function_name in if_class_names:
+        if (impact_function_py in if_py_files or
+                impact_function_pyc in if_pyc_files):
+            return False
+        else:
+            # Same name, different location
+            return True
+    else:
+        return False

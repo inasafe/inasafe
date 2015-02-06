@@ -5,10 +5,14 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import os
 
 from safe.impact_functions.utilities import (
     keywords_to_str,
-    add_to_list)
+    add_to_list,
+    get_python_file)
+from safe.impact_functions.volcanic.volcano_building_impact import (
+    VolcanoBuildingImpact)
 
 
 class TestUtilities(unittest.TestCase):
@@ -46,6 +50,16 @@ class TestUtilities(unittest.TestCase):
         list_b = add_to_list(list_a, 'c')
         assert len(list_b) == (len(list_original) + 1)
         assert list_b[-1] == 'c'
+
+    def test_get_python_file(self):
+        """Test get_python_file"""
+        path = get_python_file(TestUtilities)
+        expected_path = os.path.realpath(__file__)
+        expected_paths = [expected_path, expected_path + 'c']
+
+        message = 'Expecting %s in %s' % (path, expected_paths)
+
+        self.assertIn(path, expected_paths, message)
 
 
 if __name__ == '__main__':

@@ -17,7 +17,10 @@ from safe.gis.polygon import inside_polygon
 from safe.utilities.i18n import tr
 from safe.common.tables import Table, TableCell, TableRow
 from safe.defaults import default_minimum_needs
-from utilities import pretty_string, remove_double_spaces
+from utilities import (
+    pretty_string,
+    remove_double_spaces,
+    is_duplicate_impact_function)
 from safe.metadata import converter_dict
 
 
@@ -40,7 +43,7 @@ class PluginMount(type):
             # This must be a plugin implementation, which should be registered.
             # Simply appending it to the list is all that's needed to keep
             # track of it later.
-            if cls.__name__ in [c.__name__ for c in cls.plugins]:
+            if is_duplicate_impact_function(cls):
                 raise LookupError(
                     "Duplicate impact function name %s" % cls.__name__)
             cls.plugins.append(cls)
