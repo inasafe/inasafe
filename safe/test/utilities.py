@@ -13,14 +13,14 @@ import shutil
 from os.path import join
 from itertools import izip
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui  # pylint: disable=W0621
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsRectangle,
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
+# noinspection PyPackageRequirements
+from PyQt4 import QtGui  # pylint: disable=W0621
 
 # For testing and demoing
 # In our tests, we need to have this line below before importing any other
