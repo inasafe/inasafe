@@ -16,26 +16,21 @@ __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# this import required to enable SIP API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
-# noinspection PyPackageRequirements
-from PyQt4 import QtCore
-
 import unittest
 import sys
 import os
 import shutil
+
+from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
+from PyQt4 import QtCore
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import Qt
+
 # noinspection PyPackageRequirements
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
-
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
-
-from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 
 from safe.common.utilities import unique_filename, temp_dir
 from safe.test.utilities import (
