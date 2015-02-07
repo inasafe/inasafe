@@ -23,6 +23,8 @@ import tempfile
 #  force this test to use SIP API V.2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 from safe.utilities.file_downloader import FileDownloader

@@ -4,6 +4,8 @@ import unittest
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 from PyQt4.QtCore import QVariant
 
 from safe.utilities.gis import layer_attribute_names, is_polygon_layer

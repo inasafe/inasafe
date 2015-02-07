@@ -22,6 +22,8 @@ import os
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 from qgis.gui import QgsMapCanvas
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 from PyQt4.QtGui import QWidget
 
 from safe.test.utilities import get_qgis_app

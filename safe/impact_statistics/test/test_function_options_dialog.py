@@ -31,6 +31,8 @@ from collections import OrderedDict
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLineEdit, QCheckBox
 

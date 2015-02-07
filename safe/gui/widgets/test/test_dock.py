@@ -30,6 +30,8 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsRectangle,
     QgsCoordinateReferenceSystem)
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 

@@ -22,6 +22,8 @@ import unittest
 import logging
 
 from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 from PyQt4 import QtGui
 from PyQt4.QtCore import Qt, QPoint
 from PyQt4.QtTest import QTest

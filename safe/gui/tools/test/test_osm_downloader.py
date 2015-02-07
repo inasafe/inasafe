@@ -27,6 +27,8 @@ import shutil
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QUrl, QObject, pyqtSignal, QVariant, QByteArray
 # noinspection PyPackageRequirements

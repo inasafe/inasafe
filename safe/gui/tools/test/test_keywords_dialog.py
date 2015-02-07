@@ -26,6 +26,8 @@ from nose import SkipTest
 from qgis.core import (
     QgsRasterLayer,
     QgsMapLayerRegistry)
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 from PyQt4 import QtGui
 
 from safe.test.utilities import (

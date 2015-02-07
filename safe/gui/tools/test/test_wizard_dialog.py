@@ -22,6 +22,8 @@ import os
 import shutil
 
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 from PyQt4 import QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt

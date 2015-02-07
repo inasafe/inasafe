@@ -24,6 +24,8 @@ import os
 # This is to enable API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox
 

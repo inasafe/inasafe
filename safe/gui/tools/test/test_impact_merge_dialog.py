@@ -28,6 +28,8 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsMapSettings,
     QgsComposition)
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 from PyQt4 import QtCore
 
 from safe.gui.tools.impact_merge_dialog import ImpactMergeDialog

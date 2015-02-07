@@ -26,6 +26,8 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsRectangle)
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2
 from PyQt4.QtCore import QVariant
 
 from safe.gis.gdal_ogr_tools import (
