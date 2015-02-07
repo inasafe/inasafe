@@ -57,13 +57,14 @@ in_array () {
 
 # Set up needed QGIS environment variables
 export QGIS_PREFIX_PATH=/usr/local/qgis-2.6/
+#export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`
+export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:${PYTHONPATH}
+echo "PYTHONPATH: $PYTHONPATH" > /tmp/path.txt
 export QGIS_PATH=$QGIS_PREFIX_PATH
 export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
-export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:${PYTHONPATH}
 echo "QGIS PATH: $QGIS_PREFIX_PATH"
 export QGIS_DEBUG=0
 export QGIS_LOG_FILE=/tmp/inasafe/logs/qgis.log
-export QGIS_DEBUG_FILE=/tmp/inasafe/logs/qgis-debug.log
 export PATH=${QGIS_PREFIX_PATH}/bin:$PATH
 export INASAFE_POPULATION_PATH=/var/lib/jenkins/jobs/InaSAFE-QGIS2/exposure/population.tif
 
@@ -87,11 +88,11 @@ echo "Running tests in $PATH"
 
 #Go on with metrics and tests
 TEST_PATH="$DIR/$TEST_PACKAGE"
-xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v \
-    --with-id --with-xcoverage --with-xunit --verbose \
-    --cover-package=${TEST_PACKAGE} ${TEST_PATH}
-
 make jenkins-pyflakes
 make jenkins-pep8
 make jenkins-pylint
 make jenkins-sloccount
+xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v \
+    --with-id --with-xcoverage --with-xunit --verbose \
+    --cover-package=${TEST_PACKAGE} ${TEST_PATH}
+
