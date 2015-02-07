@@ -1,13 +1,12 @@
 # coding=utf-8
-from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
     QgsFeature,
     QgsRectangle,
     QgsFeatureRequest,
-    QgsGeometry
-)
+    QgsGeometry)
+from PyQt4.QtCore import QVariant
 
 from safe.metadata import (
     unit_wetdry,

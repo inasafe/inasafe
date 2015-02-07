@@ -2,6 +2,10 @@
 """This module contains utilities for locating application resources (img etc).
 """
 import os
+
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=unused-import
 from PyQt4 import QtCore, uic
 
 

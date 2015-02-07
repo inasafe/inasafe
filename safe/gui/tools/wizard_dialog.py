@@ -25,6 +25,15 @@ import json
 from collections import OrderedDict
 from sqlite3 import OperationalError
 
+from qgis.core import (
+    QgsCoordinateTransform,
+    QgsBrowserModel,
+    QgsDataItem,
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsDataSourceURI,
+    QgsMapLayerRegistry)
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -36,15 +45,6 @@ from PyQt4.QtGui import (
     QPixmap,
     QApplication,
     QSortFilterProxyModel)
-
-from qgis.core import (
-    QgsCoordinateTransform,
-    QgsBrowserModel,
-    QgsDataItem,
-    QgsVectorLayer,
-    QgsRasterLayer,
-    QgsDataSourceURI,
-    QgsMapLayerRegistry)
 
 # pylint: disable=F0401
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector

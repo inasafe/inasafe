@@ -13,9 +13,9 @@ from subprocess import PIPE, Popen
 import ctypes
 from numbers import Integral
 import math
-# pylint: disable=W0611
+# pylint: disable=unused-import
 from collections import OrderedDict
-# pylint: enable=W0611
+# pylint: enable=unused-import
 
 from safe.common.exceptions import VerificationError
 from safe.utilities.i18n import locale

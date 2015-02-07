@@ -8,13 +8,12 @@ by Tim Sutton, Oct 2014.
 
 """
 
-
+from qgis.core import QgsPoint, QgsRectangle, QGis
+from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignal
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QColor
-from qgis.core import QgsPoint, QgsRectangle, QGis
-from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
 
 
 class RectangleMapTool(QgsMapToolEmitPoint):
