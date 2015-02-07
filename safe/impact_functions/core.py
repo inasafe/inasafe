@@ -48,7 +48,7 @@ class PluginMount(type):
                 message = 'Duplicate impact function name %s\n' % cls.__name__
                 message += 'Impact function file %s\n' % get_python_file(cls)
                 message += 'IF files that have been loaded: %s\n' % (
-                    ','.join([get_python_file(c) for c in cls.plugins]))
+                    '\n'.join([get_python_file(c) for c in cls.plugins]))
                 raise LookupError(message)
             else:
                 cls.plugins.append(cls)

@@ -22,8 +22,9 @@ import os
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 from qgis.gui import QgsMapCanvas
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
-import safe.test.sip_api_2
+import safe.test.sip_api_2  # pylint: disable=unused-import
 from PyQt4.QtGui import QWidget
 
 from safe.test.utilities import get_qgis_app

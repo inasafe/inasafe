@@ -22,8 +22,9 @@ import os
 import shutil
 
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
-import safe.test.sip_api_2
+import safe.test.sip_api_2  # pylint: disable=unused-import
 from PyQt4 import QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt

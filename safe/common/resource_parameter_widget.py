@@ -17,6 +17,7 @@ from safe_extras.parameters.qt_widgets.float_parameter_widget import (
     FloatParameterWidget)
 
 
+# pylint: disable=super-on-old-class
 class ResourceParameterWidget(FloatParameterWidget):
     """Widget class for Resource parameter."""
     def __init__(self, parameter, parent=None):
@@ -54,3 +55,5 @@ class ResourceParameterWidget(FloatParameterWidget):
         self._unit_widget = QLabel(label)
         if self._parameter.unit.help_text:
             self._unit_widget.setToolTip(self._parameter.unit.help_text)
+
+# pylint: enable=super-on-old-class
