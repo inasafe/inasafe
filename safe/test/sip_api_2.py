@@ -11,8 +11,8 @@ importing any PyQT4 in any modules on tests e.g:
 """
 
 import sip
-api_names = ["QDate", "QDateTime", "QString", "QTextStream", "QTime",
-             "QUrl", "QVariant"]
+api_names = ['QDate', 'QDateTime', 'QString', 'QTextStream', 'QTime',
+             'QUrl', 'QVariant']
 api_version = 2
 for name in api_names:
     sip.setapi(name, api_version)
