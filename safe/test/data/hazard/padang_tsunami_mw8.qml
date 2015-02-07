@@ -1,32 +1,21 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="1.8.0-Lisboa" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
-  <transparencyLevelInt>255</transparencyLevelInt>
-  <rasterproperties>
-    <mDrawingStyle>SingleBandPseudoColor</mDrawingStyle>
-    <mColorShadingAlgorithm>PseudoColorShader</mColorShadingAlgorithm>
-    <mInvertColor boolean="false"/>
-    <mRedBandName>Not Set</mRedBandName>
-    <mGreenBandName>Not Set</mGreenBandName>
-    <mBlueBandName>Not Set</mBlueBandName>
-    <mGrayBandName>Band 1</mGrayBandName>
-    <mStandardDeviations>1</mStandardDeviations>
-    <mUserDefinedRGBMinimumMaximum boolean="false"/>
-    <mRGBMinimumMaximumEstimated boolean="false"/>
-    <mUserDefinedGrayMinimumMaximum boolean="false"/>
-    <mGrayMinimumMaximumEstimated boolean="false"/>
-    <mContrastEnhancementAlgorithm>NoEnhancement</mContrastEnhancementAlgorithm>
-    <contrastEnhancementMinMaxValues>
-      <minMaxEntry>
-        <min>-3.40282e+38</min>
-        <max>3.40282e+38</max>
-      </minMaxEntry>
-    </contrastEnhancementMinMaxValues>
-    <mNoDataValue mValidNoDataValue="false">0.000000</mNoDataValue>
-    <singleValuePixelList>
-      <pixelListEntry pixelValue="-9999.000000" percentTransparent="100"/>
-    </singleValuePixelList>
-    <threeValuePixelList>
-      <pixelListEntry red="-9999.000000" blue="-9999.000000" green="-9999.000000" percentTransparent="100"/>
-    </threeValuePixelList>
-  </rasterproperties>
+<qgis version="2.6.0-Brighton" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
+  <pipe>
+    <rasterrenderer opacity="1" alphaBand="-1" classificationMax="11.4844" classificationMinMaxOrigin="CumulativeCutFullExtentEstimated" band="1" classificationMin="0.61758" type="singlebandpseudocolor">
+      <rasterTransparency/>
+      <rastershader>
+        <colorrampshader colorRampType="INTERPOLATED" clip="0">
+          <item alpha="255" value="0.61758" label="0.617580" color="#ffffb2"/>
+          <item alpha="255" value="3.33428" label="3.334285" color="#fecc5c"/>
+          <item alpha="255" value="6.05099" label="6.050990" color="#fd8d3c"/>
+          <item alpha="255" value="8.76769" label="8.767695" color="#f03b20"/>
+          <item alpha="255" value="11.4844" label="11.484400" color="#bd0026"/>
+        </colorrampshader>
+      </rastershader>
+    </rasterrenderer>
+    <brightnesscontrast brightness="0" contrast="0"/>
+    <huesaturation colorizeGreen="128" colorizeOn="0" colorizeRed="255" colorizeBlue="128" grayscaleMode="0" saturation="0" colorizeStrength="100"/>
+    <rasterresampler maxOversampling="2"/>
+  </pipe>
+  <blendMode>0</blendMode>
 </qgis>
