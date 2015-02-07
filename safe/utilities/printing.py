@@ -2,7 +2,7 @@
 """Printing related utilities."""
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
+import qgis  # pylint: disable=unused-import
 from PyQt4 import QtGui, QtCore
 
 from safe.utilities.utilities import LOGGER

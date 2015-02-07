@@ -22,7 +22,7 @@ import os
 import logging
 
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
+import qgis  # pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (

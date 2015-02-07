@@ -15,7 +15,7 @@ email : motta _dot_ luiz _at_ gmail.com
 """
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
+import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QSettings, QT_VERSION
 from PyQt4.QtNetwork import QNetworkProxy
 

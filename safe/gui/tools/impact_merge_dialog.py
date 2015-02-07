@@ -23,7 +23,7 @@ from xml.dom import minidom
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=F0401
-# pylint: disable=W0611
+# pylint: disable=unused-import
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsComposition,
@@ -31,7 +31,7 @@ from qgis.core import (
     QgsAtlasComposition
 )
 # pylint: enable=F0401
-# pylint: enable=W0611
+# pylint: enable=unused-import
 try:
     from qgis.core import QgsMapSettings
 except ImportError:
