@@ -27,7 +27,7 @@ from qgis.core import (
     QgsPoint,
     QgsCoordinateReferenceSystem,
     QGis)
-from qgis.gui import QgsRubberBand
+from qgis.gui import QgsRubberBand  # pylint: disable=no-name-in-module
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings
 
