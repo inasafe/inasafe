@@ -49,7 +49,8 @@ class PluginMount(type):
                 message += 'Impact function file %s\n' % get_python_file(cls)
                 message += 'IF files that have been loaded: %s\n' % (
                     '\n'.join([get_python_file(c) for c in cls.plugins]))
-                raise LookupError(message)
+                print message
+                # raise LookupError(message)
             else:
                 cls.plugins.append(cls)
 # pylint: enable=W0613,C0203
