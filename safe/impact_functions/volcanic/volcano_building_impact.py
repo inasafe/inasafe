@@ -27,8 +27,8 @@ from safe.metadata import (
     hazard_definition,
     unit_building_generic)
 from safe.storage.vector import Vector
+from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    ugettext as tr,
     format_int,
     get_thousand_separator,
     get_non_conflicting_attribute_name)
@@ -84,7 +84,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': hazard_volcano,
+                        'subcategories': [hazard_volcano],
                         'units': [unit_volcano_categorical],
                         'layer_constraints': [
                             layer_vector_polygon,
@@ -93,7 +93,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_structure,
+                        'subcategories': [exposure_structure],
                         'units': [
                             unit_building_type_type,
                             unit_building_generic],

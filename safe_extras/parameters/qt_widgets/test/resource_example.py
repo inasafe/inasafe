@@ -6,7 +6,7 @@ __author__ = 'ismailsunni'
 __project_name = 'parameters'
 __filename = 'main'
 __date__ = '8/19/14'
-__copyright__ = 'imajimatika@gmail.com'
+__copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
 import sys

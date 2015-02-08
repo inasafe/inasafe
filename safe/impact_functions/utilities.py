@@ -1,36 +1,10 @@
+# coding=utf-8
 """Module to create damage curves from point data and additional logging
 utils relevant to impact_functions.
 """
 
-import numpy
-from safe.common.interpolation1d import interpolate1d
-
-
-class Damage_curve(object):
-    """Class for implementation of damage curves based on point data
-    """
-
-    def __init__(self, data):
-
-        try:
-            data = numpy.array(data)
-        except:
-            msg = 'Could not convert data %s to damage curve' % str(data)
-            raise RuntimeError(msg)
-
-        msg = 'Damage curve data must be a 2d array or a list of lists'
-        if len(data.shape) != 2:
-            raise RuntimeError(msg)
-
-        msg = 'Damage curve data must have two columns'
-        if data.shape[1] != 2:
-            raise RuntimeError(msg)
-
-        self.x = data[:, 0]
-        self.y = data[:, 1]
-
-    def __call__(self, zeta):
-        return interpolate1d(self.x, self.y, [zeta], mode='linear')[0]
+import sys
+import os
 
 
 def admissible_plugins_to_str(plugin_list):
@@ -136,3 +110,65 @@ def add_to_list(my_list, my_element):
             my_list.append(my_element)
 
     return my_list
+
+
+def get_list_id(list_dictionary):
+    """Helper function to return list of id from list of dictionary.
+
+     Each dictionary must have id in its key.
+
+    :param list_dictionary: List of dictionary
+    :type list_dictionary: list
+
+    :returns: List of id
+    :rtype: list
+    """
+    return [e['id'] for e in list_dictionary]
+
+
+def get_python_file(python_class):
+    """Obtain location where the python class is loaded from.
+
+    :param python_class: A valid python class.
+    :type python_class: class
+
+    :returns: A absolute path to python file.
+    :rtype: str
+    """
+
+    python_file = os.path.abspath(
+        sys.modules[python_class.__module__].__file__)
+    if python_file[-1] == 'c':
+        python_file = python_file[:-1]
+    return python_file
+
+
+def is_duplicate_impact_function(impact_function):
+    """Check whether the impact_function has been added or not.
+
+    Duplicate means:
+        - Same class name
+        - Different file (we can check based on .py or .pyc files)
+
+    :param impact_function: An impact function class
+    :type impact_function: FunctionProvider
+
+    :returns: True if duplicate, otherwise False
+    :rtype: bool
+    """
+
+    if_class_names = [c.__name__ for c in impact_function.plugins]
+    # if_py_files = [get_python_file(c) for c in impact_function.plugins]
+
+    impact_function_name = impact_function.__name__
+    # impact_function_py = get_python_file(impact_function)
+
+    if impact_function_name in if_class_names:
+        # if impact_function_py in if_py_files:
+        #     return False
+        # else:
+        #     # Same name, different location
+        #     return True
+        return True
+    else:
+        return False

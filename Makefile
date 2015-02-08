@@ -1,4 +1,4 @@
-#d202e28d4594ac2bc/***************************************************************************
+#/***************************************************************************
 #
 # InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 #                             -------------------
@@ -26,34 +26,20 @@ ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list usi
 # Please dont remove en here
 LOCALES = en id fr
 
-default: compile
-
-compile:
-	@echo
-	@echo "-----------------"
-	@echo "Compile GUI forms"
-	@echo "-----------------"
-	make -C safe_qgis
-
-compress-images:
-	@echo
-	@echo "-----------------"
-	@echo "Compress images"
-	@echo "-----------------"
-	@scripts/compress-images.sh
+default: quicktest
 
 #Qt .ts file updates - run to register new strings for translation in safe_qgis
-update-translation-strings: compile
+update-translation-strings:
         #update application strings
 	@echo "Checking current translation."
 	@scripts/update-strings.sh $(LOCALES)
 
 #Qt .qm file updates - run to create binary representation of translated strings for translation in safe_qgis
-compile-translation-strings: compile
-	@#compile gettext messages binary
-	$(foreach LOCALE, $(LOCALES), msgfmt --statistics -o safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.mo safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
+compile-translation-strings:
 	@#Compile qt messages binary
-	cd safe_qgis; lrelease-qt4 inasafe.pro; cd ..
+	@scripts/create_pro_file.sh
+	@lrelease-qt4 inasafe.pro
+	@rm inasafe.pro
 
 test-translations:
 	@echo
@@ -68,10 +54,6 @@ translation-stats:
 	@echo "Translation statistics - for more info see http://inasafe.org/developer-docs/i18n.html"
 	@echo "----------------------"
 	@echo
-	@echo "Gettext translations (*.po):"
-	@echo "----------------------------"
-	@$(foreach LOCALE,$(LOCALES), echo 'Locale: $(LOCALE)'; msgfmt --statistics safe/i18n/$(LOCALE)/LC_MESSAGES/inasafe.po;)
-	@echo
 	@echo "Qt translations (*.ts):"
 	@echo "----------------------------"
 	@scripts/string-stats.sh
@@ -82,7 +64,7 @@ lines-of-code:
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
 	@git log | head -3
-	@sloccount safe_qgis safe safe_api.py realtime | grep '^[0-9]'
+	@sloccount safe realtime | grep '^[0-9]'
 
 changelog:
 	@echo "----------------------"
@@ -116,6 +98,7 @@ clean:
 	@-/bin/rm .noseids 2>/dev/null || true
 	@-/bin/rm .coverage 2>/dev/null || true
 
+
 # Run the test suite followed by style checking
 test: clean pep8 pylint dependency_test unwanted_strings run_data_audit testdata_errorcheck test-translations test_suite
 
@@ -128,7 +111,7 @@ qgis2test: clean pep8 pylint dependency_test unwanted_strings run_data_audit tes
 quicktest: pep8 pylint dependency_test unwanted_strings run_data_audit test-translations test_suite_quick
 
 test_suite_quick:
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe --stop
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe --with-id
 
 # Run pep8 style checking
 #http://pypi.python.org/pypi/pep8
@@ -137,22 +120,22 @@ pep8:
 	@echo "-----------"
 	@echo "PEP8 issues"
 	@echo "-----------"
-	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude venv,pydev,safe_extras,keywords_dialog_base.py,wizard_dialog_base.py,dock_base.py,options_dialog_base.py,minimum_needs_configuration.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py,function_browser_base.py,function_options_dialog_base.py,minimum_needs_base.py,shakemap_importer_base.py,batch_dialog_base.py,osm_downloader_base.py,impact_report_dialog_base.py,impact_merge_dialog_base.py,about_dialog_base.py,extent_selector_base.py,extent_selector_dialog_base.py,function_browser_dialog_base.py,needs_calculator_dialog_base.py,needs_manager_dialog_base.py,osm_downloader_dialog_base.py,shakemap_importer_dialog_base.py . || true
+	@pep8 --repeat --ignore=E203,E121,E122,E123,E124,E125,E126,E127,E128 --exclude venv,pydev,safe_extras,keywords_dialog_base.py,wizard_dialog_base.py,dock_base.py,options_dialog_base.py,minimum_needs_configuration.py,resources_rc.py,help_base.py,xml_tools.py,system_tools.py,data_audit.py,data_audit_wrapper.py  . || true
 
 # Run entire test suite - excludes realtime until we have QGIS 2.0 support
-test_suite: compile testdata
+test_suite: testdata
 	@echo
 	@echo "---------------------"
 	@echo "Regression Test Suite"
 	@echo "---------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis safe safe_qgis 3>&1 1>&2 2>&3 3>&- || true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe safe 3>&1 1>&2 2>&3 3>&- || true
 
 	@# Report expected failures if any!
 	@#echo Expecting 1 test to fail in support of issue #3
 	@#echo Expecting 1 test to fail in support of issue #160
 
 # Run safe package tests only
-safe_test_suite: compile testdata
+safe_test_suite: testdata
 	@echo
 	@echo "---------------------"
 	@echo "Safe Regression Test Suite"
@@ -160,26 +143,13 @@ safe_test_suite: compile testdata
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id \
 	--with-coverage --cover-package=safe safe  3>&1 1>&2 2>&3 3>&- || true
 
-# Run gui test suite only
-gui_test_suite: compile testdata
-	@echo
-	@echo "----------------------"
-	@echo "Regression Test Suite"
-	@echo "----------------------"
-
-	@# Preceding dash means that make will continue in case of errors
-	#Noisy version - uncomment if you want to see all qgis stdout
-	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- || true
-	#Quiet version
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- || true
-
-# This one includes safe, safe_qgis and realtime and runs against QGIS v2
-qgis2_test_suite: compile testdata
+# This one includes safe and realtime and runs against QGIS v2
+qgis2_test_suite: testdata
 	@echo
 	@echo "---------------------"
 	@echo "Regression Test Suite"
 	@echo "---------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe,safe_qgis safe safe_qgis 3>&1 1>&2 2>&3 3>&- | true
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=safe safe 3>&1 1>&2 2>&3 3>&- | true
 
 # Run realtime test suite only
 realtime_test_suite:
@@ -190,8 +160,6 @@ realtime_test_suite:
 	@echo "-------------------"
 
 	@# Preceding dash means that make will continue in case of errors
-	#Noisy version - uncomment if you want to see all qgis stdout
-	#@-export PYTHONPATH=`pwd`:$(PYTHONPATH);nosetests -v --with-id --with-coverage --cover-package=safe_qgis safe_qgis 3>&1 1>&2 2>&3 3>&- || true
 	#Quiet version
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH);export QGIS_DEBUG=0;export QGIS_LOG_FILE=/dev/null;export QGIS_DEBUG_FILE=/dev/null;nosetests -v --with-id --with-coverage --cover-package=realtime realtime 3>&1 1>&2 2>&3 3>&- || true
 
@@ -204,7 +172,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh 077e6d9776018bcdb34dbf6db9900831f9777d02 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 99073e03a63f9c67cd84016ffb88d43281d97545 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -283,14 +251,14 @@ pylint-count:
 	@echo "Number of pylint violations"
 	@echo "For details run make pylint"
 	@echo "---------------------------"
-	@pylint --output-format=parseable --reports=n --rcfile=pylintrc safe safe_qgis realtime | wc -l
+	@pylint --output-format=parseable --reports=n --rcfile=pylintrc safe realtime | wc -l
 
 pylint:
 	@echo
 	@echo "-----------------"
 	@echo "Pylint violations"
 	@echo "-----------------"
-	@pylint --reports=n --rcfile=pylintrc safe safe_qgis realtime || true
+	@pylint --reports=n --rcfile=pylintrc safe realtime || true
 
 profile:
 	@echo
@@ -304,7 +272,7 @@ pyflakes:
 	@echo "---------------"
 	@echo "PyFlakes issues"
 	@echo "---------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe safe_qgis realtime | wc -l
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe realtime | wc -l
 
 indent:
 	@echo
@@ -328,7 +296,7 @@ docker-test: testdata clean
 	@echo "Regression Test Suite for running in docker"
 	@echo " against QGIS 2.x"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" nosetest s-v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe_qgis safe_qgis
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe
 
 
 ##########################################################
@@ -343,7 +311,7 @@ jenkins-test: testdata clean
 	@echo "Regression Test Suite for Jenkins"
 	@echo " against QGIS 2.x"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests --cover-package=safe,safe_qgis --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis safe safe_qgis || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests --cover-package=safe --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe || :
 
 jenkins-qgis2-test: testdata clean
 	@echo
@@ -351,14 +319,14 @@ jenkins-qgis2-test: testdata clean
 	@echo "Regression Test Suite for Jenkins"
 	@echo " against QGIS 2.x"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,safe_qgis,realtime safe safe_qgis realtime || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe,realtime safe realtime || :
 
 jenkins-pyflakes:
 	@echo
 	@echo "----------------------------------"
 	@echo "PyFlakes check for Jenkins"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe safe_qgis realtime > pyflakes.log || :
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); pyflakes safe realtime > pyflakes.log || :
 
 jenkins-sloccount:
 	@echo "----------------------"
@@ -366,7 +334,7 @@ jenkins-sloccount:
 	@echo " Generated using David A. Wheeler's 'SLOCCount'"
 	@echo "----------------------"
 	# This line is for machine readable output for use by Jenkins
-	@sloccount --duplicates --wide --details  safe_api.py safe safe_qgis realtime | fgrep -v .svn > sloccount.sc || :
+	@sloccount --duplicates --wide --details  safe_api.py safe realtime | fgrep -v .svn > sloccount.sc || :
 
 jenkins-pylint:
 	@echo
@@ -379,7 +347,7 @@ jenkins-pylint:
 	@echo " with 'F0401' being the warning code."
 	@echo "----------------------------------"
 	rm -f pylint.log
-	@-export PYTHONPATH=$(PYTHONPATH):`pwd`/safe_extras; pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins safe safe_qgis realtime> pylint.log || :
+	@-export PYTHONPATH=$(PYTHONPATH):`pwd`/safe_extras; pylint --output-format=parseable --reports=y --rcfile=pylintrc_jenkins safe realtime> pylint.log || :
 
 jenkins-pep8:
 	@echo

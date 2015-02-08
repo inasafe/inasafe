@@ -31,21 +31,24 @@ rm -rf ${WORKDIR}/${DIR}/pylintrc
 rm -rf ${WORKDIR}/${DIR}/extras
 rm -rf ${WORKDIR}/${DIR}/safe/test
 rm -rf ${WORKDIR}/${DIR}/realtime
-rm -rf ${WORKDIR}/${DIR}/files/flood_tagging_test.*
-rm -rf ${WORKDIR}/${DIR}/files/README.rst
+rm -rf ${WORKDIR}/${DIR}/files
 rm -rf ${WORKDIR}/${DIR}/fabfile.py
 # Commented out next line for #832 - reinstate when that issue is resolved
 #rm -rf ${WORKDIR}/${DIR}/safe_qgis/resources
 rm -rf ${WORKDIR}/${DIR}/pylintrc_jenkins
 rm -rf ${WORKDIR}/${DIR}/.travis.yml
-rm -rf ${WORKDIR}/${DIR}/setup.py
+rm -rf ${WORKDIR}/${DIR}/Dockerfile
+rm -rf ${WORKDIR}/${DIR}/docs/README.BEFORE.CHANGING.DOCS.txt
+rm -rf ${WORKDIR}/${DIR}/71-apt-cacher-ng
+rm -rf ${WORKDIR}/${DIR}/.dockerignore
+rm -rf ${WORKDIR}/${DIR}/REQUIREMENTS.txt
 
 find ${WORKDIR}/${DIR} -name test*.py -delete
 find ${WORKDIR}/${DIR} -name *_test.py -delete
 find ${WORKDIR}/${DIR} -name *.po -delete
 find ${WORKDIR}/${DIR} -name *.ts -delete
 
-rpl "from safe.common.testing import HAZDATA, EXPDATA, TESTDATA, UNITDATA, BOUNDDATA" "" ${WORKDIR}/${DIR}/safe/api.py
+rpl "from safe.test.utilities import HAZDATA, EXPDATA, TESTDATA, BOUNDDATA" "" ${WORKDIR}/${DIR}/safe/api.py
 
 rm -rf ${WORKDIR}/${DIR}/*.bat
 
@@ -55,7 +58,7 @@ cd ${WORKDIR}
 find . -name test -exec /bin/rm -rf {} \;
 # Compress all images shipped
 #for FILE in `find . -type f -name "*.png"`
-#do 
+#do
 #    echo "Compressing $FILE"
 #    convert -dither FloydSteinberg -colors 128 $FILE $FILE
 #done

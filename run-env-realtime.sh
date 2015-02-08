@@ -3,9 +3,6 @@
 # This file contains all the environments needed for realtime
 
 QGIS_PREFIX_PATH=/usr
-if [ -n "$1" ]; then
-    QGIS_PREFIX_PATH=$1
-fi
 
 echo $QGIS_PREFIX_PATH
 
@@ -15,7 +12,9 @@ export QGIS_PATH=$QGIS_PREFIX_PATH
 export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:${PYTHONPATH}
 
+
 echo "QGIS PATH: $QGIS_PREFIX_PATH"
+echo "PYTHONPATH: $PYTHONPATH"
 export QGIS_DEBUG=0
 export QGIS_LOG_FILE=/home/realtime/logs/qgis.log
 export QGIS_DEBUG_FILE=/home/realtime/logs/qgis-debug.log

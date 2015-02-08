@@ -18,7 +18,7 @@ from safe.metadata import (
     hazard_tsunami,
     unit_metres_depth,
     unit_feet_depth,
-    layer_raster_numeric,
+    layer_raster_continuous,
     exposure_road,
     unit_road_type_type,
     layer_vector_line,
@@ -30,14 +30,14 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
-from safe.common.utilities import ugettext as tr
+from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
-from safe.common.qgis_raster_tools import polygonize, clip_raster
-from safe.common.qgis_vector_tools import split_by_polygon, clip_by_polygon
+from safe.gis.qgis_raster_tools import polygonize, clip_raster
+from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 
 
 class FloodRasterRoadsExperimentalFunction(FunctionProvider):
@@ -85,7 +85,7 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [
+                        'subcategories': [
                             hazard_flood,
                             hazard_tsunami
                         ],
@@ -93,11 +93,11 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                             unit_metres_depth,
                             unit_feet_depth
                         ],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_road,
+                        'subcategories': [exposure_road],
                         'units': [unit_road_type_type],
                         'layer_constraints': [layer_vector_line]
                     }

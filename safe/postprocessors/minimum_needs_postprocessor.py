@@ -2,6 +2,7 @@
 """**Postprocessors package.**
 
 """
+from safe.utilities.i18n import tr
 
 __author__ = 'Marco Bernasocchi <marco@opengis.ch>'
 __revision__ = '$Format:%H$'
@@ -12,8 +13,6 @@ __copyright__ += 'Disaster Reduction'
 
 
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
-
-from safe.common.utilities import (ugettext as tr)
 
 
 class MinimumNeedsPostprocessor(AbstractPostprocessor):
@@ -51,7 +50,16 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
             self._raise_error('clear needs to be called before setup')
 
         try:
-            self.impact_total = int(round(params['impact_total']))
+            evacuation_percentage = 1
+            if 'function_params' in params.keys():
+                function_params = params['function_params']
+                if 'evacuation_percentage' in function_params.keys():
+                    evacuation_percentage = function_params[
+                        'evacuation_percentage']
+                    evacuation_percentage /= 100.0  # make it decimal
+
+            self.impact_total = int(round(params['impact_total'] *
+                                          evacuation_percentage))
         except (ValueError, TypeError):
             self.impact_total = self.NO_DATA_TEXT
         self.minimum_needs = params['function_params']['minimum needs']

@@ -11,15 +11,11 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '2/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
 
 import os
 import shutil
@@ -27,18 +23,11 @@ import unittest
 import logging
 import difflib
 
-# pylint: disable=E0611
-# pylint: disable=W0611
 from qgis.core import QgsFeatureRequest
-# pylint: enable=E0611
-# pylint: enable=W0611
-from safe.api import (
-    unique_filename,
-    temp_dir,
-    get_version,
-    get_shake_test_data_path
-)
-from safe.common.testing import get_qgis_app
+
+from safe.common.utilities import temp_dir, unique_filename
+from safe.common.version import get_version
+from safe.test.utilities import test_data_path, get_qgis_app
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
@@ -61,12 +50,10 @@ class TestShakeEvent(unittest.TestCase):
         """Copy our cached dataset from the fixture dir to the cache dir."""
         # Since ShakeEvent will be using sftp_shake_data, we'll copy the grid
         # file inside 20131105060809 folder to
-        # shakemap_cache_dir/20131105060809/grid.xml
+        # shakemap_extract_dir/20131105060809/grid.xml
+        shake_path = test_data_path('hazard', 'shake_data')
         input_path = os.path.abspath(
-            os.path.join(
-                get_shake_test_data_path(),
-                SHAKE_ID,
-                'output/grid.xml'))
+            os.path.join(shake_path, SHAKE_ID, 'output/grid.xml'))
         target_folder = os.path.join(
             shakemap_extract_dir(), SHAKE_ID)
         if not os.path.exists(target_folder):
@@ -85,13 +72,21 @@ class TestShakeEvent(unittest.TestCase):
         """Test grid_file_path works using cached data."""
         expected_path = os.path.join(
             shakemap_extract_dir(), SHAKE_ID, 'grid.xml')
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         grid_path = shake_event.grid_file_path()
         self.assertEquals(expected_path, grid_path)
 
     def test_to_string(self):
         """Test __str__ works properly."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         expected_state = (
             'latitude: -2.43\n'
             'longitude: 140.62\n'
@@ -130,7 +125,11 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_local_cities(self):
         """Test that we can retrieve the cities local to the event"""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         # Get teh mem layer
         cities_layer = shake_event.local_cities_memory_layer()
         provider = cities_layer.dataProvider()
@@ -178,7 +177,11 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_mmi_potential_damage(self):
         """Test mmi_potential_damage function."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         values = range(1, 11)
         expected_result = ['None', 'None', 'None', 'None', 'Very light',
                            'Light', 'Moderate', 'Mod/Heavy', 'Heavy',
@@ -191,20 +194,32 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_cities_to_shape(self):
         """Test that we can retrieve the cities local to the event."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         file_path = shake_event.cities_to_shapefile()
         self.assertTrue(os.path.exists(file_path))
 
     def test_cities_search_boxes_to_shape(self):
         """Test that we can retrieve the search boxes used to find cities."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         file_path = shake_event.city_search_boxes_to_shapefile()
         self.assertTrue(os.path.exists(file_path))
 
     def test_calculate_fatalities(self):
         """Test that we can calculate fatalities."""
         LOGGER.debug(QGIS_APP.showSettings())
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         result, fatalities_html = shake_event.calculate_impacts()
 
         # Get the os environment INASAFE_WORK_DIR if it exists
@@ -236,7 +251,11 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_sorted_impacted_cities(self):
         """Test getting impacted cities sorted by mmi then population."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         table = shake_event.sorted_impacted_cities()
 
         file_path = unique_filename(
@@ -262,7 +281,11 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_impacted_cities_table(self):
         """Test getting impacted cities table."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         table, path = shake_event.impacted_cities_table()
         expected_string = [
             '<td>Jayapura</td><td>134</td><td>I</td>',
@@ -283,7 +306,11 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_fatalities_table(self):
         """Test rendering a fatalities table."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         shake_event.calculate_impacts()
         result = shake_event.impact_table()
 
@@ -299,7 +326,11 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_event_info_dict(self):
         """Test we can get a dictionary of location info nicely."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         result = shake_event.event_dict()
         software_tag = ('This report was created using InaSAFE version %s. '
                         'Visit http://inasafe.org for more information.' %
@@ -321,8 +352,8 @@ class TestShakeEvent(unittest.TestCase):
             'elapsed-time-name': u'Elapsed time since event',
             'exposure-table-name': u'Estimated number of people '
                                    u'affected by each MMI level',
-            'longitude-value': u'140\xb037\'12.00"E',
-            'city-table-name': u'Places Affected',
+            'longitude-value': u'140\xb037\u203212.00\u2033E',
+            'city-table-name': u'Nearby Places',
             'bearing-text': u'bearing',
             'limitations': (
                 u'This impact estimation is automatically generated and only '
@@ -353,7 +384,7 @@ class TestShakeEvent(unittest.TestCase):
             'credits': (
                 u'Supported by the Australia-Indonesia Facility for Disaster '
                 u'Reduction, Geoscience Australia and the World Bank-GFDRR.'),
-            'latitude-value': u'2\xb025\'48.00"S',
+            'latitude-value': u'2\xb025\u203248.00\u2033S',
             'time': '6:8:9',
             'depth-value': '10.0'}
         result['elapsed-time'] = u''
@@ -365,12 +396,16 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_event_info_string(self):
         """Test we can get a location info string nicely."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
-        degree_symbol = unichr(176)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         expected_result = (
-            'M 3.6 5-11-2013 6:8:9 Latitude: 2%s25\'48.00"S Longitude: '
-            '140%s37\'12.00"E Depth: 10.0km Located 0.00km n/a of n/a'
-            % (degree_symbol, degree_symbol))
+            u"M 3.6 5-11-2013 6:8:9 Latitude: 2°25′48.00"
+            u'″S Longitude: 140°37'
+            u"′"
+            u'12.00″E Depth: 10.0km Located 0.00km n/a of n/a')
         result = shake_event.event_info()
         message = ('Got:\n%s\nExpected:\n%s\n' %
                    (result, expected_result))
@@ -378,7 +413,11 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_render_map(self):
         """Test render_map function in shake_event."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
         # Render Map
         shake_event.render_map()
         # There should be exist:
@@ -453,7 +492,11 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_bearing_to_cardinal(self):
         """Test we can convert a bearing to a cardinal direction."""
-        shake_event = ShakeEvent(SHAKE_ID, data_is_local_flag=True)
+        working_dir = shakemap_extract_dir()
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            data_is_local_flag=True)
 
         # Ints should work
         expected_result = 'SSE'
@@ -478,8 +521,12 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_i18n(self):
         """See if internationalisation is working."""
+        working_dir = shakemap_extract_dir()
         shake_event = ShakeEvent(
-            SHAKE_ID, locale='id', data_is_local_flag=True)
+            working_dir=working_dir,
+            event_id=SHAKE_ID,
+            locale='id',
+            data_is_local_flag=True)
         shaking = shake_event.mmi_shaking(5)
         expected_shaking = 'Sedang'
         self.assertEqual(expected_shaking, shaking)

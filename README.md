@@ -18,6 +18,7 @@ functions for impact modelling.
 Story queue on Waffle:
 [![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.svg?label=ready&title=Ready)](http://waffle.io/AIFDR/inasafe) 
 [![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/AIFDR/inasafe)
+[![Throughput Graph](https://graphs.waffle.io/aifdr/inasafe/throughput.svg)](https://waffle.io/aifdr/inasafe/metrics)
 
 Current build status master: [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=master)](https://travis-ci.org/AIFDR/inasafe)
 Current build status develop: [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=develop)](https://travis-ci.org/AIFDR/inasafe)
@@ -51,7 +52,7 @@ System Requirements
 
  - A standard PC with at least 4GB of RAM running Windows, Linux or Mac OS X
  - The QGIS Open Source Geographic Information System (http://www.qgis.org).
-   InaSAFE requires QGIS version 1.7 or newer.
+   InaSAFE requires QGIS version 2.0 or newer.
 
 Limitations
 ===========

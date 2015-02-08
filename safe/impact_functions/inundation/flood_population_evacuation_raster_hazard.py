@@ -1,6 +1,7 @@
 # coding=utf-8
 """Flood Evacuation Impact Function."""
 import numpy
+
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     get_defaults,
@@ -17,30 +18,28 @@ from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding)
 from safe.impact_functions.impact_function_metadata import (
-    ImpactFunctionMetadata
-)
+    ImpactFunctionMetadata)
 from safe.metadata import (
     hazard_flood,
     unit_feet_depth,
     unit_metres_depth,
-    layer_raster_numeric,
+    layer_raster_continuous,
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
-    exposure_definition
-)
+    exposure_definition)
 from safe.storage.raster import Raster
+from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    ugettext as tr,
     format_int,
     verify,
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator
-)
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 # noinspection PyClassHasNoInit
@@ -92,18 +91,18 @@ class FloodEvacuationFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [hazard_flood],
+                        'subcategories': [hazard_flood],
                         'units': [
                             unit_feet_depth,
                             unit_metres_depth
                         ],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_population,
+                        'subcategories': [exposure_population],
                         'units': [unit_people_per_pixel],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     }
                 }
             }
@@ -162,6 +161,7 @@ class FloodEvacuationFunction(FunctionProvider):
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Risk plugin for flood population evacuation.
@@ -275,7 +275,8 @@ class FloodEvacuationFunction(FunctionProvider):
             {'eps': thresholds[-1]},
             tr('Minimum needs are defined in BNPB regulation 7/2008'),
             tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.')])
+               'avoid representing human lives as fractions.'),
+            tr('All affected people are assumed to be evacuated.')])
 
         if len(counts) > 1:
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))

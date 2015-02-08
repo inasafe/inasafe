@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __version__ = '1.1.1'
 __revision__ = '$Format:%H$'
 __date__ = '05/05/2014'
@@ -24,6 +24,7 @@ from safe.common.utilities import (
     get_significant_decimal,
     humanize_class,
     format_decimal,
+    format_int,
     create_classes,
     create_label,
     get_thousand_separator,
@@ -35,21 +36,31 @@ from safe.common.utilities import (
     romanise)
 
 
-def print_class(my_array, my_result_class, my_expected):
-    """Print my_array, my_result, my_expected in nice format
+def print_class(array, result_class, expected_result):
+    """Print array, result_class, expected_result in nice format.
+
+    :param array: The original array.
+    :type array: list
+
+    :param result_class: The class result.
+    :type result_class: list
+
+    :param expected_result: The expected result.
+    :type expected_result: list
+
     """
     print 'Original Array'
-    for i in xrange(len(my_array[1:])):
-        print my_array[i], ' - ', my_array[i + 1]
+    for i in xrange(len(array[1:])):
+        print array[i], ' - ', array[i + 1]
     print 'Classes result'
-    for result in my_result_class:
+    for result in result_class:
         print result[0], ' - ', result[1]
     print 'Expect result'
-    for expect in my_expected:
+    for expect in expected_result:
         print expect[0], ' - ', expect[1]
 
 
-class UtilitiesTest(unittest.TestCase):
+class TestUtilities(unittest.TestCase):
     def test_humanize_class(self):
         """Test humanize class
         First class interval < 1
@@ -185,6 +196,30 @@ class UtilitiesTest(unittest.TestCase):
         assert my_result == '10,000.09', \
             'Format decimal is not valid %s' % my_result
 
+    def test_format_int(self):
+        """Test formatting integer"""
+        number = 10000000
+        lang = os.getenv('LANG')
+        formatted_int = format_int(number)
+        if lang == 'id':
+            expected_str = '10.000.000'
+        else:
+            expected_str = '10,000,000'
+        message = 'Format integer is not valid'
+        assert (formatted_int == expected_str or
+                formatted_int == str(number)), message
+
+        number = 1234
+        lang = os.getenv('LANG')
+        formatted_int = format_int(number)
+        if lang == 'id':
+            expected_str = '1.234'
+        else:
+            expected_str = '1,234'
+        message = 'Format integer %s is not valid' % formatted_int
+        assert (formatted_int == expected_str or
+                formatted_int == str(number)), message
+
     def test_separator(self):
         """Test decimal and thousand separator
         """
@@ -194,6 +229,7 @@ class UtilitiesTest(unittest.TestCase):
         os.environ['LANG'] = 'id'
         assert '.' == get_thousand_separator()
         assert ',' == get_decimal_separator()
+        os.environ['LANG'] = 'en'
 
     def test_create_classes(self):
         """Test create_classes.
@@ -294,6 +330,6 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(result, expected_result, message)
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(UtilitiesTest, 'test')
+    suite = unittest.makeSuite(TestUtilities)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

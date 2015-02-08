@@ -10,13 +10,10 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-
+from collections import OrderedDict
 from safe.postprocessors.building_type_postprocessor import \
     BuildingTypePostprocessor
-
-from safe.common.utilities import (
-    ugettext as tr,
-    OrderedDict)
+from safe.utilities.i18n import tr
 
 
 # The road postprocessing is the same workflow as Building postprocessing

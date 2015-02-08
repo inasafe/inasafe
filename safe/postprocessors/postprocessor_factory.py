@@ -15,9 +15,8 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-from safe.common.utilities import ugettext as tr
 
-# pylint: disable=W0611
+# pylint: disable=unused-import
 from gender_postprocessor import GenderPostprocessor
 from age_postprocessor import AgePostprocessor
 from aggregation_postprocessor import AggregationPostprocessor
@@ -26,7 +25,8 @@ from road_type_postprocessor import RoadTypePostprocessor
 from aggregation_categorical_postprocessor import \
     AggregationCategoricalPostprocessor
 from minimum_needs_postprocessor import MinimumNeedsPostprocessor
-# pylint: enable=W0611
+from safe.utilities.i18n import tr
+# pylint: enable=unused-import
 
 LOGGER = logging.getLogger('InaSAFE')
 # this _must_reflect the imported classes above

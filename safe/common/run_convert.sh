@@ -1,1 +1,0 @@
-PYTHONPATH=../../ python converter.py
