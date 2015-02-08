@@ -47,8 +47,7 @@ but never import this module or the functions in it!
 #              this module automatically generate the _() versions:
 # for s in strings:
 #     names[s] = '_(%s)' % s
-
-from safe.common.utilities import ugettext as tr
+from safe.utilities.i18n import tr
 
 
 # Don't call this function

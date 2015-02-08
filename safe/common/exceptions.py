@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '17/06/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -123,3 +123,206 @@ class RadiiException(Exception):
     """Raised if radii for volcano buffer is not as we expect."""
     suggestion = ('Please make sure the radii for volcano buffer are '
                   'monotonically increasing.')
+
+
+class InvalidClipGeometryError(Exception):
+    """Custom exception for when clip geometry is invalid."""
+    pass
+
+
+class FileNotFoundError(Exception):
+    """Custom exception for when a file could not be found."""
+    pass
+
+
+class TestNotImplementedError(Exception):
+    """Custom exception for when a test exists only as a stub."""
+    pass
+
+
+class InsufficientParametersError(Exception):
+    """Custom exception for when insufficient parameters have been set."""
+    pass
+
+
+class NoFunctionsFoundError(Exception):
+    """Custom exception for when a no impact calculation
+    functions can be found."""
+    pass
+
+
+class KeywordDbError(Exception):
+    """Custom exception for when an error is encountered with keyword cache db.
+    """
+    pass
+
+
+class KeywordNotFoundError(Exception):
+    """Custom exception for when a keyword's key (e.g. unit) cannot be found.
+    """
+    pass
+
+
+class HashNotFoundError(Exception):
+    """Custom exception for when a no keyword hash can be found."""
+    pass
+
+
+class StyleInfoNotFoundError(Exception):
+    """Custom exception for when a no styleInfo can be found."""
+    pass
+
+
+class InvalidParameterError(Exception):
+    """Custom exception for when an invalid parameter is passed to a function.
+    """
+    pass
+
+
+class NoKeywordsFoundError(Exception):
+    """Custom exception for when no keywords file exist for a layer.
+    """
+    pass
+
+
+class TranslationLoadError(Exception):
+    """Custom exception handler for whe translation file fails
+    to load."""
+    pass
+
+
+class InvalidKVPError(Exception):
+    """An exception raised when a key value pair is invalid -
+    for example if the key of value is None or an empty string."""
+    pass
+
+
+class LegendLayerError(Exception):
+    """An exception raised when trying to create a legend from
+    a QgsMapLayer that does not have suitable characteristics to
+    allow a legend to be created from it."""
+    pass
+
+
+class NoFeaturesInExtentError(Exception):
+    """An exception that gets thrown when no features are within
+    the extent being clipped."""
+    pass
+
+
+class InvalidProjectionError(Exception):
+    """An exception raised if a layer needs to be reprojected."""
+    pass
+
+
+class InsufficientOverlapError(Exception):
+    """An exception raised if an error occurs during extent calculation
+    because the bounding boxes do not overlap."""
+    pass
+
+
+class InvalidBoundingBoxError(Exception):
+    """An exception raised if an error occurs during extent calculation
+    because one of the extents is invalid."""
+    pass
+
+
+class StyleError(Exception):
+    """An exception relating to reading / generating GIS styles"""
+    pass
+
+
+# class ShapefileCreationError(Exception):
+#     """Raised if an error occurs creating the cities file"""
+#     pass
+#
+#
+class MemoryLayerCreationError(Exception):
+    """Raised if an error occurs creating the cities file"""
+    pass
+
+
+class MethodUnavailableError(Exception):
+    """Raised if the requested import cannot be performed dur to qgis being
+    to old"""
+    pass
+
+
+class CallGDALError(Exception):
+    """Raised if failed to call gdal command. Indicate by error message that is
+    not empty"""
+    pass
+
+
+class ImportDialogError(Exception):
+    """Raised if import process failed."""
+    pass
+
+
+class CanceledImportDialogError(Exception):
+    """Raised if import process canceled"""
+    pass
+
+
+class InvalidAggregatorError(Exception):
+    """Raised if aggregator state is not valid when trying to run it."""
+    pass
+
+
+class AggregationError(Exception):
+    """Raised if aggregator state is not valid when trying to run it."""
+    pass
+
+
+class HelpFileMissingError(Exception):
+    """Raised if a help file cannot be found."""
+    pass
+
+
+class InvalidGeometryError(Exception):
+    """Custom exception for when a feature geometry is invalid or none."""
+    pass
+
+
+class UnsupportedProviderError(Exception):
+    """For unsupported provider (e.g. openlayers plugin) encountered."""
+    pass
+
+
+class TemplateLoadingError(Exception):
+    """Raised when loading the template is error."""
+    pass
+
+
+class TemplateElementMissingError(Exception):
+    """Raised when some element ids are missing from template."""
+
+
+class ReportCreationError(Exception):
+    """Raised when error occurs during report generation."""
+    pass
+
+
+class EmptyDirectoryError(Exception):
+    """Raised when output directory is empty string path."""
+    pass
+
+
+class DownloadError(Exception):
+    """Raised when downloading file is error."""
+    pass
+
+
+class NoValidLayerError(Exception):
+    """Raised when there no valid layer in inasafe."""
+    pass
+
+
+class InsufficientMemoryWarning(Exception):
+    """Raised when there is a possible insufficient memory."""
+    pass
+
+
+class InvalidAggregationKeywords(Exception):
+    """Raised when the aggregation keywords is invalid."""
+    pass

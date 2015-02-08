@@ -16,7 +16,7 @@ See: https://github.com/AIFDR/inasafe/issues/577 for more detailed explanation.
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -25,3 +25,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 DYNAMIC_MESSAGE_SIGNAL = 'DynamicMessage'
 STATIC_MESSAGE_SIGNAL = 'StaticMessage'
 ERROR_MESSAGE_SIGNAL = 'ErrorMessage'
+BUSY_SIGNAL = 'BusySignal'
+NOT_BUSY_SIGNAL = 'NotBusySignal'
+ANALYSIS_DONE_SIGNAL = 'AnalysisDone'

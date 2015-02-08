@@ -4,7 +4,7 @@ __author__ = 'ismailsunni'
 __project_name = 'parameters'
 __filename = 'unit'
 __date__ = '8/25/14'
-__copyright__ = 'imajimatika@gmail.com'
+__copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
 import uuid
@@ -153,11 +153,17 @@ class Unit(object):
 
         """
         name = unit_dictionary.get('name', '')
+        plural = unit_dictionary.get('plural', '')
+        abbreviation = unit_dictionary.get('abbreviation', '')
         help_text = unit_dictionary.get('help_text', '')
         description = unit_dictionary.get('description', '')
 
         if name:
             self.name = name
+        if plural:
+            self.plural = plural
+        if abbreviation:
+            self.abbreviation = abbreviation
         if help_text:
             self.help_text = help_text
         if description:
@@ -172,8 +178,10 @@ class Unit(object):
         return {
             'name': self.name,
             'plural': self.plural,
-            'abbreviation': self.abbreviation
-        }
+            'abbreviation': self.abbreviation,
+            'help_text': self.help_text,
+            'description': self.description,
+            }
 
     def __str__(self):
         return self.name

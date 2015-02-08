@@ -5,16 +5,17 @@ Provides the function calculate_impact()
 """
 
 import numpy
+from datetime import datetime
+from socket import gethostname
+import getpass
 
 from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
 from safe.impact_functions.core import extract_layers
 from safe.common.utilities import unique_filename, verify
-from utilities import REQUIRED_KEYWORDS
-from datetime import datetime
-from socket import gethostname
-from safe.common.utilities import ugettext as tr
-import getpass
+from safe.utilities.i18n import tr
+from safe.engine.utilities import REQUIRED_KEYWORDS
+
 
 # The LOGGER is intialised in utilities.py by init
 import logging
@@ -141,7 +142,7 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
         F.set_name(default_name)
 
     # FIXME (Ole): If we need to save style as defined by the impact_function
-    #              this is the place
+    # this is the place
 
     # Return layer object
     return F

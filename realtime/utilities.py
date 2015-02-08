@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '19/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -22,8 +22,7 @@ import shutil
 from datetime import datetime
 import ntpath
 
-
-from safe.api import setup_logger as setup_logger_safe
+from safe.common.custom_logging import setup_logger as setup_logger_safe
 
 
 def base_data_dir():
@@ -65,13 +64,6 @@ def shakemap_data_dir():
     procesed (tifs and pickled events) data dir.
     """
     dir_path = os.path.join(base_data_dir(), 'shakemaps-processed')
-    make_directory(dir_path)
-    return dir_path
-
-
-def shakemap_cache_dir():
-    """Create (if needed) and return the path to the base shakemap zip dir."""
-    dir_path = os.path.join(base_data_dir(), 'shakemaps-cache')
     make_directory(dir_path)
     return dir_path
 
@@ -153,3 +145,20 @@ def get_path_tail(input_path):
     """
     head, tail = ntpath.split(input_path)
     return tail or ntpath.basename(head)
+
+
+def get_grid_source():
+    """Get the grid source where the grid.xml is obtained from.
+
+    If set, the environment variable EQ_GRID_SOURCE will be used, otherwise
+    the grid source will be taken from the configuration file.
+
+    :return: The source of the grid.xml.
+    :rtype: str
+    """
+    default_source = ('BMKG (Badan Meteorologi, Klimatologi, dan Geofisika) '
+                      'Indonesia')
+    if 'EQ_GRID_SOURCE' in os.environ:
+        return os.environ['EQ_GRID_SOURCE']
+    else:
+        return default_source

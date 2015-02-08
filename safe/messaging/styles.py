@@ -17,14 +17,21 @@ This will result in some standardised styling being applied to the important
 text element.
 
 """
-
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '06/06/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
+
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=unused-import
+from PyQt4.QtCore import QUrl
 # These all apply to heading elements
+
+from safe.utilities.resources import resources_path
 
 PROGRESS_UPDATE_STYLE = {
     'level': 5,
@@ -75,3 +82,15 @@ KEYWORD_STYLE = {
     # not working unless you turn css on and off again using inspector
     # 'style_class': 'label label-success'
 }
+
+
+def logo_element():
+    """Create a sanitised local url to the logo for insertion into html.
+
+    :returns: A sanitised local url to the logo.
+    :rtype: str
+    """
+    path = os.path.join(resources_path(), 'img', 'logos', 'inasafe-logo.png')
+    url = QUrl(path)
+    path = url.toLocalFile()
+    return path

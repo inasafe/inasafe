@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 """
 
-__author__ = 'imajimatika@gmail.com'
+__author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '14/03/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -21,7 +21,7 @@ import json
 from safe.impact_functions.utilities import add_to_list
 
 
-class ImpactFunctionMetadata():
+class ImpactFunctionMetadata(object):
     """Abstract metadata class for an impact function.
 
     .. versionadded:: 2.1
@@ -47,6 +47,23 @@ class ImpactFunctionMetadata():
     def __init__(self):
         """Constructor."""
         pass
+
+    @staticmethod
+    def simplify_layer_constraint(layer_constraint):
+        """Simplify layer constraint to layer_type and data_type only.
+
+        :param layer_constraint: Dictionary that represent layer_constraint
+        :type layer_constraint: dict
+
+        :returns: Simple version of layer_constraint
+        :rtype: dict
+        """
+        simple_layer_constraint = {
+            'layer_type': layer_constraint['layer_type'],
+            'data_type': layer_constraint['data_type'],
+            }
+
+        return simple_layer_constraint
 
     @staticmethod
     def is_subset(element, container):
@@ -128,7 +145,7 @@ class ImpactFunctionMetadata():
         else:
             metadata_dict = cls.get_metadata()
             categories = metadata_dict['categories']
-            result = add_to_list(result, categories[category]['subcategory'])
+            result = add_to_list(result, categories[category]['subcategories'])
             return result
 
     @classmethod
@@ -255,6 +272,72 @@ class ImpactFunctionMetadata():
             return True
 
     @classmethod
+    def is_valid(cls):
+        """Check whether the metadata is valid or not.
+
+        Valid metadata means, it has:
+        id, name, impact, author, date_implemented, and overview.
+        Also categories which has hazard and exposure.
+        Each hazard and exposure has definition, subcategories, units,
+        and layer_constraints.
+        Subcategories, units, and layer_constraints must be in list.
+
+        :returns: True or False based on the validity of IF Metadata
+        :rtype: bool
+        """
+        metadata_dict = cls.get_metadata()
+        expected_keys = [
+            'id',
+            'name',
+            'impact',
+            'author',
+            'date_implemented',
+            'overview',
+            'categories'
+        ]
+
+        for key in expected_keys:
+            if key not in metadata_dict.keys():
+                return False, 'key %s not in metadata' % key
+
+        expected_keys = [
+            'hazard',
+            'exposure'
+        ]
+        categories = metadata_dict['categories']
+        for key in expected_keys:
+            if key not in categories.keys():
+                return False, 'key %s not in categories' % key
+
+        expected_keys = [
+            'definition',
+            'subcategories',
+            'units',
+            'layer_constraints'
+        ]
+        hazard = categories['hazard']
+        for key in expected_keys:
+            if key not in hazard.keys():
+                return False, 'key %s not in hazard' % key
+        for key in expected_keys[1:]:
+            if type(hazard[key]) is not list:
+                return (
+                    False,
+                    'key %s in hazard not a list, but %s ' % (
+                        key, type(hazard[key])))
+        exposure = categories['exposure']
+        for key in expected_keys:
+            if key not in exposure.keys():
+                return False, 'key %s not in exposure' % key
+        for key in expected_keys[1:]:
+            if type(exposure[key]) is not list:
+                return (
+                    False,
+                    'key %s in exposure not a list, but %s ' % (
+                        key, type(exposure[key])))
+        return True, ''
+
+    @classmethod
     def allowed_layer_constraints(cls, category=None):
         """Determine allowed layer constraints.
 
@@ -358,7 +441,13 @@ class ImpactFunctionMetadata():
         else:
             return []
 
-        if layer_constraints in cls.allowed_layer_constraints(category):
+        category_layer_constraints = cls.allowed_layer_constraints(category)
+        category_layer_constraints = [
+            cls.simplify_layer_constraint(e) for e in
+            category_layer_constraints
+        ]
+
+        if layer_constraints in category_layer_constraints:
             return cls.allowed_units(subcategory, data_type)
         else:
             return []
@@ -391,9 +480,20 @@ class ImpactFunctionMetadata():
             'data_type': data_type
         }
         result = []
-        if layer_constraints in cls.allowed_layer_constraints('exposure'):
+
+        exposure_layer_constraints = cls.allowed_layer_constraints('exposure')
+        exposure_layer_constraints = [
+            cls.simplify_layer_constraint(e) for e in
+            exposure_layer_constraints]
+
+        hazard_layer_constraints = cls.allowed_layer_constraints('hazard')
+        hazard_layer_constraints = [
+            cls.simplify_layer_constraint(e) for e in
+            hazard_layer_constraints]
+
+        if layer_constraints in exposure_layer_constraints:
             result = add_to_list(result, 'exposure')
-        if layer_constraints in cls.allowed_layer_constraints('hazard'):
+        if layer_constraints in hazard_layer_constraints:
             result = add_to_list(result, 'hazard')
         return result
 
@@ -429,7 +529,124 @@ class ImpactFunctionMetadata():
             'layer_type': layer_type,
             'data_type': data_type
         }
-        if layer_constraints not in cls.allowed_layer_constraints(category):
+
+        category_layer_constraints = cls.allowed_layer_constraints(category)
+        category_layer_constraints = [
+            cls.simplify_layer_constraint(e) for e in
+            category_layer_constraints
+        ]
+
+        if layer_constraints not in category_layer_constraints:
             return []
         else:
             return cls.allowed_subcategories(category)
+
+    @classmethod
+    def get_hazards(cls):
+        """Return hazards of the impact function.
+
+        .. versionadded:: 2.2
+
+        :return: List of valid hazards of the impact function.
+        :rtype: list
+        """
+        hazards = cls.get_metadata()['categories']['hazard']['subcategories']
+        if type(hazards) is not list:
+            hazards = [hazards]
+        return hazards
+
+    @classmethod
+    def get_exposures(cls):
+        """Return exposures of the impact function.
+
+        .. versionadded:: 2.2
+
+        :return: List of valid exposures of the impact function.
+        :rtype: list
+        """
+        exposures = cls.get_metadata()['categories']['exposure'][
+            'subcategories']
+        if type(exposures) is not list:
+            exposures = [exposures]
+        return exposures
+
+    @classmethod
+    def has_hazard(cls, hazard):
+        """Check whether an impact function has hazard or not
+
+        .. versionadded:: 2.2
+
+        :param hazard: Dictionary that represent the hazard.
+        :type hazard: dict
+
+        :returns: True if it has hazard, else false
+        :rtype: bool
+        """
+        hazards = cls.get_hazards()
+        return hazard in hazards
+
+    @classmethod
+    def has_hazard_id(cls, hazard_id):
+        """Check whether an impact function has hazard_id or not
+
+        .. versionadded:: 2.2
+
+        :param hazard_id: String that represent the hazard id.
+        :type hazard_id: str
+
+        :returns: True if it has hazard_id, else false
+        :rtype: bool
+        """
+        hazards = cls.get_hazards()
+        hazard_ids = [hazard['id'] for hazard in hazards]
+        return hazard_id in hazard_ids
+
+    @classmethod
+    def has_exposure(cls, exposure):
+        """Check whether an impact function has exposure or not
+
+        .. versionadded:: 2.2
+
+        :param exposure: Dictionary that represent the exposure.
+        :type exposure: dict
+
+        :returns: True if it has exposure, else false
+        :rtype: bool
+        """
+        exposures = cls.get_exposures()
+        return exposure in exposures
+
+    @classmethod
+    def has_exposure_id(cls, exposure_id):
+        """Check whether an impact function has exposure_id or not
+
+        .. versionadded:: 2.2
+
+        :param exposure_id: String that represent the hazard id.
+        :type exposure_id: str
+
+        :returns: True if it has exposure_id, else false
+        :rtype: bool
+        """
+        exposures = cls.get_exposures()
+        exposure_ids = [exposure['id'] for exposure in exposures]
+        return exposure_id in exposure_ids
+
+    @classmethod
+    def get_hazard_layer_constraint(cls):
+        """Helper function to get the constraints for hazard layer.
+
+        :return: List of layer constraint of hazard layer.
+        :rtype: list
+        """
+        return cls.get_metadata()['categories']['hazard']['layer_constraints']
+
+    @classmethod
+    def get_exposure_layer_constraint(cls):
+        """Helper function to get the constraints for exposure layer.
+
+        :return: List of layer constraint of exposure layer.
+        :rtype: list
+        """
+        return cls.get_metadata()[
+            'categories']['exposure']['layer_constraints']

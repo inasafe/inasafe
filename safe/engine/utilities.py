@@ -3,7 +3,7 @@
 """
 
 from safe.common.exceptions import RadiiException
-from safe.common.geodesy import Point
+from safe.gis.geodesy import Point
 from safe.storage.geometry import Polygon
 from safe.storage.vector import Vector
 

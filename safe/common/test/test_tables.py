@@ -1,3 +1,4 @@
+# coding=utf-8
 """InaSAFE Disaster risk assessment tool developed by AusAid -
   **Table Tests implementation.**
 
@@ -10,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __version__ = '0.4.0'
 __revision__ = '$Format:%H$'
 __date__ = '20/01/2011'
@@ -25,7 +26,8 @@ from safe.common.tables import Table, TableRow, TableCell, Link
 
 class TablesTest(unittest.TestCase):
     """Test the SAFE Table"""
-    html = ('<!DOCTYPE html>\n'
+    html = (
+        '<!DOCTYPE html>\n'
         '<html lang="en">\n'
         ' <head>\n'
         '   <meta charset="utf-8">\n'
@@ -58,13 +60,13 @@ class TablesTest(unittest.TestCase):
             return self.tmp_dir
 
         # Following 4 lines are workaround for tempfile.tempdir() unreliabilty
-        myHandle, myFilename = tempfile.mkstemp()
-        os.close(myHandle)
-        myDir = os.path.dirname(myFilename)
-        os.remove(myFilename)
+        handle, filename = tempfile.mkstemp()
+        os.close(handle)
+        directory = os.path.dirname(filename)
+        os.remove(filename)
 
-        self.tmp_dir = myDir
-        return myDir
+        self.tmp_dir = directory
+        return directory
 
     def writeHtml(self, name):
         self.html += ' </body>\n</html>\n'
@@ -75,15 +77,13 @@ class TablesTest(unittest.TestCase):
         """Fixture run before all tests"""
         self.table_header = ['1', '2', '3', '4']
         self.table_data = [
-                    ['a', 'b', 'c', 'd'],
-                    ['a', 'b', 'c', 'd'],
-                    ['a', 'b', 'c', 'd'],
-                    ['a', 'b', 'c', 'd']]
+            ['a', 'b', 'c', 'd'],
+            ['a', 'b', 'c', 'd'],
+            ['a', 'b', 'c', 'd'],
+            ['a', 'b', 'c', 'd']]
         self.table_row = TableRow(['a', 'b', 'c', 'd'])
-        self.table_row_data = [self.table_row,
-                               self.table_row,
-                               self.table_row,
-                               self.table_row]
+        self.table_row_data = [
+            self.table_row, self.table_row, self.table_row, self.table_row]
         self.table_cell_a = TableCell('a')
         self.table_cell_b = TableCell('b')
         self.table_cell_c = TableCell('c')
@@ -100,17 +100,17 @@ class TablesTest(unittest.TestCase):
         self.html_table_start = ('<table class="table table-striped'
                                  ' condensed">\n')
         self.html_table_end = '</table>\n'
-        self.html_caption = (' <caption>Man this is a nice table!</caption>\n')
+        self.html_caption = ' <caption>Man this is a nice table!</caption>\n'
         self.html_bottom_caption = (' <caption class="caption-bottom">'
                                     'Man this is a nice table!</caption>\n')
         self.html_header = (' <thead>\n'
                             '  <tr>\n'
-                              '   <th>1</th>\n'
-                              '   <th>2</th>\n'
-                              '   <th>3</th>\n'
-                              '   <th>4</th>\n'
-                              '  </tr>\n'
-                              ' </thead>\n')
+                            '   <th>1</th>\n'
+                            '   <th>2</th>\n'
+                            '   <th>3</th>\n'
+                            '   <th>4</th>\n'
+                            '  </tr>\n'
+                            ' </thead>\n')
         self.html_body = (' <tbody>\n'
                           '  <tr>\n'
                           '   <td>a</td>\n'
@@ -155,12 +155,13 @@ class TablesTest(unittest.TestCase):
         self.writeHtml('simple_table')
 
     def test_table_with_header(self):
-        '''Test html render of a table with header row(s).'''
+        """Test html render of a table with header row(s)."""
         self.html += '  <h2>Table with header</h2>\n'
-        expected_result = ('%s%s%s%s' % (self.html_table_start,
-                                       self.html_header,
-                                       self.html_body,
-                                       self.html_table_end))
+        expected_result = (
+            '%s%s%s%s' % (self.html_table_start,
+                          self.html_header,
+                          self.html_body,
+                          self.html_table_end))
         actual_result = Table(self.table_data, header_row=self.table_header)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
@@ -170,10 +171,11 @@ class TablesTest(unittest.TestCase):
     def test_table_caption(self):
         """Test table caption"""
         self.html += '  <h2>Caption Top</h2>\n'
-        expected_result = ('%s%s%s%s' % (self.html_table_start,
-                                       self.html_caption,
-                                       self.html_body,
-                                       self.html_table_end))
+        expected_result = (
+            '%s%s%s%s' % (self.html_table_start,
+                          self.html_caption,
+                          self.html_body,
+                          self.html_table_end))
         actual_result = Table(self.table_data, caption=self.table_caption)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
@@ -181,10 +183,11 @@ class TablesTest(unittest.TestCase):
 
         # also test bottom caption
         self.html += '  <h2>Caption Bottom</h2>\n'
-        expected_result = ('%s%s%s%s' % (self.html_table_start,
-                                       self.html_bottom_caption,
-                                       self.html_body,
-                                       self.html_table_end))
+        expected_result = (
+            '%s%s%s%s' % (self.html_table_start,
+                          self.html_bottom_caption,
+                          self.html_body,
+                          self.html_table_end))
         actual_result = Table(self.table_data,
                               caption=self.table_caption,
                               caption_at_bottom=True)
@@ -198,9 +201,10 @@ class TablesTest(unittest.TestCase):
     def test_table_by_rows(self):
         """Test table from infividual rows"""
         self.html += '  <h2>Using Table Rows</h2>\n'
-        expected_result = ('%s%s%s' % (self.html_table_start,
-                                       self.html_body,
-                                       self.html_table_end))
+        expected_result = (
+            '%s%s%s' % (self.html_table_start,
+                        self.html_body,
+                        self.html_table_end))
         actual_result = Table(self.table_row_data)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
@@ -210,9 +214,10 @@ class TablesTest(unittest.TestCase):
     def test_table_cells(self):
         """Test table from individual cells"""
         self.html += '  <h2>Using Table Cells</h2>\n'
-        expected_result = ('%s%s%s' % (self.html_table_start,
-                                       self.html_body,
-                                       self.html_table_end))
+        expected_result = (
+            '%s%s%s' % (self.html_table_start,
+                        self.html_body,
+                        self.html_table_end))
         actual_result = Table(self.table_cell_data)
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
@@ -222,9 +227,8 @@ class TablesTest(unittest.TestCase):
     def test_col_span(self):
         """Testing column spanning"""
         table_cell_ab = TableCell('ab spanned', col_span=2)
-        table_row = TableRow([table_cell_ab,
-                                         self.table_cell_c,
-                                         self.table_cell_d])
+        table_row = TableRow(
+            [table_cell_ab, self.table_cell_c, self.table_cell_d])
         self.html += '  <h2>Spanning Table Columns</h2>\n'
         body = (' <tbody>\n'
                 '  <tr>\n'
@@ -233,9 +237,8 @@ class TablesTest(unittest.TestCase):
                 '   <td>d</td>\n'
                 '  </tr>\n'
                 ' </tbody>\n')
-        expected_result = ('%s%s%s' % (self.html_table_start,
-                                       body,
-                                       self.html_table_end))
+        expected_result = (
+            '%s%s%s' % (self.html_table_start, body, self.html_table_end))
         actual_result = Table([table_row])
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
@@ -266,9 +269,8 @@ class TablesTest(unittest.TestCase):
                 '   <td>d</td>\n'
                 '  </tr>\n'
                 ' </tbody>\n')
-        expected_result = ('%s%s%s' % (self.html_table_start,
-                                       body,
-                                       self.html_table_end))
+        expected_result = (
+            '%s%s%s' % (self.html_table_start, body, self.html_table_end))
         actual_result = Table([table_row1, table_row2])
         message = 'Expected: %s\n\nGot: %s' % (expected_result, actual_result)
         assert expected_result.strip() == str(actual_result).strip(), message
@@ -426,15 +428,6 @@ class TablesTest(unittest.TestCase):
         # print actual_result
 
         # Try at the cell level
-        cell_1 = TableCell('12')
-        cell_2 = TableCell('3000')
-        cell_3 = TableCell('5')
-        row = TableRow([cell_1, cell_2, cell_3])
-        # print row  # OK
-        table = Table(row)
-        # print table  # Broken
-
-        # Try at the cell level
         cell_1 = TableCell('12', align='right')
         cell_2 = TableCell('3000', align='right')
         cell_3 = TableCell('5', align='right')
@@ -473,6 +466,6 @@ class TablesTest(unittest.TestCase):
         assert expected_result2 == real_result2, message2
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(TablesTest, 'test')
+    suite = unittest.makeSuite(TablesTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

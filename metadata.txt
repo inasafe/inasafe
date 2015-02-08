@@ -9,11 +9,11 @@
 
 
 [general]
-name=InaSAFE
+name=InaSAFE-Dev
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
-version=2.2.3
+version=3.0.0
 # alpha, beta, rc or final
 status=final
 
@@ -22,40 +22,25 @@ status=final
 
 # Optional items:
 
-# Uncomment the following line and add your changelog entries:
 changelog=
-        2.2.3
-        Bug fix: Fix #1500 - maximum QGIS version causes error in debian
-        2.2.2
-        Bug fix: Make legend work with QGIS 2.6, removes requirement to use QGIS 2.4
-        Bug fix: Fixed issue with batch runner not working properly
-        2.2.1
-        Bug fix: Added missing minimum needs profiles.
-        2.2.0
+        3.0.0
         New features:
-        * New extent selector tool to let you specify precise analysis areas
-        * New minimum needs manager with support for regional minimum needs profiles
-        * Keywords data is now written / read as ISO19115 metadata instead of our own keywords format
-        * New generic categories impact function for hazards that uses classes e.g. low / medium / high
-        * New volcano OpenStreetMap buildings impact function
-        * New flood on OpenStreetMap buildings impact function
-        * More precise clipping to raster pixel boundaries to prevent pixel shifts
-        Bug fixes:
-        * Fix issue with ordered Dicts in keywords #1324
-        * Python error when running any IF with population data on Mac #1287
-        * Fix population rounding issues #1239
-        * Read the minimum needs from a configuration file #1230
-        * Failing Unittests against QGIS 2.4 #1223
-        * BMKG and BNPB logo does not appear on the realtime report #1182
-        * Top of InaSAFE dialog cut out #1161
-        * Building Category for volcano impact function #1110
-        * Check that the output raster is the same cell size and location as exposure input #710
-        * Running assessment at very large scales can result in unclippable rasters #349
-        * Make update-translations is unreliable at detecting new strings #348
-        * Clipped raster data has different resolution to original raster data #344
-        * Ordered dictionary is part of python 2.7 we ship our own (untested) #341
-        * Need test for presence of polygon_id in points clipped by polygon #333
-        * CANVAS.layers() doesn't include the impact layer and other generated layers #306
+        * New wizard for impact function centric analysis.
+        * Removed impact function browser.
+        * Simplified the toolbar - remaining functionality is still available in Plugins->InaSAFE menu.
+        * Impact reports are now nicely styled in PDF outputs.
+        Architectural changes:
+        * Combined safe and safe_qgis into one package.
+        * We now use one translation system instead of two (gettext was dropped).
+        * UI files are dynamically compiled at run time so we don't need to ship the uic compiled versions.
+        * We no longer user Qt resources so you no longer need to compile with pyrcc.
+        * Plugin reloader works again because we fixed the import management that caused it to break.
+        * Removed a lot of moribund / experimental / test code that is not used in production.
+        * Removed the use of api.py and abstraction between Qt/QGIS based code and console only code.
+        Note:
+        * This release breaks API comptibility with 2.x releases.
+
+
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards

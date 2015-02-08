@@ -11,11 +11,29 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import datetime
 import os
 import sys
 import subprocess
 from exceptions import WindowsError
+
+
+def current_git_hash():
+    """Retrieve the current git hash number of the git repo (first 6 digit).
+
+    :returns: 6 digit of hash number.
+    :rtype: str
+    """
+    repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    git_show = subprocess.Popen(
+        'git rev-parse --short HEAD',
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=True,
+        cwd=repo_dir,
+        universal_newlines=True
+    )
+    hash_number = git_show.communicate()[0].partition('\n')[0]
+    return hash_number
 
 
 def get_version(version=None):
@@ -70,9 +88,9 @@ def get_version(version=None):
             sub = '.dev-master'
         else:
             try:
-                git_changeset = get_git_changeset()
-                if git_changeset:
-                    sub = '.dev%s' % git_changeset
+                git_hash = current_git_hash()
+                if git_hash:
+                    sub = '.dev-%s' % git_hash
             except WindowsError:
                 sub = '.dev-master'
 
@@ -81,27 +99,3 @@ def get_version(version=None):
         sub = mapping[version[3]] + str(version[4])
 
     return main + sub
-
-
-def get_git_changeset():
-    """Returns a numeric identifier of the latest git changeset.
-
-    The result is the UTC timestamp of the changeset in YYYYMMDDHHMMSS format.
-    This value isn't guaranteed to be unique, but collisions are very unlikely,
-    so it's sufficient for generating the development version numbers.
-    """
-    repo_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    git_show = subprocess.Popen(
-        'git show --pretty=format:%ct --quiet HEAD',
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        shell=True,
-        cwd=repo_dir,
-        universal_newlines=True
-    )
-    timestamp = git_show.communicate()[0].partition('\n')[0]
-    try:
-        timestamp = datetime.datetime.utcfromtimestamp(int(timestamp))
-    except ValueError:
-        return None
-    return timestamp.strftime('%Y%m%d%H%M%S')

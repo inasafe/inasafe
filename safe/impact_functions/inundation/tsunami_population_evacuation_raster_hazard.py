@@ -1,6 +1,7 @@
 # coding=utf-8
 """Tsunami Evacuation Impact Function."""
 import numpy
+
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     get_defaults,
@@ -24,15 +25,15 @@ from safe.metadata import (
     hazard_tsunami,
     unit_feet_depth,
     unit_metres_depth,
-    layer_raster_numeric,
+    layer_raster_continuous,
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
     exposure_definition
 )
 from safe.storage.raster import Raster
+from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    ugettext as tr,
     format_int,
     verify,
     humanize_class,
@@ -42,6 +43,7 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 # noinspection PyClassHasNoInit
@@ -93,18 +95,18 @@ class TsunamiEvacuationFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [hazard_tsunami],
+                        'subcategories': [hazard_tsunami],
                         'units': [
                             unit_feet_depth,
                             unit_metres_depth
                         ],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_population,
+                        'subcategories': [exposure_population],
                         'units': [unit_people_per_pixel],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     }
                 }
             }
@@ -163,6 +165,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])
+    parameters = add_needs_parameters(parameters)
 
     def run(self, layers):
         """Risk plugin for tsunami population evacuation.

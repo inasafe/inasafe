@@ -1,13 +1,13 @@
 # coding=utf-8
-from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
     QgsFeature,
     QgsRectangle,
     QgsFeatureRequest,
-    QgsGeometry
-)
+    QgsGeometry)
+from PyQt4.QtCore import QVariant
+
 from safe.metadata import (
     unit_wetdry,
     hazard_flood,
@@ -22,7 +22,7 @@ from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
-from safe.common.utilities import ugettext as tr
+from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
 from safe.impact_functions.impact_function_metadata import (
@@ -71,13 +71,13 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [hazard_flood],
-                        'units': unit_wetdry,
+                        'subcategories': [hazard_flood],
+                        'units': [unit_wetdry],
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_structure,
+                        'subcategories': [exposure_structure],
                         'units': [unit_building_type_type],
                         'layer_constraints': [layer_vector_polygon]
                     }

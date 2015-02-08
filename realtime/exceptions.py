@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __revision__ = '$Format:%H$'
 __date__ = '31/07/2011'
@@ -34,11 +34,6 @@ class EventIdError(Exception):
 
 class EventUndefinedError(Exception):
     """Exception for when trying to work with an event that is not defined."""
-    pass
-
-
-class NetworkError(Exception):
-    """Exception for when trying to fetch a remote resource and failing."""
     pass
 
 
@@ -105,6 +100,6 @@ class CopyError(Exception):
     pass
 
 
-class SFTPEmptyError(Exception):
-    """Raised if the SFTP remote directory does not contain any shakemaps."""
+class EmptyShakeDirectoryError(Exception):
+    """Raised if the working directory does not contain any shakemaps."""
     pass

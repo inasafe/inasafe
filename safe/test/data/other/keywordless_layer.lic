@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Tim Sutton</author>
+  </metadata>
+
+  <datafile>
+    <filename>keywordless_layer.shp</filename>
+    <checksum>2963790080</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Tim Sutton</source>
+    <IP_owner>Tim Sutton</IP_owner>
+    <IP_info>This data was created for the InaSAFE project.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>keywordless_layer.shx</filename>
+    <checksum>3830571855</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Tim Sutton</source>
+    <IP_owner>Tim Sutton</IP_owner>
+    <IP_info>This data was created for the InaSAFE project.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>keywordless_layer.dbf</filename>
+    <checksum>354882271</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Tim Sutton</source>
+    <IP_owner>Tim Sutton</IP_owner>
+    <IP_info>This data was created for the InaSAFE project.</IP_info>
+  </datafile>
+
+</ga_license_file>
+

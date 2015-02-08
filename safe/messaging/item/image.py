@@ -27,7 +27,7 @@ class Image(Text):
     def __init__(self, uri, text=None, **kwargs):
         """Creates a Emphasized Text Text object
 
-        :param uri: A string to add to the message
+        :param uri: A string to add to the message.
         :type uri: str
 
         We pass the kwargs on to the base class so an exception is raised

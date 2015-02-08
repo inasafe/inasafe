@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'tim@linfiniti.com'
+__author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -18,6 +18,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import sys
 import os
+
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=unused-import
+from PyQt4 import Qt, QtWebKit
+from safe_extras.pydispatch import dispatcher
+
 from safe.messaging import (
     Message,
     Heading,
@@ -26,9 +33,6 @@ from safe.messaging import (
     Text,
     ImportantText,
     EmphasizedText)
-from safe_extras.pydispatch import dispatcher
-
-from PyQt4 import Qt, QtWebKit
 
 DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'

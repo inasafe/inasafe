@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import logging
+
 from safe.metadata import (
     hazard_flood,
     hazard_tsunami,
@@ -18,7 +20,7 @@ from safe.metadata import (
     unit_feet_depth,
     unit_metres_depth,
     layer_vector_polygon,
-    layer_raster_numeric,
+    layer_raster_continuous,
     exposure_structure,
     unit_building_type_type,
     hazard_definition,
@@ -30,12 +32,13 @@ from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
-from safe.common.utilities import ugettext as tr, format_int, verify
+from safe.utilities.i18n import tr
+from safe.common.utilities import format_int, verify
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-import logging
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -88,7 +91,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
-                        'subcategory': [
+                        'subcategories': [
                             hazard_flood,
                             hazard_tsunami
                         ],
@@ -98,18 +101,19 @@ class FloodBuildingImpactFunction(FunctionProvider):
                             unit_feet_depth],
                         'layer_constraints': [
                             layer_vector_polygon,
-                            layer_raster_numeric,
+                            layer_raster_continuous,
                         ]
                     },
                     'exposure': {
                         'definition': exposure_definition,
-                        'subcategory': exposure_structure,
+                        'subcategories': [exposure_structure],
                         'units': [
                             unit_building_type_type,
                             unit_building_generic],
                         'layer_constraints': [
                             layer_vector_polygon,
-                            layer_vector_point]
+                            layer_vector_point
+                        ]
                     }
                 }
             }
