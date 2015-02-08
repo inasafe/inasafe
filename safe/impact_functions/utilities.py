@@ -136,7 +136,11 @@ def get_python_file(python_class):
     :rtype: str
     """
 
-    return os.path.abspath(sys.modules[python_class.__module__].__file__)
+    python_file = os.path.abspath(
+        sys.modules[python_class.__module__].__file__)
+    if python_file[-1] == 'c':
+        python_file = python_file[:-1]
+    return python_file
 
 
 def is_duplicate_impact_function(impact_function):
@@ -155,15 +159,12 @@ def is_duplicate_impact_function(impact_function):
 
     if_class_names = [c.__name__ for c in impact_function.plugins]
     if_py_files = [get_python_file(c) for c in impact_function.plugins]
-    if_pyc_files = [get_python_file(c) + 'c' for c in impact_function.plugins]
 
     impact_function_name = impact_function.__name__
     impact_function_py = get_python_file(impact_function)
-    impact_function_pyc = impact_function_py + 'c'
 
     if impact_function_name in if_class_names:
-        if (impact_function_py in if_py_files or
-                impact_function_pyc in if_pyc_files):
+        if impact_function_py in if_py_files:
             return False
         else:
             # Same name, different location
