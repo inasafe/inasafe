@@ -29,7 +29,7 @@ __copyright__ = (
 import logging
 
 from qgis.core import QgsMapLayerRegistry, QGis
-from qgis.gui import QgsMapCanvasLayer
+from qgis.gui import QgsMapCanvasLayer  # pylint: disable=no-name-in-module
 from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
 LOGGER = logging.getLogger('InaSAFE')
 

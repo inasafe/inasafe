@@ -21,7 +21,7 @@ import os
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from qgis.gui import QgsMapCanvas
+from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
 # this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
 import safe.test.sip_api_2  # pylint: disable=unused-import

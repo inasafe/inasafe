@@ -38,7 +38,9 @@ from qgis.core import (
     QgsSingleSymbolRendererV2,
     QgsFillSymbolV2,
     QgsCoordinateReferenceSystem)
+# pylint: disable=no-name-in-module
 from qgis.analysis import QgsZonalStatistics
+# pylint: enable=no-name-in-module
 from PyQt4 import QtGui, QtCore
 
 from safe.storage.core import read_layer as safe_read_layer
