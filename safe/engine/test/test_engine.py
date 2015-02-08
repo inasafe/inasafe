@@ -42,11 +42,11 @@ from safe.impact_functions import get_plugins
 # These imports are needed for impact function registration - dont remove
 # If any of these get reinstated as "official" public impact functions,
 # remove from here and update test to use the real one.
-# pylint: disable=W0611
+# pylint: disable=unused-import
 # noinspection PyUnresolvedReferences
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
     PAGFatalityFunction)
-# pylint: enable=W0611
+# pylint: enable=unused-import
 
 
 def linear_function(x, y):

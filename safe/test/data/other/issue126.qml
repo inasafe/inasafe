@@ -8,7 +8,7 @@
         </singleValuePixelList>
       </rasterTransparency>
       <rastershader>
-        <colorrampshader colorRampType="INTERPOLATED" clip="32">
+        <colorrampshader colorRampType="INTERPOLATED" clip="111">
           <item alpha="255" value="0" label="" color="#ffffff"/>
           <item alpha="255" value="0.0383626" label="Rendah [0 orang/sel]" color="#38a800"/>
           <item alpha="255" value="0.0767252" label="" color="#79c900"/>

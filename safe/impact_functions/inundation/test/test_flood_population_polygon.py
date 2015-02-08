@@ -19,9 +19,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import unittest
-# pylint: disable=W0611
+# pylint: disable=unused-import
 from collections import OrderedDict
-# pylint: enable=W0611
+# pylint: enable=unused-import
 
 from safe.storage.core import read_layer
 from safe.engine.core import calculate_impact

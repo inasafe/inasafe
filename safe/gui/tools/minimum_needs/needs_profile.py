@@ -11,7 +11,7 @@ import os
 from shutil import copy
 
 # noinspection PyUnresolvedReferences
-# pylint: disable=W0611
+# pylint: disable=unused-import
 from qgis.core import QgsApplication
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings

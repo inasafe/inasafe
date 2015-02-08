@@ -22,7 +22,6 @@ import os
 import tempfile
 import logging
 
-from PyQt4.QtCore import QProcess
 from qgis.core import (
     QGis,
     QgsCoordinateTransform,
@@ -34,6 +33,7 @@ from qgis.core import (
     QgsGeometry,
     QgsVectorLayer,
     QgsRasterLayer)
+from PyQt4.QtCore import QProcess
 
 from safe.common.utilities import temp_dir, which, verify
 from safe.utilities.keyword_io import KeywordIO
