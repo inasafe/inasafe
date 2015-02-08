@@ -771,11 +771,11 @@ def get_plugins_as_table(dict_filter=None):
 
                 if myFilter != []:
                     for myKeyword in myFilter:
-                        if type(myValue) == type(str()):
+                        if isinstance(myValue, str):
                             if myValue == myKeyword:
                                 dict_found[myKey] = True
                                 break
-                        elif type(myValue) == type(list()):
+                        elif isinstance(myValue, list):
                             if myKeyword in myValue:
                                 dict_found[myKey] = True
                                 break
@@ -842,9 +842,9 @@ def get_unique_values():
             for key in dict_req.iterkeys():
                 if key not in atts:
                     break
-                if type(dict_req[key]) == type(str()):
+                if isinstance(dict_req[key], str):
                     dict_retval[key].add(dict_req[key])
-                elif type(dict_req[key]) == type(list()):
+                elif isinstance(dict_req[key], list):
                     dict_retval[key] |= set(dict_req[key])
 
     # convert to list

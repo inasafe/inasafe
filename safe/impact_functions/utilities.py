@@ -44,10 +44,10 @@ def keywords_to_str(keywords):
     Raises: None
     """
     result = '\n----------------- Keywords -------------------\n'
-    if type(keywords) == type(dict()):
+    if isinstance(keywords, dict):
         for item, value in keywords.iteritems():
             result += 'Key: %s Value: %s\n' % (item, value)
-    if type(keywords) == type(list()):
+    if isinstance(keywords, list):
         for list_item in keywords:
             result += '---\n'
             for item, value in list_item.iteritems():
@@ -68,9 +68,9 @@ def pretty_string(myArg):
 
         if myArgs is list return each element as string separated by ','
     """
-    if type(myArg) == type(str()):
+    if isinstance(myArg, str):
         return myArg
-    elif type(myArg) == type(list()):
+    elif isinstance(myArg, list):
         return ', '.join(myArg)
     else:
         return str(myArg)
