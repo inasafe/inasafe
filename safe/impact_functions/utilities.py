@@ -158,16 +158,17 @@ def is_duplicate_impact_function(impact_function):
     """
 
     if_class_names = [c.__name__ for c in impact_function.plugins]
-    if_py_files = [get_python_file(c) for c in impact_function.plugins]
+    # if_py_files = [get_python_file(c) for c in impact_function.plugins]
 
     impact_function_name = impact_function.__name__
-    impact_function_py = get_python_file(impact_function)
+    # impact_function_py = get_python_file(impact_function)
 
     if impact_function_name in if_class_names:
-        if impact_function_py in if_py_files:
-            return False
-        else:
-            # Same name, different location
-            return True
+        # if impact_function_py in if_py_files:
+        #     return False
+        # else:
+        #     # Same name, different location
+        #     return True
+        return True
     else:
         return False
