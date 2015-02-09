@@ -24,6 +24,8 @@ install:
   - pip install --upgrade pip
   - pip install --upgrade pep8
   - pip install --upgrade pylint
+  - pylint --version
+  - pep8 --version
   - echo "Checking out test data at" `date`
   - make testdata
 

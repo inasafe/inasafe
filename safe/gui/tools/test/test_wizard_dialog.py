@@ -139,7 +139,7 @@ class WizardDialogTest(unittest.TestCase):
                 list_widget.setCurrentRow(i)
                 return
         message = 'There is no %s in the list widget' % option
-        self.assertTrue(False, message)
+        raise Exception(message)
 
     def test_keywords_creation_wizard(self):
         """Test how the widgets work."""
