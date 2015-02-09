@@ -22,7 +22,6 @@ import sys
 import logging
 import math
 import numpy
-from PyQt4 import QtGui
 
 from qgis.core import (
     QGis,
@@ -36,6 +35,7 @@ from qgis.core import (
     QgsRasterShader,
     QgsColorRampShader,
     QgsSingleBandPseudoColorRenderer)
+from PyQt4 import QtGui
 
 from safe.common.exceptions import StyleError
 

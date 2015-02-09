@@ -8,13 +8,14 @@ by Tim Sutton, Oct 2014.
 
 """
 
-
+from qgis.core import QgsPoint, QgsRectangle, QGis
+# pylint: disable=no-name-in-module
+from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
+# pylint: enable=no-name-in-module
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignal
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QColor
-from qgis.core import QgsPoint, QgsRectangle, QGis
-from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
 
 
 class RectangleMapTool(QgsMapToolEmitPoint):

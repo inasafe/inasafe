@@ -47,8 +47,10 @@ class PluginMount(type):
             if is_duplicate_impact_function(cls):
                 message = 'Duplicate impact function name %s\n' % cls.__name__
                 message += 'Impact function file %s\n' % get_python_file(cls)
-                message += [get_python_file(c) + '\n' for c in cls.plugins]
-                raise LookupError(message)
+                message += 'IF files that have been loaded: %s\n' % (
+                    '\n'.join([get_python_file(c) for c in cls.plugins]))
+                print message
+                # raise LookupError(message)
             else:
                 cls.plugins.append(cls)
 # pylint: enable=W0613,C0203
@@ -769,11 +771,11 @@ def get_plugins_as_table(dict_filter=None):
 
                 if myFilter != []:
                     for myKeyword in myFilter:
-                        if type(myValue) == type(str()):
+                        if isinstance(myValue, str):
                             if myValue == myKeyword:
                                 dict_found[myKey] = True
                                 break
-                        elif type(myValue) == type(list()):
+                        elif isinstance(myValue, list):
                             if myKeyword in myValue:
                                 dict_found[myKey] = True
                                 break
@@ -840,9 +842,9 @@ def get_unique_values():
             for key in dict_req.iterkeys():
                 if key not in atts:
                     break
-                if type(dict_req[key]) == type(str()):
+                if isinstance(dict_req[key], str):
                     dict_retval[key].add(dict_req[key])
-                elif type(dict_req[key]) == type(list()):
+                elif isinstance(dict_req[key], list):
                     dict_retval[key] |= set(dict_req[key])
 
     # convert to list

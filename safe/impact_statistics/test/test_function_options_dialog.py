@@ -30,7 +30,10 @@ import logging
 from collections import OrderedDict
 
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
+import qgis  # pylint: disable=unused-import
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLineEdit, QCheckBox
 

@@ -26,6 +26,9 @@ from nose import SkipTest
 from qgis.core import (
     QgsRasterLayer,
     QgsMapLayerRegistry)
+# this import required to enable PyQt API v2 - DO NOT REMOVE!
+# noinspection PyUnresolvedReferences
+import safe.test.sip_api_2  # pylint: disable=unused-import
 from PyQt4 import QtGui
 
 from safe.test.utilities import (

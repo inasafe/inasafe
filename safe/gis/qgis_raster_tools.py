@@ -9,12 +9,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 
-from safe.common.utilities import unique_filename
-from safe.gis.gdal_ogr_tools import polygonize_thresholds
-from safe.common.exceptions import GetDataError
-
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsRasterLayer,
     QgsField,
@@ -25,11 +19,16 @@ from qgis.core import (
     QgsRasterFileWriter,
     QgsRasterPipe
 )
-
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QVariant
 from qgis_vector_tools import (
     union_geometry,
     points_to_rectangles
 )
+
+from safe.common.utilities import unique_filename
+from safe.gis.gdal_ogr_tools import polygonize_thresholds
+from safe.common.exceptions import GetDataError
 
 
 def _get_pixel_coordinates(extent, width, height, row, col):

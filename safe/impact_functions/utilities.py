@@ -44,10 +44,10 @@ def keywords_to_str(keywords):
     Raises: None
     """
     result = '\n----------------- Keywords -------------------\n'
-    if type(keywords) == type(dict()):
+    if isinstance(keywords, dict):
         for item, value in keywords.iteritems():
             result += 'Key: %s Value: %s\n' % (item, value)
-    if type(keywords) == type(list()):
+    if isinstance(keywords, list):
         for list_item in keywords:
             result += '---\n'
             for item, value in list_item.iteritems():
@@ -68,9 +68,9 @@ def pretty_string(myArg):
 
         if myArgs is list return each element as string separated by ','
     """
-    if type(myArg) == type(str()):
+    if isinstance(myArg, str):
         return myArg
-    elif type(myArg) == type(list()):
+    elif isinstance(myArg, list):
         return ', '.join(myArg)
     else:
         return str(myArg)
@@ -136,7 +136,11 @@ def get_python_file(python_class):
     :rtype: str
     """
 
-    return os.path.abspath(sys.modules[python_class.__module__].__file__)
+    python_file = os.path.abspath(
+        sys.modules[python_class.__module__].__file__)
+    if python_file[-1] == 'c':
+        python_file = python_file[:-1]
+    return python_file
 
 
 def is_duplicate_impact_function(impact_function):
@@ -154,19 +158,17 @@ def is_duplicate_impact_function(impact_function):
     """
 
     if_class_names = [c.__name__ for c in impact_function.plugins]
-    if_py_files = [get_python_file(c) for c in impact_function.plugins]
-    if_pyc_files = [get_python_file(c) + 'c' for c in impact_function.plugins]
+    # if_py_files = [get_python_file(c) for c in impact_function.plugins]
 
     impact_function_name = impact_function.__name__
-    impact_function_py = get_python_file(impact_function)
-    impact_function_pyc = impact_function_py + 'c'
+    # impact_function_py = get_python_file(impact_function)
 
     if impact_function_name in if_class_names:
-        if (impact_function_py in if_py_files or
-                impact_function_pyc in if_pyc_files):
-            return False
-        else:
-            # Same name, different location
-            return True
+        # if impact_function_py in if_py_files:
+        #     return False
+        # else:
+        #     # Same name, different location
+        #     return True
+        return True
     else:
         return False

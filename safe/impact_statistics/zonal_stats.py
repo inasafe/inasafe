@@ -23,12 +23,12 @@ import logging
 import numpy
 from osgeo import gdal, ogr, osr
 
-from PyQt4.QtCore import QCoreApplication
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry,
     QgsPoint)
+from PyQt4.QtCore import QCoreApplication
 
 from safe.utilities.gis import is_polygon_layer
 from safe.common.exceptions import InvalidParameterError, InvalidGeometryError

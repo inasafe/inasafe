@@ -22,9 +22,9 @@ import tempfile
 import logging
 
 # noinspection PyUnresolvedReferences
-# pylint: disable=W0611
+# pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
-# pylint: enable=W0611
+# pylint: enable=unused-import
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui

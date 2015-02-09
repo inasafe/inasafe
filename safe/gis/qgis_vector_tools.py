@@ -11,10 +11,6 @@ __copyright__ += 'Disaster Reduction'
 
 import itertools
 
-from safe.common.utilities import unique_filename
-from safe.common.exceptions import WrongDataTypeException
-
-from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
@@ -24,8 +20,11 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsVectorFileWriter,
     QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform
-)
+    QgsCoordinateTransform)
+from PyQt4.QtCore import QVariant
+
+from safe.common.utilities import unique_filename
+from safe.common.exceptions import WrongDataTypeException
 
 
 def points_to_rectangles(points, dx, dy):
