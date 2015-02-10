@@ -446,7 +446,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnCancel.released.connect(self.reject)
 
         # string constants
-        self.global_default_string = definitions.global_default_attribute['name']
+        self.global_default_string = definitions.global_default_attribute[
+            'name']
         self.global_default_data = definitions.global_default_attribute['id']
         self.do_not_use_string = definitions.do_not_use_attribute['name']
         self.do_not_use_data = definitions.do_not_use_attribute['id']

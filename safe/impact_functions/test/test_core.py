@@ -50,7 +50,7 @@ from safe.impact_functions.utilities import (
 from safe.definitions import converter_dict
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.test.utilities import test_data_path, TESTDATA, HAZDATA
+from safe.test.utilities import TESTDATA, HAZDATA
 
 LOGGER = logging.getLogger('InaSAFE')
 
