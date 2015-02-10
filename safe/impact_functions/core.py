@@ -498,20 +498,6 @@ def get_question(hazard_title, exposure_title, func):
                'impact': function_title.lower()})
 
 
-def get_thresholds(layer):
-    """Extract thresholds form layer keywords if present
-    """
-
-    if 'thresholds' in layer.keywords:
-        t_list = layer.keywords['thresholds']
-        thresholds = [float(x) for x in t_list]
-        thresholds.sort()
-    else:
-        thresholds = []
-
-    return thresholds
-
-
 def aggregate_point_data(data=None, boundaries=None,
                          attribute_name=None,
                          aggregation_function='count'):
@@ -674,8 +660,9 @@ def get_admissible_plugins(keywords=None):  # , name=None):
 
 
 def parse_single_requirement(requirement):
-    '''Parse single requirement from impact function's doc to category,
-        subcategory, layertype, datatype, unit, and disabled.'''
+    """Parse single requirement from impact function's doc to category,
+        subcategory, layertype, datatype, unit, and disabled.
+    """
     retval = {}
     parts = requirement.split(' and ')
     for part in parts:
@@ -697,160 +684,6 @@ def parse_single_requirement(requirement):
             pass
 
     return retval
-
-
-def get_plugins_as_table(dict_filter=None):
-    """Retrieve a table listing all plugins and their requirements.
-
-       Or just a single plugin if name is passed.
-
-       Args:
-           * dict_filter = dictionary that contains filters
-               - id = list_id
-               - title = list_title
-               - category : list_category
-               - subcategory : list_subcategory
-               - layertype : list_layertype
-               - datatype : list_datatype
-               - unit: list_unit
-               - disabled : list_disabled # not included
-
-       Returns:
-           * table contains plugins match with dict_filter
-
-       Raises: None
-    """
-
-    if dict_filter is None:
-        dict_filter = {'id': [],
-                       'title': [],
-                       'category': [],
-                       'subcategory': [],
-                       'layertype': [],
-                       'datatype': [],
-                       'unit': []}
-
-    table_body = []
-    # use this list for avoiding wrong order in dict
-    atts = ['category', 'subcategory', 'layertype',
-            'datatype', 'unit']
-    header = TableRow([tr('Title'), tr('ID'), tr('Category'),
-                       tr('Sub Category'), tr('Layer type'), tr('Data type'),
-                       tr('Unit')],
-                      header=True)
-    table_body.append(header)
-
-    plugins_dict = dict([(function_name(p), p)
-                         for p in FunctionProvider.plugins])
-
-    not_found_value = 'N/A'
-    for key, func in plugins_dict.iteritems():
-        for requirement in requirements_collect(func):
-            dict_found = {'title': False,
-                          'id': False,
-                          'category': False,
-                          'subcategory': False,
-                          'layertype': False,
-                          'datatype': False,
-                          'unit': False}
-
-            dict_req = parse_single_requirement(str(requirement))
-
-            # If the impact function is disabled, do not show it
-            if dict_req.get('disabled', False):
-                continue
-
-            for myKey in dict_found.iterkeys():
-                myFilter = dict_filter.get(myKey, [])
-                if myKey == 'title':
-                    myValue = str(get_function_title(func))
-                elif myKey == 'id':
-                    myValue = str(key)
-                else:
-                    myValue = dict_req.get(myKey, not_found_value)
-
-                if myFilter != []:
-                    for myKeyword in myFilter:
-                        if isinstance(myValue, str):
-                            if myValue == myKeyword:
-                                dict_found[myKey] = True
-                                break
-                        elif isinstance(myValue, list):
-                            if myKeyword in myValue:
-                                dict_found[myKey] = True
-                                break
-                        else:
-                            if myValue.find(str(myKeyword)) != -1:
-                                dict_found[myKey] = True
-                                break
-                else:
-                    dict_found[myKey] = True
-
-            add_row = True
-            for found_value in dict_found.itervalues():
-                if not found_value:
-                    add_row = False
-                    break
-
-            if add_row:
-                row = []
-                row.append(TableCell(get_function_title(func), header=True))
-                row.append(key)
-                for myKey in atts:
-                    myValue = pretty_string(dict_req.get(myKey,
-                                                         not_found_value))
-                    row.append(myValue)
-                table_body.append(TableRow(row))
-
-    cw = 100 / 7
-    table_col_width = [str(cw) + '%', str(cw) + '%', str(cw) + '%',
-                       str(cw) + '%', str(cw) + '%', str(cw) + '%',
-                       str(cw) + '%']
-    table = Table(table_body, col_width=table_col_width)
-    table.caption = tr('Available Impact Functions')
-
-    return table
-
-
-def get_unique_values():
-    """Get unique possible value for each column in impact functions doc
-        table.
-
-        Args: None
-
-        Returns:
-            * Dictionary contains list unique value for each column
-        """
-    atts = ['category', 'subcategory', 'layertype', 'datatype', 'unit']
-    dict_retval = {'category': set(),
-                   'subcategory': set(),
-                   'layertype': set(),
-                   'datatype': set(),
-                   'unit': set(),
-                   'id': set(),
-                   'title': set()}
-
-    plugins_dict = dict([(function_name(p), p)
-                         for p in FunctionProvider.plugins])
-    for key, func in plugins_dict.iteritems():
-        if not is_function_enabled(func):
-            continue
-        dict_retval['title'].add(get_function_title(func))
-        dict_retval['id'].add(key)
-        for requirement in requirements_collect(func):
-            dict_req = parse_single_requirement(str(requirement))
-            for key in dict_req.iterkeys():
-                if key not in atts:
-                    break
-                if isinstance(dict_req[key], str):
-                    dict_retval[key].add(dict_req[key])
-                elif isinstance(dict_req[key], list):
-                    dict_retval[key] |= set(dict_req[key])
-
-    # convert to list
-    for key in dict_retval.iterkeys():
-        dict_retval[key] = list(dict_retval[key])
-    return dict_retval
 
 
 def get_metadata(func):
@@ -922,12 +755,6 @@ def get_metadata(func):
     if hasattr(func, limitation):
         retval[limitation] = func.limitation
     return retval
-
-
-def get_doc_string(func):
-    """Return doc string of an impact function
-    """
-    return func.__doc__
 
 
 def is_function_enabled(func):
