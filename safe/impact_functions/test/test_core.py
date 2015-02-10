@@ -47,7 +47,7 @@ from safe.defaults import default_minimum_needs
 from safe.impact_functions.utilities import (
     pretty_string,
     admissible_plugins_to_str)
-from safe.metadata import converter_dict
+from safe.definitions import converter_dict
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.test.utilities import test_data_path, TESTDATA, HAZDATA

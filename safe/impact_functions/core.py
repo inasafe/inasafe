@@ -22,7 +22,7 @@ from utilities import (
     remove_double_spaces,
     is_duplicate_impact_function,
     get_python_file)
-from safe.metadata import converter_dict
+from safe.definitions import converter_dict
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -774,7 +774,7 @@ def is_function_enabled(func):
 def convert_to_old_keywords(converter, keywords):
     """Convert new keywords system to old keywords system by aliases.
 
-    Since we have new keywords system in metadata.py and assigned by wizard,
+    Since we have new keywords system in definitions.py and assigned by wizard,
     it will have backward incompatibility because the current impact function
     selector still use the old system.
 

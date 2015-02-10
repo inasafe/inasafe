@@ -17,7 +17,7 @@ from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding_full,
     population_rounding)
-from safe.metadata import (
+from safe.definitions import (
     hazard_earthquake,
     unit_mmi,
     layer_raster_continuous,

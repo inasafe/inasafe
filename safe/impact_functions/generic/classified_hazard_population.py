@@ -34,7 +34,7 @@ from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding
 )
-from safe.metadata import (
+from safe.definitions import (
     hazard_all,
     layer_raster_classified,
     layer_raster_continuous,
