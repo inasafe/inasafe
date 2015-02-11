@@ -30,10 +30,6 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsRectangle,
     QgsCoordinateReferenceSystem)
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import safe.test.sip_api_2  # pylint: disable=unused-import
-# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
 from safe.common.utilities import format_int

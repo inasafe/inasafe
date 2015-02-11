@@ -4,9 +4,6 @@ import unittest
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import safe.test.sip_api_2  # pylint: disable=unused-import
 from PyQt4.QtCore import QVariant
 
 from safe.utilities.gis import layer_attribute_names, is_polygon_layer

@@ -23,9 +23,6 @@ import unittest
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import safe.test.sip_api_2  # pylint: disable=unused-import
 from PyQt4.QtCore import QSettings
 
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
