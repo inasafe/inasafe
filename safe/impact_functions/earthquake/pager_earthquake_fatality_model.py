@@ -15,7 +15,7 @@ import math
 import numpy
 from collections import OrderedDict
 
-from safe.metadata import (
+from safe.definitions import (
     hazard_earthquake,
     unit_mmi,
     layer_raster_continuous,

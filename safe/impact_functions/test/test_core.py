@@ -30,7 +30,6 @@ from safe.impact_functions.core import (
     requirement_check,
     requirements_met,
     get_function_title,
-    get_plugins_as_table,
     parse_single_requirement,
     get_metadata,
     aggregate,
@@ -48,10 +47,10 @@ from safe.defaults import default_minimum_needs
 from safe.impact_functions.utilities import (
     pretty_string,
     admissible_plugins_to_str)
-from safe.metadata import converter_dict
+from safe.definitions import converter_dict
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.test.utilities import test_data_path, TESTDATA, HAZDATA
+from safe.test.utilities import TESTDATA, HAZDATA
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -614,19 +613,6 @@ class TestCore(unittest.TestCase):
         real_string2 = pretty_string(test_list)
         message = 'Get %s should be % s' % (real_string2, expected_string2)
         self.assertEqual(expected_string2, real_string2, message)
-
-    def test_get_plugins_as_table(self):
-        """Test get plugins as table with filtering."""
-        plugins_table = get_plugins_as_table({'title': 'Title for F1'})
-
-        control_file_path = test_data_path(
-            'control',
-            'files',
-            'test-get-plugins-as-table.txt')
-        expected_result = open(control_file_path, 'r').read()
-        self.assertEqual(
-            plugins_table.toNewlineFreeString(),
-            str(expected_result).replace('\n', ''))
 
     def test_get_documentation(self):
         """Test get_documentation for a function"""

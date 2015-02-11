@@ -5,7 +5,7 @@ import logging
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
-from safe.metadata import (
+from safe.definitions import (
     hazard_earthquake,
     layer_vector_polygon,
     layer_vector_point,

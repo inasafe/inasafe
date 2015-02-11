@@ -33,7 +33,7 @@ from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding)
 from safe.impact_functions.styles import flood_population_style as style_info
-from safe.metadata import (
+from safe.definitions import (
     hazard_all,
     layer_raster_continuous,
     exposure_population,

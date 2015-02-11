@@ -19,10 +19,8 @@ __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
 # noinspection PyUnresolvedReferences
 import unittest
 import logging
+
 from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
-# noinspection PyUnresolvedReferences
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-import safe.test.sip_api_2  # pylint: disable=unused-import
 from PyQt4 import QtGui
 from PyQt4.QtCore import Qt, QPoint
 from PyQt4.QtTest import QTest

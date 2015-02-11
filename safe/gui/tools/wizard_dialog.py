@@ -50,8 +50,8 @@ from PyQt4.QtGui import (
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
-from safe import metadata
-from safe.metadata import (
+from safe import definitions
+from safe.definitions import (
     layer_vector_point,
     layer_vector_line,
     layer_vector_polygon,
@@ -141,9 +141,9 @@ datatype_question = QApplication.translate(
     'in this raster represents a continuous '
     'value or a classified code.')   # (subcategory, category)
 
-continuous_datatype_description = metadata.unit_continuous['description']
+continuous_datatype_description = definitions.unit_continuous['description']
 
-classified_datatype_description = metadata.unit_classified['description']
+classified_datatype_description = definitions.unit_classified['description']
 
 # Constants for units
 unit_question = QApplication.translate(
@@ -446,10 +446,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnCancel.released.connect(self.reject)
 
         # string constants
-        self.global_default_string = metadata.global_default_attribute['name']
-        self.global_default_data = metadata.global_default_attribute['id']
-        self.do_not_use_string = metadata.do_not_use_attribute['name']
-        self.do_not_use_data = metadata.do_not_use_attribute['id']
+        self.global_default_string = definitions.global_default_attribute[
+            'name']
+        self.global_default_data = definitions.global_default_attribute['id']
+        self.do_not_use_string = definitions.do_not_use_attribute['name']
+        self.do_not_use_data = definitions.do_not_use_attribute['id']
         self.defaults = get_defaults()
 
         # Initialize attributes
@@ -610,7 +611,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         for category in categories:
             if type(category) != dict:
                 # pylint: disable=eval-used
-                category = eval('metadata.%s_definition' % category)
+                category = eval('definitions.%s_definition' % category)
                 # pylint: enable=eval-used
             item = QListWidgetItem(category['name'], self.lstCategories)
             item.setData(QtCore.Qt.UserRole, unicode(category))
@@ -823,7 +824,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Set values based on existing keywords (if already assigned)
         unit_id = self.get_existing_keyword('unit')
-        unit_id = metadata.old_to_new_unit_id(unit_id)
+        unit_id = definitions.old_to_new_unit_id(unit_id)
         if unit_id:
             units = []
             for index in xrange(self.lstUnits.count()):
@@ -1049,7 +1050,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Set values based on existing keywords (if already assigned)
         unit_id = self.get_existing_keyword('unit')
-        unit_name = metadata.old_to_new_unit_id(unit_id)
+        unit_name = definitions.old_to_new_unit_id(unit_id)
         # Do not continue if user select different unit
         if unit_name != self.selected_unit()['name']:
             return
