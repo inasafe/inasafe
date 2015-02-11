@@ -13,7 +13,7 @@ from qgis.core import (
     QgsCoordinateTransform
 )
 
-from safe.metadata import (
+from safe.definitions import (
     hazard_flood,
     hazard_tsunami,
     unit_metres_depth,

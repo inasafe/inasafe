@@ -16,7 +16,7 @@ from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.metadata import (
+from safe.definitions import (
     hazard_volcano,
     unit_volcano_categorical,
     layer_vector_polygon,
