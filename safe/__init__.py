@@ -18,6 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # Import the PyQt and QGIS libraries
-# this import required to enable PyQt API v2
+# DO NOT REMOTE THIS. This import required to enable PyQt API v2
+# Please import module in safe from the safe root, e.g:
+# from safe.x.y import z
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
