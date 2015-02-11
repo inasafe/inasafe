@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 import logging
 
-from safe.metadata import (
+from safe.definitions import (
     hazard_flood,
     hazard_tsunami,
     unit_wetdry,

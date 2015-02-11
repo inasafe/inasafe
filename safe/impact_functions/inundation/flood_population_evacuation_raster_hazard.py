@@ -19,7 +19,7 @@ from safe.impact_functions.core import (
     population_rounding)
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.metadata import (
+from safe.definitions import (
     hazard_flood,
     unit_feet_depth,
     unit_metres_depth,

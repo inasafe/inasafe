@@ -18,7 +18,7 @@ from collections import OrderedDict
 from safe.engine.utilities import buffer_points
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.metadata import (
+from safe.definitions import (
     hazard_volcano,
     unit_volcano_categorical,
     layer_vector_polygon,

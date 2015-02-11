@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 import logging
 from numpy import round as numpy_round
 
-from safe.metadata import (
+from safe.definitions import (
     exposure_structure,
     exposure_definition,
     hazard_all,

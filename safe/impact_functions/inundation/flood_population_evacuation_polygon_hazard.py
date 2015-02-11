@@ -23,7 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 import logging
 
-from safe.metadata import (
+from safe.definitions import (
     hazard_flood,
     unit_wetdry,
     layer_vector_polygon,
