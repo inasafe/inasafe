@@ -300,9 +300,14 @@ def read_file_keywords(layer_path, keyword=None):
     # check there really is a keywords file for this layer
     keyword_file_path = os.path.splitext(layer_path)[0]
     keyword_file_path += '.keywords'
-    if not os.path.isfile(keyword_file_path):
+    keyword_iso_path = os.path.splitext(layer_path)[0]
+    keyword_iso_path += '.xml'
+    if not os.path.isfile(keyword_file_path) and not os.path.isfile(keyword_iso_path):
         message = tr('No keywords file found for %s' % keyword_file_path)
         raise NoKeywordsFoundError(message)
+    elif not os.path.isfile(keyword_file_path) and os.path.isfile(keyword_iso_path):
+        # switch to xml iso file if .keywords file didn't exist
+        keyword_file_path = keyword_iso_path
 
     # now get the requested keyword using the inasafe library
     try:
