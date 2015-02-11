@@ -212,7 +212,8 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     """Read keywords dictionary from file
 
     :param keyword_filename: Name of keywords file. Extension expected to be
-        .keywords or .xml metadata. The format of one line is expected to be either
+        .keywords or .xml metadata.
+        The format of one line is expected to be either
         string: string or string
     :type keyword_filename: str
 
@@ -264,7 +265,8 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     basename, ext = os.path.splitext(keyword_filename)
 
     msg = ('Unknown extension for file %s. '
-           'Expected %s.keywords or %s.xml' % (keyword_filename, basename, basename))
+           'Expected %s.keywords or %s.xml' %
+           (keyword_filename, basename, basename))
     verify(ext == '.keywords' or ext == '.xml', msg)
 
     metadata = False
