@@ -270,11 +270,15 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     verify(ext == '.keywords' or ext == '.xml', msg)
 
     metadata = False
-    keywords_file = os.path.isfile(keyword_filename)
+    # check .keywords file exist
+    keywords_file = os.path.isfile(keyword_filename) \
+        and ext == '.keywords'
 
     try:
+        # read the xml metadata first
         metadata = read_iso_metadata(keyword_filename)
     except (IOError, ReadMetadataError):
+        # error reading xml metadata or file not exist
         if keywords_file:
             # if there is a keyword file generate an xml file also
             write_keyword_in_iso_metadata(keyword_filename)

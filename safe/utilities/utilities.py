@@ -298,6 +298,7 @@ def read_file_keywords(layer_path, keyword=None):
         raise InvalidParameterError(message)
 
     # check there really is a keywords file for this layer
+    # priority for iso path first
     keyword_file_path = os.path.splitext(layer_path)[0]
     keyword_file_path += '.keywords'
     keyword_iso_path = os.path.splitext(layer_path)[0]
@@ -306,14 +307,14 @@ def read_file_keywords(layer_path, keyword=None):
             and not os.path.isfile(keyword_iso_path):
         message = tr('No keywords file found for %s' % keyword_file_path)
         raise NoKeywordsFoundError(message)
-    elif not os.path.isfile(keyword_file_path) \
-            and os.path.isfile(keyword_iso_path):
-        # switch to xml iso file if .keywords file didn't exist
-        keyword_file_path = keyword_iso_path
+    elif os.path.isfile(keyword_file_path) \
+            and not os.path.isfile(keyword_iso_path):
+        # switch to .keywords file if iso xml file didn't exist
+        keyword_iso_path = keyword_file_path
 
     # now get the requested keyword using the inasafe library
     try:
-        dictionary = read_keywords(keyword_file_path)
+        dictionary = read_keywords(keyword_iso_path)
     except Exception, e:
         message = tr(
             'Keyword retrieval failed for %s (%s) \n %s' % (
