@@ -71,6 +71,7 @@ class Plugin(object):
         self.iface = iface
         self.dock_widget = None
         self.action_import_dialog = None
+        self.people_in_buildings_dialog = None
         self.action_save_scenario = None
         self.action_batch_runner = None
         self.action_shake_converter = None
@@ -369,6 +370,23 @@ class Plugin(object):
         self.add_action(self.action_import_dialog)
 
         # --------------------------------------
+        # Create action for import OSM Dialog
+        # --------------------------------------
+        icon = resources_path('img', 'icons', 'show-osm-download.svg')
+        self.people_in_buildings_dialog = QAction(
+            QIcon(icon),
+            self.tr('InaSAFE People in Buildings'),
+            self.iface.mainWindow())
+        self.people_in_buildings_dialog.setStatusTip(self.tr(
+            'InaSAFE OpenStreetMap Downloader'))
+        self.people_in_buildings_dialog.setWhatsThis(self.tr(
+            'InaSAFE OpenStreetMap Downloader'))
+        self.people_in_buildings_dialog.triggered.connect(
+            self.show_people_in_buildings)
+
+        self.add_action(self.people_in_buildings_dialog)
+
+        # --------------------------------------
         # Create action for impact layer merge Dialog
         # --------------------------------------
         icon = resources_path('img', 'icons', 'show-impact-merge.svg')
@@ -559,6 +577,17 @@ class Plugin(object):
             NeedsManagerDialog)
 
         dialog = NeedsManagerDialog(self.iface.mainWindow())
+        dialog.exec_()  # modal
+
+    def show_people_in_buildings(self):
+        """Show the people in buildings dialog."""
+        # import here only so that it is AFTER i18n set up
+        from safe.gui.tools.people_in_buildings_dialog import (
+            PeopleInBuildingsDialog)
+
+        dialog = PeopleInBuildingsDialog(
+            self.iface,
+            self.dock_widget)
         dialog.exec_()  # modal
 
     def show_impact_merge(self):
