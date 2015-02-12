@@ -18,6 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import QVariant
+from qgis.core import QgsField
+from qgis.core import QgsGeometry
 
 from safe.utilities.resources import get_ui_class
 
@@ -54,7 +57,15 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         self.censusLayerComboBox.activated['QString'].connect(
             self.handle_census_layer)
 
+        self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(
+            self.estimate_people_in_buildings)
+
+        self.progressBar.setMinimum(1)
+        self.progressBar.setMaximum(100)
+
     def load_layers_into_combo_box(self):
+        """Load the layer options and column options into the combobox.
+        """
         layer_names = self._get_layer_names()
         self._update_combobox(self.buildingLayerComboBox, layer_names)
         self._update_combobox(self.censusLayerComboBox, layer_names)
@@ -105,9 +116,164 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         field_names = self._get_field_names(layer)
         self._update_combobox(self.populationCountComboBox, field_names)
 
-    def _update_combobox(self, combobox, options):
+    @staticmethod
+    def _update_combobox(combobox, options):
         """Shorthand for clearing and loading options (this happens a lot)
         """
         combobox.clear()
         combobox.addItems(options)
+
+    @staticmethod
+    def add_population_attribute(layer):
+        name = "population"
+        provider = layer.dataProvider()
+        # Check if attribute is already there, return "-1" if not
+        ind = provider.fieldNameIndex(name)
+        try:
+            if ind == -1:
+                res = provider.addAttributes(
+                    [
+                        QgsField(name, QVariant.Double)
+                    ]
+                )
+                return res
+            return False
+        except:
+            return False
+
+    @staticmethod
+    def _get_attributes(feature, field_names):
+        attributes = feature.attributes()
+        attribute_dict = dict(zip(field_names, attributes))
+        return attribute_dict
+
+    @staticmethod
+    def _overlapping_area(feature1, feature2):
+        """Get the overlapping area between two features
+
+        :param feature1: A feature
+        :type feature1: QgsFeature
+
+        :param feature2: A feature
+        :type feature2: QgsFeature
+
+        :returns: overlapping area
+        :rtype: float
+        """
+        geometry_feature1 = feature1.geometry()
+        geometry_feature2 = feature2.geometry()
+        intersection = geometry_feature1.intersection(geometry_feature2)
+        if not intersection:
+            return 0
+        return intersection.area()
+
+    @staticmethod
+    def _get_levels(attributes, levels_attribute):
+        """Try to extract the levels from the attributes dict as an int.
+        ..Note: If the levels of this building has not been set we will
+        assume it to be 1.
+
+        :param attributes: The attributes dict from the feature
+        :type attributes: dict
+
+        :param levels_attribute: The name of the column that contains layer
+        information
+        :type levels_attribute: basestring
+
+        :returns: Number of levels (default 1)
+        :rtype: int
+        """
+        levels = attributes[levels_attribute]
+        # get the number of levels as a integer
+        if not levels:
+            return 1
+        try:
+            # get the number of levels as an intiger
+            return int(levels)
+        except ValueError:
+            return 1
+
+    @staticmethod
+    def _get_residential_proportion(attributes, building_use):
+        use = attributes[building_use]
+        if use in ['Residential', 'residential']:
+            return 1
+        return 0
+
+    @staticmethod
+    def _feature_fully_in_extent(layer, feature):
+        extent = layer.extent()
+        geometry_extent = QgsGeometry.fromRect(extent)
+        geometry_feature = feature.geometry()
+        intersection = geometry_feature.intersection(geometry_extent)
+        if intersection.area() < geometry_feature.area():
+            return False
+        return True
+
+    def estimate_people_in_buildings(self):
+        building_layer_name = self.buildingLayerComboBox.currentText()
+        buildings_layer = self._select_layer_by_name(building_layer_name)
+        building_use_column = self.usageColumnComboBox.currentText()
+        building_level_column = self.levelsColumnComboBox.currentText()
+        population_layer_name = self.censusLayerComboBox.currentText()
+        population_layer = self._select_layer_by_name(population_layer_name)
+        population_column = self.populationCountComboBox.currentText()
+        new_layer = self.newLayerCheckBox.isChecked()
+        new_layer_name = self.newLayerLineEdit.text()
+
+        if new_layer:
+            buildings_layer = self.iface.addVectorLayer(
+                buildings_layer.source(),
+                new_layer_name,
+                buildings_layer.providerType())
+
+        self.add_population_attribute(buildings_layer)
+        field_names_population = self._get_field_names(population_layer)
+        field_names = self._get_field_names(buildings_layer)
+
+        #TODO: Make a better progress estimator
+        progress = 100.0/len([p for p in population_layer.getFeatures()])
+
+        for population_area in population_layer.getFeatures():
+            if not self._feature_fully_in_extent(
+                    buildings_layer,
+                    population_area):
+                # If this feature is not fully contained within the buildings
+                # extent we cannot use it (Type B, C)
+                continue
+            self.progressBar.setValue(self.progressBar.value() + progress)
+            population_attributes = self._get_attributes(
+                population_area,
+                field_names_population
+            )
+            total_effective_area = 0
+            building_lookup = {}
+            population_count = population_attributes[population_column]
+            for building in buildings_layer.getFeatures():
+                area = self._overlapping_area(building, population_area)
+                if not area:
+                    continue
+                attributes = self._get_attributes(building, field_names)
+                levels = self._get_levels(attributes, building_level_column)
+                residential_proportion = self._get_residential_proportion(
+                    attributes,
+                    building_use_column)
+                if not residential_proportion:
+                    continue
+                effective_area = area * levels * residential_proportion
+                total_effective_area += effective_area
+                building_lookup[building] = effective_area
+            if not total_effective_area:
+                continue
+            population_density = population_count / total_effective_area
+            buildings_layer.startEditing()
+            for (building, area) in building_lookup.items():
+                people_in_building = population_density * area
+                attributes = self._get_attributes(building, field_names)
+                current_estimate = attributes['population']
+                if current_estimate:
+                    people_in_building += current_estimate
+                building['population'] = people_in_building
+                buildings_layer.updateFeature(building)
+            buildings_layer.commitChanges()
 
