@@ -30,14 +30,16 @@ from safe.impact_functions.volcanic.volcano_building_impact import (
 from safe.impact_functions.volcanic. \
     volcano_population_evacuation_polygon_hazard import (
         VolcanoPolygonHazardPopulation)
-from safe.impact_functions.generic.categorised_hazard_population import (
-    CategorisedHazardPopulationImpactFunction)
-from safe.impact_functions.generic.categorical_hazard_building import (
-    CategoricalHazardBuildingImpactFunction)
-from safe.impact_functions.generic.categorical_hazard_population import (
-    CategoricalHazardPopulationImpactFunction)
+from safe.impact_functions.generic.continuous_hazard_population import (
+    ContinuousHazardPopulationImpactFunction)
+from safe.impact_functions.generic.classified_hazard_building import (
+    ClassifiedHazardBuildingImpactFunction)
+from safe.impact_functions.generic.classified_hazard_population import (
+    ClassifiedHazardPopulationImpactFunction)
 
-from safe.metadata import (
+from safe.impact_functions.utilities import get_list_id
+
+from safe.definitions import (
     unit_wetdry,
     unit_metres_depth,
     unit_feet_depth,
@@ -53,11 +55,9 @@ from safe.metadata import (
     unit_building_type_type,
     unit_people_per_pixel,
     unit_mmi,
-    hazard_tephra,
-    unit_normalised,
+    hazard_volcanic_ash,
     hazard_generic,
     unit_building_generic,
-    unit_categorised,
     hazard_all,
     layer_vector_polygon,
     layer_vector_line)
@@ -70,8 +70,7 @@ class TestImpactFunctionManager(unittest.TestCase):
     """
 
     flood_OSM_building_hazard_units = [
-        unit_wetdry, unit_metres_depth, unit_feet_depth, unit_normalised,
-        unit_categorised]
+        unit_wetdry, unit_metres_depth, unit_feet_depth]
 
     def test_init(self):
         """Test initialize ImpactFunctionManager."""
@@ -100,7 +99,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_tsunami,
             exposure_road,
             hazard_volcano,
-            hazard_tephra,
+            hazard_volcanic_ash,
             hazard_generic]
         message = (
             'I expect %s but I got %s.' % (expected_result, result))
@@ -110,12 +109,12 @@ class TestImpactFunctionManager(unittest.TestCase):
         """Test allowed_data_types API."""
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.allowed_data_types('flood')
-        expected_result = ['polygon', 'numeric']
+        expected_result = ['polygon', 'continuous', 'classified']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_data_types('volcano')
-        expected_result = ['point', 'polygon', 'numeric']
+        expected_result = ['point', 'polygon', 'continuous', 'classified']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -125,17 +124,17 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_data_types('earthquake')
-        expected_result = ['polygon', 'numeric']
+        expected_result = ['polygon', 'continuous', 'classified']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_data_types('tsunami')
-        expected_result = ['polygon', 'numeric']
+        expected_result = ['polygon', 'continuous', 'classified']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_data_types('population')
-        expected_result = ['numeric']
+        expected_result = ['continuous']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -152,13 +151,15 @@ class TestImpactFunctionManager(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(set(result), set(expected_result), message)
 
-        result = impact_function_manager.allowed_units('flood', 'numeric')
+        result = impact_function_manager.allowed_units('flood', 'continuous')
         expected_result = self.flood_OSM_building_hazard_units
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-        result = impact_function_manager.allowed_units('earthquake', 'numeric')
-        expected_result = [unit_mmi, unit_normalised, unit_categorised]
+        result = impact_function_manager.allowed_units(
+            'earthquake', 'continuous')
+        expected_result = [unit_mmi]
+
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -167,20 +168,21 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.units_for_layer(
-            subcategory='flood', layer_type='raster', data_type='numeric')
+            subcategory='flood', layer_type='raster', data_type='continuous')
         expected_result = self.flood_OSM_building_hazard_units
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.units_for_layer(
-            subcategory='volcano', layer_type='raster', data_type='numeric')
-        expected_result = [unit_normalised, unit_categorised]
-        print result
+            subcategory='volcano', layer_type='raster', data_type='continuous')
+        expected_result = []
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.units_for_layer(
-            subcategory='population', layer_type='raster', data_type='numeric')
+            subcategory='population',
+            layer_type='raster',
+            data_type='continuous')
         expected_result = [unit_people_per_pixel]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
@@ -190,9 +192,10 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.categories_for_layer(
-            layer_type='raster', data_type='numeric')
+            layer_type='raster', data_type='continuous')
         expected_result = [hazard_definition, exposure_definition]
-        message = ('I expect %s but I got %s.' % (expected_result, result))
+        message = ('I expect %s but I got %s.' % (
+            get_list_id(expected_result), get_list_id(result)))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.categories_for_layer(
@@ -212,13 +215,13 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.subcategories_for_layer(
-            category='hazard', layer_type='raster', data_type='numeric')
+            category='hazard', layer_type='raster', data_type='continuous')
         expected_result = [
             hazard_earthquake,
             hazard_flood,
             hazard_tsunami,
-            hazard_tephra,
             hazard_volcano,
+            hazard_volcanic_ash,
             hazard_generic]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
@@ -237,7 +240,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.subcategories_for_layer(
-            category='exposure', layer_type='raster', data_type='numeric')
+            category='exposure', layer_type='raster', data_type='continuous')
         expected_result = [exposure_population]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
@@ -277,9 +280,9 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected_result = [
             VolcanoBuildingImpact.Metadata.get_metadata(),
             VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
-            CategorisedHazardPopulationImpactFunction.Metadata.get_metadata(),
-            CategoricalHazardBuildingImpactFunction.Metadata.get_metadata(),
-            CategoricalHazardPopulationImpactFunction.Metadata.get_metadata()]
+            ContinuousHazardPopulationImpactFunction.Metadata.get_metadata(),
+            ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata(),
+            ClassifiedHazardPopulationImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -291,9 +294,9 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected_result = [
             VolcanoBuildingImpact.Metadata.get_metadata(),
             VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
-            CategorisedHazardPopulationImpactFunction.Metadata.get_metadata(),
-            CategoricalHazardBuildingImpactFunction.Metadata.get_metadata(),
-            CategoricalHazardPopulationImpactFunction.Metadata.get_metadata()]
+            ContinuousHazardPopulationImpactFunction.Metadata.get_metadata(),
+            ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata(),
+            ClassifiedHazardPopulationImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -310,7 +313,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         impact_function = EarthquakeBuildingImpactFunction()
-        result = impact_function_manager.get_available_exposures(impact_function)
+        result = impact_function_manager.get_available_exposures(
+            impact_function)
         expected_result = [exposure_structure]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
@@ -325,7 +329,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
             FloodBuildingImpactFunction.Metadata.get_metadata(),
             FloodNativePolygonExperimentalFunction.Metadata.get_metadata(),
-            CategoricalHazardBuildingImpactFunction.Metadata.get_metadata()]
+            ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -339,7 +343,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
             FloodBuildingImpactFunction.Metadata.get_metadata(),
             FloodNativePolygonExperimentalFunction.Metadata.get_metadata(),
-            CategoricalHazardBuildingImpactFunction.Metadata.get_metadata()]
+            ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -351,7 +355,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         expected_result = [
             EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
-            CategoricalHazardBuildingImpactFunction.Metadata.get_metadata()]
+            ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata()]
         result = impact_function_manager.get_functions_for_constraint(
             hazard, exposure)
         message = ('I expect %s but I got %s.' % (expected_result, result))

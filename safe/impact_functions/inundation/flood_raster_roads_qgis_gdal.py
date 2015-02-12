@@ -7,12 +7,12 @@ from qgis.core import (
     QgsCoordinateTransform
 )
 
-from safe.metadata import (
+from safe.definitions import (
     hazard_flood,
     hazard_tsunami,
     unit_metres_depth,
     unit_feet_depth,
-    layer_raster_numeric,
+    layer_raster_continuous,
     exposure_road,
     unit_road_type_type,
     layer_vector_line,
@@ -93,7 +93,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                             unit_metres_depth,
                             unit_feet_depth
                         ],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     },
                     'exposure': {
                         'definition': exposure_definition,

@@ -24,13 +24,12 @@ from unittest import TestCase, skipIf
 
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=W0611
+import qgis  # pylint: disable=unused-import
 from qgis.core import (
     QgsVectorLayer,
     QgsMapLayerRegistry,
     QgsRectangle,
     QgsCoordinateReferenceSystem)
-# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
 from safe.common.utilities import format_int
@@ -764,9 +763,23 @@ class TestDock(TestCase):
         DOCK.set_dock_title()
         self.assertIn('InaSAFE', str(DOCK.windowTitle()))
 
+    def wkt_to_coordinates(self, wkt):
+        """Convert a wkt into a nested array of float pairs."""
+        expected_coords = []
+        wkt = wkt.replace('LINESTRING(', '').replace(')', '')
+        coords = wkt.split(',')
+        for item in coords:
+            item = item.strip()
+            tokens = item.split(' ')
+            # print tokens[0].strip()
+            # print tokens[1].strip()
+            expected_coords.append([
+                float(tokens[0].strip()),
+                float(tokens[1].strip())])
+        return expected_coords
+
     def test_rubber_bands(self):
         """Test that the rubber bands get updated."""
-
         setup_scenario(
             DOCK,
             hazard='A flood in Jakarta like in 2007',
@@ -808,13 +821,24 @@ class TestDock(TestCase):
         # DOCK.show_extent()
         last_band = DOCK.extent.last_analysis_rubberband
         geometry = last_band.asGeometry().exportToWkt()
-        expected_wkt = (
+        expected = (
             'LINESTRING(11876228.33329810947179794 -695807.82839082507416606, '
             '11908350.67106631398200989 -695807.82839082507416606, '
             '11908350.67106631398200989 -678083.54461829655338079, '
             '11876228.33329810947179794 -678083.54461829655338079, '
             '11876228.33329810947179794 -695807.82839082507416606)')
-        self.assertEqual(geometry, expected_wkt)
+        expected_list = self.wkt_to_coordinates(expected)
+        actual_list = self.wkt_to_coordinates(geometry)
+
+        for item in xrange(0, len(expected_list)):
+            print item, expected_list[item], actual_list[item]
+            self.assertAlmostEqual(
+                expected_list[item][0],
+                actual_list[item][0])
+            self.assertAlmostEqual(
+                expected_list[item][1],
+                actual_list[item][1])
+
         self.assertEqual(
             expected_vertex_count,
             last_band.numberOfVertices()

@@ -26,7 +26,7 @@ __revision__ = '$Format:%H$'
 import logging
 
 # noinspection PyUnresolvedReferences
-# pylint: disable=W0611
+# pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
 
 # noinspection PyPackageRequirements

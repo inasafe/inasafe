@@ -16,19 +16,16 @@ __date__ = '13/11/2014'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
 # noinspection PyUnresolvedReferences
 import unittest
 import logging
 
+from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 from PyQt4 import QtGui
-
 from PyQt4.QtCore import Qt, QPoint
 from PyQt4.QtTest import QTest
-from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 
 from safe.test.utilities import get_qgis_app
-
 
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
@@ -104,8 +101,8 @@ class ExtentSelectorTest(unittest.TestCase):
         expected_extent = QgsRectangle(10.0, 10.0, 30.0, 20.0)
         self.assertEqual(self.extent.toString(), expected_extent.toString())
 
-    @unittest.skip
     @unittest.expectedFailure
+    @unittest.skip
     def test_mouse_drag(self):
         """Test setting extents by dragging works.
 

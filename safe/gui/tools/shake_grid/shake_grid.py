@@ -29,9 +29,9 @@ from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
 # This import is required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
-# pylint: disable=W0611
+# pylint: disable=unused-import
 import qgis
-# pylint: enable=W0611
+# pylint: enable=unused-import
 from qgis.core import (
     QgsVectorLayer,
     QgsFeatureRequest,

@@ -60,6 +60,7 @@ def interpolate1d(x, z, points, mode='linear', bounds_error=False):
 
     # Input checks
     validate_mode(mode)
+    # pylint: disable=unbalanced-tuple-unpacking
     x, z, xi = validate_inputs(
         x=x, z=z, points=points, bounds_error=bounds_error)
 

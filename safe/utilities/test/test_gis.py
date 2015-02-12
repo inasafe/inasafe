@@ -3,14 +3,17 @@
 import unittest
 
 # noinspection PyUnresolvedReferences
-import qgis
+import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QVariant
 
 from safe.utilities.gis import layer_attribute_names, is_polygon_layer
 from safe.test.utilities import (
     clone_shp_layer,
     clone_raster_layer,
-    test_data_path)
+    test_data_path,
+    get_qgis_app)
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestQGIS(unittest.TestCase):

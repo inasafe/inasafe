@@ -61,6 +61,7 @@ class ResourceParameter(FloatParameter):
         pickle['unit'] = self._unit.serialize()
         return pickle
 
+    # pylint: disable=W0221
     @property
     def unit(self):
         """Property for the unit for the parameter.
@@ -80,3 +81,5 @@ class ResourceParameter(FloatParameter):
 
         """
         self._unit = unit
+
+    # pylint: enable=W0221

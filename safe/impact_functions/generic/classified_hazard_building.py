@@ -13,16 +13,16 @@ Contact : ole.moller.nielsen@gmail.com
 import logging
 from numpy import round as numpy_round
 
-from safe.metadata import (
+from safe.definitions import (
     exposure_structure,
     exposure_definition,
     hazard_all,
     hazard_definition,
     layer_vector_polygon,
-    layer_raster_numeric,
+    layer_raster_classified,
     layer_vector_point,
     unit_building_generic,
-    unit_categorised,
+    unit_classified,
     unit_building_type_type,)
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
@@ -38,14 +38,15 @@ from safe.impact_functions.impact_function_metadata import (
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class CategoricalHazardBuildingImpactFunction(FunctionProvider):
-    """Impact plugin for categorising hazard impact on building data
+class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
+    """Impact plugin for classified hazard impact on building data
 
     :author ESSC
     :rating 3
     :param requires category=='hazard' and \
-                    unit=='categorised' and \
-                    layertype=='raster'
+                    layertype=='raster' and \
+                    data_type=='classified' and \
+                    unit=='classes'
 
     :param requires category=='exposure' and \
                     subcategory=='structure' and \
@@ -53,7 +54,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
     """
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for Categorised Hazard Building Impact Function.
+        """Metadata for Classified Hazard Building Impact Function.
 
         .. versionadded:: 2.1
 
@@ -73,20 +74,20 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'CategoricalHazardBuildingImpactFunction',
-                'name': tr('Categorised Hazard Building Impact Function'),
+                'id': 'ClassifiedHazardBuildingImpactFunction',
+                'name': tr('Classified Hazard Building Impact Function'),
                 'impact': tr('Be impacted'),
                 'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of categorized hazards in raster '
+                    'To assess the impacts of classified hazards in raster '
                     'format on building vector layer.'),
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategories': hazard_all,
-                        'units': [unit_categorised],
-                        'layer_constraints': [layer_raster_numeric]
+                        'units': [unit_classified],
+                        'layer_constraints': [layer_raster_classified]
                     },
                     'exposure': {
                         'definition': exposure_definition,
@@ -106,54 +107,56 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
     # Function documentation
     target_field = 'DAMAGED'
     affected_field = 'affected'
-    title = tr('Be impacted by each category')
+    title = tr('Be impacted by each hazard class')
     synopsis = tr(
-        'To assess the impacts of categorized hazard in raster '
-        'format on structure/building raster layer.')
+        'To assess the impacts of classified hazards in raster format on '
+        'building vector layer.')
     actions = tr(
-        'Provide details about how many building would likely need '
-        'to be affected for each category.')
+        'Provide details about how many building would likely be impacted for '
+        'each hazard class.')
     hazard_input = tr(
-        'A hazard raster layer where each cell represents '
-        'the category of the hazard. There should be 3 '
-        'categories: 1, 2, and 3.')
+        'A hazard raster layer where each cell represents the class of the '
+        'hazard. There should be 3 classes: e.g. 1, 2, and 3.')
     exposure_input = tr(
-        'Vector polygon layer which can be extracted from OSM '
-        'where each polygon represents the footprint of a building.')
+        'Vector polygon layer which can be extracted from OSM where each '
+        'polygon represents the footprint of a building.')
     output = tr(
-        'Map of structure exposed to high category and a table with '
-        'number of structure in each category')
+        'The impact layer will contain all structures that were exposed to '
+        'the highest class (3) and a summary table containing the number of '
+        'structures in each class.')
     detailed_description = tr(
-        'This function will calculate how many buildings will be affected '
-        'per each category for all categories in the hazard layer. '
-        'Currently there should be 3 categories in the hazard layer. After '
-        'that it will show the result and the total of buildings that '
-        'will be affected for the hazard given.')
+        'This function will use the class from the hazard layer that has been '
+        'identified by the user which one is low, medium, or high from the '
+        'parameter that user input. After that, this impact function will '
+        'calculate the building will be impacted per each class for class in '
+        'the hazard layer. Finally, it will show the result and the total of '
+        'building that will be affected for the hazard given.')
+    limitation = tr('The number of classes is three.')
 
     # parameters
     parameters = OrderedDict([
-        ('low_thresholds', 1.0),
-        ('medium_thresholds', 2.0),
-        ('high_thresholds', 3.0),
+        ('low_hazard_class', 1.0),
+        ('medium_hazard_class', 2.0),
+        ('high_hazard_class', 3.0),
         ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
     ])
 
     def run(self, layers):
-        """Categorical hazard impact to buildings (e.g. from Open Street Map).
+        """Classified hazard impact to buildings (e.g. from Open Street Map).
 
          :param layers: List of layers expected to contain.
-                * hazard: Categorical Hazard layer
+                * hazard: Classified Hazard layer
                 * exposure: Vector layer of structure data on
                 the same grid as hazard
         """
 
-        # The 3 category
-        high_t = self.parameters['high_thresholds']
-        medium_t = self.parameters['medium_thresholds']
-        low_t = self.parameters['low_thresholds']
+        # The 3 classes
+        low_t = self.parameters['low_hazard_class']
+        medium_t = self.parameters['medium_hazard_class']
+        high_t = self.parameters['high_hazard_class']
 
         # Extract data
-        hazard = get_hazard_layer(layers)  # Depth
+        hazard = get_hazard_layer(layers)  # Classified Hazard
         exposure = get_exposure_layer(layers)  # Building locations
 
         question = get_question(hazard.get_name(), exposure.get_name(), self)
@@ -183,10 +186,10 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
         buildings = {}
         affected_buildings = {}
         for i in range(N):
-            # Get category value
+            # Get class value
             val = float(attributes[i]['level'])
             # FIXME it would be good if the affected were words not numbers
-            # FIXME need to read hazard layer and see category or keyword
+            # FIXME need to read hazard layer and see class or keyword
             val = float(numpy_round(val))
             if val == high_t:
                 count3 += 1
@@ -269,11 +272,11 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
             table_body = [question,
                           TableRow([tr('Hazard Level'),
                                     tr('Number of Buildings')], header=True),
-                          TableRow([tr('Buildings in High risk areas'),
+                          TableRow([tr('High Hazard Class'),
                                     format_int(count3)]),
-                          TableRow([tr('Buildings in Medium risk areas'),
+                          TableRow([tr('Medium Hazard Class'),
                                     format_int(count2)]),
-                          TableRow([tr('Buildings in Low risk areas'),
+                          TableRow([tr('Low Hazard Class'),
                                     format_int(count1)]),
                           TableRow([tr('Total Buildings Affected'),
                                     format_int(count1 + count2 + count3)],
@@ -343,7 +346,7 @@ class CategoricalHazardBuildingImpactFunction(FunctionProvider):
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('Map shows buildings affected in'
-                             ' low, medium and high risk areas.'))
+                             ' low, medium and high hazard class areas.'))
 
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()

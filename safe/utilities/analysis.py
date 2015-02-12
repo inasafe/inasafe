@@ -796,13 +796,14 @@ class Analysis(object):
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
-        # pylint: disable=W0612
-        (extra_exposure_keywords,
+        # pylint: disable=unpacking-non-sequence
+        (_,
          buffered_geo_extent,
-         cell_size,
+         _,
          exposure_layer,
-         geo_extent,
+         _,
          hazard_layer) = self.clip_parameters
+        # pylint: enable=unpacking-non-sequence
 
         if self.impact_calculator.requires_clipping():
             # The impact function uses SAFE layers,

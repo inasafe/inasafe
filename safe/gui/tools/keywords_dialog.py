@@ -20,6 +20,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -39,7 +42,7 @@ from safe.common.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)
-from safe import metadata
+from safe import definitions
 
 # Aggregations' keywords
 DEFAULTS = get_defaults()
@@ -89,10 +92,11 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         self.defaults = None
 
         # string constants
-        self.global_default_string = metadata.global_default_attribute['name']
-        self.do_not_use_string = metadata.do_not_use_attribute['name']
-        self.global_default_data = metadata.global_default_attribute['id']
-        self.do_not_use_data = metadata.do_not_use_attribute['id']
+        self.global_default_string = definitions.global_default_attribute[
+            'name']
+        self.do_not_use_string = definitions.do_not_use_attribute['name']
+        self.global_default_data = definitions.global_default_attribute['id']
+        self.do_not_use_data = definitions.do_not_use_attribute['id']
 
         if layer is None:
             self.layer = self.iface.activeLayer()

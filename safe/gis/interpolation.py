@@ -181,6 +181,7 @@ def validate_inputs(
                     % (eta1, y[-1]))
                 raise BoundsError(msg)
 
+    # TODO this is problematic as pylint can't see how many args to expect back
     if dimensions == 1:
         return x, z, xi
     else:

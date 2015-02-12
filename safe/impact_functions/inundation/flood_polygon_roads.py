@@ -10,7 +10,7 @@ from qgis.core import (
     QgsCoordinateTransform
 )
 
-from safe.metadata import (
+from safe.definitions import (
     unit_wetdry,
     hazard_flood,
     layer_vector_polygon,

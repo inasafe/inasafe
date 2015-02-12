@@ -3,7 +3,7 @@
 import os
 
 # noinspection PyUnresolvedReferences
-import qgis
+import qgis  # pylint: disable=unused-import
 import unittest
 from safe.utilities.resources import (
     html_header, html_footer, resources_path, resource_url)

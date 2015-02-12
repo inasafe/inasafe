@@ -18,12 +18,12 @@ from collections import OrderedDict
 from safe.engine.utilities import buffer_points
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.metadata import (
+from safe.definitions import (
     hazard_volcano,
     unit_volcano_categorical,
     layer_vector_polygon,
     layer_vector_point,
-    layer_raster_numeric,
+    layer_raster_continuous,
     exposure_population,
     unit_people_per_pixel,
     hazard_definition,
@@ -117,7 +117,7 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                         'definition': exposure_definition,
                         'subcategories': [exposure_population],
                         'units': [unit_people_per_pixel],
-                        'layer_constraints': [layer_raster_numeric]
+                        'layer_constraints': [layer_raster_continuous]
                     }
                 }
             }

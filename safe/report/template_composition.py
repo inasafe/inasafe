@@ -17,7 +17,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # noinspection PyUnresolvedReferences
-from qgis.core import QgsComposition, QgsMapSettings
+from qgis.core import QgsComposition
+try:
+    from qgis.core import QgsMapSettings  # pylint: disable=unused-import
+except ImportError:
+    from qgis.core import QgsMapRenderer  # pylint: disable=unused-import
 from PyQt4 import QtCore, QtXml
 
 from safe.utilities.i18n import tr

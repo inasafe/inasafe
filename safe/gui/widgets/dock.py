@@ -32,7 +32,7 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSlot, QSettings, pyqtSignal
+from PyQt4.QtCore import Qt, pyqtSlot, QSettings, pyqtSignal
 
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.help import show_context_help
@@ -186,10 +186,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.set_ok_button_status()
 
         self.read_settings()  # get_project_layers called by this
-        pixmap = QtGui.QPixmap(
-            resources_path('img', 'logos', 'supporters.png'),
-        )
-        self.organisation_logo.setPixmap(pixmap)
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
@@ -385,11 +381,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
+        dock_width = self.width()
+        maximum_height = 100  # px
+        pixmap = QtGui.QPixmap(self.organisation_logo_path)
+        pixmap = pixmap.scaled(
+            dock_width, maximum_height, Qt.KeepAspectRatio)
+        self.organisation_logo.setMaximumWidth(dock_width)
+        self.organisation_logo.setPixmap(pixmap)
         if self.organisation_logo_path and flag:
-            dock_width = self.width()
-            self.organisation_logo.setMaximumWidth(dock_width)
-            self.organisation_logo.setPixmap(
-                QtGui.QPixmap(self.organisation_logo_path))
             self.organisation_logo.show()
         else:
             self.organisation_logo.hide()
@@ -1424,7 +1423,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # error_message = get_error_message(e)
             # self.show_error_message(error_message)
             return
-        except Exception, e:
+        except Exception, e:  # pylint: disable=broad-except
             error_message = get_error_message(e)
             self.show_error_message(error_message)
             return
@@ -1564,7 +1563,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
                          'impact-map', 'impact-legend']
         impact_report.component_ids = component_ids
-        if template_warning_verbose and len(impact_report.missing_elements) != 0:
+        if template_warning_verbose and \
+                        len(impact_report.missing_elements) != 0:
             title = self.tr('Template is missing some elements')
             question = self.tr(
                 'The composer template you are printing to is missing '
@@ -1649,7 +1649,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_dynamic_message(status)
         except TemplateLoadingError, e:
             self.show_error_message(get_error_message(e))
-        except Exception, e:
+        except Exception, e:  # pylint: disable=broad-except
             self.show_error_message(get_error_message(e))
 
     def open_map_in_composer(self, impact_report):
@@ -1659,7 +1659,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             need to set the composition to the composer before loading the
             template.
 
-        :param impact_report: Impact Report that wants to be opened in composer.
+        :param impact_report: Impact Report to be opened in composer.
         :type impact_report: ImpactReport
         """
         impact_report.setup_composition()

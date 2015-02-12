@@ -13,14 +13,14 @@ import shutil
 from os.path import join
 from itertools import izip
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsRectangle,
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
+# noinspection PyPackageRequirements
+from PyQt4 import QtGui  # pylint: disable=W0621
 
 # For testing and demoing
 # In our tests, we need to have this line below before importing any other
@@ -75,9 +75,9 @@ def get_qgis_app():
 
     try:
         from qgis.core import QgsApplication
-        from qgis.gui import QgsMapCanvas
+        from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
         # noinspection PyPackageRequirements
-        from PyQt4 import QtGui, QtCore
+        from PyQt4 import QtGui, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
         from PyQt4.QtCore import QCoreApplication, QSettings
         from safe.gis.qgis_interface import QgisInterface
@@ -144,7 +144,8 @@ def assert_hashes_for_file(hashes, filename):
         '\nPlease check graphics %s visually '
         'and add to list of expected hashes '
         'if it is OK on this platform.' % (file_hash, hashes, filename))
-    assert file_hash in hashes, message
+    if file_hash not in hashes:
+        raise Exception(message)
 
 
 def assert_hash_for_file(hash_string, filename):
@@ -157,7 +158,8 @@ def assert_hash_for_file(hash_string, filename):
         'Unexpected hash'
         '\nGot: %s'
         '\nExpected: %s' % (file_hash, hash_string))
-    assert file_hash == hash_string, message
+    if file_hash != hash_string:
+        raise Exception(message)
 
 
 def hash_for_file(filename):
@@ -232,7 +234,8 @@ def load_layer(layer_path):
     if not layer.isValid():
         print message
     # noinspection PyUnresolvedReferences
-    assert layer.isValid(), message
+    if not layer.isValid():
+        raise Exception(message)
     return layer, category
 
 
@@ -933,7 +936,8 @@ def load_standard_layers(dock=None):
     # FIXME (MB) -1 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
 
-    assert hazard_layer_count + exposure_layer_count == len(file_list) - 1
+    if hazard_layer_count + exposure_layer_count != len(file_list) - 1:
+        raise Exception('Loading standard layers failed.')
 
     return hazard_layer_count, exposure_layer_count
 
@@ -1126,8 +1130,16 @@ def combine_coordinates(x, y):
 
 
 class FakeLayer(object):
+    """A Mock layer.
+
+    :param source:
+    """
     def __init__(self, source=None):
         self.layer_source = source
 
     def source(self):
+        """Get the sources as defined in init
+
+        :return: sources
+        """
         return self.layer_source

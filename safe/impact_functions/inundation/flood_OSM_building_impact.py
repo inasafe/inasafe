@@ -13,14 +13,14 @@ Contact : ole.moller.nielsen@gmail.com
 
 import logging
 
-from safe.metadata import (
+from safe.definitions import (
     hazard_flood,
     hazard_tsunami,
     unit_wetdry,
     unit_feet_depth,
     unit_metres_depth,
     layer_vector_polygon,
-    layer_raster_numeric,
+    layer_raster_continuous,
     exposure_structure,
     unit_building_type_type,
     hazard_definition,
@@ -101,7 +101,7 @@ class FloodBuildingImpactFunction(FunctionProvider):
                             unit_feet_depth],
                         'layer_constraints': [
                             layer_vector_polygon,
-                            layer_raster_numeric,
+                            layer_raster_continuous,
                         ]
                     },
                     'exposure': {

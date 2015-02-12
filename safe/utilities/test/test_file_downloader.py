@@ -22,7 +22,7 @@ import tempfile
 # AG: Although we don't use qgis here, qgis should be imported before PyQt to
 #  force this test to use SIP API V.2
 # noinspection PyUnresolvedReferences
-import qgis
+import qgis  # pylint: disable=unused-import
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 from safe.utilities.file_downloader import FileDownloader

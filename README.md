@@ -52,7 +52,7 @@ System Requirements
 
  - A standard PC with at least 4GB of RAM running Windows, Linux or Mac OS X
  - The QGIS Open Source Geographic Information System (http://www.qgis.org).
-   InaSAFE requires QGIS version 1.7 or newer.
+   InaSAFE requires QGIS version 2.0 or newer.
 
 Limitations
 ===========

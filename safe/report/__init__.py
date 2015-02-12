@@ -1,1 +1,1 @@
-__author__ = 'timlinux'
+# coding=utf-8

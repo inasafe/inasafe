@@ -17,7 +17,7 @@ __date__ = '20/03/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.metadata import hazard_definition, exposure_definition
+from safe.definitions import hazard_definition, exposure_definition
 from safe.impact_functions.core import FunctionProvider
 from safe.impact_functions.utilities import add_to_list
 

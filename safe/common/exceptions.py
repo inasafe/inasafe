@@ -152,13 +152,14 @@ class NoFunctionsFoundError(Exception):
 
 
 class KeywordDbError(Exception):
-    """Custom exception for when an error is encountered with keyword cach db.
+    """Custom exception for when an error is encountered with keyword cache db.
     """
     pass
 
 
 class KeywordNotFoundError(Exception):
-    """Custom exception for when a no keyword can be found."""
+    """Custom exception for when a keyword's key (e.g. unit) cannot be found.
+    """
     pass
 
 
@@ -179,7 +180,7 @@ class InvalidParameterError(Exception):
 
 
 class NoKeywordsFoundError(Exception):
-    """Custom exception for when no keywords exist for a layer.
+    """Custom exception for when no keywords file exist for a layer.
     """
     pass
 

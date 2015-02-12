@@ -85,10 +85,9 @@ def interpolate2d(x, y, z, points, mode='linear', bounds_error=False):
 
     # Input checks
     validate_mode(mode)
-    # pylint: disable=W0632
+    # pylint: disable=unbalanced-tuple-unpacking
     x, y, z, xi, eta = validate_inputs(
         x=x, y=y, z=z, points=points, bounds_error=bounds_error)
-    # pylint: enable=W0632
 
     # Identify elements that are outside interpolation domain or NaN
     outside = (xi < x[0]) + (eta < y[0]) + (xi > x[-1]) + (eta > y[-1])
@@ -132,7 +131,8 @@ def interpolate2d(x, y, z, points, mode='linear', bounds_error=False):
         # Bilinear interpolation formula
         dx = z10 - z00
         dy = z01 - z00
-        z = z00 + alpha * dx + beta * dy + alpha * beta * (z11 - dx - dy - z00)
+        z_interpolate = z00 + alpha * dx + beta * dy + alpha * beta * (
+            z11 - dx - dy - z00)
     else:
         # Piecewise constant (as verified in input_check)
 
@@ -147,28 +147,28 @@ def interpolate2d(x, y, z, points, mode='linear', bounds_error=False):
         upper_left = upper * left
 
         # Initialise result array with all elements set to upper right
-        z = z11
+        z_interpolate = z11
 
         # Then set the other quadrants
-        z[lower_left] = z00[lower_left]
-        z[lower_right] = z10[lower_right]
-        z[upper_left] = z01[upper_left]
+        z_interpolate[lower_left] = z00[lower_left]
+        z_interpolate[lower_right] = z10[lower_right]
+        z_interpolate[upper_left] = z01[upper_left]
 
     # Self test
-    if len(z) > 0:
+    if len(z_interpolate) > 0:
+        mz_interpolate = numpy.nanmax(z_interpolate)
         mz = numpy.nanmax(z)
-        mZ = numpy.nanmax(z)
         # noinspection PyStringFormat
         msg = ('Internal check failed. Max interpolated value %.15f '
-               'exceeds max grid value %.15f ' % (mz, mZ))
-        if not(numpy.isnan(mz) or numpy.isnan(mZ)):
-            if not mz <= mZ:
+               'exceeds max grid value %.15f ' % (mz_interpolate, mz))
+        if not(numpy.isnan(mz_interpolate) or numpy.isnan(mz)):
+            if not mz_interpolate <= mz:
                 raise InaSAFEError(msg)
 
     # Populate result with interpolated values for points inside domain
     # and NaN for values outside
     r = numpy.zeros(len(points))
-    r[inside] = z
+    r[inside] = z_interpolate
     r[outside] = numpy.nan
 
     return r

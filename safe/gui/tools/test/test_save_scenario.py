@@ -81,10 +81,10 @@ class SaveScenarioTest(unittest.TestCase):
         # Valid Case
         result, message = setup_scenario(
             DOCK,
-            hazard='Flood in Jakarta',
+            hazard='Classified Flood in Jakarta',
             exposure='Penduduk Jakarta',
-            function='Be impacted',
-            function_id='Categorised Hazard Population Impact Function')
+            function='Be affected by each hazard class',
+            function_id='Classified Hazard Population Impact Function')
         self.assertTrue(result, message)
         is_valid, message = self.save_scenario_dialog.validate_input()
         self.assertTrue(is_valid)
@@ -100,10 +100,10 @@ class SaveScenarioTest(unittest.TestCase):
         """Test saving Current scenario."""
         result, message = setup_scenario(
             DOCK,
-            hazard='Flood in Jakarta',
+            hazard='Classified Flood in Jakarta',
             exposure='Penduduk Jakarta',
-            function='Be impacted',
-            function_id='Categorised Hazard Population Impact Function')
+            function='Be affected by each hazard class',
+            function_id='Classified Hazard Population Impact Function')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -126,7 +126,9 @@ class SaveScenarioTest(unittest.TestCase):
         self.assertTrue(
             os.path.exists(scenario_file),
             'File %s does not exist' % scenario_file)
-        self.assertTrue(title == '[Flood in Jakarta]', 'Title is not the same')
+        self.assertTrue(
+            title == '[Classified Flood in Jakarta]',
+            'Title is not the same')
         self.assertTrue(
             exposure.startswith('exposure =') and exposure.endswith(
                 'Population_Jakarta_geographic.asc'),
@@ -137,7 +139,7 @@ class SaveScenarioTest(unittest.TestCase):
             'Hazard is not the same')
         self.assertTrue(
             function == (
-                'function = Categorised Hazard Population Impact Function'),
+                'function = Classified Hazard Population Impact Function'),
             'Impact function is not same')
 
         # TODO: figure out why this changed between releases
@@ -157,10 +159,10 @@ class SaveScenarioTest(unittest.TestCase):
         """
         result, message = setup_scenario(
             DOCK,
-            hazard='Flood in Jakarta',
+            hazard='Classified Flood in Jakarta',
             exposure='Penduduk Jakarta',
-            function='Be impacted',
-            function_id='Categorised Hazard Population Impact Function')
+            function='Be affected by each hazard class',
+            function_id='Classified Hazard Population Impact Function')
         self.assertTrue(result, message)
         fake_dir = os.path.dirname(TESTDATA)
         scenario_file = unique_filename(

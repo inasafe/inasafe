@@ -1192,7 +1192,11 @@ class TestIO(unittest.TestCase):
 
             # Test conversion between geotransform and
             # geometry (longitudes and latitudes)
+            # pylint: disable=unbalanced-tuple-unpacking
+            # pylint: disable=unpacking-non-sequence
             longitudes, latitudes = r1.get_geometry()
+            # pylint: enable=unbalanced-tuple-unpacking
+            # pylint: enable=unpacking-non-sequence
             gt = raster_geometry_to_geotransform(longitudes, latitudes)
             msg = ('Conversion from coordinates to geotransform failed: %s'
                    % str(gt))
@@ -1508,8 +1512,13 @@ class TestIO(unittest.TestCase):
         R = read_layer(filename)
 
         # Check data directly
+        # pylint: disable=unbalanced-tuple-unpacking
         coordinates, values = R.to_vector_points()
+        # pylint: disable=unbalanced-tuple-unpacking
+        # pylint: disable=unpacking-non-sequence
         longitudes, latitudes = R.get_geometry()
+        # pylint: enable=unbalanced-tuple-unpacking
+        # pylint: enable=unpacking-non-sequence
         a = R.get_data()
         M, N = a.shape
         L = M * N
@@ -1557,8 +1566,13 @@ class TestIO(unittest.TestCase):
         R = read_layer(filename)
 
         # Check data directly
+        # pylint: disable=unbalanced-tuple-unpacking
         coordinates, values = R.to_vector_points()
+        # pylint: disable=unbalanced-tuple-unpacking
+        # pylint: disable=unpacking-non-sequence
         longitudes, latitudes = R.get_geometry()
+        # pylint: enable=unbalanced-tuple-unpacking
+        # pylint: enable=unpacking-non-sequence
         A = R.get_data()
         M, N = A.shape
         L = M * N

@@ -607,7 +607,8 @@ class AnalysisHandler(QObject):
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
                          'impact-map', 'impact-legend']
         impact_report.component_ids = component_ids
-        if template_warning_verbose and len(impact_report.missing_elements) != 0:
+        if template_warning_verbose and \
+                        len(impact_report.missing_elements) != 0:
             title = self.tr('Template is missing some elements')
             question = self.tr(
                 'The composer template you are printing to is missing '
@@ -694,7 +695,7 @@ class AnalysisHandler(QObject):
             self.show_dynamic_message(self, status)
         except TemplateLoadingError, e:
             self.show_error_message(get_error_message(e))
-        except Exception, e:
+        except Exception, e:  # pylint: disable=broad-except
             self.show_error_message(get_error_message(e))
 
     def open_map_in_composer(self, impact_report):
@@ -704,7 +705,7 @@ class AnalysisHandler(QObject):
             need to set the composition to the composer before loading the
             template.
 
-        :param impact_report: Impact Report that wants to be opened in composer.
+        :param impact_report: Impact Report to be opened in composer.
         :type impact_report: ImpactReport
         """
         impact_report.setup_composition()

@@ -25,14 +25,14 @@ from safe.test.utilities import TESTDATA, HAZDATA
 from safe.common.utilities import format_int
 
 
-class TestCategoricalHazardPopulationImpactFunction(unittest.TestCase):
-    """Test for CategoricalHazardPopulationImpactFunction."""
+class TestClassifiedHazardPopulationImpactFunction(unittest.TestCase):
+    """Test for ClassifiedHazardPopulationImpactFunction."""
 
     def setUp(self):
         """Run before each test."""
         pass
 
-    def test_categorical_hazard_population_impact_function(self):
+    def test_classified_hazard_population_impact_function(self):
         """Categorised Hazard Population IF works as expected."""
         # Name file names for hazard level, exposure and expected fatalities
         hazard_filename = '%s/jakarta_flood_category_123.asc' % HAZDATA
@@ -42,7 +42,7 @@ class TestCategoricalHazardPopulationImpactFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_filename)
         exposure_layer = read_layer(exposure_filename)
 
-        plugin_name = 'Categorical Hazard Population Impact Function'
+        plugin_name = 'Classified Hazard Population Impact Function'
         impact_function = get_plugin(plugin_name)
 
         # Call calculation engine

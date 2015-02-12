@@ -21,8 +21,8 @@ import sys
 import os
 import logging
 
-LOGGER = logging.getLogger('InaSAFE')
-
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
@@ -32,7 +32,7 @@ from PyQt4.QtCore import (
     Qt,
     QSettings)
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox
+from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox, QWidget
 
 from safe.common.exceptions import (
     TranslationLoadError,
@@ -40,9 +40,10 @@ from safe.common.exceptions import (
     InvalidParameterError,
     UnsupportedProviderError)
 from safe.utilities.resources import resources_path
-
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import is_raster_layer
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class Plugin(object):
@@ -89,7 +90,7 @@ class Plugin(object):
         self.action_toggle_rubberbands = None
         self.message_bar_item = None
         # Flag indicating if toolbar should show only common icons or not
-        self.full_toolbar = True
+        self.full_toolbar = False
         # print self.tr('InaSAFE')
         # For enable/disable the keyword editor icon
         self.iface.currentLayerChanged.connect(self.layer_changed)
@@ -194,7 +195,7 @@ class Plugin(object):
         self.action_dock.setCheckable(True)
         self.action_dock.setChecked(True)
         self.action_dock.triggered.connect(self.toggle_dock_visibility)
-        self.add_action(self.action_dock, add_to_toolbar=self.full_toolbar)
+        self.add_action(self.action_dock)
 
         # --------------------------------------
         # Create action for keywords editor
@@ -503,8 +504,6 @@ class Plugin(object):
         self.dock_widget.destroy()
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
 
-        #self.clear_modules()
-
     def toggle_inasafe_action(self, checked):
         """Check or un-check the toggle inaSAFE toolbar button.
 
@@ -643,14 +642,18 @@ class Plugin(object):
         """Show the keywords creation wizard."""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.wizard_dialog import WizardDialog
-
-        dialog = WizardDialog(
-            self.iface.mainWindow(),
-            self.iface,
-            self.dock_widget)
+        # Prevent spawning multiple copies since it is non model
+        wizards = self.iface.findChildren(QWidget, "WizardDialogBase")
+        LOGGER.info('Wizards count: %i' % len(wizards))
+        if len(wizards) > 0:
+            dialog = wizards[0]
+        else:
+            dialog = WizardDialog(
+                self.iface.mainWindow(),
+                self.iface,
+                self.dock_widget)
         dialog.set_function_centric_mode()
         dialog.show()  # non-modal in order to hide for selecting user extent
-
 
     def show_shakemap_importer(self):
         """Show the converter dialog."""

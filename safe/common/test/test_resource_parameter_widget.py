@@ -22,11 +22,9 @@ from safe_extras.parameters.unit import Unit
 from safe_extras.parameters.metadata import unit_feet_depth, unit_metres_depth
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.resource_parameter_widget import ResourceParameterWidget
+from safe.test.utilities import get_qgis_app
 
-# noinspection PyPackageRequirements
-from PyQt4.QtGui import QApplication
-
-application = QApplication([])
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestResourceParameterWidget(unittest.TestCase):
@@ -56,52 +54,37 @@ class TestResourceParameterWidget(unittest.TestCase):
 
         widget = ResourceParameterWidget(resource_parameter)
 
-        # expected_value = resource_parameter.name
-        # real_value = widget._label.text()
-        # message = 'Expected %s get %s' % (expected_value, real_value)
-        # self.assertEqual(expected_value, real_value, message)
-        #
-        # expected_value = resource_parameter.value
-        # real_value = widget.get_parameter().value
-        # message = 'Expected %s get %s' % (expected_value, real_value)
-        # self.assertEqual(expected_value, real_value, message)
-        #
-        # widget._input.setValue(1.5)
-        #
-        # expected_value = 1.5
-        # real_value = widget.get_parameter().value
-        # message = 'Expected %s get %s' % (expected_value, real_value)
-        # self.assertEqual(expected_value, real_value, message)
-        #
-        # widget._input.setValue(1.55555)
-        #
-        # expected_value = 1.556
-        # real_value = widget.get_parameter().value
-        # message = 'Expected %s get %s' % (expected_value, real_value)
-        # self.assertEqual(expected_value, real_value, message)
-        #
-        # widget._input.setValue(7)
-        #
-        # expected_value = 2
-        # real_value = widget.get_parameter().value
-        # message = 'Expected %s get %s' % (expected_value, real_value)
-        # self.assertEqual(expected_value, real_value, message)
-        #
-        # expected_value = 'QComboBox'
-        # real_value = widget._unit_widget.__class__.__name__
-        # message = 'Expected %s get %s' % (expected_value, real_value)
-        # self.assertEqual(expected_value, real_value, message)
-        #
-        # expected_value = 'feet'
-        # real_value = widget.get_parameter().unit.name
-        # message = 'Expected %s get %s' % (expected_value, real_value)
-        # self.assertEqual(expected_value, real_value, message)
-        #
-        # expected_value = 'metres'
-        # widget._unit_widget.setCurrentIndex(0)
-        # real_value = widget.get_parameter().unit.name
-        # message = 'Expected %s get %s' % (expected_value, real_value)
-        # self.assertEqual(expected_value, real_value, message)
+        expected_value = resource_parameter.name
+        real_value = widget._label.text()
+        message = 'Expected %s get %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
+
+        expected_value = resource_parameter.value
+        real_value = widget.get_parameter().value
+        message = 'Expected %s get %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
+
+        widget.set_value(1.5)
+
+        expected_value = 1.5
+        real_value = widget.get_parameter().value
+        message = 'Expected %s get %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
+
+        widget.set_value(1.55555)
+
+        expected_value = 1.556
+        real_value = widget.get_parameter().value
+        message = 'Expected %s get %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
+
+        widget.set_value(7)
+
+        expected_value = 2
+        real_value = widget.get_parameter().value
+        message = 'Expected %s get %s' % (expected_value, real_value)
+        self.assertEqual(expected_value, real_value, message)
+
 
 if __name__ == '__main__':
     unittest.main()
