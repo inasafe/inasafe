@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **Paragraph.**
 
@@ -117,7 +118,7 @@ class PlainText(Text):
         """
         super(PlainText, self).__init__(**kwargs)
         if self._is_stringable(text) or self._is_qstring(text):
-            self.text = str(text)
+            self.text = text.encode('utf8')
         else:
             self.text = text
 

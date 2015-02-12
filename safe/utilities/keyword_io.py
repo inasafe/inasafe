@@ -101,7 +101,7 @@ class KeywordIO(QObject):
             UnsupportedProviderError
 
         """
-        source = str(layer.source())
+        source = layer.source().encode('utf8')
         try:
             flag = self.are_keywords_file_based(layer)
         except UnsupportedProviderError:
