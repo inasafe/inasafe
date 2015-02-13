@@ -17,11 +17,8 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# DO NOT REMOVE THIS
 # Please import module in safe from the safe root, e.g:
 # from safe.x.y import z
-
-# If you let the import qgis below here, that will be the end of it. I will not
-#  look for you, I will not pursue you. But if you don't, I will look for
-# you, I will find you, and I will kill you - Liam Neeson
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
