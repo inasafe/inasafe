@@ -60,7 +60,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(
             self.estimate_people_in_buildings)
 
-        self.progressBar.setMinimum(1)
+        self.progressBar.setMinimum(0)
         self.progressBar.setMaximum(100)
 
     def load_layers_into_combo_box(self):
@@ -129,15 +129,16 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         provider = layer.dataProvider()
         # Check if attribute is already there, return "-1" if not
         ind = provider.fieldNameIndex(name)
-        try:
-            if ind == -1:
-                res = provider.addAttributes(
-                    [
-                        QgsField(name, QVariant.Double)
-                    ]
-                )
-                return res
+        if ind != -1:
             return False
+        try:
+            res = provider.addAttributes(
+                [
+                    QgsField(name, QVariant.Double)
+                ]
+            )
+            layer.updateFields()
+            return res
         except:
             return False
 
@@ -230,18 +231,23 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         self.add_population_attribute(buildings_layer)
         field_names_population = self._get_field_names(population_layer)
         field_names = self._get_field_names(buildings_layer)
+        field_names.append('population')
 
         #TODO: Make a better progress estimator
-        progress = 100.0/len([p for p in population_layer.getFeatures()])
+        self.progressBar.setValue(0)
+        progress = 1
+        progress_increment = 100.0/len(
+            [p for p in population_layer.getFeatures()])
 
         for population_area in population_layer.getFeatures():
+            progress += progress_increment
+            self.progressBar.setValue(progress)
             if not self._feature_fully_in_extent(
                     buildings_layer,
                     population_area):
                 # If this feature is not fully contained within the buildings
                 # extent we cannot use it (Type B, C)
                 continue
-            self.progressBar.setValue(self.progressBar.value() + progress)
             population_attributes = self._get_attributes(
                 population_area,
                 field_names_population
@@ -269,11 +275,13 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
             buildings_layer.startEditing()
             for (building, area) in building_lookup.items():
                 people_in_building = population_density * area
-                attributes = self._get_attributes(building, field_names)
-                current_estimate = attributes['population']
-                if current_estimate:
-                    people_in_building += current_estimate
+                # Could buildings be in two census areas? if so uncomment below
+                # attributes = self._get_attributes(building, field_names)
+                # current_estimate = attributes['population']
+                # if current_estimate:
+                #     people_in_building += current_estimate
                 building['population'] = people_in_building
                 buildings_layer.updateFeature(building)
             buildings_layer.commitChanges()
+        self.progressBar.setValue(100)
 

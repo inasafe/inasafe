@@ -372,7 +372,7 @@ class Plugin(object):
         # --------------------------------------
         # Create action for import OSM Dialog
         # --------------------------------------
-        icon = resources_path('img', 'icons', 'show-osm-download.svg')
+        icon = resources_path('img', 'icons', 'people-in-buildings.svg')
         self.people_in_buildings_dialog = QAction(
             QIcon(icon),
             self.tr('InaSAFE People in Buildings'),
