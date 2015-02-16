@@ -567,15 +567,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
-        """Save auxiliary files when using the saved as function.
+        """Save auxiliary files when using the 'save as' function.
 
         If some auxiliary files (.xml or .keywords) exist, this function will copy them
-        when the saved as function is used on the layer.
+        when the 'save as' function is used on the layer.
 
         :param layer: The layer which has been saved as.
         :type layer: QgsMapLayer
 
-        :param destination: The new filename of the layer
+        :param destination: The new filename of the layer.
         :type str
 
         """
@@ -588,19 +588,20 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         destination_keywords = "%s.keywords" % destination_basename
         destination_xml = "%s.xml" % destination_basename
 
-        #Keywords
-        if os.path.isfile(destination_keywords):
-            os.remove(destination_keywords)
+        try :
+            #Keywords
+            if os.path.isfile(source_keywords):
+                shutil.copy(source_keywords,destination_keywords)
 
-        if os.path.isfile(source_keywords):
-            shutil.copy(source_keywords,destination_keywords)
-
-        #XML
-        if os.path.isfile(destination_xml):
-            os.remove(destination_xml)
-
-        if os.path.isfile(source_xml):
-            shutil.copy(source_xml,destination_xml)
+            #XML
+            if os.path.isfile(source_xml):
+                shutil.copy(source_xml,destination_xml)
+                
+        except OSError, e:
+            self.show_error_message(self.tr("The destination location must be writable."))
+        except Exception, e:
+            message = get_error_message(e, context=message)
+            self.show_error_message(message)
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
