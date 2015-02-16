@@ -22,6 +22,8 @@ import os
 import sys
 import logging
 
+from qgis.core import QgsMessageLog
+from PyQt4.QtCore import QSettings
 
 safe_extras_dir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..', 'safe_extras'))
@@ -35,9 +37,32 @@ from raven import Client
 # pylint: enable=F0401
 
 from safe.common.utilities import log_file_path
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
+class QgsLogHandler(logging.Handler):
+    """A logging handler that will log messages to the QGIS logging console."""
+
+    def __init__(self, level=logging.NOTSET):
+        logging.Handler.__init__(self)
+
+    def emit(self, record):
+        """Try to log the message to QGIS if available, otherwise do nothing.
+
+        :param record: logging record containing whatever info needs to be
+                logged.
+        """
+        try:
+            # Check logging.LogRecord properties for lots of other goodies
+            # like line number etc. you can get from the log message.
+            QgsMessageLog.logMessage(record.getMessage(), 'InaSAFE', 0)
+        except MemoryError:
+            message = tr(
+                'Due to memory limitations on this machine, InaSAFE can not '
+                'handle the full log')
+            print message
+            QgsMessageLog.logMessage(message, 'InaSAFE', 0)
 
 def add_logging_handler_once(logger, handler):
     """A helper to add a handler to a logger, ensuring there are no duplicates.
@@ -90,9 +115,11 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.DEBUG)
     default_handler_level = logging.DEBUG
+
     # create formatter that will be added to the handlers
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
     # create syslog handler which logs even debug messages
     # (ariel): Make this log to /var/log/safe.log instead of
     #               /var/log/syslog
@@ -104,17 +131,37 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
     else:
         file_handler = logging.FileHandler(log_file)
     file_handler.setLevel(default_handler_level)
+
     # create console handler with a higher log level
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
+
+    # create a QGIS handler
+    qgis_handler = QgsLogHandler()
+
+    # Set formatters
+    file_handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+    qgis_handler.setFormatter(formatter)
+
+    # add the handlers to the logger
+    add_logging_handler_once(logger, file_handler)
+    add_logging_handler_once(logger, console_handler)
+    add_logging_handler_once(logger, qgis_handler)
 
     # Sentry handler - this is optional hence the localised import
     # It will only log if pip install raven. If raven is available
     # logging messages will be sent to http://sentry.linfiniti.com
     # We will log exceptions only there. You need to either:
     #  * Set env var 'INASAFE_SENTRY=1' present (value can be anything)
-    # before this will be enabled.
-    if 'INASAFE_SENTRY' in os.environ:
+    # before this will be enabled or sentry is enabled in QSettings
+    #import pydevd
+    #pydevd.settrace('localhost', port=55515, stdoutToServer=True, stderrToServer=True)
+    settings = QSettings()
+    flag = settings.value('inasafe/useSentry', False, type=bool)
+    env_inasafe_sentry = 'INASAFE_SENTRY' in os.environ
+
+    if env_inasafe_sentry or flag:
         if sentry_url is None:
             client = Client(
                 'http://c64a83978732474ea751d432ab943a6b'
@@ -128,10 +175,3 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
             logger.debug('Sentry logging enabled in safe')
     else:
         logger.debug('Sentry logging disabled in safe')
-    # Set formatters
-    file_handler.setFormatter(formatter)
-    console_handler.setFormatter(formatter)
-
-    # add the handlers to the logger
-    add_logging_handler_once(logger, file_handler)
-    add_logging_handler_once(logger, console_handler)

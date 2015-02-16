@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
  - **Module inasafe.**
@@ -25,3 +26,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # you, I will find you, and I will kill you - Liam Neeson
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
+import logging
+
+from safe.common.custom_logging import setup_logger
+
+LOGGER = logging.getLogger('InaSAFE')
+setup_logger('InaSAFE')
