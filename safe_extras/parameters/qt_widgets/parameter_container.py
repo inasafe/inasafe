@@ -9,7 +9,7 @@ __doc__ = ''
 
 from PyQt4.QtGui import (
     QWidget, QScrollArea, QVBoxLayout, QGridLayout, QSizePolicy, QColor)
-from qt4_parameter_factory import Qt4ParameterFactory
+from qt_widgets.qt4_parameter_factory import Qt4ParameterFactory
 
 
 class ParameterContainer(QWidget, object):

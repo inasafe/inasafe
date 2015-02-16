@@ -16,7 +16,7 @@ class StringParameter(GenericParameter):
         :param guid: Optional unique identifier for this parameter. If none
             is specified one will be generated using python hash. This guid
             will be used when storing parameters in the registry.
-        :type guid: str
+        :type guid: str, None
         """
         super(StringParameter, self).__init__(guid)
-        self.expected_type = [str, unicode]
+        self.expected_type = str
