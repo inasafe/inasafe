@@ -31,8 +31,11 @@ if PARAMETER_DIR not in sys.path:
 sys.path.extend([os.path.abspath(os.path.join(
     os.path.dirname(__file__), os.path.pardir))])
 
+
+# DO NOT REMOVE THIS
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
+
 from PyQt4.QtCore import (
     QLocale,
     QTranslator,

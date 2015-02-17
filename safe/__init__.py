@@ -17,7 +17,8 @@ __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# Import the PyQt and QGIS libraries
-# this import required to enable PyQt API v2
+# DO NOT REMOVE THIS
+# Please import module in safe from the safe root, e.g:
+# from safe.x.y import z
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import

@@ -92,7 +92,8 @@ make jenkins-pyflakes
 make jenkins-pep8
 make jenkins-pylint
 make jenkins-sloccount
-xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v \
+make testdata
+xvfb-run -a --server-args="-screen 0, 1024x768x24" nosetests -v \
     --with-id --with-xcoverage --with-xunit --verbose \
     --cover-package=${TEST_PACKAGE} ${TEST_PATH}
 
