@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import shutil
 import logging
 from functools import partial
 
@@ -28,7 +29,8 @@ from qgis.core import (
     QgsRectangle,
     QgsMapLayer,
     QgsMapLayerRegistry,
-    QgsCoordinateReferenceSystem)
+    QgsCoordinateReferenceSystem,
+    QGis)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -175,6 +177,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.runtime_keywords_dialog = None
 
         self.setup_button_connectors()
+
+        if QGis.QGIS_VERSION_INT >= 20700:
+            self.iface.layerSavedAs.connect(self.save_auxiliary_files)
 
         canvas = self.iface.mapCanvas()
 
@@ -559,6 +564,44 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         else:
             message = self.ready_message()
             return True, message
+
+    @pyqtSlot(QgsMapLayer, str)
+    def save_auxiliary_files(self, layer, destination):
+        """Save auxiliary files when using the 'save as' function.
+
+        If some auxiliary files (.xml or .keywords) exist, this function will copy them
+        when the 'save as' function is used on the layer.
+
+        :param layer: The layer which has been saved as.
+        :type layer: QgsMapLayer
+
+        :param destination: The new filename of the layer.
+        :type str
+
+        """
+
+        source_basename = os.path.splitext(layer.source())[0]
+        source_keywords = "%s.keywords" % source_basename
+        source_xml = "%s.xml" % source_basename
+
+        destination_basename = os.path.splitext(destination)[0]
+        destination_keywords = "%s.keywords" % destination_basename
+        destination_xml = "%s.xml" % destination_basename
+
+        try :
+            #Keywords
+            if os.path.isfile(source_keywords):
+                shutil.copy(source_keywords,destination_keywords)
+
+            #XML
+            if os.path.isfile(source_xml):
+                shutil.copy(source_xml,destination_xml)
+                
+        except OSError, e:
+            self.show_error_message(self.tr("The destination location must be writable."))
+        except Exception, e:
+            message = get_error_message(e, context=message)
+            self.show_error_message(message)
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
