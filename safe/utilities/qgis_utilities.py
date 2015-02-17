@@ -184,7 +184,7 @@ def display_critical_message_bar(
         button = QPushButton(widget)
         button.setText(button_text)
         button.pressed.connect(
-            lambda: display_warning_message_box(title, more_details)
+            lambda: display_critical_message_box(title, more_details)
         )
         widget.layout().addWidget(button)
 
