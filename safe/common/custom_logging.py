@@ -155,8 +155,6 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
     # We will log exceptions only there. You need to either:
     #  * Set env var 'INASAFE_SENTRY=1' present (value can be anything)
     # before this will be enabled or sentry is enabled in QSettings
-    #import pydevd
-    #pydevd.settrace('localhost', port=55515, stdoutToServer=True, stderrToServer=True)
     settings = QSettings()
     flag = settings.value('inasafe/useSentry', False, type=bool)
     env_inasafe_sentry = 'INASAFE_SENTRY' in os.environ
