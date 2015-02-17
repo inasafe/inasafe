@@ -49,6 +49,7 @@ from safe.utilities.resources import (
     resources_path,
     resource_url,
     get_ui_class)
+from safe.utilities.qgis_utilities import display_critical_message_bar
 from safe.defaults import (
     limitations,
     default_organisation_logo_path)
@@ -488,8 +489,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         notes = m.Paragraph(self.tr(
             'You can now proceed to run your model by clicking the'),
-            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
-            self.tr('button.'))
+                            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
+                            self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
         return message
 
@@ -588,20 +589,22 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         destination_keywords = "%s.keywords" % destination_basename
         destination_xml = "%s.xml" % destination_basename
 
-        try :
-            #Keywords
+        try:
+            # Keywords
             if os.path.isfile(source_keywords):
-                shutil.copy(source_keywords,destination_keywords)
+                shutil.copy(source_keywords, destination_keywords)
 
             #XML
             if os.path.isfile(source_xml):
-                shutil.copy(source_xml,destination_xml)
-                
-        except OSError, e:
-            self.show_error_message(self.tr("The destination location must be writable."))
-        except Exception, e:
-            message = get_error_message(e, context=message)
-            self.show_error_message(message)
+                shutil.copy(source_xml, destination_xml)
+
+        except (OSError, IOError):
+            display_critical_message_bar(title=self.tr('Error while saving'),
+                                         message=self.tr("The destination location must be writable."))
+
+        except Exception:
+            display_critical_message_bar(title=self.tr('Error while saving'),
+                                         message=self.tr("Something went wrong."))
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -773,7 +776,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return
 
         # for arg in args:
-        #    LOGGER.debug('get_layer argument: %s' % arg)
+        # LOGGER.debug('get_layer argument: %s' % arg)
         # Map registry may be invalid if QGIS is shutting down
         registry = QgsMapLayerRegistry.instance()
         canvas_layers = self.iface.mapCanvas().layers()
@@ -1184,6 +1187,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Try to run completion code
         try:
             from datetime import datetime
+
             LOGGER.debug(datetime.now())
             LOGGER.debug('get engine impact layer')
             LOGGER.debug(self.analysis is None)
@@ -1203,7 +1207,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             impact_path = qgis_impact_layer.source()
             message = m.Message(report)
             # message.add(m.Heading(self.tr('View processing log as HTML'),
-            #                      **INFO_STYLE))
+            # **INFO_STYLE))
             # message.add(m.Link('file://%s' % self.wvResults.log_path))
             self.show_static_message(message)
             self.wvResults.impact_path = impact_path
@@ -1263,14 +1267,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if not style:
                 qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
                 # qgis_impact_layer.setColorShadingAlgorithm(
-                #    QgsRasterLayer.PseudoColorShader)
+                # QgsRasterLayer.PseudoColorShader)
             else:
                 setRasterStyle(qgis_impact_layer, style)
 
         else:
             message = self.tr(
                 'Impact layer %s was neither a raster or a vector layer') % (
-                    qgis_impact_layer.source())
+                qgis_impact_layer.source())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
