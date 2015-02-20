@@ -102,8 +102,6 @@ class FloodVectorRoadsExperimentalFunction(FunctionProvider):
             }
             return dict_meta
 
-
-
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value
         ('target_field', 'flooded'),

@@ -144,13 +144,6 @@ class FloodEvacuationFunction(FunctionProvider):
 
     defaults = get_defaults()
 
-    # Function documentation
-
-
-
-
-
-
     # Configurable parameters
     # TODO: Share the mimimum needs and make another default value
     parameters = OrderedDict([

@@ -118,8 +118,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                     'Vector polygon or point layer extracted from OSM where '
                     'each feature represents the footprint of a building.'),
                 'output': tr(
-                    'Vector layer contains building is estimated to be flooded '
-                    'and the breakdown of the building by type.'),
+                    'Vector layer contains building is estimated to be '
+                    'flooded and the breakdown of the building by type.'),
                 'actions': tr(
                     'Provide details about where critical infrastructure '
                     'might be flooded'),
