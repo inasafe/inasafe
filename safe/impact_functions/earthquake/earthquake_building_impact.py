@@ -64,12 +64,20 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 'id': 'EarthQuakeBuildingImpactFunction',
                 'name': tr('Earthquake Building Impact Function'),
                 'impact': tr('Be affected'),
+                'title': tr('Be affected'),
                 'author': 'N/A',
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'This impact function will calculate the impact of an '
                     'earthquake on buildings, reporting how many are expected '
                     'to be damaged etc.'),
+                'detailed_description': '',
+                'hazard_input': '',
+                'exposure_input': '',
+                'output': '',
+                'actions': '',
+                'limitations': [],
+                'citations': [],
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,

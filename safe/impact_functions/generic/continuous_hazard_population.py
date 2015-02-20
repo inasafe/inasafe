@@ -113,7 +113,7 @@ class ContinuousHazardPopulationImpactFunction(FunctionProvider):
                 'actions': tr(
                     'Provide details about how many people would likely need '
                     'to be impacted for each category.'),
-                'limitation': tr('The number of categories is three.'),
+                'limitations': [tr('The number of categories is three.')],
                 'citations': [],
                 'categories': {
                     'hazard': {

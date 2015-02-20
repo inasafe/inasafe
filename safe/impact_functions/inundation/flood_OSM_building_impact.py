@@ -83,7 +83,8 @@ class FloodBuildingImpactFunction(FunctionProvider):
                 'name': tr('Flood Building Impact Function'),
                 'impact': tr('Be flooded'),
                 'title': tr('Be flooded'),
-                'author': ['Ole Nielsen', 'Kristy van Putten'],
+                # should be a list, but we can do it later.
+                'author': 'Ole Nielsen and Kristy van Putten',
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'To assess the impacts of (flood or tsunami) inundation '

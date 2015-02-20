@@ -125,7 +125,7 @@ class ClassifiedHazardPopulationImpactFunction(FunctionProvider):
                 'actions': tr(
                     'Provide details about how many people would likely be '
                     'affected for each hazard class.'),
-                'limitation': tr('The number of classes is three.'),
+                'limitations': [tr('The number of classes is three.')],
                 'citations': [],
                 'categories': {
                     'hazard': {
