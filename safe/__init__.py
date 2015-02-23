@@ -30,5 +30,4 @@ import logging
 
 from safe.common.custom_logging import setup_logger
 
-LOGGER = logging.getLogger('InaSAFE')
 setup_logger('InaSAFE')
