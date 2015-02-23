@@ -574,7 +574,7 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="0">
         <widget class="QCheckBox" name="cbxDevMode">
          <property name="text">
-          <string>Enable developer mode for dock webkit (needs restart)</string>
+          <string>Enable developer mode (needs restart)</string>
          </property>
         </widget>
        </item>

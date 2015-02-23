@@ -1,10 +1,11 @@
+# coding=utf-8
 """List Parameter."""
 
 from collection_parameter import CollectionParameter
 
 
 class ListParameter(CollectionParameter):
-    """A subclass of paramter that allows the user to select from a list.
+    """A subclass of parameter that allows the user to select from a list.
 
     .. versionadded:: 2.2
     """
