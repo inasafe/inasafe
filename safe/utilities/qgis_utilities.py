@@ -10,6 +10,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 from qgis.gui import QgsMessageBar
+from qgis.core import QGis
 from qgis.utils import iface
 from PyQt4.QtGui import QMessageBox, QPushButton
 
@@ -56,7 +57,7 @@ def display_information_message_bar(
         button = QPushButton(widget)
         button.setText(button_text)
         button.pressed.connect(
-            lambda: display_information_message_box(more_details)
+            lambda: display_information_message_box(title=title, message=more_details)
         )
         widget.layout().addWidget(button)
 
@@ -90,11 +91,14 @@ def display_success_message_bar(
         button = QPushButton(widget)
         button.setText(button_text)
         button.pressed.connect(
-            lambda: display_information_message_box(title, more_details)
+            lambda: display_information_message_box(title=title, message=more_details)
         )
         widget.layout().addWidget(button)
 
-    iface.messageBar().pushWidget(widget, QgsMessageBar.SUCCESS, duration)
+    if QGis.QGIS_VERSION_INT >= 20700:
+        iface.messageBar().pushWidget(widget, QgsMessageBar.SUCCESS, duration)
+    else:
+        iface.messageBar().pushWidget(widget, QgsMessageBar.INFO, duration)
 
 
 def display_warning_message_box(parent=None, title=None, message=None):
@@ -137,7 +141,7 @@ def display_warning_message_bar(
         button = QPushButton(widget)
         button.setText(button_text)
         button.pressed.connect(
-            lambda: display_warning_message_box(title, more_details)
+            lambda: display_warning_message_box(title=title, message=more_details)
         )
         widget.layout().addWidget(button)
 
@@ -184,7 +188,7 @@ def display_critical_message_bar(
         button = QPushButton(widget)
         button.setText(button_text)
         button.pressed.connect(
-            lambda: display_critical_message_box(title, more_details)
+            lambda: display_critical_message_box(title=title, message=more_details)
         )
         widget.layout().addWidget(button)
 
