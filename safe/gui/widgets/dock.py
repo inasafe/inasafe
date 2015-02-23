@@ -489,8 +489,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         notes = m.Paragraph(self.tr(
             'You can now proceed to run your model by clicking the'),
-                            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
-                            self.tr('button.'))
+            m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
+            self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
         return message
 
@@ -594,17 +594,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if os.path.isfile(source_keywords):
                 shutil.copy(source_keywords, destination_keywords)
 
-            #XML
+            # XML
             if os.path.isfile(source_xml):
                 shutil.copy(source_xml, destination_xml)
 
         except (OSError, IOError):
-            display_critical_message_bar(title=self.tr('Error while saving'),
-                                         message=self.tr("The destination location must be writable."))
+            display_critical_message_bar(
+                title=self.tr('Error while saving'), message=self.tr("The destination location must be writable."))
 
         except Exception:
-            display_critical_message_bar(title=self.tr('Error while saving'),
-                                         message=self.tr("Something went wrong."))
+            display_critical_message_bar(
+                title=self.tr('Error while saving'), message=self.tr("Something went wrong."))
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
