@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 """
 InaSAFE Disaster risk assessment tool by AusAid - **Message Element.**
 
@@ -69,6 +70,7 @@ class MessageElement(object):
     def _is_stringable(message):
         return (isinstance(message, basestring)
                 or isinstance(message, int)
+                or isinstance(message, str)
                 or isinstance(message, float))
 
     def to_html(self):

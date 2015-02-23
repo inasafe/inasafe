@@ -333,7 +333,7 @@ def read_impact_layer(impact_layer):
         raise Exception(message)
 
     # Get associated filename and symbolic name
-    file_name = impact_layer.get_filename()
+    file_name = impact_layer.get_filename().decode("utf-8")
     name = impact_layer.get_name()
 
     qgis_layer = None

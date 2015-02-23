@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **Paragraph.**
 
@@ -116,10 +117,28 @@ class PlainText(Text):
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
         super(PlainText, self).__init__(**kwargs)
-        if self._is_stringable(text) or self._is_qstring(text):
-            self.text = str(text)
+
+        if text.__class__.__name__ != 'unicode':
+            if self._is_stringable(text) or self._is_qstring(text):
+                #print "transfo : " + str(type(text))
+                try:
+                    self.text = text.decode('utf-8')
+                except AttributeError:
+                    #If it's an integer, number hasn't a decode function
+                    self.text = str(text).decode('utf-8')
+            else:
+                # what to do ?
+                self.text = text
         else:
             self.text = text
+
+        #print "new : " + str(type(self.text))
+
+        '''if self._is_stringable(text) or self._is_qstring(text):
+            self.text = text.decode("utf-8")
+        else:
+            self.text = text
+        '''
 
     def to_html(self):
         """Render as html
