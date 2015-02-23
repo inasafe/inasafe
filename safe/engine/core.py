@@ -8,6 +8,7 @@ import numpy
 from datetime import datetime
 from socket import gethostname
 import getpass
+from PyQt4.QtCore import QSettings
 
 from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
@@ -104,8 +105,14 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
         else:
             source = not_specified
 
+        if 'subcategory' in keywords:
+            subcategory = keywords['subcategory']
+        else:
+            subcategory = not_specified
+
         F.keywords['%s_title' % cat] = title
         F.keywords['%s_source' % cat] = source
+        F.keywords['%s_subcategory' % cat] = subcategory
 
     F.keywords['elapsed_time'] = elapsed_time_sec
     F.keywords['time_stamp'] = time_stamp[:19]  # remove decimal part
@@ -115,6 +122,15 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
     msg = 'Impact function %s returned None' % str(impact_function)
     verify(F is not None, msg)
 
+    # Set the filename
+    # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS.EXT
+    # FloodOnBuildings_12March2015_10h22.04.shp
+    exp = F.keywords['exposure_subcategory'].title()
+    haz = F.keywords['hazard_subcategory'].title()
+    date = end_time.strftime('%d%B%Y').decode('utf8')
+    time = end_time.strftime('%Hh%M.%S').decode('utf8')
+    prefix = '%sOn%s_%s_%s-' % (haz, exp, date, time)
+
     # Write result and return filename
     if F.is_raster:
         extension = '.tif'
@@ -123,7 +139,19 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
         extension = '.shp'
         # use default style for vector
 
-    output_filename = unique_filename(suffix=extension)
+    # Check if user directory is specified
+    settings = QSettings()
+    default_user_directory = settings.value('inasafe/defaultUserDirectory', None, type=str)
+
+    if default_user_directory:
+        # encode to UTF-8 : http://gis.stackexchange.com/questions/53920/ogr-createlayer-returns-typeerror
+        output_filename = unique_filename(
+            dir=default_user_directory,
+            prefix=prefix,
+            suffix=extension).encode('utf-8')
+    else:
+        output_filename = unique_filename(prefix=prefix, suffix=extension)
+
     F.filename = output_filename
     F.write_to_file(output_filename)
 
