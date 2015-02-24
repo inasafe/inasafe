@@ -250,10 +250,6 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
 
     def accept(self):
         """Do merging two impact layers."""
-        import pydevd
-
-        pydevd.settrace('localhost', port=5678, stdoutToServer=True,
-                        stderrToServer=True)
         # Store the current state to configuration file
         self.save_state()
 
