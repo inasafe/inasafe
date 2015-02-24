@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
  - **Module inasafe.**
@@ -22,3 +23,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # from safe.x.y import z
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
+import logging
+
+from safe.common.custom_logging import setup_logger
+
+setup_logger('InaSAFE')
