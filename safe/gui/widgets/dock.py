@@ -93,6 +93,7 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
+from safe.utilities.unicode import get_string
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -1397,6 +1398,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if keyword == 'title':
                 value = self.tr(value)
                 # Add this keyword to report
+            value = get_string(value)
             key = m.ImportantText(
                 self.tr(keyword.capitalize()))
             keywords_list.add(m.Text(key, value))
