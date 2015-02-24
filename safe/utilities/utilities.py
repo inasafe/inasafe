@@ -220,11 +220,11 @@ def add_ordered_combo_item(combo, text, data=None):
     :type data: QVariant, str
     """
     size = combo.count()
-    for myCount in range(0, size):
-        item_text = str(combo.itemText(myCount))
-        # see if text alphabetically precedes myItemText
-        if cmp(str(text).lower(), item_text.lower()) < 0:
-            combo.insertItem(myCount, text, data)
+    for combo_index in range(0, size):
+        item_text = combo.itemText(combo_index)
+        # see if text alphabetically precedes item_text
+        if cmp(text.lower(), item_text.lower()) < 0:
+            combo.insertItem(combo_index, text, data)
             return
         # otherwise just add it to the end
     combo.insertItem(size, text, data)
