@@ -134,8 +134,8 @@ class SaveScenarioDialog(QDialog):
             extent = viewport_geo_array(self.iface.mapCanvas())
         extent_string = ', '.join(('%f' % x) for x in extent)
 
-        exposure_path = str(self.exposure_layer.publicSource())
-        hazard_path = str(self.hazard_layer.publicSource())
+        exposure_path = self.exposure_layer.publicSource()
+        hazard_path = self.hazard_layer.publicSource()
         title = self.keyword_io.read_keywords(self.hazard_layer, 'title')
         title = self.tr(title)
         default_filename = title.replace(
@@ -145,14 +145,11 @@ class SaveScenarioDialog(QDialog):
         dialog_title = self.tr('Save Scenario')
         if scenario_file_path is None:
             # noinspection PyCallByClass,PyTypeChecker
-            scenario_file_path = str(
-                QFileDialog.getSaveFileName(
-                    self,
-                    dialog_title,
-                    os.path.join(
-                        self.output_directory,
-                        default_filename + '.txt'),
-                    "Text files (*.txt)"))
+            scenario_file_path = QFileDialog.getSaveFileName(
+                self,
+                dialog_title,
+                os.path.join(self.output_directory, default_filename + '.txt'),
+                "Text files (*.txt)")
         if scenario_file_path is None or scenario_file_path == '':
             return
         self.output_directory = os.path.dirname(scenario_file_path)
@@ -173,7 +170,7 @@ class SaveScenarioDialog(QDialog):
         parser.set(
             title, 'extent_crs', self.dock.extent.user_extent_crs.authid())
         if self.aggregation_layer is not None:
-            aggregation_path = str(self.aggregation_layer.publicSource())
+            aggregation_path = self.aggregation_layer.publicSource()
             relative_aggregation_path = self.relative_path(
                 scenario_file_path, aggregation_path)
             parser.set(title, 'aggregation', relative_aggregation_path)
