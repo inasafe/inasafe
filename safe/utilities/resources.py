@@ -2,6 +2,7 @@
 """This module contains utilities for locating application resources (img etc).
 """
 import os
+import codecs
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -30,6 +31,7 @@ def html_header():
     :rtype: str
     """
     file_path = os.path.join(resources_path(), 'header.html')
+    header_file = codecs.open(file_path, encoding='utf-8')
     with file(file_path) as header_file:
         content = header_file.read()
         content = content.replace('PATH', resources_path())

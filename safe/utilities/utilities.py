@@ -40,6 +40,7 @@ from safe import messaging as m
 from safe.impact_functions.core import get_plugins
 from safe.messaging import styles
 from safe.messaging.error_message import ErrorMessage
+from safe.utilities.unicode import get_string
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -257,7 +258,7 @@ def html_to_file(html, file_path=None, open_browser=False):
         file_path = unique_filename(suffix='.html')
 
     with open(file_path, 'w') as f:
-        f.write(html)
+        f.write(get_string(html))
 
     if open_browser:
         open_in_browser(file_path)

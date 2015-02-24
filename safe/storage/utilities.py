@@ -16,13 +16,12 @@ from safe.gis.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.exceptions import (
     BoundingBoxError, InaSAFEError, ReadMetadataError)
-
-
-# Default attribute to assign to vector layers
 from safe.utilities.i18n import tr
+from safe.utilities.unicode import get_string, get_unicode
 from safe.storage.metadata_utilities import (
     write_keyword_in_iso_metadata, read_iso_metadata)
 
+# Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'inapolygon'
 
 # Spatial layer file extensions that are recognised in Risiko
@@ -97,10 +96,10 @@ def _keywords_to_string(keywords, sublayer=None):
     """
 
     # Write
-    result = ''
+    result = get_unicode('')
     if sublayer is not None:
         result = '[%s]\n' % sublayer
-    for k, v in keywords.items():
+    for k, value in keywords.items():
         # Create key
         msg = ('Key in keywords dictionary must be a string. '
                'I got %s with type %s' % (k, str(type(k))[1:-1]))
@@ -111,17 +110,8 @@ def _keywords_to_string(keywords, sublayer=None):
                'character. I got "%s"' % key)
         verify(':' not in key, msg)
 
-        # Create value
-        msg = ('Value in keywords dictionary must be convertible to a string. '
-               'For key %s, I got %s with type %s'
-               % (k, v, str(type(v))[1:-1]))
-        try:
-            val = str(v)
-        except:
-            raise Exception(msg)
-
         # Store
-        result += '%s: %s\n' % (key, val)
+        result += '%s: %s\n' % (key, value)
     return result
 
 
@@ -169,7 +159,6 @@ def write_keywords(keywords, filename, sublayer=None):
     Otherwise, unintentional whitespace in values would lead to surprising
     errors in the application.
     """
-
     # Input checks
     basename, ext = os.path.splitext(filename)
 
@@ -201,7 +190,8 @@ def write_keywords(keywords, filename, sublayer=None):
             handle.write(_keywords_to_string(keywords))
     else:
         # currently a simple layer so replace it with our content
-        handle.write(_keywords_to_string(keywords, sublayer=sublayer))
+        keywords = get_string(_keywords_to_string(keywords, sublayer=sublayer))
+        handle.write(keywords)
 
     handle.close()
 

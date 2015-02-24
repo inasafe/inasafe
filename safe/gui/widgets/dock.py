@@ -817,7 +817,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             #    store uuid in user property of list widget for layers
 
             name = layer.name()
-            source = str(layer.id())
+            source = layer.id()
             # See if there is a title for this layer, if not,
             # fallback to the layer's filename
 
@@ -1399,7 +1399,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 # Add this keyword to report
             key = m.ImportantText(
                 self.tr(keyword.capitalize()))
-            value = str(value)
             keywords_list.add(m.Text(key, value))
 
         report.add(keywords_list)

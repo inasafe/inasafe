@@ -238,6 +238,10 @@ class MessageViewer(QtWebKit.QWebView):
 
     def show_messages(self):
         """Show all messages."""
+        # import pydevd
+        #
+        # pydevd.settrace('localhost', port=5678, stdoutToServer=True,
+        #                 stderrToServer=True)
         string = html_header()
         if self.static_message is not None:
             string += self.static_message.to_html()
