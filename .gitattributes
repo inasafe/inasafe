@@ -14,6 +14,10 @@
 *.gif binary
 *.idraw binary
 *.xcf binary
+*.shx binary
+*.db binary
+*.zip binary
+*.sqlite binary
 
 # fonts:
 *.eot

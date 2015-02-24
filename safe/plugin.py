@@ -466,6 +466,28 @@ class Plugin(object):
 
         self.add_action(self.action_extent_selector)
 
+        # --------------------------------------
+        # Create action for adding layers if developper mode is on
+        # --------------------------------------
+        settings = QSettings()
+        self.developer_mode = settings.value(
+            'inasafe/developer_mode', False, type=bool)
+
+        if self.developer_mode:
+            icon = resources_path('img', 'icons', 'add-test-layers.svg')
+            self.action_add_layers = QAction(
+                QIcon(icon),
+                self.tr('Add some test layers'),
+                self.iface.mainWindow())
+            self.action_add_layers.setStatusTip(self.tr(
+                'Add some test layers'))
+            self.action_add_layers.setWhatsThis(self.tr(
+                'Add some test layers'))
+            self.action_add_layers.triggered.connect(
+                self.add_test_layers)
+
+            self.add_action(self.action_add_layers)
+
     # noinspection PyMethodMayBeStatic
     def clear_modules(self):
         """Unload inasafe functions and try to return QGIS to before InaSAFE.
@@ -542,6 +564,10 @@ class Plugin(object):
         else:
             self.dock_widget.setVisible(True)
             self.dock_widget.raise_()
+
+    def add_test_layers(self):
+        from safe.test.utilities import load_standard_layers
+        load_standard_layers()
 
     def show_extent_selector(self):
         """Show the extent selector widget for defining analysis extents."""

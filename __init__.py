@@ -32,9 +32,7 @@ sys.path.extend([os.path.abspath(os.path.join(
     os.path.dirname(__file__), os.path.pardir))])
 
 
-# If you let the import qgis below here, that will be the end of it. I will not
-#  look for you, I will not pursue you. But if you don't, I will look for
-# you, I will find you, and I will kill you - Liam Neeson
+# DO NOT REMOVE THIS
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 

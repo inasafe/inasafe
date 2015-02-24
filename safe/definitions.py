@@ -249,7 +249,7 @@ unit_volcano_categorical = {
         {
             'name': 'high',
             'description': tr('Distance from the volcano.'),
-            'string_defaults': ['Kawasan Rawan Bencana I',
+            'string_defaults': ['Kawasan Rawan Bencana III',
                                 'high'],
             'numeric_default_min': 0,
             'numeric_default_max': 3,
@@ -267,7 +267,7 @@ unit_volcano_categorical = {
         {
             'name': 'low',
             'description': tr('Distance from the volcano.'),
-            'string_defaults': ['Kawasan Rawan Bencana III',
+            'string_defaults': ['Kawasan Rawan Bencana I',
                                 'low'],
             'numeric_default_min': 5,
             'numeric_default_max': 10,
