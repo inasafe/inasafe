@@ -453,7 +453,7 @@ class TestEngine(unittest.TestCase):
         message = 'The user directory is empty : %s' % temp_directory
         assert os.listdir(temp_directory) != [], message
 
-        settings.setValue('inasafe/defaultUserDirectory', None)
+        settings.remove('inasafe/defaultUserDirectory')
 
     test_user_directory_when_saving.slow = False
 

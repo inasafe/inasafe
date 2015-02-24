@@ -15,6 +15,7 @@ from safe.storage.projection import DEFAULT_PROJECTION
 from safe.impact_functions.core import extract_layers
 from safe.common.utilities import unique_filename, verify
 from safe.utilities.i18n import tr
+from safe.utilities.utilities import replace_accentuated_characters
 from safe.engine.utilities import REQUIRED_KEYWORDS
 
 
@@ -122,14 +123,15 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
     msg = 'Impact function %s returned None' % str(impact_function)
     verify(F is not None, msg)
 
-    # Set the filename
+    # Set the filename : issue #1648
     # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS.EXT
     # FloodOnBuildings_12March2015_10h22.04.shp
     exp = F.keywords['exposure_subcategory'].title()
     haz = F.keywords['hazard_subcategory'].title()
     date = end_time.strftime('%d%B%Y').decode('utf8')
     time = end_time.strftime('%Hh%M.%S').decode('utf8')
-    prefix = '%sOn%s_%s_%s-' % (haz, exp, date, time)
+    prefix = u'%sOn%s_%s_%s-' % (haz, exp, date, time)
+    prefix = replace_accentuated_characters(prefix)
 
     # Write result and return filename
     if F.is_raster:
