@@ -434,7 +434,7 @@ class TestEngine(unittest.TestCase):
         settings = QSettings()
         temp_directory = temp_dir('testing_user_directory')
         temp_directory = mkdtemp(dir=temp_directory)
-        settings.setValue('inasafe/defaultUserDirectory', temp_directory)
+        settings.setValue('inasafe/defaultUserDirectory', temp_directory.encode('utf-8'))
 
         # Setting layers
         hazard_filename = test_data_path('hazard', 'jakarta_flood_design.tif')
