@@ -237,14 +237,30 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
+        attribute_names_lower = [
+            attribute_name.lower() for attribute_name in attribute_names]
         attributes = interpolated_layer.get_data()
         interpolate_size = len(interpolated_layer)
 
         building_per_category = {}
         building_usages = []
+        other_sum = {}
+
         for category_name in category_names:
             building_per_category[category_name] = {}
             building_per_category[category_name]['total'] = 0
+            other_sum[category_name] = 0
+
+        # Building attribute that should be looked up to get the usage
+        building_type_attributes = [
+            'type',
+            'amenity',
+            'building_t',
+            'office',
+            'tourism',
+            'leisure',
+            'use',
+        ]
 
         for i in range(interpolate_size):
             hazard_value = attributes[i][hazard_zone_attribute]
@@ -262,24 +278,19 @@ class VolcanoBuildingImpact(FunctionProvider):
 
             # Count affected buildings by usage type if available
             usage = None
-            building_type_attributes = [
-                'type',
-                'TYPE',
-                'amenity',
-                'building_t',
-                'office',
-                'tourism',
-                'leisure',
-                'use',
-            ]
-
             for building_type_attribute in building_type_attributes:
-                if building_type_attribute in attribute_names and (
+                if building_type_attribute in attribute_names_lower and (
                                 usage is None or usage == 0):
-                    usage = attributes[i][building_type_attribute]
+                    attribute_index = attribute_names_lower.index(
+                        building_type_attribute)
+                    field_name = attribute_names[attribute_index]
+                    usage = attributes[i][field_name]
 
-            if 'building' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['building']
+            if 'building' in attribute_names_lower and (
+                            usage is None or usage == 0):
+                attribute_index = attribute_names_lower.index('building')
+                field_name = attribute_names[attribute_index]
+                usage = attributes[i][field_name]
                 if usage == 'yes':
                     usage = 'building'
 
@@ -306,7 +317,6 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         table_body += [TableRow(table_headers, header=True)]
 
-        other_sum = {}
         for building_usage in building_usages:
             building_usage_good = building_usage.replace('_', ' ')
             building_usage_good = building_usage_good.capitalize()
