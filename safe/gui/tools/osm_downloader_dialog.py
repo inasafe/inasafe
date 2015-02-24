@@ -272,7 +272,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         :raises: CanceledImportDialogError - when user choose 'No' in
             the question dialog for creating directory.
         """
-        path = str(self.output_directory.text())
+        path = self.output_directory.text()
 
         if os.path.exists(path):
             return
@@ -336,7 +336,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         # download and extract it
         self.fetch_zip(url, path)
-        self.extract_zip(path, str(self.output_directory.text()))
+        self.extract_zip(path, self.output_directory.text())
 
         self.progress_dialog.done(QDialog.Accepted)
 
@@ -410,7 +410,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         :raises: ImportDialogError - when buildings.shp not exist
         """
         output_prefix = self.filename_prefix.text()
-        path = str(self.output_directory.text())
+        path = self.output_directory.text()
         path = os.path.join(path, '%s%s.shp' % (output_prefix, feature_type))
 
         if not os.path.exists(path):
