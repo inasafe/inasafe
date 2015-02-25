@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, QPyNullVariant
 from qgis.core import QgsField
 from qgis.core import QgsGeometry
 
@@ -26,6 +26,8 @@ from safe.utilities.resources import get_ui_class
 
 FORM_CLASS = get_ui_class('people_in_buildings_base.ui')
 
+People_Calculated = "People_Dec"
+People_Rounded = "People_Rnd"
 
 class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
     """Options dialog for the InaSAFE plugin."""
@@ -124,23 +126,30 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         combobox.addItems(options)
 
     @staticmethod
-    def add_population_attribute(layer):
-        name = "population"
+    def _add_attribute_to_layer(layer, attribute_name, data_type):
         provider = layer.dataProvider()
         # Check if attribute is already there, return "-1" if not
-        ind = provider.fieldNameIndex(name)
+        ind = provider.fieldNameIndex(attribute_name)
         if ind != -1:
             return False
-        try:
-            res = provider.addAttributes(
-                [
-                    QgsField(name, QVariant.Double)
-                ]
-            )
-            layer.updateFields()
-            return res
-        except:
-            return False
+        field = QgsField(attribute_name, data_type)
+        result = provider.addAttributes([field])
+        return result
+
+    def add_population_attribute(self, layer):
+        """Add people estimate columns/attributes to the output layer
+
+        :param layer:
+        """
+        attributes = {
+            People_Calculated: QVariant.Double,
+            People_Rounded: QVariant.Int
+        }
+        for attribute_name, data_type in attributes.items():
+            result = self._add_attribute_to_layer(
+                layer, attribute_name, data_type)
+            if result:
+                layer.updateFields()
 
     @staticmethod
     def _get_attributes(feature, field_names):
@@ -149,24 +158,24 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         return attribute_dict
 
     @staticmethod
-    def _overlapping_area(feature1, feature2):
-        """Get the overlapping area between two features
+    def _overlapping_area(feature, layer):
+        """Get the area overlapping area if feature is within layer
 
-        :param feature1: A feature
-        :type feature1: QgsFeature
+        :param feature: A feature
+        :type feature: QgsFeature
 
-        :param feature2: A feature
-        :type feature2: QgsFeature
+        :param layer: A feature
+        :type layer: QgsFeature
 
         :returns: overlapping area
         :rtype: float
         """
-        geometry_feature1 = feature1.geometry()
-        geometry_feature2 = feature2.geometry()
-        intersection = geometry_feature1.intersection(geometry_feature2)
-        if not intersection:
+        geometry_feature = feature.geometry()
+        geometry_layer = layer.geometry()
+        centroid = geometry_feature.centroid()
+        if not centroid.within(geometry_layer):
             return 0
-        return intersection.area()
+        return geometry_feature.area()
 
     @staticmethod
     def _get_levels(attributes, levels_attribute):
@@ -197,8 +206,11 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
     @staticmethod
     def _get_residential_proportion(attributes, building_use):
         use = attributes[building_use]
-        if use in ['Residential', 'residential']:
+        if use in ['Residential', 'residential', 'house', 'House']:
             return 1
+        # if use == '' or use is None or isinstance(use, QPyNullVariant):
+        #     # Default to residential, if it is unclassified
+        #     return 1
         return 0
 
     @staticmethod
@@ -231,7 +243,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         self.add_population_attribute(buildings_layer)
         field_names_population = self._get_field_names(population_layer)
         field_names = self._get_field_names(buildings_layer)
-        field_names.append('population')
+        field_names += [People_Calculated, People_Rounded]
 
         #TODO: Make a better progress estimator
         self.progressBar.setValue(0)
@@ -242,12 +254,6 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         for population_area in population_layer.getFeatures():
             progress += progress_increment
             self.progressBar.setValue(progress)
-            if not self._feature_fully_in_extent(
-                    buildings_layer,
-                    population_area):
-                # If this feature is not fully contained within the buildings
-                # extent we cannot use it (Type B, C)
-                continue
             population_attributes = self._get_attributes(
                 population_area,
                 field_names_population
@@ -275,12 +281,8 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
             buildings_layer.startEditing()
             for (building, area) in building_lookup.items():
                 people_in_building = population_density * area
-                # Could buildings be in two census areas? if so uncomment below
-                # attributes = self._get_attributes(building, field_names)
-                # current_estimate = attributes['population']
-                # if current_estimate:
-                #     people_in_building += current_estimate
-                building['population'] = people_in_building
+                building[People_Calculated] = people_in_building
+                building[People_Rounded] = people_in_building
                 buildings_layer.updateFeature(building)
             buildings_layer.commitChanges()
         self.progressBar.setValue(100)
