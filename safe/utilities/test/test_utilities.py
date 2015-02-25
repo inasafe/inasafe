@@ -9,6 +9,7 @@ from safe.utilities.utilities import (
     get_error_message,
     humanise_seconds,
     impact_attribution,
+    replace_accentuated_characters,
     read_file_keywords
 )
 from safe.utilities.gis import qgis_version
@@ -80,6 +81,10 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(humanise_seconds(9000), '2 hours and 30 minutes')
         self.assertEqual(humanise_seconds(432232),
                          '5 days, 0 hours and 3 minutes')
+
+    def test_accentuated_characters(self):
+        """Test that accentuated characters has been replaced."""
+        self.assertEqual(replace_accentuated_characters(u'áéíóúýÁÉÍÓÚÝ'), 'aeiouyAEIOUY')
 
     def test_impact_layer_attribution(self):
         """Test we get an attribution html snippet nicely for impact layers."""
