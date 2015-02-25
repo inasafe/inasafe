@@ -9,8 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.utilities.gis import is_polygon_layer
-
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '19/05/2013'
@@ -53,7 +51,8 @@ from safe.defaults import get_defaults
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import (
     layer_attribute_names,
-    create_memory_layer)
+    create_memory_layer,
+    is_polygon_layer)
 from safe.utilities.styling import set_vector_graduated_style
 from safe.common.utilities import (
     temp_dir,
@@ -68,6 +67,7 @@ from safe.common.signals import (
     STATIC_MESSAGE_SIGNAL,
 )
 from safe import messaging as m
+from safe.definitions import global_default_attribute, do_not_use_attribute
 from safe.messaging import styles
 from safe.common.exceptions import (
     KeywordNotFoundError,
@@ -295,13 +295,13 @@ class Aggregator(QtCore.QObject):
 
         if self.aoi_mode:
             keywords[self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')] = \
-                self.tr('Use default')
+                global_default_attribute['name']
             keywords[self.get_default_keyword('YOUTH_RATIO_ATTR_KEY')] = \
-                self.tr('Use default')
+                global_default_attribute['name']
             keywords[self.get_default_keyword('ADULT_RATIO_ATTR_KEY')] = \
-                self.tr('Use default')
+                global_default_attribute['name']
             keywords[self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY')] = \
-                self.tr('Use default')
+                global_default_attribute['name']
             self.update_keywords(self.layer, keywords)
             self.is_valid = True
             return
@@ -330,16 +330,16 @@ class Aggregator(QtCore.QObject):
             if (aggregation_attribute in keywords
                 and ('category' in keywords and category == 'postprocessing')
                 and (female_ratio in keywords and (
-                    female_ratio != self.tr('Use default') or
+                    female_ratio != global_default_attribute['name'] or
                     female_ratio_key in keywords))
                 and (youth_ratio in keywords and (
-                    youth_ratio != self.tr('Use default') or
+                    youth_ratio != global_default_attribute['name'] or
                     youth_ratio_key in keywords))
                 and (adult_ratio in keywords and (
-                    adult_ratio != self.tr('Use default') or
+                    adult_ratio != global_default_attribute['name'] or
                     adult_ratio_key in keywords))
                 and (elderly_ratio in keywords and (
-                    elderly_ratio != self.tr('Use default') or
+                    elderly_ratio != global_default_attribute['name'] or
                     elderly_ratio_key in keywords))):
                 self.is_valid = True
             # some keywords are needed
@@ -358,7 +358,8 @@ class Aggregator(QtCore.QObject):
                 if self.get_default_keyword('FEMALE_RATIO_ATTR_KEY') not in \
                         keywords:
                     keywords[self.get_default_keyword(
-                        'FEMALE_RATIO_ATTR_KEY')] = self.tr('Use default')
+                        'FEMALE_RATIO_ATTR_KEY')] = \
+                        global_default_attribute['name']
 
                 if self.get_default_keyword('FEMALE_RATIO_KEY') not in \
                         keywords:
@@ -368,7 +369,8 @@ class Aggregator(QtCore.QObject):
                 if self.get_default_keyword('YOUTH_RATIO_ATTR_KEY') not in \
                         keywords:
                     keywords[self.get_default_keyword(
-                        'YOUTH_RATIO_ATTR_KEY')] = self.tr('Use default')
+                        'YOUTH_RATIO_ATTR_KEY')] = \
+                        global_default_attribute['name']
 
                 if self.get_default_keyword('YOUTH_RATIO_KEY') not in \
                         keywords:
@@ -378,7 +380,8 @@ class Aggregator(QtCore.QObject):
                 if self.get_default_keyword('ADULT_RATIO_ATTR_KEY') not in \
                         keywords:
                     keywords[self.get_default_keyword(
-                        'ADULT_RATIO_ATTR_KEY')] = self.tr('Use default')
+                        'ADULT_RATIO_ATTR_KEY')] = \
+                        global_default_attribute['name']
 
                 if self.get_default_keyword('ADULT_RATIO_KEY') not in \
                         keywords:
@@ -388,7 +391,8 @@ class Aggregator(QtCore.QObject):
                 if self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY') not in \
                         keywords:
                     keywords[self.get_default_keyword(
-                        'ELDERLY_RATIO_ATTR_KEY')] = self.tr('Use default')
+                        'ELDERLY_RATIO_ATTR_KEY')] = \
+                        global_default_attribute['name']
 
                 if self.get_default_keyword('ELDERLY_RATIO_KEY') not in \
                         keywords:
@@ -1171,8 +1175,8 @@ class Aggregator(QtCore.QObject):
         female_ratio_attribute = self.read_keywords(
             self.layer,
             female_ratio_key)
-        if ((female_ratio_attribute != self.tr('Don\'t use')) and
-                (female_ratio_attribute != self.tr('Use default'))):
+        if ((female_ratio_attribute != do_not_use_attribute['name']) and
+                (female_ratio_attribute != global_default_attribute['name'])):
             self.attributes[female_ratio_key] = \
                 female_ratio_attribute
 
@@ -1180,8 +1184,8 @@ class Aggregator(QtCore.QObject):
         youth_ratio_attribute = self.read_keywords(
             self.layer,
             youth_ratio_key)
-        if ((youth_ratio_attribute != self.tr('Don\'t use')) and
-                (youth_ratio_attribute != self.tr('Use default'))):
+        if ((youth_ratio_attribute != do_not_use_attribute['name']) and
+                (youth_ratio_attribute != global_default_attribute['name'])):
             self.attributes[youth_ratio_key] = \
                 youth_ratio_attribute
 
@@ -1189,8 +1193,8 @@ class Aggregator(QtCore.QObject):
         adult_ratio_attribute = self.read_keywords(
             self.layer,
             adult_ratio_key)
-        if ((adult_ratio_attribute != self.tr('Don\'t use')) and
-                (adult_ratio_attribute != self.tr('Use default'))):
+        if ((adult_ratio_attribute != do_not_use_attribute['name']) and
+                (adult_ratio_attribute != global_default_attribute['name'])):
             self.attributes[adult_ratio_key] = \
                 adult_ratio_attribute
 
@@ -1198,8 +1202,8 @@ class Aggregator(QtCore.QObject):
         elderly_ratio_attribute = self.read_keywords(
             self.layer,
             elderly_ratio_key)
-        if ((elderly_ratio_key != self.tr('Don\'t use')) and
-                (elderly_ratio_attribute != self.tr('Use default'))):
+        if ((elderly_ratio_key != do_not_use_attribute['name']) and
+                (elderly_ratio_attribute != global_default_attribute['name'])):
             self.attributes[elderly_ratio_key] = \
                 elderly_ratio_attribute
 
