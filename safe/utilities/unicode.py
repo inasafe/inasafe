@@ -21,9 +21,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-def __if_not_unicode(object):
+def __if_not_basestring(object):
     converted_str = object
-    if not isinstance(object, unicode):
+    if not isinstance(object, basestring):
         converted_str = str(object)
     return converted_str
 
@@ -40,7 +40,7 @@ def get_unicode(input_text, encoding='utf-8'):
     :returns: Unicode representation of the input.
     :rtype: unicode
     """
-    input_text = __if_not_unicode(input_text)
+    input_text = __if_not_basestring(input_text)
     if isinstance(input_text, unicode):
         return input_text
     return unicode(input_text, encoding, errors='ignore')
@@ -58,7 +58,7 @@ def get_string(input_text, encoding='utf-8'):
     :returns: Byte string representation of the input.
     :rtype: str
     """
-    input_text = __if_not_unicode(input_text)
+    input_text = __if_not_basestring(input_text)
     if isinstance(input_text, unicode):
         return input_text.encode(encoding)
     return input_text

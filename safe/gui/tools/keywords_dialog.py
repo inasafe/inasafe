@@ -43,6 +43,7 @@ from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError)
 from safe import definitions
+from safe.utilities.unicode import get_unicode
 
 # Aggregations' keywords
 DEFAULTS = get_defaults()
@@ -776,6 +777,10 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
             return
         if value is None or value == '':
             return
+
+        # make sure that both key and value is unicode
+        key = get_unicode(key)
+        value = get_unicode(value)
 
         message = ''
         if ':' in key:

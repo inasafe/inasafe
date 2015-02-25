@@ -93,7 +93,7 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
-from safe.utilities.unicode import get_string
+from safe.utilities.unicode import get_string, get_unicode
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
