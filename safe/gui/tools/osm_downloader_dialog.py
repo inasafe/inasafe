@@ -40,11 +40,12 @@ from safe.common.exceptions import (
     CanceledImportDialogError, ImportDialogError, DownloadError)
 from safe import messaging as m
 from safe.utilities.file_downloader import FileDownloader
-from safe.utilities.gis import viewport_geo_array
+from safe.utilities.gis import viewport_geo_array, rectangle_geo_array
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.proxy import get_proxy
+from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -97,7 +98,14 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         if proxy is not None:
             self.network_manager.setProxy(proxy)
         self.restore_state()
-        self.update_extent()
+        self.update_extent_from_map_canvas()
+
+        # Setup the rectangle map tool
+        self.canvas = iface.mapCanvas()
+        self.rectangle_map_tool = RectangleMapTool(self.canvas)
+        self.rectangle_map_tool.rectangle_created.connect(self.update_extent_from_rectangle)
+        self.canvas.setMapTool(self.rectangle_map_tool)
+        self.canvas.extentsChanged.connect(self.update_extent_from_map_canvas)
 
     def show_info(self):
         """Show usage info to the user."""
@@ -174,14 +182,49 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Load the help text for the dialog."""
         show_context_help(self.help_context)
 
-    def update_extent(self):
-        """ Update extent value in GUI based from value in map."""
-        # Get the extent as [xmin, ymin, xmax, ymax]
-        extent = viewport_geo_array(self.iface.mapCanvas())
+    def update_extent(self, extent):
+        """ Update extent value in GUI based from an extent.
+
+        :param extent: a list in the form [xmin, ymin, xmax, ymax] where all
+            coordinates provided are in Geographic / EPSG:4326.
+        :type: list
+        """
         self.min_longitude.setText(str(extent[0]))
         self.min_latitude.setText(str(extent[1]))
         self.max_longitude.setText(str(extent[2]))
         self.max_latitude.setText(str(extent[3]))
+
+    def update_extent_from_map_canvas(self):
+        """ Update extent value in GUI based from value in map.
+
+        .. note:: Delegates to update_extent()
+        """
+
+        self.groupBox.setTitle(self.tr('Bounding box from the map canvas'))
+        # Get the extent as [xmin, ymin, xmax, ymax]
+        extent = viewport_geo_array(self.iface.mapCanvas())
+        self.update_extent(extent)
+
+    def update_extent_from_rectangle(self):
+        """ Update extent value in GUI based from the QgsMapTool rectangle.
+
+        .. note:: Delegates to update_extent()
+        """
+
+        # Disconnect the map canvas if not already done
+        try:
+            self.canvas.extentsChanged.disconnect(self.update_extent_from_map_canvas)
+        except TypeError:
+            pass
+
+        rectangle = self.rectangle_map_tool.rectangle()
+        if rectangle:
+            self.groupBox.setTitle(self.tr('Bounding box from the rectangle'))
+            extent = rectangle_geo_array(rectangle, self.iface.mapCanvas())
+            self.update_extent(extent)
+        else:
+            self.update_extent_from_map_canvas()
+            self.canvas.extentsChanged.connect(self.update_extent_from_map_canvas)
 
     def validate_extent(self):
         """Validate the bounding box before user click OK to download.
@@ -227,6 +270,9 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Do osm download and display it in QGIS."""
         error_dialog_title = self.tr('InaSAFE OpenStreetMap Downloader Error')
 
+        # Deactivate the rectangle selection
+        self.canvas.unsetMapTool(self.rectangle_map_tool)
+
         # Validate extent
         valid_flag = self.validate_extent()
         if not valid_flag:
@@ -253,14 +299,18 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 self.download(feature_type)
                 self.load_shapefile(feature_type)
             self.done(QDialog.Accepted)
+            self.rectangle_map_tool.reset()
+
         except CanceledImportDialogError:
             # don't show anything because this exception raised
             # when user canceling the import process directly
+            self.canvas.setMapTool(self.rectangle_map_tool)
             pass
         except Exception as exception:  # pylint: disable=broad-except
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(self, error_dialog_title, str(exception))
 
+            self.canvas.setMapTool(self.rectangle_map_tool)
             self.progress_dialog.cancel()
 
     def require_directory(self):
@@ -419,3 +469,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             raise ImportDialogError(message)
 
         self.iface.addVectorLayer(path, feature_type, 'ogr')
+
+    def reject(self):
+        """Redefinition of the reject() method to remove the rectangle selection tool.
+        It will call the super method.
+        """
+
+        self.canvas.unsetMapTool(self.rectangle_map_tool)
+        self.rectangle_map_tool.reset()
+
+        super(OsmDownloaderDialog, self).reject()
