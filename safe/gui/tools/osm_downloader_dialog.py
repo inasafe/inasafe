@@ -24,6 +24,7 @@ import logging
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
+from qgis.gui import QgsMapToolPan
 # pylint: enable=unused-import
 
 # noinspection PyPackageRequirements
@@ -98,14 +99,17 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         if proxy is not None:
             self.network_manager.setProxy(proxy)
         self.restore_state()
-        self.update_extent_from_map_canvas()
 
         # Setup the rectangle map tool
         self.canvas = iface.mapCanvas()
         self.rectangle_map_tool = RectangleMapTool(self.canvas)
         self.rectangle_map_tool.rectangle_created.connect(self.update_extent_from_rectangle)
-        self.canvas.setMapTool(self.rectangle_map_tool)
-        self.canvas.extentsChanged.connect(self.update_extent_from_map_canvas)
+        self.button_extent_rectangle.clicked.connect(self.drag_rectangle_on_map_canvas)
+
+        # Setup pan tool
+        self.pan_tool = QgsMapToolPan(self.canvas)
+        self.canvas.setMapTool(self.pan_tool)
+        self.update_extent_from_map_canvas()
 
     def show_info(self):
         """Show usage info to the user."""
@@ -211,20 +215,15 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         .. note:: Delegates to update_extent()
         """
 
-        # Disconnect the map canvas if not already done
-        try:
-            self.canvas.extentsChanged.disconnect(self.update_extent_from_map_canvas)
-        except TypeError:
-            pass
+        self.show()
+        self.canvas.unsetMapTool(self.rectangle_map_tool)
+        self.canvas.setMapTool(self.pan_tool)
 
         rectangle = self.rectangle_map_tool.rectangle()
         if rectangle:
             self.groupBox.setTitle(self.tr('Bounding box from the rectangle'))
             extent = rectangle_geo_array(rectangle, self.iface.mapCanvas())
             self.update_extent(extent)
-        else:
-            self.update_extent_from_map_canvas()
-            self.canvas.extentsChanged.connect(self.update_extent_from_map_canvas)
 
     def validate_extent(self):
         """Validate the bounding box before user click OK to download.
@@ -261,17 +260,25 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_directory_button_clicked(self):
-        """ Show a dialog to choose directory """
+        """ Show a dialog to choose directory. """
         # noinspection PyCallByClass,PyTypeChecker
         self.output_directory.setText(QFileDialog.getExistingDirectory(
             self, self.tr("Select download directory")))
+
+    def drag_rectangle_on_map_canvas(self):
+        """ Show a dialog to choose directory. """
+
+        self.hide()
+        self.rectangle_map_tool.reset()
+        self.canvas.unsetMapTool(self.pan_tool)
+        self.canvas.setMapTool(self.rectangle_map_tool)
 
     def accept(self):
         """Do osm download and display it in QGIS."""
         error_dialog_title = self.tr('InaSAFE OpenStreetMap Downloader Error')
 
-        # Deactivate the rectangle selection
-        self.canvas.unsetMapTool(self.rectangle_map_tool)
+        # Lock the groupbox
+        self.groupBox.setDisabled(True)
 
         # Validate extent
         valid_flag = self.validate_extent()
@@ -304,14 +311,16 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         except CanceledImportDialogError:
             # don't show anything because this exception raised
             # when user canceling the import process directly
-            self.canvas.setMapTool(self.rectangle_map_tool)
             pass
         except Exception as exception:  # pylint: disable=broad-except
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QMessageBox.warning(self, error_dialog_title, str(exception))
 
-            self.canvas.setMapTool(self.rectangle_map_tool)
             self.progress_dialog.cancel()
+
+        finally:
+            # Unlock the groupbox
+            self.groupBox.setEnabled(True)
 
     def require_directory(self):
         """Ensure directory path entered in dialog exist.
