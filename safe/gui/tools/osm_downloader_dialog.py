@@ -266,7 +266,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self, self.tr("Select download directory")))
 
     def drag_rectangle_on_map_canvas(self):
-        """ Show a dialog to choose directory. """
+        """ Hide the dialog and allow the user to draw a rectangle. """
 
         self.hide()
         self.rectangle_map_tool.reset()
