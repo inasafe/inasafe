@@ -765,3 +765,29 @@ def romanise(number):
     except ValueError:
         return None
     return roman
+
+
+def add_to_list(my_list, my_element):
+    """Helper function to add new my_element to my_list based on its type
+    . Add as new element if it's not a list, otherwise extend to the list
+    if it's a list.
+    It's also guarantee that all elements are unique
+
+    :param my_list: A list
+    :type my_list: list
+
+    :param my_element: A new element
+    :type my_element: str, list
+
+    :returns: A list with unique element
+    :rtype: list
+
+    """
+    if type(my_element) is list:
+        for element in my_element:
+            my_list = add_to_list(my_list, element)
+    else:
+        if my_element not in my_list:
+            my_list.append(my_element)
+
+    return my_list

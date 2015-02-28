@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
-from safe.impact_functions.utilities import add_to_list
+from safe.common.utilities import add_to_list
 
 
 class ImpactFunctionMetadata(object):

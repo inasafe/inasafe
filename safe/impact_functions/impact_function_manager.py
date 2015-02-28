@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from safe.definitions import hazard_definition, exposure_definition
 from safe.impact_functions.core import FunctionProvider
-from safe.impact_functions.utilities import add_to_list
+from safe.common.utilities import add_to_list
 
 
 class ImpactFunctionManager:
