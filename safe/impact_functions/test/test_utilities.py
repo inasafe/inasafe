@@ -22,8 +22,11 @@ import os
 
 from safe.impact_functions.utilities import (
     keywords_to_str,
-    add_to_list,
-    get_python_file)
+    get_python_file,
+    function_name,
+    get_function_title)
+from safe.impact_functions.inundation.flood_OSM_building_impact import (
+    FloodBuildingImpactFunction)
 
 
 class TestUtilities(unittest.TestCase):
@@ -43,25 +46,6 @@ class TestUtilities(unittest.TestCase):
                 'Expected value %s to appear in %s' % (val, string_keywords))
             assert val in string_keywords, message
 
-    def test_add_to_list(self):
-        """Test for add_to_list function
-        """
-        list_original = ['a', 'b', ['a'], {'a': 'b'}]
-        list_a = ['a', 'b', ['a'], {'a': 'b'}]
-        # add same immutable element
-        list_b = add_to_list(list_a, 'b')
-        assert list_b == list_original
-        # add list
-        list_b = add_to_list(list_a, ['a'])
-        assert list_b == list_original
-        # add same mutable element
-        list_b = add_to_list(list_a, {'a': 'b'})
-        assert list_b == list_original
-        # add new mutable element
-        list_b = add_to_list(list_a, 'c')
-        assert len(list_b) == (len(list_original) + 1)
-        assert list_b[-1] == 'c'
-
     def test_get_python_file(self):
         """Test get_python_file"""
         path = get_python_file(TestUtilities)
@@ -72,6 +56,26 @@ class TestUtilities(unittest.TestCase):
         message = 'Expecting %s in %s' % (path, expected_paths)
 
         self.assertIn(path, expected_paths, message)
+
+    def test_function_name(self):
+        """Test function_name."""
+        impact_function = FloodBuildingImpactFunction()
+        impact_function_name = function_name(impact_function)
+        expected_name = "Flood Building Impact Function"
+        message = "Expected %s but got %s" % (
+            impact_function_name, expected_name)
+        self.assertEqual(
+            impact_function_name, expected_name, message)
+
+    def test_get_function_title(self):
+        """Test for get_function_title."""
+        impact_function = FloodBuildingImpactFunction()
+        impact_function_title = get_function_title(impact_function)
+        expected_title = "Be flooded"
+        message = "Expected %s but got %s" % (
+            impact_function_title, expected_title)
+        self.assertEqual(
+            impact_function_title, expected_title, message)
 
 
 if __name__ == '__main__':

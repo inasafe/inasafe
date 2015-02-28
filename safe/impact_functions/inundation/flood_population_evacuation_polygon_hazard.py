@@ -104,11 +104,34 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 'id': 'FloodEvacuationFunctionVectorHazard',
                 'name': tr('Flood Evacuation Function Vector Hazard'),
                 'impact': tr('Need evacuation'),
+                'title': tr('Need evacuation'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of flood inundation '
-                    'in vector format on population.'),
+                    'To assess the impacts of flood inundation in vector '
+                    'format on population.'),
+                'detailed_description': tr(
+                    'The population subject to inundation is determined '
+                    'whether in an area which affected or not. You can also '
+                    'set an evacuation percentage to calculate how many '
+                    'percent of the total population affected to be '
+                    'evacuated. This number will be used to estimate needs'
+                    ' based on BNPB Perka 7/2008 minimum bantuan.'),
+                'hazard_input': tr(
+                    'A hazard vector layer which has attribute affected the '
+                    'value is either 1 or 0'),
+                'exposure_input': tr(
+                    'An exposure raster layer where each cell represent '
+                    'population count.'),
+                'output': tr(
+                    'Vector layer contains people affected and the minimum '
+                    'needs based on evacuation percentage.'),
+                'actions': tr(
+                    'Provide details about how many people would likely need '
+                    'to be evacuated, where they are located and what '
+                    'resources would be required to support them.'),
+                'limitations': [],
+                'citations': [],
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
@@ -125,32 +148,6 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
                 }
             }
             return dict_meta
-
-    title = tr('Need evacuation')
-    # Function documentation
-    synopsis = tr(
-        'To assess the impacts of flood inundation in vector '
-        'format on population.')
-    actions = tr(
-        'Provide details about how many people would likely need to be '
-        'evacuated, where they are located and what resources would be '
-        'required to support them.')
-
-    detailed_description = tr(
-        'The population subject to inundation is determined whether in an '
-        'area which affected or not. You can also set an evacuation '
-        'percentage to calculate how many percent of the total population '
-        'affected to be evacuated. This number will be used to estimate needs'
-        ' based on BNPB Perka 7/2008 minimum bantuan.')
-
-    hazard_input = tr(
-        'A hazard vector layer which has attribute affected the value is '
-        'either 1 or 0')
-    exposure_input = tr(
-        'An exposure raster layer where each cell represent population count.')
-    output = tr(
-        'Vector layer contains people affected and the minimum needs '
-        'based on evacuation percentage.')
 
     target_field = 'population'
     defaults = get_defaults()
