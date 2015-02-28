@@ -20,7 +20,13 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 import unittest
 import os
 
-from safe.impact_functions.utilities import (keywords_to_str, get_python_file)
+from safe.impact_functions.utilities import (
+    keywords_to_str,
+    get_python_file,
+    function_name,
+    get_function_title)
+from safe.impact_functions.inundation.flood_OSM_building_impact import (
+    FloodBuildingImpactFunction)
 
 
 class TestUtilities(unittest.TestCase):
@@ -50,6 +56,26 @@ class TestUtilities(unittest.TestCase):
         message = 'Expecting %s in %s' % (path, expected_paths)
 
         self.assertIn(path, expected_paths, message)
+
+    def test_function_name(self):
+        """Test function_name."""
+        impact_function = FloodBuildingImpactFunction()
+        impact_function_name = function_name(impact_function)
+        expected_name = "Flood Building Impact Function"
+        message = "Expected %s but got %s" % (
+            impact_function_name, expected_name)
+        self.assertEqual(
+            impact_function_name, expected_name, message)
+
+    def test_get_function_title(self):
+        """Test for get_function_title."""
+        impact_function = FloodBuildingImpactFunction()
+        impact_function_title = get_function_title(impact_function)
+        expected_title = "Be flooded"
+        message = "Expected %s but got %s" % (
+            impact_function_title, expected_title)
+        self.assertEqual(
+            impact_function_title, expected_title, message)
 
 
 if __name__ == '__main__':
