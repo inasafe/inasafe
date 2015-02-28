@@ -330,7 +330,6 @@ class TestUtilities(unittest.TestCase):
         message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
         self.assertEqual(result, expected_result, message)
 
-
     def test_add_to_list(self):
         """Test for add_to_list function
         """
