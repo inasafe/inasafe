@@ -101,7 +101,7 @@ class KeywordIO(QObject):
             UnsupportedProviderError
 
         """
-        source = str(layer.source())
+        source = layer.source()
         try:
             flag = self.are_keywords_file_based(layer)
         except UnsupportedProviderError:
@@ -144,7 +144,7 @@ class KeywordIO(QObject):
         except UnsupportedProviderError:
             raise
 
-        source = str(layer.source())
+        source = layer.source()
         try:
             if flag:
                 write_keywords_to_file(source, keywords)

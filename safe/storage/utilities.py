@@ -1206,8 +1206,8 @@ def safe_to_qgis_layer(layer):
         raise Exception(message)
 
     # Get associated filename and symbolic name
-    filename = layer.get_filename()
-    name = layer.get_name()
+    filename = layer.get_filename().decode('utf8')
+    name = layer.get_name().decode('utf8')
 
     qgis_layer = None
     # Read layer

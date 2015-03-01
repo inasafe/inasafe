@@ -1,4 +1,4 @@
-
+# -*- coding: utf8 -*-
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -22,7 +22,8 @@ def tr(text):
     :rtype: str
     """
     # Ensure that the text is a string
-    text = str(text)
+    if type(text) == 'str':
+        text = text.decode('utf-8')
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
     return QCoreApplication.translate('@default', text)
 
