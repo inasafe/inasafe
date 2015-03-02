@@ -455,15 +455,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         basics_list.add(m.Paragraph(
             self.tr(
                 'Make sure you have defined keywords for your hazard and '
-                'exposure layers. You can do this using the keywords '
-                'editor icon '),
-            m.Image('file:///%s/img/icons/show-keyword-editor.svg' %
-                    (resources_path()), **SMALL_ICON_STYLE),
-            self.tr(' or keywords creation wizard '),
+                'exposure layers. You can do this using the '
+                'keywords creation wizard '),
             m.Image(
                 'file:///%s/img/icons/show-keyword-wizard.svg' %
                 (resources_path()), **SMALL_ICON_STYLE),
-            self.tr(' in the Plugins > InaSAFE Menu.')))
+            self.tr(' in the toolbar.')))
         basics_list.add(m.Paragraph(
             self.tr('Click on the '),
             m.ImportantText(self.tr('Run'), **KEYWORD_STYLE),
