@@ -77,10 +77,32 @@ class VolcanoBuildingImpact(FunctionProvider):
                 'id': 'VolcanoBuildingImpact',
                 'name': tr('Volcano Building Impact'),
                 'impact': tr('Be affected'),
+                'title': tr('Be affected'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
-                'overview': tr('To assess the impacts of volcano eruption '
-                               'on building.'),
+                'overview': tr(
+                    'To assess the impacts of volcano eruption on building.'),
+                'detailed_description': '',
+                'hazard_input': tr(
+                    'A hazard vector layer can be polygon or point. If '
+                    'polygon, it must have "KRB" attribute and the values for '
+                    'it are "Kawasan Rawan Bencana I", "Kawasan Rawan Bencana '
+                    'II", or "Kawasan Rawan Bencana III." If you want to see '
+                    'the name of the volcano in the result, you need to add '
+                    '"NAME" attribute for point data or "GUNUNG" attribute '
+                    'for polygon data.'),
+                'exposure_input': tr(
+                    'Vector polygon layer extracted from OSM where each '
+                    'polygon represents the footprint of a building.'),
+                'output': tr(
+                    'Vector layer contains Map of building exposed to '
+                    'volcanic hazard zones for each Kawasan Rawan Bencana or '
+                    'radius.'),
+                'actions': tr(
+                    'Provide details about how many building would likely be '
+                    'affected by each hazard zones.'),
+                'limitations': [],
+                'citations': [],
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
@@ -105,27 +127,7 @@ class VolcanoBuildingImpact(FunctionProvider):
             }
             return dict_meta
 
-    title = tr('Be affected')
     target_field = 'buildings'
-
-    # Function documentations
-    synopsis = tr('To assess the impacts of volcano eruption on building.')
-    actions = tr(
-        'Provide details about how many building would likely be affected by '
-        'each hazard zones.')
-    hazard_input = tr(
-        'A hazard vector layer can be polygon or point. If polygon, it must '
-        'have "KRB" attribute and the values for it are "Kawasan Rawan '
-        'Bencana I", "Kawasan Rawan Bencana II", or "Kawasan Rawan Bencana '
-        'III." If you want to see the name of the volcano in the result, '
-        'you need to add "NAME" attribute for point data or "GUNUNG" '
-        'attribute for polygon data.')
-    exposure_input = tr(
-        'Vector polygon layer extracted from OSM where each polygon '
-        'represents the footprint of a building.')
-    output = tr(
-        'Vector layer contains Map of building exposed to volcanic hazard '
-        'zones for each Kawasan Rawan Bencana or radius.')
 
     parameters = OrderedDict([
         # The list of radii in km for volcano point hazard

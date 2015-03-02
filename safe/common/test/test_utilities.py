@@ -33,7 +33,8 @@ from safe.common.utilities import (
     get_non_conflicting_attribute_name,
     temp_dir,
     log_file_path,
-    romanise)
+    romanise,
+    add_to_list)
 
 
 def print_class(array, result_class, expected_result):
@@ -328,6 +329,26 @@ class TestUtilities(unittest.TestCase):
             result.append(romanise(value))
         message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
         self.assertEqual(result, expected_result, message)
+
+    def test_add_to_list(self):
+        """Test for add_to_list function
+        """
+        list_original = ['a', 'b', ['a'], {'a': 'b'}]
+        list_a = ['a', 'b', ['a'], {'a': 'b'}]
+        # add same immutable element
+        list_b = add_to_list(list_a, 'b')
+        assert list_b == list_original
+        # add list
+        list_b = add_to_list(list_a, ['a'])
+        assert list_b == list_original
+        # add same mutable element
+        list_b = add_to_list(list_a, {'a': 'b'})
+        assert list_b == list_original
+        # add new mutable element
+        list_b = add_to_list(list_a, 'c')
+        assert len(list_b) == (len(list_original) + 1)
+        assert list_b[-1] == 'c'
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestUtilities)

@@ -77,11 +77,38 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
                 'id': 'ClassifiedHazardBuildingImpactFunction',
                 'name': tr('Classified Hazard Building Impact Function'),
                 'impact': tr('Be impacted'),
+                'title': tr('Be impacted by each hazard class'),
                 'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'To assess the impacts of classified hazards in raster '
                     'format on building vector layer.'),
+                'detailed_description': tr(
+                    'This function will use the class from the hazard layer '
+                    'that has been identified by the user which one is low, '
+                    'medium, or high from the parameter that user input. '
+                    'After that, this impact function will calculate the '
+                    'building will be impacted per each class for class in '
+                    'the hazard layer. Finally, it will show the result and '
+                    'the total of building that will be affected for the '
+                    'hazard given.'),
+                'hazard_input': tr(
+                    'A hazard raster layer where each cell represents the '
+                    'class of the hazard. There should be 3 classes: e.g. '
+                    '1, 2, and 3.'),
+                'exposure_input': tr(
+                    'Vector polygon layer which can be extracted from OSM '
+                    'where each polygon represents the footprint of a '
+                    'building.'),
+                'output': tr(
+                    'The impact layer will contain all structures that were '
+                    'exposed to the highest class (3) and a summary table '
+                    'containing the number of structures in each class.'),
+                'actions': tr(
+                    'Provide details about how many building would likely be '
+                    'impacted for each hazard class.'),
+                'limitations': [tr('The number of classes is three.')],
+                'citations': [],
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
@@ -107,31 +134,6 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
     # Function documentation
     target_field = 'DAMAGED'
     affected_field = 'affected'
-    title = tr('Be impacted by each hazard class')
-    synopsis = tr(
-        'To assess the impacts of classified hazards in raster format on '
-        'building vector layer.')
-    actions = tr(
-        'Provide details about how many building would likely be impacted for '
-        'each hazard class.')
-    hazard_input = tr(
-        'A hazard raster layer where each cell represents the class of the '
-        'hazard. There should be 3 classes: e.g. 1, 2, and 3.')
-    exposure_input = tr(
-        'Vector polygon layer which can be extracted from OSM where each '
-        'polygon represents the footprint of a building.')
-    output = tr(
-        'The impact layer will contain all structures that were exposed to '
-        'the highest class (3) and a summary table containing the number of '
-        'structures in each class.')
-    detailed_description = tr(
-        'This function will use the class from the hazard layer that has been '
-        'identified by the user which one is low, medium, or high from the '
-        'parameter that user input. After that, this impact function will '
-        'calculate the building will be impacted per each class for class in '
-        'the hazard layer. Finally, it will show the result and the total of '
-        'building that will be affected for the hazard given.')
-    limitation = tr('The number of classes is three.')
 
     # parameters
     parameters = OrderedDict([

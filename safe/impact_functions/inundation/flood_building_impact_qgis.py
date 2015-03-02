@@ -65,9 +65,17 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 'id': 'FloodNativePolygonExperimentalFunction',
                 'name': tr('Flood Native Polygon Experimental Function'),
                 'impact': tr('Be-flooded'),
+                'title': tr('Be flooded (experimental)'),
                 'author': 'Dmitry Kolesov',
                 'date_implemented': 'N/A',
                 'overview': tr('N/A'),
+                'detailed_description': tr('N/A'),
+                'hazard_input': '',
+                'exposure_input': '',
+                'output': '',
+                'actions': '',
+                'limitations': [],
+                'citations': [],
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
@@ -84,8 +92,6 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
                 }
             }
             return dict_meta
-
-    title = tr('Be flooded (experimental)')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value

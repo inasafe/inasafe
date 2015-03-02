@@ -31,7 +31,6 @@ from safe.impact_functions.core import (
     requirements_met,
     get_function_title,
     parse_single_requirement,
-    get_metadata,
     aggregate,
     convert_to_old_keywords,
     get_admissible_plugins,
@@ -45,7 +44,6 @@ from safe.storage.core import read_layer
 from safe.utilities.utilities import read_file_keywords
 from safe.defaults import default_minimum_needs
 from safe.impact_functions.utilities import (
-    pretty_string,
     admissible_plugins_to_str)
 from safe.definitions import converter_dict
 from safe.impact_functions.impact_function_metadata import (
@@ -117,8 +115,6 @@ class F1(FunctionProvider):
                     datatype=='population'
 
     """
-    title = 'Title for F1'
-
     class Metadata(ImpactFunctionMetadata):
         """Metadata for Basic Function Core.
         """
@@ -137,6 +133,7 @@ class F1(FunctionProvider):
             dict_meta = {
                 'id': 'F1',
                 'name': 'F1',
+                'title': 'Title for F1',
                 'impact': 'Be affected',
                 'author': 'N/A',
                 'date_implemented': 'N/A',
@@ -185,6 +182,7 @@ class F2(FunctionProvider):
             dict_meta = {
                 'id': 'F2',
                 'name': 'F2',
+                'title': 'Title for F2',
                 'impact': 'Be affected',
                 'author': 'N/A',
                 'date_implemented': 'N/A',
@@ -231,6 +229,7 @@ class F3(FunctionProvider):
             dict_meta = {
                 'id': 'F3',
                 'name': 'F3',
+                'title': 'F3',
                 'impact': 'Be affected',
                 'author': 'N/A',
                 'date_implemented': 'N/A',
@@ -600,29 +599,6 @@ class TestCore(unittest.TestCase):
                         'layertype': 'vector'}
         message = 'Get %s should be % s' % (parsed_req, expected_req)
         assert parsed_req == expected_req, message
-
-    def test_pretty_string(self):
-        """Test return pretty string from list or string."""
-        string = 'Aloha'
-        expected_string = 'Aloha'
-        real_string = pretty_string(string)
-        self.assertEqual(expected_string, real_string, 'String not Ok')
-
-        test_list = ['a', 'b', 'c']
-        expected_string2 = 'a, b, c'
-        real_string2 = pretty_string(test_list)
-        message = 'Get %s should be % s' % (real_string2, expected_string2)
-        self.assertEqual(expected_string2, real_string2, message)
-
-    def test_get_documentation(self):
-        """Test get_documentation for a function"""
-        dict_doc = get_metadata('Basic Function Core')
-        message = ('title should be Basic Function but found %s \n' % (
-            dict_doc['title']))
-        message += str(dict_doc)
-        for key, value in dict_doc.iteritems():
-            print key + ':\t' + str(value)
-        assert dict_doc['title'] == 'Basic Function Core', message
 
     def test_default_needs(self):
         """default calculated needs are as expected
