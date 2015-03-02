@@ -119,7 +119,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function.Metadata.allowed_data_types('earthquake')
-        expected_result = ['continuous', 'polygon']
+        expected_result = ['continuous']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -154,14 +154,14 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for allowed_layer_constraints API."""
         impact_function = EarthquakeBuildingImpactFunction()
         result = impact_function.Metadata.allowed_layer_constraints()
-        expected_result = [
-            layer_vector_polygon, layer_raster_continuous, layer_vector_point]
+        expected_result = [layer_raster_continuous, layer_vector_polygon,
+                           layer_vector_point]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
-        result = impact_function.Metadata. allowed_layer_constraints(
+        result = impact_function.Metadata.allowed_layer_constraints(
             'hazard')
-        expected_result = [layer_vector_polygon, layer_raster_continuous]
+        expected_result = [layer_raster_continuous]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
@@ -226,7 +226,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
 
         result = impact_function.Metadata.categories_for_layer(
             layer_type='vector', data_type='polygon')
-        expected_result = ['hazard', 'exposure']
+        expected_result = ['exposure']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
