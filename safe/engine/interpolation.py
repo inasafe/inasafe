@@ -179,13 +179,13 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
 
     msg = ('Parameter attribute_name must be either a string or None. '
            'I got %s' % (str(type(exposure)))[1:-1])
-    verify(attribute_name is None
-           or isinstance(attribute_name, basestring), msg)
+    verify(attribute_name is None or
+           isinstance(attribute_name, basestring), msg)
 
     msg = ('Parameter layer_name must be either a string or None. '
            'I got %s' % (str(type(exposure)))[1:-1])
-    verify(layer_name is None
-           or isinstance(layer_name, basestring), msg)
+    verify(layer_name is None or
+           isinstance(layer_name, basestring), msg)
 
     # Establish default names
     if layer_name is None:
@@ -194,12 +194,12 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
     if hazard.is_raster and attribute_name is None:
         layer_name = hazard.get_name()
 
-    if (exposure.is_raster and hazard.is_vector and hazard.is_polygon_data
-            and attribute_name is None):
+    if (exposure.is_raster and hazard.is_vector and hazard.is_polygon_data and
+            attribute_name is None):
         attribute_name = exposure.get_name()
 
-    if (hazard.is_raster and exposure.is_vector and exposure.is_point_data
-            and attribute_name is None):
+    if (hazard.is_raster and exposure.is_vector and exposure.is_point_data and
+            attribute_name is None):
         attribute_name = hazard.get_name()
 
     # Launder for shape files

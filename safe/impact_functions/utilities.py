@@ -22,10 +22,7 @@ def admissible_plugins_to_str(plugin_list):
     result = '\n------------ Admissible Plugins ------------------------\n'
     for plugin, func in plugin_list.iteritems():
         result += 'ID: %s\n' % plugin
-        if hasattr(func, 'title'):
-            result += 'Title: %s\n' % func.title
-        else:
-            result += 'Title: %s\n' % func.__class__
+        result += 'Title: %s\n' % get_function_title(func)
 
     result += '---\n'
     return result
@@ -53,63 +50,6 @@ def keywords_to_str(keywords):
             for item, value in list_item.iteritems():
                 result += 'Key: %s Value: %s\n' % (item, value)
     return result
-
-
-def pretty_string(myArg):
-    """A helper function that return a pretty string according to the args
-
-    Args:
-
-      * myArs = string or list
-
-    Returns:
-
-      * if myArgs is string return myArgs
-
-        if myArgs is list return each element as string separated by ','
-    """
-    if isinstance(myArg, str):
-        return myArg
-    elif isinstance(myArg, list):
-        return ', '.join(myArg)
-    else:
-        return str(myArg)
-
-
-def remove_double_spaces(myStr):
-    """Remove double spaces from a string. Return the string without any
-        double spaces
-    """
-    while myStr.find('  ') != -1:
-        myStr = myStr.replace('  ', ' ')
-
-    return myStr
-
-
-def add_to_list(my_list, my_element):
-    """Helper function to add new my_element to my_list based on its type
-    . Add as new element if it's not a list, otherwise extend to the list
-    if it's a list.
-    It's also guarantee that all elements are unique
-
-    :param my_list: A list
-    :type my_list: list
-
-    :param my_element: A new element
-    :type my_element: str, list
-
-    :returns: A list with unique element
-    :rtype: list
-
-    """
-    if type(my_element) is list:
-        for element in my_element:
-            my_list = add_to_list(my_list, element)
-    else:
-        if my_element not in my_list:
-            my_list.append(my_element)
-
-    return my_list
 
 
 def get_list_id(list_dictionary):
@@ -172,3 +112,35 @@ def is_duplicate_impact_function(impact_function):
         return True
     else:
         return False
+
+
+def function_name(impact_function):
+    """Return the name for the impact function.
+
+    It assume that the impact function is valid and has name in its metadata.
+
+    :param impact_function: An impact function.
+    :type impact_function: FunctionProvider
+
+    :returns: The name of the impact function.
+    :rtype: str
+    """
+    # noinspection PyUnresolvedReferences
+    return impact_function.Metadata.get_metadata()['name']
+
+
+def get_function_title(func):
+    """Get title for impact function
+
+    :param func: Impact function class
+
+    :returns:  It's title if available as an attribute in the class
+        description, otherwise what is returned by the function
+        pretty_function_name.
+    :rtype: str
+    """
+    try:
+        title = func.Metadata.get_metadata()['title']
+    except KeyError:
+        title = func.__class__.__name__
+    return title

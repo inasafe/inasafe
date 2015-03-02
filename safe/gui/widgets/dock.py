@@ -455,12 +455,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         basics_list.add(m.Paragraph(
             self.tr(
                 'Make sure you have defined keywords for your hazard and '
-                'exposure layers. You can do this using the keywords icon '),
+                'exposure layers. You can do this using the '
+                'keywords creation wizard '),
             m.Image(
-                'file:///%s/img/icons/show-keyword-editor.svg' % (
-                    resources_path()),
-                **SMALL_ICON_STYLE),
-            self.tr(' in the InaSAFE toolbar.')))
+                'file:///%s/img/icons/show-keyword-wizard.svg' %
+                (resources_path()), **SMALL_ICON_STYLE),
+            self.tr(' in the toolbar.')))
         basics_list.add(m.Paragraph(
             self.tr('Click on the '),
             m.ImportantText(self.tr('Run'), **KEYWORD_STYLE),
@@ -570,8 +570,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def save_auxiliary_files(self, layer, destination):
         """Save auxiliary files when using the 'save as' function.
 
-        If some auxiliary files (.xml or .keywords) exist, this function will copy them
-        when the 'save as' function is used on the layer.
+        If some auxiliary files (.xml or .keywords) exist, this function will
+        copy them when the 'save as' function is used on the layer.
 
         :param layer: The layer which has been saved as.
         :type layer: QgsMapLayer
@@ -600,11 +600,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         except (OSError, IOError):
             display_critical_message_bar(
-                title=self.tr('Error while saving'), message=self.tr("The destination location must be writable."))
+                title=self.tr('Error while saving'),
+                message=self.tr("The destination location must be writable."))
 
         except Exception:
             display_critical_message_bar(
-                title=self.tr('Error while saving'), message=self.tr("Something went wrong."))
+                title=self.tr('Error while saving'),
+                message=self.tr("Something went wrong."))
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)

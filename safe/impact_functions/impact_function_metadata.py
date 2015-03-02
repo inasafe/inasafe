@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
-from safe.impact_functions.utilities import add_to_list
+from safe.common.utilities import add_to_list
 
 
 class ImpactFunctionMetadata(object):
@@ -290,15 +290,39 @@ class ImpactFunctionMetadata(object):
             'id',
             'name',
             'impact',
+            'title',
             'author',
             'date_implemented',
             'overview',
-            'categories'
+            'detailed_description',
+            'hazard_input',
+            'exposure_input',
+            'output',
+            'actions',
+            'limitations',  # list of string
+            'citations',  # list of string
+            'categories'  # dict
         ]
 
         for key in expected_keys:
             if key not in metadata_dict.keys():
                 return False, 'key %s not in metadata' % key
+
+            if key in expected_keys[-3:-1]:
+                if type(metadata_dict[key]) is not list:
+                    message = ('Value of key %s is not list but %s' %
+                               (key, type(metadata_dict[key])))
+                    return False, message
+            elif key == expected_keys[-1]:
+                if type(metadata_dict[key]) is not dict:
+                    message = ('Value of key %s is not dict but %s' %
+                               (key, type(metadata_dict[key])))
+                    return False, message
+            else:
+                if type(metadata_dict[key]) not in [str, unicode]:
+                    message = ('Value of key %s is not str but %s' %
+                               (key, type(metadata_dict[key])))
+                    return False, message
 
         expected_keys = [
             'hazard',

@@ -41,6 +41,7 @@ from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 class QgsLogHandler(logging.Handler):
     """A logging handler that will log messages to the QGIS logging console."""
 
@@ -63,6 +64,7 @@ class QgsLogHandler(logging.Handler):
                 'handle the full log')
             print message
             QgsMessageLog.logMessage(message, 'InaSAFE', 0)
+
 
 def add_logging_handler_once(logger, handler):
     """A helper to add a handler to a logger, ensuring there are no duplicates.

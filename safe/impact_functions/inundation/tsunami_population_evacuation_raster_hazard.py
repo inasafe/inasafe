@@ -87,11 +87,45 @@ class TsunamiEvacuationFunction(FunctionProvider):
                 'id': 'TsunamiEvacuationFunction',
                 'name': tr('Tsunami Evacuation Function'),
                 'impact': tr('Need evacuation'),
+                'title': tr('Need evacuation'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
                 'overview': tr(
-                    'To assess the impacts of tsunami inundation '
-                    'in raster format on population.'),
+                    'To assess the impacts of tsunami inundation in raster '
+                    'format on population.'),
+                'detailed_description': tr(
+                    'The population subject to inundation exceeding a '
+                    'threshold (default 0.7m) is calculated and returned as '
+                    'a raster layer. In addition the total number and the '
+                    'required needs in terms of the BNPB (Perka 7) are '
+                    'reported. The threshold can be changed and even contain '
+                    'multiple numbers in which case evacuation and needs are '
+                    'calculated using the largest number with population '
+                    'breakdowns provided for the smaller numbers. The '
+                    'population raster is resampled to the resolution of the '
+                    'hazard raster and is rescaled so that the resampled '
+                    'population counts reflect estimates of population count '
+                    'per resampled cell. The resulting impact layer has the '
+                    'same resolution and reflects population count per cell '
+                    'which are affected by inundation.'),
+                'hazard_input': tr(
+                    'A hazard raster layer where each cell represents tsunami '
+                    'depth (in meters).'),
+                'exposure_input': tr(
+                    'An exposure raster layer where each cell represent '
+                    'population count.'),
+                'output': tr(
+                    'Raster layer contains population affected and the '
+                    'minimum needs based on the population affected.'),
+                'actions': tr(
+                    'Provide details about how many people would likely need '
+                    'to be evacuated, where they are located and what '
+                    'resources would be required to support them.'),
+                'limitations': [tr(
+                    'The default threshold of 0.7 meter was selected based on '
+                    'consensus, not hard evidence.')
+                ],
+                'citations': [],
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
@@ -112,41 +146,7 @@ class TsunamiEvacuationFunction(FunctionProvider):
             }
             return dict_meta
 
-    title = tr('Need evacuation')
     defaults = get_defaults()
-
-    # Function documentation
-    synopsis = tr(
-        'To assess the impacts of tsunami inundation in raster '
-        'format on population.')
-    actions = tr(
-        'Provide details about how many people would likely need to be '
-        'evacuated, where they are located and what resources would be '
-        'required to support them.')
-    detailed_description = tr(
-        'The population subject to inundation exceeding a threshold '
-        '(default 0.7m) is calculated and returned as a raster layer. In '
-        'addition the total number and the required needs in terms of the '
-        'BNPB (Perka 7) are reported. The threshold can be changed and even '
-        'contain multiple numbers in which case evacuation and needs are '
-        'calculated using the largest number with population breakdowns '
-        'provided for the smaller numbers. The population raster is resampled '
-        'to the resolution of the hazard raster and is rescaled so that the '
-        'resampled population counts reflect estimates of population count '
-        'per resampled cell. The resulting impact layer has the same '
-        'resolution and reflects population count per cell which are affected '
-        'by inundation.')
-    hazard_input = tr(
-        'A hazard raster layer where each cell represents tsunami depth '
-        '(in meters).')
-    exposure_input = tr(
-        'An exposure raster layer where each cell represent population count.')
-    output = tr(
-        'Raster layer contains population affected and the minimum needs '
-        'based on the population affected.')
-    limitation = tr(
-        'The default threshold of 0.7 meter was selected based on consensus, '
-        'not hard evidence.')
 
     # Configurable parameters
     # TODO: Share the mimimum needs and make another default value

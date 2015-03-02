@@ -17,9 +17,10 @@ from safe.gis.polygon import inside_polygon
 from safe.utilities.i18n import tr
 from safe.defaults import default_minimum_needs
 from utilities import (
-    remove_double_spaces,
     is_duplicate_impact_function,
-    get_python_file)
+    get_python_file,
+    get_function_title,
+    function_name)
 from safe.definitions import converter_dict
 
 
@@ -168,24 +169,6 @@ def population_rounding(number):
     return population_rounding_full(number)[0]
 
 
-def get_function_title(func):
-    """Get title for impact function
-
-    :param func: Impact function class
-
-    :returns:  It's title if available as an attribute in the class
-        description, otherwise what is returned by the function
-        pretty_function_name.
-    :rtype: str
-    """
-    if hasattr(func, 'title'):
-        title = func.title
-    else:
-        title = function_name(func)
-
-    return tr(title)
-
-
 def get_plugins(name=None):
     """Retrieve a list of plugins that match the name you pass.
 
@@ -249,21 +232,6 @@ def remove_impact_function(impact_function):
     if impact_function in FunctionProvider.plugins:
         FunctionProvider.plugins.remove(impact_function)
     del impact_function
-
-
-def function_name(impact_function):
-    """Return the name for the impact function.
-
-    It assume that the impact function is valid and has name in its metadata.
-
-    :param impact_function: An impact function.
-    :type impact_function: FunctionProvider
-
-    :returns: The name of the impact function.
-    :rtype: str
-    """
-    # noinspection PyUnresolvedReferences
-    return impact_function.Metadata.get_metadata()['name']
 
 
 def requirements_collect(func):
@@ -681,77 +649,6 @@ def parse_single_requirement(requirement):
         else:
             pass
 
-    return retval
-
-
-def get_metadata(func):
-    """Collect metadata for an impact function and return it as a dictionary.
-
-    :param func: Name of function.
-
-    :returns: A dictionary containing:
-        * author : string (identified by :author)
-        * synopsis : string (first line)
-        * rating : integer (identified by :rating)
-        * param_req : list of param (identified by :param requires)
-        * detail : detail description (function properties)
-        * citation : list of citation in string (function properties)
-        * limitation : string (function properties)
-    :rtype: dict
-    """
-    retval = OrderedDict()
-    retval['unique_identifier'] = func
-
-    plugins_dict = dict([(function_name(p), p)
-                         for p in FunctionProvider.plugins])
-    if func not in plugins_dict.keys():
-        return None
-    else:
-        func = plugins_dict[func]
-
-    author_tag = ':author'
-    rating_tag = ':rating'
-
-    # attributes
-    synopsis = 'synopsis'
-    actions = 'actions'
-    # citations must be a list
-    citations = 'citations'
-    detailed_description = 'detailed_description'
-    hazard_input = 'hazard_input'
-    exposure_input = 'exposure_input'
-    limitation = 'limitation'
-    output = 'output'
-
-    if hasattr(func, '__doc__') and func.__doc__:
-        doc_str = func.__doc__
-        for line in doc_str.split('\n'):
-            doc_line = remove_double_spaces(line)
-            doc_line = doc_line.strip()
-
-            if doc_line.startswith(author_tag):
-                retval['author'] = remove_double_spaces(
-                    doc_line[len(author_tag) + 1:])
-            elif doc_line.startswith(rating_tag):
-                retval['rating'] = doc_line[len(rating_tag) + 1:]
-    retval['title'] = get_function_title(func)
-
-    if hasattr(func, synopsis):
-        retval[synopsis] = func.synopsis
-    if hasattr(func, actions):
-        retval[actions] = func.actions
-    if hasattr(func, citations):
-        retval[citations] = func.citations
-    if hasattr(func, detailed_description):
-        retval[detailed_description] = func.detailed_description
-    if hasattr(func, hazard_input):
-        retval[hazard_input] = func.hazard_input
-    if hasattr(func, exposure_input):
-        retval[exposure_input] = func.exposure_input
-    if hasattr(func, output):
-        retval[output] = func.output
-    if hasattr(func, limitation):
-        retval[limitation] = func.limitation
     return retval
 
 
