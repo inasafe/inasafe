@@ -37,7 +37,7 @@ class TestFloodBuildingIF(unittest.TestCase):
         """Test flood building impact function works (flood is polygon)."""
         building = 'test_flood_building_impact_exposure.shp'
         flood_data = 'test_flood_building_impact_hazard.shp'
-        plugin_name = 'FloodBuildingImpactFunction'
+        plugin_name = 'FloodRasterBuildingImpactFunction'
 
         hazard_filename = os.path.join(TESTDATA, flood_data)
         exposure_filename = os.path.join(TESTDATA, building)
@@ -78,7 +78,7 @@ class TestFloodBuildingIF(unittest.TestCase):
             hazard_layer = read_layer(hazard_filename)
             exposure_layer = read_layer(exposure_filename)
 
-            plugin_name = 'FloodBuildingImpactFunction'
+            plugin_name = 'FloodRasterBuildingImpactFunction'
             impact_function = get_plugin(plugin_name)
 
             impact_vector = calculate_impact(

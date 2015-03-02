@@ -21,8 +21,8 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.earthquake.earthquake_building_impact import (
     EarthquakeBuildingImpactFunction)
-from safe.impact_functions.inundation.flood_OSM_building_impact import (
-    FloodBuildingImpactFunction)
+from safe.impact_functions.inundation.flood_raster_OSM_building_impact import (
+    FloodRasterBuildingImpactFunction)
 from safe.impact_functions.inundation.flood_building_impact_qgis import (
     FloodNativePolygonExperimentalFunction)
 from safe.impact_functions.volcanic.volcano_building_impact import (
@@ -327,7 +327,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected_result = [
             VolcanoBuildingImpact.Metadata.get_metadata(),
             EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
-            FloodBuildingImpactFunction.Metadata.get_metadata(),
+            FloodRasterBuildingImpactFunction.Metadata.get_metadata(),
             FloodNativePolygonExperimentalFunction.Metadata.get_metadata(),
             ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
@@ -341,7 +341,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected_result = [
             VolcanoBuildingImpact.Metadata.get_metadata(),
             EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
-            FloodBuildingImpactFunction.Metadata.get_metadata(),
+            FloodRasterBuildingImpactFunction.Metadata.get_metadata(),
             FloodNativePolygonExperimentalFunction.Metadata.get_metadata(),
             ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
