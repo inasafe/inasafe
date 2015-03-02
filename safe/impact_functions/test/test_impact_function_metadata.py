@@ -145,8 +145,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-        result = impact_function.Metadata .allowed_units('flood', 'continuous')
-        expected_result = [unit_wetdry, unit_metres_depth, unit_feet_depth]
+        result = impact_function.Metadata.allowed_units('flood', 'continuous')
+        expected_result = [unit_metres_depth, unit_feet_depth]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
@@ -362,10 +362,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
     def test_get_hazard_layer_constraint(self):
         """Test for get_hazard_layer_constraint."""
         impact_function = FloodRasterBuildingImpactFunction()
-        expected_layer_constraint = [
-            layer_vector_polygon,
-            layer_raster_continuous
-        ]
+        expected_layer_constraint = [layer_raster_continuous]
         layer_constraints \
             = impact_function.Metadata.get_hazard_layer_constraint()
         message = 'Expected %s but got %s' % (

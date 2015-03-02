@@ -38,7 +38,10 @@ class TestRealImpactFunctions(unittest.TestCase):
             'Flood Evacuation Function',
             admissible_plugins, msg)
         self.assertIn(
-            'Flood Building Impact Function',
+            'Flood Vector Building Impact Function',
+            admissible_plugins, msg),
+        self.assertIn(
+            'Flood Raster Building Impact Function',
             admissible_plugins, msg)
         self.assertIn(
             'ITB Fatality Function',
@@ -87,21 +90,22 @@ class TestRealImpactFunctions(unittest.TestCase):
         # This one gets all the flood related impact functions
 
         # Try to get general inundation building impact function
-        f_name = 'Flood Building Impact Function'
+        f_name = 'Flood Evacuation Function'
 
         admissible_plugins = get_admissible_plugins(dict1)
-        assert len(admissible_plugins) >= 2
+        assert len(admissible_plugins) >= 1
         # assert 'W B Flood Evacuation Function' in admissible_plugins
         assert f_name in admissible_plugins
         # assert 'Flood Road Impact Function' in admissible_plugins
 
-        dict1 = {'category': 'hazard', 'subcategory': 'tsunami'}
+        dict1 = {'category': 'hazard', 'subcategory': 'flood'}
         dict2 = dict(category='exposure', subcategory='structure')
 
         # Add layertype
         # Not required for flood building impact
-        # dict1['layertype'] = 'raster'
+        dict1['layertype'] = 'raster'
         dict2['layertype'] = 'vector'
+        # dict1['layertype'] = 'vector'
         admissible_plugins = get_admissible_plugins([dict1, dict2])
 
         msg = 'Expected name "%s" in admissible_plugins: %s' % (
