@@ -205,8 +205,9 @@ class WizardDialogTest(unittest.TestCase):
         # are already assigned
         message = ('Invalid Next button state in step 1! Enabled while '
                    'there\'s nothing selected yet')
-        self.assertTrue(not dialog.pbnNext.isEnabled()
-                        or len(dialog.lstCategories.selectedItems()), message)
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstCategories.selectedItems()), message)
         # Select hazard one
         dialog.lstCategories.setCurrentRow(hazard_index)
         message = ('Invalid Next button state in step 1! Still disabled after '
@@ -241,10 +242,11 @@ class WizardDialogTest(unittest.TestCase):
             set(subcategories), set(expected_subcategories), message)
         # The Next button should be on disabled state first unless the keywords
         # are already assigned
-        self.assertTrue(not dialog.pbnNext.isEnabled()
-                        or len(dialog.lstSubcategories.selectedItems()),
-                        'Invalid Next button state in step 2! '
-                        'Enabled while there\'s nothing selected yet')
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstSubcategories.selectedItems()),
+            'Invalid Next button state in step 2! '
+            'Enabled while there\'s nothing selected yet')
         # Set to tsunami subcategories
         dialog.lstSubcategories.setCurrentRow(tsunami_index)
         message = ('Invalid Next button state in step 2! Still disabled after '
@@ -279,8 +281,9 @@ class WizardDialogTest(unittest.TestCase):
         # are already assigned
         message = ('Invalid Next button state in step 3! Enabled while '
                    'there\'s nothing selected yet')
-        self.assertTrue(not dialog.pbnNext.isEnabled()
-                        or len(dialog.lstUnits.selectedItems()), message)
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstUnits.selectedItems()), message)
         dialog.lstUnits.setCurrentRow(feet_unit_index)
         message = ('Invalid Next button state in step 3! Enabled while '
                    'there\'s nothing selected yet')
@@ -311,8 +314,9 @@ class WizardDialogTest(unittest.TestCase):
         # are already assigned
         message = ('Invalid Next button state in step 4! Enabled while '
                    'there\'s nothing selected yet')
-        self.assertTrue(not dialog.pbnNext.isEnabled()
-                        or len(dialog.lstFields.selectedItems()), message)
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstFields.selectedItems()), message)
         dialog.lstFields.setCurrentRow(gridcode_index)
         message = ('Invalid Next button state in step 4! Still disabled after '
                    'an item selected')

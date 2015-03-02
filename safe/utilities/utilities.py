@@ -378,7 +378,7 @@ def get_safe_impact_function(function_name=None):
 
 def replace_accentuated_characters(message):
     """Normalize unicode data in Python to remove umlauts, accents etc.
-    
+
     :param message: The string where to delete accentuated characters.
     :type message: str
 
