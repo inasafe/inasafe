@@ -31,7 +31,8 @@ def display_information_message_box(parent=None, title=None, message=None):
 
 
 def display_information_message_bar(
-        title=None, message=None, more_details=None, button_text=tr('Show details ...'), duration=8):
+        title=None, message=None, more_details=None,
+        button_text=tr('Show details ...'), duration=8):
     """
     Display an information message bar.
 
@@ -57,15 +58,16 @@ def display_information_message_bar(
         button = QPushButton(widget)
         button.setText(button_text)
         button.pressed.connect(
-            lambda: display_information_message_box(title=title, message=more_details)
-        )
+            lambda: display_information_message_box(
+                title=title, message=more_details))
         widget.layout().addWidget(button)
 
     iface.messageBar().pushWidget(widget, QgsMessageBar.INFO, duration)
 
 
 def display_success_message_bar(
-        title=None, message=None, more_details=None, button_text=tr('Show details ...'), duration=8):
+        title=None, message=None, more_details=None,
+        button_text=tr('Show details ...'), duration=8):
     """
     Display a success message bar.
 
@@ -91,8 +93,8 @@ def display_success_message_bar(
         button = QPushButton(widget)
         button.setText(button_text)
         button.pressed.connect(
-            lambda: display_information_message_box(title=title, message=more_details)
-        )
+            lambda: display_information_message_box(
+                title=title, message=more_details))
         widget.layout().addWidget(button)
 
     if QGis.QGIS_VERSION_INT >= 20700:
@@ -115,7 +117,8 @@ def display_warning_message_box(parent=None, title=None, message=None):
 
 
 def display_warning_message_bar(
-        title=None, message=None, more_details=None, button_text=tr('Show details ...'), duration=8):
+        title=None, message=None, more_details=None,
+        button_text=tr('Show details ...'), duration=8):
     """
     Display a warning message bar.
 
@@ -141,8 +144,8 @@ def display_warning_message_bar(
         button = QPushButton(widget)
         button.setText(button_text)
         button.pressed.connect(
-            lambda: display_warning_message_box(title=title, message=more_details)
-        )
+            lambda: display_warning_message_box(
+                title=title, message=more_details))
         widget.layout().addWidget(button)
 
     iface.messageBar().pushWidget(widget, QgsMessageBar.WARNING, duration)
@@ -162,7 +165,8 @@ def display_critical_message_box(parent=None, title=None, message=None):
 
 
 def display_critical_message_bar(
-        title=None, message=None, more_details=None, button_text=tr('Show details ...'), duration=8):
+        title=None, message=None, more_details=None,
+        button_text=tr('Show details ...'), duration=8):
     """
     Display a critical message bar.
 
@@ -188,8 +192,8 @@ def display_critical_message_bar(
         button = QPushButton(widget)
         button.setText(button_text)
         button.pressed.connect(
-            lambda: display_critical_message_box(title=title, message=more_details)
-        )
+            lambda: display_critical_message_box(
+                title=title, message=more_details))
         widget.layout().addWidget(button)
 
     iface.messageBar().pushWidget(widget, QgsMessageBar.CRITICAL, duration)
