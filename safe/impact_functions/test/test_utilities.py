@@ -61,7 +61,7 @@ class TestUtilities(unittest.TestCase):
         """Test function_name."""
         impact_function = FloodRasterBuildingImpactFunction()
         impact_function_name = function_name(impact_function)
-        expected_name = "Flood Building Impact Function"
+        expected_name = "Flood Raster Building Impact Function"
         message = "Expected %s but got %s" % (
             impact_function_name, expected_name)
         self.assertEqual(
