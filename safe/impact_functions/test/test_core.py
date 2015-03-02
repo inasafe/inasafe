@@ -612,10 +612,10 @@ class TestCore(unittest.TestCase):
         result = OrderedDict(
             [[r['table name'], r['amount']] for r in result])
 
-        assert (result['Rice [kg]'] == 56
-                and result['Drinking Water [l]'] == 350
-                and result['Clean Water [l]'] == 1340
-                and result['Family Kits'] == 4)
+        assert (result['Rice [kg]'] == 56 and
+                result['Drinking Water [l]'] == 350 and
+                result['Clean Water [l]'] == 1340 and
+                result['Family Kits'] == 4)
 
         result = evacuated_population_needs(10, minimum_needs)['single']
         result = OrderedDict(
@@ -637,10 +637,10 @@ class TestCore(unittest.TestCase):
         result = OrderedDict(
             [[r['table name'], r['amount']] for r in result])
 
-        assert (result['Rice [kg]'] == 40
-                and result['Drinking Water [l]'] == 30
-                and result['Clean Water [l]'] == 20
-                and result['Family Kits'] == 10)
+        assert (result['Rice [kg]'] == 40 and
+                result['Drinking Water [l]'] == 30 and
+                result['Clean Water [l]'] == 20 and
+                result['Family Kits'] == 10)
         result = evacuated_population_needs(10, minimum_needs)['single']
         result = OrderedDict(
             [[r['table name'], r['amount']] for r in result])
