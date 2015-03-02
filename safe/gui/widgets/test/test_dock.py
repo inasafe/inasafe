@@ -633,33 +633,44 @@ class TestDock(TestCase):
         self.assertTrue(expected in html, message)
 
     def test_layer_saved_as_with_keywords_and_xml(self):
-        """Check that auxiliary files are well copied when they exist and the 'saved as' is used."""
+        """Check that auxiliary files are well copied when they exist and the
+        'saved as' is used.
+        """
 
         layer_path = os.path.join(TESTDATA, 'tsunami_building_assessment.shp')
         layer, layer_type = load_layer(layer_path)
 
-        new_name = unique_filename(prefix = 'tsunami_building_assessment_saved_as_')
-        DOCK.save_auxiliary_files(layer,join(TESTDATA, '%s.shp' % new_name))
-        new_keywords_filepath = os.path.join(TESTDATA, '%s.keywords' % new_name)
+        new_name = unique_filename(
+            prefix='tsunami_building_assessment_saved_as_')
+        DOCK.save_auxiliary_files(
+            layer, join(TESTDATA, '%s.shp' % new_name))
+        new_keywords_filepath = os.path.join(
+            TESTDATA, '%s.keywords' % new_name)
         new_xml_filepath = os.path.join(TESTDATA, '%s.xml' % new_name)
 
         message = 'New auxiliary file does not exist : '
-        self.assertTrue(os.path.isfile(new_keywords_filepath), '%s keywords' % message)
+        self.assertTrue(
+            os.path.isfile(new_keywords_filepath), '%s keywords' % message)
         self.assertTrue(os.path.isfile(new_xml_filepath), '%s xml' % message)
 
     def test_layer_saved_as_without_keywords_and_xml(self):
-        """Check that auxiliary files aren't created when they don't exist and the 'saved as' is used."""
+        """Check that auxiliary files aren't created when they don't exist and
+        the 'saved as' is used.
+        """
 
         layer_path = os.path.join(TESTDATA, 'kecamatan_jakarta_osm.shp')
         layer, layer_type = load_layer(layer_path)
 
-        new_name = unique_filename(prefix = 'kecamatan_jakarta_osm_saved_as')
-        DOCK.save_auxiliary_files(layer,join(TESTDATA, '%s.shp' % new_name))
-        new_keywords_filepath = os.path.join(TESTDATA, '%s.keywords' % new_name)
+        new_name = unique_filename(prefix='kecamatan_jakarta_osm_saved_as')
+        DOCK.save_auxiliary_files(
+            layer, join(TESTDATA, '%s.shp' % new_name))
+        new_keywords_filepath = os.path.join(
+            TESTDATA, '%s.keywords' % new_name)
         new_xml_filepath = os.path.join(TESTDATA, '%s.xml' % new_name)
 
         message = 'New auxiliary file exist : '
-        self.assertFalse(os.path.isfile(new_keywords_filepath), '%s keywords' % message)
+        self.assertFalse(
+            os.path.isfile(new_keywords_filepath), '%s keywords' % message)
         self.assertFalse(os.path.isfile(new_xml_filepath), '%s xml' % message)
 
     def test_new_layers_show_in_canvas(self):
