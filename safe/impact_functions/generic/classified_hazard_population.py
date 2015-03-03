@@ -97,11 +97,36 @@ class ClassifiedHazardPopulationImpactFunction(FunctionProvider):
                 'id': 'ClassifiedHazardPopulationImpactFunction',
                 'name': tr('Classified Hazard Population Impact Function'),
                 'impact': tr('Be impacted by each class'),
+                'title': tr('Be affected by each hazard class'),
                 'author': 'Dianne Bencito',
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'To assess the impacts of classified hazards in raster '
                     'format on population raster layer.'),
+                'detailed_description': tr(
+                    'This function will use the class from the hazard layer '
+                    'that has been identified by the user which one is low, '
+                    'medium, or high from the parameter that user input. '
+                    'After that, this impact function will calculate the '
+                    'people will be affected per each class for class in the '
+                    'hazard layer. Finally, it will show the result and the '
+                    'total of people that will be affected for the hazard '
+                    'given.'),
+                'hazard_input': tr(
+                    'A hazard raster layer where each cell represents the '
+                    'class of the hazard. There should be 3 classes: e.g. '
+                    '1, 2, and 3.'),
+                'exposure_input': tr(
+                    'An exposure raster layer where each cell represent '
+                    'population count.'),
+                'output': tr(
+                    'Map of population exposed to high class and a table with '
+                    'number of people in each class'),
+                'actions': tr(
+                    'Provide details about how many people would likely be '
+                    'affected for each hazard class.'),
+                'limitations': [tr('The number of classes is three.')],
+                'citations': [],
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
@@ -118,32 +143,6 @@ class ClassifiedHazardPopulationImpactFunction(FunctionProvider):
                 }
             }
             return dict_meta
-
-    # Function documentation
-    title = tr(
-        'Be affected by each hazard class')
-    synopsis = tr(
-        'To assess the impacts of classified hazards in raster format on '
-        'population raster layer.')
-    actions = tr(
-        'Provide details about how many people would likely be affected for '
-        'each hazard class.')
-    hazard_input = tr(
-        'A hazard raster layer where each cell represents the class of the '
-        'hazard. There should be 3 classes: e.g. 1, 2, and 3.')
-    exposure_input = tr(
-        'An exposure raster layer where each cell represent population count.')
-    output = tr(
-        'Map of population exposed to high class and a table with number '
-        'of people in each class')
-    detailed_description = tr(
-        'This function will use the class from the hazard layer that has been '
-        'identified by the user which one is low, medium, or high from the '
-        'parameter that user input. After that, this impact function will '
-        'calculate the people will be affected per each class for class in '
-        'the hazard layer. Finally, it will show the result and the total of '
-        'people that will be affected for the hazard given.')
-    limitation = tr('The number of classes is three.')
 
     # Configurable parameters
     defaults = get_defaults()

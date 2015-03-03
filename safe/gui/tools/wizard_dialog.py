@@ -231,8 +231,8 @@ classify_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> measured in <b>%s</b> categorical '
     'unit, and the data column is <b>%s</b>. Below on the left you '
-    'can see all unique values found in that column. Please drag them '
-    'to the right panel in order to classify them to appropriate '
+    'can see all unclassified unique values found in that column. Please '
+    'drag them to the right panel in order to classify them to appropriate '
     'categories.')   # (subcategory, category, unit, field)
 
 # Constants for the layer origin selector
@@ -1034,12 +1034,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             value_as_string = value and unicode(value) or 'NULL'
             assigned = False
             for default_class in default_classes:
-                if (field_type > 9
-                    and value_as_string in default_class['string_defaults']) \
-                        or (field_type < 10
-                            and (default_class['numeric_default_min'] <=
-                                 value < default_class[
-                                 'numeric_default_max'])):
+                if (field_type > 9 and
+                        value_as_string in
+                        default_class['string_defaults']) or \
+                        (field_type < 10 and
+                            (default_class['numeric_default_min'] <= value <
+                                default_class['numeric_default_max'])):
                     assigned_values[default_class['name']] += [value_as_string]
                     assigned = True
             if not assigned:
@@ -1780,8 +1780,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             data_type = ec['data_type']
         else:
             # For aggregation layers, use a simplified test
-            if (keywords and 'category' in keywords
-                    and keywords['category'] == category):
+            if (keywords and 'category' in keywords and
+                    keywords['category'] == category):
                 return True
             if not keywords and is_polygon_layer(layer):
                 return True
@@ -1789,8 +1789,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Get allowed units from selected IF if possible
         imfunc = self.selected_function()
-        if (imfunc and category in imfunc['categories']
-                and 'units' in imfunc['categories'][category]):
+        if (imfunc and category in imfunc['categories'] and
+                    'units' in imfunc['categories'][category]):
             allowed_units = imfunc['categories'][category]['units']
             if type(allowed_units) != list:
                 allowed_units = [allowed_units]
@@ -1827,18 +1827,18 @@ class WizardDialog(QDialog, FORM_CLASS):
                     return False
 
         # Test the category if keywords provided
-        if (keywords and 'category' in keywords
-                and keywords['category'] != category):
+        if (keywords and 'category' in keywords and
+                keywords['category'] != category):
             return False
 
         # Test the subcategory if keywords provided
-        if (keywords and 'subcategory' in keywords
-                and keywords['subcategory'] != subcategory):
+        if (keywords and 'subcategory' in keywords and
+                keywords['subcategory'] != subcategory):
             return False
 
         # Test the units if keywords provided
-        if (allowed_units and keywords and 'units' in keywords
-                and keywords['units'] in allowed_units):
+        if (allowed_units and keywords and 'units' in keywords and
+                keywords['units'] in allowed_units):
             return False
 
         # Finally return True
@@ -2020,8 +2020,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 <b>SOURCE</b>: %s<br/>
                 <b>TYPE</b>: %s<br/><br/>
                 In the next step you will be able to register this layer.
-            """ % (source, is_raster_layer(layer)
-                   and 'raster' or 'vector (%s)' % geom_type)
+            """ % (source, is_raster_layer(layer) and
+                   'raster' or 'vector (%s)' % geom_type)
 
         return label_text
 
@@ -3337,8 +3337,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_classify
             elif self.selected_category()['id'] == 'aggregation':
                 new_step = step_kw_aggregation
-            elif (is_raster_layer(self.layer)
-                  and self.selected_category()['id'] == 'exposure'):
+            elif (is_raster_layer(self.layer) and
+                    self.selected_category()['id'] == 'exposure'):
                 new_step = step_kw_resample
             elif self.selected_field():
                 new_step = step_kw_field

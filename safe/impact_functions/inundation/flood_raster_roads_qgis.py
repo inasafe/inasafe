@@ -79,9 +79,17 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 'id': 'FloodRasterRoadsExperimentalFunction',
                 'name': tr('Flood Raster Roads Experimental Function'),
                 'impact': tr('Be flooded in given thresholds'),
+                'title': tr('Be flooded in given thresholds'),
                 'author': 'Dmitry Kolesov',
                 'date_implemented': 'N/A',
                 'overview': tr('N/A'),
+                'detailed_description': '',
+                'hazard_input': '',
+                'exposure_input': '',
+                'output': '',
+                'actions': '',
+                'limitations': [],
+                'citations': [],
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
@@ -104,8 +112,6 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 }
             }
             return dict_meta
-
-    title = tr('Be flooded in given thresholds')
 
     parameters = OrderedDict([
         # This field of impact layer marks inundated roads by '1' value

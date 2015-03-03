@@ -14,7 +14,8 @@ class TestCustomLogging(unittest.TestCase):
         LOGGER = logging.getLogger('InaSAFE')
         setup_logger('InaSAFE')
 
-        handlers = [class_name.__class__.__name__ for class_name in LOGGER.handlers]
+        handlers = [class_name.__class__.__name__
+                    for class_name in LOGGER.handlers]
 
         self.assertTrue('FileHandler' in handlers)
         self.assertTrue('StreamHandler' in handlers)
