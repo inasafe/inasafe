@@ -148,7 +148,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             org_logo_path != default_organisation_logo_path())
         self.custom_org_logo_checkbox.setChecked(custom_org_logo_flag)
         self.leOrganisationLogoPath.setText(org_logo_path)
-
         # Restore Show Organisation Logo in Dock Flag
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))

@@ -1326,7 +1326,8 @@ class WizardDialogTest(unittest.TestCase):
         message = 'Expected flood impact function not found: %s' % chosen_if
         self.assertTrue(chosen_if in flood_ifs, message)
 
-        # step_fc_function: select FloodRasterBuildingImpactFunction and press ok
+        # step_fc_function: select FloodRasterBuildingImpactFunction and
+        # press ok
         chosen_if_row = flood_ifs.index(chosen_if)
         dialog.lstFunctions.setCurrentRow(chosen_if_row)
         dialog.pbnNext.click()
