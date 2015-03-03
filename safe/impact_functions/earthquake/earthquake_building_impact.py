@@ -131,7 +131,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
         class_1 = {'label': tr('Low'), 'class': 1}
         class_2 = {'label': tr('Medium'), 'class': 2}
-        class_3      = {'label': tr('High'), 'class': 3}
+        class_3 = {'label': tr('High'), 'class': 3}
 
         # Extract data
         hazard_layer = get_hazard_layer(layers)  # Depth
