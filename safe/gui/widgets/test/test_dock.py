@@ -661,7 +661,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='OSM Building Polygons',
             function='Be flooded',
-            function_id='Flood Building Impact Function')
+            function_id='Flood Raster Building Impact Function')
         DOCK.get_functions()
         self.assertTrue(result, message)
 
