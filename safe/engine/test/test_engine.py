@@ -434,11 +434,13 @@ class TestEngine(unittest.TestCase):
         settings = QSettings()
         temp_directory = temp_dir('testing_user_directory')
         temp_directory = mkdtemp(dir=temp_directory)
-        settings.setValue('inasafe/defaultUserDirectory', temp_directory.encode('utf-8'))
+        settings.setValue(
+            'inasafe/defaultUserDirectory', temp_directory.encode('utf-8'))
 
         # Setting layers
         hazard_filename = test_data_path('hazard', 'jakarta_flood_design.tif')
-        exposure_filename = test_data_path('exposure', 'buildings_osm_4326.shp')
+        exposure_filename = test_data_path(
+            'exposure', 'buildings_osm_4326.shp')
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
