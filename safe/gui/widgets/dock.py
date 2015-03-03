@@ -387,13 +387,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
-        dock_width = self.width()
-        maximum_height = 100  # px
-        pixmap = QtGui.QPixmap(self.organisation_logo_path)
-        pixmap = pixmap.scaled(
-            dock_width, maximum_height, Qt.KeepAspectRatio)
-        self.organisation_logo.setMaximumWidth(dock_width)
-        self.organisation_logo.setPixmap(pixmap)
+        if self.organisation_logo_path:
+            dock_width = self.width()
+            maximum_height = 100.0  # px
+            pixmap = QtGui.QPixmap(self.organisation_logo_path)
+            ratio = maximum_height / pixmap.height()
+            maximum_width = pixmap.width() * ratio
+            if maximum_width > dock_width:
+                pixmap = pixmap.scaled(
+                    maximum_width, maximum_height, Qt.KeepAspectRatio)
+
+            self.organisation_logo.setMaximumWidth(maximum_width)
+            self.organisation_logo.setPixmap(pixmap)
+
         if self.organisation_logo_path and flag:
             self.organisation_logo.show()
         else:
@@ -1438,6 +1444,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     @pyqtSlot('QgsMapLayer')
     def layer_changed(self, layer):
         """Handler for when the QGIS active layer is changed.
+
         If the active layer is changed and it has keywords and a report,
         show the report.
 
@@ -1448,10 +1455,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Don't handle this event if we are already handling another layer
         # addition or removal event.
         if self.get_layers_lock:
-            return
-
-        if layer is None:
-            LOGGER.debug('Layer is None')
             return
 
         try:
@@ -1466,7 +1469,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         except (KeywordNotFoundError,
                 HashNotFoundError,
                 InvalidParameterError,
-                NoKeywordsFoundError):
+                NoKeywordsFoundError,
+                AttributeError):
             self.show_no_keywords_message()
             # Append the error message.
             # error_message = get_error_message(e)
