@@ -775,8 +775,6 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         """
         if key is None or key == '':
             return
-        if value is None or value == '':
-            return
 
         # make sure that both key and value is unicode
         key = get_unicode(key)
