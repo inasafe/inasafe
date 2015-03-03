@@ -21,8 +21,10 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.earthquake.earthquake_building_impact import (
     EarthquakeBuildingImpactFunction)
-from safe.impact_functions.inundation.flood_OSM_building_impact import (
-    FloodBuildingImpactFunction)
+from safe.impact_functions.inundation.flood_raster_OSM_building_impact import (
+    FloodRasterBuildingImpactFunction)
+from safe.impact_functions.inundation.flood_vector_OSM_building_impact import (
+    FloodVectorBuildingImpactFunction)
 from safe.impact_functions.inundation.flood_building_impact_qgis import (
     FloodNativePolygonExperimentalFunction)
 from safe.impact_functions.volcanic.volcano_building_impact import (
@@ -70,13 +72,13 @@ class TestImpactFunctionManager(unittest.TestCase):
     .. versionadded:: 2.1
     """
 
-    flood_OSM_building_hazard_units = [
-        unit_wetdry, unit_metres_depth, unit_feet_depth]
+    flood_raster_OSM_building_hazard_units = [
+        unit_metres_depth, unit_feet_depth]
 
     def test_init(self):
         """Test initialize ImpactFunctionManager."""
         impact_function_manager = ImpactFunctionManager()
-        expected_result = 15
+        expected_result = 16
         i = 0
         print 'Your impact functions:'
         for impact_function in impact_function_manager.impact_functions:
@@ -153,7 +155,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertEqual(set(result), set(expected_result), message)
 
         result = impact_function_manager.allowed_units('flood', 'continuous')
-        expected_result = self.flood_OSM_building_hazard_units
+        expected_result = self.flood_raster_OSM_building_hazard_units
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -170,7 +172,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = impact_function_manager.units_for_layer(
             subcategory='flood', layer_type='raster', data_type='continuous')
-        expected_result = self.flood_OSM_building_hazard_units
+        expected_result = self.flood_raster_OSM_building_hazard_units
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -327,7 +329,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected_result = [
             VolcanoBuildingImpact.Metadata.get_metadata(),
             EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
-            FloodBuildingImpactFunction.Metadata.get_metadata(),
+            FloodRasterBuildingImpactFunction.Metadata.get_metadata(),
+            FloodVectorBuildingImpactFunction.Metadata.get_metadata(),
             FloodNativePolygonExperimentalFunction.Metadata.get_metadata(),
             ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
@@ -341,7 +344,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected_result = [
             VolcanoBuildingImpact.Metadata.get_metadata(),
             EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
-            FloodBuildingImpactFunction.Metadata.get_metadata(),
+            FloodRasterBuildingImpactFunction.Metadata.get_metadata(),
+            FloodVectorBuildingImpactFunction.Metadata.get_metadata(),
             FloodNativePolygonExperimentalFunction.Metadata.get_metadata(),
             ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata()]
         message = ('I expect %s but I got %s.' % (expected_result, result))

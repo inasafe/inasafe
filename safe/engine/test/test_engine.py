@@ -434,17 +434,19 @@ class TestEngine(unittest.TestCase):
         settings = QSettings()
         temp_directory = temp_dir('testing_user_directory')
         temp_directory = mkdtemp(dir=temp_directory)
-        settings.setValue('inasafe/defaultUserDirectory', temp_directory.encode('utf-8'))
+        settings.setValue(
+            'inasafe/defaultUserDirectory', temp_directory.encode('utf-8'))
 
         # Setting layers
         hazard_filename = test_data_path('hazard', 'jakarta_flood_design.tif')
-        exposure_filename = test_data_path('exposure', 'buildings_osm_4326.shp')
+        exposure_filename = test_data_path(
+            'exposure', 'buildings_osm_4326.shp')
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        plugin_name = 'FloodBuildingImpactFunction'
+        plugin_name = 'FloodRasterBuildingImpactFunction'
         plugin_list = get_plugins(plugin_name)
         IF = plugin_list[0][plugin_name]
 
@@ -478,7 +480,7 @@ class TestEngine(unittest.TestCase):
         H_src = H.get_keywords()['source']
         E_src = E.get_keywords()['source']
 
-        plugin_name = 'FloodBuildingImpactFunction'
+        plugin_name = 'FloodRasterBuildingImpactFunction'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name

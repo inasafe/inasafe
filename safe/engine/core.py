@@ -143,16 +143,20 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
 
     # Check if user directory is specified
     settings = QSettings()
-    default_user_directory = settings.value('inasafe/defaultUserDirectory', defaultValue='').encode('utf8')
+    default_user_directory = settings.value(
+        'inasafe/defaultUserDirectory', defaultValue='').encode('utf8')
 
     if default_user_directory:
-        # encode to UTF-8 : http://gis.stackexchange.com/questions/53920/ogr-createlayer-returns-typeerror
+        # encode to UTF-8 :
+        # http://gis.stackexchange.com/questions/53920/
+        # ogr-createlayer-returns-typeerror
         output_filename = unique_filename(
             dir=default_user_directory,
             prefix=prefix,
             suffix=extension).encode('utf-8')
     else:
-        output_filename = unique_filename(prefix=prefix, suffix=extension).encode('utf-8')
+        output_filename = unique_filename(
+            prefix=prefix, suffix=extension).encode('utf-8')
 
     F.filename = output_filename
     F.write_to_file(output_filename)

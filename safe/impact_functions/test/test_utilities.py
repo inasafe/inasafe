@@ -25,8 +25,8 @@ from safe.impact_functions.utilities import (
     get_python_file,
     function_name,
     get_function_title)
-from safe.impact_functions.inundation.flood_OSM_building_impact import (
-    FloodBuildingImpactFunction)
+from safe.impact_functions.inundation.flood_raster_OSM_building_impact import (
+    FloodRasterBuildingImpactFunction)
 
 
 class TestUtilities(unittest.TestCase):
@@ -59,9 +59,9 @@ class TestUtilities(unittest.TestCase):
 
     def test_function_name(self):
         """Test function_name."""
-        impact_function = FloodBuildingImpactFunction()
+        impact_function = FloodRasterBuildingImpactFunction()
         impact_function_name = function_name(impact_function)
-        expected_name = "Flood Building Impact Function"
+        expected_name = "Flood Raster Building Impact Function"
         message = "Expected %s but got %s" % (
             impact_function_name, expected_name)
         self.assertEqual(
@@ -69,7 +69,7 @@ class TestUtilities(unittest.TestCase):
 
     def test_get_function_title(self):
         """Test for get_function_title."""
-        impact_function = FloodBuildingImpactFunction()
+        impact_function = FloodRasterBuildingImpactFunction()
         impact_function_title = get_function_title(impact_function)
         expected_title = "Be flooded"
         message = "Expected %s but got %s" % (
