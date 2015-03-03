@@ -8,6 +8,6 @@ extent = 106.8059973447061566, -6.1926727450000003, 106.8350938552938487, -6.167
 exposure = ../../exposure/buildings_osm_4326.shp
 hazard = ../../hazard/multipart_polygons_osm_4326.shp
 aggregation = ../../boundaries/district_osm_jakarta.shp
-function = Flood Building Impact Function
+function = Flood Vector Building Impact Function
 extent = 106.806972, -6.196005, 106.835608, -6.166831
 

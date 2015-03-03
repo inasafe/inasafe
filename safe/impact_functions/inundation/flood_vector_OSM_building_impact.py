@@ -52,7 +52,7 @@ class FloodVectorBuildingImpactFunction(FunctionProvider):
     :rating 0
     :param requires category=='hazard' and \
                     subcategory in ['flood', 'tsunami'] and \
-                    # layertype=='vector'
+                    layertype=='vector'
 
     :param requires category=='exposure' and \
                     subcategory=='structure' and \
