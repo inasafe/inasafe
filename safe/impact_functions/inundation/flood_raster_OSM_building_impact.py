@@ -51,7 +51,7 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
     # this rating below is only for testing a function, not the real one
     :rating 0
     :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] \
+                    subcategory in ['flood', 'tsunami'] and \
                     layertype=='raster'
 
     :param requires category=='exposure' and \
