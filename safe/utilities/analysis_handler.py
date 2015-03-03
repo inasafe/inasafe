@@ -497,7 +497,6 @@ class AnalysisHandler(QObject):
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
         if self.hide_exposure_flag:
-            # noinspection PyUnresolvedReferences
             exposure_layer = self.analysis.exposure_layer
             legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
