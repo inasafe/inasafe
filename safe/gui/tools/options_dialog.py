@@ -27,6 +27,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature
 
 from safe.utilities.help import show_context_help
+from safe.common.utilities import temp_dir
 from safe.defaults import (
     disclaimer,
     default_north_arrow_path,
@@ -80,6 +81,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.custom_org_logo_checkbox.toggled.connect(
             self.set_organisation_logo)
         self.custom_north_arrow_checkbox.toggled.connect(self.set_north_arrow)
+        self.custom_UseUserDirectory_checkbox.toggled.connect(self.set_user_dir)
         self.custom_templates_dir_checkbox.toggled.connect(
             self.set_templates_dir)
         self.custom_org_disclaimer_checkbox.toggled.connect(
@@ -148,6 +150,15 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             org_logo_path != default_organisation_logo_path())
         self.custom_org_logo_checkbox.setChecked(custom_org_logo_flag)
         self.leOrganisationLogoPath.setText(org_logo_path)
+
+        user_directory_path = settings.value(
+            'inasafe/defaultUserDirectory',
+            temp_dir('impacts'), type=str)
+        custom_user_directory_flag = (
+            user_directory_path != temp_dir('impacts'))
+        self.custom_UseUserDirectory_checkbox.setChecked(custom_user_directory_flag)
+        self.splitter_user_directory.setEnabled(custom_user_directory_flag)
+        self.leUserDirectoryPath.setText(user_directory_path)
 
         # Restore Show Organisation Logo in Dock Flag
         flag = bool(settings.value(
@@ -260,6 +271,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         settings.setValue(
             'inasafe/use_native_zonal_stats',
             self.cbxNativeZonalStats.isChecked())
+        settings.setValue(
+            'inasafe/defaultUserDirectory',
+            self.leUserDirectoryPath.text())
 
         # save metadata values
         settings.setValue(
@@ -300,6 +314,18 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self.keyword_io.default_keyword_db_path(),
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(file_name)
+
+    @pyqtSignature('')  # prevents actions being handled twice
+    def on_toolUserDirectoryPath_clicked(self):
+        """Auto-connect slot activated when user directory tool button is clicked.
+        """
+        # noinspection PyCallByClass,PyTypeChecker
+        dir_name = QtGui.QFileDialog.getExistingDirectory(
+            self,
+            self.tr('Results directory'),
+            '',
+            QtGui.QFileDialog.ShowDirsOnly)
+        self.leUserDirectoryPath.setText(dir_name)
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolNorthArrowPath_clicked(self):
@@ -368,6 +394,22 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             path = default_north_arrow_path()
 
         self.leNorthArrowPath.setText(path)
+
+    def set_user_dir(self):
+        """Auto-connect slot activated when user dir checkbox is toggled.
+        """
+        settings = QtCore.QSettings()
+        if self.custom_UseUserDirectory_checkbox.isChecked():
+            # Show previous templates dir
+            path = settings.value(
+                'inasafe/defaultUserDirectory',
+                '',
+                type=str)
+        else:
+            # Set the template report dir to ''
+            path = temp_dir('impacts')
+
+        self.leUserDirectoryPath.setText(path)
 
     def set_templates_dir(self):
         """Auto-connect slot activated when templates dir checkbox is toggled.
