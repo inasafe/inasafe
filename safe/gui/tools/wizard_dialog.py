@@ -231,8 +231,8 @@ classify_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> measured in <b>%s</b> categorical '
     'unit, and the data column is <b>%s</b>. Below on the left you '
-    'can see all unique values found in that column. Please drag them '
-    'to the right panel in order to classify them to appropriate '
+    'can see all unclassified unique values found in that column. Please '
+    'drag them to the right panel in order to classify them to appropriate '
     'categories.')   # (subcategory, category, unit, field)
 
 # Constants for the layer origin selector
