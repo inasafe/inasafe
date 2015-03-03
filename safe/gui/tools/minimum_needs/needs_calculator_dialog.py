@@ -54,6 +54,11 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         help_button.clicked.connect(self.show_help)
 
+        # Fix for issue 1699 - cancel button does nothing
+        cancel_button = self.button_box.button(QtGui.QDialogButtonBox.Cancel)
+        cancel_button.clicked.connect(self.reject)
+        # Fix ends
+
     def show_info(self):
         """Show basic usage instructions."""
         header = html_header()
@@ -114,7 +119,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
                 displaced = 0
             else:
                 if type(population) is basestring:
-                    population = str(population).replace(',', '')
+                    population = str(population).deplace(',', '')
 
                 try:
                     displaced = int(population)
