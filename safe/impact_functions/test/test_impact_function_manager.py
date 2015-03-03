@@ -60,6 +60,7 @@ from safe.definitions import (
     unit_building_generic,
     hazard_all,
     layer_vector_polygon,
+    layer_raster_continuous,
     layer_vector_line)
 
 
@@ -124,7 +125,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_data_types('earthquake')
-        expected_result = ['polygon', 'continuous', 'classified']
+        expected_result = ['continuous', 'classified']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -234,8 +235,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = impact_function_manager.subcategories_for_layer(
             category='hazard', layer_type='vector', data_type='polygon')
-        expected_result = [
-            hazard_earthquake, hazard_flood, hazard_tsunami, hazard_volcano]
+        expected_result = [hazard_flood, hazard_tsunami, hazard_volcano]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -361,7 +361,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(expected_result, result, message)
 
-        hazard_constraint = layer_vector_polygon
+        hazard_constraint = layer_raster_continuous
         exposure_constraint = None
 
         expected_result = [
