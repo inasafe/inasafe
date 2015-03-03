@@ -383,15 +383,29 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         if self.organisation_logo_path:
             dock_width = self.width()
+
+            # Dont let the image be more tha 100px hight
             maximum_height = 100.0  # px
             pixmap = QtGui.QPixmap(self.organisation_logo_path)
-            ratio = maximum_height / pixmap.height()
-            maximum_width = pixmap.width() * ratio
+            height_ratio = maximum_height / pixmap.height()
+            maximum_width = pixmap.width() * height_ratio
+
+            # Don't let the image be more than the dock width wide
             if maximum_width > dock_width:
+                width_ratio = dock_width / pixmap.width()
+                maximum_height = pixmap.height() * ratio
+                maximum_width = dock_width
+
+            too_high = pixmap.height() > maximum_height
+            too_wide = pixmap.width() > dock_width
+
+            if too_wide or too_high:
                 pixmap = pixmap.scaled(
                     maximum_width, maximum_height, Qt.KeepAspectRatio)
 
             self.organisation_logo.setMaximumWidth(maximum_width)
+            # We have manually scaled using logic above
+            self.organisation_logo.setScaledContents(False)
             self.organisation_logo.setPixmap(pixmap)
 
         if self.organisation_logo_path and flag:
