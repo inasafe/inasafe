@@ -144,8 +144,8 @@ class WizardDialogTest(unittest.TestCase):
         expected_categories = ['exposure', 'hazard', 'aggregation']
         chosen_category = 'hazard'
 
-        expected_subcategory_count = 4
-        expected_subcategories = ['volcano', 'earthquake', 'flood', 'tsunami']
+        expected_subcategory_count = 3
+        expected_subcategories = ['volcano', 'flood', 'tsunami']
         chosen_subcategory = "tsunami"
 
         expected_unit_count = 3
@@ -205,8 +205,9 @@ class WizardDialogTest(unittest.TestCase):
         # are already assigned
         message = ('Invalid Next button state in step 1! Enabled while '
                    'there\'s nothing selected yet')
-        self.assertTrue(not dialog.pbnNext.isEnabled()
-                        or len(dialog.lstCategories.selectedItems()), message)
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstCategories.selectedItems()), message)
         # Select hazard one
         dialog.lstCategories.setCurrentRow(hazard_index)
         message = ('Invalid Next button state in step 1! Still disabled after '
@@ -241,10 +242,11 @@ class WizardDialogTest(unittest.TestCase):
             set(subcategories), set(expected_subcategories), message)
         # The Next button should be on disabled state first unless the keywords
         # are already assigned
-        self.assertTrue(not dialog.pbnNext.isEnabled()
-                        or len(dialog.lstSubcategories.selectedItems()),
-                        'Invalid Next button state in step 2! '
-                        'Enabled while there\'s nothing selected yet')
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstSubcategories.selectedItems()),
+            'Invalid Next button state in step 2! '
+            'Enabled while there\'s nothing selected yet')
         # Set to tsunami subcategories
         dialog.lstSubcategories.setCurrentRow(tsunami_index)
         message = ('Invalid Next button state in step 2! Still disabled after '
@@ -279,8 +281,9 @@ class WizardDialogTest(unittest.TestCase):
         # are already assigned
         message = ('Invalid Next button state in step 3! Enabled while '
                    'there\'s nothing selected yet')
-        self.assertTrue(not dialog.pbnNext.isEnabled()
-                        or len(dialog.lstUnits.selectedItems()), message)
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstUnits.selectedItems()), message)
         dialog.lstUnits.setCurrentRow(feet_unit_index)
         message = ('Invalid Next button state in step 3! Enabled while '
                    'there\'s nothing selected yet')
@@ -311,8 +314,9 @@ class WizardDialogTest(unittest.TestCase):
         # are already assigned
         message = ('Invalid Next button state in step 4! Enabled while '
                    'there\'s nothing selected yet')
-        self.assertTrue(not dialog.pbnNext.isEnabled()
-                        or len(dialog.lstFields.selectedItems()), message)
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstFields.selectedItems()), message)
         dialog.lstFields.setCurrentRow(gridcode_index)
         message = ('Invalid Next button state in step 4! Still disabled after '
                    'an item selected')
@@ -1054,30 +1058,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check the values of subcategories options
-        expected_subcategories = ['earthquake', 'flood', 'tsunami', 'volcano']
+        expected_subcategories = ['flood', 'tsunami', 'volcano']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
-
-        # choosing earthquake
-        self.select_from_list_widget('earthquake', dialog.lstSubcategories)
-
-        dialog.pbnNext.click()  # Go to unit
-
-        # check the values of units options
-        expected_units = ['MMI']
-        self.check_list(expected_units, dialog.lstUnits)
-        self.select_from_list_widget('MMI', dialog.lstUnits)
-        dialog.pbnNext.click()  # go to field step
-
-        # check in field step
-        self.check_current_step(step_kw_field, dialog)
-
-        for i in range(dialog.lstFields.count()):
-            item_flag = dialog.lstFields.item(i).flags()
-            message = 'Item should be disabled'
-            self.assertTrue(item_flag & ~QtCore.Qt.ItemIsEnabled, message)
-
-        dialog.pbnBack.click()  # back  to unit step
-        dialog.pbnBack.click()  # back  to unit subcategory
 
         # select flood
         self.select_from_list_widget('flood', dialog.lstSubcategories)

@@ -5,6 +5,9 @@ import cPickle
 import numpy
 import os
 from os.path import join
+import sys
+from tempfile import mkdtemp
+
 
 # Import InaSAFE modules
 from safe.engine.core import calculate_impact
@@ -34,8 +37,9 @@ from safe.gis.numerics import (
     ensure_numeric)
 from safe.common.utilities import (
     VerificationError,
-    unique_filename,)
-from safe.test.utilities import TESTDATA, HAZDATA, EXPDATA
+    unique_filename,
+    temp_dir)
+from safe.test.utilities import TESTDATA, HAZDATA, EXPDATA, test_data_path
 from safe.common.exceptions import InaSAFEError
 from safe.impact_functions import get_plugins
 
@@ -413,6 +417,45 @@ class TestEngine(unittest.TestCase):
         assert attributes['polygon_id'] == 4
 
     test_polygon_hazard_with_holes_and_raster_exposure.slow = True
+
+    def test_user_directory_when_saving(self):
+        # These imports must be inside the test.
+        from PyQt4.QtCore import QCoreApplication, QSettings
+        from qgis.core import QgsApplication
+
+        # noinspection PyCallByClass,PyArgumentList
+        QCoreApplication.setOrganizationName('QGIS')
+        # noinspection PyCallByClass,PyArgumentList
+        QCoreApplication.setOrganizationDomain('qgis.org')
+        # noinspection PyCallByClass
+        QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
+
+        # Save some settings
+        settings = QSettings()
+        temp_directory = temp_dir('testing_user_directory')
+        temp_directory = mkdtemp(dir=temp_directory)
+        settings.setValue('inasafe/defaultUserDirectory', temp_directory.encode('utf-8'))
+
+        # Setting layers
+        hazard_filename = test_data_path('hazard', 'jakarta_flood_design.tif')
+        exposure_filename = test_data_path('exposure', 'buildings_osm_4326.shp')
+
+        # Calculate impact using API
+        H = read_layer(hazard_filename)
+        E = read_layer(exposure_filename)
+
+        plugin_name = 'FloodBuildingImpactFunction'
+        plugin_list = get_plugins(plugin_name)
+        IF = plugin_list[0][plugin_name]
+
+        calculate_impact(layers=[H, E], impact_fcn=IF)
+
+        message = 'The user directory is empty : %s' % temp_directory
+        assert os.listdir(temp_directory) != [], message
+
+        settings.remove('inasafe/defaultUserDirectory')
+
+    test_user_directory_when_saving.slow = False
 
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer

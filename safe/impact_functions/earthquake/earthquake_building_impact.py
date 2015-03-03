@@ -33,7 +33,8 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
     """Earthquake impact on building data.
 
     :param requires category=='hazard' and \
-                    subcategory=='earthquake'
+                    subcategory=='earthquake' and \
+                    layertype=='raster'
 
     :param requires category=='exposure' and \
                     subcategory=='structure' and \
@@ -61,7 +62,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'EarthQuakeBuildingImpactFunction',
+                'id': 'EarthquakeBuildingImpactFunction',
                 'name': tr('Earthquake Building Impact Function'),
                 'impact': tr('Be affected'),
                 'title': tr('Be affected'),
@@ -83,10 +84,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                         'definition': hazard_definition,
                         'subcategories': [hazard_earthquake],
                         'units': [unit_mmi],
-                        'layer_constraints': [
-                            layer_vector_polygon,
-                            layer_raster_continuous
-                        ]
+                        'layer_constraints': [layer_raster_continuous],
                     },
                     'exposure': {
                         'definition': exposure_definition,
