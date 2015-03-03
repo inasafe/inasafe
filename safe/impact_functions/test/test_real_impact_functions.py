@@ -40,19 +40,19 @@ class TestRealImpactFunctions(unittest.TestCase):
         for if_name in if_names:
             self.assertIn(if_name, admissible_plugins, message)
 
-        # This one should get 2 earthquake building impact functions
-        dict1 = {
-            'category': 'hazard',
-            'subcategory': 'earthquake',
-            'unit': 'MMI'}
+        # This one should get 1 earthquake building impact functions
+        dict1 = dict(
+            category='hazard',
+            subcategory='earthquake',
+            layertype='raster',
+            unit='MMI')
+
         dict2 = dict(
             category='exposure',
-            datatype='itb',
-            subcategory='structure')
+            subcategory='structure',
+            layertype='vector',
+            datatype='itb')
 
-        # Add layertype
-        dict1['layertype'] = 'raster'
-        dict2['layertype'] = 'vector'
         admissible_plugins = get_admissible_plugins([dict1, dict2])
         message = (
             'Expected: len(admissible_plugins) >= 1, Got: '
@@ -62,56 +62,56 @@ class TestRealImpactFunctions(unittest.TestCase):
         self.assertIn(
             'Earthquake Building Impact Function', admissible_plugins)
 
-        # This one should get 3 flood population impact functions
-        dict1 = {'category': 'hazard', 'subcategory': 'flood', 'unit': 'm'}
-        dict2 = dict(category='exposure', subcategory='population')
+        # This one should get 1 flood population impact functions
+        dict1 = dict(
+            category='hazard',
+            subcategory='flood',
+            layertype='raster',
+            unit='m')
+        dict2 = dict(
+            category='exposure',
+            subcategory='population',
+            layertype='raster')
 
-        # Add layertype
-        dict1['layertype'] = 'raster'
-        dict2['layertype'] = 'raster'
         admissible_plugins = get_admissible_plugins([dict1, dict2])
         # Depending on other tests there could be more
         self.assertTrue(len(admissible_plugins) >= 1)
-        # assert 'W B Flood Evacuation Function' in admissible_plugins
-
-        # Try form where only one dictionary is passed
-        # This one gets all the flood related impact functions
-
         # Try to get general inundation population impact function
         f_name = 'Flood Evacuation Function'
+        self.assertIn(f_name, admissible_plugins)
 
         admissible_plugins = get_admissible_plugins(dict1)
         self.assertTrue(len(admissible_plugins) >= 1)
-        # assert 'W B Flood Evacuation Function' in admissible_plugins
         self.assertIn(f_name, admissible_plugins)
-        # # assert 'Flood Road Impact Function' in admissible_plugins
-        #
-        # dict1 = {'category': 'hazard', 'subcategory': 'flood'}
-        # dict2 = dict(category='exposure', subcategory='structure')
-        #
-        # # Add layertype
-        # # Not required for flood building impact
-        # dict1['layertype'] = 'raster'
-        # dict2['layertype'] = 'vector'
-        # # dict1['layertype'] = 'vector'
-        # admissible_plugins = get_admissible_plugins([dict1, dict2])
-        #
-        # message = 'Expected name "%s" in admissible_plugins: %s' % (
-        #     f_name, admissible_plugins)
-        # assert f_name in admissible_plugins, message
-        #
-        # # Get requirements from expected function
-        # all_plugins = get_admissible_plugins()
-        # assert admissible_plugins[f_name] == all_plugins[f_name]
-        #
-        # requirelines = requirements_collect(admissible_plugins[f_name])
-        # for i, D in enumerate([dict1, dict2]):
-        #     for key in D:
-        #         message = 'Key %s was not found in %s' % (key, requirelines[i])
-        #         assert key in requirelines[i], message
-        #
-        #         message = 'Val %s was not found in %s' % (D[key], requirelines[i])
-        #         assert D[key] in requirelines[i], message
+
+        dict1 = dict(
+            category='hazard',
+            subcategory='flood',
+            layertype='raster')
+        dict2 = dict(
+            category='exposure',
+            subcategory='structure',
+            layertype='vector')
+
+        admissible_plugins = get_admissible_plugins([dict1, dict2])
+        f_name = 'Flood Raster Building Impact Function'
+        message = 'Expected name "%s" in admissible_plugins: %s' % (
+            f_name, admissible_plugins)
+        self.assertIn(f_name, admissible_plugins, message)
+
+        # Get requirements from expected function
+        all_plugins = get_admissible_plugins()
+        self.assertEqual(admissible_plugins[f_name], all_plugins[f_name])
+
+        requirelines = requirements_collect(admissible_plugins[f_name])
+        for i, D in enumerate([dict1, dict2]):
+            for key in D:
+                message = 'Key %s was not found in %s' % (key, requirelines[i])
+                self.assertIn(key, requirelines[i], message)
+
+                message = (
+                    'Val %s was not found in %s' % (D[key], requirelines[i]))
+                self.assertIn(D[key], requirelines[i], message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestRealImpactFunctions)
