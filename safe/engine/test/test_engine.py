@@ -446,7 +446,7 @@ class TestEngine(unittest.TestCase):
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        plugin_name = 'FloodBuildingImpactFunction'
+        plugin_name = 'FloodRasterBuildingImpactFunction'
         plugin_list = get_plugins(plugin_name)
         IF = plugin_list[0][plugin_name]
 
