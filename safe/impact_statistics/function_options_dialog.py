@@ -51,7 +51,8 @@ from safe.common.resource_parameter_widget import ResourceParameterWidget
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(text):
+        return text
 
 FORM_CLASS = get_ui_class('function_options_dialog_base.ui')
 
@@ -236,27 +237,44 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         hide_label = False
 
         if isinstance(key_value, list):
+            def function(values_string):
+                """
+                :param values_string: This contains the list of values the user
+                    added to the line edit for the parameter.
+                :type values_string: basestring
+
+                :returns: list of value types
+                :rtype: list
+                """
+                value_type = type(key_value[0])
+                return [value_type(y) for y in str(values_string).split(',')]
             widget = QLineEdit()
             value = ', '.join([str(x) for x in key_value])
             # NOTE: we assume that all element in list have same type
-            value_type = type(key_value[0])
-            function = lambda z: [value_type(y) for y in str(z).split(',')]
         elif isinstance(key_value, dict):
+            def function(key_values_string):
+                """
+                :param key_values_string: This contains the dictionary that
+                    the used defined on the line edit for this parameter.
+                :type key_values_string: basestring
+
+                :returns: a safe evaluation of the dict
+                :rtype: dict
+                """
+                return ast.literal_eval(str(key_values_string))
             widget = QLineEdit()
             value = str(key_value)
-            function = lambda z: ast.literal_eval(str(z))
         elif isinstance(key_value, bool):
+            function = bool
             widget = QCheckBox()
             widget.setChecked(key_value)
             widget.setText(label.text())
             property_name = 'checked'
-            function = bool
             hide_label = True
         else:
+            function = type(key_value)
             widget = QLineEdit()
             value = str(key_value)
-            function = type(key_value)
-
         if hide_label:
             form_layout.addRow(widget)
         else:
