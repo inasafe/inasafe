@@ -327,18 +327,19 @@ class Aggregator(QtCore.QObject):
             elderly_ratio = self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY')
             elderly_ratio_key = self.get_default_keyword('ELDERLY_RATIO_KEY')
 
-            if (aggregation_attribute in keywords
-                and ('category' in keywords and category == 'postprocessing')
-                and (female_ratio in keywords and (
+            if (aggregation_attribute in keywords and
+                    ('category' in keywords and
+                        category == 'postprocessing') and
+                    (female_ratio in keywords and (
                     female_ratio != self.tr('Use default') or
-                    female_ratio_key in keywords))
-                and (youth_ratio in keywords and (
+                    female_ratio_key in keywords)) and
+                    (youth_ratio in keywords and (
                     youth_ratio != self.tr('Use default') or
-                    youth_ratio_key in keywords))
-                and (adult_ratio in keywords and (
+                    youth_ratio_key in keywords)) and
+                    (adult_ratio in keywords and (
                     adult_ratio != self.tr('Use default') or
-                    adult_ratio_key in keywords))
-                and (elderly_ratio in keywords and (
+                    adult_ratio_key in keywords)) and
+                    (elderly_ratio in keywords and (
                     elderly_ratio != self.tr('Use default') or
                     elderly_ratio_key in keywords))):
                 self.is_valid = True

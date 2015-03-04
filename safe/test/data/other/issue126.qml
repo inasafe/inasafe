@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="2.6.1-Brighton" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
+<qgis version="2.8.1-Wien" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
   <pipe>
     <rasterrenderer opacity="1" alphaBand="-1" classificationMax="nan" classificationMinMaxOrigin="Unknown" band="1" classificationMin="nan" type="singlebandpseudocolor">
       <rasterTransparency>
@@ -8,7 +8,7 @@
         </singleValuePixelList>
       </rasterTransparency>
       <rastershader>
-        <colorrampshader colorRampType="INTERPOLATED" clip="111">
+        <colorrampshader colorRampType="INTERPOLATED" clip="0">
           <item alpha="255" value="0" label="" color="#ffffff"/>
           <item alpha="255" value="0.0383626" label="Rendah [0 orang/sel]" color="#38a800"/>
           <item alpha="255" value="0.0767252" label="" color="#79c900"/>
