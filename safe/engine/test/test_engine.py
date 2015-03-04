@@ -435,7 +435,7 @@ class TestEngine(unittest.TestCase):
         H_src = H.get_keywords()['source']
         E_src = E.get_keywords()['source']
 
-        plugin_name = 'FloodBuildingImpactFunction'
+        plugin_name = 'FloodRasterBuildingImpactFunction'
         plugin_list = get_plugins(plugin_name)
         assert len(plugin_list) == 1
         assert plugin_list[0].keys()[0] == plugin_name

@@ -29,12 +29,12 @@ from PyQt4.QtCore import pyqtSignature
 from safe.utilities.help import show_context_help
 from safe.defaults import (
     disclaimer,
+    default_organisation_logo_path,
     default_north_arrow_path,
     get_defaults)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class
 from safe.common.version import get_version
-from safe.defaults import default_organisation_logo_path
 
 FORM_CLASS = get_ui_class('options_dialog_base.ui')
 
@@ -148,7 +148,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             org_logo_path != default_organisation_logo_path())
         self.custom_org_logo_checkbox.setChecked(custom_org_logo_flag)
         self.leOrganisationLogoPath.setText(org_logo_path)
-
         # Restore Show Organisation Logo in Dock Flag
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))

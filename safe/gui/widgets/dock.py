@@ -41,7 +41,10 @@ from safe.utilities.utilities import (
     impact_attribution,
     add_ordered_combo_item,
     get_safe_impact_function)
-from safe.defaults import disclaimer
+from safe.defaults import (
+    disclaimer,
+    default_organisation_logo_path,
+    default_north_arrow_path)
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
 from safe.utilities.resources import (
     resources_path,
@@ -378,20 +381,74 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'inasafe/organisation_logo_path',
             default_organisation_logo_path(),
             type=str)
+        # This is a fix for 3.0.0 change where we no longer provide Qt4
+        # Qt4 resource bundles, so if the path points into a resource
+        # bundle we clear it and overwrite the setting
+        invalid_path_flag = False
+        if self.organisation_logo_path.startswith(':/'):
+            self.organisation_logo_path = None
+            invalid_path_flag = True
+            settings.setValue(
+                'inasafe/organisation_logo_path',
+                default_organisation_logo_path())
+
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
-        dock_width = self.width()
-        maximum_height = 100  # px
-        pixmap = QtGui.QPixmap(self.organisation_logo_path)
-        pixmap = pixmap.scaled(
-            dock_width, maximum_height, Qt.KeepAspectRatio)
-        self.organisation_logo.setMaximumWidth(dock_width)
-        self.organisation_logo.setPixmap(pixmap)
+        if self.organisation_logo_path:
+            dock_width = float(self.width())
+
+            # Dont let the image be more tha 100px hight
+            maximum_height = 100.0  # px
+            pixmap = QtGui.QPixmap(self.organisation_logo_path)
+            height_ratio = maximum_height / pixmap.height()
+            maximum_width = int(pixmap.width() * height_ratio)
+
+            # Don't let the image be more than the dock width wide
+            if maximum_width > dock_width:
+                width_ratio = dock_width / float(pixmap.width())
+                maximum_height = int(pixmap.height() * width_ratio)
+                maximum_width = dock_width
+
+            too_high = pixmap.height() > maximum_height
+            too_wide = pixmap.width() > dock_width
+
+            if too_wide or too_high:
+                pixmap = pixmap.scaled(
+                    maximum_width, maximum_height, Qt.KeepAspectRatio)
+
+            self.organisation_logo.setMaximumWidth(maximum_width)
+            # We have manually scaled using logic above
+            self.organisation_logo.setScaledContents(False)
+            self.organisation_logo.setPixmap(pixmap)
+
         if self.organisation_logo_path and flag:
             self.organisation_logo.show()
         else:
             self.organisation_logo.hide()
+
+        # This is a fix for 3.0.0 change where we no longer provide Qt4
+        # Qt4 resource bundles, so if the path points into a resource
+        # bundle we clear it and overwrite the setting
+        north_arrow_path = settings.value(
+            'inasafe/north_arrow_path',
+            default_north_arrow_path(),
+            type=str)
+        if north_arrow_path.startswith(':/'):
+            invalid_path_flag = True
+            settings.setValue(
+                'inasafe/north_arrow_path', default_north_arrow_path())
+
+        if invalid_path_flag:
+            QtGui.QMessageBox.warning(
+                self, self.tr('InaSAFE %s' % get_version()),
+                self.tr(
+                    'Due to backwards incompatibility with InaSAFE 2.0.0, the '
+                    'paths to your preferred organisation logo and north '
+                    'arrow may have been reset to their default values. '
+                    'Please check in Plugins -> InaSAFE -> Options that your '
+                    'paths are still correct and update them if needed.'
+                ), QtGui.QMessageBox.Ok)
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
@@ -1389,6 +1446,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     @pyqtSlot('QgsMapLayer')
     def layer_changed(self, layer):
         """Handler for when the QGIS active layer is changed.
+
         If the active layer is changed and it has keywords and a report,
         show the report.
 
@@ -1399,10 +1457,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Don't handle this event if we are already handling another layer
         # addition or removal event.
         if self.get_layers_lock:
-            return
-
-        if layer is None:
-            LOGGER.debug('Layer is None')
             return
 
         try:
@@ -1417,7 +1471,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         except (KeywordNotFoundError,
                 HashNotFoundError,
                 InvalidParameterError,
-                NoKeywordsFoundError):
+                NoKeywordsFoundError,
+                AttributeError):
             self.show_no_keywords_message()
             # Append the error message.
             # error_message = get_error_message(e)
