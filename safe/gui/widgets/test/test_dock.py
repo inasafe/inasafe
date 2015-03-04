@@ -430,7 +430,7 @@ class TestDock(TestCase):
             hazard='multipart_polygons_osm_4326',
             exposure='buildings_osm_4326',
             function='Be flooded',
-            function_id='Flood Building Impact Function')
+            function_id='Flood Vector Building Impact Function')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -661,7 +661,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='OSM Building Polygons',
             function='Be flooded',
-            function_id='Flood Building Impact Function')
+            function_id='Flood Raster Building Impact Function')
         DOCK.get_functions()
         self.assertTrue(result, message)
 
