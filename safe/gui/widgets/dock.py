@@ -1437,8 +1437,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'show-keyword-wizard.svg' % resources_path(),
                 **SMALL_ICON_STYLE),
             self.tr(
-                ' icon in the toolbar, or choosing Plugins -> InaSAFE '
-                '-> Keyword Editor from the menu bar.'))
+                ' icon in the toolbar.'))
         report.add(context)
         self.pbnPrint.setEnabled(False)
         self.show_static_message(report)
