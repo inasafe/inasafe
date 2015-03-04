@@ -131,7 +131,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         e = read_safe_layer(exposure_path)
         self.calculator.set_hazard_layer(h)
         self.calculator.set_exposure_layer(e)
-        self.calculator.set_function('Flood Building Impact Function')
+        self.calculator.set_function('Flood Raster Building Impact Function')
         try:
             function_runner = self.calculator.get_runner()
             # Run non threaded

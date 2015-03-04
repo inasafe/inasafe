@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- *Flood on Building Test Cases.**
+- *Raster Flood on Building Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -17,7 +17,6 @@ __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
 from safe.storage.core import read_layer
@@ -26,43 +25,15 @@ from safe.impact_functions import get_plugin
 from safe.test.utilities import TESTDATA, HAZDATA
 
 
-class TestFloodBuildingIF(unittest.TestCase):
-    """Test for Flood Building Impact Function."""
+class TestFloodRasterBuildingImpactFunction(unittest.TestCase):
+    """Test for Flood Raster Building Impact Function."""
 
     def setUp(self):
         """Run before each test."""
         pass
 
-    def test_flood_building_impact_function_vector(self):
-        """Test flood building impact function works (flood is polygon)."""
-        building = 'test_flood_building_impact_exposure.shp'
-        flood_data = 'test_flood_building_impact_hazard.shp'
-        plugin_name = 'FloodBuildingImpactFunction'
-
-        hazard_filename = os.path.join(TESTDATA, flood_data)
-        exposure_filename = os.path.join(TESTDATA, building)
-
-        # Calculate impact using API
-        hazard_layer = read_layer(hazard_filename)
-        exposure_layer = read_layer(exposure_filename)
-
-        impact_function = get_plugin(plugin_name)
-
-        # Call calculation engine
-        impact_layer = calculate_impact(
-            layers=[hazard_layer, exposure_layer], impact_fcn=impact_function)
-        impact_filename = impact_layer.get_filename()
-        impact_layer = read_layer(impact_filename)
-
-        keywords = impact_layer.get_keywords()
-        buildings_total = keywords['buildings_total']
-        buildings_affected = keywords['buildings_affected']
-
-        self.assertEqual(buildings_total, 67)
-        self.assertEqual(buildings_affected, 41)
-
-    def test_flood_building_impact_function(self):
-        """Flood building impact function works
+    def test_flood_raster_building_impact_function(self):
+        """Flood raster building impact function works
 
         This test also exercises interpolation of hazard level (raster) to
         building locations (vector data).
@@ -78,7 +49,7 @@ class TestFloodBuildingIF(unittest.TestCase):
             hazard_layer = read_layer(hazard_filename)
             exposure_layer = read_layer(exposure_filename)
 
-            plugin_name = 'FloodBuildingImpactFunction'
+            plugin_name = 'FloodRasterBuildingImpactFunction'
             impact_function = get_plugin(plugin_name)
 
             impact_vector = calculate_impact(
@@ -95,4 +66,4 @@ class TestFloodBuildingIF(unittest.TestCase):
 
             # FIXME (Ole): check more numbers
 
-    test_flood_building_impact_function.slow = True
+    test_flood_raster_building_impact_function.slow = True

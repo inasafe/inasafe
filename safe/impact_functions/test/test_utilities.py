@@ -24,6 +24,8 @@ from safe.impact_functions.utilities import (
     keywords_to_str,
     add_to_list,
     get_python_file)
+from safe.impact_functions.inundation.flood_raster_OSM_building_impact import (
+    FloodRasterBuildingImpactFunction)
 
 
 class TestUtilities(unittest.TestCase):
@@ -66,12 +68,14 @@ class TestUtilities(unittest.TestCase):
         """Test get_python_file"""
         path = get_python_file(TestUtilities)
         expected_path = os.path.realpath(__file__)
-        expected_paths = [expected_path, expected_path + 'c']
+        expected_paths = [
+            expected_path,
+            expected_path + 'c',
+            expected_path[:-1]]
 
         message = 'Expecting %s in %s' % (path, expected_paths)
 
         self.assertIn(path, expected_paths, message)
-
 
 if __name__ == '__main__':
     unittest.main()
