@@ -1426,19 +1426,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         report.add(LOGO_ELEMENT)
         report.add(m.Heading(self.tr(
             'Layer keywords missing:'), **WARNING_STYLE))
-        context = m.Message(
-            m.Text(self.tr(
+        context = m.Paragraph(
+            self.tr(
                 'No keywords have been defined for this layer yet. If '
                 'you wish to use it as an impact or hazard layer in a '
-                'scenario, please use the keyword editor. You can open'
-                ' the keyword editor by clicking on the ')),
+                'scenario, please use the keyword editor. You can open '
+                'the keyword editor by clicking on the '),
             m.Image(
                 'file:///%s/img/icons/'
-                'show-keyword-editor.svg' % resources_path(),
-                attributes='width=24 height=24'),
-            m.Text(self.tr(
+                'show-keyword-wizard.svg' % resources_path(),
+                **SMALL_ICON_STYLE),
+            self.tr(
                 ' icon in the toolbar, or choosing Plugins -> InaSAFE '
-                '-> Keyword Editor from the menu bar.')))
+                '-> Keyword Editor from the menu bar.'))
         report.add(context)
         self.pbnPrint.setEnabled(False)
         self.show_static_message(report)
