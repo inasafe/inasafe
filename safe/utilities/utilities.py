@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.i18n import tr
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -25,6 +23,7 @@ import traceback
 import logging
 import webbrowser
 import unicodedata
+import codecs
 
 # noinspection PyPackageRequirements
 
@@ -41,6 +40,7 @@ from safe.impact_functions.core import get_plugins
 from safe.messaging import styles
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.unicode import get_string
+from safe.utilities.i18n import tr
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -257,8 +257,8 @@ def html_to_file(html, file_path=None, open_browser=False):
     if file_path is None:
         file_path = unique_filename(suffix='.html')
 
-    with open(file_path, 'w') as f:
-        f.write(get_string(html))
+    with codecs.open(file_path, 'w', encoding='utf8') as f:
+        f.write(html)
 
     if open_browser:
         open_in_browser(file_path)

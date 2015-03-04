@@ -31,8 +31,8 @@ def html_header():
     :rtype: str
     """
     file_path = os.path.join(resources_path(), 'header.html')
-    header_file = codecs.open(file_path, encoding='utf-8')
-    with file(file_path) as header_file:
+
+    with codecs.open(file_path, 'r', encoding='utf8') as header_file:
         content = header_file.read()
         content = content.replace('PATH', resources_path())
     return content
