@@ -257,7 +257,7 @@ def html_to_file(html, file_path=None, open_browser=False):
     if file_path is None:
         file_path = unique_filename(suffix='.html')
 
-    with codecs.open(file_path, 'w', encoding='utf8') as f:
+    with codecs.open(file_path, 'w', encoding='utf-8') as f:
         f.write(html)
 
     if open_browser:
