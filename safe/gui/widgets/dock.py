@@ -1667,8 +1667,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
                          'impact-map', 'impact-legend']
         impact_report.component_ids = component_ids
-        if template_warning_verbose and \
-                        len(impact_report.missing_elements) != 0:
+        length = len(impact_report.missing_elements)
+        if template_warning_verbose and length != 0:
             title = self.tr('Template is missing some elements')
             question = self.tr(
                 'The composer template you are printing to is missing '
