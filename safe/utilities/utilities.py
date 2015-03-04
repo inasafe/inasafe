@@ -37,7 +37,7 @@ from safe.common.utilities import unique_filename
 from safe.common.version import get_version
 from safe import messaging as m
 from safe.impact_functions.core import get_plugins
-from safe.messaging import styles
+from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
@@ -70,10 +70,13 @@ def get_error_message(exception, context=None, suggestion=None):
 
     problem = m.Message(m.Text(exception.__class__.__name__))
 
-    if str(exception) is None or str(exception) == '':
+    if exception is None or exception == '':
         problem.append = m.Text(tr('No details provided'))
     else:
-        problem.append = m.Text(str(exception))
+        if isinstance(exception.message, Message):
+            problem.append = m.Text(str(exception.message.message))
+        else:
+            problem.append = m.Text(exception.message)
 
     suggestion = suggestion
     if suggestion is None and hasattr(exception, 'suggestion'):
