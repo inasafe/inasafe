@@ -382,18 +382,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
         if self.organisation_logo_path:
-            dock_width = self.width()
+            dock_width = float(self.width())
 
             # Dont let the image be more tha 100px hight
             maximum_height = 100.0  # px
             pixmap = QtGui.QPixmap(self.organisation_logo_path)
             height_ratio = maximum_height / pixmap.height()
-            maximum_width = pixmap.width() * height_ratio
+            maximum_width = int(pixmap.width() * height_ratio)
 
             # Don't let the image be more than the dock width wide
             if maximum_width > dock_width:
-                width_ratio = dock_width / pixmap.width()
-                maximum_height = pixmap.height() * ratio
+                width_ratio = dock_width / float(pixmap.width())
+                maximum_height = int(pixmap.height() * width_ratio)
                 maximum_width = dock_width
 
             too_high = pixmap.height() > maximum_height
