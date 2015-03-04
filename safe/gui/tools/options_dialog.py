@@ -30,12 +30,12 @@ from safe.utilities.help import show_context_help
 from safe.common.utilities import temp_dir
 from safe.defaults import (
     disclaimer,
+    default_organisation_logo_path,
     default_north_arrow_path,
     get_defaults)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class
 from safe.common.version import get_version
-from safe.defaults import default_organisation_logo_path
 
 FORM_CLASS = get_ui_class('options_dialog_base.ui')
 
@@ -81,7 +81,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.custom_org_logo_checkbox.toggled.connect(
             self.set_organisation_logo)
         self.custom_north_arrow_checkbox.toggled.connect(self.set_north_arrow)
-        self.custom_UseUserDirectory_checkbox.toggled.connect(self.set_user_dir)
+        self.custom_UseUserDirectory_checkbox.toggled.connect(
+            self.set_user_dir)
         self.custom_templates_dir_checkbox.toggled.connect(
             self.set_templates_dir)
         self.custom_org_disclaimer_checkbox.toggled.connect(
@@ -156,7 +157,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             temp_dir('impacts'), type=str)
         custom_user_directory_flag = (
             user_directory_path != temp_dir('impacts'))
-        self.custom_UseUserDirectory_checkbox.setChecked(custom_user_directory_flag)
+        self.custom_UseUserDirectory_checkbox.setChecked(
+            custom_user_directory_flag)
         self.splitter_user_directory.setEnabled(custom_user_directory_flag)
         self.leUserDirectoryPath.setText(user_directory_path)
 
@@ -317,7 +319,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolUserDirectoryPath_clicked(self):
-        """Auto-connect slot activated when user directory tool button is clicked.
+        """Auto-connect slot activated when user directory tool button is
+        clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
         dir_name = QtGui.QFileDialog.getExistingDirectory(

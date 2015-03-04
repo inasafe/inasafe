@@ -144,8 +144,8 @@ class WizardDialogTest(unittest.TestCase):
         expected_categories = ['exposure', 'hazard', 'aggregation']
         chosen_category = 'hazard'
 
-        expected_subcategory_count = 4
-        expected_subcategories = ['volcano', 'earthquake', 'flood', 'tsunami']
+        expected_subcategory_count = 3
+        expected_subcategories = ['volcano', 'flood', 'tsunami']
         chosen_subcategory = "tsunami"
 
         expected_unit_count = 3
@@ -1058,30 +1058,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check the values of subcategories options
-        expected_subcategories = ['earthquake', 'flood', 'tsunami', 'volcano']
+        expected_subcategories = ['flood', 'tsunami', 'volcano']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
-
-        # choosing earthquake
-        self.select_from_list_widget('earthquake', dialog.lstSubcategories)
-
-        dialog.pbnNext.click()  # Go to unit
-
-        # check the values of units options
-        expected_units = ['MMI']
-        self.check_list(expected_units, dialog.lstUnits)
-        self.select_from_list_widget('MMI', dialog.lstUnits)
-        dialog.pbnNext.click()  # go to field step
-
-        # check in field step
-        self.check_current_step(step_kw_field, dialog)
-
-        for i in range(dialog.lstFields.count()):
-            item_flag = dialog.lstFields.item(i).flags()
-            message = 'Item should be disabled'
-            self.assertTrue(item_flag & ~QtCore.Qt.ItemIsEnabled, message)
-
-        dialog.pbnBack.click()  # back  to unit step
-        dialog.pbnBack.click()  # back  to unit subcategory
 
         # select flood
         self.select_from_list_widget('flood', dialog.lstSubcategories)
@@ -1253,10 +1231,10 @@ class WizardDialogTest(unittest.TestCase):
 
         expected_hazards_count = 5
         expected_exposures_count = 3
-        expected_flood_structure_functions_count = 3
+        expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 1
         expected_functions_count = 1
-        chosen_if = 'FloodBuildingImpactFunction'
+        chosen_if = 'FloodRasterBuildingImpactFunction'
 
         expected_hazard_layers_count = 1
         expected_exposure_layers_count = 1
@@ -1349,7 +1327,8 @@ class WizardDialogTest(unittest.TestCase):
         message = 'Expected flood impact function not found: %s' % chosen_if
         self.assertTrue(chosen_if in flood_ifs, message)
 
-        # step_fc_function: select FloodBuildingImpactFunction and press ok
+        # step_fc_function: select FloodRasterBuildingImpactFunction and
+        # press ok
         chosen_if_row = flood_ifs.index(chosen_if)
         dialog.lstFunctions.setCurrentRow(chosen_if_row)
         dialog.pbnNext.click()

@@ -11,6 +11,7 @@
 *.png binary
 *.jpg binary
 *.jpeg binary
+*.tif binary
 *.gif binary
 *.idraw binary
 *.xcf binary
@@ -20,6 +21,6 @@
 *.sqlite binary
 
 # fonts:
-*.eot
-*.ttf
-*.woff
+*.eot binary
+*.ttf binary
+*.woff binary
