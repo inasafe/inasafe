@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>393</width>
-    <height>668</height>
+    <width>422</width>
+    <height>657</height>
    </rect>
   </property>
   <property name="windowIcon">
@@ -18,21 +18,27 @@
    <string>InaSAFE</string>
   </property>
   <widget class="QWidget" name="dockWidgetContents">
-   <layout class="QGridLayout" name="gridLayout">
-    <property name="horizontalSpacing">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="leftMargin">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="topMargin">
+     <number>10</number>
+    </property>
+    <property name="rightMargin">
      <number>0</number>
     </property>
-    <item row="0" column="0">
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
      <widget class="QPushButton" name="pbnShowQuestion">
       <property name="text">
        <string>Show question form</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item>
      <widget class="QGroupBox" name="grpQuestion">
       <property name="title">
        <string>Question: In the event of</string>
@@ -123,7 +129,7 @@
       </layout>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item>
      <widget class="MessageViewer" name="wvResults" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
@@ -144,68 +150,41 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
-     <layout class="QHBoxLayout" name="org_logo_placeholder">
-      <property name="spacing">
-       <number>0</number>
+    <item>
+     <widget class="QLabel" name="organisation_logo">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <item>
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>0</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="organisation_logo">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>0</width>
-          <height>64</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="pixmap">
-         <pixmap>../../../resources/img/logos/supporters.png</pixmap>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>0</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
+      <property name="minimumSize">
+       <size>
+        <width>391</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>400</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>../../../resources/img/logos/supporters.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
     </item>
-    <item row="4" column="0">
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QPushButton" name="pbnHelp">

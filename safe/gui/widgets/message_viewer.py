@@ -80,6 +80,8 @@ class MessageViewer(QtWebKit.QWebView):
         self._impact_path = None
 
         self._html_loaded_flag = False
+        # noinspection PyUnresolvedReferences
+        self.loadFinished.connect(self.html_loaded_slot)
 
     @property
     def impact_path(self):
@@ -356,8 +358,6 @@ class MessageViewer(QtWebKit.QWebView):
         """
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
         self._html_loaded_flag = False
-        # noinspection PyUnresolvedReferences
-        self.loadFinished.connect(self.html_loaded_slot)
 
         if mode == HTML_FILE_MODE:
             self.setUrl(QtCore.QUrl.fromLocalFile(html))
@@ -375,8 +375,6 @@ class MessageViewer(QtWebKit.QWebView):
             time.sleep(sleep_period)
             # noinspection PyArgumentList
             QtCore.QCoreApplication.processEvents()
-        # noinspection PyUnresolvedReferences
-        self.loadFinished.disconnect(self.html_loaded_slot)
 
     def html_loaded_slot(self, ok):
         """Slot called when the page is loaded.

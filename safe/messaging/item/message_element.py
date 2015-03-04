@@ -67,9 +67,9 @@ class MessageElement(object):
 
     @staticmethod
     def _is_stringable(message):
-        return (isinstance(message, basestring)
-                or isinstance(message, int)
-                or isinstance(message, float))
+        return (isinstance(message, basestring) or
+                isinstance(message, int) or
+                isinstance(message, float))
 
     def to_html(self):
         """Render a MessageElement queue as html

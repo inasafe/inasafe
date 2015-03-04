@@ -287,9 +287,8 @@ class FloodEvacuationFunctionVectorHazard(FunctionProvider):
 
         # Estimate number of people in need of evacuation
         evacuated = (
-            affected_population
-            * self.parameters['evacuation_percentage']
-            / 100.0)
+            affected_population *
+            self.parameters['evacuation_percentage'] / 100.0)
 
         affected_population, rounding = population_rounding_full(
             affected_population)

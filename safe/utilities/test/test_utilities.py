@@ -84,7 +84,8 @@ class UtilitiesTest(unittest.TestCase):
 
     def test_accentuated_characters(self):
         """Test that accentuated characters has been replaced."""
-        self.assertEqual(replace_accentuated_characters(u'áéíóúýÁÉÍÓÚÝ'), 'aeiouyAEIOUY')
+        self.assertEqual(
+            replace_accentuated_characters(u'áéíóúýÁÉÍÓÚÝ'), 'aeiouyAEIOUY')
 
     def test_impact_layer_attribution(self):
         """Test we get an attribution html snippet nicely for impact layers."""
