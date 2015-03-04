@@ -39,7 +39,7 @@ from safe import messaging as m
 from safe.impact_functions.core import get_plugins
 from safe.messaging import styles
 from safe.messaging.error_message import ErrorMessage
-from safe.utilities.unicode import get_string
+from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
 
 INFO_STYLE = styles.INFO_STYLE
@@ -257,6 +257,8 @@ def html_to_file(html, file_path=None, open_browser=False):
     if file_path is None:
         file_path = unique_filename(suffix='.html')
 
+    # Ensure html is in unicode for codecs module
+    html = get_unicode(html)
     with codecs.open(file_path, 'w', encoding='utf-8') as f:
         f.write(html)
 
