@@ -482,8 +482,8 @@ def check_image(control_image_path, test_image_path, tolerance=1000):
         message = 'Control image:\n{0:s}\ncould not be loaded.\n'
         return False, message
 
-    if (control_image.width() != test_image.width()
-            or control_image.height() != test_image.height()):
+    if (control_image.width() != test_image.width() or
+            control_image.height() != test_image.height()):
         message = (
             'Control and test images are different sizes.\n'
             'Control image   : %s (%i x %i)\n'
