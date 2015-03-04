@@ -187,11 +187,11 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         show_context_help(self.help_context)
 
     def update_extent(self, extent):
-        """ Update extent value in GUI based from an extent.
+        """Update extent value in GUI based from an extent.
 
-        :param extent: a list in the form [xmin, ymin, xmax, ymax] where all
+        :param extent: A list in the form [xmin, ymin, xmax, ymax] where all
             coordinates provided are in Geographic / EPSG:4326.
-        :type: list
+        :type extent: list
         """
         self.min_longitude.setText(str(extent[0]))
         self.min_latitude.setText(str(extent[1]))
@@ -199,7 +199,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.max_latitude.setText(str(extent[3]))
 
     def update_extent_from_map_canvas(self):
-        """ Update extent value in GUI based from value in map.
+        """Update extent value in GUI based from value in map.
 
         .. note:: Delegates to update_extent()
         """
@@ -210,7 +210,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.update_extent(extent)
 
     def update_extent_from_rectangle(self):
-        """ Update extent value in GUI based from the QgsMapTool rectangle.
+        """Update extent value in GUI based from the QgsMapTool rectangle.
 
         .. note:: Delegates to update_extent()
         """
@@ -260,13 +260,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_directory_button_clicked(self):
-        """ Show a dialog to choose directory. """
+        """Show a dialog to choose directory."""
         # noinspection PyCallByClass,PyTypeChecker
         self.output_directory.setText(QFileDialog.getExistingDirectory(
             self, self.tr("Select download directory")))
 
     def drag_rectangle_on_map_canvas(self):
-        """ Hide the dialog and allow the user to draw a rectangle. """
+        """Hide the dialog and allow the user to draw a rectangle."""
 
         self.hide()
         self.rectangle_map_tool.reset()
@@ -480,7 +480,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.iface.addVectorLayer(path, feature_type, 'ogr')
 
     def reject(self):
-        """Redefinition of the reject() method to remove the rectangle selection tool.
+        """Redefinition of the reject() method
+        to remove the rectangle selection tool.
         It will call the super method.
         """
 

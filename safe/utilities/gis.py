@@ -99,9 +99,9 @@ def extent_to_array(extent, source_crs, dest_crs=None):
 
 
 def rectangle_geo_array(rectangle, map_canvas):
-    """Obtain the get_rectangle in EPSG:4326.
+    """Obtain the rectangle in EPSG:4326.
 
-    :param rectangle: A get_rectangle instance.
+    :param rectangle: A rectangle instance.
     :type rectangle: QgsRectangle
 
     :param map_canvas: A map canvas instance.
