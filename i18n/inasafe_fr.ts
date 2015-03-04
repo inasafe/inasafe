@@ -3260,7 +3260,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1584"/>
+        <location filename="dock.py" line="1583"/>
         <source>InaSAFE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3270,32 +3270,32 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1546"/>
+        <location filename="dock.py" line="1545"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1690"/>
+        <location filename="dock.py" line="1689"/>
         <source>Map Creator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1595"/>
+        <location filename="dock.py" line="1594"/>
         <source>Preparing map and report</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1668"/>
+        <location filename="dock.py" line="1667"/>
         <source>Write to PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1668"/>
+        <location filename="dock.py" line="1667"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1676"/>
+        <location filename="dock.py" line="1675"/>
         <source>Printing cancelled!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3365,17 +3365,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1432"/>
-        <source> icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menu bar.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="1690"/>
+        <location filename="dock.py" line="1689"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1690"/>
+        <location filename="dock.py" line="1689"/>
         <source>and</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3385,12 +3380,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1556"/>
+        <location filename="dock.py" line="1555"/>
         <source>Report generation cancelled!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1662"/>
+        <location filename="dock.py" line="1661"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3425,12 +3420,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1626"/>
+        <location filename="dock.py" line="1625"/>
         <source>Template is missing some elements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1629"/>
+        <location filename="dock.py" line="1628"/>
         <source>The composer template you are printing to is missing these elements: %s. Do you still want to continue</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3440,7 +3435,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="dock.py" line="1584"/>
+        <location filename="dock.py" line="1583"/>
         <source>Please select a valid template before printing. The template you choose does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3457,6 +3452,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="509"/>
         <source> in the toolbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1432"/>
+        <source> icon in the toolbar.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4265,7 +4265,7 @@ to
 <context>
     <name>MessageViewer</name>
     <message>
-        <location filename="message_viewer.py" line="154"/>
+        <location filename="message_viewer.py" line="156"/>
         <source>log pageToText</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4280,22 +4280,22 @@ to
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="134"/>
+        <location filename="message_viewer.py" line="136"/>
         <source>Open in web browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="290"/>
+        <location filename="message_viewer.py" line="292"/>
         <source>report_path is not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="299"/>
+        <location filename="message_viewer.py" line="301"/>
         <source>Analysis log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="307"/>
+        <location filename="message_viewer.py" line="309"/>
         <source>log_path is not set</source>
         <translation type="unfinished"></translation>
     </message>

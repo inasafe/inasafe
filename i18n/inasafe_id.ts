@@ -3320,7 +3320,7 @@ p, li { white-space: pre-wrap; }
         <translation>Area keseluruhan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1584"/>
+        <location filename="dock.py" line="1583"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -3330,32 +3330,32 @@ p, li { white-space: pre-wrap; }
         <translation>Anda mungkin tidak memiliki memori bebas yang cukup untuk menjalankan analisis. Lihatlah panel pesan (dock) untuk informasi lebih lanjut. Apakah Anda yakin untuk melanjutkan?</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1546"/>
+        <location filename="dock.py" line="1545"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Silakan pilih layer dampak yang valid sebelum mencoba untuk mencetaknya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1690"/>
+        <location filename="dock.py" line="1689"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1595"/>
+        <location filename="dock.py" line="1594"/>
         <source>Preparing map and report</source>
         <translation>Mempersiapkan peta dan laporan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1668"/>
+        <location filename="dock.py" line="1667"/>
         <source>Write to PDF</source>
         <translation>Membuat dalam format PDF</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1668"/>
+        <location filename="dock.py" line="1667"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Dokumen PDF (*.pdf)</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1676"/>
+        <location filename="dock.py" line="1675"/>
         <source>Printing cancelled!</source>
         <translation>Pencetakan dibatalkan!</translation>
     </message>
@@ -3422,20 +3422,15 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="1432"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an impact or hazard layer in a scenario, please use the keyword editor. You can open the keyword editor by clicking on the </source>
-        <translation>Belum ada kata kunci yang telah ditentukan untuk layer ini. Jika Anda ingin menggunakannya sebagai dampak atau layer ancaman bencana dalam skenario Anda, silakan gunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan klik pada</translation>
+        <translation>Belum ada kata kunci yang telah ditentukan untuk layer ini. Jika Anda ingin menggunakannya sebagai dampak atau layer ancaman bencana dalam skenario Anda, silakan gunakan editor kata kunci. Anda dapat membuka editor kata kunci dengan klik pada ikon </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1432"/>
-        <source> icon in the toolbar, or choosing Plugins -&gt; InaSAFE -&gt; Keyword Editor from the menu bar.</source>
-        <translation>ikon pada toolbar, atau dengan memilih Plugins -&gt; InaSAFE -&gt; Keyword Editor pada menu bar.</translation>
-    </message>
-    <message>
-        <location filename="dock.py" line="1690"/>
+        <location filename="dock.py" line="1689"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation>PDF Anda telah selesai dibuat....buka dengan menggunakan pembaca berkas PDF pada sistem komputer Anda. Berkas PDF Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1690"/>
+        <location filename="dock.py" line="1689"/>
         <source>and</source>
         <translation>dan</translation>
     </message>
@@ -3445,12 +3440,12 @@ p, li { white-space: pre-wrap; }
         <translation>Layer dampak %s bukan berupa layer raster ataupun vektor</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1556"/>
+        <location filename="dock.py" line="1555"/>
         <source>Report generation cancelled!</source>
         <translation>Pembuatan laporan dibatalkan!</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1662"/>
+        <location filename="dock.py" line="1661"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation>Kata kunci &quot;map_title&quot; tidak ditemukan.</translation>
     </message>
@@ -3485,12 +3480,12 @@ p, li { white-space: pre-wrap; }
         <translation>di bawah ini.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1626"/>
+        <location filename="dock.py" line="1625"/>
         <source>Template is missing some elements</source>
         <translation>Template kehilangan beberapa element</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1629"/>
+        <location filename="dock.py" line="1628"/>
         <source>The composer template you are printing to is missing these elements: %s. Do you still want to continue</source>
         <translation>Template komposer yang akan Anda cetak kehilangan bagian-bagian berikut: %s. Apakah anda masih ingin melanjutkan</translation>
     </message>
@@ -3500,7 +3495,7 @@ p, li { white-space: pre-wrap; }
         <translation>InaSAFE %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1584"/>
+        <location filename="dock.py" line="1583"/>
         <source>Please select a valid template before printing. The template you choose does not exist.</source>
         <translation>Silahakan pilih template yang sah sebelum mencetak. Template yang Anda pilih tidak ada.</translation>
     </message>
@@ -3517,6 +3512,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="509"/>
         <source> in the toolbar.</source>
+        <translation>di toolbar.</translation>
+    </message>
+    <message>
+        <location filename="dock.py" line="1432"/>
+        <source> icon in the toolbar.</source>
         <translation>di toolbar.</translation>
     </message>
 </context>
@@ -4329,7 +4329,7 @@ ke
 <context>
     <name>MessageViewer</name>
     <message>
-        <location filename="message_viewer.py" line="154"/>
+        <location filename="message_viewer.py" line="156"/>
         <source>log pageToText</source>
         <translation>log pageToText</translation>
     </message>
@@ -4344,22 +4344,22 @@ ke
         <translation>Tampilkan laporan</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="134"/>
+        <location filename="message_viewer.py" line="136"/>
         <source>Open in web browser</source>
         <translation>Buka di browser internet</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="290"/>
+        <location filename="message_viewer.py" line="292"/>
         <source>report_path is not set</source>
         <translation>report_path tidak diatur</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="299"/>
+        <location filename="message_viewer.py" line="301"/>
         <source>Analysis log</source>
         <translation>Catatan analisis</translation>
     </message>
     <message>
-        <location filename="message_viewer.py" line="307"/>
+        <location filename="message_viewer.py" line="309"/>
         <source>log_path is not set</source>
         <translation>log_path tidak diatur</translation>
     </message>
