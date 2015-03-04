@@ -695,7 +695,7 @@ class Plugin(object):
         from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
 
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
-        dialog.exec_()  # modal
+        dialog.show()  # non modal
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
