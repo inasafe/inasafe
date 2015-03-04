@@ -74,6 +74,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         self.iface = iface
         self.buildings_url = "http://osm.linfiniti.com/buildings-shp"
+        self.building_points_url = "http://osm.linfiniti.com/building-points-shp"
         self.roads_url = "http://osm.linfiniti.com/roads-shp"
 
         self.help_context = 'openstreetmap_downloader'
@@ -293,9 +294,11 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         # Get all the feature types
         index = self.feature_type.currentIndex()
         if index == 0:
-            feature_types = ['buildings', 'roads']
+            feature_types = ['buildings', 'roads', 'building-points']
         elif index == 1:
             feature_types = ['buildings']
+        elif index == 2:
+            feature_types = ['building-points']
         else:
             feature_types = ['roads']
 
@@ -360,7 +363,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Download shapefiles from Linfiniti server.
 
         :param feature_type: What kind of features should be downloaded.
-            Currently 'buildings' or 'roads' are supported.
+            Currently 'buildings' or 'building-points' or 'roads' are supported.
         :type feature_type: str
 
         :raises: ImportDialogError, CanceledImportDialogError
@@ -384,6 +387,9 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         if feature_type == 'buildings':
             url = "{url}?bbox={box}&qgis_version=2".format(
                 url=self.buildings_url, box=box)
+        elif feature_type == 'building-points':
+            url = "{url}?bbox={box}&qgis_version=2".format(
+                url=self.building_points_url, box=box)
         else:
             url = "{url}?bbox={box}&qgis_version=2".format(
                 url=self.roads_url, box=box)
@@ -463,7 +469,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Load downloaded shape file to QGIS Main Window.
 
         :param feature_type: What kind of features should be downloaded.
-            Currently 'buildings' or 'roads' are supported.
+            Currently 'buildings' or 'building-points' or 'roads' are supported.
         :type feature_type: str
 
         :raises: ImportDialogError - when buildings.shp not exist
