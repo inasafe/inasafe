@@ -1406,7 +1406,8 @@ class WizardDialog(QDialog, FORM_CLASS):
     # STEP_FC_FUNCTION_1
     # ===========================
 
-    def available_constraints(self):
+    @staticmethod
+    def available_constraints():
         """Collect available layer_constraints from all impact functions.
 
         :returns: List of metadata of the available constraints.
@@ -1416,7 +1417,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 layer_raster_continuous]
 
     def selected_functions_1(self):
-        """Obtain functions available for hazarda an exposure selected by user.
+        """Obtain functions available for hazard an exposure selected by user.
 
         :returns: List of the available functions metadata.
         :rtype: list, None
@@ -1426,7 +1427,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             return []
         return selection[0].data(RoleFunctions)
 
-    def selected_imfunc_constraints(self):
+    def selected_impact_function_constraints(self):
         """Obtain impact function constraints selected by user.
 
         :returns: Tuple of metadata of hazard, exposure,
@@ -1480,6 +1481,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 item.setText((item == selItem) and u'\u2022' or '')
 
     # pylint: disable=W0613
+    # noinspection PyPep8Naming
     def on_tblFunctions1_cellDoubleClicked(self, row, column):
         """Choose selected hazard x exposure combination and go ahead.
 
@@ -1532,12 +1534,12 @@ class WizardDialog(QDialog, FORM_CLASS):
                 functions = ImpactFunctionManager(
                     ).get_functions_for_constraint(h, e)
                 if len(functions):
-                    bgcolor = QtGui.QColor(120, 255, 120)
+                    background_colour = QtGui.QColor(120, 255, 120)
                 else:
-                    bgcolor = QtGui.QColor(220, 220, 220)
+                    background_colour = QtGui.QColor(220, 220, 220)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
-                item.setBackground(QtGui.QBrush(bgcolor))
+                item.setBackground(QtGui.QBrush(background_colour))
                 item.setFont(big_font)
                 item.setTextAlignment(QtCore.Qt.AlignCenter |
                                       QtCore.Qt.AlignHCenter)
@@ -1591,12 +1593,18 @@ class WizardDialog(QDialog, FORM_CLASS):
                 item.setText((item == selItem) and u'\u2022' or '')
 
     # pylint: disable=W0613
+    # noinspection PyPep8Naming,PyUnusedLocal
     def on_tblFunctions2_cellDoubleClicked(self, row, column):
-        """Choose selected hazard x exposure constraints combination
-           and go ahead.
+        """Click handler for selecting hazard and exposure constraints.
 
-        .. note:: This is an automatic Qt slot
-           executed when the category selection changes.
+        :param row: The row that the user clicked on.
+        :type row: int
+
+        :param column: The column that the user clicked on.
+        :type column: int
+
+        .. note:: This is an automatic Qt slot executed when the category
+            selection changes.
         """
         self.pbnNext.click()
     # pylint: enable=W0613
@@ -1605,19 +1613,25 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Impact Functions Table 2 tab."""
 
         self.tblFunctions2.clear()
-        h, e, _hc, _ec = self.selected_imfunc_constraints()
-        haz_datatypes = [layer_raster_continuous, layer_raster_classified,
-                         layer_vector_polygon, layer_vector_point]
-        exp_datatypes = [layer_raster_continuous, layer_vector_point,
-                         layer_vector_line, layer_vector_polygon]
-        self.tblFunctions2.setColumnCount(len(haz_datatypes))
-        self.tblFunctions2.setRowCount(len(exp_datatypes))
+        h, e, _hc, _ec = self.selected_impact_function_constraints()
+        hazard_data_types = [
+            layer_raster_continuous,
+            layer_raster_classified,
+            layer_vector_polygon,
+            layer_vector_point]
+        exposure_data_types = [
+            layer_raster_continuous,
+            layer_vector_point,
+            layer_vector_line,
+            layer_vector_polygon]
+        self.tblFunctions2.setColumnCount(len(hazard_data_types))
+        self.tblFunctions2.setRowCount(len(exposure_data_types))
         self.tblFunctions2.setHorizontalHeaderLabels(
             [i['data_type'].capitalize() if i['layer_type'] != 'raster'
              else ('%s %s' % (i['data_type'], i['layer_type'])).capitalize()
-             for i in haz_datatypes])
-        for i in range(len(exp_datatypes)):
-            constr = exp_datatypes[i]
+             for i in hazard_data_types])
+        for i in range(len(exposure_data_types)):
+            constr = exposure_data_types[i]
             item = QtGui.QTableWidgetItem()
             if constr['layer_type'] == 'raster':
                 text = '%s\n%s' % (constr['data_type'], constr['layer_type'])
@@ -1636,10 +1650,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         big_font.setPointSize(80)
 
         active_items = []
-        for col in range(len(haz_datatypes)):
-            for row in range(len(exp_datatypes)):
-                hc = haz_datatypes[col]
-                ec = exp_datatypes[row]
+        for col in range(len(hazard_data_types)):
+            for row in range(len(exposure_data_types)):
+                hc = hazard_data_types[col]
+                ec = exposure_data_types[row]
                 functions = ImpactFunctionManager(
                     ).get_functions_for_constraint(h, e, hc, ec)
                 item = QtGui.QTableWidgetItem()
@@ -1720,7 +1734,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lstFunctions.clear()
         self.lblDescribeFunction.setText('')
 
-        h, e, hc, ec = self.selected_imfunc_constraints()
+        h, e, hc, ec = self.selected_impact_function_constraints()
         functions = ImpactFunctionManager().get_functions_for_constraint(
             h, e, hc, ec)
         for f in functions:
@@ -1769,7 +1783,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
 
         # Get allowed subcategory, layer_type and data_type from IF constraints
-        h, e, hc, ec = self.selected_imfunc_constraints()
+        h, e, hc, ec = self.selected_impact_function_constraints()
         if category == 'hazard':
             subcategory = h['id']
             layer_type = hc['layer_type']
@@ -1942,7 +1956,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         (hazard,
          _,
          hazard_constraints,
-         _) = self.selected_imfunc_constraints()
+         _) = self.selected_impact_function_constraints()
         if hazard_constraints['layer_type'] == 'raster':
             data_type = '%s %s' % (
                 hazard_constraints['data_type'],
@@ -2339,7 +2353,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         (_,
          exposure,
          _,
-         exposure_constraints) = self.selected_imfunc_constraints()
+         exposure_constraints) = self.selected_impact_function_constraints()
         if exposure_constraints['layer_type'] == 'raster':
             data_type = '%s %s' % (
                 exposure_constraints['data_type'],
