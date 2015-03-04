@@ -83,7 +83,9 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
                 'id': 'FloodRasterBuildingImpactFunction',
                 'name': tr('Flood Raster Building Impact Function'),
                 'impact': tr('Be flooded'),
-                'author': ['Ole Nielsen', 'Kristy van Putten'],
+                'title': tr('Be flooded'),
+                # should be a list, but we can do it later.
+                'author': 'Ole Nielsen and Kristy van Putten',
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'To assess the impacts of (flood or tsunami) inundation '
@@ -121,9 +123,9 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
                     'might be flooded'),
                 'limitations': [
                     tr('This function only flags buildings as impacted or not '
-                        'either based on a fixed threshold in case of raster '
-                        'hazard or the the attributes mentioned under input '
-                        'in case of vector hazard.')
+                       'either based on a fixed threshold in case of raster '
+                       'hazard or the the attributes mentioned under input '
+                       'in case of vector hazard.')
                 ],
                 'citations': [],
                 'categories': {
@@ -138,7 +140,7 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
                             unit_feet_depth],
                         'layer_constraints': [
                             layer_raster_continuous,
-                        ]
+                            ]
                     },
                     'exposure': {
                         'definition': exposure_definition,
@@ -155,9 +157,9 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
             }
             return dict_meta
 
-    # Function documentation
-    target_field = 'INUNDATED'
+    title = tr('Be flooded')
 
+    target_field = 'INUNDATED'
     # parameters
     parameters = OrderedDict([
         ('threshold [m]', 1.0),

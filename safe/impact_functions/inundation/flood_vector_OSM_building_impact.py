@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 import logging
 
-from safe.definitions import (
+from safe.metadata import (
     hazard_flood,
     hazard_tsunami,
     unit_wetdry,
@@ -154,6 +154,8 @@ class FloodVectorBuildingImpactFunction(FunctionProvider):
                 }
             }
             return dict_meta
+
+    title = tr('Be flooded')
 
     target_field = 'INUNDATED'
     # parameters

@@ -68,7 +68,10 @@ class TestUtilities(unittest.TestCase):
         """Test get_python_file"""
         path = get_python_file(TestUtilities)
         expected_path = os.path.realpath(__file__)
-        expected_paths = [expected_path, expected_path + 'c']
+        expected_paths = [
+            expected_path,
+            expected_path + 'c',
+            expected_path[:-1]]
 
         message = 'Expecting %s in %s' % (path, expected_paths)
 
