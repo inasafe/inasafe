@@ -495,8 +495,8 @@ class Aggregator(QtCore.QObject):
         aggregation_layer_name = self.layer.name()
         if self.aoi_mode:
             aggregation_layer_name = aggregation_layer_name.lower()
-        layer_name = str(self.tr('%s aggregated to %s') % (
-            qgis_impact_layer.name(), aggregation_layer_name))
+        layer_name = self.tr('%s aggregated to %s') % (
+            qgis_impact_layer.name(), aggregation_layer_name)
 
         # delete unwanted fields
         provider = self.layer.dataProvider()
