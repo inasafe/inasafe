@@ -74,7 +74,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         self.iface = iface
         self.buildings_url = "http://osm.linfiniti.com/buildings-shp"
-        self.building_points_url = "http://osm.linfiniti.com/building-points-shp"
+        self.building_points_url = \
+            "http://osm.linfiniti.com/building-points-shp"
         self.roads_url = "http://osm.linfiniti.com/roads-shp"
 
         self.help_context = 'openstreetmap_downloader'
@@ -103,9 +104,12 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         # Setup the rectangle map tool
         self.canvas = iface.mapCanvas()
-        self.rectangle_map_tool = RectangleMapTool(self.canvas)
-        self.rectangle_map_tool.rectangle_created.connect(self.update_extent_from_rectangle)
-        self.button_extent_rectangle.clicked.connect(self.drag_rectangle_on_map_canvas)
+        self.rectangle_map_tool = \
+            RectangleMapTool(self.canvas)
+        self.rectangle_map_tool.rectangle_created.connect(
+            self.update_extent_from_rectangle)
+        self.button_extent_rectangle.clicked.connect(
+            self.drag_rectangle_on_map_canvas)
 
         # Setup pan tool
         self.pan_tool = QgsMapToolPan(self.canvas)
@@ -363,7 +367,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Download shapefiles from Linfiniti server.
 
         :param feature_type: What kind of features should be downloaded.
-            Currently 'buildings' or 'building-points' or 'roads' are supported.
+            Currently 'buildings', 'building-points' or 'roads' are supported.
         :type feature_type: str
 
         :raises: ImportDialogError, CanceledImportDialogError
@@ -469,7 +473,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Load downloaded shape file to QGIS Main Window.
 
         :param feature_type: What kind of features should be downloaded.
-            Currently 'buildings' or 'building-points' or 'roads' are supported.
+            Currently 'buildings', 'building-points' or 'roads' are supported.
         :type feature_type: str
 
         :raises: ImportDialogError - when buildings.shp not exist
