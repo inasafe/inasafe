@@ -16,7 +16,6 @@ import logging
 from safe.metadata import (
     hazard_flood,
     hazard_tsunami,
-    unit_wetdry,
     unit_feet_depth,
     unit_metres_depth,
     layer_vector_polygon,
@@ -31,7 +30,6 @@ from safe.common.utilities import OrderedDict, get_osm_building_usage
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
-from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int, verify
 from safe.common.tables import Table, TableRow

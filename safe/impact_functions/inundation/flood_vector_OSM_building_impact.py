@@ -20,7 +20,6 @@ from safe.metadata import (
     unit_feet_depth,
     unit_metres_depth,
     layer_vector_polygon,
-    layer_raster_continuous,
     exposure_structure,
     unit_building_type_type,
     hazard_definition,
@@ -33,7 +32,7 @@ from safe.impact_functions.core import (
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.utilities.i18n import tr
-from safe.common.utilities import format_int, verify
+from safe.common.utilities import format_int
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.impact_function_metadata import (
