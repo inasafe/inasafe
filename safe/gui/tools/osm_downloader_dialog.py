@@ -403,7 +403,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         if 'LANG' in os.environ:
             env_lang = os.environ['LANG']
-            url += '&lang=%s' % env_lang
+            lang = env_lang.split('_')[0]
+            url += '&lang=%s' % lang
 
         path = tempfile.mktemp('.shp.zip')
 
