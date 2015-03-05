@@ -469,16 +469,16 @@ class KeywordsDialogTest(unittest.TestCase):
         # Load existing keywords
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'category': 'postprocessing',
-            'aggregation attribute': 'KAB_NAME',
-            'title': 'District\'s of Jakarta',
-            'elderly ratio attribute': 'Global default',
-            'youth ratio default': '0.263',
-            'elderly ratio default': '0.078',
-            'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'PEREMPUAN',
-            'youth ratio attribute': 'Global default',
-            'adult ratio default': '0.659'}
+            u'category': u'postprocessing',
+            u'aggregation attribute': u'KAB_NAME',
+            u'title': u'D\xedstr\xedct\'s of Jakarta',
+            u'elderly ratio attribute': u'Global default',
+            u'youth ratio default': u'0.26',
+            u'elderly ratio default': u'0.08',
+            u'adult ratio attribute': u'Global default',
+            u'female ratio attribute': u'PEREMPUAN',
+            u'youth ratio attribute': u'Global default',
+            u'adult ratio default': u'0.66'}
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
 
@@ -491,15 +491,15 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog.cboYouthRatioAttribute.setCurrentIndex(1)
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'category': 'postprocessing',
-            'aggregation attribute': 'KAB_NAME',
-            'title': 'District\'s of Jakarta',
-            'elderly ratio attribute': 'Global default',
-            'elderly ratio default': '0.078',
-            'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'PEREMPUAN',
-            'youth ratio attribute': 'Don\'t use',
-            'adult ratio default': '0.659'}
+            u'category': u'postprocessing',
+            u'aggregation attribute': u'KAB_NAME',
+            u'title': u'D\xedstr\xedct\'s of Jakarta',
+            u'elderly ratio attribute': u'Global default',
+            u'elderly ratio default': u'0.08',
+            u'adult ratio attribute': u'Global default',
+            u'female ratio attribute': u'PEREMPUAN',
+            u'youth ratio attribute': u'Don\'t use',
+            u'adult ratio default': u'0.66'}
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
 
@@ -513,16 +513,16 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog.dsbYouthRatioDefault.setValue(0.99)
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'category': 'postprocessing',
-            'aggregation attribute': 'KAB_NAME',
-            'title': 'District\'s of Jakarta',
-            'elderly ratio attribute': 'Global default',
-            'elderly ratio default': '0.078',
-            'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'PEREMPUAN',
-            'youth ratio attribute': 'Global default',
-            'youth ratio default': '0.99',
-            'adult ratio default': '0.659'}
+            u'category': u'postprocessing',
+            u'aggregation attribute': u'KAB_NAME',
+            u'title': u'D\xedstr\xedct\'s of Jakarta',
+            u'elderly ratio attribute': u'Global default',
+            u'elderly ratio default': u'0.08',
+            u'adult ratio attribute': u'Global default',
+            u'female ratio attribute': u'PEREMPUAN',
+            u'youth ratio attribute': u'Global default',
+            u'youth ratio default': u'0.99',
+            u'adult ratio default': u'0.66'}
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
 

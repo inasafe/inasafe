@@ -1,0 +1,64 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**Unicode Utilities.**
+
+The module provides utilities function to convert between unicode and byte
+string for Python 2.x. When we move to Python 3, this module and its usage
+should be removed as string in Python 3 is already stored in unicode.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'akbargumbira@gmail.com'
+__revision__ = '$Format:%H$'
+__date__ = '02/24/15'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
+
+def __if_not_basestring(object):
+    converted_str = object
+    if not isinstance(object, basestring):
+        converted_str = str(object)
+    return converted_str
+
+
+def get_unicode(input_text, encoding='utf-8'):
+    """Get the unicode representation of an object.
+
+    :param input_text: The input text.
+    :type input_text: unicode, str, float, int
+
+    :param encoding: The encoding used to do the conversion, default to utf-8.
+    :type encoding: str
+
+    :returns: Unicode representation of the input.
+    :rtype: unicode
+    """
+    input_text = __if_not_basestring(input_text)
+    if isinstance(input_text, unicode):
+        return input_text
+    return unicode(input_text, encoding, errors='ignore')
+
+
+def get_string(input_text, encoding='utf-8'):
+    """Get byte string representation of an object.
+
+    :param input_text:  The input text.
+    :type input_text: unicode, str, float, int
+
+    :param encoding: The encoding used to do the conversion, default to utf-8.
+    :type encoding: str
+
+    :returns: Byte string representation of the input.
+    :rtype: str
+    """
+    input_text = __if_not_basestring(input_text)
+    if isinstance(input_text, unicode):
+        return input_text.encode(encoding)
+    return input_text

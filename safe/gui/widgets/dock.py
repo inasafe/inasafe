@@ -96,6 +96,7 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
+from safe.utilities.unicode import get_string, get_unicode
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -876,7 +877,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             #    store uuid in user property of list widget for layers
 
             name = layer.name()
-            source = str(layer.id())
+            source = layer.id()
             # See if there is a title for this layer, if not,
             # fallback to the layer's filename
 
@@ -1126,7 +1127,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # Start the analysis
             self.analysis.run_analysis()
         except InsufficientOverlapError as e:
-            LOGGER.exception('Error calculating extents. %s' % str(e.message))
             context = self.tr(
                 'A problem was encountered when trying to determine the '
                 'analysis extents.'
@@ -1456,9 +1456,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if keyword == 'title':
                 value = self.tr(value)
                 # Add this keyword to report
+            value = get_string(value)
             key = m.ImportantText(
                 self.tr(keyword.capitalize()))
-            value = str(value)
             keywords_list.add(m.Text(key, value))
 
         report.add(keywords_list)

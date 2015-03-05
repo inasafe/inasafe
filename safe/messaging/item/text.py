@@ -19,6 +19,8 @@ import os
 from message_element import MessageElement
 from exceptions import InvalidMessageItemError
 
+from safe.utilities.unicode import get_string, get_unicode
+
 # FIXME (MB) remove when all to_* methods are implemented
 # pylint: disable=W0223
 
@@ -116,10 +118,7 @@ class PlainText(Text):
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
         super(PlainText, self).__init__(**kwargs)
-        if self._is_stringable(text) or self._is_qstring(text):
-            self.text = str(text)
-        else:
-            self.text = text
+        self.text = get_unicode(text)
 
     def to_html(self):
         """Render as html

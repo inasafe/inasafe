@@ -43,6 +43,7 @@ from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError)
 from safe import definitions
+from safe.utilities.unicode import get_unicode
 
 # Aggregations' keywords
 DEFAULTS = get_defaults()
@@ -767,19 +768,18 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         listwidgetitem as a simple string delimited with a bar ('|').
 
         :param key: The key part of the key value pair (kvp).
-        :type key: str
+        :type key: str, unicode
 
         :param value: Value part of the key value pair (kvp).
-        :type value: str
+        :type value: str, unicode
         """
         if key is None or key == '':
             return
-        if value is None or value == '':
-            return
 
-        # make sure that both key and value is string
-        key = str(key)
-        value = str(value)
+        # make sure that both key and value is unicode
+        key = get_unicode(key)
+        value = get_unicode(value)
+
         message = ''
         if ':' in key:
             key = key.replace(':', '.')
@@ -809,8 +809,6 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         :returns: False if radio button could not be updated, otherwise True.
         :rtype: bool
         """
-        # convert from QString if needed
-        category = str(category)
         if self.get_value_for_key('category') == category:
             # nothing to do, go home
             return True
@@ -927,8 +925,8 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
             existing_item = self.lstKeywords.item(counter)
             text = existing_item.text()
             tokens = text.split(':')
-            key = str(tokens[0]).strip()
-            value = str(tokens[1]).strip()
+            key = tokens[0].strip()
+            value = tokens[1].strip()
             if lookup_key == key:
                 return value
         return None
@@ -983,10 +981,10 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
 
         for key in keywords.iterkeys():
             if key in aggregation_attributes:
-                if str(keywords[key]) == 'Use default':
+                if keywords[key] == 'Use default':
                     self.add_list_entry(key, self.global_default_data)
                     continue
-            self.add_list_entry(key, str(keywords[key]))
+            self.add_list_entry(key, keywords[key])
 
         # now make the rest of the safe_qgis reflect the list entries
         self.update_controls_from_list()
@@ -1057,7 +1055,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         :param title: New title keyword for the layer.
         :type title: str
         """
-        self.add_list_entry('title', str(title))
+        self.add_list_entry('title', title)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -1073,7 +1071,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         if source is None or source == '':
             self.remove_item_by_key('source')
         else:
-            self.add_list_entry('source', str(source))
+            self.add_list_entry('source', source)
 
     def get_keywords(self):
         """Obtain the state of the dialog as a keywords dict.
@@ -1082,20 +1080,20 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         :rtype: dict
         """
         # make sure title is listed
-        if str(self.leTitle.text()) != '':
-            self.add_list_entry('title', str(self.leTitle.text()))
+        if self.leTitle.text() != '':
+            self.add_list_entry('title', self.leTitle.text())
 
         # make sure the source is listed too
-        if str(self.leSource.text()) != '':
-            self.add_list_entry('source', str(self.leSource.text()))
+        if self.leSource.text() != '':
+            self.add_list_entry('source', self.leSource.text())
 
         keywords = {}
         for counter in range(self.lstKeywords.count()):
             existing_item = self.lstKeywords.item(counter)
             text = existing_item.text()
             tokens = text.split(':')
-            key = str(tokens[0]).strip()
-            value = str(tokens[1]).strip()
+            key = tokens[0].strip()
+            value = tokens[1].strip()
             keywords[key] = value
         return keywords
 

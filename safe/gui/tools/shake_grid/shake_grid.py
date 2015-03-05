@@ -44,6 +44,7 @@ from safe.common.exceptions import (
     ContourCreationError,
     InvalidLayerError)
 from safe.utilities.styling import mmi_colour
+from safe.utilities.unicode import get_string
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -835,8 +836,8 @@ class ShakeGrid(object):
         else:
             keyword_title = self.title
         with open(keyword_path, 'a') as keyword_file:
-            keyword_file.write('title: %s \n' % keyword_title)
-            keyword_file.write('source: %s ' % self.source)
+            keyword_file.write(get_string('title: %s \n' % keyword_title))
+            keyword_file.write(get_string('source: %s ' % self.source))
 
 
 def convert_mmi_data(
