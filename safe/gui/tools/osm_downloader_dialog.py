@@ -401,6 +401,10 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         if output_prefix is not None:
             url += '&output_prefix=%s' % output_prefix
 
+        if 'LANG' in os.environ:
+            env_lang = os.environ['LANG']
+            url += '&lang=%s' % env_lang
+
         path = tempfile.mktemp('.shp.zip')
 
         # download and extract it
