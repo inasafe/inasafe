@@ -44,6 +44,11 @@
      </item>
      <item>
       <property name="text">
+       <string>Building points</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Roads</string>
       </property>
      </item>
