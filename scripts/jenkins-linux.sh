@@ -1,4 +1,8 @@
 #!/bin/bash
+export LOCALE=en_US.UTF-8
+export LC_ALL=${LOCALE}
+export LANG=${LOCALE}
+
 
 # You can use this script as the 'execute shell' in a jenkins job.
 # For example, set the 'command' contents to this to run the safe package tests:
