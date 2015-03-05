@@ -312,6 +312,33 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             message=error_message)
         self.hide_busy()
 
+    def _show_organisation_logo(self):
+        """Show the organisation logo in the dock if possible."""
+        dock_width = float(self.width())
+        # Don't let the image be more tha 100px height
+        maximum_height = 100.0  # px
+        pixmap = QtGui.QPixmap(self.organisation_logo_path)
+        if pixmap.height() < 1 or pixmap.width() < 1:
+            return
+
+        height_ratio = maximum_height/pixmap.height()
+        maximum_width = int(pixmap.width()*height_ratio)
+        # Don't let the image be more than the dock width wide
+        if maximum_width > dock_width:
+            width_ratio = dock_width/float(pixmap.width())
+            maximum_height = int(pixmap.height()*width_ratio)
+            maximum_width = dock_width
+        too_high = pixmap.height() > maximum_height
+        too_wide = pixmap.width() > dock_width
+        if too_wide or too_high:
+            pixmap = pixmap.scaled(
+                maximum_width, maximum_height, Qt.KeepAspectRatio)
+        self.organisation_logo.setMaximumWidth(maximum_width)
+        # We have manually scaled using logic above
+        self.organisation_logo.setScaledContents(False)
+        self.organisation_logo.setPixmap(pixmap)
+        self.organisation_logo.show()
+
     def read_settings(self):
         """Set the dock state from QSettings.
 
@@ -401,35 +428,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
-        if self.organisation_logo_path:
-            dock_width = float(self.width())
-
-            # Dont let the image be more tha 100px hight
-            maximum_height = 100.0  # px
-            pixmap = QtGui.QPixmap(self.organisation_logo_path)
-            height_ratio = maximum_height / pixmap.height()
-            maximum_width = int(pixmap.width() * height_ratio)
-
-            # Don't let the image be more than the dock width wide
-            if maximum_width > dock_width:
-                width_ratio = dock_width / float(pixmap.width())
-                maximum_height = int(pixmap.height() * width_ratio)
-                maximum_width = dock_width
-
-            too_high = pixmap.height() > maximum_height
-            too_wide = pixmap.width() > dock_width
-
-            if too_wide or too_high:
-                pixmap = pixmap.scaled(
-                    maximum_width, maximum_height, Qt.KeepAspectRatio)
-
-            self.organisation_logo.setMaximumWidth(maximum_width)
-            # We have manually scaled using logic above
-            self.organisation_logo.setScaledContents(False)
-            self.organisation_logo.setPixmap(pixmap)
-
         if self.organisation_logo_path and flag:
-            self.organisation_logo.show()
+            self._show_organisation_logo()
         else:
             self.organisation_logo.hide()
 
