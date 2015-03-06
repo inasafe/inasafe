@@ -351,12 +351,13 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
         """
         source_index = self.sourceModel().index(source_row, 0, source_parent)
         item = self.sourceModel().dataItem(source_index)
-        if item.metaObject().className() in ['QgsMssqlRootItem',
-                                             'QgsSLRootItem',
-                                             'QgsOWSRootItem',
-                                             'QgsWCSRootItem',
-                                             'QgsWFSRootItem',
-                                             'QgsWMSRootItem']:
+        if item.metaObject().className() in [
+                'QgsMssqlRootItem',
+                'QgsSLRootItem',
+                'QgsOWSRootItem',
+                'QgsWCSRootItem',
+                'QgsWFSRootItem',
+                'QgsWMSRootItem']:
             return False
         return True
 
@@ -1803,8 +1804,9 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Get allowed units from selected IF if possible
         imfunc = self.selected_function()
-        if (imfunc and category in imfunc['categories'] and
-                    'units' in imfunc['categories'][category]):
+        if (
+                imfunc and category in imfunc['categories'] and
+                'units' in imfunc['categories'][category]):
             allowed_units = imfunc['categories'][category]['units']
             if type(allowed_units) != list:
                 allowed_units = [allowed_units]
@@ -2264,9 +2266,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 '<b>Subcategory</b>: %s<br/>'
                 '<b>Unit</b>: %s<br/>'
                 '<b>Source</b>: %s<br/><br/>') % (
-                keywords.get('title'), keywords.get('category'),
-                keywords.get('subcategory'), keywords.get('unit'),
-                keywords.get('source'))
+                    keywords.get('title'), 
+                    keywords.get('category'),
+                    keywords.get('subcategory'), 
+                    keywords.get('unit'),
+                    keywords.get('source'))
         else:
             if is_point_layer(layer):
                 geom_type = 'point'
@@ -2457,10 +2461,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         extent_a = layer_a.extent()
         extent_b = layer_b.extent()
         if self.iface.mapCanvas().hasCrsTransformEnabled():
-            coordTransform = QgsCoordinateTransform(layer_a.crs(),
-                                                    layer_b.crs())
-            extent_b = (coordTransform.transform(extent_b,
-                        QgsCoordinateTransform.ReverseTransform))
+            coordTransform = QgsCoordinateTransform(
+                layer_a.crs(), 
+                layer_b.crs())
+            extent_b = (
+                coordTransform.transform(
+                    extent_b, 
+                    QgsCoordinateTransform.ReverseTransform))
         return extent_a.intersects(extent_b)
 
     def set_widgets_step_fc_disjoint_layers(self):
@@ -2772,9 +2779,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         params = []
         for p in self.if_params:
             if type(self.if_params[p]) == OrderedDict:
-                subparams = [u'<b>%s</b>: %s' % (unicode(pp),
-                             format_postprocessor(self.if_params[p][pp]))
-                             for pp in self.if_params[p]]
+                subparams = [
+                    u'<b>%s</b>: %s' % (
+                        unicode(pp),
+                        format_postprocessor(self.if_params[p][pp]))
+                    for pp in self.if_params[p]]
                 subparams = u'<br/>'.join(subparams)
                 print '!!!', subparams
             elif type(self.if_params[p]) == list and p == 'minimum needs':
