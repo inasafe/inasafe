@@ -316,7 +316,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return
 
         height_ratio = maximum_height / pixmap.height()
-        maximum_width = int(pixmap.width()* height_ratio)
+        maximum_width = int(pixmap.width() * height_ratio)
         # Don't let the image be more than the dock width wide
         if maximum_width > dock_width:
             width_ratio = dock_width / float(pixmap.width())
