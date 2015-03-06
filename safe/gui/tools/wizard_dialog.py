@@ -353,12 +353,13 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
         """
         source_index = self.sourceModel().index(source_row, 0, source_parent)
         item = self.sourceModel().dataItem(source_index)
-        if item.metaObject().className() in ['QgsMssqlRootItem',
-                                             'QgsSLRootItem',
-                                             'QgsOWSRootItem',
-                                             'QgsWCSRootItem',
-                                             'QgsWFSRootItem',
-                                             'QgsWMSRootItem']:
+        if item.metaObject().className() in [
+                'QgsMssqlRootItem',
+                'QgsSLRootItem',
+                'QgsOWSRootItem',
+                'QgsWCSRootItem',
+                'QgsWFSRootItem',
+                'QgsWMSRootItem']:
             return False
         return True
 
@@ -1033,11 +1034,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             value_as_string = value and unicode(value) or 'NULL'
             assigned = False
             for default_class in default_classes:
-                if ((field_type > 9 and value_as_string
-                        in default_class['string_defaults']) or
-                        (field_type < 10 and
-                            (default_class['numeric_default_min'] <= value <
-                                default_class['numeric_default_max']))):
+                if (
+                        (field_type > 9 and value_as_string in default_class['string_defaults']) or
+                        (field_type < 10 and (
+                            default_class['numeric_default_min'] <= value < default_class['numeric_default_max']
+                        ))):
                     assigned_values[default_class['name']] += [value_as_string]
                     assigned = True
             if not assigned:
@@ -1787,7 +1788,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Get allowed units from selected IF if possible
         imfunc = self.selected_function()
-        if (imfunc and category in imfunc['categories'] and
+        if (
+                imfunc and category in imfunc['categories'] and
                 'units' in imfunc['categories'][category]):
             allowed_units = imfunc['categories'][category]['units']
             if type(allowed_units) != list:
@@ -2248,9 +2250,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                 '<b>Subcategory</b>: %s<br/>'
                 '<b>Unit</b>: %s<br/>'
                 '<b>Source</b>: %s<br/><br/>') % (
-                keywords.get('title'), keywords.get('category'),
-                keywords.get('subcategory'), keywords.get('unit'),
-                keywords.get('source'))
+                    keywords.get('title'), keywords.get('category'),
+                    keywords.get('subcategory'), keywords.get('unit'),
+                    keywords.get('source'))
         else:
             if is_point_layer(layer):
                 geom_type = 'point'
@@ -2441,10 +2443,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         extent_a = layer_a.extent()
         extent_b = layer_b.extent()
         if self.iface.mapCanvas().hasCrsTransformEnabled():
-            coordTransform = QgsCoordinateTransform(layer_a.crs(),
-                                                    layer_b.crs())
-            extent_b = (coordTransform.transform(extent_b,
-                        QgsCoordinateTransform.ReverseTransform))
+            coordTransform = QgsCoordinateTransform(
+                layer_a.crs(), layer_b.crs())
+            extent_b = (
+                coordTransform.transform(
+                    extent_b, QgsCoordinateTransform.ReverseTransform))
         return extent_a.intersects(extent_b)
 
     def set_widgets_step_fc_disjoint_layers(self):
@@ -2755,9 +2758,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         params = []
         for p in self.if_params:
             if type(self.if_params[p]) == OrderedDict:
-                subparams = [u'<b>%s</b>: %s' % (unicode(pp),
-                             format_postprocessor(self.if_params[p][pp]))
-                             for pp in self.if_params[p]]
+                subparams = [
+                    u'<b>%s</b>: %s' % (unicode(pp), format_postprocessor(self.if_params[p][pp]))
+                    for pp in self.if_params[p]
+                ]
                 subparams = u'<br/>'.join(subparams)
                 print '!!!', subparams
             elif type(self.if_params[p]) == list and p == 'minimum needs':
@@ -3335,8 +3339,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_classify
             elif self.selected_category()['id'] == 'aggregation':
                 new_step = step_kw_aggregation
-            elif (is_raster_layer(self.layer) and
-                    self.selected_category()['id'] == 'exposure'):
+            elif (is_raster_layer(self.layer) and self.selected_category()['id'] == 'exposure'):
                 new_step = step_kw_resample
             elif self.selected_field():
                 new_step = step_kw_field
