@@ -42,7 +42,6 @@ from safe.impact_functions.generic.classified_hazard_population import (
 from safe.impact_functions.utilities import get_list_id
 
 from safe.metadata import (
-    unit_wetdry,
     unit_metres_depth,
     unit_feet_depth,
     exposure_definition,
