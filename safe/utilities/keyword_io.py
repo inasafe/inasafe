@@ -103,7 +103,7 @@ class KeywordIO(QObject):
             UnsupportedProviderError
 
         """
-        source = str(layer.source())
+        source = layer.source()
         try:
             flag = self.are_keywords_file_based(layer)
         except UnsupportedProviderError:
@@ -147,7 +147,7 @@ class KeywordIO(QObject):
         except UnsupportedProviderError:
             raise
 
-        source = str(layer.source())
+        source = layer.source()
         try:
             if flag:
                 write_keywords_to_file(source, keywords)
@@ -233,7 +233,7 @@ class KeywordIO(QObject):
         except Exception, e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
-                source_layer.source(), new_destination, str(e)))
+                    source_layer.source(), new_destination, str(e)))
             raise Exception(message)
         return
 

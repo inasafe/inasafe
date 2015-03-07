@@ -208,7 +208,7 @@ class Analysis(object):
         :returns: Layer's title
         :rtype: str
         """
-        title = layer_keyword.get('title', str(layer.name()))
+        title = layer_keyword.get('title', layer.name())
         return title
 
     def get_impact_layer(self):

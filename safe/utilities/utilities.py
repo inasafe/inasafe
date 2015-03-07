@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.i18n import tr
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -25,6 +23,7 @@ import traceback
 import logging
 import webbrowser
 import unicodedata
+import codecs
 
 # noinspection PyPackageRequirements
 
@@ -38,8 +37,10 @@ from safe.common.utilities import unique_filename
 from safe.common.version import get_version
 from safe import messaging as m
 from safe.impact_functions.core import get_plugins
-from safe.messaging import styles
+from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
+from safe.utilities.unicode import get_unicode
+from safe.utilities.i18n import tr
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -69,10 +70,13 @@ def get_error_message(exception, context=None, suggestion=None):
 
     problem = m.Message(m.Text(exception.__class__.__name__))
 
-    if str(exception) is None or str(exception) == '':
+    if exception is None or exception == '':
         problem.append = m.Text(tr('No details provided'))
     else:
-        problem.append = m.Text(str(exception))
+        if isinstance(exception.message, Message):
+            problem.append = m.Text(str(exception.message.message))
+        else:
+            problem.append = m.Text(exception.message)
 
     suggestion = suggestion
     if suggestion is None and hasattr(exception, 'suggestion'):
@@ -219,11 +223,11 @@ def add_ordered_combo_item(combo, text, data=None):
     :type data: QVariant, str
     """
     size = combo.count()
-    for myCount in range(0, size):
-        item_text = str(combo.itemText(myCount))
-        # see if text alphabetically precedes myItemText
-        if cmp(str(text).lower(), item_text.lower()) < 0:
-            combo.insertItem(myCount, text, data)
+    for combo_index in range(0, size):
+        item_text = combo.itemText(combo_index)
+        # see if text alphabetically precedes item_text
+        if cmp(text.lower(), item_text.lower()) < 0:
+            combo.insertItem(combo_index, text, data)
             return
         # otherwise just add it to the end
     combo.insertItem(size, text, data)
@@ -256,7 +260,9 @@ def html_to_file(html, file_path=None, open_browser=False):
     if file_path is None:
         file_path = unique_filename(suffix='.html')
 
-    with open(file_path, 'w') as f:
+    # Ensure html is in unicode for codecs module
+    html = get_unicode(html)
+    with codecs.open(file_path, 'w', encoding='utf-8') as f:
         f.write(html)
 
     if open_browser:

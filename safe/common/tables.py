@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: iso-8859-1 -*-
+# coding=utf-8
 """
 tables.py - v0.04 2009-07-28 Philippe Lagadec
 
@@ -68,6 +68,8 @@ __author__ = 'Philippe Lagadec'
 # 2012-09-14 Add func: - add new function, column(int) for retrieve all element
 #                        in the specific column
 #                        Ismail Sunni
+# 2015-02-25 Fixes:    - Support unicode
+#                        Akbar Gumbira
 
 # -----------------------------------------------------------------------------
 # TODO:
@@ -92,6 +94,7 @@ __author__ = 'Philippe Lagadec'
 # Columns alignement and style, one of the oldest and trickiest bugs in
 # Mozilla: https://bugzilla.mozilla.org/show_bug.cgi?id=915
 
+from safe.utilities.unicode import get_string, get_unicode
 
 # --- CONSTANTS ---------------------------------------------------------------
 
@@ -174,10 +177,14 @@ class TableCell(object):
         for attr in self.attribs:
             attribs_str += ' %s="%s"' % (attr, self.attribs[attr])
         if self.text:
-            text = str(self.text)
+            text = self.text
         else:
             # An empty cell should at least contain a non-breaking space
             text = '&nbsp;'
+
+        attribs_str = get_string(attribs_str)
+        text = get_string(text)
+
         if self.header:
             return '   <th%s>%s</th>\n' % (attribs_str, text)
         else:
@@ -422,7 +429,7 @@ class Table(object):
         .. note:: any preformatted <pre> blocks will be adversely affected by
            this.
         """
-        return self.__str__().replace('\n', '')
+        return get_unicode(self.__str__().replace('\n', ''))
 
     def column(self, col, header=False):
         """Return a list contains all element in col-th column

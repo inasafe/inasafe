@@ -33,7 +33,6 @@ from safe.common.version import get_version
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.help import show_context_help
-from safe.utilities.resources import html_header
 from safe.utilities.styling import mmi_ramp
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
@@ -190,10 +189,10 @@ class ShakemapImporterDialog(QDialog, FORM_CLASS):
     def accept(self):
         """Handler for when OK is clicked.
         """
-        input_path = str(self.input_path.text())
-        input_title = str(self.line_edit_title.text())
-        input_source = str(self.line_edit_source.text())
-        output_path = str(self.output_path.text())
+        input_path = self.input_path.text()
+        input_title = self.line_edit_title.text()
+        input_source = self.line_edit_source.text()
+        output_path = self.output_path.text()
         if not output_path.endswith('.tif'):
             # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
             QMessageBox.warning(
