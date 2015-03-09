@@ -2266,9 +2266,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                 '<b>Subcategory</b>: %s<br/>'
                 '<b>Unit</b>: %s<br/>'
                 '<b>Source</b>: %s<br/><br/>') % (
-                    keywords.get('title'), 
+                    keywords.get('title'),
                     keywords.get('category'),
-                    keywords.get('subcategory'), 
+                    keywords.get('subcategory'),
                     keywords.get('unit'),
                     keywords.get('source'))
         else:
@@ -2462,11 +2462,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         extent_b = layer_b.extent()
         if self.iface.mapCanvas().hasCrsTransformEnabled():
             coordTransform = QgsCoordinateTransform(
-                layer_a.crs(), 
+                layer_a.crs(),
                 layer_b.crs())
             extent_b = (
                 coordTransform.transform(
-                    extent_b, 
+                    extent_b,
                     QgsCoordinateTransform.ReverseTransform))
         return extent_a.intersects(extent_b)
 

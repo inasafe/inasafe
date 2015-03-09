@@ -80,11 +80,11 @@ class ImpactFunctionMetadata(object):
         :returns: boolean of the membership
         :rtype: bool
         """
-        if type(element) is list:
-            if type(container) is list:
+        if isinstance(element,list):
+            if isinstance(container, list):
                 return set(element) <= set(container)
         else:
-            if type(container) is list:
+            if isinstance(container, list):
                 return element in container
             else:
                 return element == container
@@ -343,7 +343,7 @@ class ImpactFunctionMetadata(object):
             if key not in hazard.keys():
                 return False, 'key %s not in hazard' % key
         for key in expected_keys[1:]:
-            if type(hazard[key]) is not list:
+            if not isinstance(hazard[key], list):
                 return (
                     False,
                     'key %s in hazard not a list, but %s ' % (
@@ -353,7 +353,7 @@ class ImpactFunctionMetadata(object):
             if key not in exposure.keys():
                 return False, 'key %s not in exposure' % key
         for key in expected_keys[1:]:
-            if type(exposure[key]) is not list:
+            if not isinstance(exposure[key], list):
                 return (
                     False,
                     'key %s in exposure not a list, but %s ' % (
@@ -589,7 +589,7 @@ class ImpactFunctionMetadata(object):
         """
         exposures = cls.as_dict()['categories']['exposure'][
             'subcategories']
-        if type(exposures) is not list:
+        if not isinstance(exposures, list):
             exposures = [exposures]
         return exposures
 
