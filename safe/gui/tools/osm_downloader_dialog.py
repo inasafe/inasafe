@@ -492,7 +492,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         if not os.path.exists(path):
             message = self.tr(
-                "%s doesn't exist. The server doesn't have any data on this "
+                "%s doesn't exist. The server doesn't have any data for this "
                 "extent." % path)
             raise ImportDialogError(message)
 
