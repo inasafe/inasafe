@@ -38,7 +38,10 @@ from PyQt4.QtGui import (
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 from safe.common.exceptions import (
-    CanceledImportDialogError, ImportDialogError, DownloadError)
+    CanceledImportDialogError,
+    ImportDialogError,
+    DownloadError,
+    FileMissingError)
 from safe import messaging as m
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.gis import viewport_geo_array, rectangle_geo_array
@@ -46,6 +49,7 @@ from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.proxy import get_proxy
+from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 
 INFO_STYLE = styles.INFO_STYLE
@@ -315,7 +319,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.require_directory()
             for feature_type in feature_types:
                 self.download(feature_type)
-                self.load_shapefile(feature_type)
+                try:
+                    self.load_shapefile(feature_type)
+                except FileMissingError as exception:
+                    display_warning_message_box(
+                        self,
+                        error_dialog_title,
+                        str(exception))
             self.done(QDialog.Accepted)
             self.rectangle_map_tool.reset()
 
@@ -494,7 +504,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             message = self.tr(
                 "%s doesn't exist. The server doesn't have any data for this "
                 "extent." % path)
-            raise ImportDialogError(message)
+            raise FileMissingError(message)
 
         self.iface.addVectorLayer(path, feature_type, 'ogr')
 
