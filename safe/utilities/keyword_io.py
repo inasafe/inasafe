@@ -617,7 +617,7 @@ class KeywordIO(QObject):
             # the uri already had a KW entry in the DB using the old KW system
             # we use that dictionary to update the entry to the new ISO based
             # metadata system
-            if type(metadata) is dict:
+            if isinstance(metadata, dict):
                 metadata = self.write_keywords_for_uri(uri, metadata)
 
             root = ElementTree.fromstring(metadata)

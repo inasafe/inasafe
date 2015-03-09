@@ -80,7 +80,7 @@ class ImpactFunctionMetadata(object):
         :returns: boolean of the membership
         :rtype: bool
         """
-        if isinstance(element,list):
+        if isinstance(element, list):
             if isinstance(container, list):
                 return set(element) <= set(container)
         else:

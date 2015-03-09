@@ -206,14 +206,14 @@ def _clip_vector_layer(
     geo_crs.createFromSrid(4326)
     transform = QgsCoordinateTransform(geo_crs, layer.crs())
     allowed_clip_values = [QGis.WKBPolygon, QGis.WKBPolygon25D]
-    if type(extent) is list:
+    if isinstance(extent, list):
         rectangle = QgsRectangle(
             extent[0], extent[1],
             extent[2], extent[3])
         # noinspection PyCallByClass
         # noinspection PyTypeChecker
         polygon = QgsGeometry.fromRect(rectangle)
-    elif (type(extent) is QgsGeometry and
+    elif (isinstance(extent, QgsGeometry) and
           extent.wkbType in allowed_clip_values):
         rectangle = extent.boundingBox().toRectF()
         polygon = extent
@@ -552,7 +552,9 @@ def extent_to_kml(extent):
     top_left_corner = '%s,%s' % (repr(extent[0]), repr(extent[3]))
     top_right_corner = '%s,%s' % (repr(extent[2]), repr(extent[3]))
     bottom_right_corner = '%s,%s' % (repr(extent[2]), repr(extent[1]))
-    kml = ("""<?xml version="1.0" encoding="utf-8" ?>
+
+    kml = (
+        """<?xml version="1.0" encoding="utf-8" ?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
   <Document>
     <Folder>
@@ -570,12 +572,8 @@ def extent_to_kml(extent):
     </Folder>
   </Document>
 </kml>""" % (
-        bottom_left_corner,
-        top_left_corner,
-        top_right_corner,
-        bottom_right_corner,
-        bottom_left_corner))
-
+            bottom_left_corner, top_left_corner, top_right_corner,
+            bottom_right_corner, bottom_left_corner))
     file_name = tempfile.mkstemp('.kml', 'extent_', temp_dir())[1]
     file_handle = file(file_name, 'w')
     file_handle.write(kml)
