@@ -173,8 +173,9 @@ class KeywordsDialogTest(unittest.TestCase):
         message = (
             'Toggling the female ratio attribute combo to'
             ' "Don\'t use" did not add it to the keywords list.')
-        self.assertEqual(dialog.get_value_for_key(
-            defaults['FEMALE_RATIO_ATTR_KEY']), dialog.do_not_use_string,
+        self.assertEqual(
+            dialog.get_value_for_key(defaults['FEMALE_RATIO_ATTR_KEY']),
+            dialog.do_not_use_string,
             message)
 
         message = (

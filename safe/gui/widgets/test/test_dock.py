@@ -373,8 +373,7 @@ class TestDock(TestCase):
             'Exposure': 'Population Count (5kmx5km)'}
         message = ((
             'Run button was not disabled when exposure set to \n%s'
-            '\nUI State: \n%s\nExpected State:\n%s\n%s') %
-            (
+            '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
                 DOCK.cboExposure.currentText(),
                 actual_dict,
                 expected_dict,

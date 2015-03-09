@@ -279,15 +279,17 @@ class VolcanoBuildingImpact(FunctionProvider):
             # Count affected buildings by usage type if available
             usage = None
             for building_type_attribute in building_type_attributes:
-                if building_type_attribute in attribute_names_lower and (
-                                usage is None or usage == 0):
+                if (
+                        building_type_attribute in attribute_names_lower and (
+                            usage is None or usage == 0)):
                     attribute_index = attribute_names_lower.index(
                         building_type_attribute)
                     field_name = attribute_names[attribute_index]
                     usage = attributes[i][field_name]
 
-            if 'building' in attribute_names_lower and (
-                            usage is None or usage == 0):
+            if (
+                    'building' in attribute_names_lower and (
+                        usage is None or usage == 0)):
                 attribute_index = attribute_names_lower.index('building')
                 field_name = attribute_names[attribute_index]
                 usage = attributes[i][field_name]
@@ -321,9 +323,10 @@ class VolcanoBuildingImpact(FunctionProvider):
             building_usage_good = building_usage.replace('_', ' ')
             building_usage_good = building_usage_good.capitalize()
 
-            building_sum = sum([building_per_category[category_name][
-                                    building_usage] for category_name in
-                               category_names])
+            building_sum = sum([
+                building_per_category[category_name][building_usage] for
+                category_name in category_names
+            ])
 
             # Filter building type that has no less than 25 items
             if building_sum >= 25:
