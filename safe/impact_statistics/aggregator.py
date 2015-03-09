@@ -347,8 +347,8 @@ class Aggregator(QtCore.QObject):
                     ) and (
                         elderly_ratio in keywords and (
                             elderly_ratio != self.tr('Use default') or
-                            elderly_ratio_key in keywords))
-                    ):
+                            elderly_ratio_key in keywords)
+                    )):
                 self.is_valid = True
             # some keywords are needed
             else:

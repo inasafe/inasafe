@@ -3347,7 +3347,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_classify
             elif self.selected_category()['id'] == 'aggregation':
                 new_step = step_kw_aggregation
-            elif (is_raster_layer(self.layer) and self.selected_category()['id'] == 'exposure'):
+            elif (
+                    is_raster_layer(self.layer) and
+                    self.selected_category()['id'] == 'exposure'):
                 new_step = step_kw_resample
             elif self.selected_field():
                 new_step = step_kw_field

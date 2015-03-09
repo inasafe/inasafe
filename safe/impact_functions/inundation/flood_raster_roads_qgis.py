@@ -261,7 +261,8 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 roads_by_type[road_type]['flooded'] += length
         table_body = [
             question,
-            TableRow([
+            TableRow(
+                [
                     tr('Road Type'),
                     tr('Flooded in the threshold (m)'),
                     tr('Total (m)')],

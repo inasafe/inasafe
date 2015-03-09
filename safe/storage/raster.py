@@ -406,7 +406,7 @@ class Raster(Layer):
         # Handle no data value
         # Must explicit comparison to False and True as nan can be a number
         # so 0 would evaluate to False and e.g. 1 to True.
-        if type(nan) is not bool:
+        if not isinstance(nan, bool):
             # We are handling all non-NaN's in read_from_file and
             # assuming NaN's in internal numpy arrays [issue #297].
             try:

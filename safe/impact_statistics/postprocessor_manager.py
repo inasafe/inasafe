@@ -144,12 +144,12 @@ class PostprocessorManager(QtCore.QObject):
                         'Detailed %s report (for people needing '
                         'evacuation)') % (
                             tr(get_postprocessor_human_name(processor)).lower()
-                    )
+                        )
                 else:
                     table.caption = self.tr(
                         'Detailed %s report (affected people)') % (
                             tr(get_postprocessor_human_name(processor)).lower()
-                    )
+                        )
 
             if processor in ['Gender', 'Age']:
                 table.caption = self.tr(

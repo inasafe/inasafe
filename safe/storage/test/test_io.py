@@ -141,10 +141,10 @@ class TestIO(unittest.TestCase):
             raise Exception(msg)
 
         # Read and verify test data
-        for vectorname in ['test_buildings.shp',
-                           'tsunami_building_exposure.shp',
-                           'Padang_WGS84.shp',
-                           ]:
+        for vectorname in [
+                'test_buildings.shp',
+                'tsunami_building_exposure.shp',
+                'Padang_WGS84.shp']:
 
             filename = '%s/%s' % (TESTDATA, vectorname)
             layer = read_layer(filename)
@@ -1161,8 +1161,7 @@ class TestIO(unittest.TestCase):
         assert str(r1.columns) in str(r1)
 
         assert nan_allclose(r1.get_data(), A1, rtol=1.0e-12)
-        assert nan_allclose(r1.get_geotransform(), geotransform,
-                           rtol=1.0e-12)
+        assert nan_allclose(r1.get_geotransform(), geotransform, rtol=1.0e-12)
         assert 'DGN95' in r1.get_projection()
 
     def test_reading_and_writing_of_real_rasters(self):
@@ -1530,8 +1529,8 @@ class TestIO(unittest.TestCase):
         # Generate vector layer
         V = R.to_vector_layer()
         geometry = V.get_geometry()
-        msg = ('Vector geometry should have been a list. I got %s'
-                % str(type(geometry))[1:-1])
+        msg = ('Vector geometry should have been a list. I got %s' % str(
+            type(geometry))[1:-1])
         assert isinstance(geometry, list), msg
         attributes = V.get_data()
 
@@ -1736,18 +1735,13 @@ class TestIO(unittest.TestCase):
         """
 
         # Exceptions
-        exclude = ['get_topN', 'get_bins',
-                   'get_geotransform',
-                   'get_nodata_value',
-                   'get_attribute_names',
-                   'get_resolution',
-                   'get_geometry_type',
-                   'get_geometry_name',
-                   'to_vector_points',
-                   'to_vector_layer',
-                   'as_qgis_native',  # added in InaSAFE 2.0
-                   'read_from_qgis_native'  # added in InaSAFE 2.0
-                   ]
+        exclude = [
+            'get_topN', 'get_bins', 'get_geotransform', 'get_nodata_value',
+            'get_attribute_names', 'get_resolution', 'get_geometry_type',
+            'get_geometry_name', 'to_vector_points', 'to_vector_layer',
+            'as_qgis_native',  # added in InaSAFE 2.0
+            'read_from_qgis_native'  # added in InaSAFE 2.0
+        ]
 
         V = Vector()  # Empty vector instance
         R = Raster()  # Empty raster instance
@@ -2305,8 +2299,7 @@ class TestIO(unittest.TestCase):
         l2 = numpy.array([[168, -2], [170, -2], [170, 0]])
         v2 = points_along_line(l2, delta)
 
-        expected_v2 = [[168, -2], [169, -2], [170, -2],
-                      [170, -1], [170, 0]]
+        expected_v2 = [[168, -2], [169, -2], [170, -2], [170, -1], [170, 0]]
         msg = ('Calculated points were %s, expected '
                '%s' % (v2, expected_v2))
         assert numpy.allclose(v2, expected_v2), msg

@@ -5,7 +5,6 @@ __project_name = 'parameters'
 __filename = 'resource_parameter'
 __date__ = '11/11/14'
 __copyright__ = 'kartoza.com'
-__doc__ = ''
 
 import os
 import sys

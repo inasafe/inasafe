@@ -173,8 +173,8 @@ def write_keywords(keywords, filename, sublayer=None):
     # Input checks
     basename, ext = os.path.splitext(filename)
 
-    msg = ('Unknown extension for file %s. '
-           'Expected %s.keywords' % (filename, basename))
+    msg = ('Unknown extension for file %s. Expected %s.keywords' % (
+        filename, basename))
     verify(ext == '.keywords', msg)
 
     # First read any keywords out of the file so that we can retain
@@ -184,7 +184,7 @@ def write_keywords(keywords, filename, sublayer=None):
     first_value = None
     if len(existing_keywords) > 0:
         first_value = existing_keywords[existing_keywords.keys()[0]]
-    multilayer_flag = type(first_value) == dict
+    multilayer_flag = isinstance(first_value, dict)
 
     handle = file(filename, 'w')
 

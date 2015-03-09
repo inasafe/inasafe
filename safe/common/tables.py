@@ -122,7 +122,8 @@ class TableCell(object):
     Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.6
     """
 
-    def __init__(self, text='', bgcolor=None, header=False, width=None,
+    def __init__(
+            self, text='', bgcolor=None, header=False, width=None,
             align=None, char=None, charoff=None, valign=None, style='',
             attribs=None, cell_class=None, row_span=None, col_span=None):
         """TableCell constructor"""
@@ -201,7 +202,8 @@ class TableRow(object):
     Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.5
     """
 
-    def __init__(self, cells=None, bgcolor=None, header=False, attribs=None,
+    def __init__(
+            self, cells=None, bgcolor=None, header=False, attribs=None,
             col_align=None, col_valign=None, col_char=None,
             col_charoff=None, col_styles=None):
         """TableCell constructor"""
@@ -294,7 +296,8 @@ class Table(object):
     Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.1
     """
 
-    def __init__(self, rows=None, border=None, style=None, width=None,
+    def __init__(
+            self, rows=None, border=None, style=None, width=None,
             cellspacing=None, cellpadding=None, attribs=None, header_row=None,
             table_class=None,
             col_width=None, col_align=None, col_valign=None,
@@ -383,8 +386,7 @@ class Table(object):
                 # }
                 caption_class = CAPTION_BOTTOM_CLASS
             result += ' <caption%s>%s</caption>\n' % (
-                                    caption_class,
-                                    self.caption)
+                caption_class, self.caption)
         # insert column tags and attributes if specified:
         if self.col_width:
             for width in self.col_width:
@@ -526,10 +528,10 @@ if __name__ == '__main__':
     print str(t)
     print '-' * 79
 
-    t2 = Table([('1', '2'),
-                ['3', '4']],
-               width='100%', header_row=('col1', 'col2'),
-    col_width=('', '75%'))
+    t2 = Table(
+        [('1', '2'), ['3', '4']],
+        width='100%', header_row=('col1', 'col2'),
+        col_width=('', '75%'))
     f.write(str(t2) + '<p>\n')
     print t2
     print '-' * 79

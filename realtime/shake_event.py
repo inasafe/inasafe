@@ -803,18 +803,13 @@ class ShakeEvent(QObject):
             cities.append(city)
         LOGGER.debug('%s features added to sorted impacted cities list.')
         # LOGGER.exception(cities)
-        sorted_cities = sorted(cities,
-                               key=lambda d: (
-                               # we want to use whole no's for sort
-                               - d['mmi-int'],
-                               - d['population'],
-                               d['name'],
-                               d['mmi'],  # not decimals
-                               d['roman'],
-                               d['dist_to'],
-                               d['dir_to'],
-                               d['dir_from'],
-                               d['id']))
+        sorted_cities = sorted(
+            cities,
+            key=lambda d: (
+                # we want to use whole no's for sort
+                -d['mmi-int'], -d['population'], d['name'],
+                d['mmi'],  # not decimals
+                d['roman'], d['dist_to'], d['dir_to'], d['dir_from'], d['id']))
         # TODO: Assumption that place names are unique is bad....
         if len(sorted_cities) > 0:
             self.most_affected_city = sorted_cities[0]
@@ -899,11 +894,12 @@ class ShakeEvent(QObject):
         """
         table_data = self.sorted_impacted_cities(row_count)
         table_body = []
-        header = TableRow([
-            '',
-            self.tr('Name'),
-            self.tr('Population (x 1000)'),
-            self.tr('Intensity')],
+        header = TableRow(
+            [
+                '',
+                self.tr('Name'),
+                self.tr('Population (x 1000)'),
+                self.tr('Intensity')],
             header=True)
         for row_data in table_data:
             intensity = row_data['roman']
@@ -1019,8 +1015,8 @@ class ShakeEvent(QObject):
         """
         if (
                 population_raster_path is None or (
-                not os.path.isfile(population_raster_path) and not
-                os.path.islink(population_raster_path))):
+                    not os.path.isfile(population_raster_path) and not
+                    os.path.islink(population_raster_path))):
 
             exposure_path = self._get_population_path()
         else:
@@ -1272,8 +1268,7 @@ class ShakeEvent(QObject):
         thumbnail_image_path = os.path.join(
             shakemap_extract_dir(),
             self.event_id,
-            '%s-thumb-%s.png' % (
-            self.event_id, self.locale))
+            '%s-thumb-%s.png' % (self.event_id, self.locale))
         pickle_path = os.path.join(
             shakemap_extract_dir(),
             self.event_id,

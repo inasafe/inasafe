@@ -779,7 +779,7 @@ class Vector(Layer):
 
                     val = data[i][name]
 
-                    if type(val) == numpy.ndarray:
+                    if isinstance(val, numpy.ndarray):
                         # A singleton of type <type 'numpy.ndarray'> works
                         # for gdal version 1.6 but fails for version 1.8
                         # in SetField with error: NotImplementedError:

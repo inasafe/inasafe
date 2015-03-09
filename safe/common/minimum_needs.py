@@ -101,7 +101,7 @@ class MinimumNeeds(object):
         :returns: Returns success code, -1 for failure, 0 for success.
         :rtype: int
         """
-        if type(minimum_needs) != dict:
+        if not isinstance(minimum_needs, dict):
             return -1
 
         # noinspection PyAttributeOutsideInit
