@@ -47,7 +47,7 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
             ('Tertiary link', ['Tertiary link']),
             ('Secondary', ['Secondary']),
             ('Secondary link', ['Secondary link']),
-            ('Road, residential, living street, etc.',[
+            ('Road, residential, living street, etc.', [
                 'Road, residential, living street, etc.']),
             ('Track', ['Track']),
             ('Cycleway, footpath, etc.', ['Cycleway, footpath, etc.']),
