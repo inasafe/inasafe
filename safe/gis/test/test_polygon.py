@@ -1015,14 +1015,13 @@ class TestPolygon(unittest.TestCase):
         assert len(inside) == 1
         assert numpy.allclose(inside, [0])
 
-        inside, outside = separate_points_by_polygon([[0.5, 0.5],
-                                                     [0.3, 0.2]], U)
+        inside, outside = separate_points_by_polygon(
+            [[0.5, 0.5], [0.3, 0.2]], U)
         assert len(inside) == 2
         assert numpy.allclose(inside, [0, 1])
 
-        inside, outside = separate_points_by_polygon([[0.5, 0.5],
-                                                     [0.3, 0.2],
-                                                     [0.6, 0.7]], U)
+        inside, outside = separate_points_by_polygon(
+            [[0.5, 0.5], [0.3, 0.2], [0.6, 0.7]], U)
         assert len(inside) == 3
         assert numpy.allclose(inside, [0, 1, 2])
 
@@ -1030,39 +1029,35 @@ class TestPolygon(unittest.TestCase):
         assert len(inside) == 1
         assert numpy.allclose(inside, [0])
 
-        inside, outside = separate_points_by_polygon([[0.3, 0.2],
-                                                     [1, -0.5]], U)
+        inside, outside = separate_points_by_polygon(
+            [[0.3, 0.2], [1, -0.5]], U)
         assert len(inside) == 1
         assert numpy.allclose(inside, [0])
         assert numpy.allclose(outside, [1])
 
-        inside, outside = separate_points_by_polygon([[0.5, 0.5],
-                                                     [1, -0.5],
-                                                     [0.3, 0.2]], U)
+        inside, outside = separate_points_by_polygon(
+            [[0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)
         assert numpy.allclose(inside, [0, 2])
         assert numpy.allclose(outside, [1])
 
-        inside, outside = separate_points_by_polygon([[0.1, 0.1],
-                                                     [0.5, 0.5],
-                                                     [1, -0.5],
-                                                     [0.3, 0.2]], U)
+        inside, outside = separate_points_by_polygon(
+            [[0.1, 0.1], [0.5, 0.5], [1, -0.5], [0.3, 0.2]], U)
         assert numpy.allclose(inside, [0, 1, 3])
         assert numpy.allclose(outside, [2])
 
         # Try with boundary (edge) point
-        inside, outside = separate_points_by_polygon([[0, 0.5],
-                                                     [0.1, 0.2]], U)
+        inside, outside = separate_points_by_polygon(
+            [[0, 0.5], [0.1, 0.2]], U)
         assert numpy.allclose(inside, [0, 1])
 
         # Try with boundary (corner) point
-        inside, outside = separate_points_by_polygon([[0, 0],
-                                                      [0.1, 0.2]], U)
+        inside, outside = separate_points_by_polygon(
+            [[0, 0], [0.1, 0.2]], U)
         assert numpy.allclose(inside, [0, 1])
 
         # Try with a range of cases point
-        inside, outside = separate_points_by_polygon([[0, 0],  # corner
-                                                      [0, 0.5],  # edge
-                                                      [0.1, 0.2]], U)
+        inside, outside = separate_points_by_polygon(
+            [[0, 0], [0, 0.5], [0.1, 0.2]], U)
         assert numpy.allclose(inside, [0, 1, 2])
 
         # One more test of vector formulation returning indices
@@ -1993,13 +1988,13 @@ class TestPolygon(unittest.TestCase):
 
         for _, values in inside_lines.items():
             for line in values:
-                assert type(line) == numpy.ndarray
+                assert isinstance(line, numpy.ndarray)
                 assert len(line.shape) == 2
                 assert line.shape[1] == 2
 
         for _, values in outside_lines.items():
             for line in values:
-                assert type(line) == numpy.ndarray
+                assert isinstance(line, numpy.ndarray)
                 assert len(line.shape) == 2
                 assert line.shape[1] == 2
 
@@ -2019,7 +2014,7 @@ class TestPolygon(unittest.TestCase):
         outside_geo = line_dictionary_to_geometry(outside_lines)
 
         for line in inside_geo + outside_geo:
-            assert type(line) == numpy.ndarray
+            assert isinstance(line, numpy.ndarray)
             assert len(line.shape) == 2
             assert line.shape[1] == 2
 
