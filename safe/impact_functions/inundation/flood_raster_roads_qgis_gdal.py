@@ -301,15 +301,14 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
                 roads_by_type[road_type]['flooded'] += length
         table_body = [
             question,
-            TableRow([
-                tr('Road Type'),
-                tr('Flooded in the threshold (m)'),
-                tr('Total (m)')],
+            TableRow(
+                [
+                    tr('Road Type'),
+                    tr('Flooded in the threshold (m)'),
+                    tr('Total (m)')],
                 header=True),
-            TableRow([tr('All'), int(flooded_len), int(road_len)])
-        ]
-        table_body.append(TableRow(
-            tr('Breakdown by road type'), header=True))
+            TableRow([tr('All'), int(flooded_len), int(road_len)]),
+            TableRow(tr('Breakdown by road type'), header=True)]
         for t, v in roads_by_type.iteritems():
             table_body.append(
                 TableRow([t, int(v['flooded']), int(v['total'])])
