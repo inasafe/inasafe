@@ -137,9 +137,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         )
         tips = m.BulletedList()
         tips.add(self.tr(
-            'Your current extent will be used to determine the area for which '
-            'you want data to be retrieved. You can adjust it manually using '
-            'the bounding box options below.'))
+            'Your current extent, when opening this window, will be used to '
+            'determine the area for which you want data to be retrieved.'
+            'You can interactively select the area by using the '
+            '\'select on map\' button - which will temporarily hide this '
+            'window and allow you to drag a rectangle on the map. After you '
+            'have finished dragging the rectangle, this window will '
+            'reappear.'))
         tips.add(self.tr(
             'Check the output directory is correct. Note that the saved '
             'dataset will be called either roads.shp or buildings.shp (and '
@@ -498,7 +502,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         if not os.path.exists(path):
             message = self.tr(
-                "%s don't exist. The server doesn't have any data.")
+                "%s doesn't exist. The server doesn't have any data for this "
+                "extent." % path)
             raise FileMissingError(message)
 
         self.iface.addVectorLayer(path, feature_type, 'ogr')

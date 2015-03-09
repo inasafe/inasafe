@@ -151,7 +151,8 @@ class FakeQNetworkAccessManager:
         elif url == ('http://osm.linfiniti.com/buildings-shp?'
                      'bbox=20.389938354492188,-34.10782492987083'
                      ',20.712661743164062,'
-                     '-34.008273470938335&qgis_version=2&output_prefix=&lang=en'):
+                     '-34.008273470938335&qgis_version=2&output_prefix='
+                     '&lang=en'):
             reply.content = read_all("test-importdlg-extractzip.zip")
 
         return reply
