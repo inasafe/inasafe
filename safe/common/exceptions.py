@@ -259,6 +259,11 @@ class ImportDialogError(Exception):
     pass
 
 
+class FileMissingError(Exception):
+    """Raised if a file cannot be found."""
+    pass
+
+
 class CanceledImportDialogError(Exception):
     """Raised if import process canceled"""
     pass
