@@ -538,8 +538,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # TODO refactor impact_functions so it is accessible and user here
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
-        notes = m.Paragraph(self.
-            tr('You can now proceed to run your model by clicking the'),
+        notes = m.Paragraph(
+            self.tr('You can now proceed to run your model by clicking the'),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)

@@ -609,7 +609,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.get_data_type() == 'polygon':
             categories += ['aggregation']
         for category in categories:
-            if type(category) != dict:
+            if not isinstance(category, dict):
                 # pylint: disable=eval-used
                 category = eval('metadata.%s_definition' % category)
                 # pylint: enable=eval-used
@@ -1078,7 +1078,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         assigned_values = dict()
         for default_class in default_classes:
             assigned_values[default_class['name']] = list()
-        if type(value_map) == str:
+        if isinstance(value_map, str):
             try:
                 value_map = json.loads(value_map)
             except ValueError:
@@ -1798,7 +1798,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 imfunc and category in imfunc['categories'] and
                 'units' in imfunc['categories'][category]):
             allowed_units = imfunc['categories'][category]['units']
-            if type(allowed_units) != list:
+            if not isinstance(allowed_units, list):
                 allowed_units = [allowed_units]
         else:
             allowed_units = None
@@ -2736,10 +2736,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Summary tab"""
         def format_postprocessor(val):
             """ make nested OrderedDicts more flat"""
-            if type(val) == OrderedDict:
+            if isinstance(val, OrderedDict):
                 result = []
                 for v in val:
-                    if type(val[v]) == OrderedDict:
+                    if isinstance(val[v], OrderedDict):
                         # omit the v key and unpack the dict directly
                         result += [u'%s: %s' % (unicode(k), unicode(val[v][k]))
                                    for k in val[v]]
@@ -2763,14 +2763,16 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         params = []
         for p in self.if_params:
-            if type(self.if_params[p]) == OrderedDict:
+            if isinstance(self.if_params[p], OrderedDict):
                 subparams = [
-                    u'<b>%s</b>: %s' % (unicode(pp), format_postprocessor(self.if_params[p][pp]))
+                    u'<b>%s</b>: %s' % (
+                        unicode(pp),
+                        format_postprocessor(self.if_params[p][pp]))
                     for pp in self.if_params[p]
                 ]
                 subparams = u'<br/>'.join(subparams)
                 print '!!!', subparams
-            elif type(self.if_params[p]) == list and p == 'minimum needs':
+            elif isinstance(self.if_params[p], list) and p == 'minimum needs':
                 subparams = ''
                 for need in self.if_params[p]:
                     subparams += '%s %.0f' % (need.name, need.value)
@@ -2780,7 +2782,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                         subparams += ', '
                 if not subparams:
                     subparams = 'Not applicable'
-            elif type(self.if_params[p]) == list:
+            elif isinstance(self.if_params[p], list):
                 subparams = ', '.join([unicode(i) for i in self.if_params[p]])
             else:
                 subparams = unicode(self.if_params[p])
