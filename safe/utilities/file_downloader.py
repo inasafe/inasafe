@@ -52,7 +52,8 @@ class FileDownloader(object):
         self.url = url
         self.output_path = output_path
         self.progress_dialog = progress_dialog
-        self.prefix_text = self.progress_dialog.labelText()
+        if self.progress_dialog:
+            self.prefix_text = self.progress_dialog.labelText()
         self.output_file = None
         self.reply = None
         self.downloaded_file_buffer = None
