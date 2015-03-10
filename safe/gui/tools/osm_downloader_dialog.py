@@ -38,7 +38,10 @@ from PyQt4.QtGui import (
 from PyQt4.QtNetwork import QNetworkAccessManager
 
 from safe.common.exceptions import (
-    CanceledImportDialogError, ImportDialogError, DownloadError)
+    CanceledImportDialogError,
+    ImportDialogError,
+    DownloadError,
+    FileMissingError)
 from safe import messaging as m
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.gis import viewport_geo_array, rectangle_geo_array
@@ -46,6 +49,7 @@ from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.proxy import get_proxy
+from safe.utilities.qgis_utilities import display_warning_message_box
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 
 INFO_STYLE = styles.INFO_STYLE
@@ -133,9 +137,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         )
         tips = m.BulletedList()
         tips.add(self.tr(
-            'Your current extent will be used to determine the area for which '
-            'you want data to be retrieved. You can adjust it manually using '
-            'the bounding box options below.'))
+            'Your current extent, when opening this window, will be used to '
+            'determine the area for which you want data to be retrieved.'
+            'You can interactively select the area by using the '
+            '\'select on map\' button - which will temporarily hide this '
+            'window and allow you to drag a rectangle on the map. After you '
+            'have finished dragging the rectangle, this window will '
+            'reappear.'))
         tips.add(self.tr(
             'Check the output directory is correct. Note that the saved '
             'dataset will be called either roads.shp or buildings.shp (and '
@@ -311,7 +319,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.require_directory()
             for feature_type in feature_types:
                 self.download(feature_type)
-                self.load_shapefile(feature_type)
+                try:
+                    self.load_shapefile(feature_type)
+                except FileMissingError as exception:
+                    display_warning_message_box(
+                        self,
+                        error_dialog_title,
+                        str(exception))
             self.done(QDialog.Accepted)
             self.rectangle_map_tool.reset()
 
@@ -488,8 +502,9 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         if not os.path.exists(path):
             message = self.tr(
-                "%s don't exist. The server doesn't have any data.")
-            raise ImportDialogError(message)
+                "%s doesn't exist. The server doesn't have any data for this "
+                "extent." % path)
+            raise FileMissingError(message)
 
         self.iface.addVectorLayer(path, feature_type, 'ogr')
 
