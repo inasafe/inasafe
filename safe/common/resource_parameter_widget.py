@@ -19,6 +19,7 @@ from safe_extras.parameters.qt_widgets.float_parameter_widget import (
 # pylint: disable=super-on-old-class
 class ResourceParameterWidget(FloatParameterWidget):
     """Widget class for Resource parameter."""
+    # pylint: disable=super-on-old-class
     def __init__(self, parameter, parent=None):
         """Constructor
 
