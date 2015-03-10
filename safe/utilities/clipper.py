@@ -553,6 +553,7 @@ def extent_to_kml(extent):
     top_right_corner = '%s,%s' % (repr(extent[2]), repr(extent[3]))
     bottom_right_corner = '%s,%s' % (repr(extent[2]), repr(extent[1]))
 
+    # pylint: disable=bad-continuation
     kml = (
         """<?xml version="1.0" encoding="utf-8" ?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
