@@ -115,7 +115,7 @@ class FileDownloader(object):
         if result == QNetworkReply.NoError:
             return True, None
         else:
-            return result, str(self.reply.errorString())
+            return result, self.reply.errorString()
 
     def get_buffer(self):
         """Get buffer from self.reply and store it to our buffer container."""
