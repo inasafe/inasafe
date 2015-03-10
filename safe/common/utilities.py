@@ -767,6 +767,21 @@ def romanise(number):
     return roman
 
 
+def humanize_file_size(size):
+    """Return humanize size from bytes.
+
+    :param size: The size to humanize in bytes.
+    :type size: float
+
+    :return: Human readable size.
+    :rtype: unicode
+    """
+    for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
+        if size < 1024.0:
+            return u'%3.1f %s' % (size, x)
+        size /= 1024.0
+
+
 def add_to_list(my_list, my_element):
     """Helper function to add new my_element to my_list based on its type
     . Add as new element if it's not a list, otherwise extend to the list

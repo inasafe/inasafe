@@ -422,12 +422,12 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         path = tempfile.mktemp('.shp.zip')
 
         # download and extract it
-        self.fetch_zip(url, path)
+        self.fetch_zip(url, path, feature_type)
         self.extract_zip(path, self.output_directory.text())
 
         self.progress_dialog.done(QDialog.Accepted)
 
-    def fetch_zip(self, url, output_path):
+    def fetch_zip(self, url, output_path, feature_type):
         """Download zip containing shp file and write to output_path.
 
         :param url: URL of the zip bundle.
@@ -436,16 +436,27 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         :param output_path: Path of output file,
         :type output_path: str
 
+        :param feature_type: What kind of features should be downloaded.
+            Currently 'buildings', 'building-points' or 'roads' are supported.
+        :type feature_type: str
+
         :raises: ImportDialogError - when network error occurred
         """
         LOGGER.debug('Downloading file from URL: %s' % url)
         LOGGER.debug('Downloading to: %s' % output_path)
 
         self.progress_dialog.show()
-        self.progress_dialog.setMaximum(100)
+
+        # Infinite progress bar when the server is fetching data.
+        # The progress bar will be updated with the file size later.
+        self.progress_dialog.setMaximum(0)
+        self.progress_dialog.setMinimum(0)
         self.progress_dialog.setValue(0)
 
-        label_text = self.tr("Downloading shapefile")
+        # Get a pretty label from feature_type, but not translatable
+        label_feature_type = feature_type.replace('-', ' ')
+
+        label_text = self.tr('Fetching %s' % label_feature_type)
         self.progress_dialog.setLabelText(label_text)
 
         # Download Process
