@@ -281,9 +281,16 @@ class FloodEvacuationFunction(FunctionProvider):
         if len(counts) > 1:
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))
 
-            for i, val in enumerate(counts[:-1]):
-                s = (tr('People in %(lo).1f m to %(hi).1f m of water: %(val)i')
-                     % {'lo': thresholds[i],
+            for i, val in enumerate(counts):
+                if i == len(thresholds) - 1:
+                    # The last interval
+                    s = (tr('People in >= %(lo).1f m of water: %(val)s') % {
+                        'lo': thresholds[i],
+                        'val': format_int(val)})
+                else:
+                    s = (tr('People in %(lo).1f m to %(hi).1f m of water: %('
+                            'val)s') % {
+                        'lo': thresholds[i],
                         'hi': thresholds[i + 1],
                         'val': format_int(val)})
                 table_body.append(TableRow(s))
