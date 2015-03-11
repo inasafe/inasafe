@@ -313,6 +313,33 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             message=error_message)
         self.hide_busy()
 
+    def _show_organisation_logo(self):
+        """Show the organisation logo in the dock if possible."""
+        dock_width = float(self.width())
+        # Don't let the image be more tha 100px height
+        maximum_height = 100.0  # px
+        pixmap = QtGui.QPixmap(self.organisation_logo_path)
+        if pixmap.height() < 1 or pixmap.width() < 1:
+            return
+
+        height_ratio = maximum_height / pixmap.height()
+        maximum_width = int(pixmap.width() * height_ratio)
+        # Don't let the image be more than the dock width wide
+        if maximum_width > dock_width:
+            width_ratio = dock_width / float(pixmap.width())
+            maximum_height = int(pixmap.height() * width_ratio)
+            maximum_width = dock_width
+        too_high = pixmap.height() > maximum_height
+        too_wide = pixmap.width() > dock_width
+        if too_wide or too_high:
+            pixmap = pixmap.scaled(
+                maximum_width, maximum_height, Qt.KeepAspectRatio)
+        self.organisation_logo.setMaximumWidth(maximum_width)
+        # We have manually scaled using logic above
+        self.organisation_logo.setScaledContents(False)
+        self.organisation_logo.setPixmap(pixmap)
+        self.organisation_logo.show()
+
     def read_settings(self):
         """Set the dock state from QSettings.
 
@@ -430,7 +457,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.organisation_logo.setPixmap(pixmap)
 
         if self.organisation_logo_path and flag:
-            self.organisation_logo.show()
+            self._show_organisation_logo()
         else:
             self.organisation_logo.hide()
 
@@ -1475,19 +1502,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         report.add(LOGO_ELEMENT)
         report.add(m.Heading(self.tr(
             'Layer keywords missing:'), **WARNING_STYLE))
-        context = m.Message(
-            m.Text(self.tr(
+        context = m.Paragraph(
+            self.tr(
                 'No keywords have been defined for this layer yet. If '
                 'you wish to use it as an impact or hazard layer in a '
-                'scenario, please use the keyword editor. You can open'
-                ' the keyword editor by clicking on the ')),
+                'scenario, please use the keyword editor. You can open '
+                'the keyword editor by clicking on the '),
             m.Image(
                 'file:///%s/img/icons/'
-                'show-keyword-editor.svg' % resources_path(),
-                attributes='width=24 height=24'),
-            m.Text(self.tr(
-                ' icon in the toolbar, or choosing Plugins -> InaSAFE '
-                '-> Keyword Editor from the menu bar.')))
+                'show-keyword-wizard.svg' % resources_path(),
+                **SMALL_ICON_STYLE),
+            self.tr(
+                ' icon in the toolbar.'))
         report.add(context)
         self.pbnPrint.setEnabled(False)
         self.show_static_message(report)

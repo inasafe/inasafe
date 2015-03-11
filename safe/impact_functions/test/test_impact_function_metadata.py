@@ -28,7 +28,6 @@ from safe.impact_functions.inundation.flood_raster_OSM_building_impact import (
 from safe.impact_functions.generic.continuous_hazard_population import (
     ContinuousHazardPopulationImpactFunction)
 from safe.definitions import (
-    unit_wetdry,
     unit_metres_depth,
     unit_feet_depth,
     unit_mmi,

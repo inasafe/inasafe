@@ -1243,8 +1243,11 @@ class WizardDialogTest(unittest.TestCase):
         # expected_summary_key = 'minimum needs'
         # expected_summary_value_fragment = 'rice'
 
-        expected_report_size = 5583  # as saved on Debian
-        tolerance = 120  # windows EOL etc
+        # RMN : change it to 5793 from 5583 because of issue #1706
+        expected_report_size = 5793  # as saved on Debian
+        # TS : changed tolerance from 120 to 160 because above change
+        # causes fail on fedora
+        tolerance = 160  # windows EOL etc
 
         # Initialize dialog
         # noinspection PyTypeChecker

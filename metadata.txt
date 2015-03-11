@@ -9,13 +9,13 @@
 
 
 [general]
-name=InaSAFE-Dev
+name=InaSAFE
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
-version=3.1.0
+version=3.0.0
 # alpha, beta, rc or final
-status=alpha
+status=final
 
 
 # end of mandatory metadata
@@ -23,13 +23,22 @@ status=alpha
 # Optional items:
 
 changelog=
-        3.1.0
+        3.0.0
         New features:
-        * 
+        * New wizard for impact function centric analysis.
+        * Removed impact function browser.
+        * Simplified the toolbar - remaining functionality is still available in Plugins->InaSAFE menu.
+        * Impact reports are now nicely styled in PDF outputs.
         Architectural changes:
-        * 
+        * Combined safe and safe_qgis into one package.
+        * We now use one translation system instead of two (gettext was dropped).
+        * UI files are dynamically compiled at run time so we don't need to ship the uic compiled versions.
+        * We no longer user Qt resources so you no longer need to compile with pyrcc.
+        * Plugin reloader works again because we fixed the import management that caused it to break.
+        * Removed a lot of moribund / experimental / test code that is not used in production.
+        * Removed the use of api.py and abstraction between Qt/QGIS based code and console only code.
         Note:
-        * 
+        * This release breaks API comptibility with 2.x releases.
 
 
 
