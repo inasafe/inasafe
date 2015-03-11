@@ -123,9 +123,20 @@ class TableCell(object):
     """
 
     def __init__(
-            self, text='', bgcolor=None, header=False, width=None,
-            align=None, char=None, charoff=None, valign=None, style='',
-            attribs=None, cell_class=None, row_span=None, col_span=None):
+            self,
+            text='',
+            bgcolor=None,
+            header=False,
+            width=None,
+            align=None,
+            char=None,
+            charoff=None,
+            valign=None,
+            style='',
+            attribs=None,
+            cell_class=None,
+            row_span=None,
+            col_span=None):
         """TableCell constructor"""
         self.text = text
         self.bgcolor = bgcolor
@@ -203,9 +214,16 @@ class TableRow(object):
     """
 
     def __init__(
-            self, cells=None, bgcolor=None, header=False, attribs=None,
-            col_align=None, col_valign=None, col_char=None,
-            col_charoff=None, col_styles=None):
+            self,
+            cells=None,
+            bgcolor=None,
+            header=False,
+            attribs=None,
+            col_align=None,
+            col_valign=None,
+            col_char=None,
+            col_charoff=None,
+            col_styles=None):
         """TableCell constructor"""
         self.bgcolor = bgcolor
         self.cells = cells
@@ -297,12 +315,24 @@ class Table(object):
     """
 
     def __init__(
-            self, rows=None, border=None, style=None, width=None,
-            cellspacing=None, cellpadding=None, attribs=None, header_row=None,
+            self,
+            rows=None,
+            border=None,
+            style=None,
+            width=None,
+            cellspacing=None,
+            cellpadding=None,
+            attribs=None,
+            header_row=None,
             table_class=None,
-            col_width=None, col_align=None, col_valign=None,
-            col_char=None, col_charoff=None, col_styles=None,
-            caption=None, caption_at_bottom=False):
+            col_width=None,
+            col_align=None,
+            col_valign=None,
+            col_char=None,
+            col_charoff=None,
+            col_styles=None,
+            caption=None,
+            caption_at_bottom=False):
         """TableCell constructor"""
         # Ensure Rows is an array of rows
         if isinstance(rows, TableRow):
@@ -549,12 +579,18 @@ if __name__ == '__main__':
         ['Carpenter', 'Jack', 47, 7],
         ['Johnson', 'Paul', 62, 10.55],
     ]
-    htmlcode = table(table_data,
-                     header_row=['Last name', 'First name', 'Age', 'Score'],
-                     col_width=['', '20%', '10%', '10%'],
-                     col_align=['left', 'center', 'right', 'char'],
-                     col_styles=['font-size: large', '', 'font-size: small',
-                                 'background-color:yellow'])
+    htmlcode = table(
+        table_data,
+        header_row=['Last name', 'First name', 'Age', 'Score'],
+        col_width=['', '20%', '10%', '10%'],
+        col_align=['left', 'center', 'right', 'char'],
+        col_styles=[
+            'font-size: large',
+            '',
+            'font-size: small',
+            'background-color:yellow'
+        ]
+    )
     f.write(htmlcode + '<p>\n')
     print htmlcode
     print '-' * 79
