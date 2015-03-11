@@ -9,7 +9,7 @@
 
 
 [general]
-name=InaSAFE-Dec
+name=InaSAFE-Dev
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
@@ -24,8 +24,12 @@ status=alpha
 
 changelog=
         3.1.0
+        New features:
         *
-        * 
+        Architectural changes:
+        *
+        Note:
+        *
 
 
 
