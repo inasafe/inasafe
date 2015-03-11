@@ -807,9 +807,15 @@ class ShakeEvent(QObject):
             cities,
             key=lambda d: (
                 # we want to use whole no's for sort
-                -d['mmi-int'], -d['population'], d['name'],
+                -d['mmi-int'],
+                -d['population'],
+                d['name'],
                 d['mmi'],  # not decimals
-                d['roman'], d['dist_to'], d['dir_to'], d['dir_from'], d['id']))
+                d['roman'],
+                d['dist_to'],
+                d['dir_to'],
+                d['dir_from'],
+                d['id']))
         # TODO: Assumption that place names are unique is bad....
         if len(sorted_cities) > 0:
             self.most_affected_city = sorted_cities[0]
