@@ -1034,12 +1034,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             value_as_string = value and unicode(value) or 'NULL'
             assigned = False
             for default_class in default_classes:
-                if (field_type > 9 and
-                        value_as_string in
-                        default_class['string_defaults']) or \
+                if ((field_type > 9 and value_as_string
+                        in default_class['string_defaults']) or
                         (field_type < 10 and
                             (default_class['numeric_default_min'] <= value <
-                                default_class['numeric_default_max'])):
+                                default_class['numeric_default_max']))):
                     assigned_values[default_class['name']] += [value_as_string]
                     assigned = True
             if not assigned:

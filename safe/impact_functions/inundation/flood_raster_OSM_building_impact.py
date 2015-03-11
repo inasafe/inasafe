@@ -16,7 +16,6 @@ import logging
 from safe.definitions import (
     hazard_flood,
     hazard_tsunami,
-    unit_wetdry,
     unit_feet_depth,
     unit_metres_depth,
     layer_vector_polygon,
@@ -31,7 +30,6 @@ from safe.common.utilities import OrderedDict, get_osm_building_usage
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.storage.vector import Vector
-from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int, verify
 from safe.common.tables import Table, TableRow
@@ -123,9 +121,9 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
                     'might be flooded'),
                 'limitations': [
                     tr('This function only flags buildings as impacted or not '
-                        'either based on a fixed threshold in case of raster '
-                        'hazard or the the attributes mentioned under input '
-                        'in case of vector hazard.')
+                       'either based on a fixed threshold in case of raster '
+                       'hazard or the the attributes mentioned under input '
+                       'in case of vector hazard.')
                 ],
                 'citations': [],
                 'categories': {
@@ -140,7 +138,7 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
                             unit_feet_depth],
                         'layer_constraints': [
                             layer_raster_continuous,
-                        ]
+                            ]
                     },
                     'exposure': {
                         'definition': exposure_definition,
@@ -187,7 +185,6 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
             self)
 
         # Determine attribute name for hazard levels
-        mode = 'grid'
         hazard_attribute = 'depth'
 
         # Interpolate hazard level to building locations
@@ -201,7 +198,6 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
         buildings = {}
 
         # The number of affected buildings
-        affected_count = 0
 
         # The variable for grid mode
         inundated_count = 0
@@ -210,9 +206,6 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
         inundated_buildings = {}
         wet_buildings = {}
         dry_buildings = {}
-
-        # The variable for regions mode
-        affected_buildings = {}
 
         for i in range(total_features):
             # Get the interpolated depth
@@ -265,26 +258,18 @@ class FloodRasterBuildingImpactFunction(FunctionProvider):
             if x < 25 or usage == 'unknown':
                 if 'other' not in buildings:
                     buildings['other'] = 0
-                    if mode == 'grid':
-                        inundated_buildings['other'] = 0
-                        wet_buildings['other'] = 0
-                        dry_buildings['other'] = 0
-                    elif mode == 'regions':
-                        affected_buildings['other'] = 0
+                    inundated_buildings['other'] = 0
+                    wet_buildings['other'] = 0
+                    dry_buildings['other'] = 0
 
                 buildings['other'] += x
-                if mode == 'grid':
-                    inundated_buildings['other'] += inundated_buildings[usage]
-                    wet_buildings['other'] += wet_buildings[usage]
-                    dry_buildings['other'] += dry_buildings[usage]
-                    del buildings[usage]
-                    del inundated_buildings[usage]
-                    del wet_buildings[usage]
-                    del dry_buildings[usage]
-                elif mode == 'regions':
-                    affected_buildings['other'] += affected_buildings[usage]
-                    del buildings[usage]
-                    del affected_buildings[usage]
+                inundated_buildings['other'] += inundated_buildings[usage]
+                wet_buildings['other'] += wet_buildings[usage]
+                dry_buildings['other'] += dry_buildings[usage]
+                del buildings[usage]
+                del inundated_buildings[usage]
+                del wet_buildings[usage]
+                del dry_buildings[usage]
 
         # Generate simple impact report
         table_body = [
