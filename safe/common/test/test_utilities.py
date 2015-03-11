@@ -34,6 +34,7 @@ from safe.common.utilities import (
     temp_dir,
     log_file_path,
     romanise,
+    humanize_file_size,
     add_to_list)
 
 
@@ -327,6 +328,18 @@ class TestUtilities(unittest.TestCase):
         result = []
         for value in values:
             result.append(romanise(value))
+        message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
+        self.assertEqual(result, expected_result, message)
+
+    def test_humanize_size(self):
+        """Test we can convert size values to human readable size."""
+        values = [1023, 1024, 1048575, 1048576, 1604321.28]
+        expected_result = [
+            u'1023.0 bytes', u'1.0 KB', u'1024.0 KB', u'1.0 MB', u'1.5 MB']
+
+        result = []
+        for value in values:
+            result.append(humanize_file_size(value))
         message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
         self.assertEqual(result, expected_result, message)
 
