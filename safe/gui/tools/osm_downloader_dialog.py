@@ -35,7 +35,7 @@ from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
 # noinspection PyPackageRequirements
-from PyQt4.QtNetwork import QNetworkAccessManager
+from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
 
 from safe.common.exceptions import (
     CanceledImportDialogError,
@@ -335,7 +335,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             pass
         except Exception as exception:  # pylint: disable=broad-except
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QMessageBox.warning(self, error_dialog_title, str(exception))
+            display_warning_message_box(
+                self, error_dialog_title, exception.message)
 
             self.progress_dialog.cancel()
 
@@ -458,7 +459,11 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         if result[0] is not True:
             _, error_message = result
-            raise DownloadError(error_message)
+
+            if result[0] == QNetworkReply.OperationCanceledError:
+                raise CanceledImportDialogError(error_message)
+            else:
+                raise DownloadError(error_message)
 
     @staticmethod
     def extract_zip(path, output_dir):
