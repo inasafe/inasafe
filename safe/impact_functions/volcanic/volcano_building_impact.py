@@ -10,8 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
-from safe.engine.utilities import buffer_points
+from collections import OrderedDict
+
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
 from safe.impact_functions.impact_function_metadata import (
@@ -28,6 +28,7 @@ from safe.definitions import (
     unit_building_generic)
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
+from safe.engine.utilities import buffer_points
 from safe.common.utilities import (
     format_int,
     get_thousand_separator,
@@ -39,7 +40,6 @@ from safe.common.exceptions import InaSAFEError
 
 
 class VolcanoBuildingImpact(FunctionProvider):
-    # noinspection PyUnresolvedReferences
     """Risk plugin for volcano building impact.
 
     :author AIFDR
@@ -127,18 +127,12 @@ class VolcanoBuildingImpact(FunctionProvider):
             }
             return dict_meta
 
-    target_field = 'buildings'
-
     parameters = OrderedDict([
         # The list of radii in km for volcano point hazard
         ('distances [km]', [3, 5, 10]),
 
         # Default string value for not affected
         ('Not affected value', 'Not affected'),
-
-        # This field of impact layer that will be filled with hazard level
-        # zone is chosen because usually they are divided into some zones
-        ('target field', 'zone'),
 
         # The attribute for name of the volcano in hazard layer
         ('name attribute', 'NAME'),
@@ -160,10 +154,12 @@ class VolcanoBuildingImpact(FunctionProvider):
                   Table with number of buildings affected
         :rtype: dict
         """
+        # Target Field
+        target_field = 'zone'
+
         # Parameters
         not_affected_value = self.parameters['Not affected value']
         radii = self.parameters['distances [km]']
-        target_field = self.parameters['target field']
         name_attribute = self.parameters['name attribute']
         hazard_zone_attribute = self.parameters['hazard zone attribute']
 

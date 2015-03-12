@@ -694,7 +694,8 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
     i = 0
     while new_name.upper() in uppercase_attribute_names:
         i += 1
-        new_name = '%s_%s' % (new_name[:8], i)
+        string_len = 9 - len(str(i))
+        new_name = '%s_%s' % (new_name[:string_len], i)
     return new_name
 
 
