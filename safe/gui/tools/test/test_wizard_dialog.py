@@ -1246,7 +1246,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_report_size = 5793  # as saved on Debian
         # TS : changed tolerance from 120 to 160 because above change
         # causes fail on fedora
-        tolerance = 160  # windows EOL etc
+        tolerance = 180  # windows EOL etc
 
         # Initialize dialog
         # noinspection PyTypeChecker
