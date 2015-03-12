@@ -77,16 +77,16 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
 
         self.iface = iface
-        self.buildings_url = "http://osm.linfiniti.com/buildings-shp"
+        self.buildings_url = 'http://osm.linfiniti.com/buildings-shp'
         self.building_points_url = \
-            "http://osm.linfiniti.com/building-points-shp"
-        self.roads_url = "http://osm.linfiniti.com/roads-shp"
+            'http://osm.linfiniti.com/building-points-shp'
+        self.roads_url = 'http://osm.linfiniti.com/roads-shp'
 
         self.help_context = 'openstreetmap_downloader'
         # creating progress dialog for download
         self.progress_dialog = QProgressDialog(self)
         self.progress_dialog.setAutoClose(False)
-        title = self.tr("InaSAFE OpenStreetMap Downloader")
+        title = self.tr('InaSAFE OpenStreetMap Downloader')
         self.progress_dialog.setWindowTitle(title)
         # Set up context help
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -276,7 +276,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Show a dialog to choose directory."""
         # noinspection PyCallByClass,PyTypeChecker
         self.output_directory.setText(QFileDialog.getExistingDirectory(
-            self, self.tr("Select download directory")))
+            self, self.tr('Select download directory')))
 
     def drag_rectangle_on_map_canvas(self):
         """Hide the dialog and allow the user to draw a rectangle."""
@@ -300,7 +300,9 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 'The bounding box is not valid. Please make sure it is '
                 'valid or check your projection!')
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QMessageBox.warning(self, error_dialog_title, message)
+            display_warning_message_box(self, error_dialog_title, message)
+            # Unlock the groupbox
+            self.groupBox.setEnabled(True)
             return
 
         # Get all the feature types
@@ -358,9 +360,9 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         if os.path.exists(path):
             return
 
-        title = self.tr("Directory %s not exist") % path
+        title = self.tr('Directory %s not exist') % path
         question = self.tr(
-            "Directory %s not exist. Do you want to create it?") % path
+            'Directory %s not exist. Do you want to create it?') % path
         # noinspection PyCallByClass,PyTypeChecker
         answer = QMessageBox.question(
             self, title, question, QMessageBox.Yes | QMessageBox.No)
@@ -370,7 +372,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 os.makedirs(path)
             else:
                 # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-                QMessageBox.warning(
+                display_warning_message_box(
                     self,
                     self.tr('InaSAFE error'),
                     self.tr('Output directory can not be empty.'))
@@ -404,13 +406,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             )
         output_prefix = self.filename_prefix.text()
         if feature_type == 'buildings':
-            url = "{url}?bbox={box}&qgis_version=2".format(
+            url = '{url}?bbox={box}&qgis_version=2'.format(
                 url=self.buildings_url, box=box)
         elif feature_type == 'building-points':
-            url = "{url}?bbox={box}&qgis_version=2".format(
+            url = '{url}?bbox={box}&qgis_version=2'.format(
                 url=self.building_points_url, box=box)
         else:
-            url = "{url}?bbox={box}&qgis_version=2".format(
+            url = '{url}?bbox={box}&qgis_version=2'.format(
                 url=self.roads_url, box=box)
 
         if output_prefix is not None:
@@ -518,8 +520,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         if not os.path.exists(path):
             message = self.tr(
-                "%s doesn't exist. The server doesn't have any data for this "
-                "extent." % path)
+                '%s does not exist. The server does not have any data for '
+                'this extent.' % path)
             raise FileMissingError(message)
 
         self.iface.addVectorLayer(path, feature_type, 'ogr')
