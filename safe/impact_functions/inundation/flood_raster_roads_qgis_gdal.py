@@ -38,9 +38,9 @@ from safe.gis.qgis_vector_tools import (
     reproject_vector_layer)
 
 
-class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
+class FloodRasterRoadsFunction(FunctionProvider):
     # noinspection PyUnresolvedReferences
-    """Simple experimental impact function for inundation.
+    """Simple impact function for inundation for road.
 
     :author Dmitry Kolesov
     :rating 1
@@ -56,7 +56,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         self.extent = None
 
     class Metadata(ImpactFunctionMetadata):
-        """Metadata for FloodRasterRoadsExperimentalFunction
+        """Metadata for FloodRasterRoadsFunction
 
         .. versionadded:: 2.1
 
@@ -76,8 +76,8 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'FloodRasterRoadsExperimentalFunction',
-                'name': tr('Flood Raster Roads Experimental Function'),
+                'id': 'FloodRasterRoadsFunction',
+                'name': tr('Flood Raster Roads Function'),
                 'impact': tr('Be flooded in given thresholds'),
                 'title': tr('Be flooded in given thresholds'),
                 'author': 'Dmitry Kolesov',
@@ -142,7 +142,7 @@ class FloodRasterRoadsExperimentalFunction2(FunctionProvider):
         self.extent = extent
 
     def run(self, layers):
-        """Experimental impact function.
+        """Run the impact function.
 
         :param layers: List of layers expected to contain at least:
             H: Polygon layer of inundation areas
