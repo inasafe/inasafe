@@ -151,7 +151,7 @@ class FakeQNetworkAccessManager:
         elif url == ('http://osm.linfiniti.com/buildings-shp?'
                      'bbox=20.389938354492188,-34.10782492987083'
                      ',20.712661743164062,'
-                     '-34.008273470938335&qgis_version=2&output_prefix='
+                     '-34.008273470938335&qgis_version=2'
                      '&lang=en'):
             reply.content = read_all("test-importdlg-extractzip.zip")
 
@@ -255,28 +255,52 @@ class ImportDialogTest(unittest.TestCase):
         # cleanup
         os.remove(path)
 
+    def test_suffix_extracting_shapefile(self):
+        """Test existing files method."""
+
+        path = tempfile.mkdtemp('existing-files')
+
+        # Create some files
+        one_file = os.path.join(path, 'a.txt')
+        open(one_file, 'a').close()
+
+        other_file = os.path.join(path, 'a-1.txt')
+        open(other_file, 'a').close()
+
+        message = "Index for existing files is wrong."
+
+        result = self.dialog.get_unique_suffix_file_path(one_file)
+        assert result == 2, message
+
+        os.remove(other_file)
+        result = self.dialog.get_unique_suffix_file_path(one_file)
+        assert result == 1, message
+
+        os.remove(one_file)
+        result = self.dialog.get_unique_suffix_file_path(one_file)
+        assert result == 0, message
+
+        # cleanup
+        shutil.rmtree(path)
+
     def test_extract_zip(self):
-        """Test extract_zip method."""
+        """Test extract_zip method.
+        The extract_zip method will only take care of one file for each
+        extensions. If many files has the same extension, only the last one
+        will be copied.
+        """
         base_path = tempfile.mkdtemp()
+        base_file_path = os.path.join(base_path, 'test')
         zip_file_path = test_data_path(
             'control',
             'files',
             'test-importdlg-extractzip.zip')
-        self.dialog.extract_zip(zip_file_path, base_path)
+        self.dialog.extract_zip(zip_file_path, base_file_path)
 
         message = "file {0} not exist"
 
-        file_name = 'planet_osm_line.shp'
-        path = os.path.join(base_path, file_name)
-        assert os.path.exists(path), message.format(file_name)
-
-        file_name = 'planet_osm_point.shp'
-        path = os.path.join(base_path, file_name)
-        assert os.path.exists(path), message.format(file_name)
-
-        file_name = 'planet_osm_polygon.shp'
-        path = os.path.join(base_path, file_name)
-        assert os.path.exists(path), message.format(file_name)
+        path = '%s.shp' % base_file_path
+        assert os.path.exists(path), message.format(path)
 
         # remove temporary folder and all of its content
         shutil.rmtree(base_path)
@@ -289,7 +313,7 @@ class ImportDialogTest(unittest.TestCase):
         self.dialog.min_latitude.setText('-34.10782492987083')
         self.dialog.max_longitude.setText('20.712661743164062')
         self.dialog.max_latitude.setText('-34.008273470938335')
-        self.dialog.download('buildings')
+        self.dialog.download('buildings', output_directory)
 
         result = self.dialog.progress_dialog.result()
         message = "result do not match. current result is %s " % result
@@ -303,11 +327,7 @@ class ImportDialogTest(unittest.TestCase):
 
         self.dialog.extract_zip(zip_file_path, output_path)
 
-        # outDir must be set to output_path because loadShapeFile() use
-        # that variable to determine the location of shape files.
-        self.dialog.output_directory.setText(output_path)
-
-        self.dialog.load_shapefile('buildings')
+        self.dialog.load_shapefile('buildings', output_path)
 
         shutil.rmtree(output_path)
 
