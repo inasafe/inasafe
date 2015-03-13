@@ -370,7 +370,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         :type feature_type: str
 
         :param overwrite: Boolean to know if we can overwrite existing files.
-        :type overwrite: str
+        :type overwrite: bool
 
         :return: The base path.
         :rtype: str
@@ -380,7 +380,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         if not overwrite:
             separator = '-'
-            suffix = self.get_unique_suffix_file_path(
+            suffix = self.get_unique_file_path_suffix(
                 '%s.shp' % path, separator)
 
             if suffix:
@@ -390,10 +390,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         return path
 
     @staticmethod
-    def get_unique_suffix_file_path(file_path, separator='-', i=0):
-        """Check and return the minimum number to suffix the file with a
-        separator and an integer to prevent overwriting a file with the same
-        name.
+    def get_unique_file_path_suffix(file_path, separator='-', i=0):
+        """Return the minimum number to suffix the file to not overwrite one.
         Example : /tmp/a.txt exists.
             - With file_path='/tmp/b.txt' will return 0.
             - With file_path='/tmp/a.txt' will return 1 (/tmp/a-1.txt)
@@ -419,7 +417,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             file_path_test = file_path
 
         if os.path.isfile(file_path_test):
-            return OsmDownloaderDialog.get_unique_suffix_file_path(
+            return OsmDownloaderDialog.get_unique_file_path_suffix(
                 file_path, separator, i + 1)
         else:
             return i
@@ -459,7 +457,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             raise CanceledImportDialogError()
 
     def download(self, feature_type, output_base_path):
-        """Download shapefiles from Linfiniti server.
+        """Download shapefiles from Kartoza server.
 
         :param feature_type: What kind of features should be downloaded.
             Currently 'buildings', 'building-points' or 'roads' are supported.
@@ -566,14 +564,14 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             - /tmp/CT-buildings.dbf
             - /tmp/CT-buildings.prj
 
-        If two files in the zip with the same extension, only the last one will
-        be copied.
+        If two files in the zip with the same extension, only one will be
+        copied.
 
         :param zip_path: The path of the .zip file
         :type zip_path: str
 
         :param destination_base_path: The destination base path where the shp
-        will be written to.
+            will be written to.
         :type destination_base_path: str
 
         :raises: IOError - when not able to open path or output_dir does not

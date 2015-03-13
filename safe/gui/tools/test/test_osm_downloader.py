@@ -269,25 +269,24 @@ class ImportDialogTest(unittest.TestCase):
 
         message = "Index for existing files is wrong."
 
-        result = self.dialog.get_unique_suffix_file_path(one_file)
+        result = self.dialog.get_unique_file_path_suffix(one_file)
         assert result == 2, message
 
         os.remove(other_file)
-        result = self.dialog.get_unique_suffix_file_path(one_file)
+        result = self.dialog.get_unique_file_path_suffix(one_file)
         assert result == 1, message
 
         os.remove(one_file)
-        result = self.dialog.get_unique_suffix_file_path(one_file)
+        result = self.dialog.get_unique_file_path_suffix(one_file)
         assert result == 0, message
 
         # cleanup
         shutil.rmtree(path)
 
     def test_extract_zip(self):
-        """Test extract_zip method.
-        The extract_zip method will only take care of one file for each
-        extensions. If many files has the same extension, only the last one
-        will be copied.
+        """Test extract_zip method which will only take care of one file for
+        each extensions. If many files has the same extension, only the last
+        one will be copied.
         """
         base_path = tempfile.mkdtemp()
         base_file_path = os.path.join(base_path, 'test')
