@@ -28,25 +28,26 @@ from safe.definitions import (
     unit_building_generic)
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.engine.utilities import buffer_points
 from safe.common.utilities import (
     format_int,
     get_thousand_separator,
-    get_non_conflicting_attribute_name)
+    get_non_conflicting_attribute_name,
+    get_osm_building_usage)
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.common.exceptions import InaSAFEError
 
 
-class VolcanoBuildingImpact(FunctionProvider):
-    """Risk plugin for volcano building impact.
+class VolcanoPolygonBuildingImpact(FunctionProvider):
+    """Risk plugin for volcano polygon building impact.
 
     :author AIFDR
     :rating 4
     :param requires category=='hazard' and \
                     subcategory in ['volcano'] and \
-                    layertype=='vector'
+                    layertype=='vector' and \
+                    data_type=='polygon'
 
     :param requires category=='exposure' and \
                     subcategory=='structure' and \
@@ -74,8 +75,8 @@ class VolcanoBuildingImpact(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'VolcanoBuildingImpact',
-                'name': tr('Volcano Building Impact'),
+                'id': 'VolcanoPolygonBuildingImpact',
+                'name': tr('Volcano Polygon Building Impact'),
                 'impact': tr('Be affected'),
                 'title': tr('Be affected'),
                 'author': 'AIFDR',
@@ -84,20 +85,21 @@ class VolcanoBuildingImpact(FunctionProvider):
                     'To assess the impacts of volcano eruption on building.'),
                 'detailed_description': '',
                 'hazard_input': tr(
-                    'A hazard vector layer can be polygon or point. If '
-                    'polygon, it must have "KRB" attribute and the values for '
-                    'it are "Kawasan Rawan Bencana I", "Kawasan Rawan Bencana '
-                    'II", or "Kawasan Rawan Bencana III." If you want to see '
-                    'the name of the volcano in the result, you need to add '
-                    '"NAME" attribute for point data or "GUNUNG" attribute '
-                    'for polygon data.'),
+                    'The hazard layer must be a polygon layer. This layer '
+                    'must have an attribute representing the volcano hazard '
+                    'zone that can be specified in the impact function option.'
+                    'The valid values for the volcano hazard zone are "Kawasan '
+                    'Rawan Bencana I", "Kawasan Rawan Bencana II", '
+                    'or "Kawasan  Rawan Bencana III." If you want to see the '
+                    'name of the volcano in the result, you need to specify '
+                    'the volcano name attribute in the Impact Function '
+                    'option.'),
                 'exposure_input': tr(
                     'Vector polygon layer extracted from OSM where each '
                     'polygon represents the footprint of a building.'),
                 'output': tr(
                     'Vector layer contains Map of building exposed to '
-                    'volcanic hazard zones for each Kawasan Rawan Bencana or '
-                    'radius.'),
+                    'volcanic hazard zones for each Kawasan Rawan Bencana.'),
                 'actions': tr(
                     'Provide details about how many building would likely be '
                     'affected by each hazard zones.'),
@@ -108,10 +110,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                         'definition': hazard_definition,
                         'subcategories': [hazard_volcano],
                         'units': [unit_volcano_categorical],
-                        'layer_constraints': [
-                            layer_vector_polygon,
-                            layer_vector_point
-                        ]
+                        'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {
                         'definition': exposure_definition,
@@ -128,17 +127,11 @@ class VolcanoBuildingImpact(FunctionProvider):
             return dict_meta
 
     parameters = OrderedDict([
-        # The list of radii in km for volcano point hazard
-        ('distances [km]', [3, 5, 10]),
-
-        # Default string value for not affected
-        ('Not affected value', 'Not affected'),
+        # The attribute of hazard zone in hazard layer
+        ('hazard zone attribute', 'KRB'),
 
         # The attribute for name of the volcano in hazard layer
-        ('name attribute', 'NAME'),
-
-        # The attribute of hazard zone in hazard layer
-        ('hazard zone attribute', 'KRB')])
+        ('volcano name attribute', 'NAME')])
 
     def run(self, layers):
         """Risk plugin for volcano hazard on building/structure.
@@ -157,11 +150,12 @@ class VolcanoBuildingImpact(FunctionProvider):
         # Target Field
         target_field = 'zone'
 
+        # Not affected string
+        not_affected_value = 'Not Affected'
+
         # Parameters
-        not_affected_value = self.parameters['Not affected value']
-        radii = self.parameters['distances [km]']
-        name_attribute = self.parameters['name attribute']
         hazard_zone_attribute = self.parameters['hazard zone attribute']
+        name_attribute = self.parameters['volcano name attribute']
 
         # Identify hazard and exposure layers
         hazard_layer = get_hazard_layer(layers)  # Volcano hazard layer
@@ -172,38 +166,20 @@ class VolcanoBuildingImpact(FunctionProvider):
             hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         # Input checks
-        if not hazard_layer.is_vector:
-            message = ('Input hazard %s  was not a vector layer as expected '
-                       % hazard_layer.get_name())
-            raise Exception(message)
-
-        if not (hazard_layer.is_polygon_data or hazard_layer.is_point_data):
+        if not hazard_layer.is_polygon_data:
             message = (
-                'Input hazard must be a polygon or point layer. I got %s with '
+                'Input hazard must be a polygon. I got %s with '
                 'layer type %s' %
                 (hazard_layer.get_name(), hazard_layer.get_geometry_name()))
             raise Exception(message)
 
-        if hazard_layer.is_point_data:
-            # Use concentric circles
-            centers = hazard_layer.get_geometry()
-            attributes = hazard_layer.get_data()
-            radii_meter = [x * 1000 for x in radii]  # Convert to meters
-            hazard_layer = buffer_points(
-                centers,
-                radii_meter,
-                hazard_zone_attribute,
-                data_table=attributes)
-            # To check
-            category_names = radii_meter
-        else:
-            # FIXME (Ole): Change to English and use translation system
-            # FIXME (Ismail) : Or simply use the values from the hazard layer
-            category_names = ['Kawasan Rawan Bencana III',
-                              'Kawasan Rawan Bencana II',
-                              'Kawasan Rawan Bencana I']
-
-        category_names.append(not_affected_value)
+        # FIXME (Ole): Change to English and use translation system
+        # FIXME (Ismail) : Or simply use the values from the hazard layer
+        category_names = [
+            'Kawasan Rawan Bencana III',
+            'Kawasan Rawan Bencana II',
+            'Kawasan Rawan Bencana I',
+            not_affected_value]
 
         # Get names of volcanoes considered
         if name_attribute in hazard_layer.get_attribute_names():
@@ -215,7 +191,7 @@ class VolcanoBuildingImpact(FunctionProvider):
         else:
             volcano_names = tr('Not specified in data')
 
-        # Check if category_title exists in hazard_layer
+        # Check if hazard_zone_attribute exists in hazard_layer
         if hazard_zone_attribute not in hazard_layer.get_attribute_names():
             message = (
                 'Hazard data %s did not contain expected attribute %s ' %
@@ -235,10 +211,7 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
-        attribute_names_lower = [
-            attribute_name.lower() for attribute_name in attribute_names]
-        attributes = interpolated_layer.get_data()
-        interpolate_size = len(interpolated_layer)
+        features = interpolated_layer.get_data()
 
         building_per_category = {}
         building_usages = []
@@ -249,22 +222,11 @@ class VolcanoBuildingImpact(FunctionProvider):
             building_per_category[category_name]['total'] = 0
             other_sum[category_name] = 0
 
-        # Building attribute that should be looked up to get the usage
-        building_type_attributes = [
-            'type',
-            'amenity',
-            'building_t',
-            'office',
-            'tourism',
-            'leisure',
-            'use',
-        ]
-
-        for i in range(interpolate_size):
-            hazard_value = attributes[i][hazard_zone_attribute]
+        for i in range(len(features)):
+            hazard_value = features[i][hazard_zone_attribute]
             if not hazard_value:
                 hazard_value = not_affected_value
-            attributes[i][target_field] = hazard_value
+            features[i][target_field] = hazard_value
 
             if hazard_value in building_per_category.keys():
                 building_per_category[hazard_value]['total'] += 1
@@ -275,23 +237,7 @@ class VolcanoBuildingImpact(FunctionProvider):
                 building_per_category[hazard_value]['total'] = 1
 
             # Count affected buildings by usage type if available
-            usage = None
-            for building_type_attribute in building_type_attributes:
-                if building_type_attribute in attribute_names_lower and (
-                                usage is None or usage == 0):
-                    attribute_index = attribute_names_lower.index(
-                        building_type_attribute)
-                    field_name = attribute_names[attribute_index]
-                    usage = attributes[i][field_name]
-
-            if 'building' in attribute_names_lower and (
-                            usage is None or usage == 0):
-                attribute_index = attribute_names_lower.index('building')
-                field_name = attribute_names[attribute_index]
-                usage = attributes[i][field_name]
-                if usage == 'yes':
-                    usage = 'building'
-
+            usage = get_osm_building_usage(attribute_names, features[i])
             if usage is None or usage == 0:
                 usage = tr('unknown')
 
@@ -319,9 +265,9 @@ class VolcanoBuildingImpact(FunctionProvider):
             building_usage_good = building_usage.replace('_', ' ')
             building_usage_good = building_usage_good.capitalize()
 
-            building_sum = sum([building_per_category[category_name][
-                                    building_usage] for category_name in
-                               category_names])
+            building_sum = sum(
+                [building_per_category[category_name][building_usage]
+                 for category_name in category_names])
 
             # Filter building type that has no less than 25 items
             if building_sum >= 25:
@@ -416,7 +362,7 @@ class VolcanoBuildingImpact(FunctionProvider):
 
         # Create vector layer and return
         impact_layer = Vector(
-            data=attributes,
+            data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(as_geometry_objects=True),
             name=tr('Buildings affected by volcanic hazard zone'),

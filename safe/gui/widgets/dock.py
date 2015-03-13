@@ -994,6 +994,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # We need to add the layer type to the returned keywords
         if hazard_layer.type() == QgsMapLayer.VectorLayer:
             hazard_keywords['layertype'] = 'vector'
+            if hazard_layer.geometryType() == QGis.Point:
+                hazard_keywords['data_type'] = 'point'
+            elif hazard_layer.geometryType() == QGis.Line:
+                hazard_keywords['data_type'] = 'line'
+            elif hazard_layer.geometryType() == QGis.Polygon:
+                hazard_keywords['data_type'] = 'polygon'
         elif hazard_layer.type() == QgsMapLayer.RasterLayer:
             hazard_keywords['layertype'] = 'raster'
 

@@ -27,7 +27,7 @@ from safe.common.utilities import format_int
 from safe.test.utilities import test_data_path, TESTDATA
 
 
-class TestVolcanoBuildingImpact(unittest.TestCase):
+class TestVolcanoPOlygonBuildingImpact(unittest.TestCase):
     """Test for Volcano Building Impact Function."""
 
     def setUp(self):
@@ -44,10 +44,10 @@ class TestVolcanoBuildingImpact(unittest.TestCase):
         hazard = read_layer(hazard_filename)
         exposure = read_layer(exposure_filename)
 
-        plugin_name = 'Volcano Building Impact'
+        plugin_name = 'Volcano Polygon Building Impact'
         impact_function = get_plugin(plugin_name)
-        impact_function.parameters['name attribute'] = 'GUNUNG'
-        print 'Calculating'
+        impact_function.parameters['volcano name attribute'] = 'GUNUNG'
+
         # Call calculation engine
         impact_layer = calculate_impact(
             layers=[hazard, exposure], impact_fcn=impact_function)
