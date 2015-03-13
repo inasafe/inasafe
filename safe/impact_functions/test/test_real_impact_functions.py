@@ -32,8 +32,10 @@ class TestRealImpactFunctions(unittest.TestCase):
             'Flood Evacuation Function',
             'Flood Vector Building Impact Function',
             'Flood Raster Building Impact Function',
+            'Tsunami Evacuation Function',
             'ITB Fatality Function',
-            'Volcano Building Impact',
+            'Volcano Polygon Building Impact',
+            'Volcano Point Building Impact',
             'Volcano Polygon Hazard Population',
             ]
 

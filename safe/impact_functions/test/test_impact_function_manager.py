@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.earthquake.earthquake_building_impact import (
     EarthquakeBuildingImpactFunction)
@@ -27,8 +28,10 @@ from safe.impact_functions.inundation.flood_vector_OSM_building_impact import (
     FloodVectorBuildingImpactFunction)
 from safe.impact_functions.inundation.flood_building_impact_qgis import (
     FloodNativePolygonExperimentalFunction)
-from safe.impact_functions.volcanic.volcano_building_impact import (
-    VolcanoBuildingImpact)
+from safe.impact_functions.volcanic.volcano_polygon_building_impact import (
+    VolcanoPolygonBuildingImpact)
+from safe.impact_functions.volcanic.volcano_point_building_impact import (
+    VolcanoPointBuildingImpact)
 from safe.impact_functions.volcanic. \
     volcano_population_evacuation_polygon_hazard import (
         VolcanoPolygonHazardPopulation)
@@ -77,7 +80,7 @@ class TestImpactFunctionManager(unittest.TestCase):
     def test_init(self):
         """Test initialize ImpactFunctionManager."""
         impact_function_manager = ImpactFunctionManager()
-        expected_result = 16
+        expected_result = 17
         i = 0
         print 'Your impact functions:'
         for impact_function in impact_function_manager.impact_functions:
@@ -279,7 +282,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.get_functions_for_hazard(
             hazard_volcano)
         expected_result = [
-            VolcanoBuildingImpact.Metadata.get_metadata(),
+            VolcanoPolygonBuildingImpact.Metadata.get_metadata(),
+            VolcanoPointBuildingImpact.Metadata.get_metadata(),
             VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
             ContinuousHazardPopulationImpactFunction.Metadata.get_metadata(),
             ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata(),
@@ -293,7 +297,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.get_functions_for_hazard_id(
             hazard_volcano['id'])
         expected_result = [
-            VolcanoBuildingImpact.Metadata.get_metadata(),
+            VolcanoPolygonBuildingImpact.Metadata.get_metadata(),
+            VolcanoPointBuildingImpact.Metadata.get_metadata(),
             VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
             ContinuousHazardPopulationImpactFunction.Metadata.get_metadata(),
             ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata(),
@@ -326,7 +331,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.get_functions_for_exposure(
             exposure_structure)
         expected_result = [
-            VolcanoBuildingImpact.Metadata.get_metadata(),
+            VolcanoPolygonBuildingImpact.Metadata.get_metadata(),
+            VolcanoPointBuildingImpact.Metadata.get_metadata(),
             EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
             FloodRasterBuildingImpactFunction.Metadata.get_metadata(),
             FloodVectorBuildingImpactFunction.Metadata.get_metadata(),
@@ -341,7 +347,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.get_functions_for_exposure_id(
             exposure_structure['id'])
         expected_result = [
-            VolcanoBuildingImpact.Metadata.get_metadata(),
+            VolcanoPolygonBuildingImpact.Metadata.get_metadata(),
+            VolcanoPointBuildingImpact.Metadata.get_metadata(),
             EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
             FloodRasterBuildingImpactFunction.Metadata.get_metadata(),
             FloodVectorBuildingImpactFunction.Metadata.get_metadata(),
