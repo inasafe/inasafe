@@ -27,7 +27,7 @@ from safe.common.utilities import format_int
 from safe.test.utilities import test_data_path, TESTDATA
 
 
-class TestVolcanoPOlygonBuildingImpact(unittest.TestCase):
+class TestVolcanoPolygonBuildingImpact(unittest.TestCase):
     """Test for Volcano Building Impact Function."""
 
     def setUp(self):
