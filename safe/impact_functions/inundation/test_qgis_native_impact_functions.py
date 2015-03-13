@@ -245,7 +245,7 @@ class TestGisNativeImpactFunctions(unittest.TestCase):
         exposure_name = test_data_path('exposure', 'roads_osm_4326.shp')
         qgis_exposure = QgsVectorLayer(exposure_name, 'EXPOSURE', 'ogr')
 
-        plugin_name = 'FloodRasterRoadsExperimentalFunction2'
+        plugin_name = 'FloodRasterRoadsFunction'
 
         params = OrderedDict([
             ('target_field', 'flooded'),
