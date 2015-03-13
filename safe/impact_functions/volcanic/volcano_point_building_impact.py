@@ -77,7 +77,7 @@ class VolcanoPointBuildingImpact(FunctionProvider):
             """
             dict_meta = {
                 'id': 'VolcanoPointBuildingImpact',
-                'name': tr('Volcano Point On Building Impact'),
+                'name': tr('Volcano Point Building Impact'),
                 'impact': tr('Be affected'),
                 'title': tr('Be affected'),
                 'author': 'AIFDR',
