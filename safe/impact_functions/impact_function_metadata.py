@@ -674,3 +674,16 @@ class ImpactFunctionMetadata(object):
         """
         return cls.get_metadata()[
             'categories']['exposure']['layer_constraints']
+
+    @classmethod
+    def parameters(cls):
+        """Return list of parameters.
+
+        This is a static method. You can use it to get the list of parameters
+        for the impact function.
+
+        :returns: A list that contains all parameters.
+        :rtype: list
+
+        """
+        return cls.get_metadata().get('parameters', [])

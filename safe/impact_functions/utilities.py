@@ -129,10 +129,10 @@ def function_name(impact_function):
     return impact_function.Metadata.get_metadata()['name']
 
 
-def get_function_title(func):
+def get_function_title(impact_function):
     """Get title for impact function
 
-    :param func: Impact function class
+    :param impact_function: Impact function class
 
     :returns:  It's title if available as an attribute in the class
         description, otherwise what is returned by the function
@@ -140,7 +140,7 @@ def get_function_title(func):
     :rtype: str
     """
     try:
-        title = func.Metadata.get_metadata()['title']
+        title = impact_function.metadata()['title']
     except KeyError:
-        title = func.__class__.__name__
+        title = impact_function.__class__.__name__
     return title

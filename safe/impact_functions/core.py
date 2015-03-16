@@ -447,16 +447,20 @@ def extract_layers(layers, keyword, value):
     return extracted_layers
 
 
-def get_question(hazard_title, exposure_title, func):
-    """Rephrase the question asked
+def get_question(hazard_title, exposure_title, impact_function):
+    """Rephrase the question asked.
 
-    Input
-        hazard_title: string
-        exposure_title: string
-        func: impact function class
+    :param hazard_title: Hazard title.
+    :type hazard_title: str
+
+    :param exposure_title: Exposure title.
+    :type exposure_title: str
+
+    :param impact_function: An impact function object.
+    :type impact_function: ImpactFunction
     """
 
-    function_title = get_function_title(func)
+    function_title = get_function_title(impact_function)
     return (tr('In the event of <i>%(hazard)s</i> how many '
                '<i>%(exposure)s</i> might <i>%(impact)s</i>')
             % {'hazard': hazard_title.lower(),
