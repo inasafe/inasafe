@@ -4,7 +4,6 @@
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import InvalidExtentError
-from safe.utilities.keyword_io import KeywordIO
 
 from safe.utilities.i18n import tr
 
@@ -163,10 +162,11 @@ class ImpactFunction(object):
         so that it includes any impact function specific checks too.
 
         :raises:
-        """
-        if self.extent is None:
-            raise InvalidExtentError(
-                tr('The analysis extent has not been set.'))
+        # """
+        pass
+        # if self.extent is None:
+        #     raise InvalidExtentError(
+        #         tr('The analysis extent has not been set.'))
 
     @property
     def hazard(self):

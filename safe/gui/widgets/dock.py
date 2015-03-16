@@ -45,7 +45,6 @@ from safe.utilities.utilities import (
     get_safe_impact_function)
 from safe.defaults import (
     disclaimer,
-    default_organisation_logo_path,
     default_north_arrow_path)
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
 from safe.utilities.resources import (
@@ -96,7 +95,8 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
-from safe.utilities.unicode import get_string, get_unicode
+from safe.utilities.unicode import get_string
+from safe.impact_functions.registry import Registry
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -1012,27 +1012,22 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             exposure_keywords['layertype'] = 'raster'
 
         # Find out which functions can be used with these layers
-        func_list = [hazard_keywords, exposure_keywords]
+        impact_function_registry = Registry()
         try:
-            func_dict = get_admissible_plugins(func_list)
+            functions = impact_function_registry.filter_by_keyword_string(
+                hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions
-            for myFunctionID in func_dict:
-                function = func_dict[myFunctionID]
+            for function in functions:
+                function_name = function.__name__
                 function_title = get_function_title(function)
-
-                # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
-                # print
-                # print 'function (ID)', myFunctionID
-                # print 'function', function
-                # print 'Function title:', function_title
 
                 # Provide function title and ID to function combo:
                 # function_title is the text displayed in the combo
-                # myFunctionID is the canonical identifier
+                # function_name is the canonical identifier
                 add_ordered_combo_item(
                     self.cboFunction,
                     function_title,
-                    data=myFunctionID)
+                    data=function_name)
         except Exception, e:
             raise e
 

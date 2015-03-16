@@ -22,54 +22,55 @@ from utilities import (
     get_function_title,
     function_name)
 from safe.definitions import converter_dict
+from safe.impact_functions.registry import Registry
 
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-# Disable lots of pylint for this as it is using magic
-# for managing the plugin system devised by Ted Dunstone
-# pylint: disable=W0613,C0203
-class PluginMount(type):
-    """Mount point for a plugin (impact function)."""
-    def __init__(cls, name, bases, attrs):
-        if not hasattr(cls, 'plugins'):
-            # This branch only executes when processing the mount point itself.
-            # So, since this is a new plugin type, not an implementation, this
-            # class shouldn't be registered as a plugin. Instead, it sets up a
-            # list where plugins can be registered later.
-            cls.plugins = []
-        else:
-            # This must be a plugin implementation, which should be registered.
-            # Simply appending it to the list is all that's needed to keep
-            # track of it later.
-            if is_duplicate_impact_function(cls):
-                message = 'Duplicate impact function name %s\n' % cls.__name__
-                message += 'Impact function file %s\n' % get_python_file(cls)
-                message += 'IF files that have been loaded: %s\n' % (
-                    '\n'.join([get_python_file(c) for c in cls.plugins]))
-                print message
-                # raise LookupError(message)
-            else:
-                cls.plugins.append(cls)
-# pylint: enable=W0613,C0203
+# # Disable lots of pylint for this as it is using magic
+# # for managing the plugin system devised by Ted Dunstone
+# # pylint: disable=W0613,C0203
+# class PluginMount(type):
+#     """Mount point for a plugin (impact function)."""
+#     def __init__(cls, name, bases, attrs):
+#         if not hasattr(cls, 'plugins'):
+#             # This branch only executes when processing the mount point itself.
+#             # So, since this is a new plugin type, not an implementation, this
+#             # class shouldn't be registered as a plugin. Instead, it sets up a
+#             # list where plugins can be registered later.
+#             cls.plugins = []
+#         else:
+#             # This must be a plugin implementation, which should be registered.
+#             # Simply appending it to the list is all that's needed to keep
+#             # track of it later.
+#             if is_duplicate_impact_function(cls):
+#                 message = 'Duplicate impact function name %s\n' % cls.__name__
+#                 message += 'Impact function file %s\n' % get_python_file(cls)
+#                 message += 'IF files that have been loaded: %s\n' % (
+#                     '\n'.join([get_python_file(c) for c in cls.plugins]))
+#                 print message
+#                 # raise LookupError(message)
+#             else:
+#                 cls.plugins.append(cls)
+# # pylint: enable=W0613,C0203
 
 
-class FunctionProvider(object):
-    """Mount point for impact_functions.
-
-    Plugins implementing this reference should provide the following method:
-
-    run(layers)::
-
-      layers           A list of layers
-      result           A list of layers
-
-    """
-    __metaclass__ = PluginMount
-
-    target_field = 'DAMAGE'
-    symbol_field = 'USE_MAJOR'
+# class FunctionProvider(object):
+#     """Mount point for impact_functions.
+#
+#     Plugins implementing this reference should provide the following method:
+#
+#     run(layers)::
+#
+#       layers           A list of layers
+#       result           A list of layers
+#
+#     """
+#     __metaclass__ = PluginMount
+#
+#     target_field = 'DAMAGE'
+#     symbol_field = 'USE_MAJOR'
 
 
 def evacuated_population_weekly_needs(
@@ -174,25 +175,19 @@ def get_plugins(name=None):
 
        Or all of them if no name is passed.
     """
-
-    plugins_dict = dict([(function_name(p), p)
-                         for p in FunctionProvider.plugins])
-
+    registry = Registry()
+    plugins_dict = dict([(f.metadata()['name'], f) for f in registry.filter()])
     if name is None:
         return plugins_dict
 
     if isinstance(name, basestring):
-        # Add the names
-        plugins_dict.update(
-            dict([(p.__name__, p) for p in FunctionProvider.plugins]))
-
-        msg = ('No plugin named "%s" was found. '
-               'List of available plugins is: \n%s'
-               % (name, ',\n '.join(plugins_dict.keys())))
-        if name not in plugins_dict:
+        function = registry.get_class(name)
+        if function is None:
+            msg = ('No plugin named "%s" was found. '
+                   'List of available plugins is: \n%s'
+                   % (name, ',\n '.join(plugins_dict.keys())))
             raise RuntimeError(msg)
-
-        return [{name: plugins_dict[name]}]
+        return [{function.__name__: function}]
     else:
         msg = ('get_plugins expects either no parameters or a string '
                'with the name of the plugin, you passed: '

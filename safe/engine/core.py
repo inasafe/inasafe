@@ -60,9 +60,10 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
 
     # Get an instance of the passed impact_fcn
     impact_function = impact_fcn()
+    
     # Set extent if it is provided
     if extent is not None:
-        impact_function.set_extent(extent)
+        impact_function.extent = extent
 
     # Start time
     start_time = datetime.now()
