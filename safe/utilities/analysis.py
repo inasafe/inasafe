@@ -1003,33 +1003,3 @@ class Analysis(object):
             self.analysis_error(
                 e,
                 self.tr('An exception occurred when starting the model.'))
-
-    def print_analysis(self):
-        """Print the variables in the analysis."""
-        print 'The properties of the analysis: '
-        # Layers
-        print self.hazard_layer
-        print self.exposure_layer
-        print self.aggregation_layer
-        print self.hazard_keyword
-        print self.exposure_keyword
-        print self.aggregation_keyword
-
-        # Impact Functions
-        print self.impact_function_id
-        print self.impact_function_parameters
-
-        # Variables
-        print self.clip_hard
-        print self.show_intermediate_layers
-        print self.run_in_thread_flag
-        print self.map_canvas
-        print self.clip_to_viewport
-
-        print self.force_memory
-
-        print self.clip_parameters
-        print self.impact_calculator
-        print self.runner
-        print self.aggregator
-        print self.postprocessor_manager

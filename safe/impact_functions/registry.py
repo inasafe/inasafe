@@ -34,11 +34,13 @@ class Registry(object):
 
     @classmethod
     def register(cls, impact_function):
+        """Register an impact function to the Registry."""
         if impact_function not in cls._impact_functions:
             cls._impact_functions.append(impact_function)
 
     @classmethod
     def list(cls):
+        """List of all registered impact functions."""
         return [
             impact_function.metadata()['name'] for impact_function in
             cls._impact_functions]
@@ -72,6 +74,15 @@ class Registry(object):
 
     @classmethod
     def filter_by_keyword_string(cls, hazard_keywords, exposure_keywords):
+        """Filter registered impact functions by keywords string.
+
+        :param hazard_keywords: The keywords of the hazard.
+        :type hazard_keywords: dict
+
+        :param exposure_keywords: The keywords of the exposure.
+        :type exposure_keywords: dict
+        """
+
         if hazard_keywords is None and exposure_keywords is None:
             return cls._impact_functions
 
@@ -79,33 +90,38 @@ class Registry(object):
         categories = ['hazard', 'exposure']
         keywords = {'hazard': hazard_keywords, 'exposure': exposure_keywords}
         filtered = []
-        for category in categories:
-            for f in impact_functions:
-                f_category = f.metadata()['categories'][category]
-                subcategory = f_category[
-                    'subcategories']
-                subcategory = cls.project_list(
-                    cls.convert_to_list(subcategory), 'id')
+
+        for impact_function in impact_functions:
+            requirement_met = True
+            for category in categories:
+                f_category = impact_function.metadata()['categories'][category]
+                subcategories = f_category['subcategories']
+                subcategories = cls.project_list(
+                    cls.convert_to_list(subcategories), 'id')
                 units = f_category['units']
                 units = cls.project_list(cls.convert_to_list(units), 'id')
-                layer_constraints = cls.convert_to_list(f_category[
-                    'layer_constraints'])
+                layer_constraints = cls.convert_to_list(
+                    f_category['layer_constraints'])
                 layer_types = cls.project_list(layer_constraints, 'layer_type')
                 data_types = cls.project_list(layer_constraints, 'data_type')
 
                 keyword = keywords[category]
-                if keyword.get('subcategory') not in subcategory:
+                if keyword.get('subcategory') not in subcategories:
+                    requirement_met = False
                     continue
-                if (keyword.get('units') is not None and
-                        keyword.get('units') not in units):
+                if (keyword.get('unit') is not None and
+                        keyword.get('unit') not in units):
+                    requirement_met = False
                     continue
                 if keyword.get('layertype') not in layer_types:
+                    requirement_met = False
                     continue
                 if keyword.get('data_type') not in data_types:
+                    requirement_met = False
                     continue
 
-                if f not in filtered:
-                    filtered.append(f)
+            if requirement_met and impact_function not in filtered:
+                filtered.append(impact_function)
 
         return filtered
 
@@ -154,7 +170,6 @@ class Registry(object):
 
         :returns: List of impact functions.
         :rtype: list
-
         """
         filtered_impact_functions = []
         for impact_function in impact_functions:

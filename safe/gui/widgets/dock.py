@@ -46,7 +46,10 @@ from safe.utilities.utilities import (
 from safe.defaults import (
     disclaimer,
     default_north_arrow_path)
-from safe.utilities.gis import extent_string_to_array, read_impact_layer
+from safe.utilities.gis import (
+    extent_string_to_array,
+    read_impact_layer,
+    vector_geometry_string)
 from safe.utilities.resources import (
     resources_path,
     resource_url,
@@ -800,7 +803,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         dialog = FunctionOptionsDialog(self)
         dialog.set_dialog_info(self.get_function_id())
         dialog.build_form(self.function_parameters)
-        
+
         if dialog.exec_():
             self.active_function.parameters = dialog.result()
             self.function_parameters = self.active_function.parameters
@@ -994,22 +997,23 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # We need to add the layer type to the returned keywords
         if hazard_layer.type() == QgsMapLayer.VectorLayer:
             hazard_keywords['layertype'] = 'vector'
-            if hazard_layer.geometryType() == QGis.Point:
-                hazard_keywords['data_type'] = 'point'
-            elif hazard_layer.geometryType() == QGis.Line:
-                hazard_keywords['data_type'] = 'line'
-            elif hazard_layer.geometryType() == QGis.Polygon:
-                hazard_keywords['data_type'] = 'polygon'
+            hazard_keywords['data_type'] = vector_geometry_string(hazard_layer)
         elif hazard_layer.type() == QgsMapLayer.RasterLayer:
             hazard_keywords['layertype'] = 'raster'
+            if hazard_keywords['data_type'] is None:
+                hazard_keywords['data_type'] = 'continuous'
 
         # noinspection PyTypeChecker
         exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
         # We need to add the layer type to the returned keywords
         if exposure_layer.type() == QgsMapLayer.VectorLayer:
             exposure_keywords['layertype'] = 'vector'
+            exposure_keywords['data_type'] = vector_geometry_string(
+                exposure_layer)
         elif exposure_layer.type() == QgsMapLayer.RasterLayer:
             exposure_keywords['layertype'] = 'raster'
+            if exposure_keywords['data_type'] is None:
+                exposure_keywords['data_type'] = 'continuous'
 
         # Find out which functions can be used with these layers
         impact_function_registry = Registry()

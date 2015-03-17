@@ -105,10 +105,7 @@ class FloodVectorBuildingMetadata(ImpactFunctionMetadata):
                         hazard_flood,
                         hazard_tsunami
                     ],
-                    'units': [
-                        unit_wetdry,
-                        unit_metres_depth,
-                        unit_feet_depth],
+                    'units': [unit_wetdry],
                     'layer_constraints': [layer_vector_polygon]
                 },
                 'exposure': {
