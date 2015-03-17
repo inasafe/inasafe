@@ -53,7 +53,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test init base class."""
         ifm = ImpactFunctionMetadata()
         with self.assertRaises(NotImplementedError):
-            ifm.get_metadata()
+            ifm.as_dict()
             ifm.allowed_data_types('flood')
 
     def test_is_valid(self):
@@ -75,11 +75,11 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = EarthquakeBuildingImpactFunction()
         # call from an object
         metadata = impact_function.Metadata()
-        metadata_dictionary = metadata.get_metadata()
+        metadata_dictionary = metadata.as_dict()
         assert isinstance(metadata_dictionary, dict), 'I did not got a dict'
         # call from the class
         metadata = impact_function.Metadata
-        metadata_dictionary = metadata.get_metadata()
+        metadata_dictionary = metadata.as_dict()
         assert isinstance(metadata_dictionary, dict), 'I did not got a dict'
 
     def test_allowed_subcategories(self):

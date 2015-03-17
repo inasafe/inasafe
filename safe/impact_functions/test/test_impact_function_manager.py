@@ -85,7 +85,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         print 'Your impact functions:'
         for impact_function in impact_function_manager.impact_functions:
             i += 1
-            print i, impact_function.Metadata.get_metadata()['name']
+            print i, impact_function.Metadata.as_dict()['name']
         result = len(impact_function_manager.impact_functions)
         message = (
             'I expect %s but I got %s, please check the number of current '
@@ -282,12 +282,12 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.get_functions_for_hazard(
             hazard_volcano)
         expected_result = [
-            VolcanoPolygonBuildingImpact.Metadata.get_metadata(),
-            VolcanoPointBuildingImpact.Metadata.get_metadata(),
-            VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
-            ContinuousHazardPopulationImpactFunction.Metadata.get_metadata(),
-            ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata(),
-            ClassifiedHazardPopulationImpactFunction.Metadata.get_metadata()]
+            VolcanoPolygonBuildingImpact.Metadata.as_dict(),
+            VolcanoPointBuildingImpact.Metadata.as_dict(),
+            VolcanoPolygonHazardPopulation.Metadata.as_dict(),
+            ContinuousHazardPopulationImpactFunction.Metadata.as_dict(),
+            ClassifiedHazardBuildingImpactFunction.Metadata.as_dict(),
+            ClassifiedHazardPopulationImpactFunction.Metadata.as_dict()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -297,12 +297,12 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.get_functions_for_hazard_id(
             hazard_volcano['id'])
         expected_result = [
-            VolcanoPolygonBuildingImpact.Metadata.get_metadata(),
-            VolcanoPointBuildingImpact.Metadata.get_metadata(),
-            VolcanoPolygonHazardPopulation.Metadata.get_metadata(),
-            ContinuousHazardPopulationImpactFunction.Metadata.get_metadata(),
-            ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata(),
-            ClassifiedHazardPopulationImpactFunction.Metadata.get_metadata()]
+            VolcanoPolygonBuildingImpact.Metadata.as_dict(),
+            VolcanoPointBuildingImpact.Metadata.as_dict(),
+            VolcanoPolygonHazardPopulation.Metadata.as_dict(),
+            ContinuousHazardPopulationImpactFunction.Metadata.as_dict(),
+            ClassifiedHazardBuildingImpactFunction.Metadata.as_dict(),
+            ClassifiedHazardPopulationImpactFunction.Metadata.as_dict()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -331,13 +331,13 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.get_functions_for_exposure(
             exposure_structure)
         expected_result = [
-            VolcanoPolygonBuildingImpact.Metadata.get_metadata(),
-            VolcanoPointBuildingImpact.Metadata.get_metadata(),
-            EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
-            FloodRasterBuildingImpactFunction.Metadata.get_metadata(),
-            FloodVectorBuildingImpactFunction.Metadata.get_metadata(),
-            FloodNativePolygonExperimentalFunction.Metadata.get_metadata(),
-            ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata()]
+            VolcanoPolygonBuildingImpact.Metadata.as_dict(),
+            VolcanoPointBuildingImpact.Metadata.as_dict(),
+            EarthquakeBuildingImpactFunction.Metadata.as_dict(),
+            FloodRasterBuildingImpactFunction.Metadata.as_dict(),
+            FloodVectorBuildingImpactFunction.Metadata.as_dict(),
+            FloodNativePolygonExperimentalFunction.Metadata.as_dict(),
+            ClassifiedHazardBuildingImpactFunction.Metadata.as_dict()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -347,13 +347,13 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.get_functions_for_exposure_id(
             exposure_structure['id'])
         expected_result = [
-            VolcanoPolygonBuildingImpact.Metadata.get_metadata(),
-            VolcanoPointBuildingImpact.Metadata.get_metadata(),
-            EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
-            FloodRasterBuildingImpactFunction.Metadata.get_metadata(),
-            FloodVectorBuildingImpactFunction.Metadata.get_metadata(),
-            FloodNativePolygonExperimentalFunction.Metadata.get_metadata(),
-            ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata()]
+            VolcanoPolygonBuildingImpact.Metadata.as_dict(),
+            VolcanoPointBuildingImpact.Metadata.as_dict(),
+            EarthquakeBuildingImpactFunction.Metadata.as_dict(),
+            FloodRasterBuildingImpactFunction.Metadata.as_dict(),
+            FloodVectorBuildingImpactFunction.Metadata.as_dict(),
+            FloodNativePolygonExperimentalFunction.Metadata.as_dict(),
+            ClassifiedHazardBuildingImpactFunction.Metadata.as_dict()]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -364,8 +364,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         exposure = exposure_structure
 
         expected_result = [
-            EarthquakeBuildingImpactFunction.Metadata.get_metadata(),
-            ClassifiedHazardBuildingImpactFunction.Metadata.get_metadata()]
+            EarthquakeBuildingImpactFunction.Metadata.as_dict(),
+            ClassifiedHazardBuildingImpactFunction.Metadata.as_dict()]
         result = impact_function_manager.get_functions_for_constraint(
             hazard, exposure)
         message = ('I expect %s but I got %s.' % (expected_result, result))
@@ -375,7 +375,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         exposure_constraint = None
 
         expected_result = [
-            EarthquakeBuildingImpactFunction.Metadata.get_metadata()]
+            EarthquakeBuildingImpactFunction.Metadata.as_dict()]
         result = impact_function_manager.get_functions_for_constraint(
             hazard, exposure, hazard_constraint, exposure_constraint)
         message = ('I expect %s but I got %s.' % (expected_result, result))

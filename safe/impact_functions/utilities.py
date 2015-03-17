@@ -126,7 +126,7 @@ def function_name(impact_function):
     :rtype: str
     """
     # noinspection PyUnresolvedReferences
-    return impact_function.Metadata.get_metadata()['name']
+    return impact_function.Metadata.as_dict()['name']
 
 
 def get_function_title(impact_function):
@@ -140,7 +140,7 @@ def get_function_title(impact_function):
     :rtype: str
     """
     try:
-        title = impact_function.metadata()['title']
+        title = impact_function.metadata().as_dict()['title']
     except KeyError:
         title = impact_function.__class__.__name__
     return title

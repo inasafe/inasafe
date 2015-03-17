@@ -18,8 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from safe.definitions import hazard_definition, exposure_definition
-from safe.impact_functions.core import FunctionProvider
 from safe.common.utilities import add_to_list
+from safe.impact_functions.registry import Registry
 
 
 class ImpactFunctionManager:
@@ -40,12 +40,16 @@ class ImpactFunctionManager:
 
         Disabled impact function will not be loaded.
         """
+        import pydevd
+
+        pydevd.settrace('localhost', port=5678, stdoutToServer=True,
+                        stderrToServer=True)
         result = []
-        impact_functions = FunctionProvider.plugins
+        impact_functions = Registry().filter()
         for impact_function in impact_functions:
             try:
-                is_disabled = impact_function.Metadata.is_disabled()
-                is_valid, reason = impact_function.Metadata.is_valid()
+                is_disabled = impact_function.metadata().is_disabled()
+                is_valid, reason = impact_function.metadata().is_valid()
                 if not is_disabled and is_valid:
                     result.append(impact_function)
                 if not is_valid:
@@ -319,7 +323,7 @@ class ImpactFunctionManager:
         for impact_function in self.impact_functions:
             if impact_function.Metadata.has_hazard(hazard):
                 impact_functions_metadata.append(
-                    impact_function.Metadata.get_metadata())
+                    impact_function.Metadata.as_dict())
 
         return impact_functions_metadata
 
@@ -338,7 +342,7 @@ class ImpactFunctionManager:
         for impact_function in self.impact_functions:
             if impact_function.Metadata.has_hazard_id(hazard_id):
                 impact_functions_metadata.append(
-                    impact_function.Metadata.get_metadata())
+                    impact_function.Metadata.as_dict())
 
         return impact_functions_metadata
 
@@ -390,7 +394,7 @@ class ImpactFunctionManager:
         for impact_function in self.impact_functions:
             if impact_function.Metadata.has_exposure(exposure):
                 impact_functions_metadata.append(
-                    impact_function.Metadata.get_metadata())
+                    impact_function.Metadata.as_dict())
 
         return impact_functions_metadata
 
@@ -409,7 +413,7 @@ class ImpactFunctionManager:
         for impact_function in self.impact_functions:
             if impact_function.Metadata.has_exposure_id(exposure_id):
                 impact_functions_metadata.append(
-                    impact_function.Metadata.get_metadata())
+                    impact_function.Metadata.as_dict())
 
         return impact_functions_metadata
 

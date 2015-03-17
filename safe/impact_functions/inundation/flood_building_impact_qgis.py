@@ -51,7 +51,7 @@ class FloodNativePolygonExperimentalFunction(FunctionProvider):
         are inherited from the abstract base class.
         """
         @staticmethod
-        def get_metadata():
+        def as_dict():
             """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in

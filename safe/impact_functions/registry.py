@@ -42,7 +42,7 @@ class Registry(object):
     def list(cls):
         """List of all registered impact functions."""
         return [
-            impact_function.metadata()['name'] for impact_function in
+            impact_function.metadata().as_dict()['name'] for impact_function in
             cls._impact_functions]
 
     @classmethod
@@ -94,7 +94,8 @@ class Registry(object):
         for impact_function in impact_functions:
             requirement_met = True
             for category in categories:
-                f_category = impact_function.metadata()['categories'][category]
+                f_category = impact_function.metadata().as_dict()[
+                    'categories'][category]
                 subcategories = f_category['subcategories']
                 subcategories = cls.project_list(
                     cls.convert_to_list(subcategories), 'id')
@@ -173,7 +174,7 @@ class Registry(object):
         """
         filtered_impact_functions = []
         for impact_function in impact_functions:
-            if_hazard_keywords = impact_function.metadata()[
+            if_hazard_keywords = impact_function.metadata().as_dict()[
                 'categories']['hazard']
             subcategories = if_hazard_keywords['subcategories']
             units = if_hazard_keywords['units']
@@ -206,7 +207,7 @@ class Registry(object):
         """
         filtered_impact_functions = []
         for impact_function in impact_functions:
-            if_exposure_keywords = impact_function.metadata()[
+            if_exposure_keywords = impact_function.metadata().as_dict()[
                 'categories']['exposure']
             subcategory = if_exposure_keywords['subcategories']
             units = if_exposure_keywords['units']

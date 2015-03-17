@@ -57,6 +57,11 @@ class ImpactFunction(object):
         """
         return self._function_type
 
+    @classmethod
+    def metadata(cls):
+        """Get the metadata class of this impact function."""
+        return cls._metadata
+
     @property
     def extent(self):
         """Property for the extent of impact function analysis.
@@ -133,11 +138,6 @@ class ImpactFunction(object):
     def instance(cls):
         """Make an instance of the impact function."""
         return cls()
-
-    @classmethod
-    def metadata(cls):
-        """Get the metadata for this class."""
-        return cls._metadata.get_metadata()
 
     def prepare(self):
         """Prepare this impact function for running the analysis.
@@ -298,7 +298,7 @@ class ImpactFunction(object):
             "In the event of a flood like in January 2004, how many people
             will be affected."
         """
-        function_title = self.metadata()['title']
+        function_title = self.metadata().as_dict()['title']
         return (tr('In the event of %(hazard)s how many '
                    '%(exposure)s might %(impact)s')
                 % {'hazard': self.hazard.get_name().lower(),

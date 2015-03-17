@@ -68,7 +68,7 @@ class BasicFunctionCore(FunctionProvider):
         """
 
         @staticmethod
-        def get_metadata():
+        def as_dict():
             """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
@@ -120,7 +120,7 @@ class F1(FunctionProvider):
         """
 
         @staticmethod
-        def get_metadata():
+        def as_dict():
             """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
@@ -169,7 +169,7 @@ class F2(FunctionProvider):
         """
 
         @staticmethod
-        def get_metadata():
+        def as_dict():
             """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
@@ -216,7 +216,7 @@ class F3(FunctionProvider):
         """
 
         @staticmethod
-        def get_metadata():
+        def as_dict():
             """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
@@ -265,7 +265,7 @@ class F4(FunctionProvider):
         """
 
         @staticmethod
-        def get_metadata():
+        def as_dict():
             """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
@@ -311,7 +311,7 @@ class SyntaxErrorFunction(FunctionProvider):
         """
 
         @staticmethod
-        def get_metadata():
+        def as_dict():
             """Return metadata as a dictionary.
 
             This is a static method. You can use it to get the metadata in
