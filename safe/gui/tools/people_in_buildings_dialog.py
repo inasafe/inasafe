@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import QVariant, QPyNullVariant
+from PyQt4.QtCore import QVariant  # , QPyNullVariant
 from qgis.core import QgsField
 from qgis.core import QgsGeometry
 
@@ -28,6 +28,7 @@ FORM_CLASS = get_ui_class('people_in_buildings_base.ui')
 
 People_Calculated = "People_Dec"
 People_Rounded = "People_Rnd"
+
 
 class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
     """Options dialog for the InaSAFE plugin."""
