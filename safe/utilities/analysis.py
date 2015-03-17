@@ -796,6 +796,8 @@ class Analysis(object):
 
         # Use canonical function name to identify selected function
         self.impact_calculator.set_function(self.impact_function_id)
+        self.impact_calculator.function_parameters = \
+            self.impact_function_parameters
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.

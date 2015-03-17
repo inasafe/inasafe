@@ -800,11 +800,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         dialog = FunctionOptionsDialog(self)
         dialog.set_dialog_info(self.get_function_id())
         dialog.build_form(self.function_parameters)
-
-        import pydevd
-
-        pydevd.settrace('localhost', port=5678, stdoutToServer=True,
-                        stderrToServer=True)
+        
         if dialog.exec_():
             self.active_function.parameters = dialog.result()
             self.function_parameters = self.active_function.parameters

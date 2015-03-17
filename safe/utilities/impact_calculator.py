@@ -55,6 +55,7 @@ class ImpactCalculator(QObject):
         self._hazardLayer = None
         self._exposureLayer = None
         self._function = None
+        self._function_parameters = None
         self._filename = None
         self._result = None
         self._extent = None
@@ -156,6 +157,20 @@ class ImpactCalculator(QObject):
         """
         self._function = str(function_id)
 
+    @property
+    def function_parameters(self):
+        """Get the function parameter."""
+        return self._function_parameters
+
+    @function_parameters.setter
+    def function_parameters(self, function_parameters):
+        """Set the function parameter.
+
+        :param function_parameters: Function parameters.
+        :type function_parameters: OrderedDict
+        """
+        self._function_parameters = function_parameters
+
     def get_runner(self):
         """ Factory to create a new runner thread.
 
@@ -195,6 +210,7 @@ class ImpactCalculator(QObject):
             hazard_layer,
             exposure_layer,
             function,
+            self.function_parameters,
             extent=self.extent(),
             check_integrity=self.requires_clipping())
 

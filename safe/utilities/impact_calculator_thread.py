@@ -78,6 +78,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
                  hazard_layer,
                  exposure_layer,
                  function,
+                 function_parameters,
                  extent=None,
                  check_integrity=True):
         """Constructor for the impact calculator thread.
@@ -107,6 +108,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         self._hazardLayer = hazard_layer
         self._exposureLayer = exposure_layer
         self._function = function
+        self._function_parameters = function_parameters
         self._extent = extent
         self._impactLayer = None
         self._result = None
@@ -185,6 +187,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             self._impactLayer = calculate_safe_impact(
                 layers=layers,
                 impact_fcn=self._function,
+                parameters = self._function_parameters,
                 extent=self._extent,
                 check_integrity=self._check_integrity)
         except MemoryError, e:
