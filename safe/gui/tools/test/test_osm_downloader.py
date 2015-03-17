@@ -151,7 +151,8 @@ class FakeQNetworkAccessManager:
         elif url == ('http://osm.linfiniti.com/buildings-shp?'
                      'bbox=20.389938354492188,-34.10782492987083'
                      ',20.712661743164062,'
-                     '-34.008273470938335&qgis_version=2&output_prefix='):
+                     '-34.008273470938335&qgis_version=2&output_prefix='
+                     '&lang=en'):
             reply.content = read_all("test-importdlg-extractzip.zip")
 
         return reply
@@ -239,13 +240,14 @@ class ImportDialogTest(unittest.TestCase):
 
     def test_fetch_zip(self):
         """Test fetch zip method."""
+        feature = 'buildings'
         url = (
             'http://osm.linfiniti.com/buildings-shp?'
             'bbox=20.389938354492188,-34.10782492987083'
             ',20.712661743164062,'
-            '-34.008273470938335&obj=building')
+            '-34.008273470938335&obj=%s' % feature)
         path = tempfile.mktemp('shapefiles')
-        self.dialog.fetch_zip(url, path)
+        self.dialog.fetch_zip(url, path, feature)
 
         message = "file %s not exist" % path
         assert os.path.exists(path), message

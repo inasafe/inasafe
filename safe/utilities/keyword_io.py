@@ -17,6 +17,7 @@ import json
 import os
 from os.path import expanduser
 from xml.etree import ElementTree
+from urlparse import urlparse
 import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
@@ -25,6 +26,7 @@ import cPickle as pickle
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
+from qgis.core import QgsDataSourceURI
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, QSettings
 from safe.utilities.utilities import (
@@ -101,7 +103,7 @@ class KeywordIO(QObject):
             UnsupportedProviderError
 
         """
-        source = str(layer.source())
+        source = layer.source()
         try:
             flag = self.are_keywords_file_based(layer)
         except UnsupportedProviderError:
@@ -111,7 +113,8 @@ class KeywordIO(QObject):
             if flag:
                 keywords = read_file_keywords(source, keyword)
             else:
-                keywords = self.read_keyword_from_uri(source, keyword)
+                uri = self.normalize_uri(layer)
+                keywords = self.read_keyword_from_uri(uri, keyword)
             return keywords
         except (HashNotFoundError,
                 Exception,
@@ -144,12 +147,13 @@ class KeywordIO(QObject):
         except UnsupportedProviderError:
             raise
 
-        source = str(layer.source())
+        source = layer.source()
         try:
             if flag:
                 write_keywords_to_file(source, keywords)
             else:
-                self.write_keywords_for_uri(source, keywords)
+                uri = self.normalize_uri(layer)
+                self.write_keywords_for_uri(uri, keywords)
             return
         except:
             raise
@@ -229,7 +233,7 @@ class KeywordIO(QObject):
         except Exception, e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
-                source_layer.source(), new_destination, str(e)))
+                    source_layer.source(), new_destination, str(e)))
             raise Exception(message)
         return
 
@@ -461,6 +465,44 @@ class KeywordIO(QObject):
             raise
         finally:
             self.close_connection()
+
+    def normalize_uri(self, layer):
+        """Normalize URI from layer source. URI can be in a form
+        of QgsDataSourceURI which is related to RDBMS source or
+        general URI like CSV URI
+
+        :param layer : A layer
+        :type layer : QgsMapLayer
+
+        :return: normalized URI to be hashed
+        :raise: AttributeError if providerType not recognized
+        """
+        # there are different method to extract unique uri based on
+        # layer type
+        try:
+            provider_type = str(layer.providerType())
+        except AttributeError:
+            raise UnsupportedProviderError(
+                'Could not determine type for provider: %s' %
+                layer.__class__.__name__)
+        source = str(layer.source())
+        if provider_type == 'postgres':
+            # Use QgsDataSourceURI to parse RDBMS datasource
+            # create unique uri based on host, schema, and tablename
+            datasource_uri = QgsDataSourceURI(source)
+            normalized_uri = ':'.join([datasource_uri.host(),
+               datasource_uri.schema(),
+               datasource_uri.table()])
+        elif provider_type == 'delimitedtext':
+            # Use urlparse to parse delimitedtext uri
+            # create unique uri based on protocol, host, and path
+            general_uri = urlparse(source)
+            normalized_uri = ':'.join([general_uri.scheme,
+               general_uri.netloc,
+               general_uri.path])
+        else:
+            normalized_uri = source
+        return normalized_uri
 
     def write_keywords_for_uri(self, uri, keywords):
         """Write keywords for a URI into the keywords database. All the

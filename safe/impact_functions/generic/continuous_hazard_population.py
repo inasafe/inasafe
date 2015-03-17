@@ -88,11 +88,33 @@ class ContinuousHazardPopulationImpactFunction(FunctionProvider):
                 'id': 'ContinuousHazardPopulationImpactFunction',
                 'name': tr('Continuous Hazard Population Impact Function'),
                 'impact': tr('Be impacted'),
+                'title': tr('Be impacted'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
                 'overview': tr(
                     'To assess the impacts of continuous hazards in raster '
                     'format on population raster layer.'),
+                'detailed_description': tr(
+                    'This function will categorised the continuous hazard '
+                    'level into 3 category based on the threshold that has '
+                    'been input by the user. After that, this function will '
+                    'calculate how many people will be impacted per category '
+                    'for all categories in the hazard layer.'),
+                'hazard_input': tr(
+                    'A hazard raster layer where each cell represents the '
+                    'level of the hazard. The hazard has continuous value of '
+                    'hazard level.'),
+                'exposure_input': tr(
+                    'An exposure raster layer where each cell represent '
+                    'population count.'),
+                'output': tr(
+                    'Map of population exposed to high category and a table '
+                    'with number of people in each category'),
+                'actions': tr(
+                    'Provide details about how many people would likely need '
+                    'to be impacted for each category.'),
+                'limitations': [tr('The number of categories is three.')],
+                'citations': [],
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
@@ -109,29 +131,6 @@ class ContinuousHazardPopulationImpactFunction(FunctionProvider):
                 }
             }
             return dict_meta
-
-    # Function documentation
-    title = tr('Be impacted')
-    synopsis = tr(
-        'To assess the impacts of continuous hazards in raster format on '
-        'population raster layer.')
-    actions = tr(
-        'Provide details about how many people would likely need to be '
-        'impacted for each category.')
-    hazard_input = tr(
-        'A hazard raster layer where each cell represents the level of the '
-        'hazard. The hazard has continuous value of hazard level.')
-    exposure_input = tr(
-        'An exposure raster layer where each cell represent population count.')
-    output = tr(
-        'Map of population exposed to high category and a table with number '
-        'of people in each category')
-    detailed_description = tr(
-        'This function will categorised the continuous hazard level into 3 '
-        'category based on the threshold that has been input by the user.'
-        'After that, this function will calculate how many people will be '
-        'impacted per category for all categories in the hazard layer.')
-    limitation = tr('The number of categories is three.')
 
     # Configurable parameters
     defaults = get_defaults()

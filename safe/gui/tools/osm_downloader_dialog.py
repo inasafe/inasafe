@@ -24,6 +24,7 @@ import logging
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
+from qgis.gui import QgsMapToolPan
 # pylint: enable=unused-import
 
 # noinspection PyPackageRequirements
@@ -34,17 +35,22 @@ from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
 # noinspection PyPackageRequirements
-from PyQt4.QtNetwork import QNetworkAccessManager
+from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
 
 from safe.common.exceptions import (
-    CanceledImportDialogError, ImportDialogError, DownloadError)
+    CanceledImportDialogError,
+    ImportDialogError,
+    DownloadError,
+    FileMissingError)
 from safe import messaging as m
 from safe.utilities.file_downloader import FileDownloader
-from safe.utilities.gis import viewport_geo_array
+from safe.utilities.gis import viewport_geo_array, rectangle_geo_array
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.proxy import get_proxy
+from safe.utilities.qgis_utilities import display_warning_message_box
+from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -71,14 +77,16 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
 
         self.iface = iface
-        self.buildings_url = "http://osm.linfiniti.com/buildings-shp"
-        self.roads_url = "http://osm.linfiniti.com/roads-shp"
+        self.buildings_url = 'http://osm.linfiniti.com/buildings-shp'
+        self.building_points_url = \
+            'http://osm.linfiniti.com/building-points-shp'
+        self.roads_url = 'http://osm.linfiniti.com/roads-shp'
 
         self.help_context = 'openstreetmap_downloader'
         # creating progress dialog for download
         self.progress_dialog = QProgressDialog(self)
         self.progress_dialog.setAutoClose(False)
-        title = self.tr("InaSAFE OpenStreetMap Downloader")
+        title = self.tr('InaSAFE OpenStreetMap Downloader')
         self.progress_dialog.setWindowTitle(title)
         # Set up context help
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -97,7 +105,20 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         if proxy is not None:
             self.network_manager.setProxy(proxy)
         self.restore_state()
-        self.update_extent()
+
+        # Setup the rectangle map tool
+        self.canvas = iface.mapCanvas()
+        self.rectangle_map_tool = \
+            RectangleMapTool(self.canvas)
+        self.rectangle_map_tool.rectangle_created.connect(
+            self.update_extent_from_rectangle)
+        self.button_extent_rectangle.clicked.connect(
+            self.drag_rectangle_on_map_canvas)
+
+        # Setup pan tool
+        self.pan_tool = QgsMapToolPan(self.canvas)
+        self.canvas.setMapTool(self.pan_tool)
+        self.update_extent_from_map_canvas()
 
     def show_info(self):
         """Show usage info to the user."""
@@ -116,9 +137,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         )
         tips = m.BulletedList()
         tips.add(self.tr(
-            'Your current extent will be used to determine the area for which '
-            'you want data to be retrieved. You can adjust it manually using '
-            'the bounding box options below.'))
+            'Your current extent, when opening this window, will be used to '
+            'determine the area for which you want data to be retrieved.'
+            'You can interactively select the area by using the '
+            '\'select on map\' button - which will temporarily hide this '
+            'window and allow you to drag a rectangle on the map. After you '
+            'have finished dragging the rectangle, this window will '
+            'reappear.'))
         tips.add(self.tr(
             'Check the output directory is correct. Note that the saved '
             'dataset will be called either roads.shp or buildings.shp (and '
@@ -174,14 +199,44 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Load the help text for the dialog."""
         show_context_help(self.help_context)
 
-    def update_extent(self):
-        """ Update extent value in GUI based from value in map."""
-        # Get the extent as [xmin, ymin, xmax, ymax]
-        extent = viewport_geo_array(self.iface.mapCanvas())
+    def update_extent(self, extent):
+        """Update extent value in GUI based from an extent.
+
+        :param extent: A list in the form [xmin, ymin, xmax, ymax] where all
+            coordinates provided are in Geographic / EPSG:4326.
+        :type extent: list
+        """
         self.min_longitude.setText(str(extent[0]))
         self.min_latitude.setText(str(extent[1]))
         self.max_longitude.setText(str(extent[2]))
         self.max_latitude.setText(str(extent[3]))
+
+    def update_extent_from_map_canvas(self):
+        """Update extent value in GUI based from value in map.
+
+        .. note:: Delegates to update_extent()
+        """
+
+        self.groupBox.setTitle(self.tr('Bounding box from the map canvas'))
+        # Get the extent as [xmin, ymin, xmax, ymax]
+        extent = viewport_geo_array(self.iface.mapCanvas())
+        self.update_extent(extent)
+
+    def update_extent_from_rectangle(self):
+        """Update extent value in GUI based from the QgsMapTool rectangle.
+
+        .. note:: Delegates to update_extent()
+        """
+
+        self.show()
+        self.canvas.unsetMapTool(self.rectangle_map_tool)
+        self.canvas.setMapTool(self.pan_tool)
+
+        rectangle = self.rectangle_map_tool.rectangle()
+        if rectangle:
+            self.groupBox.setTitle(self.tr('Bounding box from the rectangle'))
+            extent = rectangle_geo_array(rectangle, self.iface.mapCanvas())
+            self.update_extent(extent)
 
     def validate_extent(self):
         """Validate the bounding box before user click OK to download.
@@ -218,14 +273,25 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_directory_button_clicked(self):
-        """ Show a dialog to choose directory """
+        """Show a dialog to choose directory."""
         # noinspection PyCallByClass,PyTypeChecker
         self.output_directory.setText(QFileDialog.getExistingDirectory(
-            self, self.tr("Select download directory")))
+            self, self.tr('Select download directory')))
+
+    def drag_rectangle_on_map_canvas(self):
+        """Hide the dialog and allow the user to draw a rectangle."""
+
+        self.hide()
+        self.rectangle_map_tool.reset()
+        self.canvas.unsetMapTool(self.pan_tool)
+        self.canvas.setMapTool(self.rectangle_map_tool)
 
     def accept(self):
         """Do osm download and display it in QGIS."""
         error_dialog_title = self.tr('InaSAFE OpenStreetMap Downloader Error')
+
+        # Lock the groupbox
+        self.groupBox.setDisabled(True)
 
         # Validate extent
         valid_flag = self.validate_extent()
@@ -234,15 +300,19 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 'The bounding box is not valid. Please make sure it is '
                 'valid or check your projection!')
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QMessageBox.warning(self, error_dialog_title, message)
+            display_warning_message_box(self, error_dialog_title, message)
+            # Unlock the groupbox
+            self.groupBox.setEnabled(True)
             return
 
         # Get all the feature types
         index = self.feature_type.currentIndex()
         if index == 0:
-            feature_types = ['buildings', 'roads']
+            feature_types = ['buildings', 'roads', 'building-points']
         elif index == 1:
             feature_types = ['buildings']
+        elif index == 2:
+            feature_types = ['building-points']
         else:
             feature_types = ['roads']
 
@@ -251,17 +321,30 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.require_directory()
             for feature_type in feature_types:
                 self.download(feature_type)
-                self.load_shapefile(feature_type)
+                try:
+                    self.load_shapefile(feature_type)
+                except FileMissingError as exception:
+                    display_warning_message_box(
+                        self,
+                        error_dialog_title,
+                        str(exception))
             self.done(QDialog.Accepted)
+            self.rectangle_map_tool.reset()
+
         except CanceledImportDialogError:
             # don't show anything because this exception raised
             # when user canceling the import process directly
             pass
         except Exception as exception:  # pylint: disable=broad-except
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            QMessageBox.warning(self, error_dialog_title, str(exception))
+            display_warning_message_box(
+                self, error_dialog_title, exception.message)
 
             self.progress_dialog.cancel()
+
+        finally:
+            # Unlock the groupbox
+            self.groupBox.setEnabled(True)
 
     def require_directory(self):
         """Ensure directory path entered in dialog exist.
@@ -272,14 +355,14 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         :raises: CanceledImportDialogError - when user choose 'No' in
             the question dialog for creating directory.
         """
-        path = str(self.output_directory.text())
+        path = self.output_directory.text()
 
         if os.path.exists(path):
             return
 
-        title = self.tr("Directory %s not exist") % path
+        title = self.tr('Directory %s not exist') % path
         question = self.tr(
-            "Directory %s not exist. Do you want to create it?") % path
+            'Directory %s not exist. Do you want to create it?') % path
         # noinspection PyCallByClass,PyTypeChecker
         answer = QMessageBox.question(
             self, title, question, QMessageBox.Yes | QMessageBox.No)
@@ -289,7 +372,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 os.makedirs(path)
             else:
                 # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-                QMessageBox.warning(
+                display_warning_message_box(
                     self,
                     self.tr('InaSAFE error'),
                     self.tr('Output directory can not be empty.'))
@@ -301,7 +384,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Download shapefiles from Linfiniti server.
 
         :param feature_type: What kind of features should be downloaded.
-            Currently 'buildings' or 'roads' are supported.
+            Currently 'buildings', 'building-points' or 'roads' are supported.
         :type feature_type: str
 
         :raises: ImportDialogError, CanceledImportDialogError
@@ -323,24 +406,31 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             )
         output_prefix = self.filename_prefix.text()
         if feature_type == 'buildings':
-            url = "{url}?bbox={box}&qgis_version=2".format(
+            url = '{url}?bbox={box}&qgis_version=2'.format(
                 url=self.buildings_url, box=box)
+        elif feature_type == 'building-points':
+            url = '{url}?bbox={box}&qgis_version=2'.format(
+                url=self.building_points_url, box=box)
         else:
-            url = "{url}?bbox={box}&qgis_version=2".format(
+            url = '{url}?bbox={box}&qgis_version=2'.format(
                 url=self.roads_url, box=box)
 
         if output_prefix is not None:
             url += '&output_prefix=%s' % output_prefix
 
+        if 'LANG' in os.environ:
+            env_lang = os.environ['LANG']
+            url += '&lang=%s' % env_lang
+
         path = tempfile.mktemp('.shp.zip')
 
         # download and extract it
-        self.fetch_zip(url, path)
-        self.extract_zip(path, str(self.output_directory.text()))
+        self.fetch_zip(url, path, feature_type)
+        self.extract_zip(path, self.output_directory.text())
 
         self.progress_dialog.done(QDialog.Accepted)
 
-    def fetch_zip(self, url, output_path):
+    def fetch_zip(self, url, output_path, feature_type):
         """Download zip containing shp file and write to output_path.
 
         :param url: URL of the zip bundle.
@@ -349,16 +439,27 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         :param output_path: Path of output file,
         :type output_path: str
 
+        :param feature_type: What kind of features should be downloaded.
+            Currently 'buildings', 'building-points' or 'roads' are supported.
+        :type feature_type: str
+
         :raises: ImportDialogError - when network error occurred
         """
         LOGGER.debug('Downloading file from URL: %s' % url)
         LOGGER.debug('Downloading to: %s' % output_path)
 
         self.progress_dialog.show()
-        self.progress_dialog.setMaximum(100)
+
+        # Infinite progress bar when the server is fetching data.
+        # The progress bar will be updated with the file size later.
+        self.progress_dialog.setMaximum(0)
+        self.progress_dialog.setMinimum(0)
         self.progress_dialog.setValue(0)
 
-        label_text = self.tr("Downloading shapefile")
+        # Get a pretty label from feature_type, but not translatable
+        label_feature_type = feature_type.replace('-', ' ')
+
+        label_text = self.tr('Fetching %s' % label_feature_type)
         self.progress_dialog.setLabelText(label_text)
 
         # Download Process
@@ -371,7 +472,11 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         if result[0] is not True:
             _, error_message = result
-            raise DownloadError(error_message)
+
+            if result[0] == QNetworkReply.OperationCanceledError:
+                raise CanceledImportDialogError(error_message)
+            else:
+                raise DownloadError(error_message)
 
     @staticmethod
     def extract_zip(path, output_dir):
@@ -404,18 +509,30 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Load downloaded shape file to QGIS Main Window.
 
         :param feature_type: What kind of features should be downloaded.
-            Currently 'buildings' or 'roads' are supported.
+            Currently 'buildings', 'building-points' or 'roads' are supported.
         :type feature_type: str
 
         :raises: ImportDialogError - when buildings.shp not exist
         """
         output_prefix = self.filename_prefix.text()
-        path = str(self.output_directory.text())
+        path = self.output_directory.text()
         path = os.path.join(path, '%s%s.shp' % (output_prefix, feature_type))
 
         if not os.path.exists(path):
             message = self.tr(
-                "%s don't exist. The server doesn't have any data.")
-            raise ImportDialogError(message)
+                '%s does not exist. The server does not have any data for '
+                'this extent.' % path)
+            raise FileMissingError(message)
 
         self.iface.addVectorLayer(path, feature_type, 'ogr')
+
+    def reject(self):
+        """Redefinition of the reject() method
+        to remove the rectangle selection tool.
+        It will call the super method.
+        """
+
+        self.canvas.unsetMapTool(self.rectangle_map_tool)
+        self.rectangle_map_tool.reset()
+
+        super(OsmDownloaderDialog, self).reject()

@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.i18n import tr
-
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -25,6 +23,7 @@ import traceback
 import logging
 import webbrowser
 import unicodedata
+import codecs
 
 # noinspection PyPackageRequirements
 
@@ -38,8 +37,10 @@ from safe.common.utilities import unique_filename
 from safe.common.version import get_version
 from safe import messaging as m
 from safe.impact_functions.core import get_plugins
-from safe.messaging import styles
+from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
+from safe.utilities.unicode import get_unicode
+from safe.utilities.i18n import tr
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -69,10 +70,13 @@ def get_error_message(exception, context=None, suggestion=None):
 
     problem = m.Message(m.Text(exception.__class__.__name__))
 
-    if str(exception) is None or str(exception) == '':
+    if exception is None or exception == '':
         problem.append = m.Text(tr('No details provided'))
     else:
-        problem.append = m.Text(str(exception))
+        if isinstance(exception.message, Message):
+            problem.append = m.Text(str(exception.message.message))
+        else:
+            problem.append = m.Text(exception.message)
 
     suggestion = suggestion
     if suggestion is None and hasattr(exception, 'suggestion'):
@@ -219,11 +223,11 @@ def add_ordered_combo_item(combo, text, data=None):
     :type data: QVariant, str
     """
     size = combo.count()
-    for myCount in range(0, size):
-        item_text = str(combo.itemText(myCount))
-        # see if text alphabetically precedes myItemText
-        if cmp(str(text).lower(), item_text.lower()) < 0:
-            combo.insertItem(myCount, text, data)
+    for combo_index in range(0, size):
+        item_text = combo.itemText(combo_index)
+        # see if text alphabetically precedes item_text
+        if cmp(text.lower(), item_text.lower()) < 0:
+            combo.insertItem(combo_index, text, data)
             return
         # otherwise just add it to the end
     combo.insertItem(size, text, data)
@@ -256,7 +260,9 @@ def html_to_file(html, file_path=None, open_browser=False):
     if file_path is None:
         file_path = unique_filename(suffix='.html')
 
-    with open(file_path, 'w') as f:
+    # Ensure html is in unicode for codecs module
+    html = get_unicode(html)
+    with codecs.open(file_path, 'w', encoding='utf-8') as f:
         f.write(html)
 
     if open_browser:
@@ -298,15 +304,23 @@ def read_file_keywords(layer_path, keyword=None):
         raise InvalidParameterError(message)
 
     # check there really is a keywords file for this layer
+    # priority for iso path first
     keyword_file_path = os.path.splitext(layer_path)[0]
     keyword_file_path += '.keywords'
-    if not os.path.isfile(keyword_file_path):
+    keyword_iso_path = os.path.splitext(layer_path)[0]
+    keyword_iso_path += '.xml'
+    if not os.path.isfile(keyword_file_path)\
+            and not os.path.isfile(keyword_iso_path):
         message = tr('No keywords file found for %s' % keyword_file_path)
         raise NoKeywordsFoundError(message)
+    elif os.path.isfile(keyword_file_path) \
+            and not os.path.isfile(keyword_iso_path):
+        # switch to .keywords file if iso xml file didn't exist
+        keyword_iso_path = keyword_file_path
 
     # now get the requested keyword using the inasafe library
     try:
-        dictionary = read_keywords(keyword_file_path)
+        dictionary = read_keywords(keyword_iso_path)
     except Exception, e:
         message = tr(
             'Keyword retrieval failed for %s (%s) \n %s' % (
@@ -366,6 +380,20 @@ def get_safe_impact_function(function_name=None):
         return get_plugins(function_name)
     except:
         raise
+
+
+def replace_accentuated_characters(message):
+    """Normalize unicode data in Python to remove umlauts, accents etc.
+
+    :param message: The string where to delete accentuated characters.
+    :type message: str
+
+    :return: A string without umlauts, accents etc.
+    :rtype: str
+    """
+
+    message = unicodedata.normalize('NFKD', message).encode('ASCII', 'ignore')
+    return message.decode('utf-8')
 
 
 def get_safe_impact_function_type(function_id):

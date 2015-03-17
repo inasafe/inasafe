@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
+    <width>519</width>
     <height>594</height>
    </rect>
   </property>
@@ -40,6 +40,11 @@
      <item>
       <property name="text">
        <string>Buildings</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Building points</string>
       </property>
      </item>
      <item>
@@ -91,10 +96,20 @@
      </property>
     </widget>
    </item>
+   <item row="8" column="0">
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
    <item row="7" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+      <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -106,7 +121,7 @@
       <string>Bounding box</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0">
+      <item row="3" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>West</string>
@@ -116,19 +131,19 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
+      <item row="5" column="1">
        <widget class="QLineEdit" name="min_latitude"/>
       </item>
-      <item row="2" column="2">
+      <item row="4" column="2">
        <widget class="QLineEdit" name="max_longitude"/>
       </item>
-      <item row="1" column="1">
+      <item row="3" column="1">
        <widget class="QLineEdit" name="max_latitude"/>
       </item>
-      <item row="2" column="0">
+      <item row="4" column="0">
        <widget class="QLineEdit" name="min_longitude"/>
       </item>
-      <item row="0" column="1">
+      <item row="2" column="1">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>North</string>
@@ -138,7 +153,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
+      <item row="3" column="2">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>East</string>
@@ -148,7 +163,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="6" column="1">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>South</string>
@@ -158,17 +173,14 @@
         </property>
        </widget>
       </item>
+      <item row="4" column="1">
+       <widget class="QPushButton" name="button_extent_rectangle">
+        <property name="text">
+         <string>Select on map</string>
+        </property>
+       </widget>
+      </item>
      </layout>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QDialogButtonBox" name="button_box">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
-     </property>
     </widget>
    </item>
   </layout>

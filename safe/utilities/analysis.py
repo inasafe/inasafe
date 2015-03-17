@@ -70,7 +70,7 @@ from safe.common.signals import (
     ANALYSIS_DONE_SIGNAL)
 from safe_extras.pydispatch import dispatcher
 from safe.common.exceptions import BoundingBoxError, NoValidLayerError
-
+from safe.utilities.resources import resource_url
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -78,7 +78,10 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = styles.logo_element()
+LOGO_ELEMENT = m.Image(
+    resource_url(styles.logo_element()),
+    'InaSAFE Logo')
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -205,7 +208,7 @@ class Analysis(object):
         :returns: Layer's title
         :rtype: str
         """
-        title = layer_keyword.get('title', str(layer.name()))
+        title = layer_keyword.get('title', layer.name())
         return title
 
     def get_impact_layer(self):

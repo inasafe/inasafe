@@ -1,11 +1,11 @@
 category: postprocessing
 aggregation attribute: KAB_NAME
-title: District's of Jakarta
-elderly ratio attribute: Use default
-youth ratio default: 0.263
-elderly ratio default: 0.078
-adult ratio attribute: Use default
+title: Dístríct's of Jakarta
+elderly ratio attribute: Global default
+youth ratio default: 0.26
+elderly ratio default: 0.08
+adult ratio attribute: Global default
 female ratio attribute: PEREMPUAN
-youth ratio attribute: Use default
+youth ratio attribute: Global default
 female ratio default: 0.5
-adult ratio default: 0.659
+adult ratio default: 0.66

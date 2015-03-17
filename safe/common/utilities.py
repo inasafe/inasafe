@@ -694,7 +694,8 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
     i = 0
     while new_name.upper() in uppercase_attribute_names:
         i += 1
-        new_name = '%s_%s' % (new_name[:8], i)
+        string_len = 9 - len(str(i))
+        new_name = '%s_%s' % (new_name[:string_len], i)
     return new_name
 
 
@@ -706,27 +707,36 @@ def get_osm_building_usage(attribute_names, feature):
 
     :param feature: A row of data representing an OSM building.
     :type feature: dict
-    """
-    if 'type' in attribute_names:
-        usage = feature['type']
-    elif 'TYPE' in attribute_names:
-        usage = feature['TYPE']
-    else:
-        usage = None
 
-    if 'amenity' in attribute_names and (usage is None or usage == 0):
-        usage = feature['amenity']
-    if 'building_t' in attribute_names and (usage is None or usage == 0):
-        usage = feature['building_t']
-    if 'office' in attribute_names and (usage is None or usage == 0):
-        usage = feature['office']
-    if 'tourism' in attribute_names and (usage is None or usage == 0):
-        usage = feature['tourism']
-    if 'leisure' in attribute_names and (usage is None or usage == 0):
-        usage = feature['leisure']
-    if 'building' in attribute_names and (usage is None or usage == 0):
-        usage = feature['building']
-        if usage == 'yes':
+    :returns: The usage of the feature. Return None if it does not find any.
+    :rtype: str
+    """
+    attribute_names_lower = [
+        attribute_name.lower() for attribute_name in attribute_names]
+
+    usage = None
+    # Prioritize 'type' attribute
+    if 'type' in attribute_names_lower:
+        attribute_index = attribute_names_lower.index('type')
+        field_name = attribute_names[attribute_index]
+        usage = feature[field_name]
+
+    # Get the usage from other attribute names
+    building_type_attributes = ['amenity', 'building_t', 'office', 'tourism',
+                                'leisure', 'use']
+    for type_attribute in building_type_attributes:
+        if (type_attribute in attribute_names_lower) and usage is None:
+            attribute_index = attribute_names_lower.index(
+                type_attribute)
+            field_name = attribute_names[attribute_index]
+            usage = feature[field_name]
+
+    # The last one is to get it from 'building' attribute
+    if 'building' in attribute_names_lower and usage is None:
+        attribute_index = attribute_names_lower.index('building')
+        field_name = attribute_names[attribute_index]
+        usage = feature[field_name]
+        if usage.lower() == 'yes':
             usage = 'building'
 
     return usage
@@ -765,3 +775,44 @@ def romanise(number):
     except ValueError:
         return None
     return roman
+
+
+def humanize_file_size(size):
+    """Return humanize size from bytes.
+
+    :param size: The size to humanize in bytes.
+    :type size: float
+
+    :return: Human readable size.
+    :rtype: unicode
+    """
+    for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
+        if size < 1024.0:
+            return u'%3.1f %s' % (size, x)
+        size /= 1024.0
+
+
+def add_to_list(my_list, my_element):
+    """Helper function to add new my_element to my_list based on its type
+    . Add as new element if it's not a list, otherwise extend to the list
+    if it's a list.
+    It's also guarantee that all elements are unique
+
+    :param my_list: A list
+    :type my_list: list
+
+    :param my_element: A new element
+    :type my_element: str, list
+
+    :returns: A list with unique element
+    :rtype: list
+
+    """
+    if type(my_element) is list:
+        for element in my_element:
+            my_list = add_to_list(my_list, element)
+    else:
+        if my_element not in my_list:
+            my_list.append(my_element)
+
+    return my_list

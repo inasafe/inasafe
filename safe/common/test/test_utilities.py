@@ -33,7 +33,9 @@ from safe.common.utilities import (
     get_non_conflicting_attribute_name,
     temp_dir,
     log_file_path,
-    romanise)
+    romanise,
+    humanize_file_size,
+    add_to_list)
 
 
 def print_class(array, result_class, expected_result):
@@ -328,6 +330,38 @@ class TestUtilities(unittest.TestCase):
             result.append(romanise(value))
         message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
         self.assertEqual(result, expected_result, message)
+
+    def test_humanize_size(self):
+        """Test we can convert size values to human readable size."""
+        values = [1023, 1024, 1048575, 1048576, 1604321.28]
+        expected_result = [
+            u'1023.0 bytes', u'1.0 KB', u'1024.0 KB', u'1.0 MB', u'1.5 MB']
+
+        result = []
+        for value in values:
+            result.append(humanize_file_size(value))
+        message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
+        self.assertEqual(result, expected_result, message)
+
+    def test_add_to_list(self):
+        """Test for add_to_list function
+        """
+        list_original = ['a', 'b', ['a'], {'a': 'b'}]
+        list_a = ['a', 'b', ['a'], {'a': 'b'}]
+        # add same immutable element
+        list_b = add_to_list(list_a, 'b')
+        assert list_b == list_original
+        # add list
+        list_b = add_to_list(list_a, ['a'])
+        assert list_b == list_original
+        # add same mutable element
+        list_b = add_to_list(list_a, {'a': 'b'})
+        assert list_b == list_original
+        # add new mutable element
+        list_b = add_to_list(list_a, 'c')
+        assert len(list_b) == (len(list_original) + 1)
+        assert list_b[-1] == 'c'
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestUtilities)

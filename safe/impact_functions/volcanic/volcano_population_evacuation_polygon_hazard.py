@@ -99,10 +99,32 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
                 'id': 'VolcanoPolygonHazardPopulation',
                 'name': tr('Volcano Polygon Hazard Population'),
                 'impact': tr('Need evacuation'),
+                'title': tr('Need evacuation'),
                 'author': 'AIFDR',
                 'date_implemented': 'N/A',
-                'overview': tr('To assess the impacts of volcano eruption '
-                               'on population.'),
+                'hazard_input': tr(
+                    'A hazard vector layer can be polygon or point. If '
+                    'polygon, it must have "KRB" attribute and the valuefor '
+                    'it are "Kawasan Rawan Bencana I", "Kawasan Rawan Bencana '
+                    'II", or "Kawasan Rawan Bencana III."If you want to see '
+                    'the name of the volcano in the result, you need to add '
+                    '"NAME" attribute for point data or "GUNUNG" attribute '
+                    'for polygon data.'),
+                'exposure_input': tr(
+                    'An exposure raster layer where each cell represent '
+                    'population count.'),
+                'output': tr(
+                    'Vector layer contains people affected and the minimum '
+                    'needs based on the number of people affected.'),
+                'actions': tr(
+                    'Provide details about how many population would likely '
+                    'be affected by each hazard zones.'),
+                'limitations': [],
+                'citations': [],
+                'overview': tr(
+                    'To assess the impacts of volcano eruption on '
+                    'population.'),
+                'detailed_description': '',
                 'categories': {
                     'hazard': {
                         'definition': hazard_definition,
@@ -123,26 +145,8 @@ class VolcanoPolygonHazardPopulation(FunctionProvider):
             }
             return dict_meta
 
-    title = tr('Need evacuation')
     target_field = 'population'
     defaults = get_defaults()
-    # Function documentation
-    synopsis = tr('To assess the impacts of volcano eruption on population.')
-    actions = tr(
-        'Provide details about how many population would likely be affected '
-        'by each hazard zones.')
-    hazard_input = tr(
-        'A hazard vector layer can be polygon or point. If polygon, it must '
-        'have "KRB" attribute and the valuefor it are "Kawasan Rawan '
-        'Bencana I", "Kawasan Rawan Bencana II", or "Kawasan Rawan Bencana '
-        'III."If you want to see the name of the volcano in the result, you '
-        'need to add "NAME" attribute for point data or "GUNUNG" attribute '
-        'for polygon data.')
-    exposure_input = tr(
-        'An exposure raster layer where each cell represent population count.')
-    output = tr(
-        'Vector layer contains people affected and the minimum needs '
-        'based on the number of people affected.')
 
     parameters = OrderedDict([
         ('distance [km]', [3, 5, 10]),
