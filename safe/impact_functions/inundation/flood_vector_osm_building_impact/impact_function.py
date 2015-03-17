@@ -148,15 +148,25 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
                 * exposure_layer: Vector layer of structure data on
                 the same grid as hazard_layer
         """
+        # Prepare before running the IF
         self.prepare(layers)
+
         # Extract data
         hazard_layer = self.hazard  # Depth
         exposure_layer = self.exposure  # Building locations
 
+        # Get question
         question = get_question(
             hazard_layer.get_name(),
             exposure_layer.get_name(),
             self)
+
+        # Define the target field in the impact layer
+        target_field = 'INUNDATED'
+
+        # Get parameters from user
+        affected_field = self.parameters['affected_field']
+        affected_value = self.parameters['affected_value']
 
         # Determine attribute name for hazard levels
         hazard_attribute = None
@@ -176,32 +186,24 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
 
         # The variable for regions mode
         affected_buildings = {}
-        target_field = self.parameters()['target_field'].value
-        affected_field = self.parameters()['affected_field'].value
-        affected_value = self.parameters()['affected_value'].value
-
         for i in range(total_features):
             # Use interpolated polygon attribute
-            atts = features[i]
+            feature = features[i]
 
-            if affected_field in atts:
-                res = atts[affected_field]
-                if res is None:
+            if affected_field in attribute_names:
+                affected_status = feature[affected_field]
+                if affected_status is None:
                     inundated_status = False
                 else:
-                    try:
-                        inundated_status = int(res) == int(affected_value)
-                    except ValueError:
-                        inundated_status = (str(res).lower() ==
-                                            affected_value.lower())
-            elif DEFAULT_ATTRIBUTE in atts:
+                    inundated_status = affected_status == affected_value
+            elif DEFAULT_ATTRIBUTE in attribute_names:
                 # Check the default attribute assigned for points
                 # covered by a polygon
-                res = atts[DEFAULT_ATTRIBUTE]
-                if res is None:
+                affected_status = feature[DEFAULT_ATTRIBUTE]
+                if affected_status is None:
                     inundated_status = False
                 else:
-                    inundated_status = res
+                    inundated_status = affected_status == affected_value
             else:
                 # there is no flood related attribute
                 message = (

@@ -741,7 +741,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             function_id = self.get_function_id()
 
             functions = get_safe_impact_function(function_id)
-            self.active_function = functions[0][function_id]
+            self.active_function = functions[0][function_id].instance()
             self.function_parameters = None
             if hasattr(self.active_function, 'parameters'):
                 self.function_parameters = self.active_function.parameters
@@ -801,6 +801,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         dialog.set_dialog_info(self.get_function_id())
         dialog.build_form(self.function_parameters)
 
+        import pydevd
+
+        pydevd.settrace('localhost', port=5678, stdoutToServer=True,
+                        stderrToServer=True)
         if dialog.exec_():
             self.active_function.parameters = dialog.result()
             self.function_parameters = self.active_function.parameters

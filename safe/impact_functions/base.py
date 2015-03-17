@@ -139,11 +139,6 @@ class ImpactFunction(object):
         """Get the metadata for this class."""
         return cls._metadata.get_metadata()
 
-    @classmethod
-    def parameters(cls):
-        """Get the parameter for this class."""
-        return cls._metadata.parameters()
-
     def prepare(self):
         """Prepare this impact function for running the analysis.
 
@@ -224,6 +219,16 @@ class ImpactFunction(object):
         """
         # add more robust checks here
         self._aggregation = layer
+
+    @property
+    def parameters(self):
+        """Get the parameter."""
+        return self._parameters
+
+    @parameters.setter
+    def parameters(self, parameters):
+        """Set the parameter."""
+        self._parameters = parameters
 
     @property
     def impact(self):

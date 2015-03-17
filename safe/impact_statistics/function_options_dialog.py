@@ -122,9 +122,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
                 self.build_minimum_needs_form(value)
             else:
                 self.values[key] = self.build_widget(
-                    self.configLayout,
-                    key,
-                    value)
+                    self.configLayout, key, value)
 
     def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab.
@@ -198,8 +196,9 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.values['postprocessors'] = values
 
     def build_widget(self, form_layout, name, key_value):
-        """Create a new form element dynamically based from theValue type.
-        The element will be inserted to theFormLayout.
+        """Create a new form element dynamically based from key_value type.
+
+        The element will be inserted to form_layout.
 
         :param form_layout: Mandatory a layout instance
         :type form_layout: QFormLayout
@@ -216,7 +215,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         :raises: None
         """
-
         # create label
         if isinstance(name, str):
             label = QLabel()
