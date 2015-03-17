@@ -24,24 +24,19 @@ import logging
 from collections import OrderedDict
 
 from safe.impact_functions.core import (
-    FunctionProvider,
     get_plugins,
     requirements_collect,
     requirement_check,
     requirements_met,
     get_function_title,
-    parse_single_requirement,
     aggregate,
     convert_to_old_keywords,
-    get_admissible_plugins,
     population_rounding_full,
     population_rounding,
     evacuated_population_needs,
-    compatible_layers,
     remove_impact_function)
 from safe.common.resource_parameter import ResourceParameter
 from safe.storage.core import read_layer
-from safe.utilities.utilities import read_file_keywords
 from safe.defaults import default_minimum_needs
 from safe.impact_functions.utilities import (
     admissible_plugins_to_str)
@@ -363,26 +358,6 @@ class TestCore(unittest.TestCase):
         message = 'No plugins were found matching %s' % plugin_name
         assert len(plugin_list) > 0, message
 
-    def test_get_admissible_plugins(self):
-        """Test for get_admissible_plugins function."""
-        functions = get_admissible_plugins()
-        message = 'No functions available (len=%ss)' % len(functions)
-        self.assertTrue(len(functions) > 0, message)
-
-        # Also test if it works when we give it two layers
-        # to see if we can determine which functions will
-        # work for them.
-        keywords1 = read_file_keywords(self.raster_shake_path)
-        keywords2 = read_file_keywords(self.vector_path)
-        # We need to explicitly add the layer type to each keyword list
-        keywords1['layertype'] = 'raster'
-        keywords2['layertype'] = 'vector'
-
-        functions = [keywords1, keywords2]
-        functions = get_admissible_plugins(functions)
-        message = 'No functions available (len=%ss)' % len(functions)
-        self.assertTrue(len(functions) > 0, message)
-
     def test_get_plugins(self):
         """Plugins can be collected."""
         os.environ['LANG'] = 'en'
@@ -413,37 +388,6 @@ class TestCore(unittest.TestCase):
                      'subcategory': 'earthquake',
                      'layerType': 'raster'},
                     required_string) in [True, False]), message
-
-    def test_plugin_compatibility(self):
-        """Default plugins perform as expected."""
-
-        # Get list of plugins
-        plugin_list = get_plugins()
-        assert len(plugin_list) > 0
-
-        # Characterisation test to preserve the behaviour of
-        # get_layer_descriptors. FIXME: I think we should change this to be
-        # a dictionary of metadata entries (ticket #126).
-        reference = [
-            ['lembang_schools', {'layertype': 'vector',
-                                 'category': 'exposure',
-                                 'subcategory': 'building',
-                                 'title': 'lembang_schools'}],
-            ['shakemap_padang_20090930', {'layertype': 'raster',
-                                          'category': 'hazard',
-                                          'subcategory': 'earthquake',
-                                          'title': 'shakemap_padang_20090930'}]
-        ]
-
-        # Check plugins are returned
-        metadata = reference
-        annotated_plugins = [{'name': name,
-                              'doc': f.__doc__,
-                              'layers': compatible_layers(f, metadata)}
-                             for name, f in plugin_list.items()]
-
-        msg = 'No compatible layers returned'
-        assert len(annotated_plugins) > 0, msg
 
     def test_population_rounding(self):
         """Test for population_rounding_full function."""
@@ -535,70 +479,6 @@ class TestCore(unittest.TestCase):
         params = {'class': 'myclass'}
         msg = 'Reserved keyword in statement (logged)'
         self.assertFalse(requirement_check(params, line), msg)
-
-    def test_filtering_of_impact_functions(self):
-        """Impact functions are filtered correctly
-        """
-        # Keywords matching F1 and F3
-        haz_keywords1 = dict(category='test_cat1', subcategory='flood',
-                             layertype='raster', unit='m')
-        exp_keywords1 = dict(category='test_cat2',
-                             subcategory='population',
-                             layertype='raster', datatype='population')
-
-        # Keywords matching F2 and F3
-        haz_keywords2 = dict(category='test_cat1', subcategory='flood',
-                             layertype='raster', unit='m')
-        exp_keywords2 = dict(category='test_cat2',
-                             subcategory='building')
-
-        # Check correct matching of keyword set 1
-        plugins = get_admissible_plugins([haz_keywords1, exp_keywords1])
-        msg = 'Expected impact functions F1 and F3 in %s' % str(plugins.keys())
-        self.assertIn('F1', plugins, msg)
-        self.assertIn('F3', plugins, msg)
-        self.assertNotIn('F2', plugins, msg)
-
-        # Check correctness of title attribute
-        self.assertEqual(get_function_title(plugins['F1']), 'Title for F1')
-        self.assertEqual(get_function_title(plugins['F3']), 'F3')
-
-        # Check correct matching of keyword set 2
-        plugins = get_admissible_plugins([haz_keywords2, exp_keywords2])
-        msg = 'Expected impact functions F2 and F3 in %s' % str(
-            plugins.keys())
-        self.assertIn('F2', plugins, msg)
-        self.assertIn('F3', plugins, msg)
-        self.assertNotIn('F1', plugins, msg)
-
-        # Check correctness of title attribute
-        self.assertEqual(get_function_title(plugins['F2']), 'Title for F2')
-        self.assertEqual(get_function_title(plugins['F3']), 'F3')
-
-        # Check empty call returns all
-        plugins = get_admissible_plugins([])
-        msg = ('Expected at least impact functions F1, F2 and F3 in %s'
-               % str(plugins.keys()))
-        self.assertIn('F1', plugins, msg)
-        self.assertIn('F2', plugins, msg)
-        self.assertIn('F3', plugins, msg)
-
-    def test_parse_requirement(self):
-        """Test parse requirements of a function to dictionary."""
-        requirements = requirements_collect(F4)[0]
-        parsed_req = parse_single_requirement(requirements)
-        expected_req = {'category': 'hazard',
-                        'subcategory': ['flood', 'tsunami']}
-        message = 'Get %s should be % s' % (parsed_req, expected_req)
-        self.assertEqual(parsed_req, expected_req, message)
-
-        requirements = requirements_collect(F4)[1]
-        parsed_req = parse_single_requirement(requirements)
-        expected_req = {'category': 'exposure',
-                        'subcategory': ['building', 'structure'],
-                        'layertype': 'vector'}
-        message = 'Get %s should be % s' % (parsed_req, expected_req)
-        assert parsed_req == expected_req, message
 
     def test_default_needs(self):
         """default calculated needs are as expected

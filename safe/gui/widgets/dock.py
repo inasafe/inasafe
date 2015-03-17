@@ -64,9 +64,7 @@ from safe.utilities.styling import (
     set_vector_categorized_style)
 from safe.utilities.impact_calculator import ImpactCalculator
 from safe.impact_functions import load_plugins
-from safe.impact_functions.core import (
-    get_admissible_plugins,
-    get_function_title)
+from safe.impact_functions.core import get_function_title
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import temp_dir

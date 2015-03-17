@@ -16,61 +16,12 @@ import keyword as python_keywords
 from safe.gis.polygon import inside_polygon
 from safe.utilities.i18n import tr
 from safe.defaults import default_minimum_needs
-from utilities import (
-    is_duplicate_impact_function,
-    get_python_file,
-    get_function_title,
-    function_name)
+from utilities import get_function_title
 from safe.definitions import converter_dict
 from safe.impact_functions.registry import Registry
 
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-# # Disable lots of pylint for this as it is using magic
-# # for managing the plugin system devised by Ted Dunstone
-# # pylint: disable=W0613,C0203
-# class PluginMount(type):
-#     """Mount point for a plugin (impact function)."""
-#     def __init__(cls, name, bases, attrs):
-#         if not hasattr(cls, 'plugins'):
-#             # This branch only executes when processing the mount point itself.
-#             # So, since this is a new plugin type, not an implementation, this
-#             # class shouldn't be registered as a plugin. Instead, it sets up a
-#             # list where plugins can be registered later.
-#             cls.plugins = []
-#         else:
-#             # This must be a plugin implementation, which should be registered.
-#             # Simply appending it to the list is all that's needed to keep
-#             # track of it later.
-#             if is_duplicate_impact_function(cls):
-#                 message = 'Duplicate impact function name %s\n' % cls.__name__
-#                 message += 'Impact function file %s\n' % get_python_file(cls)
-#                 message += 'IF files that have been loaded: %s\n' % (
-#                     '\n'.join([get_python_file(c) for c in cls.plugins]))
-#                 print message
-#                 # raise LookupError(message)
-#             else:
-#                 cls.plugins.append(cls)
-# # pylint: enable=W0613,C0203
-
-
-# class FunctionProvider(object):
-#     """Mount point for impact_functions.
-#
-#     Plugins implementing this reference should provide the following method:
-#
-#     run(layers)::
-#
-#       layers           A list of layers
-#       result           A list of layers
-#
-#     """
-#     __metaclass__ = PluginMount
-#
-#     target_field = 'DAMAGE'
-#     symbol_field = 'USE_MAJOR'
 
 
 def evacuated_population_weekly_needs(
@@ -565,105 +516,6 @@ def aggregate(data=None, boundaries=None,
                'I got type: %s' % data.get_geometry_type())
         raise Exception(msg)
     return res
-
-
-# FIXME (Ole): Maybe filter by name too, rename to get_impact_functions
-# and remove some of the other functions.
-def get_admissible_plugins(keywords=None):  # , name=None):
-    """Get plugins that match specified keywords
-
-    Input:
-        keywords: Either dictionary or list of dictionaries containing
-                  layer keywords of the form
-                  {'category': 'hazard', 'subcategory': 'flood', ...}
-
-                  If None or empty all plugins are returned
-
-        name: Optional impact function name (or part of function name)
-         used to further filter the result.
-
-        If None all names are considered to match
-
-    Output:
-        Dictionary of impact functions ({name: class})
-    """
-
-    # This is very verbose, but sometimes useful
-    # LOGGER.debug(keywords_to_str(keywords))
-
-    # Input checks
-    if keywords is None:
-        keywords = []
-
-    if isinstance(keywords, dict):
-        keywords = [keywords]
-
-    convert_to_old_keywords(converter_dict, keywords)
-
-    # Get all impact functions
-    plugin_dict = get_plugins()
-
-    # Build dictionary of those that match given keywords
-    admissible_plugins = {}
-    for f_name, func in plugin_dict.items():
-
-        # Required keywords for func
-        requirelines = requirements_collect(func)
-
-        # Keep impact function if requirements are met for all given keywords
-        match = True
-        for kw_dict in keywords:
-            if not requirements_met(requirelines, kw_dict):
-                match = False
-        if match:
-            admissible_plugins[f_name] = func
-
-    # This is very verbose, but sometimes useful
-    # LOGGER.debug(admissible_plugins_to_str(admissible_plugins))
-
-    # Return (possibly empty) dictionary
-    return admissible_plugins
-
-
-def parse_single_requirement(requirement):
-    """Parse single requirement from impact function's doc to category,
-        subcategory, layertype, datatype, unit, and disabled.
-    """
-    retval = {}
-    parts = requirement.split(' and ')
-    for part in parts:
-        if part.find('==') != -1:
-            myKey = part.split('==')[0]
-            myValue = part.split('==')[1]
-            retval[myKey] = myValue[1:-1]  # Removing single quote
-        elif part.find(' in ') != -1:
-            myKey = part.split(' in ')[0]
-            myListString = part.split(' in ')[1][1:-1]  # Removing '['
-            elmtList = myListString.split(', ')
-            myList = []
-            for elmt in elmtList:
-                myList.append(elmt[1:-1])  # Removing single quote
-            retval[myKey] = myList
-        elif part.find('.startswith') != -1:
-            pass  # Not yet implemented
-        else:
-            pass
-
-    return retval
-
-
-def is_function_enabled(func):
-    """Check whether a function is enabled or not
-    :param func:
-    :returns: False is disabled param is True
-    """
-    for requirement in requirements_collect(func):
-        dict_req = parse_single_requirement(str(requirement))
-
-        # If the impact function is disabled, do not show it
-        if dict_req.get('disabled', False):
-            return False
-    return True
 
 
 def convert_to_old_keywords(converter, keywords):
