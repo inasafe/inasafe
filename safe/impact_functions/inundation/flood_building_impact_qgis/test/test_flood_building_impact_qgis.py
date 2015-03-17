@@ -11,8 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
-__author__ = 'akbargumbira@gmail.com'
+__author__ = 'lucernae'
 __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -21,10 +22,10 @@ import os
 import unittest
 
 from safe.impact_functions.registry import Registry
-from safe.impact_functions.inundation.flood_vector_osm_building_impact.\
-    impact_function import FloodVectorBuildingImpactFunction
+from safe.impact_functions.inundation.flood_building_impact_qgis\
+    .impact_function import FloodNativePolygonExperimentalFunction
 from safe.storage.core import read_layer
-from safe.test.utilities import TESTDATA, get_qgis_app
+from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer
 from safe.definitions import (
     unit_wetdry,
     layer_vector_polygon,
@@ -35,34 +36,43 @@ from safe.definitions import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
+class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
         self.registry = Registry()
-        self.registry.clear()
-        self.registry.register(FloodVectorBuildingImpactFunction)
+        self.registry.register(FloodNativePolygonExperimentalFunction)
 
     def test_run(self):
-        function = self.registry.get('FloodVectorBuildingImpactFunction')
+        function = self.registry.get('FloodNativePolygonExperimentalFunction')
 
-        building = 'test_flood_building_impact_exposure.shp'
-        flood_data = 'test_flood_building_impact_hazard.shp'
+        building = 'test_flood_building_impact_exposure'
+        flood_data = 'test_flood_building_impact_hazard'
 
         hazard_filename = os.path.join(TESTDATA, flood_data)
         exposure_filename = os.path.join(TESTDATA, building)
-        hazard_layer = read_layer(hazard_filename)
-        exposure_layer = read_layer(exposure_filename)
+        hazard_layer = clone_shp_layer(
+            name=hazard_filename,
+            include_keywords=True,
+            source_directory=TESTDATA)
+        exposure_layer = clone_shp_layer(
+            name=exposure_filename,
+            include_keywords=True,
+            source_directory=TESTDATA)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
-        function.extent = [10, 10, 20, 20]
+        function.hazard = QgisWrapper(hazard_layer)
+        function.exposure = QgisWrapper(exposure_layer)
+        function.extent = [106.8139860, -6.2043560,
+                           106.8405950, -6.2263570]
+        function.parameters['affected_field'] = 'FLOODPRONE'
+        function.parameters['affected_value'] = 'YES'
         function.run()
         impact_layer = function.impact
 
         # Check the question
         expected_question = ('In the event of a flood in jakarta how many osm '
-                             'building polygons might be flooded')
+                             'building polygons might be flooded ('
+                             'experimental)')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, function.question())
         self.assertEqual(expected_question, function.question(), message)
