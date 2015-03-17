@@ -176,7 +176,8 @@ def get_plugins(name=None):
        Or all of them if no name is passed.
     """
     registry = Registry()
-    plugins_dict = dict([(f.metadata()['name'], f) for f in registry.filter()])
+    plugins_dict = dict([(f.metadata().as_dict()['name'], f) for f in
+                         registry.filter()])
     if name is None:
         return plugins_dict
 

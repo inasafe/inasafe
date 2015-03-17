@@ -2700,7 +2700,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         imfunctions = get_safe_impact_function(imfunc_id)
         if not imfunctions:
             return
-        imfunc = imfunctions[0][imfunc_id]
+        imfunc = imfunctions[0][imfunc_id].instance()
         self.if_params = None
         if hasattr(imfunc, 'parameters'):
             self.if_params = imfunc.parameters

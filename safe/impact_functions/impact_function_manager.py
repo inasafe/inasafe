@@ -40,10 +40,6 @@ class ImpactFunctionManager:
 
         Disabled impact function will not be loaded.
         """
-        import pydevd
-
-        pydevd.settrace('localhost', port=5678, stdoutToServer=True,
-                        stderrToServer=True)
         result = []
         impact_functions = Registry().filter()
         for impact_function in impact_functions:
@@ -71,7 +67,7 @@ class ImpactFunctionManager:
         """
         result = []
         for impact_function in self.impact_functions:
-            my_allowed_subcategories = impact_function.Metadata\
+            my_allowed_subcategories = impact_function.metadata()\
                 .allowed_subcategories(category)
             result = add_to_list(result, my_allowed_subcategories)
         return result
@@ -94,7 +90,7 @@ class ImpactFunctionManager:
         """
         result = []
         for impact_function in self.impact_functions:
-            my_allowed_data_types = impact_function.Metadata \
+            my_allowed_data_types = impact_function.metadata() \
                 .allowed_data_types(subcategory)
             result = add_to_list(result, my_allowed_data_types)
         return result
@@ -121,7 +117,7 @@ class ImpactFunctionManager:
         """
         result = []
         for impact_function in self.impact_functions:
-            my_allowed_units = impact_function.Metadata \
+            my_allowed_units = impact_function.metadata()\
                 .allowed_units(subcategory, data_type)
             result = add_to_list(result, my_allowed_units)
         return result
@@ -173,7 +169,7 @@ class ImpactFunctionManager:
         """
         result = []
         for impact_function in self.impact_functions:
-            my_units = impact_function.Metadata \
+            my_units = impact_function.metadata()\
                 .units_for_layer(subcategory, layer_type, data_type)
             result = add_to_list(result, my_units)
         return result
@@ -220,7 +216,7 @@ class ImpactFunctionManager:
         """
         result = []
         for impact_function in self.impact_functions:
-            categories = impact_function.Metadata \
+            categories = impact_function.metadata()\
                 .categories_for_layer(layer_type, data_type)
             result = add_to_list(result, categories)
         categories_definitions = []
@@ -271,7 +267,7 @@ class ImpactFunctionManager:
         """
         result = []
         for impact_function in self.impact_functions:
-            subcategories = impact_function.Metadata \
+            subcategories = impact_function.metadata()\
                 .subcategories_for_layer(category, layer_type, data_type)
             result = add_to_list(result, subcategories)
         return result
@@ -296,11 +292,11 @@ class ImpactFunctionManager:
         hazards = []
         if impact_function is None:
             for impact_function in self.impact_functions:
-                add_to_list(hazards, impact_function.Metadata.get_hazards())
+                add_to_list(hazards, impact_function.metadata().get_hazards())
 
         else:
             # noinspection PyUnresolvedReferences
-            hazards = impact_function.Metadata.get_hazards()
+            hazards = impact_function.metadata().get_hazards()
 
         # make it sorted
         if ascending:
@@ -321,9 +317,9 @@ class ImpactFunctionManager:
         """
         impact_functions_metadata = []
         for impact_function in self.impact_functions:
-            if impact_function.Metadata.has_hazard(hazard):
+            if impact_function.metadata().has_hazard(hazard):
                 impact_functions_metadata.append(
-                    impact_function.Metadata.as_dict())
+                    impact_function.metadata().as_dict())
 
         return impact_functions_metadata
 
@@ -340,9 +336,9 @@ class ImpactFunctionManager:
         """
         impact_functions_metadata = []
         for impact_function in self.impact_functions:
-            if impact_function.Metadata.has_hazard_id(hazard_id):
+            if impact_function.metadata().has_hazard_id(hazard_id):
                 impact_functions_metadata.append(
-                    impact_function.Metadata.as_dict())
+                    impact_function.metadata().as_dict())
 
         return impact_functions_metadata
 
@@ -367,11 +363,11 @@ class ImpactFunctionManager:
         if impact_function is None:
             for impact_function in self.impact_functions:
                 add_to_list(
-                    exposures, impact_function.Metadata.get_exposures())
+                    exposures, impact_function.metadata().get_exposures())
 
         else:
             # noinspection PyUnresolvedReferences
-            exposures = impact_function.Metadata.get_exposures()
+            exposures = impact_function.metadata().get_exposures()
 
         # make it sorted
         if ascending:
@@ -392,9 +388,9 @@ class ImpactFunctionManager:
         """
         impact_functions_metadata = []
         for impact_function in self.impact_functions:
-            if impact_function.Metadata.has_exposure(exposure):
+            if impact_function.metadata().has_exposure(exposure):
                 impact_functions_metadata.append(
-                    impact_function.Metadata.as_dict())
+                    impact_function.metadata().as_dict())
 
         return impact_functions_metadata
 
@@ -411,9 +407,9 @@ class ImpactFunctionManager:
         """
         impact_functions_metadata = []
         for impact_function in self.impact_functions:
-            if impact_function.Metadata.has_exposure_id(exposure_id):
+            if impact_function.metadata().has_exposure_id(exposure_id):
                 impact_functions_metadata.append(
-                    impact_function.Metadata.as_dict())
+                    impact_function.metadata().as_dict())
 
         return impact_functions_metadata
 
