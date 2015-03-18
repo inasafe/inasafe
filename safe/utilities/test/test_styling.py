@@ -1,4 +1,4 @@
-    # coding=utf-8
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
  **Styling Tests.**
