@@ -39,7 +39,7 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
 
     @property
     def function_type(self):
-        """Property for the type of impact function ('legacy' or 'qgis2.0')."""
+        """Property for the type of impact function ('old-style' or 'qgis2.0')."""
         return 'qgis2.0'
 
     def get_function_type(self):

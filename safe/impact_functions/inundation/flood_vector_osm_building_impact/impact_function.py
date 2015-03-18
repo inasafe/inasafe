@@ -54,7 +54,7 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
 
     @property
     def function_type(self):
-        """Property for the type of impact function ('legacy' or 'qgis2')."""
+        """Property for the type of impact function ('old-style' or 'qgis2')."""
         return 'old-style'
 
     def prepare(self, layers=None):
