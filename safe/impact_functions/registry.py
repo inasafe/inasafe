@@ -33,6 +33,10 @@ class Registry(object):
         return cls._instance
 
     @classmethod
+    def clear(cls):
+        cls._impact_functions = []
+
+    @classmethod
     def register(cls, impact_function):
         """Register an impact function to the Registry."""
         if impact_function not in cls._impact_functions:
@@ -114,7 +118,7 @@ class Registry(object):
                         keyword.get('unit') not in units):
                     requirement_met = False
                     continue
-                if keyword.get('layertype') not in layer_types:
+                if keyword.get('layer_type') not in layer_types:
                     requirement_met = False
                     continue
                 if keyword.get('data_type') not in data_types:

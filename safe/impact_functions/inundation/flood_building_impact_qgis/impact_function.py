@@ -42,6 +42,10 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
         """Property for the type of impact function ('legacy' or 'qgis2.0')."""
         return 'qgis2.0'
 
+    def get_function_type(self):
+        """Deprecated. Will be replaced by function_type property"""
+        return 'qgis2.0'
+
     def prepare(self, layers=None):
         """Prepare this impact function for running the analysis"""
         super(FloodNativePolygonExperimentalFunction, self).prepare()
@@ -50,7 +54,7 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
             self.hazard = get_hazard_layer(layers)
             self.exposure = get_exposure_layer(layers)
 
-    def method_name(self, building_count, buildings_by_type, flooded_count,
+    def _tabulate(self, building_count, buildings_by_type, flooded_count,
                     question):
         table_body = [
             question,
@@ -76,10 +80,10 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
         """
         self.prepare(layers)
 
-        target_field = self.parameters['target_field'].value
-        building_type_field = self.parameters['building_type_field'].value
-        affected_field = self.parameters['affected_field'].value
-        affected_value = self.parameters['affected_value'].value
+        target_field = self.parameters['target_field']
+        building_type_field = self.parameters['building_type_field']
+        affected_field = self.parameters['affected_field']
+        affected_value = self.parameters['affected_value']
 
         # Extract data
         H = self.hazard    # Flood
@@ -195,7 +199,7 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
                 flooded_count += 1
                 buildings_by_type[building_type]['flooded'] += 1
 
-        table_body = self.method_name(building_count, buildings_by_type,
+        table_body = self._tabulate(building_count, buildings_by_type,
                                       flooded_count, question)
 
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -218,6 +222,9 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
             keywords={
                 'impact_summary': impact_summary,
                 'map_title': map_title,
-                'target_field': target_field},
+                'target_field': target_field,
+                'buildings_total': building_count,
+                'buildings_affected': flooded_count},
             style_info=style_info)
+        self._impact = building_layer
         return building_layer

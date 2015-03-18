@@ -994,10 +994,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         hazard_keywords = self.keyword_io.read_keywords(hazard_layer)
         # We need to add the layer type to the returned keywords
         if hazard_layer.type() == QgsMapLayer.VectorLayer:
-            hazard_keywords['layertype'] = 'vector'
+            hazard_keywords['layer_type'] = 'vector'
             hazard_keywords['data_type'] = vector_geometry_string(hazard_layer)
         elif hazard_layer.type() == QgsMapLayer.RasterLayer:
-            hazard_keywords['layertype'] = 'raster'
+            hazard_keywords['layer_type'] = 'raster'
             if hazard_keywords['data_type'] is None:
                 hazard_keywords['data_type'] = 'continuous'
 
@@ -1005,11 +1005,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
         # We need to add the layer type to the returned keywords
         if exposure_layer.type() == QgsMapLayer.VectorLayer:
-            exposure_keywords['layertype'] = 'vector'
+            exposure_keywords['layer_type'] = 'vector'
             exposure_keywords['data_type'] = vector_geometry_string(
                 exposure_layer)
         elif exposure_layer.type() == QgsMapLayer.RasterLayer:
-            exposure_keywords['layertype'] = 'raster'
+            exposure_keywords['layer_type'] = 'raster'
             if exposure_keywords['data_type'] is None:
                 exposure_keywords['data_type'] = 'continuous'
 
