@@ -120,31 +120,6 @@ def population_rounding(number):
     return population_rounding_full(number)[0]
 
 
-def get_plugins(name=None):
-    """Retrieve a list of plugins that match the name you pass.
-
-       Or all of them if no name is passed.
-    """
-    impact_functions = ImpactFunctionManager().get_impact_functions()
-    plugins_dict = dict([(f.__name__, f) for f in
-                         impact_functions])
-    if name is None:
-        return plugins_dict
-
-    if isinstance(name, basestring):
-        function = plugins_dict[name]
-        if function is None:
-            msg = ('No plugin named "%s" was found. '
-                   'List of available plugins is: \n%s'
-                   % (name, ',\n '.join(plugins_dict.keys())))
-            raise RuntimeError(msg)
-        return [{function.__name__: function}]
-    else:
-        msg = ('get_plugins expects either no parameters or a string '
-               'with the name of the plugin, you passed: '
-               '%s which is a %s' % (name, type(name)))
-        raise Exception(msg)
-
 # -------------------------------
 # Helpers for individual plugins
 # -------------------------------

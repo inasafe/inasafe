@@ -24,7 +24,6 @@ import logging
 from collections import OrderedDict
 
 from safe.impact_functions.core import (
-    get_plugins,
     aggregate,
     convert_to_old_keywords,
     population_rounding_full,
@@ -337,19 +336,6 @@ class TestCore(unittest.TestCase):
         self.vector_path = os.path.join(TESTDATA, 'Padang_WGS84.shp')
         self.raster_shake_path = os.path.join(
             HAZDATA, 'Shakemap_Padang_2009.asc')
-
-    def test_get_plugin_list(self):
-        """It is possible to retrieve the list of functions."""
-        plugin_list = get_plugins()
-        message = 'No plugins were found, not even the built-in ones'
-        assert len(plugin_list) > 0, message
-
-    def test_single_get_plugins(self):
-        """Named plugin can be retrieved"""
-        plugin_name = 'ITBFatalityFunction'
-        plugin_list = get_plugins(plugin_name)
-        message = 'No plugins were found matching %s' % plugin_name
-        assert len(plugin_list) > 0, message
 
     def test_population_rounding(self):
         """Test for population_rounding_full function."""

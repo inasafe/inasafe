@@ -31,7 +31,8 @@ from safe.test.utilities import get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions.core import get_function_title, get_plugins
+from safe.impact_functions.core import get_function_title
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 
 class SafeTranslationsTest(unittest.TestCase):
@@ -50,11 +51,11 @@ class SafeTranslationsTest(unittest.TestCase):
     # Skipped because it's not easy to unload qt translation
     def Xtest_dynamic_translation_function_title(self):
         """Test for dynamic translations for function title."""
-        plugins_dict = get_plugins()
+        impact_functions = ImpactFunctionManager().registry.filter()
         plugin_name = 'Volcano Building Impact'
-        message = '%s not found in %s' % (plugin_name, str(plugins_dict))
-        self.assertIn(plugin_name, plugins_dict, message)
-        function = plugins_dict[plugin_name]
+        message = '%s not found in %s' % (plugin_name, str(impact_functions))
+        self.assertIn(plugin_name, impact_functions, message)
+        function = impact_functions[plugin_name]
 
         # English
         function_title = get_function_title(function)

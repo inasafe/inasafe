@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from safe.definitions import hazard_definition, exposure_definition
-from safe.common.utilities import add_to_list, convert_to_list, project_list
+from safe.common.utilities import add_to_list
 from safe.impact_functions.registry import Registry
 
 

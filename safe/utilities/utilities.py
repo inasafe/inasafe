@@ -36,7 +36,6 @@ from safe.common.exceptions import (
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
 from safe import messaging as m
-from safe.impact_functions.core import get_plugins
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.unicode import get_unicode
