@@ -25,9 +25,6 @@ from collections import OrderedDict
 
 from safe.impact_functions.core import (
     get_plugins,
-    requirements_collect,
-    requirement_check,
-    get_function_title,
     aggregate,
     convert_to_old_keywords,
     population_rounding_full,
@@ -36,8 +33,6 @@ from safe.impact_functions.core import (
 from safe.common.resource_parameter import ResourceParameter
 from safe.storage.core import read_layer
 from safe.defaults import default_minimum_needs
-from safe.impact_functions.utilities import (
-    admissible_plugins_to_str)
 from safe.definitions import converter_dict
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
@@ -356,37 +351,6 @@ class TestCore(unittest.TestCase):
         message = 'No plugins were found matching %s' % plugin_name
         assert len(plugin_list) > 0, message
 
-    def test_get_plugins(self):
-        """Plugins can be collected."""
-        os.environ['LANG'] = 'en'
-        plugin_list = get_plugins()
-        self.assertGreater(len(plugin_list), 0)
-
-        # Obtain string representation
-        string_rep = admissible_plugins_to_str(plugin_list)
-
-        # Check each plugin
-        for plugin in plugin_list.values():
-            # Check that it's name appears in string representation
-            title = get_function_title(plugin)
-            message = (
-                'Expected title %s in string representation: %s'
-                % (title, string_rep))
-            assert title in string_rep, message
-
-            # Check that every plugin has a requires line
-            requirements = requirements_collect(plugin)
-            message = 'There were no requirements in plugin %s' % plugin
-            assert (len(requirements) > 0), message
-
-            for required_string in requirements:
-                message = 'All plugins should return True or False'
-                assert (requirement_check(
-                    {'category': 'hazard',
-                     'subcategory': 'earthquake',
-                     'layerType': 'raster'},
-                    required_string) in [True, False]), message
-
     def test_population_rounding(self):
         """Test for population_rounding_full function."""
         # rounding up
@@ -441,34 +405,6 @@ class TestCore(unittest.TestCase):
         self.assertEqual(total_needs['daily'][0]['name'], 'Rice')
         self.assertEqual(total_needs['daily'][0]['amount'], 5)
         self.assertEqual(total_needs['daily'][0]['table name'], 'Rice [kg]')
-
-    def test_basic_plugin_requirements(self):
-        """Test requirements_collect."""
-        requirements = requirements_collect(BasicFunctionCore)
-        valid_return = ['category=="test_cat1"', 'unit=="MMI"']
-        for ret1, ret2 in zip(valid_return, requirements):
-            self.assertEqual(ret1, ret2, "Error in requirements extraction")
-
-
-    def test_basic_requirements_check(self):
-        """Test requirement_check."""
-        requirements = requirements_collect(BasicFunctionCore)
-        params = {'category': 'test_cat2'}
-        for line in requirements:
-            check = requirement_check(params, line)
-            self.assertFalse(check)
-
-        line = "unit='MMI'"
-        params = {'category': 'test_cat2'}
-        msg = 'Malformed statement (logged)'
-        self.assertFalse(requirement_check(params, line), msg)
-
-    def test_keywords_error(self):
-        """Handling of reserved python keywords """
-        line = "unit=='MMI'"
-        params = {'class': 'myclass'}
-        msg = 'Reserved keyword in statement (logged)'
-        self.assertFalse(requirement_check(params, line), msg)
 
     def test_default_needs(self):
         """default calculated needs are as expected
