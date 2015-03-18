@@ -841,3 +841,15 @@ def is_subset(element, container):
         else:
             return element == container
     return False
+
+
+def convert_to_list(var):
+    """Convert a variable to list.
+
+    :param var: The variable to be converted.
+    """
+    return var if isinstance(var, list) else [var]
+
+
+def project_list(the_list, field):
+    return [s[field] for s in the_list]

@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import unittest
 
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.registry import Registry
 from safe.impact_functions.inundation.flood_vector_osm_building_impact.\
     impact_function import FloodVectorBuildingImpactFunction
@@ -39,12 +40,12 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
-        self.registry = Registry()
-        self.registry.clear()
-        self.registry.register(FloodVectorBuildingImpactFunction)
+        registry = Registry()
+        registry.register(FloodVectorBuildingImpactFunction)
 
     def test_run(self):
-        function = self.registry.get('FloodVectorBuildingImpactFunction')
+        impact_function = ImpactFunctionManager().get(
+            'FloodVectorBuildingImpactFunction')
 
         building = 'test_flood_building_impact_exposure.shp'
         flood_data = 'test_flood_building_impact_hazard.shp'
@@ -54,18 +55,18 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_filename)
         exposure_layer = read_layer(exposure_filename)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
-        function.extent = [10, 10, 20, 20]
-        function.run()
-        impact_layer = function.impact
+        impact_function.hazard = hazard_layer
+        impact_function.exposure = exposure_layer
+        impact_function.extent = [10, 10, 20, 20]
+        impact_function.run()
+        impact_layer = impact_function.impact
 
         # Check the question
         expected_question = ('In the event of a flood in jakarta how many osm '
                              'building polygons might be flooded')
         message = 'The question should be %s, but it returns %s' % (
-            expected_question, function.question())
-        self.assertEqual(expected_question, function.question(), message)
+            expected_question, impact_function.question())
+        self.assertEqual(expected_question, impact_function.question(), message)
 
         # Extract calculated result
         keywords = impact_layer.get_keywords()
@@ -88,7 +89,7 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
             'layer_constraints': layer_vector_polygon
         }
 
-        impact_functions = self.registry.filter(
+        impact_functions = ImpactFunctionManager().registry.filter(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)

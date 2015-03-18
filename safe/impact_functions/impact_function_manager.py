@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from safe.definitions import hazard_definition, exposure_definition
-from safe.common.utilities import add_to_list
+from safe.common.utilities import add_to_list, convert_to_list, project_list
 from safe.impact_functions.registry import Registry
 
 
@@ -31,28 +31,44 @@ class ImpactFunctionManager(object):
     def __init__(self):
         """Constructor."""
         # attributes
-        self.impact_functions = []
-        self.load_impact_functions()
+        self.registry = Registry()
 
-    # noinspection PyUnresolvedReferences
-    def load_impact_functions(self):
-        """Load all impact functions.
+    def get(self, name):
+        """Return an instance of an impact function given its name.
+
+        :param name: the name of IF class
+        :type name: str
+
+        :return: impact function instance
+        :rtype: safe.impact_functions.base.ImpactFunction.instance()
+        """
+        return self.registry.get(name)
+
+    def get_class(self, name):
+        """Return the class of an impact function given its name.
+
+        :param name: the name of IF class
+        :type name: str
+
+        :return: impact function class
+        :rtype: safe.impact_functions.base.ImpactFunction
+        """
+        return self.registry.get_class(name)
+
+    def get_impact_functions(
+            self, hazard_keywords=None, exposure_keywords=None):
+        """Get available impact functions from hazard and exposure keywords.
 
         Disabled impact function will not be loaded.
+
+        :param hazard_keywords: The keywords of the hazard.
+        :type hazard_keywords: dict
+
+        :param exposure_keywords: The keywords of the exposure.
+        :type exposure_keywords: dict
         """
-        result = []
-        impact_functions = Registry().filter()
-        for impact_function in impact_functions:
-            try:
-                is_disabled = impact_function.metadata().is_disabled()
-                is_valid, reason = impact_function.metadata().is_valid()
-                if not is_disabled and is_valid:
-                    result.append(impact_function)
-                if not is_valid:
-                    print impact_function, reason
-            except AttributeError:
-                continue
-        self.impact_functions = result
+        return self.registry.filter_by_keyword_string(
+            hazard_keywords, exposure_keywords)
 
     def allowed_subcategories(self, category=None):
         """Determine allowed subcategories, optionally filtered by category.
@@ -66,7 +82,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         result = []
-        for impact_function in self.impact_functions:
+        for impact_function in self.registry.filter():
             my_allowed_subcategories = impact_function.metadata()\
                 .allowed_subcategories(category)
             result = add_to_list(result, my_allowed_subcategories)
@@ -89,7 +105,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         result = []
-        for impact_function in self.impact_functions:
+        for impact_function in self.registry.filter():
             my_allowed_data_types = impact_function.metadata() \
                 .allowed_data_types(subcategory)
             result = add_to_list(result, my_allowed_data_types)
@@ -116,7 +132,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         result = []
-        for impact_function in self.impact_functions:
+        for impact_function in self.registry.filter():
             my_allowed_units = impact_function.metadata()\
                 .allowed_units(subcategory, data_type)
             result = add_to_list(result, my_allowed_units)
@@ -168,7 +184,7 @@ class ImpactFunctionManager(object):
         :rtype: dict
         """
         result = []
-        for impact_function in self.impact_functions:
+        for impact_function in self.registry.filter():
             my_units = impact_function.metadata()\
                 .units_for_layer(subcategory, layer_type, data_type)
             result = add_to_list(result, my_units)
@@ -215,7 +231,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         result = []
-        for impact_function in self.impact_functions:
+        for impact_function in self.registry.filter():
             categories = impact_function.metadata()\
                 .categories_for_layer(layer_type, data_type)
             result = add_to_list(result, categories)
@@ -266,7 +282,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         result = []
-        for impact_function in self.impact_functions:
+        for impact_function in self.registry.filter():
             subcategories = impact_function.metadata()\
                 .subcategories_for_layer(category, layer_type, data_type)
             result = add_to_list(result, subcategories)
@@ -291,7 +307,7 @@ class ImpactFunctionManager(object):
 
         hazards = []
         if impact_function is None:
-            for impact_function in self.impact_functions:
+            for impact_function in self.registry.filter():
                 add_to_list(hazards, impact_function.metadata().get_hazards())
 
         else:
@@ -316,7 +332,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         impact_functions_metadata = []
-        for impact_function in self.impact_functions:
+        for impact_function in self.registry.filter():
             if impact_function.metadata().has_hazard(hazard):
                 impact_functions_metadata.append(
                     impact_function.metadata().as_dict())
@@ -335,7 +351,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         impact_functions_metadata = []
-        for impact_function in self.impact_functions:
+        for impact_function in self.registry.filter():
             if impact_function.metadata().has_hazard_id(hazard_id):
                 impact_functions_metadata.append(
                     impact_function.metadata().as_dict())
@@ -361,7 +377,7 @@ class ImpactFunctionManager(object):
 
         exposures = []
         if impact_function is None:
-            for impact_function in self.impact_functions:
+            for impact_function in self.registry.filter():
                 add_to_list(
                     exposures, impact_function.metadata().get_exposures())
 
@@ -387,7 +403,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         impact_functions_metadata = []
-        for impact_function in self.impact_functions:
+        for impact_function in self.registry.filter():
             if impact_function.metadata().has_exposure(exposure):
                 impact_functions_metadata.append(
                     impact_function.metadata().as_dict())
@@ -406,7 +422,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         impact_functions_metadata = []
-        for impact_function in self.impact_functions:
+        for impact_function in self.registry.filter():
             if impact_function.metadata().has_exposure_id(exposure_id):
                 impact_functions_metadata.append(
                     impact_function.metadata().as_dict())

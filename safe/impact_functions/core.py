@@ -17,8 +17,7 @@ from safe.gis.polygon import inside_polygon
 from safe.utilities.i18n import tr
 from safe.defaults import default_minimum_needs
 from utilities import get_function_title
-from safe.definitions import converter_dict
-from safe.impact_functions.registry import Registry
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -126,14 +125,14 @@ def get_plugins(name=None):
 
        Or all of them if no name is passed.
     """
-    registry = Registry()
-    plugins_dict = dict([(f.metadata().as_dict()['name'], f) for f in
-                         registry.filter()])
+    impact_functions = ImpactFunctionManager().get_impact_functions()
+    plugins_dict = dict([(f.__name__, f) for f in
+                         impact_functions])
     if name is None:
         return plugins_dict
 
     if isinstance(name, basestring):
-        function = registry.get_class(name)
+        function = plugins_dict[name]
         if function is None:
             msg = ('No plugin named "%s" was found. '
                    'List of available plugins is: \n%s'
@@ -255,48 +254,6 @@ def requirement_check(params, require_str, verbose=False):
         # LOGGER.error(msg)
 
     return False
-
-
-def requirements_met(requirements, params):  # , verbose=False):
-    """Checks the plugin can run with a given layer.
-
-       Based on the requirements specified in the doc string.
-
-       Returns:
-           True:  if there are no requirements or they are all met.
-           False: if it has requirements and none of them are met.
-    """
-    if len(requirements) == 0:
-        # If the function has no requirements, then they are all met.
-        return True
-
-    for requires in requirements:
-        if requirement_check(params, requires):
-            return True
-
-    # If none of the conditions above is met, return False.
-    return False
-
-
-def compatible_layers(func, layer_descriptors):
-    """Fetches all the layers that match the plugin requirements.
-
-    Input
-        func: ? (FIXME(Ole): Ted, can you fill in here?
-        layer_descriptor: Layer names and meta data (keywords, type, etc)
-
-    Output:
-        Array of compatible layers, can be an empty list.
-    """
-
-    layers = []
-    requirements = requirements_collect(func)
-
-    for layer_name, layer_params in layer_descriptors:
-        if requirements_met(requirements, layer_params):
-            layers.append(layer_name)
-
-    return layers
 
 
 # -------------------------------

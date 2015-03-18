@@ -42,7 +42,7 @@ from safe.common.exceptions import (
 from safe.utilities.resources import resources_path
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import is_raster_layer
-
+from safe.impact_functions import register_impact_functions
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -66,7 +66,8 @@ class Plugin(object):
             plugin.
         :type iface: QGisAppInterface
         """
-
+        # Register all the impact functions
+        register_impact_functions()
         # Save reference to the QGIS interface
         self.iface = iface
         self.dock_widget = None

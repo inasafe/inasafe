@@ -96,7 +96,7 @@ from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
 from safe.utilities.unicode import get_string
-from safe.impact_functions.registry import Registry
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -1011,9 +1011,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 exposure_keywords['data_type'] = 'continuous'
 
         # Find out which functions can be used with these layers
-        impact_function_registry = Registry()
         try:
-            functions = impact_function_registry.filter_by_keyword_string(
+            functions = ImpactFunctionManager().get_impact_functions(
                 hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions
             for function in functions:

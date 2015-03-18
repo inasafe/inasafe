@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.common.utilities import is_subset
+from safe.common.utilities import is_subset, convert_to_list, project_list
 
 
 class Registry(object):
@@ -21,6 +21,9 @@ class Registry(object):
     We will use a singleton pattern to ensure that there is only
     one canonical registry. The registry can be used by impact functions
     to register themselves and their GUID's.
+
+    To get the impact functions, please do not use directly from this Registry,
+    but rather user ImpactFunctionManager.
     """
 
     _instance = None
@@ -41,7 +44,9 @@ class Registry(object):
         :type impact_function: ImpactFunction.
         """
         is_disabled = impact_function.metadata().is_disabled()
-        if not is_disabled and impact_function not in cls._impact_functions:
+        is_valid, reason = impact_function.metadata().is_valid()
+        if not is_disabled and is_valid and impact_function not in \
+                cls._impact_functions:
             cls._impact_functions.append(impact_function)
 
     @classmethod
@@ -83,68 +88,6 @@ class Registry(object):
                 return impact_function
         raise Exception('Impact function with the class name %s not found' %
                         name)
-
-    @classmethod
-    def filter_by_keyword_string(cls, hazard_keywords, exposure_keywords):
-        """Filter registered impact functions by keywords string.
-
-        :param hazard_keywords: The keywords of the hazard.
-        :type hazard_keywords: dict
-
-        :param exposure_keywords: The keywords of the exposure.
-        :type exposure_keywords: dict
-        """
-
-        if hazard_keywords is None and exposure_keywords is None:
-            return cls._impact_functions
-
-        impact_functions = cls._impact_functions
-        categories = ['hazard', 'exposure']
-        keywords = {'hazard': hazard_keywords, 'exposure': exposure_keywords}
-        filtered = []
-
-        for impact_function in impact_functions:
-            requirement_met = True
-            for category in categories:
-                f_category = impact_function.metadata().as_dict()[
-                    'categories'][category]
-                subcategories = f_category['subcategories']
-                subcategories = cls.project_list(
-                    cls.convert_to_list(subcategories), 'id')
-                units = f_category['units']
-                units = cls.project_list(cls.convert_to_list(units), 'id')
-                layer_constraints = cls.convert_to_list(
-                    f_category['layer_constraints'])
-                layer_types = cls.project_list(layer_constraints, 'layer_type')
-                data_types = cls.project_list(layer_constraints, 'data_type')
-
-                keyword = keywords[category]
-                if keyword.get('subcategory') not in subcategories:
-                    requirement_met = False
-                    continue
-                if (keyword.get('unit') is not None and
-                        keyword.get('unit') not in units):
-                    requirement_met = False
-                    continue
-                if keyword.get('layer_type') not in layer_types:
-                    requirement_met = False
-                    continue
-                if keyword.get('data_type') not in data_types:
-                    requirement_met = False
-                    continue
-
-            if requirement_met and impact_function not in filtered:
-                filtered.append(impact_function)
-
-        return filtered
-
-    @classmethod
-    def convert_to_list(cls, var):
-        return var if isinstance(var, list) else [var]
-
-    @classmethod
-    def project_list(cls, the_list, field):
-        return [s[field] for s in the_list]
 
     @classmethod
     def filter(cls, hazard_keywords=None, exposure_keywords=None):
@@ -235,3 +178,68 @@ class Registry(object):
             filtered_impact_functions.append(impact_function)
 
         return filtered_impact_functions
+
+    @classmethod
+    def filter_by_keyword_string(
+            cls, hazard_keywords=None, exposure_keywords=None):
+        """Get available impact functions from hazard and exposure keywords.
+
+        Disabled impact function will not be loaded.
+
+        :param hazard_keywords: The keywords of the hazard.
+        :type hazard_keywords: dict
+
+        :param exposure_keywords: The keywords of the exposure.
+        :type exposure_keywords: dict
+        """
+        if hazard_keywords is None and exposure_keywords is None:
+            return cls._impact_functions
+
+        impact_functions = []
+        categories = []
+        keywords = {}
+        if hazard_keywords is not None:
+            categories.append('hazard')
+            keywords['hazard'] = hazard_keywords
+        if exposure_keywords is not None:
+            categories.append('exposure')
+            keywords['exposure'] = exposure_keywords
+
+        for impact_function in cls._impact_functions:
+            requirement_met = True
+            for category in categories:
+                f_category = impact_function.metadata().as_dict()[
+                    'categories'][category]
+
+                subcategories = f_category['subcategories']
+                subcategories = project_list(
+                    convert_to_list(subcategories), 'id')
+
+                units = f_category['units']
+                units = project_list(convert_to_list(units), 'id')
+
+                layer_constraints = convert_to_list(
+                    f_category['layer_constraints'])
+
+                layer_types = project_list(layer_constraints, 'layer_type')
+                data_types = project_list(layer_constraints, 'data_type')
+
+                keyword = keywords[category]
+                if keyword.get('subcategory') not in subcategories:
+                    requirement_met = False
+                    continue
+                if (keyword.get('unit') is not None and keyword.get('unit')
+                        not in units):
+                    requirement_met = False
+                    continue
+                if keyword.get('layer_type') not in layer_types:
+                    requirement_met = False
+                    continue
+                if keyword.get('data_type') not in data_types:
+                    requirement_met = False
+                    continue
+
+            if requirement_met and impact_function not in impact_functions:
+                impact_functions.append(impact_function)
+
+        return impact_functions

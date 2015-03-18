@@ -15,8 +15,7 @@ from safe.impact_functions.registry import Registry
 from safe.impact_functions.inundation.flood_vector_osm_building_impact\
     .impact_function import FloodVectorBuildingImpactFunction
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
-    .impact_function import \
-    FloodNativePolygonExperimentalFunction
+    .impact_function import FloodNativePolygonExperimentalFunction
 
 
 def register_impact_functions():
@@ -24,6 +23,3 @@ def register_impact_functions():
     impact_function_registry = Registry()
     impact_function_registry.register(FloodVectorBuildingImpactFunction)
     impact_function_registry.register(FloodNativePolygonExperimentalFunction)
-
-
-register_impact_functions()

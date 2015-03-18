@@ -21,10 +21,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import unittest
 
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.registry import Registry
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
     .impact_function import FloodNativePolygonExperimentalFunction
-from safe.storage.core import read_layer
 from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer
 from safe.definitions import (
     unit_wetdry,
@@ -44,7 +44,8 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
         self.registry.register(FloodNativePolygonExperimentalFunction)
 
     def test_run(self):
-        function = self.registry.get('FloodNativePolygonExperimentalFunction')
+        function = ImpactFunctionManager().get(
+            'FloodNativePolygonExperimentalFunction')
 
         building = 'test_flood_building_impact_exposure'
         flood_data = 'test_flood_building_impact_hazard'
@@ -72,7 +73,7 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
         # Check the question
         expected_question = ('In the event of a flood in jakarta how many osm '
                              'building polygons might be flooded ('
-                             'experimental)')
+                             'qgis)')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, function.question())
         self.assertEqual(expected_question, function.question(), message)
@@ -98,7 +99,7 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
             'layer_constraints': layer_vector_polygon
         }
 
-        impact_functions = self.registry.filter(
+        impact_functions = ImpactFunctionManager().registry.filter(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)

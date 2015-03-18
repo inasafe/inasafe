@@ -27,7 +27,6 @@ from safe.impact_functions.core import (
     get_plugins,
     requirements_collect,
     requirement_check,
-    requirements_met,
     get_function_title,
     aggregate,
     convert_to_old_keywords,
@@ -450,14 +449,6 @@ class TestCore(unittest.TestCase):
         for ret1, ret2 in zip(valid_return, requirements):
             self.assertEqual(ret1, ret2, "Error in requirements extraction")
 
-    def test_basic_plugin_requirements_met(self):
-        """Test requirements_met"""
-        requirements = requirements_collect(BasicFunctionCore)
-        params = {'category': 'test_cat1', 'unit': 'MMI'}
-        self.assertTrue(requirements_met(requirements, params))
-
-        params = {'category': 'test_cat2', 'unit': 'mmi2'}
-        self.assertFalse(requirements_met(requirements, params))
 
     def test_basic_requirements_check(self):
         """Test requirement_check."""
