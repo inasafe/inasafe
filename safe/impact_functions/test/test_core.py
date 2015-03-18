@@ -33,8 +33,7 @@ from safe.impact_functions.core import (
     convert_to_old_keywords,
     population_rounding_full,
     population_rounding,
-    evacuated_population_needs,
-    remove_impact_function)
+    evacuated_population_needs)
 from safe.common.resource_parameter import ResourceParameter
 from safe.storage.core import read_layer
 from safe.defaults import default_minimum_needs
@@ -601,14 +600,6 @@ class TestCore(unittest.TestCase):
             expected_keywords, new_keywords)
         self.assertDictEqual(new_keywords, expected_keywords, msg)
 
-    @classmethod
-    def tearDownClass(cls):
-        remove_impact_function(BasicFunctionCore)
-        remove_impact_function(F1)
-        remove_impact_function(F2)
-        remove_impact_function(F3)
-        remove_impact_function(F4)
-        remove_impact_function(SyntaxErrorFunction)
 
 if __name__ == '__main__':
     unittest.main()

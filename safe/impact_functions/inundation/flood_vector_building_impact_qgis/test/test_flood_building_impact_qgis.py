@@ -22,7 +22,7 @@ import os
 import unittest
 
 from safe.impact_functions.registry import Registry
-from safe.impact_functions.inundation.flood_building_impact_qgis\
+from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
     .impact_function import FloodNativePolygonExperimentalFunction
 from safe.storage.core import read_layer
 from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer

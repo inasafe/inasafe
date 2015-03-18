@@ -257,10 +257,9 @@ class ImpactFunctionMetadata(object):
     def is_disabled(cls):
         """Determine if an impact function is disable.
 
-        Usually is used for checking whether a impact function is disabled
-        or not. If there is not disabled keyword in the metadata, return
-        False. If there is not Metadata inner class in the function, return
-        True
+        Usually is used for checking whether an impact function is disabled
+        or not. If there is no disabled keyword in the metadata, return
+        False.
 
         :returns: Return True if the metadata disabled value is True.
         :rtype: bool
@@ -269,7 +268,7 @@ class ImpactFunctionMetadata(object):
             metadata_dict = cls.as_dict()
             return metadata_dict.get('disabled', False)
         except AttributeError:
-            return True
+            return False
 
     @classmethod
     def is_valid(cls):

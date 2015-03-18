@@ -22,7 +22,7 @@ from safe.common.utilities import add_to_list
 from safe.impact_functions.registry import Registry
 
 
-class ImpactFunctionManager:
+class ImpactFunctionManager(object):
     """Class for managing metadata for all impact function.
 
     .. versionadded:: 2.1

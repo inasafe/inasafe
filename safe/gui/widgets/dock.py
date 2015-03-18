@@ -63,7 +63,6 @@ from safe.utilities.styling import (
     set_vector_graduated_style,
     set_vector_categorized_style)
 from safe.utilities.impact_calculator import ImpactCalculator
-from safe.impact_functions import load_plugins
 from safe.impact_functions.core import get_function_title
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
@@ -138,8 +137,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
-        # Ensure that all impact functions are loaded
-        load_plugins()
         self.pbnShowQuestion.setVisible(False)
         self.enable_messaging()
 

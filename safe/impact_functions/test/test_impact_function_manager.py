@@ -26,7 +26,7 @@ from safe.impact_functions.inundation.flood_raster_OSM_building_impact import (
     FloodRasterBuildingImpactFunction)
 from safe.impact_functions.inundation.flood_vector_OSM_building_impact import (
     FloodVectorBuildingImpactFunction)
-from safe.impact_functions.inundation.flood_building_impact_qgis import (
+from safe.impact_functions.inundation.flood_vector_building_impact_qgis import (
     FloodNativePolygonExperimentalFunction)
 from safe.impact_functions.volcanic.volcano_polygon_building_impact import (
     VolcanoPolygonBuildingImpact)

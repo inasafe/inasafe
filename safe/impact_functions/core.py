@@ -147,40 +147,6 @@ def get_plugins(name=None):
         raise Exception(msg)
 
 
-def get_plugin(name):
-    """Get plugin that matches given name
-
-    This is just a wrapper around get_plugins to simplify
-    the overly complicated way of extracting the function
-    """
-
-    plugin_list = get_plugins(name)
-    impact_function = plugin_list[0].items()[0][1]
-
-    return impact_function
-
-
-def unload_plugins():
-    """Unload all loaded plugins.
-
-    .. note:: Added in InaSAFE 1.2.
-    """
-    for p in FunctionProvider.plugins:
-        del p
-
-
-def remove_impact_function(impact_function):
-    """Remove an impact_function from FunctionProvider
-
-    :param impact_function: An impact function that want to be removed
-    :type impact_function: FunctionProvider
-
-    """
-    if impact_function in FunctionProvider.plugins:
-        FunctionProvider.plugins.remove(impact_function)
-    del impact_function
-
-
 def requirements_collect(func):
     """Collect the requirements from the plugin function doc
 

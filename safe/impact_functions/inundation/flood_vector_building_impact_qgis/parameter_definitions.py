@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Disaster risk tool by Australian Aid - Parameter definition for
-Flood Raster Impact on OSM Buildings
+Flood Vector on Building QGIS IF
 
 Contact : ole.moller.nielsen@gmail.com
 

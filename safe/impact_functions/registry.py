@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 from safe.common.utilities import is_subset
 
 
@@ -33,13 +34,14 @@ class Registry(object):
         return cls._instance
 
     @classmethod
-    def clear(cls):
-        cls._impact_functions = []
-
-    @classmethod
     def register(cls, impact_function):
-        """Register an impact function to the Registry."""
-        if impact_function not in cls._impact_functions:
+        """Register an impact function to the Registry.
+
+        :param impact_function: The impact function to register.
+        :type impact_function: ImpactFunction.
+        """
+        is_disabled = impact_function.metadata().is_disabled()
+        if not is_disabled and impact_function not in cls._impact_functions:
             cls._impact_functions.append(impact_function)
 
     @classmethod
@@ -48,6 +50,11 @@ class Registry(object):
         return [
             impact_function.metadata().as_dict()['name'] for impact_function in
             cls._impact_functions]
+
+    @classmethod
+    def clear(cls):
+        """Remove all registered impact functions in the registry."""
+        cls._impact_functions = []
 
     @classmethod
     def get(cls, name):
@@ -74,7 +81,8 @@ class Registry(object):
         for impact_function in cls._impact_functions:
             if impact_function.__name__ == name:
                 return impact_function
-        raise Exception('Impact function called %s not found' % name)
+        raise Exception('Impact function with the class name %s not found' %
+                        name)
 
     @classmethod
     def filter_by_keyword_string(cls, hazard_keywords, exposure_keywords):

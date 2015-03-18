@@ -26,11 +26,11 @@ from safe.utilities.i18n import tr
 
 
 class FloodNativePolygonMetadata(ImpactFunctionMetadata):
-    """Metadata for Flood Building Impact Function.
+    """Metadata for Flood Vector on Building Impact Function using QGIS.
 
     .. versionadded:: 2.1
 
-    We only need to re-implement get_metadata(), all other behaviours
+    We only need to re-implement as_dict(), all other behaviours
     are inherited from the abstract base class.
     """
 
@@ -48,8 +48,8 @@ class FloodNativePolygonMetadata(ImpactFunctionMetadata):
         dict_meta = {
             'id': 'FloodNativePolygonExperimentalFunction',
             'name': tr('Flood Native Polygon Experimental Function'),
-            'impact': tr('Be-flooded (experimental)'),
-            'title': tr('Be flooded (experimental)'),
+            'impact': tr('Be-flooded (QGIS)'),
+            'title': tr('Be flooded (QGIS)'),
             'author': 'Dmitry Kolesov',
             'date_implemented': 'N/A',
             'overview': tr('N/A'),
