@@ -11,13 +11,11 @@ import logging
 from math import ceil
 import numpy
 from collections import OrderedDict
-import keyword as python_keywords
 
 from safe.gis.polygon import inside_polygon
 from safe.utilities.i18n import tr
 from safe.defaults import default_minimum_needs
 from utilities import get_function_title
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 
 LOGGER = logging.getLogger('InaSAFE')

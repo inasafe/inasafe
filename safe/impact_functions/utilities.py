@@ -113,22 +113,6 @@ def is_duplicate_impact_function(impact_function):
     else:
         return False
 
-
-def function_name(impact_function):
-    """Return the name for the impact function.
-
-    It assume that the impact function is valid and has name in its metadata.
-
-    :param impact_function: An impact function.
-    :type impact_function: FunctionProvider
-
-    :returns: The name of the impact function.
-    :rtype: str
-    """
-    # noinspection PyUnresolvedReferences
-    return impact_function.Metadata.as_dict()['name']
-
-
 def get_function_title(impact_function):
     """Get title for impact function
 
