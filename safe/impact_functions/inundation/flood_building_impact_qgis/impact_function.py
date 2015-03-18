@@ -1,4 +1,16 @@
 # coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Vector Impact on
+Buildings using QGIS.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
@@ -20,17 +32,7 @@ from safe.common.exceptions import GetDataError
 
 class FloodNativePolygonExperimentalFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
-    """Simple experimental impact function for inundation (polygon-polygon).
-
-    :author Dmitry Kolesov
-    :rating 1
-    :param requires category=='hazard' and \
-                    subcategory=='flood' and \
-                    layertype=='vector'
-    :param requires category=='exposure' and \
-                    subcategory in ['structure'] and \
-                    layertype=='vector'
-    """
+    """Simple experimental impact function for inundation (polygon-polygon)."""
 
     _metadata = FloodNativePolygonMetadata
 
@@ -39,7 +41,7 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
 
     @property
     def function_type(self):
-        """Property for the type of impact function ('old-style' or 'qgis2.0')."""
+        """Type of the impact function ('old-style' or 'qgis2.0')."""
         return 'qgis2.0'
 
     def get_function_type(self):
@@ -80,20 +82,23 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
         """
         self.prepare(layers)
 
-        target_field = self.parameters['target_field']
+        # Set the target field in impact layer
+        target_field = 'INUNDATED'
+
+        # Get the IF parameters
         building_type_field = self.parameters['building_type_field']
         affected_field = self.parameters['affected_field']
         affected_value = self.parameters['affected_value']
 
         # Extract data
-        H = self.hazard    # Flood
-        E = self.exposure  # Roads
+        hazard_layer = self.hazard    # Flood
+        exposure_layer = self.exposure  # Roads
 
         question = get_question(
-            H.get_name(), E.get_name(), self)
+            hazard_layer.get_name(), exposure_layer.get_name(), self)
 
-        H = H.get_layer()
-        h_provider = H.dataProvider()
+        hazard_layer = hazard_layer.get_layer()
+        h_provider = hazard_layer.dataProvider()
         affected_field_index = h_provider.fieldNameIndex(affected_field)
         if affected_field_index == -1:
             message = tr('''Parameter "Affected Field"(='%s')
@@ -101,9 +106,9 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
                 attribute table of the hazard layer.''' % (affected_field, ))
             raise GetDataError(message)
 
-        E = E.get_layer()
-        srs = E.crs().toWkt()
-        e_provider = E.dataProvider()
+        exposure_layer = exposure_layer.get_layer()
+        srs = exposure_layer.crs().toWkt()
+        e_provider = exposure_layer.dataProvider()
         fields = e_provider.fields()
         # If target_field does not exist, add it:
         if fields.indexFromName(target_field) == -1:
@@ -136,7 +141,7 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
         if affected_field_type in ['Real', 'Integer']:
             affected_value = float(affected_value)
 
-        h_data = H.getFeatures(request)
+        h_data = hazard_layer.getFeatures(request)
         hazard_poly = None
         for mpolygon in h_data:
             attributes = mpolygon.attributes()
@@ -162,7 +167,7 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
                 (affected_value, ))
             raise GetDataError(message)
 
-        e_data = E.getFeatures(request)
+        e_data = exposure_layer.getFeatures(request)
         for feat in e_data:
             building_geom = feat.geometry()
             attributes = feat.attributes()

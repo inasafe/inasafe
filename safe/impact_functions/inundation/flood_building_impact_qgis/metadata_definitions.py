@@ -15,16 +15,11 @@ from collections import OrderedDict
 from safe.definitions import (
     hazard_definition,
     hazard_flood,
-    hazard_tsunami,
     unit_wetdry,
-    unit_metres_depth,
-    unit_feet_depth,
     layer_vector_polygon,
     exposure_definition,
     exposure_structure,
-    unit_building_type_type,
-    unit_building_generic,
-    layer_vector_point)
+    unit_building_type_type)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -80,22 +75,19 @@ class FloodNativePolygonMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                    # This field of impact layer marks
-                    # inundated roads by '1' value
-                    ('target_field', 'flooded'),
-                    # This field of the exposure layer contains
-                    # information about building types
-                    ('building_type_field', 'TYPE'),
-                    # This field of the  hazard layer contains information
-                    # about inundated areas
-                    ('affected_field', 'affected'),
-                    # This value in 'affected_field' of the hazard layer
-                    # marks the areas as inundated
-                    ('affected_value', '1'),
+                # This field of the exposure layer contains
+                # information about building types
+                ('building_type_field', 'TYPE'),
+                # This field of the  hazard layer contains information
+                # about inundated areas
+                ('affected_field', 'affected'),
+                # This value in 'affected_field' of the hazard layer
+                # marks the areas as inundated
+                ('affected_value', '1'),
 
-                    ('postprocessors', OrderedDict(
-                        [('BuildingType', {'on': True})]
-                    ))
-                ])
+                ('postprocessors', OrderedDict(
+                    [('BuildingType', {'on': True})]
+                ))
+            ])
             }
         return dict_meta

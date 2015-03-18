@@ -33,19 +33,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class FloodVectorBuildingImpactFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
-    """Inundation vector impact on building data.
-
-    :author Ole Nielsen, Kristy van Putten
-    # this rating below is only for testing a function, not the real one
-    :rating 0
-    :param requires category=='hazard' and \
-                    subcategory in ['flood', 'tsunami'] and \
-                    layertype=='vector'
-
-    :param requires category=='exposure' and \
-                    subcategory=='structure' and \
-                    layertype=='vector'
-    """
+    """Inundation vector impact on building data."""
     _metadata = FloodVectorBuildingMetadata
 
     def __init__(self):
@@ -54,7 +42,7 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
 
     @property
     def function_type(self):
-        """Property for the type of impact function ('old-style' or 'qgis2')."""
+        """Type of the impact function ('old-style' or 'qgis2')."""
         return 'old-style'
 
     def prepare(self, layers=None):
