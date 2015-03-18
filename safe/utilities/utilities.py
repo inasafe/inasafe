@@ -41,6 +41,7 @@ from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -377,7 +378,7 @@ def get_safe_impact_function(function_name=None):
     function_name = unicodedata.normalize(
         'NFKD', function_name).encode('ascii', 'ignore')
     try:
-        return get_plugins(function_name)
+        return ImpactFunctionManager().get(function_name)
     except:
         raise
 
@@ -409,8 +410,7 @@ def get_safe_impact_function_type(function_id):
     """
     try:
         # Get an instance of the impact function and get the type
-        function = get_safe_impact_function(function_id)[0][function_id]
-        function = function()
+        function = get_safe_impact_function(function_id)
 
         try:
             fun_type = function.get_function_type()

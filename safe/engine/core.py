@@ -25,7 +25,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 def calculate_impact(
-        layers, impact_fcn, parameters, extent=None, check_integrity=True):
+        layers, impact_function, parameters, extent=None, check_integrity=True):
     """Calculate impact levels as a function of list of input layers
 
     Input
@@ -53,14 +53,11 @@ def calculate_impact(
 
     LOGGER.debug(
         'calculate_impact called with:\nLayers: %s\nFunction:%s' % (
-            layers, impact_fcn))
+            layers, impact_function))
 
     # Input checks
     if check_integrity:
         check_data_integrity(layers)
-
-    # Get an instance of the passed impact_fcn
-    impact_function = impact_fcn()
 
     # Set the parameter
     impact_function.parameters = parameters

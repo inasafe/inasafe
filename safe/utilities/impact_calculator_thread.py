@@ -186,8 +186,8 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             layers = [self._hazardLayer, self._exposureLayer]
             self._impactLayer = calculate_safe_impact(
                 layers=layers,
-                impact_fcn=self._function,
-                parameters = self._function_parameters,
+                impact_function=self._function,
+                parameters=self._function_parameters,
                 extent=self._extent,
                 check_integrity=self._check_integrity)
         except MemoryError, e:

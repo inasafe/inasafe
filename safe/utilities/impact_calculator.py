@@ -204,8 +204,7 @@ class ImpactCalculator(QObject):
         hazard_layer = self.hazard_layer()
         exposure_layer = self.exposure_layer()
 
-        functions = get_safe_impact_function(self._function)
-        function = functions[0][self._function]
+        function = get_safe_impact_function(self._function)
         return ImpactCalculatorThread(
             hazard_layer,
             exposure_layer,

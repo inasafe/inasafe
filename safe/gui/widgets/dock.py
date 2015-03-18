@@ -739,7 +739,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             function_id = self.get_function_id()
 
             functions = get_safe_impact_function(function_id)
-            self.active_function = functions[0][function_id].instance()
+            self.active_function = functions
             self.function_parameters = None
             if hasattr(self.active_function, 'parameters'):
                 self.function_parameters = self.active_function.parameters
