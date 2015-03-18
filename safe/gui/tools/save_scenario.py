@@ -167,8 +167,12 @@ class SaveScenarioDialog(QDialog):
         parser.set(title, 'hazard', relative_hazard_path)
         parser.set(title, 'function', self.function_id)
         parser.set(title, 'extent', extent_string)
-        parser.set(
-            title, 'extent_crs', self.dock.extent.user_extent_crs.authid())
+        if self.dock.extent.user_extent_crs is None :
+            parser.set(title, 'extent_crs',
+                       'EPSG:4326')
+        else:
+            parser.set(title, 'extent_crs',
+                        self.dock.extent.user_extent_crs.authid())
         if self.aggregation_layer is not None:
             aggregation_path = self.aggregation_layer.publicSource()
             relative_aggregation_path = self.relative_path(
