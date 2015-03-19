@@ -143,16 +143,18 @@ class PostprocessorManager(QtCore.QObject):
                     table.caption = self.tr(
                         'Detailed %s report (for people needing '
                         'evacuation)') % (
-                        tr(get_postprocessor_human_name(processor)).lower())
+                            tr(get_postprocessor_human_name(processor)).lower()
+                        )
                 else:
                     table.caption = self.tr(
                         'Detailed %s report (affected people)') % (
-                        tr(get_postprocessor_human_name(processor)).lower())
+                            tr(get_postprocessor_human_name(processor)).lower()
+                        )
 
             if processor in ['Gender', 'Age']:
                 table.caption = self.tr(
                     'Detailed %s report (affected people)') % (
-                    tr(get_postprocessor_human_name(processor)).lower())
+                        tr(get_postprocessor_human_name(processor)).lower())
 
             header = m.Row()
             header.add(str(self.attribute_title).capitalize())
@@ -199,8 +201,8 @@ class PostprocessorManager(QtCore.QObject):
                     '* "%s" values mean that there where some problems while '
                     'calculating them. This did not affect the other '
                     'values.') % (
-                    self.aggregator.get_default_keyword(
-                        'NO_DATA'))))
+                        self.aggregator.get_default_keyword(
+                            'NO_DATA'))))
 
         return message
 

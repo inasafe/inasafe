@@ -46,8 +46,8 @@ DEVNULL = open(os.devnull, 'w')
 # we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
 
 # Assuming test data three lvls up
-pardir = os.path.abspath(os.path.join(os.path.realpath(os.path.dirname(
-    __file__)),
+pardir = os.path.abspath(os.path.join(
+    os.path.realpath(os.path.dirname(__file__)),
     '..',
     '..',
     '..'))

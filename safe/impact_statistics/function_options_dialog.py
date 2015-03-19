@@ -100,9 +100,9 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         # it's better to check the type of the widget.
         # for new_parameter in new_parameters:
         #     values[new_parameter.name] = new_parameter.value
-        if type(widget) == QLineEdit:
+        if isinstance(widget, QLineEdit):
             return lambda: function(widget.text())
-        elif type(widget) == QCheckBox or type(widget) == QGroupBox:
+        elif isinstance(widget, QCheckBox) or isinstance(widget, QGroupBox):
             return lambda: function(widget.isChecked())
         else:
             return lambda: function(widget.property(property_name))
@@ -280,7 +280,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         else:
             form_layout.addRow(label, widget)
 
-        if type(widget) is QLineEdit:
+        if isinstance(widget, QLineEdit):
             widget.setText(value)
             property_name = 'text'
 

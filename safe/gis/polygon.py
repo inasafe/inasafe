@@ -716,9 +716,10 @@ def _clip_lines_by_polygon(lines,
         line = lines[k]
 
         # Exclude lines that are fully outside polygon bounding box
-        if (max(line[:, 0]) < minpx or  # Everything is to the west
-            min(line[:, 0]) > maxpx or  # Everything is to the east
-            max(line[:, 1]) < minpy or  # Everything is to the south
+        if (
+                max(line[:, 0]) < minpx or  # Everything is to the west
+                min(line[:, 0]) > maxpx or  # Everything is to the east
+                max(line[:, 1]) < minpy or  # Everything is to the south
                 min(line[:, 1]) > maxpy):   # Everything is to the north
 
             inside_line_segments[k] = []

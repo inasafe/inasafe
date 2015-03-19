@@ -122,9 +122,21 @@ class TableCell(object):
     Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.6
     """
 
-    def __init__(self, text='', bgcolor=None, header=False, width=None,
-            align=None, char=None, charoff=None, valign=None, style='',
-            attribs=None, cell_class=None, row_span=None, col_span=None):
+    def __init__(
+            self,
+            text='',
+            bgcolor=None,
+            header=False,
+            width=None,
+            align=None,
+            char=None,
+            charoff=None,
+            valign=None,
+            style='',
+            attribs=None,
+            cell_class=None,
+            row_span=None,
+            col_span=None):
         """TableCell constructor"""
         self.text = text
         self.bgcolor = bgcolor
@@ -201,9 +213,17 @@ class TableRow(object):
     Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.5
     """
 
-    def __init__(self, cells=None, bgcolor=None, header=False, attribs=None,
-            col_align=None, col_valign=None, col_char=None,
-            col_charoff=None, col_styles=None):
+    def __init__(
+            self,
+            cells=None,
+            bgcolor=None,
+            header=False,
+            attribs=None,
+            col_align=None,
+            col_valign=None,
+            col_char=None,
+            col_charoff=None,
+            col_styles=None):
         """TableCell constructor"""
         self.bgcolor = bgcolor
         self.cells = cells
@@ -294,12 +314,25 @@ class Table(object):
     Reference: http://www.w3.org/tr/html4/struct/tables.html#h-11.2.1
     """
 
-    def __init__(self, rows=None, border=None, style=None, width=None,
-            cellspacing=None, cellpadding=None, attribs=None, header_row=None,
+    def __init__(
+            self,
+            rows=None,
+            border=None,
+            style=None,
+            width=None,
+            cellspacing=None,
+            cellpadding=None,
+            attribs=None,
+            header_row=None,
             table_class=None,
-            col_width=None, col_align=None, col_valign=None,
-            col_char=None, col_charoff=None, col_styles=None,
-            caption=None, caption_at_bottom=False):
+            col_width=None,
+            col_align=None,
+            col_valign=None,
+            col_char=None,
+            col_charoff=None,
+            col_styles=None,
+            caption=None,
+            caption_at_bottom=False):
         """TableCell constructor"""
         # Ensure Rows is an array of rows
         if isinstance(rows, TableRow):
@@ -383,8 +416,7 @@ class Table(object):
                 # }
                 caption_class = CAPTION_BOTTOM_CLASS
             result += ' <caption%s>%s</caption>\n' % (
-                                    caption_class,
-                                    self.caption)
+                caption_class, self.caption)
         # insert column tags and attributes if specified:
         if self.col_width:
             for width in self.col_width:
@@ -526,10 +558,10 @@ if __name__ == '__main__':
     print str(t)
     print '-' * 79
 
-    t2 = Table([('1', '2'),
-                ['3', '4']],
-               width='100%', header_row=('col1', 'col2'),
-    col_width=('', '75%'))
+    t2 = Table(
+        [('1', '2'), ['3', '4']],
+        width='100%', header_row=('col1', 'col2'),
+        col_width=('', '75%'))
     f.write(str(t2) + '<p>\n')
     print t2
     print '-' * 79
@@ -547,12 +579,18 @@ if __name__ == '__main__':
         ['Carpenter', 'Jack', 47, 7],
         ['Johnson', 'Paul', 62, 10.55],
     ]
-    htmlcode = table(table_data,
-                     header_row=['Last name', 'First name', 'Age', 'Score'],
-                     col_width=['', '20%', '10%', '10%'],
-                     col_align=['left', 'center', 'right', 'char'],
-                     col_styles=['font-size: large', '', 'font-size: small',
-                                 'background-color:yellow'])
+    htmlcode = table(
+        table_data,
+        header_row=['Last name', 'First name', 'Age', 'Score'],
+        col_width=['', '20%', '10%', '10%'],
+        col_align=['left', 'center', 'right', 'char'],
+        col_styles=[
+            'font-size: large',
+            '',
+            'font-size: small',
+            'background-color:yellow'
+        ]
+    )
     f.write(htmlcode + '<p>\n')
     print htmlcode
     print '-' * 79

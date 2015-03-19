@@ -102,7 +102,7 @@ def add_to_list(my_list, my_element):
     :rtype: list
 
     """
-    if type(my_element) is list:
+    if isinstance(my_element, list):
         for element in my_element:
             my_list = add_to_list(my_list, element)
     else:

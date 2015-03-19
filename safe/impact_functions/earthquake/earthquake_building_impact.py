@@ -98,16 +98,16 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
     statistics_classes = [0, 1, 2, 3]
     title = tr('Be affected')
 
-    parameters = OrderedDict(
-        [('low_threshold', 6),
-         ('medium_threshold', 7),
-         ('high_threshold', 8),
-         ('postprocessors', OrderedDict([
-         ('AggregationCategorical', {
-             'on': True,
-             'params': OrderedDict([
-                 # Disable categorical aggregation when in AOI mode see #781
-                 ('disable_for_entire_area_aggregation', False)])})
+    parameters = OrderedDict([
+        ('low_threshold', 6),
+        ('medium_threshold', 7),
+        ('high_threshold', 8),
+        ('postprocessors', OrderedDict([
+            ('AggregationCategorical', {
+                'on': True,
+                'params': OrderedDict([
+                    # Disable categorical aggregation when in AOI mode see #781
+                    ('disable_for_entire_area_aggregation', False)])})
         ]))])
 
     def run(self, layers):
@@ -148,8 +148,9 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
 
         # Determine if exposure data have NEXIS attributes.
         attribute_names = exposure_layer.get_attribute_names()
-        if ('FLOOR_AREA' in attribute_names and
-            'BUILDING_C' in attribute_names and
+        if (
+                'FLOOR_AREA' in attribute_names and
+                'BUILDING_C' in attribute_names and
                 'CONTENTS_C' in attribute_names):
             is_nexis = True
         else:
@@ -252,13 +253,14 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                                     format_int(contents_values[3])])]
         else:
             # Generate simple impact report for unspecific buildings
-            table_body = [question,
-                          TableRow([tr('Hazard Level'),
-                                    tr('Buildings Affected')],
-                          header=True),
-                          TableRow([class_1['label'], format_int(lo)]),
-                          TableRow([class_2['label'], format_int(me)]),
-                          TableRow([class_3['label'], format_int(hi)])]
+            table_body = [
+                question,
+                TableRow(
+                    [tr('Hazard Level'), tr('Buildings Affected')],
+                    header=True),
+                TableRow([class_1['label'], format_int(lo)]),
+                TableRow([class_2['label'], format_int(me)]),
+                TableRow([class_3['label'], format_int(hi)])]
 
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(tr('High hazard is defined as shake levels greater '
@@ -307,8 +309,7 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
                 'legend_title': legend_title,
                 'target_field': self.target_field,
                 'statistics_type': self.statistics_type,
-                'statistics_classes': self
-                .statistics_classes},
+                'statistics_classes': self.statistics_classes},
             style_info=style_info)
 
         msg = 'Created vector layer %s' % str(result_layer)

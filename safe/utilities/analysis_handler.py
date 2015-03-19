@@ -613,7 +613,7 @@ class AnalysisHandler(QObject):
             question = self.tr(
                 'The composer template you are printing to is missing '
                 'these elements: %s. Do you still want to continue') % (
-                ', '.join(impact_report.missing_elements))
+                    ', '.join(impact_report.missing_elements))
             # noinspection PyCallByClass,PyTypeChecker
             answer = QtGui.QMessageBox.question(
                 self.parent,

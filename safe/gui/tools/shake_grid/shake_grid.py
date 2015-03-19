@@ -515,8 +515,7 @@ class ShakeGrid(object):
             '%(gdal_grid)s -a %(alg)s -zfield "mmi" -txe %(xMin)s '
             '%(xMax)s -tye %(yMin)s %(yMax)s -outsize %(dimX)i '
             '%(dimY)i -of GTiff -ot Float16 -a_srs EPSG:4326 -l mmi '
-            '"%(vrt)s" "%(tif)s"') %
-            {
+            '"%(vrt)s" "%(tif)s"') % {
                 'gdal_grid': which('gdal_grid')[0],
                 'alg': algorithm,
                 'xMin': self.x_minimum,

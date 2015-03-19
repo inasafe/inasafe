@@ -538,8 +538,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # TODO refactor impact_functions so it is accessible and user here
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
-        notes = m.Paragraph(self.tr(
-            'You can now proceed to run your model by clicking the'),
+        notes = m.Paragraph(
+            self.tr('You can now proceed to run your model by clicking the'),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
@@ -1623,7 +1623,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             question = self.tr(
                 'The composer template you are printing to is missing '
                 'these elements: %s. Do you still want to continue') % (
-                ', '.join(impact_report.missing_elements))
+                    ', '.join(impact_report.missing_elements))
             # noinspection PyCallByClass,PyTypeChecker
             answer = QtGui.QMessageBox.question(
                 self,

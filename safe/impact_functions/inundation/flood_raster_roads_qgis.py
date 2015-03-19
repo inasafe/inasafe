@@ -261,17 +261,19 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                 roads_by_type[road_type]['flooded'] += length
         table_body = [
             question,
-            TableRow([
-                tr('Road Type'),
-                tr('Flooded in the threshold (m)'),
-                tr('Total (m)')],
+            TableRow(
+                [
+                    tr('Road Type'),
+                    tr('Flooded in the threshold (m)'),
+                    tr('Total (m)')],
                 header=True),
             TableRow([
                 tr('All'),
                 int(flooded_len),
-                int(road_len)])]
-        table_body.append(TableRow(
-            tr('Breakdown by road type'), header=True))
+                int(road_len)]),
+            TableRow(
+                tr('Breakdown by road type'), header=True)
+            ]
         for t, v in roads_by_type.iteritems():
             table_body.append(
                 TableRow([t, int(v['flooded']), int(v['total'])])
@@ -289,10 +291,12 @@ class FloodRasterRoadsExperimentalFunction(FunctionProvider):
                           style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(data=line_layer,
-                   name=tr('Flooded roads'),
-                   keywords={'impact_summary': impact_summary,
-                             'map_title': map_title,
-                             'target_field': target_field},
-                   style_info=style_info)
+        line_layer = Vector(
+            data=line_layer,
+            name=tr('Flooded roads'),
+            keywords={
+                'impact_summary': impact_summary,
+                'map_title': map_title,
+                'target_field': target_field},
+            style_info=style_info)
         return line_layer
