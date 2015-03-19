@@ -21,17 +21,10 @@ import os
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.registry import Registry
 from safe.impact_functions.inundation.flood_vector_osm_building_impact.\
     impact_function import FloodVectorBuildingImpactFunction
 from safe.storage.core import read_layer
 from safe.test.utilities import TESTDATA, get_qgis_app
-from safe.definitions import (
-    unit_wetdry,
-    layer_vector_polygon,
-    exposure_structure,
-    unit_building_type_type,
-    hazard_flood)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -40,7 +33,7 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
-        registry = Registry()
+        registry = ImpactFunctionManager().registry
         registry.register(FloodVectorBuildingImpactFunction)
 
     def test_run(self):
@@ -57,7 +50,8 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
 
         impact_function.hazard = hazard_layer
         impact_function.exposure = exposure_layer
-        impact_function.extent = [10, 10, 20, 20]
+        impact_function.extent = [106.8139860, -6.2043560,
+                           106.8405950, -6.2263570]
         impact_function.run()
         impact_layer = impact_function.impact
 
@@ -78,19 +72,27 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
 
     def test_filter(self):
         hazard_keywords = {
-            'subcategory': hazard_flood,
-            'units': unit_wetdry,
-            'layer_constraints': layer_vector_polygon
+            'subcategory': 'flood',
+            'units': 'wetdry',
+            'layer_type': 'vector',
+            'data_type': 'polygon'
         }
 
         exposure_keywords = {
-            'subcategory': exposure_structure,
-            'units': unit_building_type_type,
-            'layer_constraints': layer_vector_polygon
+            'subcategory': 'structure',
+            'units': 'building_type',
+            'layer_type': 'vector',
+            'data_type': 'polygon'
         }
 
-        impact_functions = ImpactFunctionManager().registry.filter(
+        impact_functions = ImpactFunctionManager().get_impact_functions(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
+        retrieved_IF = impact_functions[0].metadata().as_dict()['id']
+        self.assertEqual('FloodVectorBuildingImpactFunction',
+                         retrieved_IF,
+                         'Expecting FloodVectorBuildingImpactFunction.'
+                         'But got %s instead' %
+                         retrieved_IF)

@@ -31,6 +31,7 @@ class ImpactFunctionManager(object):
     def __init__(self):
         """Constructor."""
         # attributes
+        # RM: registry keeps track of the entire impact function in Inasafe
         self.registry = Registry()
 
     def get(self, name):
@@ -69,6 +70,54 @@ class ImpactFunctionManager(object):
         """
         return self.registry.filter_by_keyword_string(
             hazard_keywords, exposure_keywords)
+
+    def get_by_metadata_id(self, metadata_id):
+        """Return the class of an impact function given its metadata id.
+
+        :param metadata_id: the id of IF class in the metadata
+        :type metadata_id: str
+
+        :return: impact function class
+        :rtype: safe.impact_functions.base.ImpactFunction
+        """
+        return self.registry.get_by_metadata_id(metadata_id)
+
+    def get_by_metadata_name(self, metadata_name):
+        """Return the class of an impact function given its metadata id.
+
+        :param metadata_name: the id of IF class in the metadata
+        :type metadata_name: str
+
+        :return: impact function class
+        :rtype: safe.impact_functions.base.ImpactFunction
+        """
+        return self.registry.get_by_metadata_name(metadata_name)
+
+    @staticmethod
+    def get_function_title(impact_function):
+        """
+        :param impact_function: The impact function
+        :type impact_function: safe.impact_functions.base.ImpactFunction
+        """
+        return impact_function.metadata().as_dict().get('title', None)
+
+    @staticmethod
+    def get_function_name(impact_function):
+        """
+        :param impact_function: The impact function
+        :type impact_function: safe.impact_functions.base.ImpactFunction
+        """
+        return impact_function.metadata().as_dict().get('name', None)
+
+    @staticmethod
+    def get_function_type(impact_function):
+        """Return the impact function type uses to differentiate which type of
+        layers would be passed to the impact functions
+
+        :param impact_function: The impact function
+        :type impact_function: safe.impact_functions.base.ImpactFunction
+        """
+        return impact_function.function_type
 
     def allowed_subcategories(self, category=None):
         """Determine allowed subcategories, optionally filtered by category.

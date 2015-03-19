@@ -22,16 +22,9 @@ import os
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.registry import Registry
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
     .impact_function import FloodNativePolygonExperimentalFunction
 from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer
-from safe.definitions import (
-    unit_wetdry,
-    layer_vector_polygon,
-    exposure_structure,
-    unit_building_type_type,
-    hazard_flood)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -40,8 +33,8 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
-        self.registry = Registry()
-        self.registry.register(FloodNativePolygonExperimentalFunction)
+        registry = ImpactFunctionManager().registry
+        registry.register(FloodNativePolygonExperimentalFunction)
 
     def test_run(self):
         function = ImpactFunctionManager().get(
@@ -87,20 +80,29 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
         self.assertEqual(buildings_affected, 41)
 
     def test_filter(self):
+        """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': hazard_flood,
-            'units': unit_wetdry,
-            'layer_constraints': layer_vector_polygon
+            'subcategory': 'flood',
+            'units': 'wetdry',
+            'layer_type': 'vector',
+            'data_type': 'polygon'
         }
 
         exposure_keywords = {
-            'subcategory': exposure_structure,
-            'units': unit_building_type_type,
-            'layer_constraints': layer_vector_polygon
+            'subcategory': 'structure',
+            'units': 'building_type',
+            'layer_type': 'vector',
+            'data_type': 'polygon'
         }
 
-        impact_functions = ImpactFunctionManager().registry.filter(
+        impact_functions = ImpactFunctionManager().get_impact_functions(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
+        retrieved_IF = impact_functions[0].metadata().as_dict()['id']
+        self.assertEqual('FloodNativePolygonExperimentalFunction',
+                         retrieved_IF,
+                         'Expecting FloodNativePolygonExperimentalFunction.'
+                         'But got %s instead' %
+                         retrieved_IF)

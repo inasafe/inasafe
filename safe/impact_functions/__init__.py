@@ -10,8 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
-from safe.impact_functions.registry import Registry
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_vector_osm_building_impact\
     .impact_function import FloodVectorBuildingImpactFunction
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
@@ -20,6 +19,6 @@ from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
 
 def register_impact_functions():
     """Register all the impact functions available."""
-    impact_function_registry = Registry()
+    impact_function_registry = ImpactFunctionManager().registry
     impact_function_registry.register(FloodVectorBuildingImpactFunction)
     impact_function_registry.register(FloodNativePolygonExperimentalFunction)

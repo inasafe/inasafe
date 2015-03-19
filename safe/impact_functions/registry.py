@@ -61,6 +61,10 @@ class Registry(object):
         """Remove all registered impact functions in the registry."""
         cls._impact_functions = []
 
+    @property
+    def impact_functions(self):
+        return self._impact_functions
+
     @classmethod
     def get(cls, name):
         """Return an instance of an impact function given its name.
@@ -88,6 +92,36 @@ class Registry(object):
                 return impact_function
         raise Exception('Impact function with the class name %s not found' %
                         name)
+
+    @classmethod
+    def get_by_metadata_id(cls, metadata_id):
+        """Return the class of an impact function given its metadata id.
+
+        :param metadata_id: the id of IF class in the metadata
+        :type metadata_id: str
+
+        :return: impact function class
+        :rtype: safe.impact_functions.base.ImpactFunction
+        """
+        return [impact_function
+                for impact_function in cls._impact_functions
+                if impact_function.metadata().as_dict().get('id', '')
+                == metadata_id]
+
+    @classmethod
+    def get_by_metadata_name(cls, metadata_name):
+        """Return the class of an impact function given its metadata id.
+
+        :param metadata_name: the id of IF class in the metadata
+        :type metadata_name: str
+
+        :return: impact function class
+        :rtype: safe.impact_functions.base.ImpactFunction
+        """
+        return [impact_function
+                for impact_function in cls._impact_functions
+                if impact_function.metadata().as_dict().get('name', '')
+                == metadata_name]
 
     @classmethod
     def filter(cls, hazard_keywords=None, exposure_keywords=None):
