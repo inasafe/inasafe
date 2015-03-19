@@ -119,8 +119,7 @@ class NeedsProfile(MinimumNeeds):
         # the new IF architecture, patching the impact function like this
         # probably won't work. Need to check if this is still working. But to
         #  make this not thrown Python Error, I will just pass the instance.
-        impact_functions = ImpactFunctionManager().get_by_keywords()
-        for impact_function in impact_functions:
+        for impact_function in ImpactFunctionManager().impact_functions:
             impact_function = impact_function.instance()
             if not hasattr(impact_function, 'parameters'):
                 continue

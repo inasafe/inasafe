@@ -15,8 +15,7 @@ from collections import OrderedDict
 from safe.gis.polygon import inside_polygon
 from safe.utilities.i18n import tr
 from safe.defaults import default_minimum_needs
-from utilities import get_function_title
-
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -192,7 +191,7 @@ def get_question(hazard_title, exposure_title, impact_function):
     :type impact_function: ImpactFunction
     """
 
-    function_title = get_function_title(impact_function)
+    function_title = ImpactFunctionManager.get_function_title(impact_function)
     return (tr('In the event of <i>%(hazard)s</i> how many '
                '<i>%(exposure)s</i> might <i>%(impact)s</i>')
             % {'hazard': hazard_title.lower(),

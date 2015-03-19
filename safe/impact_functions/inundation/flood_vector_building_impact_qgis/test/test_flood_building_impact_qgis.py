@@ -95,7 +95,7 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
             'data_type': 'polygon'
         }
 
-        impact_functions = ImpactFunctionManager().get_by_keywords(
+        impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)

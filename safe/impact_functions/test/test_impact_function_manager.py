@@ -21,6 +21,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_functions.inundation.flood_vector_osm_building_impact\
+    .impact_function import FloodVectorBuildingImpactFunction
 from safe.impact_functions.utilities import get_list_id
 from safe.definitions import (
     unit_metres_depth,
@@ -59,7 +61,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         register_impact_functions()
 
     def test_init(self):
-        """Test initialize ImpactFunctionManager."""
+        """TestImpactFunctionManager: Test initialize ImpactFunctionManager."""
         impact_function_manager = ImpactFunctionManager()
         expected_result = len(impact_function_manager.registry.list())
         i = 0
@@ -74,8 +76,18 @@ class TestImpactFunctionManager(unittest.TestCase):
             'enabled impact functions' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
+    def test_get_function_title(self):
+        """TestImpactFunctionManager: Test getting function title."""
+        impact_function_title = ImpactFunctionManager().get_function_title(
+            FloodVectorBuildingImpactFunction)
+        expected_title = 'Be flooded'
+        message = 'Expecting %s but got %s' % (
+            impact_function_title, expected_title)
+        self.assertEqual(
+            impact_function_title, expected_title, message)
+
     def test_allowed_subcategories(self):
-        """Test allowed_subcategories API."""
+        """TestImpactFunctionManager: Test allowed_subcategories API."""
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.allowed_subcategories()
         expected_result = [
@@ -93,7 +105,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
     def test_allowed_data_types(self):
-        """Test allowed_data_types API."""
+        """TestImpactFunctionManager: Test allowed_data_types API."""
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.allowed_data_types('flood')
         expected_result = ['polygon', 'continuous', 'classified']
@@ -126,7 +138,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
     def test_allowed_units(self):
-        """Test allowed_units API."""
+        """TestImpactFunctionManager: Test allowed_units API."""
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.allowed_units('structure', 'polygon')
         expected_result = [unit_building_type_type, unit_building_generic]
@@ -151,7 +163,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
     def test_units_for_layer(self):
-        """Test units_for_layer API."""
+        """TestImpactFunctionManager: Test units_for_layer API."""
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.units_for_layer(
@@ -175,7 +187,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
     def test_categories_for_layer(self):
-        """Test categories_for_layer API."""
+        """TestImpactFunctionManager: Test categories_for_layer API."""
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.categories_for_layer(
@@ -198,7 +210,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
     def test_subcategories_for_layer(self):
-        """Test subcategories_for_layer API."""
+        """TestImpactFunctionManager: Test subcategories_for_layer API."""
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.subcategories_for_layer(

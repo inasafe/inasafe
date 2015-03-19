@@ -63,7 +63,6 @@ from safe.utilities.styling import (
     set_vector_graduated_style,
     set_vector_categorized_style)
 from safe.utilities.impact_calculator import ImpactCalculator
-from safe.impact_functions.core import get_function_title
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import temp_dir
@@ -1012,12 +1011,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Find out which functions can be used with these layers
         try:
-            functions = ImpactFunctionManager().get_by_keywords(
+            functions = ImpactFunctionManager().filter_by_keywords(
                 hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions
             for function in functions:
                 function_name = function.__name__
-                function_title = get_function_title(function)
+                function_title = ImpactFunctionManager().get_function_title(
+                    function)
 
                 # Provide function title and ID to function combo:
                 # function_title is the text displayed in the combo

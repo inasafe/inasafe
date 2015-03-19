@@ -33,6 +33,11 @@ class ImpactFunctionManager(object):
         # Singleton Registry to track all the registered Impact Functions
         self.registry = Registry()
 
+    @property
+    def impact_functions(self):
+        """Return all registered impact functions."""
+        return self.registry.impact_functions
+
     def get(self, class_name):
         """Return an instance of an impact function given its class name.
 
@@ -78,7 +83,7 @@ class ImpactFunctionManager(object):
                 impact_function_id)
         return impact_functions[0].instance()
 
-    def get_by_keywords(
+    def filter_by_keywords(
             self, hazard_keywords=None, exposure_keywords=None):
         """Get available impact functions from hazard and exposure keywords.
 
@@ -93,7 +98,7 @@ class ImpactFunctionManager(object):
         return self.registry.filter_by_keyword_string(
             hazard_keywords, exposure_keywords)
 
-    def get_by_metadata(self, metadata_key, metadata_value):
+    def filter_by_metadata(self, metadata_key, metadata_value):
         """Return IF classes given its metadata key and value.
 
         :param metadata_key: The key of the metadata e.g 'id', 'name'
@@ -106,20 +111,25 @@ class ImpactFunctionManager(object):
         :return: Impact Function classes match the arguments
         :rtype: list
         """
-        return self.registry.get_by_metadata(metadata_key, metadata_value)
+        return self.registry.filter_by_metadata(metadata_key, metadata_value)
 
     @staticmethod
     def get_function_title(impact_function):
-        """
-        :param impact_function: The impact function
+        """Get title of the impact function.
+
+        :param impact_function: Class of an impact function
         :type impact_function: safe.impact_functions.base.ImpactFunction
+
+        :returns: The title of the impact function specified in its metadata.
+        :rtype: str
         """
         return impact_function.metadata().as_dict().get('title', None)
 
     @staticmethod
     def get_function_name(impact_function):
-        """
-        :param impact_function: The impact function
+        """Get the human readable name of the impact function.
+
+        :param impact_function: Class of an impact function.
         :type impact_function: safe.impact_functions.base.ImpactFunction
         """
         return impact_function.metadata().as_dict().get('name', None)
