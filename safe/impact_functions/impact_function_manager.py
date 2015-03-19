@@ -30,33 +30,55 @@ class ImpactFunctionManager(object):
 
     def __init__(self):
         """Constructor."""
-        # attributes
-        # RM: registry keeps track of the entire impact function in Inasafe
+        # Singleton Registry to track all the registered Impact Functions
         self.registry = Registry()
 
-    def get(self, name):
-        """Return an instance of an impact function given its name.
+    def get(self, class_name):
+        """Return an instance of an impact function given its class name.
 
-        :param name: the name of IF class
-        :type name: str
+        :param class_name: the name of IF class
+        :type class_name: str
 
-        :return: impact function instance
+        :return: Impact function instance that matches the argument.
         :rtype: safe.impact_functions.base.ImpactFunction.instance()
         """
-        return self.registry.get(name)
+        return self.registry.get(class_name)
 
-    def get_class(self, name):
-        """Return the class of an impact function given its name.
+    def get_class(self, class_name):
+        """Return the class of an impact function given its class name.
 
-        :param name: the name of IF class
-        :type name: str
+        :param class_name: the name of IF class
+        :type class_name: str
 
-        :return: impact function class
+        :return: impact function class that matches the argumen.
         :rtype: safe.impact_functions.base.ImpactFunction
         """
-        return self.registry.get_class(name)
+        return self.registry.get_class(class_name)
 
-    def get_impact_functions(
+    def get_by_id(self, impact_function_id):
+        """Return an instance of an impact function given its ID.
+
+        This is a preferred way to get an instance of IF. IF should have a
+        unique human readable ID in their metadata.
+
+        :param impact_function_id: The ID of impact function in the metadata.
+        :type impact_function_id: str
+
+        :return An Impact function instance that has matched id.
+        :rtype: object
+        """
+        impact_functions = self.registry.filter_by_metadata(
+            'id', impact_function_id)
+        if len(impact_functions) == 0:
+            raise Exception(
+                'Impact function with ID: %s not found' % impact_function_id)
+        elif len(impact_functions) > 1:
+            raise Exception(
+                'There are some Impact Functions that have the same ID: %s' %
+                impact_function_id)
+        return impact_functions[0].instance()
+
+    def get_by_keywords(
             self, hazard_keywords=None, exposure_keywords=None):
         """Get available impact functions from hazard and exposure keywords.
 
@@ -71,27 +93,20 @@ class ImpactFunctionManager(object):
         return self.registry.filter_by_keyword_string(
             hazard_keywords, exposure_keywords)
 
-    def get_by_metadata_id(self, metadata_id):
-        """Return the class of an impact function given its metadata id.
+    def get_by_metadata(self, metadata_key, metadata_value):
+        """Return IF classes given its metadata key and value.
 
-        :param metadata_id: the id of IF class in the metadata
-        :type metadata_id: str
+        :param metadata_key: The key of the metadata e.g 'id', 'name'
+        :type metadata_key: str
 
-        :return: impact function class
-        :rtype: safe.impact_functions.base.ImpactFunction
+        :param metadata_value: The value of the metadata, e.g for the key
+            'id' the value is 'FloodNativePolygonExperimentalFunction'
+        :type metadata_value: str, dict
+
+        :return: Impact Function classes match the arguments
+        :rtype: list
         """
-        return self.registry.get_by_metadata_id(metadata_id)
-
-    def get_by_metadata_name(self, metadata_name):
-        """Return the class of an impact function given its metadata id.
-
-        :param metadata_name: the id of IF class in the metadata
-        :type metadata_name: str
-
-        :return: impact function class
-        :rtype: safe.impact_functions.base.ImpactFunction
-        """
-        return self.registry.get_by_metadata_name(metadata_name)
+        return self.registry.get_by_metadata(metadata_key, metadata_value)
 
     @staticmethod
     def get_function_title(impact_function):

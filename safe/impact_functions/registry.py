@@ -12,6 +12,12 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+__author__ = 'tim@kartoza.com, akbargumbira@gmail.com'
+__revision__ = '$Format:%H$'
+__date__ = '01/03/15'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 from safe.common.utilities import is_subset, convert_to_list, project_list
 
 
@@ -31,10 +37,14 @@ class Registry(object):
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
-            cls._instance = super(Registry, cls).__new__(
-                cls, *args, **kwargs)
+            cls._instance = super(Registry, cls).__new__(cls, *args, **kwargs)
             cls._impact_functions = []
         return cls._instance
+
+    @property
+    def impact_functions(self):
+        """Return all registered impact functions."""
+        return self._impact_functions
 
     @classmethod
     def register(cls, impact_function):
@@ -50,24 +60,20 @@ class Registry(object):
             cls._impact_functions.append(impact_function)
 
     @classmethod
+    def clear(cls):
+        """Remove all registered impact functions in the registry."""
+        cls._impact_functions = []
+
+    @classmethod
     def list(cls):
-        """List of all registered impact functions."""
+        """List of all registered impact functions by their name."""
         return [
             impact_function.metadata().as_dict()['name'] for impact_function in
             cls._impact_functions]
 
     @classmethod
-    def clear(cls):
-        """Remove all registered impact functions in the registry."""
-        cls._impact_functions = []
-
-    @property
-    def impact_functions(self):
-        return self._impact_functions
-
-    @classmethod
     def get(cls, name):
-        """Return an instance of an impact function given its name.
+        """Return an instance of an impact function given its class name.
 
         :param name: the name of IF class
         :type name: str
@@ -79,7 +85,7 @@ class Registry(object):
 
     @classmethod
     def get_class(cls, name):
-        """Return the class of an impact function given its name.
+        """Return the class of an impact function given its class name.
 
         :param name: the name of IF class
         :type name: str
@@ -94,61 +100,50 @@ class Registry(object):
                         name)
 
     @classmethod
-    def get_by_metadata_id(cls, metadata_id):
-        """Return the class of an impact function given its metadata id.
+    def filter_by_metadata(cls, metadata_key, metadata_value):
+        """Return IF classes given its metadata key and value.
 
-        :param metadata_id: the id of IF class in the metadata
-        :type metadata_id: str
+        :param metadata_key: The key of the metadata e.g 'id', 'name'
+        :type metadata_key: str
 
-        :return: impact function class
-        :rtype: safe.impact_functions.base.ImpactFunction
+        :param metadata_value: The value of the metadata, e.g for the key
+            'id' the value is 'FloodNativePolygonExperimentalFunction'
+        :type metadata_value: str, dict
+
+        :return: impact function classes
+        :rtype: list
         """
+        impact_functions = []
         for impact_function in cls._impact_functions:
-            if impact_function.metadata().as_dict()\
-                    .get('id', None) == metadata_id:
-                return impact_function
-        raise Exception('Impact function with the class name %s not found' %
-                        metadata_id)
+            if_metadata = impact_function.metadata().as_dict()
+            if metadata_key in if_metadata:
+                if if_metadata[metadata_key] == metadata_value:
+                    impact_functions.append(impact_function)
+
+        return impact_functions
 
     @classmethod
-    def get_by_metadata_name(cls, metadata_name):
-        """Return the class of an impact function given its metadata id.
+    def filter(cls, hazard_metadata=None, exposure_metadata=None):
+        """Filter impact function given the hazard and exposure metadata.
 
-        :param metadata_name: the id of IF class in the metadata
-        :type metadata_name: str
+        :param hazard_metadata: Dictionary represent hazard keywords
+        :type hazard_metadata: dict
 
-        :return: impact function class
-        :rtype: safe.impact_functions.base.ImpactFunction
-        """
-        for impact_function in cls._impact_functions:
-            if impact_function.metadata().as_dict()\
-                    .get('name', None) == metadata_name:
-                return impact_function
-        raise Exception('Impact function with the class name %s not found' %
-                        metadata_name)
-
-    @classmethod
-    def filter(cls, hazard_keywords=None, exposure_keywords=None):
-        """Filter impact function given the hazard and exposure keywords.
-
-        :param hazard_keywords: Dictionary represent hazard keywords
-        :type hazard_keywords: dict
-
-        :param exposure_keywords: Dictionary represent exposure keywords
-        :type exposure_keywords: dict
+        :param exposure_metadata: Dictionary represent exposure keywords
+        :type exposure_metadata: dict
 
         :returns: List of impact functions.
         :rtype: list
 
         """
-        if hazard_keywords is None and exposure_keywords is None:
+        if hazard_metadata is None and exposure_metadata is None:
             return cls._impact_functions
 
         impact_functions = cls._impact_functions
         impact_functions = cls.filter_by_hazard(
-            impact_functions, hazard_keywords)
+            impact_functions, hazard_metadata)
         impact_functions = cls.filter_by_exposure(
-            impact_functions, exposure_keywords)
+            impact_functions, exposure_metadata)
 
         return impact_functions
 

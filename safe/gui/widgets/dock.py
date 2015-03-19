@@ -1012,7 +1012,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Find out which functions can be used with these layers
         try:
-            functions = ImpactFunctionManager().get_impact_functions(
+            functions = ImpactFunctionManager().get_by_keywords(
                 hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions
             for function in functions:
