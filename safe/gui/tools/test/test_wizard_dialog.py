@@ -1434,9 +1434,9 @@ class WizardDialogTest(unittest.TestCase):
             'Please update expected_size if the generated output '
             'is acceptable on your system.'
             % (expected_report_size, tolerance, size))
-        self.assertTrue(
-            (expected_report_size - tolerance < size < expected_report_size +
-             tolerance),
+        self.assertTrue((
+            (expected_report_size - tolerance <= size) and
+            (size <= expected_report_size + tolerance)),
             message)
 
         # close the wizard
