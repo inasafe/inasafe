@@ -103,10 +103,12 @@ class Registry(object):
         :return: impact function class
         :rtype: safe.impact_functions.base.ImpactFunction
         """
-        return [impact_function
-                for impact_function in cls._impact_functions
-                if impact_function.metadata().as_dict().get('id', '')
-                == metadata_id]
+        for impact_function in cls._impact_functions:
+            if impact_function.metadata().as_dict()\
+                    .get('id', None) == metadata_id:
+                return impact_function
+        raise Exception('Impact function with the class name %s not found' %
+                        metadata_id)
 
     @classmethod
     def get_by_metadata_name(cls, metadata_name):
@@ -118,10 +120,12 @@ class Registry(object):
         :return: impact function class
         :rtype: safe.impact_functions.base.ImpactFunction
         """
-        return [impact_function
-                for impact_function in cls._impact_functions
-                if impact_function.metadata().as_dict().get('name', '')
-                == metadata_name]
+        for impact_function in cls._impact_functions:
+            if impact_function.metadata().as_dict()\
+                    .get('name', None) == metadata_name:
+                return impact_function
+        raise Exception('Impact function with the class name %s not found' %
+                        metadata_name)
 
     @classmethod
     def filter(cls, hazard_keywords=None, exposure_keywords=None):

@@ -94,3 +94,23 @@ class TestRegistry(unittest.TestCase):
         self.assertEqual(expected, result, message)
         message = 'Expecting a \'type\' object, but returned another.'
         self.assertTrue(isinstance(impact_function, type), message)
+
+        expected = 'FloodNativePolygonExperimentalFunction'
+        impact_function = registry.get_by_metadata_id(
+            expected)
+        result = impact_function.metadata().as_dict().get('id', '')
+        message = 'Expecting FloodNativePolygonExperimentalFunction. Got %s ' \
+                  'instead.' % result
+        self.assertEqual(expected, result, message)
+        message = 'Expecting a \'type\' object, but returned another.'
+        self.assertTrue(isinstance(impact_function, type), message)
+
+        expected = 'Flood Native Polygon Experimental Function'
+        impact_function = registry.get_by_metadata_name(
+            expected)
+        result = impact_function.metadata().as_dict().get('name', '')
+        message = 'Expecting Flood Native Polygon Experimental Function. ' \
+                  'Got %s instead.' % result
+        self.assertEqual(expected, result, message)
+        message = 'Expecting a \'type\' object, but returned another.'
+        self.assertTrue(isinstance(impact_function, type), message)
