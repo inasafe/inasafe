@@ -40,6 +40,7 @@ from safe.common.utilities import (
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe_extras.parameters.boolean_parameter import BooleanParameter
 
 
 # noinspection PyClassHasNoInit
@@ -146,17 +147,20 @@ class FloodEvacuationFunction(FunctionProvider):
 
     # Configurable parameters
     # TODO: Share the mimimum needs and make another default value
+    gender = BooleanParameter()
+    gender.name = 'Gender'
+    gender.value = True
     parameters = OrderedDict([
         ('thresholds [m]', [1.0]),
         ('postprocessors', OrderedDict([
-            ('Gender', {'on': True}),
-            ('Age', {
-                'on': True,
-                'params': OrderedDict([
-                    ('youth_ratio', defaults['YOUTH_RATIO']),
-                    ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-            ('MinimumNeeds', {'on': True}),
+            ('Gender', [gender]),
+            #('Age', [])
+                # 'on': True,
+                # 'params': OrderedDict([
+                #     ('youth_ratio', defaults['YOUTH_RATIO']),
+                #     ('adult_ratio', defaults['ADULT_RATIO']),
+                #     ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
+            #('MinimumNeeds', {'on': True}),
         ])),
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())

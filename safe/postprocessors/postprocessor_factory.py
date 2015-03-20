@@ -82,7 +82,7 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
 
     if requested_postprocessors is None or requested_postprocessors == {}:
         return postprocessor_instances
-
+    LOGGER.debug(requested_postprocessors)
     for name, values in requested_postprocessors.iteritems():
         constr_id = name + 'Postprocessor'
 
@@ -92,17 +92,20 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
         # lets check if the IF has a
         # ['params']['disable_for_entire_area_aggregation']
         # that would turn off the current postprocessor if in aoi_mode
-        if aoi_mode:
-            try:
-                requires_aggregation = (
-                    values['params']['disable_for_entire_area_aggregation'])
-            except KeyError:
-                pass
+
+        # if aoi_mode:
+        #     try:
+        #         requires_aggregation = (
+        #             values['params']['disable_for_entire_area_aggregation'])
+        #     except KeyError:
+        #         pass
 
         try:
-            if values['on'] and requires_aggregation:
+            if values[0].value and requires_aggregation:
                 if name in AVAILABLE_POSTPTOCESSORS.keys():
                     # http://stackoverflow.com/a/554462
+                    LOGGER.debug('globals:')
+                    LOGGER.debug(globals())
                     constr = globals()[constr_id]
                     instance = constr()
                     postprocessor_instances[name] = instance

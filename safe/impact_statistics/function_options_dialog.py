@@ -20,7 +20,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import ast
 from collections import OrderedDict
-
+import logging
+LOGGER = logging.getLogger('InaSAFE')
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -47,6 +48,7 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.resource_parameter_widget import ResourceParameterWidget
+from safe_extras.parameters.qt_widgets.boolean_parameter_widget import BooleanParameterWidget
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -143,11 +145,11 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.tabWidget.tabBar().setVisible(True)
         self.values['minimum needs'] = parameter_container.get_parameters
 
-    def build_post_processor_form(self, parameters):
+    def build_post_processor_form(self, form_elements):
         """Build Post Processor Tab.
 
-        :param parameters: A Dictionary containing element of form
-        :type parameters: dict
+        :param form_elements: A Dictionary containing element of form
+        :type form_elements: dict
         """
         # create postprocessors tab
         tab = QWidget()
@@ -156,42 +158,52 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.tabWidget.addTab(tab, self.tr('Postprocessors'))
         self.tabWidget.tabBar().setVisible(True)
 
+
         # create element for the tab
         values = OrderedDict()
-        for label, options in parameters.items():
+        LOGGER.debug(form_elements)
+        for label, parameters in form_elements.items():
+            LOGGER.debug(label)
+            LOGGER.debug(parameters)
             input_values = OrderedDict()
+            parameter_container = ParameterContainer(parameters)
+            form_layout.addWidget(parameter_container)
+            self.values['minimum needs'] = parameter_container.get_parameters()
 
-            # NOTE (gigih) : 'params' is assumed as dictionary
-            if 'params' in options:
-                group_box = QGroupBox()
-                group_box.setCheckable(True)
-                group_box.setTitle(get_postprocessor_human_name(label))
 
-                # NOTE (gigih): is 'on' always exist??
-                # (MB) should always be there
-                group_box.setChecked(options.get('on'))
-                input_values['on'] = self.bind(group_box, 'checked', bool)
-
-                layout = QFormLayout(group_box)
-                group_box.setLayout(layout)
-
-                # create widget element from 'params'
-                input_values['params'] = OrderedDict()
-                for key, value in options['params'].items():
-                    input_values['params'][key] = self.build_widget(
-                        layout, key, value)
-
-                form_layout.addRow(group_box, None)
-
-            elif 'on' in options:
-                checkbox = QCheckBox()
-                checkbox.setText(get_postprocessor_human_name(label))
-                checkbox.setChecked(options['on'])
-
-                input_values['on'] = self.bind(checkbox, 'checked', bool)
-                form_layout.addRow(checkbox, None)
-            else:
-                raise NotImplementedError('This case is not handled for now')
+            #
+            # # NOTE (gigih) : 'params' is assumed as dictionary
+            # if 'params' in options:
+            #     group_box = QGroupBox()
+            #     group_box.setCheckable(True)
+            #     group_box.setTitle(get_postprocessor_human_name(label))
+            #
+            #     # NOTE (gigih): is 'on' always exist??
+            #     # (MB) should always be there
+            #     group_box.setChecked(options.get('on'))
+            #     input_values['on'] = self.bind(group_box, 'checked', bool)
+            #
+            #     layout = QFormLayout(group_box)
+            #     group_box.setLayout(layout)
+            #
+            #     # create widget element from 'params'
+            #     input_values['params'] = OrderedDict()
+            #     for key, value in options['params'].items():
+            #         input_values['params'][key] = self.build_widget(
+            #             layout, key, value)
+            #
+            #     form_layout.addRow(group_box, None)
+            #
+            # elif 'on' in options:
+            #     param_unit = options['on']
+            #     parameter_container = ParameterContainer(param_unit)
+            #     parameter_container.setMinimumSize(0, 70)
+            #
+            #     input_values['on'] = parameter_container.get_parameters
+            #     form_layout.addWidget(parameter_container)
+            #
+            # else:
+            #     raise NotImplementedError('This case is not handled for now')
 
             values[label] = input_values
 
