@@ -77,12 +77,14 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
     :rtype: dict
 
     """
+    LOGGER.debug('ppf get_postprocessors.')
+    LOGGER.debug('INPUT: requested_postprocessors:')
+    LOGGER.debug(requested_postprocessors)
 
     postprocessor_instances = {}
 
     if requested_postprocessors is None or requested_postprocessors == {}:
         return postprocessor_instances
-    LOGGER.debug(requested_postprocessors)
     for name, values in requested_postprocessors.iteritems():
         constr_id = name + 'Postprocessor'
 

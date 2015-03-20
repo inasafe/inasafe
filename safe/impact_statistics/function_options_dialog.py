@@ -151,6 +151,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         :param form_elements: A Dictionary containing element of form
         :type form_elements: dict
         """
+        LOGGER.debug('build_post_processor_form:')
         # create postprocessors tab
         tab = QWidget()
         form_layout = QFormLayout(tab)
@@ -159,52 +160,18 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.tabWidget.tabBar().setVisible(True)
 
 
-        # create element for the tab
+        # create elements for the tab
         values = OrderedDict()
         LOGGER.debug(form_elements)
         for label, parameters in form_elements.items():
+            LOGGER.debug('form_element.item')
             LOGGER.debug(label)
             LOGGER.debug(parameters)
-            input_values = OrderedDict()
             parameter_container = ParameterContainer(parameters)
             form_layout.addWidget(parameter_container)
-            self.values['minimum needs'] = parameter_container.get_parameters()
-
-
-            #
-            # # NOTE (gigih) : 'params' is assumed as dictionary
-            # if 'params' in options:
-            #     group_box = QGroupBox()
-            #     group_box.setCheckable(True)
-            #     group_box.setTitle(get_postprocessor_human_name(label))
-            #
-            #     # NOTE (gigih): is 'on' always exist??
-            #     # (MB) should always be there
-            #     group_box.setChecked(options.get('on'))
-            #     input_values['on'] = self.bind(group_box, 'checked', bool)
-            #
-            #     layout = QFormLayout(group_box)
-            #     group_box.setLayout(layout)
-            #
-            #     # create widget element from 'params'
-            #     input_values['params'] = OrderedDict()
-            #     for key, value in options['params'].items():
-            #         input_values['params'][key] = self.build_widget(
-            #             layout, key, value)
-            #
-            #     form_layout.addRow(group_box, None)
-            #
-            # elif 'on' in options:
-            #     param_unit = options['on']
-            #     parameter_container = ParameterContainer(param_unit)
-            #     parameter_container.setMinimumSize(0, 70)
-            #
-            #     input_values['on'] = parameter_container.get_parameters
-            #     form_layout.addWidget(parameter_container)
-            #
-            # else:
-            #     raise NotImplementedError('This case is not handled for now')
-
+            input_values = parameter_container.get_parameters
+            LOGGER.debug('build_pp_form: parameter_container.get_paramters')
+            LOGGER.debug(input_values)
             values[label] = input_values
 
         self.values['postprocessors'] = values

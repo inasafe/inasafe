@@ -272,6 +272,7 @@ class PostprocessorManager(QtCore.QObject):
     def run(self):
         """Run any post processors requested by the impact function.
         """
+        LOGGER.debug('ppmanager run:')
         try:
             requested_postprocessors = self.function_parameters[
                 'postprocessors']
