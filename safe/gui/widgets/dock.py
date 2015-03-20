@@ -737,8 +737,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if index > -1:
             function_id = self.get_function_id()
 
-            functions = self.impact_function_manager.get_by_id(function_id)
-            self.active_impact_function = functions
+            function = self.impact_function_manager.get_by_id(function_id)
+            self.active_impact_function = function
             self.impact_function_parameters = None
             if hasattr(self.active_impact_function, 'parameters'):
                 self.impact_function_parameters = \
@@ -801,7 +801,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         if dialog.exec_():
             self.active_impact_function.parameters = dialog.result()
-            self.impact_function_parameters = self.active_impact_function.parameters
+            self.impact_function_parameters = \
+                self.active_impact_function.parameters
 
     @pyqtSlot()
     def canvas_layerset_changed(self):
@@ -1154,6 +1155,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.analysis.clip_parameters[1])
             # Start the analysis
             self.analysis.run_analysis()
+            a = 'ho'
         except InsufficientOverlapError as e:
             context = self.tr(
                 'A problem was encountered when trying to determine the '
@@ -1251,8 +1253,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.get_aggregation_layer())
 
         # Impact Functions
-        analysis.impact_function_id = self.get_function_id()
-        analysis.impact_function_parameters = self.impact_function_parameters
+        impact_function = self.impact_function_manager.get_by_id(
+            self.get_function_id())
+        impact_function.parameters = self.impact_function_parameters
+        analysis.impact_function = impact_function
 
         # Variables
         analysis.clip_hard = self.clip_hard

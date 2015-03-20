@@ -24,19 +24,25 @@ import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def calculate_impact(
-        layers, impact_function, parameters, extent=None, check_integrity=True):
+def calculate_impact(layers,
+                     impact_function,
+                     extent=None,
+                     check_integrity=True):
     """Calculate impact levels as a function of list of input layers
 
-    Input
-        layers: List of Raster and Vector layer objects to be used for analysis
+    :param layers: List of Raster and Vector layer objects to be used for
+        analysis.
+    :type layers: list
 
-        impact_fcn: Function of the form f(layers)
+    :param impact_function: An instance of impact function.
+    :type impact_function: safe.impact_function.base.ImpactFunction
 
-        extent:     List of [xmin, ymin, xmax, ymax]
-                    the coordinates of the bounding box.
+    :param extent: List of [xmin, ymin, xmax, ymax] the coordinates of the
+        bounding box.
+    :type extent: list
 
-        check_integrity:    If true, perform checking of input data integrity
+    :param check_integrity: If true, perform checking of input data integrity
+    :type check_integrity: bool
 
     Output
         filename of resulting impact layer (GML). Comment is embedded as
@@ -58,9 +64,6 @@ def calculate_impact(
     # Input checks
     if check_integrity:
         check_data_integrity(layers)
-
-    # Set the parameter
-    impact_function.parameters = parameters
 
     # Set extent if it is provided
     if extent is not None:
