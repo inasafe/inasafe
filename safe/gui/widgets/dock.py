@@ -144,6 +144,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Save reference to the QGIS interface
         self.iface = iface
 
+        # Impact Function Manager to deal with IF needs
+        self.impact_function_manager = ImpactFunctionManager()
+
         self.calculator = ImpactCalculator()
         self.keyword_io = KeywordIO()
         self.state = None
@@ -1011,13 +1014,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Find out which functions can be used with these layers
         try:
-            functions = ImpactFunctionManager().filter_by_keywords(
+            functions = self.impact_function_manager.filter_by_keywords(
                 hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions
             for function in functions:
                 function_name = function.__name__
-                function_title = ImpactFunctionManager().get_function_title(
-                    function)
+                function_title = \
+                    self.impact_function_manager.get_function_title(function)
 
                 # Provide function title and ID to function combo:
                 # function_title is the text displayed in the combo

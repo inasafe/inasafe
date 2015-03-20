@@ -454,6 +454,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.defaults = get_defaults()
 
         # Initialize attributes
+        self.impact_function_manager = ImpactFunctionManager()
         self.existing_keywords = None
         self.layer = None
         self.hazard_layer = None
@@ -512,12 +513,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             # and classified rasters. Sort hazard prior to exposure.
             categories = []
             for data_type in ['continuous', 'classified']:
-                for c in ImpactFunctionManager().categories_for_layer(
+                for c in self.impact_function_manager.categories_for_layer(
                         'raster', data_type):
                     if c not in categories:
                         categories += [c]
         else:
-            categories = ImpactFunctionManager().categories_for_layer(
+            categories = self.impact_function_manager.categories_for_layer(
                 layer_type, data_type)
         return categories
 
@@ -544,13 +545,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             # and classified rasters. Sort hazard prior to exposure.
             subcategories = []
             for data_type in ['continuous', 'classified']:
-                for sc in ImpactFunctionManager().subcategories_for_layer(
+                for sc in self.impact_function_manager.subcategories_for_layer(
                         category_id, 'raster', data_type):
                     if sc not in subcategories:
                         subcategories += [sc]
         else:
-            subcategories = ImpactFunctionManager().subcategories_for_layer(
-                category_id, layer_type, data_type)
+            subcategories = \
+                self.impact_function_manager.subcategories_for_layer(
+                    category_id, layer_type, data_type)
         return subcategories
 
     # ===========================
@@ -810,7 +812,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeUnit.setText('')
         self.lstUnits.clear()
         self.lstFields.clear()
-        for unit_for_layer in ImpactFunctionManager().units_for_layer(
+        for unit_for_layer in self.impact_function_manager.units_for_layer(
                 subcategory['id'],
                 self.get_layer_type(), self.get_data_type()):
             if (self.get_layer_type() == 'raster' and
@@ -1495,12 +1497,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.tblFunctions1.verticalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
 
-        hazards = ImpactFunctionManager().get_available_hazards()
+        hazards = self.impact_function_manager.get_available_hazards()
         # Remove 'generic' from hazards
         for h in hazards:
             if h['id'] == 'generic':
                 hazards.remove(h)
-        exposures = ImpactFunctionManager().get_available_exposures()
+        exposures = self.impact_function_manager.get_available_exposures()
 
         self.lblAvailableFunctions1.clear()
         self.tblFunctions1.setColumnCount(len(hazards))
@@ -1528,8 +1530,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         for h in hazards:
             for e in exposures:
                 item = QtGui.QTableWidgetItem()
-                functions = ImpactFunctionManager(
-                    ).get_functions_for_constraint(h, e)
+                functions = \
+                    self.impact_function_manager.get_functions_for_constraint(
+                        h, e)
                 if len(functions):
                     bgcolor = QtGui.QColor(120, 255, 120)
                 else:
@@ -1639,8 +1642,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             for row in range(len(exp_datatypes)):
                 hc = haz_datatypes[col]
                 ec = exp_datatypes[row]
-                functions = ImpactFunctionManager(
-                    ).get_functions_for_constraint(h, e, hc, ec)
+                functions = \
+                    self.impact_function_manager.get_functions_for_constraint(
+                        h, e, hc, ec)
                 item = QtGui.QTableWidgetItem()
                 if len(functions):
                     bgcolor = QtGui.QColor(120, 255, 120)
@@ -1720,7 +1724,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeFunction.setText('')
 
         h, e, hc, ec = self.selected_imfunc_constraints()
-        functions = ImpactFunctionManager().get_functions_for_constraint(
+        functions = self.impact_function_manager.get_functions_for_constraint(
             h, e, hc, ec)
         for f in functions:
             item = QtGui.QListWidgetItem(self.lstFunctions)
@@ -3162,14 +3166,14 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_source
             elif self.get_layer_type() == 'raster':
                 new_step = step_kw_datatype
-            elif ImpactFunctionManager().units_for_layer(
+            elif self.impact_function_manager.units_for_layer(
                     subcategory['id'],
                     self.get_layer_type(), self.get_data_type()):
                 new_step = step_kw_unit
             else:
                 new_step = step_kw_field
         elif current_step == step_kw_datatype:
-            if ImpactFunctionManager().units_for_layer(
+            if self.impact_function_manager.units_for_layer(
                     self.selected_subcategory()['id'],
                     self.get_layer_type(), self.get_data_type()):
                 new_step = step_kw_unit
