@@ -65,9 +65,7 @@ from safe.utilities.gis import (
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.utilities import (
-    get_error_message,
-    get_safe_impact_function)
+from safe.utilities.utilities import get_error_message
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -2700,8 +2698,9 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # TODO Put the params to metadata! Now we need to import the IF class.
         # Notes: Why don't we store impact_function to class attribute?
-        imfunc_id = self.selected_function()['id']
-        impact_function = get_safe_impact_function(imfunc_id)
+        impact_function_id = self.selected_function()['id']
+        impact_function = self.impact_function_manager.get_by_id(
+            impact_function_id)
         if not impact_function:
             return
         self.if_params = None
@@ -2710,11 +2709,12 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         text = self.tr(
             'Please set impact functions parameters.<br/>Parameters for '
-            'impact function "%s" that can be modified are:' % imfunc_id)
+            'impact function "%s" that can be modified are:' %
+            impact_function_id)
         self.lblSelectIFParameters.setText(text)
 
         self.parameter_dialog = FunctionOptionsDialog(self)
-        self.parameter_dialog.set_dialog_info(imfunc_id)
+        self.parameter_dialog.set_dialog_info(impact_function_id)
         self.parameter_dialog.build_form(self.if_params)
 
         if self.twParams:
@@ -2749,8 +2749,9 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # (IS) Set the current impact function to use parameter from user.
         # We should do it prettier (put it on analysis or impact calculator
-        imfunc_id = self.selected_function()['id']
-        impact_function = get_safe_impact_function(imfunc_id)
+        impact_function_id = self.selected_function()['id']
+        impact_function = self.impact_function_manager.get_by_id(
+            impact_function_id)
         if not impact_function:
             return
         impact_function.parameters = self.if_params

@@ -28,13 +28,12 @@ from PyQt4.QtCore import QObject
 # Do not import any QGIS or SAFE modules in this module!
 from safe.utilities.impact_calculator_thread import ImpactCalculatorThread
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
-from safe.utilities.utilities import (
-    get_safe_impact_function,
-    get_safe_impact_function_type)
+from safe.utilities.utilities import get_safe_impact_function_type
 from safe.common.exceptions import (
     InsufficientParametersError,
     InvalidParameterError)
 from safe.utilities.gis import convert_to_safe_layer
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 
 class ImpactCalculator(QObject):
@@ -52,6 +51,7 @@ class ImpactCalculator(QObject):
     def __init__(self):
         """Constructor for the impact calculator."""
         QObject.__init__(self)
+        self.impact_function_manager = ImpactFunctionManager()
         self._hazardLayer = None
         self._exposureLayer = None
         self._function = None
@@ -204,7 +204,7 @@ class ImpactCalculator(QObject):
         hazard_layer = self.hazard_layer()
         exposure_layer = self.exposure_layer()
 
-        function = get_safe_impact_function(self._function)
+        function = self.impact_function_manager.get_by_id(self._function)
         return ImpactCalculatorThread(
             hazard_layer,
             exposure_layer,

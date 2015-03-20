@@ -362,26 +362,6 @@ def write_keywords_to_file(filename, keywords):
         raise
 
 
-def get_safe_impact_function(function_name=None):
-    """Thin wrapper around the safe impact_functions function.
-
-    :param function_name: Specific plugin name that should be fetched.
-    :type function_name: str
-
-    :returns: A safe impact function is returned
-    :rtype: safe.impact.core.FunctionProvider
-
-    """
-    # Convert string to ASCII
-    function_name = unicode(function_name)
-    function_name = unicodedata.normalize(
-        'NFKD', function_name).encode('ascii', 'ignore')
-    try:
-        return ImpactFunctionManager().get(function_name)
-    except:
-        raise
-
-
 def replace_accentuated_characters(message):
     """Normalize unicode data in Python to remove umlauts, accents etc.
 
@@ -409,7 +389,7 @@ def get_safe_impact_function_type(function_id):
     """
     try:
         # Get an instance of the impact function and get the type
-        function = get_safe_impact_function(function_id)
+        function = ImpactFunctionManager().get_by_id(function_id)
 
         try:
             fun_type = function.get_function_type()
