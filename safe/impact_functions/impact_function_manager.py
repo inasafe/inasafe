@@ -139,8 +139,8 @@ class ImpactFunctionManager(object):
         """Return the impact function type uses to differentiate which type of
         layers would be passed to the impact functions
 
-        :param impact_function: The impact function
-        :type impact_function: safe.impact_functions.base.ImpactFunction
+        :param impact_function: An instance of the impact function
+        :type impact_function: object
         """
         return impact_function.function_type
 

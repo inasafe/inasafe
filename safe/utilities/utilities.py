@@ -374,28 +374,3 @@ def replace_accentuated_characters(message):
 
     message = unicodedata.normalize('NFKD', message).encode('ASCII', 'ignore')
     return message.decode('utf-8')
-
-
-def get_safe_impact_function_type(function_id):
-    """
-
-    :parm function_id: A specific plugins name that should be fetched.
-    :type function_id: str
-
-    :returns: A safe impact function type is returned:
-            'old-style' is "classic" safe impact function
-            'qgis2.0'   is impact function with native qgis layers support
-    :rtype: str
-    """
-    try:
-        # Get an instance of the impact function and get the type
-        function = ImpactFunctionManager().get_by_id(function_id)
-
-        try:
-            fun_type = function.get_function_type()
-        except AttributeError:
-            fun_type = 'old-style'
-    except:
-        raise
-
-    return fun_type
