@@ -114,6 +114,18 @@ class ImpactFunctionManager(object):
         return self.registry.filter_by_metadata(metadata_key, metadata_value)
 
     @staticmethod
+    def get_function_id(impact_function):
+        """Get the ID of the impact function.
+
+        :param impact_function: Class of an impact function
+        :type impact_function: safe.impact_functions.base.ImpactFunction
+
+        :returns: The ID of the impact function specified in its metadata.
+        :rtype: str
+        """
+        return impact_function.metadata().as_dict().get('id', None)
+
+    @staticmethod
     def get_function_title(impact_function):
         """Get title of the impact function.
 
@@ -136,10 +148,9 @@ class ImpactFunctionManager(object):
 
     @staticmethod
     def get_function_type(impact_function):
-        """Return the impact function type uses to differentiate which type of
-        layers would be passed to the impact functions
+        """Return the impact function type.
 
-        :param impact_function: An instance of the impact function
+        :param impact_function: The impact function.
         :type impact_function: safe.impact_functions.base.ImpactFunction
         """
         return impact_function.function_type()

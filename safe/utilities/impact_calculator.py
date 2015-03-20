@@ -72,9 +72,8 @@ class ImpactCalculator(QObject):
         :raises: InsufficientParametersError if self._function is not set,
                  InvalidParameterError if style of self._function is not
                      in ('old-style', 'qgis2.0')
-                 Any exceptions raised by other libraries will be propogated.
+                 Any exceptions raised by other libraries will be propagated.
         """
-
         if self._function_id is None or self._function_id == '':
             message = self.tr('Error: Impact Function not set.')
             raise InsufficientParametersError(message)

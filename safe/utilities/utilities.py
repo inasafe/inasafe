@@ -40,7 +40,6 @@ from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 INFO_STYLE = styles.INFO_STYLE
 

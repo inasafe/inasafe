@@ -73,7 +73,7 @@ class Registry(object):
 
     @classmethod
     def get(cls, name):
-        """Return an instance of an impact function given its class name.
+        """Return an instance of impact function given its class name.
 
         :param name: the name of IF class
         :type name: str
@@ -87,7 +87,7 @@ class Registry(object):
     def get_class(cls, name):
         """Return the class of an impact function given its class name.
 
-        :param name: the name of IF class
+        :param name: The class name of the IF.
         :type name: str
 
         :return: impact function class

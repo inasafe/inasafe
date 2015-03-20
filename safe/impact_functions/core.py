@@ -9,10 +9,8 @@ using it.
 
 import logging
 from math import ceil
-import numpy
 from collections import OrderedDict
 
-from safe.gis.polygon import inside_polygon
 from safe.utilities.i18n import tr
 from safe.defaults import default_minimum_needs
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager

@@ -741,7 +741,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.active_impact_function = functions
             self.impact_function_parameters = None
             if hasattr(self.active_impact_function, 'parameters'):
-                self.impact_function_parameters = self.active_impact_function.parameters
+                self.impact_function_parameters = \
+                    self.active_impact_function.parameters
             self.set_function_options_status()
         else:
             self.impact_function_parameters = None
@@ -973,8 +974,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.draw_rubber_bands()
 
     def get_functions(self):
-        """Obtain a list of impact functions from the impact calculator.
-        """
+        """Obtain a list of impact functions from the IF manager."""
         # remember what the current function is
         original_function = self.cboFunction.currentText()
         self.cboFunction.clear()
@@ -1011,13 +1011,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Find out which functions can be used with these layers
         try:
-            functions = self.impact_function_manager.filter_by_keywords(
+            impact_functions = self.impact_function_manager.filter_by_keywords(
                 hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions
-            for function in functions:
-                function_name = function.__name__
+            for impact_function in impact_functions:
+                function_id = self.impact_function_manager.get_function_id(
+                    impact_function)
                 function_title = \
-                    self.impact_function_manager.get_function_title(function)
+                    self.impact_function_manager.get_function_title(
+                        impact_function)
 
                 # Provide function title and ID to function combo:
                 # function_title is the text displayed in the combo
@@ -1025,7 +1027,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 add_ordered_combo_item(
                     self.cboFunction,
                     function_title,
-                    data=function_name)
+                    data=function_id)
         except Exception, e:
             raise e
 
