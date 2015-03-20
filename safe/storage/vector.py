@@ -882,9 +882,13 @@ class Vector(Layer):
                 msg = ('Specified attribute %s does not exist in '
                        'vector layer %s. Valid names are %s'
                        '' % (attribute, self, self.data[0].keys()))
-                verify(attribute in self.data[0], msg)
+                keys = [key.lower() for key in self.data[0]]
+                verify(attribute.lower() in keys, msg)
 
                 if index is None:
+                    # find normalized index (handled for different cases)
+                    attribute = [key for key in self.data[0].keys() if
+                                 key.lower() == attribute.lower()][0]
                     # Return all values for specified attribute
                     return [x[attribute] for x in self.data]
                 else:

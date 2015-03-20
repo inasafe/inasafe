@@ -74,7 +74,7 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
         self.prepare(layers)
 
         # Set the target field in impact layer
-        target_field = 'INUNDATED'
+        target_field = self.parameters['target_field']
 
         # Get the IF parameters
         building_type_field = self.parameters['building_type_field']

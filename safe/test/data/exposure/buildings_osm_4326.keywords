@@ -1,5 +1,5 @@
-datatype: osm
 category: exposure
+field: type
 subcategory: structure
-purpose: dki
+unit: building_type
 title: buildings_osm_4326

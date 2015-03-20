@@ -4,6 +4,7 @@
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import InvalidExtentError
+from safe.storage.vector import Vector
 
 from safe.utilities.i18n import tr
 
@@ -157,10 +158,19 @@ class ImpactFunction(object):
 
         :raises:
         # """
-        pass
-        # if self.extent is None:
-        #     raise InvalidExtentError(
-        #         tr('The analysis extent has not been set.'))
+        if self.extent is None:
+            # get extent from hazard layer
+            if self.function_type() == 'qgis2.0':
+                # get from QgsMapLayer
+                rect_extent = self.hazard.get_layer().extent()
+                self.extent = [
+                    rect_extent.xMinimum(), rect_extent.yMaximum(),
+                    rect_extent.xMaximum(), rect_extent.yMinimum()]
+            # RM: I don't know what if it is raster SAFE layer?
+            elif self.function_type() == 'old-style' and isinstance(
+                    self.hazard, Vector):
+                # get from safe layer
+                self.extent = self.hazard.extent
 
     @property
     def hazard(self):
