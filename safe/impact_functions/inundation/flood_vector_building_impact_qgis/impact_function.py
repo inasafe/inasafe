@@ -39,15 +39,6 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
     def __init__(self):
         super(FloodNativePolygonExperimentalFunction, self).__init__()
 
-    @property
-    def function_type(self):
-        """Type of the impact function ('old-style' or 'qgis2.0')."""
-        return 'qgis2.0'
-
-    def get_function_type(self):
-        """Deprecated. Will be replaced by function_type property"""
-        return 'qgis2.0'
-
     def prepare(self, layers=None):
         """Prepare this impact function for running the analysis"""
         super(FloodNativePolygonExperimentalFunction, self).prepare()

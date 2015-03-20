@@ -70,7 +70,7 @@ class ImpactFunctionManager(object):
         :type impact_function_id: str
 
         :return An Impact function instance that has matched id.
-        :rtype: object
+        :rtype: safe.impact_functions.base.ImpactFunction
         """
         impact_functions = self.registry.filter_by_metadata(
             'id', impact_function_id)
@@ -140,9 +140,9 @@ class ImpactFunctionManager(object):
         layers would be passed to the impact functions
 
         :param impact_function: An instance of the impact function
-        :type impact_function: object
+        :type impact_function: safe.impact_functions.base.ImpactFunction
         """
-        return impact_function.function_type
+        return impact_function.function_type()
 
     def allowed_subcategories(self, category=None):
         """Determine allowed subcategories, optionally filtered by category.

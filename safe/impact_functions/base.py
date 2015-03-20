@@ -23,7 +23,6 @@ class ImpactFunction(object):
                 super(FloodImpactFunction, self).__init__()
 
         """
-        self._function_type = 'old-style'  # or 'qgis2'
         # Analysis extent to use
         self._extent = None
         # CRS as EPSG number
@@ -47,15 +46,15 @@ class ImpactFunction(object):
         # ABC's will normally set this property.
         self._impact_style = None
 
-    @property
-    def function_type(self):
-        """Property for the type of impact function ('old-style' or 'qgis2').
+    @classmethod
+    def function_type(cls):
+        """Property for the type of impact function ('old-style' or 'qgis2.0').
 
         QGIS2 impact functions are using the QGIS api and have more
         dependencies. Legacy IF's use only numpy, gdal etc. and can be
         used in contexts where no QGIS is present.
         """
-        return self._function_type
+        return cls.metadata().as_dict().get('function_type', None)
 
     @classmethod
     def metadata(cls):

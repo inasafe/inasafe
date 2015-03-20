@@ -40,11 +40,6 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
         """Constructor (calls ctor of base class)."""
         super(FloodVectorBuildingImpactFunction, self).__init__()
 
-    @property
-    def function_type(self):
-        """Type of the impact function ('old-style' or 'qgis2')."""
-        return 'old-style'
-
     def prepare(self, layers=None):
         """Prepare this impact function for running the analysis."""
         super(FloodVectorBuildingImpactFunction, self).prepare()

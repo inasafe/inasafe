@@ -53,6 +53,7 @@ class FloodVectorBuildingMetadata(ImpactFunctionMetadata):
             'name': tr('Flood Vector Building Impact Function'),
             'impact': tr('Be flooded'),
             'title': tr('Be flooded'),
+            'function_type': 'old-style',
             # should be a list, but we can do it later.
             'author': 'Ole Nielsen and Kristy van Putten',
             'date_implemented': 'N/A',

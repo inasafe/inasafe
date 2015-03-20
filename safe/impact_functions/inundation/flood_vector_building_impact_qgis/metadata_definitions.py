@@ -50,6 +50,7 @@ class FloodNativePolygonMetadata(ImpactFunctionMetadata):
             'name': tr('Flood Native Polygon Experimental Function'),
             'impact': tr('Be-flooded (QGIS)'),
             'title': tr('Be flooded (QGIS)'),
+            'function_type': 'qgis2.0',
             'author': 'Dmitry Kolesov',
             'date_implemented': 'N/A',
             'overview': tr('N/A'),
