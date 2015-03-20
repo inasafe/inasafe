@@ -23,7 +23,6 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_vector_osm_building_impact\
     .impact_function import FloodVectorBuildingImpactFunction
-from safe.impact_functions.utilities import get_list_id
 from safe.definitions import (
     unit_metres_depth,
     unit_feet_depth,
@@ -193,8 +192,10 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.categories_for_layer(
             layer_type='raster', data_type='continuous')
         expected_result = [hazard_definition, exposure_definition]
+        result_list_id = [e['id'] for e in result]
+        expected_list_id = [e['id'] for e in expected_result]
         message = ('I expect %s but I got %s.' % (
-            get_list_id(expected_result), get_list_id(result)))
+            expected_list_id, result_list_id))
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.categories_for_layer(
