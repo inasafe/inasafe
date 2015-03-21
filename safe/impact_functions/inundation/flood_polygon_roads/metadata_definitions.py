@@ -77,8 +77,6 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # This field of impact layer marks inundated roads by '1' value
-                ('target_field', 'flooded'),
                 # This field of the exposure layer contains
                 # information about road types
                 ('road_type_field', 'TYPE'),

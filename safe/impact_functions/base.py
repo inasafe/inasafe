@@ -1,5 +1,21 @@
 # coding=utf-8
-"""Abstract base class for all impact functions."""
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**Impact Function Base Class**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+
+__author__ = 'akbargumbira@gmail.com'
+__revision__ = '$Format:%H$'
+__date__ = '15/03/15'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -48,6 +64,11 @@ class ImpactFunction(object):
         self._impact_style = None
 
     @classmethod
+    def metadata(cls):
+        """Get the metadata class of this impact function."""
+        return cls._metadata
+
+    @classmethod
     def function_type(cls):
         """Property for the type of impact function ('old-style' or 'qgis2.0').
 
@@ -56,11 +77,6 @@ class ImpactFunction(object):
         used in contexts where no QGIS is present.
         """
         return cls.metadata().as_dict().get('function_type', None)
-
-    @classmethod
-    def metadata(cls):
-        """Get the metadata class of this impact function."""
-        return cls._metadata
 
     @property
     def extent(self):
@@ -146,31 +162,26 @@ class ImpactFunction(object):
         run method before it attempts to do any real processing. This
         method will do any needed house keeping such as:
 
-            * checking that the exposure and hazard layers sufficiently overlap
+            * checking that the exposure and hazard layers sufficiently
+            overlap (post 3.1)
             * clipping or subselecting features from both layers such that
               only features / coverage within the actual analysis extent
-              will be analysed.
-            * raising errors if any untennable condition exists e.g. extent has
-              no valid CRS.
+              will be analysed (post 3.1)
+            * raising errors if any untenable condition exists e.g. extent has
+              no valid CRS. (post 3.1)
 
         We suggest to overload this method in your concrete class implementation
         so that it includes any impact function specific checks too.
 
+        ..note: For 3.1, we will still do those preprocessing in analysis
+            class. We will just need to check if the function_type is
+            'qgis2.0', it needs to have the extent set.
         :raises:
         # """
-        if self.extent is None:
-            # get extent from hazard layer
-            if self.function_type() == 'qgis2.0':
-                # get from QgsMapLayer
-                rect_extent = self.hazard.get_layer().extent()
-                self.extent = [
-                    rect_extent.xMinimum(), rect_extent.yMaximum(),
-                    rect_extent.xMaximum(), rect_extent.yMinimum()]
-            # RM: I don't know what if it is raster SAFE layer?
-            elif self.function_type() == 'old-style' and isinstance(
-                    self.hazard, Vector):
-                # get from safe layer
-                self.extent = self.hazard.extent
+        if self.function_type() == 'qgis2.0' and self.extent is None:
+            raise Exception(
+                'Impact Function with QGIS function type is used, but no '
+                'extent is provided.')
 
     @property
     def hazard(self):

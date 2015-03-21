@@ -244,7 +244,7 @@ def split_by_polygon(
     new_field_added = False
     if mark_value is not None:
         target_field = mark_value[0]
-        if result_provider.fieldNameIndex(target_field) == -1:
+        if fields.indexFromName(target_field) == -1:
             result_layer.startEditing()
             result_provider.addAttributes(
                 [QgsField(target_field, QVariant.Int)])

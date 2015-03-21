@@ -55,9 +55,15 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
             include_keywords=True,
             source_directory=TESTDATA)
 
+        # Let's set the extent to the hazard extent
+        extent = hazard_layer.extent()
+        rect_extent = [
+            extent.xMinimum(), extent.yMaximum(),
+            extent.xMaximum(), extent.yMinimum()]
+
         function.hazard = QgisWrapper(hazard_layer)
         function.exposure = QgisWrapper(exposure_layer)
-        function.parameters['target_field'] = 'FLOODED'
+        function.extent = rect_extent
         function.parameters['building_type_field'] = 'TYPE'
         function.parameters['affected_field'] = 'FLOODPRONE'
         function.parameters['affected_value'] = 'YES'
@@ -65,10 +71,11 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
         impact = function.impact
 
         # Count of flooded objects is calculated "by the hands"
-        # the count = 68
-        count = sum(impact.get_data(
-            attribute=function.parameters['target_field']))
+        # total flooded = 68, total buildings = 250
+        count = sum(impact.get_data(attribute='INUNDATED'))
         self.assertEquals(count, 68)
+        count = len(impact.get_data())
+        self.assertEquals(count, 250)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""

@@ -27,17 +27,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class FloodVectorRoadsExperimentalFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
-    """Simple experimental impact function for inundation.
-
-    :author Dmitry Kolesov
-    :rating 1
-    :param requires category=='hazard' and \
-                    subcategory=='flood' and \
-                    layertype=='vector'
-    :param requires category=='exposure' and \
-                    subcategory in ['road'] and \
-                    layertype=='vector'
-    """
+    """Simple experimental impact function for inundation."""
     _metadata = FloodPolygonRoadsMetadata()
 
     def __init__(self):
@@ -76,7 +66,10 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         """
         self.prepare(layers)
 
-        target_field = self.parameters['target_field']
+        # Set the target field
+        target_field = 'FLOODED'
+
+        # Get the parameters from IF options
         road_type_field = self.parameters['road_type_field']
         affected_field = self.parameters['affected_field']
         affected_value = self.parameters['affected_value']
@@ -153,9 +146,9 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
 
         if hazard_poly is None:
             message = tr(
-                '''There are no objects in the hazard layer with "Affected
-                value"='%s'. Please check the value or use a different
-                extent.''' % (affected_value, ))
+                'There are no objects in the hazard layer with %s (Affected '
+                'Field) = %s (Affected Value). Please check the value or use a '
+                'different extent.' % (affected_field, affected_value))
             raise GetDataError(message)
 
         # Clip exposure by the extent
@@ -217,5 +210,7 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
                 'map_title': map_title,
                 'target_field': target_field},
             style_info=style_info)
+
         self._impact = line_layer
+
         return line_layer

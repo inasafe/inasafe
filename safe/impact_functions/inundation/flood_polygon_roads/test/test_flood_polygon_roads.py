@@ -17,7 +17,6 @@ __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -38,8 +37,7 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
         registry.register(FloodVectorRoadsExperimentalFunction)
 
     def test_run(self):
-        function = ImpactFunctionManager().get(
-            'FloodVectorRoadsExperimentalFunction')
+        function = FloodVectorRoadsExperimentalFunction.instance()
 
         building = 'roads_osm_4326'
         flood_data = 'multipart_polygons_osm_4326'
@@ -54,10 +52,14 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
             name=exposure_filename,
             include_keywords=True,
             source_directory=TESTDATA)
-
+        # Let's set the extent to the hazard extent
+        extent = hazard_layer.extent()
+        rect_extent = [
+            extent.xMinimum(), extent.yMaximum(),
+            extent.xMaximum(), extent.yMinimum()]
         function.hazard = QgisWrapper(hazard_layer)
         function.exposure = QgisWrapper(exposure_layer)
-        function.parameters['target_field'] = 'FLOODED'
+        function.extent = rect_extent
         function.parameters['building_type_field'] = 'TYPE'
         function.parameters['affected_field'] = 'FLOODPRONE'
         function.parameters['affected_value'] = 'YES'
@@ -66,8 +68,7 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
 
         # Count of flooded objects is calculated "by the hands"
         # the count = 63
-        count = sum(impact.get_data(
-            attribute=function.parameters['target_field']))
+        count = sum(impact.get_data(attribute='FLOODED'))
         self.assertEquals(count, 63)
 
     def test_filter(self):

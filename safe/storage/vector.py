@@ -10,7 +10,6 @@ OGR C++ reference: http://www.gdal.org/ogr
 
 
 """
-from safe.utilities.i18n import tr
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
 __revision__ = '$Format:%H$'
@@ -52,6 +51,7 @@ from utilities import get_ring_data, get_polygon_data
 from utilities import rings_equal
 from utilities import safe_to_qgis_layer
 from safe.common.utilities import unique_filename
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(99999999)
@@ -882,13 +882,9 @@ class Vector(Layer):
                 msg = ('Specified attribute %s does not exist in '
                        'vector layer %s. Valid names are %s'
                        '' % (attribute, self, self.data[0].keys()))
-                keys = [key.lower() for key in self.data[0]]
-                verify(attribute.lower() in keys, msg)
+                verify(attribute in self.data[0], msg)
 
                 if index is None:
-                    # find normalized index (handled for different cases)
-                    attribute = [key for key in self.data[0].keys() if
-                                 key.lower() == attribute.lower()][0]
                     # Return all values for specified attribute
                     return [x[attribute] for x in self.data]
                 else:
