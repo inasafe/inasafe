@@ -34,7 +34,7 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation (polygon-polygon)."""
 
-    _metadata = FloodNativePolygonMetadata
+    _metadata = FloodNativePolygonMetadata()
 
     def __init__(self):
         super(FloodNativePolygonExperimentalFunction, self).__init__()

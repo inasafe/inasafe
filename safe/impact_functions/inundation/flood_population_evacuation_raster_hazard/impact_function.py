@@ -1,17 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid - **Flood polygon evacuation.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
-
-"""
+"""Flood Evacuation Impact Function."""
 __author__ = 'Rizky Maulana Nugraha'
 
 import logging
@@ -40,7 +28,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class FloodEvacuationFunctionRasterHazard(ImpactFunction):
     # noinspection PyUnresolvedReferences
-    """Simple experimental impact function for inundation."""
+    """Risk plugin for flood population evacuation."""
     _metadata = FloodEvacuationFunctionRasterHazardMetadata()
 
     def __init__(self):
@@ -125,15 +113,16 @@ class FloodEvacuationFunctionRasterHazard(ImpactFunction):
         """Risk plugin for flood population evacuation.
 
         :param layers: List of layers expected to contain
+              hazard_layer: Raster layer of flood depth
+              exposure_layer: Raster layer of population data on the same grid
+              as hazard_layer
 
-            * hazard_layer : Vector polygon layer of flood depth
-            * exposure_layer : Raster layer of population data on the same grid
-                as hazard_layer
+        Counts number of people exposed to flood levels exceeding
+        specified threshold.
 
-        Counts number of people exposed to areas identified as flood prone
-
-        :returns: Map of population exposed to flooding Table with number of
-            people evacuated and supplies required.
+        :returns: Map of population exposed to flood levels exceeding the
+            threshold. Table with number of people evacuated and supplies
+            required.
         :rtype: tuple
         """
         self.prepare(layers)

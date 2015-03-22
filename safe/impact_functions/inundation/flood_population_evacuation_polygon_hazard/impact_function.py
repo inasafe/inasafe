@@ -40,7 +40,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class FloodEvacuationFunctionVectorHazard(ImpactFunction):
     # noinspection PyUnresolvedReferences
-    """Simple experimental impact function for inundation."""
+    """Impact function for vector flood evacuation."""
     _metadata = FloodEvacuationFunctionVectorHazardMetadata()
 
     def __init__(self):

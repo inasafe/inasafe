@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Flood Vector Impact on OSM
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on OSM
 Buildings
 
 Contact : ole.moller.nielsen@gmail.com
@@ -10,20 +10,18 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+__author__ = 'lucernae'
+
 
 import logging
 
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import (
-    get_hazard_layer,
-    get_exposure_layer,
-    get_question)
-from safe.impact_functions.inundation.flood_vector_osm_building_impact\
-    .metadata_definitions import FloodVectorBuildingMetadata
+from safe.impact_functions.inundation\
+    .flood_raster_osm_building_impact.metadata_definitions import \
+    FloodRasterBuildingMetadata
 from safe.storage.vector import Vector
-from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.utilities.i18n import tr
-from safe.common.utilities import format_int, get_osm_building_usage
+from safe.common.utilities import format_int, get_osm_building_usage, verify
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 
@@ -31,26 +29,32 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodVectorBuildingImpactFunction(ImpactFunction):
+class FloodRasterBuildingImpactFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
-    """Inundation vector impact on building data."""
-    _metadata = FloodVectorBuildingMetadata()
+    """Inundation raster impact on building data."""
+    _metadata = FloodRasterBuildingMetadata()
 
     def __init__(self):
         """Constructor (calls ctor of base class)."""
-        super(FloodVectorBuildingImpactFunction, self).__init__()
+        super(FloodRasterBuildingImpactFunction, self).__init__()
+        self.target_field = 'INUNDATED'
 
-    def _tabulate(self, affected_buildings, affected_count, attribute_names,
-                  buildings, question, total_features):
-        # Generate simple impact report
+    def _tabulate(self, attribute_names, buildings, dry_buildings, dry_count,
+                  inundated_buildings, inundated_count, question, threshold,
+                  total_features, wet_buildings, wet_count):
         table_body = [
             question,
             TableRow([tr('Building type'),
-                      tr('Number flooded'),
+                      tr('Number Inundated'),
+                      tr('Number of Wet Buildings'),
+                      tr('Number of Dry Buildings'),
                       tr('Total')], header=True),
-            TableRow([tr('All'),
-                      format_int(affected_count),
-                      format_int(total_features)])]
+            TableRow(
+                [tr('All'),
+                 format_int(inundated_count),
+                 format_int(wet_count),
+                 format_int(dry_count),
+                 format_int(total_features)])]
         school_closed = 0
         hospital_closed = 0
         # Generate break down by building usage type if available
@@ -68,13 +72,19 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
                 building_type = tr(building_type)
                 building_list.append([
                     building_type.capitalize(),
-                    format_int(affected_buildings[usage]),
+                    format_int(inundated_buildings[usage]),
+                    format_int(wet_buildings[usage]),
+                    format_int(dry_buildings[usage]),
                     format_int(buildings[usage])])
 
                 if usage.lower() == 'school':
-                    school_closed = affected_buildings[usage]
+                    school_closed = 0
+                    school_closed += inundated_buildings[usage]
+                    school_closed += wet_buildings[usage]
                 if usage.lower() == 'hospital':
-                    hospital_closed = affected_buildings[usage]
+                    hospital_closed = 0
+                    hospital_closed += inundated_buildings[usage]
+                    hospital_closed += wet_buildings[usage]
 
             # Sort alphabetically
             building_list.sort()
@@ -111,8 +121,19 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
         # Notes Section
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(TableRow(
-            tr('Buildings are said to be flooded when in regions marked '
-               'as affected')))
+            tr('Buildings are said to be inundated when flood levels '
+               'exceed %.1f m') % threshold))
+        table_body.append(TableRow(
+            tr('Buildings are said to be wet when flood levels '
+               'are greater than 0 m but less than %.1f m') % threshold))
+        table_body.append(TableRow(
+            tr('Buildings are said to be dry when flood levels '
+               'are less than 0 m')))
+        table_body.append(TableRow(
+            tr('Buildings are said to be closed if they are inundated or '
+               'wet')))
+        table_body.append(TableRow(
+            tr('Buildings are said to be open if they are dry')))
         return table_body
 
     def run(self, layers=None):
@@ -123,28 +144,20 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
                 * exposure_layer: Vector layer of structure data on
                 the same grid as hazard_layer
         """
-        # Prepare before running the IF
         self.prepare(layers)
+        threshold = self.parameters['threshold [m]']  # Flood threshold [m]
+
+        verify(isinstance(threshold, float),
+               'Expected thresholds to be a float. Got %s' % str(threshold))
 
         # Extract data
         hazard_layer = self.hazard  # Depth
         exposure_layer = self.exposure  # Building locations
 
-        # Get question
-        question = get_question(
-            hazard_layer.get_name(),
-            exposure_layer.get_name(),
-            self)
-
-        # Define the target field in the impact layer
-        target_field = 'INUNDATED'
-
-        # Get parameters from user
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        question = self.question()
 
         # Determine attribute name for hazard levels
-        hazard_attribute = None
+        hazard_attribute = 'depth'
 
         # Interpolate hazard level to building locations
         interpolated_layer = assign_hazard_values_to_exposure_data(
@@ -157,38 +170,24 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
         buildings = {}
 
         # The number of affected buildings
-        affected_count = 0
 
-        # The variable for regions mode
-        affected_buildings = {}
+        # The variable for grid mode
+        inundated_count = 0
+        wet_count = 0
+        dry_count = 0
+        inundated_buildings = {}
+        wet_buildings = {}
+        dry_buildings = {}
+
         for i in range(total_features):
-            # Use interpolated polygon attribute
-            feature = features[i]
-
-            if affected_field in attribute_names:
-                affected_status = feature[affected_field]
-                if affected_status is None:
-                    inundated_status = False
-                else:
-                    inundated_status = affected_status == affected_value
-            elif DEFAULT_ATTRIBUTE in attribute_names:
-                # Check the default attribute assigned for points
-                # covered by a polygon
-                affected_status = feature[DEFAULT_ATTRIBUTE]
-                if affected_status is None:
-                    inundated_status = False
-                else:
-                    inundated_status = affected_status == affected_value
+            # Get the interpolated depth
+            water_depth = float(features[i]['depth'])
+            if water_depth <= 0:
+                inundated_status = 0  # dry
+            elif water_depth >= threshold:
+                inundated_status = 1  # inundated
             else:
-                # there is no flood related attribute
-                message = (
-                    'No flood related attribute found in %s. I was '
-                    'looking for either "affected", "FLOODPRONE" or '
-                    '"inapolygon". The latter should have been '
-                    'automatically set by call to '
-                    'assign_hazard_values_to_exposure_data(). Sorry I '
-                    'can\'t help more.')
-                raise Exception(message)
+                inundated_status = 2  # wet
 
             # Count affected buildings by usage type if available
             usage = get_osm_building_usage(attribute_names, features[i])
@@ -199,18 +198,31 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
 
             if key not in buildings:
                 buildings[key] = 0
-                affected_buildings[key] = 0
+                inundated_buildings[key] = 0
+                wet_buildings[key] = 0
+                dry_buildings[key] = 0
 
             # Count all buildings by type
             buildings[key] += 1
-            if inundated_status is True:
-                # Count affected buildings by type
-                affected_buildings[key] += 1
-                # Count total affected buildings
-                affected_count += 1
-
+            if inundated_status is 0:
+                # Count dry buildings by type
+                dry_buildings[key] += 1
+                # Count total dry buildings
+                dry_count += 1
+            if inundated_status is 1:
+                # Count inundated buildings by type
+                inundated_buildings[key] += 1
+                # Count total dry buildings
+                inundated_count += 1
+            if inundated_status is 2:
+                # Count wet buildings by type
+                wet_buildings[key] += 1
+                # Count total wet buildings
+                wet_count += 1
             # Add calculated impact to existing attributes
-            features[i][target_field] = int(inundated_status)
+            features[i][self.target_field] = inundated_status
+
+        affected_count = inundated_count + wet_count
 
         # Lump small entries and 'unknown' into 'other' category
         for usage in buildings.keys():
@@ -218,16 +230,24 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
             if x < 25 or usage == 'unknown':
                 if 'other' not in buildings:
                     buildings['other'] = 0
-                    affected_buildings['other'] = 0
+                    inundated_buildings['other'] = 0
+                    wet_buildings['other'] = 0
+                    dry_buildings['other'] = 0
 
                 buildings['other'] += x
-                affected_buildings['other'] += affected_buildings[usage]
+                inundated_buildings['other'] += inundated_buildings[usage]
+                wet_buildings['other'] += wet_buildings[usage]
+                dry_buildings['other'] += dry_buildings[usage]
                 del buildings[usage]
-                del affected_buildings[usage]
+                del inundated_buildings[usage]
+                del wet_buildings[usage]
+                del dry_buildings[usage]
 
-        table_body = self._tabulate(affected_buildings, affected_count,
-                                    attribute_names, buildings, question,
-                                    total_features)
+        # Generate simple impact report
+        table_body = self._tabulate(attribute_names, buildings, dry_buildings,
+                                    dry_count, inundated_buildings,
+                                    inundated_count, question, threshold,
+                                    total_features, wet_buildings, wet_count)
 
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -239,19 +259,29 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
 
         style_classes = [
             dict(
-                label=tr('Not Inundated'),
+                label=tr('Dry (<= 0 m)'),
                 value=0,
                 colour='#1EFC7C',
                 transparency=0,
-                size=1),
+                size=1
+            ),
             dict(
-                label=tr('Inundated'),
+                label=tr('Wet (0 m - %.1f m)') % threshold,
+                value=2,
+                colour='#FF9900',
+                transparency=0,
+                size=1
+            ),
+            dict(
+                label=tr('Inundated (>= %.1f m)') % threshold,
                 value=1,
                 colour='#F31A1C',
-                ztransparency=0, size=1)]
-        legend_units = tr('(inundated or not inundated)')
+                transparency=0,
+                size=1
+            )]
+        legend_units = tr('(inundated, wet, or dry)')
 
-        style_info = dict(target_field=target_field,
+        style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
@@ -264,7 +294,7 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
             keywords={
                 'impact_summary': impact_summary,
                 'impact_table': impact_table,
-                'target_field': target_field,
+                'target_field': self.target_field,
                 'map_title': map_title,
                 'legend_units': legend_units,
                 'legend_title': legend_title,
