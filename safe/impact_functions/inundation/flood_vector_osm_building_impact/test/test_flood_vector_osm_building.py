@@ -72,7 +72,7 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
     def test_filter(self):
         hazard_keywords = {
             'subcategory': 'flood',
-            'units': 'wetdry',
+            'unit': 'wetdry',
             'layer_type': 'vector',
             'data_type': 'polygon'
         }

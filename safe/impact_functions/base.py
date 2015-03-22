@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
@@ -155,7 +156,7 @@ class ImpactFunction(object):
         """Make an instance of the impact function."""
         return cls()
 
-    def prepare(self):
+    def prepare(self, layers=None):
         """Prepare this impact function for running the analysis.
 
         This method should normally be called in your concrete class's
@@ -178,6 +179,10 @@ class ImpactFunction(object):
             'qgis2.0', it needs to have the extent set.
         :raises:
         # """
+        if layers is not None:
+            self.hazard = get_hazard_layer(layers)
+            self.exposure = get_exposure_layer(layers)
+
         if self.function_type() == 'qgis2.0' and self.extent is None:
             raise Exception(
                 'Impact Function with QGIS function type is used, but no '

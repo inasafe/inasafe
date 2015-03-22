@@ -39,11 +39,11 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
     def test_run(self):
         function = FloodVectorRoadsExperimentalFunction.instance()
 
-        building = 'roads_osm_4326'
+        roads = 'roads_osm_4326'
         flood_data = 'multipart_polygons_osm_4326'
 
         hazard_filename = test_data_path('hazard', flood_data)
-        exposure_filename = test_data_path('exposure', building)
+        exposure_filename = test_data_path('exposure', roads)
         hazard_layer = clone_shp_layer(
             name=hazard_filename,
             include_keywords=True,
@@ -75,7 +75,7 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'flood',
-            'units': 'wetdry',
+            'unit': 'wetdry',
             'layer_type': 'vector',
             'data_type': 'polygon'
         }

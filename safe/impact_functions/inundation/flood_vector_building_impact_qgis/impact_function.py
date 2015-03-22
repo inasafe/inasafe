@@ -39,14 +39,6 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
     def __init__(self):
         super(FloodNativePolygonExperimentalFunction, self).__init__()
 
-    def prepare(self, layers=None):
-        """Prepare this impact function for running the analysis"""
-        super(FloodNativePolygonExperimentalFunction, self).prepare()
-
-        if layers is not None:
-            self.hazard = get_hazard_layer(layers)
-            self.exposure = get_exposure_layer(layers)
-
     def _tabulate(self, building_count, buildings_by_type, flooded_count,
                     question):
         table_body = [

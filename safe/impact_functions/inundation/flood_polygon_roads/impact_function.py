@@ -34,13 +34,6 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         """Constructor."""
         super(FloodVectorRoadsExperimentalFunction, self).__init__()
 
-    def prepare(self, layers=None):
-        super(FloodVectorRoadsExperimentalFunction, self).prepare()
-
-        if layers is not None:
-            self.hazard = get_hazard_layer(layers)
-            self.exposure = get_exposure_layer(layers)
-
     def _tabulate(self, flooded_len, question, road_len, roads_by_type):
         table_body = [
             question,

@@ -46,15 +46,7 @@ class FloodEvacuationFunctionVectorHazard(ImpactFunction):
     def __init__(self):
         """Constructor."""
         super(FloodEvacuationFunctionVectorHazard, self).__init__()
-
-    def prepare(self, layers=None):
-        super(FloodEvacuationFunctionVectorHazard, self).prepare()
-
         self.target_field = 'population'
-
-        if layers is not None:
-            self.hazard = get_hazard_layer(layers)
-            self.exposure = get_exposure_layer(layers)
 
     def _tabulate(self, affected_population, evacuated, minimum_needs,
                   question, rounding, rounding_evacuated):

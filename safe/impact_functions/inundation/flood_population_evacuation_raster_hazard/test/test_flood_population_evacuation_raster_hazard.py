@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.inundation.flood_population_evacuation_raster_hazard.impact_function import \
+    FloodEvacuationFunctionRasterHazard
 
 __author__ = 'Rizky Maulana Nugraha'
 __date__ = '20/03/2015'
@@ -22,25 +24,30 @@ import unittest
 
 from safe.storage.core import read_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.test.utilities import TESTDATA, get_qgis_app
-from safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.impact_function import \
+from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer, \
+    test_data_path, HAZDATA
+from safe.common.utilities import OrderedDict
+from safe.impact_functions.inundation.\
+    flood_population_evacuation_polygon_hazard.impact_function import \
     FloodEvacuationFunctionVectorHazard
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodEvacuationFunctionVectorHazard(unittest.TestCase):
+class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
-        registry.register(FloodEvacuationFunctionVectorHazard)
+        registry.register(FloodEvacuationFunctionRasterHazard)
 
     def test_run(self):
-        function = FloodEvacuationFunctionVectorHazard.instance()
+        function = FloodEvacuationFunctionRasterHazard.instance()
 
-        population = 'pop_clip_flood_test.tif'
-        flood_data = 'flood_poly_clip_flood_test.shp'
+        # RM: didn't have the test data for now.
+        # Will ask Akbar later
+        population = 'people_jakarta_clip.tif'
+        flood_data = 'flood_jakarta_clip.tif'
 
         hazard_filename = os.path.join(TESTDATA, flood_data)
         exposure_filename = os.path.join(TESTDATA, population)
@@ -49,25 +56,38 @@ class TestFloodEvacuationFunctionVectorHazard(unittest.TestCase):
         # Let's set the extent to the hazard extent
         function.hazard = hazard_layer
         function.exposure = exposure_layer
-        function.extent = hazard_layer.extent
         function.run()
         impact = function.impact
 
-        keywords = impact.get_keywords()
+        # Count of flooded objects is calculated "by the hands"
         # print "keywords", keywords
-        affected_population = float(keywords['affected_population'])
-        total_population = keywords['total_population']
+        keywords = impact.get_keywords()
+        evacuated = float(keywords['evacuated'])
+        total_needs_full = keywords['total_needs']
+        total_needs_weekly = OrderedDict([
+            [x['table name'], x['amount']] for x in
+            total_needs_full['weekly']
+        ])
+        total_needs_single = OrderedDict([
+            [x['table name'], x['amount']] for x in
+            total_needs_full['single']
+        ])
 
-        self.assertEqual(affected_population, 134000)
-        self.assertEqual(total_population, 163000)
+        expected_evacuated = 63400
+        self.assertEqual(evacuated, expected_evacuated)
+        self.assertEqual(total_needs_weekly['Rice [kg]'], 177520)
+        self.assertEqual(total_needs_weekly['Family Kits'], 12680)
+        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 1109500)
+        self.assertEqual(total_needs_weekly['Clean Water [l]'], 4247800)
+        self.assertEqual(total_needs_single['Toilets'], 3170)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'flood',
-            'unit': 'wetdry',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'unit': 'metres_depth',
+            'layer_type': 'raster',
+            'data_type': 'continuous'
         }
 
         exposure_keywords = {
@@ -82,8 +102,8 @@ class TestFloodEvacuationFunctionVectorHazard(unittest.TestCase):
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
         retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodEvacuationFunctionVectorHazard',
+        self.assertEqual('FloodEvacuationFunctionRasterHazard',
                          retrieved_IF,
-                         'Expecting FloodEvacuationFunctionVectorHazard.'
+                         'Expecting FloodEvacuationFunctionRasterHazard.'
                          'But got %s instead' %
                          retrieved_IF)

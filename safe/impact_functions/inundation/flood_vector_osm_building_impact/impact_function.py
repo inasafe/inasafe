@@ -40,14 +40,6 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
         """Constructor (calls ctor of base class)."""
         super(FloodVectorBuildingImpactFunction, self).__init__()
 
-    def prepare(self, layers=None):
-        """Prepare this impact function for running the analysis."""
-        super(FloodVectorBuildingImpactFunction, self).prepare()
-
-        if layers is not None:
-            self.hazard = get_hazard_layer(layers)
-            self.exposure = get_exposure_layer(layers)
-
     def _tabulate(self, affected_buildings, affected_count, attribute_names,
                   buildings, question, total_features):
         # Generate simple impact report
