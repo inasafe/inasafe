@@ -37,8 +37,7 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
         registry.register(FloodVectorBuildingImpactFunction)
 
     def test_run(self):
-        impact_function = ImpactFunctionManager().get(
-            'FloodVectorBuildingImpactFunction')
+        impact_function = FloodVectorBuildingImpactFunction.instance()
 
         building = 'test_flood_building_impact_exposure.shp'
         flood_data = 'test_flood_building_impact_hazard.shp'

@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.inundation.flood_building_impact_qgis import \
+    FloodNativePolygonExperimentalFunction
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 __author__ = 'lucernae'
@@ -38,8 +40,7 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
         registry.register(FloodNativePolygonExperimentalFunction)
 
     def test_run(self):
-        function = ImpactFunctionManager().get(
-            'FloodNativePolygonExperimentalFunction')
+        function = FloodNativePolygonExperimentalFunction.instance()
 
         building = 'buildings_osm_4326'
         flood_data = 'multipart_polygons_osm_4326'

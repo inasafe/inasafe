@@ -1007,7 +1007,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 exposure_layer)
         elif exposure_layer.type() == QgsMapLayer.RasterLayer:
             exposure_keywords['layer_type'] = 'raster'
-            if exposure_keywords['data_type'] is None:
+            if exposure_keywords.get('data_type') is None:
                 exposure_keywords['data_type'] = 'continuous'
 
         # Find out which functions can be used with these layers
