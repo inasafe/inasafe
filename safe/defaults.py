@@ -26,6 +26,8 @@ import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QSettings
 
 from safe.common.resource_parameter import ResourceParameter
+from safe_extras.parameters.boolean_parameter import BooleanParameter
+from safe_extras.parameters.float_parameter import FloatParameter
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
 
@@ -126,6 +128,52 @@ def get_defaults(default=None):
         return defaults[default]
     else:
         return None
+
+
+def default_gender_postprocessor():
+    """Build Gender postprocessor.
+    :return: A gender postprocessor
+    :rtype: BooleanParameter
+    """
+    gender = BooleanParameter()
+    gender.name = 'Gender'
+    gender.value = True
+    return [gender]
+
+
+def minimum_needs_selector():
+    """Build a checkbox for minimum needs
+    :return: A selector to activate minimum needs
+    :rtype: BooleanParameter
+    """
+    min_selector = BooleanParameter()
+    min_selector.name = 'MinimumNeeds'
+    min_selector.value = True
+    return [min_selector]
+
+
+def age_postprocessor():
+    """Build a parameter unit for Age
+    :return: A selector to activate minimum needs
+    :rtype: BooleanParameter
+    """
+    age = BooleanParameter()
+    age.name = 'Age'
+    age.value = True
+
+    youth_ratio = FloatParameter()
+    youth_ratio.name = 'youth_ratio'
+    youth_ratio.value = 0.263
+
+    adult_ratio = FloatParameter()
+    adult_ratio.name = 'adult_ratio'
+    adult_ratio.value = 0.659
+
+    elderly_ratio = FloatParameter()
+    elderly_ratio.name = 'elderly_ratio'
+    elderly_ratio.value = 0.078
+
+    return [age, youth_ratio, adult_ratio, elderly_ratio]
 
 
 def default_minimum_needs():

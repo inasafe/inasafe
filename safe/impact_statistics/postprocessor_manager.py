@@ -427,9 +427,12 @@ class PostprocessorManager(QtCore.QObject):
 
             for key, value in postprocessors.iteritems():
                 parameters = general_params
+                LOGGER.debug(general_params)
                 user_parameters = self.function_parameters['postprocessors'][key]
-                user_parameters = dict([(user_parameter.name, user_parameter.value) for user_parameter in user_parameters])
-
+                user_parameters = dict(
+                    [(user_parameter.name, user_parameter.value) for user_parameter in user_parameters])
+                LOGGER.debug('usrpms:')
+                LOGGER.debug(user_parameters)
                 try:
                     # look if params are available for this postprocessor
                     #user parameters override default parameters

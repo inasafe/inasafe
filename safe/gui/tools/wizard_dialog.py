@@ -2756,6 +2756,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         params = []
         for p in self.if_params:
             if type(self.if_params[p]) == OrderedDict:
+                LOGGER.debug('wizard_dialog : Found nested params')
                 subparams = [u'<b>%s</b>: %s' % (unicode(pp),
                              format_postprocessor(self.if_params[p][pp]))
                              for pp in self.if_params[p]]

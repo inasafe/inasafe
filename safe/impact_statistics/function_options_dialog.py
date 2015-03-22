@@ -109,6 +109,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         else:
             return lambda: function(widget.property(property_name))
 
+
     def build_form(self, parameters):
         """Build a form from impact functions parameter.
 
@@ -128,6 +129,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
                     key,
                     value)
 
+
     def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab.
 
@@ -145,6 +147,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.tabWidget.tabBar().setVisible(True)
         self.values['minimum needs'] = parameter_container.get_parameters
 
+
     def build_post_processor_form(self, form_elements):
         """Build Post Processor Tab.
 
@@ -158,8 +161,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         form_layout.setLabelAlignment(Qt.AlignLeft)
         self.tabWidget.addTab(tab, self.tr('Postprocessors'))
         self.tabWidget.tabBar().setVisible(True)
-
-
         # create elements for the tab
         values = OrderedDict()
         LOGGER.debug(form_elements)
@@ -175,6 +176,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             values[label] = input_values
 
         self.values['postprocessors'] = values
+
 
     def build_widget(self, form_layout, name, key_value):
         """Create a new form element dynamically based from theValue type.

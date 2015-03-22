@@ -5,6 +5,9 @@ import numpy
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     get_defaults,
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector,
     default_minimum_needs,
     default_provenance
 )
@@ -148,28 +151,28 @@ class FloodEvacuationFunction(FunctionProvider):
     # Configurable parameters
     # TODO: Share the mimimum needs and make another default value
 
-    gender = BooleanParameter()
-    gender.name = 'Gender'
-    gender.value = True
-
-    age = BooleanParameter()
-    age.name = 'Age'
-    age.value = True
-
-    minimum_needs = BooleanParameter()
-    minimum_needs.name = 'Minimum'
-    minimum_needs.value = True
+    # gender = BooleanParameter()
+    # gender.name = 'Gender'
+    # gender.value = True
+    #
+    # age = BooleanParameter()
+    # age.name = 'Age'
+    # age.value = True
+    #
+    # minimum_needs = BooleanParameter()
+    # minimum_needs.name = 'Minimum'
+    # minimum_needs.value = True
 
     parameters = OrderedDict([
         ('thresholds [m]', [1.0]),
         ('postprocessors', OrderedDict([
-            ('Gender', [gender]),
-            ('Age', [age]),
+            ('Gender', default_gender_postprocessor()),
+            ('Age', age_postprocessor()),
                 # 'params': OrderedDict([
                 #     ('youth_ratio', defaults['YOUTH_RATIO']),
                 #     ('adult_ratio', defaults['ADULT_RATIO']),
                 #     ('elderly_ratio', defaults['ELDERLY_RATIO'])])
-            ('MinimumNeeds', [minimum_needs]),
+            ('MinimumNeeds', minimum_needs_selector()),
         ])),
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
