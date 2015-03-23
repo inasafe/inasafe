@@ -18,9 +18,10 @@ from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry)
+
 from PyQt4.QtCore import QVariant
+
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis.\
@@ -34,18 +35,10 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation (polygon-polygon)."""
 
-    _metadata = FloodNativePolygonMetadata
+    _metadata = FloodNativePolygonMetadata()
 
     def __init__(self):
         super(FloodNativePolygonExperimentalFunction, self).__init__()
-
-    def prepare(self, layers=None):
-        """Prepare this impact function for running the analysis"""
-        super(FloodNativePolygonExperimentalFunction, self).prepare()
-
-        if layers is not None:
-            self.hazard = get_hazard_layer(layers)
-            self.exposure = get_exposure_layer(layers)
 
     def _tabulate(self, building_count, buildings_by_type, flooded_count,
                     question):

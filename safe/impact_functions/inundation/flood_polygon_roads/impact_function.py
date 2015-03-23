@@ -1,7 +1,6 @@
 # coding=utf-8
 """Polygon flood on roads."""
 import logging
-
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
@@ -11,7 +10,6 @@ from qgis.core import (
 )
 
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.inundation.flood_polygon_roads.metadata_definitions import \
     FloodPolygonRoadsMetadata
@@ -33,13 +31,6 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
     def __init__(self):
         """Constructor."""
         super(FloodVectorRoadsExperimentalFunction, self).__init__()
-
-    def prepare(self, layers=None):
-        super(FloodVectorRoadsExperimentalFunction, self).prepare()
-
-        if layers is not None:
-            self.hazard = get_hazard_layer(layers)
-            self.exposure = get_exposure_layer(layers)
 
     def _tabulate(self, flooded_len, question, road_len, roads_by_type):
         table_body = [

@@ -18,7 +18,6 @@ __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -38,8 +37,7 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
         registry.register(FloodNativePolygonExperimentalFunction)
 
     def test_run(self):
-        function = ImpactFunctionManager().get(
-            'FloodNativePolygonExperimentalFunction')
+        function = FloodNativePolygonExperimentalFunction.instance()
 
         building = 'buildings_osm_4326'
         flood_data = 'multipart_polygons_osm_4326'
@@ -81,7 +79,7 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'flood',
-            'units': 'wetdry',
+            'unit': 'wetdry',
             'layer_type': 'vector',
             'data_type': 'polygon'
         }

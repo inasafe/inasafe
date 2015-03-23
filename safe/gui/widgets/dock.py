@@ -995,7 +995,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             hazard_keywords['data_type'] = vector_geometry_string(hazard_layer)
         elif hazard_layer.type() == QgsMapLayer.RasterLayer:
             hazard_keywords['layer_type'] = 'raster'
-            if hazard_keywords['data_type'] is None:
+            if hazard_keywords.get('data_type') is None:
                 hazard_keywords['data_type'] = 'continuous'
 
         # noinspection PyTypeChecker
@@ -1007,7 +1007,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 exposure_layer)
         elif exposure_layer.type() == QgsMapLayer.RasterLayer:
             exposure_keywords['layer_type'] = 'raster'
-            if exposure_keywords['data_type'] is None:
+            if exposure_keywords.get('data_type') is None:
                 exposure_keywords['data_type'] = 'continuous'
 
         # Find out which functions can be used with these layers

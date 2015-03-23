@@ -26,6 +26,7 @@ from safe.impact_functions.inundation.flood_vector_osm_building_impact.\
 from safe.storage.core import read_layer
 from safe.test.utilities import TESTDATA, get_qgis_app
 
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
@@ -37,8 +38,7 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
         registry.register(FloodVectorBuildingImpactFunction)
 
     def test_run(self):
-        impact_function = ImpactFunctionManager().get(
-            'FloodVectorBuildingImpactFunction')
+        impact_function = FloodVectorBuildingImpactFunction.instance()
 
         building = 'test_flood_building_impact_exposure.shp'
         flood_data = 'test_flood_building_impact_hazard.shp'
@@ -73,7 +73,7 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
     def test_filter(self):
         hazard_keywords = {
             'subcategory': 'flood',
-            'units': 'wetdry',
+            'unit': 'wetdry',
             'layer_type': 'vector',
             'data_type': 'polygon'
         }

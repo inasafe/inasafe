@@ -11,78 +11,78 @@ Contact : kolesov.dm@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.inundation.flood_raster_road_qgis.impact_function import \
+    FloodRasterRoadsExperimentalFunction
 
 __author__ = 'lucernae'
-__date__ = '11/12/2014'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+__project_name__ = 'inasafe'
+__filename__ = 'test_flood_raster_road_qgis'
+__date__ = '23/03/15'
+__copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer, \
-    test_data_path
-from safe.impact_functions.inundation.flood_polygon_roads.impact_function import \
-    FloodVectorRoadsExperimentalFunction
+    test_data_path, clone_raster_layer
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-
-class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
-    """Test for Flood Vector Building Impact Function."""
+class TestFloodRasterRoadsFunction(unittest.TestCase):
+    """Test for Flood Raster Roads Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
-        registry.register(FloodVectorRoadsExperimentalFunction)
+        registry.register(FloodRasterRoadsExperimentalFunction)
 
     def test_run(self):
-        function = FloodVectorRoadsExperimentalFunction.instance()
+        function = FloodRasterRoadsExperimentalFunction.instance()
 
-        roads = 'roads_osm_4326'
-        flood_data = 'multipart_polygons_osm_4326'
-
-        hazard_filename = test_data_path('hazard', flood_data)
-        exposure_filename = test_data_path('exposure', roads)
-        hazard_layer = clone_shp_layer(
-            name=hazard_filename,
+        hazard_name = test_data_path('hazard', 'jakarta_flood_design')
+        qgis_hazard = clone_raster_layer(
+            name=hazard_name,
+            extension='.tif',
             include_keywords=True,
             source_directory=TESTDATA)
-        exposure_layer = clone_shp_layer(
-            name=exposure_filename,
+
+        exposure_name = test_data_path('exposure', 'roads_osm_4326')
+        qgis_exposure = clone_shp_layer(
+            name=exposure_name,
             include_keywords=True,
             source_directory=TESTDATA)
+
         # Let's set the extent to the hazard extent
-        extent = hazard_layer.extent()
+        extent = qgis_hazard.extent()
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
-        function.hazard = QgisWrapper(hazard_layer)
-        function.exposure = QgisWrapper(exposure_layer)
+        function.hazard = QgisWrapper(qgis_hazard)
+        function.exposure = QgisWrapper(qgis_exposure)
         function.extent = rect_extent
-        function.parameters['building_type_field'] = 'TYPE'
-        function.parameters['affected_field'] = 'FLOODPRONE'
-        function.parameters['affected_value'] = 'YES'
+        function.parameters['road_type_field'] = 'TYPE'
+        function.parameters['min threshold [m]'] = 0.005
+        function.parameters['max threshold [m]'] = float('inf')
         function.run()
         impact = function.impact
 
-        # Count of flooded objects is calculated "by the hands"
-        # the count = 63
-        count = sum(impact.get_data(attribute='flooded'))
-        self.assertEquals(count, 63)
+        keywords = impact.get_keywords()
+        self.assertEquals('flooded', keywords['target_field'])
+        count = sum(impact.get_data(attribute=keywords['target_field']))
+        self.assertEquals(count, 25)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'flood',
-            'unit': 'wetdry',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'unit': 'metres_depth',
+            'layer_type': 'raster',
+            'data_type': 'continuous'
         }
 
         exposure_keywords = {
             'subcategory': 'road',
-            'units': 'road_type',
+            'unit': 'road_type',
             'layer_type': 'vector',
             'data_type': 'line'
         }
@@ -93,8 +93,8 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
         retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodVectorRoadsExperimentalFunction',
+        self.assertEqual('FloodRasterRoadsExperimentalFunction',
                          retrieved_IF,
-                         'Expecting FloodVectorRoadsExperimentalFunction.'
+                         'Expecting FloodRasterRoadsExperimentalFunction.'
                          'But got %s instead' %
                          retrieved_IF)
