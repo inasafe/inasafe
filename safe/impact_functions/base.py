@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
@@ -21,9 +20,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import InvalidExtentError
-from safe.storage.vector import Vector
-
 from safe.utilities.i18n import tr
+from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 
 
 class ImpactFunction(object):
@@ -41,10 +39,15 @@ class ImpactFunction(object):
                 super(FloodImpactFunction, self).__init__()
 
         """
-        # Analysis extent to use
-        self._extent = None
-        # CRS as EPSG number
-        self._extent_crs = 4326
+        # Requested extent to use
+        self._requested_extent = None
+        # Requested extent's CRS as EPSG number
+        self._requested_extent_crs = 4326
+        # Actual extent to use - Read Only
+        # For 'old-style' IF we do some manipulation to the requested extent
+        self._actual_extent = None
+        # Actual extent's CRS as EPSG number - Read Only
+        self._actual_extent_crs = 4326
         # set this to a gui call back / web callback etc as needed.
         self._callback = self.console_progress_callback
         # Set the default parameters
@@ -79,17 +82,28 @@ class ImpactFunction(object):
         """
         return cls.metadata().as_dict().get('function_type', None)
 
+    @classmethod
+    def data_type(cls):
+        """Property for the data type of impact function.
+
+         This property holds value either 'single-scenario' or 'hazard-map'.
+         Single scenario data type means that the data is captured by a
+         single observation, while 'hazard-map' has been aggregated for some
+         observations.
+        """
+        return cls.metadata().as_dict().get('data_type', None)
+
     @property
-    def extent(self):
+    def requested_extent(self):
         """Property for the extent of impact function analysis.
 
         :returns: A list in the form [xmin, ymin, xmax, ymax].
         :rtype: list
         """
-        return self._extent
+        return self._requested_extent
 
-    @extent.setter
-    def extent(self, extent):
+    @requested_extent.setter
+    def requested_extent(self, extent):
         """Setter for extent property.
 
         :param extent: Analysis boundaries expressed as
@@ -100,19 +114,19 @@ class ImpactFunction(object):
         # add more robust checks here
         if len(extent) != 4:
             raise InvalidExtentError('%s is not a valid extent.' % extent)
-        self._extent = extent
+        self._requested_extent = extent
 
     @property
-    def extent_crs(self):
+    def requested_extent_crs(self):
         """Property for the extent CRS of impact function analysis.
 
-        :returns: An number representing the EPSG code for the CRS. e.g. 4326
+        :returns: A number representing the EPSG code for the CRS. e.g. 4326
         :rtype: int
         """
-        return self._extent_crs
+        return self._requested_extent_crs
 
-    @extent_crs.setter
-    def extent_crs(self, crs):
+    @requested_extent_crs.setter
+    def requested_extent_crs(self, crs):
         """Setter for extent_crs property.
 
         .. note:: We break our rule here on not allowing acronyms for
@@ -121,7 +135,25 @@ class ImpactFunction(object):
         :param crs: Analysis boundary EPSG CRS expressed as an integer.
         :type crs: int
         """
-        self._extent_crs = crs
+        self._requested_extent_crs = crs
+
+    @property
+    def actual_extent(self):
+        """Property for the actual extent for analysis.
+
+        :returns: A list in the form [xmin, ymin, xmax, ymax].
+        :rtype: list
+        """
+        return self._actual_extent
+
+    @property
+    def actual_extent_crs(self):
+        """Property for the actual extent crs for analysis.
+
+        :returns: A number representing the EPSG code for the CRS. e.g. 4326
+        :rtype: int
+        """
+        return self._actual_extent_crs
 
     @property
     def callback(self):
@@ -155,38 +187,6 @@ class ImpactFunction(object):
     def instance(cls):
         """Make an instance of the impact function."""
         return cls()
-
-    def prepare(self, layers=None):
-        """Prepare this impact function for running the analysis.
-
-        This method should normally be called in your concrete class's
-        run method before it attempts to do any real processing. This
-        method will do any needed house keeping such as:
-
-            * checking that the exposure and hazard layers sufficiently
-            overlap (post 3.1)
-            * clipping or subselecting features from both layers such that
-              only features / coverage within the actual analysis extent
-              will be analysed (post 3.1)
-            * raising errors if any untenable condition exists e.g. extent has
-              no valid CRS. (post 3.1)
-
-        We suggest to overload this method in your concrete class implementation
-        so that it includes any impact function specific checks too.
-
-        ..note: For 3.1, we will still do those preprocessing in analysis
-            class. We will just need to check if the function_type is
-            'qgis2.0', it needs to have the extent set.
-        :raises:
-        # """
-        if layers is not None:
-            self.hazard = get_hazard_layer(layers)
-            self.exposure = get_exposure_layer(layers)
-
-        if self.function_type() == 'qgis2.0' and self.extent is None:
-            raise Exception(
-                'Impact Function with QGIS function type is used, but no '
-                'extent is provided.')
 
     @property
     def hazard(self):
@@ -231,7 +231,7 @@ class ImpactFunction(object):
         """Property for the aggregation layer to be used for the analysis.
 
         :returns: A map layer.
-        :rtype: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        :rtype: QgsMapLayer, QgsVectorLayer
         """
         return self._aggregation
 
@@ -240,7 +240,7 @@ class ImpactFunction(object):
         """Setter for aggregation layer property.
 
         :param layer: Aggregation layer to be used for the analysis.
-        :type layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        :type layer: QgsMapLayer, QgsVectorLayer
         """
         # add more robust checks here
         self._aggregation = layer
@@ -349,3 +349,42 @@ class ImpactFunction(object):
         if message is not None:
             print message
         print 'Task progress: %i of %i' % (current, maximum)
+
+    def validate(self):
+        """Validate things needed to run the analysis."""
+        # Validate extent, with the QGIS IF, we need requested_extent set
+        if self.function_type() == 'qgis2.0' and self.requested_extent is None:
+            raise InvalidExtentError(
+                'Impact Function with QGIS function type is used, but no '
+                'extent is provided.')
+
+    def prepare(self, layers):
+        """Prepare this impact function for running the analysis.
+
+        This method should normally be called in your concrete class's
+        run method before it attempts to do any real processing. This
+        method will do any needed house keeping such as:
+
+            * checking that the exposure and hazard layers sufficiently
+            overlap (post 3.1)
+            * clipping or subselecting features from both layers such that
+              only features / coverage within the actual analysis extent
+              will be analysed (post 3.1)
+            * raising errors if any untenable condition exists e.g. extent has
+              no valid CRS. (post 3.1)
+
+        We suggest to overload this method in your concrete class implementation
+        so that it includes any impact function specific checks too.
+
+        ..note: For 3.1, we will still do those preprocessing in analysis
+            class. We will just need to check if the function_type is
+            'qgis2.0', it needs to have the extent set.
+        # """
+        if layers is not None:
+            self.hazard = get_hazard_layer(layers)
+            self.exposure = get_exposure_layer(layers)
+
+    def run(self, layers):
+        """Run analysis using this impact function."""
+        self.validate()
+        self.prepare(layers)
