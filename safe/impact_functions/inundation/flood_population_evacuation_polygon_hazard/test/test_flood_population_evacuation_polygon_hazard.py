@@ -21,24 +21,26 @@ import os
 import unittest
 
 from safe.storage.core import read_layer
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_functions.impact_function_manager \
+    import ImpactFunctionManager
 from safe.test.utilities import TESTDATA, get_qgis_app
-from safe.impact_functions.inundation.flood_population_evacuation_polygon_hazard.impact_function import \
-    FloodEvacuationFunctionVectorHazard
+from safe.impact_functions.inundation\
+    .flood_population_evacuation_polygon_hazard.impact_function import \
+    FloodEvacuationVectorHazardFunction
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodEvacuationFunctionVectorHazard(unittest.TestCase):
+class TestFloodEvacuationVectorHazardFunction(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
-        registry.register(FloodEvacuationFunctionVectorHazard)
+        registry.register(FloodEvacuationVectorHazardFunction)
 
     def test_run(self):
-        function = FloodEvacuationFunctionVectorHazard.instance()
+        function = FloodEvacuationVectorHazardFunction.instance()
 
         population = 'pop_clip_flood_test.tif'
         flood_data = 'flood_poly_clip_flood_test.shp'
@@ -83,8 +85,8 @@ class TestFloodEvacuationFunctionVectorHazard(unittest.TestCase):
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
         retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodEvacuationFunctionVectorHazard',
+        self.assertEqual('FloodEvacuationVectorHazardFunction',
                          retrieved_IF,
-                         'Expecting FloodEvacuationFunctionVectorHazard.'
+                         'Expecting FloodEvacuationVectorHazardFunction.'
                          'But got %s instead' %
                          retrieved_IF)

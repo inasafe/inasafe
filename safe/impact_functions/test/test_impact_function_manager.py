@@ -22,7 +22,7 @@ import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_vector_osm_building_impact\
-    .impact_function import FloodVectorBuildingImpactFunction
+    .impact_function import FloodVectorBuildingFunction
 from safe.definitions import (
     unit_metres_depth,
     unit_feet_depth,
@@ -78,7 +78,7 @@ class TestImpactFunctionManager(unittest.TestCase):
     def test_get_function_title(self):
         """TestImpactFunctionManager: Test getting function title."""
         impact_function_title = ImpactFunctionManager().get_function_title(
-            FloodVectorBuildingImpactFunction)
+            FloodVectorBuildingFunction)
         expected_title = 'Be flooded'
         message = 'Expecting %s but got %s' % (
             impact_function_title, expected_title)

@@ -11,15 +11,17 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'lucernae'
 
 import os
 import unittest
 
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_functions.impact_function_manager\
+    import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import \
-    FloodRasterBuildingImpactFunction
+    FloodRasterBuildingFunction
 from safe.storage.core import read_layer
 from safe.test.utilities import TESTDATA, get_qgis_app, HAZDATA
 
@@ -27,15 +29,15 @@ from safe.test.utilities import TESTDATA, get_qgis_app, HAZDATA
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodRasterBuildingImpactFunction(unittest.TestCase):
+class TestFloodRasterBuildingFunction(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
-        registry.register(FloodRasterBuildingImpactFunction)
+        registry.register(FloodRasterBuildingFunction)
 
     def test_run(self):
-        impact_function = FloodRasterBuildingImpactFunction.instance()
+        impact_function = FloodRasterBuildingFunction.instance()
 
         flood_hazards = ['Flood_Current_Depth_Jakarta_geographic.asc',
                          'Flood_Design_Depth_Jakarta_geographic.asc']
@@ -85,8 +87,8 @@ class TestFloodRasterBuildingImpactFunction(unittest.TestCase):
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
         retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodRasterBuildingImpactFunction',
+        self.assertEqual('FloodRasterBuildingFunction',
                          retrieved_IF,
-                         'Expecting FloodRasterBuildingImpactFunction.'
+                         'Expecting FloodRasterBuildingFunction.'
                          'But got %s instead' %
                          retrieved_IF)

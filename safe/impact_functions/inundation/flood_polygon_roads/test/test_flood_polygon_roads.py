@@ -20,10 +20,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer, \
-    test_data_path
-from safe.impact_functions.inundation.flood_polygon_roads.impact_function import \
-    FloodVectorRoadsExperimentalFunction
+from safe.impact_functions.inundation.flood_polygon_roads\
+    .impact_function import FloodVectorRoadsExperimentalFunction
+from safe.test.utilities import (
+    TESTDATA,
+    get_qgis_app,
+    clone_shp_layer,
+    test_data_path)
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

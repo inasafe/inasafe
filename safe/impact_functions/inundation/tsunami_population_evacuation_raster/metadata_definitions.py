@@ -1,12 +1,4 @@
-from safe.defaults import get_defaults, default_minimum_needs, \
-    default_provenance
-from safe.definitions import hazard_definition, hazard_tsunami, unit_feet_depth, \
-    unit_metres_depth, layer_raster_continuous, exposure_definition, \
-    exposure_population, unit_people_per_pixel
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.utilities.i18n import tr
-from safe.common.utilities import OrderedDict
+# coding=utf-8
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -14,8 +6,26 @@ __filename__ = 'metadata_definitions'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance)
+from safe.definitions import (
+    hazard_definition,
+    hazard_tsunami,
+    unit_feet_depth,
+    unit_metres_depth,
+    layer_raster_continuous,
+    exposure_definition,
+    exposure_population,
+    unit_people_per_pixel)
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
+from safe.common.utilities import OrderedDict
 
-class TsunamiEvacuationFunctionMetadata(ImpactFunctionMetadata):
+
+class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
     """Metadata for TsunamiEvacuationFunction.
 
     .. versionadded:: 2.1

@@ -1,19 +1,29 @@
-from safe.definitions import hazard_definition, hazard_flood, hazard_tsunami, \
-    unit_metres_depth, unit_feet_depth, layer_raster_continuous, \
-    exposure_definition, exposure_road, unit_road_type_type, layer_vector_line
+# coding=utf-8
+
+__author__ = 'lucernae'
+__project_name__ = 'inasafe'
+__filename__ = 'metadata_definitions.py'
+__date__ = '23/03/15'
+__copyright__ = 'lana.pcfre@gmail.com'
+
+from safe.definitions import (
+    hazard_definition,
+    hazard_flood,
+    hazard_tsunami,
+    unit_metres_depth,
+    unit_feet_depth,
+    layer_raster_continuous,
+    exposure_definition,
+    exposure_road,
+    unit_road_type_type,
+    layer_vector_line)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
 
-__author__ = 'lucernae'
-__project_name__ = 'inasafe'
-__filename__ = 'metadata_definition'
-__date__ = '23/03/15'
-__copyright__ = 'lana.pcfre@gmail.com'
 
-
-class FloodRasterRoadsExperimentalFunctionMetadata(ImpactFunctionMetadata):
+class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
     """Metadata for FloodRasterRoadsExperimentalFunction
 
     .. versionadded:: 2.1

@@ -1,10 +1,4 @@
-from safe.definitions import hazard_definition, hazard_flood, hazard_tsunami, \
-    unit_metres_depth, unit_feet_depth, layer_raster_continuous, \
-    exposure_definition, exposure_road, unit_road_type_type, layer_vector_line
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.utilities.i18n import tr
-from safe.common.utilities import OrderedDict
+# coding=utf-8
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -12,8 +6,24 @@ __filename__ = 'metadata_definitions'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
+from safe.definitions import (
+    hazard_definition,
+    hazard_flood,
+    hazard_tsunami,
+    unit_metres_depth,
+    unit_feet_depth,
+    layer_raster_continuous,
+    exposure_definition,
+    exposure_road,
+    unit_road_type_type,
+    layer_vector_line)
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
+from safe.common.utilities import OrderedDict
 
-class FloodRasterRoadsGdalFunctionMetadata(ImpactFunctionMetadata):
+
+class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
     """Metadata for FloodRasterRoadsFunction
 
     .. versionadded:: 2.1
@@ -35,9 +45,9 @@ class FloodRasterRoadsGdalFunctionMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'FloodRasterRoadsGdalFunction',
-            'name': tr('Flood Raster Roads Function'),
-            'impact': tr('Be flooded in given thresholds'),
-            'title': tr('Be flooded in given thresholds'),
+            'name': tr('Flood Raster Roads GDAL Function'),
+            'impact': tr('Be flooded in given thresholds (GDAL)'),
+            'title': tr('Be flooded in given thresholds (GDAL)'),
             'function_type': 'qgis2.0',
             'author': 'Dmitry Kolesov',
             'date_implemented': 'N/A',

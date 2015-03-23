@@ -9,8 +9,9 @@ from safe.impact_functions.core import (
     population_rounding
 )
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.inundation.tsunami_population_evacuation_raster.metadata_definitions import \
-    TsunamiEvacuationFunctionMetadata
+from safe.impact_functions.inundation\
+    .tsunami_population_evacuation_raster.metadata_definitions import \
+    TsunamiEvacuationMetadata
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
@@ -29,7 +30,7 @@ from safe.common.exceptions import ZeroImpactException
 class TsunamiEvacuationFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Impact function for tsunami evacuation."""
-    _metadata = TsunamiEvacuationFunctionMetadata()
+    _metadata = TsunamiEvacuationMetadata()
 
     def __init__(self):
         super(TsunamiEvacuationFunction, self).__init__()

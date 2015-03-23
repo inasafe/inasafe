@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 __author__ = 'lucernae'
 __date__ = '11/12/2014'
@@ -20,24 +19,29 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_functions.impact_function_manager\
+    import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
-    .impact_function import FloodNativePolygonExperimentalFunction
-from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer, \
-    test_data_path
+    .impact_function import FloodPolygonBuildingQgisFunction
+from safe.test.utilities import (
+    TESTDATA,
+    get_qgis_app,
+    clone_shp_layer,
+    test_data_path)
+from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
+class TestFloodPolygonBuildingQgis(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
-        registry.register(FloodNativePolygonExperimentalFunction)
+        registry.register(FloodPolygonBuildingQgisFunction)
 
     def test_run(self):
-        function = FloodNativePolygonExperimentalFunction.instance()
+        function = FloodPolygonBuildingQgisFunction.instance()
 
         building = 'buildings_osm_4326'
         flood_data = 'multipart_polygons_osm_4326'
@@ -97,8 +101,8 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
         retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodNativePolygonExperimentalFunction',
+        self.assertEqual('FloodPolygonBuildingQgis',
                          retrieved_IF,
-                         'Expecting FloodNativePolygonExperimentalFunction.'
+                         'Expecting FloodPolygonBuildingQgis.'
                          'But got %s instead' %
                          retrieved_IF)

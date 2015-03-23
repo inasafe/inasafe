@@ -10,8 +10,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from collections import OrderedDict
 
+__author__ = 'lucernae'
+
+from safe.common.utilities import OrderedDict
 from safe.definitions import (
     hazard_definition,
     hazard_flood,
@@ -49,8 +51,8 @@ class FloodVectorBuildingMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'FloodVectorBuildingImpactFunction',
-            'name': tr('Flood Vector Building Impact Function'),
+            'id': 'FloodVectorBuildingFunction',
+            'name': tr('Flood Vector Building Function'),
             'impact': tr('Be flooded'),
             'title': tr('Be flooded'),
             'function_type': 'old-style',

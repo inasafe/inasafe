@@ -12,20 +12,22 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-from safe.utilities.i18n import tr
-
 __author__ = 'Rizky Maulana Nugraha'
 
 import logging
 import numpy
 
+from safe.utilities.i18n import tr
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import population_rounding_full, population_rounding, evacuated_population_needs
-from safe.common.tables import Table, TableRow, TableCell
+from safe.impact_functions.core import (
+    population_rounding_full,
+    population_rounding,
+    evacuated_population_needs)
 from safe.impact_functions.inundation\
     .flood_population_evacuation_polygon_hazard.metadata_definitions import \
-    FloodEvacuationFunctionVectorHazardMetadata
+    FloodEvacuationVectorHazardMetadata
+from safe.common.tables import Table, TableRow, TableCell
 from safe.storage.vector import Vector
 from safe.common.utilities import (
     format_int,
@@ -37,14 +39,14 @@ from safe.common.utilities import (
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodEvacuationFunctionVectorHazard(ImpactFunction):
+class FloodEvacuationVectorHazardFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Impact function for vector flood evacuation."""
-    _metadata = FloodEvacuationFunctionVectorHazardMetadata()
+    _metadata = FloodEvacuationVectorHazardMetadata()
 
     def __init__(self):
         """Constructor."""
-        super(FloodEvacuationFunctionVectorHazard, self).__init__()
+        super(FloodEvacuationVectorHazardFunction, self).__init__()
         self.target_field = 'population'
 
     def _tabulate(self, affected_population, evacuated, minimum_needs,
