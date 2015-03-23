@@ -50,14 +50,8 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
     :param requested_postprocessors: The postprocessors to return e.g. ::
 
                 {
-                'Gender': {'on': True},
-                'Age': {'on': True,
-                        'params': {
-                            'youth_ratio': defaults['YOUTH_RATIO'],
-                            'adult_ratio': defaults['ADULT_RATIO'],
-                            'elderly_ratio': defaults['ELDERLY_RATIO']
-                            }
-                        }
+                'Gender': [BooleanParameter],
+                'Age': [BooleanParameter, FloatParameter ....]
                 }
 
             with 'PostprocessorName': {'on': True} being the minimum needed to
@@ -96,11 +90,9 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
         # that would turn off the current postprocessor if in aoi_mode
 
         # if aoi_mode:
-        #     try:
-        #         requires_aggregation = (
-        #             values['params']['disable_for_entire_area_aggregation'])
-        #     except KeyError:
-        #         pass
+        #     LOGGER.debug('pp factory in aoi mode if:')
+        #     if 'disable_for_entire_area_aggregation' in values:
+        #         requires_aggregation = values['disable_for_entire_area_aggregatio']
 
         try:
             if values[0].value and requires_aggregation:
