@@ -54,12 +54,12 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
                 'Age': [BooleanParameter, FloatParameter ....]
                 }
 
-            with 'PostprocessorName': {'on': True} being the minimum needed to
-            activate a postprocessor.
+            with 'PostprocessorName': [BooleanParameter]
+            being the minimum needed to activate a postprocessor.
 
             If asked for unimplemented postprocessors, the factory will just
             skip it returning the valid ones
-    :type requested_postprocessors: dict
+    :type requested_postprocessors: dict e.g. name:[list_elements]
 
     :param aoi_mode: Whether postprocessing is being done on current analysis
         extents or on an aggregation layer.
@@ -68,38 +68,26 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
     :returns: Dict of postprocessors instances e.g.::
 
             {'Gender': GenderPostprocessors instance}
+
     :rtype: dict
 
     """
-    LOGGER.debug('ppf get_postprocessors.')
-    LOGGER.debug('INPUT: requested_postprocessors:')
-    LOGGER.debug(requested_postprocessors)
-
     postprocessor_instances = {}
 
     if requested_postprocessors is None or requested_postprocessors == {}:
         return postprocessor_instances
     for name, values in requested_postprocessors.iteritems():
         constr_id = name + 'Postprocessor'
-
         # Flag specifying if aggregation is required. If set, postprocessor
         # will be disabled when AOI mode is enabled.
         requires_aggregation = True
         # lets check if the IF has a
         # ['params']['disable_for_entire_area_aggregation']
         # that would turn off the current postprocessor if in aoi_mode
-
-        # if aoi_mode:
-        #     LOGGER.debug('pp factory in aoi mode if:')
-        #     if 'disable_for_entire_area_aggregation' in values:
-        #         requires_aggregation = values['disable_for_entire_area_aggregatio']
-
         try:
             if values[0].value and requires_aggregation:
                 if name in AVAILABLE_POSTPTOCESSORS.keys():
                     # http://stackoverflow.com/a/554462
-                    #LOGGER.debug('globals:')
-                    #LOGGER.debug(globals())
                     constr = globals()[constr_id]
                     instance = constr()
                     postprocessor_instances[name] = instance
@@ -111,9 +99,6 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
                 LOGGER.debug(constr_id + ' user disabled, skipping it')
         except KeyError:
             LOGGER.debug(constr_id + ' has no "on" key, skipping it')
-    LOGGER.debug('ppf get_postprocessors.')
-    LOGGER.debug('OUTPUT: requested_postprocessors:')
-    LOGGER.debug(postprocessor_instances)
     return postprocessor_instances
 
 

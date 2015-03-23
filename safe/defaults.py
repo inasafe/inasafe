@@ -133,7 +133,7 @@ def get_defaults(default=None):
 def default_gender_postprocessor():
     """Build Gender postprocessor.
     :return: A gender postprocessor
-    :rtype: BooleanParameter
+    :rtype: list [BooleanParameter]
     """
     gender = BooleanParameter()
     gender.name = 'Gender'
@@ -144,7 +144,7 @@ def default_gender_postprocessor():
 def minimum_needs_selector():
     """Build a checkbox for minimum needs
     :return: A selector to activate minimum needs
-    :rtype: BooleanParameter
+    :rtype: list [BooleanParameter]
     """
     min_selector = BooleanParameter()
     min_selector.name = 'MinimumNeeds'
@@ -155,7 +155,7 @@ def minimum_needs_selector():
 def age_postprocessor():
     """Build a parameter unit for Age
     :return: A selector to activate minimum needs
-    :rtype: BooleanParameter
+    :rtype: list [BooleanParameter, 3xFloatParameter]
     """
     age = BooleanParameter()
     age.name = 'Age'

@@ -424,15 +424,11 @@ class PostprocessorManager(QtCore.QObject):
             except IndexError:
                 # rasters and attributeless vectors have no attributes
                 general_params['impact_attrs'] = None
-            LOGGER.debug('postprocessors:')
-            LOGGER.debug(postprocessors)
             for key, value in postprocessors.iteritems():
                 parameters = general_params
                 user_parameters = self.function_parameters['postprocessors'][key]
                 user_parameters = dict(
                     [(user_parameter.name, user_parameter.value) for user_parameter in user_parameters])
-                LOGGER.debug('usrpms:')
-                LOGGER.debug(user_parameters)
                 try:
                     #user parameters override default parameters
                     parameters.update(user_parameters)
@@ -454,7 +450,7 @@ class PostprocessorManager(QtCore.QObject):
                     parameters['female_ratio'] = female_ratio
 
                 if key == 'Age':
-                    if not user_defined_age_ratios:
+                    if user_defined_age_ratios:
                         youth_ratio = feature[youth_ratio_field_index]
                         adult_ratio = feature[adult_ratio_field_index]
                         elderly_ratio = feature[elderly_ratio_field_index]
@@ -473,9 +469,9 @@ class PostprocessorManager(QtCore.QObject):
                                            ' aggregation unit'
                                            ' %s' % feature.id)
 
-                    # parameters['youth_ratio'] = youth_ratio
-                    # parameters['adult_ratio'] = adult_ratio
-                    # parameters['elderly_ratio'] = elderly_ratio
+                    parameters['youth_ratio'] = youth_ratio
+                    parameters['adult_ratio'] = adult_ratio
+                    parameters['elderly_ratio'] = elderly_ratio
 
                 if key == 'BuildingType' or key == 'RoadType':
                     # TODO: Fix this might be referenced before assignment
