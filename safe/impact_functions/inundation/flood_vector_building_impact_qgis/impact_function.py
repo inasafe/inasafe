@@ -40,8 +40,11 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
     def __init__(self):
         super(FloodNativePolygonExperimentalFunction, self).__init__()
 
-    def _tabulate(self, building_count, buildings_by_type, flooded_count,
-                    question):
+    def _tabulate(self,
+                  building_count,
+                  buildings_by_type,
+                  flooded_count,
+                  question):
         table_body = [
             question,
             TableRow(
@@ -64,7 +67,7 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
               H: Polygon layer of inundation areas
               E: Vector layer of roads
         """
-        self.prepare(layers)
+        super(FloodNativePolygonExperimentalFunction, self).run(layers)
 
         # Set the target field in impact layer
         target_field = 'INUNDATED'
@@ -111,10 +114,10 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
         building_layer.startEditing()
         building_layer.commitChanges()
 
-        # Filter geometry and data using the extent
-        extent = QgsRectangle(*self.extent)
+        # Filter geometry and data using the requested extent
+        requested_extent = QgsRectangle(*self.requested_extent)
         request = QgsFeatureRequest()
-        request.setFilterRect(extent)
+        request.setFilterRect(requested_extent)
 
         # Split building_layer by H and save as result:
         #   1) Filter from H inundated features

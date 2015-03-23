@@ -67,7 +67,7 @@ def calculate_impact(layers,
 
     # Set extent if it is provided
     if extent is not None:
-        impact_function.extent = extent
+        impact_function.requested_extent = extent
 
     # Start time
     start_time = datetime.now()
