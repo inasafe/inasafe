@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.inundation.flood_population_evacuation_raster_hazard.impact_function import \
-    FloodEvacuationFunctionRasterHazard
 
 __author__ = 'Rizky Maulana Nugraha'
 __date__ = '20/03/2015'
@@ -23,7 +21,11 @@ import os
 import unittest
 
 from safe.storage.core import read_layer
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_functions.impact_function_manager \
+    import ImpactFunctionManager
+from safe.impact_functions.inundation\
+    .flood_population_evacuation_raster_hazard.impact_function import \
+    FloodEvacuationRasterHazardFunction
 from safe.test.utilities import TESTDATA, get_qgis_app
 from safe.common.utilities import OrderedDict
 
@@ -35,10 +37,10 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
-        registry.register(FloodEvacuationFunctionRasterHazard)
+        registry.register(FloodEvacuationRasterHazardFunction)
 
     def test_run(self):
-        function = FloodEvacuationFunctionRasterHazard.instance()
+        function = FloodEvacuationRasterHazardFunction.instance()
 
         population = 'people_jakarta_clip.tif'
         flood_data = 'flood_jakarta_clip.tif'
@@ -96,8 +98,8 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
         retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodEvacuationFunctionRasterHazard',
+        self.assertEqual('FloodEvacuationRasterHazardFunction',
                          retrieved_IF,
-                         'Expecting FloodEvacuationFunctionRasterHazard.'
+                         'Expecting FloodEvacuationRasterHazardFunction.'
                          'But got %s instead' %
                          retrieved_IF)

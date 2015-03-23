@@ -28,14 +28,14 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodRasterBuildingImpactFunction(ImpactFunction):
+class FloodRasterBuildingFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Inundation raster impact on building data."""
     _metadata = FloodRasterBuildingMetadata()
 
     def __init__(self):
         """Constructor (calls ctor of base class)."""
-        super(FloodRasterBuildingImpactFunction, self).__init__()
+        super(FloodRasterBuildingFunction, self).__init__()
         self.target_field = 'INUNDATED'
 
     def _tabulate(self, attribute_names, buildings, dry_buildings, dry_count,

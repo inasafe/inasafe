@@ -1,5 +1,4 @@
-from safe.impact_functions.inundation.tsunami_population_evacuation_raster.impact_function import \
-    TsunamiEvacuationFunction
+# coding=utf-8
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -7,16 +6,15 @@ __filename__ = 'test_tsunami_population_evacuation_raster'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-__author__ = 'Rizky Maulana Nugraha'
-__date__ = '20/03/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 import os
 import unittest
 
 from safe.storage.core import read_layer
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_functions.impact_function_manager\
+    import ImpactFunctionManager
+from safe.impact_functions.inundation\
+    .tsunami_population_evacuation_raster.impact_function import \
+    TsunamiEvacuationFunction
 from safe.test.utilities import TESTDATA, get_qgis_app
 from safe.common.utilities import OrderedDict
 

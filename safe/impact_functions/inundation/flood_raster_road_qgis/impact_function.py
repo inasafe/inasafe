@@ -5,9 +5,6 @@
     favour of flood_raster_roads_qgis_gdal which provides
     better performance. TS 11 June 2014
 """
-from safe.impact_functions.inundation.flood_raster_road_qgis.metadata_definitions import \
-    FloodRasterRoadsExperimentalFunctionMetadata
-
 __author__ = 'lucernae'
 
 
@@ -20,6 +17,9 @@ from qgis.core import (
 )
 
 from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.inundation\
+    .flood_raster_road_qgis.metadata_definitions import \
+    FloodRasterRoadsExperimentalMetadata
 from safe.common.tables import Table, TableRow
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
@@ -31,7 +31,7 @@ from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 
 class FloodRasterRoadsExperimentalFunction(ImpactFunction):
     """Simple experimental impact function for inundation."""
-    _metadata = FloodRasterRoadsExperimentalFunctionMetadata
+    _metadata = FloodRasterRoadsExperimentalMetadata
 
     def __init__(self):
         super(FloodRasterRoadsExperimentalFunction, self).__init__()

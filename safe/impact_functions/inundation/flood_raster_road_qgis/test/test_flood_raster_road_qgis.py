@@ -11,8 +11,6 @@ Contact : kolesov.dm@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.inundation.flood_raster_road_qgis.impact_function import \
-    FloodRasterRoadsExperimentalFunction
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -22,9 +20,17 @@ __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
 
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer, \
-    test_data_path, clone_raster_layer
+from safe.impact_functions.impact_function_manager \
+    import ImpactFunctionManager
+from safe.impact_functions.inundation\
+    .flood_raster_road_qgis.impact_function import \
+    FloodRasterRoadsExperimentalFunction
+from safe.test.utilities import (
+    TESTDATA,
+    get_qgis_app,
+    clone_shp_layer,
+    test_data_path,
+    clone_raster_layer)
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

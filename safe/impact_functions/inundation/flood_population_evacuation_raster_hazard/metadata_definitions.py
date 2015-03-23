@@ -13,8 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'Rizky Maulana Nugraha'
 
-from collections import OrderedDict
-
+from safe.common.utilities import OrderedDict
 from safe.defaults import default_minimum_needs, default_provenance, \
     get_defaults
 from safe.definitions import (
@@ -29,7 +28,7 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.utilities.i18n import tr
 
 
-class FloodEvacuationFunctionRasterHazardMetadata(ImpactFunctionMetadata):
+class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
     """Metadata for FloodEvacuationFunction.
 
     .. versionadded:: 2.1
@@ -51,8 +50,8 @@ class FloodEvacuationFunctionRasterHazardMetadata(ImpactFunctionMetadata):
         """
         defaults = get_defaults()
         dict_meta = {
-            'id': 'FloodEvacuationFunctionRasterHazard',
-            'name': tr('Flood Evacuation Function'),
+            'id': 'FloodEvacuationRasterHazard',
+            'name': tr('Flood Evacuation Raster Hazard Function'),
             'impact': tr('Need evacuation'),
             'title': tr('Need evacuation'),
             'function_type': 'old-style',

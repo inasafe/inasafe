@@ -5,35 +5,40 @@ __author__ = 'Rizky Maulana Nugraha'
 import logging
 import numpy
 
+from safe.impact_functions.core import (
+    population_rounding_full,
+    population_rounding,
+    evacuated_population_needs)
 from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.impact_function_manager \
+    import ImpactFunctionManager
 from safe.impact_functions.inundation.\
     flood_population_evacuation_raster_hazard.metadata_definitions import \
-    FloodEvacuationFunctionRasterHazardMetadata
+    FloodEvacuationRasterHazardMetadata
 from safe.utilities.i18n import tr
-from safe.impact_functions.core import \
-    population_rounding_full, population_rounding, evacuated_population_needs
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
     create_classes,
     humanize_class,
-    create_label, verify, get_thousand_separator)
+    create_label,
+    verify,
+    get_thousand_separator)
 
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodEvacuationFunctionRasterHazard(ImpactFunction):
+class FloodEvacuationRasterHazardFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Risk plugin for flood population evacuation."""
-    _metadata = FloodEvacuationFunctionRasterHazardMetadata()
+    _metadata = FloodEvacuationRasterHazardMetadata()
 
     def __init__(self):
         """Constructor."""
-        super(FloodEvacuationFunctionRasterHazard, self).__init__()
+        super(FloodEvacuationRasterHazardFunction, self).__init__()
         self.target_field = 'population'
         self.impact_function_manager = ImpactFunctionManager()
 

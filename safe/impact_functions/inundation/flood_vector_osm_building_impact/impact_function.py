@@ -14,8 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 import logging
 
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import (
-    get_question)
 from safe.impact_functions.inundation.flood_vector_osm_building_impact\
     .metadata_definitions import FloodVectorBuildingMetadata
 from safe.storage.vector import Vector
@@ -29,14 +27,14 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodVectorBuildingImpactFunction(ImpactFunction):
+class FloodVectorBuildingFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Inundation vector impact on building data."""
     _metadata = FloodVectorBuildingMetadata()
 
     def __init__(self):
         """Constructor (calls ctor of base class)."""
-        super(FloodVectorBuildingImpactFunction, self).__init__()
+        super(FloodVectorBuildingFunction, self).__init__()
 
     def _tabulate(self, affected_buildings, affected_count, attribute_names,
                   buildings, question, total_features):
@@ -129,10 +127,7 @@ class FloodVectorBuildingImpactFunction(ImpactFunction):
         exposure_layer = self.exposure  # Building locations
 
         # Get question
-        question = get_question(
-            hazard_layer.get_name(),
-            exposure_layer.get_name(),
-            self)
+        question = self.question()
 
         # Define the target field in the impact layer
         target_field = 'INUNDATED'

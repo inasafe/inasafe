@@ -1,22 +1,12 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on OSM
-Buildings
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
 
 __author__ = 'Rizky Maulana Nugraha'
 
-from collections import OrderedDict
-
-from safe.defaults import default_minimum_needs, default_provenance, \
-    get_defaults
+from safe.common.utilities import OrderedDict
+from safe.defaults import (
+    default_minimum_needs,
+    default_provenance,
+    get_defaults)
 from safe.definitions import (
     hazard_definition,
     hazard_flood,
@@ -31,7 +21,7 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.utilities.i18n import tr
 
 
-class FloodEvacuationFunctionVectorHazardMetadata(ImpactFunctionMetadata):
+class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
     """Metadata for FloodEvacuationFunctionVectorHazard.
 
     .. versionadded:: 2.1
@@ -53,8 +43,8 @@ class FloodEvacuationFunctionVectorHazardMetadata(ImpactFunctionMetadata):
         """
         defaults = get_defaults()
         dict_meta = {
-                'id': 'FloodEvacuationFunctionVectorHazard',
-                'name': tr('Flood Evacuation Function Vector Hazard'),
+                'id': 'FloodEvacuationVectorHazardFunction',
+                'name': tr('Flood Evacuation Vector Hazard Function'),
                 'impact': tr('Need evacuation'),
                 'title': tr('Need evacuation'),
                 'function_type': 'old-style',

@@ -25,20 +25,20 @@ from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis.\
-    metadata_definitions import FloodNativePolygonMetadata
+    metadata_definitions import FloodPolygonBuildingQgisMetadata
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
 
 
-class FloodNativePolygonExperimentalFunction(ImpactFunction):
+class FloodPolygonBuildingQgisFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation (polygon-polygon)."""
 
-    _metadata = FloodNativePolygonMetadata()
+    _metadata = FloodPolygonBuildingQgisMetadata()
 
     def __init__(self):
-        super(FloodNativePolygonExperimentalFunction, self).__init__()
+        super(FloodPolygonBuildingQgisFunction, self).__init__()
 
     def _tabulate(self,
                   building_count,
