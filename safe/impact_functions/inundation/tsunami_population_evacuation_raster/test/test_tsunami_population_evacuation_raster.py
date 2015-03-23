@@ -1,18 +1,11 @@
-# coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **Test for Flood Population Evacuation Raster Impact Function.**
+from safe.impact_functions.inundation.tsunami_population_evacuation_raster.impact_function import \
+    TsunamiEvacuationFunction
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-from safe.impact_functions.inundation.flood_population_evacuation_raster_hazard.impact_function import \
-    FloodEvacuationFunctionRasterHazard
+__author__ = 'lucernae'
+__project_name__ = 'inasafe'
+__filename__ = 'test_tsunami_population_evacuation_raster'
+__date__ = '23/03/15'
+__copyright__ = 'lana.pcfre@gmail.com'
 
 __author__ = 'Rizky Maulana Nugraha'
 __date__ = '20/03/2015'
@@ -34,16 +27,18 @@ from safe.impact_functions.inundation.\
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
+class TestTsunamiEvacuationRaster(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
-        registry.register(FloodEvacuationFunctionRasterHazard)
+        registry.register(TsunamiEvacuationFunction)
 
     def test_run(self):
-        function = FloodEvacuationFunctionRasterHazard.instance()
+        function = TsunamiEvacuationFunction.instance()
 
+        # RM: didn't have the test data for now.
+        # Will ask Akbar later
         population = 'people_jakarta_clip.tif'
         flood_data = 'flood_jakarta_clip.tif'
 
@@ -71,18 +66,19 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
             total_needs_full['single']
         ])
 
-        expected_evacuated = 63400
+        # RM: Needs to be verified by Akbar first
+        expected_evacuated = 75900
         self.assertEqual(evacuated, expected_evacuated)
-        self.assertEqual(total_needs_weekly['Rice [kg]'], 177520)
-        self.assertEqual(total_needs_weekly['Family Kits'], 12680)
-        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 1109500)
-        self.assertEqual(total_needs_weekly['Clean Water [l]'], 4247800)
-        self.assertEqual(total_needs_single['Toilets'], 3170)
+        self.assertEqual(total_needs_weekly['Rice [kg]'], 212520)
+        self.assertEqual(total_needs_weekly['Family Kits'], 15180)
+        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 1328250)
+        self.assertEqual(total_needs_weekly['Clean Water [l]'], 5085300)
+        self.assertEqual(total_needs_single['Toilets'], 3795)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
+            'subcategory': 'tsunami',
             'unit': 'metres_depth',
             'layer_type': 'raster',
             'data_type': 'continuous'
@@ -100,8 +96,8 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
         retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodEvacuationFunctionRasterHazard',
+        self.assertEqual('TsunamiEvacuationFunction',
                          retrieved_IF,
-                         'Expecting FloodEvacuationFunctionRasterHazard.'
+                         'Expecting TsunamiEvacuationFunction.'
                          'But got %s instead' %
                          retrieved_IF)

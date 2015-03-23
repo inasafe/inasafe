@@ -29,6 +29,8 @@ from safe.impact_functions.inundation.\
 from safe.impact_functions.inundation\
     .flood_population_evacuation_polygon_hazard.impact_function import \
     FloodEvacuationFunctionVectorHazard
+from safe.impact_functions.inundation.tsunami_population_evacuation_raster.impact_function import \
+    TsunamiEvacuationFunction
 
 
 def register_impact_functions():
@@ -42,3 +44,4 @@ def register_impact_functions():
     impact_function_registry.register(FloodRasterBuildingImpactFunction)
     impact_function_registry.register(FloodRasterRoadsExperimentalFunction)
     impact_function_registry.register(FloodRasterRoadsGdalFunction)
+    impact_function_registry.register(TsunamiEvacuationFunction)
