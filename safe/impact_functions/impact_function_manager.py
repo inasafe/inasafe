@@ -41,16 +41,28 @@ class ImpactFunctionManager(object):
     def get(self, class_name):
         """Return an instance of an impact function given its class name.
 
-        :param class_name: the name of IF class
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            if_class_name = 'FloodBuildingImpactFunction'
+            if =  if_manager.get(if_class_name)
+
+        :param class_name: The name of IF class.
         :type class_name: str
 
         :return: Impact function instance that matches the argument.
-        :rtype: safe.impact_functions.base.ImpactFunction.instance()
+        :rtype: safe.impact_functions.base.ImpactFunction
         """
         return self.registry.get(class_name)
 
     def get_class(self, class_name):
         """Return the class of an impact function given its class name.
+
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            if_class_name = 'FloodBuildingImpactFunction'
+            if_class =  if_manager.get_class(if_class_name)
 
         :param class_name: the name of IF class
         :type class_name: str
@@ -65,6 +77,12 @@ class ImpactFunctionManager(object):
 
         This is a preferred way to get an instance of IF. IF should have a
         unique human readable ID in their metadata.
+
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            if_id = 'FloodBuildingImpactFunction'
+            if =  if_manager.get_by_id(if_id)
 
         :param impact_function_id: The ID of impact function in the metadata.
         :type impact_function_id: str
@@ -83,11 +101,57 @@ class ImpactFunctionManager(object):
                 impact_function_id)
         return impact_functions[0].instance()
 
+    def filter(self, hazard_metadata=None, exposure_metadata=None):
+        """Get available impact functions from hazard and exposure metadata.
+
+        Disabled impact function will not be loaded.
+
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            hazard_metadata = {
+                'subcategory': hazard_flood,
+                'units': unit_wetdry,
+                'layer_constraints': layer_vector_polygon
+            }
+            exposure_metadata = {
+                'subcategory': exposure_structure,
+                'units': unit_building_type_type,
+                'layer_constraints': layer_vector_polygon
+            }
+            ifs =  if_manager.filter(hazard_metadata, exposure_metadata)
+
+        :param hazard_metadata: The metadata of the hazard.
+        :type hazard_metadata: dict
+
+        :param exposure_metadata: The metadata of the exposure.
+        :type exposure_metadata: dict
+        """
+        return self.registry.filter(hazard_metadata, exposure_metadata)
+
     def filter_by_keywords(
             self, hazard_keywords=None, exposure_keywords=None):
         """Get available impact functions from hazard and exposure keywords.
 
         Disabled impact function will not be loaded.
+
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            hazard_keywords = {
+                'subcategory': 'flood',
+                'units': 'wetdry',
+                'layer_type': 'vector',
+                'data_type': 'polygon'
+            }
+            exposure_keywords = {
+                'subcategory': 'structure',
+                'units': 'building_type',
+                'layer_type': 'vector',
+                'data_type': 'polygon'
+            }
+            ifs =  if_manager.filter_by_keywords(hazard_keywords,
+            exposure_keywords)
 
         :param hazard_keywords: The keywords of the hazard.
         :type hazard_keywords: dict
@@ -100,6 +164,14 @@ class ImpactFunctionManager(object):
 
     def filter_by_metadata(self, metadata_key, metadata_value):
         """Return IF classes given its metadata key and value.
+
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            metadata_key = 'author'
+            metadata_value = 'Akbar Gumbira'
+            ifs =  if_manager.filter_by_metadata(metadata_key,
+            metadata_value)
 
         :param metadata_key: The key of the metadata e.g 'id', 'name'
         :type metadata_key: str
