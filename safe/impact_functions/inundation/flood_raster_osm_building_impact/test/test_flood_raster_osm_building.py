@@ -23,6 +23,7 @@ from safe.impact_functions.inundation.flood_raster_osm_building_impact\
 from safe.storage.core import read_layer
 from safe.test.utilities import TESTDATA, get_qgis_app, HAZDATA
 
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 

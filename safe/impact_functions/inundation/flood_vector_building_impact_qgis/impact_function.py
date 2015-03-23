@@ -18,9 +18,10 @@ from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry)
+
 from PyQt4.QtCore import QVariant
+
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis.\

@@ -8,7 +8,6 @@ from qgis.core import (
 )
 
 from safe.impact_functions.base import ImpactFunction
-
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.inundation.flood_raster_road_qgis_gdal.metadata_definitions import \
     FloodRasterRoadsGdalFunctionMetadata

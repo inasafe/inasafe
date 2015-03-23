@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = "lucernae"
 
-
 from collections import OrderedDict
 
 from safe.definitions import (

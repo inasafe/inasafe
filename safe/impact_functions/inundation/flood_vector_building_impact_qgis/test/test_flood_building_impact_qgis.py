@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.inundation.flood_building_impact_qgis import \
-    FloodNativePolygonExperimentalFunction
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 __author__ = 'lucernae'
@@ -20,7 +18,6 @@ __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager

@@ -25,7 +25,6 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer, \
     test_data_path, clone_raster_layer
-from safe.common.utilities import OrderedDict
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

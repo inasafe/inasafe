@@ -15,8 +15,6 @@ import logging
 
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.core import (
-    get_hazard_layer,
-    get_exposure_layer,
     get_question)
 from safe.impact_functions.inundation.flood_vector_osm_building_impact\
     .metadata_definitions import FloodVectorBuildingMetadata

@@ -14,9 +14,9 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Rizky Maulana Nugraha'
 
 from collections import OrderedDict
+
 from safe.defaults import default_minimum_needs, default_provenance, \
     get_defaults
-
 from safe.definitions import (
     hazard_definition,
     hazard_flood,

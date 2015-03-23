@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 __author__ = 'lucernae'
 
-
 import logging
 
 from safe.impact_functions.base import ImpactFunction

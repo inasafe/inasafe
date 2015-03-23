@@ -24,12 +24,8 @@ import unittest
 
 from safe.storage.core import read_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer, \
-    test_data_path, HAZDATA
+from safe.test.utilities import TESTDATA, get_qgis_app
 from safe.common.utilities import OrderedDict
-from safe.impact_functions.inundation.\
-    flood_population_evacuation_polygon_hazard.impact_function import \
-    FloodEvacuationFunctionVectorHazard
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 

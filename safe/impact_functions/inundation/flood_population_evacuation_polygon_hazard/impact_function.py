@@ -21,8 +21,7 @@ import numpy
 
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer, \
-    population_rounding_full, population_rounding, evacuated_population_needs
+from safe.impact_functions.core import population_rounding_full, population_rounding, evacuated_population_needs
 from safe.common.tables import Table, TableRow, TableCell
 from safe.impact_functions.inundation\
     .flood_population_evacuation_polygon_hazard.metadata_definitions import \

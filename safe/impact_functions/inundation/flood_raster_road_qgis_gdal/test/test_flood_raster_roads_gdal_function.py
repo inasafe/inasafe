@@ -11,8 +11,6 @@ Contact : kolesov.dm@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.inundation.flood_raster_road_qgis.impact_function import \
-    FloodRasterRoadsExperimentalFunction
 from safe.impact_functions.inundation.flood_raster_road_qgis_gdal.impact_function import \
     FloodRasterRoadsGdalFunction
 
