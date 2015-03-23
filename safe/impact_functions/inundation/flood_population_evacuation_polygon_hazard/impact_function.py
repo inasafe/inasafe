@@ -126,7 +126,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             people evacuated and supplies required.
         :rtype: tuple
         """
-        self.prepare(layers)
+        super(FloodEvacuationVectorHazardFunction, self).run(layers)
+
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Flood inundation
         exposure_layer = self.exposure

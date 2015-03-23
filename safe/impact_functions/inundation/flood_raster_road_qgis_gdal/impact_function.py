@@ -36,15 +36,16 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
     def _tabulate(self, flooded_len, question, road_len, roads_by_type):
         table_body = [
             question,
-            TableRow([
-                tr('Road Type'),
-                tr('Flooded in the threshold (m)'),
-                tr('Total (m)')],
+            TableRow(
+                [tr('Road Type'),
+                 tr('Flooded in the threshold (m)'),
+                 tr('Total (m)')],
                 header=True),
-            TableRow([tr('All'), int(flooded_len), int(road_len)])
-        ]
-        table_body.append(TableRow(
-            tr('Breakdown by road type'), header=True))
+            TableRow(
+                [tr('All'),
+                 int(flooded_len),
+                 int(road_len)]),
+            TableRow(tr('Breakdown by road type'), header=True)]
         for t, v in roads_by_type.iteritems():
             table_body.append(
                 TableRow([t, int(v['flooded']), int(v['total'])])
@@ -62,7 +63,7 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
         :returns: A new line layer with inundated roads marked.
         :type: safe_layer
         """
-        self.prepare(layers)
+        super(FloodRasterRoadsGdalFunction, self).run(layers)
 
         target_field = self.target_field
         road_type_field = self.parameters['road_type_field']
@@ -89,12 +90,12 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
         hazard_authid = hazard_crs.authid()
 
         if hazard_authid == 'EPSG:4326':
-            viewport_extent = self.extent
+            viewport_extent = self.requested_extent
         else:
             geo_crs = QgsCoordinateReferenceSystem()
             geo_crs.createFromSrid(4326)
             viewport_extent = extent_to_geo_array(
-                QgsRectangle(*self.extent), geo_crs, hazard_crs)
+                QgsRectangle(*self.requested_extent), geo_crs, hazard_crs)
 
         # Align raster extent and viewport
         # assuming they are both in the same projection
@@ -152,7 +153,7 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
             small_raster, threshold_min, threshold_max)
 
         # Filter geometry and data using the extent
-        extent = QgsRectangle(*self.extent)
+        extent = QgsRectangle(*self.requested_extent)
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
 
@@ -191,7 +192,7 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
             fieldNameIndex(target_field)
 
         # Generate simple impact report
-        epsg = get_utm_epsg(self.extent[0], self.extent[1])
+        epsg = get_utm_epsg(self.requested_extent[0], self.requested_extent[1])
         output_crs = QgsCoordinateReferenceSystem(epsg)
         transform = QgsCoordinateTransform(E.crs(), output_crs)
         road_len = flooded_len = 0  # Length of roads

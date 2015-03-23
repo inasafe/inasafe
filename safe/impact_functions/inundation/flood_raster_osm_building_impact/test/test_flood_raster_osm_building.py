@@ -57,7 +57,6 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
             impact_function.run()
             impact_layer = impact_function.impact
 
-
             # Extract calculated result
             icoordinates = impact_layer.get_geometry()
             iattributes = impact_layer.get_data()

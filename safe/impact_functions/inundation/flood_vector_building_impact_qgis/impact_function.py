@@ -67,7 +67,7 @@ class FloodPolygonBuildingQgisFunction(ImpactFunction):
               H: Polygon layer of inundation areas
               E: Vector layer of roads
         """
-        super(FloodNativePolygonExperimentalFunction, self).run(layers)
+        super(FloodPolygonBuildingQgisFunction, self).run(layers)
 
         # Set the target field in impact layer
         target_field = 'INUNDATED'

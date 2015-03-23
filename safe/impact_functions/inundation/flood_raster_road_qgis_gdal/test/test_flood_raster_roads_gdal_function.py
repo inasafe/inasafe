@@ -61,7 +61,7 @@ class TestFloodRasterRoadsGdalFunction(unittest.TestCase):
             extent.xMaximum(), extent.yMinimum()]
         function.hazard = QgisWrapper(qgis_hazard)
         function.exposure = QgisWrapper(qgis_exposure)
-        function.extent = rect_extent
+        function.requested_extent = rect_extent
         function.parameters['road_type_field'] = 'TYPE'
         function.parameters['min threshold [m]'] = 0.005
         function.parameters['max threshold [m]'] = float('inf')

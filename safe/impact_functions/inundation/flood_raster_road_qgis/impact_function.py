@@ -40,17 +40,17 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
     def _tabulate(self, flooded_len, question, road_len, roads_by_type):
         table_body = [
             question,
-            TableRow([
-                tr('Road Type'),
-                tr('Flooded in the threshold (m)'),
-                tr('Total (m)')],
+            TableRow(
+                [tr('Road Type'),
+                 tr('Flooded in the threshold (m)'),
+                 tr('Total (m)')],
                 header=True),
-            TableRow([
-                tr('All'),
-                int(flooded_len),
-                int(road_len)])]
-        table_body.append(TableRow(
-            tr('Breakdown by road type'), header=True))
+            TableRow(
+                [tr('All'),
+                 int(flooded_len),
+                 int(road_len)]),
+            TableRow(
+                tr('Breakdown by road type'), header=True)]
         for t, v in roads_by_type.iteritems():
             table_body.append(
                 TableRow([t, int(v['flooded']), int(v['total'])])
@@ -59,7 +59,7 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
 
     def run(self, layers=None):
         """Experimental impact function."""
-        self.prepare(layers)
+        super(FloodRasterRoadsExperimentalFunction, self).run(layers)
 
         target_field = self.target_field
         road_type_field = self.parameters['road_type_field']
@@ -82,9 +82,11 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
         E = E.get_layer()
 
         # Get necessary width and height of raster
-        height = (self.extent[3] - self.extent[1]) / H.rasterUnitsPerPixelY()
+        height = (self.requested_extent[3] - self.requested_extent[1]) / (
+            H.rasterUnitsPerPixelY())
         height = int(height)
-        width = (self.extent[2] - self.extent[0]) / H.rasterUnitsPerPixelX()
+        width = (self.requested_extent[2] - self.requested_extent[0]) / (
+            H.rasterUnitsPerPixelX())
         width = int(width)
 
         # Align raster extent and self.extent
@@ -97,7 +99,7 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
         x_delta = (xmax - xmin) / H.width()
         x = xmin
         for i in range(H.width()):
-            if abs(x - self.extent[0]) < x_delta:
+            if abs(x - self.requested_extent[0]) < x_delta:
                 # We have found the aligned raster boundary
                 break
             x += x_delta
@@ -106,7 +108,7 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
         y_delta = (ymax - ymin) / H.height()
         y = ymin
         for i in range(H.width()):
-            if abs(y - self.extent[1]) < y_delta:
+            if abs(y - self.requested_extent[1]) < y_delta:
                 # We have found the aligned raster boundary
                 break
             y += y_delta
@@ -119,9 +121,9 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
             small_raster, threshold_min, threshold_max)
 
         # Filter geometry and data using the extent
-        extent = QgsRectangle(*self.extent)
+        requested_extent = QgsRectangle(*self.requested_extent)
         request = QgsFeatureRequest()
-        request.setFilterRect(extent)
+        request.setFilterRect(requested_extent)
 
         if flooded_polygon is None:
             message = tr('''There are no objects
@@ -132,7 +134,7 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
             raise GetDataError(message)
 
         # Clip exposure by the extent
-        extent_as_polygon = QgsGeometry().fromRect(extent)
+        extent_as_polygon = QgsGeometry().fromRect(requested_extent)
         line_layer = clip_by_polygon(
             E,
             extent_as_polygon
@@ -154,7 +156,7 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
             fieldNameIndex(target_field)
 
         # Generate simple impact report
-        epsg = get_utm_epsg(self.extent[0], self.extent[1])
+        epsg = get_utm_epsg(self.requested_extent[0], self.requested_extent[1])
         output_crs = QgsCoordinateReferenceSystem(epsg)
         transform = QgsCoordinateTransform(E.crs(), output_crs)
         road_len = flooded_len = 0  # Length of roads

@@ -49,7 +49,7 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
         exposure_filename = os.path.join(TESTDATA, population)
         hazard_layer = read_layer(hazard_filename)
         exposure_layer = read_layer(exposure_filename)
-        # Let's set the extent to the hazard extent
+
         function.hazard = hazard_layer
         function.exposure = exposure_layer
         function.run()

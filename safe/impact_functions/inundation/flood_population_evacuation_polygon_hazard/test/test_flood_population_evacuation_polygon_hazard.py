@@ -52,7 +52,7 @@ class TestFloodEvacuationVectorHazardFunction(unittest.TestCase):
         # Let's set the extent to the hazard extent
         function.hazard = hazard_layer
         function.exposure = exposure_layer
-        function.extent = hazard_layer.extent
+        function.requested_extent = hazard_layer.extent
         function.run()
         impact = function.impact
 

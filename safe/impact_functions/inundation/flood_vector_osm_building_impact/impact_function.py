@@ -119,8 +119,7 @@ class FloodVectorBuildingFunction(ImpactFunction):
                 * exposure_layer: Vector layer of structure data on
                 the same grid as hazard_layer
         """
-        # Prepare before running the IF
-        self.prepare(layers)
+        super(FloodVectorBuildingFunction, self).run(layers)
 
         # Extract data
         hazard_layer = self.hazard  # Depth
