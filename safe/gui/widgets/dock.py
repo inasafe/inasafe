@@ -429,33 +429,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
-        if self.organisation_logo_path:
-            dock_width = float(self.width())
-
-            # Dont let the image be more tha 100px hight
-            maximum_height = 100.0  # px
-            pixmap = QtGui.QPixmap(self.organisation_logo_path)
-            height_ratio = maximum_height / pixmap.height()
-            maximum_width = int(pixmap.width() * height_ratio)
-
-            # Don't let the image be more than the dock width wide
-            if maximum_width > dock_width:
-                width_ratio = dock_width / float(pixmap.width())
-                maximum_height = int(pixmap.height() * width_ratio)
-                maximum_width = dock_width
-
-            too_high = pixmap.height() > maximum_height
-            too_wide = pixmap.width() > dock_width
-
-            if too_wide or too_high:
-                pixmap = pixmap.scaled(
-                    maximum_width, maximum_height, Qt.KeepAspectRatio)
-
-            self.organisation_logo.setMaximumWidth(maximum_width)
-            # We have manually scaled using logic above
-            self.organisation_logo.setScaledContents(False)
-            self.organisation_logo.setPixmap(pixmap)
-
         if self.organisation_logo_path and flag:
             self._show_organisation_logo()
         else:
@@ -1699,8 +1672,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
                          'impact-map', 'impact-legend']
         impact_report.component_ids = component_ids
-        if template_warning_verbose and \
-                        len(impact_report.missing_elements) != 0:
+        length = len(impact_report.missing_elements)
+        if template_warning_verbose and length != 0:
             title = self.tr('Template is missing some elements')
             question = self.tr(
                 'The composer template you are printing to is missing '
