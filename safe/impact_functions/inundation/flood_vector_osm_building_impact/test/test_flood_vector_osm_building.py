@@ -22,23 +22,23 @@ import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_vector_osm_building_impact.\
-    impact_function import FloodVectorBuildingImpactFunction
+    impact_function import FloodVectorBuildingFunction
 from safe.storage.core import read_layer
 from safe.test.utilities import TESTDATA, get_qgis_app
+
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
+class TestFloodVectorBuildingFunction(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
-        registry.register(FloodVectorBuildingImpactFunction)
+        registry.register(FloodVectorBuildingFunction)
 
     def test_run(self):
-        impact_function = ImpactFunctionManager().get(
-            'FloodVectorBuildingImpactFunction')
+        impact_function = FloodVectorBuildingFunction.instance()
 
         building = 'test_flood_building_impact_exposure.shp'
         flood_data = 'test_flood_building_impact_hazard.shp'
@@ -73,7 +73,7 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
     def test_filter(self):
         hazard_keywords = {
             'subcategory': 'flood',
-            'units': 'wetdry',
+            'unit': 'wetdry',
             'layer_type': 'vector',
             'data_type': 'polygon'
         }
@@ -91,8 +91,8 @@ class TestFloodVectorBuildingImpactFunction(unittest.TestCase):
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
         retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodVectorBuildingImpactFunction',
+        self.assertEqual('FloodVectorBuildingFunction',
                          retrieved_IF,
-                         'Expecting FloodVectorBuildingImpactFunction.'
+                         'Expecting FloodVectorBuildingFunction.'
                          'But got %s instead' %
                          retrieved_IF)

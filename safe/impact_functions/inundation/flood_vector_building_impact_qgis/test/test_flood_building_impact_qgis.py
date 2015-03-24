@@ -11,40 +11,43 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 __author__ = 'lucernae'
 __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_functions.impact_function_manager\
+    import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
-    .impact_function import FloodNativePolygonExperimentalFunction
-from safe.test.utilities import TESTDATA, get_qgis_app, clone_shp_layer
+    .impact_function import FloodPolygonBuildingQgisFunction
+from safe.test.utilities import (
+    TESTDATA,
+    get_qgis_app,
+    clone_shp_layer,
+    test_data_path)
+from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
+class TestFloodPolygonBuildingQgis(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
-        registry.register(FloodNativePolygonExperimentalFunction)
+        registry.register(FloodPolygonBuildingQgisFunction)
 
     def test_run(self):
-        function = ImpactFunctionManager().get(
-            'FloodNativePolygonExperimentalFunction')
+        function = FloodPolygonBuildingQgisFunction.instance()
 
-        building = 'test_flood_building_impact_exposure'
-        flood_data = 'test_flood_building_impact_hazard'
+        building = 'buildings_osm_4326'
+        flood_data = 'multipart_polygons_osm_4326'
 
-        hazard_filename = os.path.join(TESTDATA, flood_data)
-        exposure_filename = os.path.join(TESTDATA, building)
+        hazard_filename = test_data_path('hazard', flood_data)
+        exposure_filename = test_data_path('exposure', building)
         hazard_layer = clone_shp_layer(
             name=hazard_filename,
             include_keywords=True,
@@ -54,36 +57,33 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
             include_keywords=True,
             source_directory=TESTDATA)
 
+        # Let's set the extent to the hazard extent
+        extent = hazard_layer.extent()
+        rect_extent = [
+            extent.xMinimum(), extent.yMaximum(),
+            extent.xMaximum(), extent.yMinimum()]
+
         function.hazard = QgisWrapper(hazard_layer)
         function.exposure = QgisWrapper(exposure_layer)
-        function.extent = [106.8139860, -6.2043560,
-                           106.8405950, -6.2263570]
+        function.requested_extent = rect_extent
+        function.parameters['building_type_field'] = 'TYPE'
         function.parameters['affected_field'] = 'FLOODPRONE'
         function.parameters['affected_value'] = 'YES'
         function.run()
-        impact_layer = function.impact
+        impact = function.impact
 
-        # Check the question
-        expected_question = ('In the event of a flood in jakarta how many osm '
-                             'building polygons might be flooded ('
-                             'qgis)')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, function.question())
-        self.assertEqual(expected_question, function.question(), message)
-
-        # Extract calculated result
-        keywords = impact_layer.get_keywords()
-        buildings_total = keywords['buildings_total']
-        buildings_affected = keywords['buildings_affected']
-
-        self.assertEqual(buildings_total, 67)
-        self.assertEqual(buildings_affected, 41)
+        # Count of flooded objects is calculated "by the hands"
+        # total flooded = 68, total buildings = 250
+        count = sum(impact.get_data(attribute='INUNDATED'))
+        self.assertEquals(count, 68)
+        count = len(impact.get_data())
+        self.assertEquals(count, 250)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'flood',
-            'units': 'wetdry',
+            'unit': 'wetdry',
             'layer_type': 'vector',
             'data_type': 'polygon'
         }
@@ -101,8 +101,8 @@ class TestFloodBuildingImpactQgisFunction(unittest.TestCase):
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
         retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodNativePolygonExperimentalFunction',
+        self.assertEqual('FloodPolygonBuildingQgis',
                          retrieved_IF,
-                         'Expecting FloodNativePolygonExperimentalFunction.'
+                         'Expecting FloodPolygonBuildingQgis.'
                          'But got %s instead' %
                          retrieved_IF)

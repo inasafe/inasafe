@@ -40,7 +40,6 @@ from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -362,26 +361,6 @@ def write_keywords_to_file(filename, keywords):
         raise
 
 
-def get_safe_impact_function(function_name=None):
-    """Thin wrapper around the safe impact_functions function.
-
-    :param function_name: Specific plugin name that should be fetched.
-    :type function_name: str
-
-    :returns: A safe impact function is returned
-    :rtype: safe.impact.core.FunctionProvider
-
-    """
-    # Convert string to ASCII
-    function_name = unicode(function_name)
-    function_name = unicodedata.normalize(
-        'NFKD', function_name).encode('ascii', 'ignore')
-    try:
-        return ImpactFunctionManager().get(function_name)
-    except:
-        raise
-
-
 def replace_accentuated_characters(message):
     """Normalize unicode data in Python to remove umlauts, accents etc.
 
@@ -394,28 +373,3 @@ def replace_accentuated_characters(message):
 
     message = unicodedata.normalize('NFKD', message).encode('ASCII', 'ignore')
     return message.decode('utf-8')
-
-
-def get_safe_impact_function_type(function_id):
-    """
-
-    :parm function_id: A specific plugins name that should be fetched.
-    :type function_id: str
-
-    :returns: A safe impact function type is returned:
-            'old-style' is "classic" safe impact function
-            'qgis2.0'   is impact function with native qgis layers support
-    :rtype: str
-    """
-    try:
-        # Get an instance of the impact function and get the type
-        function = get_safe_impact_function(function_id)
-
-        try:
-            fun_type = function.get_function_type()
-        except AttributeError:
-            fun_type = 'old-style'
-    except:
-        raise
-
-    return fun_type

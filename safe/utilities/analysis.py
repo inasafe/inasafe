@@ -98,9 +98,8 @@ class Analysis(object):
         self.exposure_keyword = None
         self.aggregation_keyword = None
 
-        # Impact Functions
-        self.impact_function_id = None
-        self.impact_function_parameters = None
+        # Impact Function
+        self.impact_function = None
 
         # Variables
         self.clip_hard = None
@@ -651,7 +650,7 @@ class Analysis(object):
 
         try:
             # add which postprocessors will run when appropriated
-            post_processors_names = self.impact_function_parameters[
+            post_processors_names = self.impact_function.parameters[
                 'postprocessors']
             # aggregator is not ready yet here so we can't use
             # self.aggregator.aoi_mode
@@ -793,11 +792,7 @@ class Analysis(object):
 
     def setup_impact_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
-
-        # Use canonical function name to identify selected function
-        self.impact_calculator.set_function(self.impact_function_id)
-        self.impact_calculator.function_parameters = \
-            self.impact_function_parameters
+        self.impact_calculator.set_function(self.impact_function)
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
@@ -920,7 +915,7 @@ class Analysis(object):
         LOGGER.debug('Do postprocessing')
         self.postprocessor_manager = PostprocessorManager(self.aggregator)
         self.postprocessor_manager.function_parameters = \
-            self.impact_function_parameters
+            self.impact_function.parameters
         self.postprocessor_manager.run()
         self.send_not_busy_signal()
         self.send_analysis_done_signal()

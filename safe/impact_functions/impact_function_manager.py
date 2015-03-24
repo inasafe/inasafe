@@ -41,16 +41,28 @@ class ImpactFunctionManager(object):
     def get(self, class_name):
         """Return an instance of an impact function given its class name.
 
-        :param class_name: the name of IF class
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            if_class_name = 'FloodBuildingImpactFunction'
+            if =  if_manager.get(if_class_name)
+
+        :param class_name: The name of IF class.
         :type class_name: str
 
         :return: Impact function instance that matches the argument.
-        :rtype: safe.impact_functions.base.ImpactFunction.instance()
+        :rtype: safe.impact_functions.base.ImpactFunction
         """
         return self.registry.get(class_name)
 
     def get_class(self, class_name):
         """Return the class of an impact function given its class name.
+
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            if_class_name = 'FloodBuildingImpactFunction'
+            if_class =  if_manager.get_class(if_class_name)
 
         :param class_name: the name of IF class
         :type class_name: str
@@ -66,11 +78,17 @@ class ImpactFunctionManager(object):
         This is a preferred way to get an instance of IF. IF should have a
         unique human readable ID in their metadata.
 
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            if_id = 'FloodBuildingImpactFunction'
+            if =  if_manager.get_by_id(if_id)
+
         :param impact_function_id: The ID of impact function in the metadata.
         :type impact_function_id: str
 
         :return An Impact function instance that has matched id.
-        :rtype: object
+        :rtype: safe.impact_functions.base.ImpactFunction
         """
         impact_functions = self.registry.filter_by_metadata(
             'id', impact_function_id)
@@ -83,11 +101,57 @@ class ImpactFunctionManager(object):
                 impact_function_id)
         return impact_functions[0].instance()
 
+    def filter(self, hazard_metadata=None, exposure_metadata=None):
+        """Get available impact functions from hazard and exposure metadata.
+
+        Disabled impact function will not be loaded.
+
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            hazard_metadata = {
+                'subcategory': hazard_flood,
+                'units': unit_wetdry,
+                'layer_constraints': layer_vector_polygon
+            }
+            exposure_metadata = {
+                'subcategory': exposure_structure,
+                'units': unit_building_type_type,
+                'layer_constraints': layer_vector_polygon
+            }
+            ifs =  if_manager.filter(hazard_metadata, exposure_metadata)
+
+        :param hazard_metadata: The metadata of the hazard.
+        :type hazard_metadata: dict
+
+        :param exposure_metadata: The metadata of the exposure.
+        :type exposure_metadata: dict
+        """
+        return self.registry.filter(hazard_metadata, exposure_metadata)
+
     def filter_by_keywords(
             self, hazard_keywords=None, exposure_keywords=None):
         """Get available impact functions from hazard and exposure keywords.
 
         Disabled impact function will not be loaded.
+
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            hazard_keywords = {
+                'subcategory': 'flood',
+                'units': 'wetdry',
+                'layer_type': 'vector',
+                'data_type': 'polygon'
+            }
+            exposure_keywords = {
+                'subcategory': 'structure',
+                'units': 'building_type',
+                'layer_type': 'vector',
+                'data_type': 'polygon'
+            }
+            ifs =  if_manager.filter_by_keywords(hazard_keywords,
+            exposure_keywords)
 
         :param hazard_keywords: The keywords of the hazard.
         :type hazard_keywords: dict
@@ -101,6 +165,14 @@ class ImpactFunctionManager(object):
     def filter_by_metadata(self, metadata_key, metadata_value):
         """Return IF classes given its metadata key and value.
 
+        .. example::
+
+            if_manager = ImpactFunctionManager()
+            metadata_key = 'author'
+            metadata_value = 'Akbar Gumbira'
+            ifs =  if_manager.filter_by_metadata(metadata_key,
+            metadata_value)
+
         :param metadata_key: The key of the metadata e.g 'id', 'name'
         :type metadata_key: str
 
@@ -112,6 +184,18 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         return self.registry.filter_by_metadata(metadata_key, metadata_value)
+
+    @staticmethod
+    def get_function_id(impact_function):
+        """Get the ID of the impact function.
+
+        :param impact_function: Class of an impact function
+        :type impact_function: safe.impact_functions.base.ImpactFunction
+
+        :returns: The ID of the impact function specified in its metadata.
+        :rtype: str
+        """
+        return impact_function.metadata().as_dict().get('id', None)
 
     @staticmethod
     def get_function_title(impact_function):
@@ -136,13 +220,12 @@ class ImpactFunctionManager(object):
 
     @staticmethod
     def get_function_type(impact_function):
-        """Return the impact function type uses to differentiate which type of
-        layers would be passed to the impact functions
+        """Return the impact function type.
 
-        :param impact_function: The impact function
+        :param impact_function: The impact function.
         :type impact_function: safe.impact_functions.base.ImpactFunction
         """
-        return impact_function.function_type
+        return impact_function.function_type()
 
     def allowed_subcategories(self, category=None):
         """Determine allowed subcategories, optionally filtered by category.
@@ -156,7 +239,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         result = []
-        for impact_function in self.registry.filter():
+        for impact_function in self.impact_functions:
             my_allowed_subcategories = impact_function.metadata()\
                 .allowed_subcategories(category)
             result = add_to_list(result, my_allowed_subcategories)
@@ -179,7 +262,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         result = []
-        for impact_function in self.registry.filter():
+        for impact_function in self.impact_functions:
             my_allowed_data_types = impact_function.metadata() \
                 .allowed_data_types(subcategory)
             result = add_to_list(result, my_allowed_data_types)
@@ -206,7 +289,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         result = []
-        for impact_function in self.registry.filter():
+        for impact_function in self.impact_functions:
             my_allowed_units = impact_function.metadata()\
                 .allowed_units(subcategory, data_type)
             result = add_to_list(result, my_allowed_units)
@@ -258,7 +341,7 @@ class ImpactFunctionManager(object):
         :rtype: dict
         """
         result = []
-        for impact_function in self.registry.filter():
+        for impact_function in self.impact_functions:
             my_units = impact_function.metadata()\
                 .units_for_layer(subcategory, layer_type, data_type)
             result = add_to_list(result, my_units)
@@ -305,7 +388,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         result = []
-        for impact_function in self.registry.filter():
+        for impact_function in self.impact_functions:
             categories = impact_function.metadata()\
                 .categories_for_layer(layer_type, data_type)
             result = add_to_list(result, categories)
@@ -356,7 +439,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         result = []
-        for impact_function in self.registry.filter():
+        for impact_function in self.impact_functions:
             subcategories = impact_function.metadata()\
                 .subcategories_for_layer(category, layer_type, data_type)
             result = add_to_list(result, subcategories)
@@ -381,7 +464,7 @@ class ImpactFunctionManager(object):
 
         hazards = []
         if impact_function is None:
-            for impact_function in self.registry.filter():
+            for impact_function in self.impact_functions:
                 add_to_list(hazards, impact_function.metadata().get_hazards())
 
         else:
@@ -406,7 +489,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         impact_functions_metadata = []
-        for impact_function in self.registry.filter():
+        for impact_function in self.impact_functions:
             if impact_function.metadata().has_hazard(hazard):
                 impact_functions_metadata.append(
                     impact_function.metadata().as_dict())
@@ -425,7 +508,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         impact_functions_metadata = []
-        for impact_function in self.registry.filter():
+        for impact_function in self.impact_functions:
             if impact_function.metadata().has_hazard_id(hazard_id):
                 impact_functions_metadata.append(
                     impact_function.metadata().as_dict())
@@ -451,7 +534,7 @@ class ImpactFunctionManager(object):
 
         exposures = []
         if impact_function is None:
-            for impact_function in self.registry.filter():
+            for impact_function in self.impact_functions:
                 add_to_list(
                     exposures, impact_function.metadata().get_exposures())
 
@@ -477,7 +560,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         impact_functions_metadata = []
-        for impact_function in self.registry.filter():
+        for impact_function in self.impact_functions:
             if impact_function.metadata().has_exposure(exposure):
                 impact_functions_metadata.append(
                     impact_function.metadata().as_dict())
@@ -496,7 +579,7 @@ class ImpactFunctionManager(object):
         :rtype: list
         """
         impact_functions_metadata = []
-        for impact_function in self.registry.filter():
+        for impact_function in self.impact_functions:
             if impact_function.metadata().has_exposure_id(exposure_id):
                 impact_functions_metadata.append(
                     impact_function.metadata().as_dict())

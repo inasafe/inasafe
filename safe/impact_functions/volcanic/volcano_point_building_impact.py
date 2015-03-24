@@ -40,7 +40,7 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 
 
-class VolcanoPointBuildingImpact(FunctionProvider):
+class VolcanoPointBuildingFunction(FunctionProvider):
     """Risk plugin for volcano point building impact.
 
     :author AIFDR
@@ -76,8 +76,8 @@ class VolcanoPointBuildingImpact(FunctionProvider):
             :rtype: dict
             """
             dict_meta = {
-                'id': 'VolcanoPointBuildingImpact',
-                'name': tr('Volcano Point Building Impact'),
+                'id': 'VolcanoPointBuildingFunction',
+                'name': tr('Volcano Point Building Impact Function'),
                 'impact': tr('Be affected'),
                 'title': tr('Be affected'),
                 'author': 'AIFDR',

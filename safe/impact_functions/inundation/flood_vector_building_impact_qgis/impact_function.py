@@ -18,46 +18,33 @@ from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry)
+
 from PyQt4.QtCore import QVariant
+
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis.\
-    metadata_definitions import FloodNativePolygonMetadata
+    metadata_definitions import FloodPolygonBuildingQgisMetadata
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
 
 
-class FloodNativePolygonExperimentalFunction(ImpactFunction):
+class FloodPolygonBuildingQgisFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation (polygon-polygon)."""
 
-    _metadata = FloodNativePolygonMetadata
+    _metadata = FloodPolygonBuildingQgisMetadata()
 
     def __init__(self):
-        super(FloodNativePolygonExperimentalFunction, self).__init__()
+        super(FloodPolygonBuildingQgisFunction, self).__init__()
 
-    @property
-    def function_type(self):
-        """Type of the impact function ('old-style' or 'qgis2.0')."""
-        return 'qgis2.0'
-
-    def get_function_type(self):
-        """Deprecated. Will be replaced by function_type property"""
-        return 'qgis2.0'
-
-    def prepare(self, layers=None):
-        """Prepare this impact function for running the analysis"""
-        super(FloodNativePolygonExperimentalFunction, self).prepare()
-
-        if layers is not None:
-            self.hazard = get_hazard_layer(layers)
-            self.exposure = get_exposure_layer(layers)
-
-    def _tabulate(self, building_count, buildings_by_type, flooded_count,
-                    question):
+    def _tabulate(self,
+                  building_count,
+                  buildings_by_type,
+                  flooded_count,
+                  question):
         table_body = [
             question,
             TableRow(
@@ -80,6 +67,7 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
               H: Polygon layer of inundation areas
               E: Vector layer of roads
         """
+        self.validate()
         self.prepare(layers)
 
         # Set the target field in impact layer
@@ -127,10 +115,10 @@ class FloodNativePolygonExperimentalFunction(ImpactFunction):
         building_layer.startEditing()
         building_layer.commitChanges()
 
-        # Filter geometry and data using the extent
-        extent = QgsRectangle(*self.extent)
+        # Filter geometry and data using the requested extent
+        requested_extent = QgsRectangle(*self.requested_extent)
         request = QgsFeatureRequest()
-        request.setFilterRect(extent)
+        request.setFilterRect(requested_extent)
 
         # Split building_layer by H and save as result:
         #   1) Filter from H inundated features

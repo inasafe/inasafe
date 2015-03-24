@@ -10,8 +10,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from collections import OrderedDict
 
+__author__ = 'lucernae'
+
+from safe.common.utilities import OrderedDict
 from safe.definitions import (
     hazard_definition,
     hazard_flood,
@@ -25,7 +27,7 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.utilities.i18n import tr
 
 
-class FloodNativePolygonMetadata(ImpactFunctionMetadata):
+class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
     """Metadata for Flood Vector on Building Impact Function using QGIS.
 
     .. versionadded:: 2.1
@@ -46,10 +48,11 @@ class FloodNativePolygonMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'FloodNativePolygonExperimentalFunction',
-            'name': tr('Flood Native Polygon Experimental Function'),
+            'id': 'FloodPolygonBuildingQgis',
+            'name': tr('Flood Polygon Building QGIS Function'),
             'impact': tr('Be-flooded (QGIS)'),
             'title': tr('Be flooded (QGIS)'),
+            'function_type': 'qgis2.0',
             'author': 'Dmitry Kolesov',
             'date_implemented': 'N/A',
             'overview': tr('N/A'),

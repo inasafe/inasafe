@@ -73,7 +73,7 @@ class Registry(object):
 
     @classmethod
     def get(cls, name):
-        """Return an instance of an impact function given its class name.
+        """Return an instance of impact function given its class name.
 
         :param name: the name of IF class
         :type name: str
@@ -87,7 +87,7 @@ class Registry(object):
     def get_class(cls, name):
         """Return the class of an impact function given its class name.
 
-        :param name: the name of IF class
+        :param name: The class name of the IF.
         :type name: str
 
         :return: impact function class
@@ -261,8 +261,8 @@ class Registry(object):
                 if keyword.get('subcategory') not in subcategories:
                     requirement_met = False
                     continue
-                if (keyword.get('unit') is not None and keyword.get('unit')
-                        not in units):
+                if (len(units) > 0 and keyword.get('unit') is not None and
+                        keyword.get('unit') not in units):
                     requirement_met = False
                     continue
                 if keyword.get('layer_type') not in layer_types:

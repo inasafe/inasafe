@@ -9,10 +9,8 @@ using it.
 
 import logging
 from math import ceil
-import numpy
 from collections import OrderedDict
 
-from safe.gis.polygon import inside_polygon
 from safe.utilities.i18n import tr
 from safe.defaults import default_minimum_needs
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -117,9 +115,9 @@ def population_rounding(number):
     return population_rounding_full(number)[0]
 
 
-# -------------------------------
-# Helpers for individual plugins
-# -------------------------------
+# ---------------------------------------
+# Helpers for individual impact functions
+# --------------------------------------
 def get_hazard_layers(layers):
     """Get list of layers that have category=='hazard'
     """
@@ -197,109 +195,6 @@ def get_question(hazard_title, exposure_title, impact_function):
             % {'hazard': hazard_title.lower(),
                'exposure': exposure_title.lower(),
                'impact': function_title.lower()})
-
-
-def aggregate_point_data(data=None, boundaries=None,
-                         attribute_name=None,
-                         aggregation_function='count'):
-    """Clip data to boundaries and aggregate their values for each.
-
-    Input
-        data: Point dataset
-        boundaries: Polygon dataset
-        attribute_name: Name of attribute to aggrate over.
-        aggregation_function: Function to apply ('count' or 'sum')
-
-    Output
-        List of aggregated values for each polygon.
-
-    Note
-        Aggregated values depend on aggregation function:
-
-        'sum': Sum of values for attribute_name
-
-        'count': Dictionary with counts of occurences of each value
-        of attribute_name
-
-    """
-
-    msg = ('Input argument "data" must be point type. I got type: %s'
-           % data.get_geometry_type())
-    if not data.is_point_data:
-        raise Exception(msg)
-
-    msg = ('Input argument "boundaries" must be polygon type. I got type: %s'
-           % boundaries.get_geometry_type())
-    if not boundaries.is_polygon_data:
-        raise Exception(msg)
-
-    polygon_geoms = boundaries.get_geometry()
-    # polygon_attrs = boundaries.get_data()
-
-    points = data.get_geometry()
-    attributes = data.get_data()
-
-    result = []
-    # for i, polygon in enumerate(polygon_geoms):
-    for polygon in polygon_geoms:
-        indices = inside_polygon(points, polygon)
-
-        # print 'Found %i points in polygon %i' % (len(indices), i)
-
-        # Aggregate numbers
-        if aggregation_function == 'count':
-            bins = {}
-            for att in numpy.take(attributes, indices):
-                val = att[attribute_name]
-
-                # Count occurences of val
-                if val not in bins:
-                    bins[val] = 0
-                bins[val] += 1
-            result.append(bins)
-        elif aggregation_function == 'sum':
-            sum_ = 0
-            for att in numpy.take(attributes, indices):
-                val = att[attribute_name]
-                sum_ += val
-            result.append(sum_)
-
-    return result
-
-
-def aggregate(data=None, boundaries=None,
-              attribute_name=None,
-              aggregation_function='count'):
-    """Clip data to boundaries and aggregate their values for each.
-
-    Input:
-        data: Point or Raster dataset
-
-        boundaries: Polygon dataset
-
-        attribute_name: Name of attribute to aggrate over.
-         This is only applicable for vector data
-
-        aggregation_function: Function to apply ('count' or 'sum')
-
-    Output:
-        Dictionary of {boundary_name: aggregated value}
-    """
-    res = None
-    if data.is_point_data:
-        res = aggregate_point_data(data, boundaries,
-                                   attribute_name, aggregation_function)
-    elif data.is_raster_data:
-        # Convert to point data
-        # Call point aggregation function
-        # aggregate_point_data(data, boundaries,
-        #                     attribute_name, aggregation_function)
-        pass
-    else:
-        msg = ('Input argument "data" must be point or raster data. '
-               'I got type: %s' % data.get_geometry_type())
-        raise Exception(msg)
-    return res
 
 
 def convert_to_old_keywords(converter, keywords):
