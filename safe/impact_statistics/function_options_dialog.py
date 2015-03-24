@@ -38,7 +38,9 @@ from PyQt4.QtGui import (
     QCheckBox,
     QFormLayout,
     QGridLayout,
-    QWidget)
+    QWidget,
+    QScrollArea,
+    QVBoxLayout)
 
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
@@ -154,25 +156,31 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         :param form_elements: A Dictionary containing element of form
         :type form_elements: dict
         """
-        LOGGER.debug('build_post_processor_form:')
         # create postprocessors tab
-        tab = QWidget()
-        form_layout = QFormLayout(tab)
-        form_layout.setLabelAlignment(Qt.AlignLeft)
-        self.tabWidget.addTab(tab, self.tr('Postprocessors'))
+        # tab = QWidget()
+        # form_layout = QFormLayout(tab)
+        # form_layout.setLabelAlignment(Qt.AlignLeft)
+        # self.tabWidget.addTab(tab, self.tr('Postprocessors'))
+        # self.tabWidget.tabBar().setVisible(True)
+        scroll_layout = QVBoxLayout()
+        scroll_widget = QWidget()
+        scroll_widget.setLayout(scroll_layout)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(scroll_widget)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(scroll)
+        main_widget = QWidget()
+        main_widget.setLayout(main_layout)
+
+        self.tabWidget.addTab(main_widget, self.tr('Postprocessors'))
         self.tabWidget.tabBar().setVisible(True)
         # create elements for the tab
         values = OrderedDict()
-        LOGGER.debug(form_elements)
         for label, parameters in form_elements.items():
-            LOGGER.debug('form_element.item')
-            LOGGER.debug(label)
-            LOGGER.debug(parameters)
             parameter_container = ParameterContainer(parameters)
-            form_layout.addWidget(parameter_container)
+            scroll_layout.addWidget(parameter_container)
             input_values = parameter_container.get_parameters
-            LOGGER.debug('build_pp_form: parameter_container.get_paramters')
-            LOGGER.debug(input_values)
             values[label] = input_values
 
         self.values['postprocessors'] = values
