@@ -33,11 +33,14 @@ from safe.impact_functions.inundation\
     FloodEvacuationVectorHazardFunction
 from safe.impact_functions.inundation.tsunami_population_evacuation_raster.impact_function import \
     TsunamiEvacuationFunction
+from safe.impact_functions.volcanic.volcano_point_building.impact_function \
+    import VolcanoPointBuildingFunction
 
 
 def register_impact_functions():
     """Register all the impact functions available."""
     impact_function_registry = ImpactFunctionManager().registry
+    # Inundation IF's
     impact_function_registry.register(FloodVectorBuildingFunction)
     impact_function_registry.register(FloodPolygonBuildingQgisFunction)
     impact_function_registry.register(FloodVectorRoadsExperimentalFunction)
@@ -49,3 +52,5 @@ def register_impact_functions():
     impact_function_registry.register(TsunamiEvacuationFunction)
     # Generic IF
     impact_function_registry.register(ClassifiedHazardBuildingImpactFunction)
+    # Volcanic IF
+    impact_function_registry.register(VolcanoPointBuildingFunction)

@@ -1,7 +1,6 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk tool by Australian Aid - Volcano Point impact on
-buildings.
+"""InaSAFE Disaster risk tool by Australian Aid - Volcano Point on Building
+Impact Function.
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -11,22 +10,12 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from collections import OrderedDict
 
+from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.core import (
-    FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
-from safe.impact_functions.impact_function_metadata import (
-    ImpactFunctionMetadata)
-from safe.definitions import (
-    hazard_volcano,
-    unit_volcano_categorical,
-    layer_vector_polygon,
-    layer_vector_point,
-    exposure_structure,
-    unit_building_type_type,
-    exposure_definition,
-    hazard_definition,
-    unit_building_generic)
+    get_hazard_layer, get_exposure_layer, get_question)
+from safe.impact_functions.volcanic.volcano_point_building\
+    .metadata_definitions import VolcanoPointBuildingFunctionMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.engine.utilities import buffer_points
@@ -40,103 +29,16 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 
 
-class VolcanoPointBuildingFunction(FunctionProvider):
-    """Risk plugin for volcano point building impact.
+class VolcanoPointBuildingFunction(ImpactFunction):
+    """Impact Function for Volcano Point on Building."""
 
-    :author AIFDR
-    :rating 4
-    :param requires category=='hazard' and \
-                    subcategory in ['volcano'] and \
-                    layertype=='vector' and \
-                    data_type=='point'
+    _metadata = VolcanoPointBuildingFunctionMetadata()
 
-    :param requires category=='exposure' and \
-                    subcategory=='structure' and \
-                    layertype=='vector'
-    """
+    def __init__(self):
+        super(VolcanoPointBuildingFunction, self).__init__()
 
-    class Metadata(ImpactFunctionMetadata):
-        """Metadata for Volcano Point Building Impact.
-
-        .. versionadded:: 2.1
-
-        We only need to re-implement get_metadata(), all other behaviours
-        are inherited from the abstract base class.
-        """
-
-        @staticmethod
-        def as_dict():
-            """Return metadata as a dictionary.
-
-            This is a static method. You can use it to get the metadata in
-            dictionary format for an impact function.
-
-            :returns: A dictionary representing all the metadata for the
-                concrete impact function.
-            :rtype: dict
-            """
-            dict_meta = {
-                'id': 'VolcanoPointBuildingFunction',
-                'name': tr('Volcano Point Building Impact Function'),
-                'impact': tr('Be affected'),
-                'title': tr('Be affected'),
-                'author': 'AIFDR',
-                'date_implemented': 'N/A',
-                'overview': tr(
-                    'To assess the impacts of volcano point on building.'),
-                'detailed_description': '',
-                'hazard_input': tr(
-                    'The hazard layer must be a point layer. '
-                    'This point will be buffered with the radii specified in '
-                    'the parameters as the hazard zone. If you want to see '
-                    'the name of the volcano in the result, you need to '
-                    'specify the volcano name attribute in the Impact Function '
-                    'option.'),
-                'exposure_input': tr(
-                    'Vector polygon layer extracted from OSM where each '
-                    'polygon represents the footprint of a building.'),
-                'output': tr(
-                    'Vector layer contains Map of building exposed to '
-                    'volcanic hazard zones for each  radius.'),
-                'actions': tr(
-                    'Provide details about how many building would likely be '
-                    'affected by each hazard zones.'),
-                'limitations': [],
-                'citations': [],
-                'categories': {
-                    'hazard': {
-                        'definition': hazard_definition,
-                        'subcategories': [hazard_volcano],
-                        'units': [unit_volcano_categorical],
-                        'layer_constraints': [
-                            layer_vector_point
-                        ]
-                    },
-                    'exposure': {
-                        'definition': exposure_definition,
-                        'subcategories': [exposure_structure],
-                        'units': [
-                            unit_building_type_type,
-                            unit_building_generic],
-                        'layer_constraints': [
-                            layer_vector_polygon,
-                            layer_vector_point]
-                    }
-                }
-            }
-            return dict_meta
-
-    parameters = OrderedDict([
-        # The list of radii in km for volcano point hazard
-        ('distances [km]', [3, 5, 10]),
-
-        # The attribute for name of the volcano in hazard layer
-        ('volcano name attribute', 'NAME')])
-
-    def run(self, layers):
-        """Risk plugin for volcano hazard on building/structure.
-
-        Counts number of building exposed to each volcano hazard zones.
+    def run(self, layers=None):
+        """Counts number of building exposed to each volcano hazard zones.
 
         :param layers: List of layers expected to contain.
                 * hazard_layer: Hazard layer of volcano
@@ -147,12 +49,12 @@ class VolcanoPointBuildingFunction(FunctionProvider):
                   Table with number of buildings affected
         :rtype: dict
         """
+        self.validate()
+        self.prepare(layers)
         # Target Field
         target_field = 'zone'
-
         # Hazard Zone Attribute
         hazard_zone_attribute = 'radius'
-
         # Not Affected Value
         not_affected_value = 'Not Affected'
 
@@ -161,8 +63,8 @@ class VolcanoPointBuildingFunction(FunctionProvider):
         volcano_name_attribute = self.parameters['volcano name attribute']
 
         # Identify hazard and exposure layers
-        hazard_layer = get_hazard_layer(layers)  # Volcano hazard layer
-        exposure_layer = get_exposure_layer(layers)  # Building exposure layer
+        hazard_layer = self.hazard  # Volcano hazard layer
+        exposure_layer = self.exposure  # Building exposure layer
 
         # Get question
         question = get_question(
@@ -374,4 +276,6 @@ class VolcanoPointBuildingFunction(FunctionProvider):
                       'legend_units': legend_units,
                       'legend_title': legend_title},
             style_info=style_info)
+
+        self._impact = impact_layer
         return impact_layer
