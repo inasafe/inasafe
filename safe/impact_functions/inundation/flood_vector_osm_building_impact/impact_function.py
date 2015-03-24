@@ -22,12 +22,14 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import format_int, get_osm_building_usage
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.impact_reports.building_exposure_report_mixin import (
+    BuildingExposureReportMixin)
 
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodVectorBuildingFunction(ImpactFunction):
+class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Inundation vector impact on building data."""
     _metadata = FloodVectorBuildingMetadata()
@@ -36,80 +38,31 @@ class FloodVectorBuildingFunction(ImpactFunction):
         """Constructor (calls ctor of base class)."""
         super(FloodVectorBuildingFunction, self).__init__()
 
+    def notes(self):
+        """Return the notes section of the report.
+
+        :return:
+        """
+        return [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Buildings are said to be flooded when in '
+                    'regions marked as affected')
+            }]
+
     def _tabulate(self, affected_buildings, affected_count, attribute_names,
                   buildings, question, total_features):
         # Generate simple impact report
-        table_body = [
+
+        affected_buildings = {'Inundated': affected_buildings}
+        return self.generate_html_report(
             question,
-            TableRow([tr('Building type'),
-                      tr('Number flooded'),
-                      tr('Total')], header=True),
-            TableRow([tr('All'),
-                      format_int(affected_count),
-                      format_int(total_features)])]
-        school_closed = 0
-        hospital_closed = 0
-        # Generate break down by building usage type if available
-        list_type_attribute = [
-            'TYPE', 'type', 'amenity', 'building_t', 'office',
-            'tourism', 'leisure', 'building']
-        intersect_type = set(attribute_names) & set(list_type_attribute)
-        if len(intersect_type) > 0:
-            # Make list of building types
-            building_list = []
-            for usage in buildings:
-                building_type = usage.replace('_', ' ')
-
-                # Lookup internationalised value if available
-                building_type = tr(building_type)
-                building_list.append([
-                    building_type.capitalize(),
-                    format_int(affected_buildings[usage]),
-                    format_int(buildings[usage])])
-
-                if usage.lower() == 'school':
-                    school_closed = affected_buildings[usage]
-                if usage.lower() == 'hospital':
-                    hospital_closed = affected_buildings[usage]
-
-            # Sort alphabetically
-            building_list.sort()
-
-            table_body.append(TableRow(tr('Breakdown by building type'),
-                                       header=True))
-            for row in building_list:
-                s = TableRow(row)
-                table_body.append(s)
-
-        # Action Checklist Section
-        table_body.append(TableRow(tr('Action Checklist:'), header=True))
-        table_body.append(TableRow(
-            tr('Are the critical facilities still open?')))
-        table_body.append(TableRow(
-            tr('Which structures have warning capacity (eg. sirens, speakers, '
-               'etc.)?')))
-        table_body.append(TableRow(
-            tr('Which buildings will be evacuation centres?')))
-        table_body.append(TableRow(
-            tr('Where will we locate the operations centre?')))
-        table_body.append(TableRow(
-            tr('Where will we locate warehouse and/or distribution centres?')))
-        if school_closed > 0:
-            table_body.append(TableRow(
-                tr('Where will the students from the %s closed schools go to '
-                   'study?') % format_int(school_closed)))
-        if hospital_closed > 0:
-            table_body.append(TableRow(
-                tr('Where will the patients from the %s closed hospitals go '
-                   'for treatment and how will we transport them?') %
-                format_int(hospital_closed)))
-
-        # Notes Section
-        table_body.append(TableRow(tr('Notes'), header=True))
-        table_body.append(TableRow(
-            tr('Buildings are said to be flooded when in regions marked '
-               'as affected')))
-        return table_body
+            affected_buildings,
+            buildings)
 
     def run(self, layers=None):
         """Flood impact to buildings (e.g. from Open Street Map).
@@ -218,13 +171,9 @@ class FloodVectorBuildingFunction(ImpactFunction):
                 del buildings[usage]
                 del affected_buildings[usage]
 
-        table_body = self._tabulate(affected_buildings, affected_count,
+        impact_table = self._tabulate(affected_buildings, affected_count,
                                     attribute_names, buildings, question,
                                     total_features)
-
-        # Result
-        impact_summary = Table(table_body).toNewlineFreeString()
-        impact_table = impact_summary
 
         # Prepare impact layer
         map_title = tr('Buildings inundated')
@@ -255,7 +204,7 @@ class FloodVectorBuildingFunction(ImpactFunction):
             geometry=interpolated_layer.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords={
-                'impact_summary': impact_summary,
+                'impact_summary': impact_table,
                 'impact_table': impact_table,
                 'target_field': target_field,
                 'map_title': map_title,
