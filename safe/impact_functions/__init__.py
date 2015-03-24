@@ -10,6 +10,12 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.earthquake.earthquake_building.impact_function import \
+    EarthquakeBuildingFunction
+from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
+    .impact_funtion import ITBFatalityFunction
+from safe.impact_functions.earthquake.pager_earthquake_fatality_model\
+    .impact_function import PAGFatalityFunction
 from safe.impact_functions.generic.classified_hazard_building\
     .impact_function import ClassifiedHazardBuildingFunction
 from safe.impact_functions.generic.classified_hazard_population\
@@ -61,3 +67,7 @@ def register_impact_functions():
     impact_function_registry.register(ContinuousHazardPopulationFunction)
     # Volcanic IF
     impact_function_registry.register(VolcanoPointBuildingFunction)
+    # Earthquake
+    impact_function_registry.register(EarthquakeBuildingFunction)
+    impact_function_registry.register(ITBFatalityFunction)
+    impact_function_registry.register(PAGFatalityFunction)
