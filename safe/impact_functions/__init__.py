@@ -11,14 +11,16 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.impact_functions.generic.classified_hazard_building.impact_function\
-    import ClassifiedHazardBuildingImpactFunction
-from safe.impact_functions.inundation.flood_raster_osm_building_impact.impact_function import \
-    FloodRasterBuildingFunction
+    import ClassifiedHazardBuildingFunction
+from safe.impact_functions.generic.classified_hazard_population\
+    .impact_function import ClassifiedHazardPopulationFunction
+from safe.impact_functions.inundation.flood_raster_osm_building_impact\
+    .impact_function import FloodRasterBuildingFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.inundation.flood_raster_road_qgis.impact_function import \
-    FloodRasterRoadsExperimentalFunction
-from safe.impact_functions.inundation.flood_raster_road_qgis_gdal.impact_function import \
-    FloodRasterRoadsGdalFunction
+from safe.impact_functions.inundation.flood_raster_road_qgis\
+    .impact_function import FloodRasterRoadsExperimentalFunction
+from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
+    .impact_function import FloodRasterRoadsGdalFunction
 from safe.impact_functions.inundation.flood_vector_osm_building_impact\
     .impact_function import FloodVectorBuildingFunction
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
@@ -31,7 +33,8 @@ from safe.impact_functions.inundation.\
 from safe.impact_functions.inundation\
     .flood_population_evacuation_polygon_hazard.impact_function import \
     FloodEvacuationVectorHazardFunction
-from safe.impact_functions.inundation.tsunami_population_evacuation_raster.impact_function import \
+from safe.impact_functions.inundation\
+    .tsunami_population_evacuation_raster.impact_function import \
     TsunamiEvacuationFunction
 
 
@@ -48,4 +51,5 @@ def register_impact_functions():
     impact_function_registry.register(FloodRasterRoadsGdalFunction)
     impact_function_registry.register(TsunamiEvacuationFunction)
     # Generic IF
-    impact_function_registry.register(ClassifiedHazardBuildingImpactFunction)
+    impact_function_registry.register(ClassifiedHazardBuildingFunction)
+    impact_function_registry.register(ClassifiedHazardPopulationFunction)
