@@ -32,7 +32,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class ClassifiedHazardBuildingImpactFunction(ImpactFunction):
     """Impact plugin for classified hazard impact on building data"""
-    
+
     _metadata = ClassifiedHazardBuildingMetadata()
     # Function documentation
     target_field = 'DAMAGED'
@@ -129,7 +129,8 @@ class ClassifiedHazardBuildingImpactFunction(ImpactFunction):
                 * exposure: Vector layer of structure data on
                 the same grid as hazard
         """
-        super(ClassifiedHazardBuildingImpactFunction, self).run(layers)
+        self.validate()
+        self.prepare(layers)
 
         # The 3 classes
         low_t = self.parameters['low_hazard_class']

@@ -143,7 +143,8 @@ class FloodRasterBuildingFunction(ImpactFunction):
                 * exposure_layer: Vector layer of structure data on
                 the same grid as hazard_layer
         """
-        super(FloodRasterBuildingFunction, self).run(layers)
+        self.validate()
+        self.prepare(layers)
 
         threshold = self.parameters['threshold [m]']  # Flood threshold [m]
 

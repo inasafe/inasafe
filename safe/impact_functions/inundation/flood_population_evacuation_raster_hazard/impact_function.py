@@ -130,7 +130,9 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
             required.
         :rtype: tuple
         """
-        super(FloodEvacuationRasterHazardFunction, self).run(layers)
+        self.validate()
+        self.prepare(layers)
+
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Flood inundation
         exposure_layer = self.exposure

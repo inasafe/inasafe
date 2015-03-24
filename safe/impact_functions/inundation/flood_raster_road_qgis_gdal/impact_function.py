@@ -63,7 +63,8 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
         :returns: A new line layer with inundated roads marked.
         :type: safe_layer
         """
-        super(FloodRasterRoadsGdalFunction, self).run(layers)
+        self.validate()
+        self.prepare(layers)
 
         target_field = self.target_field
         road_type_field = self.parameters['road_type_field']

@@ -106,7 +106,8 @@ class TsunamiEvacuationFunction(ImpactFunction):
             required.
         :rtype: tuple
         """
-        super(TsunamiEvacuationFunction, self).run(layers)
+        self.validate()
+        self.prepare(layers)
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Tsunami inundation [m]
