@@ -393,15 +393,3 @@ class ImpactFunction(object):
         if layers is not None:
             self.hazard = get_hazard_layer(layers)
             self.exposure = get_exposure_layer(layers)
-
-    def run(self, layers):
-        """Run analysis using this impact function.
-
-        :param layers: List of layers (hazard and exposure). This is
-            necessary now, until we streamline the preprocess in the base class
-            and remove unnecessary routines in analysis, impact_calculator,
-            impact_calculator_thread, and calculate_safe_impact module.
-        :type layers: list
-        """
-        self.validate()
-        self.prepare(layers)

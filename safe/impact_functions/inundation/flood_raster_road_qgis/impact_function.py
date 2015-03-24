@@ -59,7 +59,8 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
 
     def run(self, layers=None):
         """Experimental impact function."""
-        super(FloodRasterRoadsExperimentalFunction, self).run(layers)
+        self.validate()
+        self.prepare(layers)
 
         target_field = self.target_field
         road_type_field = self.parameters['road_type_field']

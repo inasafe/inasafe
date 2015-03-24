@@ -127,7 +127,8 @@ class ClassifiedHazardPopulationFunction(ImpactFunction):
           Map of population exposed to high class
           Table with number of people in each class
         """
-        super(ClassifiedHazardPopulationFunction, self).run(layers)
+        self.validate()
+        self.prepare(layers)
 
         # The 3 classes
         low_t = self.parameters['low_hazard_class']

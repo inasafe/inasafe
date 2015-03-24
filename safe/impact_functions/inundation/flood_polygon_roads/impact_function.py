@@ -56,7 +56,8 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         :param layers: List of layers expected to contain H: Polygon layer of
             inundation areas E: Vector layer of roads
         """
-        super(FloodVectorRoadsExperimentalFunction, self).run(layers)
+        self.validate()
+        self.prepare(layers)
 
         # Set the target field
         target_field = 'FLOODED'

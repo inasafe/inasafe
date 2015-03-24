@@ -129,7 +129,8 @@ class ClassifiedHazardBuildingFunction(ImpactFunction):
                 * exposure: Vector layer of structure data on
                 the same grid as hazard
         """
-        super(ClassifiedHazardBuildingFunction, self).run(layers)
+        self.validate()
+        self.prepare(layers)
 
         # The 3 classes
         low_t = self.parameters['low_hazard_class']
