@@ -156,12 +156,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         :param form_elements: A Dictionary containing element of form
         :type form_elements: dict
         """
-        # create postprocessors tab
-        # tab = QWidget()
-        # form_layout = QFormLayout(tab)
-        # form_layout.setLabelAlignment(Qt.AlignLeft)
-        # self.tabWidget.addTab(tab, self.tr('Postprocessors'))
-        # self.tabWidget.tabBar().setVisible(True)
         scroll_layout = QVBoxLayout()
         scroll_widget = QWidget()
         scroll_widget.setLayout(scroll_layout)
