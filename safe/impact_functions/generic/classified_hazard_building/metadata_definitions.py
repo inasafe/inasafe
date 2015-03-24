@@ -37,8 +37,8 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'ClassifiedHazardBuildingImpactFunction',
-            'name': tr('Classified Hazard Building Impact Function'),
+            'id': 'ClassifiedHazardBuildingFunction',
+            'name': tr('Classified Hazard Building Function'),
             'impact': tr('Be impacted'),
             'title': tr('Be impacted by each hazard class'),
             'function_type': 'old-style',

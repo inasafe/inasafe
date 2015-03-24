@@ -30,16 +30,16 @@ from safe.impact_functions.generic.classified_hazard_building.metadata_definitio
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ClassifiedHazardBuildingImpactFunction(ImpactFunction):
+class ClassifiedHazardBuildingFunction(ImpactFunction):
     """Impact plugin for classified hazard impact on building data"""
-
+    
     _metadata = ClassifiedHazardBuildingMetadata()
     # Function documentation
     target_field = 'DAMAGED'
     affected_field = 'affected'
 
     def __init__(self):
-        super(ClassifiedHazardBuildingImpactFunction, self).__init__()
+        super(ClassifiedHazardBuildingFunction, self).__init__()
 
     def _tabulate(self, N, affected_buildings, attribute_names, buildings,
                   count, count1, count2, count3, question):
