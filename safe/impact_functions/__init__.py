@@ -10,10 +10,12 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.generic.classified_hazard_building.impact_function\
-    import ClassifiedHazardBuildingFunction
+from safe.impact_functions.generic.classified_hazard_building\
+    .impact_function import ClassifiedHazardBuildingFunction
 from safe.impact_functions.generic.classified_hazard_population\
     .impact_function import ClassifiedHazardPopulationFunction
+from safe.impact_functions.generic.continuous_hazard_population\
+    .impact_function import ContinuousHazardPopulationFunction
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import FloodRasterBuildingFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -53,3 +55,4 @@ def register_impact_functions():
     # Generic IF
     impact_function_registry.register(ClassifiedHazardBuildingFunction)
     impact_function_registry.register(ClassifiedHazardPopulationFunction)
+    impact_function_registry.register(ContinuousHazardPopulationFunction)

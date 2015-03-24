@@ -261,8 +261,8 @@ class Registry(object):
                 if keyword.get('subcategory') not in subcategories:
                     requirement_met = False
                     continue
-                if (keyword.get('unit') is not None and keyword.get('unit')
-                        not in units):
+                if (len(units) > 0 and keyword.get('unit') is not None and
+                        keyword.get('unit') not in units):
                     requirement_met = False
                     continue
                 if keyword.get('layer_type') not in layer_types:
