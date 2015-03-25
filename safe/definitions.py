@@ -143,7 +143,6 @@ hazard_all = [
 # units
 unit_building_generic = {
     'id': 'building_generic',
-    'keywords_id': 'building_generic',
     'name': tr('building generic'),
     'description': tr(
         '<b>Building generic</b> unit means that there is no building type '
@@ -151,7 +150,6 @@ unit_building_generic = {
 }
 unit_building_type_type = {
     'id': 'building_type',
-    'keywords_id': 'building_type',
     'name': tr('building type'),
     'description': tr(
         '<b>Building type</b> is a unit that represent the type of the '
@@ -162,7 +160,6 @@ unit_building_type_type = {
 }
 unit_feet_depth = {
     'id': 'feet_depth',
-    'keywords_id': 'feet',
     'name': tr('feet'),
     'description': tr(
         '<b>Feet</b> are an imperial unit of measure. There are 12 '
@@ -173,7 +170,6 @@ unit_feet_depth = {
 }
 unit_metres_depth = {
     'id': 'metres_depth',
-    'keywords_id': 'm',
     'name': tr('metres'),
     'description': tr(
         '<b>metres</b> are a metric unit of measure. There are 100 '
@@ -184,7 +180,6 @@ unit_metres_depth = {
 }
 unit_mmi = {
     'id': 'mmi',
-    'keywords_id': 'MMI',
     'name': tr('MMI'),
     'description': tr(
         'The <b>Modified Mercalli Intensity (MMI)</b> scale describes '
@@ -195,7 +190,6 @@ unit_mmi = {
 }
 unit_continuous = {
     'id': 'continuous',
-    'keywords_id': 'continuous',
     'name': tr('continuous'),
     'description': tr(
         '<b>Continuous</b> data can be hazard or exposure data '
@@ -210,7 +204,6 @@ unit_continuous = {
 }
 unit_classified = {
     'id': 'classes',
-    'keywords_id': 'classes',
     'name': tr('classes'),
     'description': tr(
         '<b>Classified</b> data can be hazard data where the '
@@ -224,7 +217,6 @@ unit_classified = {
 }
 unit_people_per_pixel = {
     'id': 'people_per_pixel',
-    'keywords_id': 'people_per_pixel',
     'name': tr('people per pixel'),
     'description': tr(
         '<b>Count</b> is the number of people in each cell. For example <b>'
@@ -235,7 +227,6 @@ unit_people_per_pixel = {
 }
 unit_road_type_type = {
     'id': 'road_type',
-    'keywords_id': 'road_type',
     'name': tr('Road Type'),
     'description': tr(
         '<b>Road type</b> is a unit that represent the type of the road. '
@@ -246,7 +237,6 @@ unit_road_type_type = {
 }
 unit_volcano_categorical = {
     'id': 'volcano_categorical',
-    'keywords_id': 'volcano_categorical',
     'name': tr('volcano categorical'),
     'description': tr(
         'This is a ternary description for an area. The area is either '
@@ -287,7 +277,6 @@ unit_volcano_categorical = {
 }
 unit_wetdry = {
     'id': 'wetdry',
-    'keywords_id': 'wet/dry',
     'constraint': 'categorical',
     'default_attribute': 'affected',
     'default_category': 'wet',

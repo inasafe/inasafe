@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '25/02/2014'
@@ -36,6 +34,7 @@ from safe.test.utilities import (
     get_qgis_app,
     TESTDATA)
 from safe.common.utilities import unique_filename, temp_dir
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.widgets.dock

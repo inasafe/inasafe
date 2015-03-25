@@ -80,7 +80,8 @@ class TestRegistry(unittest.TestCase):
             'ITB Fatality Function',
             'PAG Fatality Function',
             'Volcano Point Building Impact Function',
-            'Volcano Polygon Building Impact Function']
+            'Volcano Polygon Building Impact Function',
+            'Volcano Polygon Population Impact Function']
         messsage = 'Expecting %s. Got %s' % (expected, impact_functions)
         self.assertEqual(impact_functions, expected, messsage)
 

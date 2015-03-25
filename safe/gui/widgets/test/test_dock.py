@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions import register_impact_functions
 
 __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
@@ -34,6 +33,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem)
 from PyQt4 import QtCore
 
+from safe.impact_functions import register_impact_functions
 from safe.common.utilities import format_int, unique_filename
 from safe.test.utilities import (
     test_data_path,

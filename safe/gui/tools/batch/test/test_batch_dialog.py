@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions import register_impact_functions
 
 __author__ = 'ismail@kartoza.com'
 __date__ = '24/06/2013'
@@ -30,6 +29,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.tools.batch.batch_dialog import BatchDialog
 from safe.common.utilities import temp_dir
 from safe.gui.widgets.dock import Dock
+from safe.impact_functions import register_impact_functions
 
 
 DOCK = Dock(IFACE)

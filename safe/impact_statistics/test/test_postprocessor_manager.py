@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions import register_impact_functions
-
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '19/05/2013'
@@ -24,6 +22,7 @@ import logging
 
 from qgis.core import QgsMapLayerRegistry
 
+from safe.impact_functions import register_impact_functions
 from safe.test.utilities import (
     set_canvas_crs,
     set_jakarta_extent,
