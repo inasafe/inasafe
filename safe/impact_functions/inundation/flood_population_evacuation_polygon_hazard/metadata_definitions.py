@@ -15,7 +15,7 @@ from safe.definitions import (
     exposure_definition,
     exposure_population,
     unit_people_per_pixel,
-    layer_raster_continuous)
+    layer_raster_continuous, unit_metres_depth, unit_feet_depth)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -79,7 +79,9 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                     'hazard': {
                         'definition': hazard_definition,
                         'subcategories': [hazard_flood],
-                        'units': [unit_wetdry],
+                        'units': [unit_wetdry,
+                                  unit_metres_depth,
+                                  unit_feet_depth],
                         'layer_constraints': [layer_vector_polygon]
                     },
                     'exposure': {

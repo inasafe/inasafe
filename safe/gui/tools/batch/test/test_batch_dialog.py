@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions import register_impact_functions
 
 __author__ = 'ismail@kartoza.com'
 __date__ = '24/06/2013'
@@ -36,6 +37,10 @@ DOCK = Dock(IFACE)
 
 class BatchDialogTest(unittest.TestCase):
     """Tests for the script/batch runner dialog."""
+
+    def setUp(self):
+        register_impact_functions()
+
     def test_load_batch_dialog(self):
         """Test for BatchDialog behaviour.
         """

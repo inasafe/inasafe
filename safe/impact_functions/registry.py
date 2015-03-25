@@ -249,7 +249,7 @@ class Registry(object):
                     convert_to_list(subcategories), 'id')
 
                 units = f_category['units']
-                units = project_list(convert_to_list(units), 'id')
+                units = project_list(convert_to_list(units), 'keywords_id')
 
                 layer_constraints = convert_to_list(
                     f_category['layer_constraints'])

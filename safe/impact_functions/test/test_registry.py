@@ -52,9 +52,9 @@ class TestRegistry(unittest.TestCase):
                   'impact functions exists' % len(registry.impact_functions)
         self.assertEqual(1, len(registry.impact_functions), message)
 
-        result = registry.get('FloodNativePolygonExperimentalFunction')\
+        result = registry.get('FloodPolygonBuildingQgisFunction')\
             .metadata().as_dict()['id']
-        expected = 'FloodNativePolygonExperimentalFunction'
+        expected = 'FloodPolygonBuildingQgis'
         message = 'Expected registered impact function ID should be %s. ' \
                   'Got %s instead' % (expected, result)
         self.assertEqual(expected, result, message)
@@ -64,8 +64,23 @@ class TestRegistry(unittest.TestCase):
         registry = Registry()
         impact_functions = registry.list()
         expected = [
-            'Flood Vector Building Impact Function',
-            'Flood Native Polygon Experimental Function']
+            'Flood Vector Building Function',
+            'Flood Polygon Building QGIS Function',
+            'Flood Vector Roads Experimental Function',
+            'Flood Evacuation Vector Hazard Function',
+            'Flood Evacuation Raster Hazard Function',
+            'Flood Raster Building Function',
+            'Flood Raster Roads Experimental Function',
+            'Flood Raster Roads GDAL Function',
+            'Tsunami Evacuation Function',
+            'Classified Hazard Building Function',
+            'Classified Hazard Population Function',
+            'Continuous Hazard Population Function',
+            'Earthquake Building Function',
+            'ITB Fatality Function',
+            'PAG Fatality Function',
+            'Volcano Point Building Impact Function',
+            'Volcano Polygon Building Impact Function']
         messsage = 'Expecting %s. Got %s' % (expected, impact_functions)
         self.assertEqual(impact_functions, expected, messsage)
 
@@ -73,10 +88,10 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test we can get an impact function instance."""
         # Getting an IF instance using its class name
         registry = Registry()
-        class_name = 'FloodNativePolygonExperimentalFunction'
+        class_name = 'FloodPolygonBuildingQgisFunction'
         impact_function = registry.get(class_name)
         result = impact_function.__class__.__name__
-        message = 'Expecting FloodNativePolygonExperimentalFunction. Got %s ' \
+        message = 'Expecting FloodPolygonBuildingQgisFunction. Got %s ' \
                   'instead.' % result
         self.assertEqual(class_name, result, message)
 
@@ -84,7 +99,7 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test we can get an impact function class."""
         # Getting an IF class using its class name
         registry = Registry()
-        expected = 'FloodNativePolygonExperimentalFunction'
+        expected = 'FloodPolygonBuildingQgisFunction'
         impact_function = registry.get_class(expected)
 
         # Check that it should be a class, not an instance
@@ -100,14 +115,14 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test getting the impact functions by its metadata."""
         # Test getting the impact functions by 'id'
         registry = Registry()
-        impact_function_id = 'FloodNativePolygonExperimentalFunction'
+        impact_function_id = 'FloodPolygonBuildingQgis'
         result = registry.filter_by_metadata('id', impact_function_id)
         expected = [FloodPolygonBuildingQgisFunction]
         message = 'Expecting %s. Got %s instead' % (expected, result)
         self.assertEqual(expected, result, message)
 
         # Test getting the impact functions by 'name'
-        impact_function_name = 'Flood Native Polygon Experimental Function'
+        impact_function_name = 'Flood Polygon Building QGIS Function'
         result = registry.filter_by_metadata('name', impact_function_name)
         expected = [FloodPolygonBuildingQgisFunction]
         message = 'Expecting %s. Got %s instead.' % (expected, result)

@@ -73,7 +73,7 @@ class TestTsunamiEvacuationRaster(unittest.TestCase):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'tsunami',
-            'unit': 'metres_depth',
+            'unit': 'm',
             'layer_type': 'raster',
             'data_type': 'continuous'
         }

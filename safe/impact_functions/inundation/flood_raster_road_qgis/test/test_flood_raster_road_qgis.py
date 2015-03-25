@@ -81,7 +81,7 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'flood',
-            'unit': 'metres_depth',
+            'unit': 'm',
             'layer_type': 'raster',
             'data_type': 'continuous'
         }

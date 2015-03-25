@@ -68,7 +68,7 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
     def test_filter(self):
         hazard_keywords = {
             'subcategory': 'tsunami',
-            'unit': 'metres_depth',
+            'unit': 'm',
             'layer_type': 'raster',
             'data_type': 'continuous'
         }

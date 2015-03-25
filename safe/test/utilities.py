@@ -26,6 +26,7 @@ from PyQt4 import QtGui  # pylint: disable=W0621
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 from safe.gis.numerics import axes_to_points
+from safe.impact_functions import register_impact_functions
 from safe.utilities.utilities import read_file_keywords
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
@@ -127,6 +128,7 @@ def get_qgis_app():
         # QgisInterface is a stub implementation of the QGIS plugin interface
         # noinspection PyPep8Naming
         IFACE = QgisInterface(CANVAS)
+        register_impact_functions()
 
     return QGIS_APP, CANVAS, IFACE, PARENT
 
