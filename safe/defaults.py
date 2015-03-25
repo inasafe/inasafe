@@ -177,11 +177,25 @@ def age_postprocessor():
     return [age, youth_ratio, adult_ratio, elderly_ratio]
 
 def road_type_postprocessor():
+    """build road-type parameter for post processing.
+    :return: A list of parameters
+    :rtype: list of BooleanParameter
+    """
     road_type = BooleanParameter()
     road_type.name = 'Road type'
     road_type.value = True
     return [road_type]
 
+
+def building_type_postprocessor():
+    """build building-type parameter for post processing.
+    :return: A list of parameters
+    :rtype: list of BooleanParameter
+    """
+    building_type = BooleanParameter()
+    building_type.name = 'Building type'
+    building_type.value = True
+    return [building_type]
 
 def default_minimum_needs():
     """Helper to get the default minimum needs.
