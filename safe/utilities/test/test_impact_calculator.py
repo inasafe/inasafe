@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions import register_impact_functions
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
@@ -31,6 +33,8 @@ class ImpactCalculatorTest(unittest.TestCase):
 
     def setUp(self):
         """Create shared resources that all tests can use"""
+        register_impact_functions()
+
         self.calculator = ImpactCalculator()
         self.vector_path = os.path.join(TESTDATA, 'Padang_WGS84.shp')
         self.vector_layer = read_safe_layer(self.vector_path)
@@ -47,7 +51,9 @@ class ImpactCalculatorTest(unittest.TestCase):
         self.raster_population_path = os.path.join(EXPDATA, 'glp10ag.asc')
         self.calculator.set_hazard_layer(self.raster_shake)
         self.calculator.set_exposure_layer(self.vector_layer)
-        self.calculator.set_function('Earthquake Building Impact Function')
+        self.calculator.set_function('EarthquakeBuildingFunction')
+
+        self.impact_function_manager = ImpactFunctionManager()
 
     def tearDown(self):
         """Tear down - destroy the QGIS app"""
@@ -65,8 +71,9 @@ class ImpactCalculatorTest(unittest.TestCase):
                 self.raster_shake), message
 
         message = 'Function property incorrect.'
-        assert (self.calculator.function() ==
-                'Earthquake Building Impact Function'), message
+        assert (self.impact_function_manager.get_function_id(
+            self.calculator.function()) ==
+            'EarthquakeBuildingFunction'), message
 
     def test_run(self):
         """Test that run works as expected in non threading mode"""
@@ -131,7 +138,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         e = read_safe_layer(exposure_path)
         self.calculator.set_hazard_layer(h)
         self.calculator.set_exposure_layer(e)
-        self.calculator.set_function('Flood Raster Building Impact Function')
+        self.calculator.set_function('FloodRasterBuildingFunction')
         try:
             function_runner = self.calculator.get_runner()
             # Run non threaded
@@ -153,7 +160,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         assert self.calculator.requires_clipping(), message
 
         self.calculator.set_function(
-            'Flood Vector Roads Experimental Function')
+            'FloodVectorRoadsExperimentalFunction')
         message = 'False expected, but True returned'
         assert not self.calculator.requires_clipping(), message
 

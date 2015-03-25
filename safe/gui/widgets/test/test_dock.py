@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions import register_impact_functions
+
 __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -89,6 +91,8 @@ class TestDock(TestCase):
         DOCK.user_extent = None
         DOCK.user_extent_crs = None
 
+        register_impact_functions()
+
     def tearDown(self):
         """Fixture run after each test"""
         QgsMapLayerRegistry.instance().removeAllMapLayers()
@@ -155,7 +159,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='Penduduk Jakarta',
             function='Need evacuation',
-            function_id='Flood Evacuation Function')
+            function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -224,7 +228,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
-            function_id='Flood Evacuation Function')
+            function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -264,7 +268,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='Penduduk Jakarta',
             function='Need evacuation',
-            function_id='Flood Evacuation Function')
+            function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -289,7 +293,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='Penduduk Jakarta',
             function='Need evacuation',
-            function_id='Flood Evacuation Function')
+            function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
         LOGGER.info("Canvas list before:\n%s" % canvas_list())
         # Enable on-the-fly reprojection
@@ -426,7 +430,7 @@ class TestDock(TestCase):
             hazard='multipart_polygons_osm_4326',
             exposure='buildings_osm_4326',
             function='Be flooded',
-            function_id='Flood Vector Building Impact Function')
+            function_id='FloodVectorBuildingFunction')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -453,7 +457,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
-            function_id='Flood Evacuation Function')
+            function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -515,6 +519,8 @@ class TestDock(TestCase):
         self.assertTrue(expected_function == current_function, message)
         DOCK.cboHazard.setCurrentIndex(0)
         # Selected function should remain the same
+        # RM: modified it, because there is generic one right now
+        DOCK.cboFunction.setCurrentIndex(1)
         expected = 'Need evacuation'
         function = DOCK.cboFunction.currentText()
         message = 'Expected: %s, Got: %s' % (expected, function)
@@ -532,7 +538,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)
         self.assertTrue(result, message)
@@ -578,7 +584,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)
         self.assertTrue(result, message)
@@ -698,7 +704,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='OSM Building Polygons',
             function='Be flooded',
-            function_id='Flood Raster Building Impact Function')
+            function_id='FloodRasterBuildingFunction')
         DOCK.get_functions()
         self.assertTrue(result, message)
 
@@ -728,7 +734,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='Penduduk Jakarta',
             function='Need evacuation',
-            function_id='Flood Evacuation Function')
+            function_id='FloodEvacuationRasterHazardFunction')
         tool_button = DOCK.toolFunctionOptions
         flag = tool_button.isEnabled()
         self.assertTrue(
@@ -747,7 +753,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='Penduduk Jakarta',
             function='Need evacuation',
-            function_id='Flood Evacuation Function')
+            function_id='FloodEvacuationRasterHazardFunction')
         result = DOCK.checkMemoryUsage()
         message = 'Expected "3mb" to apear in : %s' % result
         self.assertTrue(result is not None, 'Check memory reported None')
@@ -779,7 +785,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
         message += ' when an aggregation layer is defined.'
@@ -794,7 +800,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_enabled_flag=False)
         message += ' when no aggregation layer is defined.'
         self.assertTrue(result, message)
@@ -826,7 +832,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
 
@@ -904,7 +910,7 @@ class TestDock(TestCase):
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
             function='Need evacuation',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
 
@@ -930,7 +936,7 @@ class TestDock(TestCase):
             hazard='An earthquake in Yogyakarta like in 2006',
             exposure='OSM Building Polygons',
             function='Be affected',
-            function_id='Earthquake Building Impact Function')
+            function_id='EarthquakeBuildingFunction')
         self.assertTrue(result, message)
 
         layer = DOCK.get_hazard_layer()

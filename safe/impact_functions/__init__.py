@@ -67,7 +67,7 @@ def register_impact_functions():
     impact_function_registry.register(ClassifiedHazardBuildingFunction)
     impact_function_registry.register(ClassifiedHazardPopulationFunction)
     impact_function_registry.register(ContinuousHazardPopulationFunction)
-	# Earthquake
+    # Earthquake
     impact_function_registry.register(EarthquakeBuildingFunction)
     impact_function_registry.register(ITBFatalityFunction)
     impact_function_registry.register(PAGFatalityFunction)

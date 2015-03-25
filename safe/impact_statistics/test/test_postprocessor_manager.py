@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions import register_impact_functions
+
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '19/05/2013'
@@ -62,6 +64,8 @@ class PostprocessorManagerTest(unittest.TestCase):
         DOCK.show_intermediate_layers = False
         set_jakarta_extent()
 
+        register_impact_functions()
+
     def tearDown(self):
         """Run after each test."""
         # Let's use a fresh registry, canvas, and dock for each test!
@@ -80,7 +84,7 @@ class PostprocessorManagerTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart')
         set_jakarta_extent(dock=DOCK)
         assert result, message
@@ -128,7 +132,7 @@ class PostprocessorManagerTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function_id='Flood Evacuation Function')
+            function_id='FloodEvacuationRasterHazardFunction')
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)

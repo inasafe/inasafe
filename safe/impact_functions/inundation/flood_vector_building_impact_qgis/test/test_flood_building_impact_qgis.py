@@ -83,7 +83,7 @@ class TestFloodPolygonBuildingQgis(unittest.TestCase):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'flood',
-            'unit': 'wetdry',
+            'unit': 'wet/dry',
             'layer_type': 'vector',
             'data_type': 'polygon'
         }

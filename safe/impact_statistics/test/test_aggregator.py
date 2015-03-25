@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions import register_impact_functions
 
 __author__ = 'Marco Bernasocchi'
 __date__ = '10/01/2011'
@@ -119,7 +120,7 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart',
             aggregation_enabled_flag=True)
         set_jakarta_extent(dock=DOCK)
@@ -147,7 +148,7 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
         set_jakarta_extent(dock=DOCK)
         assert result, message
@@ -177,7 +178,7 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
         set_jakarta_extent(dock=DOCK)
         assert result, message
@@ -204,7 +205,7 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='A flood in Jakarta like in 2007',
             exposure='People',
-            function_id='Flood Evacuation Function',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
         set_jakarta_extent(dock=DOCK)
         assert result, message
@@ -253,7 +254,7 @@ class AggregatorTest(unittest.TestCase):
             DOCK,
             hazard='jakarta_crosskabupaten_polygons',
             exposure='People',
-            function_id='Flood Evacuation Function Vector Hazard',
+            function_id='FloodEvacuationVectorHazardFunction',
             aggregation_layer='kabupaten jakarta',
             aggregation_enabled_flag=True)
         assert result, message

@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.gis import qgis_version
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
@@ -24,6 +24,8 @@ import unittest
 
 from qgis.core import QgsMapLayerRegistry
 
+from safe.impact_functions import register_impact_functions
+from safe.utilities.gis import qgis_version
 from safe.gui.tools.save_scenario import SaveScenarioDialog
 from safe.test.utilities import (
     setup_scenario,
@@ -65,6 +67,9 @@ class SaveScenarioTest(unittest.TestCase):
 
         # Create scenario dialog
         self.save_scenario_dialog = SaveScenarioDialog(IFACE, DOCK)
+        # register impact functions
+        register_impact_functions()
+        self.impact_function_manager = ImpactFunctionManager()
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -84,7 +89,7 @@ class SaveScenarioTest(unittest.TestCase):
             hazard='Classified Flood in Jakarta',
             exposure='Penduduk Jakarta',
             function='Be affected by each hazard class',
-            function_id='Classified Hazard Population Impact Function')
+            function_id='ClassifiedHazardPopulationFunction')
         self.assertTrue(result, message)
         is_valid, message = self.save_scenario_dialog.validate_input()
         self.assertTrue(is_valid)
@@ -103,7 +108,7 @@ class SaveScenarioTest(unittest.TestCase):
             hazard='Classified Flood in Jakarta',
             exposure='Penduduk Jakarta',
             function='Be affected by each hazard class',
-            function_id='Classified Hazard Population Impact Function')
+            function_id='ClassifiedHazardPopulationFunction')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -139,7 +144,7 @@ class SaveScenarioTest(unittest.TestCase):
             'Hazard is not the same')
         self.assertTrue(
             function == (
-                'function = Classified Hazard Population Impact Function'),
+                'function = ClassifiedHazardPopulationFunction'),
             'Impact function is not same')
 
         # TODO: figure out why this changed between releases
@@ -162,7 +167,7 @@ class SaveScenarioTest(unittest.TestCase):
             hazard='Classified Flood in Jakarta',
             exposure='Penduduk Jakarta',
             function='Be affected by each hazard class',
-            function_id='Classified Hazard Population Impact Function')
+            function_id='ClassifiedHazardPopulationFunction')
         self.assertTrue(result, message)
         fake_dir = os.path.dirname(TESTDATA)
         scenario_file = unique_filename(
