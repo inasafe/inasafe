@@ -288,7 +288,7 @@ class Raster(Layer):
         #              precision even though Float64 is specified
         #              - see issue #17
         driver = gdal.GetDriverByName(file_format)
-        fid = driver.Create(filename, M, N, 1, gdal.GDT_Float64)
+        fid = driver.Create(filename.encode('utf-8'), M, N, 1, gdal.GDT_Float64)
         if fid is None:
             msg = ('Gdal could not create filename %s using '
                    'format %s' % (filename, file_format))

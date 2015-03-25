@@ -669,12 +669,12 @@ class Vector(Layer):
             msg = 'OGR driver %s not available' % driver
             raise WriteLayerError(msg)
 
-        ds = drv.CreateDataSource(filename)
+        ds = drv.CreateDataSource(filename.encode('utf-8'))
         if ds is None:
             msg = 'Creation of output file %s failed' % filename
             raise WriteLayerError(msg)
 
-        lyr = ds.CreateLayer(layer_name,
+        lyr = ds.CreateLayer(layer_name.encode('utf-8'),
                              self.projection.spatial_reference,
                              self.geometry_type)
         if lyr is None:
