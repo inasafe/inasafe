@@ -319,12 +319,13 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         db = sqlite3.connect(db_file_path)
         cursor = db.cursor()
         cursor.execute(
-            'SELECT name '
+            'SELECT COUNT(*) '
             'FROM sqlite_master '
             'WHERE type=\'table\' '
             'AND name=\'tbl_bookmarks\';')
 
-        if cursor.rowcount != 0:
+        number_of_rows = cursor.fetchone()[0]
+        if number_of_rows > 0:
             cursor.execute(
                 'SELECT * '
                 'FROM tbl_bookmarks;')
