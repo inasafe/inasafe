@@ -28,6 +28,7 @@ from PyQt4.QtCore import QSettings
 from safe.common.resource_parameter import ResourceParameter
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.string_parameter import StringParameter
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
 
@@ -174,6 +175,12 @@ def age_postprocessor():
     elderly_ratio.value = 0.078
 
     return [age, youth_ratio, adult_ratio, elderly_ratio]
+
+def road_type_postprocessor():
+    road_type = BooleanParameter()
+    road_type.name = 'Road type'
+    road_type.value = True
+    return [road_type]
 
 
 def default_minimum_needs():
