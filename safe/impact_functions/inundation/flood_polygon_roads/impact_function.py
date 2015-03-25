@@ -32,6 +32,7 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
     def __init__(self):
         """Constructor."""
         super(FloodVectorRoadsExperimentalFunction, self).__init__()
+        LOGGER.debug('INIT : FloodVectorRoadsExperimentalFunction')
 
     def _tabulate(self, flooded_len, question, road_len, roads_by_type):
         table_body = [
