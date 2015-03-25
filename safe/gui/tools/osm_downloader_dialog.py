@@ -320,14 +320,21 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.save_state()
             self.require_directory()
             for feature_type in feature_types:
-                self.download(feature_type)
+
+                output_directory = self.output_directory.text()
+                output_prefix = self.filename_prefix.text()
+                overwrite = self.overwrite_checkBox.isChecked()
+                output_base_file_path = self.get_output_base_path(
+                    output_directory, output_prefix, feature_type, overwrite)
+
+                self.download(feature_type, output_base_file_path)
                 try:
-                    self.load_shapefile(feature_type)
+                    self.load_shapefile(feature_type, output_base_file_path)
                 except FileMissingError as exception:
                     display_warning_message_box(
                         self,
                         error_dialog_title,
-                        str(exception))
+                        exception.message)
             self.done(QDialog.Accepted)
             self.rectangle_map_tool.reset()
 
@@ -345,6 +352,84 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         finally:
             # Unlock the groupbox
             self.groupBox.setEnabled(True)
+
+    def get_output_base_path(
+            self,
+            output_directory,
+            output_prefix,
+            feature_type,
+            overwrite):
+        """Get a full base name path to save the shapefile.
+
+        :param output_directory: The directory where to put results.
+        :type output_directory: str
+
+        :param output_prefix: The prefix to add for the shapefile.
+        :type output_prefix: str
+
+        :param feature_type: What kind of features should be downloaded.
+            Currently 'buildings', 'building-points' or 'roads' are supported.
+        :type feature_type: str
+
+        :param overwrite: Boolean to know if we can overwrite existing files.
+        :type overwrite: bool
+
+        :return: The base path.
+        :rtype: str
+        """
+        path = os.path.join(
+            output_directory, '%s%s' % (output_prefix, feature_type))
+
+        if overwrite:
+
+            # If a shapefile exists, we must remove it (only the .shp)
+            shp = '%s.shp' % path
+            if os.path.isfile(shp):
+                os.remove(shp)
+
+        else:
+            separator = '-'
+            suffix = self.get_unique_file_path_suffix(
+                '%s.shp' % path, separator)
+
+            if suffix:
+                path = os.path.join(output_directory, '%s%s%s%s' % (
+                    output_prefix, feature_type, separator, suffix))
+
+        return path
+
+    @staticmethod
+    def get_unique_file_path_suffix(file_path, separator='-', i=0):
+        """Return the minimum number to suffix the file to not overwrite one.
+        Example : /tmp/a.txt exists.
+            - With file_path='/tmp/b.txt' will return 0.
+            - With file_path='/tmp/a.txt' will return 1 (/tmp/a-1.txt)
+
+        :param file_path: The file to check.
+        :type file_path: str
+
+        :param separator: The separator to add before the prefix.
+        :type separator: str
+
+        :param i: The minimum prefix to check.
+        :type i: int
+
+        :return: The minimum prefix you should add to not overwrite a file.
+        :rtype: int
+        """
+
+        basename = os.path.splitext(file_path)
+        if i != 0:
+            file_path_test = os.path.join(
+                '%s%s%s%s' % (basename[0], separator, i, basename[1]))
+        else:
+            file_path_test = file_path
+
+        if os.path.isfile(file_path_test):
+            return OsmDownloaderDialog.get_unique_file_path_suffix(
+                file_path, separator, i + 1)
+        else:
+            return i
 
     def require_directory(self):
         """Ensure directory path entered in dialog exist.
@@ -380,12 +465,15 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         else:
             raise CanceledImportDialogError()
 
-    def download(self, feature_type):
-        """Download shapefiles from Linfiniti server.
+    def download(self, feature_type, output_base_path):
+        """Download shapefiles from Kartoza server.
 
         :param feature_type: What kind of features should be downloaded.
             Currently 'buildings', 'building-points' or 'roads' are supported.
         :type feature_type: str
+
+        :param output_base_path: The base path of the shape file.
+        :type output_base_path: str
 
         :raises: ImportDialogError, CanceledImportDialogError
         """
@@ -404,7 +492,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 max_longitude=max_longitude,
                 max_latitude=max_latitude
             )
-        output_prefix = self.filename_prefix.text()
         if feature_type == 'buildings':
             url = '{url}?bbox={box}&qgis_version=2'.format(
                 url=self.buildings_url, box=box)
@@ -415,9 +502,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             url = '{url}?bbox={box}&qgis_version=2'.format(
                 url=self.roads_url, box=box)
 
-        if output_prefix is not None:
-            url += '&output_prefix=%s' % output_prefix
-
         if 'LANG' in os.environ:
             env_lang = os.environ['LANG']
             url += '&lang=%s' % env_lang
@@ -426,7 +510,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         # download and extract it
         self.fetch_zip(url, path, feature_type)
-        self.extract_zip(path, self.output_directory.text())
+        self.extract_zip(path, output_base_path)
 
         self.progress_dialog.done(QDialog.Accepted)
 
@@ -479,14 +563,25 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 raise DownloadError(error_message)
 
     @staticmethod
-    def extract_zip(path, output_dir):
-        """Extract all content of a .zip file from path to output_dir.
+    def extract_zip(zip_path, destination_base_path):
+        """Extract different extensions to the destination base path.
 
-        :param path: The path of the .zip file
-        :type path: str
+        Example : test.zip contains a.shp, a.dbf, a.prj
+        and destination_base_path = '/tmp/CT-buildings
+        Expected result :
+            - /tmp/CT-buildings.shp
+            - /tmp/CT-buildings.dbf
+            - /tmp/CT-buildings.prj
 
-        :param output_dir: Output directory where the shp will be written to.
-        :type output_dir: str
+        If two files in the zip with the same extension, only one will be
+        copied.
+
+        :param zip_path: The path of the .zip file
+        :type zip_path: str
+
+        :param destination_base_path: The destination base path where the shp
+            will be written to.
+        :type destination_base_path: str
 
         :raises: IOError - when not able to open path or output_dir does not
             exist.
@@ -494,29 +589,31 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         import zipfile
 
-        # extract all files...
-        handle = open(path, 'rb')
+        handle = open(zip_path, 'rb')
         zip_file = zipfile.ZipFile(handle)
         for name in zip_file.namelist():
-            output_path = os.path.join(output_dir, name)
-            output_file = open(output_path, 'wb')
+            extension = os.path.splitext(name)[1]
+            output_final_path = u'%s%s' % (destination_base_path, extension)
+            output_file = open(output_final_path, 'wb')
             output_file.write(zip_file.read(name))
             output_file.close()
 
         handle.close()
 
-    def load_shapefile(self, feature_type):
+    def load_shapefile(self, feature_type, base_path):
         """Load downloaded shape file to QGIS Main Window.
 
         :param feature_type: What kind of features should be downloaded.
             Currently 'buildings', 'building-points' or 'roads' are supported.
         :type feature_type: str
 
+        :param base_path: The base path of the shape file (without extension).
+        :type base_path: str
+
         :raises: ImportDialogError - when buildings.shp not exist
         """
-        output_prefix = self.filename_prefix.text()
-        path = self.output_directory.text()
-        path = os.path.join(path, '%s%s.shp' % (output_prefix, feature_type))
+
+        path = '%s.shp' % base_path
 
         if not os.path.exists(path):
             message = self.tr(
