@@ -17,47 +17,55 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.volcanic.volcano_point_building.impact_function \
-    import VolcanoPointBuildingFunction
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
+    import VolcanoPolygonBuildingFunction
+from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 
 
-class TestVolcanoPointBuildingFunction(unittest.TestCase):
-    """Test for Volcano Point on Building Impact Function."""
+class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
+    """Test for Volcano Polygon on Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
-        registry.register(VolcanoPointBuildingFunction)
+        registry.register(VolcanoPolygonBuildingFunction)
 
     def test_run(self):
         """TestVolcanoPointBuildingFunction: Test running the IF."""
         volcano_path = test_data_path(
-            'hazard', 'region_c', 'volcano', 'merapi_point.shp')
+            'hazard', 'region_c', 'volcano', 'merapi_krb.shp')
         building_path = test_data_path(
             'exposure', 'region_c', 'structure', 'buildings.shp')
 
         hazard_layer = read_layer(volcano_path)
         exposure_layer = read_layer(building_path)
 
-        impact_function = VolcanoPointBuildingFunction.instance()
+        impact_function = VolcanoPolygonBuildingFunction.instance()
         impact_function.hazard = hazard_layer
         impact_function.exposure = exposure_layer
         impact_function.run()
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In the event of merapi how many buildings might '
-                             'be affected')
+        expected_question = ('In the event of merapi_krb how many buildings '
+                             'might be affected')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)
 
         # The buildings should all be categorised into 5000 zone
-        zone_sum = sum(impact_layer.get_data(attribute='zone'))
-        expected_sum = 5000 * 100
-        message = 'Expecting %s, but it returns %s' % (expected_sum, zone_sum)
-        self.assertEqual(zone_sum, expected_sum, message)
+        zone_sum = impact_layer.get_data(attribute='zone')
+        krb3_zone_count = zone_sum.count('Kawasan Rawan Bencana III')
+        krb2_zone_count = zone_sum.count('Kawasan Rawan Bencana II')
+        # The result (counted by hand)
+        expected_krb3_count = 35
+        expected_krb2_count = 65
+        message = 'Expecting %s for KRB III zone, but it returns %s' % (
+            krb3_zone_count, expected_krb3_count)
+        self.assertEqual(krb3_zone_count, expected_krb3_count, message)
+        message = 'Expecting %s for KRB II zone, but it returns %s' % (
+            krb2_zone_count, expected_krb2_count)
+        self.assertEqual(krb2_zone_count, expected_krb2_count, message)
 
     def test_filter(self):
         """TestVolcanoPointBuildingFunction: Test filtering IF"""
@@ -66,7 +74,7 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
             'category': 'hazard',
             'subcategory': 'volcano',
             'layer_type': 'vector',
-            'data_type': 'point'
+            'data_type': 'polygon'
         }
 
         exposure_keywords = {
@@ -84,7 +92,7 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
 
         retrieved_if = impact_functions[0].metadata().as_dict()['id']
         expected = ImpactFunctionManager().get_function_id(
-            VolcanoPointBuildingFunction)
+            VolcanoPolygonBuildingFunction)
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)

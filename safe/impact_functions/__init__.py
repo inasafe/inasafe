@@ -40,6 +40,8 @@ from safe.impact_functions.inundation\
     TsunamiEvacuationFunction
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
+from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
+    import VolcanoPolygonBuildingFunction
 
 
 def register_impact_functions():
@@ -59,5 +61,6 @@ def register_impact_functions():
     impact_function_registry.register(ClassifiedHazardBuildingFunction)
     impact_function_registry.register(ClassifiedHazardPopulationFunction)
     impact_function_registry.register(ContinuousHazardPopulationFunction)
-    # Volcanic IF
+    # Volcanic IF's
     impact_function_registry.register(VolcanoPointBuildingFunction)
+    impact_function_registry.register(VolcanoPolygonBuildingFunction)

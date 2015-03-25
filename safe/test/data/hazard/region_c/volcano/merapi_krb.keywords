@@ -1,0 +1,6 @@
+category: hazard
+subcategory: volcano
+title: merapi_krb
+field: KRB
+value_map: {"high": ["Kawasan Rawan Bencana III"], "medium": ["Kawasan Rawan Bencana II"], "low": ["Kawasan Rawan Bencana I"]}
+unit: volcano_categorical
