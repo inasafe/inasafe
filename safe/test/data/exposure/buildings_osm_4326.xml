@@ -171,11 +171,10 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-                
-<![CDATA[datatype: osm
-category: exposure
+<![CDATA[category: exposure
+field: type
 subcategory: structure
-purpose: dki
+unit: building_type
 title: buildings_osm_4326
 ]]>
 </inasafe_keywords>

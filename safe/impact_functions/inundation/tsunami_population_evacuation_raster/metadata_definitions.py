@@ -1,0 +1,126 @@
+# coding=utf-8
+
+__author__ = 'lucernae'
+__project_name__ = 'inasafe'
+__filename__ = 'metadata_definitions'
+__date__ = '23/03/15'
+__copyright__ = 'lana.pcfre@gmail.com'
+
+from safe.defaults import (
+    get_defaults,
+    default_minimum_needs,
+    default_provenance)
+from safe.definitions import (
+    hazard_definition,
+    hazard_tsunami,
+    unit_feet_depth,
+    unit_metres_depth,
+    layer_raster_continuous,
+    exposure_definition,
+    exposure_population,
+    unit_people_per_pixel)
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
+from safe.common.utilities import OrderedDict
+
+
+class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
+    """Metadata for TsunamiEvacuationFunction.
+
+    .. versionadded:: 2.1
+
+    We only need to re-implement get_metadata(), all other behaviours
+    are inherited from the abstract base class.
+    """
+
+    @staticmethod
+    def as_dict():
+        """Return metadata as a dictionary.
+
+        This is a static method. You can use it to get the metadata in
+        dictionary format for an impact function.
+
+        :returns: A dictionary representing all the metadata for the
+            concrete impact function.
+        :rtype: dict
+        """
+        defaults = get_defaults()
+        dict_meta = {
+            'id': 'TsunamiEvacuationFunction',
+            'name': tr('Tsunami Evacuation Function'),
+            'impact': tr('Need evacuation'),
+            'title': tr('Need evacuation'),
+            'function_type': 'old-style',
+            'author': 'AIFDR',
+            'date_implemented': 'N/A',
+            'overview': tr(
+                'To assess the impacts of tsunami inundation in raster '
+                'format on population.'),
+            'detailed_description': tr(
+                'The population subject to inundation exceeding a '
+                'threshold (default 0.7m) is calculated and returned as '
+                'a raster layer. In addition the total number and the '
+                'required needs in terms of the BNPB (Perka 7) are '
+                'reported. The threshold can be changed and even contain '
+                'multiple numbers in which case evacuation and needs are '
+                'calculated using the largest number with population '
+                'breakdowns provided for the smaller numbers. The '
+                'population raster is resampled to the resolution of the '
+                'hazard raster and is rescaled so that the resampled '
+                'population counts reflect estimates of population count '
+                'per resampled cell. The resulting impact layer has the '
+                'same resolution and reflects population count per cell '
+                'which are affected by inundation.'),
+            'hazard_input': tr(
+                'A hazard raster layer where each cell represents tsunami '
+                'depth (in meters).'),
+            'exposure_input': tr(
+                'An exposure raster layer where each cell represent '
+                'population count.'),
+            'output': tr(
+                'Raster layer contains population affected and the '
+                'minimum needs based on the population affected.'),
+            'actions': tr(
+                'Provide details about how many people would likely need '
+                'to be evacuated, where they are located and what '
+                'resources would be required to support them.'),
+            'limitations': [tr(
+                'The default threshold of 0.7 meter was selected based on '
+                'consensus, not hard evidence.')
+            ],
+            'citations': [],
+            'categories': {
+                'hazard': {
+                    'definition': hazard_definition,
+                    'subcategories': [hazard_tsunami],
+                    'units': [
+                        unit_feet_depth,
+                        unit_metres_depth
+                    ],
+                    'layer_constraints': [layer_raster_continuous]
+                },
+                'exposure': {
+                    'definition': exposure_definition,
+                    'subcategories': [exposure_population],
+                    'units': [unit_people_per_pixel],
+                    'layer_constraints': [layer_raster_continuous]
+                }
+            },
+            'parameters': OrderedDict([
+                ('thresholds [m]', [0.7]),
+                ('postprocessors', OrderedDict([
+                    ('Gender', {'on': True}),
+                    ('Age', {
+                        'on': True,
+                        'params': OrderedDict([
+                            ('youth_ratio', defaults['YOUTH_RATIO']),
+                            ('adult_ratio', defaults['ADULT_RATIO']),
+                            ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
+                    ('MinimumNeeds', {'on': True}),
+                ])),
+                ('minimum needs', default_minimum_needs()),
+                ('provenance', default_provenance())
+            ])
+        }
+        return dict_meta

@@ -10,7 +10,6 @@ OGR C++ reference: http://www.gdal.org/ogr
 
 
 """
-from safe.utilities.i18n import tr
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
 __revision__ = '$Format:%H$'
@@ -52,6 +51,7 @@ from utilities import get_ring_data, get_polygon_data
 from utilities import rings_equal
 from utilities import safe_to_qgis_layer
 from safe.common.utilities import unique_filename
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(99999999)

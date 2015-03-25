@@ -38,7 +38,7 @@ from safe.test.utilities import get_qgis_app
 from safe.common.resource_parameter import ResourceParameter
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-from safe.impact_functions.core import get_plugins
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 # noinspection PyUnresolvedReferences
 
 
@@ -51,10 +51,9 @@ class FunctionOptionsDialogTest(unittest.TestCase):
     def test_build_form(self):
         """Test that we can build a form by passing it a function and params.
         """
-        function_id = 'ITB Fatality Function'
-        function_list = get_plugins(function_id)
-        assert len(function_list) == 1
-        assert function_list[0].keys()[0] == function_id
+        class_name = 'ITBFatalityFunction'
+        impact_function = ImpactFunctionManager().get(class_name)
+        assert impact_function.__name__ == class_name
 
         dialog = FunctionOptionsDialog()
 
@@ -99,10 +98,9 @@ class FunctionOptionsDialogTest(unittest.TestCase):
     def test_build_form_minimum_needs(self):
         """Test that we can build a form by passing it a function and params.
         """
-        function_id = 'Flood Evacuation Function Vector Hazard'
-        function_list = get_plugins(function_id)
-        assert len(function_list) == 1
-        assert function_list[0].keys()[0] == function_id
+        class_name = 'FloodEvacuationFunctionVectorHazard'
+        impact_function = ImpactFunctionManager().get(class_name)
+        assert impact_function.__name__ == class_name
 
         dialog = FunctionOptionsDialog()
         parameters = {

@@ -98,9 +98,8 @@ class Analysis(object):
         self.exposure_keyword = None
         self.aggregation_keyword = None
 
-        # Impact Functions
-        self.impact_function_id = None
-        self.impact_function_parameters = None
+        # Impact Function
+        self.impact_function = None
 
         # Variables
         self.clip_hard = None
@@ -651,7 +650,7 @@ class Analysis(object):
 
         try:
             # add which postprocessors will run when appropriated
-            post_processors_names = self.impact_function_parameters[
+            post_processors_names = self.impact_function.parameters[
                 'postprocessors']
             # aggregator is not ready yet here so we can't use
             # self.aggregator.aoi_mode
@@ -793,9 +792,7 @@ class Analysis(object):
 
     def setup_impact_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
-
-        # Use canonical function name to identify selected function
-        self.impact_calculator.set_function(self.impact_function_id)
+        self.impact_calculator.set_function(self.impact_function)
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
@@ -918,7 +915,7 @@ class Analysis(object):
         LOGGER.debug('Do postprocessing')
         self.postprocessor_manager = PostprocessorManager(self.aggregator)
         self.postprocessor_manager.function_parameters = \
-            self.impact_function_parameters
+            self.impact_function.parameters
         self.postprocessor_manager.run()
         self.send_not_busy_signal()
         self.send_analysis_done_signal()
@@ -1001,33 +998,3 @@ class Analysis(object):
             self.analysis_error(
                 e,
                 self.tr('An exception occurred when starting the model.'))
-
-    def print_analysis(self):
-        """Print the variables in the analysis."""
-        print 'The properties of the analysis: '
-        # Layers
-        print self.hazard_layer
-        print self.exposure_layer
-        print self.aggregation_layer
-        print self.hazard_keyword
-        print self.exposure_keyword
-        print self.aggregation_keyword
-
-        # Impact Functions
-        print self.impact_function_id
-        print self.impact_function_parameters
-
-        # Variables
-        print self.clip_hard
-        print self.show_intermediate_layers
-        print self.run_in_thread_flag
-        print self.map_canvas
-        print self.clip_to_viewport
-
-        print self.force_memory
-
-        print self.clip_parameters
-        print self.impact_calculator
-        print self.runner
-        print self.aggregator
-        print self.postprocessor_manager

@@ -41,13 +41,14 @@ from safe.utilities.help import show_context_help
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
-    add_ordered_combo_item,
-    get_safe_impact_function)
+    add_ordered_combo_item)
 from safe.defaults import (
     disclaimer,
-    default_organisation_logo_path,
     default_north_arrow_path)
-from safe.utilities.gis import extent_string_to_array, read_impact_layer
+from safe.utilities.gis import (
+    extent_string_to_array,
+    read_impact_layer,
+    vector_geometry_string)
 from safe.utilities.resources import (
     resources_path,
     resource_url,
@@ -61,10 +62,6 @@ from safe.utilities.styling import (
     set_vector_graduated_style,
     set_vector_categorized_style)
 from safe.utilities.impact_calculator import ImpactCalculator
-from safe.impact_functions import load_plugins
-from safe.impact_functions.core import (
-    get_admissible_plugins,
-    get_function_title)
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import temp_dir
@@ -96,7 +93,8 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
-from safe.utilities.unicode import get_string, get_unicode
+from safe.utilities.unicode import get_string
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -137,8 +135,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
 
-        # Ensure that all impact functions are loaded
-        load_plugins()
         self.pbnShowQuestion.setVisible(False)
         self.enable_messaging()
 
@@ -147,8 +143,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Save reference to the QGIS interface
         self.iface = iface
 
+        # Impact Function Manager to deal with IF needs
+        self.impact_function_manager = ImpactFunctionManager()
+
+        self.analysis = None
         self.calculator = ImpactCalculator()
         self.keyword_io = KeywordIO()
+        self.active_impact_function = None
+        self.impact_function_parameters = None
         self.state = None
         self.last_used_function = ''
         self.extent = Extent(self.iface)
@@ -173,12 +175,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.developer_mode = None
         self.organisation_logo_path = None
 
-        self.function_parameters = None
-        self.analysis = None
-
         self.pbnPrint.setEnabled(False)
-        # used by configurable function options button
-        self.active_function = None
         self.runtime_keywords_dialog = None
 
         self.setup_button_connectors()
@@ -740,14 +737,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if index > -1:
             function_id = self.get_function_id()
 
-            functions = get_safe_impact_function(function_id)
-            self.active_function = functions[0][function_id]
-            self.function_parameters = None
-            if hasattr(self.active_function, 'parameters'):
-                self.function_parameters = self.active_function.parameters
+            function = self.impact_function_manager.get_by_id(function_id)
+            self.active_impact_function = function
+            self.impact_function_parameters = None
+            if hasattr(self.active_impact_function, 'parameters'):
+                self.impact_function_parameters = \
+                    self.active_impact_function.parameters
             self.set_function_options_status()
         else:
-            self.function_parameters = None
+            self.impact_function_parameters = None
             self.set_function_options_status()
 
         self.toggle_aggregation_combo()
@@ -788,7 +786,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         disable it.
         """
         # Check if function_parameters initialized
-        if self.function_parameters is None:
+        if self.impact_function_parameters is None:
             self.toolFunctionOptions.setEnabled(False)
         else:
             self.toolFunctionOptions.setEnabled(True)
@@ -799,11 +797,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Automatic slot executed when toolFunctionOptions is clicked."""
         dialog = FunctionOptionsDialog(self)
         dialog.set_dialog_info(self.get_function_id())
-        dialog.build_form(self.function_parameters)
+        dialog.build_form(self.impact_function_parameters)
 
         if dialog.exec_():
-            self.active_function.parameters = dialog.result()
-            self.function_parameters = self.active_function.parameters
+            self.active_impact_function.parameters = dialog.result()
+            self.impact_function_parameters = \
+                self.active_impact_function.parameters
 
     @pyqtSlot()
     def canvas_layerset_changed(self):
@@ -976,8 +975,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.draw_rubber_bands()
 
     def get_functions(self):
-        """Obtain a list of impact functions from the impact calculator.
-        """
+        """Obtain a list of impact functions from the IF manager."""
         # remember what the current function is
         original_function = self.cboFunction.currentText()
         self.cboFunction.clear()
@@ -993,46 +991,44 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         hazard_keywords = self.keyword_io.read_keywords(hazard_layer)
         # We need to add the layer type to the returned keywords
         if hazard_layer.type() == QgsMapLayer.VectorLayer:
-            hazard_keywords['layertype'] = 'vector'
-            if hazard_layer.geometryType() == QGis.Point:
-                hazard_keywords['data_type'] = 'point'
-            elif hazard_layer.geometryType() == QGis.Line:
-                hazard_keywords['data_type'] = 'line'
-            elif hazard_layer.geometryType() == QGis.Polygon:
-                hazard_keywords['data_type'] = 'polygon'
+            hazard_keywords['layer_type'] = 'vector'
+            hazard_keywords['data_type'] = vector_geometry_string(hazard_layer)
         elif hazard_layer.type() == QgsMapLayer.RasterLayer:
-            hazard_keywords['layertype'] = 'raster'
+            hazard_keywords['layer_type'] = 'raster'
+            if hazard_keywords.get('data_type') is None:
+                hazard_keywords['data_type'] = 'continuous'
 
         # noinspection PyTypeChecker
         exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
         # We need to add the layer type to the returned keywords
         if exposure_layer.type() == QgsMapLayer.VectorLayer:
-            exposure_keywords['layertype'] = 'vector'
+            exposure_keywords['layer_type'] = 'vector'
+            exposure_keywords['data_type'] = vector_geometry_string(
+                exposure_layer)
         elif exposure_layer.type() == QgsMapLayer.RasterLayer:
-            exposure_keywords['layertype'] = 'raster'
+            exposure_keywords['layer_type'] = 'raster'
+            if exposure_keywords.get('data_type') is None:
+                exposure_keywords['data_type'] = 'continuous'
 
         # Find out which functions can be used with these layers
-        func_list = [hazard_keywords, exposure_keywords]
         try:
-            func_dict = get_admissible_plugins(func_list)
+            impact_functions = self.impact_function_manager.filter_by_keywords(
+                hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions
-            for myFunctionID in func_dict:
-                function = func_dict[myFunctionID]
-                function_title = get_function_title(function)
-
-                # KEEPING THESE STATEMENTS FOR DEBUGGING UNTIL SETTLED
-                # print
-                # print 'function (ID)', myFunctionID
-                # print 'function', function
-                # print 'Function title:', function_title
+            for impact_function in impact_functions:
+                function_id = self.impact_function_manager.get_function_id(
+                    impact_function)
+                function_title = \
+                    self.impact_function_manager.get_function_title(
+                        impact_function)
 
                 # Provide function title and ID to function combo:
                 # function_title is the text displayed in the combo
-                # myFunctionID is the canonical identifier
+                # function_name is the canonical identifier
                 add_ordered_combo_item(
                     self.cboFunction,
                     function_title,
-                    data=myFunctionID)
+                    data=function_id)
         except Exception, e:
             raise e
 
@@ -1159,6 +1155,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.analysis.clip_parameters[1])
             # Start the analysis
             self.analysis.run_analysis()
+            a = 'ho'
         except InsufficientOverlapError as e:
             context = self.tr(
                 'A problem was encountered when trying to determine the '
@@ -1256,8 +1253,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.get_aggregation_layer())
 
         # Impact Functions
-        analysis.impact_function_id = self.get_function_id()
-        analysis.impact_function_parameters = self.function_parameters
+        impact_function = self.impact_function_manager.get_by_id(
+            self.get_function_id())
+        impact_function.parameters = self.impact_function_parameters
+        analysis.impact_function = impact_function
 
         # Variables
         analysis.clip_hard = self.clip_hard

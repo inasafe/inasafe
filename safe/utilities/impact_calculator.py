@@ -28,19 +28,15 @@ from PyQt4.QtCore import QObject
 # Do not import any QGIS or SAFE modules in this module!
 from safe.utilities.impact_calculator_thread import ImpactCalculatorThread
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
-from safe.utilities.utilities import (
-    get_safe_impact_function,
-    get_safe_impact_function_type)
 from safe.common.exceptions import (
     InsufficientParametersError,
     InvalidParameterError)
 from safe.utilities.gis import convert_to_safe_layer
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 
 class ImpactCalculator(QObject):
-    """A class to compute an impact scenario.
-
-    We inherit from QObject so that we can use Qt translation self.tr calls."""
+    """A class to compute an impact scenario."""
 
     # DK: I think it should be only one module that uses information about
     # function style:
@@ -52,9 +48,10 @@ class ImpactCalculator(QObject):
     def __init__(self):
         """Constructor for the impact calculator."""
         QObject.__init__(self)
-        self._hazardLayer = None
-        self._exposureLayer = None
-        self._function = None
+        self.impact_function_manager = ImpactFunctionManager()
+        self._hazard_layer = None
+        self._exposure_layer = None
+        self._impact_function = None
         self._filename = None
         self._result = None
         self._extent = None
@@ -72,23 +69,24 @@ class ImpactCalculator(QObject):
         :raises: InsufficientParametersError if self._function is not set,
                  InvalidParameterError if style of self._function is not
                      in ('old-style', 'qgis2.0')
-                 Any exceptions raised by other libraries will be propogated.
+                 Any exceptions raised by other libraries will be propagated.
         """
-
-        if self._function is None or self._function == '':
-            message = self.tr('Error: Function not set.')
+        if self._impact_function is None:
+            message = self.tr('Error: Impact Function not set.')
             raise InsufficientParametersError(message)
 
         # Get type of the impact function (old-style or new-style)
         try:
-            func_type = get_safe_impact_function_type(self._function)
-            if func_type == 'old-style':
+            impact_function_type = \
+                self.impact_function_manager.get_function_type(
+                    self._impact_function)
+            if impact_function_type == 'old-style':
                 return convert_to_safe_layer(layer)
-            elif func_type == 'qgis2.0':
+            elif impact_function_type == 'qgis2.0':
                 # convert for new style impact function
                 return QgisWrapper(layer)
             else:
-                message = self.tr('Error: Function has unknown style.')
+                message = self.tr('Error: Impact Function has unknown style.')
                 raise InvalidParameterError(message)
         except:
             raise
@@ -99,7 +97,7 @@ class ImpactCalculator(QObject):
         :returns: The exposure layer.
         :rtype: read_layer
         """
-        return self._get_layer(self._exposureLayer)
+        return self._get_layer(self._exposure_layer)
 
     def set_exposure_layer(self, layer):
         """Mutator for Exposure layer property.
@@ -110,9 +108,9 @@ class ImpactCalculator(QObject):
         :type layer:  QgsMapLayer or SAFE layer.
         """
         if layer is None:
-            self._exposureLayer = None
+            self._exposure_layer = None
         else:
-            self._exposureLayer = layer
+            self._exposure_layer = layer
 
     def hazard_layer(self):
         """Accessor for the hazard layer.
@@ -121,7 +119,7 @@ class ImpactCalculator(QObject):
         :rtype:   QgsMapLayer or SAFE layer.
 
         """
-        return self._get_layer(self._hazardLayer)
+        return self._get_layer(self._hazard_layer)
 
     def set_hazard_layer(self, layer):
         """Mutator for hazard layer property.
@@ -132,9 +130,9 @@ class ImpactCalculator(QObject):
         :type layer: QgsMapLayer or SAFE layer.
         """
         if layer is None:
-            self._hazardLayer = None
+            self._hazard_layer = None
         else:
-            self._hazardLayer = layer
+            self._hazard_layer = layer
 
     def function(self):
         """Accessor for the impact function.
@@ -142,19 +140,19 @@ class ImpactCalculator(QObject):
         :returns: An InaSAFE impact function or None depending on if it is set.
         :rtype: FunctionProvider, None
         """
-        return self._function
+        return self._impact_function
 
-    def set_function(self, function_id):
+    def set_function(self, impact_function):
         """Mutator for the impact function.
 
         The function property specifies which inasafe function to use to
         process the hazard and exposure layers with.
 
-        :param function_id: The identifier of a valid SAFE impact_function.
-        :type function_id: str
+        :param impact_function: The identifier of a valid SAFE impact_function.
+        :type impact_function: str
 
         """
-        self._function = str(function_id)
+        self._impact_function = impact_function
 
     def get_runner(self):
         """ Factory to create a new runner thread.
@@ -173,15 +171,15 @@ class ImpactCalculator(QObject):
         """
         self._filename = None
         self._result = None
-        if self._hazardLayer is None:
+        if self._hazard_layer is None:
             message = self.tr('Error: Hazard layer not set.')
             raise InsufficientParametersError(message)
 
-        if self._exposureLayer is None:
+        if self._exposure_layer is None:
             message = self.tr('Error: Exposure layer not set.')
             raise InsufficientParametersError(message)
 
-        if self._function is None or self._function == '':
+        if self._impact_function is None:
             message = self.tr('Error: Function not set.')
             raise InsufficientParametersError(message)
 
@@ -189,12 +187,10 @@ class ImpactCalculator(QObject):
         hazard_layer = self.hazard_layer()
         exposure_layer = self.exposure_layer()
 
-        functions = get_safe_impact_function(self._function)
-        function = functions[0][self._function]
         return ImpactCalculatorThread(
             hazard_layer,
             exposure_layer,
-            function,
+            self._impact_function,
             extent=self.extent(),
             check_integrity=self.requires_clipping())
 
@@ -210,18 +206,19 @@ class ImpactCalculator(QObject):
         :raises: InsufficientParametersError if function parameter is not set.
                  InvalidParameterError if the function has unknown style.
         """
-        f = self.function()
-        if f is None:
-            message = self.tr('Error: Function is not provided.')
+        if self._impact_function is None:
+            message = self.tr('Error: Impact Function is not provided.')
             raise InsufficientParametersError(message)
 
-        style = get_safe_impact_function_type(f)
-        if style == 'old-style':
+        impact_function_type = \
+            self.impact_function_manager.get_function_type(
+                self._impact_function)
+        if impact_function_type == 'old-style':
             return True
-        elif style == 'qgis2.0':
+        elif impact_function_type == 'qgis2.0':
             return False
         else:
-            message = self.tr('Error: Function has unknown style.')
+            message = self.tr('Error: Impact Function has unknown style.')
             raise InvalidParameterError(message)
 
     def set_extent(self, extent):
