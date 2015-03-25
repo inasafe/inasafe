@@ -17,6 +17,7 @@ from safe.definitions import (
     exposure_road,
     unit_road_type_type,
     layer_vector_line)
+from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -85,7 +86,8 @@ class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
                 ('road_type_field', 'TYPE'),
                 ('min threshold [m]', 1.0),
                 ('max threshold [m]', float('inf')),
-                ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
+                ('postprocessors', OrderedDict([('RoadType',
+                                                road_type_postprocessor())]))
             ])
         }
         return dict_meta
