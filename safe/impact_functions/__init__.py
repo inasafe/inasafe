@@ -48,6 +48,8 @@ from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
 from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
     import VolcanoPolygonBuildingFunction
+from safe.impact_functions.volcanic.volcano_polygon_population\
+    .impact_function import VolcanoPolygonPopulationFunction
 
 
 def register_impact_functions():
@@ -63,14 +65,15 @@ def register_impact_functions():
     impact_function_registry.register(FloodRasterRoadsExperimentalFunction)
     impact_function_registry.register(FloodRasterRoadsGdalFunction)
     impact_function_registry.register(TsunamiEvacuationFunction)
-    # Generic IF
+    # Generic IF's
     impact_function_registry.register(ClassifiedHazardBuildingFunction)
     impact_function_registry.register(ClassifiedHazardPopulationFunction)
     impact_function_registry.register(ContinuousHazardPopulationFunction)
-	# Earthquake
+    # Earthquake
     impact_function_registry.register(EarthquakeBuildingFunction)
     impact_function_registry.register(ITBFatalityFunction)
     impact_function_registry.register(PAGFatalityFunction)
-    # Volcanic IF
+    # Volcanic IF's
     impact_function_registry.register(VolcanoPointBuildingFunction)
     impact_function_registry.register(VolcanoPolygonBuildingFunction)
+    impact_function_registry.register(VolcanoPolygonPopulationFunction)

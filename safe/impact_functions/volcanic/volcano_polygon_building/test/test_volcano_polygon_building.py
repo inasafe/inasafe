@@ -31,7 +31,7 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         registry.register(VolcanoPolygonBuildingFunction)
 
     def test_run(self):
-        """TestVolcanoPointBuildingFunction: Test running the IF."""
+        """TestVolcanoPolygonBuildingFunction: Test running the IF."""
         volcano_path = test_data_path(
             'hazard', 'region_c', 'volcano', 'merapi_krb.shp')
         building_path = test_data_path(
@@ -68,7 +68,7 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         self.assertEqual(krb2_zone_count, expected_krb2_count, message)
 
     def test_filter(self):
-        """TestVolcanoPointBuildingFunction: Test filtering IF"""
+        """TestVolcanoPolygonBuildingFunction: Test filtering IF"""
         hazard_keywords = {
             'title': 'merapi',
             'category': 'hazard',
