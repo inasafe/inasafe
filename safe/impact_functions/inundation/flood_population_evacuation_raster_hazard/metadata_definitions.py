@@ -120,9 +120,9 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 ('thresholds [m]', [1.0]),
                 ('postprocessors', OrderedDict([
-                     ('Gender', default_gender_postprocessor()),
-                     ('Age', age_postprocessor()),
-                     ('MinimumNeeds', minimum_needs_selector()),
+                    ('Gender', default_gender_postprocessor()),
+                    ('Age', age_postprocessor()),
+                    ('MinimumNeeds', minimum_needs_selector()),
                 ])),
                 ('minimum needs', default_minimum_needs()),
                 ('provenance', default_provenance())
