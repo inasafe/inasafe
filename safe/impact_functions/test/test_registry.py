@@ -52,7 +52,7 @@ class TestRegistry(unittest.TestCase):
                   'impact functions exists' % len(registry.impact_functions)
         self.assertEqual(1, len(registry.impact_functions), message)
 
-        result = registry.get('FloodPolygonBuildingQgisFunction')\
+        result = registry.get_instance('FloodPolygonBuildingQgisFunction')\
             .metadata().as_dict()['id']
         expected = 'FloodPolygonBuildingQgis'
         message = 'Expected registered impact function ID should be %s. ' \
@@ -92,7 +92,7 @@ class TestRegistry(unittest.TestCase):
         # Getting an IF instance using its class name
         registry = Registry()
         class_name = 'FloodPolygonBuildingQgisFunction'
-        impact_function = registry.get(class_name)
+        impact_function = registry.get_instance(class_name)
         result = impact_function.__class__.__name__
         message = 'Expecting FloodPolygonBuildingQgisFunction. Got %s ' \
                   'instead.' % result

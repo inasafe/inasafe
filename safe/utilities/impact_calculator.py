@@ -146,7 +146,7 @@ class ImpactCalculator(QObject):
         """
         if isinstance(impact_function, str):
             self._impact_function = self.impact_function_manager\
-                .get_by_id(impact_function)
+                .get(impact_function)
         else:
             self._impact_function = impact_function
 

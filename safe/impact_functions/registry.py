@@ -72,7 +72,7 @@ class Registry(object):
             cls._impact_functions]
 
     @classmethod
-    def get(cls, name):
+    def get_instance(cls, name):
         """Return an instance of impact function given its class name.
 
         :param name: the name of IF class

@@ -737,7 +737,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if index > -1:
             function_id = self.get_function_id()
 
-            function = self.impact_function_manager.get_by_id(function_id)
+            function = self.impact_function_manager.get(function_id)
             self.active_impact_function = function
             self.impact_function_parameters = None
             if hasattr(self.active_impact_function, 'parameters'):
@@ -1254,7 +1254,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Impact Functions
         if self.get_function_id() != '':
-            impact_function = self.impact_function_manager.get_by_id(
+            impact_function = self.impact_function_manager.get(
                 self.get_function_id())
             impact_function.parameters = self.impact_function_parameters
             analysis.impact_function = impact_function

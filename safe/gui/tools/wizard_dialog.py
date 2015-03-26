@@ -2711,7 +2711,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         # TODO Put the params to metadata! Now we need to import the IF class.
         # Notes: Why don't we store impact_function to class attribute?
         impact_function_id = self.selected_function()['id']
-        impact_function = self.impact_function_manager.get_by_id(
+        impact_function = self.impact_function_manager.get(
             impact_function_id)
         if not impact_function:
             return
@@ -2762,7 +2762,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         # (IS) Set the current impact function to use parameter from user.
         # We should do it prettier (put it on analysis or impact calculator
         impact_function_id = self.selected_function()['id']
-        impact_function = self.impact_function_manager.get_by_id(
+        impact_function = self.impact_function_manager.get(
             impact_function_id)
         if not impact_function:
             return

@@ -470,7 +470,7 @@ class TestEngine(unittest.TestCase):
         exposure_source = exposure_layer.get_keywords()['source']
 
         function_id = 'FloodRasterBuildingFunction'
-        impact_function = self.impact_function_manager.get_by_id(function_id)
+        impact_function = self.impact_function_manager.get(function_id)
         impact_vector = calculate_impact(
             layers=[hazard_layer, exposure_layer],
             impact_function=impact_function)
@@ -1715,7 +1715,7 @@ class TestEngine(unittest.TestCase):
             hazard_layer = read_layer(hazard_filename)
             exposure_layer = read_layer(exposure_filename)
 
-            impact_function = self.impact_function_manager.get_by_id(
+            impact_function = self.impact_function_manager.get(
                 function_id)
 
             # Call impact calculation engine normally

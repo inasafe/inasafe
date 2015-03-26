@@ -38,14 +38,14 @@ class ImpactFunctionManager(object):
         """Return all registered impact functions."""
         return self.registry.impact_functions
 
-    def get(self, class_name):
+    def get_instance(self, class_name):
         """Return an instance of an impact function given its class name.
 
         .. example::
 
             if_manager = ImpactFunctionManager()
             if_class_name = 'FloodBuildingImpactFunction'
-            if =  if_manager.get(if_class_name)
+            if =  if_manager.get_instance(if_class_name)
 
         :param class_name: The name of IF class.
         :type class_name: str
@@ -53,7 +53,7 @@ class ImpactFunctionManager(object):
         :return: Impact function instance that matches the argument.
         :rtype: safe.impact_functions.base.ImpactFunction
         """
-        return self.registry.get(class_name)
+        return self.registry.get_instance(class_name)
 
     def get_class(self, class_name):
         """Return the class of an impact function given its class name.
@@ -72,7 +72,7 @@ class ImpactFunctionManager(object):
         """
         return self.registry.get_class(class_name)
 
-    def get_by_id(self, impact_function_id):
+    def get(self, impact_function_id):
         """Return an instance of an impact function given its ID.
 
         This is a preferred way to get an instance of IF. IF should have a
@@ -82,7 +82,7 @@ class ImpactFunctionManager(object):
 
             if_manager = ImpactFunctionManager()
             if_id = 'FloodBuildingImpactFunction'
-            if =  if_manager.get_by_id(if_id)
+            if =  if_manager.get(if_id)
 
         :param impact_function_id: The ID of impact function in the metadata.
         :type impact_function_id: str
