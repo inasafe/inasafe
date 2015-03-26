@@ -158,6 +158,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             'on map\' button - which will temporarily hide this window and '
             'allow you to drag a rectangle on the map. After you have '
             'finished dragging the rectangle, this window will reappear. '
+            'You can also use one of your bookmarks to set the region. '
             'If you enable the \'Toggle scenario outlines\' tool on the '
             'InaSAFE toolbar, your user defined extent will be shown on '
             'the map as a blue rectangle. Please note that when running '
@@ -283,7 +284,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.blockSignals(False)
 
     def bookmarks_index_changed(self):
-        """Update the UI when the combobox about bookmarks has changed.
+        """Update the UI when the bookmarks combobox has changed.
         """
         index = self.comboBox_bookmarks_list.currentIndex()
         if index >= 0:
@@ -296,9 +297,9 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             self.ok_button.setDisabled(True)
 
     def on_checkBox_use_bookmark_toggled(self, use_bookmark):
-        """Update the UI when the user toggles the checkbox about bookmarks.
+        """Update the UI when the user toggles the bookmarks checkbox.
 
-        :param use_bookmark: The status of the checkbox
+        :param use_bookmark: The status of the checkbox.
         :type use_bookmark: bool
         """
         if use_bookmark:
@@ -311,6 +312,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
     def _populate_bookmarks_list(self):
         """Read the sqlite database and populate the bookmarks list.
+
         Every bookmark are reprojected to mapcanvas crs.
         """
 
