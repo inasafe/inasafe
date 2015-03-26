@@ -172,7 +172,12 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[title: multipart_polygons_osm_4326
+<![CDATA[category: hazard
+subcategory: earthquake
+data_type: continuous
+title: Earthquake Region B
+source: Earthquake Jogja Clip
+unit: mmi
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

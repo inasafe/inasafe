@@ -172,7 +172,12 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[title: multipart_polygons_osm_4326
+<![CDATA[category: exposure
+subcategory: road
+license: Open Data Commons Open Database License (ODbL)
+title: Roads
+source: OpenStreetMap - www.openstreetmap.org
+date: 26-03-2015 03:42
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>
