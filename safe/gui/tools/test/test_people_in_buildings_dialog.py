@@ -57,7 +57,7 @@ from safe.test.utilities import (
     set_small_jakarta_extent,
     get_qgis_app,
     TESTDATA,
-    BOUNDDATA,
+    EXPDATA,
     HAZDATA)
 
 
@@ -69,10 +69,17 @@ class KeywordsDialogTest(unittest.TestCase):
 
     def setUp(self):
         """Create fresh dialog for each test."""
-        self.dialog = PeopleInBuildingsDialog(IFACE, PARENT)
         IFACE.setActiveLayer(None)
-        os.path.join(TESTDATA, 'people_in_buildings_buildings')
-        os.path.join(TESTDATA, 'people_in_buildings_census')
+        import pydevd
+        pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        buildings_layer = test_data_path(
+            'exposure', 'people_in_buildings_buildings.shp')
+        load_layer(buildings_layer)
+        census_layer = test_data_path(
+            'exposure', 'people_in_buildings_census.shp')
+        print load_layer(census_layer)
+        print [l for l in QgsMapLayerRegistry.instance().mapLayers()]
+        self.dialog = PeopleInBuildingsDialog(IFACE, PARENT)
 
     def tearDown(self):
         """Destroy the dialog after each test."""
@@ -101,3 +108,8 @@ class KeywordsDialogTest(unittest.TestCase):
         """
         self.dialog.load_layers_into_combo_box()
 
+
+if __name__ == '__main__':
+    suite = unittest.makeSuite(KeywordsDialogTest)
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suite)
