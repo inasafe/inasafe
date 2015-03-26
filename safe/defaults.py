@@ -155,7 +155,7 @@ def minimum_needs_selector():
 
 def age_postprocessor():
     """Build a parameter unit for Age
-    :return: A selector to activate minimum needs
+    :return: A list of Parameters
     :rtype: list [BooleanParameter, 3xFloatParameter]
     """
     age = BooleanParameter()
@@ -175,6 +175,23 @@ def age_postprocessor():
     elderly_ratio.value = 0.078
 
     return [age, youth_ratio, adult_ratio, elderly_ratio]
+
+
+def aggregation_categorial_postprocessor():
+    """Build a parameter unit for aggregation categorial
+        postprocessor
+    :return: A list of Parameters
+    :rtype: list [BooleanParameter, 3xFloatParameter]
+    """
+    aggregatec = BooleanParameter()
+    aggregatec.name = 'Aggregation categorical'
+    aggregatec.value = True
+
+    disable_area_aggregation = BooleanParameter()
+    disable_area_aggregation.name = 'disable_for_entire_area_aggregation'
+    disable_area_aggregation.value = False
+
+    return [aggregatec, disable_area_aggregation]
 
 def road_type_postprocessor():
     """build road-type parameter for post processing.

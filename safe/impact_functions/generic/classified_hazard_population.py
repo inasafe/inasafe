@@ -43,6 +43,11 @@ from safe.definitions import (
     hazard_definition,
     exposure_definition,
     unit_classified)
+from safe.defaults import (
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector
+    )
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -151,15 +156,10 @@ class ClassifiedHazardPopulationImpactFunction(FunctionProvider):
         ('medium_hazard_class', 2.0),
         ('high_hazard_class', 3.0),
         ('postprocessors', OrderedDict([
-            ('Gender', {'on': True}),
-            ('Age', {
-                'on': True,
-                'params': OrderedDict([
-                    ('youth_ratio', defaults['YOUTH_RATIO']),
-                    ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-            ('MinimumNeeds', {'on': True}),
-        ])),
+            ('Gender', default_gender_postprocessor()),
+            ('Age', age_postprocessor()),
+            ('MinimumNeeds', minimum_needs_selector()),
+            ])),
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())
     ])

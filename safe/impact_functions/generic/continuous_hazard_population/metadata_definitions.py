@@ -13,6 +13,11 @@ from safe.definitions import (
     exposure_definition,
     exposure_population,
     unit_people_per_pixel)
+from safe.defaults import (
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector
+    )
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -89,14 +94,9 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 ('Categorical thresholds', [0.34, 0.67, 1]),
                 ('postprocessors', OrderedDict([
-                    ('Gender', {'on': True}),
-                    ('Age', {
-                        'on': True,
-                        'params': OrderedDict([
-                            ('youth_ratio', defaults['YOUTH_RATIO']),
-                            ('adult_ratio', defaults['ADULT_RATIO']),
-                            ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-                    ('MinimumNeeds', {'on': True}),
+                    ('Gender', default_gender_postprocessor()),
+                    ('Age', age_postprocessor()),
+                    ('MinimumNeeds', minimum_needs_selector()),
                 ])),
                 ('minimum needs', default_minimum_needs()),
                 ('provenance', default_provenance())

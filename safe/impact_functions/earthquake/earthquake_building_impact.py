@@ -16,6 +16,7 @@ from safe.definitions import (
     hazard_definition,
     exposure_definition,
     unit_building_generic)
+from safe.defaults import aggregation_categorial_postprocessor
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
@@ -111,12 +112,8 @@ class EarthquakeBuildingImpactFunction(FunctionProvider):
          ('medium_threshold', 7),
          ('high_threshold', 8),
          ('postprocessors', OrderedDict([
-         ('AggregationCategorical', {
-             'on': True,
-             'params': OrderedDict([
-                 # Disable categorical aggregation when in AOI mode see #781
-                 ('disable_for_entire_area_aggregation', False)])})
-        ]))])
+             ('AggregationCategorical', aggregation_categorial_postprocessor())
+         ]))])
 
     def run(self, layers):
         """Earthquake impact to buildings (e.g. from OpenStreetMap).

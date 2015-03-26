@@ -27,7 +27,10 @@ from safe.definitions import (
 from safe.defaults import (
     get_defaults,
     default_minimum_needs,
-    default_provenance
+    default_provenance,
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector
 )
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model import (
     ITBFatalityFunction)
@@ -135,14 +138,10 @@ class PAGFatalityFunction(ITBFatalityFunction):
         ('tolerance', 0.01),
         ('calculate_displaced_people', True),
         ('postprocessors', OrderedDict([
-            ('Gender', {'on': True}),
-            ('Age', {
-                'on': True,
-                'params': OrderedDict([
-                    ('youth_ratio', defaults['YOUTH_RATIO']),
-                    ('adult_ratio', defaults['ADULT_RATIO']),
-                    ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-            ('MinimumNeeds', {'on': True})])),
+            ('Gender', default_gender_postprocessor()),
+            ('Age', age_postprocessor()),
+            ('MinimumNeeds', minimum_needs_selector()),
+            ])),
         ('minimum needs', default_minimum_needs()),
         ('provenance', default_provenance())])
     parameters = add_needs_parameters(parameters)

@@ -24,6 +24,7 @@ from safe.definitions import (
     unit_building_generic,
     unit_classified,
     unit_building_type_type,)
+from safe.defaults import building_type_postprocessor
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.core import (
     FunctionProvider, get_hazard_layer, get_exposure_layer, get_question)
@@ -140,7 +141,7 @@ class ClassifiedHazardBuildingImpactFunction(FunctionProvider):
         ('low_hazard_class', 1.0),
         ('medium_hazard_class', 2.0),
         ('high_hazard_class', 3.0),
-        ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
+        ('postprocessors', OrderedDict([('BuildingType', building_type_postprocessor)]))
     ])
 
     def run(self, layers):
