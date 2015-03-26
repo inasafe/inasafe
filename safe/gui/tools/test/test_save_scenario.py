@@ -32,7 +32,7 @@ from safe.test.utilities import (
     load_standard_layers,
     GEOCRS,
     get_qgis_app,
-    TESTDATA)
+    TESTDATA, test_data_path)
 from safe.common.utilities import unique_filename, temp_dir
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
@@ -85,8 +85,8 @@ class SaveScenarioTest(unittest.TestCase):
         # Valid Case
         result, message = setup_scenario(
             DOCK,
-            hazard='Classified Flood in Jakarta',
-            exposure='Penduduk Jakarta',
+            hazard='Classified Flood',
+            exposure='Population',
             function='Be affected by each hazard class',
             function_id='ClassifiedHazardPopulationFunction')
         self.assertTrue(result, message)
@@ -104,8 +104,8 @@ class SaveScenarioTest(unittest.TestCase):
         """Test saving Current scenario."""
         result, message = setup_scenario(
             DOCK,
-            hazard='Classified Flood in Jakarta',
-            exposure='Penduduk Jakarta',
+            hazard='Classified Flood',
+            exposure='Population',
             function='Be affected by each hazard class',
             function_id='ClassifiedHazardPopulationFunction')
         self.assertTrue(result, message)
@@ -131,15 +131,15 @@ class SaveScenarioTest(unittest.TestCase):
             os.path.exists(scenario_file),
             'File %s does not exist' % scenario_file)
         self.assertTrue(
-            title == '[Classified Flood in Jakarta]',
+            title == '[Classified Flood]',
             'Title is not the same')
         self.assertTrue(
             exposure.startswith('exposure =') and exposure.endswith(
-                'Population_Jakarta_geographic.asc'),
+                'pop_binary_raster_20_20.asc'),
             'Exposure is not the same')
         self.assertTrue(
             hazard.startswith('hazard =') and hazard.endswith(
-                'jakarta_flood_category_123.asc'),
+                'classified_flood_20_20.asc'),
             'Hazard is not the same')
         self.assertTrue(
             function == (
@@ -163,12 +163,12 @@ class SaveScenarioTest(unittest.TestCase):
         """
         result, message = setup_scenario(
             DOCK,
-            hazard='Classified Flood in Jakarta',
-            exposure='Penduduk Jakarta',
+            hazard='Classified Flood',
+            exposure='Population',
             function='Be affected by each hazard class',
             function_id='ClassifiedHazardPopulationFunction')
         self.assertTrue(result, message)
-        fake_dir = os.path.dirname(TESTDATA)
+        fake_dir = test_data_path()
         scenario_file = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=fake_dir)
         exposure_layer = str(DOCK.get_exposure_layer().publicSource())
@@ -182,16 +182,16 @@ class SaveScenarioTest(unittest.TestCase):
         if 'win32' in sys.platform:
             # windows
             self.assertEqual(
-                'test\\Population_Jakarta_geographic.asc',
+                'exposure\\pop_binary_raster_20_20.asc',
                 relative_exposure)
             self.assertEqual(
-                'hazard\\jakarta_flood_category_123.asc',
+                'hazard\\classified_flood_20_20.asc',
                 relative_hazard)
 
         else:
             self.assertEqual(
-                'test/Population_Jakarta_geographic.asc',
+                'exposure/pop_binary_raster_20_20.asc',
                 relative_exposure)
             self.assertEqual(
-                'hazard/jakarta_flood_category_123.asc',
+                'hazard/classified_flood_20_20.asc',
                 relative_hazard)

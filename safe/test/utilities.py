@@ -339,7 +339,7 @@ def set_small_jakarta_extent(dock=None):
         set as the user extent and an appropriate CRS set.
     :type dock: Dock
     """
-    rect = QgsRectangle(106.7767, -6.1260, 106.7817, -6.1216)
+    rect = QgsRectangle(106.8382152, -6.1649805, 106.8382152, -6.1649805)
     CANVAS.setExtent(rect)
     if dock is not None:
         crs = QgsCoordinateReferenceSystem('EPSG:4326')

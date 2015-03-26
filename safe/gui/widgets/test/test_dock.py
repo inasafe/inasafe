@@ -20,6 +20,7 @@ import unittest
 import sys
 import os
 import logging
+from codecs import open
 from os.path import join
 from unittest import TestCase, skipIf
 
@@ -156,8 +157,8 @@ class TestDock(TestCase):
 
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='Penduduk Jakarta',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
@@ -225,8 +226,8 @@ class TestDock(TestCase):
 
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
@@ -265,8 +266,8 @@ class TestDock(TestCase):
 
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='Penduduk Jakarta',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
@@ -281,7 +282,8 @@ class TestDock(TestCase):
         result = DOCK.wvResults.page_to_text()
 
         message = 'Result not as expected: %s' % result
-        self.assertTrue(format_int(35793) in result, message)
+        # searching for values 6700 clean water [l] in result
+        self.assertTrue(format_int(6700) in result, message)
 
     def test_issue306(self):
         """Issue306: CANVAS doesnt add generated layers in tests.
@@ -290,8 +292,8 @@ class TestDock(TestCase):
 
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='Penduduk Jakarta',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
@@ -394,8 +396,8 @@ class TestDock(TestCase):
         """Test that multipart features can be used in a scenario - issue #160
         """
 
-        exposure = test_data_path('exposure', 'buildings_osm_4326.shp')
-        hazard = test_data_path('hazard', 'multipart_polygons_osm_4326.shp')
+        exposure = test_data_path('exposure', 'buildings.shp')
+        hazard = test_data_path('hazard', 'flood_multipart_polygons.shp')
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         # print 'Using QGIS: %s' % qgis_version()
@@ -427,8 +429,8 @@ class TestDock(TestCase):
 
         result, message = setup_scenario(
             DOCK,
-            hazard='multipart_polygons_osm_4326',
-            exposure='buildings_osm_4326',
+            hazard='Flood Polygon',
+            exposure='Buildings',
             function='Be flooded',
             function_id='FloodVectorBuildingFunction')
         self.assertTrue(result, message)
@@ -436,7 +438,7 @@ class TestDock(TestCase):
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
         IFACE.mapCanvas().setExtent(
-            QgsRectangle(106.788, -6.193, 106.853, -6.167))
+            QgsRectangle(106.8078217, -6.1672275, 106.8256753, -6.1927572))
 
         # Press RUN
         # noinspection PyCallByClass,PyCallByClass,PyTypeChecker
@@ -444,7 +446,7 @@ class TestDock(TestCase):
         result = DOCK.wvResults.page_to_text()
 
         message = 'Result not as expected: %s' % result
-        self.assertTrue(format_int(68) in result, message)
+        self.assertTrue(format_int(33) in result, message)
 
     def test_issue581(self):
         """Test issue #581 in github - Humanize can produce IndexError : list
@@ -454,8 +456,8 @@ class TestDock(TestCase):
 
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
@@ -470,21 +472,23 @@ class TestDock(TestCase):
         message = 'Result not as expected: %s' % result
         self.assertTrue('IndexError' not in result, message)
         self.assertTrue(
-            'It appears that no People are affected by A flood in '
-            'Jakarta like in 2007. You may want to consider:' in result)
+            'It appears that no Population are affected by Continuous Flood.'
+            ' You may want to consider:' in result, message)
 
     def test_state(self):
         """Check if the save/restore state methods work. See also
         https://github.com/AIFDR/inasafe/issues/58
         """
-        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
+        # default selected layer is the third layer exposure
+        # so, decrease the index by one to change it
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() - 1)
         DOCK.save_state()
         expected_dict = get_ui_state(DOCK)
         # myState = DOCK.state
         # Now reset and restore and check that it gets the old state
         # Html is not considered in restore test since the ready
         # message overwrites it in dock implementation
-        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
+        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() - 1)
         DOCK.restore_state()
         result_dict = get_ui_state(DOCK)
         message = 'Got unexpected state: %s\nExpected: %s\n%s' % (
@@ -496,13 +500,18 @@ class TestDock(TestCase):
         # remain unchanged
         self.tearDown()
         file_list = [
-            join(HAZDATA, 'Flood_Design_Depth_Jakarta_geographic.asc'),
-            join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
-            join(TESTDATA, 'Population_Jakarta_geographic.asc')]
+            test_data_path('hazard', 'jakarta_flood_design.tif'),
+            test_data_path('hazard', 'continuous_flood_20_20.asc'),
+            test_data_path('exposure', 'pop_binary_raster_20_20.asc')
+        ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
         self.assertTrue(hazard_layer_count == 2)
         self.assertTrue(exposure_layer_count == 1)
-        DOCK.cboFunction.setCurrentIndex(0)
+        # we will have 2 impact function available right now:
+        # - ContinuousHazardPopulationFunction, titled: 'Be impacted'
+        # - FloodEvacuationRasterHazardFunction, titled: 'Need evacuation'
+        # set it to the second for testing purposes
+        DOCK.cboFunction.setCurrentIndex(1)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         expected_function = str(DOCK.cboFunction.currentText())
@@ -519,7 +528,8 @@ class TestDock(TestCase):
         self.assertTrue(expected_function == current_function, message)
         DOCK.cboHazard.setCurrentIndex(0)
         # Selected function should remain the same
-        # RM: modified it, because there is generic one right now
+        # RM: modified it, because there is generic one right now as the first.
+        # the selected one should be FloodEvacuationRasterHazardFunction
         DOCK.cboFunction.setCurrentIndex(1)
         expected = 'Need evacuation'
         function = DOCK.cboFunction.currentText()
@@ -529,17 +539,14 @@ class TestDock(TestCase):
     def test_full_run_pyzstats(self):
         """Aggregation results correct using our own python zonal stats code.
         """
-        path = os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp')
-        file_list = [path]
-        load_layers(file_list, clear_flag=False)
 
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction',
-            aggregation_layer='kabupaten jakarta',
+            aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
         self.assertTrue(result, message)
 
@@ -556,7 +563,8 @@ class TestDock(TestCase):
             'control',
             'files',
             'test-full-run-results.txt')
-        expected_result = open(control_file_path, 'r').readlines()
+        expected_result = open(control_file_path, mode='r',
+                               encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
         for line in expected_result:
@@ -575,17 +583,14 @@ class TestDock(TestCase):
         """
 
         # TODO check that the values are similar enough to the python stats
-        path = os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp')
-        file_list = [path]
-        load_layers(file_list, clear_flag=False)
 
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction',
-            aggregation_layer='kabupaten jakarta',
+            aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
         self.assertTrue(result, message)
 
@@ -609,7 +614,8 @@ class TestDock(TestCase):
             'control',
             'files',
             'test-full-run-results-qgis.txt')
-        expected_result = open(control_file_path, 'rb').readlines()
+        expected_result = open(control_file_path, mode='r',
+                               encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
         for line in expected_result:
@@ -701,8 +707,8 @@ class TestDock(TestCase):
         set_jakarta_extent(DOCK)
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='OSM Building Polygons',
+            hazard='Continuous Flood',
+            exposure='Buildings',
             function='Be flooded',
             function_id='FloodRasterBuildingFunction')
         DOCK.get_functions()
@@ -714,8 +720,8 @@ class TestDock(TestCase):
         set_canvas_crs(GEOCRS, True)
         setup_scenario(
             DOCK,
-            hazard='An earthquake in Yogyakarta like in 2006',
-            exposure='roads Maumere',
+            hazard='Earthquake',
+            exposure='Roads',
             function='',
             function_id='')
         tool_button = DOCK.toolFunctionOptions
@@ -782,11 +788,11 @@ class TestDock(TestCase):
         # With aggregation layer
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction',
-            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
         message += ' when an aggregation layer is defined.'
         self.assertTrue(result, message)
@@ -797,8 +803,8 @@ class TestDock(TestCase):
         QgsMapLayerRegistry.instance().removeMapLayer(layer_id)
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_enabled_flag=False)
@@ -829,11 +835,11 @@ class TestDock(TestCase):
         """Test that the rubber bands get updated."""
         setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction',
-            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
 
         DOCK.extent.show_rubber_bands = True
@@ -933,8 +939,8 @@ class TestDock(TestCase):
 
         result, message = setup_scenario(
             DOCK,
-            hazard='An earthquake in Yogyakarta like in 2006',
-            exposure='OSM Building Polygons',
+            hazard='Earthquake',
+            exposure='Buildings',
             function='Be affected',
             function_id='EarthquakeBuildingFunction')
         self.assertTrue(result, message)
@@ -942,7 +948,7 @@ class TestDock(TestCase):
         layer = DOCK.get_hazard_layer()
         keyword_io = KeywordIO()
 
-        original_title = 'An earthquake in Yogyakarta like in 2006'
+        original_title = 'Earthquake'
         title = keyword_io.read_keywords(layer, 'title')
         self.assertEqual(title, original_title)
 
