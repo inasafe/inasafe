@@ -435,10 +435,12 @@ class TestDock(TestCase):
             function_id='FloodVectorBuildingFunction')
         self.assertTrue(result, message)
 
+
+
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
         IFACE.mapCanvas().setExtent(
-            QgsRectangle(106.8078217, -6.1672275, 106.8256753, -6.1927572))
+            QgsRectangle(106.80801, -6.19531, 106.83456946836641, -6.167526))
 
         # Press RUN
         # noinspection PyCallByClass,PyCallByClass,PyTypeChecker
@@ -875,11 +877,11 @@ class TestDock(TestCase):
         last_band = DOCK.extent.last_analysis_rubberband
         geometry = last_band.asGeometry().exportToWkt()
         expected = (
-            'LINESTRING(11876228.33329810947179794 -695807.82839082507416606, '
-            '11908350.67106631398200989 -695807.82839082507416606, '
-            '11908350.67106631398200989 -678083.54461829655338079, '
-            '11876228.33329810947179794 -678083.54461829655338079, '
-            '11876228.33329810947179794 -695807.82839082507416606)')
+            'LINESTRING(11889533.87392097897827625 -691251.80866545776370913, '
+            '11893986.65355271473526955 -691251.80866545776370913, '
+            '11893986.65355271473526955 -686773.02196401008404791, '
+            '11889533.87392097897827625 -686773.02196401008404791, '
+            '11889533.87392097897827625 -691251.80866545776370913)')
         expected_list = self.wkt_to_coordinates(expected)
         actual_list = self.wkt_to_coordinates(geometry)
 
@@ -913,15 +915,15 @@ class TestDock(TestCase):
 
         setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
+            hazard='Continuous Flood',
+            exposure='Population',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction',
-            aggregation_layer='kabupaten jakarta singlepart',
+            aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
 
         DOCK.extent.show_rubber_bands = True
-        expected_vertex_count = 5
+        expected_vertex_count = 2
 
         # 4326 with disabled on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
