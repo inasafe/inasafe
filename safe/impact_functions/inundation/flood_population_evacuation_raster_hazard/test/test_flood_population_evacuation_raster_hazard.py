@@ -17,7 +17,6 @@ __date__ = '20/03/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
 from safe.storage.core import read_layer
@@ -26,7 +25,7 @@ from safe.impact_functions.impact_function_manager \
 from safe.impact_functions.inundation\
     .flood_population_evacuation_raster_hazard.impact_function import \
     FloodEvacuationRasterHazardFunction
-from safe.test.utilities import TESTDATA, get_qgis_app
+from safe.test.utilities import get_qgis_app, test_data_path
 from safe.common.utilities import OrderedDict
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -37,18 +36,18 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
+        registry.clear()
         registry.register(FloodEvacuationRasterHazardFunction)
 
     def test_run(self):
         function = FloodEvacuationRasterHazardFunction.instance()
 
-        population = 'people_jakarta_clip.tif'
-        flood_data = 'flood_jakarta_clip.tif'
-
-        hazard_filename = os.path.join(TESTDATA, flood_data)
-        exposure_filename = os.path.join(TESTDATA, population)
-        hazard_layer = read_layer(hazard_filename)
-        exposure_layer = read_layer(exposure_filename)
+        hazard_path = test_data_path(
+            'hazard', 'region_a', 'flood', 'continuous_flood_20_20.asc')
+        exposure_path = test_data_path(
+            'exposure', 'region_a', 'population', 'binary_raster_20_20.asc')
+        hazard_layer = read_layer(hazard_path)
+        exposure_layer = read_layer(exposure_path)
 
         function.hazard = hazard_layer
         function.exposure = exposure_layer
@@ -69,19 +68,19 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
             total_needs_full['single']
         ])
 
-        expected_evacuated = 63400
+        expected_evacuated = 100
         self.assertEqual(evacuated, expected_evacuated)
-        self.assertEqual(total_needs_weekly['Rice [kg]'], 177520)
-        self.assertEqual(total_needs_weekly['Family Kits'], 12680)
-        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 1109500)
-        self.assertEqual(total_needs_weekly['Clean Water [l]'], 4247800)
-        self.assertEqual(total_needs_single['Toilets'], 3170)
+        self.assertEqual(total_needs_weekly['Rice [kg]'], 280)
+        self.assertEqual(total_needs_weekly['Family Kits'], 20)
+        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 1750)
+        self.assertEqual(total_needs_weekly['Clean Water [l]'], 6700)
+        self.assertEqual(total_needs_single['Toilets'], 5)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'flood',
-            'unit': 'm',
+            'unit': 'metres_depth',
             'layer_type': 'raster',
             'data_type': 'continuous'
         }
@@ -97,9 +96,11 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
-        retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodEvacuationRasterHazardFunction',
-                         retrieved_IF,
-                         'Expecting FloodEvacuationRasterHazardFunction.'
-                         'But got %s instead' %
-                         retrieved_IF)
+
+        retrieved_if = impact_functions[0].metadata().as_dict()['id']
+        expected = ImpactFunctionManager().get_function_id(
+            FloodEvacuationRasterHazardFunction)
+        message = 'Expecting %s, but getting %s instead' % (
+            expected, retrieved_if)
+        self.assertEqual(expected, retrieved_if, message)
+

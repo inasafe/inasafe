@@ -28,6 +28,7 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
+        registry.clear()
         registry.register(VolcanoPolygonPopulationFunction)
 
     def test_run(self):
@@ -51,8 +52,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of merapi how many population '
-                             'merapi ten by ten raster might need evacuation')
+        expected_question = ('In the event of volcano merapi point region c '
+                             'how many population region c might need evacuation')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)
@@ -76,8 +77,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of merapi_krb how many population '
-                             'merapi ten by ten raster might need evacuation')
+        expected_question = ('In the event of volcano merapi krb region c how '
+                             'many population region c might need evacuation')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)

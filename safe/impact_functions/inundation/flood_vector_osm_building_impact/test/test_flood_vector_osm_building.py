@@ -17,14 +17,13 @@ __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_vector_osm_building_impact.\
     impact_function import FloodVectorBuildingFunction
 from safe.storage.core import read_layer
-from safe.test.utilities import TESTDATA, get_qgis_app
+from safe.test.utilities import test_data_path, get_qgis_app
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -35,29 +34,28 @@ class TestFloodVectorBuildingFunction(unittest.TestCase):
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
+        registry.clear()
         registry.register(FloodVectorBuildingFunction)
 
     def test_run(self):
         impact_function = FloodVectorBuildingFunction.instance()
 
-        building = 'test_flood_building_impact_exposure.shp'
-        flood_data = 'test_flood_building_impact_hazard.shp'
+        hazard_path = test_data_path(
+            'hazard', 'region_a', 'flood', 'flood_multipart_polygons.shp')
+        exposure_path = test_data_path(
+            'exposure', 'region_a', 'infrastructure', 'buildings.shp')
 
-        hazard_filename = os.path.join(TESTDATA, flood_data)
-        exposure_filename = os.path.join(TESTDATA, building)
-        hazard_layer = read_layer(hazard_filename)
-        exposure_layer = read_layer(exposure_filename)
+        hazard_layer = read_layer(hazard_path)
+        exposure_layer = read_layer(exposure_path)
 
         impact_function.hazard = hazard_layer
         impact_function.exposure = exposure_layer
-        impact_function.extent = [106.8139860, -6.2043560,
-                           106.8405950, -6.2263570]
         impact_function.run()
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In the event of a flood in jakarta how many osm '
-                             'building polygons might be flooded')
+        expected_question = ('In the event of flood polygon region a how '
+                             'many buildings region a might be flooded')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)
@@ -67,13 +65,13 @@ class TestFloodVectorBuildingFunction(unittest.TestCase):
         buildings_total = keywords['buildings_total']
         buildings_affected = keywords['buildings_affected']
 
-        self.assertEqual(buildings_total, 67)
-        self.assertEqual(buildings_affected, 41)
+        self.assertEqual(buildings_total, 131)
+        self.assertEqual(buildings_affected, 27)
 
     def test_filter(self):
         hazard_keywords = {
             'subcategory': 'flood',
-            'unit': 'wet/dry',
+            'unit': 'wetdry',
             'layer_type': 'vector',
             'data_type': 'polygon'
         }
@@ -90,9 +88,10 @@ class TestFloodVectorBuildingFunction(unittest.TestCase):
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
-        retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodVectorBuildingFunction',
-                         retrieved_IF,
-                         'Expecting FloodVectorBuildingFunction.'
-                         'But got %s instead' %
-                         retrieved_IF)
+
+        retrieved_if = impact_functions[0].metadata().as_dict()['id']
+        expected = ImpactFunctionManager().get_function_id(
+            FloodVectorBuildingFunction)
+        message = 'Expecting %s, but getting %s instead' % (
+            expected, retrieved_if)
+        self.assertEqual(expected, retrieved_if, message)

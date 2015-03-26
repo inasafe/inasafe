@@ -14,7 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'lucernae'
 
-import os
 import unittest
 
 from safe.impact_functions.impact_function_manager\
@@ -23,7 +22,7 @@ from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import \
     FloodRasterBuildingFunction
 from safe.storage.core import read_layer
-from safe.test.utilities import TESTDATA, get_qgis_app, HAZDATA
+from safe.test.utilities import get_qgis_app, test_data_path
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -34,41 +33,51 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
+        registry.clear()
         registry.register(FloodRasterBuildingFunction)
 
     def test_run(self):
         impact_function = FloodRasterBuildingFunction.instance()
 
-        flood_hazards = ['Flood_Current_Depth_Jakarta_geographic.asc',
-                         'Flood_Design_Depth_Jakarta_geographic.asc']
-        for flood_data in flood_hazards:
+        hazard_path = test_data_path(
+            'hazard', 'region_a', 'flood', 'continuous_flood_20_20.asc')
+        exposure_path = test_data_path(
+            'exposure', 'region_a', 'infrastructure', 'buildings.shp')
+        hazard_layer = read_layer(hazard_path)
+        exposure_layer = read_layer(exposure_path)
 
-            building = 'OSM_building_polygons_20110905.shp'
+        impact_function.hazard = hazard_layer
+        impact_function.exposure = exposure_layer
+        impact_function.run()
+        impact_layer = impact_function.impact
 
-            hazard_filename = os.path.join(HAZDATA, flood_data)
-            exposure_filename = os.path.join(TESTDATA, building)
+        # Extract calculated result
+        impact_data = impact_layer.get_data()
+        self.assertEqual(len(impact_data), 131)
 
-            # calculate impact
-            hazard_layer = read_layer(hazard_filename)
-            exposure_layer = read_layer(exposure_filename)
+        # 1 = inundated, 2 = wet, 3 = dry
+        expected_result = {
+            1: 61,
+            2: 70,
+            3: 0
+        }
 
-            impact_function.hazard = hazard_layer
-            impact_function.exposure = exposure_layer
-            impact_function.run()
-            impact_layer = impact_function.impact
+        result = {
+            1: 0,
+            2: 0,
+            3: 0
+        }
+        for feature in impact_data:
+            inundated_status = feature['INUNDATED']
+            result[inundated_status] += 1
 
-            # Extract calculated result
-            icoordinates = impact_layer.get_geometry()
-            iattributes = impact_layer.get_data()
-
-            # Check
-            self.assertEqual(len(icoordinates), 34960)
-            self.assertEqual(len(iattributes), 34960)
+        message = 'Expecting %s, but it returns %s' % (expected_result, result)
+        self.assertEqual(expected_result, result, message)
 
     def test_filter(self):
         hazard_keywords = {
             'subcategory': 'tsunami',
-            'unit': 'm',
+            'unit': 'metres_depth',
             'layer_type': 'raster',
             'data_type': 'continuous'
         }
@@ -85,9 +94,10 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
-        retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodRasterBuildingFunction',
-                         retrieved_IF,
-                         'Expecting FloodRasterBuildingFunction.'
-                         'But got %s instead' %
-                         retrieved_IF)
+
+        retrieved_if = impact_functions[0].metadata().as_dict()['id']
+        expected = ImpactFunctionManager().get_function_id(
+            FloodRasterBuildingFunction)
+        message = 'Expecting %s, but getting %s instead' % (
+            expected, retrieved_if)
+        self.assertEqual(expected, retrieved_if, message)

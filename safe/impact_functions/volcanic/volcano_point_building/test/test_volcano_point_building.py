@@ -28,6 +28,7 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
+        registry.clear()
         registry.register(VolcanoPointBuildingFunction)
 
     def test_run(self):
@@ -35,7 +36,7 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         volcano_path = test_data_path(
             'hazard', 'region_c', 'volcano', 'merapi_point.shp')
         building_path = test_data_path(
-            'exposure', 'region_c', 'structure', 'buildings.shp')
+            'exposure', 'region_c', 'infrastructure', 'buildings.shp')
 
         hazard_layer = read_layer(volcano_path)
         exposure_layer = read_layer(building_path)
@@ -47,8 +48,8 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In the event of merapi how many buildings might '
-                             'be affected')
+        expected_question = ('In the event of volcano merapi point region c '
+                             'how many buildings region c might be affected')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)

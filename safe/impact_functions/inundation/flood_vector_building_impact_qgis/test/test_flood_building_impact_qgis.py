@@ -16,17 +16,16 @@ __author__ = 'lucernae'
 __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
 import unittest
+
+from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
     .impact_function import FloodPolygonBuildingQgisFunction
 from safe.test.utilities import (
-    TESTDATA,
     get_qgis_app,
-    clone_shp_layer,
     test_data_path)
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
@@ -38,24 +37,20 @@ class TestFloodPolygonBuildingQgis(unittest.TestCase):
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
+        registry.clear()
         registry.register(FloodPolygonBuildingQgisFunction)
 
     def test_run(self):
         function = FloodPolygonBuildingQgisFunction.instance()
 
-        building = 'buildings_osm_4326'
-        flood_data = 'multipart_polygons_osm_4326'
-
-        hazard_filename = test_data_path('hazard', flood_data)
-        exposure_filename = test_data_path('exposure', building)
-        hazard_layer = clone_shp_layer(
-            name=hazard_filename,
-            include_keywords=True,
-            source_directory=TESTDATA)
-        exposure_layer = clone_shp_layer(
-            name=exposure_filename,
-            include_keywords=True,
-            source_directory=TESTDATA)
+        hazard_path = test_data_path(
+            'hazard', 'region_a', 'flood', 'flood_multipart_polygons.shp')
+        exposure_path = test_data_path(
+            'exposure', 'region_a', 'infrastructure', 'buildings.shp')
+        # noinspection PyCallingNonCallable
+        hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
+        # noinspection PyCallingNonCallable
+        exposure_layer = QgsVectorLayer(exposure_path, 'Buildings', 'ogr')
 
         # Let's set the extent to the hazard extent
         extent = hazard_layer.extent()
@@ -73,17 +68,17 @@ class TestFloodPolygonBuildingQgis(unittest.TestCase):
         impact = function.impact
 
         # Count of flooded objects is calculated "by the hands"
-        # total flooded = 68, total buildings = 250
+        # total flooded = 27, total buildings = 129
         count = sum(impact.get_data(attribute='INUNDATED'))
-        self.assertEquals(count, 68)
+        self.assertEquals(count, 27)
         count = len(impact.get_data())
-        self.assertEquals(count, 250)
+        self.assertEquals(count, 129)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'flood',
-            'unit': 'wet/dry',
+            'unit': 'wetdry',
             'layer_type': 'vector',
             'data_type': 'polygon'
         }
@@ -100,9 +95,10 @@ class TestFloodPolygonBuildingQgis(unittest.TestCase):
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
-        retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodPolygonBuildingQgis',
-                         retrieved_IF,
-                         'Expecting FloodPolygonBuildingQgis.'
-                         'But got %s instead' %
-                         retrieved_IF)
+
+        retrieved_if = impact_functions[0].metadata().as_dict()['id']
+        expected = ImpactFunctionManager().get_function_id(
+            FloodPolygonBuildingQgisFunction)
+        message = 'Expecting %s, but getting %s instead' % (
+            expected, retrieved_if)
+        self.assertEqual(expected, retrieved_if, message)
