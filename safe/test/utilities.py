@@ -914,25 +914,19 @@ def load_standard_layers(dock=None):
     # If changing the order does cause tests to fail, please update the tests
     # to also use find instead of relative position. (Tim)
     #
-    # WARNING: Please keep test_data/test/loadStandardLayers.qgs in sync with
-    # file_list
+    # WARNING: Please keep test/data/project/load_standard_layers.qgs in sync
     file_list = [
-        join(TESTDATA, 'Padang_WGS84.shp'),
-        join(EXPDATA, 'glp10ag.asc'),
-        join(HAZDATA, 'Shakemap_Padang_2009.asc'),
-        join(TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif'),
-        join(TESTDATA, 'tsunami_building_exposure.shp'),
-        join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
-        join(TESTDATA, 'Population_Jakarta_geographic.asc'),
-        join(HAZDATA, 'eq_yogya_2006.asc'),
-        join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
-        join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
-        join(EXPDATA, 'DKI_buildings.shp'),
-        join(HAZDATA, 'jakarta_flood_category_123.asc'),
-        join(TESTDATA, 'roads_Maumere.shp'),
-        join(TESTDATA, 'donut.shp'),
-        join(TESTDATA, 'Merapi_alert.shp'),
-        join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
+        test_data_path('exposure', 'buildings.shp'),
+        test_data_path('hazard', 'volcano_point.shp'),
+        test_data_path('exposure', 'roads.shp'),
+        test_data_path('hazard', 'flood_multipart_polygons.shp'),
+        test_data_path('hazard', 'volcano_krb.shp'),
+        test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
+        test_data_path('hazard', 'classified_flood_20_20.asc'),
+        test_data_path('hazard', 'continuous_flood_20_20.asc'),
+        test_data_path('hazard', 'earthquake.tif'),
+        test_data_path('boundaries', 'district_osm_jakarta.shp'),
+    ]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, dock=dock)
     # FIXME (MB) -1 is until we add the aggregation category because of
