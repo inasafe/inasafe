@@ -172,7 +172,11 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[title: Buildings
+<![CDATA[category: exposure
+field: TYPE
+subcategory: structure
+title: Buildings Region A
+unit: building_type
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

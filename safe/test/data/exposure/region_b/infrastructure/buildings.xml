@@ -173,11 +173,11 @@
             <gmd:supplementalInformation>
                 <inasafe_keywords>
 <![CDATA[category: exposure
-subcategory: road
-source: OpenStreetMap - www.openstreetmap.org
-title: Roads Region A
+subcategory: structure
 field: TYPE
-unit: road_type
+title: Buildings Region B
+source: OpenStreetMap - www.openstreetmap.org
+unit: building_type
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

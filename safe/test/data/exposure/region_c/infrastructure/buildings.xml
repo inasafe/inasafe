@@ -173,11 +173,10 @@
             <gmd:supplementalInformation>
                 <inasafe_keywords>
 <![CDATA[category: exposure
-subcategory: structure
-license: Open Data Commons Open Database License (ODbL)
-title: Buildings
 source: OpenStreetMap - www.openstreetmap.org
-date: 24-03-2015 06:16
+subcategory: structure
+title: Buildings Region C
+unit: building_generic
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>
