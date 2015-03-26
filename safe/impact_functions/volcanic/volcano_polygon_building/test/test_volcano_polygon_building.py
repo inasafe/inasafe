@@ -33,10 +33,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
 
     def test_run(self):
         """TestVolcanoPolygonBuildingFunction: Test running the IF."""
-        volcano_path = test_data_path(
-            'hazard', 'region_c', 'volcano', 'merapi_krb.shp')
-        building_path = test_data_path(
-            'exposure', 'region_c', 'infrastructure', 'buildings.shp')
+        volcano_path = test_data_path('hazard', 'volcano_krb.shp')
+        building_path = test_data_path('exposure', 'buildings.shp')
 
         hazard_layer = read_layer(volcano_path)
         exposure_layer = read_layer(building_path)
@@ -48,8 +46,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In the event of volcano merapi krb region c how '
-                             'many buildings region c might be affected')
+        expected_question = ('In the event of volcano krb how many buildings '
+                             'might be affected')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)
@@ -59,8 +57,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         krb3_zone_count = zone_sum.count('Kawasan Rawan Bencana III')
         krb2_zone_count = zone_sum.count('Kawasan Rawan Bencana II')
         # The result (counted by hand)
-        expected_krb3_count = 35
-        expected_krb2_count = 65
+        expected_krb3_count = 11
+        expected_krb2_count = 161
         message = 'Expecting %s for KRB III zone, but it returns %s' % (
             krb3_zone_count, expected_krb3_count)
         self.assertEqual(krb3_zone_count, expected_krb3_count, message)

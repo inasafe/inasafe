@@ -40,22 +40,22 @@ class TestFloodVectorBuildingFunction(unittest.TestCase):
     def test_run(self):
         impact_function = FloodVectorBuildingFunction.instance()
 
-        hazard_path = test_data_path(
-            'hazard', 'region_a', 'flood', 'flood_multipart_polygons.shp')
-        exposure_path = test_data_path(
-            'exposure', 'region_a', 'infrastructure', 'buildings.shp')
+        hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
+        exposure_path = test_data_path('exposure', 'buildings.shp')
 
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
         impact_function.hazard = hazard_layer
         impact_function.exposure = exposure_layer
+        impact_function.parameters['affected_field'] = 'FLOODPRONE'
+        impact_function.parameters['affected_value'] = 'YES'
         impact_function.run()
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In the event of flood polygon region a how '
-                             'many buildings region a might be flooded')
+        expected_question = ('In the event of flood polygon how many '
+                             'buildings might be flooded')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)
@@ -65,8 +65,8 @@ class TestFloodVectorBuildingFunction(unittest.TestCase):
         buildings_total = keywords['buildings_total']
         buildings_affected = keywords['buildings_affected']
 
-        self.assertEqual(buildings_total, 131)
-        self.assertEqual(buildings_affected, 27)
+        self.assertEqual(buildings_total, 181)
+        self.assertEqual(buildings_affected, 33)
 
     def test_filter(self):
         hazard_keywords = {

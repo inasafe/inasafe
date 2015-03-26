@@ -17,6 +17,7 @@ __date__ = '23/03/15'
 
 
 import unittest
+import math
 
 from safe.impact_functions.generic.classified_hazard_building.impact_function import \
     ClassifiedHazardBuildingFunction
@@ -37,10 +38,8 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
     def test_run(self):
         function = ClassifiedHazardBuildingFunction.instance()
 
-        hazard_path = test_data_path(
-            'hazard', 'region_a', 'flood', 'classified_flood_20_20.asc')
-        exposure_path = test_data_path(
-            'exposure', 'region_a', 'infrastructure', 'buildings.shp')
+        hazard_path = test_data_path('hazard', 'classified_flood_20_20.asc')
+        exposure_path = test_data_path('exposure', 'buildings.shp')
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
@@ -52,9 +51,9 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
 
         # Count
         expected_impact = {
-            1.0: 42,
-            2.0: 35,
-            3.0: 54
+            1.0: 67,
+            2.0: 49,
+            3.0: 64
         }
 
         result_impact = {
@@ -64,7 +63,8 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
         }
         for impact_feature in impact_data:
             level = impact_feature['level']
-            result_impact[level] += 1
+            if not math.isnan(level):
+                result_impact[level] += 1
         message = 'Expecting %s, but it returns %s' % (
             expected_impact, result_impact)
         self.assertEqual(expected_impact, result_impact, message)

@@ -43,10 +43,8 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
     def test_run(self):
         function = FloodVectorRoadsExperimentalFunction.instance()
 
-        hazard_path = test_data_path(
-            'hazard', 'region_a', 'flood', 'flood_multipart_polygons.shp')
-        exposure_path = test_data_path(
-            'exposure', 'region_a', 'infrastructure', 'roads.shp')
+        hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
+        exposure_path = test_data_path('exposure', 'roads.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
         # noinspection PyCallingNonCallable

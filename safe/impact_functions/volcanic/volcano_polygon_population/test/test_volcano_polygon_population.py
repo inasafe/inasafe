@@ -33,12 +33,10 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
 
     def test_run(self):
         """TestVolcanoPolygonPopulationFunction: Test running the IF."""
-        merapi_point_path = test_data_path(
-            'hazard', 'region_c', 'volcano', 'merapi_point.shp')
-        merapi_krb_path = test_data_path(
-            'hazard', 'region_c', 'volcano', 'merapi_krb.shp')
+        merapi_point_path = test_data_path('hazard', 'volcano_point.shp')
+        merapi_krb_path = test_data_path('hazard', 'volcano_krb.shp')
         population_path = test_data_path(
-            'exposure', 'region_c', 'population', 'tenbytenraster.asc')
+            'exposure', 'pop_binary_raster_20_20.asc')
 
         merapi_point_layer = read_layer(merapi_point_path)
         merapi_krb_layer = read_layer(merapi_krb_path)
@@ -52,16 +50,16 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of volcano merapi point region c '
-                             'how many population region c might need evacuation')
+        expected_question = ('In the event of volcano point how many '
+                             'population might need evacuation')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)
         # Count by hand
         impact = {
-            3000: 12,
-            5000: 18,
-            10000: 20
+            3000: 200,
+            5000: 0,
+            10000: 0
         }
         impact_features = impact_layer.get_data()
         for i in range(len(impact_features)):
@@ -77,15 +75,15 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of volcano merapi krb region c how '
-                             'many population region c might need evacuation')
+        expected_question = ('In the event of volcano krb how many population '
+                             'might need evacuation')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)
         # Count by hand
         impact = {
-            'Kawasan Rawan Bencana III': 30,
-            'Kawasan Rawan Bencana II': 8,
+            'Kawasan Rawan Bencana III': 49,
+            'Kawasan Rawan Bencana II': 132,
             'Kawasan Rawan Bencana I': 0,
         }
         impact_features = impact_layer.get_data()

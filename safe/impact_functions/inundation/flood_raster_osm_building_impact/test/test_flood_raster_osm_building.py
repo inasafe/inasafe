@@ -39,10 +39,8 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
     def test_run(self):
         impact_function = FloodRasterBuildingFunction.instance()
 
-        hazard_path = test_data_path(
-            'hazard', 'region_a', 'flood', 'continuous_flood_20_20.asc')
-        exposure_path = test_data_path(
-            'exposure', 'region_a', 'infrastructure', 'buildings.shp')
+        hazard_path = test_data_path('hazard', 'continuous_flood_20_20.asc')
+        exposure_path = test_data_path('exposure', 'buildings.shp')
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
@@ -53,12 +51,12 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
 
         # Extract calculated result
         impact_data = impact_layer.get_data()
-        self.assertEqual(len(impact_data), 131)
+        self.assertEqual(len(impact_data), 181)
 
         # 1 = inundated, 2 = wet, 3 = dry
         expected_result = {
-            1: 61,
-            2: 70,
+            1: 64,
+            2: 117,
             3: 0
         }
 

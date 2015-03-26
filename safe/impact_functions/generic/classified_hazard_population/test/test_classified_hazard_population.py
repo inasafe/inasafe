@@ -37,10 +37,9 @@ class TestClassifiedHazardPopulationFunction(unittest.TestCase):
     def test_run(self):
         function = ClassifiedHazardPopulationFunction.instance()
 
-        hazard_path = test_data_path(
-            'hazard', 'region_a', 'flood', 'classified_flood_20_20.asc')
+        hazard_path = test_data_path('hazard', 'classified_flood_20_20.asc')
         exposure_path = test_data_path(
-            'exposure', 'region_a', 'population', 'binary_raster_20_20.asc')
+            'exposure', 'pop_binary_raster_20_20.asc')
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 

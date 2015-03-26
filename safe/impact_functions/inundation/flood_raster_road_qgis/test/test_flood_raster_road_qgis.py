@@ -44,10 +44,8 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
     def test_run(self):
         function = FloodRasterRoadsExperimentalFunction.instance()
 
-        hazard_path = test_data_path(
-            'hazard', 'region_a', 'flood', 'continuous_flood_20_20.asc')
-        exposure_path = test_data_path(
-            'exposure', 'region_a', 'infrastructure', 'roads.shp')
+        hazard_path = test_data_path('hazard', 'continuous_flood_20_20.asc')
+        exposure_path = test_data_path('exposure', 'roads.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsRasterLayer(hazard_path, 'Flood')
         # noinspection PyCallingNonCallable

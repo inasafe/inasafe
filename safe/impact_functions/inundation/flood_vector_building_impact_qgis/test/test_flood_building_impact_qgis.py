@@ -43,10 +43,8 @@ class TestFloodPolygonBuildingQgis(unittest.TestCase):
     def test_run(self):
         function = FloodPolygonBuildingQgisFunction.instance()
 
-        hazard_path = test_data_path(
-            'hazard', 'region_a', 'flood', 'flood_multipart_polygons.shp')
-        exposure_path = test_data_path(
-            'exposure', 'region_a', 'infrastructure', 'buildings.shp')
+        hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
+        exposure_path = test_data_path('exposure', 'buildings.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
         # noinspection PyCallingNonCallable
@@ -70,9 +68,9 @@ class TestFloodPolygonBuildingQgis(unittest.TestCase):
         # Count of flooded objects is calculated "by the hands"
         # total flooded = 27, total buildings = 129
         count = sum(impact.get_data(attribute='INUNDATED'))
-        self.assertEquals(count, 27)
+        self.assertEquals(count, 33)
         count = len(impact.get_data())
-        self.assertEquals(count, 129)
+        self.assertEquals(count, 176)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""

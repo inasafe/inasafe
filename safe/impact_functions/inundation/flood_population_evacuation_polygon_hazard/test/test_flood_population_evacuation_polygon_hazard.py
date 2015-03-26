@@ -41,10 +41,9 @@ class TestFloodEvacuationVectorHazardFunction(unittest.TestCase):
     def test_run(self):
         function = FloodEvacuationVectorHazardFunction.instance()
 
-        hazard_path = test_data_path(
-            'hazard', 'region_a', 'flood', 'flood_multipart_polygons.shp')
+        hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
         exposure_path = test_data_path(
-            'exposure', 'region_a', 'population', 'binary_raster_20_20.asc')
+            'exposure', 'pop_binary_raster_20_20.asc')
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
