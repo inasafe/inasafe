@@ -81,10 +81,10 @@ class PostprocessorManagerTest(unittest.TestCase):
         # kabupaten_jakarta_singlepart.shp
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
+            hazard='Continuous Flood',
+            exposure='Population',
             function_id='FloodEvacuationRasterHazardFunction',
-            aggregation_layer='kabupaten jakarta singlepart')
+            aggregation_layer=u"Dístríct's of Jakarta")
         set_jakarta_extent(dock=DOCK)
         assert result, message
 
@@ -129,8 +129,8 @@ class PostprocessorManagerTest(unittest.TestCase):
         # kabupaten_jakarta_singlepart.shp
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
+            hazard='Continuous Flood',
+            exposure='Population',
             function_id='FloodEvacuationRasterHazardFunction')
 
         # Enable on-the-fly reprojection

@@ -49,11 +49,8 @@ LOGGER = logging.getLogger('InaSAFE')
 class FunctionOptionsDialogTest(unittest.TestCase):
     """Test the InaSAFE GUI for Configurable Impact Functions"""
     def test_build_form(self):
-        """Test that we can build a form by passing it a function and params.
+        """Test that we can build a form by passing params.
         """
-        class_name = 'ITBFatalityFunction'
-        impact_function = ImpactFunctionManager().get(class_name)
-        assert impact_function.__name__ == class_name
 
         dialog = FunctionOptionsDialog()
 
@@ -96,12 +93,8 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         self.assertEqual(len(children), 5, message)
 
     def test_build_form_minimum_needs(self):
-        """Test that we can build a form by passing it a function and params.
+        """Test that we can build a form by passing it params.
         """
-        class_name = 'FloodEvacuationFunctionVectorHazard'
-        impact_function = ImpactFunctionManager().get(class_name)
-        assert impact_function.__name__ == class_name
-
         dialog = FunctionOptionsDialog()
         parameters = {
             'thresholds': [1.0],

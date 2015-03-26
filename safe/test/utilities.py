@@ -10,7 +10,6 @@ import logging
 import platform
 import glob
 import shutil
-from os.path import join
 from itertools import izip
 
 from qgis.core import (
@@ -685,7 +684,7 @@ def canvas_list():
     """
     list_string = ''
     for layer in CANVAS.layers():
-        list_string += str(layer.name()) + '\n'
+        list_string += layer.name() + '\n'
     return list_string
 
 
@@ -745,7 +744,7 @@ def combos_to_string(dock):
             string += '>> '
         else:
             string += '   '
-        string += str(item_text) + '\n'
+        string += item_text + '\n'
 
     string += '\n\n >> means combo item is selected'
     return string

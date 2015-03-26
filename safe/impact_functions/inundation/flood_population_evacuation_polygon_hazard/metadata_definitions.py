@@ -43,68 +43,68 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
         """
         defaults = get_defaults()
         dict_meta = {
-                'id': 'FloodEvacuationVectorHazardFunction',
-                'name': tr('Flood Evacuation Vector Hazard Function'),
-                'impact': tr('Need evacuation'),
-                'title': tr('Need evacuation'),
-                'function_type': 'old-style',
-                'author': 'AIFDR',
-                'date_implemented': 'N/A',
-                'overview': tr(
-                    'To assess the impacts of flood inundation in vector '
-                    'format on population.'),
-                'detailed_description': tr(
-                    'The population subject to inundation is determined '
-                    'whether in an area which affected or not. You can also '
-                    'set an evacuation percentage to calculate how many '
-                    'percent of the total population affected to be '
-                    'evacuated. This number will be used to estimate needs'
-                    ' based on BNPB Perka 7/2008 minimum bantuan.'),
-                'hazard_input': tr(
-                    'A hazard vector layer which has attribute affected the '
-                    'value is either 1 or 0'),
-                'exposure_input': tr(
-                    'An exposure raster layer where each cell represent '
-                    'population count.'),
-                'output': tr(
-                    'Vector layer contains people affected and the minimum '
-                    'needs based on evacuation percentage.'),
-                'actions': tr(
-                    'Provide details about how many people would likely need '
-                    'to be evacuated, where they are located and what '
-                    'resources would be required to support them.'),
-                'limitations': [],
-                'citations': [],
-                'categories': {
-                    'hazard': {
-                        'definition': hazard_definition,
-                        'subcategories': [hazard_flood],
-                        'units': [unit_wetdry,
-                                  unit_metres_depth,
-                                  unit_feet_depth],
-                        'layer_constraints': [layer_vector_polygon]
-                    },
-                    'exposure': {
-                        'definition': exposure_definition,
-                        'subcategories': [exposure_population],
-                        'units': [unit_people_per_pixel],
-                        'layer_constraints': [layer_raster_continuous]
-                    }
+            'id': 'FloodEvacuationVectorHazardFunction',
+            'name': tr('Flood Evacuation Vector Hazard Function'),
+            'impact': tr('Need evacuation'),
+            'title': tr('Need evacuation'),
+            'function_type': 'old-style',
+            'author': 'AIFDR',
+            'date_implemented': 'N/A',
+            'overview': tr(
+                'To assess the impacts of flood inundation in vector '
+                'format on population.'),
+            'detailed_description': tr(
+                'The population subject to inundation is determined '
+                'whether in an area which affected or not. You can also '
+                'set an evacuation percentage to calculate how many '
+                'percent of the total population affected to be '
+                'evacuated. This number will be used to estimate needs'
+                ' based on BNPB Perka 7/2008 minimum bantuan.'),
+            'hazard_input': tr(
+                'A hazard vector layer which has attribute affected the '
+                'value is either 1 or 0'),
+            'exposure_input': tr(
+                'An exposure raster layer where each cell represent '
+                'population count.'),
+            'output': tr(
+                'Vector layer contains people affected and the minimum '
+                'needs based on evacuation percentage.'),
+            'actions': tr(
+                'Provide details about how many people would likely need '
+                'to be evacuated, where they are located and what '
+                'resources would be required to support them.'),
+            'limitations': [],
+            'citations': [],
+            'categories': {
+                'hazard': {
+                    'definition': hazard_definition,
+                    'subcategories': [hazard_flood],
+                    'units': [unit_wetdry,
+                              unit_metres_depth,
+                              unit_feet_depth],
+                    'layer_constraints': [layer_vector_polygon]
                 },
-                'parameters': OrderedDict([
-                    ('evacuation_percentage', 1),  # Percent of affected needing evacuation
-                    ('postprocessors', OrderedDict([
-                        ('Gender', {'on': True}),
-                        ('Age', {
-                            'on': True,
-                            'params': OrderedDict([
-                                ('youth_ratio', defaults['YOUTH_RATIO']),
-                                ('adult_ratio', defaults['ADULT_RATIO']),
-                                ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-                        ('MinimumNeeds', {'on': True}),
-                    ])),
-                    ('minimum needs', default_minimum_needs()),
-                    ('provenance', default_provenance())
-                ])
+                'exposure': {
+                    'definition': exposure_definition,
+                    'subcategories': [exposure_population],
+                    'units': [unit_people_per_pixel],
+                    'layer_constraints': [layer_raster_continuous]
+                }
+            },
+            'parameters': OrderedDict([
+                ('evacuation_percentage', 1),  # Percent of affected needing evacuation
+                ('postprocessors', OrderedDict([
+                    ('Gender', {'on': True}),
+                    ('Age', {
+                        'on': True,
+                        'params': OrderedDict([
+                            ('youth_ratio', defaults['YOUTH_RATIO']),
+                            ('adult_ratio', defaults['ADULT_RATIO']),
+                            ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
+                    ('MinimumNeeds', {'on': True}),
+                ])),
+                ('minimum needs', default_minimum_needs()),
+                ('provenance', default_provenance())
+            ])
         }
         return dict_meta
