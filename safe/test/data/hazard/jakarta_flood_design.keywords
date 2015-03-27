@@ -1,4 +1,5 @@
 category: hazard
 subcategory: flood
-unit: metres_depth
+data_type: continuous
 title: Jakarta flood like 2007 with structural improvements
+unit: metres_depth

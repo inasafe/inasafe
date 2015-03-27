@@ -134,14 +134,6 @@ class ImpactCalculator(QObject):
         else:
             self._hazard_layer = layer
 
-    def function(self):
-        """Accessor for the impact function.
-
-        :returns: An InaSAFE impact function or None depending on if it is set.
-        :rtype: FunctionProvider, None
-        """
-        return self._impact_function
-
     def set_function(self, impact_function):
         """Mutator for the impact function.
 
@@ -152,7 +144,11 @@ class ImpactCalculator(QObject):
         :type impact_function: str
 
         """
-        self._impact_function = impact_function
+        if isinstance(impact_function, str):
+            self._impact_function = self.impact_function_manager\
+                .get(impact_function)
+        else:
+            self._impact_function = impact_function
 
     def get_runner(self):
         """ Factory to create a new runner thread.
@@ -193,6 +189,14 @@ class ImpactCalculator(QObject):
             self._impact_function,
             extent=self.extent(),
             check_integrity=self.requires_clipping())
+
+    def function(self):
+        """Accessor for the impact function.
+
+        :returns: An InaSAFE impact function or None depending on if it is set.
+        :rtype: safe.impact_functions.base.ImpactFunction, None
+        """
+        return self._impact_function
 
     def requires_clipping(self):
         """Check to clip or not to clip layers.

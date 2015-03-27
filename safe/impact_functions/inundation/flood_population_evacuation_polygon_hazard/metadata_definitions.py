@@ -19,7 +19,7 @@ from safe.definitions import (
     exposure_definition,
     exposure_population,
     unit_people_per_pixel,
-    layer_raster_continuous)
+    layer_raster_continuous, unit_metres_depth, unit_feet_depth)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -47,61 +47,63 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
         """
         defaults = get_defaults()
         dict_meta = {
-                'id': 'FloodEvacuationVectorHazardFunction',
-                'name': tr('Flood Evacuation Vector Hazard Function'),
-                'impact': tr('Need evacuation'),
-                'title': tr('Need evacuation'),
-                'function_type': 'old-style',
-                'author': 'AIFDR',
-                'date_implemented': 'N/A',
-                'overview': tr(
-                    'To assess the impacts of flood inundation in vector '
-                    'format on population.'),
-                'detailed_description': tr(
-                    'The population subject to inundation is determined '
-                    'whether in an area which affected or not. You can also '
-                    'set an evacuation percentage to calculate how many '
-                    'percent of the total population affected to be '
-                    'evacuated. This number will be used to estimate needs'
-                    ' based on BNPB Perka 7/2008 minimum bantuan.'),
-                'hazard_input': tr(
-                    'A hazard vector layer which has attribute affected the '
-                    'value is either 1 or 0'),
-                'exposure_input': tr(
-                    'An exposure raster layer where each cell represent '
-                    'population count.'),
-                'output': tr(
-                    'Vector layer contains people affected and the minimum '
-                    'needs based on evacuation percentage.'),
-                'actions': tr(
-                    'Provide details about how many people would likely need '
-                    'to be evacuated, where they are located and what '
-                    'resources would be required to support them.'),
-                'limitations': [],
-                'citations': [],
-                'categories': {
-                    'hazard': {
-                        'definition': hazard_definition,
-                        'subcategories': [hazard_flood],
-                        'units': [unit_wetdry],
-                        'layer_constraints': [layer_vector_polygon]
-                    },
-                    'exposure': {
-                        'definition': exposure_definition,
-                        'subcategories': [exposure_population],
-                        'units': [unit_people_per_pixel],
-                        'layer_constraints': [layer_raster_continuous]
-                    }
+            'id': 'FloodEvacuationVectorHazardFunction',
+            'name': tr('Flood Evacuation Vector Hazard Function'),
+            'impact': tr('Need evacuation'),
+            'title': tr('Need evacuation'),
+            'function_type': 'old-style',
+            'author': 'AIFDR',
+            'date_implemented': 'N/A',
+            'overview': tr(
+                'To assess the impacts of flood inundation in vector '
+                'format on population.'),
+            'detailed_description': tr(
+                'The population subject to inundation is determined '
+                'whether in an area which affected or not. You can also '
+                'set an evacuation percentage to calculate how many '
+                'percent of the total population affected to be '
+                'evacuated. This number will be used to estimate needs'
+                ' based on BNPB Perka 7/2008 minimum bantuan.'),
+            'hazard_input': tr(
+                'A hazard vector layer which has attribute affected the '
+                'value is either 1 or 0'),
+            'exposure_input': tr(
+                'An exposure raster layer where each cell represent '
+                'population count.'),
+            'output': tr(
+                'Vector layer contains people affected and the minimum '
+                'needs based on evacuation percentage.'),
+            'actions': tr(
+                'Provide details about how many people would likely need '
+                'to be evacuated, where they are located and what '
+                'resources would be required to support them.'),
+            'limitations': [],
+            'citations': [],
+            'categories': {
+                'hazard': {
+                    'definition': hazard_definition,
+                    'subcategories': [hazard_flood],
+                    'units': [unit_wetdry,
+                              unit_metres_depth,
+                              unit_feet_depth],
+                    'layer_constraints': [layer_vector_polygon]
                 },
-                'parameters': OrderedDict([
-                    ('evacuation_percentage', 1),  # Percent of affected needing evacuation
-                    ('postprocessors', OrderedDict([
-                        ('Gender', default_gender_postprocessor()),
-                        ('Age', age_postprocessor()),
-                        ('MinimumNeeds', minimum_needs_selector()),
-                    ])),
-                    ('minimum needs', default_minimum_needs()),
-                    ('provenance', default_provenance())
-                ])
+                'exposure': {
+                    'definition': exposure_definition,
+                    'subcategories': [exposure_population],
+                    'units': [unit_people_per_pixel],
+                    'layer_constraints': [layer_raster_continuous]
+                }
+            },
+            'parameters': OrderedDict([
+                ('evacuation_percentage', 1),  # Percent of affected needing evacuation
+                ('postprocessors', OrderedDict([
+                    ('Gender', default_gender_postprocessor()),
+                    ('Age', age_postprocessor()),
+                    ('MinimumNeeds', minimum_needs_selector()),
+                ])),
+                ('minimum needs', default_minimum_needs()),
+                ('provenance', default_provenance())
+            ])
         }
         return dict_meta

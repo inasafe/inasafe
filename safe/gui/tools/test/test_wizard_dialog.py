@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'borysjurgiel.pl'
 __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -32,6 +33,7 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
+from safe.impact_functions import register_impact_functions
 from safe.common.utilities import unique_filename, temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
@@ -73,6 +75,11 @@ def clone_csv_layer():
 
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
+
+    def setUp(self):
+        # register impact functions
+        register_impact_functions()
+
     """Test the InaSAFE wizard GUI"""
     def tearDown(self):
         """Run after each test."""
@@ -380,6 +387,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 2 of 7 - select subcategory
         # noinspection PyTypeChecker
+        # selecting tsunami
         self.check_current_text('tsunami', dialog.lstSubcategories)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
@@ -1234,7 +1242,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 1
         expected_functions_count = 1
-        chosen_if = 'FloodRasterBuildingImpactFunction'
+        chosen_if = 'FloodRasterBuildingFunction'
 
         expected_hazard_layers_count = 1
         expected_exposure_layers_count = 1

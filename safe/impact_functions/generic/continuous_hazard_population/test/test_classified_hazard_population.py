@@ -25,7 +25,7 @@ import os
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.storage.core import read_layer
-from safe.test.utilities import HAZDATA, TESTDATA, EXPDATA
+from safe.test.utilities import TESTDATA, test_data_path
 from safe.common.utilities import OrderedDict
 
 
@@ -34,18 +34,18 @@ class TestContinuousHazardPopulationFunction(unittest.TestCase):
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
+        registry.clear()
         registry.register(ContinuousHazardPopulationFunction)
 
     def test_run(self):
         function = ContinuousHazardPopulationFunction.instance()
 
-        population = 'people_jakarta_clip.tif'
-        flood_data = 'flood_jakarta_clip.tif'
-
-        hazard_filename = os.path.join(TESTDATA, flood_data)
-        exposure_filename = os.path.join(TESTDATA, population)
-        hazard_layer = read_layer(hazard_filename)
-        exposure_layer = read_layer(exposure_filename)
+        hazard_path = test_data_path(
+            'hazard', 'continuous_flood_20_20.asc')
+        exposure_path = test_data_path(
+            'exposure', 'pop_binary_raster_20_20.asc')
+        hazard_layer = read_layer(hazard_path)
+        exposure_layer = read_layer(exposure_path)
 
         function.hazard = hazard_layer
         function.exposure = exposure_layer
@@ -64,11 +64,11 @@ class TestContinuousHazardPopulationFunction(unittest.TestCase):
             total_needs_full['single']
         ])
 
-        self.assertEqual(total_needs_weekly['Rice [kg]'], 1044400)
-        self.assertEqual(total_needs_weekly['Family Kits'], 74600)
-        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 6527500)
-        self.assertEqual(total_needs_weekly['Clean Water [l]'], 24991000)
-        self.assertEqual(total_needs_single['Toilets'], 18650)
+        self.assertEqual(total_needs_weekly['Rice [kg]'], 336)
+        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 2100)
+        self.assertEqual(total_needs_weekly['Clean Water [l]'], 8040)
+        self.assertEqual(total_needs_weekly['Family Kits'], 24)
+        self.assertEqual(total_needs_single['Toilets'], 6)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""
@@ -80,6 +80,7 @@ class TestContinuousHazardPopulationFunction(unittest.TestCase):
         }
 
         exposure_keywords = {
+            'category': 'exposure',
             'subcategory': 'population',
             'layer_type': 'raster',
             'data_type': 'continuous'
@@ -90,9 +91,10 @@ class TestContinuousHazardPopulationFunction(unittest.TestCase):
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
-        retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('ContinuousHazardPopulationFunction',
-                         retrieved_IF,
-                         'Expecting ContinuousHazardPopulationFunction.'
-                         'But got %s instead' %
-                         retrieved_IF)
+
+        retrieved_if = impact_functions[0].metadata().as_dict()['id']
+        expected = ImpactFunctionManager().get_function_id(
+            ContinuousHazardPopulationFunction)
+        message = 'Expecting %s, but getting %s instead' % (
+            expected, retrieved_if)
+        self.assertEqual(expected, retrieved_if, message)

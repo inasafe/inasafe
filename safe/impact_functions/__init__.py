@@ -10,6 +10,12 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.earthquake.earthquake_building.impact_function import \
+    EarthquakeBuildingFunction
+from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
+    .impact_function import ITBFatalityFunction
+from safe.impact_functions.earthquake.pager_earthquake_fatality_model\
+    .impact_function import PAGFatalityFunction
 from safe.impact_functions.generic.classified_hazard_building\
     .impact_function import ClassifiedHazardBuildingFunction
 from safe.impact_functions.generic.classified_hazard_population\
@@ -40,6 +46,10 @@ from safe.impact_functions.inundation\
     TsunamiEvacuationFunction
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
+from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
+    import VolcanoPolygonBuildingFunction
+from safe.impact_functions.volcanic.volcano_polygon_population\
+    .impact_function import VolcanoPolygonPopulationFunction
 
 
 def register_impact_functions():
@@ -55,12 +65,15 @@ def register_impact_functions():
     impact_function_registry.register(FloodRasterRoadsExperimentalFunction)
     impact_function_registry.register(FloodRasterRoadsGdalFunction)
     impact_function_registry.register(TsunamiEvacuationFunction)
-    # Generic IF
+    # Generic IF's
     impact_function_registry.register(ClassifiedHazardBuildingFunction)
     impact_function_registry.register(ClassifiedHazardPopulationFunction)
     impact_function_registry.register(ContinuousHazardPopulationFunction)
-    # Volcanic IF
+    # Earthquake
+    impact_function_registry.register(EarthquakeBuildingFunction)
+    impact_function_registry.register(ITBFatalityFunction)
+    impact_function_registry.register(PAGFatalityFunction)
+    # Volcanic IF's
     impact_function_registry.register(VolcanoPointBuildingFunction)
-
-
-
+    impact_function_registry.register(VolcanoPolygonBuildingFunction)
+    impact_function_registry.register(VolcanoPolygonPopulationFunction)

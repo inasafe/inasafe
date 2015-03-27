@@ -737,7 +737,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if index > -1:
             function_id = self.get_function_id()
 
-            function = self.impact_function_manager.get_by_id(function_id)
+            function = self.impact_function_manager.get(function_id)
             self.active_impact_function = function
             self.impact_function_parameters = None
             if hasattr(self.active_impact_function, 'parameters'):
@@ -1253,19 +1253,20 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.get_aggregation_layer())
 
         # Impact Functions
-        impact_function = self.impact_function_manager.get_by_id(
-            self.get_function_id())
-        impact_function.parameters = self.impact_function_parameters
-        analysis.impact_function = impact_function
+        if self.get_function_id() != '':
+            impact_function = self.impact_function_manager.get(
+                self.get_function_id())
+            impact_function.parameters = self.impact_function_parameters
+            analysis.impact_function = impact_function
 
-        # Variables
-        analysis.clip_hard = self.clip_hard
-        analysis.show_intermediate_layers = self.show_intermediate_layers
-        analysis.run_in_thread_flag = self.run_in_thread_flag
-        analysis.map_canvas = self.iface.mapCanvas()
-        analysis.clip_to_viewport = self.clip_to_viewport
-        analysis.user_extent = self.extent.user_extent
-        analysis.user_extent_crs = self.extent.user_extent_crs
+            # Variables
+            analysis.clip_hard = self.clip_hard
+            analysis.show_intermediate_layers = self.show_intermediate_layers
+            analysis.run_in_thread_flag = self.run_in_thread_flag
+            analysis.map_canvas = self.iface.mapCanvas()
+            analysis.clip_to_viewport = self.clip_to_viewport
+            analysis.user_extent = self.extent.user_extent
+            analysis.user_extent_crs = self.extent.user_extent_crs
 
         return analysis
 
@@ -1698,8 +1699,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
                          'impact-map', 'impact-legend']
         impact_report.component_ids = component_ids
-        if template_warning_verbose and \
-                        len(impact_report.missing_elements) != 0:
+        length = len(impact_report.missing_elements)
+        if template_warning_verbose and length != 0:
             title = self.tr('Template is missing some elements')
             question = self.tr(
                 'The composer template you are printing to is missing '

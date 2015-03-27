@@ -363,7 +363,7 @@ class AnalysisHandler(QObject):
                 self.parent.aggregation_layer)
 
         # Impact Function
-        impact_function = self.impact_function_manager.get_by_id(
+        impact_function = self.impact_function_manager.get(
             self.parent.selected_function()['id'])
         impact_function.parameters = self.parent.if_params
         self.analysis.impact_function = impact_function
