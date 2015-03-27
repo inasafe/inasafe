@@ -102,14 +102,8 @@ class PlainText(Text):
     def __init__(self, text, **kwargs):
         """Creates a strong Text object
 
-        Args:
-            String message, a string to add to the message
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
+        :param text: Text to add to the message,
+        :type text: str
 
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
