@@ -435,12 +435,14 @@ class TestDock(TestCase):
             function_id='FloodVectorBuildingFunction')
         self.assertTrue(result, message)
 
-
-
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        IFACE.mapCanvas().setExtent(
-            QgsRectangle(106.80801, -6.19531, 106.83456946836641, -6.167526))
+        expected_extent = QgsRectangle(
+            106.80801, -6.19531, 106.83456946836641, -6.167526)
+        CANVAS.setExtent(expected_extent)
+
+        crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        DOCK.define_user_analysis_extent(expected_extent, crs)
 
         # Press RUN
         # noinspection PyCallByClass,PyCallByClass,PyTypeChecker
