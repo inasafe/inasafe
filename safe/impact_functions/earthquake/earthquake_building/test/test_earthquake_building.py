@@ -24,7 +24,7 @@ from safe.storage.core import read_layer
 
 
 class TestEarthquakeBuildingFunction(unittest.TestCase):
-    """Test for Volcano Polygon on Building Impact Function."""
+    """Test for Earthquake on Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
@@ -32,7 +32,7 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         registry.register(EarthquakeBuildingFunction)
 
     def test_run(self):
-        """TestVolcanoPolygonPopulationFunction: Test running the IF."""
+        """TestEarthquakeBuildingFunction: Test running the IF."""
         eq_path = test_data_path('hazard', 'earthquake.tif')
         building_path = test_data_path(
             'exposure', 'buildings.shp')
@@ -73,7 +73,7 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         self.assertEqual(impact, result, message)
 
     def test_filter(self):
-        """TestVolcanoPolygonPopulationFunction: Test filtering IF"""
+        """TestEarthquakeBuildingFunction: Test filtering IF"""
         hazard_keywords = {
             'category': 'hazard',
             'subcategory': 'earthquake',

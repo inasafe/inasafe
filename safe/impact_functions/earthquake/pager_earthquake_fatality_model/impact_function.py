@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import math
 
 from safe.impact_functions.earthquake.\
-    itb_earthquake_fatality_model.impact_funtion import ITBFatalityFunction
+    itb_earthquake_fatality_model.impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake\
     .pager_earthquake_fatality_model.metadata_definitions import \
     PAGFatalityMetadata
@@ -37,7 +37,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
 
     def __init__(self):
         super(PAGFatalityFunction, self).__init__()
-    
+
     # noinspection PyPep8Naming
     def fatality_rate(self, mmi):
         """Pager method to compute fatality rate.

@@ -696,10 +696,10 @@ def combos_to_string(dock):
 
     :returns: A descriptive list of the contents of each combo with the
         active combo item highlighted with a >> symbol.
-    :rtype: str
+    :rtype: unicode
     """
 
-    string = 'Hazard Layers\n'
+    string = u'Hazard Layers\n'
     string += '-------------------------\n'
     current_id = dock.cboHazard.currentIndex()
     for count in range(0, dock.cboHazard.count()):
