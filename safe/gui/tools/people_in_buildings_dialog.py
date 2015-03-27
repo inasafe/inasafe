@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-__author__ = 'christian@kartoza.com'
+__author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '12/02/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -93,20 +93,43 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         return layers[index]
 
     def _get_layers(self):
+        """Get all layers.
+
+        :returns: All layers currently loaded.
+        :rtype: list
+        """
         layers = self.iface.legendInterface().layers()
         return layers
 
     def _get_layer_names(self):
+        """Get the names of all layers.
+
+        :returns: A list of all layer names
+        :rtype: list
+        """
         layers = self._get_layers()
         layer_names = [l.name() for l in layers]
         return layer_names
 
     @staticmethod
     def _get_field_names(layer):
+        """Get all attribute names of the layer.
+
+        :param layer: The layer to be investigated.
+        :type layer: VectorLayer
+
+        :returns: Returns a list of all attribute names of the layer.
+        :rtype: list
+        """
         field_names = [field.name() for field in layer.pendingFields()]
         return field_names
 
     def handle_building_layer(self, layer_name):
+        """Handler for change buildings layer event.
+
+        :param layer_name: The name of the layer that was selected.
+        :type layer_name: basestring
+        """
         layer = self._select_layer_by_name(layer_name)
         if layer is None:
             return
@@ -115,6 +138,11 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         self._update_combobox(self.levelsColumnComboBox, field_names)
 
     def handle_census_layer(self, layer_name):
+        """Hander for change of population layer selection event.
+
+        :param layer_name: The name of the layer that was selected.
+        :type layer_name: basestring
+        """
         layer = self._select_layer_by_name(layer_name)
         if layer is None:
             return
@@ -130,6 +158,20 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
 
     @staticmethod
     def _add_attribute_to_layer(layer, attribute_name, data_type):
+        """Add a new attribute to an existing layer.
+
+        :param layer: The layer to be altered.
+        :type layer: VectorLayer
+
+        :param attribute_name: The name of the new attribute.
+        :type attribute_name: basestring
+
+        :param data_type: The type of the new attribute.
+        :type data_type: QVariant.Double, QVariant.Int
+
+        :returns: The success state of the operation.
+        :rtype: bool
+        """
         provider = layer.dataProvider()
         # Check if attribute is already there, return "-1" if not
         ind = provider.fieldNameIndex(attribute_name)
@@ -140,9 +182,10 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         return result
 
     def add_population_attribute(self, layer):
-        """Add people estimate columns/attributes to the output layer
+        """Add people estimate columns/attributes to the output layer.
 
-        :param layer:
+        :param layer: The layer that the population attribute should be added.
+        :type layer: VectorLayer
         """
         attributes = {
             People_Calculated: QVariant.Double,
@@ -156,6 +199,17 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
 
     @staticmethod
     def _get_attributes(feature, field_names):
+        """Get the attribute dict based on the feature and the field names.
+
+        :param feature: The feature to be investigated.
+        :type feature:
+
+        :param field_names: The field names list.
+        :type field_names: list
+
+        :return: A lookup of the field values by field name.
+        :rtype: dict
+        """
         attributes = feature.attributes()
         attribute_dict = dict(zip(field_names, attributes))
         return attribute_dict
@@ -208,6 +262,22 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
 
     @staticmethod
     def _get_residential_proportion(attributes, building_use):
+        """The proportion of the surface to be used for residential.
+
+        :param attributes: The feature's attribute dictionary lookup.
+        :type attributes: dict
+
+        :param building_use: The name of the attribute containing the
+            building use.
+        :type building_use: basestring
+
+        :returns: The residential proprtion
+        :rtype: int, float
+
+        ...Note: The residential proportion is based on the building type.
+        Currently the types 'Residential' and 'House' are considered to be
+        used 100% for residential.
+        """
         use = attributes[building_use]
         if use in ['Residential', 'residential', 'house', 'House']:
             return 1
@@ -218,6 +288,20 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
 
     @staticmethod
     def _feature_fully_in_extent(layer, feature):
+        """Determine wether the feature is fully within the layer's extent.
+
+        :param layer: The layer to be considered.
+        :type layer: VectorLayer
+
+        :param feature: The feature to be considered.
+        :type feature:
+
+        :return: The result of the test.
+        :rtype: bool
+
+        ...Note: This operation uses the internal centroid.
+
+        """
         extent = layer.extent()
         geometry_extent = QgsGeometry.fromRect(extent)
         geometry_feature = feature.geometry()
@@ -236,6 +320,8 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         population_column = self.populationCountComboBox.currentText()
         new_layer = self.newLayerCheckBox.isChecked()
         new_layer_name = self.newLayerLineEdit.text()
+        if not buildings_layer or not population_layer:
+            return False
 
         if new_layer:
             buildings_layer = self.iface.addVectorLayer(
@@ -279,6 +365,8 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
                 total_effective_area += effective_area
                 building_lookup[building] = effective_area
             if not total_effective_area:
+                continue
+            if not isinstance(population_count, (int, float, long)):
                 continue
             population_density = population_count / total_effective_area
             buildings_layer.startEditing()
