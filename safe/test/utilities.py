@@ -925,6 +925,7 @@ def load_standard_layers(dock=None):
         test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
         test_data_path('hazard', 'classified_flood_20_20.asc'),
         test_data_path('hazard', 'continuous_flood_20_20.asc'),
+        test_data_path('hazard', 'tsunami_wgs84.tif'),
         test_data_path('hazard', 'earthquake.tif'),
         test_data_path('boundaries', 'district_osm_jakarta.shp'),
     ]
@@ -1141,8 +1142,9 @@ class FakeLayer(object):
         """
         return self.layer_source
 
+
 def clip_layers(first_layer_path, second_layer_path):
-    """Clip layers to the finest resolution between the two.
+    """Clip and resample layers with the reference to the first layer.
 
     :param first_layer_path: Path to the first layer path.
     :type first_layer_path: str
