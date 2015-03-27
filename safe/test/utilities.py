@@ -940,6 +940,43 @@ def load_standard_layers(dock=None):
     return hazard_layer_count, exposure_layer_count
 
 
+def compare_wkt(a, b, tol=0.000001):
+    """Helper function to compare WKT geometries with given tolerance
+    Taken from QGIS test suite
+
+    :param a: Input WKT geometry
+    :type a: str
+
+    :param b: Expected WKT geometry
+    :type b: str
+
+    :param tol: compare tolerance
+    :type tol: float
+
+    :return: True on success, False on failure
+    :rtype: bool
+    """
+    r = re.compile(r'-?\d+(?:\.\d+)?(?:[eE]\d+)?')
+
+    # compare the structure
+    a0 = r.sub("#", a)
+    b0 = r.sub("#", b)
+    if a0 != b0:
+        return False
+
+    # compare the numbers with given tolerance
+    a0 = r.findall(a)
+    b0 = r.findall(b)
+    if len(a0) != len(b0):
+        return False
+
+    for (a1, b1) in izip(a0, b0):
+        if abs(float(a1) - float(b1)) > tol:
+            return False
+
+    return True
+
+
 def load_layers(
         layer_list,
         clear_flag=True,
@@ -988,43 +1025,6 @@ def load_layers(
 
     # Add MCL's to the CANVAS
     return hazard_layer_count, exposure_layer_count
-
-
-def compare_wkt(a, b, tol=0.000001):
-    """Helper function to compare WKT geometries with given tolerance
-    Taken from QGIS test suite
-
-    :param a: Input WKT geometry
-    :type a: str
-
-    :param b: Expected WKT geometry
-    :type b: str
-
-    :param tol: compare tolerance
-    :type tol: float
-
-    :return: True on success, False on failure
-    :rtype: bool
-    """
-    r = re.compile(r'-?\d+(?:\.\d+)?(?:[eE]\d+)?')
-
-    # compare the structure
-    a0 = r.sub("#", a)
-    b0 = r.sub("#", b)
-    if a0 != b0:
-        return False
-
-    # compare the numbers with given tolerance
-    a0 = r.findall(a)
-    b0 = r.findall(b)
-    if len(a0) != len(b0):
-        return False
-
-    for (a1, b1) in izip(a0, b0):
-        if abs(float(a1) - float(b1)) > tol:
-            return False
-
-    return True
 
 
 def clone_shp_layer(
