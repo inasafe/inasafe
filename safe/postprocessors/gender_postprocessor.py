@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""**Postprocessors package.**
+"""Postprocessors package.
 
 """
 
@@ -17,9 +17,10 @@ from safe.utilities.i18n import tr
 class GenderPostprocessor(AbstractPostprocessor):
     """
     Postprocessor that calculates gender related statistics.
-    see the _calculate_* methods to see indicator specific documentation
 
-    see :mod:`safe.defaults` for default values information
+    See the _calculate_* methods to see indicator specific documentation
+
+    .. see:: :mod:`safe.defaults` for default values information.
     """
 
     def __init__(self):
@@ -30,27 +31,12 @@ class GenderPostprocessor(AbstractPostprocessor):
     def description(self):
         """Describe briefly what the post processor does.
 
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
-            Errors are propagated
         """
         return tr('Calculates gender related statistics.')
 
     def setup(self, params):
-        """concrete implementation it takes care of the needed parameters being
-         initialized
+        """Initialise parameters.
 
-        Args:
-            params: Dict of parameters to pass to the post processor
-        Returns:
-            None
-        Raises:
-            None
         """
         AbstractPostprocessor.setup(self, None)
         if self.impact_total is not None or self.female_ratio is not None:
@@ -62,15 +48,8 @@ class GenderPostprocessor(AbstractPostprocessor):
                               '%s ' % self.female_ratio)
 
     def process(self):
-        """concrete implementation it takes care of the needed parameters being
-         available and performs all the indicators calculations
+        """Setup parameters parameters and performs all the calculations.
 
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
         AbstractPostprocessor.process(self)
         if self.impact_total is None or self.female_ratio is None:
@@ -85,15 +64,8 @@ class GenderPostprocessor(AbstractPostprocessor):
             self._calculate_weekly_increased_calories()
 
     def clear(self):
-        """concrete implementation it takes care of the needed parameters being
-         properly cleared
+        """Clear the parameters.
 
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
         AbstractPostprocessor.clear(self)
         self.impact_total = None
@@ -103,13 +75,6 @@ class GenderPostprocessor(AbstractPostprocessor):
         """Total population indicator.
 
         This indicator reports the total population.
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
         name = tr('Total')
 
@@ -123,15 +88,9 @@ class GenderPostprocessor(AbstractPostprocessor):
     def _calculate_females(self):
         """Female population count indicator.
 
-        this indicator reports the amount of female population according to the
-        set female_ratio
+        This indicator reports the amount of female population according to the
+        set female_ratio.
 
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
         name = tr('Female count (affected)')
         result = self.impact_total * self.female_ratio
@@ -147,13 +106,6 @@ class GenderPostprocessor(AbstractPostprocessor):
         This indicator reports the weekly requirements of female hygiene packs
         for further detail refer to the "Sample InaSAFE Actions for Vulnerable
         Populations" [27.07.2012] paper
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
         name = tr('Weekly hygiene packs')
         meta = {'description': 'Females hygiene packs for weekly use'}
@@ -176,12 +128,6 @@ class GenderPostprocessor(AbstractPostprocessor):
         for further detail refer to the "Sample InaSAFE Actions for Vulnerable
         Populations" [27.07.2012] paper
 
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
         name = tr('Additional weekly rice kg for pregnant and lactating women')
         meta = {'description': 'Additional rice kg per week for pregnant and '
