@@ -73,10 +73,10 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         parameter = {
             'thresholds': [1.0],
             'postprocessors':  OrderedDict([
-                    ('Gender', default_gender_postprocessor()),
-                    ('Age', age_postprocessor()),
-                    ('MinimumNeeds', minimum_needs_selector()),
-                    ]),
+                ('Gender', default_gender_postprocessor()),
+                ('Age', age_postprocessor()),
+                ('MinimumNeeds', minimum_needs_selector()),
+                ]),
             'minimum needs': [rice]
         }
 
@@ -97,14 +97,12 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         dialog = FunctionOptionsDialog()
         parameters = {
             'thresholds': [1.0],
-            'postprocessors': {
-                'Gender': {'on': True},
-                'Age': {
-                    'on': True,
-                    'params': {
-                        'youth_ratio': 0.263,
-                        'elderly_ratio': 0.078,
-                        'adult_ratio': 0.659}}}}
+            'postprocessors': OrderedDict([
+                ('Gender', default_gender_postprocessor()),
+                ('Age', age_postprocessor()),
+                ('MinimumNeeds', minimum_needs_selector()),
+                ])
+        }
 
         dialog.build_form(parameters)
 
