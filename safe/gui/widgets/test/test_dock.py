@@ -435,8 +435,6 @@ class TestDock(TestCase):
             function_id='FloodVectorBuildingFunction')
         self.assertTrue(result, message)
 
-
-
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
         IFACE.mapCanvas().setExtent(

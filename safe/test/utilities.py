@@ -708,7 +708,7 @@ def combos_to_string(dock):
             string += '>> '
         else:
             string += '   '
-        string += str(item_text) + '\n'
+        string += item_text + '\n'
     string += '\n'
     string += 'Exposure Layers\n'
     string += '-------------------------\n'
@@ -719,7 +719,7 @@ def combos_to_string(dock):
             string += '>> '
         else:
             string += '   '
-        string += str(item_text) + '\n'
+        string += item_text + '\n'
 
     string += '\n'
     string += 'Functions\n'
@@ -732,7 +732,7 @@ def combos_to_string(dock):
         else:
             string += '   '
         string += '%s (Function ID: %s)\n' % (
-            str(item_text), dock.get_function_id(current_id))
+            item_text, dock.get_function_id(current_id))
 
     string += '\n'
     string += 'Aggregation Layers\n'

@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions import register_impact_functions
-
 __author__ = 'Marco Bernasocchi'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -51,6 +49,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.widgets.dock import Dock
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.keyword_io import KeywordIO
+from safe.impact_functions import register_impact_functions
 
 
 DOCK = Dock(IFACE)
@@ -64,9 +63,8 @@ class AggregatorTest(unittest.TestCase):
     # noinspection PyPep8Naming
     def setUp(self):
         """Fixture run before all tests"""
-
+        register_impact_functions()
         self.maxDiff = None  # show full diff for assert errors
-
         os.environ['LANG'] = 'en'
         DOCK.show_only_visible_layers_flag = True
         load_standard_layers(DOCK)
