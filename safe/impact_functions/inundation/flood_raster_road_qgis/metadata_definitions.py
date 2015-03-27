@@ -86,8 +86,9 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
                 ('road_type_field', 'TYPE'),
                 ('min threshold [m]', 1.0),
                 ('max threshold [m]', float('inf')),
-                ('postprocessors', OrderedDict([('RoadType',
-                                                road_type_postprocessor())]))
+                ('postprocessors', OrderedDict([
+                    ('RoadType', road_type_postprocessor())
+                ]))
             ])
         }
         return dict_meta

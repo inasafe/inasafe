@@ -129,9 +129,9 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
             },
             'parameters':  OrderedDict([
                 ('threshold [m]', 1.0),
-                ('postprocessors', OrderedDict([('BuildingType',
-                                                building_type_postprocessor())]
-                ))
+                ('postprocessors', OrderedDict([
+                    ('BuildingType', building_type_postprocessor())
+                ]))
             ])
         }
         return dict_meta

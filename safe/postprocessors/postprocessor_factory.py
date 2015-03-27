@@ -99,9 +99,7 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
                 LOGGER.debug(constr_id + ' user disabled, skipping it')
         except KeyError:
             LOGGER.debug(constr_id + ' has no "on" key, skipping it')
-    LOGGER.debug('ppf get_postprocessors.')
-    LOGGER.debug('OUTPUT: requested_postprocessors:')
-    LOGGER.debug(postprocessor_instances)
+
     return postprocessor_instances
 
 

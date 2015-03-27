@@ -76,8 +76,9 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                 # This value in 'affected_field' of the hazard layer
                 # marks the areas as inundated
                 ('affected_value', '1'),
-                ('postprocessors', OrderedDict([('RoadType',
-                                                road_type_postprocessor())]))
+                ('postprocessors', OrderedDict([
+                    ('RoadType', road_type_postprocessor())
+                ]))
             ])
         }
         return dict_meta

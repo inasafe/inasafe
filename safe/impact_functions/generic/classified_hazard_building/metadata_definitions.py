@@ -5,6 +5,7 @@ from safe.definitions import hazard_definition, hazard_all, unit_classified, \
     unit_building_type_type, unit_building_generic, layer_vector_polygon, \
     layer_vector_point
 from safe.utilities.i18n import tr
+
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata

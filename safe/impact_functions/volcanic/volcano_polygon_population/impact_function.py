@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import numpy
+
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .metadata_definitions import VolcanoPolygonPopulationFunctionMetadata
@@ -44,6 +45,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
 
     def run(self, layers=None):
         """Run volcano population evacuation Impact Function.
+
         :param layers: List of layers expected to contain where two layers
             should be present.
 

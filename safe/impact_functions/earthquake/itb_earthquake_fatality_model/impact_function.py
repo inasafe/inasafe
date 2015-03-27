@@ -6,6 +6,7 @@ __date__ = '24/03/15'
 
 import numpy
 import logging
+
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model.metadata_definitions import \
     ITBFatalityMetadata

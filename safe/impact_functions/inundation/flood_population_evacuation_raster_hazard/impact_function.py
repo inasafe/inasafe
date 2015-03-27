@@ -4,6 +4,7 @@ __author__ = 'Rizky Maulana Nugraha'
 
 import logging
 import numpy
+
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
@@ -39,7 +40,6 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
         super(FloodEvacuationRasterHazardFunction, self).__init__()
         self.target_field = 'population'
         self.impact_function_manager = ImpactFunctionManager()
-        LOGGER.debug('init : Flood Evac raster hazard Impact Function')
 
     def _tabulate(self, counts, evacuated, minimum_needs, question,
                   rounding_evacuated, thresholds, total):

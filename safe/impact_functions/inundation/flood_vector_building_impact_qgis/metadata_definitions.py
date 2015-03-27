@@ -89,9 +89,9 @@ class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
                 # marks the areas as inundated
                 ('affected_value', '1'),
 
-                ('postprocessors', OrderedDict(
-                    [('BuildingType', building_type_postprocessor())]
-                ))
+                ('postprocessors', OrderedDict([
+                    ('BuildingType', building_type_postprocessor())
+                ]))
             ])
             }
         return dict_meta

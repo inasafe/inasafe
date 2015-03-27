@@ -133,8 +133,9 @@ class FloodVectorBuildingMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 ('affected_field', 'FLOODPRONE'),
                 ('affected_value', 'YES'),
-                ('postprocessors', OrderedDict([('BuildingType',
-                                                 building_type_postprocessor())
-                ]))])
+                ('postprocessors', OrderedDict([
+                    ('BuildingType', building_type_postprocessor())
+                ]))
+            ])
         }
         return dict_meta
