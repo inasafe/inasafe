@@ -35,6 +35,11 @@ import qgis  # pylint: disable=unused-import
 from PyQt4.QtGui import QLineEdit, QCheckBox
 
 from safe.test.utilities import get_qgis_app
+from safe.defaults import (
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector
+    )
 from safe.common.resource_parameter import ResourceParameter
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
@@ -70,17 +75,11 @@ class FunctionOptionsDialogTest(unittest.TestCase):
 
         parameter = {
             'thresholds': [1.0],
-            'postprocessors': {
-                'Gender': {'on': True},
-                'Age': {
-                    'on': True,
-                    'params': {
-                        'youth_ratio': 0.263,
-                        'elderly_ratio': 0.078,
-                        'adult_ratio': 0.659
-                    }
-                }
-            },
+            'postprocessors':  OrderedDict([
+                    ('Gender', default_gender_postprocessor()),
+                    ('Age', age_postprocessor()),
+                    ('MinimumNeeds', minimum_needs_selector()),
+                    ]),
             'minimum needs': [rice]
         }
 
