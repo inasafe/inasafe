@@ -174,9 +174,9 @@
                 <inasafe_keywords>
 <![CDATA[category: exposure
 subcategory: road
-field: TYPE
-title: Roads
 source: OpenStreetMap - www.openstreetmap.org
+title: Roads
+field: TYPE
 unit: road_type
 ]]>
 </inasafe_keywords>

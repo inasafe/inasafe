@@ -17,33 +17,31 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
-    .impact_function import ITBFatalityFunction
-from safe.test.utilities import test_data_path
+from safe.impact_functions.earthquake.pager_earthquake_fatality_model\
+    .impact_function import PAGFatalityFunction
+from safe.test.utilities import test_data_path, get_qgis_app, clip_layers
 from safe.storage.core import read_layer
-from safe.test.utilities import get_qgis_app, clip_layers
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestITBEarthquakeFatalityFunction(unittest.TestCase):
-    """Test for Earthquake on Population Impact Function."""
+class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
+    """Test for Pager Earthquake on Population Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(ITBFatalityFunction)
+        registry.register(PAGFatalityFunction)
 
     def test_run(self):
-        """TestITEarthquakeFatalityFunction: Test running the IF."""
+        """TestPagerEarthquakeFatalityFunction: Test running the IF."""
         eq_path = test_data_path('hazard', 'earthquake.tif')
         population_path = test_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         # For EQ on Pops we need to clip the hazard and exposure first to the
-        # same dimension
-        clipped_hazard, clipped_exposure = clip_layers(
-            eq_path, population_path)
+        #  same dimension
+        clipped_hazard, clipped_exposure = clip_layers(eq_path,population_path)
 
         # noinspection PyUnresolvedReferences
         eq_layer = read_layer(
@@ -52,36 +50,43 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         population_layer = read_layer(
             str(clipped_exposure.source()))
 
-        impact_function = ITBFatalityFunction.instance()
+        impact_function = PAGFatalityFunction.instance()
         impact_function.hazard = eq_layer
         impact_function.exposure = population_layer
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
         expected_question = ('In the event of earthquake how many '
-                             'population might die or be displaced')
+                             'population might die or be displaced according '
+                             'pager model')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)
-        # Count by hand,
-        # 1 = low, 2 = medium, 3 = high
+
         expected_exposed_per_mmi = {
-            2: 0,
-            3: 0,
-            4: 0,
-            5: 0,
-            6: 0,
-            7: 0,
-            8: 200,
-            9: 0
-        }
+            2.0: 0,
+            2.5: 0,
+            3.0: 0,
+            3.5: 0,
+            4.0: 0,
+            4.5: 0,
+            5.0: 0,
+            5.5: 0,
+            6.5: 0,
+            6.0: 0,
+            7.0: 0,
+            7.5: 60,
+            8.0: 140,
+            8.5: 0,
+            9.0: 0,
+            9.5: 0}
         result = impact_layer.get_keywords('exposed_per_mmi')
 
         message = 'Expecting %s, but it returns %s' % (expected_exposed_per_mmi, result)
         self.assertEqual(expected_exposed_per_mmi, result, message)
 
     def test_filter(self):
-        """TestITEarthquakeFatalityFunction: Test filtering IF"""
+        """TestPagerEarthquakeFatalityFunction: Test filtering IF"""
         hazard_keywords = {
             'category': 'hazard',
             'subcategory': 'earthquake',
@@ -105,7 +110,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
 
         retrieved_if = impact_functions[0].metadata().as_dict()['id']
         expected = ImpactFunctionManager().get_function_id(
-            ITBFatalityFunction)
+            PAGFatalityFunction)
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
