@@ -70,15 +70,11 @@ class KeywordsDialogTest(unittest.TestCase):
     def setUp(self):
         """Create fresh dialog for each test."""
         IFACE.setActiveLayer(None)
-        import pydevd
-        pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
         buildings_layer = test_data_path(
             'exposure', 'people_in_buildings_buildings.shp')
-        load_layer(buildings_layer)
         census_layer = test_data_path(
             'exposure', 'people_in_buildings_census.shp')
-        print load_layer(census_layer)
-        print [l for l in QgsMapLayerRegistry.instance().mapLayers()]
+        load_layers([census_layer, buildings_layer])
         self.dialog = PeopleInBuildingsDialog(IFACE, PARENT)
 
     def tearDown(self):
@@ -94,19 +90,52 @@ class KeywordsDialogTest(unittest.TestCase):
         items = [combo_box.itemText(i) for i in range(combo_box.count())]
         return items
 
+    def _load_building_layer_details(self):
+        """Load the buildings layer deatils"""
+        buildings_combo = self.dialog.buildingLayerComboBox
+        items = self._get_combobox_content(buildings_combo)
+        buildings_name = 'people_in_buildings_buildings'
+        buildings_combo.setCurrentIndex(items.index(buildings_name))
+
+    def _load_buildings_attributes(self):
+        """Load the building layer attributes"""
+        usage_column = self.dialog.usageColumnComboBox
+        usage_name = 'TYPE'
+        levels_column = self.dialog.levelsColumnComboBox
+        levels_name = 'LEVELS'
+
     def test_0001_load_layer(self):
-        """
-        :return:
+        """Test that the correct layers are available to the UI.
         """
         self.dialog.load_layers_into_combo_box()
-        print self._get_combobox_content(self.dialog.buildingLayerComboBox)
-        print self._get_combobox_content(self.dialog.censusLayerComboBox)
+        buildings_options = self._get_combobox_content(
+            self.dialog.buildingLayerComboBox)
+        population_options =  self._get_combobox_content(
+            self.dialog.censusLayerComboBox)
+        buildings_name = 'people_in_buildings_buildings'
+        population_name = 'people_in_buildings_census'
+        message = (
+            'The buildings layer %s has not been loaded into the people '
+            'in buildings dialog' % buildings_name)
+        self.assertIn(buildings_name, buildings_options, message)
+        message = (
+            'The population layer %s has not been loaded into the people '
+            'in buildings dialog' % population_name)
+        self.assertIn(population_name, population_options, message)
+        message = 'The layers in the layer dropdowns should be equal'
+        self.assertItemsEqual(buildings_options, population_options, message)
 
     def test_0002_add_attributes_to_buildings_layer(self):
         """Ensure the people attributes are being assigned to buildings layer.
-        :return:
         """
-        self.dialog.load_layers_into_combo_box()
+        self._load_building_layer_details()
+        buildings_name = 'people_in_buildings_buildings'
+        buildings_combo = self.dialog.buildingLayerComboBox
+        buildings_text = buildings_combo.getCurrentText()
+        message = 'The buildings layer was not selected.'
+        self.assertEqual(buildings_name, buildings_text, message)
+
+        self._load_buildings_attbributes()
 
 
 if __name__ == '__main__':

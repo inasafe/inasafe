@@ -57,9 +57,9 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
 
         self.load_layers_into_combo_box()
 
-        self.buildingLayerComboBox.activated['QString'].connect(
+        self.buildingLayerComboBox.currentIndexChanged['QString'].connect(
             self.handle_building_layer)
-        self.censusLayerComboBox.activated['QString'].connect(
+        self.censusLayerComboBox.currentIndexChanged['QString'].connect(
             self.handle_census_layer)
 
         self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(
