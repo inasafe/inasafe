@@ -7,7 +7,6 @@
      (at your option) any later version.
 
 """
-
 __author__ = 'lucernae'
 __date__ = '24/03/15'
 __revision__ = '$Format:%H$'

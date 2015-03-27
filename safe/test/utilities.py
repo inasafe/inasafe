@@ -29,6 +29,8 @@ from safe.impact_functions import register_impact_functions
 from safe.utilities.utilities import read_file_keywords
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
+from safe.utilities.clipper import extent_to_geoarray, clip_layer
+from safe.utilities.gis import get_wgs84_resolution
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -923,6 +925,7 @@ def load_standard_layers(dock=None):
         test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
         test_data_path('hazard', 'classified_flood_20_20.asc'),
         test_data_path('hazard', 'continuous_flood_20_20.asc'),
+        test_data_path('hazard', 'tsunami_wgs84.tif'),
         test_data_path('hazard', 'earthquake.tif'),
         test_data_path('boundaries', 'district_osm_jakarta.shp'),
     ]
@@ -935,6 +938,43 @@ def load_standard_layers(dock=None):
         raise Exception('Loading standard layers failed.')
 
     return hazard_layer_count, exposure_layer_count
+
+
+def compare_wkt(a, b, tol=0.000001):
+    """Helper function to compare WKT geometries with given tolerance
+    Taken from QGIS test suite
+
+    :param a: Input WKT geometry
+    :type a: str
+
+    :param b: Expected WKT geometry
+    :type b: str
+
+    :param tol: compare tolerance
+    :type tol: float
+
+    :return: True on success, False on failure
+    :rtype: bool
+    """
+    r = re.compile(r'-?\d+(?:\.\d+)?(?:[eE]\d+)?')
+
+    # compare the structure
+    a0 = r.sub("#", a)
+    b0 = r.sub("#", b)
+    if a0 != b0:
+        return False
+
+    # compare the numbers with given tolerance
+    a0 = r.findall(a)
+    b0 = r.findall(b)
+    if len(a0) != len(b0):
+        return False
+
+    for (a1, b1) in izip(a0, b0):
+        if abs(float(a1) - float(b1)) > tol:
+            return False
+
+    return True
 
 
 def load_layers(
@@ -985,43 +1025,6 @@ def load_layers(
 
     # Add MCL's to the CANVAS
     return hazard_layer_count, exposure_layer_count
-
-
-def compare_wkt(a, b, tol=0.000001):
-    """Helper function to compare WKT geometries with given tolerance
-    Taken from QGIS test suite
-
-    :param a: Input WKT geometry
-    :type a: str
-
-    :param b: Expected WKT geometry
-    :type b: str
-
-    :param tol: compare tolerance
-    :type tol: float
-
-    :return: True on success, False on failure
-    :rtype: bool
-    """
-    r = re.compile(r'-?\d+(?:\.\d+)?(?:[eE]\d+)?')
-
-    # compare the structure
-    a0 = r.sub("#", a)
-    b0 = r.sub("#", b)
-    if a0 != b0:
-        return False
-
-    # compare the numbers with given tolerance
-    a0 = r.findall(a)
-    b0 = r.findall(b)
-    if len(a0) != len(b0):
-        return False
-
-    for (a1, b1) in izip(a0, b0):
-        if abs(float(a1) - float(b1)) > tol:
-            return False
-
-    return True
 
 
 def clone_shp_layer(
@@ -1138,3 +1141,52 @@ class FakeLayer(object):
         :return: sources
         """
         return self.layer_source
+
+
+def clip_layers(first_layer_path, second_layer_path):
+    """Clip and resample layers with the reference to the first layer.
+
+    :param first_layer_path: Path to the first layer path.
+    :type first_layer_path: str
+
+    :param second_layer_path: Path to the second layer path.
+    :type second_layer_path: str
+
+    :return: Path to the clipped datasets (clipped 1st layer, clipped 2nd
+        layer).
+    :rtype: tuple(str, str)
+
+    :raise
+        FileNotFoundError
+    """
+    base_name, _ = os.path.splitext(first_layer_path)
+    # noinspection PyCallingNonCallable
+    first_layer = QgsRasterLayer(first_layer_path, base_name)
+    base_name, _ = os.path.splitext(second_layer_path)
+    # noinspection PyCallingNonCallable
+    second_layer = QgsRasterLayer(second_layer_path, base_name)
+
+    # Get the firs_layer extents as an array in EPSG:4326
+    first_layer_geo_extent = extent_to_geoarray(
+        first_layer.extent(),
+        first_layer.crs())
+
+    first_layer_geo_cell_size, _ = get_wgs84_resolution(first_layer)
+    second_layer_geo_cell_size, _ = get_wgs84_resolution(second_layer)
+
+    if first_layer_geo_cell_size < second_layer_geo_cell_size:
+        cell_size = first_layer_geo_cell_size
+    else:
+        cell_size = second_layer_geo_cell_size
+
+    clipped_first_layer = clip_layer(
+        layer=first_layer,
+        extent=first_layer_geo_extent,
+        cell_size=cell_size)
+
+    clipped_second_layer = clip_layer(
+        layer=second_layer,
+        extent=first_layer_geo_extent,
+        cell_size=cell_size)
+
+    return clipped_first_layer, clipped_second_layer
