@@ -40,108 +40,144 @@
      <property name="flat">
       <bool>true</bool>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="2">
-       <widget class="QDoubleSpinBox" name="x_maximum">
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::NoButtons</enum>
-        </property>
-        <property name="prefix">
-         <string>West: </string>
-        </property>
-        <property name="decimals">
-         <number>7</number>
-        </property>
-        <property name="minimum">
-         <double>-999999999.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>999999999.000000000000000</double>
-        </property>
-       </widget>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QCheckBox" name="checkBox_use_bookmark">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Use a bookmark</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBox_bookmarks_list">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
-      <item row="2" column="1">
-       <widget class="QDoubleSpinBox" name="y_minimum">
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
+      <item>
+       <widget class="QGroupBox" name="groupBox_coordinates">
+        <property name="title">
+         <string/>
         </property>
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::NoButtons</enum>
+        <property name="flat">
+         <bool>true</bool>
         </property>
-        <property name="prefix">
-         <string>South: </string>
-        </property>
-        <property name="decimals">
-         <number>7</number>
-        </property>
-        <property name="minimum">
-         <double>-999999999.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>999999999.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QDoubleSpinBox" name="x_minimum">
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::NoButtons</enum>
-        </property>
-        <property name="prefix">
-         <string>East: </string>
-        </property>
-        <property name="decimals">
-         <number>7</number>
-        </property>
-        <property name="minimum">
-         <double>-999999999.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>999999999.000000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QPushButton" name="capture_button">
-        <property name="text">
-         <string>Select on map</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="y_maximum">
-        <property name="font">
-         <font>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::NoButtons</enum>
-        </property>
-        <property name="prefix">
-         <string>North: </string>
-        </property>
-        <property name="decimals">
-         <number>7</number>
-        </property>
-        <property name="minimum">
-         <double>-999999999.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>999999999.000000000000000</double>
-        </property>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="1" column="1">
+          <widget class="QPushButton" name="capture_button">
+           <property name="text">
+            <string>Select on map</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDoubleSpinBox" name="y_maximum">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="prefix">
+            <string>North: </string>
+           </property>
+           <property name="decimals">
+            <number>7</number>
+           </property>
+           <property name="minimum">
+            <double>-999999999.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999999999.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QDoubleSpinBox" name="x_minimum">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="prefix">
+            <string>East: </string>
+           </property>
+           <property name="decimals">
+            <number>7</number>
+           </property>
+           <property name="minimum">
+            <double>-999999999.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999999999.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QDoubleSpinBox" name="x_maximum">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="prefix">
+            <string>West: </string>
+           </property>
+           <property name="decimals">
+            <number>7</number>
+           </property>
+           <property name="minimum">
+            <double>-999999999.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999999999.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QDoubleSpinBox" name="y_minimum">
+           <property name="font">
+            <font>
+             <pointsize>9</pointsize>
+            </font>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="prefix">
+            <string>South: </string>
+           </property>
+           <property name="decimals">
+            <number>7</number>
+           </property>
+           <property name="minimum">
+            <double>-999999999.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999999999.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
@@ -173,15 +209,27 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>x_minimum</tabstop>
-  <tabstop>y_maximum</tabstop>
-  <tabstop>x_maximum</tabstop>
-  <tabstop>y_minimum</tabstop>
-  <tabstop>capture_button</tabstop>
   <tabstop>button_box</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>checkBox_use_bookmark</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>comboBox_bookmarks_list</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>68</x>
+     <y>239</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>279</x>
+     <y>238</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
