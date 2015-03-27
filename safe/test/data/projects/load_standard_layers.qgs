@@ -3,34 +3,34 @@
   <title></title>
   <layer-tree-group expanded="1" checked="Qt::Checked" name="">
     <customproperties/>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="buildings20150326221224011" name="Buildings">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="buildings20150327135220314" name="Buildings">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="volcano_point20150326221224030" name="Volcano Point">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="volcano_point20150327135220379" name="Volcano Point">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="roads20150326221224038" name="Roads">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="roads20150327135220389" name="Roads">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="flood_multipart_polygons20150326221224060" name="Flood Polygon">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="flood_multipart_polygons20150327135220416" name="Flood Polygon">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="volcano_krb20150326221224069" name="Volcano KRB">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="volcano_krb20150327135220425" name="Volcano KRB">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="0" checked="Qt::Checked" id="pop_binary_raster_20_2020150326221224087" name="Population">
+    <layer-tree-layer expanded="0" checked="Qt::Checked" id="pop_binary_raster_20_2020150327135220446" name="Population">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="0" checked="Qt::Checked" id="classified_flood_20_2020150326221224106" name="Classified Flood">
+    <layer-tree-layer expanded="0" checked="Qt::Checked" id="classified_flood_20_2020150327135220469" name="Classified Flood">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="0" checked="Qt::Checked" id="continuous_flood_20_2020150326221224125" name="Continuous Flood">
+    <layer-tree-layer expanded="0" checked="Qt::Checked" id="continuous_flood_20_2020150327135220491" name="Continuous Flood">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="earthquake20150326221224144" name="Earthquake">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="earthquake20150327135220517" name="Earthquake">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="district_osm_jakarta20150326221224155" name="Dístríct's of Jakarta">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="district_osm_jakarta20150327135220528" name="Dístríct's of Jakarta">
       <customproperties/>
     </layer-tree-layer>
   </layer-tree-group>
@@ -38,10 +38,10 @@
   <mapcanvas>
     <units>degrees</units>
     <extent>
-      <xmin>106.79943797970292962</xmin>
-      <ymin>-6.19970417559904874</ymin>
-      <xmax>106.83891616064579466</xmax>
-      <ymax>-6.16898031138471836</ymax>
+      <xmin>106.8394405288499911</xmin>
+      <ymin>-6.34204664519999994</ymin>
+      <xmax>107.31193863885005157</xmax>
+      <ymax>-6.02704790519999989</ymax>
     </extent>
     <rotation>0</rotation>
     <projections>1</projections>
@@ -58,142 +58,157 @@
       </spatialrefsys>
     </destinationsrs>
     <layer_coordinate_transform_info>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_Jakarta_geographic20150326002223631"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="penduduk_jawa20141129151756563"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="volcano_point20150326221224030"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="continuous_flood_20_2020150326221224125"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32748" srcDatumTransform="-1" destDatumTransform="-1" layerid="tes20141129222937891"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Padang_WGS8420150326002223516"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="kabupaten_jakarta20141129151831282"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Estimated_buildings_affected20141112171654470"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="donut20150326002223810"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="penduduk_jawa20150107171519445"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326221224011"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_which_need_evacuation20150106102115077"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="classified_flood_20_2020150326120858334"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_which_need_evacuation20141218113729128"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326125804166"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326121919673"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Estimated_displaced_population_per_cell20150327133732013"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Estimated_buildings_affected20150327110606693"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20141201111741558"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Merapi_alert20150326002223825"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32748" srcDatumTransform="-1" destDatumTransform="-1" layerid="bangunan_jakarta20141112171644115"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="earthquake20150326221224144"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="continuous_flood_20_2020150326120844873"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326210339335"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326121010860"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Buildings_affected_by_volcanic_hazard_zone20150312151211680"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="eq_yogya_200620150326002223661"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326121642326"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150327135220314"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="volcano_krb20150327135220425"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Estimated_displaced_population_per_cell20150327111827545"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_Jakarta_geographic20150326002223631"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="flood_multipart_polygons20150327135220416"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="OSM_building_polygons_2011090520150326002223719"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Merapi_alert20150326002223825"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="continuous_flood_20_2020150326120844873"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="volcano_krb20150326221224069"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32756" srcDatumTransform="-1" destDatumTransform="-1" layerid="tsunami_max_inundation_depth_utm56s20150326002223569"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="DKI_buildings20150326002223742"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="roads20150326121003301"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="clip_eq20150327134834373"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="pop_binary_raster_20_2020150327135220446"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Padang_WGS8420150326002223516"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="continuous_flood_20_2020150327135220491"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="kabupaten_jakarta20141129223723174"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150107171505952"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="district_osm_jakarta20150327135220528"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="roads_Maumere20150326002223793"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="eq_jogja20150326120831125"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Shakemap_Padang_200920150326002223544"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_which_be_impacted20150327111800960"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Buildings_affected_by_volcanic_buffered_point20150313112508341"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326125804166"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="tsunami_building_exposure20150326002223590"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="continuous_flood_20_2020150326221224125"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="classified_flood_20_2020150326221224106"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326211914669"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Estimated_buildings_affected20141112171654470"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326221224011"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="flood_multipart_polygons20150326120807050"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Jakarta_RW_2007flood20150326002223690"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="roads20150326121003301"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="glp10ag20150326002223528"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="roads_Maumere20150326002223793"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="kabupaten_jakarta20141129223723174"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Estimated_buildings_affected20150326125959022"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="eq_jogja20150326120831125"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="DKI_buildings20150326002223742"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="volcano_krb20150326221224069"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="classified_flood_20_2020150326221224106"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="merapi20150107171452995"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="roads20150326221224038"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="district_osm_jakarta20150326221224155"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Flood_Current_Depth_Jakarta_geographic20150326002223603"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="flood_multipart_polygons20150326221224060"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="jakarta_flood_category_12320150326002223761"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="tenbytenraster20150326120722152"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326121919673"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Buildings_affected_by_volcanic_buffered_point20150313112508341"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326121522475"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_which_need_evacuation20150107101503262"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="tsunami_building_exposure20150326002223590"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Shakemap_Padang_200920150326002223544"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Estimated_buildings_affected20150326121927916"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="earthquake20150327135220517"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="merapi_point20150326144917054"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32748" srcDatumTransform="-1" destDatumTransform="-1" layerid="bangunan_jakarta20141112171644115"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Estimated_buildings_affected20150326121927916"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Buildings_affected_by_volcanic_hazard_zone20150312151211680"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="jakarta_flood_category_12320150326002223761"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="binary_raster_20_2020150326120637649"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32748" srcDatumTransform="-1" destDatumTransform="-1" layerid="tes20141129223632791"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32756" srcDatumTransform="-1" destDatumTransform="-1" layerid="tsunami_max_inundation_depth_utm56s20150326002223569"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326120938224"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Banjir_jakarta_200720141112171610871"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="binary_raster_20_2020150326120751625"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="classified_flood_20_2020150326120858334"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="flood_multipart_polygons20150326221224060"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="roads20150326221224038"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="eq_yogya_200620150326002223661"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="merapi_krb20150107171444229"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326211914669"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="district_osm_jakarta20150326221224155"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Estimated_buildings_affected20150326125959022"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326120938224"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="classified_flood_20_2020150327135220469"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="kabupaten_jakarta20141129151831282"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="glp10ag20150326002223528"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="volcano_point20150327135220379"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Flood_Current_Depth_Jakarta_geographic20150326002223603"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_which_need_evacuation20150106102115077"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326210339335"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326121010860"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150326121522475"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="volcano_point20150326221224030"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="tenbytenraster20150326120722152"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_which_need_evacuation20141218113729128"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="merapi20150107171452995"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32748" srcDatumTransform="-1" destDatumTransform="-1" layerid="tes20141129222937891"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="penduduk_jawa20141129151756563"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="merapi_krb20150326144945687"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="penduduk_jawa20150107171519445"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="roads20150327135220389"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="earthquake20150326221224144"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_which_need_evacuation20150107101503262"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="pop_binary_raster_20_2020150326221224087"/>
       <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="kabupaten_jakarta_singlepart20150326002223841"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="merapi_krb20150326144945687"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150107171505952"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Banjir_jakarta_200720141112171610871"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="OSM_building_polygons_2011090520150326002223719"/>
-      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="binary_raster_20_2020150326120751625"/>
     </layer_coordinate_transform_info>
   </mapcanvas>
   <visibility-presets/>
   <layer-tree-canvas>
     <custom-order enabled="0">
-      <item>buildings20150326221224011</item>
-      <item>volcano_point20150326221224030</item>
-      <item>roads20150326221224038</item>
-      <item>flood_multipart_polygons20150326221224060</item>
-      <item>volcano_krb20150326221224069</item>
-      <item>pop_binary_raster_20_2020150326221224087</item>
-      <item>classified_flood_20_2020150326221224106</item>
-      <item>continuous_flood_20_2020150326221224125</item>
-      <item>earthquake20150326221224144</item>
-      <item>district_osm_jakarta20150326221224155</item>
+      <item>buildings20150327135220314</item>
+      <item>volcano_point20150327135220379</item>
+      <item>roads20150327135220389</item>
+      <item>flood_multipart_polygons20150327135220416</item>
+      <item>volcano_krb20150327135220425</item>
+      <item>pop_binary_raster_20_2020150327135220446</item>
+      <item>classified_flood_20_2020150327135220469</item>
+      <item>continuous_flood_20_2020150327135220491</item>
+      <item>earthquake20150327135220517</item>
+      <item>district_osm_jakarta20150327135220528</item>
     </custom-order>
   </layer-tree-canvas>
   <legend updateDrawingOrder="true">
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Buildings" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="buildings20150326221224011" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="buildings20150327135220314" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Volcano Point" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="volcano_point20150326221224030" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="volcano_point20150327135220379" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Roads" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="roads20150326221224038" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="roads20150327135220389" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Flood Polygon" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="flood_multipart_polygons20150326221224060" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="flood_multipart_polygons20150327135220416" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Volcano KRB" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="volcano_krb20150326221224069" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="volcano_krb20150327135220425" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Population" showFeatureCount="0">
       <filegroup open="false" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="pop_binary_raster_20_2020150326221224087" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="pop_binary_raster_20_2020150327135220446" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Classified Flood" showFeatureCount="0">
       <filegroup open="false" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="classified_flood_20_2020150326221224106" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="classified_flood_20_2020150327135220469" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Continuous Flood" showFeatureCount="0">
       <filegroup open="false" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="continuous_flood_20_2020150326221224125" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="continuous_flood_20_2020150327135220491" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Earthquake" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="earthquake20150326221224144" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="earthquake20150327135220517" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Dístríct's of Jakarta" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="district_osm_jakarta20150326221224155" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="district_osm_jakarta20150327135220528" visible="1"/>
       </filegroup>
     </legendlayer>
   </legend>
   <projectlayers layercount="10">
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>buildings20150326221224011</id>
+      <id>buildings20150327135220314</id>
       <datasource>../exposure/buildings.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -440,10 +455,10 @@
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <editform>/home/gisdata/InaSAFEPackages/Jakarta</editform>
+      <editform>/home/akbar/dev/python/inasafe-dev/gisdata/InaSAFEPackages/Jakarta</editform>
       <editforminit/>
       <featformsuppress>0</featformsuppress>
-      <annotationform>/home/gisdata/InaSAFEPackages/Jakarta</annotationform>
+      <annotationform>/home/akbar/dev/python/inasafe-dev/gisdata/InaSAFEPackages/Jakarta</annotationform>
       <editorlayout>generatedlayout</editorlayout>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
@@ -506,7 +521,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
-      <id>classified_flood_20_2020150326221224106</id>
+      <id>classified_flood_20_2020150327135220469</id>
       <datasource>../hazard/classified_flood_20_20.asc</datasource>
       <title></title>
       <abstract></abstract>
@@ -561,7 +576,7 @@
       <blendMode>0</blendMode>
     </maplayer>
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
-      <id>continuous_flood_20_2020150326221224125</id>
+      <id>continuous_flood_20_2020150327135220491</id>
       <datasource>../hazard/continuous_flood_20_20.asc</datasource>
       <title></title>
       <abstract></abstract>
@@ -616,7 +631,7 @@
       <blendMode>0</blendMode>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="1" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>district_osm_jakarta20150326221224155</id>
+      <id>district_osm_jakarta20150327135220528</id>
       <datasource>../boundaries/district_osm_jakarta.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -704,10 +719,10 @@
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <editform>../../../../../../../Documents/InaSAFE scenario/QGS Project</editform>
+      <editform>.</editform>
       <editforminit/>
       <featformsuppress>0</featformsuppress>
-      <annotationform>../../../../../../../Documents/InaSAFE scenario/QGS Project</annotationform>
+      <annotationform>.</annotationform>
       <editorlayout>generatedlayout</editorlayout>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
@@ -728,7 +743,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
-      <id>earthquake20150326221224144</id>
+      <id>earthquake20150327135220517</id>
       <datasource>../hazard/earthquake.tif</datasource>
       <title></title>
       <abstract></abstract>
@@ -774,7 +789,7 @@
       <blendMode>0</blendMode>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>flood_multipart_polygons20150326221224060</id>
+      <id>flood_multipart_polygons20150327135220416</id>
       <datasource>../hazard/flood_multipart_polygons.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -826,7 +841,7 @@
           <symbol alpha="1" type="fill" name="0">
             <layer pass="0" class="SimpleFill" locked="0">
               <prop k="border_width_map_unit_scale" v="0,0"/>
-              <prop k="color" v="142,57,92,255"/>
+              <prop k="color" v="71,134,211,255"/>
               <prop k="joinstyle" v="bevel"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0"/>
@@ -898,7 +913,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
-      <id>pop_binary_raster_20_2020150326221224087</id>
+      <id>pop_binary_raster_20_2020150327135220446</id>
       <datasource>../exposure/pop_binary_raster_20_20.asc</datasource>
       <title></title>
       <abstract></abstract>
@@ -953,7 +968,7 @@
       <blendMode>0</blendMode>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>roads20150326221224038</id>
+      <id>roads20150327135220389</id>
       <datasource>../exposure/roads.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -992,26 +1007,26 @@
         </edittype>
       </edittypes>
       <renderer-v2 symbollevels="0" type="RuleRenderer">
-        <rules key="{e5cb6d97-1886-4851-9c02-babbc718140f}">
-          <rule scalemaxdenom="25000" key="{c1591d0c-5255-43b9-874c-823279a4dafb}" scalemindenom="1" label="1:25000">
-            <rule filter="&quot;TYPE&quot; = 'Motorway or highway'" key="{a37358fe-a396-4fd6-8ff6-969fb1e4c1e2}" symbol="0" label="Motorway or highway"/>
-            <rule filter="&quot;TYPE&quot; = 'Motorway link'" key="{7e5b76dd-e62b-4b1c-9d28-8b80df065e0e}" symbol="1" label="Motorway Link"/>
-            <rule filter="&quot;TYPE&quot; = 'Primary road'" key="{80685c84-e830-45eb-8622-d32634d623dd}" symbol="2" label="Primary road"/>
-            <rule filter="&quot;TYPE&quot; = 'Primary link'" key="{11066421-18bd-4ccd-9291-473b32e920d8}" symbol="3" label="Primary link"/>
-            <rule filter="&quot;TYPE&quot; = 'Tertiary'" key="{b818327a-76fa-4ba3-8d3c-e9ca28ff0444}" symbol="4" label="Tertiary"/>
-            <rule filter="&quot;TYPE&quot; = 'Tertiary link'" key="{ebecc387-1e78-4264-9340-c0e0edd82d10}" symbol="5" label="Tertiary link"/>
-            <rule filter="&quot;TYPE&quot; = 'Secondary'" key="{4875fbb5-9532-46ca-b51d-6496c3077240}" symbol="6" label="Secondary"/>
-            <rule filter="&quot;TYPE&quot; = 'Secondary link'" key="{2e9b40dc-7eca-4d0f-b199-8552d7ed2b82}" symbol="7" label="Secondary link"/>
-            <rule filter="&quot;TYPE&quot; = 'Road, residential, living street, etc.'" key="{0855e3ae-3ddd-4813-a9e3-2d3027f41749}" symbol="8" label="Road, residential, living street, etc."/>
-            <rule filter="&quot;TYPE&quot; = 'Track'" key="{9003bdd2-df32-46bb-93f3-ca4e984377e5}" symbol="9" label="Track"/>
-            <rule filter="&quot;TYPE&quot; = 'Cycleway, footpath, etc.'" key="{a01514a1-0cd5-4cc0-9097-5891a5f2fed3}" symbol="10" label="Cycleway, footpath etc."/>
+        <rules key="{8d1020e0-fd8d-4b9b-a7d2-2af6e5ff183e}">
+          <rule scalemaxdenom="25000" key="{938efcf2-31b3-406c-9c67-bcf6d03fff07}" scalemindenom="1" label="1:25000">
+            <rule filter="&quot;TYPE&quot; = 'Motorway or highway'" key="{7ff08286-2fdf-445f-a32e-fc1bfd0ce4de}" symbol="0" label="Motorway or highway"/>
+            <rule filter="&quot;TYPE&quot; = 'Motorway link'" key="{6a67572a-5cd7-48ef-bf78-f6f438ab0b9f}" symbol="1" label="Motorway Link"/>
+            <rule filter="&quot;TYPE&quot; = 'Primary road'" key="{62a4c2b6-ba65-4116-b7c9-ef4c66f80ce9}" symbol="2" label="Primary road"/>
+            <rule filter="&quot;TYPE&quot; = 'Primary link'" key="{b5ad6cfe-e5f0-4812-a3db-0d746abbaab7}" symbol="3" label="Primary link"/>
+            <rule filter="&quot;TYPE&quot; = 'Tertiary'" key="{62a0b3ca-f5a6-4c3e-8b6e-149fafb9fbc3}" symbol="4" label="Tertiary"/>
+            <rule filter="&quot;TYPE&quot; = 'Tertiary link'" key="{c1b290be-656a-4c53-af2f-58793c0eaf3e}" symbol="5" label="Tertiary link"/>
+            <rule filter="&quot;TYPE&quot; = 'Secondary'" key="{adbd5161-48c3-4779-b324-3044badc802e}" symbol="6" label="Secondary"/>
+            <rule filter="&quot;TYPE&quot; = 'Secondary link'" key="{1ac5b5ff-4385-44a1-8f53-d2c96c0d8873}" symbol="7" label="Secondary link"/>
+            <rule filter="&quot;TYPE&quot; = 'Road, residential, living street, etc.'" key="{527a23a3-a717-4610-993a-dea1e61c2f84}" symbol="8" label="Road, residential, living street, etc."/>
+            <rule filter="&quot;TYPE&quot; = 'Track'" key="{43eaa783-a3cd-4f42-9e6d-d66afae4aaad}" symbol="9" label="Track"/>
+            <rule filter="&quot;TYPE&quot; = 'Cycleway, footpath, etc.'" key="{09890d41-ed12-4458-8a99-40ec598cd6d4}" symbol="10" label="Cycleway, footpath etc."/>
           </rule>
-          <rule scalemaxdenom="50000" key="{beb763b9-7981-4617-948b-e50137048c5b}" symbol="11" scalemindenom="25001" label="25k to 50k">
-            <rule filter=" &quot;TYPE&quot;  =  'Motorway or highway'" key="{71b89b3f-ea76-4efd-a485-98d078de9b66}" symbol="12" label="Motorway or highway"/>
-            <rule filter="&quot;TYPE&quot; = 'Primary road'" key="{b84a8462-1676-4562-8fb5-90b22a5ea060}" symbol="13" label="Primary"/>
+          <rule scalemaxdenom="50000" key="{683c5451-1b0c-4cfe-8f09-ee4c45aaf35d}" symbol="11" scalemindenom="25001" label="25k to 50k">
+            <rule filter=" &quot;TYPE&quot;  =  'Motorway or highway'" key="{1a7635fb-2dd9-42aa-b605-a4b176d5f964}" symbol="12" label="Motorway or highway"/>
+            <rule filter="&quot;TYPE&quot; = 'Primary road'" key="{71d29c4b-b277-43e5-80fb-a73c8005ea9b}" symbol="13" label="Primary"/>
           </rule>
-          <rule scalemaxdenom="10000000" key="{2b3f085f-e847-4304-a562-fdcf999f0de3}" symbol="14" scalemindenom="50001" label="50k +">
-            <rule filter=" &quot;TYPE&quot;  =  'Motorway or highway' " key="{1df79ae4-4419-4eab-8f39-fa326f2f8d5b}" symbol="15" label="Motorway or highway"/>
+          <rule scalemaxdenom="10000000" key="{f6759ca6-a52d-4351-b3c0-b5cf5c105b30}" symbol="14" scalemindenom="50001" label="50k +">
+            <rule filter=" &quot;TYPE&quot;  =  'Motorway or highway' " key="{ff105745-e59c-4ec5-be1d-af9c0a9976db}" symbol="15" label="Motorway or highway"/>
           </rule>
         </rules>
         <symbols>
@@ -1740,7 +1755,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="1" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>volcano_krb20150326221224069</id>
+      <id>volcano_krb20150327135220425</id>
       <datasource>../hazard/volcano_krb.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -1884,10 +1899,10 @@
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <editform>../../../../../../../Documents/InaSAFE scenario/QGS Project</editform>
+      <editform>.</editform>
       <editforminit/>
       <featformsuppress>0</featformsuppress>
-      <annotationform>../../../../../../../Documents/InaSAFE scenario/QGS Project</annotationform>
+      <annotationform>.</annotationform>
       <editorlayout>generatedlayout</editorlayout>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
@@ -1905,7 +1920,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>volcano_point20150326221224030</id>
+      <id>volcano_point20150327135220379</id>
       <datasource>../hazard/volcano_point.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -1981,7 +1996,7 @@
           <symbol alpha="1" type="marker" name="0">
             <layer pass="0" class="SimpleMarker" locked="0">
               <prop k="angle" v="0"/>
-              <prop k="color" v="219,159,5,255"/>
+              <prop k="color" v="216,181,53,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
               <prop k="name" v="circle"/>
               <prop k="offset" v="0,0"/>

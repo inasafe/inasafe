@@ -41,7 +41,7 @@
         </gmd:CI_ResponsibleParty>
     </gmd:contact>
     <gmd:dateStamp>
-        <gco:Date>2015-03-26</gco:Date>
+        <gco:Date>2015-03-27</gco:Date>
     </gmd:dateStamp>
     <gmd:metadataStandardName>
         <gco:CharacterString>ISO19115</gco:CharacterString>
@@ -63,7 +63,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2015-03-26</gco:Date>
+                                <gco:Date>2015-03-27</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication
@@ -74,7 +74,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2015-03-26</gco:Date>
+                                <gco:Date>2015-03-27</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision">revision
@@ -85,7 +85,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2015-03-26</gco:Date>
+                                <gco:Date>2015-03-27</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation
@@ -176,7 +176,6 @@
 subcategory: earthquake
 data_type: continuous
 title: Earthquake
-source: Earthquake Jogja Clip and Reposition
 unit: mmi
 ]]>
 </inasafe_keywords>
@@ -228,7 +227,7 @@ unit: mmi
                                     <gmd:date>
                                         <gmd:CI_Date>
                                             <gmd:date>
-                                                <gco:Date>2015-03-26</gco:Date>
+                                                <gco:Date>2015-03-27</gco:Date>
                                             </gmd:date>
                                             <gmd:dateType>
                                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">
