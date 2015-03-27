@@ -30,7 +30,7 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, pyqtSignal
 
-from safe.engine.core import calculate_impact as calculate_safe_impact
+from safe.engine.core import calculate_impact
 from safe.common.exceptions import InsufficientParametersError
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -77,7 +77,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
     def __init__(self,
                  hazard_layer,
                  exposure_layer,
-                 function,
+                 impact_function,
                  extent=None,
                  check_integrity=True):
         """Constructor for the impact calculator thread.
@@ -88,9 +88,8 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         :param exposure_layer: read_layer object containing the Exposure data.
         :type exposure_layer: read_layer
 
-        :param function: Function that defines how the Hazard assessment
-            will be computed.
-        :type function: FunctionProvider
+        :param impact_function: An instance of impact function.
+        :type impact_function: safe.impact_function.base.ImpactFunction
 
         :param extent: Bounding box [xmin, ymin, xmax, ymax] of the working
             region.
@@ -104,11 +103,11 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         """
         threading.Thread.__init__(self)
         QObject.__init__(self)
-        self._hazardLayer = hazard_layer
-        self._exposureLayer = exposure_layer
-        self._function = function
+        self._hazard_layer = hazard_layer
+        self._exposure_layer = exposure_layer
+        self._impact_function = impact_function
         self._extent = extent
-        self._impactLayer = None
+        self._impact_layer = None
         self._result = None
         self._exception = None
         self._traceback = None
@@ -120,7 +119,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         :returns: An impact layer.
         :rtype: read_layer
         """
-        return self._impactLayer
+        return self._impact_layer
 
     def result(self):
         """Return the result of the last run.
@@ -173,18 +172,18 @@ class ImpactCalculatorThread(threading.Thread, QObject):
 
         .. note:: a done signal is emitted when the analysis is complete.
         """
-        if (self._hazardLayer is None) or \
-                (self._exposureLayer is None) or \
-                (self._function is None):
+        if (self._hazard_layer is None) or \
+                (self._exposure_layer is None) or \
+                (self._impact_function is None):
             message = self.tr(
                 'Ensure that hazard, exposure and function are all set before '
                 'trying to run the analysis.')
             raise InsufficientParametersError(message)
         try:
-            layers = [self._hazardLayer, self._exposureLayer]
-            self._impactLayer = calculate_safe_impact(
+            layers = [self._hazard_layer, self._exposure_layer]
+            self._impact_layer = calculate_impact(
                 layers=layers,
-                impact_fcn=self._function,
+                impact_function=self._impact_function,
                 extent=self._extent,
                 check_integrity=self._check_integrity)
         except MemoryError, e:

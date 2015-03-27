@@ -57,7 +57,6 @@ class Qt4ParameterFactory(object):
             IntegerParameterWidget, StringParameterWidget
         """
         class_name = parameter.__class__.__name__
-
         if class_name in self.dict_widget.keys():
             return self.dict_widget[class_name](parameter)
         else:

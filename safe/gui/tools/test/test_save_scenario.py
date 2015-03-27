@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.utilities.gis import qgis_version
-
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '25/02/2014'
@@ -24,6 +22,8 @@ import unittest
 
 from qgis.core import QgsMapLayerRegistry
 
+from safe.impact_functions import register_impact_functions
+from safe.utilities.gis import qgis_version
 from safe.gui.tools.save_scenario import SaveScenarioDialog
 from safe.test.utilities import (
     setup_scenario,
@@ -32,8 +32,9 @@ from safe.test.utilities import (
     load_standard_layers,
     GEOCRS,
     get_qgis_app,
-    TESTDATA)
+    TESTDATA, test_data_path)
 from safe.common.utilities import unique_filename, temp_dir
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.widgets.dock
@@ -65,6 +66,9 @@ class SaveScenarioTest(unittest.TestCase):
 
         # Create scenario dialog
         self.save_scenario_dialog = SaveScenarioDialog(IFACE, DOCK)
+        # register impact functions
+        register_impact_functions()
+        self.impact_function_manager = ImpactFunctionManager()
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -81,10 +85,10 @@ class SaveScenarioTest(unittest.TestCase):
         # Valid Case
         result, message = setup_scenario(
             DOCK,
-            hazard='Classified Flood in Jakarta',
-            exposure='Penduduk Jakarta',
+            hazard='Classified Flood',
+            exposure='Population',
             function='Be affected by each hazard class',
-            function_id='Classified Hazard Population Impact Function')
+            function_id='ClassifiedHazardPopulationFunction')
         self.assertTrue(result, message)
         is_valid, message = self.save_scenario_dialog.validate_input()
         self.assertTrue(is_valid)
@@ -100,10 +104,10 @@ class SaveScenarioTest(unittest.TestCase):
         """Test saving Current scenario."""
         result, message = setup_scenario(
             DOCK,
-            hazard='Classified Flood in Jakarta',
-            exposure='Penduduk Jakarta',
+            hazard='Classified Flood',
+            exposure='Population',
             function='Be affected by each hazard class',
-            function_id='Classified Hazard Population Impact Function')
+            function_id='ClassifiedHazardPopulationFunction')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -127,19 +131,19 @@ class SaveScenarioTest(unittest.TestCase):
             os.path.exists(scenario_file),
             'File %s does not exist' % scenario_file)
         self.assertTrue(
-            title == '[Classified Flood in Jakarta]',
+            title == '[Classified Flood]',
             'Title is not the same')
         self.assertTrue(
             exposure.startswith('exposure =') and exposure.endswith(
-                'Population_Jakarta_geographic.asc'),
+                'pop_binary_raster_20_20.asc'),
             'Exposure is not the same')
         self.assertTrue(
             hazard.startswith('hazard =') and hazard.endswith(
-                'jakarta_flood_category_123.asc'),
+                'classified_flood_20_20.asc'),
             'Hazard is not the same')
         self.assertTrue(
             function == (
-                'function = Classified Hazard Population Impact Function'),
+                'function = ClassifiedHazardPopulationFunction'),
             'Impact function is not same')
 
         # TODO: figure out why this changed between releases
@@ -159,12 +163,12 @@ class SaveScenarioTest(unittest.TestCase):
         """
         result, message = setup_scenario(
             DOCK,
-            hazard='Classified Flood in Jakarta',
-            exposure='Penduduk Jakarta',
+            hazard='Classified Flood',
+            exposure='Population',
             function='Be affected by each hazard class',
-            function_id='Classified Hazard Population Impact Function')
+            function_id='ClassifiedHazardPopulationFunction')
         self.assertTrue(result, message)
-        fake_dir = os.path.dirname(TESTDATA)
+        fake_dir = test_data_path()
         scenario_file = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=fake_dir)
         exposure_layer = str(DOCK.get_exposure_layer().publicSource())
@@ -178,16 +182,16 @@ class SaveScenarioTest(unittest.TestCase):
         if 'win32' in sys.platform:
             # windows
             self.assertEqual(
-                'test\\Population_Jakarta_geographic.asc',
+                'exposure\\pop_binary_raster_20_20.asc',
                 relative_exposure)
             self.assertEqual(
-                'hazard\\jakarta_flood_category_123.asc',
+                'hazard\\classified_flood_20_20.asc',
                 relative_hazard)
 
         else:
             self.assertEqual(
-                'test/Population_Jakarta_geographic.asc',
+                'exposure/pop_binary_raster_20_20.asc',
                 relative_exposure)
             self.assertEqual(
-                'hazard/jakarta_flood_category_123.asc',
+                'hazard/classified_flood_20_20.asc',
                 relative_hazard)

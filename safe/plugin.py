@@ -42,7 +42,7 @@ from safe.common.exceptions import (
 from safe.utilities.resources import resources_path
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import is_raster_layer
-
+from safe.impact_functions import register_impact_functions
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -66,7 +66,8 @@ class Plugin(object):
             plugin.
         :type iface: QGisAppInterface
         """
-
+        # Register all the impact functions
+        register_impact_functions()
         # Save reference to the QGIS interface
         self.iface = iface
         self.dock_widget = None
@@ -449,7 +450,7 @@ class Plugin(object):
         self.add_action(self.action_extent_selector)
 
         # --------------------------------------
-        # Create action for adding layers if developper mode is on
+        # Create action for adding layers if developer mode is on
         # --------------------------------------
         settings = QSettings()
         self.developer_mode = settings.value(
@@ -474,9 +475,6 @@ class Plugin(object):
     def clear_modules(self):
         """Unload inasafe functions and try to return QGIS to before InaSAFE.
         """
-        from safe.impact_functions import core
-
-        core.unload_plugins()
         # next lets force remove any inasafe related modules
         modules = []
         for module in sys.modules:
@@ -548,6 +546,7 @@ class Plugin(object):
             self.dock_widget.raise_()
 
     def add_test_layers(self):
+        """Add standard test layers."""
         from safe.test.utilities import load_standard_layers
         load_standard_layers()
 

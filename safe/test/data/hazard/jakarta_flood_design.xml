@@ -173,8 +173,9 @@
                 <inasafe_keywords>
 <![CDATA[category: hazard
 subcategory: flood
-unit: m
+data_type: continuous
 title: Jakarta flood like 2007 with structural improvements
+unit: metres_depth
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

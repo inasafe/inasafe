@@ -28,6 +28,7 @@ from PyQt4.QtCore import QSettings
 from safe.common.resource_parameter import ResourceParameter
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.string_parameter import StringParameter
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
 
@@ -154,7 +155,7 @@ def minimum_needs_selector():
 
 def age_postprocessor():
     """Build a parameter unit for Age
-    :return: A selector to activate minimum needs
+    :return: A list of Parameters
     :rtype: list [BooleanParameter, 3xFloatParameter]
     """
     age = BooleanParameter()
@@ -175,6 +176,43 @@ def age_postprocessor():
 
     return [age, youth_ratio, adult_ratio, elderly_ratio]
 
+
+def aggregation_categorial_postprocessor():
+    """Build a parameter unit for aggregation categorial
+        postprocessor
+    :return: A list of Parameters
+    :rtype: list [BooleanParameter, 3xFloatParameter]
+    """
+    aggregatec = BooleanParameter()
+    aggregatec.name = 'Aggregation categorical'
+    aggregatec.value = True
+
+    disable_area_aggregation = BooleanParameter()
+    disable_area_aggregation.name = 'disable_for_entire_area_aggregation'
+    disable_area_aggregation.value = False
+
+    return [aggregatec, disable_area_aggregation]
+
+def road_type_postprocessor():
+    """build road-type parameter for post processing.
+    :return: A list of parameters
+    :rtype: list of BooleanParameter
+    """
+    road_type = BooleanParameter()
+    road_type.name = 'Road type'
+    road_type.value = True
+    return [road_type]
+
+
+def building_type_postprocessor():
+    """build building-type parameter for post processing.
+    :return: A list of parameters
+    :rtype: list of BooleanParameter
+    """
+    building_type = BooleanParameter()
+    building_type.name = 'Building type'
+    building_type.value = True
+    return [building_type]
 
 def default_minimum_needs():
     """Helper to get the default minimum needs.
