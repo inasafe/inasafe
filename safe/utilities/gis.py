@@ -117,10 +117,7 @@ def rectangle_geo_array(rectangle, map_canvas):
     destination_crs = QgsCoordinateReferenceSystem()
     destination_crs.createFromSrid(4326)
 
-    if map_canvas.hasCrsTransformEnabled():
-        source_crs = map_canvas.mapRenderer().destinationCrs()
-    else:
-        source_crs = destination_crs
+    source_crs = map_canvas.mapRenderer().destinationCrs()
 
     return extent_to_array(rectangle, source_crs, destination_crs)
 
