@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Impact on OSM
-Buildings
+"""InaSAFE Disaster risk tool by Australian Aid - Generic Impact function on
+Building for Classified Hazard.
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -32,7 +32,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class ClassifiedHazardBuildingFunction(ImpactFunction):
     """Impact plugin for classified hazard impact on building data"""
-    
+
     _metadata = ClassifiedHazardBuildingMetadata()
     # Function documentation
     target_field = 'DAMAGED'

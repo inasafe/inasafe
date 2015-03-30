@@ -35,11 +35,13 @@ import qgis  # pylint: disable=unused-import
 from PyQt4.QtGui import QLineEdit, QCheckBox
 
 from safe.test.utilities import get_qgis_app
+from safe.defaults import (
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector)
 from safe.common.resource_parameter import ResourceParameter
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-# noinspection PyUnresolvedReferences
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -49,11 +51,8 @@ LOGGER = logging.getLogger('InaSAFE')
 class FunctionOptionsDialogTest(unittest.TestCase):
     """Test the InaSAFE GUI for Configurable Impact Functions"""
     def test_build_form(self):
-        """Test that we can build a form by passing it a function and params.
+        """Test that we can build a form by passing params.
         """
-        class_name = 'ITBFatalityFunction'
-        impact_function = ImpactFunctionManager().get(class_name)
-        assert impact_function.__name__ == class_name
 
         dialog = FunctionOptionsDialog()
 
@@ -70,17 +69,11 @@ class FunctionOptionsDialogTest(unittest.TestCase):
 
         parameter = {
             'thresholds': [1.0],
-            'postprocessors': {
-                'Gender': {'on': True},
-                'Age': {
-                    'on': True,
-                    'params': {
-                        'youth_ratio': 0.263,
-                        'elderly_ratio': 0.078,
-                        'adult_ratio': 0.659
-                    }
-                }
-            },
+            'postprocessors':  OrderedDict([
+                ('Gender', default_gender_postprocessor()),
+                ('Age', age_postprocessor()),
+                ('MinimumNeeds', minimum_needs_selector()),
+                ]),
             'minimum needs': [rice]
         }
 
@@ -96,23 +89,17 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         self.assertEqual(len(children), 5, message)
 
     def test_build_form_minimum_needs(self):
-        """Test that we can build a form by passing it a function and params.
+        """Test that we can build a form by passing it params.
         """
-        class_name = 'FloodEvacuationFunctionVectorHazard'
-        impact_function = ImpactFunctionManager().get(class_name)
-        assert impact_function.__name__ == class_name
-
         dialog = FunctionOptionsDialog()
         parameters = {
             'thresholds': [1.0],
-            'postprocessors': {
-                'Gender': {'on': True},
-                'Age': {
-                    'on': True,
-                    'params': {
-                        'youth_ratio': 0.263,
-                        'elderly_ratio': 0.078,
-                        'adult_ratio': 0.659}}}}
+            'postprocessors': OrderedDict([
+                ('Gender', default_gender_postprocessor()),
+                ('Age', age_postprocessor()),
+                ('MinimumNeeds', minimum_needs_selector()),
+                ])
+        }
 
         dialog.build_form(parameters)
 

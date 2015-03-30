@@ -1,4 +1,14 @@
 # coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on Roads
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -19,6 +29,7 @@ from safe.definitions import (
     layer_vector_line)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.defaults import road_type_postprocessor
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
 
@@ -28,7 +39,7 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
 
     .. versionadded:: 2.1
 
-    We only need to re-implement get_metadata(), all other behaviours
+    We only need to re-implement as_dict(), all other behaviours
     are inherited from the abstract base class.
     """
 
@@ -85,7 +96,9 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
                 ('road_type_field', 'TYPE'),
                 ('min threshold [m]', 1.0),
                 ('max threshold [m]', float('inf')),
-                ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
+                ('postprocessors', OrderedDict([
+                    ('RoadType', road_type_postprocessor())
+                ]))
             ])
         }
         return dict_meta

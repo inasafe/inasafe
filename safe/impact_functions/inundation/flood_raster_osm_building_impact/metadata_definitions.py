@@ -25,6 +25,7 @@ from safe.definitions import (
     unit_building_generic,
     layer_vector_point, unit_metres_depth, unit_feet_depth,
     layer_raster_continuous)
+from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -35,7 +36,7 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
 
     .. versionadded:: 2.1
 
-    We only need to re-implement get_metadata(), all other behaviours
+    We only need to re-implement as_dict(), all other behaviours
     are inherited from the abstract base class.
     """
 
@@ -128,7 +129,9 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
             },
             'parameters':  OrderedDict([
                 ('threshold [m]', 1.0),
-                ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
+                ('postprocessors', OrderedDict([
+                    ('BuildingType', building_type_postprocessor())
+                ]))
             ])
         }
         return dict_meta

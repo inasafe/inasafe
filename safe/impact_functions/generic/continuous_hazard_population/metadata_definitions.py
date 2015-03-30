@@ -1,4 +1,15 @@
 # coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Metadata for generic Impact
+function on Population for Continuous Hazard.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 
 __author__ = 'lucernae'
 __date__ = '24/03/15'
@@ -13,6 +24,10 @@ from safe.definitions import (
     exposure_definition,
     exposure_population,
     unit_people_per_pixel)
+from safe.defaults import (
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector)
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -23,7 +38,7 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
 
     .. versionadded:: 2.1
 
-    We only need to re-implement get_metadata(), all other behaviours
+    We only need to re-implement as_dict(), all other behaviours
     are inherited from the abstract base class.
     """
 
@@ -38,7 +53,6 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        defaults = get_defaults()
         dict_meta = {
             'id': 'ContinuousHazardPopulationFunction',
             'name': tr('Continuous Hazard Population Function'),
@@ -89,14 +103,9 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 ('Categorical thresholds', [0.34, 0.67, 1]),
                 ('postprocessors', OrderedDict([
-                    ('Gender', {'on': True}),
-                    ('Age', {
-                        'on': True,
-                        'params': OrderedDict([
-                            ('youth_ratio', defaults['YOUTH_RATIO']),
-                            ('adult_ratio', defaults['ADULT_RATIO']),
-                            ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-                    ('MinimumNeeds', {'on': True}),
+                    ('Gender', default_gender_postprocessor()),
+                    ('Age', age_postprocessor()),
+                    ('MinimumNeeds', minimum_needs_selector()),
                 ])),
                 ('minimum needs', default_minimum_needs()),
                 ('provenance', default_provenance())

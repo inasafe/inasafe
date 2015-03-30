@@ -1,4 +1,15 @@
 # coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Metadata for Tsunami Raster
+Impact Function on Population.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -7,7 +18,6 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 from safe.defaults import (
-    get_defaults,
     default_minimum_needs,
     default_provenance)
 from safe.definitions import (
@@ -19,6 +29,10 @@ from safe.definitions import (
     exposure_definition,
     exposure_population,
     unit_people_per_pixel)
+from safe.defaults import (
+    default_gender_postprocessor,
+    minimum_needs_selector,
+    age_postprocessor)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -30,7 +44,7 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
 
     .. versionadded:: 2.1
 
-    We only need to re-implement get_metadata(), all other behaviours
+    We only need to re-implement as_dict(), all other behaviours
     are inherited from the abstract base class.
     """
 
@@ -45,7 +59,6 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        defaults = get_defaults()
         dict_meta = {
             'id': 'TsunamiEvacuationFunction',
             'name': tr('Tsunami Evacuation Function'),
@@ -110,14 +123,9 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 ('thresholds [m]', [0.7]),
                 ('postprocessors', OrderedDict([
-                    ('Gender', {'on': True}),
-                    ('Age', {
-                        'on': True,
-                        'params': OrderedDict([
-                            ('youth_ratio', defaults['YOUTH_RATIO']),
-                            ('adult_ratio', defaults['ADULT_RATIO']),
-                            ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-                    ('MinimumNeeds', {'on': True}),
+                    ('Gender', default_gender_postprocessor()),
+                    ('Age', age_postprocessor()),
+                    ('MinimumNeeds', minimum_needs_selector()),
                 ])),
                 ('minimum needs', default_minimum_needs()),
                 ('provenance', default_provenance())

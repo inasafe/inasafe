@@ -112,7 +112,7 @@ class PluginTest(unittest.TestCase):
         assert language == 'af'
         # functions = get_safe_impact_function()
         # print functions
-        functions = ImpactFunctionManager().get_by_id('Tydelik gesluit')
+        functions = ImpactFunctionManager().get('Tydelik gesluit')
         assert len(functions) > 0
 
 if __name__ == '__main__':

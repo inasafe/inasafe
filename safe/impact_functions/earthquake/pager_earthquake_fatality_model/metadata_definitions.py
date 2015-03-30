@@ -1,4 +1,15 @@
 # coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Metadata for PAGER Earthquake
+Impact Function on Population.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 
 __author__ = 'lucernae'
 __date__ = '24/03/15'
@@ -10,6 +21,10 @@ from safe.defaults import get_defaults, default_minimum_needs, \
 from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
     layer_raster_continuous, exposure_definition, exposure_population, \
     unit_people_per_pixel
+from safe.defaults import (
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector)
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model.metadata_definitions import \
     ITBFatalityMetadata
 from safe.utilities.i18n import tr
@@ -20,7 +35,7 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
 
     .. versionadded:: 2.1
 
-    We only need to re-implement get_metadata(), all other behaviours
+    We only need to re-implement as_dict(), all other behaviours
     are inherited from the abstract base class.
     """
 
@@ -89,14 +104,10 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
                 ('tolerance', 0.01),
                 ('calculate_displaced_people', True),
                 ('postprocessors', OrderedDict([
-                    ('Gender', {'on': True}),
-                    ('Age', {
-                        'on': True,
-                        'params': OrderedDict([
-                            ('youth_ratio', defaults['YOUTH_RATIO']),
-                            ('adult_ratio', defaults['ADULT_RATIO']),
-                            ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-                    ('MinimumNeeds', {'on': True})])),
+                    ('Gender', default_gender_postprocessor()),
+                    ('Age', age_postprocessor()),
+                    ('MinimumNeeds', minimum_needs_selector()),
+                    ])),
                 ('minimum needs', default_minimum_needs()),
                 ('provenance', default_provenance())])
 

@@ -20,62 +20,53 @@ __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
 
+from qgis.core import QgsVectorLayer, QgsRasterLayer
+
 from safe.impact_functions.impact_function_manager \
     import ImpactFunctionManager
 from safe.impact_functions.inundation\
     .flood_raster_road_qgis.impact_function import \
     FloodRasterRoadsExperimentalFunction
-from safe.test.utilities import (
-    TESTDATA,
-    get_qgis_app,
-    clone_shp_layer,
-    test_data_path,
-    clone_raster_layer)
+from safe.test.utilities import get_qgis_app, test_data_path
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 
 class TestFloodRasterRoadsFunction(unittest.TestCase):
     """Test for Flood Raster Roads Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
+        registry.clear()
         registry.register(FloodRasterRoadsExperimentalFunction)
 
     def test_run(self):
         function = FloodRasterRoadsExperimentalFunction.instance()
 
-        hazard_name = test_data_path('hazard', 'jakarta_flood_design')
-        qgis_hazard = clone_raster_layer(
-            name=hazard_name,
-            extension='.tif',
-            include_keywords=True,
-            source_directory=TESTDATA)
-
-        exposure_name = test_data_path('exposure', 'roads_osm_4326')
-        qgis_exposure = clone_shp_layer(
-            name=exposure_name,
-            include_keywords=True,
-            source_directory=TESTDATA)
+        hazard_path = test_data_path('hazard', 'continuous_flood_20_20.asc')
+        exposure_path = test_data_path('exposure', 'roads.shp')
+        # noinspection PyCallingNonCallable
+        hazard_layer = QgsRasterLayer(hazard_path, 'Flood')
+        # noinspection PyCallingNonCallable
+        exposure_layer = QgsVectorLayer(exposure_path, 'Roads', 'ogr')
 
         # Let's set the extent to the hazard extent
-        extent = qgis_hazard.extent()
+        extent = hazard_layer.extent()
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
-        function.hazard = QgisWrapper(qgis_hazard)
-        function.exposure = QgisWrapper(qgis_exposure)
+        function.hazard = QgisWrapper(hazard_layer)
+        function.exposure = QgisWrapper(exposure_layer)
         function.requested_extent = rect_extent
-        function.parameters['road_type_field'] = 'TYPE'
-        function.parameters['min threshold [m]'] = 0.005
-        function.parameters['max threshold [m]'] = float('inf')
         function.run()
         impact = function.impact
 
         keywords = impact.get_keywords()
         self.assertEquals('flooded', keywords['target_field'])
+        expected_inundated_feature = 193
         count = sum(impact.get_data(attribute=keywords['target_field']))
-        self.assertEquals(count, 25)
+        self.assertEquals(count, expected_inundated_feature)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""
@@ -98,9 +89,10 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)
-        retrieved_IF = impact_functions[0].metadata().as_dict()['id']
-        self.assertEqual('FloodRasterRoadsExperimentalFunction',
-                         retrieved_IF,
-                         'Expecting FloodRasterRoadsExperimentalFunction.'
-                         'But got %s instead' %
-                         retrieved_IF)
+
+        retrieved_if = impact_functions[0].metadata().as_dict()['id']
+        expected = ImpactFunctionManager().get_function_id(
+            FloodRasterRoadsExperimentalFunction)
+        message = 'Expecting %s, but getting %s instead' % (
+            expected, retrieved_if)
+        self.assertEqual(expected, retrieved_if, message)

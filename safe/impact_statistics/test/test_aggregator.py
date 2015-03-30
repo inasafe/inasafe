@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'Marco Bernasocchi'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -50,6 +49,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.widgets.dock import Dock
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.keyword_io import KeywordIO
+from safe.impact_functions import register_impact_functions
 
 
 DOCK = Dock(IFACE)
@@ -63,9 +63,8 @@ class AggregatorTest(unittest.TestCase):
     # noinspection PyPep8Naming
     def setUp(self):
         """Fixture run before all tests"""
-
+        register_impact_functions()
         self.maxDiff = None  # show full diff for assert errors
-
         os.environ['LANG'] = 'en'
         DOCK.show_only_visible_layers_flag = True
         load_standard_layers(DOCK)
@@ -99,7 +98,7 @@ class AggregatorTest(unittest.TestCase):
         """Aggregation combo changes properly according loaded layers"""
         layer_list = [
             DOCK.tr('Entire area'),
-            DOCK.tr('kabupaten jakarta singlepart')]
+            DOCK.tr(u"D\xedstr\xedct's of Jakarta")]
         current_layers = [DOCK.cboAggregation.itemText(i) for i in range(
             DOCK.cboAggregation.count())]
 
@@ -117,10 +116,10 @@ class AggregatorTest(unittest.TestCase):
         # kabupaten_jakarta_singlepart.shp
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function_id='Flood Evacuation Function',
-            aggregation_layer='kabupaten jakarta singlepart',
+            hazard='Continuous Flood',
+            exposure='Population',
+            function_id='FloodEvacuationRasterHazardFunction',
+            aggregation_layer=u"Dístríct's of Jakarta",
             aggregation_enabled_flag=True)
         set_jakarta_extent(dock=DOCK)
         assert result, message
@@ -145,9 +144,9 @@ class AggregatorTest(unittest.TestCase):
         # kabupaten_jakarta_singlepart_1_good_attr.shp
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function_id='Flood Evacuation Function',
+            hazard='Continuous Flood',
+            exposure='Population',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
         set_jakarta_extent(dock=DOCK)
         assert result, message
@@ -175,9 +174,9 @@ class AggregatorTest(unittest.TestCase):
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function_id='Flood Evacuation Function',
+            hazard='Continuous Flood',
+            exposure='Population',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
         set_jakarta_extent(dock=DOCK)
         assert result, message
@@ -202,9 +201,9 @@ class AggregatorTest(unittest.TestCase):
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function_id='Flood Evacuation Function',
+            hazard='Continuous Flood',
+            exposure='Population',
+            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
         set_jakarta_extent(dock=DOCK)
         assert result, message
@@ -237,24 +236,19 @@ class AggregatorTest(unittest.TestCase):
         TODO - this needs to be fixed post dock refactor.
 
         """
-        layer_path = os.path.join(
-            TESTDATA, 'jakarta_crosskabupaten_polygons.shp')
+        layer_path = test_data_path(
+            'hazard', 'flood_polygon_crosskabupaten.shp')
         # See qgis project in test data: vector_preprocessing_test.qgs
         # add additional layers
         file_list = [layer_path]
         load_layers(file_list, clear_flag=False)
 
-        layer_path = os.path.join(
-            BOUNDDATA, 'kabupaten_jakarta.shp')
-        file_list = [layer_path]
-        load_layers(file_list, clear_flag=False)
-
         result, message = setup_scenario(
             DOCK,
-            hazard='jakarta_crosskabupaten_polygons',
-            exposure='People',
-            function_id='Flood Evacuation Function Vector Hazard',
-            aggregation_layer='kabupaten jakarta',
+            hazard='Flood Polygon Cross Kabupaten',
+            exposure='Population',
+            function_id='FloodEvacuationVectorHazardFunction',
+            aggregation_layer=u"Dístríct's of Jakarta",
             aggregation_enabled_flag=True)
         assert result, message
 
@@ -265,7 +259,7 @@ class AggregatorTest(unittest.TestCase):
         DOCK.accept()
         DOCK.runtime_keywords_dialog.accept()
 
-        expected_feature_count = 20
+        expected_feature_count = 5
         message = (
             'The preprocessing should have generated %s features, '
             'found %s' % (
@@ -274,7 +268,7 @@ class AggregatorTest(unittest.TestCase):
         self.assertEqual(
             expected_feature_count,
             DOCK.analysis.aggregator.preprocessed_feature_count,
-            message)
+                message)
 
     def _create_aggregator(self,
                            use_aoi_mode,

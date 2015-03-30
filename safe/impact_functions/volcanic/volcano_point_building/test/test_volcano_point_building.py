@@ -22,22 +22,19 @@ from safe.impact_functions.volcanic.volcano_point_building.impact_function \
 from safe.test.utilities import get_qgis_app, test_data_path
 from safe.storage.core import read_layer
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 
 class TestVolcanoPointBuildingFunction(unittest.TestCase):
     """Test for Volcano Point on Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
+        registry.clear()
         registry.register(VolcanoPointBuildingFunction)
 
     def test_run(self):
         """TestVolcanoPointBuildingFunction: Test running the IF."""
-        volcano_path = test_data_path(
-            'hazard', 'region_c', 'volcano', 'merapi_point.shp')
-        building_path = test_data_path(
-            'exposure', 'region_c', 'structure', 'buildings.shp')
+        volcano_path = test_data_path('hazard', 'volcano_point.shp')
+        building_path = test_data_path('exposure', 'buildings.shp')
 
         hazard_layer = read_layer(volcano_path)
         exposure_layer = read_layer(building_path)
@@ -49,15 +46,15 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In the event of merapi how many buildings might '
-                             'be affected')
+        expected_question = ('In the event of volcano point how many '
+                             'buildings might be affected')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question())
         self.assertEqual(expected_question, impact_function.question(), message)
 
-        # The buildings should all be categorised into 5000 zone
+        # The buildings should all be categorised into 3000 zone
         zone_sum = sum(impact_layer.get_data(attribute='zone'))
-        expected_sum = 5000 * 100
+        expected_sum = 3000 * 181
         message = 'Expecting %s, but it returns %s' % (expected_sum, zone_sum)
         self.assertEqual(zone_sum, expected_sum, message)
 

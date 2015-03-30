@@ -51,7 +51,9 @@ from utilities import get_ring_data, get_polygon_data
 from utilities import rings_equal
 from utilities import safe_to_qgis_layer
 from safe.common.utilities import unique_filename
+from safe.utilities.unicode import get_string
 from safe.utilities.i18n import tr
+
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(99999999)
@@ -669,12 +671,12 @@ class Vector(Layer):
             msg = 'OGR driver %s not available' % driver
             raise WriteLayerError(msg)
 
-        ds = drv.CreateDataSource(filename)
+        ds = drv.CreateDataSource(get_string(filename))
         if ds is None:
             msg = 'Creation of output file %s failed' % filename
             raise WriteLayerError(msg)
 
-        lyr = ds.CreateLayer(layer_name,
+        lyr = ds.CreateLayer(get_string(layer_name),
                              self.projection.spatial_reference,
                              self.geometry_type)
         if lyr is None:

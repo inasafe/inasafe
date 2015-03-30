@@ -736,7 +736,8 @@ def get_osm_building_usage(attribute_names, feature):
         attribute_index = attribute_names_lower.index('building')
         field_name = attribute_names[attribute_index]
         usage = feature[field_name]
-        if usage.lower() == 'yes':
+
+        if usage is not None and usage.lower() == 'yes':
             usage = 'building'
 
     return usage

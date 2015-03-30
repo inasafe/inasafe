@@ -1,4 +1,15 @@
 # coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Metadata for generic Impact
+function on Building for Classified Hazard.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 from safe.common.utilities import OrderedDict
 from safe.definitions import hazard_definition, hazard_all, unit_classified, \
     layer_raster_classified, exposure_definition, exposure_structure, \
@@ -6,6 +17,7 @@ from safe.definitions import hazard_definition, hazard_all, unit_classified, \
     layer_vector_point
 from safe.utilities.i18n import tr
 
+from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 
@@ -21,7 +33,7 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
 
     .. versionadded:: 2.1
 
-    We only need to re-implement get_metadata(), all other behaviours
+    We only need to re-implement as_dict(), all other behaviours
     are inherited from the abstract base class.
     """
 
@@ -97,7 +109,9 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
                 ('low_hazard_class', 1.0),
                 ('medium_hazard_class', 2.0),
                 ('high_hazard_class', 3.0),
-                ('postprocessors', OrderedDict([('BuildingType', {'on': True})]))
+                ('postprocessors', OrderedDict([('BuildingType',
+                                                building_type_postprocessor())
+                                                ]))
             ])
         }
         return dict_meta

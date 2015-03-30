@@ -450,7 +450,7 @@ class Plugin(object):
         self.add_action(self.action_extent_selector)
 
         # --------------------------------------
-        # Create action for adding layers if developper mode is on
+        # Create action for adding layers if developer mode is on
         # --------------------------------------
         settings = QSettings()
         self.developer_mode = settings.value(
@@ -546,6 +546,7 @@ class Plugin(object):
             self.dock_widget.raise_()
 
     def add_test_layers(self):
+        """Add standard test layers."""
         from safe.test.utilities import load_standard_layers
         load_standard_layers()
 

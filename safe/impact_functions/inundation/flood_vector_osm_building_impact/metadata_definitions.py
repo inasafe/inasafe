@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on OSM
-Buildings
+"""InaSAFE Disaster risk tool by Australian Aid - Metadata for Flood Vector
+Impact Function on OSM Buildings.
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -24,7 +24,8 @@ from safe.definitions import (
     exposure_structure,
     unit_building_type_type,
     unit_building_generic,
-    layer_vector_point)
+    layer_vector_point, unit_metres_depth, unit_feet_depth)
+from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -106,7 +107,15 @@ class FloodVectorBuildingMetadata(ImpactFunctionMetadata):
                         hazard_flood,
                         hazard_tsunami
                     ],
-                    'units': [unit_wetdry],
+                    'units': [
+                        unit_wetdry,
+                        # RM: add metres unit and feet depth, because it
+                        # is needed in the
+                        # test_wizard_dialog.test_existing_keywords to test
+                        # tsunami's keywords
+                        unit_metres_depth,
+                        unit_feet_depth
+                        ],
                     'layer_constraints': [layer_vector_polygon]
                 },
                 'exposure': {
@@ -121,18 +130,12 @@ class FloodVectorBuildingMetadata(ImpactFunctionMetadata):
                     ]
                 }
             },
-            'parameters': OrderedDict(
-                [
-                    ('affected_field', 'FLOODPRONE'),
-                    ('affected_value', 'YES'),
-                    (
-                        'postprocessors', OrderedDict(
-                            [
-                                ('BuildingType', {'on': True})
-                            ]
-                        )
-                    )
-                ]
-            )
+            'parameters': OrderedDict([
+                ('affected_field', 'FLOODPRONE'),
+                ('affected_value', 'YES'),
+                ('postprocessors', OrderedDict([
+                    ('BuildingType', building_type_postprocessor())
+                ]))
+            ])
         }
         return dict_meta

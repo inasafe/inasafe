@@ -140,7 +140,8 @@ class UtilitiesTest(unittest.TestCase):
         expected_keywords = {
             'category': 'hazard',
             'subcategory': 'flood',
-            'unit': 'm',
+            'data_type': 'continuous',
+            'unit': 'metres_depth',
             'title': 'Jakarta flood like 2007 with structural improvements'}
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)
