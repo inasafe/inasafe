@@ -15,6 +15,7 @@ __author__ = 'lucernae'
 __date__ = '24/03/15'
 
 import logging
+
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.earthquake.earthquake_building.metadata_definitions import \
     EarthquakeBuildingMetadata
@@ -23,12 +24,14 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.impact_reports.building_exposure_report_mixin import (
+    BuildingExposureReportMixin)
 
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class EarthquakeBuildingFunction(ImpactFunction):
+class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Earthquake impact on building data."""
 

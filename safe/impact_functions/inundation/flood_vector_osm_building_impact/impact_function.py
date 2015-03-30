@@ -19,8 +19,7 @@ from safe.impact_functions.inundation.flood_vector_osm_building_impact\
 from safe.storage.vector import Vector
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.utilities.i18n import tr
-from safe.common.utilities import format_int, get_osm_building_usage
-from safe.common.tables import Table, TableRow
+from safe.common.utilities import get_osm_building_usage
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
@@ -54,9 +53,7 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                     'regions marked as affected')
             }]
 
-    def _tabulate(self, affected_buildings, affected_count, attribute_names,
-                  buildings, question, total_features):
-        # Generate simple impact report
+    def _tabulate(self, affected_buildings, buildings, question):
 
         affected_buildings = {'Inundated': affected_buildings}
         return self.generate_html_report(
@@ -171,9 +168,7 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 del buildings[usage]
                 del affected_buildings[usage]
 
-        impact_table = self._tabulate(affected_buildings, affected_count,
-                                    attribute_names, buildings, question,
-                                    total_features)
+        impact_table = self._tabulate(affected_buildings, buildings, question)
 
         # Prepare impact layer
         map_title = tr('Buildings inundated')
