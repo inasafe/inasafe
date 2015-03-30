@@ -1,4 +1,15 @@
 # coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on
+Roads using QGIS and GDAL libaries.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'

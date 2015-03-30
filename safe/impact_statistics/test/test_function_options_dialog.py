@@ -38,13 +38,10 @@ from safe.test.utilities import get_qgis_app
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
-    minimum_needs_selector
-    )
+    minimum_needs_selector)
 from safe.common.resource_parameter import ResourceParameter
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-# noinspection PyUnresolvedReferences
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()

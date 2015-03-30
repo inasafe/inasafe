@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on OSM
-Buildings
+"""InaSAFE Disaster risk tool by Australian Aid - Metadata for Flood Vector
+Impact Function on OSM Buildings.
 
 Contact : ole.moller.nielsen@gmail.com
 

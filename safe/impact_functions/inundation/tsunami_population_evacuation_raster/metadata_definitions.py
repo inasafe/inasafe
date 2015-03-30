@@ -1,4 +1,15 @@
 # coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Metadata for Tsunami Raster
+Impact Function on Population.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -7,7 +18,6 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 from safe.defaults import (
-    get_defaults,
     default_minimum_needs,
     default_provenance)
 from safe.definitions import (
@@ -49,7 +59,6 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        defaults = get_defaults()
         dict_meta = {
             'id': 'TsunamiEvacuationFunction',
             'name': tr('Tsunami Evacuation Function'),
