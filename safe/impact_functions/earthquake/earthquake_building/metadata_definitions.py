@@ -4,6 +4,7 @@ from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
     layer_raster_continuous, exposure_definition, exposure_structure, \
     unit_building_type_type, unit_building_generic, layer_vector_polygon, \
     layer_vector_point
+from safe.defaults import aggregation_categorial_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -78,11 +79,7 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                  ('medium_threshold', 7),
                  ('high_threshold', 8),
                  ('postprocessors', OrderedDict([
-                     ('AggregationCategorical', {
-                         'on': True,
-                         'params': OrderedDict([
-                             # Disable categorical aggregation when in AOI mode see #781
-                             ('disable_for_entire_area_aggregation', False)])})
-                 ]))])
+                     ('AggregationCategorical',
+                      aggregation_categorial_postprocessor())]))])
         }
         return dict_meta

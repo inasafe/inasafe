@@ -54,6 +54,7 @@ from safe.common.utilities import unique_filename
 from safe.utilities.unicode import get_string
 from safe.utilities.i18n import tr
 
+
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(99999999)
 

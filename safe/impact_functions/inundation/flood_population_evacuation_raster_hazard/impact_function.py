@@ -27,7 +27,6 @@ from safe.common.utilities import (
     verify,
     get_thousand_separator)
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -113,6 +112,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
                       '%s' % format_int(evacuated)],
                      header=True)]
         return table_body
+
 
     def run(self, layers=None):
         """Risk plugin for flood population evacuation.

@@ -22,6 +22,7 @@ from safe.definitions import (
     exposure_definition,
     exposure_structure,
     unit_building_type_type)
+from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -88,9 +89,9 @@ class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
                 # marks the areas as inundated
                 ('affected_value', '1'),
 
-                ('postprocessors', OrderedDict(
-                    [('BuildingType', {'on': True})]
-                ))
+                ('postprocessors', OrderedDict([
+                    ('BuildingType', building_type_postprocessor())
+                ]))
             ])
             }
         return dict_meta

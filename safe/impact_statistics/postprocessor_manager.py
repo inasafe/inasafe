@@ -272,6 +272,7 @@ class PostprocessorManager(QtCore.QObject):
     def run(self):
         """Run any post processors requested by the impact function.
         """
+        LOGGER.debug('ppmanager run:')
         try:
             requested_postprocessors = self.function_parameters[
                 'postprocessors']
@@ -398,6 +399,7 @@ class PostprocessorManager(QtCore.QObject):
         # feature
         polygon_index = 0
         for feature in provider.getFeatures(request):
+            LOGGER.debug('feature loop.')
             # if a feature has no field called
             if name_filed_index == -1:
                 zone_name = str(feature.id())
@@ -422,14 +424,15 @@ class PostprocessorManager(QtCore.QObject):
             except IndexError:
                 # rasters and attributeless vectors have no attributes
                 general_params['impact_attrs'] = None
-
             for key, value in postprocessors.iteritems():
                 parameters = general_params
+                user_parameters = self.function_parameters['postprocessors'][key]
+                user_parameters = dict(
+                    [(user_parameter.name, user_parameter.value) for user_parameter in user_parameters])
                 try:
-                    # look if params are available for this postprocessor
-                    parameters.update(
-                        self.function_parameters[
-                            'postprocessors'][key]['params'])
+                    #user parameters override default parameters
+                    parameters.update(user_parameters)
+                    LOGGER.debug(parameters)
                 except KeyError:
                     pass
 
@@ -454,6 +457,7 @@ class PostprocessorManager(QtCore.QObject):
                         if (youth_ratio is None or
                                 adult_ratio is None or
                                 elderly_ratio is None):
+                            LOGGER.debug('--- only default age ratios used ---')
                             youth_ratio = self.aggregator.defaults[
                                 'YOUTH_RATIO']
                             adult_ratio = self.aggregator.defaults[

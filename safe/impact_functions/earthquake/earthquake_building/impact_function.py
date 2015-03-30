@@ -5,7 +5,6 @@ __author__ = 'lucernae'
 __date__ = '24/03/15'
 
 import logging
-
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.earthquake.earthquake_building.metadata_definitions import \
     EarthquakeBuildingMetadata

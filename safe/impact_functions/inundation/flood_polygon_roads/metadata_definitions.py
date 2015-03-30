@@ -8,7 +8,9 @@ from safe.definitions import (
     exposure_definition,
     exposure_road,
     unit_road_type_type,
-    layer_vector_line)
+    layer_vector_line,
+    )
+from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -74,7 +76,9 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                 # This value in 'affected_field' of the hazard layer
                 # marks the areas as inundated
                 ('affected_value', '1'),
-                ('postprocessors', OrderedDict([('RoadType', {'on': True})]))
+                ('postprocessors', OrderedDict([
+                    ('RoadType', road_type_postprocessor())
+                ]))
             ])
         }
         return dict_meta

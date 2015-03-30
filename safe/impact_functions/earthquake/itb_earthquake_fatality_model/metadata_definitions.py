@@ -5,6 +5,11 @@ from safe.defaults import get_defaults, default_minimum_needs, \
 from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
     layer_raster_continuous, exposure_definition, exposure_population, \
     unit_people_per_pixel
+from safe.defaults import (
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector
+    )
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -123,14 +128,10 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                 ('tolerance', 0.01),
                 ('calculate_displaced_people', True),
                 ('postprocessors', OrderedDict([
-                    ('Gender', {'on': True}),
-                    ('Age', {
-                        'on': True,
-                        'params': OrderedDict([
-                            ('youth_ratio', defaults['YOUTH_RATIO']),
-                            ('adult_ratio', defaults['ADULT_RATIO']),
-                            ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-                    ('MinimumNeeds', {'on': True})])),
+                    ('Gender', default_gender_postprocessor()),
+                    ('Age', age_postprocessor()),
+                    ('MinimumNeeds', minimum_needs_selector()),
+                    ])),
                 ('minimum needs', default_minimum_needs()),
                 ('provenance', default_provenance())
             ])

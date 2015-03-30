@@ -14,8 +14,15 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Rizky Maulana Nugraha'
 
 from safe.common.utilities import OrderedDict
-from safe.defaults import default_minimum_needs, default_provenance, \
-    get_defaults
+
+from safe.defaults import (
+    default_minimum_needs,
+    default_provenance,
+    get_defaults,
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector
+    )
 from safe.definitions import (
     hazard_definition,
     hazard_flood,
@@ -113,14 +120,9 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 ('thresholds [m]', [1.0]),
                 ('postprocessors', OrderedDict([
-                    ('Gender', {'on': True}),
-                    ('Age', {
-                        'on': True,
-                        'params': OrderedDict([
-                            ('youth_ratio', defaults['YOUTH_RATIO']),
-                            ('adult_ratio', defaults['ADULT_RATIO']),
-                            ('elderly_ratio', defaults['ELDERLY_RATIO'])])}),
-                    ('MinimumNeeds', {'on': True}),
+                    ('Gender', default_gender_postprocessor()),
+                    ('Age', age_postprocessor()),
+                    ('MinimumNeeds', minimum_needs_selector()),
                 ])),
                 ('minimum needs', default_minimum_needs()),
                 ('provenance', default_provenance())
