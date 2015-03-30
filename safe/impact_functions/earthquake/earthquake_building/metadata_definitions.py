@@ -1,10 +1,21 @@
 # coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Metadata for Earthquake
+Impact Function on Building.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 from safe.common.utilities import OrderedDict
 from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
     layer_raster_continuous, exposure_definition, exposure_structure, \
     unit_building_type_type, unit_building_generic, layer_vector_polygon, \
     layer_vector_point
-from safe.defaults import aggregation_categorial_postprocessor
+from safe.defaults import aggregation_categorical_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -80,6 +91,8 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                  ('high_threshold', 8),
                  ('postprocessors', OrderedDict([
                      ('AggregationCategorical',
-                      aggregation_categorial_postprocessor())]))])
+                      aggregation_categorical_postprocessor())]
+                 ))]
+            )
         }
         return dict_meta

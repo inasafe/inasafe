@@ -1,7 +1,7 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool by AusAid - **Flood classified raster
-evacuation.**
+InaSAFE Disaster risk assessment tool by AusAid - ** Generic Impact
+Function on Population for Classified Hazard.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -46,7 +46,7 @@ from safe.impact_functions.impact_function_manager\
 class ClassifiedHazardPopulationFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by classified hazard."""
-    
+
     _metadata = ClassifiedHazardPopulationMetadata()
 
     def __init__(self):

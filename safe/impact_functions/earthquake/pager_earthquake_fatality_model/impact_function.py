@@ -1,5 +1,8 @@
 # coding=utf-8
-"""**Pager Earthquake fatality model**
+"""InaSAFE Disaster risk tool by Australian Aid - PAGER Earthquake
+Impact Function on Population.
+
+Contact : ole.moller.nielsen@gmail.com
 
 .. note:: This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -7,6 +10,7 @@
      (at your option) any later version.
 
 """
+
 __author__ = 'lucernae'
 __date__ = '24/03/15'
 __revision__ = '$Format:%H$'

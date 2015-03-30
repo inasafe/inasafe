@@ -104,8 +104,7 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
 
 
 def get_postprocessor_human_name(postprocessor):
-    """
-    Returns the human readable name of  post processor
+    """Returns the human readable name of  post processor
 
     :param postprocessor: Machine name of the postprocessor
     :type postprocessor:

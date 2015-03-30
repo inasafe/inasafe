@@ -1,4 +1,15 @@
 # coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Metadata for Flood Polygon
+on Population Impact Function.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 
 __author__ = 'Rizky Maulana Nugraha'
 
@@ -9,8 +20,7 @@ from safe.defaults import (
     get_defaults,
     default_gender_postprocessor,
     age_postprocessor,
-    minimum_needs_selector
-    )
+    minimum_needs_selector)
 from safe.definitions import (
     hazard_definition,
     hazard_flood,
@@ -45,7 +55,6 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        defaults = get_defaults()
         dict_meta = {
             'id': 'FloodEvacuationVectorHazardFunction',
             'name': tr('Flood Evacuation Vector Hazard Function'),
@@ -96,7 +105,8 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('evacuation_percentage', 1),  # Percent of affected needing evacuation
+                # Percent of affected needing evacuation
+                ('evacuation_percentage', 1),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

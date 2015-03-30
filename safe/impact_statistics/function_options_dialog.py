@@ -21,7 +21,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import ast
 from collections import OrderedDict
 import logging
-LOGGER = logging.getLogger('InaSAFE')
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -50,7 +49,6 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.resource_parameter_widget import ResourceParameterWidget
-from safe_extras.parameters.qt_widgets.boolean_parameter_widget import BooleanParameterWidget
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -58,6 +56,7 @@ except AttributeError:
     def _fromUtf8(text):
         return text
 
+LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('function_options_dialog_base.ui')
 
 
@@ -111,7 +110,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         else:
             return lambda: function(widget.property(property_name))
 
-
     def build_form(self, parameters):
         """Build a form from impact functions parameter.
 
@@ -128,7 +126,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             else:
                 self.values[key] = self.build_widget(
                     self.configLayout, key, value)
-
 
     def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab.
@@ -147,11 +144,10 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.tabWidget.tabBar().setVisible(True)
         self.values['minimum needs'] = parameter_container.get_parameters
 
-
     def build_post_processor_form(self, form_elements):
         """Build Post Processor Tab.
 
-        :param form_elements: A Dictionary containing element of form
+        :param form_elements: A Dictionary containing element of form.
         :type form_elements: dict
         """
         scroll_layout = QVBoxLayout()
@@ -167,6 +163,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         self.tabWidget.addTab(main_widget, self.tr('Postprocessors'))
         self.tabWidget.tabBar().setVisible(True)
+
         # create elements for the tab
         values = OrderedDict()
         for label, parameters in form_elements.items():
@@ -176,7 +173,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             values[label] = input_values
 
         self.values['postprocessors'] = values
-
 
     def build_widget(self, form_layout, name, key_value):
         """Create a new form element dynamically based from key_value type.

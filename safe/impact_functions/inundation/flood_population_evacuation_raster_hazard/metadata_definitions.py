@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on OSM
-Buildings
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on
+Population.
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -21,8 +21,7 @@ from safe.defaults import (
     get_defaults,
     default_gender_postprocessor,
     age_postprocessor,
-    minimum_needs_selector
-    )
+    minimum_needs_selector)
 from safe.definitions import (
     hazard_definition,
     hazard_flood,
@@ -55,7 +54,6 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        defaults = get_defaults()
         dict_meta = {
             'id': 'FloodEvacuationRasterHazardFunction',
             'name': tr('Flood Evacuation Raster Hazard Function'),

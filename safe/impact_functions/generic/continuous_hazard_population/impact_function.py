@@ -1,6 +1,7 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool by AusAid - **Flood polygon evacuation.**
+InaSAFE Disaster risk assessment tool by AusAid - **Generic Impact Function
+on Population for Continuous Hazard.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -26,8 +27,6 @@ from safe.impact_functions.generic\
     ContinuousHazardPopulationMetadata
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.core import (
-    get_hazard_layer,
-    get_exposure_layer,
     evacuated_population_needs,
     population_rounding)
 from safe.impact_functions.styles import flood_population_style as style_info

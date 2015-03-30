@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- *Categorised Hazard Population Impact Function Test Cases.**
+- *Classified Hazard Building Impact Function Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
 
