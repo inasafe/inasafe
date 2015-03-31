@@ -53,21 +53,22 @@ class NeedsProfile(MinimumNeeds):
         self.load()
 
     def load(self):
-        """Load the minimum needs from the QSettings object.
+        """Load the minimum needs.
+
+        If the minimum needs defined in QSettings use it, if not, get the
+        most relevant available minimum needs (based on QGIS locale). The
+        last thing to do is to just use the default minimum needs.
         """
-        # minimum_needs = None
         try:
-            minimum_needs = self.settings.value('MinimumNeeds', type=dict)
+            minimum_needs = self.settings.value('MinimumNeeds')
             if not minimum_needs and minimum_needs != u'':
-                profiles = self.get_profiles()
-                # TODO (Ismail): Check this part below.
-                # I just change from string concatenation to use os.path.join.
-                # But it's obvious that there is something wrong in this line
-                profiles_path = os.path.join(
+                # Load the most relevant minimum needs
+                profile = self.get_profiles()[0]
+                profile_path = os.path.join(
                     str(self.root_directory),
                     'minimum_needs',
-                    profiles + '.json')
-                self.read_from_file(profiles_path)
+                    profile + '.json')
+                self.read_from_file(profile_path)
         except TypeError:
             minimum_needs = self._defaults()
 
