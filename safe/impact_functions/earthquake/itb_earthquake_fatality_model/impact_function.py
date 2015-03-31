@@ -34,6 +34,7 @@ from safe.common.utilities import (
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.utilities.i18n import tr
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -104,6 +105,9 @@ class ITBFatalityFunction(ImpactFunction):
     def __init__(self):
         super(ITBFatalityFunction, self).__init__()
 
+        # AG: Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
+
     def fatality_rate(self, mmi):
         """ITB method to compute fatality rate.
 
@@ -141,8 +145,6 @@ class ITBFatalityFunction(ImpactFunction):
         # Extract input layers
         intensity = self.hazard
         population = self.exposure
-
-        question = self.question()
 
         # Extract data grids
         hazard = intensity.get_data()   # Ground Shaking
@@ -215,7 +217,7 @@ class ITBFatalityFunction(ImpactFunction):
             number_of_displaced.values()))
 
         # Generate impact report
-        table_body = [question]
+        table_body = [self.question]
 
         # Add total fatality estimate
         s = format_int(fatalities)
@@ -242,7 +244,7 @@ class ITBFatalityFunction(ImpactFunction):
 
         # Generate impact report for the pdf map
         table_body = [
-            question, TableRow(
+            self.question, TableRow(
                 [tr('Fatalities'), '%s' % format_int(fatalities)],
                 header=True),
             TableRow(
@@ -311,7 +313,7 @@ class ITBFatalityFunction(ImpactFunction):
         # check for zero impact
         if numpy.nanmax(mask) == 0 == numpy.nanmin(mask):
             table_body = [
-                question,
+                self.question,
                 TableRow([tr('Fatalities'), '%s' % format_int(fatalities)],
                          header=True)]
             my_message = Table(table_body).toNewlineFreeString()

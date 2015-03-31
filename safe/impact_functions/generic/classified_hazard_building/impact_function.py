@@ -141,8 +141,6 @@ class ClassifiedHazardBuildingFunction(ImpactFunction):
         hazard = self.hazard      # Classified Hazard
         exposure = self.exposure  # Building locations
 
-        question = self.question()
-
         # Determine attribute name for hazard levels
         if hazard.is_raster:
             hazard_attribute = 'level'
@@ -251,7 +249,7 @@ class ClassifiedHazardBuildingFunction(ImpactFunction):
 
         table_body = self._tabulate(N, affected_buildings, attribute_names,
                                     buildings, count, count1, count2, count3,
-                                    question)
+                                    self.question)
 
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()

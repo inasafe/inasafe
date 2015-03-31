@@ -169,7 +169,10 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 del buildings[usage]
                 del affected_buildings[usage]
 
-        impact_table = self._tabulate(affected_buildings, buildings, question)
+        impact_table = impact_summary = self._tabulate(
+            affected_buildings, 
+            buildings, 
+            question)
 
         # Prepare impact layer
         map_title = tr('Buildings inundated')
@@ -200,7 +203,7 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
             geometry=interpolated_layer.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords={
-                'impact_summary': impact_table,
+                'impact_summary': impact_summary,
                 'impact_table': impact_table,
                 'target_field': target_field,
                 'map_title': map_title,

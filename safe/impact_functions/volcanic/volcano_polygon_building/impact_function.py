@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.impact_functions.core import get_question
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.impact_functions.base import ImpactFunction
@@ -65,10 +64,6 @@ class VolcanoPolygonBuildingFunction(ImpactFunction):
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Volcano hazard layer
         exposure_layer = self.exposure  # Building exposure layer
-
-        # Get question
-        question = get_question(
-            hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         # Input checks
         if not hazard_layer.is_polygon_data:
@@ -155,7 +150,7 @@ class VolcanoPolygonBuildingFunction(ImpactFunction):
 
         # Generate simple impact report
         blank_cell = ''
-        table_body = [question,
+        table_body = [self.question,
                       TableRow([tr('Volcanoes considered'),
                                 '%s' % volcano_names, blank_cell],
                                header=True)]

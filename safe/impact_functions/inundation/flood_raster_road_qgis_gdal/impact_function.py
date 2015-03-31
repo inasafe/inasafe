@@ -81,8 +81,6 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
         H = self.hazard    # Flood
         E = self.exposure  # Roads
 
-        question = self.question()
-
         H = H.get_layer()
         E = E.get_layer()
 
@@ -219,7 +217,7 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
                 flooded_len += length
                 roads_by_type[road_type]['flooded'] += length
 
-        table_body = self._tabulate(flooded_len, question, road_len,
+        table_body = self._tabulate(flooded_len, self.question, road_len,
                                     roads_by_type)
 
         impact_summary = Table(table_body).toNewlineFreeString()

@@ -212,7 +212,7 @@ class TestShakeEvent(unittest.TestCase):
         file_path = shake_event.city_search_boxes_to_shapefile()
         self.assertTrue(os.path.exists(file_path))
 
-    def test_calculate_fatalities(self):
+    def     test_calculate_fatalities(self):
         """Test that we can calculate fatalities."""
         LOGGER.debug(QGIS_APP.showSettings())
         working_dir = shakemap_extract_dir()

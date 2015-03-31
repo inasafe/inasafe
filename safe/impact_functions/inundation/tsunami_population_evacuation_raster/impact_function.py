@@ -24,6 +24,7 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 # noinspection PyClassHasNoInit
@@ -35,6 +36,9 @@ class TsunamiEvacuationFunction(ImpactFunction):
     def __init__(self):
         super(TsunamiEvacuationFunction, self).__init__()
         self.impact_function_manager = ImpactFunctionManager()
+
+        # AG: Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
 
     def _tabulate(self, counts, evacuated, minimum_needs, question, rounding,
                   thresholds, total):
@@ -113,8 +117,6 @@ class TsunamiEvacuationFunction(ImpactFunction):
         hazard_layer = self.hazard  # Tsunami inundation [m]
         exposure_layer = self.exposure
 
-        question = self.question()
-
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
         thresholds = self.parameters['thresholds [m]']
@@ -162,7 +164,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
 
         # Generate impact report for the pdf map
         table_body, total_needs = self._tabulate(counts, evacuated,
-                                                 minimum_needs, question,
+                                                 minimum_needs, self.question,
                                                  rounding, thresholds, total)
 
         # Result
