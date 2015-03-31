@@ -34,22 +34,17 @@ class BuildingExposureReportMixin(ReportMixin):
         """
         report = [{'content': self.question}]
         report += [{'content': ''}]  # Blank line to separate report sections
-        report += self.impact_summary(self.affected_buildings)
+        report += self.impact_summary()
         report += [{'content': ''}]  # Blank line to separate report sections
-        report += self.buildings_breakdown(
-            self.affected_buildings,
-            self.buildings)
+        report += self.buildings_breakdown()
         report += [{'content': ''}]  # Blank line to separate report sections
-        report += self.action_checklist(self.affected_buildings)
+        report += self.action_checklist()
         report += [{'content': ''}]  # Blank line to separate report sections
         report += self.notes()
         return report
 
-    def action_checklist(self, affected_buildings):
+    def action_checklist(self):
         """Breakdown by building type.
-
-        :param affected_buildings: The affected buildings
-        :type affected_buildings: OrderedDict
 
         :returns: The buildings breakdown report.
         :rtype: list
@@ -64,8 +59,8 @@ class BuildingExposureReportMixin(ReportMixin):
                 (dry, {residential: 50, school: 50})
             ])
         """
-        schools_closed = self.schools_closed(affected_buildings)
-        hospitals_closed = self.hospitals_closed(affected_buildings)
+        schools_closed = self.schools_closed
+        hospitals_closed = self.hospitals_closed
         return [
             {
                 'content': tr('Action Checklist:'),
@@ -105,7 +100,7 @@ class BuildingExposureReportMixin(ReportMixin):
             }
         ]
 
-    def impact_summary(self, affected_buildings):
+    def impact_summary(self):
         """The impact summary as per category
 
         :returns:
@@ -116,7 +111,7 @@ class BuildingExposureReportMixin(ReportMixin):
                 'content': [tr('Hazard Category')] + affect_types,
                 'header': True
             }]
-        for (category, building_breakdown) in affected_buildings.items():
+        for (category, building_breakdown) in self.affected_buildings.items():
             total_affected = [0] * len(affect_types)
             for affected_breakdown in building_breakdown.values():
                 for affect_type, number_affected in affected_breakdown.items():
@@ -151,14 +146,8 @@ class BuildingExposureReportMixin(ReportMixin):
             })
         return impact_summary_report
 
-    def buildings_breakdown(self, affected_buildings, buildings):
+    def buildings_breakdown(self):
         """Breakdown by building type.
-
-        :param affected_buildings: The affected buildings
-        :type affected_buildings: OrderedDict
-
-        :param buildings: The buildings totals
-        :type buildings: dict
 
         :returns: The buildings breakdown report.
         :rtype: list
@@ -203,7 +192,7 @@ class BuildingExposureReportMixin(ReportMixin):
             buildings = {residential: 1062, school: 52 ...}
         """
         buildings_breakdown_report = []
-        category_names = affected_buildings.keys()
+        category_names = self.affected_buildings.keys()
         table_headers = [tr('Building type')]
         table_headers += [tr(x) for x in category_names]
         table_headers += [tr('Total')]
@@ -213,16 +202,16 @@ class BuildingExposureReportMixin(ReportMixin):
                 'header': True
             })
         # Let's sort alphabetically first
-        building_types = [building_type for building_type in buildings]
+        building_types = [building_type for building_type in self.buildings]
         building_types.sort()
         for building_type in building_types:
             building_type = building_type.replace('_', ' ')
             affected_by_usage = []
             for category in category_names:
-                if building_type in affected_buildings[category]:
+                if building_type in self.affected_buildings[category]:
                     affected_by_usage.append(
                         format_int(
-                            affected_buildings[category][
+                            self.affected_buildings[category][
                                 building_type].values()[0]))
                 else:
                     affected_by_usage.append(format_int(0))
@@ -232,7 +221,7 @@ class BuildingExposureReportMixin(ReportMixin):
                 # categories
                 affected_by_usage +
                 # total
-                [format_int(buildings[building_type])])
+                [format_int(self.buildings[building_type])])
             buildings_breakdown_report.append(
                 {
                     'content': building_detail
@@ -240,12 +229,9 @@ class BuildingExposureReportMixin(ReportMixin):
 
         return buildings_breakdown_report
 
-    #This could be a property if we make affected_buildings a class property
-    def schools_closed(self, affected_buildings):
+    @property
+    def schools_closed(self):
         """Get the number of schools
-
-        :param affected_buildings: The affected buildings
-        :type affected_buildings: OrderedDict
 
         :returns: The buildings breakdown report.
         :rtype: list
@@ -260,14 +246,11 @@ class BuildingExposureReportMixin(ReportMixin):
                 (dry, {residential: 50, school: 50})
             ])
         """
-        return self._count_usage('school', affected_buildings)
+        return self._count_usage('school')
 
-    #This could also be a property if we make affected_buildings a class property
-    def hospitals_closed(self, affected_buildings):
+    @property
+    def hospitals_closed(self):
         """Get the number of schools
-
-        :param affected_buildings: The affected buildings
-        :type affected_buildings: OrderedDict
 
         :returns: The buildings breakdown report.
         :rtype: list
@@ -282,12 +265,11 @@ class BuildingExposureReportMixin(ReportMixin):
                 (dry, {residential: 50, school: 50})
             ])
         """
-        return self._count_usage('hospital', affected_buildings)
+        return self._count_usage('hospital')
 
-    @staticmethod  # While we have a static don't have affected_buildings as a
-    def _count_usage(usage, affected_buildings):
+    def _count_usage(self, usage):
         count = 0
-        for category, category_breakdown in affected_buildings.items():
+        for category, category_breakdown in self.affected_buildings.items():
             for current_usage in category_breakdown:
                 if current_usage.lower() == usage.lower():
                     count += category_breakdown[current_usage].values()[0]
