@@ -59,23 +59,16 @@ class NeedsProfile(MinimumNeeds):
         most relevant available minimum needs (based on QGIS locale). The
         last thing to do is to just use the default minimum needs.
         """
-        try:
-            minimum_needs = self.settings.value('MinimumNeeds')
-            if not minimum_needs and minimum_needs != u'':
-                # Load the most relevant minimum needs
+        self.minimum_needs = self.settings.value('MinimumNeeds')
+
+        if not self.minimum_needs or self.minimum_needs == u'':
+            # Load the most relevant minimum needs
+            profiles = self.get_profiles()
+            if len(profiles) > 0:
                 profile = self.get_profiles()[0]
-                profile_path = os.path.join(
-                    str(self.root_directory),
-                    'minimum_needs',
-                    profile + '.json')
-                self.read_from_file(profile_path)
-        except TypeError:
-            minimum_needs = self._defaults()
-
-        if not minimum_needs and minimum_needs != u'':
-            minimum_needs = self._defaults()
-
-        self.minimum_needs = minimum_needs
+                self.load_profile(profile)
+            else:
+                self.minimum_needs = self._defaults()
 
     def load_profile(self, profile):
         """Load a specific profile into the current minimum needs.
