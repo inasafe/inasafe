@@ -126,9 +126,6 @@ class FloodVectorBuildingFunction(ImpactFunction):
         hazard_layer = self.hazard  # Depth
         exposure_layer = self.exposure  # Building locations
 
-        # Get question
-        question = self.question()
-
         # Define the target field in the impact layer
         target_field = 'INUNDATED'
 
@@ -219,7 +216,7 @@ class FloodVectorBuildingFunction(ImpactFunction):
                 del affected_buildings[usage]
 
         table_body = self._tabulate(affected_buildings, affected_count,
-                                    attribute_names, buildings, question,
+                                    attribute_names, buildings, self.question,
                                     total_features)
 
         # Result

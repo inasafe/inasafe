@@ -143,8 +143,6 @@ class ClassifiedHazardPopulationFunction(ImpactFunction):
         hazard_layer = self.hazard  # Classified Hazard
         exposure_layer = self.exposure  # Population Raster
 
-        question = self.question()
-
         # Extract data as numeric arrays
         data = hazard_layer.get_data(nan=0.0)  # Class
 
@@ -206,7 +204,7 @@ class ClassifiedHazardPopulationFunction(ImpactFunction):
 
         table_body, total_needs = self._tabulate(high, low, medium,
                                                  minimum_needs, no_impact,
-                                                 question, total_impact)
+                                                 self.question, total_impact)
 
         impact_table = Table(table_body).toNewlineFreeString()
 

@@ -117,8 +117,6 @@ class TsunamiEvacuationFunction(ImpactFunction):
         hazard_layer = self.hazard  # Tsunami inundation [m]
         exposure_layer = self.exposure
 
-        question = self.question()
-
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
         thresholds = self.parameters['thresholds [m]']
@@ -166,7 +164,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
 
         # Generate impact report for the pdf map
         table_body, total_needs = self._tabulate(counts, evacuated,
-                                                 minimum_needs, question,
+                                                 minimum_needs, self.question,
                                                  rounding, thresholds, total)
 
         # Result

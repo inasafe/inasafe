@@ -155,8 +155,6 @@ class FloodRasterBuildingFunction(ImpactFunction):
         hazard_layer = self.hazard  # Depth
         exposure_layer = self.exposure  # Building locations
 
-        question = self.question()
-
         # Determine attribute name for hazard levels
         hazard_attribute = 'depth'
 
@@ -247,7 +245,7 @@ class FloodRasterBuildingFunction(ImpactFunction):
         # Generate simple impact report
         table_body = self._tabulate(attribute_names, buildings, dry_buildings,
                                     dry_count, inundated_buildings,
-                                    inundated_count, question, threshold,
+                                    inundated_count, self.question, threshold,
                                     total_features, wet_buildings, wet_count)
 
         # Result

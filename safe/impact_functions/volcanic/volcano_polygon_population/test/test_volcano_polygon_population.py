@@ -53,8 +53,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         expected_question = ('In the event of volcano point how many '
                              'population might need evacuation')
         message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question())
-        self.assertEqual(expected_question, impact_function.question(), message)
+            expected_question, impact_function.question)
+        self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand
         impact = {
             3000: 200,
@@ -78,8 +78,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         expected_question = ('In the event of volcano krb how many population '
                              'might need evacuation')
         message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question())
-        self.assertEqual(expected_question, impact_function.question(), message)
+            expected_question, impact_function.question)
+        self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand
         impact = {
             'Kawasan Rawan Bencana III': 49,

@@ -146,8 +146,6 @@ class ITBFatalityFunction(ImpactFunction):
         intensity = self.hazard
         population = self.exposure
 
-        question = self.question()
-
         # Extract data grids
         hazard = intensity.get_data()   # Ground Shaking
         exposure = population.get_data(scaling=True)  # Population Density
@@ -219,7 +217,7 @@ class ITBFatalityFunction(ImpactFunction):
             number_of_displaced.values()))
 
         # Generate impact report
-        table_body = [question]
+        table_body = [self.question]
 
         # Add total fatality estimate
         s = format_int(fatalities)
@@ -246,7 +244,7 @@ class ITBFatalityFunction(ImpactFunction):
 
         # Generate impact report for the pdf map
         table_body = [
-            question, TableRow(
+            self.question, TableRow(
                 [tr('Fatalities'), '%s' % format_int(fatalities)],
                 header=True),
             TableRow(
@@ -315,7 +313,7 @@ class ITBFatalityFunction(ImpactFunction):
         # check for zero impact
         if numpy.nanmax(mask) == 0 == numpy.nanmin(mask):
             table_body = [
-                question,
+                self.question,
                 TableRow([tr('Fatalities'), '%s' % format_int(fatalities)],
                          header=True)]
             my_message = Table(table_body).toNewlineFreeString()

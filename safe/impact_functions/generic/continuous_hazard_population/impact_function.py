@@ -117,8 +117,6 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         hazard_layer = self.hazard    # Categorised Hazard
         exposure_layer = self.exposure  # Population Raster
 
-        question = self.question()
-
         # Extract data as numeric arrays
         C = hazard_layer.get_data(nan=0.0)  # Category
 
@@ -147,7 +145,8 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
             self.parameters['minimum needs']
         ]
 
-        table_body = self._tabulate(high, low, medium, question, total_impact)
+        table_body = self._tabulate(
+            high, low, medium, self.question, total_impact)
 
         impact_table = Table(table_body).toNewlineFreeString()
 

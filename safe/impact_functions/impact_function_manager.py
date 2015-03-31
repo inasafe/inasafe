@@ -67,7 +67,7 @@ class ImpactFunctionManager(object):
         :param class_name: the name of IF class
         :type class_name: str
 
-        :return: impact function class that matches the argumen.
+        :return: impact function class that matches the argument.
         :rtype: safe.impact_functions.base.ImpactFunction
         """
         return self.registry.get_class(class_name)

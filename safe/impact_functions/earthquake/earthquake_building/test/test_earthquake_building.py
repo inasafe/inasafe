@@ -49,8 +49,8 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         expected_question = ('In the event of earthquake how many '
                              'buildings might be affected')
         message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question())
-        self.assertEqual(expected_question, impact_function.question(), message)
+            expected_question, impact_function.question)
+        self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand,
         # 1 = low, 2 = medium, 3 = high
         impact = {

@@ -60,8 +60,8 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
                              'population might die or be displaced according '
                              'pager model')
         message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question())
-        self.assertEqual(expected_question, impact_function.question(), message)
+            expected_question, impact_function.question)
+        self.assertEqual(expected_question, impact_function.question, message)
 
         expected_exposed_per_mmi = {
             2.0: 0,

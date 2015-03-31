@@ -136,8 +136,6 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         hazard_layer = self.hazard  # Flood inundation
         exposure_layer = self.exposure
 
-        question = self.question()
-
         # Check that hazard is polygon type
         if not hazard_layer.is_vector:
             message = (
@@ -253,7 +251,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         # Generate impact report for the pdf map
         table_body, total_needs = self._tabulate(affected_population,
                                                  evacuated, minimum_needs,
-                                                 question, rounding,
+                                                 self.question, rounding,
                                                  rounding_evacuated)
 
         impact_table = Table(table_body).toNewlineFreeString()

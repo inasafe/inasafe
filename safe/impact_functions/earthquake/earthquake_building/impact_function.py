@@ -70,8 +70,6 @@ class EarthquakeBuildingFunction(ImpactFunction):
         hazard_layer = self.hazard  # Depth
         exposure_layer = self.exposure  # Building locations
 
-        question = self.question()
-
         # Define attribute name for hazard levels.
         hazard_attribute = 'mmi'
 
@@ -164,7 +162,7 @@ class EarthquakeBuildingFunction(ImpactFunction):
 
         if is_nexis:
             # Generate simple impact report for NEXIS type buildings
-            table_body = [question,
+            table_body = [self.question,
                           TableRow([tr('Hazard Level'),
                                     tr('Buildings Affected'),
                                     tr('Buildings value ($M)'),
@@ -181,10 +179,10 @@ class EarthquakeBuildingFunction(ImpactFunction):
                                     format_int(contents_values[3])])]
         else:
             # Generate simple impact report for unspecific buildings
-            table_body = [question,
+            table_body = [self.question,
                           TableRow([tr('Hazard Level'),
                                     tr('Buildings Affected')],
-                          header=True),
+                                   header=True),
                           TableRow([class_1['label'], format_int(lo)]),
                           TableRow([class_2['label'], format_int(me)]),
                           TableRow([class_3['label'], format_int(hi)])]

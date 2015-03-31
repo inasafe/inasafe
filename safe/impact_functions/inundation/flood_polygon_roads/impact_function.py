@@ -1,6 +1,17 @@
 # coding=utf-8
-"""Polygon flood on roads."""
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Polygon on Roads
+Impact Function.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 import logging
+
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
@@ -70,8 +81,6 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         # Extract data
         hazard = self.hazard    # Flood
         exposure = self.exposure  # Roads
-
-        question = self.question()
 
         hazard = hazard.get_layer()
         hazard_provider = hazard.dataProvider()
@@ -180,8 +189,8 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
                 flooded_len += length
                 roads_by_type[road_type]['flooded'] += length
 
-        table_body = self._tabulate(flooded_len, question, road_len,
-                                    roads_by_type)
+        table_body = self._tabulate(
+            flooded_len, self.question, road_len, roads_by_type)
 
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('Roads inundated')

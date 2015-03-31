@@ -310,6 +310,7 @@ class ImpactFunction(object):
         """
         return self._impact_style
 
+    @property
     def question(self):
         """Formulate the question for this impact function.
 

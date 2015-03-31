@@ -46,7 +46,6 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
 
-
     def _tabulate(self, counts, evacuated, minimum_needs, question,
                   rounding_evacuated, thresholds, total):
         table_body = [
@@ -103,9 +102,9 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
                 else:
                     s = (tr('People in %(lo).1f m to %(hi).1f m of water: %('
                             'val)s') % {
-                             'lo': thresholds[i],
-                             'hi': thresholds[i + 1],
-                             'val': format_int(val)})
+                        'lo': thresholds[i],
+                        'hi': thresholds[i + 1],
+                        'val': format_int(val)})
                 table_body.append(TableRow(s))
 
         return table_body, total_needs
@@ -141,8 +140,6 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Flood inundation
         exposure_layer = self.exposure
-
-        question = self.question()
 
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
@@ -190,7 +187,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
         # Generate impact report for the pdf map
         # noinspection PyListCreation
         table_body, total_needs = self._tabulate(counts, evacuated,
-                                                 minimum_needs, question,
+                                                 minimum_needs, self.question,
                                                  rounding_evacuated,
                                                  thresholds, total)
 
@@ -200,8 +197,8 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
 
         # check for zero impact
         if numpy.nanmax(impact) == 0 == numpy.nanmin(impact):
-            table_body = self._tabulate_zero_impact(evacuated, question,
-                                                    table_body, thresholds)
+            table_body = self._tabulate_zero_impact(
+                evacuated, self.question, table_body, thresholds)
             my_message = Table(table_body).toNewlineFreeString()
             raise ZeroImpactException(my_message)
 

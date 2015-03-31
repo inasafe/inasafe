@@ -22,7 +22,6 @@ from qgis.core import (
 from PyQt4.QtCore import QVariant
 
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import get_question
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis.\
     metadata_definitions import FloodPolygonBuildingQgisMetadata
@@ -81,9 +80,6 @@ class FloodPolygonBuildingQgisFunction(ImpactFunction):
         # Extract data
         hazard_layer = self.hazard    # Flood
         exposure_layer = self.exposure  # Roads
-
-        question = get_question(
-            hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         hazard_layer = hazard_layer.get_layer()
         h_provider = hazard_layer.dataProvider()
@@ -192,8 +188,8 @@ class FloodPolygonBuildingQgisFunction(ImpactFunction):
                 flooded_count += 1
                 buildings_by_type[building_type]['flooded'] += 1
 
-        table_body = self._tabulate(building_count, buildings_by_type,
-                                      flooded_count, question)
+        table_body = self._tabulate(
+            building_count, buildings_by_type, flooded_count, self.question)
 
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('Buildings inundated')

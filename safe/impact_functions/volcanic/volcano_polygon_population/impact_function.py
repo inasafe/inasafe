@@ -16,7 +16,6 @@ from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .metadata_definitions import VolcanoPolygonPopulationFunctionMetadata
 from safe.impact_functions.core import (
-    get_question,
     evacuated_population_needs,
     population_rounding)
 from safe.engine.utilities import buffer_points
@@ -73,9 +72,6 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Volcano KRB
         exposure_layer = self.exposure
-
-        question = get_question(
-            hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         # Input checks
         if not hazard_layer.is_vector:
@@ -200,7 +196,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
 
         # Generate impact report for the pdf map
         blank_cell = ''
-        table_body = [question,
+        table_body = [self.question,
                       TableRow([tr('Volcanoes considered'),
                                 '%s' % volcano_names, blank_cell],
                                header=True),
@@ -253,7 +249,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         if numpy.nanmax(population_counts) == 0 == numpy.nanmin(
                 population_counts):
             table_body = [
-                question,
+                self.question,
                 TableRow([tr('People needing evacuation'),
                           '%s' % format_int(evacuated),
                           blank_cell], header=True)]

@@ -57,8 +57,8 @@ class TestFloodVectorBuildingFunction(unittest.TestCase):
         expected_question = ('In the event of flood polygon how many '
                              'buildings might be flooded')
         message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question())
-        self.assertEqual(expected_question, impact_function.question(), message)
+            expected_question, impact_function.question)
+        self.assertEqual(expected_question, impact_function.question, message)
 
         # Extract calculated result
         keywords = impact_layer.get_keywords()
