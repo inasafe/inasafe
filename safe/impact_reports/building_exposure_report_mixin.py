@@ -10,6 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+__author__ = 'Christian Christelis <christian@kartoza.com>'
+
+from collections import OrderedDict
 
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
@@ -18,28 +21,26 @@ from safe.impact_reports.report_mixin_base import ReportMixin
 
 class BuildingExposureReportMixin(ReportMixin):
 
-    def generate_report(self, question, affected_buildings, buildings):
+    def __init__(self):
+        self.question = ''
+        self.buildings = {}
+        self.affected_buildings = {}
+
+    def generate_report(self):
         """Breakdown by building type.
-
-        :param question: The impact question.
-        :type question: basestring
-
-        :param affected_buildings: The affected buildings
-        :type affected_buildings: OrderedDict
-
-        :param buildings: The buildings and totals.
-        :type buildings: dict
 
         :returns: The report.
         :rtype: list
         """
-        report = [{'content': question}]
+        report = [{'content': self.question}]
         report += [{'content': ''}]  # Blank line to separate report sections
-        report += self.impact_summary(affected_buildings)
+        report += self.impact_summary(self.affected_buildings)
         report += [{'content': ''}]  # Blank line to separate report sections
-        report += self.buildings_breakdown(affected_buildings, buildings)
+        report += self.buildings_breakdown(
+            self.affected_buildings,
+            self.buildings)
         report += [{'content': ''}]  # Blank line to separate report sections
-        report += self.action_checklist(affected_buildings)
+        report += self.action_checklist(self.affected_buildings)
         report += [{'content': ''}]  # Blank line to separate report sections
         report += self.notes()
         return report
@@ -109,7 +110,7 @@ class BuildingExposureReportMixin(ReportMixin):
 
         :returns:
         """
-        affect_types = self._impact_breakdown(affected_buildings)
+        affect_types = self._impact_breakdown
         impact_summary_report = [
             {
                 'content': [tr('Hazard Category')] + affect_types,
@@ -118,7 +119,7 @@ class BuildingExposureReportMixin(ReportMixin):
         for (category, building_breakdown) in affected_buildings.items():
             total_affected = [0] * len(affect_types)
             for affected_breakdown in building_breakdown.values():
-                for (affect_type, number_affected) in affected_breakdown.items():
+                for affect_type, number_affected in affected_breakdown.items():
                     count = affect_types.index(affect_type)
                     total_affected[count] += number_affected
             total_affected_formatted = [
@@ -127,6 +128,27 @@ class BuildingExposureReportMixin(ReportMixin):
                 {
                     'content': [tr(category)] + total_affected_formatted
                 })
+        impact_summary_report.append(
+            {
+                'content': [
+                    tr(tr('Total Buildings Affected')),
+                    format_int(self.total_affected_buildings)],
+                'header': True
+            })
+        impact_summary_report.append(
+            {
+                'content': [
+                    tr('Buildings Not Affected'),
+                    format_int(self.total_unaffected_buildings)],
+                'header': True
+            })
+        impact_summary_report.append(
+            {
+                'content': [
+                    tr('All Buildings'),
+                    format_int(self.total_buildings)],
+                'header': True
+            })
         return impact_summary_report
 
     def buildings_breakdown(self, affected_buildings, buildings):
@@ -271,5 +293,59 @@ class BuildingExposureReportMixin(ReportMixin):
                     count += category_breakdown[current_usage].values()[0]
         return count
 
-    def _impact_breakdown(self, affected_buildings):
-        return affected_buildings.values()[0].values()[0].keys()
+    @property
+    def _impact_breakdown(self):
+        return self.affected_buildings.values()[0].values()[0].keys()
+
+    @property
+    def total_affected_buildings(self):
+        """The total number of affected buildings
+
+        :returns: The total number of affected buildings.
+        :rtype: int
+        """
+        total_affected = 0
+        for category_breakdown in self.affected_buildings.values():
+            for building_breakdown in category_breakdown.values():
+                total_affected += building_breakdown.values()[0]
+        return total_affected
+
+    @property
+    def total_unaffected_buildings(self):
+        """The total number of unaffected buildings.
+
+        :returns: The total number of unaffected buildings.
+        :rtype: int
+        """
+        return self.total_buildings - self.total_affected_buildings
+
+    @property
+    def total_buildings(self):
+        """The total number of buildings.
+
+        :returns: The total number of buildings.
+        :rtype: int
+        """
+        return sum(self.buildings.values())
+
+    def _consolidate_to_other(self):
+        """Consolidate the small building usage groups < 25 to other.
+        """
+        cutoff = 25
+        other = tr('other')
+        for (usage, value) in self.buildings.items():
+            if value >= cutoff:
+                continue
+            if other not in self.buildings.keys():
+                self.buildings[other] = 0
+                for category in self.affected_buildings.keys():
+                    other_dict = OrderedDict(
+                        [(key, 0) for key in self._impact_breakdown])
+                    self.affected_buildings[category][other] = other_dict
+            self.buildings[other] += value
+            del self.buildings[usage]
+            for category in self.affected_buildings.keys():
+                for key in self._impact_breakdown:
+                    old = self.affected_buildings[category][usage][key]
+                    self.affected_buildings[category][other][key] += old
+                del self.affected_buildings[category][usage]

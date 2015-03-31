@@ -147,11 +147,11 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         # Building breakdown
         buildings = {}
         # Impacted building breakdown
-        affected_buildings = {
-            tr('Low'): {},
-            tr('Medium'): {},
-            tr('High'): {}
-        }
+        affected_buildings = OrderedDict([
+            (tr('High'), {}),
+            (tr('Medium'), {}),
+            (tr('Low'), {})
+        ])
         for i in range(interpolate_size):
             # Classify building according to shake level
             # and calculate dollar losses
@@ -256,8 +256,7 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 'legend_title': legend_title,
                 'target_field': self.target_field,
                 'statistics_type': self.statistics_type,
-                'statistics_classes': self
-                .statistics_classes},
+                'statistics_classes': self.statistics_classes},
             style_info=style_info)
 
         msg = 'Created vector layer %s' % str(result_layer)
