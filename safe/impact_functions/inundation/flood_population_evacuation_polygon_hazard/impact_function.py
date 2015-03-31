@@ -34,7 +34,7 @@ from safe.common.utilities import (
     create_classes,
     humanize_class,
     create_label)
-
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -48,6 +48,9 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         """Constructor."""
         super(FloodEvacuationVectorHazardFunction, self).__init__()
         self.target_field = 'population'
+
+        # AG: Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
 
     def _tabulate(self, affected_population, evacuated, minimum_needs,
                   question, rounding, rounding_evacuated):

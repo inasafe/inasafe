@@ -32,6 +32,7 @@ from safe.common.utilities import (
     get_non_conflicting_attribute_name)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class VolcanoPolygonPopulationFunction(ImpactFunction):
@@ -42,6 +43,8 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
     def __init__(self):
         super(VolcanoPolygonPopulationFunction, self).__init__()
         self.target_field = 'population'
+        # AG: Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
 
     def run(self, layers=None):
         """Run volcano population evacuation Impact Function.

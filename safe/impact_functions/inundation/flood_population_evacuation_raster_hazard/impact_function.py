@@ -26,6 +26,7 @@ from safe.common.utilities import (
     create_label,
     verify,
     get_thousand_separator)
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -41,6 +42,10 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
         super(FloodEvacuationRasterHazardFunction, self).__init__()
         self.target_field = 'population'
         self.impact_function_manager = ImpactFunctionManager()
+
+        # AG: Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
+
 
     def _tabulate(self, counts, evacuated, minimum_needs, question,
                   rounding_evacuated, thresholds, total):

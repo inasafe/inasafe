@@ -34,6 +34,7 @@ from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.common.tables import Table, TableRow
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class ContinuousHazardPopulationFunction(ImpactFunction):
@@ -44,6 +45,9 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
     def __init__(self):
         super(ContinuousHazardPopulationFunction, self).__init__()
         self.impact_function_manager = ImpactFunctionManager()
+
+        # AG: Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
 
     def _tabulate(self, high, low, medium, question, total_impact):
         # Generate impact report for the pdf map

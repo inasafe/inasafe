@@ -24,6 +24,7 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 # noinspection PyClassHasNoInit
@@ -35,6 +36,9 @@ class TsunamiEvacuationFunction(ImpactFunction):
     def __init__(self):
         super(TsunamiEvacuationFunction, self).__init__()
         self.impact_function_manager = ImpactFunctionManager()
+
+        # AG: Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
 
     def _tabulate(self, counts, evacuated, minimum_needs, question, rounding,
                   thresholds, total):

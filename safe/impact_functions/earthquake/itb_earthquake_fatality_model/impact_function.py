@@ -34,6 +34,7 @@ from safe.common.utilities import (
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.utilities.i18n import tr
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -103,6 +104,9 @@ class ITBFatalityFunction(ImpactFunction):
 
     def __init__(self):
         super(ITBFatalityFunction, self).__init__()
+
+        # AG: Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
 
     def fatality_rate(self, mmi):
         """ITB method to compute fatality rate.

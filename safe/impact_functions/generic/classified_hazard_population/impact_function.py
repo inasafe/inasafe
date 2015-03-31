@@ -41,6 +41,7 @@ from safe.impact_functions.generic.\
     ClassifiedHazardPopulationMetadata
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class ClassifiedHazardPopulationFunction(ImpactFunction):
@@ -52,6 +53,9 @@ class ClassifiedHazardPopulationFunction(ImpactFunction):
     def __init__(self):
         super(ClassifiedHazardPopulationFunction, self).__init__()
         self.impact_function_manager = ImpactFunctionManager()
+
+        # AG: Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
 
     def _tabulate(self, high, low, medium, minimum_needs, no_impact, question,
                   total_impact):

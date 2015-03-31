@@ -19,7 +19,6 @@ from PyQt4.QtCore import QSettings
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 from safe.utilities.resources import resources_path
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 
 def add_needs_parameters(parameters):
@@ -107,20 +106,6 @@ class NeedsProfile(MinimumNeeds):
             return
 
         self.settings.setValue('MinimumNeeds', self.minimum_needs)
-        # Monkey patch all the impact functions
-
-        # FIXME (AG) Since the parameters is not class property anymore in
-        # the new IF architecture, patching the impact function like this
-        # probably won't work. Need to check if this is still working. But to
-        #  make this not thrown Python Error, I will just pass the instance.
-        for impact_function in ImpactFunctionManager().impact_functions:
-            impact_function = impact_function.instance()
-            if not hasattr(impact_function, 'parameters'):
-                continue
-            if 'minimum needs' in impact_function.parameters:
-                impact_function.parameters['minimum needs'] = (
-                    self.get_needs_parameters())
-                impact_function.parameters['provenance'] = self.provenance
 
     def get_profiles(self):
         """Get all the minimum needs profiles.
