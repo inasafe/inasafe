@@ -583,7 +583,9 @@ class Plugin(object):
         from safe.gui.tools.minimum_needs.needs_manager_dialog import (
             NeedsManagerDialog)
 
-        dialog = NeedsManagerDialog(self.iface.mainWindow())
+        dialog = NeedsManagerDialog(
+            parent=self.iface.mainWindow(),
+            dock=self.dock_widget)
         dialog.exec_()  # modal
 
     def show_impact_merge(self):
