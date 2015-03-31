@@ -40,7 +40,8 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
     def notes(self):
         """Return the notes section of the report.
 
-        :return:
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
         """
         return [
             {

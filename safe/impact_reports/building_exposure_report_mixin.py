@@ -109,18 +109,23 @@ class BuildingExposureReportMixin(ReportMixin):
 
         :returns:
         """
+        affect_types = self._impact_breakdown(affected_buildings)
         impact_summary_report = [
             {
-                'content': [tr('Hazard Category'), tr('Buildings Affected')],
+                'content': [tr('Hazard Category')] + affect_types,
                 'header': True
             }]
         for (category, building_breakdown) in affected_buildings.items():
-            total_affected = 0
-            for number_affected in building_breakdown.values():
-                total_affected += number_affected
+            total_affected = [0] * len(affect_types)
+            for affected_breakdown in building_breakdown.values():
+                for (affect_type, number_affected) in affected_breakdown.items():
+                    count = affect_types.index(affect_type)
+                    total_affected[count] += number_affected
+            total_affected_formatted = [
+                format_int(affected) for affected in total_affected]
             impact_summary_report.append(
                 {
-                    'content': [tr(category), format_int(total_affected)]
+                    'content': [tr(category)] + total_affected_formatted
                 })
         return impact_summary_report
 
@@ -141,9 +146,37 @@ class BuildingExposureReportMixin(ReportMixin):
             affected_buildings = OrderedDict([
                 (category, {building_type: amount}),
             e.g.
-                (inundated, {residential: 1000, school: 0 ...}),
-                (wet, {residential: 12, school: 2 ...}),
-                (dry, {residential: 50, school: 50})
+                (inundated, {
+                    residential: OrderedDict([
+                        (Buildings Affected, 1000),
+                        (value, ...
+                    ]),
+                    school: OrderedDict([
+                        (Buildings Affected, 0),
+                        (value, ...
+                    },
+                    ...
+                }),
+                (wet, {
+                    residential: OrderedDict([
+                        (Buildings Affected, 12),
+                        (value, ...
+                    },
+                    school: OrderedDict([
+                        (Buildings Affected, 2),
+                        (value, ...
+                    }...
+                }),
+                (dry, {
+                    residential: OrderedDict([
+                        (Buildings Affected, 1),
+                        (value, ...
+                    },
+                    school: {
+                        (Buildings Affected, 5),
+                        (value, ...
+                    }...
+                }),
             ])
             buildings = {residential: 1062, school: 52 ...}
         """
@@ -167,7 +200,8 @@ class BuildingExposureReportMixin(ReportMixin):
                 if building_type in affected_buildings[category]:
                     affected_by_usage.append(
                         format_int(
-                            affected_buildings[category][building_type]))
+                            affected_buildings[category][
+                                building_type].values()[0]))
                 else:
                     affected_by_usage.append(format_int(0))
             building_detail = (
@@ -234,5 +268,8 @@ class BuildingExposureReportMixin(ReportMixin):
         for category, category_breakdown in affected_buildings.items():
             for current_usage in category_breakdown:
                 if current_usage.lower() == usage.lower():
-                    count += category_breakdown[current_usage]
+                    count += category_breakdown[current_usage].values()[0]
         return count
+
+    def _impact_breakdown(self, affected_buildings):
+        return affected_buildings.values()[0].values()[0].keys()
