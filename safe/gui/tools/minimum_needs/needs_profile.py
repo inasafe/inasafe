@@ -136,6 +136,9 @@ class NeedsProfile(MinimumNeeds):
             :returns: Ordered profiles
             :rtype: list
             """
+            if locale is None:
+                return unsorted_profiles
+            
             locale = '_%s' % locale[:2]
             profiles_our_locale = []
             profiles_remaining = []
