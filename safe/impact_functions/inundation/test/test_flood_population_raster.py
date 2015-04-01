@@ -26,7 +26,9 @@ from collections import OrderedDict
 from safe.storage.core import read_layer
 from safe.engine.core import calculate_impact
 from safe.impact_functions import get_plugin
-from safe.test.utilities import TESTDATA
+from safe.test.utilities import TESTDATA, get_qgis_app
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestFloodPopulationEvacuation(unittest.TestCase):
