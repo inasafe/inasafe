@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from collections import OrderedDict
+
 import logging
 
 from safe.impact_functions.base import ImpactFunction
@@ -54,13 +56,13 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                     'regions marked as affected')
             }]
 
-    def _tabulate(self, affected_buildings, buildings, question):
+    def _tabulate(self):
+        """The tabulation report. Any last configuration should be done here.
 
-        affected_buildings = {'Inundated': affected_buildings}
-        return self.generate_html_report(
-            question,
-            affected_buildings,
-            buildings)
+        :returns: A html report.
+        :rtype: basestring
+        """
+        return self.generate_html_report()
 
     def run(self, layers=None):
         """Flood impact to buildings (e.g. from Open Street Map).
@@ -76,9 +78,6 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         # Extract data
         hazard_layer = self.hazard  # Depth
         exposure_layer = self.exposure  # Building locations
-
-        # Get question
-        question = self.question()
 
         # Define the target field in the impact layer
         target_field = 'INUNDATED'
@@ -98,13 +97,11 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         attribute_names = interpolated_layer.get_attribute_names()
         features = interpolated_layer.get_data()
         total_features = len(interpolated_layer)
-        buildings = {}
-
-        # The number of affected buildings
-        affected_count = 0
-
+        self.buildings = {}
         # The variable for regions mode
-        affected_buildings = {}
+        self.affected_buildings = OrderedDict([
+            (tr('Inundated'), {})
+        ])
         for i in range(total_features):
             # Use interpolated polygon attribute
             feature = features[i]
@@ -134,45 +131,32 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                     'can\'t help more.')
                 raise Exception(message)
 
-            # Count affected buildings by usage type if available
-            usage = get_osm_building_usage(attribute_names, features[i])
-            if usage is not None and usage != 0:
-                key = usage
-            else:
-                key = 'unknown'
-
-            if key not in buildings:
-                buildings[key] = 0
-                affected_buildings[key] = 0
-
-            # Count all buildings by type
-            buildings[key] += 1
-            if inundated_status is True:
-                # Count affected buildings by type
-                affected_buildings[key] += 1
-                # Count total affected buildings
-                affected_count += 1
-
             # Add calculated impact to existing attributes
             features[i][target_field] = int(inundated_status)
 
+            # Count affected buildings by usage type if available
+            usage = get_osm_building_usage(attribute_names, features[i])
+            if usage is None or usage == 0:
+                usage = 'unknown'
+
+            if usage not in self.buildings:
+                self.buildings[usage] = 0
+                for category in self.affected_buildings.keys():
+                    self.affected_buildings[category][
+                        usage] = OrderedDict([
+                            (tr('Buildings Affected'), 0)])
+
+            # Count all buildings by type
+            self.buildings[usage] += 1
+            if inundated_status is True:
+                self.affected_buildings[tr('Inundated')][usage][
+                    tr('Buildings Affected')] += 1
+
+        affected_buildings = self.total_affected_buildings
+        total_buildings = self.total_buildings
         # Lump small entries and 'unknown' into 'other' category
-        for usage in buildings.keys():
-            x = buildings[usage]
-            if x < 25 or usage == 'unknown':
-                if 'other' not in buildings:
-                    buildings['other'] = 0
-                    affected_buildings['other'] = 0
-
-                buildings['other'] += x
-                affected_buildings['other'] += affected_buildings[usage]
-                del buildings[usage]
-                del affected_buildings[usage]
-
-        impact_table = impact_summary = self._tabulate(
-            affected_buildings, 
-            buildings, 
-            question)
+        self._consolidate_to_other()
+        impact_table = impact_summary = self._tabulate()
 
         # Prepare impact layer
         map_title = tr('Buildings inundated')
@@ -209,8 +193,8 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 'map_title': map_title,
                 'legend_units': legend_units,
                 'legend_title': legend_title,
-                'buildings_total': total_features,
-                'buildings_affected': affected_count},
+                'buildings_total': total_buildings,
+                'buildings_affected': affected_buildings},
             style_info=style_info)
         self._impact = vector_layer
         return vector_layer
