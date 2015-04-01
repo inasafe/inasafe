@@ -64,7 +64,7 @@ class FloodPolygonBuildingQgisFunction(ImpactFunction):
         Input
           layers: List of layers expected to contain
               H: Polygon layer of inundation areas
-              E: Vector layer of roads
+              E: Vector layer of buildings
         """
         self.validate()
         self.prepare(layers)
