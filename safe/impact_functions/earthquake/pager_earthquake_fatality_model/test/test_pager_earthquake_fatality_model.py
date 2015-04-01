@@ -41,7 +41,8 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
 
         # For EQ on Pops we need to clip the hazard and exposure first to the
         #  same dimension
-        clipped_hazard, clipped_exposure = clip_layers(eq_path,population_path)
+        clipped_hazard, clipped_exposure = clip_layers(eq_path,
+                                                       population_path)
 
         # noinspection PyUnresolvedReferences
         eq_layer = read_layer(
@@ -82,7 +83,8 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             9.5: 0}
         result = impact_layer.get_keywords('exposed_per_mmi')
 
-        message = 'Expecting %s, but it returns %s' % (expected_exposed_per_mmi, result)
+        message = 'Expecting %s, but it returns %s' % (
+            expected_exposed_per_mmi, result)
         self.assertEqual(expected_exposed_per_mmi, result, message)
 
     def test_filter(self):

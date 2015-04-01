@@ -43,8 +43,8 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test register and clear impact function."""
         registry = Registry()
         registry.clear()
-        message = 'Expecting registry should be cleared. %s impact functions ' \
-                  'exists instead' % len(registry.impact_functions)
+        message = 'Expecting registry should be cleared. %s impact ' \
+                  'functions exists instead' % len(registry.impact_functions)
         self.assertEqual(0, len(registry.impact_functions), message)
 
         registry.register(FloodPolygonBuildingQgisFunction)
@@ -189,6 +189,6 @@ class TestRegistry(unittest.TestCase):
                 'categories']['exposure']['subcategories']
             result_list = [subcat.get('id') for subcat in result]
             expected = 'structure'
-            message = 'Expecting structure exposure impact functions. Got %s ' \
-                      'instead' % result_list[0]
+            message = 'Expecting structure exposure impact functions. ' \
+                      'Got %s instead' % result_list[0]
             self.assertTrue(expected in result_list, message)

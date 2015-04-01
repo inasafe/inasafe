@@ -455,7 +455,8 @@ class PostprocessorManager(QtCore.QObject):
                         if (youth_ratio is None or
                                 adult_ratio is None or
                                 elderly_ratio is None):
-                            LOGGER.debug('--- only default age ratios used ---')
+                            LOGGER.debug(
+                                '--- only default age ratios used ---')
                             youth_ratio = self.aggregator.defaults[
                                 'YOUTH_RATIO']
                             adult_ratio = self.aggregator.defaults[

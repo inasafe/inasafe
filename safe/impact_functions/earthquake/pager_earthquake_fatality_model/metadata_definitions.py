@@ -25,8 +25,8 @@ from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
-from safe.impact_functions.earthquake.itb_earthquake_fatality_model.metadata_definitions import \
-    ITBFatalityMetadata
+from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
+    .metadata_definitions import ITBFatalityMetadata
 from safe.utilities.i18n import tr
 
 

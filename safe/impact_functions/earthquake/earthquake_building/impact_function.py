@@ -18,8 +18,8 @@ import logging
 from collections import OrderedDict
 
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.earthquake.earthquake_building.metadata_definitions import \
-    EarthquakeBuildingMetadata
+from safe.impact_functions.earthquake.earthquake_building\
+    .metadata_definitions import EarthquakeBuildingMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.common.utilities import get_osm_building_usage

@@ -266,7 +266,8 @@ class TestImpactFunctionManager(unittest.TestCase):
     #     self.assertItemsEqual(result, expected_result, message)
     #
     #     impact_function = EarthquakeBuildingImpactFunction()
-    #     result = impact_function_manager.get_available_hazards(impact_function)
+    #     result = impact_function_manager\
+    #         .get_available_hazards(impact_function)
     #     expected_result = [hazard_earthquake]
     #     message = ('I expect %s but I got %s.' % (expected_result, result))
     #     self.assertItemsEqual(result, expected_result, message)

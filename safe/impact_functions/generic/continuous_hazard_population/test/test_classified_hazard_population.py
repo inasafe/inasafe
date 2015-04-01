@@ -11,8 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.generic.continuous_hazard_population.impact_function import \
-    ContinuousHazardPopulationFunction
+from safe.impact_functions.generic.continuous_hazard_population\
+    .impact_function import ContinuousHazardPopulationFunction
 
 __author__ = 'lucernae'
 __filename__ = 'test_classified_hazard_building'

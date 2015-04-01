@@ -19,8 +19,8 @@ __date__ = '23/03/15'
 import unittest
 import math
 
-from safe.impact_functions.generic.classified_hazard_building.impact_function import \
-    ClassifiedHazardBuildingFunction
+from safe.impact_functions.generic.classified_hazard_building\
+    .impact_function import ClassifiedHazardBuildingFunction
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.storage.core import read_layer
@@ -96,4 +96,3 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
-

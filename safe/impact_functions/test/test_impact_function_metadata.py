@@ -144,7 +144,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-        result = impact_function.metadata().allowed_units('flood', 'continuous')
+        result = impact_function.metadata()\
+            .allowed_units('flood', 'continuous')
         expected_result = [unit_metres_depth, unit_feet_depth]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertEqual(result, expected_result, message)

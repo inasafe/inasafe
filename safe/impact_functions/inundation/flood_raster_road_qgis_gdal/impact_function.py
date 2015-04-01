@@ -9,8 +9,8 @@ from qgis.core import (
 
 from safe.impact_functions.base import ImpactFunction
 from safe.common.tables import Table, TableRow
-from safe.impact_functions.inundation.flood_raster_road_qgis_gdal.metadata_definitions import \
-    FloodRasterRoadsGdalMetadata
+from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
+    .metadata_definitions import FloodRasterRoadsGdalMetadata
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg

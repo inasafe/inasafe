@@ -267,8 +267,7 @@ class AggregatorTest(unittest.TestCase):
                 DOCK.analysis.aggregator.preprocessed_feature_count))
         self.assertEqual(
             expected_feature_count,
-            DOCK.analysis.aggregator.preprocessed_feature_count,
-                message)
+            DOCK.analysis.aggregator.preprocessed_feature_count, message)
 
     def _create_aggregator(self,
                            use_aoi_mode,
