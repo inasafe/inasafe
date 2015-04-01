@@ -21,9 +21,7 @@ from numpy import round as numpy_round
 from safe.storage.vector import Vector
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.utilities.i18n import tr
-from safe.common.utilities import format_int
 from safe.common.utilities import get_osm_building_usage
-from safe.common.tables import Table, TableRow
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.classified_hazard_building.metadata_definitions import \
     ClassifiedHazardBuildingMetadata
@@ -63,6 +61,9 @@ class ClassifiedHazardBuildingFunction(
                     'Map shows buildings affected in low, medium and '
                     'high hazard class areas.')
             }]
+
+    def _tabulate(self):
+        return self.generate_html_report()
 
     def run(self, layers=None):
         """Classified hazard impact to buildings (e.g. from Open Street Map).
@@ -147,7 +148,7 @@ class ClassifiedHazardBuildingFunction(
 
         self._consolidate_to_other()
         buildings_affected = self.total_affected_buildings
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self._tabulate()
 
         # Create style
         style_classes = [dict(label=tr('High'),

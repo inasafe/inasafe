@@ -280,6 +280,10 @@ class BuildingExposureReportMixin(ReportMixin):
         return self.affected_buildings.values()[0].values()[0].keys()
 
     @property
+    def _affected_categories(self):
+        return self.affected_buildings.keys()
+
+    @property
     def total_affected_buildings(self):
         """The total number of affected buildings
 
@@ -287,7 +291,8 @@ class BuildingExposureReportMixin(ReportMixin):
         :rtype: int
         """
         total_affected = 0
-        for category_breakdown in self.affected_buildings.values():
+        for category in self._affected_categories:
+            category_breakdown = self.affected_buildings[category]
             for building_breakdown in category_breakdown.values():
                 total_affected += building_breakdown.values()[0]
         return total_affected

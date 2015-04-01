@@ -213,6 +213,7 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 self.affected_buildings[category][usage][
                     tr('Contents value ($M)')] += contents_value / 1000000.0
 
+        self._consolidate_to_other()
         impact_table = impact_summary = self._tabulate()
 
         # Create style
