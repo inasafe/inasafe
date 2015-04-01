@@ -69,7 +69,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
 
         parameter = {
             'thresholds': [1.0],
-            'postprocessors':  OrderedDict([
+            'postprocessors': OrderedDict([
                 ('Gender', default_gender_postprocessor()),
                 ('Age', age_postprocessor()),
                 ('MinimumNeeds', minimum_needs_selector()),

@@ -132,8 +132,6 @@ def check_data_integrity(layer_objects):
             verify(layer.columns == N, msg)
 
 
-
-
 def calculate_impact(layers,
                      impact_function,
                      extent=None,

@@ -16,8 +16,8 @@ __date__ = '24/03/15'
 
 import logging
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.earthquake.earthquake_building.metadata_definitions import \
-    EarthquakeBuildingMetadata
+from safe.impact_functions.earthquake.earthquake_building\
+    .metadata_definitions import EarthquakeBuildingMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int

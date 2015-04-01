@@ -378,8 +378,9 @@ class ImpactFunction(object):
             * raising errors if any untenable condition exists e.g. extent has
               no valid CRS. (post 3.1)
 
-        We suggest to overload this method in your concrete class implementation
-        so that it includes any impact function specific checks too.
+        We suggest to overload this method in your concrete class
+        implementation so that it includes any impact function specific checks
+        too.
 
         ..note: For 3.1, we will still do those preprocessing in analysis
             class. We will just need to check if the function_type is

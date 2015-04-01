@@ -17,8 +17,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.volcanic.volcano_polygon_population.impact_function \
-    import VolcanoPolygonPopulationFunction
+from safe.impact_functions.volcanic.volcano_polygon_population\
+    .impact_function import VolcanoPolygonPopulationFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 

@@ -149,8 +149,8 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         if hazard_poly is None:
             message = tr(
                 'There are no objects in the hazard layer with %s (Affected '
-                'Field) = %s (Affected Value). Please check the value or use a '
-                'different extent.' % (affected_field, affected_value))
+                'Field) = %s (Affected Value). Please check the value or use '
+                'a different extent.' % (affected_field, affected_value))
             raise GetDataError(message)
 
         # Clip exposure by the extent

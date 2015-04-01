@@ -23,8 +23,8 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.generic.classified_hazard_building.metadata_definitions import \
-    ClassifiedHazardBuildingMetadata
+from safe.impact_functions.generic.classified_hazard_building\
+    .metadata_definitions import ClassifiedHazardBuildingMetadata
 
 
 LOGGER = logging.getLogger('InaSAFE')

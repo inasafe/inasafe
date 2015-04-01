@@ -127,7 +127,7 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                     ]
                 }
             },
-            'parameters':  OrderedDict([
+            'parameters': OrderedDict([
                 ('threshold [m]', 1.0),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
