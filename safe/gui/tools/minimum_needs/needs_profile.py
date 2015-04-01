@@ -49,7 +49,14 @@ class NeedsProfile(MinimumNeeds):
         self.settings = QSettings()
         self.minimum_needs = None
         self._root_directory = None
-        self.locale = self.settings.value('locale/userLocale')
+
+        # Set locale needed to sort minimum needs. If the settings in QGIS
+        # none, default to en_US (This case is useful for testing, in real
+        # life locale QGIS would probably never be empty
+        locale = self.settings.value('locale/userLocale')
+        if locale is None:
+            locale = 'en_US'
+        self.locale = locale
         self.load()
 
     def load(self):
@@ -138,7 +145,7 @@ class NeedsProfile(MinimumNeeds):
             """
             if locale is None:
                 return unsorted_profiles
-            
+
             locale = '_%s' % locale[:2]
             profiles_our_locale = []
             profiles_remaining = []
