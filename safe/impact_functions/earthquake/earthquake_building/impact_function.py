@@ -82,11 +82,8 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 'condition': is_nexis
             }]
 
-    def _tabulate(self, affected_buildings, buildings, question):
-        return self.generate_html_report(
-            question,
-            affected_buildings,
-            buildings)
+    def _tabulate(self):
+        return self.generate_html_report()
 
     def run(self, layers=None):
         """Earthquake impact to buildings (e.g. from OpenStreetMap).
@@ -117,8 +114,6 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         hazard_layer = self.hazard  # Depth
         exposure_layer = self.exposure  # Building locations
 
-        question = self.question()
-
         # Define attribute name for hazard levels.
         hazard_attribute = 'mmi'
 
@@ -145,9 +140,9 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         interpolate_size = len(interpolate_result)
 
         # Building breakdown
-        buildings = {}
+        self.buildings = {}
         # Impacted building breakdown
-        affected_buildings = OrderedDict([
+        self.affected_buildings = OrderedDict([
             (tr('High'), {}),
             (tr('Medium'), {}),
             (tr('Low'), {})
@@ -182,18 +177,18 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
             if usage is None or usage == 0:
                 usage = 'unknown'
 
-            if usage not in buildings:
-                buildings[usage] = 0
-                for category in affected_buildings.keys():
+            if usage not in self.buildings:
+                self.buildings[usage] = 0
+                for category in self.affected_buildings.keys():
                     if self.is_nexis:
-                        affected_buildings[category][usage] = OrderedDict([
+                        self.affected_buildings[category][usage] = OrderedDict([
                             (tr('Buildings Affected'), 0),
                             (tr('Buildings value ($M)'), 0),
                             (tr('Contents value ($M)'), 0)])
                     else:
-                        affected_buildings[category][usage] = OrderedDict([
+                        self.affected_buildings[category][usage] = OrderedDict([
                             (tr('Buildings Affected'), 0)])
-            buildings[usage] += 1
+            self.buildings[usage] += 1
             try:
                 mmi = float(attributes[i][hazard_attribute])  # MMI
             except TypeError:
@@ -211,17 +206,14 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 # Not reported for less than level t0
                 continue
             attributes[i][self.target_field] = cls
-            affected_buildings[category][usage][tr('Buildings Affected')] += 1
+            self.affected_buildings[category][usage][tr('Buildings Affected')] += 1
             if self.is_nexis:
-                affected_buildings[category][usage][
+                self.affected_buildings[category][usage][
                     tr('Buildings value ($M)')] += building_value / 1000000.0
-                affected_buildings[category][usage][
+                self.affected_buildings[category][usage][
                     tr('Contents value ($M)')] += contents_value / 1000000.0
 
-        impact_table = impact_summary = self._tabulate(
-            affected_buildings,
-            buildings,
-            question)
+        impact_table = impact_summary = self._tabulate()
 
         # Create style
         style_classes = [dict(label=class_1['label'], value=class_1['class'],
