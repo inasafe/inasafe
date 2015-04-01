@@ -123,13 +123,14 @@ class BuildingExposureReportMixin(ReportMixin):
                 {
                     'content': [tr(category)] + total_affected_formatted
                 })
-        impact_summary_report.append(
-            {
-                'content': [
-                    tr(tr('Total Buildings Affected')),
-                    format_int(self.total_affected_buildings)],
-                'header': True
-            })
+        if len(self._affected_categories) > 1:
+            impact_summary_report.append(
+                {
+                    'content': [
+                        tr(tr('Total Buildings Affected')),
+                        format_int(self.total_affected_buildings)],
+                    'header': True
+                })
         impact_summary_report.append(
             {
                 'content': [

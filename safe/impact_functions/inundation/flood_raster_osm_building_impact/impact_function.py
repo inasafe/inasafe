@@ -76,11 +76,22 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 'content': tr(
                     'Buildings are said to be open if they are dry.')
             }]
+
     @property
     def _affected_categories(self):
+        """Overwriting the affected categories, since 'unaffected' are counted.
+
+        :returns: The categoiues that equal effected.
+        :rtype: list
+        """
         return [tr('Number Inundated'), tr('Number of Wet Buildings')]
 
     def _tabulate(self):
+        """The tabulation report. Any last configuration should be done here.
+
+        :returns: A html report.
+        :rtype: basestring
+        """
         return self.generate_html_report()
 
     def run(self, layers=None):
@@ -115,16 +126,6 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         features = interpolated_layer.get_data()
         total_features = len(interpolated_layer)
 
-        # The number of affected buildings
-
-        # The variable for grid mode
-        inundated_count = 0
-        wet_count = 0
-        dry_count = 0
-        inundated_buildings = {}
-        wet_buildings = {}
-        dry_buildings = {}
-
         # Building breakdown
         self.buildings = {}
         # Impacted building breakdown
@@ -146,7 +147,7 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
             # Count affected buildings by usage type if available
             usage = get_osm_building_usage(attribute_names, features[i])
             if usage is None or usage == 0:
-                key = 'unknown'
+                usage = 'unknown'
 
             if usage not in self.buildings:
                 self.buildings[usage] = 0
