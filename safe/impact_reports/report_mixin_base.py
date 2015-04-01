@@ -16,37 +16,33 @@ from safe.common.tables import Table, TableRow
 
 
 class ReportMixin(object):
-    def generate_html_report(self, *args):
-        """
-        :param args: The arguments to be passed to the reoprt
+    def generate_html_report(self):
+        """Generate an HTML report.
 
         :returns: The report in html format.
         :rtype: basestring
         """
         return self.parse_to_html(
-            self.generate_report(*args))
+            self.generate_report())
 
-    def generate_report(self, *args):
+    def generate_report(self):
         """Defining the interface.
-        :param args: The arguments needed by the derived class.
-            (This might be phased out as we rather use the class members)
+
         :returns: An itemized breakdown of the report.
         :rtype: list
         """
         return []
 
-    def action_checklist(self, *args):
+    def action_checklist(self):
         """The actions to be taken in for the impact on this exposure type.
-        :param args: The arguments needed by the derived class.
 
         :returns: The action checklist.
         :rtype: list
         """
         return []
 
-    def impact_summary(self, *args):
+    def impact_summary(self):
         """The impact summary.
-        :param args: The arguments needed by the derived class.
 
         :returns: The action checklist.
         :rtype: list
@@ -68,7 +64,7 @@ class ReportMixin(object):
     def parse_to_html(report):
         """Convert a json compatible list of results to a tabulated version.
 
-        :param report: A json compatible reoprt
+        :param report: A json compatible report
         :type report: list
 
         :returns: Returns a tabulated version of the report

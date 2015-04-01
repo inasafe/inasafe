@@ -22,6 +22,47 @@ from safe.impact_reports.report_mixin_base import ReportMixin
 class BuildingExposureReportMixin(ReportMixin):
 
     def __init__(self):
+        """Building specific report mixin.
+
+        ..Notes:
+        Expect affected buildings to be given as following:
+            affected_buildings = OrderedDict([
+                (category, {building_type: amount}),
+            e.g.
+                (inundated, {
+                    residential: OrderedDict([
+                        (Buildings Affected, 1000),
+                        (value, ...
+                    ]),
+                    school: OrderedDict([
+                        (Buildings Affected, 0),
+                        (value, ...
+                    },
+                    ...
+                }),
+                (wet, {
+                    residential: OrderedDict([
+                        (Buildings Affected, 12),
+                        (value, ...
+                    },
+                    school: OrderedDict([
+                        (Buildings Affected, 2),
+                        (value, ...
+                    }...
+                }),
+                (dry, {
+                    residential: OrderedDict([
+                        (Buildings Affected, 1),
+                        (value, ...
+                    },
+                    school: {
+                        (Buildings Affected, 5),
+                        (value, ...
+                    }...
+                }),
+            ])
+            buildings = {residential: 1062, school: 52 ...}
+        """
         self.question = ''
         self.buildings = {}
         self.affected_buildings = {}
@@ -48,16 +89,6 @@ class BuildingExposureReportMixin(ReportMixin):
 
         :returns: The buildings breakdown report.
         :rtype: list
-
-        ..Notes:
-        Expect affected buildings to be given as following:
-            affected_buildings = OrderedDict([
-                (category, {building_type: amount}),
-            e.g.
-                (inundated, {residential: 1000, school: 0 ...}),
-                (wet, {residential: 12, school: 2 ...}),
-                (dry, {residential: 50, school: 50})
-            ])
         """
         schools_closed = self.schools_closed
         hospitals_closed = self.hospitals_closed
@@ -152,45 +183,6 @@ class BuildingExposureReportMixin(ReportMixin):
 
         :returns: The buildings breakdown report.
         :rtype: list
-
-        ..Notes:
-        Expect affected buildings to be given as following:
-            affected_buildings = OrderedDict([
-                (category, {building_type: amount}),
-            e.g.
-                (inundated, {
-                    residential: OrderedDict([
-                        (Buildings Affected, 1000),
-                        (value, ...
-                    ]),
-                    school: OrderedDict([
-                        (Buildings Affected, 0),
-                        (value, ...
-                    },
-                    ...
-                }),
-                (wet, {
-                    residential: OrderedDict([
-                        (Buildings Affected, 12),
-                        (value, ...
-                    },
-                    school: OrderedDict([
-                        (Buildings Affected, 2),
-                        (value, ...
-                    }...
-                }),
-                (dry, {
-                    residential: OrderedDict([
-                        (Buildings Affected, 1),
-                        (value, ...
-                    },
-                    school: {
-                        (Buildings Affected, 5),
-                        (value, ...
-                    }...
-                }),
-            ])
-            buildings = {residential: 1062, school: 52 ...}
         """
         buildings_breakdown_report = []
         category_names = self.affected_buildings.keys()
@@ -270,7 +262,7 @@ class BuildingExposureReportMixin(ReportMixin):
 
     def _count_usage(self, usage):
         count = 0
-        for category, category_breakdown in self.affected_buildings.items():
+        for category_breakdown in self.affected_buildings.values():
             for current_usage in category_breakdown:
                 if current_usage.lower() == usage.lower():
                     count += category_breakdown[current_usage].values()[0]
