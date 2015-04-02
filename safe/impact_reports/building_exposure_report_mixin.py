@@ -20,9 +20,15 @@ from safe.impact_reports.report_mixin_base import ReportMixin
 
 
 class BuildingExposureReportMixin(ReportMixin):
+    """Building specific report.
+
+    .. versionadded:: 3.1
+    """
 
     def __init__(self):
         """Building specific report mixin.
+
+        .. versionadded:: 3.1
 
         ..Notes:
         Expect affected buildings to be given as following:
@@ -134,7 +140,8 @@ class BuildingExposureReportMixin(ReportMixin):
     def impact_summary(self):
         """The impact summary as per category
 
-        :returns:
+        :returns: The impact summary.
+        :rtype: list
         """
         affect_types = self._impact_breakdown
         impact_summary_report = [
@@ -270,6 +277,11 @@ class BuildingExposureReportMixin(ReportMixin):
 
     @property
     def _impact_breakdown(self):
+        """Get the impact breakdown categories"""
+        if len(self.affected_buildings.values()) == 0:
+            return []
+        if len(self.affected_buildings.values()[0].values()) == 0:
+            return []
         return self.affected_buildings.values()[0].values()[0].keys()
 
     @property
@@ -312,7 +324,7 @@ class BuildingExposureReportMixin(ReportMixin):
         """Consolidate the small building usage groups < 25 to other.
         """
         cutoff = 25
-        other = tr('other')
+        other = tr('Other')
         for (usage, value) in self.buildings.items():
             if value >= cutoff:
                 continue

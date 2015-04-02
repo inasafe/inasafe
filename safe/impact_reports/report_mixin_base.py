@@ -16,6 +16,11 @@ from safe.common.tables import Table, TableRow
 
 
 class ReportMixin(object):
+    """Report Mixin Interface.
+
+    .. versionadded:: 3.1
+    """
+
     def generate_html_report(self):
         """Generate an HTML report.
 

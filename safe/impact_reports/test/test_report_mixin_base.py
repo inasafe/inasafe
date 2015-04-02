@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 
-__date__ = '10/01/2011'
+__date__ = '02/04/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
@@ -24,7 +24,10 @@ from safe.impact_reports.report_mixin_base import ReportMixin
 
 # noinspection PyArgumentList
 class ReportMixinTest(unittest.TestCase):
-    """Test the ReportMixin."""
+    """Test the ReportMixin.
+
+    .. versionadded:: 3.1
+    """
 
     # noinspection PyPep8Naming
     def setUp(self):
