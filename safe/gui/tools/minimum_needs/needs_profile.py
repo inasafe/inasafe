@@ -49,14 +49,7 @@ class NeedsProfile(MinimumNeeds):
         self.settings = QSettings()
         self.minimum_needs = None
         self._root_directory = None
-
-        # Set locale needed to sort minimum needs. If the settings in QGIS
-        # none, default to en_US (This case is useful for testing, in real
-        # life locale QGIS would probably never be empty
-        locale = self.settings.value('locale/userLocale')
-        if locale is None:
-            locale = 'en_US'
-        self.locale = locale
+        self.locale = self.settings.value('locale/userLocale')
         self.load()
 
     def load(self):
@@ -70,8 +63,10 @@ class NeedsProfile(MinimumNeeds):
 
         if not self.minimum_needs or self.minimum_needs == u'':
             # Load the most relevant minimum needs
+            # If there are more than one profile exist, just use defaults so
+            # that user doesnt get confused.
             profiles = self.get_profiles()
-            if len(profiles) > 0:
+            if len(profiles) == 1:
                 profile = self.get_profiles()[0]
                 self.load_profile(profile)
             else:
