@@ -45,7 +45,6 @@ from safe.utilities.utilities import (
     get_safe_impact_function)
 from safe.defaults import (
     disclaimer,
-    default_organisation_logo_path,
     default_north_arrow_path)
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
 from safe.utilities.resources import (
@@ -96,7 +95,7 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
-from safe.utilities.unicode import get_string, get_unicode
+from safe.utilities.unicode import get_string
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE

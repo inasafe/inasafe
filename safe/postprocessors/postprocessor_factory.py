@@ -38,8 +38,7 @@ AVAILABLE_POSTPTOCESSORS = {
     'Aggregation': 'Aggregation',
     'BuildingType': 'Building type',
     'RoadType': 'Road type',
-    'AggregationCategorical':
-    'Aggregation categorical',
+    'AggregationCategorical': 'Aggregation categorical',
     'MinimumNeeds': 'Minimum needs'}
 
 
@@ -93,11 +92,13 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
         # ['params']['disable_for_entire_area_aggregation']
         # that would turn off the current postprocessor if in aoi_mode
         if aoi_mode:
+            disable_flag = False
             try:
-                requires_aggregation = (
-                    values['params']['disable_for_entire_area_aggregation'])
+                disable_flag = values['params'][
+                    'disable_for_entire_area_aggregation']
             except KeyError:
                 pass
+            requires_aggregation = not disable_flag
 
         try:
             if values['on'] and requires_aggregation:
