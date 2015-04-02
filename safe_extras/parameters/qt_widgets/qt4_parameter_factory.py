@@ -7,10 +7,13 @@ __date__ = '8/19/14'
 __copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
+import logging
+LOGGER = logging.getLogger('InaSAFE')
 from qt_widgets.boolean_parameter_widget import BooleanParameterWidget
 from qt_widgets.float_parameter_widget import FloatParameterWidget
 from qt_widgets.integer_parameter_widget import IntegerParameterWidget
 from qt_widgets.string_parameter_widget import StringParameterWidget
+from safe.common.dict_parameter_widget import DictParameterWidget
 from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
 
@@ -24,6 +27,7 @@ class Qt4ParameterFactory(object):
             'FloatParameter': FloatParameterWidget,
             'IntegerParameter': IntegerParameterWidget,
             'StringParameter': StringParameterWidget,
+            'DictParameter': DictParameterWidget,
         }
 
     def register_widget(self, parameter, parameter_widget):

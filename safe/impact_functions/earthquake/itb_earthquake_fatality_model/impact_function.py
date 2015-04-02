@@ -130,6 +130,7 @@ class ITBFatalityFunction(ImpactFunction):
 
                 exposure: Raster layer of population count
         """
+        LOGGER.debug('------running itb earthquake if--------')
         self.validate()
         self.prepare(layers)
 

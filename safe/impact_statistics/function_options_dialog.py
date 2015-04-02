@@ -49,6 +49,11 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.resource_parameter_widget import ResourceParameterWidget
+from safe_extras.parameters.boolean_parameter import BooleanParameter
+from safe_extras.parameters.list_parameter import ListParameter
+from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.dict_parameter import DictParameter
+from safe_extras.parameters.string_parameter import StringParameter
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -124,8 +129,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             elif key == 'minimum needs':
                 self.build_minimum_needs_form(value)
             else:
-                self.values[key] = self.build_widget(
-                    self.configLayout, key, value)
+                self.build_widget(self.configLayout, key, value)
 
     def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab.
@@ -174,10 +178,10 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         self.values['postprocessors'] = values
 
-    def build_widget(self, form_layout, name, key_value):
+    def build_widget(self, form_layout, name, parameter_value):
         """Create a new form element dynamically based from key_value type.
 
-        The element will be inserted to form_layout.
+        The Parametetr Container will be inserted to form_layout.
 
         :param form_layout: Mandatory a layout instance
         :type form_layout: QFormLayout
@@ -186,82 +190,24 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
          configurable parameters dictionary.
         :type name: str
 
-        :param key_value: Mandatory representing the value referenced by the
+        :param parameter_value: Mandatory representing the value referenced by the
          key.
-        :type key_value: object
+        :type parameter_value: object
 
         :returns: a function that return the value of widget
 
         :raises: None
         """
-        # create label
-        if isinstance(name, str):
-            label = QLabel()
-            label.setObjectName(_fromUtf8(name + "Label"))
-            label_text = name.replace('_', ' ').capitalize()
-            label.setText(tr(label_text))
-            label.setToolTip(str(type(key_value)))
+        if parameter_value is not None:
+            # create and add widget to the dialog box
+            parameter_container = ParameterContainer([parameter_value])
+            form_layout.addWidget(parameter_container)
+            # bind parameter
+            input_values = parameter_container.get_parameters
+            self.values[name] = input_values
         else:
-            label = name
-
-        # create widget based on the type of key_value variable
-        # if widget is a QLineEdit, value needs to be set
-        # if widget is NOT a QLineEdit, property_name needs to be set
-        value = None
-        property_name = None
-
-        # can be used for widgets that have their own text like QCheckBox
-        hide_label = False
-
-        if isinstance(key_value, list):
-            def function(values_string):
-                """
-                :param values_string: This contains the list of values the user
-                    added to the line edit for the parameter.
-                :type values_string: basestring
-
-                :returns: list of value types
-                :rtype: list
-                """
-                value_type = type(key_value[0])
-                return [value_type(y) for y in str(values_string).split(',')]
-            widget = QLineEdit()
-            value = ', '.join([str(x) for x in key_value])
-            # NOTE: we assume that all element in list have same type
-        elif isinstance(key_value, dict):
-            def function(key_values_string):
-                """
-                :param key_values_string: This contains the dictionary that
-                    the used defined on the line edit for this parameter.
-                :type key_values_string: basestring
-
-                :returns: a safe evaluation of the dict
-                :rtype: dict
-                """
-                return ast.literal_eval(str(key_values_string))
-            widget = QLineEdit()
-            value = str(key_value)
-        elif isinstance(key_value, bool):
-            function = bool
-            widget = QCheckBox()
-            widget.setChecked(key_value)
-            widget.setText(label.text())
-            property_name = 'checked'
-            hide_label = True
-        else:
-            function = type(key_value)
-            widget = QLineEdit()
-            value = str(key_value)
-        if hide_label:
-            form_layout.addRow(widget)
-        else:
-            form_layout.addRow(label, widget)
-
-        if type(widget) is QLineEdit:
-            widget.setText(value)
-            property_name = 'text'
-
-        return self.bind(widget, property_name, function)
+            LOGGER.debug('build_widget : parameter is None')
+            LOGGER.debug(parameter_value)
 
     def set_dialog_info(self, function_id):
         """Show help text in dialog.

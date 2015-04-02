@@ -19,3 +19,37 @@ class DictParameter(CollectionParameter):
         """
         super(DictParameter, self).__init__(guid)
         self.expected_type = dict
+
+
+    def __setitem__(self, key, value):
+        """Helper method to make DictParameter behave like dict"""
+        self._value[key] = value
+
+
+    def __getitem__(self, key):
+        """Helper method to make DictParameter behave like dict"""
+        return self._value[key]
+
+
+    def keys(self):
+        """Helper method to make DictParameter behave like dict"""
+        return self._value.keys()
+
+    @property
+    def value(self):
+        """Property for value of this parameter."""
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        """Define the current value for the parameter.
+
+        Need to check the type of each element isdict.
+
+        :param value: The collection of values set for this parameter.
+        :type value: dict
+
+        :raises: TypeError
+        """
+        self.check_types(value)
+        self._value = value
