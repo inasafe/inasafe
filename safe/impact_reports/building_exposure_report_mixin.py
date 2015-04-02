@@ -205,7 +205,7 @@ class BuildingExposureReportMixin(ReportMixin):
         building_types = [building_type for building_type in self.buildings]
         building_types.sort()
         for building_type in building_types:
-            building_type = building_type.replace('_', ' ')
+            building_type_name = building_type.replace('_', ' ')
             affected_by_usage = []
             for category in category_names:
                 if building_type in self.affected_buildings[category]:
@@ -217,7 +217,7 @@ class BuildingExposureReportMixin(ReportMixin):
                     affected_by_usage.append(format_int(0))
             building_detail = (
                 # building type
-                [building_type.capitalize()] +
+                [building_type_name.capitalize()] +
                 # categories
                 affected_by_usage +
                 # total
