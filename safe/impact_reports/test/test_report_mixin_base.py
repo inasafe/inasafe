@@ -18,43 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-import os
-import logging
-
-from qgis.core import (
-    QgsVectorLayer,
-    QgsCoordinateReferenceSystem,
-    QgsMapLayerRegistry)
-
-from safe.gis.qgis_vector_tools import extent_to_geo_array
-from safe.defaults import get_defaults
-from safe.storage.raster import Raster
-from safe.storage.vector import Vector
-from safe.test.utilities import (
-    set_canvas_crs,
-    set_jakarta_extent,
-    GEOCRS,
-    test_data_path,
-    get_qgis_app,
-    load_standard_layers,
-    setup_scenario,
-    load_layers,
-    TESTDATA,
-    BOUNDDATA)
-
-# AG: get_qgis_app() should be called before importing modules from
-# safe.gui.widgets.dock
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from safe.gui.widgets.dock import Dock
-from safe.impact_statistics.aggregator import Aggregator
-from safe.utilities.keyword_io import KeywordIO
-from safe.impact_functions import register_impact_functions
 
 from safe.impact_reports.report_mixin_base import ReportMixin
-
-DOCK = Dock(IFACE)
-LOGGER = logging.getLogger('InaSAFE')
 
 
 # noinspection PyArgumentList
