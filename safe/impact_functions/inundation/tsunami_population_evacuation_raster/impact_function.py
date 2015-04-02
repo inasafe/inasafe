@@ -174,7 +174,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
         # check for zero impact
         if numpy.nanmax(impact) == 0 == numpy.nanmin(impact):
             table_body = [
-                question,
+                self.question,
                 TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
                           '%s' % format_int(evacuated)],
                          header=True)]

@@ -15,22 +15,26 @@ __author__ = 'lucernae'
 __date__ = '23/03/15'
 
 import logging
+from collections import OrderedDict
 from numpy import round as numpy_round
 
 from safe.storage.vector import Vector
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.utilities.i18n import tr
-from safe.common.utilities import format_int
-from safe.common.tables import Table, TableRow
+from safe.common.utilities import get_osm_building_usage
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.generic.classified_hazard_building\
-    .metadata_definitions import ClassifiedHazardBuildingMetadata
+from safe.impact_functions.generic.classified_hazard_building.metadata_definitions import \
+    ClassifiedHazardBuildingMetadata
+from safe.impact_reports.building_exposure_report_mixin import (
+    BuildingExposureReportMixin)
 
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ClassifiedHazardBuildingFunction(ImpactFunction):
+class ClassifiedHazardBuildingFunction(
+        ImpactFunction,
+        BuildingExposureReportMixin):
     """Impact plugin for classified hazard impact on building data"""
 
     _metadata = ClassifiedHazardBuildingMetadata()
@@ -41,85 +45,25 @@ class ClassifiedHazardBuildingFunction(ImpactFunction):
     def __init__(self):
         super(ClassifiedHazardBuildingFunction, self).__init__()
 
-    def _tabulate(self, N, affected_buildings, attribute_names, buildings,
-                  count, count1, count2, count3, question):
-        # Lump small entries and 'unknown' into 'other' category
+    def notes(self):
+        """Return the notes section of the report.
 
-        # Generate impact summary
-        table_body = [question,
-                      TableRow([tr('Hazard Level'),
-                                tr('Number of Buildings')], header=True),
-                      TableRow([tr('High Hazard Class'),
-                                format_int(count3)]),
-                      TableRow([tr('Medium Hazard Class'),
-                                format_int(count2)]),
-                      TableRow([tr('Low Hazard Class'),
-                                format_int(count1)]),
-                      TableRow([tr('Total Buildings Affected'),
-                                format_int(count1 + count2 + count3)],
-                               header=True),
-                      TableRow([tr('Buildings Not Affected'),
-                                format_int(count)],
-                               header=True),
-                      TableRow([tr('All Buildings'), format_int(N)],
-                               header=True)]
-        school_closed = 0
-        hospital_closed = 0
-        # Generate break down by building usage type is available
-        list_type_attribute = [
-            'TYPE', 'type', 'amenity', 'building_t', 'office',
-            'tourism', 'leisure', 'building']
-        intersect_type = set(attribute_names) & set(list_type_attribute)
-        if len(intersect_type) > 0:
-            # Make list of building types
-            building_list = []
-            for usage in buildings:
-                building_type = usage.replace('_', ' ')
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        return [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Map shows buildings affected in low, medium and '
+                    'high hazard class areas.')
+            }]
 
-                # Lookup internationalised value if available
-                building_type = tr(building_type)
-                building_list.append([
-                    building_type.capitalize(),
-                    format_int(affected_buildings[usage]),
-                    format_int(buildings[usage])])
-                if building_type == 'school':
-                    school_closed = affected_buildings[usage]
-                if building_type == 'hospital':
-                    hospital_closed = affected_buildings[usage]
-
-            # Sort alphabetically
-            building_list.sort()
-
-            table_body.append(TableRow(tr('Breakdown by building type'),
-                                       header=True))
-            for row in building_list:
-                s = TableRow(row)
-                table_body.append(s)
-        table_body.append(TableRow(tr('Action Checklist:'), header=True))
-        table_body.append(TableRow(
-            tr('Are the critical facilities still open?')))
-        table_body.append(TableRow(
-            tr('Which structures have warning capacity (eg. sirens, speakers, '
-               'etc.)?')))
-        table_body.append(TableRow(
-            tr('Which buildings will be evacuation centres?')))
-        table_body.append(TableRow(
-            tr('Where will we locate the operations centre?')))
-        table_body.append(TableRow(
-            tr('Where will we locate warehouse and/or distribution centres?')))
-        if school_closed > 0:
-            table_body.append(TableRow(
-                tr('Where will the students from the %s closed schools go to '
-                   'study?') % format_int(school_closed)))
-        if hospital_closed > 0:
-            table_body.append(TableRow(
-                tr('Where will the patients from the %s closed hospitals go '
-                   'for treatment and how will we transport them?') %
-                format_int(hospital_closed)))
-        table_body.append(TableRow(tr('Notes'), header=True))
-        table_body.append(tr('Map shows buildings affected in'
-                             ' low, medium and high hazard class areas.'))
-        return table_body
+    def _tabulate(self):
+        return self.generate_html_report()
 
     def run(self, layers=None):
         """Classified hazard impact to buildings (e.g. from Open Street Map).
@@ -157,103 +101,54 @@ class ClassifiedHazardBuildingFunction(ImpactFunction):
         attribute_names = interpolated_result.get_attribute_names()
         attributes = interpolated_result.get_data()
 
-        N = len(interpolated_result)
+        buildings_total = len(interpolated_result)
         # Calculate building impact
-        count = 0
-        count1 = 0
-        count2 = 0
-        count3 = 0
-        buildings = {}
-        affected_buildings = {}
-        for i in range(N):
-            # Get class value
-            val = float(attributes[i]['level'])
-            # FIXME it would be good if the affected were words not numbers
-            # FIXME need to read hazard layer and see class or keyword
-            val = float(numpy_round(val))
-            if val == high_t:
-                count3 += 1
-            elif val == medium_t:
-                count2 += 1
-            elif val == low_t:
-                count1 += 1
-            else:
-                count += 1
+        self.buildings = {}
+        self.affected_buildings = OrderedDict([
+            (tr('High Hazard Class'), {}),
+            (tr('Medium Hazard Class'), {}),
+            (tr('Low Hazard Class'), {})
+        ])
+        for i in range(buildings_total):
+            usage = get_osm_building_usage(attribute_names, attributes[i])
+            if usage is None or usage == 0:
+                usage = 'unknown'
 
-            # Count affected buildings by usage type if available
-            if 'type' in attribute_names:
-                usage = attributes[i]['type']
-            elif 'TYPE' in attribute_names:
-                usage = attributes[i]['TYPE']
-            else:
-                usage = None
-            if 'amenity' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['amenity']
-            if ('building_t' in attribute_names and
-                    (usage is None or usage == 0)):
-                usage = attributes[i]['building_t']
-            if 'office' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['office']
-            if 'tourism' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['tourism']
-            if 'leisure' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['leisure']
-            if 'building' in attribute_names and (usage is None or usage == 0):
-                usage = attributes[i]['building']
-                if usage == 'yes':
-                    usage = 'building'
-
-            if usage is not None and usage != 0:
-                key = usage
-            else:
-                key = 'unknown'
-
-            if key not in buildings:
-                buildings[key] = 0
-                affected_buildings[key] = 0
+            if usage not in self.buildings:
+                self.buildings[usage] = 0
+                for category in self.affected_buildings.keys():
+                    self.affected_buildings[category][usage] = OrderedDict([
+                        (tr('Buildings Affected'), 0)])
 
             # Count all buildings by type
-            buildings[key] += 1
-            if val is True:
-                # Count affected buildings by type
-                affected_buildings[key] += 1
+            self.buildings[usage] += 1
+            attributes[i][self.target_field] = 0
+            attributes[i][self.affected_field] = 0
+            level = float(attributes[i]['level'])
+            level = float(numpy_round(level))
+            if level == high_t:
+                impact_level = tr('High Hazard Class')
+            elif level == medium_t:
+                impact_level = tr('Medium Hazard Class')
+            elif level == low_t:
+                impact_level = tr('Low Hazard Class')
+            else:
+                continue
 
             # Add calculated impact to existing attributes
-            if val == high_t:
-                attributes[i][self.target_field] = 3
-                attributes[i][self.affected_field] = 1
+            attributes[i][self.target_field] = {
+                tr('High Hazard Class'): 3,
+                tr('Medium Hazard Class'): 2,
+                tr('Low Hazard Class'): 1
+            }[impact_level]
+            attributes[i][self.affected_field] = 1
+            # Count affected buildings by type
+            self.affected_buildings[impact_level][usage][
+                tr('Buildings Affected')] += 1
 
-            elif val == medium_t:
-                attributes[i][self.target_field] = 2
-                attributes[i][self.affected_field] = 1
-
-            elif val == low_t:
-                attributes[i][self.target_field] = 1
-                attributes[i][self.affected_field] = 1
-
-            else:
-                attributes[i][self.target_field] = 0
-                attributes[i][self.affected_field] = 0
-
-        for usage in buildings.keys():
-            val = buildings[usage]
-            if val < 25 or usage == 'unknown':
-                if 'other' not in buildings:
-                    buildings['other'] = 0
-                    affected_buildings['other'] = 0
-
-                buildings['other'] += val
-                affected_buildings['other'] += affected_buildings[usage]
-                del buildings[usage]
-                del affected_buildings[usage]
-
-        table_body = self._tabulate(N, affected_buildings, attribute_names,
-                                    buildings, count, count1, count2, count3,
-                                    self.question)
-
-        # Result
-        impact_summary = Table(table_body).toNewlineFreeString()
-        impact_table = impact_summary
+        self._consolidate_to_other()
+        buildings_affected = self.total_affected_buildings
+        impact_table = impact_summary = self._tabulate()
 
         # Create style
         style_classes = [dict(label=tr('High'),
@@ -306,8 +201,8 @@ class ClassifiedHazardBuildingFunction(ImpactFunction):
                 'map_title': map_title,
                 'legend_units': legend_units,
                 'legend_title': legend_title,
-                'buildings_total': N,
-                'buildings_affected': count1 + count2 + count3},
+                'buildings_total': buildings_total,
+                'buildings_affected': buildings_affected},
             style_info=style_info)
         self._impact = vector_layer
         return vector_layer
