@@ -57,8 +57,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand
         impact = {
-            3000: 200,
-            5000: 0,
+            3000: 174,
+            5000: 26,
             10000: 0
         }
         impact_features = impact_layer.get_data()
