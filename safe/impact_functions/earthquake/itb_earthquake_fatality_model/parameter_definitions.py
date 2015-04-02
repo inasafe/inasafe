@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from safe_extras.parameters.boolean_parameter import BooleanParameter
+from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.list_parameter import ListParameter
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.dict_parameter import DictParameter
@@ -77,3 +78,15 @@ def displaced_people():
     field.name = 'calculate_displaced_people'
     field.value = True
     return field
+
+
+def default_provenance():
+    """The provenance for the default values.
+
+    :return: default provenance.
+    :rtype: StringParameter
+    """
+    prov_string = StringParameter()
+    prov_string.name = 'provenance'
+    prov_string.value =  'The minimum needs are based on Perka 7/2008.'
+    return prov_string

@@ -122,6 +122,13 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         :param parameters: Parameters to be edited
         """
+        scroll_layout = QVBoxLayout()
+        scroll_widget = QWidget()
+        scroll_widget.setLayout(scroll_layout)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(scroll_widget)
+        self.configLayout.addWidget(scroll)
 
         for key, value in parameters.items():
             if key == 'postprocessors':
@@ -129,7 +136,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             elif key == 'minimum needs':
                 self.build_minimum_needs_form(value)
             else:
-                self.build_widget(self.configLayout, key, value)
+                self.build_widget(scroll_layout, key, value)
 
     def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab.
@@ -198,13 +205,22 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         :raises: None
         """
+        LOGGER.debug('build_widget:')
+        LOGGER.debug(form_layout)
+        LOGGER.debug(name)
+        LOGGER.debug(parameter_value)
         if parameter_value is not None:
+            LOGGER.debug('parameter_value type:')
+            LOGGER.debug(type(parameter_value))
             # create and add widget to the dialog box
+            # default tab's layout
             parameter_container = ParameterContainer([parameter_value])
             form_layout.addWidget(parameter_container)
             # bind parameter
             input_values = parameter_container.get_parameters
             self.values[name] = input_values
+            # dont have to add tab since gui design has it in
+            # self.tabWidget.addTab(main_widget, self.tr('Postprocessors'))
         else:
             LOGGER.debug('build_widget : parameter is None')
             LOGGER.debug(parameter_value)

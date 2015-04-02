@@ -11,8 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.defaults import get_defaults, default_minimum_needs, \
-    default_provenance
+from safe.defaults import get_defaults, default_minimum_needs
 from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
     layer_raster_continuous, exposure_definition, exposure_population, \
     unit_people_per_pixel
@@ -31,7 +30,8 @@ from safe.impact_functions.earthquake.\
     y_coefficient,
     step,
     tolerance,
-    displaced_people)
+    displaced_people,
+    default_provenance)
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'

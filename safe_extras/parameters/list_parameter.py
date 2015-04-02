@@ -20,3 +20,12 @@ class ListParameter(CollectionParameter):
         """
         super(ListParameter, self).__init__(guid)
         self.expected_type = list
+
+    def __len__(self):
+        return self._value.__len__()
+
+    def __getitem__(self, i):
+        return self._value[i]
+
+    def __setitem__(self, i, val):
+        return self._value.__setitem__(i, val)

@@ -14,6 +14,7 @@ from qt_widgets.float_parameter_widget import FloatParameterWidget
 from qt_widgets.integer_parameter_widget import IntegerParameterWidget
 from qt_widgets.string_parameter_widget import StringParameterWidget
 from safe.common.dict_parameter_widget import DictParameterWidget
+from safe.common.list_parameter_widget import ListParameterWidget
 from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
 
@@ -28,6 +29,8 @@ class Qt4ParameterFactory(object):
             'IntegerParameter': IntegerParameterWidget,
             'StringParameter': StringParameterWidget,
             'DictParameter': DictParameterWidget,
+            'ListParameter': ListParameterWidget,
+
         }
 
     def register_widget(self, parameter, parameter_widget):

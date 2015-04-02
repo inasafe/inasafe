@@ -20,38 +20,38 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 # pylint: disable=super-on-old-class
-class DictParameterWidget(GenericParameterWidget):
+class ListParameterWidget(GenericParameterWidget):
     """Widget class for DictParameter."""
     def __init__(self, parameter, parent=None):
         """Constructor
 
         .. versionadded:: 3.1
 
-        :param parameter: A DictParameter object.
-        :type parameter: DictParameter
+        :param parameter: A ListParameter object.
+        :type parameter: ListParameter
 
         """
         # pylint: disable=E1002
-        super(DictParameterWidget, self).__init__(parameter, parent)
+        super(ListParameterWidget, self).__init__(parameter, parent)
         # pylint: enable=E1002
 
         self._table_edit_input = QTableWidget(
-            1, self._parameter.keys().__len__())
+            1, self._parameter.__len__())
 
         # pack parameter into table
-        for (i, label) in enumerate(sorted(self._parameter.keys())):
-            entry = self._parameter[label]
-            t_item = QTableWidgetItem(str(entry))
+        for (i, label) in enumerate(sorted(self._parameter.value)):
             self._table_edit_input.setHorizontalHeaderItem(
-                i, QTableWidgetItem(str(label)))
+                i, QTableWidgetItem(str(i)))
+            t_item = QTableWidgetItem(str(self._parameter[i]))
             self._table_edit_input.setItem(0, i, t_item)
 
+        self._table_edit_input.verticalHeader().setVisible(False)
         self._inner_input_layout.addWidget(self._table_edit_input)
 
     def get_parameter(self):
         """Obtain the parameter object from the current widget state.
 
-        :returns: A DictParameter from the current state of widget
+        :returns: A ListParameter from the current state of widget
 
         """
         # step through QTableWidget and build dict
