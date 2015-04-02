@@ -134,7 +134,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
-
         self.pbnShowQuestion.setVisible(False)
         self.enable_messaging()
 
@@ -1155,7 +1154,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.analysis.clip_parameters[1])
             # Start the analysis
             self.analysis.run_analysis()
-            a = 'ho'
         except InsufficientOverlapError as e:
             context = self.tr(
                 'A problem was encountered when trying to determine the '

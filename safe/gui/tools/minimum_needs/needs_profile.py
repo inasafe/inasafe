@@ -63,8 +63,10 @@ class NeedsProfile(MinimumNeeds):
 
         if not self.minimum_needs or self.minimum_needs == u'':
             # Load the most relevant minimum needs
+            # If there are more than one profile exist, just use defaults so
+            # that user doesnt get confused.
             profiles = self.get_profiles()
-            if len(profiles) > 0:
+            if len(profiles) == 1:
                 profile = self.get_profiles()[0]
                 self.load_profile(profile)
             else:
@@ -128,6 +130,9 @@ class NeedsProfile(MinimumNeeds):
             :returns: Ordered profiles
             :rtype: list
             """
+            if locale is None:
+                return unsorted_profiles
+
             locale = '_%s' % locale[:2]
             profiles_our_locale = []
             profiles_remaining = []
