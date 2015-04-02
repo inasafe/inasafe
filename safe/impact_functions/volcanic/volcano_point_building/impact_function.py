@@ -221,7 +221,7 @@ class VolcanoPointBuildingFunction(
         impact_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
-            geometry=interpolated_layer.get_geometry(as_geometry_objects=True),
+            geometry=interpolated_layer.get_geometry(),
             name=tr('Buildings affected by volcanic buffered point'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
