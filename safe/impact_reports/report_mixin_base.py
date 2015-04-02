@@ -81,10 +81,19 @@ class ReportMixin(object):
             row_template.update(row)
             if not row_template['condition']:
                 continue
+            content = row_template['content']
             if row_template['arguments']:
-                content = row_template['content'] % row_template['arguments']
-            else:
-                content = row_template['content']
+                arguments = row_template['arguments']
+                if hasattr(content, '__iter__'):
+                    message = (
+                        'Problem formatting arguments into contetn.'
+                        'The element count of the arguments must equal '
+                        'the element count of the content.')
+                    assert len(content) == len(arguments), message
+                    content = map(lambda c, a: c % a, content, arguments)
+                else:
+                    content = row_template['content'] % arguments
+
             if row_template['header']:
                 table_row = TableRow(content, header=True)
             else:
