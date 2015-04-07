@@ -1,5 +1,6 @@
 # coding=utf-8
 """Docstring for this file."""
+
 __author__ = 'ismailsunni'
 __project_name = 'parameters'
 __filename = 'qt4_parameter_factory'
@@ -7,15 +8,13 @@ __date__ = '8/19/14'
 __copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
-import logging
-LOGGER = logging.getLogger('InaSAFE')
 from qt_widgets.boolean_parameter_widget import BooleanParameterWidget
 from qt_widgets.float_parameter_widget import FloatParameterWidget
 from qt_widgets.integer_parameter_widget import IntegerParameterWidget
 from qt_widgets.string_parameter_widget import StringParameterWidget
-from safe.common.dict_parameter_widget import DictParameterWidget
-from safe.common.list_parameter_widget import ListParameterWidget
 from qt_widgets.generic_parameter_widget import GenericParameterWidget
+from qt_widgets.list_parameter_widget import ListParameterWidget
+from qt_widgets.dict_parameter_widget import DictParameterWidget
 
 
 class Qt4ParameterFactory(object):
@@ -28,9 +27,8 @@ class Qt4ParameterFactory(object):
             'FloatParameter': FloatParameterWidget,
             'IntegerParameter': IntegerParameterWidget,
             'StringParameter': StringParameterWidget,
-            'DictParameter': DictParameterWidget,
             'ListParameter': ListParameterWidget,
-
+            'DictParameter': DictParameterWidget
         }
 
     def register_widget(self, parameter, parameter_widget):

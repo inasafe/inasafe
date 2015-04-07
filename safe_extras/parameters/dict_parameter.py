@@ -20,16 +20,13 @@ class DictParameter(CollectionParameter):
         super(DictParameter, self).__init__(guid)
         self.expected_type = dict
 
-
     def __setitem__(self, key, value):
         """Helper method to make DictParameter behave like dict"""
         self._value[key] = value
 
-
     def __getitem__(self, key):
         """Helper method to make DictParameter behave like dict"""
         return self._value[key]
-
 
     def keys(self):
         """Helper method to make DictParameter behave like dict"""

@@ -42,6 +42,8 @@ from safe.defaults import (
 from safe.common.resource_parameter import ResourceParameter
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
+from safe.impact_functions.inundation.default_parameters import \
+    default_threshold
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -68,32 +70,32 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         rice.unit.plural = 'kilograms'
 
         parameter = {
-            'thresholds': [1.0],
+            'thresholds': default_threshold(),
             'postprocessors':  OrderedDict([
                 ('Gender', default_gender_postprocessor()),
                 ('Age', age_postprocessor()),
                 ('MinimumNeeds', minimum_needs_selector()),
                 ]),
-            'minimum needs': [rice]
+            'minimum needs': rice
         }
 
         dialog.build_form(parameter)
 
         message = 'There should be %s tabwidget but got %s' % (
-            3, dialog.tabWidget.count())
-        self.assertEqual(dialog.tabWidget.count(), 3, message)
+            2, dialog.tabWidget.count())
+        self.assertEqual(dialog.tabWidget.count(), 2, message)
 
         children = dialog.tabWidget.findChildren(QLineEdit)
         message = 'There should be %s QLineEdit but got %s' % (
-            5, len(children))
-        self.assertEqual(len(children), 5, message)
+            4, len(children))
+        self.assertEqual(len(children), 4, message)
 
     def test_build_form_minimum_needs(self):
         """Test that we can build a form by passing it params.
         """
         dialog = FunctionOptionsDialog()
         parameters = {
-            'thresholds': [1.0],
+            'thresholds': default_threshold(),
             'postprocessors': OrderedDict([
                 ('Gender', default_gender_postprocessor()),
                 ('Age', age_postprocessor()),

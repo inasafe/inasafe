@@ -79,9 +79,7 @@ class CollectionParameter(GenericParameter):
         if maximum_count > self._minimum_item_count:
             self._maximum_item_count = maximum_count
             return
-
         raise InvalidMaximumError('Maximum must be greater than minimum')
-        self._maximum_item_count = maximum_count
 
     def count(self):
         """Obtain the number of element in the list.

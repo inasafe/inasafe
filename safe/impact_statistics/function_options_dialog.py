@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe_extras.parameters.generic_parameter import GenericParameter
 
 __author__ = 'oz@tanoshiistudio.com'
 __revision__ = '$Format:%H$'
@@ -18,7 +19,6 @@ __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import ast
 from collections import OrderedDict
 import logging
 # This import is to enable SIP API V2
@@ -27,13 +27,11 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QGroupBox,
     QLineEdit,
     QDialog,
-    QLabel,
     QCheckBox,
     QFormLayout,
     QGridLayout,
@@ -41,19 +39,11 @@ from PyQt4.QtGui import (
     QScrollArea,
     QVBoxLayout)
 
-from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
-from safe.postprocessors.postprocessor_factory import (
-    get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.resource_parameter_widget import ResourceParameterWidget
-from safe_extras.parameters.boolean_parameter import BooleanParameter
-from safe_extras.parameters.list_parameter import ListParameter
-from safe_extras.parameters.float_parameter import FloatParameter
-from safe_extras.parameters.dict_parameter import DictParameter
-from safe_extras.parameters.string_parameter import StringParameter
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -149,7 +139,9 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         form_layout = QGridLayout(tab)
         form_layout.setContentsMargins(0, 0, 0, 0)
         extra_parameters = [(ResourceParameter, ResourceParameterWidget)]
-        parameter_container = ParameterContainer(parameters, extra_parameters)
+        parameter_container = ParameterContainer(
+            parameters=parameters, extra_parameters=extra_parameters)
+        parameter_container.setup_ui()
         form_layout.addWidget(parameter_container)
         self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
@@ -179,6 +171,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         values = OrderedDict()
         for label, parameters in form_elements.items():
             parameter_container = ParameterContainer(parameters)
+            parameter_container.setup_ui()
             scroll_layout.addWidget(parameter_container)
             input_values = parameter_container.get_parameters
             values[label] = input_values
@@ -214,7 +207,8 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             LOGGER.debug(type(parameter_value))
             # create and add widget to the dialog box
             # default tab's layout
-            parameter_container = ParameterContainer([parameter_value])
+            parameter_container = ParameterContainer(parameter_value)
+            parameter_container.setup_ui()
             form_layout.addWidget(parameter_container)
             # bind parameter
             input_values = parameter_container.get_parameters
