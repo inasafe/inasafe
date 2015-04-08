@@ -917,6 +917,7 @@ def load_standard_layers(dock=None):
     #
     # WARNING: Please keep test/data/project/load_standard_layers.qgs in sync
     file_list = [
+        test_data_path('exposure', 'building-points.shp'),
         test_data_path('exposure', 'buildings.shp'),
         test_data_path('hazard', 'volcano_point.shp'),
         test_data_path('exposure', 'roads.shp'),
