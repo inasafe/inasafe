@@ -65,9 +65,7 @@ from safe.utilities.gis import (
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.utilities import (
-    get_error_message,
-    get_safe_impact_function)
+from safe.utilities.utilities import get_error_message
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -454,6 +452,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.defaults = get_defaults()
 
         # Initialize attributes
+        self.impact_function_manager = ImpactFunctionManager()
         self.existing_keywords = None
         self.layer = None
         self.hazard_layer = None
@@ -512,12 +511,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             # and classified rasters. Sort hazard prior to exposure.
             categories = []
             for data_type in ['continuous', 'classified']:
-                for c in ImpactFunctionManager().categories_for_layer(
+                for c in self.impact_function_manager.categories_for_layer(
                         'raster', data_type):
                     if c not in categories:
                         categories += [c]
         else:
-            categories = ImpactFunctionManager().categories_for_layer(
+            categories = self.impact_function_manager.categories_for_layer(
                 layer_type, data_type)
         return categories
 
@@ -544,13 +543,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             # and classified rasters. Sort hazard prior to exposure.
             subcategories = []
             for data_type in ['continuous', 'classified']:
-                for sc in ImpactFunctionManager().subcategories_for_layer(
+                for sc in self.impact_function_manager.subcategories_for_layer(
                         category_id, 'raster', data_type):
                     if sc not in subcategories:
                         subcategories += [sc]
         else:
-            subcategories = ImpactFunctionManager().subcategories_for_layer(
-                category_id, layer_type, data_type)
+            subcategories = \
+                self.impact_function_manager.subcategories_for_layer(
+                    category_id, layer_type, data_type)
         return subcategories
 
     # ===========================
@@ -810,7 +810,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeUnit.setText('')
         self.lstUnits.clear()
         self.lstFields.clear()
-        for unit_for_layer in ImpactFunctionManager().units_for_layer(
+        for unit_for_layer in self.impact_function_manager.units_for_layer(
                 subcategory['id'],
                 self.get_layer_type(), self.get_data_type()):
             if (self.get_layer_type() == 'raster' and
@@ -1497,12 +1497,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.tblFunctions1.verticalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
 
-        hazards = ImpactFunctionManager().get_available_hazards()
+        hazards = self.impact_function_manager.get_available_hazards()
         # Remove 'generic' from hazards
         for h in hazards:
             if h['id'] == 'generic':
                 hazards.remove(h)
-        exposures = ImpactFunctionManager().get_available_exposures()
+        exposures = self.impact_function_manager.get_available_exposures()
 
         self.lblAvailableFunctions1.clear()
         self.tblFunctions1.setColumnCount(len(hazards))
@@ -1530,8 +1530,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         for h in hazards:
             for e in exposures:
                 item = QtGui.QTableWidgetItem()
-                functions = ImpactFunctionManager(
-                    ).get_functions_for_constraint(h, e)
+                functions = \
+                    self.impact_function_manager.get_functions_for_constraint(
+                        h, e)
                 if len(functions):
                     background_colour = QtGui.QColor(120, 255, 120)
                 else:
@@ -1653,8 +1654,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             for row in range(len(exposure_data_types)):
                 hc = hazard_data_types[col]
                 ec = exposure_data_types[row]
-                functions = ImpactFunctionManager(
-                    ).get_functions_for_constraint(h, e, hc, ec)
+                functions = self.impact_function_manager\
+                    .get_functions_for_constraint(h, e, hc, ec)
                 item = QtGui.QTableWidgetItem()
                 if len(functions):
                     bgcolor = QtGui.QColor(120, 255, 120)
@@ -1734,7 +1735,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeFunction.setText('')
 
         h, e, hc, ec = self.selected_impact_function_constraints()
-        functions = ImpactFunctionManager().get_functions_for_constraint(
+        functions = self.impact_function_manager.get_functions_for_constraint(
             h, e, hc, ec)
         for f in functions:
             item = QtGui.QListWidgetItem(self.lstFunctions)
@@ -2710,22 +2711,23 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # TODO Put the params to metadata! Now we need to import the IF class.
         # Notes: Why don't we store impact_function to class attribute?
-        imfunc_id = self.selected_function()['id']
-        imfunctions = get_safe_impact_function(imfunc_id)
-        if not imfunctions:
+        impact_function_id = self.selected_function()['id']
+        impact_function = self.impact_function_manager.get(
+            impact_function_id)
+        if not impact_function:
             return
-        imfunc = imfunctions[0][imfunc_id]
         self.if_params = None
-        if hasattr(imfunc, 'parameters'):
-            self.if_params = imfunc.parameters
+        if hasattr(impact_function, 'parameters'):
+            self.if_params = impact_function.parameters
 
         text = self.tr(
             'Please set impact functions parameters.<br/>Parameters for '
-            'impact function "%s" that can be modified are:' % imfunc_id)
+            'impact function "%s" that can be modified are:' %
+            impact_function_id)
         self.lblSelectIFParameters.setText(text)
 
         self.parameter_dialog = FunctionOptionsDialog(self)
-        self.parameter_dialog.set_dialog_info(imfunc_id)
+        self.parameter_dialog.set_dialog_info(impact_function_id)
         self.parameter_dialog.build_form(self.if_params)
 
         if self.twParams:
@@ -2760,12 +2762,12 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # (IS) Set the current impact function to use parameter from user.
         # We should do it prettier (put it on analysis or impact calculator
-        imfunc_id = self.selected_function()['id']
-        imfunctions = get_safe_impact_function(imfunc_id)
-        if not imfunctions:
+        impact_function_id = self.selected_function()['id']
+        impact_function = self.impact_function_manager.get(
+            impact_function_id)
+        if not impact_function:
             return
-        imfunc = imfunctions[0][imfunc_id]
-        imfunc.parameters = self.if_params
+        impact_function.parameters = self.if_params
 
         params = []
         for p in self.if_params:
@@ -3178,14 +3180,14 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_source
             elif self.get_layer_type() == 'raster':
                 new_step = step_kw_datatype
-            elif ImpactFunctionManager().units_for_layer(
+            elif self.impact_function_manager.units_for_layer(
                     subcategory['id'],
                     self.get_layer_type(), self.get_data_type()):
                 new_step = step_kw_unit
             else:
                 new_step = step_kw_field
         elif current_step == step_kw_datatype:
-            if ImpactFunctionManager().units_for_layer(
+            if self.impact_function_manager.units_for_layer(
                     self.selected_subcategory()['id'],
                     self.get_layer_type(), self.get_data_type()):
                 new_step = step_kw_unit

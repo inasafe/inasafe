@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'borysjurgiel.pl'
 __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -32,6 +33,7 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
+from safe.impact_functions import register_impact_functions
 from safe.common.utilities import unique_filename, temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
@@ -74,6 +76,10 @@ def clone_csv_layer():
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
     """Test the InaSAFE wizard GUI"""
+    def setUp(self):
+        # register impact functions
+        register_impact_functions()
+
     def tearDown(self):
         """Run after each test."""
         # Remove the mess that we made on each test
@@ -380,6 +386,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 2 of 7 - select subcategory
         # noinspection PyTypeChecker
+        # selecting tsunami
         self.check_current_text('tsunami', dialog.lstSubcategories)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
@@ -1234,7 +1241,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 1
         expected_functions_count = 1
-        chosen_if = 'FloodRasterBuildingImpactFunction'
+        chosen_if = 'FloodRasterBuildingFunction'
 
         expected_hazard_layers_count = 1
         expected_exposure_layers_count = 1
@@ -1243,11 +1250,11 @@ class WizardDialogTest(unittest.TestCase):
         # expected_summary_key = 'minimum needs'
         # expected_summary_value_fragment = 'rice'
 
-        # RMN : change it to 5793 from 5583 because of issue #1706
-        expected_report_size = 5793  # as saved on Debian
+        expected_report_size = 6110  # as saved on Ubuntu
         # TS : changed tolerance from 120 to 160 because above change
         # causes fail on fedora
-        tolerance = 160  # windows EOL etc
+        # AG: updated the tolerance from 160 to 190
+        tolerance = 190  # windows EOL etc
 
         # Initialize dialog
         # noinspection PyTypeChecker

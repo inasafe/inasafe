@@ -10,7 +10,6 @@ OGR C++ reference: http://www.gdal.org/ogr
 
 
 """
-from safe.utilities.i18n import tr
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
 __revision__ = '$Format:%H$'
@@ -53,6 +52,8 @@ from utilities import rings_equal
 from utilities import safe_to_qgis_layer
 from safe.common.utilities import unique_filename
 from safe.utilities.unicode import get_string
+from safe.utilities.i18n import tr
+
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(99999999)
@@ -562,7 +563,7 @@ class Vector(Layer):
         # FIXME (DK): this branch isn't covered by test
         if not QGIS_IS_AVAILABLE:
             msg = ('Used data is QgsVectorLayer instance, '
-                   'but QGIS is not avialable.')
+                   'but QGIS is not available.')
             raise TypeError(msg)
 
         base_name = unique_filename()

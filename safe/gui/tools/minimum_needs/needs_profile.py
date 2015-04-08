@@ -106,16 +106,8 @@ class NeedsProfile(MinimumNeeds):
         # sequence
         if not self.minimum_needs['resources']:
             return
-        from safe.impact_functions.core import get_plugins
+
         self.settings.setValue('MinimumNeeds', self.minimum_needs)
-        # Monkey patch all the impact functions
-        for (_, plugin) in get_plugins().items():
-            if not hasattr(plugin, 'parameters'):
-                continue
-            if 'minimum needs' in plugin.parameters:
-                plugin.parameters['minimum needs'] = (
-                    self.get_needs_parameters())
-                plugin.parameters['provenance'] = self.provenance
 
     def get_profiles(self):
         """Get all the minimum needs profiles.

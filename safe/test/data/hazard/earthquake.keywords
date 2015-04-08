@@ -1,0 +1,5 @@
+category: hazard
+subcategory: earthquake
+data_type: continuous
+title: Earthquake
+unit: mmi

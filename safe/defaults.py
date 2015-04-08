@@ -25,6 +25,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QSettings
 
+from safe_extras.parameters.boolean_parameter import BooleanParameter
+from safe_extras.parameters.float_parameter import FloatParameter
+
 from safe.common.resource_parameter import ResourceParameter
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
@@ -126,6 +129,100 @@ def get_defaults(default=None):
         return defaults[default]
     else:
         return None
+
+
+def default_gender_postprocessor():
+    """Get gender postprocessor selector.
+
+    :return: A selector to activate gender postprocessor.
+    :rtype: list
+    """
+    gender = BooleanParameter()
+    gender.name = 'Gender'
+    gender.value = True
+
+    return [gender]
+
+
+def minimum_needs_selector():
+    """Get minimum needs postprocessor selector.
+
+    :return: A selector to activate minimum needs postprocessor.
+    :rtype: list
+    """
+    min_selector = BooleanParameter()
+    min_selector.name = 'MinimumNeeds'
+    min_selector.value = True
+
+    return [min_selector]
+
+
+def age_postprocessor():
+    """Get age postprocessor selectors.
+
+    :return: Selectors to activate age postprocessor.
+    :rtype: list
+    """
+    age = BooleanParameter()
+    age.name = 'Age'
+    age.value = True
+
+    youth_ratio = FloatParameter()
+    youth_ratio.name = 'youth_ratio'
+    youth_ratio.value = get_defaults('YOUTH_RATIO')
+
+    adult_ratio = FloatParameter()
+    adult_ratio.name = 'adult_ratio'
+    adult_ratio.value = get_defaults('ADULT_RATIO')
+
+    elderly_ratio = FloatParameter()
+    elderly_ratio.name = 'elderly_ratio'
+    elderly_ratio.value = get_defaults('ELDERLY_RATIO')
+
+    return [age, youth_ratio, adult_ratio, elderly_ratio]
+
+
+def aggregation_categorical_postprocessor():
+    """Get aggregation categorical postprocessor selectors.
+
+    :return: A list of Parameters.
+    :rtype: list
+    """
+    aggregatec = BooleanParameter()
+    aggregatec.name = 'Aggregation categorical'
+    aggregatec.value = True
+
+    disable_area_aggregation = BooleanParameter()
+    disable_area_aggregation.name = 'disable_for_entire_area_aggregation'
+    disable_area_aggregation.value = False
+
+    return [aggregatec, disable_area_aggregation]
+
+
+def road_type_postprocessor():
+    """Get road-type parameter for postprocessing.
+
+    :return: A list of boolean parameter.
+    :rtype: list
+    """
+    road_type = BooleanParameter()
+    road_type.name = 'Road type'
+    road_type.value = True
+
+    return [road_type]
+
+
+def building_type_postprocessor():
+    """Get building-type parameter for postprocessing.
+
+    :return: A list of boolean parameter.
+    :rtype: list
+    """
+    building_type = BooleanParameter()
+    building_type.name = 'Building type'
+    building_type.value = True
+
+    return [building_type]
 
 
 def default_minimum_needs():

@@ -281,7 +281,6 @@ class PostprocessorManager(QtCore.QObject):
             # TypeError is for when function_parameters is none
             # KeyError is for when ['postprocessors'] is unavailable
             postprocessors = {}
-        LOGGER.debug('Running this postprocessors: ' + str(postprocessors))
 
         feature_names_attribute = self.aggregator.attributes[
             self.aggregator.get_default_keyword('AGGR_ATTR_KEY')]
@@ -422,14 +421,16 @@ class PostprocessorManager(QtCore.QObject):
             except IndexError:
                 # rasters and attributeless vectors have no attributes
                 general_params['impact_attrs'] = None
-
             for key, value in postprocessors.iteritems():
                 parameters = general_params
+                user_parameters = self.function_parameters[
+                    'postprocessors'][key]
+                user_parameters = dict(
+                    [(user_parameter.name, user_parameter.value) for
+                     user_parameter in user_parameters])
                 try:
-                    # look if params are available for this postprocessor
-                    parameters.update(
-                        self.function_parameters[
-                            'postprocessors'][key]['params'])
+                    # user parameters override default parameters
+                    parameters.update(user_parameters)
                 except KeyError:
                     pass
 
@@ -454,6 +455,8 @@ class PostprocessorManager(QtCore.QObject):
                         if (youth_ratio is None or
                                 adult_ratio is None or
                                 elderly_ratio is None):
+                            LOGGER.debug(
+                                '--- only default age ratios used ---')
                             youth_ratio = self.aggregator.defaults[
                                 'YOUTH_RATIO']
                             adult_ratio = self.aggregator.defaults[

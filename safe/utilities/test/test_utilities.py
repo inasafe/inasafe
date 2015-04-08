@@ -122,7 +122,7 @@ class UtilitiesTest(unittest.TestCase):
         vector_path = test_data_path(
             'exposure', 'buildings_osm_4326.shp')
         raster_tsunami_path = test_data_path(
-            'hazard', 'padang_tsunami_mw8.tif')
+            'hazard', 'tsunami_wgs84.tif')
 
         keyword = read_file_keywords(raster_shake_path, 'category')
         expected_keyword = 'hazard'
@@ -140,7 +140,8 @@ class UtilitiesTest(unittest.TestCase):
         expected_keywords = {
             'category': 'hazard',
             'subcategory': 'flood',
-            'unit': 'm',
+            'data_type': 'continuous',
+            'unit': 'metres_depth',
             'title': 'Jakarta flood like 2007 with structural improvements'}
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)
@@ -159,10 +160,12 @@ class UtilitiesTest(unittest.TestCase):
         # tsunami example
         keywords = read_file_keywords(raster_tsunami_path)
         expected_keywords = {
-            'title': 'A tsunami in Padang (Mw 8.8)',
             'category': 'hazard',
+            'unit': 'metres_depth',
             'subcategory': 'tsunami',
-            'unit': 'm'}
+            'data_type': 'continuous',
+            'title': 'Tsunami'
+        }
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)
 
