@@ -1251,8 +1251,7 @@ class WizardDialogTest(unittest.TestCase):
         # expected_summary_key = 'minimum needs'
         # expected_summary_value_fragment = 'rice'
 
-        # RMN : change it to 5793 from 5583 because of issue #1706
-        expected_report_size = 5793  # as saved on Debian
+        expected_report_size = 6110  # as saved on Ubuntu
         # TS : changed tolerance from 120 to 160 because above change
         # causes fail on fedora
         # AG: updated the tolerance from 160 to 190
