@@ -23,8 +23,8 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.utilities.i18n import tr
 from safe.common.utilities import get_osm_building_usage
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.generic.classified_hazard_building.metadata_definitions import \
-    ClassifiedHazardBuildingMetadata
+from safe.impact_functions.generic.classified_hazard_building\
+    .metadata_definitions import ClassifiedHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 

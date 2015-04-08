@@ -169,7 +169,10 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
             },
             {'content': [u'Hazard Level 2', '12,050', '1,324,567,000']},
             {'content': [u'Hazard Level 1', '1,027', '21,284,567,111']},
-            {'content': [u'Total Buildings Affected', '13,077'], 'header': True},
+            {
+                'content': [u'Total Buildings Affected', '13,077'],
+                'header': True
+            },
             {'content': [u'Buildings Not Affected', '7,036'], 'header': True},
             {'content': [u'All Buildings', '20,113'], 'header': True}]
         message = 'Impact summary is not as expcted.'

@@ -17,7 +17,6 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import (
     default_minimum_needs,
     default_provenance,
-    get_defaults,
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)

@@ -23,8 +23,8 @@ from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 
 
-class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
-    """Test for Volcano Polygon on Building Impact Function."""
+class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
+    """Test for Volcano Polygon on Population Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry

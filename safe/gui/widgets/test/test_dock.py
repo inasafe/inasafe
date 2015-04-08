@@ -55,7 +55,6 @@ from safe.test.utilities import (
     set_small_jakarta_extent,
     get_qgis_app,
     TESTDATA,
-    BOUNDDATA,
     HAZDATA)
 
 # AG: get_qgis_app() should be called before importing modules from

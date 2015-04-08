@@ -40,11 +40,7 @@ from safe.definitions import (
     unit_mmi,
     hazard_volcanic_ash,
     hazard_generic,
-    unit_building_generic,
-    hazard_all,
-    layer_vector_polygon,
-    layer_raster_continuous,
-    layer_vector_line)
+    unit_building_generic)
 
 
 class TestImpactFunctionManager(unittest.TestCase):

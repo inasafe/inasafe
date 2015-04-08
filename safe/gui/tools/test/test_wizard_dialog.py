@@ -75,12 +75,11 @@ def clone_csv_layer():
 
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
-
+    """Test the InaSAFE wizard GUI"""
     def setUp(self):
         # register impact functions
         register_impact_functions()
 
-    """Test the InaSAFE wizard GUI"""
     def tearDown(self):
         """Run after each test."""
         # Remove the mess that we made on each test

@@ -71,9 +71,11 @@ class ImpactCalculatorTest(unittest.TestCase):
                 self.raster_shake), message
 
         message = 'Function property incorrect.'
-        assert (self.impact_function_manager.get_function_id(
-            self.calculator.function()) ==
-            'EarthquakeBuildingFunction'), message
+        self.assertEqual(
+            self.impact_function_manager.get_function_id(
+                self.calculator.function()),
+            'EarthquakeBuildingFunction',
+            message)
 
     def test_run(self):
         """Test that run works as expected in non threading mode"""

@@ -91,8 +91,7 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                  ('high_threshold', 8),
                  ('postprocessors', OrderedDict([
                      ('AggregationCategorical',
-                      aggregation_categorical_postprocessor())]
-                 ))]
+                      aggregation_categorical_postprocessor())]))]
             )
         }
         return dict_meta
