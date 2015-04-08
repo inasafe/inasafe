@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-**Impact Function Manager**
+**Impact Function Report Mixin Base Class**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -27,8 +27,7 @@ class ReportMixin(object):
         :returns: The report in html format.
         :rtype: basestring
         """
-        return self.parse_to_html(
-            self.generate_report())
+        return self.parse_to_html(self.generate_report())
 
     def generate_report(self):
         """Defining the interface.
@@ -91,7 +90,7 @@ class ReportMixin(object):
                 arguments = row_template['arguments']
                 if hasattr(content, '__iter__'):
                     message = (
-                        'Problem formatting arguments into contetn.'
+                        'Problem formatting arguments into content.'
                         'The element count of the arguments must equal '
                         'the element count of the content.')
                     assert len(content) == len(arguments), message

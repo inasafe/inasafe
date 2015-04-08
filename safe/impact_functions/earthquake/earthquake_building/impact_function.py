@@ -37,13 +37,13 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
 
     _metadata = EarthquakeBuildingMetadata()
 
-    target_field = 'Shake_cls'
-    statistics_type = 'class_count'
-    statistics_classes = [0, 1, 2, 3]
-
     def __init__(self):
         super(EarthquakeBuildingFunction, self).__init__()
+
+        self.target_field = 'Shake_cls'
         self.is_nexis = False
+        self.statistics_type = 'class_count'
+        self.statistics_classes = [0, 1, 2, 3]
 
     def notes(self):
         """Return the notes section of the report.
@@ -81,9 +81,6 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                     'Values are in units of 1 million Australian Dollars'),
                 'condition': is_nexis
             }]
-
-    def _tabulate(self):
-        return self.generate_html_report()
 
     def run(self, layers=None):
         """Earthquake impact to buildings (e.g. from OpenStreetMap).
@@ -213,8 +210,10 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 self.affected_buildings[category][usage][
                     tr('Contents value ($M)')] += contents_value / 1000000.0
 
+        # Consolidate the small building usage groups < 25 to other
         self._consolidate_to_other()
-        impact_table = impact_summary = self._tabulate()
+
+        impact_table = impact_summary = self.generate_html_report()
 
         # Create style
         style_classes = [dict(label=class_1['label'], value=class_1['class'],

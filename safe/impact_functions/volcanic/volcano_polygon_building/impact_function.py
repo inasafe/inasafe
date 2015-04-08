@@ -67,14 +67,6 @@ class VolcanoPolygonBuildingFunction(
             }
         ]
 
-    def _tabulate(self):
-        """The tabulation report. Any last configuration should be done here.
-
-        :returns: A html report.
-        :rtype: basestring
-        """
-        return self.generate_html_report()
-
     def run(self, layers=None):
         """Risk plugin for volcano hazard on building/structure.
 
@@ -175,8 +167,9 @@ class VolcanoPolygonBuildingFunction(
 
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
+
         # Generate simple impact report
-        impact_summary = impact_table = self._tabulate()
+        impact_summary = impact_table = self.generate_html_report()
 
         # FIXME (Ole): Change to English and use translation system
         # FIXME (Ismail) : Or simply use the values from the hazard layer
@@ -226,8 +219,7 @@ class VolcanoPolygonBuildingFunction(
         impact_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
-            geometry=interpolated_layer.get_geometry(
-                as_geometry_objects=True),
+            geometry=interpolated_layer.get_geometry(),
             name=tr('Buildings affected by volcanic hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,

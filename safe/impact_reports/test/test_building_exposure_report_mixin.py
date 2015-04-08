@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-**Impact Function Manager**
+**Test for Building Exposure Report Mixin**
 
 Contact : ole.moller.nielsen@gmail.com
 

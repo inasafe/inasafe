@@ -54,7 +54,8 @@ class ReportMixinTest(unittest.TestCase):
         blank_table = (
             u'<table class="table table-striped condensed"> <tbody> '
             u'</tbody></table>')
-        self.assertEqual(self.mixin.generate_html_report(), blank_table, message)
+        self.assertEqual(
+            self.mixin.generate_html_report(), blank_table, message)
 
     def test_0002_parse_to_html(self):
         """Test parsing to HTML"""

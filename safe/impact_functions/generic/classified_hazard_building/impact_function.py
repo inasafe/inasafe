@@ -39,11 +39,12 @@ class ClassifiedHazardBuildingFunction(
 
     _metadata = ClassifiedHazardBuildingMetadata()
     # Function documentation
-    target_field = 'DAMAGED'
-    affected_field = 'affected'
 
     def __init__(self):
         super(ClassifiedHazardBuildingFunction, self).__init__()
+
+        self.target_field = 'DAMAGED'
+        self.affected_field = 'affected'
 
     def notes(self):
         """Return the notes section of the report.
@@ -61,9 +62,6 @@ class ClassifiedHazardBuildingFunction(
                     'Map shows buildings affected in low, medium and '
                     'high hazard class areas.')
             }]
-
-    def _tabulate(self):
-        return self.generate_html_report()
 
     def run(self, layers=None):
         """Classified hazard impact to buildings (e.g. from Open Street Map).
@@ -146,9 +144,8 @@ class ClassifiedHazardBuildingFunction(
             self.affected_buildings[impact_level][usage][
                 tr('Buildings Affected')] += 1
 
+        # Consolidate the small building usage groups < 25 to other
         self._consolidate_to_other()
-        buildings_affected = self.total_affected_buildings
-        impact_table = impact_summary = self._tabulate()
 
         # Create style
         style_classes = [dict(label=tr('High'),
@@ -183,6 +180,7 @@ class ClassifiedHazardBuildingFunction(
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
+        impact_table = impact_summary = self.generate_html_report()
         # For printing map purpose
         map_title = tr('Buildings affected')
         legend_units = tr('(Low, Medium, High)')
@@ -202,7 +200,7 @@ class ClassifiedHazardBuildingFunction(
                 'legend_units': legend_units,
                 'legend_title': legend_title,
                 'buildings_total': buildings_total,
-                'buildings_affected': buildings_affected},
+                'buildings_affected': self.total_affected_buildings},
             style_info=style_info)
         self._impact = vector_layer
         return vector_layer

@@ -67,14 +67,6 @@ class VolcanoPointBuildingFunction(
             }
         ]
 
-    def _tabulate(self):
-        """The tabulation report. Any last configuration should be done here.
-
-        :returns: A html report.
-        :rtype: basestring
-        """
-        return self.generate_html_report()
-
     def run(self, layers=None):
         """Counts number of building exposed to each volcano hazard zones.
 
@@ -180,8 +172,9 @@ class VolcanoPointBuildingFunction(
 
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
+
         # Generate simple impact report
-        impact_summary = impact_table = self._tabulate()
+        impact_summary = impact_table = self.generate_html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',

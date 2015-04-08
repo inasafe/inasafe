@@ -81,18 +81,10 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
     def _affected_categories(self):
         """Overwriting the affected categories, since 'unaffected' are counted.
 
-        :returns: The categoiues that equal effected.
+        :returns: The categories that equal effected.
         :rtype: list
         """
         return [tr('Number Inundated'), tr('Number of Wet Buildings')]
-
-    def _tabulate(self):
-        """The tabulation report. Any last configuration should be done here.
-
-        :returns: A html report.
-        :rtype: basestring
-        """
-        return self.generate_html_report()
 
     def run(self, layers=None):
         """Flood impact to buildings (e.g. from Open Street Map).
@@ -166,11 +158,10 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
             self.affected_buildings[category][usage][
                 tr('Buildings Affected')] += 1
 
-        affected_count = self.total_affected_buildings
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
         # Generate simple impact report
-        impact_table = impact_summary = self._tabulate()
+        impact_table = impact_summary = self.generate_html_report()
 
         # Prepare impact layer
         map_title = tr('Buildings inundated')
@@ -218,7 +209,7 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 'legend_units': legend_units,
                 'legend_title': legend_title,
                 'buildings_total': total_features,
-                'buildings_affected': affected_count},
+                'buildings_affected': self.total_affected_buildings},
             style_info=style_info)
         self._impact = vector_layer
         return vector_layer

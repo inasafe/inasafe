@@ -20,7 +20,6 @@ from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry)
-
 from PyQt4.QtCore import QVariant
 
 from safe.impact_functions.base import ImpactFunction
@@ -64,14 +63,6 @@ class FloodPolygonBuildingQgisFunction(
                         affected_field, affected_value)
             }
         ]
-
-    def _tabulate(self):
-        """The tabulation report. Any last configuration should be done here.
-
-        :returns: A html report.
-        :rtype: basestring
-        """
-        return self.generate_html_report()
 
     def run(self, layers=None):
         """Experimental impact function.
@@ -206,14 +197,11 @@ class FloodPolygonBuildingQgisFunction(
                 self.affected_buildings[tr('Flooded')][building_type][
                     tr('Buildings Affected')] += 1
 
-        flooded_count = self.total_affected_buildings
-        building_count = self.total_buildings
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
-        impact_summary = self._tabulate()
 
+        impact_summary = self.generate_html_report()
         map_title = tr('Buildings inundated')
-
         style_classes = [
             dict(label=tr('Not Inundated'), value=0, colour='#1EFC7C',
                  transparency=0, size=0.5),
@@ -232,8 +220,8 @@ class FloodPolygonBuildingQgisFunction(
                 'impact_summary': impact_summary,
                 'map_title': map_title,
                 'target_field': target_field,
-                'buildings_total': building_count,
-                'buildings_affected': flooded_count},
+                'buildings_total': self.total_buildings,
+                'buildings_affected': self.total_affected_buildings},
             style_info=style_info)
         self._impact = building_layer
         return building_layer

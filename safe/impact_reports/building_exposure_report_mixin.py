@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-**Impact Function Manager**
+**Building Exposure Report Mixin Class**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -31,7 +31,7 @@ class BuildingExposureReportMixin(ReportMixin):
         .. versionadded:: 3.1
 
         ..Notes:
-        Expect affected buildings to be given as following:
+        Expect affected buildings and buildings to be given as following:
             affected_buildings = OrderedDict([
                 (category, {building_type: amount}),
             e.g.
@@ -67,6 +67,7 @@ class BuildingExposureReportMixin(ReportMixin):
                     }...
                 }),
             ])
+
             buildings = {residential: 1062, school: 52 ...}
         """
         self.question = ''
@@ -194,7 +195,7 @@ class BuildingExposureReportMixin(ReportMixin):
         buildings_breakdown_report = []
         category_names = self.affected_buildings.keys()
         table_headers = [tr('Building type')]
-        table_headers += [tr(x) for x in category_names]
+        table_headers += [tr(category) for category in category_names]
         table_headers += [tr('Total')]
         buildings_breakdown_report.append(
             {
@@ -277,7 +278,13 @@ class BuildingExposureReportMixin(ReportMixin):
 
     @property
     def _impact_breakdown(self):
-        """Get the impact breakdown categories"""
+        """Get the impact breakdown categories.
+
+        For example, on Earthquake Building with nexis true, this will return:
+            [tr('Buildings Affected'),
+             tr('Buildings value ($M)'),
+             tr('Contents value ($M)')]
+        """
         if len(self.affected_buildings.values()) == 0:
             return []
         if len(self.affected_buildings.values()[0].values()) == 0:
@@ -321,8 +328,7 @@ class BuildingExposureReportMixin(ReportMixin):
         return sum(self.buildings.values())
 
     def _consolidate_to_other(self):
-        """Consolidate the small building usage groups < 25 to other.
-        """
+        """Consolidate the small building usage groups < 25 to other."""
         cutoff = 25
         other = tr('Other')
         for (usage, value) in self.buildings.items():

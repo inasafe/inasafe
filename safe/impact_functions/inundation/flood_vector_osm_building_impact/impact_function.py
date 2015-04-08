@@ -56,14 +56,6 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                     'regions marked as affected')
             }]
 
-    def _tabulate(self):
-        """The tabulation report. Any last configuration should be done here.
-
-        :returns: A html report.
-        :rtype: basestring
-        """
-        return self.generate_html_report()
-
     def run(self, layers=None):
         """Flood impact to buildings (e.g. from Open Street Map).
 
@@ -152,16 +144,13 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 self.affected_buildings[tr('Inundated')][usage][
                     tr('Buildings Affected')] += 1
 
-        affected_buildings = self.total_affected_buildings
-        total_buildings = self.total_buildings
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
-        impact_table = impact_summary = self._tabulate()
 
         # Prepare impact layer
         map_title = tr('Buildings inundated')
         legend_title = tr('Structure inundated status')
-
+        impact_table = impact_summary = self.generate_html_report()
         style_classes = [
             dict(
                 label=tr('Not Inundated'),
@@ -193,8 +182,8 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 'map_title': map_title,
                 'legend_units': legend_units,
                 'legend_title': legend_title,
-                'buildings_total': total_buildings,
-                'buildings_affected': affected_buildings},
+                'buildings_total': self.total_buildings,
+                'buildings_affected': self.total_affected_buildings},
             style_info=style_info)
         self._impact = vector_layer
         return vector_layer
