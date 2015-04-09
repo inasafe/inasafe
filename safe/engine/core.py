@@ -24,18 +24,133 @@ import logging
 LOGGER = logging.getLogger('InaSAFE')
 
 
-def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
-    """Calculate impact levels as a function of list of input layers
+def check_data_integrity(layer_objects):
+    """Check list of layer objects
 
     Input
-        layers: List of Raster and Vector layer objects to be used for analysis
+        layer_objects: List of InaSAFE layer instances
 
-        impact_fcn: Function of the form f(layers)
+    Output
+        Nothing
 
-        extent:     List of [xmin, ymin, xmax, ymax]
-                    the coordinates of the bounding box.
+    Raises
+        Exceptions for a range of errors
 
-        check_integrity:    If true, perform checking of input data integrity
+    This function checks that
+    * Layers have correct keywords
+    * That they have the same georeferences
+    """
+
+    # Link to documentation
+    manpage = ('http://risiko_dev.readthedocs.org/en/latest/usage/'
+               'plugins/development.html')
+    instructions = ('Please add keywords as <keyword>:<value> pairs '
+                    ' in the .keywords file. For more information '
+                    'please read the sections on impact functions '
+                    'and keywords in the manual: %s' % manpage)
+
+    # Set default values for projection and geotransform.
+    # Enforce DEFAULT (WGS84).
+    # Choosing 'None' will use value of first layer.
+    reference_projection = Projection(DEFAULT_PROJECTION)
+    geotransform = None
+
+    for layer in layer_objects:
+
+        # Check that critical keywords exist and are non empty
+        keywords = layer.get_keywords()
+        for kw in REQUIRED_KEYWORDS:
+            msg = ('Layer %s did not have required keyword "%s". '
+                   '%s' % (layer.name, kw, instructions))
+            verify(kw in keywords, msg)
+
+            val = keywords[kw]
+            msg = ('No value found for keyword "%s" in layer %s. '
+                   '%s' % (kw, layer.name, instructions))
+            verify(val, msg)
+
+        # Ensure that projection is consistent across all layers
+        if reference_projection is None:
+            reference_projection = layer.projection
+        else:
+            msg = ('Projections in input layer %s is not as expected:\n'
+                   'projection: %s\n'
+                   'default:    %s'
+                   '' % (layer, layer.projection, reference_projection))
+            verify(reference_projection == layer.projection, msg)
+
+        # FIXME (Ariel): Make this configurable by the frontend choice?
+        # Relax tolerance requirements to have GeoNode compatibility
+        # tolerance = 10e-12
+        tolerance = 10e-7
+
+        # Ensure that geotransform and dimensions is consistent across
+        # all *raster* layers
+        if layer.is_raster:
+            if geotransform is None:
+                geotransform = layer.get_geotransform()
+            else:
+                msg = ('Geotransforms in input raster layers are different:\n'
+                       '%s\n%s' % (geotransform, layer.get_geotransform()))
+                verify(numpy.allclose(geotransform,
+                                      layer.get_geotransform(),
+                                      rtol=tolerance), msg)
+
+        # In case of vector layers, we just check that they are non-empty
+        # FIXME (Ole): Not good as nasty error is raised in cases where
+        # there are no buildings in the hazard area. Need to be more graceful
+        # See e.g. shakemap dated 20120227190230
+        if layer.is_vector:
+            msg = ('There are no vector data features. '
+                   'Perhaps zoom out or pan to the study area '
+                   'and try again')
+            verify(len(layer) > 0, msg)
+
+    # Check that arrays are aligned.
+
+    refname = None
+    for layer in layer_objects:
+        if layer.is_raster:
+
+            if refname is None:
+                refname = layer.get_name()
+                M = layer.rows
+                N = layer.columns
+
+            msg = ('Rasters are not aligned!\n'
+                   'Raster %s has %i rows but raster %s has %i rows\n'
+                   'Refer to issue #102' % (layer.get_name(),
+                                            layer.rows,
+                                            refname, M))
+            verify(layer.rows == M, msg)
+
+            msg = ('Rasters are not aligned!\n'
+                   'Raster %s has %i columns but raster %s has %i columns\n'
+                   'Refer to issue #102' % (layer.get_name(),
+                                            layer.columns,
+                                            refname, N))
+            verify(layer.columns == N, msg)
+
+
+def calculate_impact(layers,
+                     impact_function,
+                     extent=None,
+                     check_integrity=True):
+    """Calculate impact levels as a function of list of input layers
+
+    :param layers: List of Raster and Vector layer objects to be used for
+        analysis.
+    :type layers: list
+
+    :param impact_function: An instance of impact function.
+    :type impact_function: safe.impact_function.base.ImpactFunction
+
+    :param extent: List of [xmin, ymin, xmax, ymax] the coordinates of the
+        bounding box.
+    :type extent: list
+
+    :param check_integrity: If true, perform checking of input data integrity
+    :type check_integrity: bool
 
     Output
         filename of resulting impact layer (GML). Comment is embedded as
@@ -52,17 +167,15 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
 
     LOGGER.debug(
         'calculate_impact called with:\nLayers: %s\nFunction:%s' % (
-            layers, impact_fcn))
+            layers, impact_function))
 
     # Input checks
     if check_integrity:
         check_data_integrity(layers)
 
-    # Get an instance of the passed impact_fcn
-    impact_function = impact_fcn()
     # Set extent if it is provided
     if extent is not None:
-        impact_function.set_extent(extent)
+        impact_function.requested_extent = extent
 
     # Start time
     start_time = datetime.now()
@@ -177,115 +290,6 @@ def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
 
     # Return layer object
     return F
-
-
-def check_data_integrity(layer_objects):
-    """Check list of layer objects
-
-    Input
-        layer_objects: List of InaSAFE layer instances
-
-    Output
-        Nothing
-
-    Raises
-        Exceptions for a range of errors
-
-    This function checks that
-    * Layers have correct keywords
-    * That they have the same georeferences
-    """
-
-    # Link to documentation
-    manpage = ('http://risiko_dev.readthedocs.org/en/latest/usage/'
-               'plugins/development.html')
-    instructions = ('Please add keywords as <keyword>:<value> pairs '
-                    ' in the .keywords file. For more information '
-                    'please read the sections on impact functions '
-                    'and keywords in the manual: %s' % manpage)
-
-    # Set default values for projection and geotransform.
-    # Enforce DEFAULT (WGS84).
-    # Choosing 'None' will use value of first layer.
-    reference_projection = Projection(DEFAULT_PROJECTION)
-    geotransform = None
-
-    for layer in layer_objects:
-
-        # Check that critical keywords exist and are non empty
-        keywords = layer.get_keywords()
-        for kw in REQUIRED_KEYWORDS:
-            msg = ('Layer %s did not have required keyword "%s". '
-                   '%s' % (layer.name, kw, instructions))
-            verify(kw in keywords, msg)
-
-            val = keywords[kw]
-            msg = ('No value found for keyword "%s" in layer %s. '
-                   '%s' % (kw, layer.name, instructions))
-            verify(val, msg)
-
-        # Ensure that projection is consistent across all layers
-        if reference_projection is None:
-            reference_projection = layer.projection
-        else:
-            msg = ('Projections in input layer %s is not as expected:\n'
-                   'projection: %s\n'
-                   'default:    %s'
-                   '' % (layer, layer.projection, reference_projection))
-            verify(reference_projection == layer.projection, msg)
-
-        # FIXME (Ariel): Make this configurable by the frontend choice?
-        # Relax tolerance requirements to have GeoNode compatibility
-        # tolerance = 10e-12
-        tolerance = 10e-7
-
-        # Ensure that geotransform and dimensions is consistent across
-        # all *raster* layers
-        if layer.is_raster:
-            if geotransform is None:
-                geotransform = layer.get_geotransform()
-            else:
-                msg = ('Geotransforms in input raster layers are different:\n'
-                       '%s\n%s' % (geotransform, layer.get_geotransform()))
-                verify(numpy.allclose(geotransform,
-                                      layer.get_geotransform(),
-                                      rtol=tolerance), msg)
-
-        # In case of vector layers, we just check that they are non-empty
-        # FIXME (Ole): Not good as nasty error is raised in cases where
-        # there are no buildings in the hazard area. Need to be more graceful
-        # See e.g. shakemap dated 20120227190230
-        if layer.is_vector:
-            msg = ('There are no vector data features. '
-                   'Perhaps zoom out or pan to the study area '
-                   'and try again')
-            verify(len(layer) > 0, msg)
-
-    # Check that arrays are aligned.
-
-    refname = None
-    for layer in layer_objects:
-        if layer.is_raster:
-
-            if refname is None:
-                refname = layer.get_name()
-                M = layer.rows
-                N = layer.columns
-
-            msg = ('Rasters are not aligned!\n'
-                   'Raster %s has %i rows but raster %s has %i rows\n'
-                   'Refer to issue #102' % (layer.get_name(),
-                                            layer.rows,
-                                            refname, M))
-            verify(layer.rows == M, msg)
-
-            msg = ('Rasters are not aligned!\n'
-                   'Raster %s has %i columns but raster %s has %i columns\n'
-                   'Refer to issue #102' % (layer.get_name(),
-                                            layer.columns,
-                                            refname, N))
-            verify(layer.columns == N, msg)
-
 # FIXME (Ole): This needs to be rewritten as it
 # directly depends on ows metadata. See issue #54
 # def get_linked_layers(main_layers):

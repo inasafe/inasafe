@@ -105,11 +105,11 @@ class ImpactFunctionMetadata(object):
         :rtype: json
         """
 
-        my_json = json.dumps(ImpactFunctionMetadata.get_metadata())
+        my_json = json.dumps(ImpactFunctionMetadata.as_dict())
         return my_json
 
     @staticmethod
-    def get_metadata():
+    def as_dict():
         """Return metadata as a dictionary.
 
         This is a static method. You can use it to get the metadata in
@@ -143,7 +143,7 @@ class ImpactFunctionMetadata(object):
             return cls.allowed_subcategories('exposure') + cls\
                 .allowed_subcategories('hazard')
         else:
-            metadata_dict = cls.get_metadata()
+            metadata_dict = cls.as_dict()
             categories = metadata_dict['categories']
             result = add_to_list(result, categories[category]['subcategories'])
             return result
@@ -176,7 +176,7 @@ class ImpactFunctionMetadata(object):
         :rtype: list
         """
         result = []
-        metadata_dict = cls.get_metadata()
+        metadata_dict = cls.as_dict()
         categories = metadata_dict['categories']
         if subcategory in [x['id'] for x in cls.allowed_subcategories(
                 'exposure')]:
@@ -232,7 +232,7 @@ class ImpactFunctionMetadata(object):
         result = []
         if data_type not in cls.allowed_data_types(subcategory):
             return result
-        metadata_dict = cls.get_metadata()
+        metadata_dict = cls.as_dict()
         categories = metadata_dict['categories']
         if subcategory in [x['id'] for x in cls.allowed_subcategories(
                 'exposure')]:
@@ -257,19 +257,18 @@ class ImpactFunctionMetadata(object):
     def is_disabled(cls):
         """Determine if an impact function is disable.
 
-        Usually is used for checking whether a impact function is disabled
-        or not. If there is not disabled keyword in the metadata, return
-        False. If there is not Metadata inner class in the function, return
-        True
+        Usually is used for checking whether an impact function is disabled
+        or not. If there is no disabled keyword in the metadata, return
+        False.
 
         :returns: Return True if the metadata disabled value is True.
         :rtype: bool
         """
         try:
-            metadata_dict = cls.get_metadata()
+            metadata_dict = cls.as_dict()
             return metadata_dict.get('disabled', False)
         except AttributeError:
-            return True
+            return False
 
     @classmethod
     def is_valid(cls):
@@ -285,7 +284,7 @@ class ImpactFunctionMetadata(object):
         :returns: True or False based on the validity of IF Metadata
         :rtype: bool
         """
-        metadata_dict = cls.get_metadata()
+        metadata_dict = cls.as_dict()
         expected_keys = [
             'id',
             'name',
@@ -402,7 +401,7 @@ class ImpactFunctionMetadata(object):
             return result
 
         else:
-            metadata_dict = cls.get_metadata()
+            metadata_dict = cls.as_dict()
             categories = metadata_dict['categories']
             return categories[category]['layer_constraints']
 
@@ -574,7 +573,7 @@ class ImpactFunctionMetadata(object):
         :return: List of valid hazards of the impact function.
         :rtype: list
         """
-        hazards = cls.get_metadata()['categories']['hazard']['subcategories']
+        hazards = cls.as_dict()['categories']['hazard']['subcategories']
         if type(hazards) is not list:
             hazards = [hazards]
         return hazards
@@ -588,7 +587,7 @@ class ImpactFunctionMetadata(object):
         :return: List of valid exposures of the impact function.
         :rtype: list
         """
-        exposures = cls.get_metadata()['categories']['exposure'][
+        exposures = cls.as_dict()['categories']['exposure'][
             'subcategories']
         if type(exposures) is not list:
             exposures = [exposures]
@@ -663,7 +662,7 @@ class ImpactFunctionMetadata(object):
         :return: List of layer constraint of hazard layer.
         :rtype: list
         """
-        return cls.get_metadata()['categories']['hazard']['layer_constraints']
+        return cls.as_dict()['categories']['hazard']['layer_constraints']
 
     @classmethod
     def get_exposure_layer_constraint(cls):
@@ -672,5 +671,18 @@ class ImpactFunctionMetadata(object):
         :return: List of layer constraint of exposure layer.
         :rtype: list
         """
-        return cls.get_metadata()[
+        return cls.as_dict()[
             'categories']['exposure']['layer_constraints']
+
+    @classmethod
+    def parameters(cls):
+        """Return list of parameters.
+
+        This is a static method. You can use it to get the list of parameters
+        for the impact function.
+
+        :returns: A list that contains all parameters.
+        :rtype: list
+
+        """
+        return cls.as_dict().get('parameters', [])

@@ -1,0 +1,5 @@
+__author__ = 'lucernae'
+__project_name__ = 'inasafe'
+__filename__ = '__init__.py'
+__date__ = '22/03/15'
+__copyright__ = 'lana.pcfre@gmail.com'

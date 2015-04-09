@@ -1,6 +1,7 @@
 # coding=utf-8
 """Helpers for GIS related functionality."""
 import uuid
+
 from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
@@ -117,10 +118,7 @@ def rectangle_geo_array(rectangle, map_canvas):
     destination_crs = QgsCoordinateReferenceSystem()
     destination_crs.createFromSrid(4326)
 
-    if map_canvas.hasCrsTransformEnabled():
-        source_crs = map_canvas.mapRenderer().destinationCrs()
-    else:
-        source_crs = destination_crs
+    source_crs = map_canvas.mapRenderer().destinationCrs()
 
     return extent_to_array(rectangle, source_crs, destination_crs)
 
@@ -387,3 +385,25 @@ def convert_to_safe_layer(layer):
         return safe_read_layer(layer.source())
     except:
         raise
+
+
+def vector_geometry_string(layer):
+    """Get string representation of geometry types of a QgsVectorLayer.
+
+    :param layer: A vector layer.
+    :type layer: QgsVectorLayer
+
+     :returns: A string 'point', 'line', or 'polygon'.
+     :rtype: str
+     """
+
+    types = {
+        QGis.Point: 'point',
+        QGis.Line: 'line',
+        QGis.Polygon: 'polygon'
+    }
+
+    if not layer.type() == QgsMapLayer.VectorLayer:
+        return None
+
+    return types.get(layer.geometryType())

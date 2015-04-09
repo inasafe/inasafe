@@ -736,7 +736,8 @@ def get_osm_building_usage(attribute_names, feature):
         attribute_index = attribute_names_lower.index('building')
         field_name = attribute_names[attribute_index]
         usage = feature[field_name]
-        if usage.lower() == 'yes':
+
+        if usage is not None and usage.lower() == 'yes':
             usage = 'building'
 
     return usage
@@ -816,3 +817,40 @@ def add_to_list(my_list, my_element):
             my_list.append(my_element)
 
     return my_list
+
+
+def is_subset(element, container):
+    """Check the membership of element from container.
+
+    It will check based on the type. Only valid for string and list.
+
+    :param element: Element that will be searched for in container.
+    :type element: list, str
+
+    :param container: Container that will be checked.
+    :type container: list, str
+
+    :returns: boolean of the membership
+    :rtype: bool
+    """
+    if type(element) is list:
+        if type(container) is list:
+            return set(element) <= set(container)
+    else:
+        if type(container) is list:
+            return element in container
+        else:
+            return element == container
+    return False
+
+
+def convert_to_list(var):
+    """Convert a variable to list.
+
+    :param var: The variable to be converted.
+    """
+    return var if isinstance(var, list) else [var]
+
+
+def project_list(the_list, field):
+    return [s[field] for s in the_list]

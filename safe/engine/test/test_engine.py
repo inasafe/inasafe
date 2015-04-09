@@ -5,17 +5,16 @@ import cPickle
 import numpy
 import os
 from os.path import join
-import sys
 from tempfile import mkdtemp
 
-
-# Import InaSAFE modules
 from safe.engine.core import calculate_impact
 from safe.engine.interpolation import (
     interpolate_polygon_raster,
     interpolate_raster_vector_points,
     assign_hazard_values_to_exposure_data,
     tag_polygons_by_grid)
+from safe.impact_functions import register_impact_functions
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import (
     read_layer,
     write_vector_data,
@@ -41,16 +40,6 @@ from safe.common.utilities import (
     temp_dir)
 from safe.test.utilities import TESTDATA, HAZDATA, EXPDATA, test_data_path
 from safe.common.exceptions import InaSAFEError
-from safe.impact_functions import get_plugins
-
-# These imports are needed for impact function registration - dont remove
-# If any of these get reinstated as "official" public impact functions,
-# remove from here and update test to use the real one.
-# pylint: disable=unused-import
-# noinspection PyUnresolvedReferences
-from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
-    PAGFatalityFunction)
-# pylint: enable=unused-import
 
 
 def linear_function(x, y):
@@ -70,6 +59,9 @@ class TestEngine(unittest.TestCase):
         """Run before each test."""
         # ensure we are using english by default
         os.environ['LANG'] = 'en'
+        # load impact function
+        register_impact_functions()
+        self.impact_function_manager = ImpactFunctionManager()
 
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344
@@ -446,11 +438,12 @@ class TestEngine(unittest.TestCase):
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        plugin_name = 'FloodRasterBuildingImpactFunction'
-        plugin_list = get_plugins(plugin_name)
-        IF = plugin_list[0][plugin_name]
+        plugin_name = 'FloodRasterBuildingFunction'
+        plugin_list = self.impact_function_manager.filter_by_metadata(
+            'id', plugin_name)
+        IF = plugin_list[0].instance()
 
-        calculate_impact(layers=[H, E], impact_fcn=IF)
+        calculate_impact(layers=[H, E], impact_function=IF)
 
         message = 'The user directory is empty : %s' % temp_directory
         assert os.listdir(temp_directory) != [], message
@@ -460,8 +453,7 @@ class TestEngine(unittest.TestCase):
     test_user_directory_when_saving.slow = False
 
     def test_data_sources_are_carried_forward(self):
-        """Data sources are carried forward to impact layer
-        """
+        """Data sources are carried forward to impact layer."""
 
         haz_filename = 'Flood_Current_Depth_Jakarta_geographic.asc'
 
@@ -470,36 +462,32 @@ class TestEngine(unittest.TestCase):
         exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
                              % TESTDATA)
 
-        # Calculate impact using API
-        H = read_layer(hazard_filename)
-        E = read_layer(exposure_filename)
+        hazard_layer = read_layer(hazard_filename)
+        exposure_layer = read_layer(exposure_filename)
+        hazard_title = hazard_layer.get_keywords()['title']
+        exposure_title = exposure_layer.get_keywords()['title']
+        hazard_source = hazard_layer.get_keywords()['source']
+        exposure_source = exposure_layer.get_keywords()['source']
 
-        H_tit = H.get_keywords()['title']
-        E_tit = E.get_keywords()['title']
+        function_id = 'FloodRasterBuildingFunction'
+        impact_function = self.impact_function_manager.get(function_id)
+        impact_vector = calculate_impact(
+            layers=[hazard_layer, exposure_layer],
+            impact_function=impact_function)
 
-        H_src = H.get_keywords()['source']
-        E_src = E.get_keywords()['source']
-
-        plugin_name = 'FloodRasterBuildingImpactFunction'
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
-
-        IF = plugin_list[0][plugin_name]
-
-        impact_vector = calculate_impact(layers=[H, E],
-                                         impact_fcn=IF)
-
-        assert impact_vector.get_keywords()['hazard_title'] == H_tit
-        assert impact_vector.get_keywords()['exposure_title'] == E_tit
-        assert impact_vector.get_keywords()['hazard_source'] == H_src
-        assert impact_vector.get_keywords()['exposure_source'] == E_src
+        self.assertEqual(
+            impact_vector.get_keywords()['hazard_title'], hazard_title)
+        self.assertEqual(
+            impact_vector.get_keywords()['exposure_title'], exposure_title)
+        self.assertEqual(
+            impact_vector.get_keywords()['hazard_source'], hazard_source)
+        self.assertEqual(
+            impact_vector.get_keywords()['exposure_source'], exposure_source)
 
     test_data_sources_are_carried_forward.slow = True
 
     def test_raster_vector_interpolation_exception(self):
-        """Exceptions are caught by interpolate_raster_points
-        """
+        """Exceptions are caught by interpolate_raster_points."""
 
         hazard_filename = (
             '%s/tsunami_max_inundation_depth_4326.tif' % TESTDATA)
@@ -1712,11 +1700,9 @@ class TestEngine(unittest.TestCase):
     Xtest_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
 
     def test_layer_integrity_raises_exception(self):
-        """Layers without keywords raise exception
-        """
-
+        """Layers without keywords raise exception."""
         population = 'Population_Jakarta_geographic.asc'
-        plugin_name = 'Flood Evacuation Function'
+        function_id = 'FloodEvacuationRasterHazardFunction'
 
         hazard_layers = ['Flood_Current_Depth_Jakarta_geographic.asc',
                          'Flood_Design_Depth_Jakarta_geographic.asc']
@@ -1726,22 +1712,22 @@ class TestEngine(unittest.TestCase):
             exposure_filename = join(TESTDATA, population)
 
             # Get layers using API
-            H = read_layer(hazard_filename)
-            E = read_layer(exposure_filename)
+            hazard_layer = read_layer(hazard_filename)
+            exposure_layer = read_layer(exposure_filename)
 
-            plugin_list = get_plugins(plugin_name)
-            IF = plugin_list[0][plugin_name]
+            impact_function = self.impact_function_manager.get(
+                function_id)
 
             # Call impact calculation engine normally
-            calculate_impact(layers=[H, E],
-                             impact_fcn=IF)
+            calculate_impact(layers=[hazard_layer, exposure_layer],
+                             impact_function=impact_function)
 
             # Make keyword value empty and verify exception is raised
-            expected_category = E.keywords['category']
-            E.keywords['category'] = ''
+            expected_category = exposure_layer.keywords['category']
+            exposure_layer.keywords['category'] = ''
             try:
-                calculate_impact(layers=[H, E],
-                                 impact_fcn=IF)
+                calculate_impact(layers=[hazard_layer, exposure_layer],
+                                 impact_function=impact_function)
             except VerificationError, e:
                 # Check expected error message
                 assert 'No value found' in str(e)
@@ -1750,17 +1736,17 @@ class TestEngine(unittest.TestCase):
                 raise Exception(msg)
 
             # Restore for next test
-            E.keywords['category'] = expected_category
+            exposure_layer.keywords['category'] = expected_category
 
             # Remove critical keywords and verify exception is raised
             if i == 0:
-                del H.keywords['category']
+                del hazard_layer.keywords['category']
             else:
-                del H.keywords['subcategory']
+                del hazard_layer.keywords['subcategory']
 
             try:
-                calculate_impact(layers=[H, E],
-                                 impact_fcn=IF)
+                calculate_impact(layers=[hazard_layer, exposure_layer],
+                                 impact_function=impact_function)
             except VerificationError, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)

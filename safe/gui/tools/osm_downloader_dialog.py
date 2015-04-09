@@ -49,7 +49,9 @@ from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.proxy import get_proxy
-from safe.utilities.qgis_utilities import display_warning_message_box
+from safe.utilities.qgis_utilities import (
+    display_warning_message_box,
+    display_warning_message_bar)
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 
 INFO_STYLE = styles.INFO_STYLE
@@ -622,6 +624,20 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             raise FileMissingError(message)
 
         self.iface.addVectorLayer(path, feature_type, 'ogr')
+
+        canvas_srid = self.canvas.mapRenderer().destinationCrs().srsid()
+        on_the_fly_projection = self.canvas.hasCrsTransformEnabled()
+        if canvas_srid != 4326 and not on_the_fly_projection:
+            if QGis.QGIS_VERSION_INT >= 20400:
+                self.canvas.setCrsTransformEnabled(True)
+            else:
+                display_warning_message_bar(
+                    self.tr('Enable \'on the fly\''),
+                    self.tr(
+                        'Your current projection is different than EPSG:4326. '
+                        'You should enable \'on the fly\' to display '
+                        'correctly your layers')
+                    )
 
     def reject(self):
         """Redefinition of the reject() method
