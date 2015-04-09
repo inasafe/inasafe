@@ -38,12 +38,11 @@ AVAILABLE_POSTPTOCESSORS = {
     'Aggregation': 'Aggregation',
     'BuildingType': 'Building type',
     'RoadType': 'Road type',
-    'AggregationCategorical':
-    'Aggregation categorical',
+    'AggregationCategorical': 'Aggregation categorical',
     'MinimumNeeds': 'Minimum needs'}
 
 
-def get_postprocessors(requested_postprocessors, aoi_mode):
+def get_postprocessors(requested_postprocessors):
     """
     Creates a dictionary of applicable postprocessor instances
 
@@ -61,10 +60,6 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
             skip it returning the valid ones
     :type requested_postprocessors: dict e.g. name:[list_elements]
 
-    :param aoi_mode: Whether postprocessing is being done on current analysis
-        extents or on an aggregation layer.
-    :type aoi_mode: bool
-
     :returns: Dict of postprocessors instances e.g.::
 
             {'Gender': GenderPostprocessors instance}
@@ -77,28 +72,24 @@ def get_postprocessors(requested_postprocessors, aoi_mode):
     if requested_postprocessors is None or requested_postprocessors == {}:
         return postprocessor_instances
     for name, values in requested_postprocessors.iteritems():
-        constr_id = name + 'Postprocessor'
-        # Flag specifying if aggregation is required. If set, postprocessor
-        # will be disabled when AOI mode is enabled.
-        requires_aggregation = True
-        # lets check if the IF has a
-        # ['params']['disable_for_entire_area_aggregation']
-        # that would turn off the current postprocessor if in aoi_mode
+        constructor_class_name = name + 'Postprocessor'
         try:
-            if values[0].value and requires_aggregation:
+            if values[0].value:
                 if name in AVAILABLE_POSTPTOCESSORS.keys():
                     # http://stackoverflow.com/a/554462
-                    constr = globals()[constr_id]
-                    instance = constr()
+                    constructor = globals()[constructor_class_name]
+                    instance = constructor()
                     postprocessor_instances[name] = instance
                 else:
-                    LOGGER.debug(constr_id + ' is not a valid Postprocessor,'
-                                             ' skipping it')
-
+                    LOGGER.debug(
+                        constructor_class_name + ' is not a valid '
+                                                 'Postprocessor, skipping it')
             else:
-                LOGGER.debug(constr_id + ' user disabled, skipping it')
+                LOGGER.debug(
+                    constructor_class_name + ' user disabled, skipping it')
         except KeyError:
-            LOGGER.debug(constr_id + ' has no "on" key, skipping it')
+            LOGGER.debug(
+                constructor_class_name + ' has no "on" key, skipping it')
 
     return postprocessor_instances
 
