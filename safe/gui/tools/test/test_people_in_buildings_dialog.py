@@ -79,6 +79,7 @@ class KeywordsDialogTest(unittest.TestCase):
         items = self._get_combobox_content(combo)
         message = 'Trying to load an invalid field %s into a combo box' % (
             option)
+        print items, option
         self.assertIn(option, items, message)
         combo.setCurrentIndex(items.index(option))
 
