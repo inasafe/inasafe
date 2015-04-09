@@ -33,15 +33,15 @@ People_Rounded = "People_Rnd"
 
 
 class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
-    """Options dialog for the InaSAFE plugin."""
+    """People in buildings dialog for creating new exposure layer."""
 
     def __init__(self, iface, parent=None):
         """Constructor for the dialog.
 
-        :param iface: A Quantum GIS QGisAppInterface instance.
+        :param iface: A QGIS QGisAppInterface instance.
         :type iface: QGisAppInterface
 
-        :param parent: Parent widget of this dialog
+        :param parent: Parent widget of this dialog.
         :type parent: QWidget
 
         :param dock: Optional dock widget instance that we can notify of
@@ -58,9 +58,9 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         self.load_layers_into_combo_box()
 
         self.buildingLayerComboBox.currentIndexChanged['QString'].connect(
-            self.handle_building_layer)
+            self.building_layer_changed)
         self.censusLayerComboBox.currentIndexChanged['QString'].connect(
-            self.handle_census_layer)
+            self.cencus_layer_changed)
 
         self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(
             self.estimate_people_in_buildings)
@@ -74,15 +74,16 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         layer_names = self._get_layer_names()
         self._update_combobox(self.buildingLayerComboBox, layer_names)
         self._update_combobox(self.censusLayerComboBox, layer_names)
-        self.handle_building_layer(self.buildingLayerComboBox.currentText())
-        self.handle_census_layer(self.censusLayerComboBox.currentText())
+        self.building_layer_changed(self.buildingLayerComboBox.currentText())
+        self.cencus_layer_changed(self.censusLayerComboBox.currentText())
 
     def _select_layer_by_name(self, layer_name):
-        """Get a layer by name
-        :param layer_name: The layer's name
+        """Get a layer by its name.
+
+        :param layer_name: The layer's name.
         :type layer_name: basestring
 
-        :returns: The layer that has the appropriate name or none
+        :returns: The layer that has the appropriate name or none.
         :rtype: QgsMapLayer, None
         """
         layers = self._get_layers()
@@ -104,7 +105,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
     def _get_layer_names(self):
         """Get the names of all layers.
 
-        :returns: A list of all layer names
+        :returns: A list of all layer names.
         :rtype: list
         """
         layers = self._get_layers()
@@ -116,7 +117,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         """Get all attribute names of the layer.
 
         :param layer: The layer to be investigated.
-        :type layer: VectorLayer
+        :type layer: QgsVectorLayer
 
         :returns: Returns a list of all attribute names of the layer.
         :rtype: list
@@ -124,7 +125,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         field_names = [field.name() for field in layer.pendingFields()]
         return field_names
 
-    def handle_building_layer(self, layer_name):
+    def building_layer_changed(self, layer_name):
         """Handler for change buildings layer event.
 
         :param layer_name: The name of the layer that was selected.
@@ -137,7 +138,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         self._update_combobox(self.usageColumnComboBox, field_names)
         self._update_combobox(self.levelsColumnComboBox, field_names)
 
-    def handle_census_layer(self, layer_name):
+    def cencus_layer_changed(self, layer_name):
         """Hander for change of population layer selection event.
 
         :param layer_name: The name of the layer that was selected.
@@ -151,7 +152,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
 
     @staticmethod
     def _update_combobox(combobox, options):
-        """Shorthand for clearing and loading options (this happens a lot)
+        """Shorthand for clearing and loading options (this happens a lot).
         """
         combobox.clear()
         combobox.addItems(options)
@@ -161,7 +162,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         """Add a new attribute to an existing layer.
 
         :param layer: The layer to be altered.
-        :type layer: VectorLayer
+        :type layer: QgsVectorLayer
 
         :param attribute_name: The name of the new attribute.
         :type attribute_name: basestring
@@ -174,8 +175,8 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         """
         provider = layer.dataProvider()
         # Check if attribute is already there, return "-1" if not
-        ind = provider.fieldNameIndex(attribute_name)
-        if ind != -1:
+        field_index = provider.fieldNameIndex(attribute_name)
+        if field_index != -1:
             return False
         field = QgsField(attribute_name, data_type)
         result = provider.addAttributes([field])
@@ -184,8 +185,8 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
     def add_population_attribute(self, layer):
         """Add people estimate columns/attributes to the output layer.
 
-        :param layer: The layer that the population attribute should be added.
-        :type layer: VectorLayer
+        :param layer: Layer that the population attribute should be added to.
+        :type layer: QgsVectorLayer
         """
         attributes = {
             People_Calculated: QVariant.Double,
@@ -215,8 +216,8 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         return attribute_dict
 
     @staticmethod
-    def _overlapping_area(feature, layer):
-        """Get the area overlapping area if feature is within layer
+    def _area_contained(feature, layer):
+        """Get the area if feature centroid is within layer.
 
         :param feature: A feature
         :type feature: QgsFeature
@@ -237,17 +238,18 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
     @staticmethod
     def _get_levels(attributes, levels_attribute):
         """Try to extract the levels from the attributes dict as an int.
-        ..Note: If the levels of this building has not been set we will
-        assume it to be 1.
 
-        :param attributes: The attributes dict from the feature
+        .. note:: If the levels of this building has not been set we will
+            assume it to be 1.
+
+        :param attributes: The attributes dict from the feature.
         :type attributes: dict
 
         :param levels_attribute: The name of the column that contains layer
-        information
+            information.
         :type levels_attribute: basestring
 
-        :returns: Number of levels (default 1)
+        :returns: The number of levels (default 1).
         :rtype: int
         """
         levels = attributes[levels_attribute]
@@ -274,9 +276,9 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         :returns: The residential proprtion
         :rtype: int, float
 
-        ...Note: The residential proportion is based on the building type.
-        Currently the types 'Residential' and 'House' are considered to be
-        used 100% for residential.
+        .. note:: The residential proportion is based on the building type.
+            Currently the types 'Residential' and 'House' are considered to be
+            used 100% for residential.
         """
         use = attributes[building_use]
         if use in ['Residential', 'residential', 'house', 'House']:
@@ -288,10 +290,10 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
 
     @staticmethod
     def _feature_fully_in_extent(layer, feature):
-        """Determine wether the feature is fully within the layer's extent.
+        """Determine whether the feature is fully within the layer's extent.
 
         :param layer: The layer to be considered.
-        :type layer: VectorLayer
+        :type layer: QgsVectorLayer
 
         :param feature: The feature to be considered.
         :type feature:
@@ -311,6 +313,33 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         return True
 
     def estimate_people_in_buildings(self):
+        """Estimate the number of people in each building based on the census.
+
+        .. note:: The user selects both a buildings layer and a census areas
+            layer. The building layer is expected to have a column with
+            building usages. In this column the values: 'Residential',
+            'residential', 'house' and 'House' are considered to have a 100%
+            residential proportion. All other types are considered to not have
+            contributed to the census counts. The buildings layer is
+            furthermore expected to to have a levels column. This column
+            contains the number of levels that a given structure has. A blank
+            value is assumed to be 1. The building layer is a vector layer
+            with building features. The census area should have a column with
+            the people counts.
+
+            People in buildings is calculated by the following formulae:
+
+            residential area = surface area * levels * residential proportion
+
+                                 residential area * people in census area
+            number of people =  --------------------------------------------
+                                    total residential surface area
+
+            Since this calculation may result in a fractional result, 2
+            columns are created. One with the exact calculated value used in
+            further calculations. The other with whole numbers to be used by
+            the user directly.
+        """
         building_layer_name = self.buildingLayerComboBox.currentText()
         buildings_layer = self._select_layer_by_name(building_layer_name)
         building_use_column = self.usageColumnComboBox.currentText()
@@ -321,7 +350,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         new_layer = self.newLayerCheckBox.isChecked()
         new_layer_name = self.newLayerLineEdit.text()
         if not buildings_layer or not population_layer:
-            return False
+            return
 
         if new_layer:
             buildings_layer = self.iface.addVectorLayer(
@@ -351,7 +380,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
             building_lookup = {}
             population_count = population_attributes[population_column]
             for building in buildings_layer.getFeatures():
-                area = self._overlapping_area(building, population_area)
+                area = self._area_contained(building, population_area)
                 if not area:
                     continue
                 attributes = self._get_attributes(building, field_names)
