@@ -19,7 +19,6 @@ from PyQt4.QtCore import QSettings
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 from safe.utilities.resources import resources_path
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 
 def add_needs_parameters(parameters):
@@ -54,28 +53,24 @@ class NeedsProfile(MinimumNeeds):
         self.load()
 
     def load(self):
-        """Load the minimum needs from the QSettings object.
+        """Load the minimum needs.
+
+        If the minimum needs defined in QSettings use it, if not, get the
+        most relevant available minimum needs (based on QGIS locale). The
+        last thing to do is to just use the default minimum needs.
         """
-        # minimum_needs = None
-        try:
-            minimum_needs = self.settings.value('MinimumNeeds', type=dict)
-            if not minimum_needs and minimum_needs != u'':
-                profiles = self.get_profiles()
-                # TODO (Ismail): Check this part below.
-                # I just change from string concatenation to use os.path.join.
-                # But it's obvious that there is something wrong in this line
-                profiles_path = os.path.join(
-                    str(self.root_directory),
-                    'minimum_needs',
-                    profiles + '.json')
-                self.read_from_file(profiles_path)
-        except TypeError:
-            minimum_needs = self._defaults()
+        self.minimum_needs = self.settings.value('MinimumNeeds')
 
-        if not minimum_needs and minimum_needs != u'':
-            minimum_needs = self._defaults()
-
-        self.minimum_needs = minimum_needs
+        if not self.minimum_needs or self.minimum_needs == u'':
+            # Load the most relevant minimum needs
+            # If there are more than one profile exist, just use defaults so
+            # that user doesnt get confused.
+            profiles = self.get_profiles()
+            if len(profiles) == 1:
+                profile = self.get_profiles()[0]
+                self.load_profile(profile)
+            else:
+                self.minimum_needs = self._defaults()
 
     def load_profile(self, profile):
         """Load a specific profile into the current minimum needs.
@@ -113,20 +108,6 @@ class NeedsProfile(MinimumNeeds):
             return
 
         self.settings.setValue('MinimumNeeds', self.minimum_needs)
-        # Monkey patch all the impact functions
-
-        # FIXME (AG) Since the parameters is not class property anymore in
-        # the new IF architecture, patching the impact function like this
-        # probably won't work. Need to check if this is still working. But to
-        #  make this not thrown Python Error, I will just pass the instance.
-        for impact_function in ImpactFunctionManager().impact_functions:
-            impact_function = impact_function.instance()
-            if not hasattr(impact_function, 'parameters'):
-                continue
-            if 'minimum needs' in impact_function.parameters:
-                impact_function.parameters['minimum needs'] = (
-                    self.get_needs_parameters())
-                impact_function.parameters['provenance'] = self.provenance
 
     def get_profiles(self):
         """Get all the minimum needs profiles.
@@ -149,6 +130,9 @@ class NeedsProfile(MinimumNeeds):
             :returns: Ordered profiles
             :rtype: list
             """
+            if locale is None:
+                return unsorted_profiles
+
             locale = '_%s' % locale[:2]
             profiles_our_locale = []
             profiles_remaining = []

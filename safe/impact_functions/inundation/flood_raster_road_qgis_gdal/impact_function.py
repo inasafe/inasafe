@@ -9,8 +9,8 @@ from qgis.core import (
 
 from safe.impact_functions.base import ImpactFunction
 from safe.common.tables import Table, TableRow
-from safe.impact_functions.inundation.flood_raster_road_qgis_gdal.metadata_definitions import \
-    FloodRasterRoadsGdalMetadata
+from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
+    .metadata_definitions import FloodRasterRoadsGdalMetadata
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
@@ -80,8 +80,6 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
         # Extract data
         H = self.hazard    # Flood
         E = self.exposure  # Roads
-
-        question = self.question()
 
         H = H.get_layer()
         E = E.get_layer()
@@ -219,7 +217,7 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
                 flooded_len += length
                 roads_by_type[road_type]['flooded'] += length
 
-        table_body = self._tabulate(flooded_len, question, road_len,
+        table_body = self._tabulate(flooded_len, self.question, road_len,
                                     roads_by_type)
 
         impact_summary = Table(table_body).toNewlineFreeString()

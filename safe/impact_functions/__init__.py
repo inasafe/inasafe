@@ -10,8 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.earthquake.earthquake_building.impact_function import \
-    EarthquakeBuildingFunction
+from safe.impact_functions.earthquake.earthquake_building\
+    .impact_function import EarthquakeBuildingFunction
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model\

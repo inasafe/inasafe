@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from collections import OrderedDict
+
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
@@ -18,20 +20,21 @@ from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry)
-
 from PyQt4.QtCore import QVariant
 
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import get_question
-from safe.common.tables import Table, TableRow
 from safe.impact_functions.inundation.flood_vector_building_impact_qgis.\
     metadata_definitions import FloodPolygonBuildingQgisMetadata
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
+from safe.impact_reports.building_exposure_report_mixin import (
+    BuildingExposureReportMixin)
 
 
-class FloodPolygonBuildingQgisFunction(ImpactFunction):
+class FloodPolygonBuildingQgisFunction(
+        ImpactFunction,
+        BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation (polygon-polygon)."""
 
@@ -40,24 +43,26 @@ class FloodPolygonBuildingQgisFunction(ImpactFunction):
     def __init__(self):
         super(FloodPolygonBuildingQgisFunction, self).__init__()
 
-    def _tabulate(self,
-                  building_count,
-                  buildings_by_type,
-                  flooded_count,
-                  question):
-        table_body = [
-            question,
-            TableRow(
-                [tr('Building Type'), tr('Flooded'), tr('Total')],
-                header=True),
-            TableRow(
-                [tr('All'), int(flooded_count), int(building_count)]),
-            TableRow(
-                tr('Breakdown by building type'), header=True)]
-        for t, v in buildings_by_type.iteritems():
-            table_body.append(
-                TableRow([t, int(v['flooded']), int(v['total'])]))
-        return table_body
+    def notes(self):
+        """Return the notes section of the report.
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        affected_field = self.parameters['affected_field']
+        affected_value = self.parameters['affected_value']
+        return [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Buildings are said to be inundated when in a region with '
+                    'an Affected Field Parameter "%s"(=%s).') % (
+                        affected_field, affected_value)
+            }
+        ]
 
     def run(self, layers=None):
         """Experimental impact function.
@@ -65,7 +70,7 @@ class FloodPolygonBuildingQgisFunction(ImpactFunction):
         Input
           layers: List of layers expected to contain
               H: Polygon layer of inundation areas
-              E: Vector layer of roads
+              E: Vector layer of buildings
         """
         self.validate()
         self.prepare(layers)
@@ -81,9 +86,6 @@ class FloodPolygonBuildingQgisFunction(ImpactFunction):
         # Extract data
         hazard_layer = self.hazard    # Flood
         exposure_layer = self.exposure  # Roads
-
-        question = get_question(
-            hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         hazard_layer = hazard_layer.get_layer()
         h_provider = hazard_layer.dataProvider()
@@ -171,33 +173,35 @@ class FloodPolygonBuildingQgisFunction(ImpactFunction):
         building_layer.updateExtents()
 
         # Generate simple impact report
-
-        building_count = flooded_count = 0  # Count of buildings
-        buildings_by_type = dict()      # Length of flooded roads by types
-
+        self.buildings = {}
+        self.affected_buildings = OrderedDict([
+            (tr('Flooded'), {})
+        ])
         buildings_data = building_layer.getFeatures()
         building_type_field_index = building_layer.fieldNameIndex(
             building_type_field)
         for building in buildings_data:
-            building_count += 1
             attributes = building.attributes()
             building_type = attributes[building_type_field_index]
             if building_type in [None, 'NULL', 'null', 'Null']:
                 building_type = 'Unknown type'
-            if building_type not in buildings_by_type:
-                buildings_by_type[building_type] = {'flooded': 0, 'total': 0}
-            buildings_by_type[building_type]['total'] += 1
+            if building_type not in self.buildings:
+                self.buildings[building_type] = 0
+                for category in self.affected_buildings.keys():
+                    self.affected_buildings[category][
+                        building_type] = OrderedDict([
+                            (tr('Buildings Affected'), 0)])
+            self.buildings[building_type] += 1
 
             if attributes[target_field_index] == 1:
-                flooded_count += 1
-                buildings_by_type[building_type]['flooded'] += 1
+                self.affected_buildings[tr('Flooded')][building_type][
+                    tr('Buildings Affected')] += 1
 
-        table_body = self._tabulate(building_count, buildings_by_type,
-                                      flooded_count, question)
+        # Lump small entries and 'unknown' into 'other' category
+        self._consolidate_to_other()
 
-        impact_summary = Table(table_body).toNewlineFreeString()
+        impact_summary = self.generate_html_report()
         map_title = tr('Buildings inundated')
-
         style_classes = [
             dict(label=tr('Not Inundated'), value=0, colour='#1EFC7C',
                  transparency=0, size=0.5),
@@ -216,8 +220,8 @@ class FloodPolygonBuildingQgisFunction(ImpactFunction):
                 'impact_summary': impact_summary,
                 'map_title': map_title,
                 'target_field': target_field,
-                'buildings_total': building_count,
-                'buildings_affected': flooded_count},
+                'buildings_total': self.total_buildings,
+                'buildings_affected': self.total_affected_buildings},
             style_info=style_info)
         self._impact = building_layer
         return building_layer

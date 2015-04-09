@@ -61,8 +61,8 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         expected_question = ('In the event of earthquake how many '
                              'population might die or be displaced')
         message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question())
-        self.assertEqual(expected_question, impact_function.question(), message)
+            expected_question, impact_function.question)
+        self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand,
         # 1 = low, 2 = medium, 3 = high
         expected_exposed_per_mmi = {
@@ -77,7 +77,8 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         }
         result = impact_layer.get_keywords('exposed_per_mmi')
 
-        message = 'Expecting %s, but it returns %s' % (expected_exposed_per_mmi, result)
+        message = 'Expecting %s, but it returns %s' % (
+            expected_exposed_per_mmi, result)
         self.assertEqual(expected_exposed_per_mmi, result, message)
 
     def test_filter(self):

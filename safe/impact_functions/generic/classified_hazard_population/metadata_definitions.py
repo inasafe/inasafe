@@ -18,8 +18,7 @@ __date__ = '24/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 from safe.common.utilities import OrderedDict
-from safe.defaults import (
-    get_defaults, default_minimum_needs, default_provenance)
+from safe.defaults import default_minimum_needs, default_provenance
 from safe.definitions import (
     hazard_definition,
     hazard_all,
@@ -58,8 +57,6 @@ class ClassifiedHazardPopulationMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        # Configurable parameters
-        defaults = get_defaults()
         dict_meta = {
             'id': 'ClassifiedHazardPopulationFunction',
             'name': tr('Classified Hazard Population Function'),

@@ -1654,7 +1654,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             for row in range(len(exposure_data_types)):
                 hc = hazard_data_types[col]
                 ec = exposure_data_types[row]
-                functions = self.impact_function_manager.get_functions_for_constraint(h, e, hc, ec)
+                functions = self.impact_function_manager\
+                    .get_functions_for_constraint(h, e, hc, ec)
                 item = QtGui.QTableWidgetItem()
                 if len(functions):
                     bgcolor = QtGui.QColor(120, 255, 120)

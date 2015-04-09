@@ -67,7 +67,7 @@ class ImpactFunctionManager(object):
         :param class_name: the name of IF class
         :type class_name: str
 
-        :return: impact function class that matches the argumen.
+        :return: impact function class that matches the argument.
         :rtype: safe.impact_functions.base.ImpactFunction
         """
         return self.registry.get_class(class_name)
@@ -592,10 +592,14 @@ class ImpactFunctionManager(object):
             exposure,
             hazard_constraint=None,
             exposure_constraint=None):
-        """
+        """Get all impact functions that match the hazard n exposure metadata.
 
-        :param hazard:
-        :param exposure:
+        :param hazard: The hazard metadata.
+        :type hazard: dict
+
+        :param exposure: The exposure metadata.
+        :type exposure: dict
+
         :param hazard_constraint:
         :param exposure_constraint:
         :return:
@@ -603,9 +607,10 @@ class ImpactFunctionManager(object):
         result = []
         if_hazard = self.get_functions_for_hazard(hazard)
         if_exposure = self.get_functions_for_exposure(exposure)
+        if_exposure_id = [function['id'] for function in if_exposure]
 
         for f in if_hazard:
-            if f in if_exposure:
+            if f['id'] in if_exposure_id:
                 if (not hazard_constraint or hazard_constraint in
                         f['categories']['hazard']['layer_constraints']):
                     if (not exposure_constraint or exposure_constraint in

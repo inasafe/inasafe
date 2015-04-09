@@ -11,31 +11,61 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from collections import OrderedDict
+
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.core import (
-    get_hazard_layer, get_exposure_layer, get_question)
 from safe.impact_functions.volcanic.volcano_point_building\
     .metadata_definitions import VolcanoPointBuildingFunctionMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.engine.utilities import buffer_points
 from safe.common.utilities import (
-    format_int,
     get_thousand_separator,
     get_non_conflicting_attribute_name,
     get_osm_building_usage)
-from safe.common.tables import Table, TableRow
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
+from safe.impact_reports.building_exposure_report_mixin import (
+    BuildingExposureReportMixin)
 
 
-class VolcanoPointBuildingFunction(ImpactFunction):
+class VolcanoPointBuildingFunction(
+        ImpactFunction,
+        BuildingExposureReportMixin):
     """Impact Function for Volcano Point on Building."""
 
     _metadata = VolcanoPointBuildingFunctionMetadata()
 
     def __init__(self):
         super(VolcanoPointBuildingFunction, self).__init__()
+
+    def notes(self):
+        """Return the notes section of the report.
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        volcano_names = self.volcano_names
+        return [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Map shows buildings affected in each of the '
+                    'volcano buffered zones.')
+            },
+            {
+                'content': tr(
+                    'Only buildings available in OpenStreetMap '
+                    'are considered.')
+            },
+            {
+                'content': tr('Volcanoes considered: %s.') % volcano_names,
+                'header': True
+            }
+        ]
 
     def run(self, layers=None):
         """Counts number of building exposed to each volcano hazard zones.
@@ -66,10 +96,6 @@ class VolcanoPointBuildingFunction(ImpactFunction):
         hazard_layer = self.hazard  # Volcano hazard layer
         exposure_layer = self.exposure  # Building exposure layer
 
-        # Get question
-        question = get_question(
-            hazard_layer.get_name(), exposure_layer.get_name(), self)
-
         # Input checks
         if not hazard_layer.is_point_data:
             message = (
@@ -97,9 +123,9 @@ class VolcanoPointBuildingFunction(ImpactFunction):
             for row in hazard_layer.get_data():
                 # Run through all polygons and get unique names
                 volcano_name_list.add(row[volcano_name_attribute])
-            volcano_names = ', '.join(volcano_name_list)
+            self.volcano_names = ', '.join(volcano_name_list)
         else:
-            volcano_names = tr('Not specified in data')
+            self.volcano_names = tr('Not specified in data')
 
         # Find the target field name that has no conflict with the attribute
         # names in the hazard layer
@@ -115,15 +141,11 @@ class VolcanoPointBuildingFunction(ImpactFunction):
         attribute_names = interpolated_layer.get_attribute_names()
         features = interpolated_layer.get_data()
 
-        # Initialize the container for the result
-        building_per_category = {}
-        other_sum = {}
-        for category_name in category_names:
-            building_per_category[category_name] = {}
-            building_per_category[category_name]['total'] = 0
-            other_sum[category_name] = 0
+        self.buildings = {}
+        self.affected_buildings = OrderedDict()
+        for category in radii_meter:
+            self.affected_buildings[category] = {}
 
-        building_usages = []
         # Iterate the interpolated building layer
         for i in range(len(features)):
             hazard_value = features[i][hazard_zone_attribute]
@@ -131,108 +153,34 @@ class VolcanoPointBuildingFunction(ImpactFunction):
                 hazard_value = not_affected_value
             features[i][target_field] = hazard_value
 
-            if hazard_value in building_per_category.keys():
-                building_per_category[hazard_value]['total'] += 1
-            elif not hazard_value:
-                building_per_category[not_affected_value]['total'] += 1
-            else:
-                building_per_category[hazard_value] = {}
-                building_per_category[hazard_value]['total'] = 1
-
             # Count affected buildings by usage type if available
             usage = get_osm_building_usage(attribute_names, features[i])
-            if usage is None:
-                usage = tr('unknown')
+            if usage is [None, 'NULL', 'null', 'Null', 0]:
+                usage = tr('Unknown')
 
-            if usage not in building_usages:
-                building_usages.append(usage)
-                for building in building_per_category.values():
-                    building[usage] = 0
+            if usage not in self.buildings:
+                self.buildings[usage] = 0
+                for category in self.affected_buildings.keys():
+                    self.affected_buildings[category][
+                        usage] = OrderedDict([
+                            (tr('Buildings Affected'), 0)])
 
-            building_per_category[hazard_value][usage] += 1
+            self.buildings[usage] += 1
+            if hazard_value in self.affected_buildings.keys():
+                self.affected_buildings[hazard_value][usage][
+                    tr('Buildings Affected')] += 1
+
+        # Lump small entries and 'unknown' into 'other' category
+        self._consolidate_to_other()
 
         # Generate simple impact report
-        blank_cell = ''
-        table_body = [question,
-                      TableRow([tr('Volcanoes considered'),
-                                '%s' % volcano_names, blank_cell],
-                               header=True)]
-
-        table_headers = [tr('Building type')]
-        table_headers += [tr(x) for x in category_names]
-        table_headers += [tr('Total')]
-
-        table_body += [TableRow(table_headers, header=True)]
-
-        for building_usage in building_usages:
-            building_usage_good = building_usage.replace('_', ' ')
-            building_usage_good = building_usage_good.capitalize()
-
-            building_sum = sum(
-                [building_per_category[category_name][building_usage] for
-                 category_name in category_names])
-
-            # Filter building type that has no less than 25 items
-            if building_sum >= 25:
-                row = [tr(building_usage_good)]
-                building_sum = 0
-                for category_name in category_names:
-                    building_sub_sum = building_per_category[category_name][
-                        building_usage]
-                    row.append(format_int(building_sub_sum))
-                    building_sum += building_sub_sum
-
-                row.append(format_int(building_sum))
-                table_body.append(row)
-            else:
-                for category_name in category_names:
-                    if category_name in other_sum.keys():
-                        other_sum[category_name] += building_per_category[
-                            category_name][building_usage]
-                    else:
-                        other_sum[category_name] = building_per_category[
-                            category_name][building_usage]
-
-        # Adding others building type to the report.
-        other_row = [tr('Other')]
-        other_building_total = 0
-        for category_name in category_names:
-            other_building_sum = other_sum[category_name]
-            other_row.append(format_int(other_building_sum))
-            other_building_total += other_building_sum
-
-        other_row.append(format_int(other_building_total))
-        table_body.append(other_row)
-
-        all_row = [tr('Total')]
-        all_row += [format_int(building_per_category[category_name]['total'])
-                    for category_name in category_names]
-        total = sum([building_per_category[category_name]['total'] for
-                     category_name in category_names])
-        all_row += [format_int(total)]
-
-        table_body.append(TableRow(all_row, header=True))
-
-        table_body += [TableRow(tr('Map shows buildings affected in each of '
-                                   'the buffered zone.'))]
-
-        impact_table = Table(table_body).toNewlineFreeString()
-        impact_summary = impact_table
-
-        # Extend impact report for on-screen display
-        table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total number of buildings %s in the viewable '
-                              'area') % format_int(total),
-                           tr('Only buildings available in OpenStreetMap '
-                              'are considered.')])
+        impact_summary = impact_table = self.generate_html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
         colours = colours[::-1]  # flip
-
         colours = colours[:len(category_names)]
-
         style_classes = []
 
         i = 0
@@ -266,7 +214,7 @@ class VolcanoPointBuildingFunction(ImpactFunction):
         impact_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
-            geometry=interpolated_layer.get_geometry(as_geometry_objects=True),
+            geometry=interpolated_layer.get_geometry(),
             name=tr('Buildings affected by volcanic buffered point'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,

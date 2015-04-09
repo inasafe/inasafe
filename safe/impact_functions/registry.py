@@ -50,14 +50,24 @@ class Registry(object):
     def register(cls, impact_function):
         """Register an impact function to the Registry.
 
+        Impact Function that will be registered has to have a unique id that
+        is not registered yet.
+
         :param impact_function: The impact function to register.
         :type impact_function: ImpactFunction.
         """
         is_disabled = impact_function.metadata().is_disabled()
         is_valid, reason = impact_function.metadata().is_valid()
+        impact_function_id = impact_function.metadata().as_dict()['id']
         if not is_disabled and is_valid and impact_function not in \
                 cls._impact_functions:
-            cls._impact_functions.append(impact_function)
+            id_unique = cls.filter_by_metadata('id', impact_function_id) == []
+            if id_unique:
+                cls._impact_functions.append(impact_function)
+            else:
+                raise Exception('Impact Function with ID %s is already '
+                                'registered' % impact_function_id)
+
 
     @classmethod
     def clear(cls):

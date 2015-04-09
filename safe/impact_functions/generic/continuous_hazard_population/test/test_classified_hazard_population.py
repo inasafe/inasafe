@@ -11,8 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.generic.continuous_hazard_population.impact_function import \
-    ContinuousHazardPopulationFunction
+from safe.impact_functions.generic.continuous_hazard_population\
+    .impact_function import ContinuousHazardPopulationFunction
 
 __author__ = 'lucernae'
 __filename__ = 'test_classified_hazard_building'
@@ -20,12 +20,11 @@ __date__ = '24/03/15'
 
 
 import unittest
-import os
 
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.storage.core import read_layer
-from safe.test.utilities import TESTDATA, test_data_path
+from safe.test.utilities import test_data_path
 from safe.common.utilities import OrderedDict
 
 

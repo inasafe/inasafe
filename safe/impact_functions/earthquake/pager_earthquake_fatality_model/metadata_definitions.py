@@ -16,8 +16,7 @@ __date__ = '24/03/15'
 
 import numpy
 from safe.common.utilities import OrderedDict
-from safe.defaults import get_defaults, default_minimum_needs, \
-    default_provenance
+from safe.defaults import default_minimum_needs, default_provenance
 from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
     layer_raster_continuous, exposure_definition, exposure_population, \
     unit_people_per_pixel
@@ -25,8 +24,8 @@ from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
-from safe.impact_functions.earthquake.itb_earthquake_fatality_model.metadata_definitions import \
-    ITBFatalityMetadata
+from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
+    .metadata_definitions import ITBFatalityMetadata
 from safe.utilities.i18n import tr
 
 
@@ -50,7 +49,6 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
             concrete impact function.
         :rtype: dict
         """
-        defaults = get_defaults()
         dict_meta = {
             'id': 'PAGFatalityFunction',
             'name': tr('PAG Fatality Function'),
