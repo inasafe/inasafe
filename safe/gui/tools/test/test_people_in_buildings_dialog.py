@@ -148,7 +148,7 @@ class KeywordsDialogTest(unittest.TestCase):
         self.assertItemsEqual(buildings_options, population_options, message)
 
     def test_0002_building_layer_and_attributes(self):
-        """Ensure the building attributes are being assigned to the
+        """Ensure the building attributes are assigned to the combo boxes.
         """
         self._load_building_layer_details()
         buildings_name = 'people_in_buildings_buildings'

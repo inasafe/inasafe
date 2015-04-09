@@ -23,6 +23,8 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QVariant  # , QPyNullVariant
 from qgis.core import QgsField
 from qgis.core import QgsGeometry
+from qgis.core import QgsVectorLayer
+from qgis.core import QgsMapLayerRegistry
 
 from safe.utilities.resources import get_ui_class
 
@@ -99,7 +101,8 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         :returns: All layers currently loaded.
         :rtype: list
         """
-        layers = self.iface.legendInterface().layers()
+        layers = QgsMapLayerRegistry.instance().mapLayers()
+        layers = [l for l in layers.values() if isinstance(l, QgsVectorLayer)]
         return layers
 
     def _get_layer_names(self):
@@ -257,7 +260,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         if not levels:
             return 1
         try:
-            # get the number of levels as an intiger
+            # get the number of levels as an integer
             return int(levels)
         except ValueError:
             return 1
@@ -366,8 +369,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         #TODO: Make a better progress estimator
         self.progressBar.setValue(0)
         progress = 1
-        progress_increment = 100.0/len(
-            [p for p in population_layer.getFeatures()])
+        progress_increment = 100.0/population_layer.featureCount()
 
         for population_area in population_layer.getFeatures():
             progress += progress_increment
