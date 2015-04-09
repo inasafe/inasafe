@@ -28,6 +28,3 @@ import logging
 from safe.common.custom_logging import setup_logger
 
 setup_logger('InaSAFE')
-
-import pydevd
-pydevd.settrace('localhost', port=53110, stdoutToServer=True, stderrToServer=True)
