@@ -51,7 +51,7 @@ class ImpactReportTest(unittest.TestCase):
     def test_handle_missing_map_title(self):
         """Missing map title from the keywords fails gracefully"""
         # Use hazard layer as it won't have 'map_title' keyword
-        layer_path = test_data_path('hazard', 'padang_tsunami_mw8.tif')
+        layer_path = test_data_path('hazard', 'tsunami_wgs84.tif')
         layer, _ = load_layer(layer_path)
         template = resources_path(
             'qgis-composer-templates', 'inasafe-portrait-a4.qpt')

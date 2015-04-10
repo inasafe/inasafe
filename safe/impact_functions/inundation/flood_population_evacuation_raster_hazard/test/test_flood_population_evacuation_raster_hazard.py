@@ -102,4 +102,3 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
-

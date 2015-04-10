@@ -100,8 +100,7 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                 'resources would be required to support them.'),
             'limitations': [tr(
                 'The default threshold of 0.7 meter was selected based on '
-                'consensus, not hard evidence.')
-            ],
+                'consensus, not hard evidence.')],
             'citations': [],
             'categories': {
                 'hazard': {

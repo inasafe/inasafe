@@ -377,7 +377,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_remove_item_by_value(self):
         """Test remove_item_by_value works."""
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='tsunami_wgs84',
             extension='.tif',
             include_keywords=True,
             source_directory=test_data_path('hazard')
@@ -387,9 +387,10 @@ class KeywordsDialogTest(unittest.TestCase):
 
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'title': 'A tsunami in Padang (Mw 8.8)',
+            'unit': 'metres_depth',
             'subcategory': 'tsunami',
-            'unit': 'm'}
+            'data_type': 'continuous',
+            'title': 'Tsunami'}
         message = 'The keywords should be %s, but it returns %s' % (
             expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)
@@ -397,7 +398,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_get_value_for_key(self):
         """Test get_value_for_key works."""
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='tsunami_wgs84',
             extension='.tif',
             include_keywords=True,
             source_directory=test_data_path('hazard')
@@ -413,7 +414,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_load_state_from_keywords(self):
         """Test load_state_from_keywords works."""
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='tsunami_wgs84',
             extension='.tif',
             include_keywords=True,
             source_directory=test_data_path('hazard')
@@ -422,10 +423,11 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog.load_state_from_keywords()
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'title': 'A tsunami in Padang (Mw 8.8)',
             'category': 'hazard',
+            'unit': 'metres_depth',
             'subcategory': 'tsunami',
-            'unit': 'm'}
+            'data_type': 'continuous',
+            'title': 'Tsunami'}
         message = 'The keyword should be %s, but it returns %s' % (
             expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)

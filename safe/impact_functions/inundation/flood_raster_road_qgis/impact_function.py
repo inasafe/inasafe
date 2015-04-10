@@ -77,8 +77,6 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
         H = self.hazard    # Flood
         E = self.exposure  # Roads
 
-        question = self.question()
-
         H = H.get_layer()
         E = E.get_layer()
 
@@ -183,7 +181,7 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
                 flooded_len += length
                 roads_by_type[road_type]['flooded'] += length
 
-        table_body = self._tabulate(flooded_len, question, road_len,
+        table_body = self._tabulate(flooded_len, self.question, road_len,
                                     roads_by_type)
 
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -198,11 +196,12 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
                           style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(data=line_layer,
-                   name=tr('Flooded roads'),
-                   keywords={'impact_summary': impact_summary,
-                             'map_title': map_title,
-                             'target_field': target_field},
-                   style_info=style_info)
+        line_layer = Vector(
+            data=line_layer,
+            name=tr('Flooded roads'),
+            keywords={'impact_summary': impact_summary,
+                      'map_title': map_title,
+                      'target_field': target_field},
+            style_info=style_info)
         self._impact = line_layer
         return line_layer

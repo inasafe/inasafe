@@ -16,7 +16,6 @@ from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .metadata_definitions import VolcanoPolygonPopulationFunctionMetadata
 from safe.impact_functions.core import (
-    get_question,
     evacuated_population_needs,
     population_rounding)
 from safe.engine.utilities import buffer_points
@@ -32,6 +31,7 @@ from safe.common.utilities import (
     get_non_conflicting_attribute_name)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class VolcanoPolygonPopulationFunction(ImpactFunction):
@@ -42,6 +42,8 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
     def __init__(self):
         super(VolcanoPolygonPopulationFunction, self).__init__()
         self.target_field = 'population'
+        # AG: Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
 
     def run(self, layers=None):
         """Run volcano population evacuation Impact Function.
@@ -70,9 +72,6 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Volcano KRB
         exposure_layer = self.exposure
-
-        question = get_question(
-            hazard_layer.get_name(), exposure_layer.get_name(), self)
 
         # Input checks
         if not hazard_layer.is_vector:
@@ -197,7 +196,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
 
         # Generate impact report for the pdf map
         blank_cell = ''
-        table_body = [question,
+        table_body = [self.question,
                       TableRow([tr('Volcanoes considered'),
                                 '%s' % volcano_names, blank_cell],
                                header=True),
@@ -250,7 +249,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         if numpy.nanmax(population_counts) == 0 == numpy.nanmin(
                 population_counts):
             table_body = [
-                question,
+                self.question,
                 TableRow([tr('People needing evacuation'),
                           '%s' % format_int(evacuated),
                           blank_cell], header=True)]

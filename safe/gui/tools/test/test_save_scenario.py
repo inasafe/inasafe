@@ -32,7 +32,7 @@ from safe.test.utilities import (
     load_standard_layers,
     GEOCRS,
     get_qgis_app,
-    TESTDATA, test_data_path)
+    test_data_path)
 from safe.common.utilities import unique_filename, temp_dir
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 

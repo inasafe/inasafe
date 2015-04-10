@@ -40,11 +40,7 @@ from safe.definitions import (
     unit_mmi,
     hazard_volcanic_ash,
     hazard_generic,
-    unit_building_generic,
-    hazard_all,
-    layer_vector_polygon,
-    layer_raster_continuous,
-    layer_vector_line)
+    unit_building_generic)
 
 
 class TestImpactFunctionManager(unittest.TestCase):
@@ -266,7 +262,8 @@ class TestImpactFunctionManager(unittest.TestCase):
     #     self.assertItemsEqual(result, expected_result, message)
     #
     #     impact_function = EarthquakeBuildingImpactFunction()
-    #     result = impact_function_manager.get_available_hazards(impact_function)
+    #     result = impact_function_manager\
+    #         .get_available_hazards(impact_function)
     #     expected_result = [hazard_earthquake]
     #     message = ('I expect %s but I got %s.' % (expected_result, result))
     #     self.assertItemsEqual(result, expected_result, message)

@@ -17,14 +17,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.volcanic.volcano_polygon_population.impact_function \
-    import VolcanoPolygonPopulationFunction
+from safe.impact_functions.volcanic.volcano_polygon_population\
+    .impact_function import VolcanoPolygonPopulationFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 
 
-class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
-    """Test for Volcano Polygon on Building Impact Function."""
+class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
+    """Test for Volcano Polygon on Population Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
@@ -53,12 +53,12 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         expected_question = ('In the event of volcano point how many '
                              'population might need evacuation')
         message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question())
-        self.assertEqual(expected_question, impact_function.question(), message)
+            expected_question, impact_function.question)
+        self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand
         impact = {
-            3000: 200,
-            5000: 0,
+            3000: 174,
+            5000: 26,
             10000: 0
         }
         impact_features = impact_layer.get_data()
@@ -78,8 +78,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         expected_question = ('In the event of volcano krb how many population '
                              'might need evacuation')
         message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question())
-        self.assertEqual(expected_question, impact_function.question(), message)
+            expected_question, impact_function.question)
+        self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand
         impact = {
             'Kawasan Rawan Bencana III': 49,

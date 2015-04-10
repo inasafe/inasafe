@@ -275,8 +275,7 @@ class PostprocessorManager(QtCore.QObject):
         try:
             requested_postprocessors = self.function_parameters[
                 'postprocessors']
-            postprocessors = get_postprocessors(
-                requested_postprocessors, self.aggregator.aoi_mode)
+            postprocessors = get_postprocessors(requested_postprocessors)
         except (TypeError, KeyError):
             # TypeError is for when function_parameters is none
             # KeyError is for when ['postprocessors'] is unavailable
@@ -455,7 +454,8 @@ class PostprocessorManager(QtCore.QObject):
                         if (youth_ratio is None or
                                 adult_ratio is None or
                                 elderly_ratio is None):
-                            LOGGER.debug('--- only default age ratios used ---')
+                            LOGGER.debug(
+                                '--- only default age ratios used ---')
                             youth_ratio = self.aggregator.defaults[
                                 'YOUTH_RATIO']
                             adult_ratio = self.aggregator.defaults[

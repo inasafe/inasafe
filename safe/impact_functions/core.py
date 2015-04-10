@@ -176,27 +176,6 @@ def extract_layers(layers, keyword, value):
     return extracted_layers
 
 
-def get_question(hazard_title, exposure_title, impact_function):
-    """Rephrase the question asked.
-
-    :param hazard_title: Hazard title.
-    :type hazard_title: str
-
-    :param exposure_title: Exposure title.
-    :type exposure_title: str
-
-    :param impact_function: An impact function object.
-    :type impact_function: ImpactFunction
-    """
-
-    function_title = ImpactFunctionManager.get_function_title(impact_function)
-    return (tr('In the event of <i>%(hazard)s</i> how many '
-               '<i>%(exposure)s</i> might <i>%(impact)s</i>')
-            % {'hazard': hazard_title.lower(),
-               'exposure': exposure_title.lower(),
-               'impact': function_title.lower()})
-
-
 def convert_to_old_keywords(converter, keywords):
     """Convert new keywords system to old keywords system by aliases.
 

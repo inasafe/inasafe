@@ -76,7 +76,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
                 ('Age', age_postprocessor()),
                 ('MinimumNeeds', minimum_needs_selector()),
                 ]),
-            'minimum needs': rice
+            'minimum needs': [rice]
         }
 
         dialog.build_form(parameter)

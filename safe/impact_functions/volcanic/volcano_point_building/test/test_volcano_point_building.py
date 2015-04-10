@@ -19,7 +19,7 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 
 
@@ -49,8 +49,8 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         expected_question = ('In the event of volcano point how many '
                              'buildings might be affected')
         message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question())
-        self.assertEqual(expected_question, impact_function.question(), message)
+            expected_question, impact_function.question)
+        self.assertEqual(expected_question, impact_function.question, message)
 
         # The buildings should all be categorised into 3000 zone
         zone_sum = sum(impact_layer.get_data(attribute='zone'))

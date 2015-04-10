@@ -563,7 +563,7 @@ class Vector(Layer):
         # FIXME (DK): this branch isn't covered by test
         if not QGIS_IS_AVAILABLE:
             msg = ('Used data is QgsVectorLayer instance, '
-                   'but QGIS is not avialable.')
+                   'but QGIS is not available.')
             raise TypeError(msg)
 
         base_name = unique_filename()
