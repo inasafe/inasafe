@@ -454,16 +454,12 @@ class TestEngine(unittest.TestCase):
 
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer."""
+        hazard_filepath = test_data_path(
+            'hazard', 'continuous_flood_20_20.asc')
+        exposure_filepath = test_data_path('exposure', 'buildings.shp')
 
-        haz_filename = 'Flood_Current_Depth_Jakarta_geographic.asc'
-
-        # File names for hazard level and exposure
-        hazard_filename = '%s/%s' % (HAZDATA, haz_filename)
-        exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
-                             % TESTDATA)
-
-        hazard_layer = read_layer(hazard_filename)
-        exposure_layer = read_layer(exposure_filename)
+        hazard_layer = read_layer(hazard_filepath)
+        exposure_layer = read_layer(exposure_filepath)
         hazard_title = hazard_layer.get_keywords()['title']
         exposure_title = exposure_layer.get_keywords()['title']
         hazard_source = hazard_layer.get_keywords()['source']

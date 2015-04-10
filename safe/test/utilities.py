@@ -1045,7 +1045,7 @@ def clone_shp_layer(
     :type source_directory: str
 
     :param target_directory: Subdirectory in InaSAFE temp dir that we want to
-        put the files into. Default to 'testing'.
+        put the files into. Default to 'test'.
     :type target_directory: str
     """
     extensions = ['.shp', '.shx', '.dbf', '.prj']
@@ -1061,6 +1061,32 @@ def clone_shp_layer(
 
     shp_path = '%s.shp' % temp_path
     layer = QgsVectorLayer(shp_path, os.path.basename(shp_path), 'ogr')
+    return layer
+
+
+def clone_csv_layer(
+        name,
+        source_directory,
+        target_directory='test'):
+    """Helper function that copies a test csv layer and returns it.
+
+    :param name: The default name for the csv layer.
+    :type name: str
+
+    :param source_directory: Directory where the file is located.
+    :type source_directory: str
+
+    :param target_directory: Subdirectory in InaSAFE temp dir that we want to
+        put the files into. Default to 'test'.
+    :type target_directory: str
+    """
+    file_path = '%s.csv' % name
+    temp_path = unique_filename(dir=temp_dir(target_directory))
+    # copy to temp file
+    source_path = os.path.join(source_directory, file_path)
+    shutil.copy2(source_path, temp_path)
+    # return a single predefined layer
+    layer = QgsVectorLayer(temp_path, '', 'delimitedtext')
     return layer
 
 
