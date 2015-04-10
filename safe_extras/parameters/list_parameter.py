@@ -22,6 +22,16 @@ class ListParameter(CollectionParameter):
         super(ListParameter, self).__init__(guid)
         self.expected_type = list
         self._options_list = None
+        self._is_editable = False
+
+    @property
+    def is_editable(self):
+        """Flag to determine that the list items is editable"""
+        return self._is_editable
+
+    @is_editable.setter
+    def is_editable(self, value):
+        self._is_editable = value
 
     @property
     def options_list(self):
@@ -67,3 +77,12 @@ class ListParameter(CollectionParameter):
             if val not in self.options_list:
                 message = message % val
                 raise ValueNotAllowedException(message)
+
+    def __len__(self):
+        return self._value.__len__()
+
+    def __getitem__(self, i):
+        return self._value[i]
+
+    def __setitem__(self, i, val):
+        return self._value.__setitem__(i, val)

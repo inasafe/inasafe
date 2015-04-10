@@ -1,11 +1,16 @@
 # coding=utf-8
+
 __author__ = 'lucernae'
 __project_name__ = 'parameters'
 __filename__ = 'list_parameter_widget'
 __date__ = '02/04/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from PyQt4.QtGui import QListWidget, QAbstractItemView, QMessageBox
+
+from PyQt4.QtCore import Qt
+from PyQt4.QtGui import (
+    QListWidget, QAbstractItemView, QMessageBox,
+    QListWidgetItem, QVBoxLayout)
 from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
 
@@ -37,13 +42,31 @@ class ListParameterWidget(GenericParameterWidget):
 
         self._input.setToolTip(tool_tip)
 
-        # for idx, opt in enumerate(self._parameter.options_list):
-        #     list_item = QListWidgetItem()
-        #     list_item.setText(opt.__str__())
-        #     list_item.setData(0, idx)
-        #     self._input.addItem(list_item)
-        self._input.addItems(self._parameter.options_list)
+        for opt in self._parameter.options_list:
+            item = QListWidgetItem()
+            item.setFlags(item.flags() | Qt.ItemIsEditable)
+            item.setText(str(opt))
+            self._input.addItem(item)
+
         self._inner_input_layout.addWidget(self._input)
+
+        # override self._input_layout arrangement to make the label at the top
+        # reset the layout
+        self._input_layout.setParent(None)
+        self._help_layout.setParent(None)
+
+        self._label.setParent(None)
+        self._inner_input_layout.setParent(None)
+
+        self._input_layout = QVBoxLayout()
+        self._input_layout.setSpacing(0)
+
+        # put element into layout
+        self._input_layout.addWidget(self._label)
+        self._input_layout.addLayout(self._inner_input_layout)
+
+        self._main_layout.addLayout(self._input_layout)
+        self._main_layout.addLayout(self._help_layout)
 
     def get_parameter(self):
         """Obtain list parameter object from the current widget state.
