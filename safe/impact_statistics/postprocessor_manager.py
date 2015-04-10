@@ -275,8 +275,7 @@ class PostprocessorManager(QtCore.QObject):
         try:
             requested_postprocessors = self.function_parameters[
                 'postprocessors']
-            postprocessors = get_postprocessors(
-                requested_postprocessors, self.aggregator.aoi_mode)
+            postprocessors = get_postprocessors(requested_postprocessors)
         except (TypeError, KeyError):
             # TypeError is for when function_parameters is none
             # KeyError is for when ['postprocessors'] is unavailable

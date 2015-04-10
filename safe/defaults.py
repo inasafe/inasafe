@@ -185,18 +185,14 @@ def age_postprocessor():
 def aggregation_categorical_postprocessor():
     """Get aggregation categorical postprocessor selectors.
 
-    :return: A list of Parameters.
+    :return: List of boolean parameter.
     :rtype: list
     """
-    aggregatec = BooleanParameter()
-    aggregatec.name = 'Aggregation categorical'
-    aggregatec.value = True
+    aggregation_categorical = BooleanParameter()
+    aggregation_categorical.name = 'Aggregation categorical'
+    aggregation_categorical.value = True
 
-    disable_area_aggregation = BooleanParameter()
-    disable_area_aggregation.name = 'disable_for_entire_area_aggregation'
-    disable_area_aggregation.value = False
-
-    return [aggregatec, disable_area_aggregation]
+    return [aggregation_categorical]
 
 
 def road_type_postprocessor():
