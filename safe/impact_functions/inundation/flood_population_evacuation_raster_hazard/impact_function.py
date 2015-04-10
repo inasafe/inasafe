@@ -143,7 +143,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
 
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
-        thresholds = self.parameters['thresholds [m]']
+        thresholds = self.parameters['thresholds [m]'].value
 
         verify(
             isinstance(thresholds, list),
