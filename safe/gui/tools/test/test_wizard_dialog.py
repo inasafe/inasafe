@@ -339,10 +339,6 @@ class WizardDialogTest(unittest.TestCase):
     def test_existing_keywords(self):
         """Test if keywords already exist."""
         expected_field_count = 6
-        expected_fields = [
-            'OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW',
-            'FLOODPRONE']
-        expected_chosen_field = 'FLOODPRONE'
 
         layer = clone_shp_layer(
             name='flood_multipart_polygons',
