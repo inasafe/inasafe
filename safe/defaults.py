@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe_extras.parameters.string_parameter import StringParameter
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -287,7 +288,10 @@ def default_provenance():
     :return: default provenance.
     :rtype: str
     """
-    return 'The minimum needs are based on Perka 7/2008.'
+    field = StringParameter()
+    field.name = 'Provenanece'
+    field.value = 'The minimum needs are based on Perka 7/2008.'
+    return [field]
 
 
 def disclaimer():

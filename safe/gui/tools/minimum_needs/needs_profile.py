@@ -1,6 +1,7 @@
 # coding=utf-8
 """This is the concrete Minimum Needs class that contains the logic to load
 the minimum needs to and from the QSettings"""
+from safe_extras.parameters.string_parameter import StringParameter
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '05/10/2014'
@@ -32,7 +33,7 @@ def add_needs_parameters(parameters):
     """
     minimum_needs = NeedsProfile()
     parameters['minimum needs'] = minimum_needs.get_needs_parameters()
-    parameters['provenance'] = minimum_needs.provenance
+    parameters['provenance'] = [minimum_needs.provenance]
     return parameters
 
 
@@ -198,7 +199,10 @@ class NeedsProfile(MinimumNeeds):
         :returns: The provenance.
         :rtype: str
         """
-        return self.minimum_needs['provenance']
+        provenance = StringParameter()
+        provenance.name = 'Provenance'
+        provenance.value = self.minimum_needs['provenance']
+        return provenance
 
     @property
     def root_directory(self):

@@ -46,6 +46,8 @@ class ListParameter(CollectionParameter):
 
     @property
     def value(self):
+        if self._value is None:
+            self._value = []
         return self._value
 
     @value.setter

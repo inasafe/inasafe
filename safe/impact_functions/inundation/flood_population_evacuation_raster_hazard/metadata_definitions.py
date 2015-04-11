@@ -117,14 +117,14 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('thresholds [m]', default_threshold()),
+                ('thresholds', default_threshold()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                 ])),
                 ('minimum needs', default_minimum_needs()),
-                # ('provenance', default_provenance())
+                ('provenance', default_provenance())
             ])
         }
         return dict_meta

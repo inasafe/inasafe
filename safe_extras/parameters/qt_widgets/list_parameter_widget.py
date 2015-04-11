@@ -47,6 +47,8 @@ class ListParameterWidget(GenericParameterWidget):
             item.setFlags(item.flags() | Qt.ItemIsEditable)
             item.setText(str(opt))
             self._input.addItem(item)
+            if opt in self._parameter.value:
+                item.setSelected(True)
 
         self._inner_input_layout.addWidget(self._input)
 

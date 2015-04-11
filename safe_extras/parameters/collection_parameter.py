@@ -152,7 +152,7 @@ class CollectionParameter(GenericParameter):
         """
 
         if (self._maximum_item_count is None and
-                    self._minimum_item_count is None):
+                self._minimum_item_count is None):
             return
 
         length = len(value)

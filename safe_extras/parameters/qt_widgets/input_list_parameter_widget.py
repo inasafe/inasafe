@@ -28,6 +28,7 @@ class InputListParameterWidget(GenericParameterWidget):
         super(InputListParameterWidget, self).__init__(parameter, parent)
 
         # value cache for self._parameter.value
+        # copy the list so the original is unaffected
         self._value_cache = list(self._parameter.value)
 
         self._input = QListWidget()
@@ -44,6 +45,8 @@ class InputListParameterWidget(GenericParameterWidget):
                        self._parameter.maximum_item_count)
 
         self._input.setToolTip(tool_tip)
+
+        # arrange widget
 
         self._insert_item_input = QLineEdit()
 
@@ -93,6 +96,10 @@ class InputListParameterWidget(GenericParameterWidget):
 
     def refresh_list(self):
         self._input.clear()
+        if not self._parameter.ordering == InputListParameter.NotOrdered:
+            self._value_cache.sort()
+        if self._parameter.ordering == InputListParameter.DescendingOrder:
+            self._value_cache.reverse()
         for opt in self._value_cache:
             item = QListWidgetItem()
             item.setText(str(opt))
@@ -104,10 +111,6 @@ class InputListParameterWidget(GenericParameterWidget):
             value = self._parameter.element_type(
                 self._insert_item_input.text())
             self._value_cache.append(value)
-            if not self._parameter.ordering == InputListParameter.NotOrdered:
-                self._value_cache.sort()
-            if self._parameter.ordering == InputListParameter.DescendingOrder:
-                self._value_cache.reverse()
             self.refresh_list()
         except ValueError:
             self.show_invalid_type_exception()
