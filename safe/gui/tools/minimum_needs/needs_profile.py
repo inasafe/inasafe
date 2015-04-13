@@ -33,7 +33,7 @@ def add_needs_parameters(parameters):
     """
     minimum_needs = NeedsProfile()
     parameters['minimum needs'] = minimum_needs.get_needs_parameters()
-    parameters['provenance'] = [minimum_needs.provenance]
+    parameters['provenance'] = minimum_needs.provenance
     return parameters
 
 

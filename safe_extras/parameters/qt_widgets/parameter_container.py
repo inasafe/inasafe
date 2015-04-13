@@ -35,10 +35,10 @@ class ParameterContainer(QWidget, object):
 
         :param parameters: List of Parameter Widget
         :type parameters: list
-
+xt
         :param description_text: Text for description of the parameter
             container.
-        :type description_text: str
+        :type description_te: str
 
         """
         QWidget.__init__(self, parent)
@@ -108,7 +108,12 @@ class ParameterContainer(QWidget, object):
             parameter = parameter_widget.get_parameter()
             parameters.append(parameter)
 
-        return parameters
+        # returns based on the object type of self.parameters
+        if isinstance(self.parameters, list):
+            return parameters
+        else:
+            # just return single parameter
+            return parameters[0]
 
     def get_parameter_widgets(self):
         """Return list of parameter widgets from the current state of widget.
@@ -149,7 +154,12 @@ class ParameterContainer(QWidget, object):
 
         self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
 
-        if len(self.parameters) == 0:
+        if not isinstance(self.parameters, list):
+            parameters = [self.parameters]
+        else:
+            parameters = self.parameters
+
+        if len(parameters) == 0:
             self.set_empty_parameters()
             return
 
@@ -167,7 +177,7 @@ class ParameterContainer(QWidget, object):
         color_even = QColor(192, 192, 192)
 
         i = 0
-        for parameter in self.parameters:
+        for parameter in parameters:
             parameter_widget = self.qt4_parameter_factory.get_widget(parameter)
             if i % 2:
                 color = color_even

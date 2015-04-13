@@ -190,8 +190,8 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
          configurable parameters dictionary.
         :type name: str
 
-        :param parameter_value: Mandatory representing the value referenced by the
-         key.
+        :param parameter_value: Mandatory representing the value referenced
+        by the key.
         :type parameter_value: object
 
         :returns: a function that return the value of widget

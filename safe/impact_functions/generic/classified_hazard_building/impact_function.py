@@ -75,9 +75,9 @@ class ClassifiedHazardBuildingFunction(
         self.prepare(layers)
 
         # The 3 classes
-        low_t = self.parameters['low_hazard_class']
-        medium_t = self.parameters['medium_hazard_class']
-        high_t = self.parameters['high_hazard_class']
+        low_t = self.parameters['low_hazard_class'].value
+        medium_t = self.parameters['medium_hazard_class'].value
+        high_t = self.parameters['high_hazard_class'].value
 
         # Extract data
         hazard = self.hazard      # Classified Hazard

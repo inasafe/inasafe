@@ -118,8 +118,8 @@ class ITBFatalityFunction(ImpactFunction):
         if mmi < 4:
             return 0
 
-        x = self.parameters['x']
-        y = self.parameters['y']
+        x = self.parameters['x'].value
+        y = self.parameters['y'].value
         # noinspection PyUnresolvedReferences
         return numpy.power(10.0, x * mmi - y)
 
@@ -138,10 +138,10 @@ class ITBFatalityFunction(ImpactFunction):
         self.validate()
         self.prepare(layers)
 
-        displacement_rate = self.parameters['displacement_rate']
+        displacement_rate = self.parameters['displacement_rate'].value
 
         # Tolerance for transparency
-        tolerance = self.parameters['tolerance']
+        tolerance = self.parameters['tolerance'].value
 
         # Extract input layers
         intensity = self.hazard
@@ -153,7 +153,7 @@ class ITBFatalityFunction(ImpactFunction):
 
         # Calculate people affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
-        mmi_range = self.parameters['mmi_range']
+        mmi_range = self.parameters['mmi_range'].value
         number_of_exposed = {}
         number_of_displaced = {}
         number_of_fatalities = {}
@@ -164,9 +164,10 @@ class ITBFatalityFunction(ImpactFunction):
         for mmi in mmi_range:
             # Identify cells where MMI is in class i and
             # count people affected by this shake level
+            step = self.parameters['step'].value
             mmi_matches = numpy.where(
-                (hazard > mmi - self.parameters['step']) * (
-                    hazard <= mmi + self.parameters['step']),
+                (hazard > mmi - step) * (
+                    hazard <= mmi + step),
                 exposure, 0)
 
             # Calculate expected number of fatalities per level
@@ -225,7 +226,7 @@ class ITBFatalityFunction(ImpactFunction):
         table_body.append(TableRow([tr('Number of fatalities'), s],
                                    header=True))
 
-        if self.parameters['calculate_displaced_people']:
+        if self.parameters['calculate_displaced_people'].value:
             # Add total estimate of people displaced
             s = format_int(displaced)
             table_body.append(TableRow([tr('Number of people displaced'), s],
@@ -267,7 +268,7 @@ class ITBFatalityFunction(ImpactFunction):
                     tr(resource['table name']),
                     format_int(resource['amount'])]))
         table_body.append(TableRow(tr('Provenance'), header=True))
-        table_body.append(TableRow(self.parameters['provenance']))
+        table_body.append(TableRow(self.parameters['provenance'].value))
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
 

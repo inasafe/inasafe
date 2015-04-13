@@ -68,7 +68,6 @@ class Registry(object):
                 raise Exception('Impact Function with ID %s is already '
                                 'registered' % impact_function_id)
 
-
     @classmethod
     def clear(cls):
         """Remove all registered impact functions in the registry."""

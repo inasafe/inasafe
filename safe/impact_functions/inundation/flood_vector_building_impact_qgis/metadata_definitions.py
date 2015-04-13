@@ -25,6 +25,10 @@ from safe.definitions import (
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
+    .parameter_definitions import (
+        building_type_field, affected_field,
+        affected_value)
 from safe.utilities.i18n import tr
 
 
@@ -81,13 +85,13 @@ class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about building types
-                ('building_type_field', 'TYPE'),
+                ('building_type_field', building_type_field()),
                 # This field of the  hazard layer contains information
                 # about inundated areas
-                ('affected_field', 'affected'),
+                ('affected_field', affected_field()),
                 # This value in 'affected_field' of the hazard layer
                 # marks the areas as inundated
-                ('affected_value', '1'),
+                ('affected_value', affected_value()),
 
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())

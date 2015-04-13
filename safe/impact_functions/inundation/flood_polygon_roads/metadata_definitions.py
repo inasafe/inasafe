@@ -23,6 +23,11 @@ from safe.definitions import (
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_polygon_roads\
+    .parameter_definitions import (
+        road_type_field,
+        affected_field,
+        affected_value)
 from safe.utilities.i18n import tr
 
 
@@ -79,13 +84,13 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about road types
-                ('road_type_field', 'TYPE'),
+                ('road_type_field', road_type_field()),
                 # This field of the  hazard layer contains information
                 # about inundated areas
-                ('affected_field', 'affected'),
+                ('affected_field', affected_field()),
                 # This value in 'affected_field' of the hazard layer
                 # marks the areas as inundated
-                ('affected_value', '1'),
+                ('affected_value', affected_value()),
                 ('postprocessors', OrderedDict([
                     ('RoadType', road_type_postprocessor())
                 ]))

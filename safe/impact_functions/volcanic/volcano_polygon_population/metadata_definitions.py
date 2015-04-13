@@ -29,6 +29,8 @@ from safe.defaults import (
     minimum_needs_selector)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.volcanic.volcano_polygon_population.parameter_definitions import \
+    distance
 from safe.utilities.i18n import tr
 
 
@@ -101,7 +103,7 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('distance [km]', [3, 5, 10]),
+                ('distance', distance()),
                 ('minimum needs', default_minimum_needs()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),

@@ -291,7 +291,7 @@ def default_provenance():
     field = StringParameter()
     field.name = 'Provenanece'
     field.value = 'The minimum needs are based on Perka 7/2008.'
-    return [field]
+    return field
 
 
 def disclaimer():

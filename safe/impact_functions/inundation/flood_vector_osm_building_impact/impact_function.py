@@ -75,8 +75,8 @@ class FloodVectorBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         target_field = 'INUNDATED'
 
         # Get parameters from user
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
 
         # Determine attribute name for hazard levels
         hazard_attribute = None

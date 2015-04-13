@@ -59,9 +59,9 @@ class TestFloodPolygonBuildingQgis(unittest.TestCase):
         function.hazard = QgisWrapper(hazard_layer)
         function.exposure = QgisWrapper(exposure_layer)
         function.requested_extent = rect_extent
-        function.parameters['building_type_field'] = 'TYPE'
-        function.parameters['affected_field'] = 'FLOODPRONE'
-        function.parameters['affected_value'] = 'YES'
+        function.parameters['building_type_field'].value = 'TYPE'
+        function.parameters['affected_field'].value = 'FLOODPRONE'
+        function.parameters['affected_value'].value = 'YES'
         function.run()
         impact = function.impact
 

@@ -135,9 +135,9 @@ class ClassifiedHazardPopulationFunction(ImpactFunction):
         self.prepare(layers)
 
         # The 3 classes
-        low_t = self.parameters['low_hazard_class']
-        medium_t = self.parameters['medium_hazard_class']
-        high_t = self.parameters['high_hazard_class']
+        low_t = self.parameters['low_hazard_class'].value
+        medium_t = self.parameters['medium_hazard_class'].value
+        high_t = self.parameters['high_hazard_class'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Classified Hazard

@@ -15,6 +15,9 @@ from safe.definitions import hazard_definition, hazard_all, unit_classified, \
     layer_raster_classified, exposure_definition, exposure_structure, \
     unit_building_type_type, unit_building_generic, layer_vector_polygon, \
     layer_vector_point
+from safe.impact_functions.generic.classified_hazard_building\
+    .parameter_definitions import (
+        low_hazard_class, medium_hazard_class, high_hazard_class)
 from safe.utilities.i18n import tr
 
 from safe.defaults import building_type_postprocessor
@@ -106,9 +109,9 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
             },
             # parameters
             'parameters': OrderedDict([
-                ('low_hazard_class', 1.0),
-                ('medium_hazard_class', 2.0),
-                ('high_hazard_class', 3.0),
+                ('low_hazard_class', low_hazard_class()),
+                ('medium_hazard_class', medium_hazard_class()),
+                ('high_hazard_class', high_hazard_class()),
                 ('postprocessors', OrderedDict([('BuildingType',
                                                 building_type_postprocessor())
                                                 ]))

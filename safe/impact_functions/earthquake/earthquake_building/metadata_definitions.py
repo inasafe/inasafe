@@ -16,6 +16,9 @@ from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
     unit_building_type_type, unit_building_generic, layer_vector_polygon, \
     layer_vector_point
 from safe.defaults import aggregation_categorical_postprocessor
+from safe.impact_functions.earthquake.earthquake_building\
+    .parameter_definitions import (
+        low_threshold, medium_threshold, high_threshold)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -86,9 +89,9 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict(
-                [('low_threshold', 6),
-                 ('medium_threshold', 7),
-                 ('high_threshold', 8),
+                [('low_threshold', low_threshold()),
+                 ('medium_threshold', medium_threshold()),
+                 ('high_threshold', high_threshold()),
                  ('postprocessors', OrderedDict([
                      ('AggregationCategorical',
                       aggregation_categorical_postprocessor())]))]
