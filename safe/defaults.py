@@ -27,6 +27,7 @@ from PyQt4.QtCore import QSettings
 
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.generic_parameter import GenericParameter
 
 from safe.common.resource_parameter import ResourceParameter
 from safe.utilities.i18n import tr
@@ -140,6 +141,7 @@ def default_gender_postprocessor():
     gender = BooleanParameter()
     gender.name = 'Gender'
     gender.value = True
+    gender._description = 'Enable a gender specific breakdown in the report'
 
     return [gender]
 
@@ -153,6 +155,8 @@ def minimum_needs_selector():
     min_selector = BooleanParameter()
     min_selector.name = 'MinimumNeeds'
     min_selector.value = True
+    min_selector._description = \
+        'Enable the minimum needs breakdown in the report'
 
     return [min_selector]
 
@@ -166,18 +170,25 @@ def age_postprocessor():
     age = BooleanParameter()
     age.name = 'Age'
     age.value = True
+    age._description = 'Enable an age specific breakdown in the report.'
 
     youth_ratio = FloatParameter()
-    youth_ratio.name = 'youth_ratio'
+    youth_ratio.name = 'Youth Ratio'
     youth_ratio.value = get_defaults('YOUTH_RATIO')
+    youth_ratio._description = \
+        'Indication of percentage of youth present in the population.'
 
     adult_ratio = FloatParameter()
-    adult_ratio.name = 'adult_ratio'
+    adult_ratio.name = 'Adult Ratio'
     adult_ratio.value = get_defaults('ADULT_RATIO')
+    adult_ratio._description = \
+        'Indication of percentage of adults present in the population.'
 
     elderly_ratio = FloatParameter()
-    elderly_ratio.name = 'elderly_ratio'
+    elderly_ratio.name = 'Elderly Ratio'
     elderly_ratio.value = get_defaults('ELDERLY_RATIO')
+    elderly_ratio._description = \
+        'Indication of percentage of elderly present in the population.'
 
     return [age, youth_ratio, adult_ratio, elderly_ratio]
 
@@ -204,6 +215,7 @@ def road_type_postprocessor():
     road_type = BooleanParameter()
     road_type.name = 'Road type'
     road_type.value = True
+    road_type._description = 'Enable road type breakdown in the report.'
 
     return [road_type]
 
@@ -217,6 +229,7 @@ def building_type_postprocessor():
     building_type = BooleanParameter()
     building_type.name = 'Building type'
     building_type.value = True
+    building_type._description = 'Enable building type breakdown in the report.'
 
     return [building_type]
 
