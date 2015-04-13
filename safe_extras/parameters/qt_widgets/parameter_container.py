@@ -97,8 +97,7 @@ xt
             if not self.validate():
                 return
 
-        parameter_widgets = (self.vertical_layout.itemAt(i) for i in range(
-            self.vertical_layout.count()))
+        parameter_widgets = self.get_parameter_widgets()
 
         parameters = []
 
@@ -122,8 +121,8 @@ xt
         :rtype: list
         """
 
-        parameter_widgets = (self.vertical_layout.itemAt(i) for i in range(
-            self.vertical_layout.count()))
+        parameter_widgets = [self.vertical_layout.itemAt(i) for i in range(
+            self.vertical_layout.count())]
 
         return parameter_widgets
 

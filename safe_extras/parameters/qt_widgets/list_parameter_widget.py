@@ -70,6 +70,12 @@ class ListParameterWidget(GenericParameterWidget):
         self._main_layout.addLayout(self._input_layout)
         self._main_layout.addLayout(self._help_layout)
 
+    def raise_invalid_type_exception(self):
+        message = 'Expecting element type of %s' % (
+            self._parameter.element_type.__name__)
+        err = ValueError(message)
+        return err
+
     def get_parameter(self):
         """Obtain list parameter object from the current widget state.
 
@@ -83,8 +89,8 @@ class ListParameterWidget(GenericParameterWidget):
 
         try:
             self._parameter.value = selected_value
-        except Exception as inst:
-            box = QMessageBox()
-            box.critical(self._input, self._parameter.name, inst.message)
+        except ValueError:
+            err = self.raise_invalid_type_exception()
+            raise err
 
         return self._parameter

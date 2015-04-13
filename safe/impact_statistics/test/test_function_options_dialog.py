@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'misugijunz@gmail.com'
 __date__ = '15/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -32,7 +33,8 @@ from collections import OrderedDict
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QLineEdit, QCheckBox
+from PyQt4.QtCore import Qt
+from PyQt4.QtGui import QLineEdit, QCheckBox, QPushButton, QListWidget
 
 from safe.test.utilities import get_qgis_app
 from safe.defaults import (
@@ -42,8 +44,7 @@ from safe.defaults import (
 from safe.common.resource_parameter import ResourceParameter
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-from safe.impact_functions.inundation.default_parameters import \
-    default_threshold
+from safe_extras.parameters.input_list_parameter import InputListParameter
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -69,8 +70,19 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         rice.unit.name = 'kilogram'
         rice.unit.plural = 'kilograms'
 
+        # Define threshold
+        threshold = InputListParameter()
+        threshold.name = 'Thresholds [m]'
+        threshold.is_required = True
+        threshold.element_type = float
+        threshold.expected_type = list
+        threshold.ordering = InputListParameter.AscendingOrder
+        threshold.minimum_item_count = 1
+        threshold.maximum_item_count = 3
+        threshold.value = [1.0]  # default value
+
         parameter = {
-            'thresholds': default_threshold(),
+            'thresholds': threshold,
             'postprocessors': OrderedDict([
                 ('Gender', default_gender_postprocessor()),
                 ('Age', age_postprocessor()),
@@ -82,20 +94,32 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         dialog.build_form(parameter)
 
         message = 'There should be %s tabwidget but got %s' % (
-            2, dialog.tabWidget.count())
-        self.assertEqual(dialog.tabWidget.count(), 2, message)
+            3, dialog.tabWidget.count())
+        self.assertEqual(dialog.tabWidget.count(), 3, message)
 
         children = dialog.tabWidget.findChildren(QLineEdit)
         message = 'There should be %s QLineEdit but got %s' % (
-            4, len(children))
-        self.assertEqual(len(children), 4, message)
+            5, len(children))
+        self.assertEqual(len(children), 5, message)
 
     def test_build_form_minimum_needs(self):
         """Test that we can build a form by passing it params.
         """
         dialog = FunctionOptionsDialog()
+
+        # Define threshold
+        threshold = InputListParameter()
+        threshold.name = 'Thresholds [m]'
+        threshold.is_required = True
+        threshold.element_type = float
+        threshold.expected_type = list
+        threshold.ordering = InputListParameter.AscendingOrder
+        threshold.minimum_item_count = 1
+        threshold.maximum_item_count = 3
+        threshold.value = [1.0]  # default value
+
         parameters = {
-            'thresholds': default_threshold(),
+            'thresholds': threshold,
             'postprocessors': OrderedDict([
                 ('Gender', default_gender_postprocessor()),
                 ('Age', age_postprocessor()),
@@ -110,32 +134,72 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         children = dialog.tabWidget.findChildren(QLineEdit)
         assert len(children) == 4
 
+    @staticmethod
+    def click_list_widget_item(list_widget, content):
+        """Clicking a list widget item using User Interface
+
+        :param list_widget: the list widget to clear for
+        :type list_widget: QListWidget
+        :param content: the content text of the list widget item to click
+        :type content: str
+        """
+        # iterate through widget items
+        items = list_widget.findItems(content, Qt.MatchExactly)
+        for item in items:
+            item.setSelected(True)
+
     def test_build_widget(self):
         dialog = FunctionOptionsDialog()
-        value = dialog.build_widget(dialog.configLayout, 'foo', [2.3])
+
+        # Define threshold
+        threshold = InputListParameter()
+        threshold.name = 'Thresholds [m]'
+        threshold.is_required = True
+        threshold.element_type = float
+        threshold.expected_type = list
+        threshold.ordering = InputListParameter.AscendingOrder
+        threshold.minimum_item_count = 1
+        threshold.maximum_item_count = 3
+        threshold.value = [2.3]  # default value
+
+        value = dialog.build_widget(dialog.configLayout, 'foo', threshold)
         widget = dialog.findChild(QLineEdit)
+        add_button = dialog.findChildren(QPushButton)[0]
+        remove_button = dialog.findChildren(QPushButton)[1]
+        list_widget = dialog.findChild(QListWidget)
 
         # initial value must be same with default
         expected_value = [2.3]
-        real_value = value()
+        real_value = value().value
         message = 'Expected %s but got %s' % (expected_value, real_value)
         self.assertEqual(expected_value, real_value, message)
 
         # change to 5.9
+        # select 2.3 list item
+        self.click_list_widget_item(list_widget, '2.3')
+        # remove 2.3 list item
+        remove_button.click()
+        # typing 5.9
         widget.setText('5.9')
+        # add it to list
+        add_button.click()
         expected_value = [5.9]
-        real_value = value()
+        real_value = value().value
         message = 'Expected %s but got %s' % (expected_value, real_value)
         self.assertEqual(expected_value, real_value, message)
 
-        widget.setText('5.9, 70')
+        # add 70
+        widget.setText('70')
+        # add it to list
+        add_button.click()
         expected_value = [5.9, 70]
-        real_value = value()
+        real_value = value().value
         message = 'Expected %s but got %s' % (expected_value, real_value)
         self.assertEqual(expected_value, real_value, message)
 
         widget.setText('bar')
         try:
+            add_button.click()
             value()
         except ValueError:
             # expected to raises this exception
@@ -149,7 +213,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
 
         # initial value must be same with default
         expected_value = True
-        real_value = value()
+        real_value = value().value
         message = 'Expected %s but got %s' % (expected_value, real_value)
         self.assertEqual(expected_value, real_value, message)
 

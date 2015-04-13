@@ -94,6 +94,24 @@ class InputListParameterWidget(GenericParameterWidget):
 
         self.refresh_list()
 
+        # init row add error handler
+        self._add_row_error_handler = None
+
+    @property
+    def add_row_error_handler(self):
+        """return error handler if user mistakenly add row of unexpected type
+        :return: a function handler
+        :rtype: () -> None
+        """
+        return self._add_row_error_handler
+
+    @add_row_error_handler.setter
+    def add_row_error_handler(self, value):
+        """Set error handler to handle user mistakenly add row of unexpected
+        type
+        """
+        self._add_row_error_handler = value
+
     def refresh_list(self):
         self._input.clear()
         if not self._parameter.ordering == InputListParameter.NotOrdered:
@@ -113,7 +131,11 @@ class InputListParameterWidget(GenericParameterWidget):
             self._value_cache.append(value)
             self.refresh_list()
         except ValueError:
-            self.show_invalid_type_exception()
+            err = self.raise_invalid_type_exception()
+            if self.add_row_error_handler is not None:
+                self.add_row_error_handler(err)
+            else:
+                raise err
 
     def on_remove_button_click(self):
         for opt in self._input.selectedItems():
@@ -128,14 +150,14 @@ class InputListParameterWidget(GenericParameterWidget):
             self._value_cache[index] = self._parameter.element_type(
                 item.text())
         except ValueError:
-            self.show_invalid_type_exception()
             item.setText(str(prev_value))
+            self.raise_invalid_type_exception()
 
-    def show_invalid_type_exception(self):
+    def raise_invalid_type_exception(self):
         message = 'Expecting element type of %s' % (
             self._parameter.element_type.__name__)
-        box = QMessageBox()
-        box.critical(self._input, self._parameter.name, message)
+        err = ValueError(message)
+        return err
 
     def get_parameter(self):
         """Obtain list parameter object from the current widget state.
@@ -146,8 +168,8 @@ class InputListParameterWidget(GenericParameterWidget):
 
         try:
             self._parameter.value = self._value_cache
-        except Exception as inst:
-            box = QMessageBox()
-            box.critical(self._input, self._parameter.name, inst.message)
+        except ValueError:
+            err = self.raise_invalid_type_exception()
+            raise err
 
         return self._parameter
