@@ -26,9 +26,9 @@ from safe.new_definitions import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_earthquake,
-    hazard_category_hazard_zone,
     exposure_population,
-    count_exposure_unit
+    count_exposure_unit,
+    hazard_category_hazard_scenario
 )
 
 __author__ = 'lucernae'
@@ -137,7 +137,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_categories': [hazard_category_hazard_scenario],
                     'hazard_types': [hazard_earthquake],
                     'units_classes': [unit_mmi]
                 },

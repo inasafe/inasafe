@@ -26,9 +26,9 @@ from safe.new_definitions import (
     layer_geometry_point,
     layer_geometry_raster,
     hazard_earthquake,
-    hazard_category_hazard_zone,
     exposure_structure,
-    unit_mmi
+    unit_mmi,
+    hazard_category_hazard_scenario
 )
 
 
@@ -101,7 +101,7 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_categories': [hazard_category_hazard_scenario],
                     'hazard_types': [hazard_earthquake],
                     'units_classes': [unit_mmi]
                 },

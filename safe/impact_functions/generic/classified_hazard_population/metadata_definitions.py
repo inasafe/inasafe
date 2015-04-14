@@ -38,12 +38,9 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.new_definitions import (
     layer_mode_classified,
     layer_mode_continuous,
-    layer_geometry_polygon,
-    layer_geometry_point,
     layer_geometry_raster,
     hazard_all,
     hazard_category_hazard_zone,
-    exposure_structure,
     count_exposure_unit,
     generic_raster_hazard_classes
 )

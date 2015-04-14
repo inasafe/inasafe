@@ -344,6 +344,14 @@ unit_feet = {
         'inches in 1 foot and 3 feet in 1 yard.'),
 }
 
+unit_generic = {
+    'key': 'generic',
+    'name': tr('generic'),
+    'description': tr(
+        'A generic unit for value that does not have unit or we do not know '
+        'about the unit. It also can be used for normalised values.'),
+    }
+
 unit_kilogram_per_meter_square = {
     'key': 'kilogram_per_meter_square',
     'name': tr('kg/m2'),
@@ -391,6 +399,7 @@ continuous_hazard_unit = {
         'To be added later.'),
     'types': [
         unit_feet,
+        unit_generic,
         unit_kilogram_per_meter_square,
         unit_kilometres,
         unit_metres,

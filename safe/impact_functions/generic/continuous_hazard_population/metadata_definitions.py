@@ -31,16 +31,12 @@ from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.new_definitions import (
-    layer_mode_classified,
     layer_mode_continuous,
-    layer_geometry_polygon,
-    layer_geometry_point,
     layer_geometry_raster,
     hazard_all,
     hazard_category_hazard_zone,
-    exposure_structure,
     count_exposure_unit,
-    generic_raster_hazard_classes
+    unit_generic
 )
 
 
@@ -116,7 +112,7 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_raster],
                     'hazard_categories': [hazard_category_hazard_zone],
                     'hazard_types': hazard_all,
-                    'units_classes': []
+                    'units_classes': [unit_generic]  # (IS) Still not sure
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,

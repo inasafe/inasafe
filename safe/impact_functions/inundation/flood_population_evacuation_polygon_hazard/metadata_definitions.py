@@ -34,19 +34,13 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.utilities.i18n import tr
 from safe.new_definitions import (
     layer_mode_classified,
-    layer_mode_continuous,
     layer_geometry_polygon,
-    layer_geometry_point,
     layer_geometry_raster,
-    layer_geometry_line,
     hazard_flood,
-    hazard_category_hazard_zone,
-    exposure_structure,
+    hazard_category_hazard_scenario,
     wetdry_vector_hazard_classes,
-    exposure_road,
-    unit_metres,
-    unit_feet,
-    count_exposure_unit
+    count_exposure_unit,
+    exposure_population
 )
 
 
@@ -125,12 +119,10 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
-                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_categories': [hazard_category_hazard_scenario],
                     'hazard_types': [hazard_flood],
                     'units_classes': [
                         wetdry_vector_hazard_classes,
-                        unit_feet,
-                        unit_metres
                     ]
                 },
                 'exposure': {
