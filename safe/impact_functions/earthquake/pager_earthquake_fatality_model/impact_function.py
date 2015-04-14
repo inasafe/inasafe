@@ -51,8 +51,8 @@ class PAGFatalityFunction(ITBFatalityFunction):
         """
 
         N = math.sqrt(2 * math.pi)
-        THETA = self.parameters['Theta']
-        BETA = self.parameters['Beta']
+        THETA = self.parameters['Theta'].value
+        BETA = self.parameters['Beta'].value
 
         x = math.log(mmi / THETA) / BETA
         return math.exp(-x * x / 2.0) / N

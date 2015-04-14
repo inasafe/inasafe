@@ -88,5 +88,5 @@ def default_provenance():
     """
     prov_string = StringParameter()
     prov_string.name = 'provenance'
-    prov_string.value =  'The minimum needs are based on Perka 7/2008.'
+    prov_string.value = 'The minimum needs are based on Perka 7/2008.'
     return prov_string

@@ -88,7 +88,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         data_table = hazard_layer.get_data()
         if hazard_layer.is_point_data:
             # Use concentric circles
-            radii = self.parameters['distance [km]']
+            radii = self.parameters['distance'].value
             category_title = 'Radius'
             category_header = tr('Distance [km]')
             category_names = radii

@@ -190,8 +190,8 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
          configurable parameters dictionary.
         :type name: str
 
-        :param parameter_value: Mandatory representing the value referenced by the
-         key.
+        :param parameter_value: Mandatory representing the value referenced
+        by the key.
         :type parameter_value: object
 
         :returns: a function that return the value of widget
@@ -202,6 +202,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         LOGGER.debug(form_layout)
         LOGGER.debug(name)
         LOGGER.debug(parameter_value)
+        input_values = None
         if parameter_value is not None:
             LOGGER.debug('parameter_value type:')
             LOGGER.debug(type(parameter_value))
@@ -218,6 +219,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         else:
             LOGGER.debug('build_widget : parameter is None')
             LOGGER.debug(parameter_value)
+        return input_values
 
     def set_dialog_info(self, function_id):
         """Show help text in dialog.

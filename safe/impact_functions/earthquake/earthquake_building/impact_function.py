@@ -18,7 +18,7 @@ import logging
 from collections import OrderedDict
 
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.earthquake.earthquake_building\
+from safe.impact_functions.earthquake.earthquake_building \
     .metadata_definitions import EarthquakeBuildingMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
@@ -52,9 +52,9 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         :rtype: list
         """
         # Thresholds for mmi breakdown.
-        t0 = self.parameters['low_threshold']
-        t1 = self.parameters['medium_threshold']
-        t2 = self.parameters['high_threshold']
+        t0 = self.parameters['low_threshold'].value
+        t1 = self.parameters['medium_threshold'].value
+        t2 = self.parameters['high_threshold'].value
         is_nexis = self.is_nexis
         return [
             {
@@ -97,9 +97,9 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         contents_value = 0
 
         # Thresholds for mmi breakdown.
-        t0 = self.parameters['low_threshold']
-        t1 = self.parameters['medium_threshold']
-        t2 = self.parameters['high_threshold']
+        t0 = self.parameters['low_threshold'].value
+        t1 = self.parameters['medium_threshold'].value
+        t2 = self.parameters['high_threshold'].value
 
         # Class Attribute and Label.
 
@@ -117,8 +117,8 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         # Determine if exposure data have NEXIS attributes.
         attribute_names = exposure_layer.get_attribute_names()
         if ('FLOOR_AREA' in attribute_names and
-                'BUILDING_C' in attribute_names and
-                'CONTENTS_C' in attribute_names):
+                    'BUILDING_C' in attribute_names and
+                    'CONTENTS_C' in attribute_names):
             self.is_nexis = True
         else:
             self.is_nexis = False
@@ -178,13 +178,14 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 self.buildings[usage] = 0
                 for category in self.affected_buildings.keys():
                     if self.is_nexis:
-                        self.affected_buildings[category][usage] = OrderedDict([
-                            (tr('Buildings Affected'), 0),
-                            (tr('Buildings value ($M)'), 0),
-                            (tr('Contents value ($M)'), 0)])
+                        self.affected_buildings[category][usage] = OrderedDict(
+                            [
+                                (tr('Buildings Affected'), 0),
+                                (tr('Buildings value ($M)'), 0),
+                                (tr('Contents value ($M)'), 0)])
                     else:
-                        self.affected_buildings[category][usage] = OrderedDict([
-                            (tr('Buildings Affected'), 0)])
+                        self.affected_buildings[category][usage] = \
+                            OrderedDict([(tr('Buildings Affected'), 0)])
             self.buildings[usage] += 1
             try:
                 mmi = float(attributes[i][hazard_attribute])  # MMI

@@ -63,9 +63,9 @@ class FloodRasterRoadsExperimentalFunction(ImpactFunction):
         self.prepare(layers)
 
         target_field = self.target_field
-        road_type_field = self.parameters['road_type_field']
-        threshold_min = self.parameters['min threshold [m]']
-        threshold_max = self.parameters['max threshold [m]']
+        road_type_field = self.parameters['road_type_field'].value
+        threshold_min = self.parameters['min threshold'].value
+        threshold_max = self.parameters['max threshold'].value
 
         if threshold_min > threshold_max:
             message = tr('''The minimal threshold is

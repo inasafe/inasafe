@@ -48,8 +48,8 @@ class TestFloodVectorBuildingFunction(unittest.TestCase):
 
         impact_function.hazard = hazard_layer
         impact_function.exposure = exposure_layer
-        impact_function.parameters['affected_field'] = 'FLOODPRONE'
-        impact_function.parameters['affected_value'] = 'YES'
+        impact_function.parameters['affected_field'].value = 'FLOODPRONE'
+        impact_function.parameters['affected_value'].value = 'YES'
         impact_function.run()
         impact_layer = impact_function.impact
 

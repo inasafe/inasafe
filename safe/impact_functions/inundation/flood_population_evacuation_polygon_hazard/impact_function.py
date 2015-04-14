@@ -73,7 +73,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                         rounding_evacuated),
                     col_span=2)]),
             TableRow([tr('Evacuation threshold'), '%s%%' % format_int(
-                self.parameters['evacuation_percentage'])], header=True),
+                self.parameters['evacuation_percentage'].value)],
+                header=True),
             TableRow(tr(
                 'Map shows the number of people affected in each flood prone '
                 'area')),
@@ -231,7 +232,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         # Estimate number of people in need of evacuation
         evacuated = (
             affected_population *
-            self.parameters['evacuation_percentage'] /
+            self.parameters['evacuation_percentage'].value /
             100.0)
 
         affected_population, rounding = population_rounding_full(

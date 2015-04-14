@@ -49,4 +49,5 @@ class DictParameter(CollectionParameter):
         :raises: TypeError
         """
         self.check_types(value)
+        self.check_length(value)
         self._value = value

@@ -10,13 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
-__author__ = 'lucernae'
-__project_name__ = 'inasafe'
-__filename__ = 'metadata_definitions'
-__date__ = '24/03/15'
-__copyright__ = 'lana.pcfre@gmail.com'
-
 from safe.common.utilities import OrderedDict
 from safe.defaults import default_minimum_needs, default_provenance
 from safe.definitions import (
@@ -35,6 +28,15 @@ from safe.defaults import (
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.generic.classified_hazard_population\
+    .parameter_definitions import (
+        low_hazard_class, medium_hazard_class, high_hazard_class)
+
+__author__ = 'lucernae'
+__project_name__ = 'inasafe'
+__filename__ = 'metadata_definitions'
+__date__ = '24/03/15'
+__copyright__ = 'lana.pcfre@gmail.com'
 
 
 class ClassifiedHazardPopulationMetadata(ImpactFunctionMetadata):
@@ -107,9 +109,9 @@ class ClassifiedHazardPopulationMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('low_hazard_class', 1.0),
-                ('medium_hazard_class', 2.0),
-                ('high_hazard_class', 3.0),
+                ('low_hazard_class', low_hazard_class()),
+                ('medium_hazard_class', medium_hazard_class()),
+                ('high_hazard_class', high_hazard_class()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

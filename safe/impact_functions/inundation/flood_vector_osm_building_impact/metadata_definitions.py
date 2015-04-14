@@ -28,6 +28,9 @@ from safe.definitions import (
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_vector_osm_building_impact\
+    .parameter_definitions import (
+        affected_field, affected_value)
 from safe.utilities.i18n import tr
 
 
@@ -131,8 +134,8 @@ class FloodVectorBuildingMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('affected_field', 'FLOODPRONE'),
-                ('affected_value', 'YES'),
+                ('affected_field', affected_field()),
+                ('affected_value', affected_value()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))

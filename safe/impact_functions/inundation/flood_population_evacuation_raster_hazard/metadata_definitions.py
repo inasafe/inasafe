@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.inundation.default_parameters import \
-    default_threshold
 
 __author__ = 'Rizky Maulana Nugraha'
 
@@ -32,6 +30,9 @@ from safe.definitions import (
     layer_raster_continuous, unit_feet_depth, unit_metres_depth)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.\
+    flood_population_evacuation_raster_hazard.parameter_definitions \
+    import threshold
 from safe.utilities.i18n import tr
 
 
@@ -117,14 +118,14 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('thresholds [m]', default_threshold()),
+                ('thresholds', threshold()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                 ])),
                 ('minimum needs', default_minimum_needs()),
-                # ('provenance', default_provenance())
+                ('provenance', default_provenance())
             ])
         }
         return dict_meta
