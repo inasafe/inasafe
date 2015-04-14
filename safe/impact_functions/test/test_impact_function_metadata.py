@@ -27,6 +27,12 @@ from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import(FloodRasterBuildingFunction)
 from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import (ContinuousHazardPopulationFunction)
+from safe.impact_functions.volcanic.volcano_point_building.impact_function\
+    import VolcanoPointBuildingFunction
+from safe.impact_functions.volcanic.volcano_polygon_building.impact_function\
+    import VolcanoPolygonBuildingFunction
+from safe.impact_functions.volcanic.volcano_polygon_population\
+    .impact_function import VolcanoPolygonPopulationFunction
 from safe.definitions import (
     unit_metres_depth,
     unit_feet_depth,
@@ -58,8 +64,17 @@ class TestImpactFunctionMetadata(unittest.TestCase):
 
     def test_is_valid(self):
         """Test is_valid."""
-        ifm = ContinuousHazardPopulationFunction()
-        self.assertTrue(ifm.metadata().is_valid()[0])
+        impact_functions = [
+            VolcanoPointBuildingFunction(),
+            VolcanoPolygonBuildingFunction(),
+            VolcanoPolygonPopulationFunction
+        ]
+        for impact_function in impact_functions:
+            valid = impact_function.metadata().is_valid()
+            impact_function_name = impact_function.__class__.__name__
+            message = '%s is invalid because %s' % (
+                impact_function_name, valid[1])
+            self.assertTrue(valid[0], message)
 
     def test_is_subset(self):
         """Test for is_subset function."""

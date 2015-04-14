@@ -274,90 +274,78 @@ class ImpactFunctionMetadata(object):
     def is_valid(cls):
         """Check whether the metadata is valid or not.
 
-        Valid metadata means, it has:
-        id, name, impact, author, date_implemented, and overview.
-        Also categories which has hazard and exposure.
-        Each hazard and exposure has definition, subcategories, units,
-        and layer_constraints.
-        Subcategories, units, and layer_constraints must be in list.
+        TODO(IS): Add comment explaining how we validate IF Metadata.
 
         :returns: True or False based on the validity of IF Metadata
         :rtype: bool
         """
         metadata_dict = cls.as_dict()
-        expected_keys = [
-            'id',
-            'name',
-            'impact',
-            'title',
-            'author',
-            'date_implemented',
-            'overview',
-            'detailed_description',
-            'hazard_input',
-            'exposure_input',
-            'output',
-            'actions',
-            'limitations',  # list of string
-            'citations',  # list of string
-            'categories'  # dict
-        ]
+        expected_metadata = {
+            'id': basestring,
+            'name': basestring,
+            'impact': basestring,
+            'title': basestring,
+            'author': basestring,
+            'date_implemented': basestring,
+            'overview': basestring,
+            'detailed_description': basestring,
+            'hazard_input': basestring,
+            'exposure_input': basestring,
+            'output': basestring,
+            'actions': basestring,
+            'limitations': list,  # list of string
+            'citations': list,  # list of string
+            # 'categories'  # dict
+            'layer_requirements': dict
+        }
 
-        for key in expected_keys:
+        for key, value in expected_metadata.iteritems():
             if key not in metadata_dict.keys():
                 return False, 'key %s not in metadata' % key
 
-            if key in expected_keys[-3:-1]:
-                if type(metadata_dict[key]) is not list:
-                    message = ('Value of key %s is not list but %s' %
-                               (key, type(metadata_dict[key])))
-                    return False, message
-            elif key == expected_keys[-1]:
-                if type(metadata_dict[key]) is not dict:
-                    message = ('Value of key %s is not dict but %s' %
-                               (key, type(metadata_dict[key])))
-                    return False, message
-            else:
-                if type(metadata_dict[key]) not in [str, unicode]:
-                    message = ('Value of key %s is not str but %s' %
-                               (key, type(metadata_dict[key])))
-                    return False, message
+            if not isinstance(metadata_dict[key], value):
+                message = 'key %s in metadata is not a %s, but %s ' % (
+                    key, value, type(metadata_dict[key]))
+                return False, message
 
-        expected_keys = [
-            'hazard',
-            'exposure'
-        ]
-        categories = metadata_dict['categories']
-        for key in expected_keys:
-            if key not in categories.keys():
-                return False, 'key %s not in categories' % key
+        expected_layer_requirements_keys = ['hazard', 'exposure']
+        layer_requirements = metadata_dict['layer_requirements']
+        for key in expected_layer_requirements_keys:
+            if key not in layer_requirements.keys():
+                return False, 'key %s is not in layer_requirements' % key
 
-        expected_keys = [
-            'definition',
-            'subcategories',
-            'units',
-            'layer_constraints'
-        ]
-        hazard = categories['hazard']
-        for key in expected_keys:
+        expected_hazard_metadata = {
+            'layer_mode': dict,
+            'layer_geometries': list,
+            'hazard_categories': list,
+            'hazard_types': list,
+            'units_classes': list
+        }
+
+        hazard = layer_requirements['hazard']
+        for key, value in expected_hazard_metadata.iteritems():
             if key not in hazard.keys():
-                return False, 'key %s not in hazard' % key
-        for key in expected_keys[1:]:
-            if type(hazard[key]) is not list:
-                return (
-                    False,
-                    'key %s in hazard not a list, but %s ' % (
-                        key, type(hazard[key])))
-        exposure = categories['exposure']
-        for key in expected_keys:
+                return False, 'key %s is not in hazard' % key
+            if type(hazard[key]) is not value:
+                message = 'key %s in hazard is not a %s, but %s ' % (
+                    key, value, type(hazard[key]))
+                return False, message
+
+        expected_exposure_metadata = {
+            'layer_mode': dict,
+            'layer_geometries': list,
+            'exposure_types': list,
+            'units_classes': list
+        }
+
+        exposure = layer_requirements['exposure']
+        for key, value in expected_exposure_metadata.iteritems():
             if key not in exposure.keys():
-                return False, 'key %s not in exposure' % key
-        for key in expected_keys[1:]:
-            if type(exposure[key]) is not list:
-                return (
-                    False,
-                    'key %s in exposure not a list, but %s ' % (
-                        key, type(exposure[key])))
+                return False, 'key %s is not in exposure' % key
+            if type(exposure[key]) is not value:
+                message = 'key %s in exposure not a %s, but %s ' % (
+                    key, value, type(exposure[key]))
+                return False, message
         return True, ''
 
     @classmethod

@@ -24,6 +24,15 @@ from safe.definitions import (
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.new_definitions import (
+    layer_mode_classified,
+    layer_geometry_point,
+    layer_geometry_polygon,
+    hazard_volcano,
+    volcano_vector_hazard_classes,
+    hazard_category_hazard_zone,
+    exposure_structure,
+)
 
 
 class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
@@ -93,6 +102,23 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'layer_constraints': [
                         layer_vector_polygon,
                         layer_vector_point]
+                }
+            },
+            'layer_requirements': {
+                'hazard': {
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_point],
+                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_types': [hazard_volcano],
+                    'units_classes': [volcano_vector_hazard_classes]
+                },
+                'exposure': {
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [
+                        layer_geometry_polygon,
+                        layer_geometry_point],
+                    'exposure_types': [exposure_structure],
+                    'units_classes': []
                 }
             },
             'parameters': OrderedDict([
