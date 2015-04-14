@@ -44,7 +44,8 @@ from safe.new_definitions import (
     unit_metres,
     unit_feet,
     count_exposure_unit,
-    exposure_population
+    exposure_population,
+    hazard_tsunami
 )
 
 
