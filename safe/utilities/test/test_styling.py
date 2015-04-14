@@ -160,7 +160,7 @@ class StylingTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
         layer = clone_shp_layer(
-            name='Marapi',
+            name='volcano_point',
             include_keywords=True,
             source_directory=test_data_path('hazard'))
 
