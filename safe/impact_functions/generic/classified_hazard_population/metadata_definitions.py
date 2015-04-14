@@ -42,7 +42,8 @@ from safe.new_definitions import (
     hazard_all,
     hazard_category_hazard_zone,
     count_exposure_unit,
-    generic_raster_hazard_classes
+    generic_raster_hazard_classes,
+    exposure_population
 )
 
 

@@ -40,6 +40,7 @@ from safe.new_definitions import (
     exposure_structure,
     unit_metres,
     unit_feet,
+    hazard_tsunami
 )
 
 

@@ -36,7 +36,8 @@ from safe.new_definitions import (
     hazard_all,
     hazard_category_hazard_zone,
     count_exposure_unit,
-    unit_generic
+    unit_generic,
+    exposure_population
 )
 
 

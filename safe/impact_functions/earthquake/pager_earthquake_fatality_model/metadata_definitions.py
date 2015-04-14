@@ -33,7 +33,8 @@ from safe.new_definitions import (
     hazard_earthquake,
     exposure_population,
     count_exposure_unit,
-    hazard_category_hazard_scenario
+    hazard_category_hazard_scenario,
+    unit_mmi
 )
 
 
