@@ -21,8 +21,6 @@ import unittest
 
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.impact_functions.earthquake.earthquake_building.impact_function\
-    import (EarthquakeBuildingFunction)
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import(FloodRasterBuildingFunction)
 
@@ -38,6 +36,12 @@ from safe.impact_functions.generic.classified_hazard_population \
     .impact_function import ClassifiedHazardPopulationFunction
 from safe.impact_functions.generic.continuous_hazard_population \
     .impact_function import ContinuousHazardPopulationFunction
+from safe.impact_functions.earthquake.earthquake_building.impact_function \
+    import EarthquakeBuildingFunction
+from safe.impact_functions.earthquake.itb_earthquake_fatality_model.\
+    impact_function import ITBFatalityFunction
+from safe.impact_functions.earthquake.pager_earthquake_fatality_model. \
+    impact_function import PAGFatalityFunction
 from safe.definitions import (
     unit_metres_depth,
     unit_feet_depth,
@@ -75,7 +79,10 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             VolcanoPolygonPopulationFunction(),
             ClassifiedHazardBuildingFunction(),
             ClassifiedHazardPopulationFunction(),
-            ContinuousHazardPopulationFunction()
+            ContinuousHazardPopulationFunction(),
+            EarthquakeBuildingFunction(),
+            ITBFatalityFunction(),
+            PAGFatalityFunction()
         ]
         for impact_function in impact_functions:
             valid = impact_function.metadata().is_valid()

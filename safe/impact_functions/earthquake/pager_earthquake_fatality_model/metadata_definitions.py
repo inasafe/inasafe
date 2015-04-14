@@ -27,6 +27,14 @@ from safe.defaults import (
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .metadata_definitions import ITBFatalityMetadata
 from safe.utilities.i18n import tr
+from safe.new_definitions import (
+    layer_mode_continuous,
+    layer_geometry_raster,
+    hazard_earthquake,
+    hazard_category_hazard_zone,
+    exposure_population,
+    count_exposure_unit
+)
 
 
 class PAGFatalityMetadata(ITBFatalityMetadata):
@@ -84,6 +92,21 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
                     'subcategories': [exposure_population],
                     'units': [unit_people_per_pixel],
                     'layer_constraints': [layer_raster_continuous]
+                }
+            },
+            'layer_requirements': {
+                'hazard': {
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_types': [hazard_earthquake],
+                    'units_classes': [unit_mmi]
+                },
+                'exposure': {
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'exposure_types': [exposure_population],
+                    'units_classes': [count_exposure_unit]
                 }
             },
             'parameters': OrderedDict([

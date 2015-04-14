@@ -19,6 +19,18 @@ from safe.defaults import aggregation_categorical_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.new_definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    layer_geometry_point,
+    layer_geometry_raster,
+    hazard_earthquake,
+    hazard_category_hazard_zone,
+    exposure_structure,
+    unit_mmi
+)
+
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -83,6 +95,24 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                         layer_vector_polygon,
                         layer_vector_point
                     ]
+                }
+            },
+            'layer_requirements': {
+                'hazard': {
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_types': [hazard_earthquake],
+                    'units_classes': [unit_mmi]
+                },
+                'exposure': {
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [
+                        layer_geometry_point,
+                        layer_geometry_polygon
+                    ],
+                    'exposure_types': [exposure_structure],
+                    'units_classes': []
                 }
             },
             'parameters': OrderedDict(

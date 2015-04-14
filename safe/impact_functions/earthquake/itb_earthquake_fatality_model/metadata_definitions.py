@@ -22,6 +22,14 @@ from safe.defaults import (
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.new_definitions import (
+    layer_mode_continuous,
+    layer_geometry_raster,
+    hazard_earthquake,
+    hazard_category_hazard_zone,
+    exposure_population,
+    count_exposure_unit
+)
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -123,6 +131,21 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                     'subcategories': [exposure_population],
                     'units': [unit_people_per_pixel],
                     'layer_constraints': [layer_raster_continuous]
+                }
+            },
+            'layer_requirements': {
+                'hazard': {
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_types': [hazard_earthquake],
+                    'units_classes': [unit_mmi]
+                },
+                'exposure': {
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'exposure_types': [exposure_population],
+                    'units_classes': [count_exposure_unit]
                 }
             },
             'parameters': OrderedDict([
