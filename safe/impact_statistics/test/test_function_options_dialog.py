@@ -205,7 +205,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
             # expected to raises this exception
             pass
         else:
-            raise Exception("Fail: must be raise an exception")
+            raise Exception("Fail: must raise an exception")
 
         dialog = FunctionOptionsDialog()
         value = dialog.build_widget(dialog.configLayout, 'foo', True)
