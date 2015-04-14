@@ -196,6 +196,7 @@ hazard_generic = {
         'have been classified or generalised. For example: earthquake, flood, '
         'volcano, or tsunami.')
 }
+
 hazard_earthquake = {
     'key': 'earthquake',
     'name': tr('earthquake'),
@@ -204,6 +205,7 @@ hazard_earthquake = {
         'ground that occurs as a result of volcanic activity or movement '
         'in the earth\'s crust.')
 }
+
 hazard_flood = {
     'key': 'flood',
     'name': tr('flood'),
@@ -215,6 +217,7 @@ hazard_flood = {
         'The effect of a <b>flood</b> is for land that is normally dry '
         'to become wet.')
 }
+
 hazard_volcanic_ash = {
     'key': 'volcanic_ash',
     'name': tr('volcanic ash'),
@@ -223,6 +226,7 @@ hazard_volcanic_ash = {
         'and volcanic glass, created during volcanic eruptions, less than '
         '2 mm (0.079 inches) in diameter')
 }
+
 hazard_tsunami = {
     'key': 'tsunami',
     'name': tr('tsunami'),
@@ -233,6 +237,7 @@ hazard_tsunami = {
         'wave that strikes land may cause massive destruction and '
         'flooding.')
 }
+
 hazard_volcano = {
     'key': 'volcano',
     'name': tr('volcano'),
@@ -242,6 +247,16 @@ hazard_volcano = {
         'from below the earth\'s surface. The type of material '
         'ejected depends on the type of <b>volcano</b>.')
 }
+
+hazard_all =[
+    hazard_flood,
+    hazard_tsunami,
+    hazard_earthquake,
+    hazard_volcano,
+    hazard_volcanic_ash,
+    hazard_generic
+]
+
 hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
@@ -253,7 +268,7 @@ hazard = {
         hazard_earthquake,
         hazard_volcano,
         hazard_volcanic_ash,
-        hazard_generic,
+        hazard_generic
     ]
 }
 
@@ -297,6 +312,14 @@ exposure_structure = {
         'with walls and a roof) or a telecommunications facility or a '
         'bridge.')
 }
+
+exposure_all = [
+    exposure_land_cover,
+    exposure_people_in_building,
+    exposure_population,
+    exposure_road,
+    exposure_structure
+]
 
 exposure = {
     'key': 'exposure',
@@ -508,6 +531,7 @@ flood_raster_hazard_classes = {
     'name': tr('flood raster hazard classes'),
     'description': tr(
         'TBA'),
+    'default_class': 'dry',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'wet',
@@ -528,11 +552,48 @@ flood_raster_hazard_classes = {
     ]
 }
 
+generic_raster_hazard_classes = {
+    'key': 'generic_raster_hazard_classes',
+    'name': tr('generic raster hazard classes'),
+    'description': tr(
+        'This is a ternary description for an area. The area is either '
+        'has <b>low</b>, <b>medium</b>, or <b>high</b> impact from the '
+        'hazard.'),
+    'default_class': 'high',  # unclassified value will go to this class
+    'classes': [
+        {
+            'key': 'high',
+            'name': tr('high'),
+            'description': tr('The location that has highest impact.'),
+            'numeric_default_min': 3,
+            'numeric_default_max': 3,
+            'optional': False
+        },
+        {
+            'key': 'medium',
+            'name': tr('medium'),
+            'description': tr('The location that has medium impact.'),
+            'numeric_default_min': 2,
+            'numeric_default_max': 2,
+            'optional': False
+        },
+        {
+            'key': 'low',
+            'name': tr('low'),
+            'description': tr('The location that has lowest impact.'),
+            'numeric_default_min': 1,
+            'numeric_default_max': 1,
+            'optional': False
+        }
+    ]
+}
+
 tsunami_raster_hazard_classes = {
     'key': 'tsunami_raster_hazard_classes',
     'name': tr('tsunami raster hazard classes'),
     'description': tr(
         'TBA'),
+    'default_class': 'dry',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'wet',
@@ -559,8 +620,10 @@ raster_hazard_classification = {
     'description': tr(
         'TBA.'),
     'types': [
-        flood_raster_hazard_classes
-        ]
+        flood_raster_hazard_classes,
+        generic_raster_hazard_classes,
+        tsunami_raster_hazard_classes
+    ]
 }
 
 # Exposure Unit

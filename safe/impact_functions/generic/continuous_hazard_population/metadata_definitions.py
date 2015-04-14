@@ -30,7 +30,18 @@ from safe.defaults import (
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-
+from safe.new_definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    layer_geometry_point,
+    layer_geometry_raster,
+    hazard_all,
+    hazard_category_hazard_zone,
+    exposure_structure,
+    count_exposure_unit,
+    generic_raster_hazard_classes
+)
 
 class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
     """Metadata for Continuous Hazard Population Impact Function.
@@ -96,6 +107,21 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                     'subcategories': [exposure_population],
                     'units': [unit_people_per_pixel],
                     'layer_constraints': [layer_raster_continuous]
+                }
+            },
+            'layer_requirements': {
+                'hazard': {
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_types': hazard_all,
+                    'units_classes': []
+                },
+                'exposure': {
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'exposure_types': [exposure_population],
+                    'units_classes': [count_exposure_unit]
                 }
             },
             # Configurable parameters

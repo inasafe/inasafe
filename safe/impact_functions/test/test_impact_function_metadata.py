@@ -25,14 +25,19 @@ from safe.impact_functions.earthquake.earthquake_building.impact_function\
     import (EarthquakeBuildingFunction)
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import(FloodRasterBuildingFunction)
-from safe.impact_functions.generic.continuous_hazard_population\
-    .impact_function import (ContinuousHazardPopulationFunction)
+
 from safe.impact_functions.volcanic.volcano_point_building.impact_function\
     import VolcanoPointBuildingFunction
 from safe.impact_functions.volcanic.volcano_polygon_building.impact_function\
     import VolcanoPolygonBuildingFunction
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .impact_function import VolcanoPolygonPopulationFunction
+from safe.impact_functions.generic.classified_hazard_building \
+    .impact_function import ClassifiedHazardBuildingFunction
+from safe.impact_functions.generic.classified_hazard_population \
+    .impact_function import ClassifiedHazardPopulationFunction
+from safe.impact_functions.generic.continuous_hazard_population \
+    .impact_function import ContinuousHazardPopulationFunction
 from safe.definitions import (
     unit_metres_depth,
     unit_feet_depth,
@@ -67,7 +72,10 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_functions = [
             VolcanoPointBuildingFunction(),
             VolcanoPolygonBuildingFunction(),
-            VolcanoPolygonPopulationFunction
+            VolcanoPolygonPopulationFunction(),
+            ClassifiedHazardBuildingFunction(),
+            ClassifiedHazardPopulationFunction(),
+            ContinuousHazardPopulationFunction()
         ]
         for impact_function in impact_functions:
             valid = impact_function.metadata().is_valid()
@@ -75,6 +83,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             message = '%s is invalid because %s' % (
                 impact_function_name, valid[1])
             self.assertTrue(valid[0], message)
+            if valid[0]:
+                print '%s has a valid metadata.' % impact_function_name
 
     def test_is_subset(self):
         """Test for is_subset function."""

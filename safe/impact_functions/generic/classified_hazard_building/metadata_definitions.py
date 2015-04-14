@@ -11,15 +11,35 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import hazard_definition, hazard_all, unit_classified, \
-    layer_raster_classified, exposure_definition, exposure_structure, \
-    unit_building_type_type, unit_building_generic, layer_vector_polygon, \
+from safe.definitions import (
+    hazard_definition,
+    hazard_all,
+    unit_classified,
+    layer_raster_classified,
+    exposure_definition,
+    exposure_structure,
+    unit_building_type_type,
+    unit_building_generic,
+    layer_vector_polygon,
     layer_vector_point
+)
 from safe.utilities.i18n import tr
 
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.new_definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    layer_geometry_point,
+    layer_geometry_raster,
+    hazard_all,
+    hazard_category_hazard_zone,
+    exposure_structure,
+    count_exposure_unit,
+    generic_raster_hazard_classes
+)
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -102,6 +122,24 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
                         layer_vector_polygon,
                         layer_vector_point
                     ]
+                }
+            },
+            'layer_requirements': {
+                'hazard': {
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_types': hazard_all,
+                    'units_classes': [generic_raster_hazard_classes]
+                },
+                'exposure': {
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [
+                        layer_geometry_point,
+                        layer_geometry_polygon
+                    ],
+                    'exposure_types': [exposure_structure],
+                    'units_classes': []
                 }
             },
             # parameters
