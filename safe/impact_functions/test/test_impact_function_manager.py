@@ -382,5 +382,25 @@ class TestImpactFunctionManager(unittest.TestCase):
     #     message = ('I expect %s but I got %s.' % (expected_result, result))
     #     self.assertItemsEqual(expected_result, result, message)
 
+    def test_get_all_layer_requirements(self):
+        """Test to generate all layer requirements from all IFs."""
+        impact_function_manager = ImpactFunctionManager()
+        for impact_function in impact_function_manager.impact_functions:
+            # from pprint import pprint
+            print '##', impact_function.metadata().get_name()
+            layer_req = impact_function.metadata().get_layer_requirements()
+            for key, value in layer_req.iteritems():
+                print '###', key
+                for k, v in value.iteritems():
+                    print '1. ', k
+                    if type(v) is dict:
+                        print '\t-', v['key']
+                    else:
+                        for the_v in v:
+                            print '\t-', the_v['key']
+                print ''
+            # pprint(impact_function.metadata().get_layer_requirements())
+            print ''
+
 if __name__ == '__main__':
     unittest.main()

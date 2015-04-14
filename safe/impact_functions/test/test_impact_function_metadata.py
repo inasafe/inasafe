@@ -443,5 +443,12 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         self.assertItemsEqual(
             expected_layer_constraint, layer_constraints, message)
 
+    def test_get_layer_requirements(self):
+        """Test for get_layer_requirements."""
+        impact_function = VolcanoPolygonBuildingFunction()
+        layer_req = impact_function.metadata().get_layer_requirements()
+        self.assertIsNotNone(layer_req)
+        self.assertIsInstance(layer_req, dict)
+
 if __name__ == '__main__':
     unittest.main()

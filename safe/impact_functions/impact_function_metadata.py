@@ -674,3 +674,26 @@ class ImpactFunctionMetadata(object):
 
         """
         return cls.as_dict().get('parameters', [])
+
+    @classmethod
+    def get_layer_requirements(cls):
+        """Return layer requirements.
+
+        This is a static method. You can use it to get the layer requirements
+        for the impact function.
+
+        :returns: A dict that contains layer requirements.
+        :rtype: dict
+
+        """
+        return cls.as_dict().get('layer_requirements', {})
+
+    @classmethod
+    def get_name(cls):
+        """Return IF name.
+
+        :returns: The IF name.
+        :rtype: str
+
+        """
+        return cls.as_dict().get('name', '')
