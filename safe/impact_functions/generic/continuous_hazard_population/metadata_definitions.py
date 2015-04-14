@@ -43,6 +43,7 @@ from safe.new_definitions import (
     generic_raster_hazard_classes
 )
 
+
 class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
     """Metadata for Continuous Hazard Population Impact Function.
 

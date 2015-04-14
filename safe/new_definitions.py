@@ -248,7 +248,7 @@ hazard_volcano = {
         'ejected depends on the type of <b>volcano</b>.')
 }
 
-hazard_all =[
+hazard_all = [
     hazard_flood,
     hazard_tsunami,
     hazard_earthquake,

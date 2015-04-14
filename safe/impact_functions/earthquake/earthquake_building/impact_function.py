@@ -178,13 +178,16 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 self.buildings[usage] = 0
                 for category in self.affected_buildings.keys():
                     if self.is_nexis:
-                        self.affected_buildings[category][usage] = OrderedDict([
-                            (tr('Buildings Affected'), 0),
-                            (tr('Buildings value ($M)'), 0),
-                            (tr('Contents value ($M)'), 0)])
+                        self.affected_buildings[category][usage] = OrderedDict(
+                            [
+                                (tr('Buildings Affected'), 0),
+                                (tr('Buildings value ($M)'), 0),
+                                (tr('Contents value ($M)'), 0)]
+                        )
                     else:
-                        self.affected_buildings[category][usage] = OrderedDict([
-                            (tr('Buildings Affected'), 0)])
+                        self.affected_buildings[category][usage] = OrderedDict(
+                            [(tr('Buildings Affected'), 0)]
+                        )
             self.buildings[usage] += 1
             try:
                 mmi = float(attributes[i][hazard_attribute])  # MMI
