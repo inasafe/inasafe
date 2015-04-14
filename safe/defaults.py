@@ -27,7 +27,6 @@ from PyQt4.QtCore import QSettings
 
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.float_parameter import FloatParameter
-from safe_extras.parameters.generic_parameter import GenericParameter
 
 from safe.common.resource_parameter import ResourceParameter
 from safe.utilities.i18n import tr
