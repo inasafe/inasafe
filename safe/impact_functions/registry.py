@@ -238,48 +238,97 @@ class Registry(object):
             return cls._impact_functions
 
         impact_functions = []
-        categories = []
+        layer_purposes = []
         keywords = {}
         if hazard_keywords is not None:
-            categories.append('hazard')
+            layer_purposes.append('hazard')
             keywords['hazard'] = hazard_keywords
         if exposure_keywords is not None:
-            categories.append('exposure')
+            layer_purposes.append('exposure')
             keywords['exposure'] = exposure_keywords
 
         for impact_function in cls._impact_functions:
             requirement_met = True
-            for category in categories:
-                f_category = impact_function.metadata().as_dict()[
-                    'categories'][category]
+            for layer_purpose in layer_purposes:
+                layer_requirement = impact_function.metadata().as_dict()[
+                    'layer_requirements'][layer_purpose]
 
-                subcategories = f_category['subcategories']
-                subcategories = project_list(
-                    convert_to_list(subcategories), 'id')
+                # general requirements
+                layer_mode = layer_requirement['layer_mode']
+                layer_mode = project_list(convert_to_list(layer_mode), 'key')
 
-                units = f_category['units']
-                units = project_list(convert_to_list(units), 'id')
+                layer_geometries = layer_requirement['layer_geometries']
+                layer_geometries = project_list(
+                    convert_to_list(layer_geometries), 'key')
 
-                layer_constraints = convert_to_list(
-                    f_category['layer_constraints'])
+                units_classes = layer_requirement['units_classes']
+                units_classes = project_list(
+                    convert_to_list(units_classes), 'key')
 
-                layer_types = project_list(layer_constraints, 'layer_type')
-                data_types = project_list(layer_constraints, 'data_type')
+                # hazard layer specific requirements
+                if layer_purpose == 'hazard':
+                    hazard_categories = layer_requirement['hazard_categories']
+                    hazard_categories = project_list(
+                        convert_to_list(hazard_categories), 'key')
 
-                keyword = keywords[category]
-                if keyword.get('subcategory') not in subcategories:
+                    hazard_types = layer_requirement['hazard_types']
+                    hazard_types = project_list(
+                        convert_to_list(hazard_types), 'key')
+
+                # exposure layer specific requirements
+                if layer_purpose == 'exposure':
+                    exposure_types = layer_requirement['exposure_types']
+                    exposure_types = project_list(
+                        convert_to_list(exposure_types), 'key')
+
+                keyword = keywords[layer_purpose]
+                if layer_mode and keyword.get('layer_mode') not in layer_mode:
                     requirement_met = False
                     continue
-                if (len(units) > 0 and keyword.get('unit') is not None and
-                        keyword.get('unit') not in units):
+
+                if (layer_geometries and keyword.get('layer_geometry') not in
+                        layer_geometries):
                     requirement_met = False
                     continue
-                if keyword.get('layer_type') not in layer_types:
-                    requirement_met = False
-                    continue
-                if keyword.get('data_type') not in data_types:
-                    requirement_met = False
-                    continue
+
+                layer_units_classes = []
+                layer_units_classes += keyword.get('continuous_hazard_unit')
+                layer_units_classes += keyword.get(
+                    'vector_hazard_classification')
+                layer_units_classes += keyword.get(
+                    'raster_hazard_classification')
+                layer_units_classes += keyword.get(
+                    'exposure_unit')
+
+                # removing None
+                layer_units_classes = [
+                    x for x in layer_units_classes if x is not None]
+
+                if units_classes:
+                    units_classes_found = [
+                        i for i in layer_units_classes if i in units_classes]
+                    if not units_classes_found:
+                        requirement_met = False
+                        continue
+
+                # hazard layer specific requirements
+                if layer_purpose == 'hazard':
+                    if (hazard_types and keyword.get('hazard') not in
+                            hazard_types):
+                        requirement_met = False
+                        continue
+
+                    if (hazard_categories and keyword.get('hazard_category')
+                            not in hazard_categories):
+                        requirement_met = False
+                        continue
+
+                # exposure layer specific requirements
+                if layer_purpose == 'exposure':
+                    if (exposure_types and keyword.get('exposure') not in
+                            exposure_types):
+                        requirement_met = False
+                        continue
 
             if requirement_met and impact_function not in impact_functions:
                 impact_functions.append(impact_function)
