@@ -425,34 +425,48 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
+        # Flag to check valid organization logo
+        invalid_logo_size = False
+        logo_not_exist = False
+
         if self.organisation_logo_path:
             dock_width = float(self.width())
 
             # Dont let the image be more tha 100px hight
             maximum_height = 100.0  # px
             pixmap = QtGui.QPixmap(self.organisation_logo_path)
-            height_ratio = maximum_height / pixmap.height()
-            maximum_width = int(pixmap.width() * height_ratio)
+            # it will throw Overflow Error if pixmap.height() == 0
+            if pixmap.height() > 0:
 
-            # Don't let the image be more than the dock width wide
-            if maximum_width > dock_width:
-                width_ratio = dock_width / float(pixmap.width())
-                maximum_height = int(pixmap.height() * width_ratio)
-                maximum_width = dock_width
+                height_ratio = maximum_height / pixmap.height()
+                maximum_width = int(pixmap.width() * height_ratio)
 
-            too_high = pixmap.height() > maximum_height
-            too_wide = pixmap.width() > dock_width
+                # Don't let the image be more than the dock width wide
+                if maximum_width > dock_width:
+                    width_ratio = dock_width / float(pixmap.width())
+                    maximum_height = int(pixmap.height() * width_ratio)
+                    maximum_width = dock_width
 
-            if too_wide or too_high:
-                pixmap = pixmap.scaled(
-                    maximum_width, maximum_height, Qt.KeepAspectRatio)
+                too_high = pixmap.height() > maximum_height
+                too_wide = pixmap.width() > dock_width
 
-            self.organisation_logo.setMaximumWidth(maximum_width)
-            # We have manually scaled using logic above
-            self.organisation_logo.setScaledContents(False)
-            self.organisation_logo.setPixmap(pixmap)
+                if too_wide or too_high:
+                    pixmap = pixmap.scaled(
+                        maximum_width, maximum_height, Qt.KeepAspectRatio)
 
-        if self.organisation_logo_path and flag:
+                self.organisation_logo.setMaximumWidth(maximum_width)
+                # We have manually scaled using logic above
+                self.organisation_logo.setScaledContents(False)
+                self.organisation_logo.setPixmap(pixmap)
+            else:
+                # handle zero pixmap height and or nonexistent files
+                if not os.path.exists(self.organisation_logo_path):
+                    logo_not_exist = True
+                else:
+                    invalid_logo_size = True
+
+        if (self.organisation_logo_path and flag and
+                not invalid_logo_size and not logo_not_exist):
             self._show_organisation_logo()
         else:
             self.organisation_logo.hide()
@@ -479,6 +493,28 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'Please check in Plugins -> InaSAFE -> Options that your '
                     'paths are still correct and update them if needed.'
                 ), QtGui.QMessageBox.Ok)
+
+        # RM: this is a fix for nonexistent organization logo or zero height
+        if logo_not_exist:
+            QtGui.QMessageBox.warning(
+                self, self.tr('InaSAFE %s' % get_version()),
+                self.tr(
+                    'The file for organization logo in %s doesn\'t exists. '
+                    'Please check in Plugins -> InaSAFE -> Options that your '
+                    'paths are still correct and update them if needed.' %
+                    self.organisation_logo_path
+                ), QtGui.QMessageBox.Ok)
+        if invalid_logo_size:
+            QtGui.QMessageBox.warning(
+                self, self.tr('InaSAFE %s' % get_version()),
+                self.tr(
+                    'The file for organization logo has zero height. Please '
+                    'provide valid file for organization logo.'
+                ), QtGui.QMessageBox.Ok)
+        if logo_not_exist or invalid_logo_size:
+            settings.setValue(
+                'inasafe/organisation_logo_path',
+                default_organisation_logo_path())
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.

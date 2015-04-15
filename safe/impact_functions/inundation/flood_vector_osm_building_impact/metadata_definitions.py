@@ -111,13 +111,7 @@ class FloodVectorBuildingMetadata(ImpactFunctionMetadata):
                         hazard_tsunami
                     ],
                     'units': [
-                        unit_wetdry,
-                        # RM: add metres unit and feet depth, because it
-                        # is needed in the
-                        # test_wizard_dialog.test_existing_keywords to test
-                        # tsunami's keywords
-                        unit_metres_depth,
-                        unit_feet_depth
+                        unit_wetdry
                         ],
                     'layer_constraints': [layer_vector_polygon]
                 },
