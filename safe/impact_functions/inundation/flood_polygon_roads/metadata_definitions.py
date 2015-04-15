@@ -68,15 +68,16 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_polygon],
                     'hazard_categories': [hazard_category_hazard_scenario],
                     'hazard_types': [hazard_flood],
-                    'units_classes': [wetdry_vector_hazard_classes]
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': [
+                        wetdry_vector_hazard_classes],
+                    'raster_hazard_classifications': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_classified,
-                    'layer_geometries': [
-                        layer_geometry_line
-                    ],
+                    'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
-                    'units_classes': []
+                    'exposure_units': []
                 }
             },
             'parameters': OrderedDict([

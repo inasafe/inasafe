@@ -77,13 +77,15 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_raster],
                     'hazard_categories': [hazard_category_hazard_scenario],
                     'hazard_types': [hazard_flood, hazard_tsunami],
-                    'units_classes': [unit_feet, unit_metres]
+                    'continuous_hazard_units': [unit_feet, unit_metres],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
-                    'units_classes': []
+                    'exposure_units': []
                 }
             },
             'parameters': OrderedDict([

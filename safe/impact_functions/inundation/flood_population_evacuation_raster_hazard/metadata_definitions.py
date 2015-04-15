@@ -106,16 +106,15 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_raster],
                     'hazard_categories': [hazard_category_hazard_scenario],
                     'hazard_types': [hazard_flood],
-                    'units_classes': [
-                        unit_feet,
-                        unit_metres
-                    ]
+                    'continuous_hazard_units': [unit_feet, unit_metres],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
-                    'units_classes': [count_exposure_unit]
+                    'exposure_units': [count_exposure_unit]
                 }
             },
             'parameters': OrderedDict([

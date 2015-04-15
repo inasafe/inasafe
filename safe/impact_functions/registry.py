@@ -171,18 +171,44 @@ class Registry(object):
         """
         filtered_impact_functions = []
         for impact_function in impact_functions:
-            if_hazard_keywords = impact_function.metadata().as_dict()[
-                'categories']['hazard']
-            subcategories = if_hazard_keywords['subcategories']
-            units = if_hazard_keywords['units']
-            layer_constraints = if_hazard_keywords['layer_constraints']
+            if_hazard_requirements = impact_function.metadata().as_dict()[
+                'layer_requirements']['hazard']
 
-            if not is_subset(hazard_keywords['subcategory'], subcategories):
+            layer_mode = if_hazard_requirements['layer_mode']
+            layer_geometries = if_hazard_requirements['layer_geometries']
+            hazard_categories = if_hazard_requirements['hazard_categories']
+            hazard_types = if_hazard_requirements['hazard_types']
+            continuous_hazard_units = if_hazard_requirements[
+                'continuous_hazard_units']
+            vector_hazard_classifications = if_hazard_requirements[
+                'vector_hazard_classifications']
+            raster_hazard_classifications = if_hazard_requirements[
+                'raster_hazard_classifications']
+
+            if (layer_mode and not is_subset(
+                    hazard_keywords.get('layer_mode'), layer_mode)):
                 continue
-            if not is_subset(hazard_keywords['units'], units):
+            if (layer_geometries and not is_subset(
+                    hazard_keywords.get('layer_geometry'), layer_geometries)):
                 continue
-            if not is_subset(
-                    hazard_keywords['layer_constraints'], layer_constraints):
+            if (hazard_categories and not is_subset(
+                    hazard_keywords.get('hazard_category'),
+                    hazard_categories)):
+                continue
+            if (hazard_types and not is_subset(
+                    hazard_keywords.get('hazard'), hazard_types)):
+                continue
+            if (continuous_hazard_units and not is_subset(
+                    hazard_keywords.get('continuous_hazard_unit'),
+                    continuous_hazard_units)):
+                continue
+            if (vector_hazard_classifications and not is_subset(
+                    hazard_keywords.get('vector_hazard_classification'),
+                    vector_hazard_classifications)):
+                continue
+            if (raster_hazard_classifications and not is_subset(
+                    hazard_keywords.get('raster_hazard_classification'),
+                    raster_hazard_classifications)):
                 continue
             filtered_impact_functions.append(impact_function)
 
@@ -205,18 +231,27 @@ class Registry(object):
         filtered_impact_functions = []
         for impact_function in impact_functions:
             if_exposure_keywords = impact_function.metadata().as_dict()[
-                'categories']['exposure']
-            subcategory = if_exposure_keywords['subcategories']
-            units = if_exposure_keywords['units']
-            layer_constraints = if_exposure_keywords['layer_constraints']
+                'layer_requirements']['exposure']
 
-            if not is_subset(exposure_keywords['subcategory'], subcategory):
+            layer_mode = if_exposure_keywords['layer_mode']
+            layer_geometries = if_exposure_keywords['layer_geometries']
+            exposure_types = if_exposure_keywords['exposure_types']
+            exposure_units = if_exposure_keywords['exposure_units']
+
+            if (layer_mode and not is_subset(
+                    exposure_keywords.get('layer_mode'), layer_mode)):
                 continue
-            if not is_subset(exposure_keywords['units'], units):
+            if (layer_geometries and not is_subset(
+                    exposure_keywords.get('layer_geometry'), layer_geometries)):
                 continue
-            if not is_subset(
-                    exposure_keywords['layer_constraints'], layer_constraints):
+            if (exposure_types and not is_subset(
+                    exposure_keywords.get('exposure'),
+                    exposure_types)):
                 continue
+            if (exposure_units and not is_subset(
+                    exposure_keywords.get('exposure_unit'), exposure_units)):
+                continue
+
             filtered_impact_functions.append(impact_function)
 
         return filtered_impact_functions

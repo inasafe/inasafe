@@ -25,13 +25,33 @@ from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
     .impact_function import FloodPolygonBuildingQgisFunction
 from safe.impact_functions.inundation.flood_vector_osm_building_impact\
     .impact_function import FloodVectorBuildingFunction
+from safe.impact_functions.earthquake.earthquake_building.impact_function \
+    import EarthquakeBuildingFunction
+from safe.impact_functions.earthquake.itb_earthquake_fatality_model \
+    .impact_function import ITBFatalityFunction
+from safe.impact_functions.earthquake.pager_earthquake_fatality_model \
+    .impact_function import PAGFatalityFunction
+
+from safe.impact_functions.inundation.flood_raster_osm_building_impact \
+    .impact_function import FloodRasterBuildingFunction
+from safe.impact_functions.generic.classified_hazard_building.impact_function\
+    import ClassifiedHazardBuildingFunction
+from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
+    import VolcanoPolygonBuildingFunction
+from safe.impact_functions.volcanic.volcano_point_building.impact_function \
+    import VolcanoPointBuildingFunction
 from safe.impact_functions.registry import Registry
-from safe.definitions import (
-    unit_wetdry,
-    layer_vector_polygon,
+from safe.new_definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_point,
+    layer_geometry_polygon,
+    layer_geometry_raster,
+    hazard_earthquake,
     exposure_structure,
-    unit_building_type_type,
-    hazard_flood)
+    unit_mmi,
+    hazard_category_hazard_scenario
+)
 
 
 class TestRegistry(unittest.TestCase):
@@ -131,26 +151,120 @@ class TestRegistry(unittest.TestCase):
         message = 'Expecting %s. Got %s instead.' % (expected, result)
         self.assertEqual(expected, result, message)
 
+    def test_filter_by_hazard_metadata(self):
+        """TestRegistry: Test filtering IF by hazard metadata."""
+        # Full metadata
+        hazard_metadata = {
+            'layer_mode': layer_mode_continuous,
+            'layer_geometry': layer_geometry_raster,
+            'hazard_category': hazard_category_hazard_scenario,
+            'hazard': hazard_earthquake,
+            'continuous_hazard_unit': unit_mmi,
+        }
+        registry = Registry()
+        impact_functions = registry.filter_by_hazard(
+            registry.impact_functions, hazard_metadata)
+        expected = [
+            ITBFatalityFunction,
+            EarthquakeBuildingFunction,
+            PAGFatalityFunction
+        ]
+        message = 'Expecting %s. Got %s instead' % (expected, impact_functions)
+        self.assertItemsEqual(expected, impact_functions, message)
+
+        # Miss one metadata
+        hazard_metadata = {
+            'layer_mode': layer_mode_continuous,
+            'layer_geometry': layer_geometry_raster,
+            'hazard_category': hazard_category_hazard_scenario,
+            'hazard': hazard_earthquake,
+            # 'continuous_hazard_unit': unit_mmi,
+            }
+        registry = Registry()
+        impact_functions = registry.filter_by_hazard(
+            registry.impact_functions, hazard_metadata)
+        expected = [
+            # ITBFatalityFunction,
+            # EarthquakeBuildingFunction,
+            # PAGFatalityFunction
+        ]
+        message = 'Expecting %s. Got %s instead' % (expected, impact_functions)
+        self.assertItemsEqual(expected, impact_functions, message)
+
+    def test_filter_by_exposure_metadata(self):
+        """TestRegistry: Test filtering IF by exposure metadata."""
+        # Full metadata
+        exposure_metadata = {
+            'layer_mode': layer_mode_classified,
+            'layer_geometry': layer_geometry_point,
+            'exposure': exposure_structure,
+            'exposure_unit': []
+            }
+        registry = Registry()
+        impact_functions = registry.filter_by_exposure(
+            registry.impact_functions, exposure_metadata)
+        expected = [
+            FloodVectorBuildingFunction,
+            FloodRasterBuildingFunction,
+            ClassifiedHazardBuildingFunction,
+            EarthquakeBuildingFunction,
+            VolcanoPointBuildingFunction,
+            VolcanoPolygonBuildingFunction
+        ]
+        message = 'Expecting \n%s.\n\nGot \n%s instead' % (
+            '\n'.join([x.__name__ for x in expected]),
+            '\n'.join([x.__name__ for x in impact_functions]))
+        self.assertItemsEqual(expected, impact_functions, message)
+
+        # Full metadata
+        exposure_metadata = {
+            'layer_mode': layer_mode_classified,
+            'layer_geometry': layer_geometry_polygon,
+            'exposure': exposure_structure,
+            # 'exposure_unit': []
+        }
+        registry = Registry()
+        impact_functions = registry.filter_by_exposure(
+            registry.impact_functions, exposure_metadata)
+        expected = [
+            FloodVectorBuildingFunction,
+            FloodRasterBuildingFunction,
+            ClassifiedHazardBuildingFunction,
+            EarthquakeBuildingFunction,
+            VolcanoPointBuildingFunction,
+            VolcanoPolygonBuildingFunction,
+            FloodPolygonBuildingQgisFunction
+        ]
+        message = 'Expecting %s IFs. Got %s IFs instead' % (
+            len(expected), len(impact_functions))
+        self.assertEqual(len(expected), len(impact_functions), message)
+        message = 'Expecting \n%s.\n\nGot \n%s instead' % (
+            '\n'.join([x.__name__ for x in expected]),
+            '\n'.join([x.__name__ for x in impact_functions]))
+        self.assertItemsEqual(expected, impact_functions, message)
+
     def test_filter_by_metadata(self):
         """TestRegistry: Test filtering IF by hazard and exposure metadata."""
         hazard_metadata = {
-            'subcategory': hazard_flood,
-            'units': unit_wetdry,
-            'layer_constraints': layer_vector_polygon
+            'layer_mode': layer_mode_continuous,
+            'layer_geometry': layer_geometry_raster,
+            'hazard_category': hazard_category_hazard_scenario,
+            'hazard': hazard_earthquake,
+            'continuous_hazard_unit': unit_mmi
         }
 
         exposure_metadata = {
-            'subcategory': exposure_structure,
-            'units': unit_building_type_type,
-            'layer_constraints': layer_vector_polygon
+            'layer_mode': layer_mode_classified,
+            'layer_geometry': layer_geometry_point,
+            'exposure': exposure_structure,
         }
 
         registry = Registry()
         impact_functions = registry.filter(hazard_metadata, exposure_metadata)
-        expected = [
-            FloodVectorBuildingFunction,
-            FloodPolygonBuildingQgisFunction]
-        message = 'Expecting %s. Got %s instead' % (expected, impact_functions)
+        expected = [EarthquakeBuildingFunction]
+        message = 'Expecting \n%s.\n\nGot \n%s instead' % (
+            '\n'.join([x.__name__ for x in expected]),
+            '\n'.join([x.__name__ for x in impact_functions]))
         self.assertEqual(expected, impact_functions, message)
 
     def test_filter_by_keywords(self):

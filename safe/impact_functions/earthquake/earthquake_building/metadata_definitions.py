@@ -80,7 +80,9 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_raster],
                     'hazard_categories': [hazard_category_hazard_scenario],
                     'hazard_types': [hazard_earthquake],
-                    'units_classes': [unit_mmi]
+                    'continuous_hazard_units': [unit_mmi],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_classified,
@@ -89,7 +91,7 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
-                    'units_classes': []
+                    'exposure_units': []
                 }
             },
             'parameters': OrderedDict(
