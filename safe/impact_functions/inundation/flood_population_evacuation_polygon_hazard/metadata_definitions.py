@@ -31,6 +31,10 @@ from safe.definitions import (
     layer_raster_continuous, unit_metres_depth, unit_feet_depth)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.\
+    flood_population_evacuation_polygon_hazard.parameter_definitions import (
+        affected_field,
+        affected_value)
 from safe.impact_functions.inundation\
     .flood_population_evacuation_polygon_hazard.parameter_definitions import \
     evaluation_percentage
@@ -108,6 +112,8 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
             },
             'parameters': OrderedDict([
                 # Percent of affected needing evacuation
+                ('affected_field', affected_field()),
+                ('affected_value', affected_value()),
                 ('evacuation_percentage', evaluation_percentage()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),

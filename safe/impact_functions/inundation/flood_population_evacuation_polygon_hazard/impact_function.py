@@ -157,8 +157,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
         new_attributes = hazard_layer.get_data()
-        category_title = 'affected'  # FIXME: Should come from keywords
-        deprecated_category_title = 'FLOODPRONE'
+        category_title = self.parameters['affected_field'].value
+        deprecated_category_title = self.parameters['affected_value'].value
         categories = {}
         for attr in new_attributes:
             attr[self.target_field] = 0
