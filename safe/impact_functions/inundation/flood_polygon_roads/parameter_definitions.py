@@ -4,12 +4,24 @@ __date__ = '11/04/15'
 
 from safe_extras.parameters.string_parameter import StringParameter
 
+def target_field_value():
+    """Generate target field value parameter with default field value
+
+    :return: StringParameter
+    :rtype: StringParameter
+    """
+    field = StringParameter()
+    field.name = 'Target Field Value'
+    field.is_required = True
+    field.value = 'FLOODED'
+    return field
+
 
 def road_type_field():
     """Generate road type field parameter
 
-    :return: list of StringParameter
-    :rtype: list[StringParameter]
+    :return: StringParameter
+    :rtype: StringParameter
     """
     field = StringParameter()
     field.name = 'Road Type Field'
@@ -21,8 +33,8 @@ def road_type_field():
 def affected_field():
     """Generate affected field parameter
 
-    :return: list of StringParameter
-    :rtype: list[StringParameter]
+    :return: StringParameter
+    :rtype: StringParameter
     """
     field = StringParameter()
     field.name = 'Affected Field'
@@ -34,8 +46,8 @@ def affected_field():
 def affected_value():
     """Generate affected value parameter
 
-    :return: list of String Parameter
-    :rtype: list[StringParameter]
+    :return: String Parameter
+    :rtype: StringParameter
     """
     field = StringParameter()
     field.name = 'Affected Value'

@@ -27,7 +27,8 @@ from safe.impact_functions.inundation.flood_polygon_roads\
     .parameter_definitions import (
         road_type_field,
         affected_field,
-        affected_value)
+        affected_value,
+        target_field_value)
 from safe.utilities.i18n import tr
 
 
@@ -84,6 +85,7 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about road types
+                ('target_field_value', target_field_value()),
                 ('road_type_field', road_type_field()),
                 # This field of the  hazard layer contains information
                 # about inundated areas
