@@ -11,10 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
-    layer_raster_continuous, exposure_definition, exposure_structure, \
-    unit_building_type_type, unit_building_generic, layer_vector_polygon, \
-    layer_vector_point
 from safe.defaults import aggregation_categorical_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -78,25 +74,6 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
             'actions': '',
             'limitations': [],
             'citations': [],
-            'categories': {
-                'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_earthquake],
-                    'units': [unit_mmi],
-                    'layer_constraints': [layer_raster_continuous],
-                },
-                'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [
-                        unit_building_type_type,
-                        unit_building_generic],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point
-                    ]
-                }
-            },
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

@@ -11,23 +11,11 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_definition,
-    hazard_all,
-    unit_classified,
-    layer_raster_classified,
-    exposure_definition,
-    exposure_structure,
-    unit_building_type_type,
-    unit_building_generic,
-    layer_vector_polygon,
-    layer_vector_point
-)
 from safe.utilities.i18n import tr
 
 from safe.defaults import building_type_postprocessor
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 from safe.new_definitions import (
     layer_mode_classified,
     layer_geometry_polygon,
@@ -103,25 +91,6 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
                 'impacted for each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
             'citations': [],
-            'categories': {
-                'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': hazard_all,
-                    'units': [unit_classified],
-                    'layer_constraints': [layer_raster_classified]
-                },
-                'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [
-                        unit_building_type_type,
-                        unit_building_generic],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point
-                    ]
-                }
-            },
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

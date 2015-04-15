@@ -17,9 +17,6 @@ __date__ = '24/03/15'
 import numpy
 from safe.common.utilities import OrderedDict
 from safe.defaults import default_minimum_needs, default_provenance
-from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
-    layer_raster_continuous, exposure_definition, exposure_population, \
-    unit_people_per_pixel
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
@@ -81,20 +78,6 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
                    'using an empirical approach. U.S. Geological Survey '
                    'Open-File Report 2009-1136.')
             ],
-            'categories': {
-                'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_earthquake],
-                    'units': [unit_mmi],
-                    'layer_constraints': [layer_raster_continuous]
-                },
-                'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
-                }
-            },
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

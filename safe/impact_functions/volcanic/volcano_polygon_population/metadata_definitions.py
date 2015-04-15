@@ -11,16 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_volcano,
-    unit_volcano_categorical,
-    layer_vector_polygon,
-    layer_vector_point,
-    layer_raster_continuous,
-    exposure_population,
-    unit_people_per_pixel,
-    hazard_definition,
-    exposure_definition)
 from safe.defaults import (
     default_minimum_needs,
     default_provenance,
@@ -95,23 +85,6 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'To assess the impacts of volcano eruption on '
                 'population.'),
             'detailed_description': '',
-            'categories': {
-                'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_volcano],
-                    'units': [unit_volcano_categorical],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point
-                    ]
-                },
-                'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
-                }
-            },
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

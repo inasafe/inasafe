@@ -17,17 +17,6 @@ __filename__ = 'metadata_definitions'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    hazard_tsunami,
-    unit_metres_depth,
-    unit_feet_depth,
-    layer_raster_continuous,
-    exposure_definition,
-    exposure_road,
-    unit_road_type_type,
-    layer_vector_line)
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -83,26 +72,6 @@ class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
             'actions': '',
             'limitations': [],
             'citations': [],
-            'categories': {
-                'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [
-                        hazard_flood,
-                        hazard_tsunami
-                    ],
-                    'units': [
-                        unit_metres_depth,
-                        unit_feet_depth
-                    ],
-                    'layer_constraints': [layer_raster_continuous]
-                },
-                'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_road],
-                    'units': [unit_road_type_type],
-                    'layer_constraints': [layer_vector_line]
-                }
-            },
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

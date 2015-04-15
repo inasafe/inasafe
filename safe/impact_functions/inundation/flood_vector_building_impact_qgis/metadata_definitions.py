@@ -14,14 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    unit_wetdry,
-    layer_vector_polygon,
-    exposure_definition,
-    exposure_structure,
-    unit_building_type_type)
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -72,20 +64,6 @@ class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
             'actions': '',
             'limitations': [],
             'citations': [],
-            'categories': {
-                'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_flood],
-                    'units': [unit_wetdry],
-                    'layer_constraints': [layer_vector_polygon]
-                },
-                'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [unit_building_type_type],
-                    'layer_constraints': [layer_vector_polygon]
-                }
-            },
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

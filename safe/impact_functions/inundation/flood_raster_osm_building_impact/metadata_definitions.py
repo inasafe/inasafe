@@ -14,17 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = "lucernae"
 
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    hazard_tsunami,
-    layer_vector_polygon,
-    exposure_definition,
-    exposure_structure,
-    unit_building_type_type,
-    unit_building_generic,
-    layer_vector_point, unit_metres_depth, unit_feet_depth,
-    layer_raster_continuous)
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -114,32 +103,6 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                    'in case of vector hazard.')
             ],
             'citations': [],
-            'categories': {
-                'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [
-                        hazard_flood,
-                        hazard_tsunami
-                    ],
-                    'units': [
-                        unit_metres_depth,
-                        unit_feet_depth],
-                    'layer_constraints': [
-                        layer_raster_continuous,
-                        ]
-                },
-                'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [
-                        unit_building_type_type,
-                        unit_building_generic],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point
-                    ]
-                }
-            },
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

@@ -21,13 +21,6 @@ from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    exposure_definition,
-    exposure_population,
-    unit_people_per_pixel,
-    layer_raster_continuous, unit_feet_depth, unit_metres_depth)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -107,23 +100,6 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                    'on consensus, not hard evidence.')
             ],
             'citations': [],
-            'categories': {
-                'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_flood],
-                    'units': [
-                        unit_feet_depth,
-                        unit_metres_depth
-                    ],
-                    'layer_constraints': [layer_raster_continuous]
-                },
-                'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
-                }
-            },
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

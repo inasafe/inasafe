@@ -11,16 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_definition,
-    hazard_volcano,
-    unit_volcano_categorical,
-    layer_vector_point,
-    layer_vector_polygon,
-    exposure_definition,
-    exposure_structure,
-    unit_building_type_type,
-    unit_building_generic)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -87,24 +77,6 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'affected by each hazard zones.'),
             'limitations': [],
             'citations': [],
-            'categories': {
-                'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_volcano],
-                    'units': [unit_volcano_categorical],
-                    'layer_constraints': [layer_vector_polygon]
-                },
-                'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [
-                        unit_building_type_type,
-                        unit_building_generic],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point]
-                }
-            },
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,
