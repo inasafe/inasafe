@@ -1,4 +1,7 @@
-category: hazard
-source: smithsonian
-subcategory: volcano
+hazard_category: hazard_zone
 title: Volcano Point
+source: smithsonian
+vector_hazard_classification: volcano_vector_hazard_classes
+layer_purpose: hazard
+layer_mode: classified
+exposure: volcano

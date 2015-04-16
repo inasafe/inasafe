@@ -1,6 +1,8 @@
-category: hazard
-subcategory: flood
-data_type: classified
+hazard_category: hazard_scenario
+raster_hazard_classification: wetdry_vector_hazard_classes
 title: Classified Flood
+hazard: flood
 source: Akbar Gumbira
+layer_purpose: hazard
+layer_mode: classified
 unit: classes

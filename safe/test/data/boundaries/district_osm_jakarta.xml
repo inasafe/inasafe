@@ -180,6 +180,7 @@ elderly ratio default: 0.08
 adult ratio attribute: Global default
 female ratio attribute: PEREMPUAN
 youth ratio attribute: Global default
+layer_purpose: aggregation
 adult ratio default: 0.66
 ]]>
 </inasafe_keywords>

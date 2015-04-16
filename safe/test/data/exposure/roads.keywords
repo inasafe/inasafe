@@ -1,6 +1,6 @@
-category: exposure
-subcategory: road
 field: TYPE
 title: Roads
 source: OpenStreetMap - www.openstreetmap.org
-unit: road_type
+layer_purpose: exposure
+layer_mode: classified
+exposure: road
