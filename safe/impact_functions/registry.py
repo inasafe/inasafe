@@ -296,10 +296,6 @@ class Registry(object):
                 layer_geometries = project_list(
                     convert_to_list(layer_geometries), 'key')
 
-                units_classes = layer_requirement['units_classes']
-                units_classes = project_list(
-                    convert_to_list(units_classes), 'key')
-
                 # hazard layer specific requirements
                 if layer_purpose == 'hazard':
                     hazard_categories = layer_requirement['hazard_categories']
@@ -310,11 +306,30 @@ class Registry(object):
                     hazard_types = project_list(
                         convert_to_list(hazard_types), 'key')
 
+                    continuous_hazard_units = layer_requirement.get(
+                        'continuous_hazard_units')
+                    continuous_hazard_units = project_list(
+                        convert_to_list(continuous_hazard_units), 'key')
+
+                    vector_hazard_classifications = layer_requirement.get(
+                        'vector_hazard_classifications')
+                    vector_hazard_classifications = project_list(
+                        convert_to_list(vector_hazard_classifications), 'key')
+
+                    raster_hazard_classifications = layer_requirement.get(
+                        'raster_hazard_classifications')
+                    raster_hazard_classifications = project_list(
+                        convert_to_list(raster_hazard_classifications), 'key')
+
                 # exposure layer specific requirements
                 if layer_purpose == 'exposure':
                     exposure_types = layer_requirement['exposure_types']
                     exposure_types = project_list(
                         convert_to_list(exposure_types), 'key')
+
+                    exposure_units = layer_requirement['exposure_units']
+                    exposure_units = project_list(
+                        convert_to_list(exposure_units), 'key')
 
                 keyword = keywords[layer_purpose]
                 if layer_mode and keyword.get('layer_mode') not in layer_mode:
@@ -325,26 +340,6 @@ class Registry(object):
                         layer_geometries):
                     requirement_met = False
                     continue
-
-                layer_units_classes = []
-                layer_units_classes += keyword.get('continuous_hazard_unit')
-                layer_units_classes += keyword.get(
-                    'vector_hazard_classification')
-                layer_units_classes += keyword.get(
-                    'raster_hazard_classification')
-                layer_units_classes += keyword.get(
-                    'exposure_unit')
-
-                # removing None
-                layer_units_classes = [
-                    x for x in layer_units_classes if x is not None]
-
-                if units_classes:
-                    units_classes_found = [
-                        i for i in layer_units_classes if i in units_classes]
-                    if not units_classes_found:
-                        requirement_met = False
-                        continue
 
                 # hazard layer specific requirements
                 if layer_purpose == 'hazard':
@@ -358,10 +353,33 @@ class Registry(object):
                         requirement_met = False
                         continue
 
+                    if (continuous_hazard_units and keyword.get(
+                            'continuous_hazard_unit')
+                            not in continuous_hazard_units):
+                        requirement_met = False
+                        continue
+
+                    if (vector_hazard_classifications and keyword.get(
+                            'vector_hazard_classification')
+                            not in vector_hazard_classifications):
+                        requirement_met = False
+                        continue
+
+                    if (raster_hazard_classifications and keyword.get(
+                            'raster_hazard_classification')
+                            not in raster_hazard_classifications):
+                        requirement_met = False
+                        continue
+
                 # exposure layer specific requirements
                 if layer_purpose == 'exposure':
                     if (exposure_types and keyword.get('exposure') not in
                             exposure_types):
+                        requirement_met = False
+                        continue
+
+                    if (exposure_units and keyword.get('exposure_unit') not in
+                            exposure_units):
                         requirement_met = False
                         continue
 

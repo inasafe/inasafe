@@ -269,39 +269,50 @@ class TestRegistry(unittest.TestCase):
 
     def test_filter_by_keywords(self):
         """TestRegistry: Test filtering IF using hazard n exposure keywords."""
+        registry = Registry()
+        # impact_functions = registry.filter_by_keyword_string()
+        # message = 'Registry should returns matched impact functions. ' \
+        #           'Nothing returned instead. Please check registered IF.'
+        # self.assertTrue(len(impact_functions) > 0, message)
+
         # Using keywords string
         hazard_keywords = {
-            'subcategory': 'flood',
-            'units': 'wetdry',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'flood',
+            'hazard_category': 'hazard_scenario',
+            'vector_hazard_classification': 'wetdry_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'subcategory': 'structure',
-            'units': 'building_type',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure',
         }
-        registry = Registry()
+
         impact_functions = registry.filter_by_keyword_string(
             hazard_keywords, exposure_keywords)
         message = 'Registry should returns matched impact functions. ' \
                   'Nothing returned instead. Please check registered IF.'
         self.assertTrue(len(impact_functions) > 0, message)
 
+        for i in impact_functions:
+            print i.__name__
+
         for impact_function in impact_functions:
             result = impact_function.metadata().as_dict()[
-                'categories']['hazard']['subcategories']
-            result_list = [subcat.get('id') for subcat in result]
+                'layer_requirements']['hazard']['hazard_types']
+            result_list = [subcat.get('key') for subcat in result]
             expected = 'flood'
             message = 'Expecting flood hazard impact functions. Got %s ' \
                       'instead' % result_list[0]
             self.assertTrue(expected in result_list, message)
 
             result = impact_function.metadata().as_dict()[
-                'categories']['exposure']['subcategories']
-            result_list = [subcat.get('id') for subcat in result]
+                'layer_requirements']['exposure']['exposure_types']
+            result_list = [subcat.get('key') for subcat in result]
             expected = 'structure'
             message = 'Expecting structure exposure impact functions. ' \
                       'Got %s instead' % result_list[0]
