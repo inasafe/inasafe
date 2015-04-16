@@ -3,6 +3,6 @@ title: Flood Polygon
 hazard: flood
 field: FLOODPRONE
 value_map: {'dry': ['NO'], 'wet': ['YES']}
-vector_hazard_classification: wetdry_vector_hazard_classes
+vector_hazard_classification: flood_vector_hazard_classes
 layer_purpose: hazard
 layer_mode: classified
