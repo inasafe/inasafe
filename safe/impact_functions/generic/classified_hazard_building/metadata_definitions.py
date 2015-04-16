@@ -24,7 +24,8 @@ from safe.new_definitions import (
     hazard_all,
     hazard_category_hazard_zone,
     exposure_structure,
-    all_raster_hazard_classes
+    all_raster_hazard_classes,
+    hazard_category_hazard_scenario
 )
 
 __author__ = 'lucernae'
@@ -95,7 +96,10 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_categories': [
+                        hazard_category_hazard_zone,
+                        hazard_category_hazard_scenario
+                    ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [],

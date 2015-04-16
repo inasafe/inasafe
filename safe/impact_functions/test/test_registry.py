@@ -317,3 +317,28 @@ class TestRegistry(unittest.TestCase):
             message = 'Expecting structure exposure impact functions. ' \
                       'Got %s instead' % result_list[0]
             self.assertTrue(expected in result_list, message)
+
+    def test_filter_by_keywords_dev(self):
+        """TestRegistry: Test filtering IF using hazard n exposure keywords."""
+        registry = Registry()
+
+        # Using keywords string
+        hazard_keywords = {'continuous_hazard_unit': 'metres',
+                           'hazard': 'flood',
+                           'hazard_category': 'hazard_scenario',
+                           'layer_geometry': 'raster',
+                           'layer_mode': 'continuous',
+                           'layer_purpose': 'hazard',
+                           'title': 'Jakarta flood like 2007 with structural improvements'}
+        exposure_keywords = {'exposure': 'population',
+                             'exposure_unit': 'count',
+                             'layer_geometry': 'raster',
+                             'layer_mode': 'continuous',
+                             'layer_purpose': 'exposure',
+                             'title': 'Population'}
+
+        impact_functions = registry.filter_by_keyword_string(
+            hazard_keywords, exposure_keywords)
+
+        for i in impact_functions:
+            print i.__name__

@@ -507,8 +507,10 @@ class TestDock(TestCase):
             test_data_path('exposure', 'pop_binary_raster_20_20.asc')
         ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
-        self.assertTrue(hazard_layer_count == 2)
-        self.assertTrue(exposure_layer_count == 1)
+        message = 'Expecting 2 hazard layers, got %s' % hazard_layer_count
+        self.assertTrue(hazard_layer_count == 2, message)
+        message = 'Expecting 1 exposure layer, got %s' % exposure_layer_count
+        self.assertTrue(exposure_layer_count == 1, message)
         # we will have 2 impact function available right now:
         # - ContinuousHazardPopulationFunction, titled: 'Be impacted'
         # - FloodEvacuationRasterHazardFunction, titled: 'Need evacuation'

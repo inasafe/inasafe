@@ -940,16 +940,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # the layer will be ignored.
             # noinspection PyBroadException
             try:
-                category = self.keyword_io.read_keywords(layer, 'category')
+                layer_purpose = self.keyword_io.read_keywords(
+                    layer, 'layer_purpose')
             except:  # pylint: disable=W0702
                 # continue ignoring this layer
                 continue
 
-            if category == 'hazard':
+            if layer_purpose == 'hazard':
                 add_ordered_combo_item(self.cboHazard, title, source)
-            elif category == 'exposure':
+            elif layer_purpose == 'exposure':
                 add_ordered_combo_item(self.cboExposure, title, source)
-            elif category == 'postprocessing':
+            elif layer_purpose == 'aggregation':
                 add_ordered_combo_item(self.cboAggregation, title, source)
 
         self.unblock_signals()
@@ -990,27 +991,26 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         hazard_keywords = self.keyword_io.read_keywords(hazard_layer)
         # We need to add the layer type to the returned keywords
         if hazard_layer.type() == QgsMapLayer.VectorLayer:
-            hazard_keywords['layer_type'] = 'vector'
-            hazard_keywords['data_type'] = vector_geometry_string(hazard_layer)
+            hazard_keywords['layer_geometry'] = vector_geometry_string(
+                hazard_layer)
         elif hazard_layer.type() == QgsMapLayer.RasterLayer:
-            hazard_keywords['layer_type'] = 'raster'
-            if hazard_keywords.get('data_type') is None:
-                hazard_keywords['data_type'] = 'continuous'
+            hazard_keywords['layer_geometry'] = 'raster'
 
         # noinspection PyTypeChecker
         exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
         # We need to add the layer type to the returned keywords
         if exposure_layer.type() == QgsMapLayer.VectorLayer:
-            exposure_keywords['layer_type'] = 'vector'
-            exposure_keywords['data_type'] = vector_geometry_string(
+            exposure_keywords['layer_geometry'] = vector_geometry_string(
                 exposure_layer)
         elif exposure_layer.type() == QgsMapLayer.RasterLayer:
-            exposure_keywords['layer_type'] = 'raster'
-            if exposure_keywords.get('data_type') is None:
-                exposure_keywords['data_type'] = 'continuous'
+            exposure_keywords['layer_geometry'] = 'raster'
 
         # Find out which functions can be used with these layers
         try:
+            from pprint import pprint
+            pprint(hazard_keywords)
+            pprint(exposure_keywords)
+            print '---------------------------------------------------------'
             impact_functions = self.impact_function_manager.filter_by_keywords(
                 hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions

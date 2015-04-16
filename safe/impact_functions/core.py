@@ -119,10 +119,10 @@ def population_rounding(number):
 # Helpers for individual impact functions
 # --------------------------------------
 def get_hazard_layers(layers):
-    """Get list of layers that have category=='hazard'
+    """Get list of layers that have layer_purpose=='hazard'
     """
 
-    return extract_layers(layers, 'category', 'hazard')
+    return extract_layers(layers, 'layer_purpose', 'hazard')
 
 
 def get_hazard_layer(layers):
@@ -142,10 +142,10 @@ def get_hazard_layer(layers):
 
 
 def get_exposure_layers(layers):
-    """Get list of layers that have category=='exposure'
+    """Get list of layers that have layer_purpose=='exposure'
     """
 
-    return extract_layers(layers, 'category', 'exposure')
+    return extract_layers(layers, 'layer_purpose', 'exposure')
 
 
 def get_exposure_layer(layers):

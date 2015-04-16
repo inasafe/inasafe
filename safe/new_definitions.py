@@ -408,6 +408,7 @@ continuous_hazard_unit = {
     ]
 }
 
+continuous_hazard_unit_all = continuous_hazard_unit['types']
 
 # Vector Hazard Classification
 generic_vector_hazard_classes = {

@@ -47,16 +47,13 @@ class MEMORYSTATUSEX(ctypes.Structure):
 def verify(statement, message=None):
     """Verification of logical statement similar to assertions.
 
-    Input:
-      statement: expression
+    :param statement: Expression
+    :type statement: type, bool
 
-      message: error message in case statement evaluates as False
+    :param message: error message in case statement evaluates as False
+    :type message: str
 
-    Output:
-        None
-
-    Raises:
-        VerificationError in case statement evaluates to False
+    :raises: VerificationError
     """
 
     if bool(statement) is False:

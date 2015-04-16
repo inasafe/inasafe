@@ -29,8 +29,9 @@ from safe.new_definitions import (
     hazard_all,
     hazard_category_hazard_zone,
     count_exposure_unit,
-    unit_generic,
     exposure_population,
+    hazard_category_hazard_scenario,
+    continuous_hazard_unit_all
 )
 
 
@@ -90,9 +91,12 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_hazard_zone],
+                    'hazard_categories': [
+                        hazard_category_hazard_zone,
+                        hazard_category_hazard_scenario
+                    ],
                     'hazard_types': hazard_all,
-                    'continuous_hazard_units': [unit_generic],  # (IS) not sure
+                    'continuous_hazard_units': continuous_hazard_unit_all,
                     'vector_hazard_classifications': [],
                     'raster_hazard_classifications': []
                 },

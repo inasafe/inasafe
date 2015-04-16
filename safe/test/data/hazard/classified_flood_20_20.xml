@@ -171,8 +171,8 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[hazard_category: hazard_scenario
-raster_hazard_classification: wetdry_vector_hazard_classes
+<![CDATA[hazard_category: hazard_zone
+raster_hazard_classification: flood_raster_hazard_classes
 title: Classified Flood
 hazard: flood
 source: Akbar Gumbira

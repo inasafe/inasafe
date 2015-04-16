@@ -16,7 +16,8 @@ from safe.impact_functions.core import extract_layers
 from safe.common.utilities import unique_filename, verify
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import replace_accentuated_characters
-from safe.engine.utilities import REQUIRED_KEYWORDS
+from safe.engine.utilities import (
+    REQUIRED_EXPOSURE_KEYWORDS, REQUIRED_HAZARD_KEYWORDS, REQUIRED_KEYWORDS)
 
 
 # The LOGGER is intialised in utilities.py by init
@@ -42,69 +43,71 @@ def check_data_integrity(layer_objects):
     """
 
     # Link to documentation
-    manpage = ('http://risiko_dev.readthedocs.org/en/latest/usage/'
-               'plugins/development.html')
-    instructions = ('Please add keywords as <keyword>:<value> pairs '
-                    ' in the .keywords file. For more information '
-                    'please read the sections on impact functions '
-                    'and keywords in the manual: %s' % manpage)
+    inasafe_url = 'http://inasafe.org/en/developer-docs/'
+    instructions = (
+        'Please add keywords as <keyword>:<value> pairs  in the .xml '
+        'file. For more information please read the sections on impact '
+        'functions and keywords in the InaSAFE website: %s' % inasafe_url)
 
-    # Set default values for projection and geotransform.
+    # Set default values for projection and geo_transform.
     # Enforce DEFAULT (WGS84).
     # Choosing 'None' will use value of first layer.
     reference_projection = Projection(DEFAULT_PROJECTION)
-    geotransform = None
+    geo_transform = None
 
     for layer in layer_objects:
-
         # Check that critical keywords exist and are non empty
         keywords = layer.get_keywords()
-        for kw in REQUIRED_KEYWORDS:
-            msg = ('Layer %s did not have required keyword "%s". '
-                   '%s' % (layer.name, kw, instructions))
-            verify(kw in keywords, msg)
+        for keyword in REQUIRED_KEYWORDS:
+            message = (
+                'Layer %s did not have required keyword "%s". %s' % (
+                    layer.name, keyword, instructions))
+            verify(keyword in keywords, message)
 
-            val = keywords[kw]
-            msg = ('No value found for keyword "%s" in layer %s. '
-                   '%s' % (kw, layer.name, instructions))
-            verify(val, msg)
+            value = keywords[keyword]
+            message = (
+                'No value found for keyword "%s" in layer %s. %s' % (
+                    keyword, layer.name, instructions))
+            verify(value, message)
+
+
 
         # Ensure that projection is consistent across all layers
         if reference_projection is None:
             reference_projection = layer.projection
         else:
-            msg = ('Projections in input layer %s is not as expected:\n'
+            message = ('Projections in input layer %s is not as expected:\n'
                    'projection: %s\n'
                    'default:    %s'
                    '' % (layer, layer.projection, reference_projection))
-            verify(reference_projection == layer.projection, msg)
+            verify(reference_projection == layer.projection, message)
 
         # FIXME (Ariel): Make this configurable by the frontend choice?
         # Relax tolerance requirements to have GeoNode compatibility
         # tolerance = 10e-12
         tolerance = 10e-7
 
-        # Ensure that geotransform and dimensions is consistent across
+        # Ensure that geo_transform and dimensions is consistent across
         # all *raster* layers
         if layer.is_raster:
-            if geotransform is None:
-                geotransform = layer.get_geotransform()
+            if geo_transform is None:
+                geo_transform = layer.get_geotransform()
             else:
-                msg = ('Geotransforms in input raster layers are different:\n'
-                       '%s\n%s' % (geotransform, layer.get_geotransform()))
-                verify(numpy.allclose(geotransform,
+                message = ('Geotransforms in input raster layers are different:\n'
+                       '%s\n%s' % (geo_transform, layer.get_geotransform()))
+                verify(numpy.allclose(geo_transform,
                                       layer.get_geotransform(),
-                                      rtol=tolerance), msg)
+                                      rtol=tolerance), message)
 
         # In case of vector layers, we just check that they are non-empty
         # FIXME (Ole): Not good as nasty error is raised in cases where
         # there are no buildings in the hazard area. Need to be more graceful
         # See e.g. shakemap dated 20120227190230
         if layer.is_vector:
-            msg = ('There are no vector data features. '
+            message = ('There are no vector data features. '
                    'Perhaps zoom out or pan to the study area '
                    'and try again')
-            verify(len(layer) > 0, msg)
+            verify(len(layer) > 0, message)
 
     # Check that arrays are aligned.
 
@@ -117,19 +120,19 @@ def check_data_integrity(layer_objects):
                 M = layer.rows
                 N = layer.columns
 
-            msg = ('Rasters are not aligned!\n'
+            message = ('Rasters are not aligned!\n'
                    'Raster %s has %i rows but raster %s has %i rows\n'
                    'Refer to issue #102' % (layer.get_name(),
                                             layer.rows,
                                             refname, M))
-            verify(layer.rows == M, msg)
+            verify(layer.rows == M, message)
 
-            msg = ('Rasters are not aligned!\n'
+            message = ('Rasters are not aligned!\n'
                    'Raster %s has %i columns but raster %s has %i columns\n'
                    'Refer to issue #102' % (layer.get_name(),
                                             layer.columns,
                                             refname, N))
-            verify(layer.columns == N, msg)
+            verify(layer.columns == N, message)
 
 
 def calculate_impact(layers,
@@ -206,7 +209,7 @@ def calculate_impact(layers,
     # NOTE: We assume here that there is only one of each
     #       If there are more only the first one is used
     for cat in ['hazard', 'exposure']:
-        L = extract_layers(layers, 'category', cat)
+        L = extract_layers(layers, 'layer_purpose', cat)
         keywords = L[0].get_keywords()
         not_specified = tr('Not specified')
         if 'title' in keywords:
@@ -219,8 +222,10 @@ def calculate_impact(layers,
         else:
             source = not_specified
 
-        if 'subcategory' in keywords:
-            subcategory = keywords['subcategory']
+        if 'hazard' in keywords:
+            subcategory = keywords['hazard']
+        elif 'exposure' in keywords:
+            subcategory = keywords['exposure']
         else:
             subcategory = not_specified
 
