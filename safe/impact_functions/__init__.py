@@ -29,10 +29,8 @@ from safe.impact_functions.inundation.flood_raster_road_qgis\
     .impact_function import FloodRasterRoadsExperimentalFunction
 from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
     .impact_function import FloodRasterRoadsGdalFunction
-from safe.impact_functions.inundation.flood_vector_osm_building_impact\
-    .impact_function import FloodVectorBuildingFunction
-from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
-    .impact_function import FloodPolygonBuildingQgisFunction
+from safe.impact_functions.inundation.flood_vector_building_impact\
+    .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.inundation.flood_polygon_roads\
     .impact_function import FloodVectorRoadsExperimentalFunction
 from safe.impact_functions.inundation.\
@@ -58,8 +56,7 @@ def register_impact_functions():
     """Register all the impact functions available."""
     impact_function_registry = ImpactFunctionManager().registry
     # Inundation IF's
-    impact_function_registry.register(FloodVectorBuildingFunction)
-    impact_function_registry.register(FloodPolygonBuildingQgisFunction)
+    impact_function_registry.register(FloodPolygonBuildingFunction)
     impact_function_registry.register(FloodVectorRoadsExperimentalFunction)
     impact_function_registry.register(FloodEvacuationVectorHazardFunction)
     impact_function_registry.register(FloodEvacuationRasterHazardFunction)
