@@ -25,6 +25,7 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.utilities.i18n import tr
 from safe.new_definitions import (
     layer_mode_classified,
+    layer_mode_continuous,
     layer_geometry_polygon,
     layer_geometry_raster,
     hazard_flood,
@@ -100,7 +101,7 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                     'raster_hazard_classifications': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
                     'exposure_units': [count_exposure_unit]

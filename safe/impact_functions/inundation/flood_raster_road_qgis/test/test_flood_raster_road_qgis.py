@@ -71,17 +71,19 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'metres_depth',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'hazard': 'flood',
+            'hazard_category': 'hazard_scenario',
+            'continuous_hazard_unit': 'metres'
         }
 
         exposure_keywords = {
-            'subcategory': 'road',
-            'unit': 'road_type',
-            'layer_type': 'vector',
-            'data_type': 'line'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'line',
+            'exposure': 'road'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
