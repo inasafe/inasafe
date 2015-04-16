@@ -80,7 +80,7 @@ class TestFloodPolygonBuildingQgis(unittest.TestCase):
             'layer_geometry': 'polygon',
             'hazard': 'flood',
             'hazard_category': 'hazard_scenario',
-            'vector_hazard_classification': 'wetdry_vector_hazard_classes'
+            'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
         exposure_keywords = {

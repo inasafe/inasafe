@@ -24,7 +24,7 @@ from safe.new_definitions import (
     hazard_flood,
     hazard_category_hazard_scenario,
     exposure_structure,
-    wetdry_vector_hazard_classes
+    flood_vector_hazard_classes
 )
 
 
@@ -72,7 +72,7 @@ class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
                     'hazard_types': [hazard_flood],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
-                        wetdry_vector_hazard_classes],
+                        flood_vector_hazard_classes],
                     'raster_hazard_classifications': []
                 },
                 'exposure': {

@@ -490,9 +490,9 @@ volcano_vector_hazard_classes = {
     ]
 }
 
-wetdry_vector_hazard_classes = {
-    'key': 'wetdry_vector_hazard_classes',
-    'name': tr('wet / dry'),
+flood_vector_hazard_classes = {
+    'key': 'flood_vector_hazard_classes',
+    'name': tr('flood vector hazard classes'),
     'description': tr(
         'This is a binary description for an area. The area is either '
         '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
@@ -530,16 +530,21 @@ vector_hazard_classification = {
     'types': [
         generic_vector_hazard_classes,
         volcano_vector_hazard_classes,
-        wetdry_vector_hazard_classes
+        flood_vector_hazard_classes
     ]
 }
+
+all_vector_hazard_classes = vector_hazard_classification['types']
 
 # Raster Hazard Classification
 flood_raster_hazard_classes = {
     'key': 'flood_raster_hazard_classes',
     'name': tr('flood raster hazard classes'),
     'description': tr(
-        'TBA'),
+        'This is a binary description for an area. The area is either '
+        '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
+        'by flood water). This unit does not describe how <b>wet</b> or '
+        '<b>dry</b> an area is.'),
     'default_class': 'dry',  # unclassified value will go to this class
     'classes': [
         {
@@ -634,6 +639,8 @@ raster_hazard_classification = {
         tsunami_raster_hazard_classes
     ]
 }
+
+all_raster_hazard_classes = raster_hazard_classification['types']
 
 # Exposure Unit
 count_exposure_unit = {
