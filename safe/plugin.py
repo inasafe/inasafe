@@ -34,6 +34,7 @@ from PyQt4.QtCore import (
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox, QWidget
 
+from safe.common.version import release_status
 from safe.common.exceptions import (
     TranslationLoadError,
     NoKeywordsFoundError,
@@ -450,13 +451,14 @@ class Plugin(object):
         self.add_action(self.action_extent_selector)
 
         # --------------------------------------
-        # Create action for adding layers if developer mode is on
+        # Create action for adding layers if not final release and developer
+        # mode is on
         # --------------------------------------
+        final_release = release_status() == 'final'
         settings = QSettings()
         self.developer_mode = settings.value(
             'inasafe/developer_mode', False, type=bool)
-
-        if self.developer_mode:
+        if not final_release and self.developer_mode:
             icon = resources_path('img', 'icons', 'add-test-layers.svg')
             self.action_add_layers = QAction(
                 QIcon(icon),
