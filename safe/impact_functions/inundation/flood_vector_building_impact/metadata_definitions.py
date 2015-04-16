@@ -28,7 +28,7 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.utilities.i18n import tr
 
 
-class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
+class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
     """Metadata for Flood Vector on Building Impact Function using QGIS.
 
     .. versionadded:: 2.1
@@ -49,10 +49,10 @@ class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'FloodPolygonBuildingQgis',
-            'name': tr('Flood Polygon Building QGIS Function'),
-            'impact': tr('Be-flooded (QGIS)'),
-            'title': tr('Be flooded (QGIS)'),
+            'id': 'FloodPolygonBuildingFunction',
+            'name': tr('Flood Polygon Building Function'),
+            'impact': tr('Be-flooded'),
+            'title': tr('Be flooded'),
             'function_type': 'qgis2.0',
             'author': 'Dmitry Kolesov',
             'date_implemented': 'N/A',
@@ -84,10 +84,10 @@ class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
                 ('building_type_field', 'TYPE'),
                 # This field of the  hazard layer contains information
                 # about inundated areas
-                ('affected_field', 'affected'),
+                ('affected_field', 'FLOODPRONE'),
                 # This value in 'affected_field' of the hazard layer
                 # marks the areas as inundated
-                ('affected_value', '1'),
+                ('affected_value', 'YES'),
 
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())

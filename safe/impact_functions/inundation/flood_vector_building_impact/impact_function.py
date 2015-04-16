@@ -23,8 +23,8 @@ from qgis.core import (
 from PyQt4.QtCore import QVariant
 
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.inundation.flood_vector_building_impact_qgis.\
-    metadata_definitions import FloodPolygonBuildingQgisMetadata
+from safe.impact_functions.inundation.flood_vector_building_impact.\
+    metadata_definitions import FloodPolygonBuildingFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError
@@ -32,16 +32,16 @@ from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
 
-class FloodPolygonBuildingQgisFunction(
+class FloodPolygonBuildingFunction(
         ImpactFunction,
         BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
-    """Simple experimental impact function for inundation (polygon-polygon)."""
+    """Impact function for inundation (polygon-polygon)."""
 
-    _metadata = FloodPolygonBuildingQgisMetadata()
+    _metadata = FloodPolygonBuildingFunctionMetadata()
 
     def __init__(self):
-        super(FloodPolygonBuildingQgisFunction, self).__init__()
+        super(FloodPolygonBuildingFunction, self).__init__()
 
     def notes(self):
         """Return the notes section of the report.
@@ -59,7 +59,7 @@ class FloodPolygonBuildingQgisFunction(
             {
                 'content': tr(
                     'Buildings are said to be inundated when in a region with '
-                    'an Affected Field Parameter "%s"(=%s).') % (
+                    'field "%s" = "%s" .') % (
                         affected_field, affected_value)
             }
         ]
@@ -87,33 +87,48 @@ class FloodPolygonBuildingQgisFunction(
         hazard_layer = self.hazard    # Flood
         exposure_layer = self.exposure  # Roads
 
+        # Prepare Hazard Layer
         hazard_layer = hazard_layer.get_layer()
-        h_provider = hazard_layer.dataProvider()
-        affected_field_index = h_provider.fieldNameIndex(affected_field)
+        hazard_provider = hazard_layer.dataProvider()
+
+        # Check affected field exists in the hazard layer
+        affected_field_index = hazard_provider.fieldNameIndex(affected_field)
         if affected_field_index == -1:
-            message = tr('''Parameter "Affected Field"(='%s')
-                is not present in the
-                attribute table of the hazard layer.''' % (affected_field, ))
+            message = tr('Field "%s" is not present in the attribute table of '
+                         'the hazard layer. Please change the Affected Field '
+                         'parameter in the IF Option.') % affected_field
             raise GetDataError(message)
 
+        # Prepare Exposure Layer
         exposure_layer = exposure_layer.get_layer()
         srs = exposure_layer.crs().toWkt()
-        e_provider = exposure_layer.dataProvider()
-        fields = e_provider.fields()
-        # If target_field does not exist, add it:
-        if fields.indexFromName(target_field) == -1:
-            e_provider.addAttributes(
-                [QgsField(target_field, QVariant.Int)])
-        target_field_index = e_provider.fieldNameIndex(target_field)
-        fields = e_provider.fields()
+        exposure_provider = exposure_layer.dataProvider()
+        exposure_fields = exposure_provider.fields()
 
-        # Create layer for store the lines from E and extent
+        # Check building_type_field exists in exposure layer
+        building_type_field_index = exposure_provider.fieldNameIndex(
+            building_type_field)
+        if building_type_field_index == -1:
+            message = tr('Field "%s" is not present in the attribute table of '
+                         'the exposure layer. Please change the Building Type '
+                         'Field parameter in the IF Option.') % (
+                building_type_field)
+            raise GetDataError(message)
+
+        # If target_field does not exist, add it:
+        if exposure_fields.indexFromName(target_field) == -1:
+            exposure_provider.addAttributes(
+                [QgsField(target_field, QVariant.Int)])
+        target_field_index = exposure_provider.fieldNameIndex(target_field)
+        exposure_fields = exposure_provider.fields()
+
+        # Create layer to store the lines from E and extent
         building_layer = QgsVectorLayer(
             'Polygon?crs=' + srs, 'impact_buildings', 'memory')
         building_provider = building_layer.dataProvider()
 
         # Set attributes
-        building_provider.addAttributes(fields.toList())
+        building_provider.addAttributes(exposure_fields.toList())
         building_layer.startEditing()
         building_layer.commitChanges()
 
@@ -126,24 +141,23 @@ class FloodPolygonBuildingQgisFunction(
         #   1) Filter from H inundated features
         #   2) Mark buildings as inundated (1) or not inundated (0)
 
-        affected_field_type = h_provider.fields()[
+        affected_field_type = hazard_provider.fields()[
             affected_field_index].typeName()
         if affected_field_type in ['Real', 'Integer']:
             affected_value = float(affected_value)
 
-        h_data = hazard_layer.getFeatures(request)
+        hazard_data = hazard_layer.getFeatures(request)
         hazard_poly = None
-        for mpolygon in h_data:
-            attributes = mpolygon.attributes()
-            if attributes[affected_field_index] != affected_value:
+        for feature in hazard_data:
+            record = feature.attributes()
+            if record[affected_field_index] != affected_value:
                 continue
             if hazard_poly is None:
-                hazard_poly = QgsGeometry(mpolygon.geometry())
+                hazard_poly = QgsGeometry(feature.geometry())
             else:
                 # Make geometry union of inundated polygons
-
-                # But some mpolygon.geometry() could be invalid, skip them
-                tmp_geometry = hazard_poly.combine(mpolygon.geometry())
+                # But some polygon.geometry() could be invalid, skip them
+                tmp_geometry = hazard_poly.combine(feature.geometry())
                 try:
                     if tmp_geometry.isGeosValid():
                         hazard_poly = tmp_geometry
@@ -152,22 +166,21 @@ class FloodPolygonBuildingQgisFunction(
 
         if hazard_poly is None:
             message = tr(
-                '''There are no objects in the hazard layer with "Affected
-                value"='%s'. Please check the value or use other extent.''' %
-                (affected_value, ))
+                'There are no objects in the hazard layer with Affected '
+                'value=%s. Please check the value or use other extent.') % (
+                affected_value)
             raise GetDataError(message)
 
-        e_data = exposure_layer.getFeatures(request)
-        for feat in e_data:
-            building_geom = feat.geometry()
-            attributes = feat.attributes()
+        exposure_data = exposure_layer.getFeatures(request)
+        for feature in exposure_data:
+            building_geom = feature.geometry()
+            record = feature.attributes()
             l_feat = QgsFeature()
             l_feat.setGeometry(building_geom)
-            l_feat.setAttributes(attributes)
+            l_feat.setAttributes(record)
             if hazard_poly.intersects(building_geom):
                 l_feat.setAttribute(target_field_index, 1)
             else:
-
                 l_feat.setAttribute(target_field_index, 0)
             (_, __) = building_layer.dataProvider().addFeatures([l_feat])
         building_layer.updateExtents()
@@ -181,8 +194,8 @@ class FloodPolygonBuildingQgisFunction(
         building_type_field_index = building_layer.fieldNameIndex(
             building_type_field)
         for building in buildings_data:
-            attributes = building.attributes()
-            building_type = attributes[building_type_field_index]
+            record = building.attributes()
+            building_type = record[building_type_field_index]
             if building_type in [None, 'NULL', 'null', 'Null']:
                 building_type = 'Unknown type'
             if building_type not in self.buildings:
@@ -193,7 +206,7 @@ class FloodPolygonBuildingQgisFunction(
                             (tr('Buildings Affected'), 0)])
             self.buildings[building_type] += 1
 
-            if attributes[target_field_index] == 1:
+            if record[target_field_index] == 1:
                 self.affected_buildings[tr('Flooded')][building_type][
                     tr('Buildings Affected')] += 1
 

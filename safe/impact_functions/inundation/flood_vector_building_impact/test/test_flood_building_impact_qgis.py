@@ -22,8 +22,8 @@ from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
-from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
-    .impact_function import FloodPolygonBuildingQgisFunction
+from safe.impact_functions.inundation.flood_vector_building_impact\
+    .impact_function import FloodPolygonBuildingFunction
 from safe.test.utilities import (
     get_qgis_app,
     test_data_path)
@@ -32,16 +32,16 @@ from safe.utilities.qgis_layer_wrapper import QgisWrapper
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodPolygonBuildingQgis(unittest.TestCase):
+class TestFloodPolygonBuildingFunction(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(FloodPolygonBuildingQgisFunction)
+        registry.register(FloodPolygonBuildingFunction)
 
     def test_run(self):
-        function = FloodPolygonBuildingQgisFunction.instance()
+        function = FloodPolygonBuildingFunction.instance()
 
         hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
         exposure_path = test_data_path('exposure', 'buildings.shp')
@@ -96,7 +96,7 @@ class TestFloodPolygonBuildingQgis(unittest.TestCase):
 
         retrieved_if = impact_functions[0].metadata().as_dict()['id']
         expected = ImpactFunctionManager().get_function_id(
-            FloodPolygonBuildingQgisFunction)
+            FloodPolygonBuildingFunction)
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
