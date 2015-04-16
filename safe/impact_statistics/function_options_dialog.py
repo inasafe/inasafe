@@ -198,14 +198,8 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         :raises: None
         """
-        LOGGER.debug('build_widget:')
-        LOGGER.debug(form_layout)
-        LOGGER.debug(name)
-        LOGGER.debug(parameter_value)
         input_values = None
         if parameter_value is not None:
-            LOGGER.debug('parameter_value type:')
-            LOGGER.debug(type(parameter_value))
             # create and add widget to the dialog box
             # default tab's layout
             parameter_container = ParameterContainer(parameter_value)
@@ -214,8 +208,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             # bind parameter
             input_values = parameter_container.get_parameters
             self.values[name] = input_values
-            # dont have to add tab since gui design has it in
-            # self.tabWidget.addTab(main_widget, self.tr('Postprocessors'))
         else:
             LOGGER.debug('build_widget : parameter is None')
             LOGGER.debug(parameter_value)

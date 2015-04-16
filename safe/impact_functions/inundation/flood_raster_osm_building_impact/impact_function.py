@@ -108,7 +108,7 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         exposure_layer = self.exposure  # Building locations
 
         # Determine attribute name for hazard levels
-        hazard_attribute = 'depth'
+        hazard_attribute = self.parameters['hazard_level_name'].value
 
         # Interpolate hazard level to building locations
         interpolated_layer = assign_hazard_values_to_exposure_data(
