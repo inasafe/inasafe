@@ -81,7 +81,8 @@ class TestRegistry(unittest.TestCase):
             'PAG Fatality Function',
             'Volcano Point Building Impact Function',
             'Volcano Polygon Building Impact Function',
-            'Volcano Polygon Population Impact Function']
+            'Volcano Polygon Population Impact Function',
+            'Volcano Point Population Impact Function']
         self.assertTrue(
             len(impact_functions) == len(expected) and
             all(impact_functions.count(i) == expected.count(i) for i in

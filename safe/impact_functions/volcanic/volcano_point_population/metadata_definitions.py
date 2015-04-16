@@ -14,7 +14,7 @@ from safe.common.utilities import OrderedDict
 from safe.definitions import (
     hazard_volcano,
     unit_volcano_categorical,
-    layer_vector_polygon,
+    layer_vector_point,
     layer_raster_continuous,
     exposure_population,
     unit_people_per_pixel,
@@ -31,8 +31,8 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.utilities.i18n import tr
 
 
-class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
-    """Metadata for VolcanoPolygonPopulationFunctionMetadata.
+class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
+    """Metadata for VolcanoPointPopulationFunctionMetadata.
 
     .. versionadded:: 2.1
 
@@ -52,16 +52,15 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'VolcanoPolygonPopulationFunction',
-            'name': tr('Volcano Polygon Population Impact Function'),
+            'id': 'VolcanoPointPopulationFunction',
+            'name': tr('Volcano Point Population Impact Function'),
             'impact': tr('Need evacuation'),
             'title': tr('Need evacuation'),
             'function_type': 'old-style',
             'author': 'AIFDR',
             'date_implemented': 'N/A',
             'hazard_input': tr(
-                'A hazard vector layer must be a polygon that has a specific '
-                'hazard zone attribute.'),
+                'A point vector layer.'),
             'exposure_input': tr(
                 'An exposure raster layer where each cell represent '
                 'population count.'),
@@ -83,7 +82,7 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                     'subcategories': [hazard_volcano],
                     'units': [unit_volcano_categorical],
                     'layer_constraints': [
-                        layer_vector_polygon
+                        layer_vector_point
                     ]
                 },
                 'exposure': {
@@ -94,8 +93,8 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', 'KRB'),
+                # The radii
+                ('distance [km]', [3, 5, 10]),
                 # The attribute for name of the volcano in hazard layer
                 ('volcano name attribute', 'NAME'),
                 ('postprocessors', OrderedDict([

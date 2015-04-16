@@ -50,6 +50,8 @@ from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
     import VolcanoPolygonBuildingFunction
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .impact_function import VolcanoPolygonPopulationFunction
+from safe.impact_functions.volcanic.volcano_point_population\
+    .impact_function import VolcanoPointPopulationFunction
 
 
 def register_impact_functions():
@@ -76,4 +78,5 @@ def register_impact_functions():
     # Volcanic IF's
     impact_function_registry.register(VolcanoPointBuildingFunction)
     impact_function_registry.register(VolcanoPolygonBuildingFunction)
+    impact_function_registry.register(VolcanoPointPopulationFunction)
     impact_function_registry.register(VolcanoPolygonPopulationFunction)
