@@ -62,17 +62,19 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         """TestVolcanoPointBuildingFunction: Test filtering IF"""
         hazard_keywords = {
             'title': 'merapi',
-            'category': 'hazard',
-            'subcategory': 'volcano',
-            'layer_type': 'vector',
-            'data_type': 'point'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'point',
+            'hazard': 'volcano',
+            'hazard_category': 'hazard_zone',
+            'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'structure',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
