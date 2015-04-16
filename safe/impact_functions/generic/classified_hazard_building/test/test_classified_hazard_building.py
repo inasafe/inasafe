@@ -72,18 +72,20 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'classes',
-            'layer_type': 'raster',
-            'data_type': 'classified'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'raster',
+            'hazard': 'flood',
+            'hazard_category': 'hazard_zone',
+            'raster_hazard_classification': 'generic_raster_hazard_classes'
         }
 
         exposure_keywords = {
-            'subcategory': 'structure',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure',
         }
-
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \

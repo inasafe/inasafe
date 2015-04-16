@@ -270,10 +270,10 @@ class TestRegistry(unittest.TestCase):
     def test_filter_by_keywords(self):
         """TestRegistry: Test filtering IF using hazard n exposure keywords."""
         registry = Registry()
-        # impact_functions = registry.filter_by_keyword_string()
-        # message = 'Registry should returns matched impact functions. ' \
-        #           'Nothing returned instead. Please check registered IF.'
-        # self.assertTrue(len(impact_functions) > 0, message)
+        impact_functions = registry.filter_by_keyword_string()
+        message = 'Registry should returns matched impact functions. ' \
+                  'Nothing returned instead. Please check registered IF.'
+        self.assertTrue(len(impact_functions) > 0, message)
 
         # Using keywords string
         hazard_keywords = {
