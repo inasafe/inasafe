@@ -128,6 +128,10 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             else:
                 self.build_widget(scroll_layout, key, value)
 
+        scroll_layout.addStretch()
+
+
+
     def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab.
 
@@ -177,6 +181,8 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             values[label] = input_values
 
         self.values['postprocessors'] = values
+        # spacer needs to be added last
+        scroll_layout.addStretch()
 
     def build_widget(self, form_layout, name, parameter_value):
         """Create a new form element dynamically based from key_value type.
