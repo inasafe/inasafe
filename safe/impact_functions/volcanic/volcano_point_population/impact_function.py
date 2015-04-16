@@ -35,7 +35,7 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 class VolcanoPointPopulationFunction(ImpactFunction):
-    """Impact Function for Volcano Point on Building."""
+    """Impact Function for Volcano Point on Population."""
 
     _metadata = VolcanoPointPopulationFunctionMetadata()
 
@@ -75,7 +75,7 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         name_attribute = self.parameters['volcano name attribute']
 
         # Identify hazard and exposure layers
-        hazard_layer = self.hazard  # Volcano KRB
+        hazard_layer = self.hazard
         exposure_layer = self.exposure
 
         # Input checks
@@ -260,7 +260,7 @@ class VolcanoPointPopulationFunction(ImpactFunction):
                           style_type='graduatedSymbol')
 
         # For printing map purpose
-        map_title = tr('People affected by volcanic hazard zone')
+        map_title = tr('People affected by the buffered point volcano')
         legend_notes = tr('Thousand separator is represented by  %s' %
                           get_thousand_separator())
         legend_units = tr('(people per cell)')
@@ -271,7 +271,7 @@ class VolcanoPointPopulationFunction(ImpactFunction):
             data=new_data_table,
             projection=hazard_layer.get_projection(),
             geometry=hazard_layer.get_geometry(as_geometry_objects=True),
-            name=tr('People affected by volcanic hazard zone'),
+            name=tr('People affected by the buffered point volcano'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
                       'target_field': self.target_field,

@@ -24,7 +24,7 @@ from safe.storage.core import read_layer
 
 
 class TestVolcanoPointPopulationFunction(unittest.TestCase):
-    """Test for Volcano Polygon on Population Impact Function."""
+    """Test for Volcano Point on Population Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
@@ -32,7 +32,7 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
         registry.register(VolcanoPointPopulationFunction)
 
     def test_run(self):
-        """TestVolcanoPolygonPopulationFunction: Test running the IF."""
+        """TestVolcanoPointPopulationFunction: Test running the IF."""
         merapi_point_path = test_data_path('hazard', 'volcano_point.shp')
         population_path = test_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
