@@ -21,10 +21,8 @@ import unittest
 import inspect
 
 from safe.impact_functions import register_impact_functions
-from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
-    .impact_function import FloodPolygonBuildingQgisFunction
-from safe.impact_functions.inundation.flood_vector_osm_building_impact\
-    .impact_function import FloodVectorBuildingFunction
+from safe.impact_functions.inundation.flood_vector_building_impact\
+    .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.registry import Registry
 from safe.definitions import (
     unit_wetdry,
@@ -47,14 +45,14 @@ class TestRegistry(unittest.TestCase):
                   'functions exists instead' % len(registry.impact_functions)
         self.assertEqual(0, len(registry.impact_functions), message)
 
-        registry.register(FloodPolygonBuildingQgisFunction)
+        registry.register(FloodPolygonBuildingFunction)
         message = 'Expecting registry will contains 1 impact functions. %s ' \
                   'impact functions exists' % len(registry.impact_functions)
         self.assertEqual(1, len(registry.impact_functions), message)
 
-        result = registry.get_instance('FloodPolygonBuildingQgisFunction')\
+        result = registry.get_instance('FloodPolygonBuildingFunction')\
             .metadata().as_dict()['id']
-        expected = 'FloodPolygonBuildingQgis'
+        expected = 'FloodPolygonBuildingFunction'
         message = 'Expected registered impact function ID should be %s. ' \
                   'Got %s instead' % (expected, result)
         self.assertEqual(expected, result, message)
@@ -64,8 +62,7 @@ class TestRegistry(unittest.TestCase):
         registry = Registry()
         impact_functions = registry.list()
         expected = [
-            'Flood Vector Building Function',
-            'Flood Polygon Building QGIS Function',
+            'Flood Polygon Building Function',
             'Flood Vector Roads Experimental Function',
             'Flood Evacuation Vector Hazard Function',
             'Flood Evacuation Raster Hazard Function',
@@ -92,10 +89,10 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test we can get an impact function instance."""
         # Getting an IF instance using its class name
         registry = Registry()
-        class_name = 'FloodPolygonBuildingQgisFunction'
+        class_name = 'FloodPolygonBuildingFunction'
         impact_function = registry.get_instance(class_name)
         result = impact_function.__class__.__name__
-        message = 'Expecting FloodPolygonBuildingQgisFunction. Got %s ' \
+        message = 'Expecting FloodPolygonBuildingFunction. Got %s ' \
                   'instead.' % result
         self.assertEqual(class_name, result, message)
 
@@ -103,7 +100,7 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test we can get an impact function class."""
         # Getting an IF class using its class name
         registry = Registry()
-        expected = 'FloodPolygonBuildingQgisFunction'
+        expected = 'FloodPolygonBuildingFunction'
         impact_function = registry.get_class(expected)
 
         # Check that it should be a class, not an instance
@@ -119,16 +116,16 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test getting the impact functions by its metadata."""
         # Test getting the impact functions by 'id'
         registry = Registry()
-        impact_function_id = 'FloodPolygonBuildingQgis'
+        impact_function_id = 'FloodPolygonBuildingFunction'
         result = registry.filter_by_metadata('id', impact_function_id)
-        expected = [FloodPolygonBuildingQgisFunction]
+        expected = [FloodPolygonBuildingFunction]
         message = 'Expecting %s. Got %s instead' % (expected, result)
         self.assertEqual(expected, result, message)
 
         # Test getting the impact functions by 'name'
-        impact_function_name = 'Flood Polygon Building QGIS Function'
+        impact_function_name = 'Flood Polygon Building Function'
         result = registry.filter_by_metadata('name', impact_function_name)
-        expected = [FloodPolygonBuildingQgisFunction]
+        expected = [FloodPolygonBuildingFunction]
         message = 'Expecting %s. Got %s instead.' % (expected, result)
         self.assertEqual(expected, result, message)
 
@@ -148,9 +145,7 @@ class TestRegistry(unittest.TestCase):
 
         registry = Registry()
         impact_functions = registry.filter(hazard_metadata, exposure_metadata)
-        expected = [
-            FloodVectorBuildingFunction,
-            FloodPolygonBuildingQgisFunction]
+        expected = [FloodPolygonBuildingFunction]
         message = 'Expecting %s. Got %s instead' % (expected, impact_functions)
         self.assertEqual(expected, impact_functions, message)
 

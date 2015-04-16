@@ -17,6 +17,7 @@ from safe.common.utilities import OrderedDict
 from safe.definitions import (
     hazard_definition,
     hazard_flood,
+    hazard_tsunami,
     unit_wetdry,
     layer_vector_polygon,
     exposure_definition,
@@ -67,7 +68,7 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
             'categories': {
                 'hazard': {
                     'definition': hazard_definition,
-                    'subcategories': [hazard_flood],
+                    'subcategories': [hazard_flood, hazard_tsunami],
                     'units': [unit_wetdry],
                     'layer_constraints': [layer_vector_polygon]
                 },
