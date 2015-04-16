@@ -35,7 +35,8 @@ from safe.new_definitions import (
     count_exposure_unit,
     all_raster_hazard_classes,
     exposure_population,
-    hazard_category_hazard_scenario
+    hazard_category_hazard_scenario,
+    density_exposure_unit
 )
 
 
@@ -110,7 +111,8 @@ class ClassifiedHazardPopulationMetadata(ImpactFunctionMetadata):
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
-                    'exposure_units': [count_exposure_unit]
+                    'exposure_units': [
+                        count_exposure_unit, density_exposure_unit]
                 }
             },
             'parameters': OrderedDict([
