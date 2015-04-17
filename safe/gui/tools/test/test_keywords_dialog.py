@@ -347,7 +347,7 @@ class KeywordsDialogTest(unittest.TestCase):
         """Test set category works."""
         dialog = KeywordsDialog(PARENT, IFACE)
         dialog.reset(False)
-        dialog.set_category('hazard')
+        dialog.set_layer_purpose('hazard')
         expected_result = 'hazard'
         result = dialog.get_value_for_key('category')
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
@@ -471,7 +471,8 @@ class KeywordsDialogTest(unittest.TestCase):
         # Load existing keywords
         keywords = dialog.get_keywords()
         expected_keywords = {
-            u'category': u'postprocessing',
+            u'layer_purpose': u'aggregation',
+            u'layer_mode': u'classified',
             u'aggregation attribute': u'KAB_NAME',
             u'title': u'D\xedstr\xedct\'s of Jakarta',
             u'elderly ratio attribute': u'Global default',
@@ -493,7 +494,8 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog.cboYouthRatioAttribute.setCurrentIndex(1)
         keywords = dialog.get_keywords()
         expected_keywords = {
-            u'category': u'postprocessing',
+            u'layer_purpose': u'aggregation',
+            u'layer_mode': u'classified',
             u'aggregation attribute': u'KAB_NAME',
             u'title': u'D\xedstr\xedct\'s of Jakarta',
             u'elderly ratio attribute': u'Global default',
@@ -515,7 +517,8 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog.dsbYouthRatioDefault.setValue(0.99)
         keywords = dialog.get_keywords()
         expected_keywords = {
-            u'category': u'postprocessing',
+            u'layer_purpose': u'aggregation',
+            u'layer_mode': u'classified',
             u'aggregation attribute': u'KAB_NAME',
             u'title': u'D\xedstr\xedct\'s of Jakarta',
             u'elderly ratio attribute': u'Global default',

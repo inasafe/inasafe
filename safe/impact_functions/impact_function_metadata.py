@@ -698,3 +698,10 @@ class ImpactFunctionMetadata(object):
 
         """
         return cls.as_dict().get('name', '')
+
+    @classmethod
+    def get_layer_requirements_by_key(cls, key):
+        """Obtain all layer_requirements for a key.
+        :param key:
+        :return:
+        """
