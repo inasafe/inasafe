@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import OrderedDict
 from safe.definitions import (
     hazard_definition,
-    hazard_generic,
+    hazard_all,
     unit_classified,
     layer_vector_point,
     layer_vector_polygon,
@@ -75,7 +75,7 @@ class ClassifiedPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
             'categories': {
                 'hazard': {
                     'definition': hazard_definition,
-                    'subcategories': [hazard_generic],
+                    'subcategories': hazard_all,
                     'units': [unit_classified],
                     'layer_constraints': [layer_vector_polygon]
                 },

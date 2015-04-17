@@ -174,8 +174,8 @@
                 <inasafe_keywords>
 <![CDATA[category: hazard
 field: h_zone
-subcategory: generic
-title: Generic Classified Polygon
+subcategory: earthquake
+title: Earthquake Polygon
 unit: classes
 ]]>
 </inasafe_keywords>
