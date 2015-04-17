@@ -116,7 +116,6 @@ class ClassifiedPolygonBuildingFunction(
         # Hazard zone categories from hazard layer
         self.hazard_zones = list(
             set(hazard_layer.get_data(hazard_zone_attribute)))
-        self.hazard_zones.append(not_affected_value)
 
         self.buildings = {}
         self.affected_buildings = OrderedDict()
@@ -156,7 +155,9 @@ class ClassifiedPolygonBuildingFunction(
         impact_summary = impact_table = self.generate_html_report()
 
         # Create style
-        colours = color_ramp(len(self.hazard_zones))
+        categories = self.hazard_zones
+        categories.append(not_affected_value)
+        colours = color_ramp(len(categories))
         style_classes = []
 
         i = 0
