@@ -325,23 +325,29 @@ class TestRegistry(unittest.TestCase):
             self.assertTrue(expected in result_list, message)
 
     def test_filter_by_keywords_dev(self):
-        """TestRegistry: Test filtering IF using hazard n exposure keywords."""
+        """TestRegistry: Test filtering IF using hazard n exposure keywords.
+
+        Note (IS): I use this test to check the result of IF filtering only.
+        """
         registry = Registry()
 
         # Using keywords string
-        hazard_keywords = {'continuous_hazard_unit': 'metres',
-                           'hazard': 'flood',
-                           'hazard_category': 'hazard_scenario',
-                           'layer_geometry': 'raster',
-                           'layer_mode': 'continuous',
-                           'layer_purpose': 'hazard',
-                           'title': 'Jakarta flood like 2007 with structural improvements'}
-        exposure_keywords = {'exposure': 'population',
-                             'exposure_unit': 'count',
-                             'layer_geometry': 'raster',
-                             'layer_mode': 'continuous',
-                             'layer_purpose': 'exposure',
-                             'title': 'Population'}
+        hazard_keywords = {
+            'continuous_hazard_unit': 'metres',
+            'hazard': 'flood',
+            'hazard_category': 'hazard_scenario',
+            'layer_mode': 'continuous',
+            'layer_purpose': 'hazard',
+            'title': 'Jakarta flood like 2007 with structural improvements'
+        }
+        exposure_keywords = {
+            'exposure': 'population',
+            'exposure_unit': 'count',
+            'layer_geometry': 'raster',
+            'layer_mode': 'continuous',
+            'layer_purpose': 'exposure',
+            'title': 'Population'
+        }
 
         impact_functions = registry.filter_by_keyword_string(
             hazard_keywords, exposure_keywords)
