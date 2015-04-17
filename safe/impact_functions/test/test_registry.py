@@ -40,6 +40,9 @@ from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
     import VolcanoPolygonBuildingFunction
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
+from safe.impact_functions.generic.continuous_hazard_population\
+    .impact_function import ContinuousHazardPopulationFunction
+
 from safe.impact_functions.registry import Registry
 from safe.new_definitions import (
     layer_mode_classified,
@@ -167,9 +170,12 @@ class TestRegistry(unittest.TestCase):
         expected = [
             ITBFatalityFunction,
             EarthquakeBuildingFunction,
-            PAGFatalityFunction
+            PAGFatalityFunction,
+            ContinuousHazardPopulationFunction
         ]
-        message = 'Expecting %s. Got %s instead' % (expected, impact_functions)
+        message = 'Expecting \n%s.\n\nGot \n%s instead' % (
+            '\n'.join([x.__name__ for x in expected]),
+            '\n'.join([x.__name__ for x in impact_functions]))
         self.assertItemsEqual(expected, impact_functions, message)
 
         # Miss one metadata

@@ -316,7 +316,7 @@ class Aggregator(QtCore.QObject):
             self._send_message(message)
 
             # keywords are already complete
-            category = keywords['category']
+            layer_purpose = keywords['layer_purpose']
             aggregation_attribute = self.get_default_keyword('AGGR_ATTR_KEY')
             female_ratio = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
             female_ratio_key = self.get_default_keyword('FEMALE_RATIO_KEY')
@@ -328,8 +328,8 @@ class Aggregator(QtCore.QObject):
             elderly_ratio_key = self.get_default_keyword('ELDERLY_RATIO_KEY')
 
             if (aggregation_attribute in keywords and
-                    ('category' in keywords and
-                        category == 'postprocessing') and
+                    ('layer_purpose' in keywords and
+                        layer_purpose == 'aggregation') and
                     (female_ratio in keywords and (
                     female_ratio != global_default_attribute['name'] or
                     female_ratio_key in keywords)) and
@@ -346,7 +346,7 @@ class Aggregator(QtCore.QObject):
             # some keywords are needed
             else:
                 # set the default values by writing to the keywords
-                keywords['category'] = 'postprocessing'
+                keywords['layer_purpose'] = 'aggregation'
 
                 # noinspection PyTypeChecker
                 my_attributes, _ = layer_attribute_names(
@@ -450,11 +450,11 @@ class Aggregator(QtCore.QObject):
                     self.hazard_layer)
 
             if is_polygon_layer(self.exposure_layer):
-                # Find out the subcategory for this layer
-                subcategory = self.read_keywords(
-                    self.exposure_layer, 'subcategory')
+                # Find out the exposure for this layer
+                exposure = self.read_keywords(
+                    self.exposure_layer, 'exposure')
                 # We don't want to chop up buildings!
-                if subcategory != 'structure':
+                if exposure != 'structure':
                     self.exposure_layer = self._prepare_polygon_layer(
                         self.exposure_layer)
 
