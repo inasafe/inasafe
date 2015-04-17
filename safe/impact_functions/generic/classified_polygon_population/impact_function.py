@@ -15,9 +15,7 @@ import numpy
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.classified_polygon_population\
     .metadata_definitions import ClassifiedPolygonPopulationFunctionMetadata
-from safe.impact_functions.core import (
-    evacuated_population_needs,
-    population_rounding)
+from safe.impact_functions.core import population_rounding
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
@@ -146,7 +144,7 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
                 cumulative)
 
         # Use final accumulation as total number needing evacuation
-        evacuated = population_rounding(cumulative)
+        impacted_people = population_rounding(cumulative)
 
         minimum_needs = [
             parameter.serialize() for parameter in
@@ -156,8 +154,8 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
         # Generate impact report for the pdf map
         blank_cell = ''
         table_body = [self.question,
-                      TableRow([tr('People needing evacuation'),
-                                '%s' % format_int(evacuated),
+                      TableRow([tr('People impacted'),
+                                '%s' % format_int(impacted_people),
                                 blank_cell],
                                header=True),
                       TableRow([category_header,
@@ -172,21 +170,9 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
 
         table_body.extend([
             TableRow(tr(
-                'Map shows the number of people affected in each of the '
+                'Map shows the number of people impacted in each of the '
                 'hazard zones.'))])
 
-        total_needs = evacuated_population_needs(evacuated, minimum_needs)
-        for frequency, needs in total_needs.items():
-            table_body.append(TableRow(
-                [
-                    tr('Needs should be provided %s' % frequency),
-                    tr('Total')
-                ],
-                header=True))
-            for resource in needs:
-                table_body.append(TableRow([
-                    tr(resource['table name']),
-                    format_int(resource['amount'])]))
         impact_table = Table(table_body).toNewlineFreeString()
 
         # Extend impact report for on-screen display
@@ -203,8 +189,8 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
                 population_counts):
             table_body = [
                 self.question,
-                TableRow([tr('People needing evacuation'),
-                          '%s' % format_int(evacuated),
+                TableRow([tr('People impacted'),
+                          '%s' % format_int(impacted_people),
                           blank_cell], header=True)]
             my_message = Table(table_body).toNewlineFreeString()
             raise ZeroImpactException(my_message)
@@ -236,7 +222,7 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
                           style_type='graduatedSymbol')
 
         # For printing map purpose
-        map_title = tr('People affected by each hazard zone')
+        map_title = tr('People impacted by each hazard zone')
         legend_notes = tr('Thousand separator is represented by  %s' %
                           get_thousand_separator())
         legend_units = tr('(people per cell)')
@@ -247,15 +233,14 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
             data=new_data_table,
             projection=hazard_layer.get_projection(),
             geometry=hazard_layer.get_geometry(as_geometry_objects=True),
-            name=tr('People affected by each hazard zone'),
+            name=tr('People impacted by each hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
                       'target_field': self.target_field,
                       'map_title': map_title,
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,
-                      'legend_title': legend_title,
-                      'total_needs': total_needs},
+                      'legend_title': legend_title},
             style_info=style_info)
 
         self._impact = impact_layer
