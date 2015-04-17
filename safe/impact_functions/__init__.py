@@ -18,6 +18,8 @@ from safe.impact_functions.earthquake.pager_earthquake_fatality_model\
     .impact_function import PAGFatalityFunction
 from safe.impact_functions.generic.classified_hazard_building\
     .impact_function import ClassifiedHazardBuildingFunction
+from safe.impact_functions.generic.classified_polygon_population\
+    .impact_function import ClassifiedPolygonPopulationFunction
 from safe.impact_functions.generic.classified_hazard_population\
     .impact_function import ClassifiedHazardPopulationFunction
 from safe.impact_functions.generic.continuous_hazard_population\
@@ -70,6 +72,7 @@ def register_impact_functions():
     impact_function_registry.register(ClassifiedHazardBuildingFunction)
     impact_function_registry.register(ClassifiedHazardPopulationFunction)
     impact_function_registry.register(ContinuousHazardPopulationFunction)
+    impact_function_registry.register(ClassifiedPolygonPopulationFunction)
     impact_function_registry.register(ClassifiedPolygonBuildingFunction)
     # Earthquake
     impact_function_registry.register(EarthquakeBuildingFunction)

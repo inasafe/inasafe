@@ -17,67 +17,60 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.generic.classified_polygon_building.impact_function \
-    import ClassifiedPolygonBuildingFunction
+from safe.impact_functions.generic.classified_polygon_population\
+    .impact_function import ClassifiedPolygonPopulationFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 
 
-class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
-    """Test for Generic Polygon on Building Impact Function."""
+class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
+    """Test for Classified Polygon on Population Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(ClassifiedPolygonBuildingFunction)
+        registry.register(ClassifiedPolygonPopulationFunction)
 
     def test_run(self):
-        """TestGenericPolygonBuildingFunction: Test running the IF."""
+        """TestClassifiedPolygonPopulationFunction: Test running the IF."""
         generic_polygon_path = test_data_path(
             'hazard', 'classified_generic_polygon.shp')
-        building_path = test_data_path('exposure', 'buildings.shp')
+        population_path = test_data_path(
+            'exposure', 'pop_binary_raster_20_20.asc')
 
-        hazard_layer = read_layer(generic_polygon_path)
-        exposure_layer = read_layer(building_path)
+        generic_polygon_layer = read_layer(generic_polygon_path)
+        population_layer = read_layer(population_path)
 
-        impact_function = ClassifiedPolygonBuildingFunction.instance()
-        impact_function.hazard = hazard_layer
-        impact_function.exposure = exposure_layer
+        impact_function = ClassifiedPolygonPopulationFunction.instance()
+        impact_function.hazard = generic_polygon_layer
+        impact_function.exposure = population_layer
         impact_function.parameters['hazard zone attribute'] = 'h_zone'
         impact_function.run()
         impact_layer = impact_function.impact
-
         # Check the question
-        expected_question = ('In the event of earthquake polygon how '
-                             'many buildings might be affected')
+        expected_question = ('In the event of earthquake polygon how many '
+                             'population might be impacted')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
-
-        zone_sum = impact_layer.get_data(attribute='zone')
-        high_zone_count = zone_sum.count('High Hazard Zone')
-        medium_zone_count = zone_sum.count('Medium Hazard Zone')
-        low_zone_count = zone_sum.count('Low Hazard Zone')
-        # The result
-        expected_high_count = 11
-        expected_medium_count = 161
-        expected_low_count = 0
-        message = 'Expecting %s for High Hazard Zone, but it returns %s' % (
-            high_zone_count, expected_high_count)
-        self.assertEqual(high_zone_count, expected_high_count, message)
-
-        message = 'Expecting %s for Medium Hazard Zone, but it returns %s' % (
-            expected_medium_count, medium_zone_count)
-        self.assertEqual(medium_zone_count, expected_medium_count, message)
-
-        message = 'Expecting %s for Low Hazard Zone, but it returns %s' % (
-            expected_low_count, low_zone_count)
-        self.assertEqual(expected_low_count, low_zone_count, message)
+        # Count by hand
+        impact = {
+            'Low Hazard Zone': 0,
+            'Medium Hazard Zone': 132.0,
+            'High Hazard Zone': 49.0,
+        }
+        impact_features = impact_layer.get_data()
+        for i in range(len(impact_features)):
+            impact_feature = impact_features[i]
+            hazard_zone = impact_feature.get('h_zone')
+            expected = impact[hazard_zone]
+            result = impact_feature['population']
+            message = 'Expecting %s, but it returns %s' % (expected, result)
+            self.assertEqual(expected, result, message)
 
     def test_filter(self):
-        """TestGenericPolygonBuildingFunction: Test filtering IF"""
+        """TestClassifiedPolygonPopulationFunction: Test filtering IF"""
         hazard_keywords = {
-            'title': 'Generic Polygon',
             'category': 'hazard',
             'subcategory': 'earthquake',
             'unit': 'classes',
@@ -87,9 +80,10 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
 
         exposure_keywords = {
             'category': 'exposure',
-            'subcategory': 'structure',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'subcategory': 'population',
+            'layer_type': 'raster',
+            'data_type': 'continuous',
+            'unit': 'people_per_pixel'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
@@ -100,7 +94,7 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
 
         retrieved_if = impact_functions[0].metadata().as_dict()['id']
         expected = ImpactFunctionManager().get_function_id(
-            ClassifiedPolygonBuildingFunction)
+            ClassifiedPolygonPopulationFunction)
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
