@@ -32,7 +32,7 @@ from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
 from safe.utilities.i18n import tr
 
 
-class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
+class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
     """Metadata for Flood Vector on Building Impact Function using QGIS.
 
     .. versionadded:: 2.1
@@ -53,10 +53,10 @@ class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'FloodPolygonBuildingQgis',
-            'name': tr('Flood Polygon Building QGIS Function'),
-            'impact': tr('Be-flooded (QGIS)'),
-            'title': tr('Be flooded (QGIS)'),
+            'id': 'FloodPolygonBuildingFunction',
+            'name': tr('Flood Polygon Building Function'),
+            'impact': tr('Be-flooded'),
+            'title': tr('Be flooded'),
             'function_type': 'qgis2.0',
             'author': 'Dmitry Kolesov',
             'date_implemented': 'N/A',
@@ -71,7 +71,7 @@ class FloodPolygonBuildingQgisMetadata(ImpactFunctionMetadata):
             'categories': {
                 'hazard': {
                     'definition': hazard_definition,
-                    'subcategories': [hazard_flood],
+                    'subcategories': [hazard_flood, hazard_tsunami],
                     'units': [unit_wetdry],
                     'layer_constraints': [layer_vector_polygon]
                 },

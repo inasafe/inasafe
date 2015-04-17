@@ -105,6 +105,14 @@ class VolcanoPolygonBuildingFunction(
                 (hazard_layer.get_name(), hazard_layer.get_geometry_name()))
             raise Exception(message)
 
+        # Check if hazard_zone_attribute exists in hazard_layer
+        if hazard_zone_attribute not in hazard_layer.get_attribute_names():
+            message = (
+                'Hazard data %s did not contain expected attribute %s ' %
+                (hazard_layer.get_name(), hazard_zone_attribute))
+            # noinspection PyExceptionInherit
+            raise InaSAFEError(message)
+
         # Get names of volcanoes considered
         if name_attribute in hazard_layer.get_attribute_names():
             volcano_name_list = set()
@@ -114,14 +122,6 @@ class VolcanoPolygonBuildingFunction(
             self.volcano_names = ', '.join(volcano_name_list)
         else:
             self.volcano_names = tr('Not specified in data')
-
-        # Check if hazard_zone_attribute exists in hazard_layer
-        if hazard_zone_attribute not in hazard_layer.get_attribute_names():
-            message = (
-                'Hazard data %s did not contain expected attribute %s ' %
-                (hazard_layer.get_name(), hazard_zone_attribute))
-            # noinspection PyExceptionInherit
-            raise InaSAFEError(message)
 
         # Find the target field name that has no conflict with default
         # target
@@ -137,14 +137,14 @@ class VolcanoPolygonBuildingFunction(
         attribute_names = interpolated_layer.get_attribute_names()
         features = interpolated_layer.get_data()
 
+        # Hazard zone categories from hazard layer
+        hazard_zone_categories = list(
+            set(hazard_layer.get_data(hazard_zone_attribute)))
+
         self.buildings = {}
-        # FIXME (Ole): Change to English and use translation system
-        # FIXME (Ismail) : Or simply use the values from the hazard layer
-        self.affected_buildings = OrderedDict([
-            ('Kawasan Rawan Bencana III', {}),
-            ('Kawasan Rawan Bencana II', {}),
-            ('Kawasan Rawan Bencana I', {})
-        ])
+        self.affected_buildings = OrderedDict()
+        for hazard_category in hazard_zone_categories:
+            self.affected_buildings[hazard_category] = {}
 
         for i in range(len(features)):
             hazard_value = features[i][hazard_zone_attribute]
@@ -170,14 +170,8 @@ class VolcanoPolygonBuildingFunction(
 
         # Generate simple impact report
         impact_summary = impact_table = self.generate_html_report()
-
-        # FIXME (Ole): Change to English and use translation system
-        # FIXME (Ismail) : Or simply use the values from the hazard layer
-        category_names = [
-            'Kawasan Rawan Bencana III',
-            'Kawasan Rawan Bencana II',
-            'Kawasan Rawan Bencana I',
-            not_affected_value]
+        category_names = hazard_zone_categories
+        category_names.append(not_affected_value)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',

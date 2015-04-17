@@ -872,7 +872,6 @@ class Analysis(object):
                     'exclude all features unintentionally.'))
                 report.add(check_list)
                 self.send_static_message(report)
-                self.send_not_busy_signal()
                 return
             if exception is not None:
                 content = self.tr(
@@ -880,7 +879,12 @@ class Analysis(object):
                 ) % (self.runner.result())
                 message = get_error_message(exception, context=content)
             # noinspection PyTypeChecker
+            # RM: Send not busy signal to restore busy cursor
+            self.send_not_busy_signal()
             self.send_error_message(message)
+            # RM: Send analysis done signal because analysis failed and we
+            # want to restore the cursor
+            self.send_analysis_done_signal()
             # self.analysis_done.emit(False)
             return
 

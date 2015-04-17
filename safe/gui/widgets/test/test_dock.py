@@ -430,7 +430,7 @@ class TestDock(TestCase):
             hazard='Flood Polygon',
             exposure='Buildings',
             function='Be flooded',
-            function_id='FloodVectorBuildingFunction')
+            function_id='FloodPolygonBuildingFunction')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection

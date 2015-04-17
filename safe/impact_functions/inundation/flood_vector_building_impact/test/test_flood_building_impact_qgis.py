@@ -12,63 +12,68 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'akbargumbira@gmail.com'
+__author__ = 'lucernae'
 __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
 import unittest
 
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.inundation.flood_vector_osm_building_impact.\
-    impact_function import FloodVectorBuildingFunction
-from safe.storage.core import read_layer
-from safe.test.utilities import test_data_path, get_qgis_app
+from qgis.core import QgsVectorLayer
 
+from safe.impact_functions.impact_function_manager\
+    import ImpactFunctionManager
+from safe.impact_functions.inundation.flood_vector_building_impact\
+    .impact_function import FloodPolygonBuildingFunction
+from safe.test.utilities import (
+    get_qgis_app,
+    test_data_path)
+from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodVectorBuildingFunction(unittest.TestCase):
+class TestFloodPolygonBuildingFunction(unittest.TestCase):
     """Test for Flood Vector Building Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(FloodVectorBuildingFunction)
+        registry.register(FloodPolygonBuildingFunction)
 
     def test_run(self):
-        impact_function = FloodVectorBuildingFunction.instance()
+        function = FloodPolygonBuildingFunction.instance()
 
         hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
         exposure_path = test_data_path('exposure', 'buildings.shp')
+        # noinspection PyCallingNonCallable
+        hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
+        # noinspection PyCallingNonCallable
+        exposure_layer = QgsVectorLayer(exposure_path, 'Buildings', 'ogr')
 
-        hazard_layer = read_layer(hazard_path)
-        exposure_layer = read_layer(exposure_path)
+        # Let's set the extent to the hazard extent
+        extent = hazard_layer.extent()
+        rect_extent = [
+            extent.xMinimum(), extent.yMaximum(),
+            extent.xMaximum(), extent.yMinimum()]
 
-        impact_function.hazard = hazard_layer
-        impact_function.exposure = exposure_layer
-        impact_function.parameters['affected_field'].value = 'FLOODPRONE'
-        impact_function.parameters['affected_value'].value = 'YES'
-        impact_function.run()
-        impact_layer = impact_function.impact
+        function.hazard = QgisWrapper(hazard_layer)
+        function.exposure = QgisWrapper(exposure_layer)
+        function.requested_extent = rect_extent
+        function.parameters['building_type_field'].value = 'TYPE'
+        function.parameters['affected_field'].value = 'FLOODPRONE'
+        function.parameters['affected_value'].value = 'YES'
+        function.run()
+        impact = function.impact
 
-        # Check the question
-        expected_question = ('In the event of flood polygon how many '
-                             'buildings might be flooded')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
-
-        # Extract calculated result
-        keywords = impact_layer.get_keywords()
-        buildings_total = keywords['buildings_total']
-        buildings_affected = keywords['buildings_affected']
-
-        self.assertEqual(buildings_total, 181)
-        self.assertEqual(buildings_affected, 33)
+        # Count of flooded objects is calculated "by the hands"
+        # total flooded = 27, total buildings = 129
+        count = sum(impact.get_data(attribute='INUNDATED'))
+        self.assertEquals(count, 33)
+        count = len(impact.get_data())
+        self.assertEquals(count, 176)
 
     def test_filter(self):
+        """Test filtering IF from layer keywords"""
         hazard_keywords = {
             'subcategory': 'flood',
             'unit': 'wetdry',
@@ -91,7 +96,7 @@ class TestFloodVectorBuildingFunction(unittest.TestCase):
 
         retrieved_if = impact_functions[0].metadata().as_dict()['id']
         expected = ImpactFunctionManager().get_function_id(
-            FloodVectorBuildingFunction)
+            FloodPolygonBuildingFunction)
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)

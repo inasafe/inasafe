@@ -29,10 +29,8 @@ from safe.impact_functions.inundation.flood_raster_road_qgis\
     .impact_function import FloodRasterRoadsExperimentalFunction
 from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
     .impact_function import FloodRasterRoadsGdalFunction
-from safe.impact_functions.inundation.flood_vector_osm_building_impact\
-    .impact_function import FloodVectorBuildingFunction
-from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
-    .impact_function import FloodPolygonBuildingQgisFunction
+from safe.impact_functions.inundation.flood_vector_building_impact\
+    .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.inundation.flood_polygon_roads\
     .impact_function import FloodVectorRoadsExperimentalFunction
 from safe.impact_functions.inundation.\
@@ -50,14 +48,15 @@ from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
     import VolcanoPolygonBuildingFunction
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .impact_function import VolcanoPolygonPopulationFunction
+from safe.impact_functions.volcanic.volcano_point_population\
+    .impact_function import VolcanoPointPopulationFunction
 
 
 def register_impact_functions():
     """Register all the impact functions available."""
     impact_function_registry = ImpactFunctionManager().registry
     # Inundation IF's
-    impact_function_registry.register(FloodVectorBuildingFunction)
-    impact_function_registry.register(FloodPolygonBuildingQgisFunction)
+    impact_function_registry.register(FloodPolygonBuildingFunction)
     impact_function_registry.register(FloodVectorRoadsExperimentalFunction)
     impact_function_registry.register(FloodEvacuationVectorHazardFunction)
     impact_function_registry.register(FloodEvacuationRasterHazardFunction)
@@ -76,4 +75,5 @@ def register_impact_functions():
     # Volcanic IF's
     impact_function_registry.register(VolcanoPointBuildingFunction)
     impact_function_registry.register(VolcanoPolygonBuildingFunction)
+    impact_function_registry.register(VolcanoPointPopulationFunction)
     impact_function_registry.register(VolcanoPolygonPopulationFunction)
