@@ -699,6 +699,33 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
     return new_name
 
 
+def color_ramp(color_number):
+    """Generate list of color in (R, G, B) in hexadecimal.
+
+    This will generate colors from R to G spectrum.
+
+    :param color_number: The number of the colors generated.
+    :type color_number: int
+
+    :returns: List of color.
+    :rtype: list
+    """
+    if color_number < 1:
+        raise Exception('The number of the colors should be > 0')
+
+    if color_number == 1:
+        return ['#ff0000']
+    else:
+        colors = []
+        for i in range(color_number):
+            red = 255 * (color_number - i - 1) / (color_number - 1)
+            green = (255 * i) / (color_number - 1)
+            blue = 0
+            hex_color = '#%02x%02x%02x' % (red, green, blue)
+            colors.append(hex_color)
+        return colors
+
+
 def get_osm_building_usage(attribute_names, feature):
     """Get the usage of a row of OSM building data.
 
