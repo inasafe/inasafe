@@ -39,7 +39,8 @@ def current_git_hash():
 def release_status():
     """Returns the release status from plugin metadata file.
 
-    It could be alpha, beta, rc, or final
+    :returns: The status of release - it could be alpha, beta, rc, or final.
+    :rtype: basestring
     """
     status = ''
     # Get location of application wide version info
