@@ -385,7 +385,9 @@ class Plugin(object):
         self.people_in_buildings_dialog.triggered.connect(
             self.show_people_in_buildings)
 
-        self.add_action(self.people_in_buildings_dialog)
+        self.add_action(
+            self.people_in_buildings_dialog,
+            add_to_toolbar=self.full_toolbar)
 
         # --------------------------------------
         # Create action for impact layer merge Dialog
@@ -615,7 +617,7 @@ class Plugin(object):
         dialog = PeopleInBuildingsDialog(
             self.iface,
             self.dock_widget)
-        dialog.exec_()  # modal
+        dialog.show()
 
     def show_impact_merge(self):
         """Show the impact layer merge dialog."""
