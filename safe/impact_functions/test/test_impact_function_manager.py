@@ -40,7 +40,8 @@ from safe.definitions import (
     unit_mmi,
     hazard_volcanic_ash,
     hazard_generic,
-    unit_building_generic)
+    unit_building_generic,
+    hazard_all)
 
 
 class TestImpactFunctionManager(unittest.TestCase):
@@ -118,7 +119,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertItemsEqual(result, expected_result, message)
 
         result = impact_function_manager.allowed_data_types('earthquake')
-        expected_result = ['continuous', 'classified']
+        expected_result = ['continuous', 'classified', 'polygon']
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -230,7 +231,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = impact_function_manager.subcategories_for_layer(
             category='hazard', layer_type='vector', data_type='polygon')
-        expected_result = [hazard_flood, hazard_tsunami, hazard_volcano]
+        expected_result = hazard_all
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
