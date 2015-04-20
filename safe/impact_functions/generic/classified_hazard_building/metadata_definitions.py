@@ -109,9 +109,9 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
                 ('low_hazard_class', 1.0),
                 ('medium_hazard_class', 2.0),
                 ('high_hazard_class', 3.0),
-                ('postprocessors', OrderedDict([('BuildingType',
-                                                building_type_postprocessor())
-                                                ]))
+                ('postprocessors', OrderedDict([
+                    ('BuildingType', building_type_postprocessor())
+                ]))
             ])
         }
         return dict_meta

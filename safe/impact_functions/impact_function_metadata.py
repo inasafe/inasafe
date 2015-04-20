@@ -308,17 +308,17 @@ class ImpactFunctionMetadata(object):
                 return False, 'key %s not in metadata' % key
 
             if key in expected_keys[-3:-1]:
-                if type(metadata_dict[key]) is not list:
+                if not isinstance(metadata_dict[key], list):
                     message = ('Value of key %s is not list but %s' %
                                (key, type(metadata_dict[key])))
                     return False, message
             elif key == expected_keys[-1]:
-                if type(metadata_dict[key]) is not dict:
+                if not isinstance(metadata_dict[key], dict):
                     message = ('Value of key %s is not dict but %s' %
                                (key, type(metadata_dict[key])))
                     return False, message
             else:
-                if type(metadata_dict[key]) not in [str, unicode]:
+                if not isinstance(metadata_dict[key], [str, unicode]):
                     message = ('Value of key %s is not str but %s' %
                                (key, type(metadata_dict[key])))
                     return False, message
@@ -574,7 +574,7 @@ class ImpactFunctionMetadata(object):
         :rtype: list
         """
         hazards = cls.as_dict()['categories']['hazard']['subcategories']
-        if type(hazards) is not list:
+        if not isinstance(hazards, list):
             hazards = [hazards]
         return hazards
 

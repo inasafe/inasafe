@@ -809,7 +809,7 @@ def add_to_list(my_list, my_element):
     :rtype: list
 
     """
-    if type(my_element) is list:
+    if isinstance(my_element, list):
         for element in my_element:
             my_list = add_to_list(my_list, element)
     else:
@@ -833,11 +833,11 @@ def is_subset(element, container):
     :returns: boolean of the membership
     :rtype: bool
     """
-    if type(element) is list:
-        if type(container) is list:
+    if isinstance(element, list):
+        if isinstance(container, list):
             return set(element) <= set(container)
     else:
-        if type(container) is list:
+        if isinstance(container, list):
             return element in container
         else:
             return element == container

@@ -490,16 +490,18 @@ class KeywordIO(QObject):
             # Use QgsDataSourceURI to parse RDBMS datasource
             # create unique uri based on host, schema, and tablename
             datasource_uri = QgsDataSourceURI(source)
-            normalized_uri = ':'.join([datasource_uri.host(),
-               datasource_uri.schema(),
-               datasource_uri.table()])
+            normalized_uri = ':'.join([
+                datasource_uri.host(),
+                datasource_uri.schema(),
+                datasource_uri.table()])
         elif provider_type == 'delimitedtext':
             # Use urlparse to parse delimitedtext uri
             # create unique uri based on protocol, host, and path
             general_uri = urlparse(source)
-            normalized_uri = ':'.join([general_uri.scheme,
-               general_uri.netloc,
-               general_uri.path])
+            normalized_uri = ':'.join([
+                general_uri.scheme,
+                general_uri.netloc,
+                general_uri.path])
         else:
             normalized_uri = source
         return normalized_uri

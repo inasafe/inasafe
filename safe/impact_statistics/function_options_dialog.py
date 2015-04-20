@@ -27,8 +27,6 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QGroupBox,
     QLineEdit,
@@ -43,8 +41,6 @@ from PyQt4.QtGui import (
 
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
-from safe.postprocessors.postprocessor_factory import (
-    get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe.common.resource_parameter import ResourceParameter
