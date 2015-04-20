@@ -12,6 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from safe_extras.parameters.generic_parameter import GenericParameter
+
 __author__ = 'qgis@borysjurgiel.pl'
 __revision__ = '$Format:%H$'
 __date__ = '21/02/2011'
@@ -2741,7 +2743,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         text = self.tr(
             'Please set impact functions parameters.<br/>Parameters for '
-            'impact function "%s" that can be modified are:' %
+            'impact function "%s" that can be modified are:') % (
             impact_function_id)
         self.lblSelectIFParameters.setText(text)
 
@@ -2763,16 +2765,29 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Summary tab"""
         def format_postprocessor(val):
             """ make nested OrderedDicts more flat"""
-            if type(val) == OrderedDict:
+            if isinstance(val, OrderedDict):
                 result = []
                 for v in val:
-                    if type(val[v]) == OrderedDict:
+                    if isinstance(val[v], OrderedDict):
                         # omit the v key and unpack the dict directly
                         result += [u'%s: %s' % (unicode(k), unicode(val[v][k]))
                                    for k in val[v]]
+                    elif isinstance(val[v], list):
+                        # assume it is a generic parameter
+                        result += [unicode(k.value) for k in val[v]]
                     else:
                         result += [u'%s: %s' % (unicode(v), unicode(val[v]))]
                 return u', '.join(result)
+            elif isinstance(val, list):
+                result = []
+                for v in val:
+                    if isinstance(v, GenericParameter):
+                        result.append(unicode(v.value))
+                    else:
+                        result.append(unicode(v))
+                return u', '.join(result)
+            elif isinstance(val, GenericParameter):
+                return unicode(val.value)
             else:
                 return unicode(val)
 
@@ -2799,7 +2814,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             elif type(self.if_params[p]) == list and p == 'minimum needs':
                 subparams = ''
                 for need in self.if_params[p]:
-                    subparams += '%s %.0f' % (need.name, need.value)
+                    subparams += '%s %.1f' % (need.name, need.value)
                     if need.unit.abbreviation:
                         subparams += need.unit.abbreviation
                     if need != self.if_params[p][-1]:
