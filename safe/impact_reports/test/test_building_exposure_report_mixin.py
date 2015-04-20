@@ -193,10 +193,10 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
                     u'Total'],
                 'header': True
             },
-            {'content': ['Religious', '0', '1', '3']},
-            {'content': ['Residential', '12,000', '1,000', '20,000']},
-            {'content': ['School', '50', '25', '100']},
-            {'content': ['University', '0', '1', '10']}]
+            {'content': ['Religious', '0', '1', '1']},
+            {'content': ['Residential', '12,000', '1,000', '13,000']},
+            {'content': ['School', '50', '25', '75']},
+            {'content': ['University', '0', '1', '1']}]
         message = 'building breakdown is not as expected.'
         self.assertListEqual(
             buildings_breakdown,
