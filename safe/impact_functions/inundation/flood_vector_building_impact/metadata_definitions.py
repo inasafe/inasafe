@@ -17,6 +17,7 @@ from safe.common.utilities import OrderedDict
 from safe.definitions import (
     hazard_definition,
     hazard_flood,
+    hazard_tsunami,
     unit_wetdry,
     layer_vector_polygon,
     exposure_definition,
@@ -25,9 +26,10 @@ from safe.definitions import (
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
+from safe.impact_functions.inundation.flood_vector_building_impact\
     .parameter_definitions import (
-        building_type_field, affected_field,
+        building_type_field,
+        affected_field,
         affected_value)
 from safe.utilities.i18n import tr
 
