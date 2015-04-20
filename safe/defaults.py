@@ -168,15 +168,15 @@ def age_postprocessor():
     age.value = True
 
     youth_ratio = FloatParameter()
-    youth_ratio.name = 'Youth Ratio'
+    youth_ratio.name = 'youth_ratio'
     youth_ratio.value = get_defaults('YOUTH_RATIO')
 
     adult_ratio = FloatParameter()
-    adult_ratio.name = 'Adult Ratio'
+    adult_ratio.name = 'adult_ratio'
     adult_ratio.value = get_defaults('ADULT_RATIO')
 
     elderly_ratio = FloatParameter()
-    elderly_ratio.name = 'Elderly Ratio'
+    elderly_ratio.name = 'elderly_ratio'
     elderly_ratio.value = get_defaults('ELDERLY_RATIO')
 
     return [age, youth_ratio, adult_ratio, elderly_ratio]
