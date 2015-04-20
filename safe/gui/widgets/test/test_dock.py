@@ -564,8 +564,10 @@ class TestDock(TestCase):
             'control',
             'files',
             'test-full-run-results.txt')
-        expected_result = codecs.open(control_file_path, mode='r',
-                               encoding='utf-8').readlines()
+        expected_result = codecs.open(
+            control_file_path,
+            mode='r',
+            encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
         for line in expected_result:
@@ -615,8 +617,10 @@ class TestDock(TestCase):
             'control',
             'files',
             'test-full-run-results-qgis.txt')
-        expected_result = codecs.open(control_file_path, mode='r',
-                               encoding='utf-8').readlines()
+        expected_result = codecs.open(
+            control_file_path,
+            mode='r',
+            encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
         for line in expected_result:
@@ -674,7 +678,9 @@ class TestDock(TestCase):
         """
 
         layer_path = os.path.join(TESTDATA, 'kecamatan_jakarta_osm.shp')
+        # pylint: disable=unused-variable
         layer, layer_type = load_layer(layer_path)
+        # pylint: enable=unused-variable
 
         new_name = unique_filename(prefix='kecamatan_jakarta_osm_saved_as')
         DOCK.save_auxiliary_files(

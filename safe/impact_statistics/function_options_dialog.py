@@ -33,7 +33,6 @@ from PyQt4.QtGui import (
     QDialog,
     QLabel,
     QCheckBox,
-    QFormLayout,
     QGridLayout,
     QWidget,
     QScrollArea,

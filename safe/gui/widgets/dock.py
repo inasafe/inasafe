@@ -720,12 +720,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 title=self.tr('Error while saving'),
                 message=self.tr("The destination location must be writable."))
 
-        # pylint: disable=broad-except
-        except Exception:
+        except Exception: # pylint: disable=broad-except
             display_critical_message_bar(
                 title=self.tr('Error while saving'),
                 message=self.tr("Something went wrong."))
-        # pylint: enable=broad-except
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
