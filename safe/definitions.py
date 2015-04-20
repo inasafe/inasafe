@@ -352,32 +352,6 @@ layer_vector_polygon = {
 }
 
 
-# Converter new keywords to old keywords
-converter_dict = {
-    'subcategory': {
-        'all': [],
-        'earthquake': [],
-        'flood': [],
-        'population': [],
-        'road': [],
-        'structure': [],
-        'tephra': [],
-        'tsunami': [],
-        'volcano': []
-    },
-    'layertype': {
-        'raster': [],
-        'vector': []
-    },
-    'data_type': {
-    },
-    'unit': {
-        'm': ['metres_depth'],  # FIXME(Ismail): Please check for feet_depth
-        'MMI': ['mmi'],
-    }
-}
-
-
 def old_to_new_unit_id(old_unit_id):
     """Convert old unit id to new unit id in keyword system.
 
