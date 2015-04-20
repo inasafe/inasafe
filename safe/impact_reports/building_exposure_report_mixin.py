@@ -211,18 +211,17 @@ class BuildingExposureReportMixin(ReportMixin):
             for category in category_names:
                 if building_type in self.affected_buildings[category]:
                     affected_by_usage.append(
-                        format_int(
-                            self.affected_buildings[category][
-                                building_type].values()[0]))
+                        self.affected_buildings[category][
+                            building_type].values()[0])
                 else:
-                    affected_by_usage.append(format_int(0))
+                    affected_by_usage.append(0)
             building_detail = (
                 # building type
                 [building_type_name.capitalize()] +
                 # categories
-                affected_by_usage +
+                [format_int(x) for x in affected_by_usage] +
                 # total
-                [format_int(self.buildings[building_type])])
+                [format_int(sum(affected_by_usage))])
             buildings_breakdown_report.append(
                 {
                     'content': building_detail
