@@ -73,6 +73,8 @@ class TestRegistry(unittest.TestCase):
             'Classified Hazard Building Function',
             'Classified Hazard Population Function',
             'Continuous Hazard Population Function',
+            'Classified Polygon Population Impact Function',
+            'Classified Polygon Building Impact Function',
             'Earthquake Building Function',
             'ITB Fatality Function',
             'PAG Fatality Function',
