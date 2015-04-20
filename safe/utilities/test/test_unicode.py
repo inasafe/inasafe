@@ -33,12 +33,12 @@ class UnicodeTest(unittest.TestCase):
 
     def test_get_string(self):
         """Test get_string function."""
-        unicode = u'Test \xe1, \xe9, \xed, \xf3, \xfa, \xfc, \xf1, \xbf'
+        unicode_text = u'Test \xe1, \xe9, \xed, \xf3, \xfa, \xfc, \xf1, \xbf'
         string_repr = 'Test \xc3\xa1, \xc3\xa9, \xc3\xad, \xc3\xb3, ' \
                       '\xc3\xba, \xc3\xbc, \xc3\xb1, \xc2\xbf'
         message = 'It should return %s, but it returned %s' % (
-            get_string(unicode), string_repr)
-        self.assertEqual(get_string(unicode), string_repr, message)
+            get_string(unicode_text), string_repr)
+        self.assertEqual(get_string(unicode_text), string_repr, message)
 
     def test_str_unicode_str(self):
         """Test if str(unicode(str)) works correctly."""

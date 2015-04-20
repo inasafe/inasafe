@@ -604,8 +604,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # TODO refactor impact_functions so it is accessible and user here
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
-        notes = m.Paragraph(self.tr(
-            'You can now proceed to run your model by clicking the'),
+        notes = m.Paragraph(
+            self.tr('You can now proceed to run your model by clicking the'),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
@@ -720,7 +720,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 title=self.tr('Error while saving'),
                 message=self.tr("The destination location must be writable."))
 
-        except Exception:
+        except Exception: # pylint: disable=broad-except
             display_critical_message_bar(
                 title=self.tr('Error while saving'),
                 message=self.tr("Something went wrong."))
@@ -1400,7 +1400,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         else:
             message = self.tr(
                 'Impact layer %s was neither a raster or a vector layer') % (
-                qgis_impact_layer.source())
+                    qgis_impact_layer.source())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
@@ -1739,7 +1739,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             question = self.tr(
                 'The composer template you are printing to is missing '
                 'these elements: %s. Do you still want to continue') % (
-                ', '.join(impact_report.missing_elements))
+                    ', '.join(impact_report.missing_elements))
             # noinspection PyCallByClass,PyTypeChecker
             answer = QtGui.QMessageBox.question(
                 self,

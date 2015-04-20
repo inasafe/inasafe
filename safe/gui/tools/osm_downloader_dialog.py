@@ -39,7 +39,6 @@ from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
 
 from safe.common.exceptions import (
     CanceledImportDialogError,
-    ImportDialogError,
     DownloadError,
     FileMissingError)
 from safe import messaging as m
@@ -612,7 +611,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         :param base_path: The base path of the shape file (without extension).
         :type base_path: str
 
-        :raises: ImportDialogError - when buildings.shp not exist
+        :raises: FileMissingError - when buildings.shp not exist
         """
 
         path = '%s.shp' % base_path

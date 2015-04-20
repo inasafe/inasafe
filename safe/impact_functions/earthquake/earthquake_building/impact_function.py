@@ -116,9 +116,10 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
 
         # Determine if exposure data have NEXIS attributes.
         attribute_names = exposure_layer.get_attribute_names()
-        if ('FLOOR_AREA' in attribute_names and
-                    'BUILDING_C' in attribute_names and
-                    'CONTENTS_C' in attribute_names):
+        if (
+                'FLOOR_AREA' in attribute_names and
+                'BUILDING_C' in attribute_names and
+                'CONTENTS_C' in attribute_names):
             self.is_nexis = True
         else:
             self.is_nexis = False

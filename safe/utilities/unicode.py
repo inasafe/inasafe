@@ -21,10 +21,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-def __if_not_basestring(object):
-    converted_str = object
-    if not isinstance(object, basestring):
-        converted_str = str(object)
+def __if_not_basestring(text_object):
+    converted_str = text_object
+    if not isinstance(text_object, basestring):
+        converted_str = str(text_object)
     return converted_str
 
 
