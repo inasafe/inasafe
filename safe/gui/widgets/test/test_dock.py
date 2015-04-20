@@ -76,6 +76,8 @@ class TestDock(TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
+        register_impact_functions()
+
         DOCK.show_only_visible_layers_flag = True
         load_standard_layers(DOCK)
         DOCK.cboHazard.setCurrentIndex(0)
@@ -89,8 +91,6 @@ class TestDock(TestCase):
         DOCK.show_intermediate_layers = False
         DOCK.user_extent = None
         DOCK.user_extent_crs = None
-
-        register_impact_functions()
 
     def tearDown(self):
         """Fixture run after each test"""

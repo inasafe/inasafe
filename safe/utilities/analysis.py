@@ -872,6 +872,7 @@ class Analysis(object):
                     'exclude all features unintentionally.'))
                 report.add(check_list)
                 self.send_static_message(report)
+                self.send_not_busy_signal()
                 return
             if exception is not None:
                 content = self.tr(
