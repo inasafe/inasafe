@@ -922,6 +922,7 @@ def load_standard_layers(dock=None):
         test_data_path('hazard', 'volcano_point.shp'),
         test_data_path('exposure', 'roads.shp'),
         test_data_path('hazard', 'flood_multipart_polygons.shp'),
+        test_data_path('hazard', 'classified_generic_polygon.shp'),
         test_data_path('hazard', 'volcano_krb.shp'),
         test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
         test_data_path('hazard', 'classified_flood_20_20.asc'),

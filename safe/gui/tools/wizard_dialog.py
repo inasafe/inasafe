@@ -207,6 +207,25 @@ structure_building_type_question = QApplication.translate(
     'WizardDialog',
     'type for your building')
 
+# Constants for [hazard]_classes_question
+flood_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your flood hazard')
+
+tsunami_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your tsunami hazard')
+
+earthquake_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your earthquake hazard')
+
+volcanic_ash_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your volcanic ash hazard')
+
+volcano_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your volcano hazard')
+
+generic_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your generic hazard')
+
 # Constants for field selection
 # noinspection PyCallByClass
 field_question_subcategory_unit = QApplication.translate(

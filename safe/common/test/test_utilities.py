@@ -35,7 +35,8 @@ from safe.common.utilities import (
     log_file_path,
     romanise,
     humanize_file_size,
-    add_to_list)
+    add_to_list,
+    color_ramp)
 
 
 def print_class(array, result_class, expected_result):
@@ -362,6 +363,19 @@ class TestUtilities(unittest.TestCase):
         assert len(list_b) == (len(list_original) + 1)
         assert list_b[-1] == 'c'
 
+    def test_color_ramp(self):
+        """Test for color_ramp function."""
+        number_of_colours = 1
+        expected_colors = ['#ff0000']
+        colors = color_ramp(number_of_colours)
+        message = 'Expecting %s, but it returns %s' % (expected_colors, colors)
+        self.assertEqual(colors, expected_colors, message)
+
+        number_of_colours = 2
+        expected_colors = ['#ff0000', '#00ffff']
+        colors = color_ramp(number_of_colours)
+        message = 'Expecting %s, but it returns %s' % (expected_colors, colors)
+        self.assertEqual(colors, expected_colors, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestUtilities)

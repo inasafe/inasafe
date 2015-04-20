@@ -13,6 +13,7 @@ from subprocess import PIPE, Popen
 import ctypes
 from numbers import Integral
 import math
+import colorsys
 # pylint: disable=unused-import
 from collections import OrderedDict
 # pylint: enable=unused-import
@@ -697,6 +698,35 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
         string_len = 9 - len(str(i))
         new_name = '%s_%s' % (new_name[:string_len], i)
     return new_name
+
+
+def color_ramp(number_of_colour):
+    """Generate list of color in hexadecimal.
+
+    This will generate colors using hsv model by playing around with the hue
+    (the saturation and the value are all set to 1).
+
+    :param number_of_colour: The number of intervals between R and G spectrum.
+    :type number_of_colour: int
+
+    :returns: List of color.
+    :rtype: list
+    """
+    if number_of_colour < 1:
+        raise Exception('The number of colours should be > 0')
+
+    colors = []
+    hue_interval = 1.0 / number_of_colour
+    for i in range(number_of_colour):
+        hue = i * hue_interval
+        saturation = 1
+        value = 1
+        rgb = map(
+            lambda x: int(x * 255), colorsys.hsv_to_rgb(
+                hue, saturation, value))
+        hex_color = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
+        colors.append(hex_color)
+    return colors
 
 
 def get_osm_building_usage(attribute_names, feature):
