@@ -191,8 +191,7 @@ class StylingTest(unittest.TestCase):
             actual_size = symbol_layer.size()
             message = ((
                 'Expected symbol layer 0 for range %s to have'
-                ' a size of %s, got %s') %
-                (size, size, actual_size))
+                ' a size of %s, got %s') % (size, size, actual_size))
             assert size == actual_size, message
             size += 1
 
