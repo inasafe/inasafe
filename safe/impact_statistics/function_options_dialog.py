@@ -117,7 +117,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         :param parameters: Parameters to be edited
         """
-
         for key, value in parameters.items():
             if key == 'postprocessors':
                 self.build_post_processor_form(value)
