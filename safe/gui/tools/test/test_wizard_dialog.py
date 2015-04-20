@@ -135,12 +135,14 @@ class WizardDialogTest(unittest.TestCase):
         expected_categories = ['exposure', 'hazard', 'aggregation']
         chosen_category = 'hazard'
 
-        expected_subcategory_count = 3
-        expected_subcategories = ['volcano', 'flood', 'tsunami']
+        expected_subcategory_count = 6
+        expected_subcategories = ['flood', 'tsunami', 'earthquake',
+                                  'volcanic_ash', 'volcano', 'generic']
+
         chosen_subcategory = 'flood'
 
-        expected_unit_count = 3
-        expected_units = ['wetdry', 'metres_depth', 'feet_depth']
+        expected_unit_count = 4
+        expected_units = ['wetdry', 'metres_depth', 'feet_depth', 'classes']
         expected_chosen_unit = 'wetdry'
 
         expected_field_count = 6
@@ -652,7 +654,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # choose hazard go to subcategory  step
         dialog.pbnNext.click()  # choose volcano  go to unit step
-        dialog.lstUnits.setCurrentRow(0)  # Choose volcano categorical
+        dialog.lstUnits.setCurrentRow(1)  # Choose volcano categorical
 
         self.check_current_text('volcano categorical', dialog.lstUnits)
 
@@ -706,10 +708,10 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose volcano  go to unit  step
 
         message = 'It should auto select, but it does not.'
-        self.assertTrue(dialog.lstUnits.currentRow() == 0, message)
+        self.assertTrue(dialog.lstUnits.currentRow() == 1, message)
         num_item = dialog.lstUnits.count()
         message = 'There is should be only one item, I got %s' % num_item
-        self.assertTrue(num_item == 1, message)
+        self.assertTrue(num_item == 2, message)
 
         dialog.pbnNext.click()  # choose volcano categorical go to field  step
         message = 'It should auto select, but it does not.'
@@ -1018,7 +1020,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check the values of subcategories options
-        expected_subcategories = ['flood', 'tsunami', 'volcano']
+        expected_subcategories = ['flood', 'tsunami',  'earthquake',
+                                  'volcanic ash', 'volcano', 'generic']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # select flood
@@ -1026,7 +1029,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to unit
         self.check_current_step(step_kw_unit, dialog)
 
-        expected_units = ['wet / dry', 'metres', 'feet']
+        expected_units = ['wet / dry', 'metres', 'feet', 'classes']
         self.check_list(expected_units, dialog.lstUnits)
 
         # select wet / dry
@@ -1103,10 +1106,11 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to unit
 
-        expected_units = ['volcano categorical']
+        expected_units = ['classes', 'volcano categorical']
         self.check_list(expected_units, dialog.lstUnits)
 
-        # no need to select, use auto select
+        # select volcano_categorical
+        dialog.lstUnits.setCurrentRow(1)  # select no type
         dialog.pbnNext.click()  # go to field
         self.check_current_step(step_kw_field, dialog)
 
@@ -1192,7 +1196,7 @@ class WizardDialogTest(unittest.TestCase):
 
         expected_hazards_count = 5
         expected_exposures_count = 3
-        expected_flood_structure_functions_count = 3
+        expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 1
         expected_functions_count = 1
         chosen_if = 'FloodRasterBuildingFunction'
