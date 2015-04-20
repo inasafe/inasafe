@@ -131,10 +131,9 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
         total_population = population_rounding(
             int(numpy.sum(exposure_layer.get_data(nan=0))))
 
-        # Count number and cumulative for each zone
+        # Count number of affected people for each zone
         cumulative = 0
         all_categories_population = {}
-        all_categories_cumulative = {}
         for hazard_zone in self.hazard_zones:
             key = hazard_zone
             # prevent key error
@@ -142,8 +141,6 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
             cumulative += population
             all_categories_population[hazard_zone] = population_rounding(
                 population)
-            all_categories_cumulative[hazard_zone] = population_rounding(
-                cumulative)
 
         # Use final accumulation as total number needing evacuation
         impacted_people = population_rounding(cumulative)
