@@ -173,6 +173,9 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             values[label] = input_values
 
         self.values['postprocessors'] = values
+        # spacer needs to be added last
+        scroll_layout.addStretch()
+
 
     def build_widget(self, form_layout, name, key_value):
         """Create a new form element dynamically based from key_value type.
