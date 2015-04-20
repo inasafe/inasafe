@@ -92,7 +92,7 @@ class ClassifiedPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
             },
             'parameters': OrderedDict([
                 # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', 'zone')
+                ('hazard zone attribute', 'KRB')
             ])
         }
         return dict_meta
