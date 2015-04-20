@@ -56,7 +56,7 @@ class ClassifiedPolygonBuildingFunction(
             },
             {
                 'content': tr(
-                    'Map shows buildings affected on one of these hazard '
+                    'Map shows buildings affected on each of these hazard '
                     'zones: %s') % ', '.join(self.hazard_zones)
             }
         ]
@@ -122,7 +122,7 @@ class ClassifiedPolygonBuildingFunction(
         for hazard_zone in self.hazard_zones:
             self.affected_buildings[hazard_zone] = {}
 
-        # Run interpolation function for polygon2raster
+        # Run interpolation function for polygon2polygon
         interpolated_layer = assign_hazard_values_to_exposure_data(
             hazard_layer, exposure_layer, attribute_name=None)
 

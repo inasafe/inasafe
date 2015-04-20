@@ -365,15 +365,15 @@ class TestUtilities(unittest.TestCase):
 
     def test_color_ramp(self):
         """Test for color_ramp function."""
-        color_number = 1
+        number_of_colours = 1
         expected_colors = ['#ff0000']
-        colors = color_ramp(color_number)
+        colors = color_ramp(number_of_colours)
         message = 'Expecting %s, but it returns %s' % (expected_colors, colors)
         self.assertEqual(colors, expected_colors, message)
 
-        color_number = 2
-        expected_colors = ['#ff0000', '#00ff00']
-        colors = color_ramp(color_number)
+        number_of_colours = 2
+        expected_colors = ['#ff0000', '#00ffff']
+        colors = color_ramp(number_of_colours)
         message = 'Expecting %s, but it returns %s' % (expected_colors, colors)
         self.assertEqual(colors, expected_colors, message)
 
