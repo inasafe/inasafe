@@ -92,7 +92,6 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
             # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
-        category_header = tr('Category')
         self.hazard_zones = list(
             set(hazard_layer.get_data(hazard_zone_attribute)))
 
@@ -132,10 +131,9 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
         total_population = population_rounding(
             int(numpy.sum(exposure_layer.get_data(nan=0))))
 
-        # Count number and cumulative for each zone
+        # Count number of affected people for each zone
         cumulative = 0
         all_categories_population = {}
-        all_categories_cumulative = {}
         for hazard_zone in self.hazard_zones:
             key = hazard_zone
             # prevent key error
@@ -143,16 +141,9 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
             cumulative += population
             all_categories_population[hazard_zone] = population_rounding(
                 population)
-            all_categories_cumulative[hazard_zone] = population_rounding(
-                cumulative)
 
         # Use final accumulation as total number needing evacuation
         impacted_people = population_rounding(cumulative)
-
-        minimum_needs = [
-            parameter.serialize() for parameter in
-            self.parameters['minimum needs']
-        ]
 
         # Generate impact report for the pdf map
         blank_cell = ''
@@ -160,16 +151,13 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
                       TableRow([tr('People impacted'),
                                 '%s' % format_int(impacted_people),
                                 blank_cell],
-                               header=True),
-                      TableRow([category_header,
-                                tr('Total'), tr('Cumulative')],
                                header=True)]
 
         for hazard_zone in self.hazard_zones:
             table_body.append(
-                TableRow([hazard_zone,
-                          format_int(all_categories_population[hazard_zone]),
-                          format_int(all_categories_cumulative[hazard_zone])]))
+                TableRow(
+                    [hazard_zone,
+                     format_int(all_categories_population[hazard_zone])]))
 
         table_body.extend([
             TableRow(tr(
