@@ -318,7 +318,7 @@ class ImpactFunctionMetadata(object):
                                (key, type(metadata_dict[key])))
                     return False, message
             else:
-                if not isinstance(metadata_dict[key], [str, unicode]):
+                if not isinstance(metadata_dict[key], (str, unicode)):
                     message = ('Value of key %s is not str but %s' %
                                (key, type(metadata_dict[key])))
                     return False, message
