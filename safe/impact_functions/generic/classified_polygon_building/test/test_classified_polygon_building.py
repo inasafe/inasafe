@@ -48,8 +48,8 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In the event of earthquake polygon how '
-                             'many buildings might be affected')
+        expected_question = ('In each of the hazard zones how many buildings '
+                             'might be affected.')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)

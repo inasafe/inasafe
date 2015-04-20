@@ -1020,7 +1020,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check the values of subcategories options
-        expected_subcategories = ['flood', 'tsunami',  'earthquake',
+        expected_subcategories = ['flood', 'tsunami', 'earthquake',
                                   'volcanic ash', 'volcano', 'generic']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 

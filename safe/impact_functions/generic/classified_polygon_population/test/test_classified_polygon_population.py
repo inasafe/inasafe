@@ -48,8 +48,8 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of earthquake polygon how many '
-                             'population might be impacted')
+        expected_question = ('In each of the hazard zones how many people '
+                             'might be impacted.')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
