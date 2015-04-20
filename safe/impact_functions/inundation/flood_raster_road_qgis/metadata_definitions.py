@@ -29,6 +29,9 @@ from safe.definitions import (
     layer_vector_line)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_raster_road_qgis\
+    .parameter_definitions import \
+    road_type_field, min_threshold, max_threshold
 from safe.defaults import road_type_postprocessor
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
@@ -93,9 +96,9 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about road types
-                ('road_type_field', 'TYPE'),
-                ('min threshold [m]', 1.0),
-                ('max threshold [m]', float('inf')),
+                ('road_type_field', road_type_field()),
+                ('min threshold', min_threshold()),
+                ('max threshold', max_threshold()),
                 ('postprocessors', OrderedDict([
                     ('RoadType', road_type_postprocessor())
                 ]))

@@ -73,7 +73,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                         rounding_evacuated),
                     col_span=2)]),
             TableRow([tr('Evacuation threshold'), '%s%%' % format_int(
-                self.parameters['evacuation_percentage'])], header=True),
+                self.parameters['evacuation_percentage'].value)],
+                header=True),
             TableRow(tr(
                 'Map shows the number of people affected in each flood prone '
                 'area')),
@@ -156,8 +157,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         # Initialise attributes of output dataset with all attributes
         # from input polygon and a population count of zero
         new_attributes = hazard_layer.get_data()
-        category_title = 'affected'  # FIXME: Should come from keywords
-        deprecated_category_title = 'FLOODPRONE'
+        category_title = self.parameters['affected_field'].value
+        deprecated_category_title = self.parameters['affected_value'].value
         categories = {}
         for attr in new_attributes:
             attr[self.target_field] = 0
@@ -231,7 +232,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         # Estimate number of people in need of evacuation
         evacuated = (
             affected_population *
-            self.parameters['evacuation_percentage'] /
+            self.parameters['evacuation_percentage'].value /
             100.0)
 
         affected_population, rounding = population_rounding_full(

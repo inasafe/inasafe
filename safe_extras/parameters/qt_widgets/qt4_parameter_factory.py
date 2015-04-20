@@ -1,5 +1,6 @@
 # coding=utf-8
 """Docstring for this file."""
+
 __author__ = 'ismailsunni'
 __project_name = 'parameters'
 __filename = 'qt4_parameter_factory'
@@ -12,6 +13,9 @@ from qt_widgets.float_parameter_widget import FloatParameterWidget
 from qt_widgets.integer_parameter_widget import IntegerParameterWidget
 from qt_widgets.string_parameter_widget import StringParameterWidget
 from qt_widgets.generic_parameter_widget import GenericParameterWidget
+from qt_widgets.list_parameter_widget import ListParameterWidget
+from qt_widgets.input_list_parameter_widget import InputListParameterWidget
+from qt_widgets.dict_parameter_widget import DictParameterWidget
 
 
 class Qt4ParameterFactory(object):
@@ -24,6 +28,9 @@ class Qt4ParameterFactory(object):
             'FloatParameter': FloatParameterWidget,
             'IntegerParameter': IntegerParameterWidget,
             'StringParameter': StringParameterWidget,
+            'ListParameter': ListParameterWidget,
+            'InputListParameter': InputListParameterWidget,
+            'DictParameter': DictParameterWidget
         }
 
     def register_widget(self, parameter, parameter_widget):

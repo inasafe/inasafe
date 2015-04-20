@@ -71,12 +71,12 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         self.prepare(layers)
 
         # Set the target field
-        target_field = 'FLOODED'
+        target_field = self.parameters['target_field_value'].value
 
         # Get the parameters from IF options
-        road_type_field = self.parameters['road_type_field']
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        road_type_field = self.parameters['road_type_field'].value
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
 
         # Extract data
         hazard = self.hazard    # Flood

@@ -46,7 +46,7 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        threshold = self.parameters['threshold [m]']
+        threshold = self.parameters['threshold'].value
         return [
             {
                 'content': tr('Notes'),
@@ -97,7 +97,8 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         self.validate()
         self.prepare(layers)
 
-        threshold = self.parameters['threshold [m]']  # Flood threshold [m]
+        threshold = self.parameters['threshold'].value
+        # Flood threshold [m]
 
         verify(isinstance(threshold, float),
                'Expected thresholds to be a float. Got %s' % str(threshold))
@@ -107,7 +108,7 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         exposure_layer = self.exposure  # Building locations
 
         # Determine attribute name for hazard levels
-        hazard_attribute = 'depth'
+        hazard_attribute = self.parameters['hazard_level_name'].value
 
         # Interpolate hazard level to building locations
         interpolated_layer = assign_hazard_values_to_exposure_data(

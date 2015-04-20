@@ -109,9 +109,9 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         self.prepare(layers)
 
         # The 3 category
-        high_t = self.parameters['Categorical thresholds'][2]
-        medium_t = self.parameters['Categorical thresholds'][1]
-        low_t = self.parameters['Categorical thresholds'][0]
+        high_t = self.parameters['Categorical thresholds'].value[2]
+        medium_t = self.parameters['Categorical thresholds'].value[1]
+        low_t = self.parameters['Categorical thresholds'].value[0]
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard    # Categorised Hazard
