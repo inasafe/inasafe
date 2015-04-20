@@ -721,9 +721,13 @@ def color_ramp(number_of_colour):
         hue = i * hue_interval
         saturation = 1
         value = 1
+        # pylint: disable=bad-builtin
+        # pylint: disable=deprecated-lambda
         rgb = map(
             lambda x: int(x * 255), colorsys.hsv_to_rgb(
                 hue, saturation, value))
+        # pylint: enable=deprecated-lambda
+        # pylint: enable=bad-builtin
         hex_color = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
         colors.append(hex_color)
     return colors
