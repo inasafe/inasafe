@@ -168,16 +168,42 @@ def age_postprocessor():
     age.value = True
 
     youth_ratio = FloatParameter()
-    youth_ratio.name = 'youth_ratio'
+    youth_ratio.name = 'Youth ratio'
     youth_ratio.value = get_defaults('YOUTH_RATIO')
+    youth_ratio.description = tr(
+        'Youth ratio defines what proportion of the population have not yet '
+        'achieved financial independence. The age threshold for youth can '
+        'vary by region - please consult with your local census bureau to find'
+        'out what the relevant threshold is in your region. InaSAFE does not '
+        'impose a particular age ratio scheme - it will break down the '
+        'population according to the thresholds you define for your locality.'
+    )
 
     adult_ratio = FloatParameter()
-    adult_ratio.name = 'adult_ratio'
+    adult_ratio.name = 'Adult ratio'
     adult_ratio.value = get_defaults('ADULT_RATIO')
+    adult_ratio.description = tr(
+        'Adult ratio defines what proportion of the population have '
+        'passed into adulthood and are not yet aged. The age threshold for '
+        'adults can vary by region - please consult with your local census '
+        'bureau to find out what the relevant threshold is in your region. '
+        'InaSAFE does not impose a particular age ratio scheme - it will '
+        'break down the population according to the thresholds you define for '
+        'your locality.'
+    )
 
     elderly_ratio = FloatParameter()
-    elderly_ratio.name = 'elderly_ratio'
+    elderly_ratio.name = 'Elderly ratio'
     elderly_ratio.value = get_defaults('ELDERLY_RATIO')
+    elderly_ratio.description = tr(
+        'Elderly ratio defines what proportion of the population have '
+        'passed from adulthood into their later life stage.  The age '
+        'threshold for being considered elderly can vary by region - please '
+        'consult with your local census bureau to find out what the relevant '
+        'threshold is in your region. InaSAFE does not impose a particular '
+        'age ratio scheme - it will break down the population according to '
+        'the thresholds you define for your locality.'
+    )
 
     return [age, youth_ratio, adult_ratio, elderly_ratio]
 
@@ -191,6 +217,9 @@ def aggregation_categorical_postprocessor():
     aggregation_categorical = BooleanParameter()
     aggregation_categorical.name = 'Aggregation categorical'
     aggregation_categorical.value = True
+    aggregation_categorical.description = tr(
+        ''
+    )
 
     return [aggregation_categorical]
 
