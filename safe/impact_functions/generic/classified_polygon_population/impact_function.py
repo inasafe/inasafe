@@ -43,6 +43,9 @@ class ClassifiedPolygonPopulationFunction(ImpactFunction):
         self.hazard_zones = []
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
+        # Set the question of the IF (as the hazard data is not an event)
+        self.question = ('In each of the hazard zones how many people '
+                         'might be impacted.')
 
     def run(self, layers=None):
         """Run classified population evacuation Impact Function.

@@ -42,6 +42,9 @@ class ClassifiedPolygonBuildingFunction(
 
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
+        # Set the question of the IF (as the hazard data is not an event)
+        self.question = ('In each of the hazard zones how many buildings '
+                         'might be affected.')
 
     def notes(self):
         """Return the notes section of the report.
