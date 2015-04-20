@@ -42,7 +42,7 @@ from safe.common.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)
-from safe import definitions
+from safe.new_definitions import global_default_attribute, do_not_use_attribute
 from safe.utilities.unicode import get_unicode
 
 # Aggregations' keywords
@@ -93,11 +93,10 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         self.defaults = None
 
         # string constants
-        self.global_default_string = definitions.global_default_attribute[
-            'name']
-        self.do_not_use_string = definitions.do_not_use_attribute['name']
-        self.global_default_data = definitions.global_default_attribute['id']
-        self.do_not_use_data = definitions.do_not_use_attribute['id']
+        self.global_default_string = global_default_attribute['name']
+        self.do_not_use_string = do_not_use_attribute['name']
+        self.global_default_data = global_default_attribute['id']
+        self.do_not_use_data = do_not_use_attribute['id']
 
         if layer is None:
             self.layer = self.iface.activeLayer()
