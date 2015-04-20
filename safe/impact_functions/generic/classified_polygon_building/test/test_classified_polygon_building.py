@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.generic.classified_polygon_building.impact_function \
+from safe.impact_functions.generic.classified_polygon_building.impact_function\
     import ClassifiedPolygonBuildingFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
