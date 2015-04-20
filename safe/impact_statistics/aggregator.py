@@ -67,7 +67,7 @@ from safe.common.signals import (
     STATIC_MESSAGE_SIGNAL,
 )
 from safe import messaging as m
-from safe.definitions import global_default_attribute, do_not_use_attribute
+from safe.new_definitions import global_default_attribute, do_not_use_attribute
 from safe.messaging import styles
 from safe.common.exceptions import (
     KeywordNotFoundError,
