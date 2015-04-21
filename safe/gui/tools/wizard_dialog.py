@@ -2823,7 +2823,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 if not sub_parameters:
                     sub_parameters = 'Not applicable'
             elif isinstance(self.if_params[parameter], list):
-                sub_parameters = ', '.join([unicode(i) for i in self.if_params[parameter]])
+                sub_parameters = ', '.join(
+                    [unicode(i) for i in self.if_params[parameter]])
             else:
                 sub_parameters = unicode(self.if_params[parameter])
 
