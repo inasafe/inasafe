@@ -75,7 +75,7 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'volcanic hazard zones for each Kawasan Rawan Bencana.'),
             'actions': tr(
                 'Provide details about how many building would likely be '
-                'affected by each hazard zones.'),
+                'affected in each hazard zone.'),
             'limitations': [],
             'citations': [],
             'categories': {

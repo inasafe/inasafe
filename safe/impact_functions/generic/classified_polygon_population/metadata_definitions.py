@@ -72,7 +72,7 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'also calculated.'),
             'actions': tr(
                 'Provide details about how many people would likely '
-                'be affected by each hazard zones.'),
+                'be affected by each hazard zone.'),
             'limitations': [],
             'citations': [],
             'overview': tr(

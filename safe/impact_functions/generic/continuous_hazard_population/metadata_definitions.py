@@ -80,9 +80,9 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                 'Map of population exposed to high category and a table '
                 'with number of people in each category'),
             'actions': tr(
-                'Provide details about how many people would likely need '
-                'to be impacted for each category.'),
-            'limitations': [tr('The number of categories is three.')],
+                'Provide details about how many people would likely '
+                'be impacted in each category.'),
+            'limitations': [tr('Only three categories can be used.')],
             'citations': [],
             'categories': {
                 'hazard': {

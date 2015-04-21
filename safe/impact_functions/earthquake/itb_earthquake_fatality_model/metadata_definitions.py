@@ -81,7 +81,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             'output': '',
             'actions': tr(
                 'Provide details about the population including '
-                'estimages for mortalities and displaced persons.'),
+                'estimates for mortalities and displaced persons.'),
             'limitations': [
                 tr('The model is based on a limited number of observed '
                    'fatality rates during four previous fatal events.'),

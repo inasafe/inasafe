@@ -68,8 +68,8 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'A vector layer of buildings with each tagged according to '
                 'which hazard zone it falls in.'),
             'actions': tr(
-                'Provide details about how many building would likely be '
-                'affected by each hazard zone.'),
+                'Provide details about how many buildings would likely be '
+                'affected in each hazard zone.'),
             'limitations': [],
             'citations': [],
             'categories': {

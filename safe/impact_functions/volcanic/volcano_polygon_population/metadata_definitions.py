@@ -71,11 +71,11 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'affected.'),
             'actions': tr(
                 'Provide details about how many population would likely '
-                'be affected by each hazard zones.'),
+                'be affected in each hazard zone.'),
             'limitations': [],
             'citations': [],
             'overview': tr(
-                'To assess the impacts of volcano eruption on population.'),
+                'To assess the impacts of a volcano eruption on population.'),
             'detailed_description': '',
             'categories': {
                 'hazard': {

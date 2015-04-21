@@ -56,7 +56,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
             TableRow(tr('* Number is rounded up to the nearest %s') % (
                 rounding_evacuated)),
             TableRow(tr('Map shows the numbers of people needing evacuation')),
-            TableRow(tr('Table below shows the weekly minimum needs for all '
+            TableRow(tr('Table shows the weekly minimum needs for all '
                         'evacuated people'))]
         total_needs = evacuated_population_needs(
             evacuated, minimum_needs)
