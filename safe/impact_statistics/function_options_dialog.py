@@ -27,7 +27,6 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QGroupBox,
@@ -36,7 +35,6 @@ from PyQt4.QtGui import (
     QLabel,
     QCheckBox,
     QFormLayout,
-    QGridLayout,
     QWidget,
     QScrollArea,
     QVBoxLayout)
@@ -134,15 +132,28 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         :type parameters: list
         """
         # create minimum needs tab
+        scroll_layout = QVBoxLayout()
+        scroll_widget = QWidget()
+        scroll_widget.setLayout(scroll_layout)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(scroll_widget)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(scroll)
+
         tab = QWidget()
-        form_layout = QGridLayout(tab)
-        form_layout.setContentsMargins(0, 0, 0, 0)
+        tab.setLayout(main_layout)
+
         extra_parameters = [(ResourceParameter, ResourceParameterWidget)]
         parameter_container = ParameterContainer(parameters, extra_parameters)
-        form_layout.addWidget(parameter_container)
+        scroll_layout.addWidget(parameter_container)
+
         self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
         self.values['minimum needs'] = parameter_container.get_parameters
+
+        scroll_layout.addStretch()
+
 
     def build_post_processor_form(self, form_elements):
         """Build Post Processor Tab.
