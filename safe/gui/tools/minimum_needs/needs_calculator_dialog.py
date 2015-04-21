@@ -118,7 +118,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             if population in ['-', None]:
                 displaced = 0
             else:
-                if type(population) is basestring:
+                if isinstance(population, basestring):
                     population = str(population).replace(',', '')
 
                 try:

@@ -60,6 +60,8 @@ class ImpactFunction(object):
         self._aggregation = None
         # Layer produced by the impact function
         self._impact = None
+        # The question of the impact function
+        self._question = None
         # Post analysis Result dictionary (suitable to conversion to json etc.)
         self._tabulated_impact = None
         # Style information for the impact layer - at some point we should
@@ -328,12 +330,27 @@ class ImpactFunction(object):
             "In the event of a flood like in January 2004, how many people
             will be affected."
         """
-        function_title = self.metadata().as_dict()['title']
-        return (tr('In the event of %(hazard)s how many '
-                   '%(exposure)s might %(impact)s')
-                % {'hazard': self.hazard.get_name().lower(),
-                   'exposure': self.exposure.get_name().lower(),
-                   'impact': function_title.lower()})
+        if self._question is None:
+            function_title = self.metadata().as_dict()['title']
+            return (tr('In the event of %(hazard)s how many '
+                       '%(exposure)s might %(impact)s')
+                    % {'hazard': self.hazard.get_name().lower(),
+                       'exposure': self.exposure.get_name().lower(),
+                       'impact': function_title.lower()})
+        else:
+            return self._question
+
+    @question.setter
+    def question(self, question):
+        """Setter of the question.
+
+        :param question: The question for the impact function.
+        :type question: basestring
+        """
+        if isinstance(question, basestring):
+            self._question = question
+        else:
+            raise Exception('The question should be a basestring instance.')
 
     @staticmethod
     def console_progress_callback(current, maximum, message=None):
