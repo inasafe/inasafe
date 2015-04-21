@@ -34,6 +34,7 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import create_classes, create_label, humanize_class
+from safe.common.exceptions import FunctionParametersError
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
@@ -109,10 +110,24 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         self.validate()
         self.prepare(layers)
 
-        # The 3 category
-        high_t = self.parameters['Categorical thresholds'][2]
-        medium_t = self.parameters['Categorical thresholds'][1]
-        low_t = self.parameters['Categorical thresholds'][0]
+        thresholds = self.parameters['Categorical thresholds']
+
+        # Thresholds must contain 3 thresholds
+        if len(thresholds) != 3:
+            raise FunctionParametersError(
+                'The thresholds must consist of 3 values.')
+
+        # Thresholds must monotonically increasing
+        monotonically_increasing_flag = all(
+            x < y for x, y in zip(thresholds, thresholds[1:]))
+        if not monotonically_increasing_flag:
+            raise FunctionParametersError(
+                'The thresholds must be monotonically increasing')
+
+        # The 3 categories
+        low_t = thresholds[0]
+        medium_t = thresholds[1]
+        high_t = thresholds[2]
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard    # Categorised Hazard
@@ -197,7 +212,6 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
             style_class['transparency'] = transparency
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
-
 
         style_info = dict(
             target_field=None,
