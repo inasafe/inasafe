@@ -67,9 +67,8 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
             'output': tr(
                 'Vector layer contains people affected and the minimum '
                 'needs based on the number of people affected.'),
-            'actions': tr(
-                'Provide details about how many population would likely '
-                'be affected in each hazard zone.'),
+                'Provide details about how many people would likely '
+                'be affected by each hazard zone.'),
             'limitations': [],
             'citations': [],
             'overview': tr(

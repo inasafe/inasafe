@@ -8,7 +8,12 @@ __copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
 from PyQt4.QtGui import (
-    QWidget, QHBoxLayout, QVBoxLayout, QLabel, QToolButton, QGridLayout,
+    QWidget,
+    QHBoxLayout,
+    QVBoxLayout,
+    QLabel,
+    QToolButton,
+    QGridLayout,
     QSizePolicy)
 
 
@@ -31,7 +36,12 @@ class GenericParameterWidget(QWidget, object):
         self._label = QLabel(self._parameter.name)
 
         # Label (help text)
-        self._help_text_label = QLabel(self._parameter.help_text)
+        # Hacky fix for #1830 - checking the base type
+        if isinstance(self._parameter.help_text, basestring):
+            self._help_text_label = QLabel(self._parameter.help_text)
+        else:
+            self._help_text_label = QLabel()
+
         self._help_text_label.setWordWrap(True)
 
         # Label (description)

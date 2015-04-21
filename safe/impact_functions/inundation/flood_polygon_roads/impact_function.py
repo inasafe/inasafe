@@ -79,11 +79,11 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         affected_value = self.parameters['affected_value']
 
         # Extract data
-        hazard = self.hazard    # Flood
-        exposure = self.exposure  # Roads
+        hazard_layer = self.hazard    # Flood
+        exposure_layer = self.exposure  # Roads
 
-        hazard = hazard.get_layer()
-        hazard_provider = hazard.dataProvider()
+        hazard_layer = hazard_layer.get_layer()
+        hazard_provider = hazard_layer.dataProvider()
         affected_field_index = hazard_provider.fieldNameIndex(affected_field)
         # see #818: should still work if there is no valid attribute
         if affected_field_index == -1:
@@ -96,11 +96,23 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         LOGGER.info('Affected field: %s' % affected_field)
         LOGGER.info('Affected field index: %s' % affected_field_index)
 
-        exposure = exposure.get_layer()
+        exposure_layer = exposure_layer.get_layer()
+
         # Filter geometry and data using the extent
         requested_extent = QgsRectangle(*self.requested_extent)
+        # This is a hack - we should be setting the extent CRS
+        # in the IF base class via safe/engine/core.py:calculate_impact
+        # for now we assume the extent is in 4326 because it
+        # is set to that from geo_extent
+        # See issue #1857
+        transform = QgsCoordinateTransform(
+            QgsCoordinateReferenceSystem(
+                'EPSG:%i' % self._requested_extent_crs),
+            hazard_layer.crs()
+        )
+        projected_extent = transform.transformBoundingBox(requested_extent)
         request = QgsFeatureRequest()
-        request.setFilterRect(requested_extent)
+        request.setFilterRect(projected_extent)
 
         # Split line_layer by hazard and save as result:
         #   1) Filter from hazard inundated features
@@ -123,7 +135,7 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         #
         ################################
 
-        hazard_features = hazard.getFeatures(request)
+        hazard_features = hazard_layer.getFeatures(request)
         hazard_poly = None
         for feature in hazard_features:
             attributes = feature.attributes()
@@ -155,7 +167,7 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
 
         # Clip exposure by the extent
         extent_as_polygon = QgsGeometry().fromRect(requested_extent)
-        line_layer = clip_by_polygon(exposure, extent_as_polygon)
+        line_layer = clip_by_polygon(exposure_layer, extent_as_polygon)
         # Find inundated roads, mark them
         line_layer = split_by_polygon(
             line_layer, hazard_poly, request, mark_value=(target_field, 1))
@@ -163,7 +175,7 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         # Generate simple impact report
         epsg = get_utm_epsg(self.requested_extent[0], self.requested_extent[1])
         destination_crs = QgsCoordinateReferenceSystem(epsg)
-        transform = QgsCoordinateTransform(exposure.crs(), destination_crs)
+        transform = QgsCoordinateTransform(exposure_layer.crs(), destination_crs)
         road_len = flooded_len = 0  # Length of roads
         roads_by_type = dict()      # Length of flooded roads by types
 
