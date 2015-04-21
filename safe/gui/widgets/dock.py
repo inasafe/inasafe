@@ -1903,14 +1903,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.tr('No overlapping extents'), **WARNING_STYLE),
             m.Paragraph(
                 self.tr(
-                'Currently there are no overlapping extents between the '
-                'hazard layer, the exposure layer and the user defined '
-                'analysis area. Try zooming to the analysis area, clearing '
-                'the analysis area or defining a new one using the analysis '
-                'area definition tool.'),
-            m.Image(
-                'file:///%s/img/icons/set-extents-tool.svg' %
-                (resources_path()), **SMALL_ICON_STYLE),
+                    'Currently there are no overlapping extents between the '
+                    'hazard layer, the exposure layer and the user defined '
+                    'analysis area. Try zooming to the analysis area, '
+                    'clearing the analysis area or defining a new one using '
+                    'the analysis area definition tool.'),
+                m.Image(
+                    'file:///%s/img/icons/set-extents-tool.svg' %
+                    (resources_path()), **SMALL_ICON_STYLE),
             ))
         self.extent.hide_next_analysis_extent()
         try:
@@ -1925,8 +1925,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 m.Message(
                     LOGO_ELEMENT,
                     m.Heading(
-                        self.tr('Analysis environment ready'
-                                ), **INFO_STYLE),
+                        self.tr('Analysis environment ready'),
+                        **INFO_STYLE),
                     m.Text(self.tr(
                         'The hazard layer, exposure layer and your '
                         'defined analysis area extents all overlap. Press the '
