@@ -23,6 +23,9 @@
     <normaloff>:/plugins/inasafe/icon.svg</normaloff>:/plugins/inasafe/icon.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <property name="topMargin">
+    <number>2</number>
+   </property>
    <item row="1" column="0">
     <widget class="QGroupBox" name="group_box">
      <property name="sizePolicy">
@@ -185,6 +188,12 @@
    </item>
    <item row="0" column="0">
     <widget class="QWebView" name="web_view" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="url" stdset="0">
       <url>
        <string>about:blank</string>
