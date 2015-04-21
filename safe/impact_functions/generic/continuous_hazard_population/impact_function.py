@@ -143,7 +143,8 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         # exposure is in the hazard zone, else just assign 0
         low_exposure = numpy.where(hazard_data < low_t, exposure_data, 0)
         medium_exposure = numpy.where(
-            (hazard_data >= low_t) & (hazard_data < medium_t), exposure_data, 0)
+            (hazard_data >= low_t) &
+            (hazard_data < medium_t), exposure_data, 0)
         high_exposure = numpy.where(
             (hazard_data >= medium_t) & (hazard_data <= high_t),
             exposure_data, 0)

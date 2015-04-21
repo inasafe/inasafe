@@ -22,12 +22,6 @@
     <height>550</height>
    </size>
   </property>
-  <property name="maximumSize">
-   <size>
-    <width>1003</width>
-    <height>639</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>InaSAFE Keywords Creation Wizard...</string>
   </property>
@@ -120,8 +114,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>985</width>
-        <height>504</height>
+        <width>1834</width>
+        <height>792</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -2379,8 +2373,8 @@ Please step back and select another layer.</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>965</width>
-                <height>484</height>
+                <width>177</width>
+                <height>120</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_32">
