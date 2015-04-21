@@ -31,8 +31,8 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.utilities.i18n import tr
 
 
-class ClassifiedPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
-    """Metadata for ClassifiedPolygonPopulationFunctionMetadata.
+class ClassifiedPolygonHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
+    """Metadata for ClassifiedPolygonHazardPopulationFunctionMetadata.
 
     .. versionadded:: 3.1
 
@@ -52,8 +52,8 @@ class ClassifiedPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'ClassifiedPolygonPopulationFunction',
-            'name': tr('Classified Polygon Population Impact Function'),
+            'id': 'ClassifiedPolygonHazardPopulationFunction',
+            'name': tr('Classified Polygon Hazard Population Function'),
             'impact': tr('Be impacted'),
             'title': tr('Be impacted'),
             'function_type': 'old-style',

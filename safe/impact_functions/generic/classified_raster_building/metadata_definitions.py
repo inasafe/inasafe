@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Disaster risk tool by Australian Aid - Metadata for generic Impact
-function on Population for Classified Hazard.
+function on Building for Classified Hazard.
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -10,35 +10,26 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.utilities import OrderedDict
+from safe.definitions import hazard_definition, hazard_all, unit_classified, \
+    layer_raster_classified, exposure_definition, exposure_structure, \
+    unit_building_type_type, unit_building_generic, layer_vector_polygon, \
+    layer_vector_point
+from safe.utilities.i18n import tr
+
+from safe.defaults import building_type_postprocessor
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
 __filename__ = 'metadata_definitions'
-__date__ = '24/03/15'
+__date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.common.utilities import OrderedDict
-from safe.defaults import default_minimum_needs, default_provenance
-from safe.definitions import (
-    hazard_definition,
-    hazard_all,
-    unit_classified,
-    layer_raster_classified,
-    exposure_definition,
-    exposure_population,
-    unit_people_per_pixel,
-    layer_raster_continuous)
-from safe.defaults import (
-    default_gender_postprocessor,
-    age_postprocessor,
-    minimum_needs_selector)
-from safe.utilities.i18n import tr
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
 
-
-class ClassifiedHazardPopulationMetadata(ImpactFunctionMetadata):
-    """Metadata for Classified Hazard Population Impact Function.
+class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
+    """Metadata for Classified Hazard Building Impact Function.
 
     .. versionadded:: 2.1
 
@@ -58,38 +49,40 @@ class ClassifiedHazardPopulationMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'ClassifiedHazardPopulationFunction',
-            'name': tr('Classified Hazard Population Function'),
-            'impact': tr('Be impacted by each class'),
-            'title': tr('Be affected by each hazard class'),
+            'id': 'ClassifiedRasterHazardBuildingFunction',
+            'name': tr('Classified Raster Hazard Building Function'),
+            'impact': tr('Be impacted'),
+            'title': tr('Be impacted by each hazard class'),
             'function_type': 'old-style',
             'author': 'Dianne Bencito',
             'date_implemented': 'N/A',
             'overview': tr(
                 'To assess the impacts of classified hazards in raster '
-                'format on population raster layer.'),
+                'format on building vector layer.'),
             'detailed_description': tr(
                 'This function will use the class from the hazard layer '
                 'that has been identified by the user which one is low, '
                 'medium, or high from the parameter that user input. '
                 'After that, this impact function will calculate the '
-                'people will be affected per each class for class in the '
-                'hazard layer. Finally, it will show the result and the '
-                'total of people that will be affected for the hazard '
-                'given.'),
+                'building will be impacted per each class for class in '
+                'the hazard layer. Finally, it will show the result and '
+                'the total of building that will be affected for the '
+                'hazard given.'),
             'hazard_input': tr(
                 'A hazard raster layer where each cell represents the '
                 'class of the hazard. There should be 3 classes: e.g. '
                 '1, 2, and 3.'),
             'exposure_input': tr(
-                'An exposure raster layer where each cell represent '
-                'population count.'),
+                'Vector polygon layer which can be extracted from OSM '
+                'where each polygon represents the footprint of a '
+                'building.'),
             'output': tr(
-                'Map of population exposed to high class and a table with '
-                'number of people in each class'),
+                'The impact layer will contain all structures that were '
+                'exposed to the highest class (3) and a summary table '
+                'containing the number of structures in each class.'),
             'actions': tr(
-                'Provide details about how many people would likely be '
-                'affected for each hazard class.'),
+                'Provide details about how many building would likely be '
+                'impacted for each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
             'citations': [],
             'categories': {
@@ -101,22 +94,24 @@ class ClassifiedHazardPopulationMetadata(ImpactFunctionMetadata):
                 },
                 'exposure': {
                     'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
+                    'subcategories': [exposure_structure],
+                    'units': [
+                        unit_building_type_type,
+                        unit_building_generic],
+                    'layer_constraints': [
+                        layer_vector_polygon,
+                        layer_vector_point
+                    ]
                 }
             },
+            # parameters
             'parameters': OrderedDict([
                 ('low_hazard_class', 1.0),
                 ('medium_hazard_class', 2.0),
                 ('high_hazard_class', 3.0),
                 ('postprocessors', OrderedDict([
-                    ('Gender', default_gender_postprocessor()),
-                    ('Age', age_postprocessor()),
-                    ('MinimumNeeds', minimum_needs_selector()),
-                ])),
-                ('minimum needs', default_minimum_needs()),
-                ('provenance', default_provenance())
+                    ('BuildingType', building_type_postprocessor())
+                ]))
             ])
         }
         return dict_meta

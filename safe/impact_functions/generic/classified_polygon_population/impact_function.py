@@ -14,7 +14,8 @@ import numpy
 
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.classified_polygon_population\
-    .metadata_definitions import ClassifiedPolygonPopulationFunctionMetadata
+    .metadata_definitions import \
+    ClassifiedPolygonHazardPopulationFunctionMetadata
 from safe.impact_functions.core import population_rounding
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.vector import Vector
@@ -31,13 +32,13 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
-class ClassifiedPolygonPopulationFunction(ImpactFunction):
+class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
     """Impact Function for Classified Polygon on Population."""
 
-    _metadata = ClassifiedPolygonPopulationFunctionMetadata()
+    _metadata = ClassifiedPolygonHazardPopulationFunctionMetadata()
 
     def __init__(self):
-        super(ClassifiedPolygonPopulationFunction, self).__init__()
+        super(ClassifiedPolygonHazardPopulationFunction, self).__init__()
         self.target_field = 'population'
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
