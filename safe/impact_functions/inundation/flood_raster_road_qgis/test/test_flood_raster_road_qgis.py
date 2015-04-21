@@ -26,7 +26,7 @@ from safe.impact_functions.impact_function_manager \
     import ImpactFunctionManager
 from safe.impact_functions.inundation\
     .flood_raster_road_qgis.impact_function import \
-    FloodRasterRoadsExperimentalFunction
+    FloodRasterRoadsQGISFunction
 from safe.test.utilities import get_qgis_app, test_data_path
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
@@ -39,10 +39,10 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(FloodRasterRoadsExperimentalFunction)
+        registry.register(FloodRasterRoadsQGISFunction)
 
     def test_run(self):
-        function = FloodRasterRoadsExperimentalFunction.instance()
+        function = FloodRasterRoadsQGISFunction.instance()
 
         hazard_path = test_data_path('hazard', 'continuous_flood_20_20.asc')
         exposure_path = test_data_path('exposure', 'roads.shp')
@@ -92,7 +92,7 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
 
         retrieved_if = impact_functions[0].metadata().as_dict()['id']
         expected = ImpactFunctionManager().get_function_id(
-            FloodRasterRoadsExperimentalFunction)
+            FloodRasterRoadsQGISFunction)
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)

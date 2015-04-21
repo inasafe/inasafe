@@ -56,7 +56,7 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'FloodEvacuationVectorHazardFunction',
-            'name': tr('Flood Evacuation Vector Hazard Function'),
+            'name': tr('Flood polygon on people'),
             'impact': tr('Need evacuation'),
             'title': tr('Need evacuation'),
             'function_type': 'old-style',
@@ -66,21 +66,23 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 'To assess the impacts of flood inundation in vector '
                 'format on population.'),
             'detailed_description': tr(
-                'The population subject to inundation is determined '
-                'whether in an area which affected or not. You can also '
-                'set an evacuation percentage to calculate how many '
-                'percent of the total population affected to be '
-                'evacuated. This number will be used to estimate needs'
-                ' based on BNPB Perka 7/2008 minimum bantuan.'),
+                'The population subject to inundation is determined by '
+                'whether they are in an area which affected or not. You can '
+                'also set an evacuation percentage to calculate what '
+                'percent of the total population affected should be '
+                'evacuated. This number will be used to estimate needs '
+                'based on BNPB Perka 7/2008 minimum bantuan.'),
             'hazard_input': tr(
-                'A hazard vector layer which has attribute affected the '
-                'value is either 1 or 0'),
+                'A hazard vector layer which has an attribute "affected". The '
+                'value of the affected attribute should be either 1 '
+                '(for affected) or 0 (for unaffected).'),
             'exposure_input': tr(
-                'An exposure raster layer where each cell represent '
+                'An exposure raster layer where each cell represents a '
                 'population count.'),
             'output': tr(
-                'Vector layer contains people affected and the minimum '
-                'needs based on evacuation percentage.'),
+                'A vector layer containing the number of people affected '
+                'per flood area and the minimum needs based on '
+                'evacuation percentage.'),
             'actions': tr(
                 'Provide details about how many people would likely need '
                 'to be evacuated, where they are located and what '

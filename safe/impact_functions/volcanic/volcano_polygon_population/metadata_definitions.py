@@ -53,29 +53,29 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'VolcanoPolygonPopulationFunction',
-            'name': tr('Volcano Polygon Population Impact Function'),
+            'name': tr('Polygon volcano on population'),
             'impact': tr('Need evacuation'),
             'title': tr('Need evacuation'),
             'function_type': 'old-style',
             'author': 'AIFDR',
             'date_implemented': 'N/A',
             'hazard_input': tr(
-                'A hazard vector layer must be a polygon that has a specific '
+                'The hazard vector layer must be a polygon that has a specific '
                 'hazard zone attribute.'),
             'exposure_input': tr(
-                'An exposure raster layer where each cell represent '
-                'population count.'),
+                'An exposure raster layer where each cell represents a '
+                'population count for that cell.'),
             'output': tr(
-                'Vector layer contains people affected and the minimum '
-                'needs based on the number of people affected.'),
+                'A vector layer containing people affected per hazard zone '
+                'and the minimum needs based on the number of people '
+                'affected.'),
             'actions': tr(
                 'Provide details about how many population would likely '
                 'be affected by each hazard zones.'),
             'limitations': [],
             'citations': [],
             'overview': tr(
-                'To assess the impacts of volcano eruption on '
-                'population.'),
+                'To assess the impacts of volcano eruption on population.'),
             'detailed_description': '',
             'categories': {
                 'hazard': {

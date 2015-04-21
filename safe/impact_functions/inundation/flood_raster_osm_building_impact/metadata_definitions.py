@@ -53,7 +53,7 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'FloodRasterBuildingFunction',
-            'name': tr('Flood Raster Building Function'),
+            'name': tr('Raster flood on buildings'),
             'impact': tr('Be flooded'),
             'title': tr('Be flooded'),
             'function_type': 'old-style',

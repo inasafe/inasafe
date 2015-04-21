@@ -52,7 +52,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'ITBFatalityFunction',
-            'name': tr('ITB Fatality Function'),
+            'name': tr('ITB earthquake fatality'),
             'impact': tr('Die or be displaced'),
             'title': tr('Die or be displaced'),
             'function_type': 'old-style',
@@ -60,7 +60,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             'date_implemented': 'N/A',
             'overview': tr(
                 'To assess the impact of earthquake on population based '
-                'on earthquake model developed by ITB'),
+                'on the earthquake model developed by ITB.'),
             'detailed_description': tr(
                 'This model was developed by Institut Teknologi Bandung '
                 '(ITB) and implemented by Dr. Hadi Ghasemi, Geoscience '
@@ -80,20 +80,19 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             'exposure_input': '',
             'output': '',
             'actions': tr(
-                'Provide details about the population will be die or '
-                'displaced'),
+                'Provide details about the population including '
+                'estimages for mortalities and displaced persons.'),
             'limitations': [
-                tr('The model is based on limited number of observed '
-                   'fatality rates during 4 past fatal events.'),
+                tr('The model is based on a limited number of observed '
+                   'fatality rates during four previous fatal events.'),
                 tr('The model clearly over-predicts the fatality rates at '
                    'intensities higher than VIII.'),
                 tr('The model only estimates the expected fatality rate '
-                   'for a given intensity level; however the associated '
+                   'for a given intensity level. The associated '
                    'uncertainty for the proposed model is not addressed.'),
-                tr('There are few known mistakes in developing the '
-                   'current model:\n\n'
+                tr('There are few known issues in the  current model:\n\n'
                    '* rounding MMI values to the nearest 0.5,\n'
-                   '* Implementing Finite-Fault models of candidate '
+                   '* Implemention of Finite-Fault models of candidate '
                    '  events, and\n'
                    '* consistency between selected GMPEs with those in '
                    '  use by BMKG.\n')

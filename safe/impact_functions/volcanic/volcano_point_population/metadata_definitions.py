@@ -53,7 +53,7 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'VolcanoPointPopulationFunction',
-            'name': tr('Volcano Point Population Impact Function'),
+            'name': tr('Volcano point on population'),
             'impact': tr('Need evacuation'),
             'title': tr('Need evacuation'),
             'function_type': 'old-style',
@@ -69,7 +69,7 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'needs based on the number of people affected.'),
             'actions': tr(
                 'Provide details about how many population would likely '
-                'be affected by each hazard zones.'),
+                'be affected in each hazard zone.'),
             'limitations': [],
             'citations': [],
             'overview': tr(

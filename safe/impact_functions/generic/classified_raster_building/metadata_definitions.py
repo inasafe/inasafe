@@ -50,30 +50,30 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'ClassifiedRasterHazardBuildingFunction',
-            'name': tr('Classified Raster Hazard Building Function'),
+            'name': tr('Classified raster hazard on buidlings'),
             'impact': tr('Be impacted'),
-            'title': tr('Be impacted by each hazard class'),
+            'title': tr('Be impacted in each hazard class'),
             'function_type': 'old-style',
             'author': 'Dianne Bencito',
             'date_implemented': 'N/A',
             'overview': tr(
-                'To assess the impacts of classified hazards in raster '
-                'format on building vector layer.'),
+                'To assess the impacts of a classified hazard in raster '
+                'format on a buildings vector layer.'),
             'detailed_description': tr(
-                'This function will use the class from the hazard layer '
-                'that has been identified by the user which one is low, '
-                'medium, or high from the parameter that user input. '
-                'After that, this impact function will calculate the '
-                'building will be impacted per each class for class in '
-                'the hazard layer. Finally, it will show the result and '
-                'the total of building that will be affected for the '
-                'hazard given.'),
+                'This function will treat the values in the hazard raster '
+                'layer as classes representing low, medium and high '
+                'impact. You need to ensure that the keywords for the hazard '
+                'layer have been set appropriately to define these classes.'
+                'The number of buildings that will be impacted will be '
+                'calculated for each class. The report will show the total '
+                'number of buildings that will be affected for each '
+                'hazard class.'),
             'hazard_input': tr(
                 'A hazard raster layer where each cell represents the '
                 'class of the hazard. There should be 3 classes: e.g. '
                 '1, 2, and 3.'),
             'exposure_input': tr(
-                'Vector polygon layer which can be extracted from OSM '
+                'A vector polygon layer which can be extracted from OSM '
                 'where each polygon represents the footprint of a '
                 'building.'),
             'output': tr(
@@ -81,7 +81,7 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                 'exposed to the highest class (3) and a summary table '
                 'containing the number of structures in each class.'),
             'actions': tr(
-                'Provide details about how many building would likely be '
+                'Provide details about how many buildings would likely be '
                 'impacted for each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
             'citations': [],
