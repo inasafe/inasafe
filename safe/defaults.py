@@ -140,7 +140,10 @@ def default_gender_postprocessor():
     gender = BooleanParameter()
     gender.name = 'Gender'
     gender.value = True
-
+    gender.description = tr(
+        'Check this option if you wish to calculate the gender breakdown '
+        'on the affected population.'
+    )
     return [gender]
 
 
@@ -150,11 +153,15 @@ def minimum_needs_selector():
     :return: A selector to activate minimum needs postprocessor.
     :rtype: list
     """
-    min_selector = BooleanParameter()
-    min_selector.name = 'MinimumNeeds'
-    min_selector.value = True
-
-    return [min_selector]
+    minimum_needs_flag = BooleanParameter()
+    minimum_needs_flag.name = 'MinimumNeeds'
+    minimum_needs_flag.value = True
+    minimum_needs_flag.description = tr(
+        'Check this option if you wish to calculate minimum needs for the '
+        'affected population. Minimum needs will be calculated according to '
+        'the defaults defined in the minimum needs configuration tool.'
+    )
+    return [minimum_needs_flag]
 
 
 def age_postprocessor():
@@ -168,16 +175,42 @@ def age_postprocessor():
     age.value = True
 
     youth_ratio = FloatParameter()
-    youth_ratio.name = 'youth_ratio'
+    youth_ratio.name = 'Youth ratio'
     youth_ratio.value = get_defaults('YOUTH_RATIO')
+    youth_ratio.description = tr(
+        'Youth ratio defines what proportion of the population have not yet '
+        'achieved financial independence. The age threshold for youth can '
+        'vary by region - please consult with your local census bureau to find'
+        'out what the relevant threshold is in your region. InaSAFE does not '
+        'impose a particular age ratio scheme - it will break down the '
+        'population according to the thresholds you define for your locality.'
+    )
 
     adult_ratio = FloatParameter()
-    adult_ratio.name = 'adult_ratio'
+    adult_ratio.name = 'Adult ratio'
     adult_ratio.value = get_defaults('ADULT_RATIO')
+    adult_ratio.description = tr(
+        'Adult ratio defines what proportion of the population have '
+        'passed into adulthood and are not yet aged. The age threshold for '
+        'adults can vary by region - please consult with your local census '
+        'bureau to find out what the relevant threshold is in your region. '
+        'InaSAFE does not impose a particular age ratio scheme - it will '
+        'break down the population according to the thresholds you define for '
+        'your locality.'
+    )
 
     elderly_ratio = FloatParameter()
-    elderly_ratio.name = 'elderly_ratio'
+    elderly_ratio.name = 'Elderly ratio'
     elderly_ratio.value = get_defaults('ELDERLY_RATIO')
+    elderly_ratio.description = tr(
+        'Elderly ratio defines what proportion of the population have '
+        'passed from adulthood into their later life stage.  The age '
+        'threshold for being considered elderly can vary by region - please '
+        'consult with your local census bureau to find out what the relevant '
+        'threshold is in your region. InaSAFE does not impose a particular '
+        'age ratio scheme - it will break down the population according to '
+        'the thresholds you define for your locality.'
+    )
 
     return [age, youth_ratio, adult_ratio, elderly_ratio]
 
@@ -191,6 +224,11 @@ def aggregation_categorical_postprocessor():
     aggregation_categorical = BooleanParameter()
     aggregation_categorical.name = tr('Aggregation categorical')
     aggregation_categorical.value = True
+    aggregation_categorical.description = tr(
+        'Enable the aggregation by categories. For example if you have '
+        'roads classified by type, you will get a breakdown by type of roads'
+        'per aggregation area.'
+    )
 
     return [aggregation_categorical]
 
@@ -204,6 +242,9 @@ def road_type_postprocessor():
     road_type = BooleanParameter()
     road_type.name = tr('Road type')
     road_type.value = True
+    road_type.description = tr(
+        'Check this option to enable reporting break down by road type.'
+    )
 
     return [road_type]
 
@@ -217,6 +258,10 @@ def building_type_postprocessor():
     building_type = BooleanParameter()
     building_type.name = tr('Building type')
     building_type.value = True
+    building_type.description = tr(
+        'Check this option to enable the generation of a break down buildings '
+        'by type for each aggregation area.'
+    )
 
     return [building_type]
 

@@ -29,11 +29,12 @@ from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding)
-from safe.impact_functions.styles import flood_population_style as style_info
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.common.tables import Table, TableRow
+from safe.common.utilities import create_classes, create_label, humanize_class
+from safe.common.exceptions import FunctionParametersError
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
@@ -71,7 +72,8 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         # Extend impact report for on-screen display
         table_body.extend([
             TableRow(tr('Notes'), header=True),
-            tr('Map shows population count in high or medium hazard area'),
+            tr('Map shows population count in high, medium, and low hazard '
+               'area.'),
             tr('Total population: %s') % format_int(total),
             TableRow(tr(
                 'Table below shows the minimum needs for all '
@@ -108,37 +110,59 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         self.validate()
         self.prepare(layers)
 
-        # The 3 category
-        high_t = self.parameters['Categorical thresholds'][2]
-        medium_t = self.parameters['Categorical thresholds'][1]
-        low_t = self.parameters['Categorical thresholds'][0]
+        thresholds = self.parameters['Categorical thresholds']
+
+        # Thresholds must contain 3 thresholds
+        if len(thresholds) != 3:
+            raise FunctionParametersError(
+                'The thresholds must consist of 3 values.')
+
+        # Thresholds must monotonically increasing
+        monotonically_increasing_flag = all(
+            x < y for x, y in zip(thresholds, thresholds[1:]))
+        if not monotonically_increasing_flag:
+            raise FunctionParametersError(
+                'Each threshold should be larger than the previous.')
+
+        # The 3 categories
+        low_t = thresholds[0]
+        medium_t = thresholds[1]
+        high_t = thresholds[2]
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard    # Categorised Hazard
         exposure_layer = self.exposure  # Population Raster
 
         # Extract data as numeric arrays
-        C = hazard_layer.get_data(nan=0.0)  # Category
+        hazard_data = hazard_layer.get_data(nan=0.0)  # Category
 
         # Calculate impact as population exposed to each category
-        P = exposure_layer.get_data(nan=0.0, scaling=True)
-        H = numpy.where(C <= high_t, P, 0)
-        M = numpy.where(C < medium_t, P, 0)
-        L = numpy.where(C < low_t, P, 0)
+        exposure_data = exposure_layer.get_data(nan=0.0, scaling=True)
+
+        # Make 3 data for each zone. Get the value of the exposure if the
+        # exposure is in the hazard zone, else just assign 0
+        low_exposure = numpy.where(hazard_data < low_t, exposure_data, 0)
+        medium_exposure = numpy.where(
+            (hazard_data >= low_t) &
+            (hazard_data < medium_t), exposure_data, 0)
+        high_exposure = numpy.where(
+            (hazard_data >= medium_t) & (hazard_data <= high_t),
+            exposure_data, 0)
+        impacted_exposure = low_exposure + medium_exposure + high_exposure
 
         # Count totals
-        total = int(numpy.sum(P))
-        high = int(numpy.sum(H)) - int(numpy.sum(M))
-        medium = int(numpy.sum(M)) - int(numpy.sum(L))
-        low = int(numpy.sum(L))
-        total_impact = high + medium + low
+        total = int(numpy.sum(exposure_data))
+        low_total = int(numpy.sum(low_exposure))
+        medium_total = int(numpy.sum(medium_exposure))
+        high_total = int(numpy.sum(high_exposure))
+        total_impact = high_total + medium_total + low_total
 
         # Don't show digits less than a 1000
         total = population_rounding(total)
         total_impact = population_rounding(total_impact)
-        high = population_rounding(high)
-        medium = population_rounding(medium)
-        low = population_rounding(low)
+        low_total = population_rounding(low_total)
+        medium_total = population_rounding(medium_total)
+        high_total = population_rounding(high_total)
 
         minimum_needs = [
             parameter.serialize() for parameter in
@@ -146,7 +170,7 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         ]
 
         table_body = self._tabulate(
-            high, low, medium, self.question, total_impact)
+            high_total, low_total, medium_total, self.question, total_impact)
 
         impact_table = Table(table_body).toNewlineFreeString()
 
@@ -154,32 +178,55 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
             minimum_needs, table_body, total, total_impact)
 
         impact_summary = Table(table_body).toNewlineFreeString()
-        map_title = tr('People in high hazard areas')
+        map_title = tr('People in each hazard areas (low, medium, high)')
 
-        # Generate 8 equidistant classes across the range of flooded population
-        # 8 is the number of classes in the predefined flood population style
-        # as imported
-        # noinspection PyTypeChecker
-        classes = numpy.linspace(
-            numpy.nanmin(M.flat[:]), numpy.nanmax(M.flat[:]), 8)
+        # Style for impact layer
+        colours = [
+            '#FFFFFF', '#38A800', '#79C900', '#CEED00',
+            '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
+        classes = create_classes(impacted_exposure.flat[:], len(colours))
+        interval_classes = humanize_class(classes)
+        style_classes = []
 
-        # Modify labels in existing flood style to show quantities
-        style_classes = style_info['style_classes']
+        for i in xrange(len(colours)):
+            style_class = dict()
+            if i == 1:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Low Population [%i people/cell]' % classes[i]))
+            elif i == 4:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Medium Population [%i people/cell]' % classes[i]))
+            elif i == 7:
+                label = create_label(
+                    interval_classes[i],
+                    tr('High Population [%i people/cell]' % classes[i]))
+            else:
+                label = create_label(interval_classes[i])
+            style_class['label'] = label
+            style_class['quantity'] = classes[i]
+            if i == 0:
+                transparency = 100
+            else:
+                transparency = 0
+            style_class['transparency'] = transparency
+            style_class['colour'] = colours[i]
+            style_classes.append(style_class)
 
-        style_classes[1]['label'] = tr('Low [%i people/cell]') % classes[1]
-        style_classes[4]['label'] = tr('Medium [%i people/cell]') % classes[4]
-        style_classes[7]['label'] = tr('High [%i people/cell]') % classes[7]
-
-        style_info['legend_title'] = tr('Population Count')
+        style_info = dict(
+            target_field=None,
+            style_classes=style_classes,
+            style_type='rasterStyle')
 
         # Create raster object and return
         raster_layer = Raster(
-            M,
+            data=impacted_exposure,
             projection=hazard_layer.get_projection(),
             geotransform=hazard_layer.get_geotransform(),
-            name=tr('Population which %s') % (
-                self.impact_function_manager
-                .get_function_title(self).lower()),
+            name=tr('Population might %s') % (
+                self.impact_function_manager.
+                get_function_title(self).lower()),
             keywords={
                 'impact_summary': impact_summary,
                 'impact_table': impact_table,
