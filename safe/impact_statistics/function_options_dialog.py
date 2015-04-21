@@ -33,7 +33,6 @@ from PyQt4.QtGui import (
     QDialog,
     QLabel,
     QCheckBox,
-    QGridLayout,
     QWidget,
     QScrollArea,
     QVBoxLayout)
@@ -129,15 +128,28 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         :type parameters: list
         """
         # create minimum needs tab
+        scroll_layout = QVBoxLayout()
+        scroll_widget = QWidget()
+        scroll_widget.setLayout(scroll_layout)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(scroll_widget)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(scroll)
+
         tab = QWidget()
-        form_layout = QGridLayout(tab)
-        form_layout.setContentsMargins(0, 0, 0, 0)
+        tab.setLayout(main_layout)
+
         extra_parameters = [(ResourceParameter, ResourceParameterWidget)]
         parameter_container = ParameterContainer(parameters, extra_parameters)
-        form_layout.addWidget(parameter_container)
+        scroll_layout.addWidget(parameter_container)
+
         self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
         self.values['minimum needs'] = parameter_container.get_parameters
+
+        scroll_layout.addStretch()
+
 
     def build_post_processor_form(self, form_elements):
         """Build Post Processor Tab.
@@ -168,6 +180,9 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             values[label] = input_values
 
         self.values['postprocessors'] = values
+        # spacer needs to be added last
+        scroll_layout.addStretch()
+
 
     def build_widget(self, form_layout, name, key_value):
         """Create a new form element dynamically based from key_value type.
