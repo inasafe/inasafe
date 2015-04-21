@@ -109,10 +109,10 @@ class FloodPolygonBuildingFunction(
         building_type_field_index = exposure_provider.fieldNameIndex(
             building_type_field)
         if building_type_field_index == -1:
-            message = tr('Field "%s" is not present in the attribute table of '
-                         'the exposure layer. Please change the Building Type '
-                         'Field parameter in the IF Option.') % (
-                building_type_field)
+            message = tr(
+                'Field "%s" is not present in the attribute table of '
+                'the exposure layer. Please change the Building Type '
+                'Field parameter in the IF Option.') % building_type_field
             raise GetDataError(message)
 
         # If target_field does not exist, add it:
@@ -168,7 +168,7 @@ class FloodPolygonBuildingFunction(
             message = tr(
                 'There are no objects in the hazard layer with Affected '
                 'value=%s. Please check the value or use other extent.') % (
-                affected_value)
+                    affected_value)
             raise GetDataError(message)
 
         exposure_data = exposure_layer.getFeatures(request)

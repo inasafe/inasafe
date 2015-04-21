@@ -721,9 +721,13 @@ def color_ramp(number_of_colour):
         hue = i * hue_interval
         saturation = 1
         value = 1
+        # pylint: disable=bad-builtin
+        # pylint: disable=deprecated-lambda
         rgb = map(
             lambda x: int(x * 255), colorsys.hsv_to_rgb(
                 hue, saturation, value))
+        # pylint: enable=deprecated-lambda
+        # pylint: enable=bad-builtin
         hex_color = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
         colors.append(hex_color)
     return colors
@@ -839,7 +843,7 @@ def add_to_list(my_list, my_element):
     :rtype: list
 
     """
-    if type(my_element) is list:
+    if isinstance(my_element, list):
         for element in my_element:
             my_list = add_to_list(my_list, element)
     else:
@@ -863,11 +867,11 @@ def is_subset(element, container):
     :returns: boolean of the membership
     :rtype: bool
     """
-    if type(element) is list:
-        if type(container) is list:
+    if isinstance(element, list):
+        if isinstance(container, list):
             return set(element) <= set(container)
     else:
-        if type(container) is list:
+        if isinstance(container, list):
             return element in container
         else:
             return element == container

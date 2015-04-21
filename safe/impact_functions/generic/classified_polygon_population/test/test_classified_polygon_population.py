@@ -18,7 +18,7 @@ import unittest
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.generic.classified_polygon_population\
-    .impact_function import ClassifiedPolygonPopulationFunction
+    .impact_function import ClassifiedPolygonHazardPopulationFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 
@@ -29,7 +29,7 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(ClassifiedPolygonPopulationFunction)
+        registry.register(ClassifiedPolygonHazardPopulationFunction)
 
     def test_run(self):
         """TestClassifiedPolygonPopulationFunction: Test running the IF."""
@@ -41,7 +41,7 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
         generic_polygon_layer = read_layer(generic_polygon_path)
         population_layer = read_layer(population_path)
 
-        impact_function = ClassifiedPolygonPopulationFunction.instance()
+        impact_function = ClassifiedPolygonHazardPopulationFunction.instance()
         impact_function.hazard = generic_polygon_layer
         impact_function.exposure = population_layer
         impact_function.parameters['hazard zone attribute'] = 'h_zone'
@@ -94,7 +94,7 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
 
         retrieved_if = impact_functions[0].metadata().as_dict()['id']
         expected = ImpactFunctionManager().get_function_id(
-            ClassifiedPolygonPopulationFunction)
+            ClassifiedPolygonHazardPopulationFunction)
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)

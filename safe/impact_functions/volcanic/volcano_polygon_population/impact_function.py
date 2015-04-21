@@ -18,7 +18,6 @@ from safe.impact_functions.volcanic.volcano_polygon_population\
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding)
-from safe.engine.utilities import buffer_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr

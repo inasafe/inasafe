@@ -37,7 +37,7 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 
 
-class ClassifiedHazardPopulationMetadata(ImpactFunctionMetadata):
+class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
     """Metadata for Classified Hazard Population Impact Function.
 
     .. versionadded:: 2.1
@@ -58,8 +58,8 @@ class ClassifiedHazardPopulationMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'ClassifiedHazardPopulationFunction',
-            'name': tr('Classified Hazard Population Function'),
+            'id': 'ClassifiedRasterHazardPopulationFunction',
+            'name': tr('Classified Raster Hazard Population Function'),
             'impact': tr('Be impacted by each class'),
             'title': tr('Be affected by each hazard class'),
             'function_type': 'old-style',

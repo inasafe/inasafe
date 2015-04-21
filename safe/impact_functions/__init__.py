@@ -16,16 +16,16 @@ from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model\
     .impact_function import PAGFatalityFunction
-from safe.impact_functions.generic.classified_hazard_building\
-    .impact_function import ClassifiedHazardBuildingFunction
+from safe.impact_functions.generic.classified_raster_building\
+    .impact_function import ClassifiedRasterHazardBuildingFunction
 from safe.impact_functions.generic.classified_polygon_population\
-    .impact_function import ClassifiedPolygonPopulationFunction
-from safe.impact_functions.generic.classified_hazard_population\
-    .impact_function import ClassifiedHazardPopulationFunction
+    .impact_function import ClassifiedPolygonHazardPopulationFunction
+from safe.impact_functions.generic.classified_raster_population\
+    .impact_function import ClassifiedRasterHazardPopulationFunction
 from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
 from safe.impact_functions.generic.classified_polygon_building\
-    .impact_function import ClassifiedPolygonBuildingFunction
+    .impact_function import ClassifiedPolygonHazardBuildingFunction
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import FloodRasterBuildingFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -69,11 +69,11 @@ def register_impact_functions():
     impact_function_registry.register(FloodRasterRoadsGdalFunction)
     impact_function_registry.register(TsunamiEvacuationFunction)
     # Generic IF's
-    impact_function_registry.register(ClassifiedHazardBuildingFunction)
-    impact_function_registry.register(ClassifiedHazardPopulationFunction)
+    impact_function_registry.register(ClassifiedRasterHazardBuildingFunction)
+    impact_function_registry.register(ClassifiedRasterHazardPopulationFunction)
     impact_function_registry.register(ContinuousHazardPopulationFunction)
-    impact_function_registry.register(ClassifiedPolygonPopulationFunction)
-    impact_function_registry.register(ClassifiedPolygonBuildingFunction)
+    impact_function_registry.register(ClassifiedPolygonHazardPopulationFunction)
+    impact_function_registry.register(ClassifiedPolygonHazardBuildingFunction)
     # Earthquake
     impact_function_registry.register(EarthquakeBuildingFunction)
     impact_function_registry.register(ITBFatalityFunction)

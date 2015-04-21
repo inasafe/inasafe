@@ -28,7 +28,7 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 
-class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
+class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
     """Metadata for Classified Hazard Building Impact Function.
 
     .. versionadded:: 2.1
@@ -49,8 +49,8 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'ClassifiedHazardBuildingFunction',
-            'name': tr('Classified Hazard Building Function'),
+            'id': 'ClassifiedRasterHazardBuildingFunction',
+            'name': tr('Classified Raster Hazard Building Function'),
             'impact': tr('Be impacted'),
             'title': tr('Be impacted by each hazard class'),
             'function_type': 'old-style',
@@ -109,9 +109,9 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
                 ('low_hazard_class', 1.0),
                 ('medium_hazard_class', 2.0),
                 ('high_hazard_class', 3.0),
-                ('postprocessors', OrderedDict([('BuildingType',
-                                                building_type_postprocessor())
-                                                ]))
+                ('postprocessors', OrderedDict([
+                    ('BuildingType', building_type_postprocessor())
+                ]))
             ])
         }
         return dict_meta
