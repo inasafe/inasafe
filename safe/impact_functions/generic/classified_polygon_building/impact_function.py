@@ -17,7 +17,7 @@ from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.classified_polygon_building\
-    .metadata_definitions import ClassifiedPolygonBuildingFunctionMetadata
+    .metadata_definitions import ClassifiedPolygonHazardBuildingFunctionMetadata
 from safe.common.exceptions import InaSAFEError
 from safe.common.utilities import (
     get_thousand_separator,
@@ -30,15 +30,15 @@ from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
 
-class ClassifiedPolygonBuildingFunction(
+class ClassifiedPolygonHazardBuildingFunction(
         ImpactFunction,
         BuildingExposureReportMixin):
     """Impact Function for Generic Polygon on Building."""
 
-    _metadata = ClassifiedPolygonBuildingFunctionMetadata()
+    _metadata = ClassifiedPolygonHazardBuildingFunctionMetadata()
 
     def __init__(self):
-        super(ClassifiedPolygonBuildingFunction, self).__init__()
+        super(ClassifiedPolygonHazardBuildingFunction, self).__init__()
 
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
