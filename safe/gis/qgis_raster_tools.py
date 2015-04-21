@@ -226,9 +226,12 @@ def polygonize_gdal(
         provider.extent(),
         provider.crs())
 
-    (inside_file_name, inside_layer_name, outside_file_name,
-        outside_layer_name) = \
-        polygonize_thresholds(file_name, threshold_min, threshold_max)
+    (
+        inside_file_name,
+        inside_layer_name,
+        outside_file_name,
+        outside_layer_name
+    ) = polygonize_thresholds(file_name, threshold_min, threshold_max)
     inside_layer = \
         QgsVectorLayer(inside_file_name, inside_layer_name, 'ogr')
     outside_layer = \

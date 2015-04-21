@@ -635,8 +635,7 @@ class Analysis(object):
                 text.add(m.Text(
                     self.tr('and bullet_list the results'),
                     m.ImportantText(self.tr('aggregated by')),
-                    m.EmphasizedText(aggregation_name))
-                )
+                    m.EmphasizedText(aggregation_name)))
             except AttributeError:
                 pass
 
@@ -880,7 +879,12 @@ class Analysis(object):
                 ) % (self.runner.result())
                 message = get_error_message(exception, context=content)
             # noinspection PyTypeChecker
+            # RM: Send not busy signal to restore busy cursor
+            self.send_not_busy_signal()
             self.send_error_message(message)
+            # RM: Send analysis done signal because analysis failed and we
+            # want to restore the cursor
+            self.send_analysis_done_signal()
             # self.analysis_done.emit(False)
             return
 
@@ -930,8 +934,8 @@ class Analysis(object):
             return
         except InsufficientOverlapError, e:
             self.analysis_error(e, self.tr(
-                'An exception occurred when setting up the impact calculator.')
-            )
+                'An exception occurred when setting up the '
+                'impact calculator.'))
             return
         except NoFeaturesInExtentError, e:
             self.analysis_error(e, self.tr(

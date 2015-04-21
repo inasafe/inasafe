@@ -15,7 +15,6 @@ from safe.definitions import (
     hazard_volcano,
     unit_volcano_categorical,
     layer_vector_polygon,
-    layer_vector_point,
     layer_raster_continuous,
     exposure_population,
     unit_people_per_pixel,
@@ -61,13 +60,8 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
             'author': 'AIFDR',
             'date_implemented': 'N/A',
             'hazard_input': tr(
-                'A hazard vector layer can be polygon or point. If '
-                'polygon, it must have "KRB" attribute and the valuefor '
-                'it are "Kawasan Rawan Bencana I", "Kawasan Rawan Bencana '
-                'II", or "Kawasan Rawan Bencana III."If you want to see '
-                'the name of the volcano in the result, you need to add '
-                '"NAME" attribute for point data or "GUNUNG" attribute '
-                'for polygon data.'),
+                'A hazard vector layer must be a polygon that has a specific '
+                'hazard zone attribute.'),
             'exposure_input': tr(
                 'An exposure raster layer where each cell represent '
                 'population count.'),
@@ -89,8 +83,7 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                     'subcategories': [hazard_volcano],
                     'units': [unit_volcano_categorical],
                     'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point
+                        layer_vector_polygon
                     ]
                 },
                 'exposure': {
@@ -101,8 +94,10 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('distance [km]', [3, 5, 10]),
-                ('minimum needs', default_minimum_needs()),
+                # The attribute of hazard zone in hazard layer
+                ('hazard zone attribute', 'KRB'),
+                # The attribute for name of the volcano in hazard layer
+                ('volcano name attribute', 'NAME'),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

@@ -604,8 +604,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # TODO refactor impact_functions so it is accessible and user here
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
-        notes = m.Paragraph(self.tr(
-            'You can now proceed to run your model by clicking the'),
+        notes = m.Paragraph(
+            self.tr('You can now proceed to run your model by clicking the'),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
@@ -720,7 +720,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 title=self.tr('Error while saving'),
                 message=self.tr("The destination location must be writable."))
 
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             display_critical_message_bar(
                 title=self.tr('Error while saving'),
                 message=self.tr("Something went wrong."))
@@ -1400,7 +1400,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         else:
             message = self.tr(
                 'Impact layer %s was neither a raster or a vector layer') % (
-                qgis_impact_layer.source())
+                    qgis_impact_layer.source())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
@@ -1739,7 +1739,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             question = self.tr(
                 'The composer template you are printing to is missing '
                 'these elements: %s. Do you still want to continue') % (
-                ', '.join(impact_report.missing_elements))
+                    ', '.join(impact_report.missing_elements))
             # noinspection PyCallByClass,PyTypeChecker
             answer = QtGui.QMessageBox.question(
                 self,
@@ -1897,6 +1897,21 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 2.1.0
         """
+        no_overlap_message = m.Message(
+            LOGO_ELEMENT,
+            m.Heading(
+                self.tr('No overlapping extents'), **WARNING_STYLE),
+            m.Paragraph(
+                self.tr(
+                'Currently there are no overlapping extents between the '
+                'hazard layer, the exposure layer and the user defined '
+                'analysis area. Try zooming to the analysis area, clearing '
+                'the analysis area or defining a new one using the analysis '
+                'area definition tool.'),
+            m.Image(
+                'file:///%s/img/icons/set-extents-tool.svg' %
+                (resources_path()), **SMALL_ICON_STYLE),
+            ))
         self.extent.hide_next_analysis_extent()
         try:
             # Temporary only, for checking the user extent
@@ -1906,7 +1921,31 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             next_analysis_extent = analysis.clip_parameters[1]
 
             self.extent.show_next_analysis_extent(next_analysis_extent)
-
+            self.show_static_message(
+                m.Message(
+                    LOGO_ELEMENT,
+                    m.Heading(
+                        self.tr('Analysis environment ready'
+                                ), **INFO_STYLE),
+                    m.Text(self.tr(
+                        'The hazard layer, exposure layer and your '
+                        'defined analysis area extents all overlap. Press the '
+                        'run button below to continue with the analysis.'
+                    ))))
         except (AttributeError, InsufficientOverlapError):
-            # No layers loaded etc.
-            return
+            # For issue #618
+
+            legend = self.iface.legendInterface()
+
+            # This logic for #1811
+            layers = legend.layers()
+            visible_count = len(layers)
+            if self.show_only_visible_layers_flag:
+                visible_count = 0
+                for layer in layers:
+                    if legend.isLayerVisible(layer):
+                        visible_count += 1
+            if visible_count == 0:
+                self.show_static_message(self.getting_started_message())
+            else:
+                self.show_static_message(no_overlap_message)

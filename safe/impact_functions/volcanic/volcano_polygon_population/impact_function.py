@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Volcano Vector on
+"""InaSAFE Disaster risk tool by Australian Aid - Volcano Polygon on
 Population Impact Function.
 
 Contact : ole.moller.nielsen@gmail.com
@@ -18,7 +18,6 @@ from safe.impact_functions.volcanic.volcano_polygon_population\
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding)
-from safe.engine.utilities import buffer_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
@@ -69,53 +68,39 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         """
         self.validate()
         self.prepare(layers)
+
+        # Parameters
+        hazard_zone_attribute = self.parameters['hazard zone attribute']
+        name_attribute = self.parameters['volcano name attribute']
+
         # Identify hazard and exposure layers
-        hazard_layer = self.hazard  # Volcano KRB
+        hazard_layer = self.hazard
         exposure_layer = self.exposure
 
         # Input checks
-        if not hazard_layer.is_vector:
-            msg = ('Input hazard %s  was not a vector layer as expected '
-                   % hazard_layer.get_name())
+        if not hazard_layer.is_polygon_data:
+            msg = ('Input hazard must be a polygon layer. I got %s with '
+                   'layer type %s' % (hazard_layer.get_name(),
+                                      hazard_layer.get_geometry_name()))
             raise Exception(msg)
 
-        msg = ('Input hazard must be a polygon or point layer. I got %s with '
-               'layer type %s' % (hazard_layer.get_name(),
-                                  hazard_layer.get_geometry_name()))
-        if not (hazard_layer.is_polygon_data or hazard_layer.is_point_data):
-            raise Exception(msg)
+        # Check if hazard_zone_attribute exists in hazard_layer
+        if hazard_zone_attribute not in hazard_layer.get_attribute_names():
+            msg = ('Hazard data %s did not contain expected attribute %s ' % (
+                hazard_layer.get_name(), hazard_zone_attribute))
+            # noinspection PyExceptionInherit
+            raise InaSAFEError(msg)
 
-        data_table = hazard_layer.get_data()
-        if hazard_layer.is_point_data:
-            # Use concentric circles
-            radii = self.parameters['distance [km]']
-            category_title = 'Radius'
-            category_header = tr('Distance [km]')
-            category_names = radii
-
-            name_attribute = 'NAME'  # As in e.g. the Smithsonian dataset
-
-            centers = hazard_layer.get_geometry()
-            rad_m = [x * 1000 for x in radii]  # Convert to meters
-            hazard_layer = buffer_points(
-                centers, rad_m, category_title, data_table=data_table)
-        else:
-            # Use hazard map
-            category_title = 'KRB'
-            category_header = tr('Category')
-
-            # FIXME (Ole): Change to English and use translation system
-            category_names = ['Kawasan Rawan Bencana III',
-                              'Kawasan Rawan Bencana II',
-                              'Kawasan Rawan Bencana I']
-
-            name_attribute = 'GUNUNG'  # As in e.g. BNPB hazard map
+        features = hazard_layer.get_data()
+        category_header = tr('Category')
+        hazard_zone_categories = list(
+            set(hazard_layer.get_data(hazard_zone_attribute)))
 
         # Get names of volcanoes considered
         if name_attribute in hazard_layer.get_attribute_names():
             volcano_name_list = []
             # Run through all polygons and get unique names
-            for row in data_table:
+            for row in features:
                 volcano_name_list.append(row[name_attribute])
 
             volcano_names = ''
@@ -124,13 +109,6 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
             volcano_names = volcano_names[:-2]  # Strip trailing ', '
         else:
             volcano_names = tr('Not specified in data')
-
-        # Check if category_title exists in hazard_layer
-        if category_title not in hazard_layer.get_attribute_names():
-            msg = ('Hazard data %s did not contain expected '
-                   'attribute %s ' % (hazard_layer.get_name(), category_title))
-            # noinspection PyExceptionInherit
-            raise InaSAFEError(msg)
 
         # Find the target field name that has no conflict with default target
         attribute_names = hazard_layer.get_attribute_names()
@@ -148,7 +126,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         categories = {}
         for row in new_data_table:
             row[self.target_field] = 0
-            category = row[category_title]
+            category = row[hazard_zone_attribute]
             categories[category] = 0
 
         # Count affected population per polygon and total
@@ -161,7 +139,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
             new_data_table[poly_id][self.target_field] += population
 
             # Update population count for each category
-            category = new_data_table[poly_id][category_title]
+            category = new_data_table[poly_id][hazard_zone_attribute]
             categories[category] += population
 
         # Count totals
@@ -172,11 +150,8 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         cumulative = 0
         all_categories_population = {}
         all_categories_cumulative = {}
-        for name in category_names:
-            if category_title == 'Radius':
-                key = name * 1000  # Convert to meters
-            else:
-                key = name
+        for name in hazard_zone_categories:
+            key = name
             # prevent key error
             population = int(categories.get(key, 0))
 
@@ -208,7 +183,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
                                 tr('Total'), tr('Cumulative')],
                                header=True)]
 
-        for name in category_names:
+        for name in hazard_zone_categories:
             table_body.append(
                 TableRow([name,
                           format_int(all_categories_population[name]),
