@@ -32,7 +32,7 @@ from safe.utilities.i18n import tr
 
 
 class ClassifiedPolygonHazardPopulationFunctionMetadata(
-    ImpactFunctionMetadata):
+        ImpactFunctionMetadata):
     """Metadata for ClassifiedPolygonHazardPopulationFunctionMetadata.
 
     .. versionadded:: 3.1
