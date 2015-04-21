@@ -144,7 +144,7 @@ class FloodPolygonBuildingFunction(
         # See issue #1857
         transform = QgsCoordinateTransform(
             QgsCoordinateReferenceSystem(
-                'EPSG:%i') % self._requested_extent_crs,
+                'EPSG:%i' % self._requested_extent_crs),
             hazard_layer.crs()
         )
         projected_extent = transform.transformBoundingBox(requested_extent)
