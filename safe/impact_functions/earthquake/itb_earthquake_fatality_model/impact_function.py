@@ -111,8 +111,10 @@ class ITBFatalityFunction(ImpactFunction):
         self.hardcoded_parameters = OrderedDict([
             ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
             # Rates of people displaced for each MMI level
-            ('displacement_rate', {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
-                                   7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0}),
+            ('displacement_rate', {
+                1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
+                7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
+            }),
             ('mmi_range', range(2, 10)),
             ('step', 0.5),
             # Threshold below which layer should be transparent

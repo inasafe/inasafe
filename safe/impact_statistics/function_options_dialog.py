@@ -27,15 +27,12 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QGroupBox,
     QLineEdit,
     QDialog,
     QLabel,
     QCheckBox,
-    QFormLayout,
     QWidget,
     QScrollArea,
     QVBoxLayout)
