@@ -390,7 +390,7 @@ class Plugin(object):
             icon = resources_path('img', 'icons', 'add-test-layers.svg')
             self.action_add_layers = QAction(
                 QIcon(icon),
-                self.tr('Add some test layers'),
+                self.tr('Add Some Test Layers'),
                 self.iface.mainWindow())
             self.action_add_layers.setStatusTip(self.tr(
                 'Add some test layers'))
@@ -430,24 +430,24 @@ class Plugin(object):
         # Now create the actual dock
         self._create_dock()
         # And all the menu actions
+        # Configuration Group
         self._create_options_dialog_action()
         self._create_minimum_needs_options_action()
-        # TODO: add menu separator
-        self._create_keywords_wizard_action()
-        self._create_analysis_wizard_action()
-        # TODO: add menu separator
+        self._create_analysis_extent_action()
         self._create_dock_toggle_action()
         self._create_rubber_bands_action()
-        self._create_analysis_extent_action()
-        self._create_save_scenario_action()
-        # TODO: add menu separator
+        # TODO: add menu separator - Wizards
+        self._create_keywords_wizard_action()
+        self._create_analysis_wizard_action()
+        # TODO: add menu separator - Data
         self._create_osm_downloader_action()
-        self._create_batch_runner_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
-        self._create_impact_merge_action()
-        # TODO: add menu separator
         self._create_test_layers_action()
+        # TODO: add menu separator - Analysis
+        self._create_batch_runner_action()
+        self._create_impact_merge_action()
+        self._create_save_scenario_action()
         # TODO: This action (and related code) will be deprecated
         # keywords dialog to be replaced by keywords wizard
         self._create_keywords_action()
