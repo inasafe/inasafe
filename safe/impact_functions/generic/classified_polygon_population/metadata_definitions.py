@@ -31,7 +31,8 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.utilities.i18n import tr
 
 
-class ClassifiedPolygonHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
+class ClassifiedPolygonHazardPopulationFunctionMetadata(
+    ImpactFunctionMetadata):
     """Metadata for ClassifiedPolygonHazardPopulationFunctionMetadata.
 
     .. versionadded:: 3.1
