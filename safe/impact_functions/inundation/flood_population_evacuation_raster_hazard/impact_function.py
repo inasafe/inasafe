@@ -100,11 +100,12 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
                         'lo': thresholds[i],
                         'val': format_int(val)})
                 else:
-                    s = (tr('People in %(lo).1f m to %(hi).1f m of water: %('
-                            'val)s') % {
-                        'lo': thresholds[i],
-                        'hi': thresholds[i + 1],
-                        'val': format_int(val)})
+                    s = tr(
+                        'People in %(lo).1f m to %(hi).1f m of water: '
+                        '%(val)s') % {
+                            'lo': thresholds[i],
+                            'hi': thresholds[i + 1],
+                            'val': format_int(val)}
                 table_body.append(TableRow(s))
 
         return table_body, total_needs

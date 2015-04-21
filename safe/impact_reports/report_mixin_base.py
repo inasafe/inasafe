@@ -94,7 +94,11 @@ class ReportMixin(object):
                         'The element count of the arguments must equal '
                         'the element count of the content.')
                     assert len(content) == len(arguments), message
+                    # pylint: disable=bad-builtin
+                    # pylint: disable=deprecated-lambda
                     content = map(lambda c, a: c % a, content, arguments)
+                    # pylint: enable=deprecated-lambda
+                    # pylint: enable=bad-builtin
                 else:
                     content = row_template['content'] % arguments
 

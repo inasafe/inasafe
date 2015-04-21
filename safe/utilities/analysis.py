@@ -635,8 +635,7 @@ class Analysis(object):
                 text.add(m.Text(
                     self.tr('and bullet_list the results'),
                     m.ImportantText(self.tr('aggregated by')),
-                    m.EmphasizedText(aggregation_name))
-                )
+                    m.EmphasizedText(aggregation_name)))
             except AttributeError:
                 pass
 
@@ -872,6 +871,7 @@ class Analysis(object):
                     'exclude all features unintentionally.'))
                 report.add(check_list)
                 self.send_static_message(report)
+                self.send_not_busy_signal()
                 return
             if exception is not None:
                 content = self.tr(
@@ -934,8 +934,8 @@ class Analysis(object):
             return
         except InsufficientOverlapError, e:
             self.analysis_error(e, self.tr(
-                'An exception occurred when setting up the impact calculator.')
-            )
+                'An exception occurred when setting up the '
+                'impact calculator.'))
             return
         except NoFeaturesInExtentError, e:
             self.analysis_error(e, self.tr(

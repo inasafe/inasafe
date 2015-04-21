@@ -27,15 +27,12 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QGroupBox,
     QLineEdit,
     QDialog,
     QLabel,
     QCheckBox,
-    QFormLayout,
     QGridLayout,
     QWidget,
     QScrollArea,
@@ -43,8 +40,6 @@ from PyQt4.QtGui import (
 
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
-from safe.postprocessors.postprocessor_factory import (
-    get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe.common.resource_parameter import ResourceParameter
@@ -103,9 +98,9 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         # it's better to check the type of the widget.
         # for new_parameter in new_parameters:
         #     values[new_parameter.name] = new_parameter.value
-        if type(widget) == QLineEdit:
+        if isinstance(widget, QLineEdit):
             return lambda: function(widget.text())
-        elif type(widget) == QCheckBox or type(widget) == QGroupBox:
+        elif isinstance(widget, QCheckBox) or isinstance(widget, QGroupBox):
             return lambda: function(widget.isChecked())
         else:
             return lambda: function(widget.property(property_name))
@@ -256,7 +251,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         else:
             form_layout.addRow(label, widget)
 
-        if type(widget) is QLineEdit:
+        if isinstance(widget, QLineEdit):
             widget.setText(value)
             property_name = 'text'
 

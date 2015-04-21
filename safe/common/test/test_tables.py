@@ -248,13 +248,17 @@ class TablesTest(unittest.TestCase):
     def test_row_span(self):
         """Testing row spanning"""
         table_cell_aa = TableCell('aa spanned', row_span=2)
-        table_row1 = TableRow([table_cell_aa,
-                              self.table_cell_b,
-                              self.table_cell_c,
-                              self.table_cell_d])
-        table_row2 = TableRow([self.table_cell_b,
-                               self.table_cell_c,
-                               self.table_cell_d])
+        table_row1 = TableRow([
+            table_cell_aa,
+            self.table_cell_b,
+            self.table_cell_c,
+            self.table_cell_d
+        ])
+        table_row2 = TableRow([
+            self.table_cell_b,
+            self.table_cell_c,
+            self.table_cell_d
+        ])
         self.html += '  <h2>Spanning Table Columns</h2>\n'
         body = (' <tbody>\n'
                 '  <tr>\n'

@@ -37,21 +37,21 @@ from safe.utilities.i18n import tr
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.\
-    classified_hazard_population.metadata_definitions import \
-    ClassifiedHazardPopulationMetadata
+    classified_raster_population.metadata_definitions import \
+    ClassifiedRasterHazardPopulationMetadata
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
-class ClassifiedHazardPopulationFunction(ImpactFunction):
+class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
     # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by classified hazard."""
 
-    _metadata = ClassifiedHazardPopulationMetadata()
+    _metadata = ClassifiedRasterHazardPopulationMetadata()
 
     def __init__(self):
-        super(ClassifiedHazardPopulationFunction, self).__init__()
+        super(ClassifiedRasterHazardPopulationFunction, self).__init__()
         self.impact_function_manager = ImpactFunctionManager()
 
         # AG: Use the proper minimum needs, update the parameters

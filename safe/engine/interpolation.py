@@ -427,11 +427,14 @@ def interpolate_raster_vector_points(source, target,
         values = interpolate_raster(longitudes, latitudes, A,
                                     coordinates, mode=mode)
     except (BoundsError, InaSAFEError), e:
-        msg = (tr('Could not interpolate from raster layer %(raster)s to '
-                 'vector layer %(vector)s. Error message: %(error)s')
-               % {'raster': source.get_name(),
-                  'vector': target.get_name(),
-                  'error': str(e)})
+        msg = (
+            tr(
+                'Could not interpolate from raster layer %(raster)s to '
+                'vector layer %(vector)s. Error message: %(error)s'
+            ) % {
+                'raster': source.get_name(),
+                'vector': target.get_name(),
+                'error': str(e)})
         raise InaSAFEError(msg)
 
     # Add interpolated attribute to existing attributes and return

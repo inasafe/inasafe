@@ -11,9 +11,7 @@ import logging
 from math import ceil
 from collections import OrderedDict
 
-from safe.utilities.i18n import tr
 from safe.defaults import default_minimum_needs
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 LOGGER = logging.getLogger('InaSAFE')
 

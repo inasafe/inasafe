@@ -327,21 +327,23 @@ class Aggregator(QtCore.QObject):
             elderly_ratio = self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY')
             elderly_ratio_key = self.get_default_keyword('ELDERLY_RATIO_KEY')
 
-            if (aggregation_attribute in keywords and
-                    ('category' in keywords and
+            if (
+                    aggregation_attribute in keywords and
+                    (
+                        'category' in keywords and
                         category == 'postprocessing') and
                     (female_ratio in keywords and (
-                    female_ratio != global_default_attribute['name'] or
-                    female_ratio_key in keywords)) and
+                        female_ratio != global_default_attribute['name'] or
+                        female_ratio_key in keywords)) and
                     (youth_ratio in keywords and (
-                    youth_ratio != global_default_attribute['name'] or
-                    youth_ratio_key in keywords)) and
+                        youth_ratio != global_default_attribute['name'] or
+                        youth_ratio_key in keywords)) and
                     (adult_ratio in keywords and (
-                    adult_ratio != global_default_attribute['name'] or
-                    adult_ratio_key in keywords)) and
+                        adult_ratio != global_default_attribute['name'] or
+                        adult_ratio_key in keywords)) and
                     (elderly_ratio in keywords and (
-                    elderly_ratio != global_default_attribute['name'] or
-                    elderly_ratio_key in keywords))):
+                        elderly_ratio != global_default_attribute['name'] or
+                        elderly_ratio_key in keywords))):
                 self.is_valid = True
             # some keywords are needed
             else:
@@ -537,7 +539,7 @@ class Aggregator(QtCore.QObject):
         else:
             message = self.tr(
                 '%s is %s but it should be either vector or raster') % (
-                qgis_impact_layer.name(), qgis_impact_layer.type())
+                    qgis_impact_layer.name(), qgis_impact_layer.type())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
@@ -1168,9 +1170,9 @@ class Aggregator(QtCore.QObject):
         self.attributes = {}
         self.attributes[self.get_default_keyword(
             'AGGR_ATTR_KEY')] = (
-            self.read_keywords(
-                self.layer,
-                self.get_default_keyword('AGGR_ATTR_KEY')))
+                self.read_keywords(
+                    self.layer,
+                    self.get_default_keyword('AGGR_ATTR_KEY')))
 
         female_ratio_key = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
         female_ratio_attribute = self.read_keywords(
@@ -1640,7 +1642,7 @@ class Aggregator(QtCore.QObject):
                 self.tr(
                     'No "target_field" keyword found in the impact layer %s '
                     'keywords. The impact function should define this.') % (
-                    impact_layer.name()))
+                        impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
             return False
@@ -1652,7 +1654,7 @@ class Aggregator(QtCore.QObject):
                 self.tr('No attribute "%s" was found in the attribute table '
                         'for layer "%s". The impact function must define this'
                         ' attribute for postprocessing to work.') % (
-                    self.target_field, impact_layer.name()))
+                            self.target_field, impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
             return False
