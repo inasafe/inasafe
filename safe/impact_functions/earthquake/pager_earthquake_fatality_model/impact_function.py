@@ -42,7 +42,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
 
     def __init__(self):
         super(PAGFatalityFunction, self).__init__()
-        self.hardcode_parameters = OrderedDict([
+        self.hardcoded_parameters = OrderedDict([
             ('Theta', 11.067),
             ('Beta', 0.106),  # Model coefficients
             # Rates of people displaced for each MMI level
@@ -69,8 +69,8 @@ class PAGFatalityFunction(ITBFatalityFunction):
         """
 
         N = math.sqrt(2 * math.pi)
-        THETA = self.hardcode_parameters['Theta']
-        BETA = self.hardcode_parameters['Beta']
+        THETA = self.hardcoded_parameters['Theta']
+        BETA = self.hardcoded_parameters['Beta']
 
         x = math.log(mmi / THETA) / BETA
         return math.exp(-x * x / 2.0) / N

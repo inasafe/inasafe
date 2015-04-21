@@ -108,7 +108,7 @@ class ITBFatalityFunction(ImpactFunction):
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
-        self.hardcode_parameters = OrderedDict([
+        self.hardcoded_parameters = OrderedDict([
             ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
             # Rates of people displaced for each MMI level
             ('displacement_rate', {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
@@ -130,8 +130,8 @@ class ITBFatalityFunction(ImpactFunction):
         if mmi < 4:
             return 0
 
-        x = self.hardcode_parameters['x']
-        y = self.hardcode_parameters['y']
+        x = self.hardcoded_parameters['x']
+        y = self.hardcoded_parameters['y']
         # noinspection PyUnresolvedReferences
         return numpy.power(10.0, x * mmi - y)
 
@@ -149,10 +149,10 @@ class ITBFatalityFunction(ImpactFunction):
         self.validate()
         self.prepare(layers)
 
-        displacement_rate = self.hardcode_parameters['displacement_rate']
+        displacement_rate = self.hardcoded_parameters['displacement_rate']
 
         # Tolerance for transparency
-        tolerance = self.hardcode_parameters['tolerance']
+        tolerance = self.hardcoded_parameters['tolerance']
 
         # Extract input layers
         intensity = self.hazard
@@ -164,7 +164,7 @@ class ITBFatalityFunction(ImpactFunction):
 
         # Calculate people affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
-        mmi_range = self.hardcode_parameters['mmi_range']
+        mmi_range = self.hardcoded_parameters['mmi_range']
         number_of_exposed = {}
         number_of_displaced = {}
         number_of_fatalities = {}
@@ -176,8 +176,8 @@ class ITBFatalityFunction(ImpactFunction):
             # Identify cells where MMI is in class i and
             # count people affected by this shake level
             mmi_matches = numpy.where(
-                (hazard > mmi - self.hardcode_parameters['step']) * (
-                    hazard <= mmi + self.hardcode_parameters['step']),
+                (hazard > mmi - self.hardcoded_parameters['step']) * (
+                    hazard <= mmi + self.hardcoded_parameters['step']),
                 exposure, 0)
 
             # Calculate expected number of fatalities per level
@@ -236,7 +236,7 @@ class ITBFatalityFunction(ImpactFunction):
         table_body.append(TableRow([tr('Number of fatalities'), s],
                                    header=True))
 
-        if self.hardcode_parameters['calculate_displaced_people']:
+        if self.hardcoded_parameters['calculate_displaced_people']:
             # Add total estimate of people displaced
             s = format_int(displaced)
             table_body.append(TableRow([tr('Number of people displaced'), s],
