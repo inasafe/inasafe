@@ -2753,7 +2753,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         text = self.tr(
             'Please set impact functions parameters.<br/>Parameters for '
             'impact function "%s" that can be modified are:') % (
-            impact_function_id)
+                impact_function_id)
         self.lblSelectIFParameters.setText(text)
 
         self.parameter_dialog = FunctionOptionsDialog(self)
@@ -2823,7 +2823,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 if not sub_parameters:
                     sub_parameters = 'Not applicable'
             elif isinstance(self.if_params[parameter], list):
-                sub_parameters = ', '.join([unicode(i) for i in self.if_params[parameter]])
+                sub_parameters = ', '.join(
+                    [unicode(i) for i in self.if_params[parameter]])
             else:
                 sub_parameters = unicode(self.if_params[parameter])
 
