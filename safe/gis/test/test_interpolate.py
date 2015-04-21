@@ -397,10 +397,9 @@ class TestInterpolate(unittest.TestCase):
         points = combine_coordinates(xis, etas)
 
         # Interpolate to cropped grids
-        for xc, yc, Ac in [([x[0]], [y[0]], numpy.array([[A[0, 0]]])),  # 1 x 1
-                           ([x[0]], y, numpy.array([A[0, :]])),  # 1 x 2
-                           ]:
-
+        for xc, yc, Ac in [
+                ([x[0]], [y[0]], numpy.array([[A[0, 0]]])),  # 1 x 1
+                ([x[0]], y, numpy.array([A[0, :]]))]:  # 1 x 2
             vals = interpolate2d(xc, yc, Ac, points, mode='linear')
             msg = 'Expected NaN when grid %s is incomplete' % str(Ac.shape)
             assert numpy.all(numpy.isnan(vals)), msg

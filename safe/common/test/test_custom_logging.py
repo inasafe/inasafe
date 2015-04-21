@@ -21,7 +21,7 @@ class TestCustomLogging(unittest.TestCase):
         self.assertTrue('StreamHandler' in handlers)
         self.assertTrue('QgsLogHandler' in handlers)
 
-        if 'INASAFE_SENTRY' in os.environ :
+        if 'INASAFE_SENTRY' in os.environ:
             self.assertTrue('SentryHandler' in handlers)
 
 if __name__ == '__main__':

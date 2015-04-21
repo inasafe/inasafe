@@ -140,6 +140,11 @@ class TestNotImplementedError(Exception):
     pass
 
 
+class FunctionParametersError(Exception):
+    """Custom exception for when function parameters are not valid."""
+    pass
+
+
 class InsufficientParametersError(Exception):
     """Custom exception for when insufficient parameters have been set."""
     pass

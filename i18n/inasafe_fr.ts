@@ -30,7 +30,7 @@
     <message>
         <location filename="clipper.py" line="186"/>
         <source>Expected a vector layer but received a %s.</source>
-        <translation type="unfinished"/>
+        <translation>Couche vectorielle attendue, mais %s a été reçu. </translation>
     </message>
     <message>
         <location filename="clipper.py" line="221"/>
@@ -745,7 +745,7 @@
     <message>
         <location filename="dynamic_translations.py" line="164"/>
         <source>Calculate displaced people</source>
-        <translation type="unfinished"/>
+        <translation>Calculer le nombre de personnes déplacées. </translation>
     </message>
     <message>
         <location filename="dynamic_translations.py" line="165"/>
@@ -1048,7 +1048,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="334"/>
+        <location filename="building_exposure_report_mixin.py" line="333"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
@@ -2477,7 +2477,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="333"/>
+        <location filename="base.py" line="336"/>
         <source>In the event of %(hazard)s how many %(exposure)s might %(impact)s</source>
         <translation type="unfinished"/>
     </message>
@@ -2534,6 +2534,61 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="metadata_definitions.py" line="62"/>
         <source>A hazard vector layer must be a polygon that has a specific hazard zone attribute.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="56"/>
+        <source>Classified Polygon Population Impact Function</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="76"/>
+        <source>To assess the impacts of each hazard zones on population.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="184"/>
+        <source>People impacted</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="163"/>
+        <source>Map shows the number of people impacted in each of the hazard zones.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="224"/>
+        <source>People impacted by each hazard zone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="51"/>
+        <source>Classified Polygon Building Impact Function</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="57"/>
+        <source>To assess the impacts of polygon hazard zone on building.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="60"/>
+        <source>The hazard layer must be a polygon layer. This layer must have an attribute representing the hazard zone that can be specified in the impact function option.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="67"/>
+        <source>Vector layer contains Map of building exposed to each hazard zones.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="61"/>
+        <source>Map shows buildings affected on each of these hazard zones: %s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="190"/>
+        <source>Buildings affected by each hazard zone</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -2961,62 +3016,62 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="879"/>
+        <location filename="analysis.py" line="880"/>
         <source>An exception occurred when calculating the results. %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="908"/>
+        <location filename="analysis.py" line="909"/>
         <source>Aggregation error occurred.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="928"/>
+        <location filename="analysis.py" line="929"/>
         <source>An error occurred when calling a GDAL command</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="932"/>
+        <location filename="analysis.py" line="933"/>
         <source>An error occurred when writing clip file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="936"/>
+        <location filename="analysis.py" line="937"/>
         <source>An exception occurred when setting up the impact calculator.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="941"/>
+        <location filename="analysis.py" line="942"/>
         <source>An error occurred because there are no features visible in the current view. Try zooming out or panning until some features become visible.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="947"/>
+        <location filename="analysis.py" line="948"/>
         <source>An error occurred because you are using a layer containing count data (e.g. population count) which will not scale accurately if we re-project it from its native coordinate reference system to WGS84/GeoGraphic.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="954"/>
+        <location filename="analysis.py" line="955"/>
         <source>An error occurred because it appears that your system does not have sufficient memory. Upgrading your computer so that it has more memory may help. Alternatively, consider using a smaller geographical area for your analysis, or using rasters with a larger cell size.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="968"/>
+        <location filename="analysis.py" line="969"/>
         <source>An exception occurred when setting up the model runner.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="978"/>
+        <location filename="analysis.py" line="979"/>
         <source>Calculating impact</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="979"/>
+        <location filename="analysis.py" line="980"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="998"/>
+        <location filename="analysis.py" line="999"/>
         <source>An exception occurred when starting the model.</source>
         <translation type="unfinished"/>
     </message>
@@ -5637,47 +5692,47 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="212"/>
+        <location filename="wizard_dialog.py" line="231"/>
         <source>You have selected a &lt;b&gt;%s %s&lt;/b&gt; layer measured in &lt;b&gt;%s&lt;/b&gt;, and the selected layer is a vector layer. Please select the attribute in this layer that represents %s.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="220"/>
+        <location filename="wizard_dialog.py" line="239"/>
         <source>You have selected an aggregation layer, and it is a vector layer. Please select the attribute in this layer that represents names of the aggregation areas.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="865"/>
+        <location filename="wizard_dialog.py" line="884"/>
         <source>Field type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="866"/>
+        <location filename="wizard_dialog.py" line="885"/>
         <source>Unique values: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="892"/>
+        <location filename="wizard_dialog.py" line="911"/>
         <source>&lt;b&gt;&lt;font color=&quot;red&quot;&gt;ERROR! Missing subcategory or unit!&lt;/font&gt;&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3040"/>
+        <location filename="wizard_dialog.py" line="3059"/>
         <source>Finish</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3082"/>
+        <location filename="wizard_dialog.py" line="3101"/>
         <source>Next</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3550"/>
+        <location filename="wizard_dialog.py" line="3569"/>
         <source>InaSAFE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3550"/>
+        <location filename="wizard_dialog.py" line="3569"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished"/>
@@ -5693,32 +5748,32 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1304"/>
+        <location filename="wizard_dialog.py" line="1323"/>
         <source>Use default</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3572"/>
+        <location filename="wizard_dialog.py" line="3591"/>
         <source>Title of the layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3573"/>
+        <location filename="wizard_dialog.py" line="3592"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3576"/>
+        <location filename="wizard_dialog.py" line="3595"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3578"/>
+        <location filename="wizard_dialog.py" line="3597"/>
         <source>What is the scale of this layer?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3579"/>
+        <location filename="wizard_dialog.py" line="3598"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
         <translation type="unfinished"/>
     </message>
@@ -5728,58 +5783,58 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2949"/>
+        <location filename="wizard_dialog.py" line="2968"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="469"/>
+        <location filename="wizard_dialog.py" line="488"/>
         <source>Keywords creation...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1942"/>
+        <location filename="wizard_dialog.py" line="1961"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the hazard data registration wizard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1949"/>
+        <location filename="wizard_dialog.py" line="1968"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2345"/>
+        <location filename="wizard_dialog.py" line="2364"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the hazard data registration wizard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2353"/>
+        <location filename="wizard_dialog.py" line="2372"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2519"/>
+        <location filename="wizard_dialog.py" line="2538"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the hazard data registration wizard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2527"/>
+        <location filename="wizard_dialog.py" line="2546"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2810"/>
+        <location filename="wizard_dialog.py" line="2829"/>
         <source>no aggregation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3042"/>
+        <location filename="wizard_dialog.py" line="3061"/>
         <source>Run</source>
         <translation type="unfinished"/>
     </message>
@@ -5799,12 +5854,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="488"/>
+        <location filename="wizard_dialog.py" line="507"/>
         <source>Guided impact assessment wizard...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3233"/>
+        <location filename="wizard_dialog.py" line="3252"/>
         <source>Guided InaSAFE analysis wizard...</source>
         <translation type="unfinished"/>
     </message>
@@ -5829,48 +5884,78 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="237"/>
+        <location filename="wizard_dialog.py" line="256"/>
         <source>Based on your selection of &lt;b&gt;%s %s %s&lt;/b&gt; on the previous page, you should select a &lt;b&gt;%s&lt;/b&gt; layer containing &lt;b&gt;%s&lt;/b&gt; data now.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="245"/>
+        <location filename="wizard_dialog.py" line="264"/>
         <source>&lt;html&gt;In order to use PostGIS layers, please close the wizard, create a new PostGIS connection and run the wizard again. &lt;br/&gt;&lt;br/&gt; You can manage connections under the &lt;i&gt;Layer&lt;/i&gt; &gt; &lt;i&gt;Add Layer&lt;/i&gt; &gt; &lt;i&gt;Add PostGIS Layers&lt;/i&gt; menu.&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2812"/>
+        <location filename="wizard_dialog.py" line="2831"/>
         <source>Please ensure the following information is correct and press Run.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2815"/>
+        <location filename="wizard_dialog.py" line="2834"/>
         <source>impact function</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2815"/>
+        <location filename="wizard_dialog.py" line="2834"/>
         <source>hazard layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2815"/>
+        <location filename="wizard_dialog.py" line="2834"/>
         <source>exposure layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2815"/>
+        <location filename="wizard_dialog.py" line="2834"/>
         <source>aggregation layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2732"/>
+        <location filename="wizard_dialog.py" line="2751"/>
         <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="228"/>
+        <location filename="wizard_dialog.py" line="247"/>
         <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; measured in &lt;b&gt;%s&lt;/b&gt; categorical unit, and the data column is &lt;b&gt;%s&lt;/b&gt;. Below on the left you can see all unclassified unique values found in that column. Please drag them to the right panel in order to classify them to appropriate categories.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="211"/>
+        <source>classes for your flood hazard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="214"/>
+        <source>classes for your tsunami hazard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="217"/>
+        <source>classes for your earthquake hazard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="220"/>
+        <source>classes for your volcanic ash hazard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="223"/>
+        <source>classes for your volcano hazard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="226"/>
+        <source>classes for your generic hazard</source>
         <translation type="unfinished"/>
     </message>
 </context>

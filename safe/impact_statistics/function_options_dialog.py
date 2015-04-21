@@ -27,24 +27,18 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QGroupBox,
     QLineEdit,
     QDialog,
     QLabel,
     QCheckBox,
-    QFormLayout,
-    QGridLayout,
     QWidget,
     QScrollArea,
     QVBoxLayout)
 
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
-from safe.postprocessors.postprocessor_factory import (
-    get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe.common.resource_parameter import ResourceParameter
@@ -103,9 +97,9 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         # it's better to check the type of the widget.
         # for new_parameter in new_parameters:
         #     values[new_parameter.name] = new_parameter.value
-        if type(widget) == QLineEdit:
+        if isinstance(widget, QLineEdit):
             return lambda: function(widget.text())
-        elif type(widget) == QCheckBox or type(widget) == QGroupBox:
+        elif isinstance(widget, QCheckBox) or isinstance(widget, QGroupBox):
             return lambda: function(widget.isChecked())
         else:
             return lambda: function(widget.property(property_name))
@@ -133,15 +127,28 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         :type parameters: list
         """
         # create minimum needs tab
+        scroll_layout = QVBoxLayout()
+        scroll_widget = QWidget()
+        scroll_widget.setLayout(scroll_layout)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(scroll_widget)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(scroll)
+
         tab = QWidget()
-        form_layout = QGridLayout(tab)
-        form_layout.setContentsMargins(0, 0, 0, 0)
+        tab.setLayout(main_layout)
+
         extra_parameters = [(ResourceParameter, ResourceParameterWidget)]
         parameter_container = ParameterContainer(parameters, extra_parameters)
-        form_layout.addWidget(parameter_container)
+        scroll_layout.addWidget(parameter_container)
+
         self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
         self.values['minimum needs'] = parameter_container.get_parameters
+
+        scroll_layout.addStretch()
+
 
     def build_post_processor_form(self, form_elements):
         """Build Post Processor Tab.
@@ -172,6 +179,9 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             values[label] = input_values
 
         self.values['postprocessors'] = values
+        # spacer needs to be added last
+        scroll_layout.addStretch()
+
 
     def build_widget(self, form_layout, name, key_value):
         """Create a new form element dynamically based from key_value type.
@@ -256,7 +266,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         else:
             form_layout.addRow(label, widget)
 
-        if type(widget) is QLineEdit:
+        if isinstance(widget, QLineEdit):
             widget.setText(value)
             property_name = 'text'
 

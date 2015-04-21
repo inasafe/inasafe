@@ -555,19 +555,15 @@ class ClipperTest(unittest.TestCase):
     def test_clip_geometry(self):
         """Test that we can clip a geometry using another geometry."""
         geometry = QgsGeometry.fromPolyline([
-            QgsPoint(10, 10),
-            QgsPoint(20, 20),
-            QgsPoint(30, 30),
-            QgsPoint(40, 40)]
-        )
+            QgsPoint(10, 10), QgsPoint(20, 20), QgsPoint(30, 30),
+            QgsPoint(40, 40)])
 
         clip_polygon = QgsGeometry.fromPolygon([
             [QgsPoint(20, 20),
              QgsPoint(20, 30),
              QgsPoint(30, 30),
              QgsPoint(30, 20),
-             QgsPoint(20, 20)]]
-        )
+             QgsPoint(20, 20)]])
 
         result = clip_geometry(clip_polygon, geometry)
 
