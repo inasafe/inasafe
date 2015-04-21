@@ -122,7 +122,7 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
             x < y for x, y in zip(thresholds, thresholds[1:]))
         if not monotonically_increasing_flag:
             raise FunctionParametersError(
-                'The thresholds must be monotonically increasing')
+                'Each threshold should be larger than the previous.')
 
         # The 3 categories
         low_t = thresholds[0]
