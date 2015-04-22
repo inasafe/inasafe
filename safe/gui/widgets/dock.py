@@ -1409,7 +1409,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.show_intermediate_layers:
             layers_to_add.append(self.analysis.aggregator.layer)
         layers_to_add.append(qgis_impact_layer)
+        active_function = self.active_impact_function
         QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
+        self.active_impact_function = active_function
+        self.impact_function_parameters = \
+            self.active_impact_function.parameters
         # make sure it is active in the legend - needed since QGIS 2.4
         self.iface.setActiveLayer(qgis_impact_layer)
         # then zoom to it
