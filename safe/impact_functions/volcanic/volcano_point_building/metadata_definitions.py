@@ -48,7 +48,7 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'VolcanoPointBuildingFunction',
-            'name': tr('Volcano point on buildings'),
+            'name': tr('Point volcano on buildings'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
             'function_type': 'old-style',

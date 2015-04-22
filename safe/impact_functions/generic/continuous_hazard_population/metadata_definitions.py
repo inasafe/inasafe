@@ -54,7 +54,7 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'ContinuousHazardPopulationFunction',
-            'name': tr('Continuous Hazard Population Function'),
+            'name': tr('Continuous raster hazard on population'),
             'impact': tr('Be impacted'),
             'title': tr('Be impacted'),
             'function_type': 'old-style',

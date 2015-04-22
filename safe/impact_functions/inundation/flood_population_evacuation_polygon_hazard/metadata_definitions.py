@@ -56,7 +56,7 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'FloodEvacuationVectorHazardFunction',
-            'name': tr('Flood polygon on people'),
+            'name': tr('Polygon flood on people'),
             'impact': tr('Need evacuation'),
             'title': tr('Need evacuation'),
             'function_type': 'old-style',

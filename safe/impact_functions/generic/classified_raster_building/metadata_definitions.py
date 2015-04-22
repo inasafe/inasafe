@@ -50,7 +50,7 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'ClassifiedRasterHazardBuildingFunction',
-            'name': tr('Classified raster hazard on buidlings'),
+            'name': tr('Classified raster hazard on buildings'),
             'impact': tr('Be impacted'),
             'title': tr('Be impacted in each hazard class'),
             'function_type': 'old-style',

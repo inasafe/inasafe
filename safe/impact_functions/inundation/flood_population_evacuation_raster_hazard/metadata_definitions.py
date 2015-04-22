@@ -55,7 +55,7 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'FloodEvacuationRasterHazardFunction',
-            'name': tr('Raster flood hazard on raster population'),
+            'name': tr('Raster flood hazard on population'),
             'impact': tr('Need evacuation'),
             'title': tr('Need evacuation'),
             'function_type': 'old-style',

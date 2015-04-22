@@ -50,7 +50,7 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
         """
         dict_meta = {
             'id': 'PAGFatalityFunction',
-            'name': tr('PAG earthquake fatality function'),
+            'name': tr('PAG earthquake fatality'),
             'impact': tr('Die or be displaced according Pager model'),
             'title': tr('Die or be displaced according Pager model'),
             'function_type': 'old-style',
