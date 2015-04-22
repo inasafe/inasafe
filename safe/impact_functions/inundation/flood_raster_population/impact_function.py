@@ -12,9 +12,8 @@ from safe.impact_functions.core import (
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.impact_function_manager \
     import ImpactFunctionManager
-from safe.impact_functions.inundation.\
-    flood_population_evacuation_raster_hazard.metadata_definitions import \
-    FloodEvacuationRasterHazardMetadata
+from safe.impact_functions.inundation.flood_raster_population\
+    .metadata_definitions import FloodEvacuationRasterHazardMetadata
 from safe.utilities.i18n import tr
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException

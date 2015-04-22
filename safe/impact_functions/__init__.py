@@ -37,12 +37,10 @@ from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.inundation.flood_polygon_roads\
     .impact_function import FloodVectorRoadsExperimentalFunction
-from safe.impact_functions.inundation.\
-    flood_population_evacuation_raster_hazard.impact_function import \
-    FloodEvacuationRasterHazardFunction
-from safe.impact_functions.inundation\
-    .flood_population_evacuation_polygon_hazard.impact_function import \
-    FloodEvacuationVectorHazardFunction
+from safe.impact_functions.inundation.flood_raster_population.impact_function\
+    import FloodEvacuationRasterHazardFunction
+from safe.impact_functions.inundation.flood_polygon_population\
+    .impact_function import FloodEvacuationVectorHazardFunction
 from safe.impact_functions.inundation\
     .tsunami_population_evacuation_raster.impact_function import \
     TsunamiEvacuationFunction

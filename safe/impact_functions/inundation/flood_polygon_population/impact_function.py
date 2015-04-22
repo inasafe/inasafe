@@ -24,9 +24,8 @@ from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
     evacuated_population_needs)
-from safe.impact_functions.inundation\
-    .flood_population_evacuation_polygon_hazard.metadata_definitions import \
-    FloodEvacuationVectorHazardMetadata
+from safe.impact_functions.inundation.flood_polygon_population\
+    .metadata_definitions import FloodEvacuationVectorHazardMetadata
 from safe.common.tables import Table, TableRow, TableCell
 from safe.storage.vector import Vector
 from safe.common.utilities import (
