@@ -18,7 +18,7 @@ from safe.impact_functions.generic.classified_polygon_population\
     ClassifiedPolygonHazardPopulationFunctionMetadata
 from safe.impact_functions.core import population_rounding
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.storage.vector import Vector
+from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
     format_int,
@@ -190,28 +190,45 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        classes = create_classes(population_counts, len(colours))
+        classes = create_classes(
+            exposure_layer.get_data().flat[:], len(colours))
         interval_classes = humanize_class(classes)
         # Define style info for output polygons showing population counts
         style_classes = []
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
+            if i == 1:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Low Population [%i people/cell]' % classes[i]))
+            elif i == 4:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Medium Population [%i people/cell]' % classes[i]))
+            elif i == 7:
+                label = create_label(
+                    interval_classes[i],
+                    tr('High Population [%i people/cell]' % classes[i]))
+            else:
+                label = create_label(interval_classes[i])
+
             if i == 0:
                 transparency = 100
-                style_class['min'] = 0
             else:
-                transparency = 30
-                style_class['min'] = classes[i - 1]
-            style_class['transparency'] = transparency
+                transparency = 0
+
+            style_class['label'] = label
+            style_class['quantity'] = classes[i]
             style_class['colour'] = colours[i]
-            style_class['max'] = classes[i]
+            style_class['transparency'] = transparency
             style_classes.append(style_class)
 
         # Override style info with new classes and name
-        style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes,
-                          style_type='graduatedSymbol')
+        style_info = dict(
+            target_field=None,
+            style_classes=style_classes,
+            style_type='rasterStyle')
 
         # For printing map purpose
         map_title = tr('People impacted by each hazard zone')
@@ -221,10 +238,10 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         legend_title = tr('Population')
 
         # Create vector layer and return
-        impact_layer = Vector(
-            data=new_data_table,
-            projection=hazard_layer.get_projection(),
-            geometry=hazard_layer.get_geometry(as_geometry_objects=True),
+        impact_layer = Raster(
+            data=exposure_layer.get_data(),
+            projection=exposure_layer.get_projection(),
+            geotransform=exposure_layer.get_geotransform(),
             name=tr('People impacted by each hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
