@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Metadata for Flood Polygon
-on Population Impact Function.
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on
+Population.
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -14,6 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Rizky Maulana Nugraha'
 
 from safe.common.utilities import OrderedDict
+
 from safe.defaults import (
     default_minimum_needs,
     default_provenance,
@@ -23,19 +24,17 @@ from safe.defaults import (
 from safe.definitions import (
     hazard_definition,
     hazard_flood,
-    unit_wetdry,
-    layer_vector_polygon,
     exposure_definition,
     exposure_population,
     unit_people_per_pixel,
-    layer_raster_continuous, unit_metres_depth, unit_feet_depth)
+    layer_raster_continuous, unit_feet_depth, unit_metres_depth)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 
 
-class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
-    """Metadata for FloodEvacuationFunctionVectorHazard.
+class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
+    """Metadata for FloodEvacuationFunction.
 
     .. versionadded:: 2.1
 
@@ -55,46 +54,58 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'FloodEvacuationVectorHazardFunction',
-            'name': tr('Flood Evacuation Vector Hazard Function'),
+            'id': 'FloodEvacuationRasterHazardFunction',
+            'name': tr('Raster flood hazard on population'),
             'impact': tr('Need evacuation'),
             'title': tr('Need evacuation'),
             'function_type': 'old-style',
             'author': 'AIFDR',
             'date_implemented': 'N/A',
             'overview': tr(
-                'To assess the impacts of flood inundation in vector '
+                'To assess the impacts of flood inundation in raster '
                 'format on population.'),
             'detailed_description': tr(
-                'The population subject to inundation is determined '
-                'whether in an area which affected or not. You can also '
-                'set an evacuation percentage to calculate how many '
-                'percent of the total population affected to be '
-                'evacuated. This number will be used to estimate needs'
-                ' based on BNPB Perka 7/2008 minimum bantuan.'),
+                'The population subject to inundation exceeding a '
+                'threshold (default 1m) is calculated and returned as a '
+                'raster layer. In addition the total number of affected '
+                'people and the  required needs in terms of the BNPB '
+                '(Perka 7) are reported. The threshold can be changed and '
+                'even contain multiple numbers in which case evacuation and '
+                'needs are calculated using the largest number with '
+                'population breakdowns provided for the smaller numbers. '
+                'The population raster is resampled to the resolution of the '
+                'hazard raster and is rescaled so that the resampled '
+                'population counts reflect estimates of population count '
+                'per resampled cell. The resulting impact layer has the '
+                'same resolution and reflects population count per cell '
+                'which are affected by inundation.'),
             'hazard_input': tr(
-                'A hazard vector layer which has attribute affected the '
-                'value is either 1 or 0'),
+                'A hazard raster layer where each cell represents flood '
+                'depth (in meters).'),
             'exposure_input': tr(
                 'An exposure raster layer where each cell represent '
                 'population count.'),
             'output': tr(
-                'Vector layer contains people affected and the minimum '
-                'needs based on evacuation percentage.'),
+                'Raster layer contains people affected and the minimum '
+                'needs based on the people affected.'),
             'actions': tr(
                 'Provide details about how many people would likely need '
                 'to be evacuated, where they are located and what '
                 'resources would be required to support them.'),
-            'limitations': [],
+            'limitations': [
+                tr('The default threshold of 1 meter was selected based '
+                   'on consensus, not hard evidence.')
+            ],
             'citations': [],
             'categories': {
                 'hazard': {
                     'definition': hazard_definition,
                     'subcategories': [hazard_flood],
-                    'units': [unit_wetdry,
-                              unit_metres_depth,
-                              unit_feet_depth],
-                    'layer_constraints': [layer_vector_polygon]
+                    'units': [
+                        unit_feet_depth,
+                        unit_metres_depth
+                    ],
+                    'layer_constraints': [layer_raster_continuous]
                 },
                 'exposure': {
                     'definition': exposure_definition,
@@ -104,8 +115,7 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # Percent of affected needing evacuation
-                ('evacuation_percentage', 1),
+                ('thresholds [m]', [1.0]),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

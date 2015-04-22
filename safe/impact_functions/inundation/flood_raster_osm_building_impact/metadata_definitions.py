@@ -53,7 +53,7 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'FloodRasterBuildingFunction',
-            'name': tr('Flood Raster Building Function'),
+            'name': tr('Raster flood on buildings'),
             'impact': tr('Be flooded'),
             'title': tr('Be flooded'),
             'function_type': 'old-style',
@@ -93,7 +93,7 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                 'flooded and the breakdown of the building by type.'),
             'actions': tr(
                 'Provide details about where critical infrastructure '
-                'might be flooded'),
+                'might be flooded.'),
             'limitations': [
                 tr('This function only flags buildings as impacted or not '
                    'either based on a fixed threshold in case of raster '

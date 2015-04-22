@@ -48,7 +48,7 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'FloodVectorRoadsExperimentalFunction',
-            'name': tr('Flood Vector Roads Experimental Function'),
+            'name': tr('Polygon flood on roads'),
             'impact': tr('Be flooded'),
             'title': tr('Be flooded'),
             'function_type': 'qgis2.0',
@@ -56,10 +56,10 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
             'date_implemented': 'N/A',
             'overview': tr('N/A'),
             'detailed_description': tr('N/A'),
-            'hazard_input': '',
-            'exposure_input': '',
-            'output': '',
-            'actions': '',
+            'hazard_input': tr(''),
+            'exposure_input': tr(''),
+            'output': tr(''),
+            'actions': tr(''),
             'limitations': [],
             'citations': [],
             'categories': {

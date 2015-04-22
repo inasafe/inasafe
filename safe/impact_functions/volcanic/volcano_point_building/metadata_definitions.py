@@ -48,14 +48,14 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'VolcanoPointBuildingFunction',
-            'name': tr('Volcano Point Building Impact Function'),
+            'name': tr('Point volcano on buildings'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
             'function_type': 'old-style',
             'author': 'AIFDR',
             'date_implemented': 'N/A',
             'overview': tr(
-                'To assess the impacts of volcano point on building.'),
+                'To assess the impacts of volcano points on buildings.'),
             'detailed_description': '',
             'hazard_input': tr(
                 'The hazard layer must be a point layer. '

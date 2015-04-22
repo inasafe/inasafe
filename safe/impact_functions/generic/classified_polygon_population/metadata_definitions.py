@@ -54,28 +54,30 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
         """
         dict_meta = {
             'id': 'ClassifiedPolygonHazardPopulationFunction',
-            'name': tr('Classified Polygon Hazard Population Function'),
+            'name': tr('Classified polygon hazard on population'),
             'impact': tr('Be impacted'),
             'title': tr('Be impacted'),
             'function_type': 'old-style',
             'author': 'Akbar Gumbira (akbargumbira@gmail.com)',
             'date_implemented': 'N/A',
             'hazard_input': tr(
-                'A hazard vector layer must be a polygon that has a specific '
+                'A hazard vector layer must be a polygon layer that has a '
                 'hazard zone attribute.'),
             'exposure_input': tr(
-                'An exposure raster layer where each cell represent '
-                'population count.'),
+                'An exposure raster layer where each cell represents '
+                'the population count for that cell.'),
             'output': tr(
-                'Vector layer contains people affected and the minimum '
-                'needs based on the number of people affected.'),
+                'A vector layer containing polygons matching the hazard areas'
+                'and an attribute representing the number of people affected '
+                'for each area. The minimum needs for the affected people are '
+                'also calculated.'),
             'actions': tr(
-                'Provide details about how many population would likely '
-                'be affected by each hazard zones.'),
+                'Provide details about how many people would likely '
+                'be affected by each hazard zone.'),
             'limitations': [],
             'citations': [],
             'overview': tr(
-                'To assess the impacts of each hazard zones on population.'),
+                'To assess the impact of each hazard zone on population.'),
             'detailed_description': '',
             'categories': {
                 'hazard': {

@@ -51,8 +51,8 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'FloodPolygonBuildingFunction',
-            'name': tr('Flood Polygon Building Function'),
-            'impact': tr('Be-flooded'),
+            'name': tr('Polygon flood on buildings'),
+            'impact': tr('Be flooded'),
             'title': tr('Be flooded'),
             'function_type': 'qgis2.0',
             'author': 'Dmitry Kolesov',

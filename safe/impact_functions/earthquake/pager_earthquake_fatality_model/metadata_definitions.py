@@ -50,15 +50,15 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
         """
         dict_meta = {
             'id': 'PAGFatalityFunction',
-            'name': tr('PAG Fatality Function'),
+            'name': tr('PAG earthquake fatality'),
             'impact': tr('Die or be displaced according Pager model'),
             'title': tr('Die or be displaced according Pager model'),
             'function_type': 'old-style',
             'author': 'Helen Crowley',
             'date_implemented': 'N/A',
             'overview': tr(
-                'To assess the impact of earthquake on population based '
-                'on Population Vulnerability Model Pager'),
+                'To assess the impact of an earthquake on population based '
+                'on the Population Vulnerability Model Pager.'),
             'detailed_description': '',
             'hazard_input': '',
             'exposure_input': '',

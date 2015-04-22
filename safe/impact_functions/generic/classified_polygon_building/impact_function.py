@@ -60,7 +60,7 @@ class ClassifiedPolygonHazardBuildingFunction(
             },
             {
                 'content': tr(
-                    'Map shows buildings affected on each of these hazard '
+                    'Map shows buildings affected in each of these hazard '
                     'zones: %s') % ', '.join(self.hazard_zones)
             }
         ]

@@ -48,28 +48,28 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'ClassifiedPolygonHazardBuildingFunction',
-            'name': tr('Classified Polygon Hazard Building Function'),
+            'name': tr('Classified polygon hazard on buildings'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
             'function_type': 'old-style',
             'author': 'Akbar Gumbira (akbargumbira@gmail.com)',
             'date_implemented': '17/04/2015',
             'overview': tr(
-                'To assess the impacts of polygon hazard zone on building.'),
+                'To assess the impacts of polygon hazard zones on buildings.'),
             'detailed_description': '',
             'hazard_input': tr(
                 'The hazard layer must be a polygon layer. This layer '
                 'must have an attribute representing the hazard '
-                'zone that can be specified in the impact function option.'),
+                'zone that can be specified in the impact function options.'),
             'exposure_input': tr(
                 'Vector polygon layer extracted from OSM where each '
                 'polygon represents the footprint of a building.'),
             'output': tr(
-                'Vector layer contains Map of building exposed to '
-                'each hazard zones.'),
+                'A vector layer of buildings with each tagged according to '
+                'which hazard zone it falls in.'),
             'actions': tr(
-                'Provide details about how many building would likely be '
-                'affected by each hazard zones.'),
+                'Provide details about how many buildings would likely be '
+                'affected in each hazard zone.'),
             'limitations': [],
             'citations': [],
             'categories': {

@@ -48,7 +48,7 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'VolcanoPolygonBuildingFunction',
-            'name': tr('Volcano Polygon Building Impact Function'),
+            'name': tr('Polygon volcano on buildings'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
             'function_type': 'old-style',
@@ -75,7 +75,7 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'volcanic hazard zones for each Kawasan Rawan Bencana.'),
             'actions': tr(
                 'Provide details about how many building would likely be '
-                'affected by each hazard zones.'),
+                'affected in each hazard zone.'),
             'limitations': [],
             'citations': [],
             'categories': {
