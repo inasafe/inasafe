@@ -178,8 +178,15 @@ class Aggregator(QtCore.QObject):
     @extent.setter
     def extent(self, value):
         self._extent = value
-        self._prepare_layer()
-        self.safe_layer = safe_read_layer(str(self.layer.source()))
+        # update layer extent to match impact layer if in aoi_mode
+        if self.aoi_mode:
+            try:
+                self.layer = self._extents_to_layer()
+                self.safe_layer = safe_read_layer(str(self.layer.source()))
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
+                raise
 
     def read_keywords(self, layer, keyword=None):
         """It is a wrapper around self._keyword_io.read_keywords
