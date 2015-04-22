@@ -37,7 +37,7 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
-    bbox_intersection)
+    bbox_intersection, safe_to_qgis_layer)
 from safe.common.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
@@ -585,7 +585,12 @@ class Analysis(object):
         # Refactor from dock.prepare_aggregator
         if self.clip_parameters is None:
             raise Exception(self.tr('Clip parameters are not set!'))
-        buffered_geo_extent = self.clip_parameters[1]
+        try:
+            impact_layer = self.get_impact_layer()
+            buffered_geo_extent = impact_layer.extent
+        except AttributeError:
+            # if we have no runner, set dummy extent
+            buffered_geo_extent = self.clip_parameters[1]
 
         # setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
@@ -889,7 +894,12 @@ class Analysis(object):
             return
 
         try:
-            self.aggregator.aggregate(self.runner.impact_layer())
+            impact_layer = self.get_impact_layer()
+            qgis_impact_layer = safe_to_qgis_layer(impact_layer)
+            self.aggregator.extent = extent_to_array(
+                qgis_impact_layer.extent(),
+                qgis_impact_layer.crs())
+            self.aggregator.aggregate(impact_layer)
         except InvalidGeometryError, e:
             message = get_error_message(e)
             self.send_error_message(message)

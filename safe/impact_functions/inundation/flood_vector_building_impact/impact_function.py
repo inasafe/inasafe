@@ -181,7 +181,8 @@ class FloodPolygonBuildingFunction(
         if hazard_poly is None:
             message = tr(
                 'There are no objects in the hazard layer with %s '
-                'value=%s. Please check your data or use another attribute.') % (
+                'value=%s. Please check your data or use another '
+                'attribute.') % (
                     affected_field,
                     affected_value)
             raise GetDataError(message)

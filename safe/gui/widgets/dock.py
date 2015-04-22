@@ -554,7 +554,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         message = m.Message()
         message.add(LOGO_ELEMENT)
-        message.add(m.Heading('Getting started', **INFO_STYLE))
+        message.add(m.Heading(self.tr('Getting started'), **INFO_STYLE))
         notes = m.Paragraph(
             self.tr(
                 'These are the minimum steps you need to follow in order '
@@ -584,13 +584,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.tr(' button below.')))
         message.add(basics_list)
 
-        message.add(m.Heading('Limitations', **WARNING_STYLE))
+        message.add(m.Heading(self.tr('Limitations'), **WARNING_STYLE))
         caveat_list = m.NumberedList()
         for limitation in limitations():
             caveat_list.add(limitation)
         message.add(caveat_list)
 
-        message.add(m.Heading('Disclaimer', **WARNING_STYLE))
+        message.add(m.Heading(self.tr('Disclaimer'), **WARNING_STYLE))
         message.add(m.Paragraph(disclaimer()))
 
         return message
@@ -1925,8 +1925,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 m.Message(
                     LOGO_ELEMENT,
                     m.Heading(
-                        self.tr('Analysis environment ready'),
-                        **INFO_STYLE),
+                        self.tr('Analysis environment ready'), **INFO_STYLE),
                     m.Text(self.tr(
                         'The hazard layer, exposure layer and your '
                         'defined analysis area extents all overlap. Press the '
