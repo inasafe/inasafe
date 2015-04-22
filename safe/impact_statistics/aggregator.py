@@ -124,7 +124,7 @@ class Aggregator(QtCore.QObject):
             'inasafe/use_native_zonal_stats', False, type=bool))
         self.use_native_zonal_stats = flag
 
-        self.extent = extent
+        self._extent = extent
         self._keyword_io = KeywordIO()
         self._defaults = get_defaults()
         self.error_message = None
@@ -170,6 +170,23 @@ class Aggregator(QtCore.QObject):
             keywords = {}
             self.write_keywords(
                 self.layer, keywords)
+
+    @property
+    def extent(self):
+        return self._extent
+
+    @extent.setter
+    def extent(self, value):
+        self._extent = value
+        # update layer extent to match impact layer if in aoi_mode
+        if self.aoi_mode:
+            try:
+                self.layer = self._extents_to_layer()
+                self.safe_layer = safe_read_layer(str(self.layer.source()))
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
+                raise
 
     def read_keywords(self, layer, keyword=None):
         """It is a wrapper around self._keyword_io.read_keywords
@@ -1580,12 +1597,18 @@ class Aggregator(QtCore.QObject):
         fields = provider.fields()
         feature.setFields(fields)
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-        feature.setGeometry(QgsGeometry.fromRect(
+        geom = QgsGeometry.fromRect(
             QgsRectangle(
                 QgsPoint(self.extent[0], self.extent[1]),
-                QgsPoint(self.extent[2], self.extent[3]))))
+                QgsPoint(self.extent[2], self.extent[3])))
+        feature.setGeometry(geom)
         feature[attribute_name] = self.tr('Entire area')
-        provider.addFeatures([feature])
+        if provider.featureCount() > 0:
+            # delete previous feature
+            for f in provider.getFeatures():
+                provider.changeGeometryValues({f.id(): geom})
+        else:
+            provider.addFeatures([feature])
         self.layer.updateExtents()
         try:
             self.update_keywords(

@@ -175,7 +175,8 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         # Generate simple impact report
         epsg = get_utm_epsg(self.requested_extent[0], self.requested_extent[1])
         destination_crs = QgsCoordinateReferenceSystem(epsg)
-        transform = QgsCoordinateTransform(exposure_layer.crs(), destination_crs)
+        transform = QgsCoordinateTransform(
+            exposure_layer.crs(), destination_crs)
         road_len = flooded_len = 0  # Length of roads
         roads_by_type = dict()      # Length of flooded roads by types
 

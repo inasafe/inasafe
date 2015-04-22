@@ -60,8 +60,8 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
             'author': 'AIFDR',
             'date_implemented': 'N/A',
             'hazard_input': tr(
-                'The hazard vector layer must be a polygon that has a specific '
-                'hazard zone attribute.'),
+                'The hazard vector layer must be a polygon that has a '
+                'specific hazard zone attribute.'),
             'exposure_input': tr(
                 'An exposure raster layer where each cell represents a '
                 'population count for that cell.'),

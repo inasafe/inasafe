@@ -1925,8 +1925,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 m.Message(
                     LOGO_ELEMENT,
                     m.Heading(
-                        self.tr('Analysis environment ready'),
-                        **INFO_STYLE),
+                        self.tr('Analysis environment ready'), **INFO_STYLE),
                     m.Text(self.tr(
                         'The hazard layer, exposure layer and your '
                         'defined analysis area extents all overlap. Press the '
