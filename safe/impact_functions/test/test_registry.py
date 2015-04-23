@@ -62,26 +62,26 @@ class TestRegistry(unittest.TestCase):
         registry = Registry()
         impact_functions = registry.list()
         expected = [
-            'Flood Polygon Building Function',
-            'Flood Vector Roads Experimental Function',
-            'Flood Evacuation Vector Hazard Function',
-            'Flood Evacuation Raster Hazard Function',
-            'Flood Raster Building Function',
-            'Flood Raster Roads Experimental Function',
-            'Flood Raster Roads GDAL Function',
-            'Tsunami Evacuation Function',
-            'Classified Raster Hazard Building Function',
-            'Classified Raster Hazard Population Function',
-            'Continuous Hazard Population Function',
-            'Classified Polygon Hazard Population Function',
-            'Classified Polygon Hazard Building Function',
-            'Earthquake Building Function',
-            'ITB Fatality Function',
-            'PAG Fatality Function',
-            'Volcano Point Building Impact Function',
-            'Volcano Polygon Building Impact Function',
-            'Volcano Polygon Population Impact Function',
-            'Volcano Point Population Impact Function']
+            'Polygon flood on buildings',
+            'Polygon flood on roads',
+            'Polygon flood on people',
+            'Raster flood hazard on population',
+            'Raster flood on buildings',
+            'Raster flood on roads (QGIS)',
+            'Raster flood on roads (GDAL)',
+            'Tsunami evacuation',
+            'Classified raster hazard on buildings',
+            'Classified raster hazard on population',
+            'Continuous raster hazard on population',
+            'Classified polygon hazard on population',
+            'Classified polygon hazard on buildings',
+            'Earthquake on buildings',
+            'ITB earthquake fatality',
+            'PAG earthquake fatality',
+            'Point volcano on buildings',
+            'Polygon volcano on buildings',
+            'Point volcano on population',
+            'Polygon volcano on population']
         self.assertTrue(
             len(impact_functions) == len(expected) and
             all(impact_functions.count(i) == expected.count(i) for i in
@@ -125,7 +125,7 @@ class TestRegistry(unittest.TestCase):
         self.assertEqual(expected, result, message)
 
         # Test getting the impact functions by 'name'
-        impact_function_name = 'Flood Polygon Building Function'
+        impact_function_name = 'Polygon flood on buildings'
         result = registry.filter_by_metadata('name', impact_function_name)
         expected = [FloodPolygonBuildingFunction]
         message = 'Expecting %s. Got %s instead.' % (expected, result)

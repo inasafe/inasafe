@@ -135,6 +135,7 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
         self.prepare(layers)
 
         # The 3 classes
+        # TODO: shouldnt these be defined in keywords rather? TS
         low_t = self.parameters['low_hazard_class']
         medium_t = self.parameters['medium_hazard_class']
         high_t = self.parameters['high_hazard_class']

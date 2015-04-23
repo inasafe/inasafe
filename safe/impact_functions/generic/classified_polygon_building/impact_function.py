@@ -17,7 +17,8 @@ from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.classified_polygon_building\
-    .metadata_definitions import ClassifiedPolygonHazardBuildingFunctionMetadata
+    .metadata_definitions \
+    import ClassifiedPolygonHazardBuildingFunctionMetadata
 from safe.common.exceptions import InaSAFEError
 from safe.common.utilities import (
     get_thousand_separator,
@@ -59,7 +60,7 @@ class ClassifiedPolygonHazardBuildingFunction(
             },
             {
                 'content': tr(
-                    'Map shows buildings affected on each of these hazard '
+                    'Map shows buildings affected in each of these hazard '
                     'zones: %s') % ', '.join(self.hazard_zones)
             }
         ]

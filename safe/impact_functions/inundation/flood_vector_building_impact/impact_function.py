@@ -19,6 +19,8 @@ from qgis.core import (
     QgsFeature,
     QgsRectangle,
     QgsFeatureRequest,
+    QgsCoordinateTransform,
+    QgsCoordinateReferenceSystem,
     QgsGeometry)
 from PyQt4.QtCore import QVariant
 
@@ -134,8 +136,20 @@ class FloodPolygonBuildingFunction(
 
         # Filter geometry and data using the requested extent
         requested_extent = QgsRectangle(*self.requested_extent)
+
+        # This is a hack - we should be setting the extent CRS
+        # in the IF base class via safe/engine/core.py:calculate_impact
+        # for now we assume the extent is in 4326 because it
+        # is set to that from geo_extent
+        # See issue #1857
+        transform = QgsCoordinateTransform(
+            QgsCoordinateReferenceSystem(
+                'EPSG:%i' % self._requested_extent_crs),
+            hazard_layer.crs()
+        )
+        projected_extent = transform.transformBoundingBox(requested_extent)
         request = QgsFeatureRequest()
-        request.setFilterRect(requested_extent)
+        request.setFilterRect(projected_extent)
 
         # Split building_layer by H and save as result:
         #   1) Filter from H inundated features
@@ -166,8 +180,10 @@ class FloodPolygonBuildingFunction(
 
         if hazard_poly is None:
             message = tr(
-                'There are no objects in the hazard layer with Affected '
-                'value=%s. Please check the value or use other extent.') % (
+                'There are no objects in the hazard layer with %s '
+                'value=%s. Please check your data or use another '
+                'attribute.') % (
+                    affected_field,
                     affected_value)
             raise GetDataError(message)
 
