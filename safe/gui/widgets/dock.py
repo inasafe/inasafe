@@ -55,7 +55,8 @@ from safe.utilities.resources import (
     get_ui_class)
 from safe.utilities.qgis_utilities import (
     display_critical_message_bar,
-    display_warning_message_bar)
+    display_warning_message_bar,
+    display_information_message_bar)
 from safe.defaults import (
     limitations,
     default_organisation_logo_path)
@@ -650,47 +651,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             hazard_keywords)
         return message
 
-    def no_overlap_message(self):
-        """A message for when there is no valid overlap for analysis area.
-
-        :returns: A Message saying there are no overlapping extents.
-        :rtype: Message
-        """
-        message = m.Message(
-            LOGO_ELEMENT,
-            m.Heading(
-                self.tr('No overlapping extents'), **WARNING_STYLE),
-            m.Paragraph(
-                self.tr(
-                    'Currently there are no overlapping extents between the '
-                    'hazard layer, the exposure layer and the user defined '
-                    'analysis area. Try zooming to the analysis area, '
-                    'clearing the analysis area or defining a new one using '
-                    'the analysis area definition tool.'),
-                m.Image(
-                    'file:///%s/img/icons/set-extents-tool.svg' %
-                    (resources_path()), **SMALL_ICON_STYLE)
-            ))
-        return message
-
-    def overlap_ok_message(self):
-        """A message for when the analysis extents are ok.
-
-        :returns: A message saying the extents are ok, ready to proceed.
-        :rtype: Message
-        """
-        message = m.Message(
-            LOGO_ELEMENT,
-            m.Heading(
-                self.tr('Analysis environment ready'),
-                **INFO_STYLE),
-            m.Text(self.tr(
-                'The hazard layer, exposure layer and your '
-                'defined analysis area extents all overlap. Press the '
-                'run button below to continue with the analysis.'
-            )))
-        return message
-
     def validate(self):
         """Helper method to evaluate the current state of the dialog.
 
@@ -724,8 +684,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return False, message
 
         # Now check if extents are ok for #1811
-
-
         else:
             message = self.ready_message()
             return True, message
@@ -1998,6 +1956,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if valid:
             self.extent.show_next_analysis_extent(extents)
             self.show_static_message(self.overlap_ok_message())
+            display_information_message_bar(
+                self.tr('InaSAFE'),
+                self.tr('Analysis environment ready'),
+                self.tr(
+                    'The hazard layer, exposure layer and your '
+                    'defined analysis area extents all overlap. Press the '
+                    'run button below to continue with the analysis.'),
+                self.tr('More info ...'),
+                2
+            )
         else:
             # For issue #618, #1811
             if self.show_only_visible_layers_flag:
@@ -2017,7 +1985,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         'defined analysis area. Try zooming to the analysis '
                         'area, clearing the analysis area or defining a new '
                         'one using the analysis area definition tool.')
-                ),
+                )
 
                 # self.show_static_message(self.no_overlap_message())
 
