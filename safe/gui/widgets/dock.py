@@ -53,7 +53,9 @@ from safe.utilities.resources import (
     resources_path,
     resource_url,
     get_ui_class)
-from safe.utilities.qgis_utilities import display_critical_message_bar
+from safe.utilities.qgis_utilities import (
+    display_critical_message_bar,
+    display_warning_message_bar)
 from safe.defaults import (
     limitations,
     default_organisation_logo_path)
@@ -506,7 +508,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 ), QtGui.QMessageBox.Ok)
         if invalid_logo_size:
             QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE %s' % get_version()),
+                self,
+                self.tr('InaSAFE %s' % get_version()),
                 self.tr(
                     'The file for organization logo has zero height. Please '
                     'provide valid file for organization logo.'
@@ -600,8 +603,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         :returns Message: A localised message indicating we are ready to run.
         """
-        # What does this todo mean? TS
-        # TODO refactor impact_functions so it is accessible and user here
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         notes = m.Paragraph(
@@ -616,7 +617,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. note:: Assumes a valid hazard and exposure layer are loaded.
 
-        :returns Message: A localised message indicating we are not ready.
+        :returns: A localised message indicating we are not ready.
+        :rtype: Message
         """
         # myHazardFilename = self.getHazardLayer().source()
         # noinspection PyTypeChecker
@@ -646,6 +648,47 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             exposure_keywords,
             hazard_heading,
             hazard_keywords)
+        return message
+
+    def no_overlap_message(self):
+        """A message for when there is no valid overlap for analysis area.
+
+        :returns: A Message saying there are no overlapping extents.
+        :rtype: Message
+        """
+        message = m.Message(
+            LOGO_ELEMENT,
+            m.Heading(
+                self.tr('No overlapping extents'), **WARNING_STYLE),
+            m.Paragraph(
+                self.tr(
+                    'Currently there are no overlapping extents between the '
+                    'hazard layer, the exposure layer and the user defined '
+                    'analysis area. Try zooming to the analysis area, '
+                    'clearing the analysis area or defining a new one using '
+                    'the analysis area definition tool.'),
+                m.Image(
+                    'file:///%s/img/icons/set-extents-tool.svg' %
+                    (resources_path()), **SMALL_ICON_STYLE)
+            ))
+        return message
+
+    def overlap_ok_message(self):
+        """A message for when the analysis extents are ok.
+
+        :returns: A message saying the extents are ok, ready to proceed.
+        :rtype: Message
+        """
+        message = m.Message(
+            LOGO_ELEMENT,
+            m.Heading(
+                self.tr('Analysis environment ready'),
+                **INFO_STYLE),
+            m.Text(self.tr(
+                'The hazard layer, exposure layer and your '
+                'defined analysis area extents all overlap. Press the '
+                'run button below to continue with the analysis.'
+            )))
         return message
 
     def validate(self):
@@ -679,9 +722,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.cboFunction.currentIndex() == -1:
             message = self.not_ready_message()
             return False, message
+
+        # Now check if extents are ok for #1811
+
+
         else:
             message = self.ready_message()
             return True, message
+
+
 
     @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
@@ -1574,6 +1623,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.get_layers_lock:
             return
 
+        # do nothing if no layer is active - see #1861
+        if not self._has_active_layer():
+            return
+
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
@@ -1886,6 +1939,48 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         except InvalidGeometryError:
             return
 
+    def _has_active_layer(self):
+        """Check if there is a layer active in the legend.
+
+        .. versionadded:: 3.1
+
+        :returns: True if there is a layer hightlighted in the legend.
+        :rtype: bool
+        """
+        layer = self.iface.activeLayer()
+        return layer is not None
+
+    def _layer_count(self):
+        """Return the count of layers in the legend.
+
+        .. versionadded: 3.1
+
+        :returns: Number of layers in the legend, regardless of their
+            visibility status.
+        :rtype: int
+        """
+
+        legend = self.iface.legendInterface()
+        layers = legend.layers()
+        count = len(layers)
+        return count
+
+    def _visible_layers_count(self):
+        """Calculate the number of visible layers in the legend.
+
+        .. versionadded: 3.1
+
+        :returns: Count of layers that are actually visible.
+        :rtype: int
+        """
+        legend = self.iface.legendInterface()
+        layers = legend.layers()
+        visible_count = 0
+        for layer in layers:
+            if legend.isLayerVisible(layer):
+                visible_count += 1
+        return visible_count
+
     def show_next_analysis_extent(self):
         """Update the rubber band showing where the next analysis extent is.
 
@@ -1897,55 +1992,53 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 2.1.0
         """
-        no_overlap_message = m.Message(
-            LOGO_ELEMENT,
-            m.Heading(
-                self.tr('No overlapping extents'), **WARNING_STYLE),
-            m.Paragraph(
-                self.tr(
-                    'Currently there are no overlapping extents between the '
-                    'hazard layer, the exposure layer and the user defined '
-                    'analysis area. Try zooming to the analysis area, '
-                    'clearing the analysis area or defining a new one using '
-                    'the analysis area definition tool.'),
-                m.Image(
-                    'file:///%s/img/icons/set-extents-tool.svg' %
-                    (resources_path()), **SMALL_ICON_STYLE),
-            ))
+
         self.extent.hide_next_analysis_extent()
+        valid, extents = self.validate_extents()
+        if valid:
+            self.extent.show_next_analysis_extent(extents)
+            self.show_static_message(self.overlap_ok_message())
+        else:
+            # For issue #618, #1811
+            if self.show_only_visible_layers_flag:
+                layer_count = self._visible_layers_count()
+            else:
+                layer_count = self._layer_count()
+
+            if layer_count == 0:
+                self.show_static_message(self.getting_started_message())
+            else:
+                display_warning_message_bar(
+                    self.tr('InaSAFE'),
+                    self.tr('No overlapping extents'),
+                    self.tr(
+                        'Currently there are no overlapping extents between '
+                        'the hazard layer, the exposure layer and the user '
+                        'defined analysis area. Try zooming to the analysis '
+                        'area, clearing the analysis area or defining a new '
+                        'one using the analysis area definition tool.')
+                ),
+
+                # self.show_static_message(self.no_overlap_message())
+
+    def validate_extents(self):
+        """Check if the current extents are valid.
+
+        Look at the intersection between Hazard, exposure and user analysis area
+        and see if they represent a valid, usable area for analysis.
+
+        .. versionadded:: 3.1
+
+        :returns: A two-tuple. The first element will be True if extents are
+            usable, otherwise False. It will also return False if an invalid
+            condition exists e.g. no hazard layer etc. The second element will
+            be a rectangle for the analysis extent (if valid) or None.
+        :rtype: (bool, QgisRectangle)
+        """
         try:
             # Temporary only, for checking the user extent
             analysis = self.prepare_analysis()
-
-            analysis.clip_parameters = analysis.get_clip_parameters()
-            next_analysis_extent = analysis.clip_parameters[1]
-
-            self.extent.show_next_analysis_extent(next_analysis_extent)
-            self.show_static_message(
-                m.Message(
-                    LOGO_ELEMENT,
-                    m.Heading(
-                        self.tr('Analysis environment ready'),
-                        **INFO_STYLE),
-                    m.Text(self.tr(
-                        'The hazard layer, exposure layer and your '
-                        'defined analysis area extents all overlap. Press the '
-                        'run button below to continue with the analysis.'
-                    ))))
+            clip_parameters = analysis.get_clip_parameters()
+            return True, clip_parameters[1]
         except (AttributeError, InsufficientOverlapError):
-            # For issue #618
-
-            legend = self.iface.legendInterface()
-
-            # This logic for #1811
-            layers = legend.layers()
-            visible_count = len(layers)
-            if self.show_only_visible_layers_flag:
-                visible_count = 0
-                for layer in layers:
-                    if legend.isLayerVisible(layer):
-                        visible_count += 1
-            if visible_count == 0:
-                self.show_static_message(self.getting_started_message())
-            else:
-                self.show_static_message(no_overlap_message)
+            return False, None
