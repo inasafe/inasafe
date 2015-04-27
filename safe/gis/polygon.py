@@ -1278,16 +1278,6 @@ def intersection(line0, line1):
 def clip_grid_by_polygons(A, geotransform, polygons):
     """Clip raster grid by polygon.
 
-    Args:
-        * A: MxN array of grid points
-        * geotransform: 6-tuple used to locate A geographically
-            (top left x, w-e pixel resolution, rotation,
-            top left y, rotation, n-s pixel resolution)
-        * polygons: list of polygon geometry objects or list of polygon arrays
-
-    Returns:
-        points_covered: List of (points, values) - one per input polygon.
-
     Implementing algorithm suggested in
     https://github.com/AIFDR/inasafe/issues/91#issuecomment-7025120
 
@@ -1298,6 +1288,17 @@ def clip_grid_by_polygons(A, geotransform, polygons):
 
         If multiple polygons overlap, the one first encountered will be used.
 
+    :param A: MxN array of grid points.
+
+    :param geotransform: 6-tuple used to locate A geographically
+        (top left x, w-e pixel resolution, rotation, top left y, rotation,
+        n-s pixel resolution)
+
+    :param polygons: list of polygon geometry objects or list of polygon arrays
+
+    :returns: Tuple of (points_covered, values_covered).
+        points_covered = List of (points, values) - one per input polygon.
+        values_covered = A that lie on the polygons
     """
 
     # Convert raster grid to Nx2 array of points and an N array of pixel values
@@ -1307,8 +1308,9 @@ def clip_grid_by_polygons(A, geotransform, polygons):
 
     # Generate list of points and values that fall inside each polygon
     points_covered = []
-    remaining_points = points
-    remaining_values = values
+
+    # List of indices that are inside the polygons
+    values_indices = set([])
 
     for polygon in polygons:
         # print 'Remaining points', len(remaining_points)
@@ -1321,20 +1323,30 @@ def clip_grid_by_polygons(A, geotransform, polygons):
             outer_ring = polygon
             inner_rings = None
 
-        inside, outside = in_and_outside_polygon(remaining_points,
-                                                 outer_ring,
-                                                 holes=inner_rings,
-                                                 closed=True,
-                                                 check_input=False)
+        inside, outside = in_and_outside_polygon(
+            points,
+            outer_ring,
+            holes=inner_rings,
+            closed=True,
+            check_input=False
+        )
         # Add features inside this polygon
-        points_covered.append((remaining_points[inside],
-                               remaining_values[inside]))
+        points_covered.append((points[inside], values[inside]))
 
-        # Select remaining points to clip
-        remaining_points = remaining_points[outside]
-        remaining_values = remaining_values[outside]
+        # Union inside to values indices
+        values_indices |= set(inside)
 
-    return points_covered
+    # Values covered, set 0 if it's not
+    values_covered = values
+    values_indices = list(values_indices)
+    mask = numpy.ones(values.shape, dtype=bool)
+    mask[values_indices] = False
+    values_covered[mask] = numpy.NaN
+
+    # Reshape to the A shape
+    A_covered = numpy.reshape(values_covered, A.shape)
+
+    return points_covered, A_covered
 
 
 def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
