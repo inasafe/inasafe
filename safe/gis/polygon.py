@@ -1327,14 +1327,20 @@ def clip_grid_by_polygons(grid_data, geotransform, polygons):
             closed=True,
             check_input=False
         )
+
+        # Get non intersected inside
+        inside_set = set(inside)
+        intersected_inside = inside_set & values_indices
+        inside = list(inside_set - intersected_inside)
+
         # Add features inside this polygon
         points_covered.append((points[inside], values[inside]))
 
         # Union inside to values indices
-        values_indices |= set(inside)
+        values_indices |= inside_set
 
     # Values covered, set to NaN if it's not covered by any polygons
-    values_covered = values
+    values_covered = values.astype(numpy.float, copy=False)
     values_indices = list(values_indices)
     mask = numpy.ones(values.shape, dtype=bool)
     mask[values_indices] = False

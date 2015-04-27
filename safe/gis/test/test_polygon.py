@@ -1210,12 +1210,12 @@ class TestPolygon(unittest.TestCase):
         values = [{'val': float(x)} for x in values]
 
         # Check correctness (from QGIS inspection)
-        assert numpy.allclose(points[0], [106.7745, -6.2175])
-        assert numpy.allclose(points[3], [106.7805, -6.2235])
-        assert numpy.allclose(points[9], [106.7865, -6.2325])
-        assert values[0]['val'] == 21
-        assert values[3]['val'] == 43
-        assert values[9]['val'] == 75
+        assert numpy.allclose(points[0], [106.7775, -6.2205])
+        assert numpy.allclose(points[3], [106.7865, -6.2295])
+        assert numpy.allclose(points[9], [106.7925, -6.2355])
+        assert values[0]['val'] == 32
+        assert values[3]['val'] == 65
+        assert values[9]['val'] == 87
 
         # Optionally store output for inspection with QGIS (this one is nice)
         if False:
