@@ -98,14 +98,14 @@ class TestEngine(unittest.TestCase):
         polygons = H.get_geometry(as_geometry_objects=True)
 
         # Clip
-        res_clip = clip_grid_by_polygons(E_clip.get_data(),
+        res_clip, _ = clip_grid_by_polygons(E_clip.get_data(),
                                          E_clip.get_geotransform(),
                                          polygons)
 
         # print res_clip
         # print len(res_clip)
 
-        res_full = clip_grid_by_polygons(E_full.get_data(),
+        res_full, _ = clip_grid_by_polygons(E_full.get_data(),
                                          E_full.get_geotransform(),
                                          polygons)
 
@@ -164,7 +164,7 @@ class TestEngine(unittest.TestCase):
         # Run and test the fundamental clipping routine
         # import time
         # t0 = time.time()
-        res = clip_grid_by_polygons(E.get_data(),
+        res, _ = clip_grid_by_polygons(E.get_data(),
                                     E.get_geotransform(),
                                     H.get_geometry(as_geometry_objects=True))
         # print 'Engine took %i seconds' % (time.time() - t0)
@@ -253,7 +253,7 @@ class TestEngine(unittest.TestCase):
         assert N == 4
 
         # Run underlying clipping routine
-        res0 = clip_grid_by_polygons(E.get_data(),
+        res0, _ = clip_grid_by_polygons(E.get_data(),
                                      E.get_geotransform(),
                                      H.get_geometry(as_geometry_objects=True))
         assert len(res0) == N

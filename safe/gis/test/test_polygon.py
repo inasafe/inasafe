@@ -1203,8 +1203,7 @@ class TestPolygon(unittest.TestCase):
                                  inner_rings=inner_rings))()]
 
         # Call clipping function
-        res = clip_grid_by_polygons(A, geotransform,
-                                    polygon_arg)
+        res, _ = clip_grid_by_polygons(A, geotransform, polygon_arg)
 
         points = res[0][0]
         values = res[0][1]
