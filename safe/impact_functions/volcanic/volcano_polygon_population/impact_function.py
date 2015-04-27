@@ -19,7 +19,7 @@ from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding)
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.storage.vector import Vector
+from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
     format_int,
@@ -117,29 +117,24 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         self.target_field = new_target_field
 
         # Run interpolation function for polygon2raster
-        interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name=self.target_field)
+        interpolated_layer, covered_exposure_data = \
+            assign_hazard_values_to_exposure_data(
+                hazard_layer,
+                exposure_layer,
+                attribute_name=self.target_field)
 
-        # Initialise data_table of output dataset with all data_table
-        # from input polygon and a population count of zero
-        new_data_table = hazard_layer.get_data()
+        # Initialise total affected per category
         categories = {}
-        for row in new_data_table:
-            row[self.target_field] = 0
-            category = row[hazard_zone_attribute]
-            categories[category] = 0
+        for hazard_zone in hazard_zone_categories:
+            categories[hazard_zone] = 0
 
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
             # Get population at this location
             population = float(row[self.target_field])
 
-            # Update population count for associated polygon
-            poly_id = row['polygon_id']
-            new_data_table[poly_id][self.target_field] += population
-
             # Update population count for each category
-            category = new_data_table[poly_id][hazard_zone_attribute]
+            category = row[hazard_zone_attribute]
             categories[category] += population
 
         # Count totals
@@ -216,13 +211,10 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
                  total_population),
              tr('People need evacuation if they are within the '
                 'volcanic hazard zones.')])
-
-        population_counts = [x[self.target_field] for x in new_data_table]
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # check for zero impact
-        if numpy.nanmax(population_counts) == 0 == numpy.nanmin(
-                population_counts):
+        if evacuated == 0:
             table_body = [
                 self.question,
                 TableRow([tr('People needing evacuation'),
@@ -234,28 +226,45 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        classes = create_classes(population_counts, len(colours))
+        classes = create_classes(covered_exposure_data.flat[:],
+                                 len(colours))
         interval_classes = humanize_class(classes)
         # Define style info for output polygons showing population counts
         style_classes = []
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
+            if i == 1:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Low Population [%i people/cell]' % classes[i]))
+            elif i == 4:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Medium Population [%i people/cell]' % classes[i]))
+            elif i == 7:
+                label = create_label(
+                    interval_classes[i],
+                    tr('High Population [%i people/cell]' % classes[i]))
+            else:
+                label = create_label(interval_classes[i])
+
             if i == 0:
                 transparency = 100
-                style_class['min'] = 0
             else:
-                transparency = 30
-                style_class['min'] = classes[i - 1]
-            style_class['transparency'] = transparency
+                transparency = 0
+
+            style_class['label'] = label
+            style_class['quantity'] = classes[i]
             style_class['colour'] = colours[i]
-            style_class['max'] = classes[i]
+            style_class['transparency'] = transparency
             style_classes.append(style_class)
 
         # Override style info with new classes and name
-        style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes,
-                          style_type='graduatedSymbol')
+        style_info = dict(
+            target_field=None,
+            style_classes=style_classes,
+            style_type='rasterStyle')
 
         # For printing map purpose
         map_title = tr('People affected by volcanic hazard zone')
@@ -265,10 +274,10 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         legend_title = tr('Population')
 
         # Create vector layer and return
-        impact_layer = Vector(
-            data=new_data_table,
-            projection=hazard_layer.get_projection(),
-            geometry=hazard_layer.get_geometry(as_geometry_objects=True),
+        impact_layer = Raster(
+            data=covered_exposure_data,
+            projection=exposure_layer.get_projection(),
+            geotransform=exposure_layer.get_geotransform(),
             name=tr('People affected by volcanic hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,

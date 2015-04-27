@@ -18,7 +18,7 @@ from safe.impact_functions.generic.classified_polygon_population\
     ClassifiedPolygonHazardPopulationFunctionMetadata
 from safe.impact_functions.core import population_rounding
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.storage.raster import Raster, Vector
+from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
     format_int,
@@ -28,7 +28,7 @@ from safe.common.utilities import (
     get_thousand_separator,
     get_non_conflicting_attribute_name)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.common.exceptions import InaSAFEError
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
