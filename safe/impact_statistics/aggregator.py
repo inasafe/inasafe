@@ -182,7 +182,7 @@ class Aggregator(QtCore.QObject):
         if self.aoi_mode:
             try:
                 self.layer = self._extents_to_layer()
-                self.safe_layer = safe_read_layer(str(self.layer.source()))
+                self.safe_layer = safe_read_layer(unicode(self.layer.source()))
             except (InvalidLayerError,
                     UnsupportedProviderError,
                     KeywordDbError):
@@ -439,7 +439,7 @@ class Aggregator(QtCore.QObject):
         except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
             raise
 
-        self.safe_layer = safe_read_layer(str(self.layer.source()))
+        self.safe_layer = safe_read_layer(unicode(self.layer.source()))
 
     def deintersect(self):
         """Ensure there are no intersecting features with self.layer.
