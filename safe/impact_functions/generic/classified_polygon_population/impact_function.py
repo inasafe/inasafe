@@ -93,6 +93,7 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
+        # Get unique hazard zones from the layer attribute
         self.hazard_zones = list(
             set(hazard_layer.get_data(hazard_zone_attribute)))
 
@@ -103,7 +104,7 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         self.target_field = new_target_field
 
         # Interpolated layer represents grid cell that lies in the polygon
-        interpolated_polygon, interpolated_raster = \
+        interpolated_layer, covered_exposure_data = \
             assign_hazard_values_to_exposure_data(
                 hazard_layer,
                 exposure_layer,
@@ -112,45 +113,48 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
 
         # Initialise total population affected by each hazard zone
         affected_population = {}
-        for row in hazard_layer.get_data():
-            row[self.target_field] = 0
-            hazard_zone = row[hazard_zone_attribute]
+        for hazard_zone in self.hazard_zones:
             affected_population[hazard_zone] = 0
 
-        # Count affected population per hazard zone and total
-        for row in interpolated_polygon.get_data():
+        # Count total affected population per hazard zone
+        for row in interpolated_layer.get_data():
             # Get population at this location
             population = float(row[self.target_field])
 
-            # Update population count for this row
+            # Update population count for this hazard zone
             hazard_zone = row[hazard_zone_attribute]
             affected_population[hazard_zone] += population
 
-        # Count totals
+        # Count total population from exposure layer
         total_population = population_rounding(
             int(numpy.sum(exposure_layer.get_data(nan=0))))
-        # Total Affected population
+
+        # Count total affected population
         total_affected_population = reduce(
             lambda x, y: x + y,
             [population for population in affected_population.values()])
 
-        # Use final accumulation as total number needing evacuation
-        total_affected_people = population_rounding(total_affected_population)
-
         # Generate impact report for the pdf map
         blank_cell = ''
-        table_body = [self.question,
-                      TableRow(
-                          [tr('People impacted'),
-                           '%s' % format_int(total_affected_people),
-                           blank_cell],
-                          header=True)]
+        table_body = [
+            self.question,
+            TableRow(
+                [
+                    tr('People impacted'),
+                    '%s' % format_int(
+                        population_rounding(total_affected_population)),
+                    blank_cell],
+                header=True)]
 
         for hazard_zone in self.hazard_zones:
             table_body.append(
                 TableRow(
-                    [hazard_zone,
-                     format_int(affected_population[hazard_zone])]))
+                    [
+                        hazard_zone,
+                        format_int(
+                            population_rounding(
+                                affected_population[hazard_zone]))
+                    ]))
 
         table_body.extend([
             TableRow(tr(
@@ -162,7 +166,7 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         # Extend impact report for on-screen display
         table_body.extend(
             [TableRow(tr('Notes'), header=True),
-             tr('Total population %s in the exposure layer') % format_int(
+             tr('Total population: %s in the exposure layer') % format_int(
                  total_population)])
 
         impact_summary = Table(table_body).toNewlineFreeString()
@@ -170,7 +174,7 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        classes = create_classes(interpolated_raster.flat[:], len(colours))
+        classes = create_classes(covered_exposure_data.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         # Define style info for output polygons showing population counts
         style_classes = []
@@ -218,7 +222,7 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
 
         # Create vector layer and return
         impact_layer = Raster(
-            data=interpolated_raster,
+            data=covered_exposure_data,
             projection=exposure_layer.get_projection(),
             geotransform=exposure_layer.get_geotransform(),
             name=tr('People impacted by each hazard zone'),

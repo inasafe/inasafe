@@ -149,14 +149,13 @@ def assign_hazard_values_to_exposure_data(
         return interpolate_polygon_vector(
             hazard, exposure, layer_name=layer_name)
 
-    # Vector-Raster (returns tuple (interpolated_polygon, interpolated_raster)
+    # Vector-Raster (returns tuple (interpolated_layer, covered exposure))
     elif hazard.is_vector and exposure.is_raster:
         return interpolate_polygon_raster(
             hazard,
             exposure,
             layer_name=layer_name,
-            attribute_name=attribute_name
-        )
+            attribute_name=attribute_name)
     # Unknown
     else:
         msg = ('Unknown combination of types for hazard and exposure data. '
@@ -353,7 +352,7 @@ def interpolate_polygon_raster(
         of layer target is used
     :type attribute_name: basestring
 
-    :returns: Tuple of Vector data set (points located as target with values
+    :returns: Tuple of Vector (points located as target with values
         interpolated from source) and Raster data set (raster data set that
         are coincide with the source)
     :rtype: Vector
@@ -366,7 +365,7 @@ def interpolate_polygon_raster(
     polygon_geometry = source.get_geometry(as_geometry_objects=True)
 
     polygon_attributes = source.get_data()
-    res, covered_source = clip_grid_by_polygons(
+    covered_source, covered_target = clip_grid_by_polygons(
         target.get_data(scaling=False),
         target.get_geotransform(),
         polygon_geometry
@@ -375,7 +374,7 @@ def interpolate_polygon_raster(
     # Create one new point layer with interpolated attributes
     new_geometry = []
     new_attributes = []
-    for i, (geometry, values) in enumerate(res):
+    for i, (geometry, values) in enumerate(covered_source):
         # For each polygon assign attributes to points that fall inside it
         for j, geom in enumerate(geometry):
             attr = polygon_attributes[i].copy()  # Attributes for this polygon
@@ -385,11 +384,13 @@ def interpolate_polygon_raster(
             new_attributes.append(attr)
             new_geometry.append(geom)
 
-    R = Vector(data=new_attributes,
-               projection=source.get_projection(),
-               geometry=new_geometry,
-               name=layer_name)
-    return R, covered_source
+    interpolated_layer = Vector(
+        data=new_attributes,
+        projection=source.get_projection(),
+        geometry=new_geometry,
+        name=layer_name)
+
+    return interpolated_layer, covered_target
 
 
 def interpolate_raster_vector_points(source, target,

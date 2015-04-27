@@ -34,7 +34,8 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 def separate_points_by_polygon(
-        points, polygon,
+        points,
+        polygon,
         polygon_bbox=None,
         closed=True,
         check_input=True,
@@ -471,7 +472,8 @@ def point_on_line(points, line, rtol=1.0e-5, atol=1.0e-8,
 
 
 def in_and_outside_polygon(
-        points, polygon,
+        points,
+        polygon,
         closed=True,
         holes=None,
         check_input=True):
@@ -498,9 +500,8 @@ def in_and_outside_polygon(
     """
 
     # Get separation by outer_ring
-    inside, outside = separate_points_by_polygon(points, polygon,
-                                                 closed=closed,
-                                                 check_input=check_input)
+    inside, outside = separate_points_by_polygon(
+        points, polygon, closed=closed, check_input=check_input)
 
     # Take care of holes
     if holes is not None:
@@ -510,15 +511,13 @@ def in_and_outside_polygon(
             raise InaSAFEError(msg)
 
         for hole in holes:
-            in_hole, out_hole = separate_points_by_polygon(points[inside],
-                                                           hole,
-                                                           closed=not closed,
-                                                           check_input=True)
+            in_hole, out_hole = separate_points_by_polygon(
+                points[inside], hole, closed=not closed, check_input=True)
 
             in_hole = inside[in_hole]  # Inside hole
             inside = inside[out_hole]  # Inside outer_ring but outside hole
 
-            # Add holde indices to outside
+            # Add hole indices to outside
             outside = numpy.concatenate((outside, in_hole))
 
     return inside, outside
@@ -1275,7 +1274,7 @@ def intersection(line0, line1):
 # Main functions for polygon clipping
 # FIXME (Ole): Both can be rigged to return points or lines
 # outside any polygon by adding that as the entry in the list returned
-def clip_grid_by_polygons(A, geotransform, polygons):
+def clip_grid_by_polygons(grid_data, geotransform, polygons):
     """Clip raster grid by polygon.
 
     Implementing algorithm suggested in
@@ -1288,7 +1287,7 @@ def clip_grid_by_polygons(A, geotransform, polygons):
 
         If multiple polygons overlap, the one first encountered will be used.
 
-    :param A: MxN array of grid points.
+    :param grid_data: MxN array of grid points.
 
     :param geotransform: 6-tuple used to locate A geographically
         (top left x, w-e pixel resolution, rotation, top left y, rotation,
@@ -1296,15 +1295,15 @@ def clip_grid_by_polygons(A, geotransform, polygons):
 
     :param polygons: list of polygon geometry objects or list of polygon arrays
 
-    :returns: Tuple of (points_covered, values_covered).
-        points_covered = List of (points, values) - one per input polygon.
-        values_covered = A that lie on the polygons
+    :returns: Tuple of (points_covered, grid_covered).
+        points_covered = List of tuple (points, values) - points covered and
+        its value per polygon.
+        values_covered = grid_data that coincide with the polygons
     """
-
     # Convert raster grid to Nx2 array of points and an N array of pixel values
-    ny, nx = A.shape
+    ny, nx = grid_data.shape
     x, y = geotransform_to_axes(geotransform, nx, ny)
-    points, values = grid_to_points(A, x, y)
+    points, values = grid_to_points(grid_data, x, y)
 
     # Generate list of points and values that fall inside each polygon
     points_covered = []
@@ -1313,8 +1312,6 @@ def clip_grid_by_polygons(A, geotransform, polygons):
     values_indices = set([])
 
     for polygon in polygons:
-        # print 'Remaining points', len(remaining_points)
-
         if hasattr(polygon, 'outer_ring'):
             outer_ring = polygon.outer_ring
             inner_rings = polygon.inner_rings
@@ -1336,17 +1333,17 @@ def clip_grid_by_polygons(A, geotransform, polygons):
         # Union inside to values indices
         values_indices |= set(inside)
 
-    # Values covered, set 0 if it's not
+    # Values covered, set to NaN if it's not covered by any polygons
     values_covered = values
     values_indices = list(values_indices)
     mask = numpy.ones(values.shape, dtype=bool)
     mask[values_indices] = False
     values_covered[mask] = numpy.NaN
 
-    # Reshape to the A shape
-    A_covered = numpy.reshape(values_covered, A.shape)
+    # Reshape to the grid_data shape
+    grid_covered = numpy.reshape(values_covered, grid_data.shape)
 
-    return points_covered, A_covered
+    return points_covered, grid_covered
 
 
 def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):

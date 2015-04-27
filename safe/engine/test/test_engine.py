@@ -185,9 +185,8 @@ class TestEngine(unittest.TestCase):
 
         # Then run and test the high level interpolation function
         # t0 = time.time()
-        P = interpolate_polygon_raster(H, E,
-                                       layer_name='poly2raster_test',
-                                       attribute_name='grid_value')
+        P, _ = interpolate_polygon_raster(
+            H, E, layer_name='poly2raster_test', attribute_name='grid_value')
         # print 'High level function took %i seconds' % (time.time() - t0)
         # P.write_to_file('polygon_raster_interpolation_example_big.shp')
 
