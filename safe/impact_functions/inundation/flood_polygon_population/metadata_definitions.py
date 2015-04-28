@@ -67,11 +67,11 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 'format on population.'),
             'detailed_description': tr(
                 'The population subject to inundation is determined by '
-                'whether they are in an area which affected or not. You can '
+                'whether they are in a flood affected area or not. You can '
                 'also set an evacuation percentage to calculate what '
-                'percent of the total population affected should be '
+                'percentage of the affected population should be '
                 'evacuated. This number will be used to estimate needs '
-                'based on BNPB Perka 7/2008 minimum bantuan.'),
+                'based on the user defined minimum needs file.'),
             'hazard_input': tr(
                 'A hazard vector layer which has an attribute "affected". The '
                 'value of the affected attribute should be either 1 '
