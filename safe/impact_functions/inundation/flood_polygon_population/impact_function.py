@@ -34,6 +34,7 @@ from safe.common.utilities import (
     humanize_class,
     create_label)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.utilities.unicode import get_unicode
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -186,8 +187,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             if self.use_affected_field:
                 row_affected_value = attr[affected_field]
                 if row_affected_value is not None:
-                    affected =\
-                        row_affected_value.lower() == affected_value.lower()
+                    affected = get_unicode(row_affected_value).lower() == \
+                               get_unicode(affected_value).lower()
             else:
                 # assume that every polygon is affected (see #816)
                 affected = True
