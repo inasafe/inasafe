@@ -146,10 +146,6 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             people evacuated and supplies required.
         :rtype: tuple
         """
-        import pydevd
-
-        pydevd.settrace('localhost', port=5678, stdoutToServer=True,
-                        stderrToServer=True)
         self.validate()
         self.prepare(layers)
 
