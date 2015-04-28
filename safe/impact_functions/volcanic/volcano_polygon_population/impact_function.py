@@ -124,9 +124,9 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
                 attribute_name=self.target_field)
 
         # Initialise total affected per category
-        categories = {}
+        affected_population = {}
         for hazard_zone in hazard_zone_categories:
-            categories[hazard_zone] = 0
+            affected_population[hazard_zone] = 0
 
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
@@ -135,7 +135,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
 
             # Update population count for each category
             category = row[hazard_zone_attribute]
-            categories[category] += population
+            affected_population[category] += population
 
         # Count totals
         total_population = population_rounding(
@@ -148,7 +148,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         for name in hazard_zone_categories:
             key = name
             # prevent key error
-            population = int(categories.get(key, 0))
+            population = int(affected_population.get(key, 0))
 
             cumulative += population
 
@@ -226,8 +226,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        classes = create_classes(covered_exposure_data.flat[:],
-                                 len(colours))
+        classes = create_classes(covered_exposure_data.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         # Define style info for output polygons showing population counts
         style_classes = []

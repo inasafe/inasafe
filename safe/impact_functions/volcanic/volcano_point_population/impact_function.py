@@ -20,7 +20,7 @@ from safe.impact_functions.core import (
     population_rounding)
 from safe.engine.utilities import buffer_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.storage.vector import Vector
+from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
     format_int,
@@ -91,7 +91,7 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         # Use concentric circles
         category_title = 'Radius'
         category_header = tr('Distance [km]')
-        category_names = radii
+        rad_m = radii
 
         centers = hazard_layer.get_geometry()
         rad_m = [x * 1000 for x in radii]  # Convert to meters
@@ -106,8 +106,8 @@ class VolcanoPointPopulationFunction(ImpactFunction):
                 volcano_name_list.append(row[name_attribute])
 
             volcano_names = ''
-            for name in volcano_name_list:
-                volcano_names += '%s, ' % name
+            for radius in volcano_name_list:
+                volcano_names += '%s, ' % radius
             volcano_names = volcano_names[:-2]  # Strip trailing ', '
         else:
             volcano_names = tr('Not specified in data')
@@ -119,52 +119,38 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         self.target_field = new_target_field
 
         # Run interpolation function for polygon2raster
-        interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name=self.target_field)
+        interpolated_layer, covered_exposure_data = \
+            assign_hazard_values_to_exposure_data(
+                hazard_layer,
+                exposure_layer,
+                attribute_name=self.target_field
+            )
 
-        # Initialise data_table of output dataset with all data_table
-        # from input polygon and a population count of zero
-        new_data_table = hazard_layer.get_data()
-        categories = {}
-        for row in new_data_table:
-            row[self.target_field] = 0
-            category = row[category_title]
-            categories[category] = 0
+        # Initialise affected population per categories
+        affected_population = {}
+        for radius in rad_m:
+            affected_population[radius] = 0
 
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
             # Get population at this location
             population = float(row[self.target_field])
 
-            # Update population count for associated polygon
-            poly_id = row['polygon_id']
-            new_data_table[poly_id][self.target_field] += population
-
             # Update population count for each category
-            category = new_data_table[poly_id][category_title]
-            categories[category] += population
+            category = row[category_title]
+            affected_population[category] += population
 
         # Count totals
         total_population = population_rounding(
             int(numpy.sum(exposure_layer.get_data(nan=0))))
 
-        # Count number and cumulative for each zone
-        cumulative = 0
-        all_categories_population = {}
-        all_categories_cumulative = {}
-        for name in category_names:
-            key = name * 1000  # Convert to meters
-            # prevent key error
-            population = int(categories.get(key, 0))
-
-            cumulative += population
-
-            # I'm not sure whether this is the best place to apply rounding?
-            all_categories_population[name] = population_rounding(population)
-            all_categories_cumulative[name] = population_rounding(cumulative)
-
-        # Use final accumulation as total number needing evacuation
-        evacuated = population_rounding(cumulative)
+        # Count cumulative for each zone
+        total_affected_population = 0
+        cumulative_affected_population = {}
+        for radius in rad_m:
+            population = int(affected_population.get(radius, 0))
+            total_affected_population += population
+            cumulative_affected_population[radius] = total_affected_population
 
         minimum_needs = [
             parameter.serialize() for parameter in
@@ -173,23 +159,35 @@ class VolcanoPointPopulationFunction(ImpactFunction):
 
         # Generate impact report for the pdf map
         blank_cell = ''
-        table_body = [self.question,
-                      TableRow([tr('Volcanoes considered'),
-                                '%s' % volcano_names, blank_cell],
-                               header=True),
-                      TableRow([tr('People needing evacuation'),
-                                '%s' % format_int(evacuated),
-                                blank_cell],
-                               header=True),
-                      TableRow([category_header,
-                                tr('Total'), tr('Cumulative')],
-                               header=True)]
+        table_body = [
+            self.question,
+            TableRow(
+                [tr('Volcanoes considered'),
+                 '%s' % volcano_names,
+                 blank_cell],
+                header=True),
+            TableRow(
+                [tr('People needing evacuation'),
+                 '%s' % format_int(
+                     population_rounding(total_affected_population)),
+                 blank_cell],
+                header=True),
+            TableRow(
+                [category_header,
+                 tr('Total'),
+                 tr('Cumulative')],
+                header=True)]
 
-        for name in category_names:
+        for radius in rad_m:
             table_body.append(
-                TableRow([name,
-                          format_int(all_categories_population[name]),
-                          format_int(all_categories_cumulative[name])]))
+                TableRow(
+                    [radius,
+                     format_int(
+                         population_rounding(
+                             affected_population[radius])),
+                     format_int(
+                         population_rounding(
+                             cumulative_affected_population[radius]))]))
 
         table_body.extend([
             TableRow(tr(
@@ -197,7 +195,7 @@ class VolcanoPointPopulationFunction(ImpactFunction):
                 'hazard polygons.'))])
 
         total_needs = evacuated_population_needs(
-            evacuated, minimum_needs)
+            total_affected_population, minimum_needs)
         for frequency, needs in total_needs.items():
             table_body.append(TableRow(
                 [
@@ -219,45 +217,61 @@ class VolcanoPointPopulationFunction(ImpactFunction):
              tr('People need evacuation if they are within the '
                 'volcanic hazard zones.')])
 
-        population_counts = [x[self.target_field] for x in new_data_table]
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # check for zero impact
-        if numpy.nanmax(population_counts) == 0 == numpy.nanmin(
-                population_counts):
+        if total_affected_population == 0:
             table_body = [
                 self.question,
-                TableRow([tr('People needing evacuation'),
-                          '%s' % format_int(evacuated),
-                          blank_cell], header=True)]
-            my_message = Table(table_body).toNewlineFreeString()
-            raise ZeroImpactException(my_message)
+                TableRow(
+                    [tr('People needing evacuation'),
+                     '%s' % format_int(total_affected_population),
+                     blank_cell],
+                    header=True)]
+            message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(message)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        classes = create_classes(population_counts, len(colours))
+        classes = create_classes(covered_exposure_data.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         # Define style info for output polygons showing population counts
         style_classes = []
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
+            if i == 1:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Low Population [%i people/cell]' % classes[i]))
+            elif i == 4:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Medium Population [%i people/cell]' % classes[i]))
+            elif i == 7:
+                label = create_label(
+                    interval_classes[i],
+                    tr('High Population [%i people/cell]' % classes[i]))
+            else:
+                label = create_label(interval_classes[i])
+
             if i == 0:
                 transparency = 100
-                style_class['min'] = 0
             else:
-                transparency = 30
-                style_class['min'] = classes[i - 1]
-            style_class['transparency'] = transparency
+                transparency = 0
+
+            style_class['label'] = label
+            style_class['quantity'] = classes[i]
             style_class['colour'] = colours[i]
-            style_class['max'] = classes[i]
+            style_class['transparency'] = transparency
             style_classes.append(style_class)
 
         # Override style info with new classes and name
-        style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes,
-                          style_type='graduatedSymbol')
+        style_info = dict(
+            target_field=None,
+            style_classes=style_classes,
+            style_type='rasterStyle')
 
         # For printing map purpose
         map_title = tr('People affected by the buffered point volcano')
@@ -267,10 +281,10 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         legend_title = tr('Population')
 
         # Create vector layer and return
-        impact_layer = Vector(
-            data=new_data_table,
-            projection=hazard_layer.get_projection(),
-            geometry=hazard_layer.get_geometry(as_geometry_objects=True),
+        impact_layer = Raster(
+            data=covered_exposure_data,
+            projection=exposure_layer.get_projection(),
+            geotransform=exposure_layer.get_geotransform(),
             name=tr('People affected by the buffered point volcano'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
