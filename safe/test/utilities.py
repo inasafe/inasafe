@@ -232,7 +232,7 @@ def load_layer(layer_path):
         raise Exception(message)
 
     # noinspection PyUnresolvedReferences
-    message = 'Layer "%s" is not valid' % str(layer.source())
+    message = 'Layer "%s" is not valid' % layer.source()
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
         print message
