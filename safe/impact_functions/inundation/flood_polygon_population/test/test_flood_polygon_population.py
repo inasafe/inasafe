@@ -48,6 +48,8 @@ class TestFloodEvacuationVectorHazardFunction(unittest.TestCase):
 
         function.hazard = hazard_layer
         function.exposure = exposure_layer
+        function.parameters['affected_field'] = 'FLOODPRONE'
+        function.parameters['affected_value'] = 'YES'
         function.run()
         impact = function.impact
 
