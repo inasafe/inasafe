@@ -202,7 +202,11 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
 
             if affected:
                 # Get population at this location
-                population = float(attr[self.target_field])
+                population = attr[self.target_field]
+                if numpy.isnan(population):
+                    population = 0
+                else:
+                    population = float(population)
 
                 # Update population count for associated polygon
                 poly_id = attr['polygon_id']
