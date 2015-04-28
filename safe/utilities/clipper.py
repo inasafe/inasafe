@@ -441,7 +441,7 @@ def _clip_raster_layer(
             str(layer.type()))
         raise InvalidParameterError(message)
 
-    working_layer = str(layer.source())
+    working_layer = layer.source()
 
     # Check for existence of keywords file
     base, _ = os.path.splitext(working_layer)
