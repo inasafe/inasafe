@@ -104,8 +104,8 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
                 volcano_name_list.append(row[name_attribute])
 
             volcano_names = ''
-            for name in volcano_name_list:
-                volcano_names += '%s, ' % name
+            for hazard_zone in volcano_name_list:
+                volcano_names += '%s, ' % hazard_zone
             volcano_names = volcano_names[:-2]  # Strip trailing ', '
         else:
             volcano_names = tr('Not specified in data')
@@ -142,22 +142,13 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
             int(numpy.sum(exposure_layer.get_data(nan=0))))
 
         # Count number and cumulative for each zone
-        cumulative = 0
-        all_categories_population = {}
-        all_categories_cumulative = {}
-        for name in hazard_zone_categories:
-            key = name
-            # prevent key error
-            population = int(affected_population.get(key, 0))
-
-            cumulative += population
-
-            # I'm not sure whether this is the best place to apply rounding?
-            all_categories_population[name] = population_rounding(population)
-            all_categories_cumulative[name] = population_rounding(cumulative)
-
-        # Use final accumulation as total number needing evacuation
-        evacuated = population_rounding(cumulative)
+        total_affected_population = 0
+        cumulative_affected_population = {}
+        for hazard_zone in hazard_zone_categories:
+            population = int(affected_population.get(hazard_zone, 0))
+            total_affected_population += population
+            cumulative_affected_population[hazard_zone] = \
+                total_affected_population
 
         minimum_needs = [
             parameter.serialize() for parameter in
@@ -166,23 +157,35 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
 
         # Generate impact report for the pdf map
         blank_cell = ''
-        table_body = [self.question,
-                      TableRow([tr('Volcanoes considered'),
-                                '%s' % volcano_names, blank_cell],
-                               header=True),
-                      TableRow([tr('People needing evacuation'),
-                                '%s' % format_int(evacuated),
-                                blank_cell],
-                               header=True),
-                      TableRow([category_header,
-                                tr('Total'), tr('Cumulative')],
-                               header=True)]
+        table_body = [
+            self.question,
+            TableRow(
+                [tr('Volcanoes considered'),
+                 '%s' % volcano_names,
+                 blank_cell],
+                header=True),
+            TableRow(
+                [tr('People needing evacuation'),
+                 '%s' % format_int(
+                     population_rounding(total_affected_population)),
+                 blank_cell],
+                header=True),
+            TableRow(
+                [category_header,
+                 tr('Total'),
+                 tr('Cumulative')],
+                header=True)]
 
-        for name in hazard_zone_categories:
+        for hazard_zone in hazard_zone_categories:
             table_body.append(
-                TableRow([name,
-                          format_int(all_categories_population[name]),
-                          format_int(all_categories_cumulative[name])]))
+                TableRow(
+                    [hazard_zone,
+                     format_int(
+                         population_rounding(
+                             affected_population[hazard_zone])),
+                     format_int(
+                         population_rounding(
+                             cumulative_affected_population[hazard_zone]))]))
 
         table_body.extend([
             TableRow(tr(
@@ -190,7 +193,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
                 'hazard polygons.'))])
 
         total_needs = evacuated_population_needs(
-            evacuated, minimum_needs)
+            total_affected_population, minimum_needs)
         for frequency, needs in total_needs.items():
             table_body.append(TableRow(
                 [
@@ -214,14 +217,15 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # check for zero impact
-        if evacuated == 0:
+        if total_affected_population == 0:
             table_body = [
                 self.question,
-                TableRow([tr('People needing evacuation'),
-                          '%s' % format_int(evacuated),
-                          blank_cell], header=True)]
-            my_message = Table(table_body).toNewlineFreeString()
-            raise ZeroImpactException(my_message)
+                TableRow(
+                    [tr('People needing evacuation'),
+                     '%s' % format_int(total_affected_population),
+                     blank_cell], header=True)]
+            message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(message)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
