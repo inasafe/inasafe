@@ -876,7 +876,7 @@ class Analysis(object):
                     'exclude all features unintentionally.'))
                 report.add(check_list)
                 self.send_static_message(report)
-                self.send_not_busy_signal()
+                self.send_analysis_done_signal()
                 return
             if exception is not None:
                 content = self.tr(
@@ -892,7 +892,6 @@ class Analysis(object):
             self.send_analysis_done_signal()
             # self.analysis_done.emit(False)
             return
-
         try:
             impact_layer = self.get_impact_layer()
             qgis_impact_layer = safe_to_qgis_layer(impact_layer)

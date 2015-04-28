@@ -15,6 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Rizky Maulana Nugraha'
 
 import logging
+from numbers import Number
 import numpy
 
 from safe.utilities.i18n import tr
@@ -34,6 +35,7 @@ from safe.common.utilities import (
     humanize_class,
     create_label)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.common.exceptions import ZeroImpactException
 from safe.utilities.unicode import get_unicode
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -144,6 +146,10 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             people evacuated and supplies required.
         :rtype: tuple
         """
+        import pydevd
+
+        pydevd.settrace('localhost', port=5678, stdoutToServer=True,
+                        stderrToServer=True)
         self.validate()
         self.prepare(layers)
 
@@ -187,8 +193,13 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             if self.use_affected_field:
                 row_affected_value = attr[affected_field]
                 if row_affected_value is not None:
-                    affected = get_unicode(row_affected_value).lower() == \
-                               get_unicode(affected_value).lower()
+                    if isinstance(row_affected_value, Number):
+                        type_func = type(row_affected_value)
+                        affected = row_affected_value == type_func(
+                            affected_value)
+                    else:
+                        affected = get_unicode(row_affected_value).lower() ==\
+                                   get_unicode(affected_value).lower()
             else:
                 # assume that every polygon is affected (see #816)
                 affected = True
@@ -233,12 +244,24 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         self._tabulate_action_checklist(table_body, total)
         impact_summary = Table(table_body).toNewlineFreeString()
 
+        population_counts = [x[self.target_field] for x in new_attributes]
+        # check for zero impact
+        if numpy.nanmax(population_counts) == 0 == numpy.nanmin(
+                population_counts):
+            table_body = [
+                self.question,
+                TableRow(
+                    [tr('People affected'),
+                     '%s' % format_int(total_affected_population)],
+                    header=True)]
+            message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(message)
+
         # Create style
         # Define classes for legend for flooded population counts
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
 
-        population_counts = [x['population'] for x in new_attributes]
         classes = create_classes(population_counts, len(colours))
         interval_classes = humanize_class(classes)
 
