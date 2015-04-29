@@ -119,7 +119,7 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         self.target_field = new_target_field
 
         # Run interpolation function for polygon2raster
-        interpolated_layer, covered_exposure_data = \
+        interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
                 hazard_layer,
                 exposure_layer,
@@ -234,7 +234,8 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        classes = create_classes(covered_exposure_data.flat[:], len(colours))
+        classes = create_classes(
+            covered_exposure_layer.get_data().flat[:], len(colours))
         interval_classes = humanize_class(classes)
         # Define style info for output polygons showing population counts
         style_classes = []
@@ -282,9 +283,9 @@ class VolcanoPointPopulationFunction(ImpactFunction):
 
         # Create vector layer and return
         impact_layer = Raster(
-            data=covered_exposure_data,
-            projection=exposure_layer.get_projection(),
-            geotransform=exposure_layer.get_geotransform(),
+            data=covered_exposure_layer.get_data(),
+            projection=covered_exposure_layer.get_projection(),
+            geotransform=covered_exposure_layer.get_geotransform(),
             name=tr('People affected by the buffered point volcano'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,

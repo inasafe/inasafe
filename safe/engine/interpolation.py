@@ -150,7 +150,8 @@ def assign_hazard_values_to_exposure_data(
         return interpolate_polygon_vector(
             hazard, exposure, layer_name=layer_name)
 
-    # Vector-Raster (returns tuple (interpolated_layer, covered exposure))
+    # Vector-Raster (returns tuple)
+    # (interpolated_layer, covered exposure layer)
     elif hazard.is_vector and exposure.is_raster:
         return interpolate_polygon_raster(
             hazard,
@@ -333,7 +334,7 @@ def interpolate_polygon_vector(source, target,
 
 def interpolate_polygon_raster(
         source, target, layer_name=None, attribute_name=None):
-    """Interpolate from polygon layer to raster data
+    """Interpolate from polygon layer to raster data.
 
     .. note:
         Each point in the resulting dataset will have an attribute
@@ -355,8 +356,8 @@ def interpolate_polygon_raster(
     :type attribute_name: basestring
 
     :returns: Tuple of Vector (points located as target with values
-        interpolated from source) and Raster data set (raster data set that
-        are coincide with the source)
+        interpolated from source) and Raster  (raster data that are coincide
+        with the source)
     :rtype: Vector
     """
     # Input checks
