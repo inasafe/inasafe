@@ -19,7 +19,8 @@ from PyQt4.QtCore import QSettings
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 from safe.utilities.resources import resources_path
-
+import logging
+LOGGER = logging.getLogger('InaSAFE')
 
 def add_needs_parameters(parameters):
     """Add minimum needs to an impact functions parameters.
@@ -162,6 +163,18 @@ class NeedsProfile(MinimumNeeds):
         profiles = sort_by_locale(profiles, self.locale)
         return profiles
 
+
+    def precision_of(self, num_txt):
+        """Get the precision by counting chars to right of '.' .
+
+        :returns: The precision of float parameters.
+        :rtype: int
+        """
+        LOGGER.debug(num_txt)
+        precision = num_txt.split('.')[1]
+        return len(precision)
+
+
     def get_needs_parameters(self):
         """Get the minimum needs resources in parameter format
 
@@ -187,6 +200,18 @@ class NeedsProfile(MinimumNeeds):
             parameter.unit.plural = resource['Units']
             parameter.unit.abbreviation = resource['Unit abbreviation']
             parameter.value = float(resource['Default'])
+            LOGGER.debug(resource['Default'])
+            LOGGER.debug(type(resource['Default']))
+            # choose highest precision between resource parameters
+            if '.' in resource['Default']:
+                precisions = [
+                    self.precision_of(resource['Maximum allowed']),
+                    self.precision_of(resource['Minimum allowed']),
+                    self.precision_of(resource['Default'])
+                ]
+                parameter.precision = max(precisions)
+            else:
+                parameter.precision = 1
             parameters.append(parameter)
         return parameters
 
