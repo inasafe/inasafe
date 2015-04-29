@@ -17,6 +17,7 @@ from safe.gis.polygon import (
     clip_lines_by_polygons,
     clip_grid_by_polygons)
 from safe.storage.vector import Vector, convert_polygons_to_centroids
+from safe.storage.raster import Raster
 from safe.storage.utilities import geometry_type_to_string
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
@@ -336,7 +337,8 @@ def interpolate_polygon_raster(
 
     .. note:
         Each point in the resulting dataset will have an attribute
-        'polygon_id' which refers to the polygon it belongs to.
+        'polygon_id' which refers to the polygon it belongs to and
+        'grid_point' which refers to the grid point of the target.
 
     :param source: Polygon data set.
     :type source: Vector
@@ -380,7 +382,7 @@ def interpolate_polygon_raster(
             attr = polygon_attributes[i].copy()  # Attributes for this polygon
             attr[attribute_name] = values[j]  # Attribute value from grid cell
             attr['polygon_id'] = i  # Store id for associated polygon
-
+            attr['grid_point'] = geom  # Store grid point for associated grid
             new_attributes.append(attr)
             new_geometry.append(geom)
 
@@ -388,6 +390,12 @@ def interpolate_polygon_raster(
         data=new_attributes,
         projection=source.get_projection(),
         geometry=new_geometry,
+        name=layer_name)
+
+    covered_target = Raster(
+        data=covered_target,
+        projection=target.get_projection(),
+        geotransform=target.get_geotransform(),
         name=layer_name)
 
     return interpolated_layer, covered_target
