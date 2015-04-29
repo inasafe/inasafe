@@ -130,6 +130,10 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             table_body.append(
                 TableRow(
                     tr('All area in the polygons are considered affected.')))
+        table_body.append(
+            TableRow(
+                tr('No data values in the exposure layer are treated as 0 '
+                   'when counting affected population or total population')))
 
     def run(self, layers=None):
         """Risk plugin for flood population evacuation.

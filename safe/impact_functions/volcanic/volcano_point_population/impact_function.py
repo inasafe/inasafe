@@ -134,15 +134,16 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
             # Get population at this location
-            population = float(row[self.target_field])
-
-            # Update population count for each category
-            category = row[category_title]
-            affected_population[category] += population
+            population = row[self.target_field]
+            if not numpy.isnan(population):
+                population = float(population)
+                # Update population count for this category
+                category = row[category_title]
+                affected_population[category] += population
 
         # Count totals
         total_population = population_rounding(
-            int(numpy.sum(exposure_layer.get_data(nan=0))))
+            int(numpy.nansum(exposure_layer.get_data())))
 
         # Count cumulative for each zone
         total_affected_population = 0
@@ -215,7 +216,9 @@ class VolcanoPointPopulationFunction(ImpactFunction):
              tr('Total population %s in the exposure layer') % format_int(
                  total_population),
              tr('People need evacuation if they are within the '
-                'volcanic hazard zones.')])
+                'volcanic hazard zones.'),
+             tr('No data values in the exposure layer are treated as 0 '
+                'when counting affected population or total population')])
 
         impact_summary = Table(table_body).toNewlineFreeString()
 

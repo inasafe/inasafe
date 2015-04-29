@@ -119,15 +119,16 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         # Count total affected population per hazard zone
         for row in interpolated_layer.get_data():
             # Get population at this location
-            population = float(row[self.target_field])
-
-            # Update population count for this hazard zone
-            hazard_zone = row[hazard_zone_attribute]
-            affected_population[hazard_zone] += population
+            population = row[self.target_field]
+            if not numpy.isnan(population):
+                population = float(population)
+                # Update population count for this hazard zone
+                hazard_zone = row[hazard_zone_attribute]
+                affected_population[hazard_zone] += population
 
         # Count total population from exposure layer
         total_population = population_rounding(
-            int(numpy.sum(exposure_layer.get_data(nan=0))))
+            int(numpy.nansum(exposure_layer.get_data())))
 
         # Count total affected population
         total_affected_population = reduce(
@@ -167,7 +168,10 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         table_body.extend(
             [TableRow(tr('Notes'), header=True),
              tr('Total population: %s in the exposure layer') % format_int(
-                 total_population)])
+                 total_population),
+             tr('No data values in the exposure layer are treated as 0 when '
+                'counting affected population or total population')]
+        )
 
         impact_summary = Table(table_body).toNewlineFreeString()
 
