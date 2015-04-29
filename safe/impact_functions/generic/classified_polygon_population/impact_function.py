@@ -18,7 +18,7 @@ from safe.impact_functions.generic.classified_polygon_population\
     ClassifiedPolygonHazardPopulationFunctionMetadata
 from safe.impact_functions.core import population_rounding
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.storage.vector import Vector
+from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
     format_int,
@@ -28,7 +28,7 @@ from safe.common.utilities import (
     get_thousand_separator,
     get_non_conflicting_attribute_name)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.common.exceptions import InaSAFEError
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
@@ -93,6 +93,7 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
+        # Get unique hazard zones from the layer attribute
         self.hazard_zones = list(
             set(hazard_layer.get_data(hazard_zone_attribute)))
 
@@ -102,63 +103,59 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             self.target_field, attribute_names)
         self.target_field = new_target_field
 
-        # Run interpolation function for polygon2raster
-        interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name=self.target_field)
+        # Interpolated layer represents grid cell that lies in the polygon
+        interpolated_layer, covered_exposure_layer = \
+            assign_hazard_values_to_exposure_data(
+                hazard_layer,
+                exposure_layer,
+                attribute_name=self.target_field
+            )
 
-        # Initialise data_table of output dataset with all data_table
-        # from input polygon and a population count of zero
-        new_data_table = hazard_layer.get_data()
-        categories = {}
-        for row in new_data_table:
-            row[self.target_field] = 0
-            category = row[hazard_zone_attribute]
-            categories[category] = 0
+        # Initialise total population affected by each hazard zone
+        affected_population = {}
+        for hazard_zone in self.hazard_zones:
+            affected_population[hazard_zone] = 0
 
-        # Count affected population per polygon and total
+        # Count total affected population per hazard zone
         for row in interpolated_layer.get_data():
             # Get population at this location
-            population = float(row[self.target_field])
+            population = row[self.target_field]
+            if not numpy.isnan(population):
+                population = float(population)
+                # Update population count for this hazard zone
+                hazard_zone = row[hazard_zone_attribute]
+                affected_population[hazard_zone] += population
 
-            # Update population count for associated polygon
-            poly_id = row['polygon_id']
-            new_data_table[poly_id][self.target_field] += population
-
-            # Update population count for each category
-            category = new_data_table[poly_id][hazard_zone_attribute]
-            categories[category] += population
-
-        # Count totals
+        # Count total population from exposure layer
         total_population = population_rounding(
-            int(numpy.sum(exposure_layer.get_data(nan=0))))
+            int(numpy.nansum(exposure_layer.get_data())))
 
-        # Count number of affected people for each zone
-        cumulative = 0
-        all_categories_population = {}
-        for hazard_zone in self.hazard_zones:
-            key = hazard_zone
-            # prevent key error
-            population = int(categories.get(key, 0))
-            cumulative += population
-            all_categories_population[hazard_zone] = population_rounding(
-                population)
-
-        # Use final accumulation as total number needing evacuation
-        impacted_people = population_rounding(cumulative)
+        # Count total affected population
+        total_affected_population = reduce(
+            lambda x, y: x + y,
+            [population for population in affected_population.values()])
 
         # Generate impact report for the pdf map
         blank_cell = ''
-        table_body = [self.question,
-                      TableRow([tr('People impacted'),
-                                '%s' % format_int(impacted_people),
-                                blank_cell],
-                               header=True)]
+        table_body = [
+            self.question,
+            TableRow(
+                [
+                    tr('People impacted'),
+                    '%s' % format_int(
+                        population_rounding(total_affected_population)),
+                    blank_cell],
+                header=True)]
 
         for hazard_zone in self.hazard_zones:
             table_body.append(
                 TableRow(
-                    [hazard_zone,
-                     format_int(all_categories_population[hazard_zone])]))
+                    [
+                        hazard_zone,
+                        format_int(
+                            population_rounding(
+                                affected_population[hazard_zone]))
+                    ]))
 
         table_body.extend([
             TableRow(tr(
@@ -170,48 +167,56 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         # Extend impact report for on-screen display
         table_body.extend(
             [TableRow(tr('Notes'), header=True),
-             tr('Total population %s in the exposure layer') % format_int(
-                 total_population)])
+             tr('Total population: %s in the exposure layer') % format_int(
+                 total_population),
+             tr('No data values in the exposure layer are treated as 0 when '
+                'counting affected population or total population')]
+        )
 
-        population_counts = [x[self.target_field] for x in new_data_table]
         impact_summary = Table(table_body).toNewlineFreeString()
-
-        # check for zero impact
-        if numpy.nanmax(population_counts) == 0 == numpy.nanmin(
-                population_counts):
-            table_body = [
-                self.question,
-                TableRow([tr('People impacted'),
-                          '%s' % format_int(impacted_people),
-                          blank_cell], header=True)]
-            my_message = Table(table_body).toNewlineFreeString()
-            raise ZeroImpactException(my_message)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        classes = create_classes(population_counts, len(colours))
+        classes = create_classes(
+            covered_exposure_layer.get_data().flat[:], len(colours))
         interval_classes = humanize_class(classes)
         # Define style info for output polygons showing population counts
         style_classes = []
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
+            if i == 1:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Low Population [%i people/cell]' % classes[i]))
+            elif i == 4:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Medium Population [%i people/cell]' % classes[i]))
+            elif i == 7:
+                label = create_label(
+                    interval_classes[i],
+                    tr('High Population [%i people/cell]' % classes[i]))
+            else:
+                label = create_label(interval_classes[i])
+
             if i == 0:
                 transparency = 100
-                style_class['min'] = 0
             else:
-                transparency = 30
-                style_class['min'] = classes[i - 1]
-            style_class['transparency'] = transparency
+                transparency = 0
+
+            style_class['label'] = label
+            style_class['quantity'] = classes[i]
             style_class['colour'] = colours[i]
-            style_class['max'] = classes[i]
+            style_class['transparency'] = transparency
             style_classes.append(style_class)
 
         # Override style info with new classes and name
-        style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes,
-                          style_type='graduatedSymbol')
+        style_info = dict(
+            target_field=None,
+            style_classes=style_classes,
+            style_type='rasterStyle')
 
         # For printing map purpose
         map_title = tr('People impacted by each hazard zone')
@@ -221,10 +226,10 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         legend_title = tr('Population')
 
         # Create vector layer and return
-        impact_layer = Vector(
-            data=new_data_table,
-            projection=hazard_layer.get_projection(),
-            geometry=hazard_layer.get_geometry(as_geometry_objects=True),
+        impact_layer = Raster(
+            data=covered_exposure_layer.get_data(),
+            projection=covered_exposure_layer.get_projection(),
+            geotransform=covered_exposure_layer.get_geotransform(),
             name=tr('People impacted by each hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,

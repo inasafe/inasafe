@@ -531,9 +531,8 @@ def create_classes(class_list, num_classes):
     :param num_classes: The number of class to hold all values in class_list.
     :type num_classes: int
     """
-    unique_class_list = list(set(class_list))
-    min_value = numpy.nanmin(unique_class_list)
-    max_value = numpy.nanmax(unique_class_list)
+    min_value = numpy.nanmin(class_list)
+    max_value = numpy.nanmax(class_list)
 
     # If min_value == max_value (it only has 1 unique class), or
     # max_value <= 1.0, then we will populate the classes from 0 - max_value
@@ -549,11 +548,8 @@ def create_classes(class_list, num_classes):
     # 3. (AG) Yes! The idea is to classify the non affected value to the 1st
     #    class (see #637, #702)
 
-    # Now, Get the smallest value that is not 0
-    non_zero_min_value = max_value
-    for value in unique_class_list:
-        if value < non_zero_min_value and value != 0:
-            non_zero_min_value = value
+    # Now, Get the smallest value that is > 0
+    non_zero_min_value = class_list[class_list > 0].min()
 
     lower_bound = math.ceil(non_zero_min_value)
     if lower_bound != 1:

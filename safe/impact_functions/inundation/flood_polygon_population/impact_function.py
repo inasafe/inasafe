@@ -25,18 +25,18 @@ from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
     evacuated_population_needs)
-from safe.impact_functions.inundation.flood_polygon_population\
+from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
 from safe.common.tables import Table, TableRow, TableCell
-from safe.storage.vector import Vector
+from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
     create_classes,
     humanize_class,
     create_label)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-from safe.common.exceptions import ZeroImpactException
 from safe.utilities.unicode import get_unicode
+from safe.common.exceptions import ZeroImpactException
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -130,6 +130,10 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             table_body.append(
                 TableRow(
                     tr('All area in the polygons are considered affected.')))
+        table_body.append(
+            TableRow(
+                tr('No data values in the exposure layer are treated as 0 '
+                   'when counting affected population or total population')))
 
     def run(self, layers=None):
         """Risk plugin for flood population evacuation.
@@ -172,19 +176,24 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             self.use_affected_field = True
 
         # Run interpolation function for polygon2raster
-        combined = assign_hazard_values_to_exposure_data(
-            hazard_layer,
-            exposure_layer,
-            attribute_name=self.target_field)
+        interpolated_layer, covered_exposure = \
+            assign_hazard_values_to_exposure_data(
+                hazard_layer,
+                exposure_layer,
+                attribute_name=self.target_field)
 
-        # Initialise total population per polygon
-        new_attributes = hazard_layer.get_data()
-        for polygon in new_attributes:
-            polygon[self.target_field] = 0
+        # Data for manipulating the covered_exposure layer
+        new_covered_exposure_data = covered_exposure.get_data()
+        covered_exposure_top_left = numpy.array([
+            covered_exposure.get_geotransform()[0],
+            covered_exposure.get_geotransform()[3]])
+        covered_exposure_dimension = numpy.array([
+            covered_exposure.get_geotransform()[1],
+            covered_exposure.get_geotransform()[5]])
 
         # Count affected population per polygon, per category and total
         total_affected_population = 0
-        for attr in combined.get_data():
+        for attr in interpolated_layer.get_data():
             affected = False
             if self.use_affected_field:
                 row_affected_value = attr[affected_field]
@@ -194,8 +203,9 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                         affected = row_affected_value == type_func(
                             affected_value)
                     else:
-                        affected = get_unicode(row_affected_value).lower() ==\
-                                   get_unicode(affected_value).lower()
+                        affected =\
+                            get_unicode(affected_value).lower() == \
+                            get_unicode(row_affected_value).lower()
             else:
                 # assume that every polygon is affected (see #816)
                 affected = True
@@ -203,51 +213,56 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             if affected:
                 # Get population at this location
                 population = attr[self.target_field]
-                if numpy.isnan(population):
-                    population = 0
-                else:
+                if not numpy.isnan(population):
                     population = float(population)
-
-                # Update population count for associated polygon
-                poly_id = attr['polygon_id']
-                new_attributes[poly_id][self.target_field] += population
-
-                # Update total
-                total_affected_population += population
+                    total_affected_population += population
+            else:
+                # If it's not affected, set the value of the impact layer to 0
+                grid_point = attr['grid_point']
+                index = numpy.floor((grid_point - covered_exposure_top_left) / (
+                    covered_exposure_dimension)).astype(int)
+                new_covered_exposure_data[index[1]][index[0]] = 0
 
         # Estimate number of people in need of evacuation
         evacuated = (
             total_affected_population * evacuation_percentage / 100.0)
 
-        total_affected_population, rounding = population_rounding_full(
-            total_affected_population)
-
-        total = int(numpy.sum(exposure_layer.get_data(nan=0, scaling=False)))
-
-        # Don't show digits less than a 1000
-        total = population_rounding(total)
-        evacuated, rounding_evacuated = population_rounding_full(evacuated)
+        total_population = int(
+            numpy.nansum(exposure_layer.get_data(scaling=False)))
 
         minimum_needs = [
             parameter.serialize() for parameter in
             self.parameters['minimum needs']
         ]
 
+        # Rounding
+        total_affected_population, rounding = population_rounding_full(
+            total_affected_population)
+        total_population = population_rounding(total_population)
+        evacuated, rounding_evacuated = population_rounding_full(evacuated)
+
         # Generate impact report for the pdf map
-        table_body, total_needs = self._tabulate(total_affected_population,
-                                                 evacuated, minimum_needs,
-                                                 self.question, rounding,
-                                                 rounding_evacuated)
+        table_body, total_needs = self._tabulate(
+            total_affected_population,
+            evacuated,
+            minimum_needs,
+            self.question,
+            rounding,
+            rounding_evacuated)
 
         impact_table = Table(table_body).toNewlineFreeString()
 
-        self._tabulate_action_checklist(table_body, total)
+        self._tabulate_action_checklist(table_body, total_population)
         impact_summary = Table(table_body).toNewlineFreeString()
 
-        population_counts = [x[self.target_field] for x in new_attributes]
+        # Create style
+        colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
+                   '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
+        classes = create_classes(
+            new_covered_exposure_data.flat[:], len(colours))
+
         # check for zero impact
-        if numpy.nanmax(population_counts) == 0 == numpy.nanmin(
-                population_counts):
+        if min(classes) == 0 == max(classes):
             table_body = [
                 self.question,
                 TableRow(
@@ -257,34 +272,43 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             message = Table(table_body).toNewlineFreeString()
             raise ZeroImpactException(message)
 
-        # Create style
-        # Define classes for legend for flooded population counts
-        colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
-                   '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-
-        classes = create_classes(population_counts, len(colours))
         interval_classes = humanize_class(classes)
-
         # Define style info for output polygons showing population counts
         style_classes = []
         for i in xrange(len(colours)):
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
+            if i == 1:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Low Population [%i people/cell]' % classes[i]))
+            elif i == 4:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Medium Population [%i people/cell]' % classes[i]))
+            elif i == 7:
+                label = create_label(
+                    interval_classes[i],
+                    tr('High Population [%i people/cell]' % classes[i]))
+            else:
+                label = create_label(interval_classes[i])
+
             if i == 0:
-                transparency = 0
-                style_class['min'] = 0
+                transparency = 100
             else:
                 transparency = 0
-                style_class['min'] = classes[i - 1]
-            style_class['transparency'] = transparency
+
+            style_class['label'] = label
+            style_class['quantity'] = classes[i]
             style_class['colour'] = colours[i]
-            style_class['max'] = classes[i]
+            style_class['transparency'] = transparency
             style_classes.append(style_class)
 
         # Override style info with new classes and name
-        style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes,
-                          style_type='graduatedSymbol')
+        style_info = dict(
+            target_field=None,
+            style_classes=style_classes,
+            style_type='rasterStyle')
 
         # For printing map purpose
         map_title = tr('People affected by flood prone areas')
@@ -293,10 +317,10 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         legend_title = tr('Population Count')
 
         # Create vector layer and return
-        vector_layer = Vector(
-            data=new_attributes,
-            projection=hazard_layer.get_projection(),
-            geometry=hazard_layer.get_geometry(),
+        impact_layer = Raster(
+            data=new_covered_exposure_data,
+            projection=covered_exposure.get_projection(),
+            geotransform=covered_exposure.get_geotransform(),
             name=tr('People affected by flood prone areas'),
             keywords={
                 'impact_summary': impact_summary,
@@ -307,8 +331,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                 'legend_units': legend_units,
                 'legend_title': legend_title,
                 'affected_population': total_affected_population,
-                'total_population': total,
+                'total_population': total_population,
                 'total_needs': total_needs},
             style_info=style_info)
-        self._impact = vector_layer
-        return vector_layer
+        self._impact = impact_layer
+        return impact_layer
