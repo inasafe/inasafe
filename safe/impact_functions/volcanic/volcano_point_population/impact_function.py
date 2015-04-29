@@ -44,6 +44,11 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         self.target_field = 'population'
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
+        # TODO: alternatively to specifying the question here we should
+        # TODO: consider changing the 'population' metadata concept to 'people'
+        self.question = (
+            'In the event of a volcano point how many people might be impacted'
+        )
 
     def run(self, layers=None):
         """Run volcano point population evacuation Impact Function.
