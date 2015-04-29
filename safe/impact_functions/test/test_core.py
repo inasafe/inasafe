@@ -21,13 +21,15 @@ import unittest
 import random
 import os
 import logging
+import numpy
 from collections import OrderedDict
 
 from safe.impact_functions.core import (
     convert_to_old_keywords,
     population_rounding_full,
     population_rounding,
-    evacuated_population_needs)
+    evacuated_population_needs,
+    has_no_data)
 from safe.common.resource_parameter import ResourceParameter
 from safe.defaults import default_minimum_needs
 from safe.definitions import converter_dict
@@ -161,6 +163,13 @@ class TestCore(unittest.TestCase):
         msg = 'Expected %s but I got %s' % (
             expected_keywords, new_keywords)
         self.assertDictEqual(new_keywords, expected_keywords, msg)
+
+    def test_0005_has_no_data(self):
+        """Test whether the nodata tester detects nan's in arrays."""
+        layer_data = numpy.array([[1, 2.0], [2.0, 3]])
+        layer_data_nan = numpy.array([[1, 2.0], [numpy.nan, 3]])
+        self.assertFalse(has_no_data(layer_data))
+        self.assertTrue(has_no_data(layer_data_nan))
 
 
 if __name__ == '__main__':

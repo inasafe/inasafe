@@ -8,7 +8,8 @@ import numpy
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
-    evacuated_population_needs)
+    evacuated_population_needs,
+    has_no_data)
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.impact_function_manager \
     import ImpactFunctionManager
@@ -45,8 +46,27 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
 
-    def _tabulate(self, counts, evacuated, minimum_needs, question,
-                  rounding_evacuated, thresholds, total):
+    def _tabulate(
+            self,
+            counts,
+            evacuated,
+            minimum_needs,
+            question,
+            rounding_evacuated,
+            thresholds,
+            total,
+            no_data_warning):
+        """Create a tabulated output.
+        :param counts: The counts breakdown.
+        :param evacuated: The total.
+        :param minimum_needs: The minimum needs breakdown.
+        :param question: The impact question.
+        :param rounding_evacuated: The rounding that was applied.
+        :param thresholds: The thresholds that where used.
+        :param total: The impact total.
+        :param no_data_warning: Flag to warn about nodata in layer data.
+        :return:
+        """
         table_body = [
             question,
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
@@ -90,6 +110,11 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
             tr('All values are rounded up to the nearest integer in order to '
                'avoid representing human lives as fractions.'),
             tr('All affected people are assumed to be evacuated.')])
+        if no_data_warning:
+            table_body.extend([
+                tr(
+                    'The layers contained `no data`. This missing data was '
+                    'carried through to the impact layer.')])
         if len(counts) > 1:
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))
 
@@ -152,9 +177,14 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
 
         # Extract data as numeric arrays
         data = hazard_layer.get_data(nan=0.0)  # Depth
+        no_data_warning = False
+        if has_no_data(data):
+            no_data_warning = True
 
         # Calculate impact as population exposed to depths > max threshold
         population = exposure_layer.get_data(nan=0.0, scaling=True)
+        if has_no_data(population):
+            no_data_warning = True
 
         # Calculate impact to intermediate thresholds
         counts = []
@@ -174,6 +204,11 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
 
             counts.append(val)
 
+        if has_no_data:
+            """Carry the no data values forward to the impact layer."""
+            impact = numpy.where(numpy.isnan(data), numpy.nan, impact)
+            impact = numpy.where(numpy.isnan(data), numpy.nan, impact)
+
         # Count totals
         evacuated, rounding_evacuated = population_rounding_full(counts[-1])
         total = int(numpy.sum(population))
@@ -187,10 +222,15 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
 
         # Generate impact report for the pdf map
         # noinspection PyListCreation
-        table_body, total_needs = self._tabulate(counts, evacuated,
-                                                 minimum_needs, self.question,
-                                                 rounding_evacuated,
-                                                 thresholds, total)
+        table_body, total_needs = self._tabulate(
+            counts,
+            evacuated,
+            minimum_needs,
+            self.question,
+            rounding_evacuated,
+            thresholds,
+            total,
+            no_data_warning)
 
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()
