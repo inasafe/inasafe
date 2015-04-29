@@ -50,7 +50,7 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
         impact_layer = impact_function.impact
         # Check the question
         expected_question = (
-            'In the event of volcano point how many '
+            'In the event of a volcano point how many '
             'people might be impacted')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
