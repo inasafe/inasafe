@@ -27,8 +27,6 @@ from PyQt4.QtCore import QSettings
 
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.common.minimum_needs import MinimumNeeds
-import logging
-LOGGER = logging.getLogger('InaSAFE')
 
 
 class TestNeedsProfile(NeedsProfile):
@@ -64,7 +62,6 @@ class MinimumNeedsTest(unittest.TestCase):
         """Run after each test."""
         self.minimum_needs.settings.clear()
 
-
     def test_precision_of(self):
         """Test determining precision of json file min needs resources."""
         resources = self.minimum_needs.minimum_needs['resources']
@@ -74,10 +71,10 @@ class MinimumNeedsTest(unittest.TestCase):
             precisions = [1]
             for element in precision_influence:
                 if resource[element] is not None and '.' in resource[element]:
-                    precisions.append(self.minimum_needs.precision_of(resource[element]))
+                    precisions.append(
+                        self.minimum_needs.precision_of(resource[element]))
 
             default_precisions.append(max(precisions))
-        LOGGER.debug(default_precisions)
         self.assertEqual([1, 1, 1, 1, 2], default_precisions)
 
 
