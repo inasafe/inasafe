@@ -485,7 +485,7 @@ class KeywordIO(QObject):
             raise UnsupportedProviderError(
                 'Could not determine type for provider: %s' %
                 layer.__class__.__name__)
-        source = str(layer.source())
+        source = layer.source()
         if provider_type == 'postgres':
             # Use QgsDataSourceURI to parse RDBMS datasource
             # create unique uri based on host, schema, and tablename

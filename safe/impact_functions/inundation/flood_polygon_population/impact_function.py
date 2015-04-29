@@ -15,6 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Rizky Maulana Nugraha'
 
 import logging
+from numbers import Number
 import numpy
 
 from safe.utilities.i18n import tr
@@ -34,6 +35,8 @@ from safe.common.utilities import (
     humanize_class,
     create_label)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.common.exceptions import ZeroImpactException
+from safe.utilities.unicode import get_unicode
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -46,7 +49,13 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
     def __init__(self):
         """Constructor."""
         super(FloodEvacuationVectorHazardFunction, self).__init__()
+
+        # Target field in the impact layer
         self.target_field = 'population'
+
+        # Use affected field flag (if False, all polygon will be considered as
+        # affected)
+        self.use_affected_field = False
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
@@ -79,8 +88,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             TableRow(tr(
                 'Table below shows the weekly minimum needs for all '
                 'evacuated people'))]
-        total_needs = evacuated_population_needs(
-            evacuated, minimum_needs)
+        total_needs = evacuated_population_needs(evacuated, minimum_needs)
         for frequency, needs in total_needs.items():
             table_body.append(TableRow(
                 [
@@ -105,13 +113,23 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         table_body.append(TableRow(
             'If no, where can we obtain additional relief items from and '
             'how will we transport them to here?'))
-        # Extend impact report for on-screen display
-        table_body.extend([
-            TableRow(tr('Notes'), header=True),
-            tr('Total population: %s') % format_int(total),
-            tr('People need evacuation if in the area identified as '
-               '"Flood Prone"'),
-            tr('Minimum needs are defined in BNPB regulation 7/2008')])
+
+        # Notes
+        table_body.append(TableRow(tr('Notes'), header=True))
+        table_body.append(
+            TableRow(tr('Total population: %s') % format_int(total)))
+        table_body.append(TableRow(self.parameters['provenance']))
+        if self.use_affected_field:
+            table_body.append(
+                TableRow(
+                    tr('People are affected if in the area with the value of '
+                       'the affected field ("%s") equals to "%s"') %
+                    (self.parameters['affected_field'],
+                     self.parameters['affected_value'])))
+        else:
+            table_body.append(
+                TableRow(
+                    tr('All area in the polygons are considered affected.')))
 
     def run(self, layers=None):
         """Risk plugin for flood population evacuation.
@@ -131,110 +149,78 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         self.validate()
         self.prepare(layers)
 
+        # Get the IF parameters
+        affected_field = self.parameters['affected_field']
+        affected_value = self.parameters['affected_value']
+        evacuation_percentage = self.parameters['evacuation_percentage']
+
         # Identify hazard and exposure layers
-        hazard_layer = self.hazard  # Flood inundation
+        hazard_layer = self.hazard
         exposure_layer = self.exposure
 
         # Check that hazard is polygon type
-        if not hazard_layer.is_vector:
+        if not hazard_layer.is_polygon_data:
             message = (
-                'Input hazard %s  was not a vector layer as expected ' %
-                hazard_layer.get_name())
+                'Input hazard must be a polygon layer. I got %s with layer '
+                'type %s' % (
+                    hazard_layer.get_name(),
+                    hazard_layer.get_geometry_name()))
             raise Exception(message)
 
-        message = (
-            'Input hazard must be a polygon layer. I got %s with layer type '
-            '%s' % (hazard_layer.get_name(), hazard_layer.get_geometry_name()))
-        if not hazard_layer.is_polygon_data:
-            raise Exception(message)
+        # Check that affected field exists in hazard layer
+        if affected_field in hazard_layer.get_attribute_names():
+            self.use_affected_field = True
 
         # Run interpolation function for polygon2raster
         combined = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name='population')
+            hazard_layer,
+            exposure_layer,
+            attribute_name=self.target_field)
 
-        # Initialise attributes of output dataset with all attributes
-        # from input polygon and a population count of zero
+        # Initialise total population per polygon
         new_attributes = hazard_layer.get_data()
-        category_title = 'affected'  # FIXME: Should come from keywords
-        deprecated_category_title = 'FLOODPRONE'
-        categories = {}
-        for attr in new_attributes:
-            attr[self.target_field] = 0
-            try:
-                title = attr[category_title]
-            except KeyError:
-                try:
-                    title = attr['FLOODPRONE']
-                    categories[title] = 0
-                except KeyError:
-                    pass
+        for polygon in new_attributes:
+            polygon[self.target_field] = 0
 
         # Count affected population per polygon, per category and total
-        affected_population = 0
+        total_affected_population = 0
         for attr in combined.get_data():
-
             affected = False
-            if 'affected' in attr:
-                res = attr['affected']
-                if res is None:
-                    x = False
-                else:
-                    x = bool(res)
-                affected = x
-            elif 'FLOODPRONE' in attr:
-                # If there isn't an 'affected' attribute,
-                res = attr['FLOODPRONE']
-                if res is not None:
-                    affected = res.lower() == 'yes'
-            elif 'Affected' in attr:
-                # Check the default attribute assigned for points
-                # covered by a polygon
-                res = attr['Affected']
-                if res is None:
-                    x = False
-                else:
-                    x = res
-                affected = x
+            if self.use_affected_field:
+                row_affected_value = attr[affected_field]
+                if row_affected_value is not None:
+                    if isinstance(row_affected_value, Number):
+                        type_func = type(row_affected_value)
+                        affected = row_affected_value == type_func(
+                            affected_value)
+                    else:
+                        affected = get_unicode(row_affected_value).lower() ==\
+                                   get_unicode(affected_value).lower()
             else:
                 # assume that every polygon is affected (see #816)
                 affected = True
-                # there is no flood related attribute
-                # message = ('No flood related attribute found in %s. '
-                #       'I was looking for either "Flooded", "FLOODPRONE" '
-                #       'or "Affected". The latter should have been '
-                #       'automatically set by call to '
-                #       'assign_hazard_values_to_exposure_data(). '
-                #       'Sorry I can\'t help more.')
-                # raise Exception(message)
 
             if affected:
                 # Get population at this location
-                pop = float(attr['population'])
+                population = attr[self.target_field]
+                if numpy.isnan(population):
+                    population = 0
+                else:
+                    population = float(population)
 
                 # Update population count for associated polygon
                 poly_id = attr['polygon_id']
-                new_attributes[poly_id][self.target_field] += pop
-
-                # Update population count for each category
-                if len(categories) > 0:
-                    try:
-                        title = new_attributes[poly_id][category_title]
-                    except KeyError:
-                        title = new_attributes[poly_id][
-                            deprecated_category_title]
-                    categories[title] += pop
+                new_attributes[poly_id][self.target_field] += population
 
                 # Update total
-                affected_population += pop
+                total_affected_population += population
 
         # Estimate number of people in need of evacuation
         evacuated = (
-            affected_population *
-            self.parameters['evacuation_percentage'] /
-            100.0)
+            total_affected_population * evacuation_percentage / 100.0)
 
-        affected_population, rounding = population_rounding_full(
-            affected_population)
+        total_affected_population, rounding = population_rounding_full(
+            total_affected_population)
 
         total = int(numpy.sum(exposure_layer.get_data(nan=0, scaling=False)))
 
@@ -248,7 +234,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         ]
 
         # Generate impact report for the pdf map
-        table_body, total_needs = self._tabulate(affected_population,
+        table_body, total_needs = self._tabulate(total_affected_population,
                                                  evacuated, minimum_needs,
                                                  self.question, rounding,
                                                  rounding_evacuated)
@@ -258,12 +244,24 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         self._tabulate_action_checklist(table_body, total)
         impact_summary = Table(table_body).toNewlineFreeString()
 
+        population_counts = [x[self.target_field] for x in new_attributes]
+        # check for zero impact
+        if numpy.nanmax(population_counts) == 0 == numpy.nanmin(
+                population_counts):
+            table_body = [
+                self.question,
+                TableRow(
+                    [tr('People affected'),
+                     '%s' % format_int(total_affected_population)],
+                    header=True)]
+            message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(message)
+
         # Create style
         # Define classes for legend for flooded population counts
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
 
-        population_counts = [x['population'] for x in new_attributes]
         classes = create_classes(population_counts, len(colours))
         interval_classes = humanize_class(classes)
 
@@ -308,7 +306,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                 'legend_notes': legend_notes,
                 'legend_units': legend_units,
                 'legend_title': legend_title,
-                'affected_population': affected_population,
+                'affected_population': total_affected_population,
                 'total_population': total,
                 'total_needs': total_needs},
             style_info=style_info)
