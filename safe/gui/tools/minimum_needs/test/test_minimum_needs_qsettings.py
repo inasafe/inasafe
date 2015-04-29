@@ -27,6 +27,8 @@ from PyQt4.QtCore import QSettings
 
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.common.minimum_needs import MinimumNeeds
+import logging
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class TestNeedsProfile(NeedsProfile):
@@ -61,6 +63,23 @@ class MinimumNeedsTest(unittest.TestCase):
     def tearDown(self):
         """Run after each test."""
         self.minimum_needs.settings.clear()
+
+
+    def test_precision_of(self):
+        """Test determining precision of json file min needs resources."""
+        resources = self.minimum_needs.minimum_needs['resources']
+        default_precisions = []
+        precision_influence = ['Maximum allowed', 'Minimum allowed', 'Default']
+        for resource in resources:
+            precisions = [1]
+            for element in precision_influence:
+                if resource[element] is not None and '.' in resource[element]:
+                    precisions.append(self.minimum_needs.precision_of(resource[element]))
+
+            default_precisions.append(max(precisions))
+        LOGGER.debug(default_precisions)
+        self.assertEqual([1, 1, 1, 1, 2], default_precisions)
+
 
     def test_01_loading_defaults(self):
         """Test loading the defaults on a blank settings."""
