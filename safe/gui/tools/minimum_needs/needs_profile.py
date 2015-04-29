@@ -64,8 +64,8 @@ class NeedsProfile(MinimumNeeds):
 
         if not self.minimum_needs or self.minimum_needs == u'':
             # Load the most relevant minimum needs
-            # If there are more than one profile exist, just use defaults so
-            # that user doesnt get confused.
+            # If more than one profile exists, just use defaults so
+            # the user doesn't get confused.
             profiles = self.get_profiles()
             if len(profiles) == 1:
                 profile = self.get_profiles()[0]
@@ -170,7 +170,6 @@ class NeedsProfile(MinimumNeeds):
         :returns: The precision of float parameters.
         :rtype: int
         """
-        LOGGER.debug(num_txt)
         precision = num_txt.split('.')[1]
         return len(precision)
 
@@ -202,16 +201,16 @@ class NeedsProfile(MinimumNeeds):
             parameter.value = float(resource['Default'])
             LOGGER.debug(resource['Default'])
             LOGGER.debug(type(resource['Default']))
-            # choose highest precision between resource parameters
-            if '.' in resource['Default']:
-                precisions = [
-                    self.precision_of(resource['Maximum allowed']),
-                    self.precision_of(resource['Minimum allowed']),
-                    self.precision_of(resource['Default'])
-                ]
-                parameter.precision = max(precisions)
-            else:
-                parameter.precision = 1
+            # choose highest precision between resource's parameters
+            # start with default of 1
+            precisions = [1]
+            precision_influence = [
+                'Maximum allowed', 'Minimum allowed', 'Default']
+            for element in precision_influence:
+                if resource[element] is not None and '.' in resource[element]:
+                    precisions.append(self.precision_of(resource[element]))
+
+            parameter.precision = max(precisions)
             parameters.append(parameter)
         return parameters
 
