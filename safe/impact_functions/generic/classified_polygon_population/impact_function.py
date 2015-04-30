@@ -169,8 +169,8 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             [TableRow(tr('Notes'), header=True),
              tr('Total population: %s in the exposure layer') % format_int(
                  total_population),
-             tr('No data values in the exposure layer are treated as 0 when '
-                'counting affected population or total population')]
+             tr('"nodata" values in the exposure layer are treated as 0 '
+                'when counting the affected or total population')]
         )
 
         impact_summary = Table(table_body).toNewlineFreeString()
