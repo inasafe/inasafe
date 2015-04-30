@@ -162,13 +162,18 @@ class NeedsProfile(MinimumNeeds):
         profiles = sort_by_locale(profiles, self.locale)
         return profiles
 
-    def precision_of(self, num_txt):
-        """Get the precision by counting chars to right of '.' .
+    def precision_of(self, number_as_text):
+        """The number of digits after the decimal will be counted and used
+        as returned as the precision.
+        :param: number_as_text: A textual representation of the number whose
+        precision we wish to determine.
+        :type: number_as_text: basestring
 
-        :returns: The precision of float parameters.
+        :returns: The precision of the passed in textual
+         representation of a number.
         :rtype: int
         """
-        precision = num_txt.split('.')[1]
+        precision = number_as_text.split('.')[1]
         return len(precision)
 
     def get_needs_parameters(self):
