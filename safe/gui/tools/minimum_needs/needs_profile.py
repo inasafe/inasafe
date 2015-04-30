@@ -166,9 +166,9 @@ class NeedsProfile(MinimumNeeds):
         """The number of digits after the decimal will be counted and used
         as returned as the precision.
 
-        :param: number_as_text: A textual representation of the number whose
-        precision we wish to determine.
-        :type: number_as_text: basestring
+        :param number_as_text: A textual representation of the number whose
+            precision we wish to determine.
+        :type number_as_text: basestring
 
         :returns: The precision of the passed in textual
          representation of a number.
