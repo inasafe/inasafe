@@ -65,7 +65,7 @@ class TestRegistry(unittest.TestCase):
             'Polygon flood on buildings',
             'Polygon flood on roads',
             'Polygon flood on people',
-            'Raster flood hazard on population',
+            'Raster flood on population',
             'Raster flood on buildings',
             'Raster flood on roads (QGIS)',
             'Raster flood on roads (GDAL)',
@@ -76,16 +76,14 @@ class TestRegistry(unittest.TestCase):
             'Classified polygon hazard on population',
             'Classified polygon hazard on buildings',
             'Earthquake on buildings',
-            'ITB earthquake fatality',
-            'PAG earthquake fatality',
+            'Earthquake ITB fatality function',
+            'Earthquake PAGER fatality function',
             'Point volcano on buildings',
             'Polygon volcano on buildings',
             'Point volcano on population',
             'Polygon volcano on population']
-        self.assertTrue(
-            len(impact_functions) == len(expected) and
-            all(impact_functions.count(i) == expected.count(i) for i in
-                expected))
+        self.assertTrue(len(impact_functions) == len(expected))
+        self.assertListEqual(expected, impact_functions)
 
     def test_get_impact_function_instance(self):
         """TestRegistry: Test we can get an impact function instance."""
