@@ -22,6 +22,16 @@ from safe.defaults import (
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.earthquake.\
+    itb_earthquake_fatality_model.parameter_definitions import (
+        mmi_range,
+        displacement_rate,
+        x_coefficient,
+        y_coefficient,
+        step,
+        tolerance,
+        displaced_people,
+        default_provenance)
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -125,6 +135,16 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
+                # Model coefficients
+                ('x', x_coefficient()),
+                ('y', y_coefficient()),
+                # Rates of people displaced for each MMI level
+                ('displacement_rate', displacement_rate()),
+                ('mmi_range', mmi_range()),
+                ('step', step()),
+                # Threshold below which layer should be transparent
+                ('tolerance', tolerance()),
+                ('calculate_displaced_people', displaced_people()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),
