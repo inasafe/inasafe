@@ -351,7 +351,7 @@ class Analysis(object):
             * cell_size: float - the cell size that is the best of the
                 hazard and exposure rasters.
             * exposure_layer: QgsMapLayer - layer representing exposure.
-            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
+            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unadjusted
                 intersection of the two input layers extents and the viewport.
             * hazard_layer: QgsMapLayer - layer representing hazard.
         :rtype: dict, QgsRectangle, float, QgsMapLayer, QgsRectangle,
@@ -422,7 +422,7 @@ class Analysis(object):
         # the ideal WGS84 cell size and extents to the layer prep routines
         # and do all preprocessing in a single operation.
         # All this is done in the function getWGS84resolution
-        adjusted_geo_extent = geo_extent  # Bbox to use for hazard layer
+        adjusted_geo_extent = geo_extent
         cell_size = None
         extra_exposure_keywords = {}
         if hazard_layer.type() == QgsMapLayer.RasterLayer:
@@ -448,7 +448,7 @@ class Analysis(object):
 
                     # Adjust the geo extent to coincide with hazard grids
                     # so gdalwarp can do clipping properly
-                    geo_extent = adjust_clip_extent(
+                    adjusted_geo_extent = adjust_clip_extent(
                         geo_extent,
                         get_wgs84_resolution(hazard_layer),
                         hazard_geoextent)
@@ -457,12 +457,10 @@ class Analysis(object):
 
                     # Adjust extent to coincide with exposure grids
                     # so gdalwarp can do clipping properly
-                    geo_extent = adjust_clip_extent(
+                    adjusted_geo_extent = adjust_clip_extent(
                         geo_extent,
                         get_wgs84_resolution(exposure_layer),
                         exposure_geoextent)
-
-                adjusted_geo_extent = geo_extent
 
                 # Record native resolution to allow rescaling of exposure data
                 if not numpy.allclose(cell_size, exposure_geo_cell_size):
@@ -479,7 +477,7 @@ class Analysis(object):
 
                 # Adjust the geo extent to be at the edge of the pixel in
                 # so gdalwarp can do clipping properly
-                geo_extent = adjust_clip_extent(
+                adjusted_geo_extent = adjust_clip_extent(
                     geo_extent,
                     get_wgs84_resolution(hazard_layer),
                     hazard_geoextent)
@@ -489,7 +487,7 @@ class Analysis(object):
                 # the view port to be interpolated correctly. This requires
                 # resolution to be available
                 adjusted_geo_extent = get_buffered_extent(
-                    geo_extent,
+                    adjusted_geo_extent,
                     get_wgs84_resolution(hazard_layer))
         else:
             # Hazard layer is vector
@@ -500,6 +498,14 @@ class Analysis(object):
             if hazard_layer.geometryType() == QGis.Point:
                 geo_extent = exposure_geoextent
                 adjusted_geo_extent = geo_extent
+                
+            if exposure_layer.type() == QgsMapLayer.RasterLayer:
+                # Adjust the geo extent to be at the edge of the pixel in
+                # so gdalwarp can do clipping properly
+                adjusted_geo_extent = adjust_clip_extent(
+                    geo_extent,
+                    get_wgs84_resolution(exposure_layer),
+                    exposure_geoextent)
 
         return (
             extra_exposure_keywords,
@@ -744,7 +750,7 @@ class Analysis(object):
         # and other related parameters needed for clipping.
         try:
             extra_exposure_keywords = self.clip_parameters[0]
-            buffered_geo_extent = self.clip_parameters[1]
+            adjusted_geo_extent = self.clip_parameters[1]
             cell_size = self.clip_parameters[2]
             exposure_layer = self.clip_parameters[3]
             geo_extent = self.clip_parameters[4]
@@ -765,7 +771,7 @@ class Analysis(object):
         try:
             clipped_hazard = clip_layer(
                 layer=hazard_layer,
-                extent=buffered_geo_extent,
+                extent=adjusted_geo_extent,
                 cell_size=cell_size,
                 hard_clip_flag=self.clip_hard)
         except CallGDALError, e:
@@ -784,7 +790,7 @@ class Analysis(object):
 
         clipped_exposure = clip_layer(
             layer=exposure_layer,
-            extent=geo_extent,
+            extent=adjusted_geo_extent,
             cell_size=cell_size,
             extra_keywords=extra_exposure_keywords,
             hard_clip_flag=self.clip_hard)
