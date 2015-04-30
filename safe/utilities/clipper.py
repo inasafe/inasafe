@@ -482,25 +482,31 @@ def _clip_raster_layer(
     os.close(handle)
     os.remove(filename)
 
-    # If no cell size is specified, we need to run gdalwarp without
-    # specifying the output pixel size to ensure the raster dims
-    # remain consistent.
-    binary_list = which('gdalwarp')
-    LOGGER.debug('Path for gdalwarp: %s' % binary_list)
-    if len(binary_list) < 1:
-        raise CallGDALError(
-            tr('gdalwarp could not be found on your computer'))
-    # Use the first matching gdalwarp found
-    binary = binary_list[0]
+    # If no cell size is specified, we can use gdal_translate. If cell size
+    # is specified. use gdalwarp.
     if cell_size is None:
+        binary_list = which('gdal_translate')
+        if len(binary_list) < 1:
+            raise CallGDALError(
+                tr('gdal_translate could not be found on your computer'))
+        # Get the first matching gdal_translate found
+        binary = binary_list[0]
         command = (
-            '"%s" -q -t_srs EPSG:4326 -r near -cutline %s -crop_to_cutline '
-            '-ot Float64 -of GTiff "%s" "%s"' % (
+            '"%s" -projwin %f %f %f %f -of GTiff -a_srs EPSG:4326 "%s" %s' % (
                 binary,
-                clip_kml,
+                extent[0],
+                extent[3],
+                extent[2],
+                extent[1],
                 working_layer,
                 filename))
     else:
+        binary_list = which('gdalwarp')
+        if len(binary_list) < 1:
+            raise CallGDALError(
+                tr('gdalwarp could not be found on your computer'))
+        # Use the first matching gdalwarp found
+        binary = binary_list[0]
         command = (
             '"%s" -q -t_srs EPSG:4326 -r near -tr %s %s -cutline %s '
             '-crop_to_cutline -ot Float64 -of GTiff "%s" "%s"' % (
