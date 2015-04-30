@@ -217,8 +217,8 @@ class VolcanoPointPopulationFunction(ImpactFunction):
                  total_population),
              tr('People need evacuation if they are within the '
                 'volcanic hazard zones.'),
-             tr('No data values in the exposure layer are treated as 0 '
-                'when counting affected population or total population')])
+             tr('"nodata" values in the exposure layer are treated as 0 '
+                'when counting the affected or total population')])
 
         impact_summary = Table(table_body).toNewlineFreeString()
 
