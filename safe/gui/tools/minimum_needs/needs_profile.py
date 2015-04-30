@@ -172,7 +172,6 @@ class NeedsProfile(MinimumNeeds):
         for resource in self.minimum_needs['resources']:
             parameter = ResourceParameter()
             parameter.name = resource['Resource name']
-            parameter.help_text = resource['Resource description']
             # Adding in the frequency property. This is not in the
             # FloatParameter by default, so maybe we should subclass.
             parameter.frequency = resource['Frequency']
