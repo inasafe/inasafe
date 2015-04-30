@@ -52,7 +52,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'ITBFatalityFunction',
-            'name': tr('ITB earthquake fatality'),
+            'name': tr('Earthquake ITB fatality function'),
             'impact': tr('Die or be displaced'),
             'title': tr('Die or be displaced'),
             'function_type': 'old-style',
@@ -60,7 +60,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             'date_implemented': 'N/A',
             'overview': tr(
                 'To assess the impact of earthquake on population based '
-                'on the earthquake model developed by ITB.'),
+                'on the earthquake model for Indonesia developed by ITB.'),
             'detailed_description': tr(
                 'This model was developed by Institut Teknologi Bandung '
                 '(ITB) and implemented by Dr. Hadi Ghasemi, Geoscience '
