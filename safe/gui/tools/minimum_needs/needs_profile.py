@@ -187,6 +187,10 @@ class NeedsProfile(MinimumNeeds):
             parameter.unit.plural = resource['Units']
             parameter.unit.abbreviation = resource['Unit abbreviation']
             parameter.value = float(resource['Default'])
+            # Rizky : Add default precision check for older minimum needs
+            # Json format
+            NeedsProfile.check_default_precision(resource)
+            parameter.precision = int(resource['Precision'])
             parameters.append(parameter)
         return parameters
 
@@ -254,3 +258,17 @@ class NeedsProfile(MinimumNeeds):
             os.path.join(
                 str(self.root_directory), 'minimum_needs', profile + '.json')
         )
+
+    @staticmethod
+    def check_default_precision(resource):
+        """Add failsafe format change for Precision field. Because of json
+        format change, we add default check for format error.
+
+        :param resource: The resource to check
+        :type resource: dict
+
+        :rtype: dict
+        """
+        if 'Precision' not in resource:
+            resource[u'Precision'] = "2"
+        return resource

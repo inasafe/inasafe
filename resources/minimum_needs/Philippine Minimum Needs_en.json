@@ -10,6 +10,7 @@
             "Default": "0.2",
             "Minimum allowed": "0.167",
             "Maximum allowed": "0.2",
+            "Precision": "3",
             "Frequency": "daily"
         },
         {
@@ -22,6 +23,7 @@
             "Default": "0.2",
             "Minimum allowed": "0.167",
             "Maximum allowed": "0.2",
+            "Precision": "3",
             "Frequency": "monthly"
         },
         {
@@ -34,6 +36,7 @@
             "Default": "0.2",
             "Minimum allowed": "0.167",
             "Maximum allowed": "0.2",
+            "Precision": "3",
             "Frequency": "once"
         },
         {
@@ -46,6 +49,7 @@
             "Default": "0.2",
             "Minimum allowed": "0.167",
             "Maximum allowed": "0.2",
+            "Precision": "3",
             "Frequency": "monthly"
         },
         {
@@ -58,6 +62,7 @@
             "Default": "3",
             "Minimum allowed": "2.5",
             "Maximum allowed": "3",
+            "Precision": "1",
             "Frequency": "daily"
         },
         {
@@ -70,6 +75,7 @@
             "Default": "12",
             "Minimum allowed": "5",
             "Maximum allowed": "12",
+            "Precision": "0",
             "Frequency": "daily"
         },
         {
@@ -82,6 +88,7 @@
             "Default": "52",
             "Minimum allowed": "52",
             "Maximum allowed": "52",
+            "Precision": "0",
             "Frequency": "daily"
         },
         {
@@ -94,6 +101,7 @@
             "Default": "3.5",
             "Minimum allowed": "3.5",
             "Maximum allowed": "3.5",
+            "Precision": "1",
             "Frequency": "once"
         },
         {
@@ -106,6 +114,7 @@
             "Default": "0.05",
             "Minimum allowed": "0.02",
             "Maximum allowed": "0.05",
+            "Precision": "2",
             "Frequency": "single"
         },
         {
@@ -118,6 +127,7 @@
             "Default": "0.084",
             "Minimum allowed": "0.07",
             "Maximum allowed": "0.084",
+            "Precision": "3",
             "Frequency": "single"
         },
         {
@@ -130,6 +140,7 @@
             "Default": "0.01",
             "Minimum allowed": "0.01",
             "Maximum allowed": "0.01",
+            "Precision": "2",
             "Frequency": "single"
         },
         {
@@ -142,6 +153,7 @@
             "Default": "0.004",
             "Minimum allowed": "0.004",
             "Maximum allowed": "0.004",
+            "Precision": "3",
             "Frequency": "single"
         },
         {
@@ -154,6 +166,7 @@
             "Default": "0",
             "Minimum allowed": "0",
             "Maximum allowed": "0",
+            "Precision": "0",
             "Frequency": "single"
         },
         {
@@ -166,6 +179,7 @@
             "Default": "0",
             "Minimum allowed": "0",
             "Maximum allowed": "0",
+            "Precision": "0",
             "Frequency": "single"
         }
     ],
