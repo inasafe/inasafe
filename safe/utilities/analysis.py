@@ -37,7 +37,8 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
-    bbox_intersection, safe_to_qgis_layer)
+    bbox_intersection,
+    safe_to_qgis_layer)
 from safe.common.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
@@ -87,6 +88,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class Analysis(object):
     """Class for running full analysis."""
+
     def __init__(self):
         """Constructor."""
         # Please set Layers, Impact Functions, and Variables to run Analysis
@@ -394,8 +396,8 @@ class Analysis(object):
             # the viewport unless the user has deselected clip to viewport in
             # options.
             if (self.clip_to_viewport or (
-                    self.user_extent is not None and
-                    self.user_extent_crs is not None)):
+                            self.user_extent is not None and
+                            self.user_extent_crs is not None)):
                 geo_extent = self.get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent,
@@ -491,14 +493,26 @@ class Analysis(object):
                     get_wgs84_resolution(hazard_layer))
         else:
             # Hazard layer is vector
-
-            # In case hazard data is a point data set, we will not clip the
-            # exposure data to it. The reason being that points may be used
-            # as centers for evacuation circles: See issue #285
+            # In case hazard data is a point data set, we will need to set
+            # the geo_extent to the extent of exposure and the analysis
+            # extent. We check the extent first if the point extent intersects
+            # with geo_extent.
             if hazard_layer.geometryType() == QGis.Point:
-                geo_extent = exposure_geoextent
+                if (self.clip_to_viewport or
+                        (self.user_extent is not None and
+                                 self.user_extent_crs is not None)):
+                    # Get intersection between exposure and analysis extent
+                    geo_extent = bbox_intersection(
+                        exposure_geoextent, analysis_geoextent)
+                    # Check if the point is within geo_extent
+                    if bbox_intersection(
+                            geo_extent, exposure_geoextent) is None:
+                        raise InsufficientOverlapError
+
+                else:
+                    geo_extent = exposure_geoextent
                 adjusted_geo_extent = geo_extent
-                
+
             if exposure_layer.type() == QgsMapLayer.RasterLayer:
                 # Adjust the geo extent to be at the edge of the pixel in
                 # so gdalwarp can do clipping properly
@@ -868,12 +882,13 @@ class Analysis(object):
                 report.add(m.Text(self.tr(
                     'It appears that no %s are affected by %s. You may want '
                     'to consider:') % (
-                        exposure_layer_title, hazard_layer_title)))
+                    exposure_layer_title,
+                    hazard_layer_title)))
                 check_list = m.BulletedList()
                 check_list.add(self.tr(
                     'Check that you are not zoomed in too much and thus '
                     'excluding %s from your analysis area.') % (
-                        exposure_layer_title))
+                    exposure_layer_title))
                 check_list.add(self.tr(
                     'Check that the exposure is not no-data or zero for the '
                     'entire area of your analysis.'))
