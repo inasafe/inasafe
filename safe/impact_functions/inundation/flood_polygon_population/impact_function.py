@@ -62,32 +62,47 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
 
     def _tabulate(self, affected_population, evacuated, minimum_needs,
                   question, rounding, rounding_evacuated):
+        # People Affected
         table_body = [
             question,
             TableRow(
                 [tr('People affected'), '%s*' % (
                     format_int(int(affected_population)))],
-                header=True),
-            TableRow(
-                [TableCell(
-                    tr('* Number is rounded up to the nearest %s') % (
-                        rounding),
-                    col_span=2)]),
+                header=True)]
+        if self.use_affected_field:
+            table_body.append(
+                TableRow(
+                    tr('* People are considered to be affected if they are '
+                       'within the area where the value of the hazard field ('
+                       '"%s") is "%s"') %
+                    (self.parameters['affected_field'],
+                     self.parameters['affected_value'])))
+        else:
+            table_body.append(
+                TableRow(
+                    tr('* People are considered to be affected if they are '
+                       'within any polygons.')))
+        table_body.append(
+            TableRow([TableCell(
+                tr('* Number is rounded up to the nearest %s') % rounding,
+                col_span=2)]))
+
+        # People Needing Evacuation
+        table_body.append(
             TableRow([tr('People needing evacuation'), '%s*' % (
-                format_int(int(evacuated)))], header=True),
+                format_int(int(evacuated)))], header=True))
+        table_body.append(TableRow(
+            [TableCell(
+                tr('* Number is rounded up to the nearest %s') %
+                rounding_evacuated, col_span=2)]))
+        table_body.append(
             TableRow(
-                [TableCell(
-                    tr('* Number is rounded up to the nearest %s') % (
-                        rounding_evacuated),
-                    col_span=2)]),
-            TableRow([tr('Evacuation threshold'), '%s%%' % format_int(
-                self.parameters['evacuation_percentage'])], header=True),
-            TableRow(tr(
-                'Map shows the number of people affected in each flood prone '
-                'area')),
-            TableRow(tr(
-                'Table below shows the weekly minimum needs for all '
-                'evacuated people'))]
+                [tr('Evacuation threshold'), '%s%%' % format_int(
+                    self.parameters['evacuation_percentage'])], header=True))
+        table_body.append(
+            TableRow(tr('Table below shows the weekly minimum needs for all '
+                        'evacuated people')))
+
         total_needs = evacuated_population_needs(evacuated, minimum_needs)
         for frequency, needs in total_needs.items():
             table_body.append(TableRow(
@@ -103,6 +118,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         return table_body, total_needs
 
     def _tabulate_action_checklist(self, table_body, total):
+        # Action Checklist
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
         table_body.append(TableRow(tr('How will we reach stranded people?')))
@@ -119,17 +135,6 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         table_body.append(
             TableRow(tr('Total population: %s') % format_int(total)))
         table_body.append(TableRow(self.parameters['provenance']))
-        if self.use_affected_field:
-            table_body.append(
-                TableRow(
-                    tr('People are affected if in the area with the value of '
-                       'the affected field ("%s") equals to "%s"') %
-                    (self.parameters['affected_field'],
-                     self.parameters['affected_value'])))
-        else:
-            table_body.append(
-                TableRow(
-                    tr('All area in the polygons are considered affected.')))
         table_body.append(
             TableRow(
                 tr('No data values in the exposure layer are treated as 0 '
