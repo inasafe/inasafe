@@ -176,13 +176,13 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
             'Expected thresholds to be a list. Got %s' % str(thresholds))
 
         # Extract data as numeric arrays
-        data = hazard_layer.get_data(nan=0.0)  # Depth
+        data = hazard_layer.get_data(nan=True)  # Depth
         no_data_warning = False
         if has_no_data(data):
             no_data_warning = True
 
         # Calculate impact as population exposed to depths > max threshold
-        population = exposure_layer.get_data(nan=0.0, scaling=True)
+        population = exposure_layer.get_data(nan=True, scaling=True)
         if has_no_data(population):
             no_data_warning = True
 
@@ -200,18 +200,17 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
                 medium = numpy.where((data >= lo) * (data < hi), population, 0)
 
             # Count
-            val = int(numpy.sum(medium))
+            val = int(numpy.nansum(medium))
 
             counts.append(val)
 
-        if has_no_data:
-            """Carry the no data values forward to the impact layer."""
-            impact = numpy.where(numpy.isnan(data), numpy.nan, impact)
-            impact = numpy.where(numpy.isnan(data), numpy.nan, impact)
+        """Carry the no data values forward to the impact layer."""
+        impact = numpy.where(numpy.isnan(population), numpy.nan, impact)
+        impact = numpy.where(numpy.isnan(data), numpy.nan, impact)
 
         # Count totals
         evacuated, rounding_evacuated = population_rounding_full(counts[-1])
-        total = int(numpy.sum(population))
+        total = int(numpy.nansum(population))
         # Don't show digits less than a 1000
         total = population_rounding(total)
 
