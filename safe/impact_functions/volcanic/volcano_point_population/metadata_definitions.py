@@ -54,8 +54,8 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
         dict_meta = {
             'id': 'VolcanoPointPopulationFunction',
             'name': tr('Point volcano on population'),
-            'impact': tr('Need evacuation'),
-            'title': tr('Need evacuation'),
+            'impact': tr('Be impacted'),
+            'title': tr('Be impacted'),
             'function_type': 'old-style',
             'author': 'AIFDR',
             'date_implemented': 'N/A',
