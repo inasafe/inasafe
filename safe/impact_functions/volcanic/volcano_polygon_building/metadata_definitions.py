@@ -74,8 +74,8 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'Vector layer contains Map of building exposed to '
                 'volcanic hazard zones for each Kawasan Rawan Bencana.'),
             'actions': tr(
-                'Provide details about the number of buildings that are within '
-                'each hazard zone.'),
+                'Provide details about the number of buildings that are '
+                'within each hazard zone.'),
             'limitations': [],
             'citations': [],
             'categories': {

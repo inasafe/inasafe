@@ -77,7 +77,6 @@ class MinimumNeedsTest(unittest.TestCase):
             default_precisions.append(max(precisions))
         self.assertEqual([1, 1, 1, 1, 2], default_precisions)
 
-
     def test_01_loading_defaults(self):
         """Test loading the defaults on a blank settings."""
         full_minimum_needs = self.minimum_needs.get_full_needs()['resources']
