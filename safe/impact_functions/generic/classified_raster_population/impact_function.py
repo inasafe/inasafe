@@ -24,8 +24,8 @@ import numpy
 
 from safe.impact_functions.core import (
     evacuated_population_needs,
-    population_rounding
-)
+    population_rounding,
+    has_no_data)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -90,7 +90,7 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
                     format_int(resource['amount'])]))
         return table_body, total_needs
 
-    def _tabulate_action_checklist(self, table_body, total):
+    def _tabulate_action_checklist(self, table_body, total, no_data_warning):
         table_body.append(
             TableRow(tr('Action Checklist:'), header=True))
         table_body.append(
@@ -114,6 +114,11 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
                'hazard class areas'),
             tr('Total population: %s') % format_int(total)
         ])
+        if no_data_warning:
+            table_body.extend([
+                tr(
+                    'The layers contained `no data`. This missing data was '
+                    'carried through to the impact layer.')])
         return table_body
 
     def run(self, layers=None):
@@ -145,10 +150,16 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
         exposure_layer = self.exposure  # Population Raster
 
         # Extract data as numeric arrays
-        data = hazard_layer.get_data(nan=0.0)  # Class
+        data = hazard_layer.get_data(nan=True)  # Class
+        no_data_warning = False
+        if has_no_data(data):
+            no_data_warning = True
 
         # Calculate impact as population exposed to each class
-        population = exposure_layer.get_data(nan=0.0, scaling=True)
+        population = exposure_layer.get_data(nan=True, scaling=True)
+        if has_no_data(population):
+            no_data_warning = True
+
         if high_t == 0:
             hi = numpy.where(0, population, 0)
         else:
@@ -184,11 +195,11 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
                 population, 0)
 
         # Count totals
-        total = int(numpy.sum(population))
-        high = int(numpy.sum(hi))
-        medium = int(numpy.sum(med))
-        low = int(numpy.sum(lo))
-        total_impact = int(numpy.sum(impact))
+        total = int(numpy.nansum(population))
+        high = int(numpy.nansum(hi))
+        medium = int(numpy.nansum(med))
+        low = int(numpy.nansum(lo))
+        total_impact = int(numpy.nansum(impact))
 
         # Perform population rounding based on number of people
         no_impact = population_rounding(total - total_impact)
@@ -203,13 +214,21 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
             self.parameters['minimum needs']
         ]
 
-        table_body, total_needs = self._tabulate(high, low, medium,
-                                                 minimum_needs, no_impact,
-                                                 self.question, total_impact)
+        table_body, total_needs = self._tabulate(
+            high,
+            low,
+            medium,
+            minimum_needs,
+            no_impact,
+            self.question,
+            total_impact)
 
         impact_table = Table(table_body).toNewlineFreeString()
 
-        table_body = self._tabulate_action_checklist(table_body, total)
+        table_body = self._tabulate_action_checklist(
+            table_body,
+            total,
+            no_data_warning)
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # Create style
