@@ -182,6 +182,16 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
             high_hazard_population + medium_hazard_population +
             low_hazard_population)
 
+        # Carry the no data values forward to the impact layer.
+        affected_population = numpy.where(
+            numpy.isnan(population),
+            numpy.nan,
+            affected_population)
+        affected_population = numpy.where(
+            numpy.isnan(hazard_data),
+            numpy.nan,
+            affected_population)
+
         # Count totals
         total_population = int(numpy.nansum(population))
         total_high_population = int(numpy.nansum(high_hazard_population))
