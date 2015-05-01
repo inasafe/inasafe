@@ -42,7 +42,8 @@ from safe.impact_functions.generic.\
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-from safe.common.exceptions import FunctionParametersError
+from safe.common.exceptions import (
+    FunctionParametersError, ZeroImpactException)
 
 
 class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
@@ -179,6 +180,16 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
         total_low_population = int(numpy.nansum(low_hazard_population))
         total_affected = int(numpy.nansum(affected_population))
         total_not_affected = total_population - total_affected
+
+        # check for zero impact
+        if total_affected == 0:
+            table_body = [
+                self.question,
+                TableRow(
+                    [tr('People affected'),
+                     '%s' % format_int(total_affected)], header=True)]
+            message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(message)
 
         minimum_needs = [
             parameter.serialize() for parameter in
