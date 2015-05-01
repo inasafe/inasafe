@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import numpy
 
 from safe.storage.core import read_layer
 from safe.impact_functions.impact_function_manager \
@@ -55,7 +56,7 @@ class TestFloodEvacuationVectorHazardFunction(unittest.TestCase):
 
         keywords = impact.get_keywords()
         # print "keywords", keywords
-        affected_population = float(keywords['affected_population'])
+        affected_population = numpy.nansum(impact.get_data())
         total_population = keywords['total_population']
 
         self.assertEqual(affected_population, 20)

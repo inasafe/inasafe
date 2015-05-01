@@ -15,6 +15,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import numpy
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.volcanic.volcano_polygon_population\
@@ -54,19 +55,9 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand
-        impact = {
-            'Kawasan Rawan Bencana III': 49,
-            'Kawasan Rawan Bencana II': 132,
-            'Kawasan Rawan Bencana I': 0,
-        }
-        impact_features = impact_layer.get_data()
-        for i in range(len(impact_features)):
-            impact_feature = impact_features[i]
-            krb_zone = impact_feature.get('KRB')
-            expected = impact[krb_zone]
-            result = impact_feature['population']
-            message = 'Expecting %s, but it returns %s' % (expected, result)
-            self.assertEqual(expected, result, message)
+        expected_affected_population = 181
+        result = numpy.nansum(impact_layer.get_data())
+        self.assertEqual(expected_affected_population, result, message)
 
     def test_filter(self):
         """TestVolcanoPolygonPopulationFunction: Test filtering IF"""

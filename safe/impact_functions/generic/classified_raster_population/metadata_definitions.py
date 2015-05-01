@@ -86,7 +86,7 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 'population count for that cell.'),
             'output': tr(
                 'Map of population exposed to the highest class and a table '
-                'with number of people in each class'),
+                'with the number of people in each class'),
             'actions': tr(
                 'Provide details about how many people would likely be '
                 'affected for each hazard class.'),
