@@ -28,7 +28,8 @@ from safe.impact_functions.generic\
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.core import (
     evacuated_population_needs,
-    population_rounding)
+    population_rounding,
+    has_no_data)
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
@@ -50,7 +51,13 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
 
-    def _tabulate(self, high, low, medium, question, total_impact):
+    def _tabulate(
+            self,
+            high,
+            low,
+            medium,
+            question,
+            total_impact):
         # Generate impact report for the pdf map
         table_body = [
             question,
@@ -68,7 +75,13 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
                      header=True)]
         return table_body
 
-    def _tabulate_notes(self, minimum_needs, table_body, total, total_impact):
+    def _tabulate_notes(
+            self,
+            minimum_needs,
+            table_body,
+            total,
+            total_impact,
+            no_data_warning):
         # Extend impact report for on-screen display
         table_body.extend([
             TableRow(tr('Notes'), header=True),
@@ -78,6 +91,11 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
             TableRow(tr(
                 'Table below shows the minimum needs for all '
                 'affected people'))])
+        if no_data_warning:
+            table_body.extend([
+                tr(
+                    'The layers contained `no data`. This missing data was '
+                    'carried through to the impact layer.')])
         total_needs = evacuated_population_needs(
             total_impact, minimum_needs)
         for frequency, needs in total_needs.items():
@@ -134,10 +152,15 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         exposure_layer = self.exposure  # Population Raster
 
         # Extract data as numeric arrays
-        hazard_data = hazard_layer.get_data(nan=0.0)  # Category
+        hazard_data = hazard_layer.get_data(nan=True)  # Category
+        no_data_warning = False
+        if has_no_data(hazard_data):
+            no_data_warning = True
 
         # Calculate impact as population exposed to each category
-        exposure_data = exposure_layer.get_data(nan=0.0, scaling=True)
+        exposure_data = exposure_layer.get_data(nan=True, scaling=True)
+        if has_no_data(exposure_data):
+            no_data_warning = True
 
         # Make 3 data for each zone. Get the value of the exposure if the
         # exposure is in the hazard zone, else just assign 0
@@ -151,10 +174,10 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         impacted_exposure = low_exposure + medium_exposure + high_exposure
 
         # Count totals
-        total = int(numpy.sum(exposure_data))
-        low_total = int(numpy.sum(low_exposure))
-        medium_total = int(numpy.sum(medium_exposure))
-        high_total = int(numpy.sum(high_exposure))
+        total = int(numpy.nansum(exposure_data))
+        low_total = int(numpy.nansum(low_exposure))
+        medium_total = int(numpy.nansum(medium_exposure))
+        high_total = int(numpy.nansum(high_exposure))
         total_impact = high_total + medium_total + low_total
 
         # Don't show digits less than a 1000
@@ -175,7 +198,7 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         impact_table = Table(table_body).toNewlineFreeString()
 
         table_body, total_needs = self._tabulate_notes(
-            minimum_needs, table_body, total, total_impact)
+            minimum_needs, table_body, total, total_impact, no_data_warning)
 
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in each hazard areas (low, medium, high)')
