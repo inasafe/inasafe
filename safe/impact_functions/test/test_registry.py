@@ -82,10 +82,8 @@ class TestRegistry(unittest.TestCase):
             'Polygon volcano on buildings',
             'Point volcano on population',
             'Polygon volcano on population']
-        self.assertTrue(
-            len(impact_functions) == len(expected) and
-            all(impact_functions.count(i) == expected.count(i) for i in
-                expected))
+        self.assertTrue(len(impact_functions) == len(expected))
+        self.assertListEqual(expected, impact_functions)
 
     def test_get_impact_function_instance(self):
         """TestRegistry: Test we can get an impact function instance."""
