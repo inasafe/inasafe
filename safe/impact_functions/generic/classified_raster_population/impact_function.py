@@ -141,7 +141,7 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
         medium_class = self.parameters['medium_hazard_class']
         high_class = self.parameters['high_hazard_class']
 
-        # The thresholds must be different to each other
+        # The classes must be different to each other
         unique_classes_flag = all(
             x != y for x, y in list(
                 itertools.combinations(
@@ -177,8 +177,8 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
         total_high_population = int(numpy.nansum(high_hazard_population))
         total_medium_population = int(numpy.nansum(medium_hazard_population))
         total_low_population = int(numpy.nansum(low_hazard_population))
-        total_impact = int(numpy.nansum(affected_population))
-        total_not_affected = total_population - total_impact
+        total_affected = int(numpy.nansum(affected_population))
+        total_not_affected = total_population - total_affected
 
         minimum_needs = [
             parameter.serialize() for parameter in
@@ -192,7 +192,7 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
             minimum_needs,
             population_rounding(total_not_affected),
             self.question,
-            population_rounding(total_impact))
+            population_rounding(total_affected))
 
         impact_table = Table(table_body).toNewlineFreeString()
 
@@ -212,19 +212,25 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
         for i in xrange(len(colours)):
             style_class = dict()
             if i == 1:
-                label = create_label(interval_classes[i], 'Low')
+                label = create_label(
+                    interval_classes[i],
+                    tr('Low Population [%i people/cell]' % classes[i]))
             elif i == 4:
-                label = create_label(interval_classes[i], 'Medium')
+                label = create_label(
+                    interval_classes[i],
+                    tr('Medium Population [%i people/cell]' % classes[i]))
             elif i == 7:
-                label = create_label(interval_classes[i], 'High')
+                label = create_label(
+                    interval_classes[i],
+                    tr('High Population [%i people/cell]' % classes[i]))
             else:
                 label = create_label(interval_classes[i])
             style_class['label'] = label
             style_class['quantity'] = classes[i]
             if i == 0:
-                transparency = 30
+                transparency = 100
             else:
-                transparency = 30
+                transparency = 0
             style_class['transparency'] = transparency
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
