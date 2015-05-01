@@ -143,14 +143,6 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
                 category = row[hazard_zone_attribute]
                 affected_population[category] += population
 
-            # Update population count for associated polygon
-            poly_id = row['polygon_id']
-            new_data_table[poly_id][self.target_field] += population
-
-            # Update population count for each category
-            category = new_data_table[poly_id][hazard_zone_attribute]
-            categories[category] += population
-
         # Count totals
         total_population = population_rounding(
             int(numpy.nansum(exposure_layer.get_data())))
@@ -235,7 +227,6 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
                     '`No data` cells where detected in the population layer. '
                     'This may affect the result.')])
 
-        population_counts = [x[self.target_field] for x in new_data_table]
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # check for zero impact

@@ -204,7 +204,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
 
             counts.append(val)
 
-        """Carry the no data values forward to the impact layer."""
+        # Carry the no data values forward to the impact layer.
         impact = numpy.where(numpy.isnan(population), numpy.nan, impact)
         impact = numpy.where(numpy.isnan(data), numpy.nan, impact)
 
