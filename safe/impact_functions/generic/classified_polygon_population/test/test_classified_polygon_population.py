@@ -15,6 +15,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import numpy
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.generic.classified_polygon_population\
@@ -54,19 +55,9 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand
-        impact = {
-            'Low Hazard Zone': 0,
-            'Medium Hazard Zone': 132.0,
-            'High Hazard Zone': 49.0,
-        }
-        impact_features = impact_layer.get_data()
-        for i in range(len(impact_features)):
-            impact_feature = impact_features[i]
-            hazard_zone = impact_feature.get('h_zone')
-            expected = impact[hazard_zone]
-            result = impact_feature['population']
-            message = 'Expecting %s, but it returns %s' % (expected, result)
-            self.assertEqual(expected, result, message)
+        expected_affected_population = 181
+        result = numpy.nansum(impact_layer.get_data())
+        self.assertEqual(expected_affected_population, result, message)
 
     def test_filter(self):
         """TestClassifiedPolygonPopulationFunction: Test filtering IF"""

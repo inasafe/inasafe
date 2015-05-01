@@ -55,7 +55,7 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
             'author': 'Akbar Gumbira (akbargumbira@gmail.com)',
             'date_implemented': '17/04/2015',
             'overview': tr(
-                'To assess the impacts of polygon hazard zones on buildings.'),
+                'To assess the impact of each hazard zone on buildings.'),
             'detailed_description': '',
             'hazard_input': tr(
                 'The hazard layer must be a polygon layer. This layer '
@@ -66,10 +66,10 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'polygon represents the footprint of a building.'),
             'output': tr(
                 'A vector layer of buildings with each tagged according to '
-                'which hazard zone it falls in.'),
+                'the hazard zone in which it falls.'),
             'actions': tr(
-                'Provide details about how many buildings would likely be '
-                'affected in each hazard zone.'),
+                'Provide details about how many buildings fall within '
+                'each hazard zone.'),
             'limitations': [],
             'citations': [],
             'categories': {

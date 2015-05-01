@@ -15,6 +15,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import numpy
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.volcanic.volcano_point_population\
@@ -48,25 +49,18 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of volcano point how many '
-                             'population might need evacuation')
+        expected_question = (
+            'In the event of a volcano point how many '
+            'people might be impacted')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand
-        impact = {
-            3000: 174,
-            5000: 26,
-            10000: 0
-        }
-        impact_features = impact_layer.get_data()
-        for i in range(len(impact_features)):
-            impact_feature = impact_features[i]
-            radius = impact_feature.get('Radius')
-            expected = impact[radius]
-            result = impact_feature['population']
-            message = 'Expecting %s, but it returns %s' % (expected, result)
-            self.assertEqual(expected, result, message)
+        expected_affected_population = 200
+        result = numpy.nansum(impact_layer.get_data())
+        message = 'Expecting %s, but it returns %s' % (
+            expected_affected_population, result)
+        self.assertEqual(expected_affected_population, result, message)
 
     def test_filter(self):
         """TestVolcanoPointPopulationFunction: Test filtering IF"""
