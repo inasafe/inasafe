@@ -1574,6 +1574,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.get_layers_lock:
             return
 
+        # Do nothing if there is no active layer - see #1861
+        if not self._has_active_layer():
+            self.show_static_message(self.getting_started_message())
+
+        # Now try to read the keywords and show them in the dock
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
@@ -1886,6 +1891,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         except InvalidGeometryError:
             return
 
+    def _has_active_layer(self):
+        """Check if there is a layer active in the legend.
+
+        .. versionadded:: 3.1
+
+        :returns: True if there is a layer highlighted in the legend.
+        :rtype: bool
+        """
+        layer = self.iface.activeLayer()
+        return layer is not None
+
     def show_next_analysis_extent(self):
         """Update the rubber band showing where the next analysis extent is.
 
@@ -1897,21 +1913,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 2.1.0
         """
-        no_overlap_message = m.Message(
-            LOGO_ELEMENT,
-            m.Heading(
-                self.tr('No overlapping extents'), **WARNING_STYLE),
-            m.Paragraph(
-                self.tr(
-                    'Currently there are no overlapping extents between the '
-                    'hazard layer, the exposure layer and the user defined '
-                    'analysis area. Try zooming to the analysis area, '
-                    'clearing the analysis area or defining a new one using '
-                    'the analysis area definition tool.'),
-                m.Image(
-                    'file:///%s/img/icons/set-extents-tool.svg' %
-                    (resources_path()), **SMALL_ICON_STYLE),
-            ))
         self.extent.hide_next_analysis_extent()
         try:
             # Temporary only, for checking the user extent
@@ -1921,21 +1922,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             next_analysis_extent = analysis.clip_parameters[1]
 
             self.extent.show_next_analysis_extent(next_analysis_extent)
-            self.show_static_message(
-                m.Message(
-                    LOGO_ELEMENT,
-                    m.Heading(
-                        self.tr('Analysis environment ready'), **INFO_STYLE),
-                    m.Text(self.tr(
-                        'The hazard layer, exposure layer and your '
-                        'defined analysis area extents all overlap. Press the '
-                        'run button below to continue with the analysis.'
-                    ))))
+            self.pbnRunStop.setEnabled(True)
         except (AttributeError, InsufficientOverlapError):
             # For issue #618
-
             legend = self.iface.legendInterface()
-
             # This logic for #1811
             layers = legend.layers()
             visible_count = len(layers)
@@ -1946,5 +1936,4 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         visible_count += 1
             if visible_count == 0:
                 self.show_static_message(self.getting_started_message())
-            else:
-                self.show_static_message(no_overlap_message)
+            self.pbnRunStop.setEnabled(False)
