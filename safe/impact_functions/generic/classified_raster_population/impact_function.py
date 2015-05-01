@@ -21,11 +21,11 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import numpy
+import itertools
 
 from safe.impact_functions.core import (
     evacuated_population_needs,
-    population_rounding
-)
+    population_rounding)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -42,6 +42,8 @@ from safe.impact_functions.generic.\
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.common.exceptions import (
+    FunctionParametersError, ZeroImpactException)
 
 
 class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
@@ -135,107 +137,111 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
         self.prepare(layers)
 
         # The 3 classes
-        # TODO: shouldnt these be defined in keywords rather? TS
-        low_t = self.parameters['low_hazard_class']
-        medium_t = self.parameters['medium_hazard_class']
-        high_t = self.parameters['high_hazard_class']
+        # TODO (3.2): shouldnt these be defined in keywords rather? TS
+        low_class = self.parameters['low_hazard_class']
+        medium_class = self.parameters['medium_hazard_class']
+        high_class = self.parameters['high_hazard_class']
+
+        # The classes must be different to each other
+        unique_classes_flag = all(
+            x != y for x, y in list(
+                itertools.combinations(
+                    [low_class, medium_class, high_class], 2)))
+        if not unique_classes_flag:
+            raise FunctionParametersError(
+                'There is hazard class that has the same value with other '
+                'class. Please check the parameters.')
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Classified Hazard
         exposure_layer = self.exposure  # Population Raster
 
         # Extract data as numeric arrays
-        data = hazard_layer.get_data(nan=0.0)  # Class
+        hazard_data = hazard_layer.get_data()
 
         # Calculate impact as population exposed to each class
-        population = exposure_layer.get_data(nan=0.0, scaling=True)
-        if high_t == 0:
-            hi = numpy.where(0, population, 0)
-        else:
-            hi = numpy.where(data == high_t, population, 0)
-        if medium_t == 0:
-            med = numpy.where(0, population, 0)
-        else:
-            med = numpy.where(data == medium_t, population, 0)
-        if low_t == 0:
-            lo = numpy.where(0, population, 0)
-        else:
-            lo = numpy.where(data == low_t, population, 0)
-        if high_t == 0:
-            impact = numpy.where(
-                (data == low_t) +
-                (data == medium_t),
-                population, 0)
-        elif medium_t == 0:
-            impact = numpy.where(
-                (data == low_t) +
-                (data == high_t),
-                population, 0)
-        elif low_t == 0:
-            impact = numpy.where(
-                (data == medium_t) +
-                (data == high_t),
-                population, 0)
-        else:
-            impact = numpy.where(
-                (data == low_t) +
-                (data == medium_t) +
-                (data == high_t),
-                population, 0)
+        population = exposure_layer.get_data(scaling=True)
+
+        # Get all population data that falls in each hazard class
+        high_hazard_population = numpy.where(
+            hazard_data == high_class, population, 0)
+        medium_hazard_population = numpy.where(
+            hazard_data == medium_class, population, 0)
+        low_hazard_population = numpy.where(
+            hazard_data == low_class, population, 0)
+        affected_population = (
+            high_hazard_population + medium_hazard_population +
+            low_hazard_population)
 
         # Count totals
-        total = int(numpy.sum(population))
-        high = int(numpy.sum(hi))
-        medium = int(numpy.sum(med))
-        low = int(numpy.sum(lo))
-        total_impact = int(numpy.sum(impact))
+        total_population = int(numpy.nansum(population))
+        total_high_population = int(numpy.nansum(high_hazard_population))
+        total_medium_population = int(numpy.nansum(medium_hazard_population))
+        total_low_population = int(numpy.nansum(low_hazard_population))
+        total_affected = int(numpy.nansum(affected_population))
+        total_not_affected = total_population - total_affected
 
-        # Perform population rounding based on number of people
-        no_impact = population_rounding(total - total_impact)
-        total = population_rounding(total)
-        total_impact = population_rounding(total_impact)
-        high = population_rounding(high)
-        medium = population_rounding(medium)
-        low = population_rounding(low)
+        # check for zero impact
+        if total_affected == 0:
+            table_body = [
+                self.question,
+                TableRow(
+                    [tr('People affected'),
+                     '%s' % format_int(total_affected)], header=True)]
+            message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(message)
 
         minimum_needs = [
             parameter.serialize() for parameter in
             self.parameters['minimum needs']
         ]
 
-        table_body, total_needs = self._tabulate(high, low, medium,
-                                                 minimum_needs, no_impact,
-                                                 self.question, total_impact)
+        table_body, total_needs = self._tabulate(
+            population_rounding(total_high_population),
+            population_rounding(total_low_population),
+            population_rounding(total_medium_population),
+            minimum_needs,
+            population_rounding(total_not_affected),
+            self.question,
+            population_rounding(total_affected))
 
         impact_table = Table(table_body).toNewlineFreeString()
 
-        table_body = self._tabulate_action_checklist(table_body, total)
+        table_body = self._tabulate_action_checklist(
+            table_body,
+            population_rounding(total_population))
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # Create style
         colours = [
             '#FFFFFF', '#38A800', '#79C900', '#CEED00',
             '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
-        classes = create_classes(impact.flat[:], len(colours))
+        classes = create_classes(affected_population.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
 
         for i in xrange(len(colours)):
             style_class = dict()
             if i == 1:
-                label = create_label(interval_classes[i], 'Low')
+                label = create_label(
+                    interval_classes[i],
+                    tr('Low Population [%i people/cell]' % classes[i]))
             elif i == 4:
-                label = create_label(interval_classes[i], 'Medium')
+                label = create_label(
+                    interval_classes[i],
+                    tr('Medium Population [%i people/cell]' % classes[i]))
             elif i == 7:
-                label = create_label(interval_classes[i], 'High')
+                label = create_label(
+                    interval_classes[i],
+                    tr('High Population [%i people/cell]' % classes[i]))
             else:
                 label = create_label(interval_classes[i])
             style_class['label'] = label
             style_class['quantity'] = classes[i]
             if i == 0:
-                transparency = 30
+                transparency = 100
             else:
-                transparency = 30
+                transparency = 0
             style_class['transparency'] = transparency
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
@@ -255,9 +261,9 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
 
         # Create raster object and return
         raster_layer = Raster(
-            impact,
-            projection=hazard_layer.get_projection(),
-            geotransform=hazard_layer.get_geotransform(),
+            data=affected_population,
+            projection=exposure_layer.get_projection(),
+            geotransform=exposure_layer.get_geotransform(),
             name=tr('Population which %s') % (
                 self.impact_function_manager
                 .get_function_title(self).lower()),
