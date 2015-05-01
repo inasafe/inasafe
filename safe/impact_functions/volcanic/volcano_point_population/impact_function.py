@@ -17,7 +17,8 @@ from safe.impact_functions.volcanic.volcano_point_population\
     .metadata_definitions import VolcanoPointPopulationFunctionMetadata
 from safe.impact_functions.core import (
     evacuated_population_needs,
-    population_rounding)
+    population_rounding,
+    has_no_data)
 from safe.engine.utilities import buffer_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.vector import Vector
@@ -78,6 +79,10 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         hazard_layer = self.hazard
         exposure_layer = self.exposure
 
+        nan_warning = False
+        if has_no_data(exposure_layer.get_data(nan=True)):
+            nan_warning = True
+
         # Input checks
         if not hazard_layer.is_point_data:
             msg = (
@@ -131,10 +136,18 @@ class VolcanoPointPopulationFunction(ImpactFunction):
             category = row[category_title]
             categories[category] = 0
 
+
+        nan_warning = False
+        if has_no_data(exposure_layer.get_data(nan=True)):
+            nan_warning = True
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
             # Get population at this location
             population = float(row[self.target_field])
+
+            if numpy.isnan(population):
+                # #1800 - NaN handling we don't count them - Christian
+                continue
 
             # Update population count for associated polygon
             poly_id = row['polygon_id']
@@ -218,6 +231,12 @@ class VolcanoPointPopulationFunction(ImpactFunction):
                  total_population),
              tr('People need evacuation if they are within the '
                 'volcanic hazard zones.')])
+
+        if nan_warning:
+            table_body.extend([
+                tr(
+                    '`No data` cells where detected in the population layer. '
+                    'This may affect the result.')])
 
         population_counts = [x[self.target_field] for x in new_data_table]
         impact_summary = Table(table_body).toNewlineFreeString()
