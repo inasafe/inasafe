@@ -396,8 +396,8 @@ class Analysis(object):
             # the viewport unless the user has deselected clip to viewport in
             # options.
             if (self.clip_to_viewport or (
-                            self.user_extent is not None and
-                            self.user_extent_crs is not None)):
+                    self.user_extent is not None and
+                    self.user_extent_crs is not None)):
                 geo_extent = self.get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent,
@@ -498,9 +498,10 @@ class Analysis(object):
             # extent. We check the extent first if the point extent intersects
             # with geo_extent.
             if hazard_layer.geometryType() == QGis.Point:
-                if (self.clip_to_viewport or
-                        (self.user_extent is not None and
-                                 self.user_extent_crs is not None)):
+                user_extent_enabled = (
+                    self.user_extent is not None and
+                    self.user_extent_crs is not None)
+                if self.clip_to_viewport or user_extent_enabled:
                     # Get intersection between exposure and analysis extent
                     geo_extent = bbox_intersection(
                         exposure_geoextent, analysis_geoextent)
@@ -767,7 +768,7 @@ class Analysis(object):
             adjusted_geo_extent = self.clip_parameters[1]
             cell_size = self.clip_parameters[2]
             exposure_layer = self.clip_parameters[3]
-            geo_extent = self.clip_parameters[4]
+            # geo_extent = self.clip_parameters[4]
             hazard_layer = self.clip_parameters[5]
         except:
             raise
@@ -882,13 +883,13 @@ class Analysis(object):
                 report.add(m.Text(self.tr(
                     'It appears that no %s are affected by %s. You may want '
                     'to consider:') % (
-                    exposure_layer_title,
-                    hazard_layer_title)))
+                        exposure_layer_title,
+                        hazard_layer_title)))
                 check_list = m.BulletedList()
                 check_list.add(self.tr(
                     'Check that you are not zoomed in too much and thus '
                     'excluding %s from your analysis area.') % (
-                    exposure_layer_title))
+                        exposure_layer_title))
                 check_list.add(self.tr(
                     'Check that the exposure is not no-data or zero for the '
                     'entire area of your analysis.'))

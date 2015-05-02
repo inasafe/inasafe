@@ -659,9 +659,10 @@ def tag_polygons_by_grid(polygons, grid, threshold=0, tag='affected'):
     polygon_geometry = polygons.get_geometry(as_geometry_objects=True)
 
     # Separate grid points by polygon
-    res, _ = clip_grid_by_polygons(grid.get_data(),
-                                grid.get_geotransform(),
-                                polygon_geometry)
+    res, _ = clip_grid_by_polygons(
+        grid.get_data(),
+        grid.get_geotransform(),
+        polygon_geometry)
 
     # Create new polygon layer with tag set according to grid values
     # and threshold
