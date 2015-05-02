@@ -28,7 +28,7 @@ from safe.common.utilities import (
     get_thousand_separator,
     get_non_conflicting_attribute_name)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
@@ -134,6 +134,17 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         total_affected_population = reduce(
             lambda x, y: x + y,
             [population for population in affected_population.values()])
+
+        # check for zero impact
+        if total_affected_population == 0:
+            table_body = [
+                self.question,
+                TableRow(
+                    [tr('People impacted'),
+                     '%s' % format_int(total_affected_population)],
+                    header=True)]
+            message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(message)
 
         # Generate impact report for the pdf map
         blank_cell = ''

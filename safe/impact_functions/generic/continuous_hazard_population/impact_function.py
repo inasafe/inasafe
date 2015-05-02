@@ -34,7 +34,8 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import create_classes, create_label, humanize_class
-from safe.common.exceptions import FunctionParametersError
+from safe.common.exceptions import (
+    FunctionParametersError, ZeroImpactException)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
@@ -156,6 +157,16 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
         medium_total = int(numpy.sum(medium_exposure))
         high_total = int(numpy.sum(high_exposure))
         total_impact = high_total + medium_total + low_total
+
+        # Check for zero impact
+        if total_impact == 0:
+            table_body = [
+                self.question,
+                TableRow(
+                    [tr('People impacted'),
+                     '%s' % format_int(total_impact)], header=True)]
+            message = Table(table_body).toNewlineFreeString()
+            raise ZeroImpactException(message)
 
         # Don't show digits less than a 1000
         total = population_rounding(total)
