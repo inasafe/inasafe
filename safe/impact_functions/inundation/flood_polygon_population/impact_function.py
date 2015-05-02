@@ -224,8 +224,9 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             else:
                 # If it's not affected, set the value of the impact layer to 0
                 grid_point = attr['grid_point']
-                index = numpy.floor((grid_point - covered_exposure_top_left) / (
-                    covered_exposure_dimension)).astype(int)
+                index = numpy.floor(
+                    (grid_point - covered_exposure_top_left) / (
+                        covered_exposure_dimension)).astype(int)
                 new_covered_exposure_data[index[1]][index[0]] = 0
 
         # Estimate number of people in need of evacuation
