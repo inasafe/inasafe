@@ -1,8 +1,239 @@
 Changelog for version 3.1.0
 ================================
 
-0975aca (HEAD, upstream/develop, inasafe-1819, develop) Merge pull request #1818 from lucernae/develop
+19bbe17 (HEAD, upstream/develop, origin/v3.1-prep, v3.1-prep) Merge pull request #1908 from akbargumbira/develop
+b9afd37 Merge pull request #1907 from timlinux/docker
+b2d512e Update and compile translations.
+fe8970d Merge pull request #1906 from akbargumbira/develop
+f6fa836 Standardize nan warning.
+218e1df (origin/docker, docker) Rather use hosted docker repo for test builds
+28c47ce Merge pull request #1905 from timlinux/docker
+c9098ec Merge pull request #1904 from AIFDR/pylint
+59f7b4b Fix typo nan warning.
+3787fc6 Merge pull request #1903 from timlinux/pep8
+a02f1f5 (upstream/pylint, pylint) Fix pylint errors
+4cb8396 Fix for python path in docker
+135f08d (origin/pep8, pep8) PEP8 fixes and removed some redundant code / vars
+142c1b3 Merge pull request #1902 from ismailsunni/update_translation
+78d15d7 Update translation.
+9c0a640 (develop) Merge pull request #1898 from cchristelis/feature/1800_nan_handling
+fa3b845 Merge pull request #1901 from timlinux/pylint
+0e3a6c9 Merge pull request #1900 from timlinux/docker
+d14cbaa (origin/pylint) Pylint fixes for release
+b3d9f2f In progress work to support running tests under docker for a homogenous testing environment
+9394133 Merge pull request #1895 from timlinux/ui-tweaks
+f984361 (origin/ui-tweaks, ui-tweaks) Test items are equal in registry list, not lists themselves (fixes failing test)
+11be6c4 Merge remote-tracking branch 'upstream/develop' into ui-tweaks
+8b1d931 Merge pull request #1896 from timlinux/pep8
+29432d2 Merge pull request #1899 from akbargumbira/develop
+61494ee Ensure all IF's on population have ZeroImpact handle.
+c120edb Merge with develop
+6fa783c Better NaN handling classified_raster_population.
+9a56cdc Merge branch 'develop' of github.com:AIFDR/inasafe into feature/1800_nan_handling
+5789421 PEP8 fixes
+6ca0133 Small tweaks for extent selector and osm downloader dialogs so they look better on osx
+03d6011 Merge remote-tracking branch 'upstream/develop' into develop
+7f6254e Better NaN handling - flood_polygon_population.
+ea7f156 Better NaN handling - classified_raster_population.
+56017f8 Better NaN handling - continuous_hazard_population.
+37a4542 Better NaN handling - tsunami_population_evacuation.
+b1f2a33 Merge pull request #1865 from lucernae/fix_parameters_reset_after_run
+a406a39 Merge pull request #1875 from timlinux/inasafe-1861
+16fb8ab Merge pull request #1891 from akbargumbira/develop
+8a5ce97 Merge pull request #1894 from Jannes123/clean_resources
+0cb06a2 remove duplicate text from resource file
+25bedab Add ZeroImpact handle.
+f235591 Merge branch 'develop' of github.com:AIFDR/inasafe into feature/1800_nan_handling
+dc334cb Fix failing tests.
+40e0cce Better NaN handling - volcano_point_population.
+7b9d418 Better NaN handling - volcano_polygon_popuolation.
+14c1108 Update the style and metadata.
+d263e60 Better NaN handling - flood raster popuolation.
+d37cfd5 Fix the logic in classified hazard on population IF.
+a66b70d Merge pull request #1881 from Jannes123/min_needs_precision
+6b105f5 Merge upstream changes
+efe1107 revert
+d382f01 (jannes/min_needs_precision, min_needs_precision) docstring
+8289fb7 Merge pull request #1886 from akbargumbira/develop
+1cad197 Merge remote-tracking branch 'upstream/develop' into develop
+8c9805b Merge pull request #1880 from timlinux/fix-1843
+bec7751 Fix failing test for #1843
+ffa4689 Change how we intersect the extents if the hazard is point data.
+e2ed972 Resolve clipping problem by adjusting the extent in the case of vector on raster.
+f8a784f Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+5d3a89f docstrings update
+275eb8b docstrings update
+655bf0a Merge pull request #1884 from akbargumbira/develop
+4250206 Tweak nodata statement in other 3 IF's
+f79fe79 Tweak the nodata statement in this IF.
+30bf290 Rearrange the report tabulation for this IF.
+3be079c (origin/fix-1843, fix-1843) Fix failing test for #1843
+a003796 Fix failing test for #1843
+8847c90 rollback previous precision mistake
+55445ca clean out logger
+e3b8973 Merge branch 'develop' into min_needs_precision
+9295407 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+197cd88 added tests
+adc60c6 min needs options tab floating point precision fix
+b32eb62 NaN handling
+4bc03b5 Resolved final comments from Charlotte
+5847d33 dynamic floating point for minimumneeds profile
+185f73a Fix reference to IF names in test list based on tweaks for #1843
+2be3a2f Resolved merge conflicts with master
+3bd26cf Merge pull request #1871 from akbargumbira/generic_polygon
+5b107a8 Handle NaN in these 4 IF's.
+0889889 (rizky/fix_parameters_reset_after_run) Merge branch 'develop' of github.com:AIFDR/inasafe into fix_parameters_reset_after_run
+efb371d Update Classified Polygon Pops IF, Volcano Point Pops IF, Volcano Polygon Pops IF.
+d3e84f5 Change interpolation polygon raster and update Flood Polygon on Pops IF.
+55ff0b0 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+1ae6455 Merge branch 'develop' of github.com:AIFDR/inasafe into generic_polygon
+ebdb7e3 Merge pull request #1876 from akbargumbira/develop
+343b3c5 Handle NaN in the Flood Polygon on Population IF.
+ebee51e Improvements to metadata based on Charlotte's suggestions. See #1843
+7b0615f Merge branch 'develop' of github.com:AIFDR/inasafe into generic_polygon
+13bf8eb Merge pull request #1873 from akbargumbira/flood_polygon_population
+12cca0a Remove debugging lines.
+7b65ee5 Add ZeroImpactException in the IF.
+2a06e63 (origin/inasafe-1861, inasafe-1861) Tweaks for legend no active layer handline (#1861) and roll back changes in #1811 - I have a better implementation for that coming post 3.1 release
+d8942c1 Merge pull request #1874 from akbargumbira/unicode
+0f47c83 Cast to unicode. The value could be other than str object.
+ce8f1b2 [Unicode] Remove casting QgsMapLayer source to string.
+872c9bd Improve Flood Polygon on Population to not use hardcoded attribute.
+5263882 Only round total affected for presentation.
+4c30971 Update Volcano Point on Population to use the new interpolation method.
+7e4519e Update Volcano Polygon on Population to return exposure layer as the impact layer.
+a8c4738 Fix failing test.
+dc316a9 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_parameters_reset_after_run
+18e112a Finalise Classified Polygon on Population IF.
+0a78d76 Much faster create_classes utilising the power of numpy.
+8daf921 Change the interpolation for polygon on raster
+635240e Merge branch 'develop' of github.com:AIFDR/inasafe into generic_polygon
+afd6b9e (jannes/develop) Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+dab65f5 floating point precision fix # #1851
+a5290f7 Merge pull request #1866 from lucernae/develop
+04e7c38 (rizky/develop) Update Translations
+621c2e4 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_parameters_reset_after_run
+fdbdec1 Merge pull request #1864 from lucernae/fix_generic_if_postprocessors
+1e9eb2c (rizky/fix_generic_if_postprocessors) Modify false logic. Fixing tests where show_intermediate_layer is enabled
+7fedfe7 Fix #1863: Rerun function with the same param
+7c53d68 Fix #1854: Modified aggregation to use impact layer extent if aggregation layer is not provided
+e04c252 Merge pull request #1848 from timlinux/fix-1843
+91662a7 More standardization on IF package name.
+7c94095 More standardization on IF name. Fix failing tests.
+a8cd085 Initial implementation of returning the impact based on exposure.
+4efc04b Resolved merge conflicts
+d9bc46a Merge pull request #1834 from timlinux/fix-1830
+2c5524f Merge pull request #1858 from timlinux/fix-1857
+409e7d4 (origin/fix-1857, fix-1857) Further fix for #1857 - support on the fly projection for flood on roads and flood on buildings
+a6c7124 (origin/fix-1830, fix-1830) Merge remote-tracking branch 'upstream/develop' into fix-1830
+2774ca7 Fix #1857 - support OTFP for flood vector building impact
+25fe425 Merge pull request #1822 from timlinux/v3.1-prep
+bc63a34 Merge pull request #1855 from cchristelis/develop
+7daa2fc Fixing newly added pylint. #Pylintpolice
+a0e2475 merged upstream changes
+bbc7fec Merge remote-tracking branch 'upstream/develop' into fix-1830
+29497c2 Address comments for @cchristellis for #1843
+9ae424b Merge remote-tracking branch 'upstream/develop' into fix-1843
+b1b4782 (etienne/develop) Merge pull request #1850 from timlinux/pep8
+14b9c99 Merge pull request #1635 from timlinux/develop
+2a67e35 Merge pull request #1760 from timlinux/fix-1484
+48fceb0 Mreged changes from upstream
+0060342 Merge pull request #1852 from timlinux/fix-1792
+bc0b443 (origin/fix-1792, fix-1792) Further fixes for #1792
+c3e7697 In progress cleanups for age based postprocessors. See #1792
+c7bb24d PEP8 fixes
+086002c Merge pull request #1793 from Jannes123/develop
+ad906ac Merge pull request #1847 from cchristelis/develop
+f6a1d95 Fix #1843 We need to review the text for all impact function metadata.py files.
+b4eee74 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+a24fc25 Suppressing the buggy pylint error on Jenkins (caused by an astroid bug).
+b93bfc9 Merge pull request #1844 from akbargumbira/develop
+d15bc68 Change the exception message to a layman term.
+6e6558b minor pylint
+acee5fb in progress work for #1843 We need to review the text for all impact function metadata.py files. Also fix #1828 (don't call impact functions experimental).
+4559b29 merged with upstream
+20f2581 Merge pull request #1846 from cchristelis/timlinux-fix-1820
+30eaa67 Validate if the IF has exactly 3 values of thresholds
+9ba5907 refactor
+76b0e94 alice in wonderland scrollbars fixed
+557b28e Udating improvined menu layout.
+9a557ef Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+6afc88a Fix unstyled impact layer of Continuous Raster Hazard on Population IF.
+66e5c5b Merge upstream changes
+b4c58af Merge pull request #1842 from timlinux/inasafe-1811
+60b600e Merge branch 'fix-1820' of https://github.com/timlinux/inasafe into timlinux-fix-1820
+9c5b599 Merge pull request #1841 from akbargumbira/develop
+5594065 Implementation for #1811 and pep8 fix in wizard code
+e59a084 Fix failing tests and PEP8.
+1c38ac8 Change the name of Generic IF's for more clarity.
+9b8d49a Merge pull request #1840 from akbargumbira/develop
+f827677 Postprocessors are always list of Generic Parameter. Simplify the summary step in wizard.
+5516b0a Merge pull request #1839 from lucernae/fix_wizard
+e24dc4d (rizky/fix_wizard) Fix pep8 errors
+6bfd61f Merge pull request #1837 from lucernae/fix_wizard
+dc79b4e Merge pull request #1838 from cchristelis/develop
+2215842 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+422b901 Suppressing unneeded errors.
+108cbd7 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_wizard
+43732ab Merge pull request #1835 from cchristelis/develop
+efe793d revert defaults.py
+37bdc4d remove default descriptions
+6db3865 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+ed93065 hardcode options for earthquake_fatality
+588a9a5 Fix localization string and presentation error. Fix #1810 about rounding minimum needs to 1 decimal place in IF Wizard Summary. Add possible UI presentation fix for postprocessor summary
+cd3ba95 Merge pull request #1833 from lucernae/test_fix
+5e5dd6a correcting isinstance second argument to tupple.
+e3f9bda Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+ee9d5b6 Fixing pylint
+9ea5f75 Fix #1830 Options dialog raises unhandled error
+b359092 Removing new pylint violations
+df5eb4e (rizky/test_fix) Merge branch 'develop' of github.com:AIFDR/inasafe into test_fix
+ef594e2 Fix strange test caused by busy signal doesn't reset. Issue #1829
+4e4e88a Merge pull request #1832 from akbargumbira/generic_polygon
+21fb9f6 Remove unused variables.
+6ed44cf Remove cumulative tabulation in the report.
+f1ff9ec Merge pull request #1831 from ismailsunni/fix_1827
+aaa19d3 PEP8.
+e1614e3 Merge branch 'aifdr_develop' into fix_1827
+7697e1f Update translation.
+010fd37 resolved merge conflicts
+41f53ae Merge remote-tracking branch 'upstream/develop' into develop
+b1b11d3 Add question for [hazard]_classes_question.
+1542dc1 Merge pull request #1825 from akbargumbira/develop
+89551cb Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+d06a86e Merge pull request #1826 from akbargumbira/generic_polygon
+828233f Change the default value of the hazard zone attribute to KRB for classified polygon IF on building.
+7b142a2 Adding missing shx
+627a2f1 Fixing broken tests.
+713476f Fixed unexpected indent
+cdfa909 Applied item per line convention on changes
+a2fd9e5 suppress where pylint errors make no sense
+8133c43 pylint merge
+70a8a3e updating missing files
+c60613f Fixing all pylint to establish a clean baseline - continued 2
+12b54b7 Don't include Not Affected category in the total of each breakdown by building type.
+215d530 Fixing all pylint to establish a clean baseline - continued 2
+e792d74 Fixing all pylint to establish a clean baseline - continued 1
+7229c5d Fixing all pylint to establish a clean baseline - continued
+57a7b31 Fixing all pylint to establish a clean baseline
+4a8a6e7 Made behaviour between jenkins and make identical
+fd1d67a merging pylint changes
+b33aa76 Merge pull request #1814 from akbargumbira/generic_polygon
+f761e67 Fix failing tests caused by changing the question.
+5d1a3db Change the question for classified polygon on building and population as the hazard is not an 'event'.
+f197500 Change the color_ramp to use HSV model
+feea9a4 Fix failing tests.
+00fd4b1 In progess updating changelog and metadata for 3.1 release
+325c496 In progess updating changelog and metadata for 3.1 release
+540f343 (origin/fix-1820, fix-1820) Partial implementation for #1820 - tidy up plugin menu entries.
+0975aca (inasafe-1819) Merge pull request #1818 from lucernae/develop
 c2bb007 Update Translations
+1be82e6 Remove the minimum needs report in the IF.
+26a9bc2 Fix bugs to the total building affected + not affected
+d28d7ae Add classified polygon IF on population.
+235c0b9 Update metadata for classified polygon
+4a6048c Add classified generic polygon hazard data.
+f6400f2 Add Generic Polygon on Building IF.
 8b3a5a4 Merge pull request #1806 from akbargumbira/inasafe_1795
 3dec8f6 Merge pull request #1804 from akbargumbira/inasafe_1727
 c245a5b Update scenario file for batch dialog test.
@@ -17,16 +248,21 @@ e38e8e4 Fix wording.
 c2cf01d Merge pull request #1794 from lucernae/develop
 7044275 Bugfix related to #1675: when we have errors in the IF run method, the cursor still displayed as busy.
 410e0e7 Update translations
+ac3e6be Merge branch 'develop' of github.com:AIFDR/inasafe into develop
 c8ddd91 Merge pull request #1791 from ismailsunni/translation_update
 2341707 Translation update.
 f0b9dd1 Merge pull request #1790 from lucernae/develop
 95847de Update translations
 0bbc05e Merge pull request #1789 from lucernae/develop
 5996c89 Add Indonesian translation
+5538fbf fix unused import
+460f29c Merge branch 'develop' of github.com:AIFDR/inasafe into develop
 659dc60 Merge pull request #1787 from lucernae/develop
 6729011 PEP8 fixes and remove unnecessary key-value pair in metadata
 a2886e8 Merge pull request #1786 from lucernae/develop
 ca4f2cf Bugfix Issue #1784 : Add file exist and zero heights checks
+1981370 parameter descriptions
+342921a Resolved merge conflicts
 b104832 Merge pull request #1783 from akbargumbira/develop
 8185001 (akbar/develop) Add French translation.
 085806b Merge pull request #1782 from akbargumbira/develop
@@ -166,8 +402,10 @@ a984184 dialog box scrollbar fixed
 dae6981 Add ClassifiedHazardPopulation IF with tests"
 0e62d21 Remove run method in base class. For now, most likely we need to override the validate and prepare layers.
 56f3053 Add Generic ClassifiedHazardBuilding IF, with tests
-88bca84 (jannes/develop) cleanout logger and previous commit mistake
+88bca84 cleanout logger and previous commit mistake
 731ddf2 establish #1726 reason for bug
+029c7fe (origin/fix-1484) Fix #1484 - wizard is not resizable on hidpi screens
+84274e9 Resolved merge conflicts
 93f2016 (origin/fix-1758) [BACKPORT] fix #1758 - IF options dialog lacks top level layout.
 a4109ef Remove old inundation test package.
 c2d7597 Run super method 'run' in each IF's run method.
@@ -224,7 +462,7 @@ e3a70c3 Add 'flood building impact qgis' IF using Qgis Wrapper in the new arch s
 cab5b72 default extent bug #1775
 5e35341 Use registry for getting the IFs. A working example in dock for flood vector on buildings.
 67dd1c1 Add a working example of the impact function using the new IF architecture.
-0ee1f5d fix #1679 : fix docstrings and previous shapefile if exists
+0ee1f5d (etienne/fix1679) fix #1679 : fix docstrings and previous shapefile if exists
 16bfaaf Merge pull request #1754 from akbargumbira/develop
 f68bd99 Fix classname typo.
 f1f2a71 Fix failed unittests.
@@ -249,46 +487,98 @@ f50b024 PEP8.
 806eb63 Merge pull request #1738 from akbargumbira/develop
 87db32b Fix Flood IF Raster on Population.
 2fc8dc1 fix #1735 : improvements about the OSM downloader's progress dialog
+ef3ec64 Merge remote-tracking branch 'upstream/develop' into develop
 e6d81d1 Merge pull request #1731 from Gustry/fix-1730
 b827129 merge develop
 c81bfa5 fix #1730 grammar
 fcb65cd Merge pull request #1733 from Gustry/fix-1732
 f1a2d7b fix #1732 : OSM downloader : skip a feature type if one is empty
 68cafcc fix pep8 and fix #1730 : improvements on the OSM downloader
+3859c8d Merge remote-tracking branch 'upstream/develop' into develop
+3e8ffc9 (tag: version-3.0.0) Merge pull request #1724 from timlinux/master
+b5f65bf (origin/master, master) Pep8 fix
+421a8d2 Merge pull request #1723 from timlinux/master
+f2bf097 Fix for failing test on fedora
+2d21873 Pep8 fixes
 81e7d6f Merge pull request #1722 from Gustry/fix-1721
 1964872 fix #1721 : fix typo
 5aae1f3 Merge pull request #1674 from akbargumbira/unicode
+ba6e5d8 Fix pylint issues
 85e248a fix #1721 : change test and fix some language typo
 847de34 fix #1721 add a locale flag in the url for osm downloader
 a9d53f8 Merge pull request #1718 from Gustry/fix-1207
 2ec811f (akbar/unicode) Merge branch 'develop' of github.com:AIFDR/inasafe into unicode
 b8987c2 Merge pull request #1720 from timlinux/jenkins-tweaks
 c587b48 (origin/jenkins-tweaks) Force locale to utf-8 for jenkins
+2c6cb63 Use logo resizing logic from master
 6e6af50 fix pep8
+ea38f5e Merge pull request #1719 from lucernae/master_icon_change
+276dc5a (rizky/master_icon_change) Update translation on the 'Layer keyword missing' interface
 141cdcc add 'building points' to the osm downloader
+7049199 Merge branch 'master' of github.com:AIFDR/inasafe into master_icon_change
+e2121bf Merge remote-tracking branch 'origin/develop' into develop
+925b98f Change icon in the description to appropriate icon
+3f82710 Merge pull request #1717 from timlinux/fix-1712
 eae7ed6 Merge pull request #1702 from timlinux/fix-1533
+c9ec0a3 Merge pull request #1715 from timlinux/fix-1713
 784f085 Merge branch 'develop' of github.com:AIFDR/inasafe into unicode
+a0c546c (origin/fix-1712) [BACKPORT] Fix #1688 - disconnect() failed between 'loadFinished' and 'unislot'
 b6cb606 [Unicode] Handle error when Exception.message returns Message object
 22eb144 Merge pull request #1641 from lucernae/fix_layer_uri_normalization
 c2b6157 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_layer_uri_normalization
+c4df525 Merge pull request #1714 from lucernae/master_translation
+288d332 (origin/fix-1713) Fix #1713 for divide by zero error when rescaling logo.
+0924f79 Add new translation on dock interfaces
 aa35fd5 Merge pull request #1678 from Gustry/fix-1225
+789a152 Merge pull request #1711 from lucernae/master_pep8
 358e048 [Unicode] Ensure that html to be written to file is in unicode for codecs module
+8ce9d37 Fix lambda warning and changed it to use def
+aa25d8e Fix PEP8 warnings
 1820043 [Unicode] Fix failing test in keywords_dialog.
 70c610d PEP8 fix
+98a7d3e Merge pull request #1704 from lucernae/master
+f22a53f Merge branch 'master' of github.com:AIFDR/inasafe
+93241a4 Merge pull request #1708 from timlinux/master
 4369b2b Merge pull request #1707 from timlinux/issue-1706
 c2ce737 Merge pull request #1709 from lucernae/line_ending_fix
 6f38dd0 Merge branch 'develop' of github.com:AIFDR/inasafe into line_ending_fix
+24034cf Merge branch 'master' of github.com:AIFDR/inasafe
 2110dc1 [Unicode] Write or read file using codecs module.
 83a05e3 Line ending fixed
+f37d3cd Merge remote-tracking branch 'upstream/master'
+9686706 [BACKPORT] Fix #1706 - logo does not display in dock during processing.
 617a7ee (origin/issue-1706) [BACKPORT] Fix #1706 - logo does not display in dock during processing.
+588482b Merge pull request #1705 from ismailsunni/backport_if_split
+904ff2f Merge remote-tracking branch 'origin/develop' into develop
 68b1a68 [Unicode] Update some test data to contain unicode chars.
+83c94a7 Fix unused import.
+05eb165 Fix failed unit tests when backporting.
+5328c15 Merge pull request #1703 from timlinux/master
+cb70fcf Issue #1642: change the description to toolbar instead of plugins
+d347bd0 Fix one more unit test from IF splitting.
+8fb56bd PEP8.
+f20cb8f Issue #1642 Update in getting started message to point out user to use keywords creation wizard in the Plugins > Inasafe menu
+2fd84c3 Fix all failed unit tests related to IF split.
+38895bc Fix more unit tests related to split IF.
+492792c Split to flood_vector_OSM_building_impact.py
+d1834c1 Fix unit test due to IF splitting.
+6bd6296 Split Flood OSM building IF.
+b4fc68d Fix 1699 - fix typo introduced in previous commit
+ea87983 Fix 1699 - cancel button on minimum needs calculator dialog does nothing
+9809d4d [BACKPORT] Fix 1694 - clear default paths if they point to Qt resource bundles.
+aaa22fa Further fixes for #1533
+1986d9d [BACKPORT] Further fix for 1533 - scale size nicely if logo is wider than the dock
+2691468 [BACKPORT] Fix #1533 - logo is squashed in dock
 52ed4ad (origin/fix-1533) Further fixes for #1533
 bc01405 Merge pull request #1697 from timlinux/fix-1688
 ff22f67 Merge pull request #1700 from timlinux/fix-1699
 1998270 [BACKPORT] Further fix for 1533 - scale size nicely if logo is wider than the dock
 4c3ea7d Merge branch 'develop' of github.com:AIFDR/inasafe into unicode
 3b03780 It's OK to write None or empty string to keywords in Keywords Editor.
+0a2af15 Merge pull request #1701 from akbargumbira/master
 56a4a10 (origin/fix-1699) Fix 1699 - fix typo introduced in previous commit
+e31534a (akbar/master) Remove unnecessary inspection.
+5747827 Fix nonexistent wizard_dialog.get_exposure_layer
 b8d5f42 Fix 1699 - cancel button on minimum needs calculator dialog does nothing
 a8fec08 Merge pull request #1696 from akbargumbira/develop
 e17e357 Merge pull request #1698 from timlinux/fix-1694
@@ -302,8 +592,12 @@ db73ac0 (origin/fix-1688) [BACKPORT] Fix #1688 - disconnect() failed between 'lo
 1aa81f0 PEP8.
 079895f Merge branch 'aifdr_develop' into split_IF
 3a2a61a Fix all failed unit tests related to IF split.
+1018f18 Merge pull request #1693 from akbargumbira/master
 4481567 Fix more unit tests related to split IF.
 a1951cc Split to flood_vector_OSM_building_impact.py
+605a86b Fix PEP8
+b4955b5 Fix failing tests.
+1f50021 Fix Earthquake Building IF Issues #1686
 1cebaee Merge pull request #1691 from akbargumbira/develop
 3d570bc Fix PEP8
 0c119a6 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_layer_uri_normalization
@@ -311,6 +605,7 @@ b26724b Merge branch 'develop' of github.com:AIFDR/inasafe into develop
 2396554 Merge pull request #1684 from timlinux/fix-1533
 f6ebc4a Fix failing tests.
 43d34b0 Fix Earthquake Building IF Issues #1686
+b1ddf97 Merge pull request #1682 from akbargumbira/master
 d3a9891 Merge pull request #1676 from Gustry/fix-1648
 621e863 Fix unit test due to IF splitting.
 d4b9aa5 [BACKPORT] Fix #1533 - logo is squashed in dock
@@ -324,6 +619,9 @@ c704dda Merge branch 'develop' of github.com:AIFDR/inasafe into change_dock_mess
 b6f248f Merge pull request #1683 from lucernae/pep8
 2f189f3 PEP8 fix for version 1.6.2
 075e4f1 Merge branch 'develop' of github.com:AIFDR/inasafe into change_dock_message
+fadcb23 Fix #1662
+c55edf4 Fix #1661 Update volcano hazard zone classification in our definitions.
+72ea9d6 Merge branch 'develop' of github.com:timlinux/inasafe into develop
 916a3df Merge pull request #1680 from ismailsunni/inner_metadata
 fc5ce5d Merge branch 'aifdr_develop' into jaran
 f2c2505 Pep8.
@@ -404,15 +702,20 @@ cfc8a4e Issue #1570: fix layer uri normalization for postgres and delimitedtext
 b26f63e Merge pull request #1640 from akbargumbira/develop
 91adb0f Update jenkins script to checkout its own inasafe_data in the workspace.
 6e290b9 Merge pull request #1638 from cchristelis/develop
+9f0aa2d Merge pull request #1639 from akbargumbira/master
 37d00a5 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_keywords_editor
 104d6c5 Issue #1281: Change priority so the xml file be read first
+b820f36 Update the name of the plugin in master to InaSAFE
 8139858 Merge pull request #1636 from akbargumbira/develop
 df191f7 Fix pep8 issues
+1da659e Merge remote-tracking branch 'upstream/develop' into develop
 f1a8846 Issue #1621. Fix pep8 use conventional function definition rather than lambdas
 8457712 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_keywords_editor
 e4129f8 Issue #1281: Bugs on Keywords Editor. Switch to xml iso metadata if .keywords file didn't exist
 5e481f3 [Travis] No need to clean the working dir.
 92bee5a Merge pull request #1634 from akbargumbira/develop
+ccb5091 Small code conventions cleanup in messaging text.py
+3216885 Small clode convention cleanups made while giving Etienne a coding standards walk through.
 fc42b52 Put a friendly message to highlight the importance of importing qgis in 2 places.
 b1d0f42 Remove importing qgis in __init__ of safe's submodules.
 e0de139 Don't set the SIP API V2 manually anymore.
@@ -422,8 +725,11 @@ deedab1 Merge pull request #1633 from ismailsunni/fix_1625_1620
 928c91b Fix #1620
 6f51e98 Merge pull request #1608 from lucernae/normalize_line_ending
 527cae2 Merge branch 'develop' into normalize_line_ending
+a54a5e8 Merge pull request #1623 from timlinux/master
 f63d1db Merge pull request #1622 from timlinux/develop
+d3fcb33 Merge pull request #1619 from timlinux/master
 ef8e56c Pre line endings normalization
+ac9c29c Merge pull request #1501 from timlinux/master
 
 Changelog for version 3.0.0
 ================================
