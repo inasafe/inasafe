@@ -228,9 +228,11 @@ class VolcanoPointPopulationFunction(ImpactFunction):
 
         if nan_warning:
             table_body.extend([
-                tr(
-                    '`No data` cells where detected in the population layer. '
-                    'This may affect the result.')])
+                tr('The population layer contained `no data`. This missing '
+                   'data was carried through to the impact layer.'),
+                tr('`No data` values in the impact layer were treated as 0 '
+                   'when counting the affected or total population.')
+            ])
 
         impact_summary = Table(table_body).toNewlineFreeString()
 

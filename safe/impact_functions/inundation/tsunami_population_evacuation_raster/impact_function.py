@@ -94,9 +94,11 @@ class TsunamiEvacuationFunction(ImpactFunction):
                 table_body.append(TableRow(s))
         if no_data_warning:
             table_body.extend([
-                tr(
-                    'The layers contained `no data`. This missing data was '
-                    'carried through to the impact layer.')])
+                tr('The layers contained `no data`. This missing data was '
+                   'carried through to the impact layer.'),
+                tr('`No data` values in the impact layer were treated as 0 '
+                   'when counting the affected or total population.')
+            ])
 
         return table_body, total_needs
 

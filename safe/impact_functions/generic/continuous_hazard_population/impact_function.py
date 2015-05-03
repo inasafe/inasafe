@@ -94,9 +94,12 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
                 'affected people'))])
         if no_data_warning:
             table_body.extend([
-                tr(
-                    'The layers contained `no data`. This missing data was '
-                    'carried through to the impact layer.')])
+                tr('The layers contained `no data`. This missing data was '
+                   'carried through to the impact layer.'),
+                tr('`No data` values in the impact layer were treated as 0 '
+                   'when counting the affected or total population.')
+            ])
+
         total_needs = evacuated_population_needs(
             total_impact, minimum_needs)
         for frequency, needs in total_needs.items():
