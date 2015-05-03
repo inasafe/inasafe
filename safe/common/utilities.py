@@ -13,6 +13,7 @@ from subprocess import PIPE, Popen
 import ctypes
 from numbers import Integral
 import math
+import colorsys
 # pylint: disable=unused-import
 from collections import OrderedDict
 # pylint: enable=unused-import
@@ -530,9 +531,8 @@ def create_classes(class_list, num_classes):
     :param num_classes: The number of class to hold all values in class_list.
     :type num_classes: int
     """
-    unique_class_list = list(set(class_list))
-    min_value = numpy.nanmin(unique_class_list)
-    max_value = numpy.nanmax(unique_class_list)
+    min_value = numpy.nanmin(class_list)
+    max_value = numpy.nanmax(class_list)
 
     # If min_value == max_value (it only has 1 unique class), or
     # max_value <= 1.0, then we will populate the classes from 0 - max_value
@@ -548,11 +548,8 @@ def create_classes(class_list, num_classes):
     # 3. (AG) Yes! The idea is to classify the non affected value to the 1st
     #    class (see #637, #702)
 
-    # Now, Get the smallest value that is not 0
-    non_zero_min_value = max_value
-    for value in unique_class_list:
-        if value < non_zero_min_value and value != 0:
-            non_zero_min_value = value
+    # Now, Get the smallest value that is > 0
+    non_zero_min_value = class_list[class_list > 0].min()
 
     lower_bound = math.ceil(non_zero_min_value)
     if lower_bound != 1:
@@ -694,8 +691,42 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
     i = 0
     while new_name.upper() in uppercase_attribute_names:
         i += 1
-        new_name = '%s_%s' % (new_name[:8], i)
+        string_len = 9 - len(str(i))
+        new_name = '%s_%s' % (new_name[:string_len], i)
     return new_name
+
+
+def color_ramp(number_of_colour):
+    """Generate list of color in hexadecimal.
+
+    This will generate colors using hsv model by playing around with the hue
+    (the saturation and the value are all set to 1).
+
+    :param number_of_colour: The number of intervals between R and G spectrum.
+    :type number_of_colour: int
+
+    :returns: List of color.
+    :rtype: list
+    """
+    if number_of_colour < 1:
+        raise Exception('The number of colours should be > 0')
+
+    colors = []
+    hue_interval = 1.0 / number_of_colour
+    for i in range(number_of_colour):
+        hue = i * hue_interval
+        saturation = 1
+        value = 1
+        # pylint: disable=bad-builtin
+        # pylint: disable=deprecated-lambda
+        rgb = map(
+            lambda x: int(x * 255), colorsys.hsv_to_rgb(
+                hue, saturation, value))
+        # pylint: enable=deprecated-lambda
+        # pylint: enable=bad-builtin
+        hex_color = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
+        colors.append(hex_color)
+    return colors
 
 
 def get_osm_building_usage(attribute_names, feature):
@@ -706,27 +737,37 @@ def get_osm_building_usage(attribute_names, feature):
 
     :param feature: A row of data representing an OSM building.
     :type feature: dict
-    """
-    if 'type' in attribute_names:
-        usage = feature['type']
-    elif 'TYPE' in attribute_names:
-        usage = feature['TYPE']
-    else:
-        usage = None
 
-    if 'amenity' in attribute_names and (usage is None or usage == 0):
-        usage = feature['amenity']
-    if 'building_t' in attribute_names and (usage is None or usage == 0):
-        usage = feature['building_t']
-    if 'office' in attribute_names and (usage is None or usage == 0):
-        usage = feature['office']
-    if 'tourism' in attribute_names and (usage is None or usage == 0):
-        usage = feature['tourism']
-    if 'leisure' in attribute_names and (usage is None or usage == 0):
-        usage = feature['leisure']
-    if 'building' in attribute_names and (usage is None or usage == 0):
-        usage = feature['building']
-        if usage == 'yes':
+    :returns: The usage of the feature. Return None if it does not find any.
+    :rtype: str
+    """
+    attribute_names_lower = [
+        attribute_name.lower() for attribute_name in attribute_names]
+
+    usage = None
+    # Prioritize 'type' attribute
+    if 'type' in attribute_names_lower:
+        attribute_index = attribute_names_lower.index('type')
+        field_name = attribute_names[attribute_index]
+        usage = feature[field_name]
+
+    # Get the usage from other attribute names
+    building_type_attributes = ['amenity', 'building_t', 'office', 'tourism',
+                                'leisure', 'use']
+    for type_attribute in building_type_attributes:
+        if (type_attribute in attribute_names_lower) and usage is None:
+            attribute_index = attribute_names_lower.index(
+                type_attribute)
+            field_name = attribute_names[attribute_index]
+            usage = feature[field_name]
+
+    # The last one is to get it from 'building' attribute
+    if 'building' in attribute_names_lower and usage is None:
+        attribute_index = attribute_names_lower.index('building')
+        field_name = attribute_names[attribute_index]
+        usage = feature[field_name]
+
+        if usage is not None and usage.lower() == 'yes':
             usage = 'building'
 
     return usage
@@ -765,3 +806,81 @@ def romanise(number):
     except ValueError:
         return None
     return roman
+
+
+def humanize_file_size(size):
+    """Return humanize size from bytes.
+
+    :param size: The size to humanize in bytes.
+    :type size: float
+
+    :return: Human readable size.
+    :rtype: unicode
+    """
+    for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
+        if size < 1024.0:
+            return u'%3.1f %s' % (size, x)
+        size /= 1024.0
+
+
+def add_to_list(my_list, my_element):
+    """Helper function to add new my_element to my_list based on its type
+    . Add as new element if it's not a list, otherwise extend to the list
+    if it's a list.
+    It's also guarantee that all elements are unique
+
+    :param my_list: A list
+    :type my_list: list
+
+    :param my_element: A new element
+    :type my_element: str, list
+
+    :returns: A list with unique element
+    :rtype: list
+
+    """
+    if isinstance(my_element, list):
+        for element in my_element:
+            my_list = add_to_list(my_list, element)
+    else:
+        if my_element not in my_list:
+            my_list.append(my_element)
+
+    return my_list
+
+
+def is_subset(element, container):
+    """Check the membership of element from container.
+
+    It will check based on the type. Only valid for string and list.
+
+    :param element: Element that will be searched for in container.
+    :type element: list, str
+
+    :param container: Container that will be checked.
+    :type container: list, str
+
+    :returns: boolean of the membership
+    :rtype: bool
+    """
+    if isinstance(element, list):
+        if isinstance(container, list):
+            return set(element) <= set(container)
+    else:
+        if isinstance(container, list):
+            return element in container
+        else:
+            return element == container
+    return False
+
+
+def convert_to_list(var):
+    """Convert a variable to list.
+
+    :param var: The variable to be converted.
+    """
+    return var if isinstance(var, list) else [var]
+
+
+def project_list(the_list, field):
+    return [s[field] for s in the_list]

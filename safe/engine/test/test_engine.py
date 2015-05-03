@@ -5,14 +5,16 @@ import cPickle
 import numpy
 import os
 from os.path import join
+from tempfile import mkdtemp
 
-# Import InaSAFE modules
 from safe.engine.core import calculate_impact
 from safe.engine.interpolation import (
     interpolate_polygon_raster,
     interpolate_raster_vector_points,
     assign_hazard_values_to_exposure_data,
     tag_polygons_by_grid)
+from safe.impact_functions import register_impact_functions
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import (
     read_layer,
     write_vector_data,
@@ -34,19 +36,10 @@ from safe.gis.numerics import (
     ensure_numeric)
 from safe.common.utilities import (
     VerificationError,
-    unique_filename,)
-from safe.test.utilities import TESTDATA, HAZDATA, EXPDATA
+    unique_filename,
+    temp_dir)
+from safe.test.utilities import TESTDATA, HAZDATA, EXPDATA, test_data_path
 from safe.common.exceptions import InaSAFEError
-from safe.impact_functions import get_plugins
-
-# These imports are needed for impact function registration - dont remove
-# If any of these get reinstated as "official" public impact functions,
-# remove from here and update test to use the real one.
-# pylint: disable=unused-import
-# noinspection PyUnresolvedReferences
-from safe.impact_functions.earthquake.pager_earthquake_fatality_model import (
-    PAGFatalityFunction)
-# pylint: enable=unused-import
 
 
 def linear_function(x, y):
@@ -66,6 +59,9 @@ class TestEngine(unittest.TestCase):
         """Run before each test."""
         # ensure we are using english by default
         os.environ['LANG'] = 'en'
+        # load impact function
+        register_impact_functions()
+        self.impact_function_manager = ImpactFunctionManager()
 
     # This one currently fails because the clipped input data has
     # different resolution to the full data. Issue #344
@@ -102,14 +98,14 @@ class TestEngine(unittest.TestCase):
         polygons = H.get_geometry(as_geometry_objects=True)
 
         # Clip
-        res_clip = clip_grid_by_polygons(E_clip.get_data(),
+        res_clip, _ = clip_grid_by_polygons(E_clip.get_data(),
                                          E_clip.get_geotransform(),
                                          polygons)
 
         # print res_clip
         # print len(res_clip)
 
-        res_full = clip_grid_by_polygons(E_full.get_data(),
+        res_full, _ = clip_grid_by_polygons(E_full.get_data(),
                                          E_full.get_geotransform(),
                                          polygons)
 
@@ -168,9 +164,10 @@ class TestEngine(unittest.TestCase):
         # Run and test the fundamental clipping routine
         # import time
         # t0 = time.time()
-        res = clip_grid_by_polygons(E.get_data(),
-                                    E.get_geotransform(),
-                                    H.get_geometry(as_geometry_objects=True))
+        res, _ = clip_grid_by_polygons(
+            E.get_data(),
+            E.get_geotransform(),
+            H.get_geometry(as_geometry_objects=True))
         # print 'Engine took %i seconds' % (time.time() - t0)
 
         assert len(res) == N
@@ -184,14 +181,13 @@ class TestEngine(unittest.TestCase):
         geom = res[0][0]
         vals = res[0][1]
         assert numpy.allclose(vals[17], 1481.98)
-        assert numpy.allclose(geom[17][0], 106.88746869)  # LON
-        assert numpy.allclose(geom[17][1], -6.11493812)  # LAT
+        assert numpy.allclose(geom[17][0], 106.88927)  # LON
+        assert numpy.allclose(geom[17][1], -6.114458)  # LAT
 
         # Then run and test the high level interpolation function
         # t0 = time.time()
-        P = interpolate_polygon_raster(H, E,
-                                       layer_name='poly2raster_test',
-                                       attribute_name='grid_value')
+        P, _ = interpolate_polygon_raster(
+            H, E, layer_name='poly2raster_test', attribute_name='grid_value')
         # print 'High level function took %i seconds' % (time.time() - t0)
         # P.write_to_file('polygon_raster_interpolation_example_big.shp')
 
@@ -206,8 +202,8 @@ class TestEngine(unittest.TestCase):
         assert attributes['polygon_id'] == 0
         assert numpy.allclose(attributes['grid_value'], 1481.984)
 
-        assert numpy.allclose(geometry[0], 106.88746869)  # LON
-        assert numpy.allclose(geometry[1], -6.11493812)  # LAT
+        assert numpy.allclose(geometry[0], 106.88927)  # LON
+        assert numpy.allclose(geometry[1], -6.11448)  # LAT
 
         # A second characterisation test
         attributes = P.get_data()[10000]
@@ -220,8 +216,8 @@ class TestEngine(unittest.TestCase):
         assert attributes['polygon_id'] == 93
         assert numpy.allclose(attributes['grid_value'], 715.6508)
 
-        assert numpy.allclose(geometry[0], 106.74092731)  # LON
-        assert numpy.allclose(geometry[1], -6.1081538)  # LAT
+        assert numpy.allclose(geometry[0], 106.74137)  # LON
+        assert numpy.allclose(geometry[1], -6.10634)  # LAT
 
         # A third characterisation test
         attributes = P.get_data()[99000]
@@ -235,7 +231,7 @@ class TestEngine(unittest.TestCase):
         assert numpy.allclose(attributes['grid_value'], 770.7628)
 
         assert numpy.allclose(geometry[0], 106.9675237)  # LON
-        assert numpy.allclose(geometry[1], -6.16966499)  # LAT
+        assert numpy.allclose(geometry[1], -6.16468982)  # LAT
 
     test_polygon_hazard_and_raster_exposure_big.slow = True
 
@@ -257,15 +253,15 @@ class TestEngine(unittest.TestCase):
         assert N == 4
 
         # Run underlying clipping routine
-        res0 = clip_grid_by_polygons(E.get_data(),
-                                     E.get_geotransform(),
-                                     H.get_geometry(as_geometry_objects=True))
+        res0, _ = clip_grid_by_polygons(
+            E.get_data(),
+            E.get_geotransform(),
+            H.get_geometry(as_geometry_objects=True))
         assert len(res0) == N
 
         # Run higher level interpolation routine
-        P = interpolate_polygon_raster(H, E,
-                                       layer_name='poly2raster_test',
-                                       attribute_name='grid_value')
+        P, _ = interpolate_polygon_raster(
+            H, E, layer_name='poly2raster_test', attribute_name='grid_value')
 
         # Verify result (numbers obtained from using QGIS)
         # P.write_to_file('poly2raster_test.shp')
@@ -297,21 +293,21 @@ class TestEngine(unittest.TestCase):
         assert attributes[6]['id'] == 1
         assert attributes[6]['name'] == 'B'
         assert numpy.allclose(attributes[6]['number'], 13)
-        assert numpy.allclose(attributes[6]['grid_value'], -15)
+        assert numpy.allclose(attributes[6]['grid_value'], 50.338)
         assert attributes[6]['polygon_id'] == 1
 
         assert attributes[11]['id'] == 1
         assert attributes[11]['name'] == 'B'
         assert numpy.allclose(attributes[11]['number'], 13)
-        assert numpy.isnan(attributes[11]['grid_value'])
+        assert numpy.allclose(attributes[11]['grid_value'], 50.5438)
         assert attributes[11]['polygon_id'] == 1
 
         assert attributes[13]['id'] == 1
         assert attributes[13]['name'] == 'B'
-        assert numpy.allclose(geometry[13][0], 97.063559372)  # Lon
+        assert numpy.allclose(geometry[13][0], 97.002111596)  # Lon
         assert numpy.allclose(geometry[13][1], -5.472621404)  # Lat
         assert numpy.allclose(attributes[13]['number'], 13)
-        assert numpy.allclose(attributes[13]['grid_value'], 50.8258)
+        assert numpy.allclose(attributes[13]['grid_value'], 50.988)
         assert attributes[13]['polygon_id'] == 1
 
         # Polygon 2 (overlapping)
@@ -386,9 +382,8 @@ class TestEngine(unittest.TestCase):
         assert H.get_data()[9]['KRB'] == 'Kawasan Rawan Bencana II'
 
         # Then run and test the high level interpolation function
-        P = interpolate_polygon_raster(H, E,
-                                       layer_name='poly2raster_test',
-                                       attribute_name='grid_value')
+        P, _ = interpolate_polygon_raster(
+            H, E, layer_name='poly2raster_test', attribute_name='grid_value')
 
         # Possibly write result to file for visual inspection, e.g. with QGIS
         # P.write_to_file('polygon_raster_interpolation_example_holes.shp')
@@ -414,47 +409,80 @@ class TestEngine(unittest.TestCase):
 
     test_polygon_hazard_with_holes_and_raster_exposure.slow = True
 
-    def test_data_sources_are_carried_forward(self):
-        """Data sources are carried forward to impact layer
-        """
+    def test_user_directory_when_saving(self):
+        # These imports must be inside the test.
+        from PyQt4.QtCore import QCoreApplication, QSettings
+        from qgis.core import QgsApplication
 
-        haz_filename = 'Flood_Current_Depth_Jakarta_geographic.asc'
+        # noinspection PyCallByClass,PyArgumentList
+        QCoreApplication.setOrganizationName('QGIS')
+        # noinspection PyCallByClass,PyArgumentList
+        QCoreApplication.setOrganizationDomain('qgis.org')
+        # noinspection PyCallByClass
+        QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
 
-        # File names for hazard level and exposure
-        hazard_filename = '%s/%s' % (HAZDATA, haz_filename)
-        exposure_filename = ('%s/OSM_building_polygons_20110905.shp'
-                             % TESTDATA)
+        # Save some settings
+        settings = QSettings()
+        temp_directory = temp_dir('testing_user_directory')
+        temp_directory = mkdtemp(dir=temp_directory)
+        settings.setValue(
+            'inasafe/defaultUserDirectory', temp_directory.encode('utf-8'))
+
+        # Setting layers
+        hazard_filename = test_data_path('hazard', 'jakarta_flood_design.tif')
+        exposure_filename = test_data_path(
+            'exposure', 'buildings_osm_4326.shp')
 
         # Calculate impact using API
         H = read_layer(hazard_filename)
         E = read_layer(exposure_filename)
 
-        H_tit = H.get_keywords()['title']
-        E_tit = E.get_keywords()['title']
+        plugin_name = 'FloodRasterBuildingFunction'
+        plugin_list = self.impact_function_manager.filter_by_metadata(
+            'id', plugin_name)
+        IF = plugin_list[0].instance()
 
-        H_src = H.get_keywords()['source']
-        E_src = E.get_keywords()['source']
+        calculate_impact(layers=[H, E], impact_function=IF)
 
-        plugin_name = 'FloodRasterBuildingImpactFunction'
-        plugin_list = get_plugins(plugin_name)
-        assert len(plugin_list) == 1
-        assert plugin_list[0].keys()[0] == plugin_name
+        message = 'The user directory is empty : %s' % temp_directory
+        assert os.listdir(temp_directory) != [], message
 
-        IF = plugin_list[0][plugin_name]
+        settings.remove('inasafe/defaultUserDirectory')
 
-        impact_vector = calculate_impact(layers=[H, E],
-                                         impact_fcn=IF)
+    test_user_directory_when_saving.slow = False
 
-        assert impact_vector.get_keywords()['hazard_title'] == H_tit
-        assert impact_vector.get_keywords()['exposure_title'] == E_tit
-        assert impact_vector.get_keywords()['hazard_source'] == H_src
-        assert impact_vector.get_keywords()['exposure_source'] == E_src
+    def test_data_sources_are_carried_forward(self):
+        """Data sources are carried forward to impact layer."""
+        hazard_filepath = test_data_path(
+            'hazard', 'continuous_flood_20_20.asc')
+        exposure_filepath = test_data_path('exposure', 'buildings.shp')
+
+        hazard_layer = read_layer(hazard_filepath)
+        exposure_layer = read_layer(exposure_filepath)
+        hazard_title = hazard_layer.get_keywords()['title']
+        exposure_title = exposure_layer.get_keywords()['title']
+        hazard_source = hazard_layer.get_keywords()['source']
+        exposure_source = exposure_layer.get_keywords()['source']
+
+        function_id = 'FloodRasterBuildingFunction'
+        impact_function = self.impact_function_manager.get(function_id)
+        impact_vector = calculate_impact(
+            layers=[hazard_layer, exposure_layer],
+            impact_function=impact_function)
+
+        self.assertEqual(
+            impact_vector.get_keywords()['hazard_title'], hazard_title)
+        self.assertEqual(
+            impact_vector.get_keywords()['exposure_title'], exposure_title)
+        self.assertEqual(
+            impact_vector.get_keywords()['hazard_source'], hazard_source)
+        self.assertEqual(
+            impact_vector.get_keywords()['exposure_source'], exposure_source)
 
     test_data_sources_are_carried_forward.slow = True
 
     def test_raster_vector_interpolation_exception(self):
-        """Exceptions are caught by interpolate_raster_points
-        """
+        """Exceptions are caught by interpolate_raster_points."""
 
         hazard_filename = (
             '%s/tsunami_max_inundation_depth_4326.tif' % TESTDATA)
@@ -1667,11 +1695,9 @@ class TestEngine(unittest.TestCase):
     Xtest_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
 
     def test_layer_integrity_raises_exception(self):
-        """Layers without keywords raise exception
-        """
-
+        """Layers without keywords raise exception."""
         population = 'Population_Jakarta_geographic.asc'
-        plugin_name = 'Flood Evacuation Function'
+        function_id = 'FloodEvacuationRasterHazardFunction'
 
         hazard_layers = ['Flood_Current_Depth_Jakarta_geographic.asc',
                          'Flood_Design_Depth_Jakarta_geographic.asc']
@@ -1681,22 +1707,22 @@ class TestEngine(unittest.TestCase):
             exposure_filename = join(TESTDATA, population)
 
             # Get layers using API
-            H = read_layer(hazard_filename)
-            E = read_layer(exposure_filename)
+            hazard_layer = read_layer(hazard_filename)
+            exposure_layer = read_layer(exposure_filename)
 
-            plugin_list = get_plugins(plugin_name)
-            IF = plugin_list[0][plugin_name]
+            impact_function = self.impact_function_manager.get(
+                function_id)
 
             # Call impact calculation engine normally
-            calculate_impact(layers=[H, E],
-                             impact_fcn=IF)
+            calculate_impact(layers=[hazard_layer, exposure_layer],
+                             impact_function=impact_function)
 
             # Make keyword value empty and verify exception is raised
-            expected_category = E.keywords['category']
-            E.keywords['category'] = ''
+            expected_category = exposure_layer.keywords['category']
+            exposure_layer.keywords['category'] = ''
             try:
-                calculate_impact(layers=[H, E],
-                                 impact_fcn=IF)
+                calculate_impact(layers=[hazard_layer, exposure_layer],
+                                 impact_function=impact_function)
             except VerificationError, e:
                 # Check expected error message
                 assert 'No value found' in str(e)
@@ -1705,17 +1731,17 @@ class TestEngine(unittest.TestCase):
                 raise Exception(msg)
 
             # Restore for next test
-            E.keywords['category'] = expected_category
+            exposure_layer.keywords['category'] = expected_category
 
             # Remove critical keywords and verify exception is raised
             if i == 0:
-                del H.keywords['category']
+                del hazard_layer.keywords['category']
             else:
-                del H.keywords['subcategory']
+                del hazard_layer.keywords['subcategory']
 
             try:
-                calculate_impact(layers=[H, E],
-                                 impact_fcn=IF)
+                calculate_impact(layers=[hazard_layer, exposure_layer],
+                                 impact_function=impact_function)
             except VerificationError, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)

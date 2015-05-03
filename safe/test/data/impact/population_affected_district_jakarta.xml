@@ -6,6 +6,7 @@
     <gmd:language>
         <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng">eng
         </gmd:LanguageCode>
+        <gco:CharacterString>eng</gco:CharacterString>
     </gmd:language>
     <gmd:characterSet>
         <gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="MD_CharacterSetCode_utf8" codeSpace="ISOTC211/19115">
@@ -40,7 +41,7 @@
         </gmd:CI_ResponsibleParty>
     </gmd:contact>
     <gmd:dateStamp>
-        <gco:Date>2014-11-28</gco:Date>
+        <gco:Date>2015-03-04</gco:Date>
     </gmd:dateStamp>
     <gmd:metadataStandardName>
         <gco:CharacterString>ISO19115</gco:CharacterString>
@@ -62,7 +63,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2014-11-28</gco:Date>
+                                <gco:Date>2015-03-04</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication
@@ -73,7 +74,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2014-11-28</gco:Date>
+                                <gco:Date>2015-03-04</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision">revision
@@ -84,7 +85,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2014-11-28</gco:Date>
+                                <gco:Date>2015-03-04</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation
@@ -171,23 +172,28 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[map_title: People affected by flood prone areas
-impact_table: <table class="table table-striped condensed"> <tbody>  <tr>   <td colspan="100%">In the event of <i>a flood in jakarta</i> how many <i>people</i> might <i>need evacuation</i></td>  </tr>  <tr>   <th>People affected</th>   <th>122,000*</th>  </tr>  <tr>   <th>People needing evacuation</th>   <th>1,000*</th>  </tr>  <tr>   <td colspan="2">* Number is rounded to the nearest 1000</td>  </tr>  <tr>   <th>Evacuation threshold</th>   <th>1%</th>  </tr>  <tr>   <td colspan="100%">Map shows population affected in each flood prone area</td>  </tr>  <tr>   <td colspan="100%">Table below shows the weekly minium needs for all evacuated people</td>  </tr>  <tr>   <th>Needs per week</th>   <th>Total</th>  </tr>  <tr>   <td>Rice [kg]</td>   <td>2,800</td>  </tr>  <tr>   <td>Drinking Water [l]</td>   <td>17,500</td>  </tr>  <tr>   <td>Clean Water [l]</td>   <td>105,000</td>  </tr>  <tr>   <td>Family Kits</td>   <td>200</td>  </tr>  <tr>   <td>Toilets</td>   <td>50</td>  </tr> </tbody></table>
-postprocessing_report: <table class="table table-condensed table-striped"><caption>Detailed gender report</caption><tbody><tr><td>Kab_name</td><td>Total</td><td>Female population (affected)</td><td>Weekly hygiene packs</td><td>Additional weekly rice kg for pregnant and lactating women</td></tr><tr><td>JAKARTA PUSAT</td><td>69,555</td><td>34,486</td><td>27,372</td><td>3,214</td></tr><tr><td>JAKARTA UTARA</td><td>52,981</td><td>26,287</td><td>20,864</td><td>2,450</td></tr><tr><td>JAKARTA BARAT</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Total in aggregation areas</td><td>122,536</td><td>60,773</td><td>48,236</td><td>5,664</td></tr></tbody></table><table class="table table-condensed table-striped"><caption>Detailed age report</caption><tbody><tr><td>Kab_name</td><td>Total</td><td>Youth count (affected)</td><td>Adult count (affected)</td><td>Elderly count (affected)</td></tr><tr><td>JAKARTA PUSAT</td><td>69,555</td><td>18,293</td><td>45,837</td><td>5,425</td></tr><tr><td>JAKARTA UTARA</td><td>52,981</td><td>13,934</td><td>34,914</td><td>4,133</td></tr><tr><td>JAKARTA BARAT</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Total in aggregation areas</td><td>122,536</td><td>32,227</td><td>80,751</td><td>9,558</td></tr></tbody></table><table class="table table-condensed table-striped"><caption>Detailed minimum needs report</caption><tbody><tr><td>Kab_name</td><td>Rice</td><td>Drinking Water</td><td>Water</td><td>Family Kits</td><td>Toilets</td></tr><tr><td>JAKARTA PUSAT</td><td>194,754</td><td>1,217,213</td><td>7,303,275</td><td>13,911</td><td>3,478</td></tr><tr><td>JAKARTA UTARA</td><td>148,347</td><td>927,168</td><td>5,563,005</td><td>10,596</td><td>2,649</td></tr><tr><td>JAKARTA BARAT</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Total in aggregation areas</td><td>343,101</td><td>2,144,381</td><td>12,866,280</td><td>24,507</td><td>6,127</td></tr></tbody></table>
-exposure_title: people
-title: Population affected by flood prone areas - District Jakarta
+<![CDATA[exposure_title: Populasi Jawa
+impact_summary: <table class="table table-striped condensed"> <tbody>  <tr>   <td colspan="100%">In the event of <i>banjir jakarta</i> how many <i>populasi jawa</i> might <i>need evacuation</i></td>  </tr>  <tr>   <th>People affected</th>   <th>4,000*</th>  </tr>  <tr>   <td colspan="2">* Number is rounded up to the nearest 100</td>  </tr>  <tr>   <th>People needing evacuation</th>   <th>40*</th>  </tr>  <tr>   <td colspan="2">* Number is rounded up to the nearest 10</td>  </tr>  <tr>   <th>Evacuation threshold</th>   <th>1%</th>  </tr>  <tr>   <td colspan="100%">Map shows the number of people affected in each flood prone area</td>  </tr>  <tr>   <td colspan="100%">Table below shows the weekly minimum needs for all evacuated people</td>  </tr>  <tr>   <th>Needs should be provided weekly</th>   <th>Total</th>  </tr>  <tr>   <td>Rice [kg]</td>   <td>112</td>  </tr>  <tr>   <td>Drinking Water [l]</td>   <td>700</td>  </tr>  <tr>   <td>Clean Water [l]</td>   <td>2,680</td>  </tr>  <tr>   <td>Family Kits</td>   <td>8</td>  </tr>  <tr>   <th>Needs should be provided single</th>   <th>Total</th>  </tr>  <tr>   <td>Toilets</td>   <td>2</td>  </tr>  <tr>   <th colspan="100%">Action Checklist:</th>  </tr>  <tr>   <td colspan="100%">How will warnings be disseminated?</td>  </tr>  <tr>   <td colspan="100%">How will we reach stranded people?</td>  </tr>  <tr>   <td colspan="100%">Do we have enough relief items?</td>  </tr>  <tr>   <td colspan="100%">If yes, where are they located and how will we distribute them?</td>  </tr>  <tr>   <td colspan="100%">If no, where can we obtain additional relief items from and how will we transport them to here?</td>  </tr>  <tr>   <th colspan="100%">Notes</th>  </tr>  <tr>   <td colspan="100%">Total population: 7,300</td>  </tr>  <tr>   <td colspan="100%">People need evacuation if in the area identified as "Flood Prone"</td>  </tr>  <tr>   <td colspan="100%">Minimum needs are defined in BNPB regulation 7/2008</td>  </tr> </tbody></table>
+affected_population: 4000
+total_population: 7300
+map_title: People affected by flood prone areas
+title: People affected by flood prone areas
+elapsed_time: 0
+exposure_subcategory: population
+time_stamp: 2015-03-04_10:14:18
+total_needs: OrderedDict([('weekly', [{'maximum_allowed_value': 100.0, 'guid': 'bb840af5-c277-402f-828c-527cba6456c9', 'name': u'Rice', 'precision': 2, 'value': 2.8, 'allowed_units': [], 'amount': 112, 'frequency': 'weekly', 'unit': {'abbreviation': 'kg', 'help_text': None, 'plural': 'kilograms', 'name': 'kilogram', 'description': None}, 'table name': u'Rice [kg]', 'help_text': 'Basic food', 'expected_type': ["<type 'float'>", "<type 'int'>"], 'is_required': True, 'minimum_allowed_value': 0.0, 'description': u'Each person should be provided with 2.8  kilograms of  Rice  weekly.'}, {'maximum_allowed_value': 100.0, 'guid': 'd9a0ad5c-e281-4cca-8f34-fda54a5eb6ec', 'name': u'Drinking Water', 'precision': 2, 'value': 17.5, 'allowed_units': [], 'amount': 700, 'frequency': 'weekly', 'unit': {'abbreviation': 'l', 'help_text': None, 'plural': 'litres', 'name': 'litre', 'description': None}, 'table name': u'Drinking Water [l]', 'help_text': 'For drinking', 'expected_type': ["<type 'float'>", "<type 'int'>"], 'is_required': True, 'minimum_allowed_value': 0.0, 'description': u'Each person should be provided with 17.5  litres of  Drinking Water  weekly for drinking.'}, {'maximum_allowed_value': 100.0, 'guid': 'e9a7d0af-e785-4e2c-856d-3771adef4cfd', 'name': u'Clean Water', 'precision': 2, 'value': 67.0, 'allowed_units': [], 'amount': 2680, 'frequency': 'weekly', 'unit': {'abbreviation': 'l', 'help_text': None, 'plural': 'litres', 'name': 'litre', 'description': None}, 'table name': u'Clean Water [l]', 'help_text': 'For washing', 'expected_type': ["<type 'float'>", "<type 'int'>"], 'is_required': True, 'minimum_allowed_value': 10.0, 'description': u'Each person should be provided with 67  litres of  Clean Water  weekly for washing.'}, {'maximum_allowed_value': 1.0, 'guid': '3febe911-86a6-4954-8308-214819f03b91', 'name': u'Family Kits', 'precision': 2, 'value': 0.2, 'allowed_units': [], 'amount': 8, 'frequency': 'weekly', 'unit': {'abbreviation': '', 'help_text': None, 'plural': '', 'name': '', 'description': None}, 'table name': u'Family Kits', 'help_text': 'Hygiene kits', 'expected_type': ["<type 'float'>", "<type 'int'>"], 'is_required': True, 'minimum_allowed_value': 0.1, 'description': 'Each family of 5 persons should be provided with 1 Family Kit per week.'}]), ('single', [{'maximum_allowed_value': 1.0, 'guid': '0b42a89d-8179-4426-b5e1-1e2811399c42', 'name': u'Toilets', 'precision': 2, 'value': 0.05, 'allowed_units': [], 'amount': 2, 'frequency': 'single', 'unit': {'abbreviation': '', 'help_text': None, 'plural': '', 'name': '', 'description': None}, 'table name': u'Toilets', 'help_text': '', 'expected_type': ["<type 'float'>", "<type 'int'>"], 'is_required': True, 'minimum_allowed_value': 0.02, 'description': 'A Toilet should be provided for every 20 persons.'}])])
+host_name: mindpalace
+postprocessing_report: <table class="table table-condensed table-striped"><caption>Detailed gender report (affected people)</caption><tbody><tr><td>Kab_name</td><td>Total</td><td>Female count (affected)</td><td>Weekly hygiene packs</td><td>Additional weekly rice kg for pregnant and lactating women</td></tr><tr><td>JAKARTA BARAT</td><td>3,997</td><td>1,958</td><td>1,554</td><td>182</td></tr><tr><td>JAKARTA PúSAT</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>JAKARTA UTARA</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Total in aggregation areas</td><td>3,997</td><td>1,958</td><td>1,554</td><td>182</td></tr></tbody></table><table class="table table-condensed table-striped"><caption>Detailed age report (affected people)</caption><tbody><tr><td>Kab_name</td><td>Total</td><td>Youth count (affected)</td><td>Adult count (affected)</td><td>Elderly count (affected)</td></tr><tr><td>JAKARTA BARAT</td><td>3,997</td><td>1,039</td><td>2,638</td><td>320</td></tr><tr><td>JAKARTA PúSAT</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>JAKARTA UTARA</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Total in aggregation areas</td><td>3,997</td><td>1,039</td><td>2,638</td><td>320</td></tr></tbody></table><table class="table table-condensed table-striped"><caption>Detailed minimum needs report (for people needing evacuation)</caption><tbody><tr><td>Kab_name</td><td>Rice [kg]</td><td>Drinking Water [l]</td><td>Clean Water [l]</td><td>Family Kits</td><td>Toilets</td></tr><tr><td>JAKARTA BARAT</td><td>112</td><td>700</td><td>2,680</td><td>8</td><td>2</td></tr><tr><td>JAKARTA PúSAT</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>JAKARTA UTARA</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>Total in aggregation areas</td><td>112</td><td>700</td><td>2,680</td><td>8</td><td>2</td></tr></tbody></table>
+hazard_subcategory: flood
+legend_units: (people per polygon)
+user: akbar
+hazard_title: Banjir Jakarta
 legend_title: Population Count
 legend_notes: Thousand separator is represented by '.'
-exposure_source: Asiapop - rescale 2km2
-elapsed_time: 0
-legend_units: (people per polygon)
-impact_summary: <table class="table table-striped condensed"> <tbody>  <tr>   <td colspan="100%">In the event of <i>a flood in jakarta</i> how many <i>people</i> might <i>need evacuation</i></td>  </tr>  <tr>   <th>People affected</th>   <th>122,000*</th>  </tr>  <tr>   <th>People needing evacuation</th>   <th>1,000*</th>  </tr>  <tr>   <td colspan="2">* Number is rounded to the nearest 1000</td>  </tr>  <tr>   <th>Evacuation threshold</th>   <th>1%</th>  </tr>  <tr>   <td colspan="100%">Map shows population affected in each flood prone area</td>  </tr>  <tr>   <td colspan="100%">Table below shows the weekly minium needs for all evacuated people</td>  </tr>  <tr>   <th>Needs per week</th>   <th>Total</th>  </tr>  <tr>   <td>Rice [kg]</td>   <td>2,800</td>  </tr>  <tr>   <td>Drinking Water [l]</td>   <td>17,500</td>  </tr>  <tr>   <td>Clean Water [l]</td>   <td>105,000</td>  </tr>  <tr>   <td>Family Kits</td>   <td>200</td>  </tr>  <tr>   <td>Toilets</td>   <td>50</td>  </tr>  <tr>   <th colspan="100%">Action Checklist:</th>  </tr>  <tr>   <td colspan="100%">How will warnings be disseminated?</td>  </tr>  <tr>   <td colspan="100%">How will we reach stranded people?</td>  </tr>  <tr>   <td colspan="100%">Do we have enough relief items?</td>  </tr>  <tr>   <td colspan="100%">If yes, where are they located and how will we distribute them?</td>  </tr>  <tr>   <td colspan="100%">If no, where can we obtain additional relief items from and how will we transport them to here?</td>  </tr>  <tr>   <th colspan="100%">Notes</th>  </tr>  <tr>   <td colspan="100%">Total population: 721,000</td>  </tr>  <tr>   <td colspan="100%">People need evacuation if in area identified as "Flood Prone"</td>  </tr>  <tr>   <td colspan="100%">Minimum needs are defined in BNPB regulation 7/2008</td>  </tr> </tbody></table>
-user: gumbia
-host_name: shiva
-time_stamp: 2013-12-17_15:30:33
-hazard_source: OpenStreetMap
+exposure_source: AsiaPop
+hazard_source: OSM
 target_field: population
-hazard_title: A flood in Jakarta
+impact_table: <table class="table table-striped condensed"> <tbody>  <tr>   <td colspan="100%">In the event of <i>banjir jakarta</i> how many <i>populasi jawa</i> might <i>need evacuation</i></td>  </tr>  <tr>   <th>People affected</th>   <th>4,000*</th>  </tr>  <tr>   <td colspan="2">* Number is rounded up to the nearest 100</td>  </tr>  <tr>   <th>People needing evacuation</th>   <th>40*</th>  </tr>  <tr>   <td colspan="2">* Number is rounded up to the nearest 10</td>  </tr>  <tr>   <th>Evacuation threshold</th>   <th>1%</th>  </tr>  <tr>   <td colspan="100%">Map shows the number of people affected in each flood prone area</td>  </tr>  <tr>   <td colspan="100%">Table below shows the weekly minimum needs for all evacuated people</td>  </tr>  <tr>   <th>Needs should be provided weekly</th>   <th>Total</th>  </tr>  <tr>   <td>Rice [kg]</td>   <td>112</td>  </tr>  <tr>   <td>Drinking Water [l]</td>   <td>700</td>  </tr>  <tr>   <td>Clean Water [l]</td>   <td>2,680</td>  </tr>  <tr>   <td>Family Kits</td>   <td>8</td>  </tr>  <tr>   <th>Needs should be provided single</th>   <th>Total</th>  </tr>  <tr>   <td>Toilets</td>   <td>2</td>  </tr> </tbody></table>
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>
@@ -238,7 +244,7 @@ hazard_title: A flood in Jakarta
                                     <gmd:date>
                                         <gmd:CI_Date>
                                             <gmd:date>
-                                                <gco:Date>2014-11-28</gco:Date>
+                                                <gco:Date>2015-03-04</gco:Date>
                                             </gmd:date>
                                             <gmd:dateType>
                                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">

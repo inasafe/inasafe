@@ -29,6 +29,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.tools.batch.batch_dialog import BatchDialog
 from safe.common.utilities import temp_dir
 from safe.gui.widgets.dock import Dock
+from safe.impact_functions import register_impact_functions
 
 
 DOCK = Dock(IFACE)
@@ -36,6 +37,10 @@ DOCK = Dock(IFACE)
 
 class BatchDialogTest(unittest.TestCase):
     """Tests for the script/batch runner dialog."""
+
+    def setUp(self):
+        register_impact_functions()
+
     def test_load_batch_dialog(self):
         """Test for BatchDialog behaviour.
         """

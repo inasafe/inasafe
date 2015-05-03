@@ -9,13 +9,13 @@
 
 
 [general]
-name=InaSAFE
+name=InaSAFE-Dev
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
-version=3.0.0
+version=3.1.0
 # alpha, beta, rc or final
-status=final
+status=rc
 
 
 # end of mandatory metadata
@@ -23,22 +23,49 @@ status=final
 # Optional items:
 
 changelog=
-        3.0.0
+        3.1.0
         New features:
-        * New wizard for impact function centric analysis.
-        * Removed impact function browser.
-        * Simplified the toolbar - remaining functionality is still available in Plugins->InaSAFE menu.
-        * Impact reports are now nicely styled in PDF outputs.
+        * Add 'building points' to the osm downloader
+        * Separate volcano IF on population between point and polygon hazard.
+        * Unicode support for InaSAFE
+        * #1650 display warnings in QgsMessageBar
+        * Split Flood OSM building IF.
+        * Add a new button when developer mode is on about test layers #1630
+        * #1225 Allow the user to select an area by drawing a rectangle in the OSM downloader
+        Bug fixes:
+        * #896 
+        * #1281 Change priority so the xml file be read first. In keywords editor, Switch to xml iso metadata if .keywords file didn't exist.
+        * #1423 Save .xml and .keywords when using 'saved as'
+        * #1423 With new QgsMessageBar if exception
+        * #1475
+        * #1533  Further fix for 1533 - scale size nicely if logo is wider than the dock
+        * #1570 Fix layer uri normalization for postgres and delimitedtext
+        * #1620
+        * #1694 - clear default paths if they point to Qt resource bundles.
+        * #1688 - disconnect() failed between 'loadFinished' and 'unislot'
+        * #1621 Fix pep8 use conventional function definition rather than lambdas
+        * #1625
+        * #1642 Update in getting started message to point out user to use keywords creation wizard in the Plugins > Inasafe menu
+        * #1648 Allow the user to save results to their own designated directory
+        * #1650 Add QMessageBox
+        * #1662
+        * #1679 Change how the zip OSM downloader zip is  extracted, allow the user to overwrite or not.
+        * #1686 Fix Earthquake Building IF Issues
+        * #1699 - cancel button on minimum needs calculator dialog does nothing
+        * #1706 Fix logo does not display in dock during processing.
+        * #1721 Add a locale flag in the url for osm downloader
+        * #1730 
+        * #1732 OSM downloader : skip a feature type if one is empty
+        * #1735 Improvements about the OSM downloader's progress dialog
+        * #1739 Exception about canceled download
+        * #1764 Allow a user to select the analysis area with a bookmark
+        * #1770 Check if the map canvas is using 4326 and enable OTF if necessary
         Architectural changes:
-        * Combined safe and safe_qgis into one package.
-        * We now use one translation system instead of two (gettext was dropped).
-        * UI files are dynamically compiled at run time so we don't need to ship the uic compiled versions.
-        * We no longer user Qt resources so you no longer need to compile with pyrcc.
-        * Plugin reloader works again because we fixed the import management that caused it to break.
-        * Removed a lot of moribund / experimental / test code that is not used in production.
-        * Removed the use of api.py and abstraction between Qt/QGIS based code and console only code.
+        * Overhauled impact function API to use more Object Orientated Design
+        * Remove importing qgis in __init__ of safe's submodules.
+        * Don't set the SIP API V2 manually anymore.
         Note:
-        * This release breaks API comptibility with 2.x releases.
+        *
 
 
 

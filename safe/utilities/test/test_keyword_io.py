@@ -47,13 +47,14 @@ class KeywordIOTest(unittest.TestCase):
             'subcategory': 'building'}
 
         # Raster Layer keywords
-        hazard_path = test_data_path('hazard', 'padang_tsunami_mw8.tif')
+        hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
         self.raster_layer, _ = load_layer(hazard_path)
         self.expected_raster_keywords = {
             'category': 'hazard',
             'subcategory': 'tsunami',
-            'unit': 'm',
-            'title': 'A tsunami in Padang (Mw 8.8)'}
+            'data_type': 'continuous',
+            'unit': 'metres_depth',
+            'title': 'Tsunami'}
 
         # Vector Layer keywords
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
@@ -168,7 +169,7 @@ class KeywordIOTest(unittest.TestCase):
     def test_update_keywords(self):
         """Test append file keywords with update_keywords method."""
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='tsunami_wgs84',
             extension='.tif',
             include_keywords=True,
             source_directory=test_data_path('hazard'))
@@ -177,10 +178,12 @@ class KeywordIOTest(unittest.TestCase):
         keywords = self.keyword_io.read_keywords(layer)
         expected_keywords = {
             'category': 'exposure',
-            'test': 'TEST',
             'subcategory': 'tsunami',
-            'unit': 'm',
-            'title': 'A tsunami in Padang (Mw 8.8)'}
+            'data_type': 'continuous',
+            'title': 'Tsunami',
+            'test': 'TEST',
+            'unit': 'metres_depth'
+        }
         message = 'Keywords: %s. Expected: %s' % (keywords, expected_keywords)
         self.assertEqual(keywords, expected_keywords, message)
 

@@ -1,6 +1,7 @@
 # coding=utf-8
 """Helpers for GIS related functionality."""
 import uuid
+
 from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
@@ -98,8 +99,11 @@ def extent_to_array(extent, source_crs, dest_crs=None):
     return geo_extent
 
 
-def viewport_geo_array(map_canvas):
-    """Obtain the map canvas current extent in EPSG:4326.
+def rectangle_geo_array(rectangle, map_canvas):
+    """Obtain the rectangle in EPSG:4326.
+
+    :param rectangle: A rectangle instance.
+    :type rectangle: QgsRectangle
 
     :param map_canvas: A map canvas instance.
     :type map_canvas: QgsMapCanvas
@@ -111,18 +115,31 @@ def viewport_geo_array(map_canvas):
     .. note:: Delegates to extent_to_array()
     """
 
-    # get the current viewport extent
-    rectangle = map_canvas.extent()
-
     destination_crs = QgsCoordinateReferenceSystem()
     destination_crs.createFromSrid(4326)
 
-    if map_canvas.hasCrsTransformEnabled():
-        source_crs = map_canvas.mapRenderer().destinationCrs()
-    else:
-        source_crs = destination_crs
+    source_crs = map_canvas.mapRenderer().destinationCrs()
 
     return extent_to_array(rectangle, source_crs, destination_crs)
+
+
+def viewport_geo_array(map_canvas):
+    """Obtain the map canvas current extent in EPSG:4326.
+
+    :param map_canvas: A map canvas instance.
+    :type map_canvas: QgsMapCanvas
+
+    :returns: A list in the form [xmin, ymin, xmax, ymax] where all
+        coordinates provided are in Geographic / EPSG:4326.
+    :rtype: list
+
+    .. note:: Delegates to rectangle_geo_array()
+    """
+
+    # get the current viewport extent
+    rectangle = map_canvas.extent()
+
+    return rectangle_geo_array(rectangle, map_canvas)
 
 
 def is_point_layer(layer):
@@ -368,3 +385,25 @@ def convert_to_safe_layer(layer):
         return safe_read_layer(layer.source())
     except:
         raise
+
+
+def vector_geometry_string(layer):
+    """Get string representation of geometry types of a QgsVectorLayer.
+
+    :param layer: A vector layer.
+    :type layer: QgsVectorLayer
+
+     :returns: A string 'point', 'line', or 'polygon'.
+     :rtype: str
+     """
+
+    types = {
+        QGis.Point: 'point',
+        QGis.Line: 'line',
+        QGis.Polygon: 'polygon'
+    }
+
+    if not layer.type() == QgsMapLayer.VectorLayer:
+        return None
+
+    return types.get(layer.geometryType())

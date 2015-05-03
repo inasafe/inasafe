@@ -9,8 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.utilities.gis import is_polygon_layer
-
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '19/05/2013'
@@ -53,7 +51,8 @@ from safe.defaults import get_defaults
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import (
     layer_attribute_names,
-    create_memory_layer)
+    create_memory_layer,
+    is_polygon_layer)
 from safe.utilities.styling import set_vector_graduated_style
 from safe.common.utilities import (
     temp_dir,
@@ -68,6 +67,7 @@ from safe.common.signals import (
     STATIC_MESSAGE_SIGNAL,
 )
 from safe import messaging as m
+from safe.definitions import global_default_attribute, do_not_use_attribute
 from safe.messaging import styles
 from safe.common.exceptions import (
     KeywordNotFoundError,
@@ -124,7 +124,7 @@ class Aggregator(QtCore.QObject):
             'inasafe/use_native_zonal_stats', False, type=bool))
         self.use_native_zonal_stats = flag
 
-        self.extent = extent
+        self._extent = extent
         self._keyword_io = KeywordIO()
         self._defaults = get_defaults()
         self.error_message = None
@@ -170,6 +170,23 @@ class Aggregator(QtCore.QObject):
             keywords = {}
             self.write_keywords(
                 self.layer, keywords)
+
+    @property
+    def extent(self):
+        return self._extent
+
+    @extent.setter
+    def extent(self, value):
+        self._extent = value
+        # update layer extent to match impact layer if in aoi_mode
+        if self.aoi_mode:
+            try:
+                self.layer = self._extents_to_layer()
+                self.safe_layer = safe_read_layer(self.layer.source())
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
+                raise
 
     def read_keywords(self, layer, keyword=None):
         """It is a wrapper around self._keyword_io.read_keywords
@@ -295,13 +312,13 @@ class Aggregator(QtCore.QObject):
 
         if self.aoi_mode:
             keywords[self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')] = \
-                self.tr('Use default')
+                global_default_attribute['name']
             keywords[self.get_default_keyword('YOUTH_RATIO_ATTR_KEY')] = \
-                self.tr('Use default')
+                global_default_attribute['name']
             keywords[self.get_default_keyword('ADULT_RATIO_ATTR_KEY')] = \
-                self.tr('Use default')
+                global_default_attribute['name']
             keywords[self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY')] = \
-                self.tr('Use default')
+                global_default_attribute['name']
             self.update_keywords(self.layer, keywords)
             self.is_valid = True
             return
@@ -331,24 +348,19 @@ class Aggregator(QtCore.QObject):
                     aggregation_attribute in keywords and
                     (
                         'category' in keywords and
-                        category == 'postprocessing'
-                    ) and (
-                        female_ratio in keywords and (
-                            female_ratio != self.tr('Use default') or
-                            female_ratio_key in keywords)
-                    ) and (
-                        youth_ratio in keywords and (
-                            youth_ratio != self.tr('Use default') or
-                            youth_ratio_key in keywords)
-                    ) and (
-                        adult_ratio in keywords and (
-                            adult_ratio != self.tr('Use default') or
-                            adult_ratio_key in keywords)
-                    ) and (
-                        elderly_ratio in keywords and (
-                            elderly_ratio != self.tr('Use default') or
-                            elderly_ratio_key in keywords)
-                    )):
+                        category == 'postprocessing') and
+                    (female_ratio in keywords and (
+                        female_ratio != global_default_attribute['name'] or
+                        female_ratio_key in keywords)) and
+                    (youth_ratio in keywords and (
+                        youth_ratio != global_default_attribute['name'] or
+                        youth_ratio_key in keywords)) and
+                    (adult_ratio in keywords and (
+                        adult_ratio != global_default_attribute['name'] or
+                        adult_ratio_key in keywords)) and
+                    (elderly_ratio in keywords and (
+                        elderly_ratio != global_default_attribute['name'] or
+                        elderly_ratio_key in keywords))):
                 self.is_valid = True
             # some keywords are needed
             else:
@@ -366,7 +378,8 @@ class Aggregator(QtCore.QObject):
                 if self.get_default_keyword('FEMALE_RATIO_ATTR_KEY') not in \
                         keywords:
                     keywords[self.get_default_keyword(
-                        'FEMALE_RATIO_ATTR_KEY')] = self.tr('Use default')
+                        'FEMALE_RATIO_ATTR_KEY')] = \
+                        global_default_attribute['name']
 
                 if self.get_default_keyword('FEMALE_RATIO_KEY') not in \
                         keywords:
@@ -376,7 +389,8 @@ class Aggregator(QtCore.QObject):
                 if self.get_default_keyword('YOUTH_RATIO_ATTR_KEY') not in \
                         keywords:
                     keywords[self.get_default_keyword(
-                        'YOUTH_RATIO_ATTR_KEY')] = self.tr('Use default')
+                        'YOUTH_RATIO_ATTR_KEY')] = \
+                        global_default_attribute['name']
 
                 if self.get_default_keyword('YOUTH_RATIO_KEY') not in \
                         keywords:
@@ -386,7 +400,8 @@ class Aggregator(QtCore.QObject):
                 if self.get_default_keyword('ADULT_RATIO_ATTR_KEY') not in \
                         keywords:
                     keywords[self.get_default_keyword(
-                        'ADULT_RATIO_ATTR_KEY')] = self.tr('Use default')
+                        'ADULT_RATIO_ATTR_KEY')] = \
+                        global_default_attribute['name']
 
                 if self.get_default_keyword('ADULT_RATIO_KEY') not in \
                         keywords:
@@ -396,7 +411,8 @@ class Aggregator(QtCore.QObject):
                 if self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY') not in \
                         keywords:
                     keywords[self.get_default_keyword(
-                        'ELDERLY_RATIO_ATTR_KEY')] = self.tr('Use default')
+                        'ELDERLY_RATIO_ATTR_KEY')] = \
+                        global_default_attribute['name']
 
                 if self.get_default_keyword('ELDERLY_RATIO_KEY') not in \
                         keywords:
@@ -423,7 +439,7 @@ class Aggregator(QtCore.QObject):
         except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
             raise
 
-        self.safe_layer = safe_read_layer(str(self.layer.source()))
+        self.safe_layer = safe_read_layer(self.layer.source())
 
     def deintersect(self):
         """Ensure there are no intersecting features with self.layer.
@@ -498,8 +514,8 @@ class Aggregator(QtCore.QObject):
         aggregation_layer_name = self.layer.name()
         if self.aoi_mode:
             aggregation_layer_name = aggregation_layer_name.lower()
-        layer_name = str(self.tr('%s aggregated to %s') % (
-            qgis_impact_layer.name(), aggregation_layer_name))
+        layer_name = self.tr('%s aggregated to %s') % (
+            qgis_impact_layer.name(), aggregation_layer_name)
 
         # delete unwanted fields
         provider = self.layer.dataProvider()
@@ -1179,8 +1195,8 @@ class Aggregator(QtCore.QObject):
         female_ratio_attribute = self.read_keywords(
             self.layer,
             female_ratio_key)
-        if ((female_ratio_attribute != self.tr('Don\'t use')) and
-                (female_ratio_attribute != self.tr('Use default'))):
+        if ((female_ratio_attribute != do_not_use_attribute['name']) and
+                (female_ratio_attribute != global_default_attribute['name'])):
             self.attributes[female_ratio_key] = \
                 female_ratio_attribute
 
@@ -1188,8 +1204,8 @@ class Aggregator(QtCore.QObject):
         youth_ratio_attribute = self.read_keywords(
             self.layer,
             youth_ratio_key)
-        if ((youth_ratio_attribute != self.tr('Don\'t use')) and
-                (youth_ratio_attribute != self.tr('Use default'))):
+        if ((youth_ratio_attribute != do_not_use_attribute['name']) and
+                (youth_ratio_attribute != global_default_attribute['name'])):
             self.attributes[youth_ratio_key] = \
                 youth_ratio_attribute
 
@@ -1197,8 +1213,8 @@ class Aggregator(QtCore.QObject):
         adult_ratio_attribute = self.read_keywords(
             self.layer,
             adult_ratio_key)
-        if ((adult_ratio_attribute != self.tr('Don\'t use')) and
-                (adult_ratio_attribute != self.tr('Use default'))):
+        if ((adult_ratio_attribute != do_not_use_attribute['name']) and
+                (adult_ratio_attribute != global_default_attribute['name'])):
             self.attributes[adult_ratio_key] = \
                 adult_ratio_attribute
 
@@ -1206,8 +1222,8 @@ class Aggregator(QtCore.QObject):
         elderly_ratio_attribute = self.read_keywords(
             self.layer,
             elderly_ratio_key)
-        if ((elderly_ratio_key != self.tr('Don\'t use')) and
-                (elderly_ratio_attribute != self.tr('Use default'))):
+        if ((elderly_ratio_key != do_not_use_attribute['name']) and
+                (elderly_ratio_attribute != global_default_attribute['name'])):
             self.attributes[elderly_ratio_key] = \
                 elderly_ratio_attribute
 
@@ -1242,7 +1258,7 @@ class Aggregator(QtCore.QObject):
         # noinspection PyTypeChecker
         self._send_message(message)
 
-        layer_filename = str(layer.source())
+        layer_filename = layer.source()
         postprocessing_polygons = self.safe_layer.get_geometry()
         polygons_layer = safe_read_layer(layer_filename)
         remaining_polygons = numpy.array(
@@ -1581,12 +1597,18 @@ class Aggregator(QtCore.QObject):
         fields = provider.fields()
         feature.setFields(fields)
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-        feature.setGeometry(QgsGeometry.fromRect(
+        geom = QgsGeometry.fromRect(
             QgsRectangle(
                 QgsPoint(self.extent[0], self.extent[1]),
-                QgsPoint(self.extent[2], self.extent[3]))))
+                QgsPoint(self.extent[2], self.extent[3])))
+        feature.setGeometry(geom)
         feature[attribute_name] = self.tr('Entire area')
-        provider.addFeatures([feature])
+        if provider.featureCount() > 0:
+            # delete previous feature
+            for f in provider.getFeatures():
+                provider.changeGeometryValues({f.id(): geom})
+        else:
+            provider.addFeatures([feature])
         self.layer.updateExtents()
         try:
             self.update_keywords(

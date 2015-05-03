@@ -1,4 +1,8 @@
 #!/bin/bash
+export LOCALE=en_US.UTF-8
+export LC_ALL=${LOCALE}
+export LANG=${LOCALE}
+
 
 # You can use this script as the 'execute shell' in a jenkins job.
 # For example, set the 'command' contents to this to run the safe package tests:
@@ -92,7 +96,8 @@ make jenkins-pyflakes
 make jenkins-pep8
 make jenkins-pylint
 make jenkins-sloccount
-xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v \
+make testdata
+xvfb-run -a --server-args="-screen 0, 1024x768x24" nosetests -v \
     --with-id --with-xcoverage --with-xunit --verbose \
     --cover-package=${TEST_PACKAGE} ${TEST_PATH}
 
