@@ -112,9 +112,11 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
             tr('All affected people are assumed to be evacuated.')])
         if no_data_warning:
             table_body.extend([
-                tr(
-                    'The layers contained `no data`. This missing data was '
-                    'carried through to the impact layer.')])
+                tr('The layers contained `no data`. This missing data was '
+                   'carried through to the impact layer.'),
+                tr('`No data` values in the impact layer were treated as 0 '
+                   'when counting the affected or total population.')
+            ])
         if len(counts) > 1:
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))
 

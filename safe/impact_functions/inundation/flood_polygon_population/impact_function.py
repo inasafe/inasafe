@@ -137,10 +137,12 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
             TableRow(tr('Total population: %s') % format_int(total)))
         table_body.append(TableRow(self.parameters['provenance']))
         if nan_warning:
-            table_body.append(
-                TableRow(
-                    tr('"nodata" values in the exposure layer are treated as '
-                       '0 when counting the affected or total population')))
+            table_body.extend([
+                tr('The population layer contained `no data`. This missing '
+                   'data was carried through to the impact layer.'),
+                tr('`No data` values in the impact layer were treated as 0 '
+                   'when counting the affected or total population.')
+            ])
 
     def run(self, layers=None):
         """Risk plugin for flood population evacuation.
