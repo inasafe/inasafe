@@ -5,7 +5,7 @@
   </metadata>
 
   <datafile>
-    <filename>multipart_polygons_osm_4326.shp</filename>
+    <filename>flood_multipart_polygons.shp</filename>
     <checksum>464866639</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
@@ -15,7 +15,7 @@
   </datafile>
 
   <datafile>
-    <filename>multipart_polygons_osm_4326.shx</filename>
+    <filename>flood_multipart_polygons.shx</filename>
     <checksum>2493515869</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
@@ -25,7 +25,7 @@
   </datafile>
 
   <datafile>
-    <filename>multipart_polygons_osm_4326.dbf</filename>
+    <filename>flood_multipart_polygons.dbf</filename>
     <checksum>2339343168</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
