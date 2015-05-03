@@ -84,10 +84,6 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         hazard_layer = self.hazard
         exposure_layer = self.exposure
 
-        nan_warning = False
-        if has_no_data(exposure_layer.get_data(nan=True)):
-            nan_warning = True
-
         # Input checks
         if not hazard_layer.is_point_data:
             msg = (
@@ -101,7 +97,6 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         # Use concentric circles
         category_title = 'Radius'
         category_header = tr('Distance [km]')
-        rad_m = radii
 
         centers = hazard_layer.get_geometry()
         rad_m = [x * 1000 for x in radii]  # Convert to meters
@@ -140,7 +135,6 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         affected_population = {}
         for radius in rad_m:
             affected_population[radius] = 0
-
 
         nan_warning = False
         if has_no_data(exposure_layer.get_data(nan=True)):
