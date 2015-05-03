@@ -292,13 +292,15 @@ indent:
 ##########################################################
 
 docker-run-tests:
-	docker build -t inasafe/inasafe-test-runner .
+    # The image is hosted in docker hub at
+    # https://registry.hub.docker.com/u/inasafe/inasafe-test-runner/
+	docker pull inasafe/inasafe-test-runner
 	#docker rm inasafe-test-runner
 	docker run -i -t --rm --name="inasafe-tests" \
-	-v /Users/timlinux/dev/python/inasafe_data/:/inasafe_data \
-	-v /Users/timlinux/dev/python/inasafe:/inasafe \
-	inasafe/inasafe-test-runner \
-    /bin/bash
+		-v /Users/timlinux/dev/python/inasafe_data/:/inasafe_data \
+		-v /Users/timlinux/dev/python/inasafe:/inasafe \
+		inasafe/inasafe-test-runner \
+		/bin/bash
 
 
 docker-test: testdata clean
