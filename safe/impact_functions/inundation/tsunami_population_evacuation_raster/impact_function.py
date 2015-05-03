@@ -162,7 +162,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
             val, rounding = population_rounding_full(val)
             counts.append([val, rounding])
 
-        """Carry the no data values forward to the impact layer."""
+        # Carry the no data values forward to the impact layer.
         impact = numpy.where(numpy.isnan(population), numpy.nan, impact)
         impact = numpy.where(numpy.isnan(data), numpy.nan, impact)
 
