@@ -48,7 +48,7 @@ RUN apt-get install -y --force-yes \
     python-qgis
 
 ENV QGIS_PREFIX_PATH /usr
-ENV PYTHONPATH ${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`:/insafe-tests
+ENV PYTHONPATH ${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`:/insafe:/
 ENV LD_LIBRARY_PATH ${QGIS_PREFIX_PATH}/share/qgis/python/plugins/
 ENV LD_LIBRARY_PATH ${QGIS_PREFIX_PATH}/lib
 
