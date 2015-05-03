@@ -53,28 +53,24 @@ class NeedsProfile(MinimumNeeds):
         self.load()
 
     def load(self):
-        """Load the minimum needs from the QSettings object.
+        """Load the minimum needs.
+
+        If the minimum needs defined in QSettings use it, if not, get the
+        most relevant available minimum needs (based on QGIS locale). The
+        last thing to do is to just use the default minimum needs.
         """
-        # minimum_needs = None
-        try:
-            minimum_needs = self.settings.value('MinimumNeeds', type=dict)
-            if not minimum_needs and minimum_needs != u'':
-                profiles = self.get_profiles()
-                # TODO (Ismail): Check this part below.
-                # I just change from string concatenation to use os.path.join.
-                # But it's obvious that there is something wrong in this line
-                profiles_path = os.path.join(
-                    str(self.root_directory),
-                    'minimum_needs',
-                    profiles + '.json')
-                self.read_from_file(profiles_path)
-        except TypeError:
-            minimum_needs = self._defaults()
+        self.minimum_needs = self.settings.value('MinimumNeeds')
 
-        if not minimum_needs and minimum_needs != u'':
-            minimum_needs = self._defaults()
-
-        self.minimum_needs = minimum_needs
+        if not self.minimum_needs or self.minimum_needs == u'':
+            # Load the most relevant minimum needs
+            # If more than one profile exists, just use defaults so
+            # the user doesn't get confused.
+            profiles = self.get_profiles()
+            if len(profiles) == 1:
+                profile = self.get_profiles()[0]
+                self.load_profile(profile)
+            else:
+                self.minimum_needs = self._defaults()
 
     def load_profile(self, profile):
         """Load a specific profile into the current minimum needs.
@@ -110,16 +106,8 @@ class NeedsProfile(MinimumNeeds):
         # sequence
         if not self.minimum_needs['resources']:
             return
-        from safe.impact_functions.core import get_plugins
+
         self.settings.setValue('MinimumNeeds', self.minimum_needs)
-        # Monkey patch all the impact functions
-        for (_, plugin) in get_plugins().items():
-            if not hasattr(plugin, 'parameters'):
-                continue
-            if 'minimum needs' in plugin.parameters:
-                plugin.parameters['minimum needs'] = (
-                    self.get_needs_parameters())
-                plugin.parameters['provenance'] = self.provenance
 
     def get_profiles(self):
         """Get all the minimum needs profiles.
@@ -142,6 +130,9 @@ class NeedsProfile(MinimumNeeds):
             :returns: Ordered profiles
             :rtype: list
             """
+            if locale is None:
+                return unsorted_profiles
+
             locale = '_%s' % locale[:2]
             profiles_our_locale = []
             profiles_remaining = []
@@ -171,6 +162,21 @@ class NeedsProfile(MinimumNeeds):
         profiles = sort_by_locale(profiles, self.locale)
         return profiles
 
+    def precision_of(self, number_as_text):
+        """The number of digits after the decimal will be counted and used
+        as returned as the precision.
+
+        :param number_as_text: A textual representation of the number whose
+            precision we wish to determine.
+        :type number_as_text: basestring
+
+        :returns: The precision of the passed in textual
+         representation of a number.
+        :rtype: int
+        """
+        precision = number_as_text.split('.')[1]
+        return len(precision)
+
     def get_needs_parameters(self):
         """Get the minimum needs resources in parameter format
 
@@ -196,6 +202,16 @@ class NeedsProfile(MinimumNeeds):
             parameter.unit.plural = resource['Units']
             parameter.unit.abbreviation = resource['Unit abbreviation']
             parameter.value = float(resource['Default'])
+            # choose highest precision between resource's parameters
+            # start with default of 1
+            precisions = [1]
+            precision_influence = [
+                'Maximum allowed', 'Minimum allowed', 'Default']
+            for element in precision_influence:
+                if resource[element] is not None and '.' in resource[element]:
+                    precisions.append(self.precision_of(resource[element]))
+
+            parameter.precision = max(precisions)
             parameters.append(parameter)
         return parameters
 

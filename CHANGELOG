@@ -1,3 +1,430 @@
+Changelog for version 3.1.0
+================================
+
+0975aca (HEAD, upstream/develop, inasafe-1819, develop) Merge pull request #1818 from lucernae/develop
+c2bb007 Update Translations
+8b3a5a4 Merge pull request #1806 from akbargumbira/inasafe_1795
+3dec8f6 Merge pull request #1804 from akbargumbira/inasafe_1727
+c245a5b Update scenario file for batch dialog test.
+f4ef5cf Don't enable load standard layers tool if it's not final release.
+95f055a Fix failing test after removing the old flood IF.
+2158d5d Remove Flood Polygon on Building IF using the old style.
+b38e3bc Merge pull request #1801 from akbargumbira/develop
+fe6b033 Add volcano point on population in test_registry.
+fd42c16 Fix Ole and Ismail in VolcanoPolygon on Building. Get the hazard zone value from the layer itself.
+e38e8e4 Fix wording.
+8af0c2c Separate volcano IF on population between point and polygon hazard.
+c2cf01d Merge pull request #1794 from lucernae/develop
+7044275 Bugfix related to #1675: when we have errors in the IF run method, the cursor still displayed as busy.
+410e0e7 Update translations
+c8ddd91 Merge pull request #1791 from ismailsunni/translation_update
+2341707 Translation update.
+f0b9dd1 Merge pull request #1790 from lucernae/develop
+95847de Update translations
+0bbc05e Merge pull request #1789 from lucernae/develop
+5996c89 Add Indonesian translation
+659dc60 Merge pull request #1787 from lucernae/develop
+6729011 PEP8 fixes and remove unnecessary key-value pair in metadata
+a2886e8 Merge pull request #1786 from lucernae/develop
+ca4f2cf Bugfix Issue #1784 : Add file exist and zero heights checks
+b104832 Merge pull request #1783 from akbargumbira/develop
+8185001 (akbar/develop) Add French translation.
+085806b Merge pull request #1782 from akbargumbira/develop
+36156af Remove unused test data.
+dc1b15a Merge pull request #1780 from akbargumbira/test
+d1c5d83 (akbar/test) Address Pylint violation.
+1d563de Use local test data for test_wizard_dialog
+2c166a5 Merge pull request #1779 from akbargumbira/develop
+690bb44 Update translations.
+7a2e49a Update config file for transifex pointing to the new project for inasafe.
+4b9bc9c Merge pull request #1778 from akbargumbira/develop
+6e83a85 Remove 'disable_for_entire_area_aggregation_param' postprocessor parameter.
+56efd0d Merge pull request #1756 from akbargumbira/IF_OOP
+6f95503 (akbar/IF_OOP) Address PEP8 and Pylint Violation.
+1692edc Merge pull request #1771 from Gustry/fix-1770
+c93f70e Fix failing test caused by new building report for some IFs.
+a8cf8a5 Remove _tabulate method in IF dealing on buildings.
+8cdd4b2 Add building centroids in the load_standard_layers method.
+eabda00 Merge pull request #7 from cchristelis/IF_OOP
+430185e Only use the formatted building type name for the report.
+2adbd12 Restore original state of test data
+182d243 Adding test cases for buildings specific ReportMixin
+07cd9da Tests covering the Report Mixin base class
+83dc512 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+42f2ca0 Tests covering the Report Mixin base class
+f8ab7e0 Fix failing test in safe.impact_functions.
+5492db7 Merge branch 'develop' of github.com:AIFDR/inasafe into IF_OOP
+6bcc4a0 Merge pull request #1773 from akbargumbira/develop
+295debd It's more sensible to load defaults minimum needs if there are more than one profile exist with the same locale.
+12122eb Move volcano point test data so that it overlaps with other exposure.
+c692362 Fix the error raised in case of the building data is centroid.
+8720861 Add building centroids test data.
+dbcddb0 Code compliance housekeeping
+82baba3 Updated Volcano point IF to work with now ReportMixin
+1a2810f Update Volcano Building IF to use new ReportMixin
+11e0efc Update Vector Flood OSM building IF to latest ReportMixin
+1335b99 Updated flood vector qgis IF to work with Reports Mixin
+e333cac Give default locale if locale from QGIS returns None
+d9164f9 Fixed typo
+a6a869f Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+e623a08 Mixin cleanups
+dd88894 Updated flood raster osm IF to use report mixin
+eb9e587 updated Earth Quake function to use class attributes as the means of passing impact breakdowns
+b83ecf9 PEP8 issue fix
+9d45c78 Use QGIS app test configuration for this impact function.
+5ed4d96 Fix sor_by_locale of sorting needs profile in case locale passed is None.
+d38c935 Fix the wrong logic of disabling running a postprocessor via param 'disable_for_entire_area_aggregation'
+20ff50b Use instances rather than passing the same properties all around.
+b8f163e Updated to work with generic IF
+07d48c5 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+34c3e90 Emit function combobox changed from needs manager dialog to update the minimum needs in option.
+90e2306 Updating Mixin/Earthquake IF to allow for building value breakdown+
+404dc85 Remove get_question and use .question property from IF base class.
+7e377f8 Update the minimum needs parameter for IF dealing with population.
+8b00ca3 Merge branch 'develop' of github.com:AIFDR/inasafe into IF_OOP
+2e3efec Merge pull request #1772 from akbargumbira/develop
+086e436 Update loading the needs profile.
+d179e4f Fix minimum needs not loaded. We mustn't declare the type to get the value from QSettings anymore.
+6ca0765 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+60daed3 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+3af2dda Create mixin base class
+769493f Update the IF filter by constraints and add rule when registering IF that it needs to have a unique ID.
+515eaea Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+3cbe77d Smallfix for tests. Rename padang_tsunami_mw8 to tsunami_wgs84
+e82a5fa Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+96e6dea fix #1770 check if the map canvas is using 4326 and enable OTF if necessary
+39b8682 Review Jannes work on Postprocessor parameter.
+4472086 Merge pull request #8 from Jannes123/fix_tests
+a8b8a31 Merge branch 'develop' of github.com:AIFDR/inasafe into IF_OOP
+56ba09a (jannes/fix_tests) clean code
+5e785eb merged new-style IFs and parameters and develop
+c375bdc Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+d58cd28 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into fix_tests
+1945fd0 opt dialog tests updated
+b416aa4 merge new-style IF_OOP
+3c37190 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+5e00139 Add tsunami tests data.
+96f016e Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+517f08c Fix test: test_dock.test_issue160
+71beb77 Add test for PAG Earthquake Fatality Model.
+660cbeb Add test for ITB Earthquake Fatality IF. Clip EQ test data for a faster test.
+ad63a2e stash commit
+13fe43b Merge pull request #1768 from Gustry/fix-unicode
+7838b78 Merge pull request #1766 from Gustry/fix-1764
+60a19e3 Add tests for EQ on Building IF.
+86e7b23 Fix failing tests.
+49056db Fix other tests.
+141d18f Fixing tests data using the new standard layers.
+6d72086 updated IFs work but not unittest
+037c7ea 'Housekeeping' on IF docstring
+8fd8e5f Refactor ImpactFunctionRegistry's get, and get_by_id methods
+8251ae0 Merge branch 'develop' of github.com:AIFDR/inasafe into IF_OOP
+cb9113d FIx all failing tests in local.
+1fc8620 Update load_standard_layers to the new test data and add a qgs project.
+ee07d39 Update test data and update all tests in safe.impact_function package.
+e6e02b5 new-style params for all inundation ifs
+448017d fix #1764 update documentation and fix typo
+0347b18 Update all the tests in safe.impact_function to use the new test data.
+96c85fc fix unicode using get_string
+3eeecad Merge pull request #1761 from timlinux/coding-standards
+8084366 Add buildings in region_b
+a0ab308 Add tests data for region_a (JKT), region_b (Jogja), region_c (around merapi)
+0bf2cd1 floodraster gdal road postp update
+bf161bf Remove keywords_id in units metadata. Will introduce more failing tests.
+cdf3f95 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+8839f63 AddVOlcano Vector On Population and its tests. Add population data in region_c.
+74f8547 fix unicode in file path
+15c0298 raster flood road postp
+672b9f5 Fixing most of the tests
+040f645 OSM building rastre flood postp
+ab28bd6 stash commiit
+f5863fd stash commit
+46c72ac fix #1764 : fix test
+d8ecee4 fix #1764 : allow a user to select the area with a bookmark
+3ca1bf2 stash commit
+49b24aa merge commit
+a6aa4cf Merge branch 'develop' of github.com:AIFDR/inasafe into IF_OOP
+6cac66d Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+16a80a8 Add VolcanoPolygonBuilding IF and its tests. Also add merapi KRB to region_c test package.
+2b4a095 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+bd90dc2 Using mixin in flood_vector_osm_building_impact
+a0f934e Merge pull request #1759 from timlinux/fix-1758
+0068780 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+3ebc8dc Add Earthquake IFs
+7951024 Report standardization
+5f96f1e clean comments
+6b83bc6 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+a722f2d Building Reports Mixins
+513c831 (origin/coding-standards) Coding stadnards cleanups for gender postprocessor.
+93f3153 Small code conventions cleanup in messaging text.py
+8d0bb8f Small clode convention cleanups made while giving Etienne a coding standards walk through.
+270531e Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+c711fe4 Add VolcanoPointBuilding IF and its tests. Add data for region_c.
+8d6ccbe Add ContinuousHazardPopulation IF with tests
+a984184 dialog box scrollbar fixed
+0898c00 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+dae6981 Add ClassifiedHazardPopulation IF with tests"
+0e62d21 Remove run method in base class. For now, most likely we need to override the validate and prepare layers.
+56f3053 Add Generic ClassifiedHazardBuilding IF, with tests
+88bca84 (jannes/develop) cleanout logger and previous commit mistake
+731ddf2 establish #1726 reason for bug
+93f2016 (origin/fix-1758) [BACKPORT] fix #1758 - IF options dialog lacks top level layout.
+a4109ef Remove old inundation test package.
+c2d7597 Run super method 'run' in each IF's run method.
+e239305 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+cc39ea8 Change the run method in base class.
+ea88cc6 Import cleanup and function rename
+3f10b07 Update impact function base class.
+283afb6 Merge pull request #1751 from Gustry/fix1679
+bfb1492 git commit
+e547387 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+87acfc4 Give example on how to deal with IF manager to query IF.
+3129c18 Optimize imports
+01d2fb8 Add TsunamiPopulationEvacuationRaster IF with tests
+3b13e80 Add FloodRasterRoadsGDAL IF with tests
+e7c6bb9 Add FloodRasterRoadQgis IF with tests
+4b31700 multiple new-style parameters concept
+6a55e68 Add FloodRasterOSMBuilding IF, with tests
+4523c3a Add FloodPopulationEvacuationRasterHazard IF, also with tests
+84e2791 Add FloodPopulationEvacuationPolygonHazard IF, with tests. I guess tests not yet using the valid data.
+0e94f53 Review Rizky's work for flood_polygon_roads.
+781a890 Add FloodVectorPolygonRoad IF. Modify qgis test
+ff1adb8 new-style multiple boolean params
+f5dff49 Pass an instance of IF among dock and  wizard to analysis, impact calculator, impact calculator thread, calculate impact.
+e2c23c5 proof of concept new-style boolparam
+55c0084 Use ID of the IF instead of its class name to register it on the combo in the dock.
+1fabd06 Changed function_type as classmethod and have it loaded from metadata
+da7ee83 Remove get_safe_impact_function_type in favor of IFManager.get_function_type()
+87a6fa2 Remove get_safe_impact_functions and its usage in favor of IFManager.get_by_id()
+c80fcae Remove unused code in safe.impact_functions.core
+3744904 Remove safe.impact_function.utilities module.
+60ef8a4 Instantiate IF manager once and use it in the necessary places.
+659fd21 Use its own property to get the impact functions.
+3cfe080 More streamlining for things that can be done by Impact Function Manager.
+344432c More improvement on Registry and Impact Function Manager.
+f2110db Add some test in test_registry.py
+ffe0bab Create Registry unit test. Modifying impact function manager test module, commenting unavailable one at the momen. Add some functions in registry and impact function manager.
+dfeec72 Remove unused codes after streamlining utilities function related to IF.
+b59beed Streamlining the way to get IF. Removing get_plugins for good.
+1c97281 Streamlining getting the IF - Lessen the usage of get_plugins.
+4926fd4 Remove unused codes related to getting plugins.
+53f5c97 Streamlining Registry and Impact Function Manager.
+de63d74 Utilise Registry singleton to get the IFs.
+ffbe723 Review Rizky's work on flood_building_impact_qgis.
+d8f36eb Change the term 'legacy' to 'old-style' for IF style.
+a44a9b3 Merge branch 'IF_OOP' of github.com:akbargumbira/inasafe into IF_OOP
+c3edf83 Merge branch 'develop' of github.com:AIFDR/inasafe into IF_OOP
+e3a70c3 Add 'flood building impact qgis' IF using Qgis Wrapper in the new arch style
+860bdd8 Remove unused codes e.g collecting IF requirements from docstrings.
+6dc5cfb Make wizard work with the new style of IF.
+0667031 Change get_metadata to as_dict in ImpactFunctionMetadata class and make metadata() class method in IF base class.
+00a4127 Fix filtering impact functions in registry.
+4208824 IF parameters is working but not in a nice way.
+10db9e9 Use the old IF parameters.
+cab5b72 default extent bug #1775
+5e35341 Use registry for getting the IFs. A working example in dock for flood vector on buildings.
+67dd1c1 Add a working example of the impact function using the new IF architecture.
+0ee1f5d fix #1679 : fix docstrings and previous shapefile if exists
+16bfaaf Merge pull request #1754 from akbargumbira/develop
+f68bd99 Fix classname typo.
+f1f2a71 Fix failed unittests.
+85c3346 [Volcano on Building] Separate the IF between the point and the polygon hazard.
+f1a37dc fix #1679 typo, docstring
+e53973f fix #1679 : change how the zip is extracted, allow the user to overwrite or not
+36e73d3 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+8e15f78 Merge pull request #1749 from ismailsunni/fix_1745
+6e3c69e Don't allow users to set the target field in Volcano Building IF.
+13ad903 Merge pull request #1743 from Gustry/refact
+2cc26ab Fix #1475
+4e63b44 fix quoted strings, qmessagebox
+6665be4 Merge pull request #1736 from Gustry/fix-1735
+4e5e92a Merge pull request #1740 from Gustry/unicode
+ad63f45 Merge pull request #1741 from ismailsunni/backport_master
+f50b024 PEP8.
+54a3d56 Fix typo in metadata.txt
+1166157 Revert metadata.txt to version 3.1
+0e70def Backport from master.
+88ea710 fix #1739 exception about canceled download
+077d57a fix #1735 : fix tests
+806eb63 Merge pull request #1738 from akbargumbira/develop
+87db32b Fix Flood IF Raster on Population.
+2fc8dc1 fix #1735 : improvements about the OSM downloader's progress dialog
+e6d81d1 Merge pull request #1731 from Gustry/fix-1730
+b827129 merge develop
+c81bfa5 fix #1730 grammar
+fcb65cd Merge pull request #1733 from Gustry/fix-1732
+f1a2d7b fix #1732 : OSM downloader : skip a feature type if one is empty
+68cafcc fix pep8 and fix #1730 : improvements on the OSM downloader
+81e7d6f Merge pull request #1722 from Gustry/fix-1721
+1964872 fix #1721 : fix typo
+5aae1f3 Merge pull request #1674 from akbargumbira/unicode
+85e248a fix #1721 : change test and fix some language typo
+847de34 fix #1721 add a locale flag in the url for osm downloader
+a9d53f8 Merge pull request #1718 from Gustry/fix-1207
+2ec811f (akbar/unicode) Merge branch 'develop' of github.com:AIFDR/inasafe into unicode
+b8987c2 Merge pull request #1720 from timlinux/jenkins-tweaks
+c587b48 (origin/jenkins-tweaks) Force locale to utf-8 for jenkins
+6e6af50 fix pep8
+141cdcc add 'building points' to the osm downloader
+eae7ed6 Merge pull request #1702 from timlinux/fix-1533
+784f085 Merge branch 'develop' of github.com:AIFDR/inasafe into unicode
+b6cb606 [Unicode] Handle error when Exception.message returns Message object
+22eb144 Merge pull request #1641 from lucernae/fix_layer_uri_normalization
+c2b6157 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_layer_uri_normalization
+aa35fd5 Merge pull request #1678 from Gustry/fix-1225
+358e048 [Unicode] Ensure that html to be written to file is in unicode for codecs module
+1820043 [Unicode] Fix failing test in keywords_dialog.
+70c610d PEP8 fix
+4369b2b Merge pull request #1707 from timlinux/issue-1706
+c2ce737 Merge pull request #1709 from lucernae/line_ending_fix
+6f38dd0 Merge branch 'develop' of github.com:AIFDR/inasafe into line_ending_fix
+2110dc1 [Unicode] Write or read file using codecs module.
+83a05e3 Line ending fixed
+617a7ee (origin/issue-1706) [BACKPORT] Fix #1706 - logo does not display in dock during processing.
+68b1a68 [Unicode] Update some test data to contain unicode chars.
+52ed4ad (origin/fix-1533) Further fixes for #1533
+bc01405 Merge pull request #1697 from timlinux/fix-1688
+ff22f67 Merge pull request #1700 from timlinux/fix-1699
+1998270 [BACKPORT] Further fix for 1533 - scale size nicely if logo is wider than the dock
+4c3ea7d Merge branch 'develop' of github.com:AIFDR/inasafe into unicode
+3b03780 It's OK to write None or empty string to keywords in Keywords Editor.
+56a4a10 (origin/fix-1699) Fix 1699 - fix typo introduced in previous commit
+b8d5f42 Fix 1699 - cancel button on minimum needs calculator dialog does nothing
+a8fec08 Merge pull request #1696 from akbargumbira/develop
+e17e357 Merge pull request #1698 from timlinux/fix-1694
+5f071d7 Change CRLF to LF
+765be91 (origin/fix-1694) [BACKPORT] Fix 1694 - clear default paths if they point to Qt resource bundles.
+aed69da Merge pull request #1692 from ismailsunni/split_IF
+ec8a500 Fix one more unit test from IF splitting.
+db73ac0 (origin/fix-1688) [BACKPORT] Fix #1688 - disconnect() failed between 'loadFinished' and 'unislot'
+619b566 Remove unnecessary inspection.
+023964b Fix nonexistent wizard_dialog.get_exposure_layer
+1aa81f0 PEP8.
+079895f Merge branch 'aifdr_develop' into split_IF
+3a2a61a Fix all failed unit tests related to IF split.
+4481567 Fix more unit tests related to split IF.
+a1951cc Split to flood_vector_OSM_building_impact.py
+1cebaee Merge pull request #1691 from akbargumbira/develop
+3d570bc Fix PEP8
+0c119a6 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_layer_uri_normalization
+b26724b Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+2396554 Merge pull request #1684 from timlinux/fix-1533
+f6ebc4a Fix failing tests.
+43d34b0 Fix Earthquake Building IF Issues #1686
+d3a9891 Merge pull request #1676 from Gustry/fix-1648
+621e863 Fix unit test due to IF splitting.
+d4b9aa5 [BACKPORT] Fix #1533 - logo is squashed in dock
+00b7eb4 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_layer_uri_normalization
+8b8ba86 Merge pull request #1637 from lucernae/fix_keywords_editor
+e446d1d Merge branch 'develop' of github.com:AIFDR/inasafe into fix_keywords_editor
+f794eee Merge pull request #1646 from lucernae/change_dock_message
+2052919 Issue #1642: change the description to toolbar instead of plugins
+672c3de Split Flood OSM building IF.
+c704dda Merge branch 'develop' of github.com:AIFDR/inasafe into change_dock_message
+b6f248f Merge pull request #1683 from lucernae/pep8
+2f189f3 PEP8 fix for version 1.6.2
+075e4f1 Merge branch 'develop' of github.com:AIFDR/inasafe into change_dock_message
+916a3df Merge pull request #1680 from ismailsunni/inner_metadata
+fc5ce5d Merge branch 'aifdr_develop' into jaran
+f2c2505 Pep8.
+6c32d26 Fix failed unit test due to moving metadata.
+5c9d56c Move add_to_list to safe.common.utilities.
+033a6f2 fix #1225 : change docstrings
+015aa5b fix #1225 : add UI improvements in the OSM downloader
+833283f fix #1225 : allow the user to select an area by drawing a rectangle in the OSM downloader
+f8ea8ff Merge branch 'develop' of github.com:AIFDR/inasafe into unicode
+fd00aaa Merge pull request #1677 from akbargumbira/develop
+fc6c74a Update hash of the test data.
+ba6d326 Use aggregator "global default" and "don't use" strings from safe.definitions
+07530e2 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_keywords_editor
+b045302 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_layer_uri_normalization
+0782b44 Merge branch 'develop' of github.com:AIFDR/inasafe into change_dock_message
+6222b7b [Unicode] Fix problems in Keywords Editor
+a14dc71 [Unicode] Stringify all the objects other than unicode before making it as unicode.
+f575ff5 Remove pydev for remote debugging purpose.
+8d41ea6 [Unicode] Support unicode in Impact Merge Tools
+a85c4cc [Unicode] Make OSM Downloader work when we save it to output path with non ASCII chars.
+e900f4d fix #1648 fix settings if no key
+d5ecc00 [Unicode] Support unicode in Save Current Scenario tools.
+288866f [Unicode] Support Unicode in Needs Calculator Dialog and Shakemap Importer
+e92b358 [Unicode] Making InaSAFE Keywords Editor (the old one)  work with Unicode.
+767bdd8 [Unicode] Don't cast to string when adding item to combobox.
+3f3e848 fix #1648 : remove accent and settings after test
+17f2a04 fix #1648 allow the user to save results to their own designated directory
+a4be0d0 Merge pull request #1673 from Gustry/accentuated
+efa4022 fix new line
+52b15f3 Remove remote debugging code.
+e7e9d19 [Unicode] Support InaSAFE to use Unicode
+3932fa6 add function to replace accentuated characters
+0f847f4 Merge pull request #1654 from Gustry/fix-896
+e500730 Merge pull request #1669 from akbargumbira/volcano
+1be5a12 (akbar/volcano) Fix #1661 Update volcano hazard zone classification in our definitions.
+b0e4622 Fix #1662
+c4fc8e8 Merge pull request #1652 from Gustry/fix-1650
+f8bbefd Merge pull request #1660 from Gustry/gitattributes
+c81e515 Merge branch 'develop' into fix-896
+c413fd3 Merge branch 'develop' into fix-1650
+51560b6 Merge pull request #1653 from Gustry/fix-1423-with-1650
+306273f add more binaries files to .gitattribute
+60f8aad fix #1423 pep8
+1028034 fix #896 remove an useless line
+44e740a Merge branch 'fix-1650' of github.com:Gustry/inasafe into fix-1650
+becdf10 fix #1650 qgis version and variables
+f200e40 Merge branch 'develop' into fix-1650
+4924e09 Add richer validator for inner class.
+fd96485 Pep8.
+a3b7fd7 Move IFs metadata to inner class.
+0731f39 Merge pull request #1644 from Gustry/fix-1630
+7de8e4a Remove some IFs metadata to inner class.
+6f253aa Merge pull request #1656 from ismailsunni/update_parameters
+a1094cc Merge branch 'aifdr_develop' into update_parameters
+4ad1b22 Revert accidental changes.
+b078792 fix #896 remove pydevd lines
+a588b10 fix 1423 with new QgsMessageBar if exception
+2254b07 Merge branch 'fix-1423' into fix-1423-with-1650
+c636f57 fix #1650 typo
+860e60f fix #1650 : add QMessageBox
+a362fad #1650 : add QgsMessageBar
+58a65f0 Merge pull request #1649 from akbargumbira/develop
+77806e5 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+cf93824 fix #1423 : small fix  about typos and add exception handling
+43b08a1 fix #896, merge utilities/custom_logging.py in common/custom_logging.py, enable LOGGER in top level
+91f0fee Merge pull request #1647 from ismailsunni/update_parameters
+bfb79da Update parameters and remove parameter test.
+f725216 Remove a friendly message.
+61064f5 Merge pull request #1645 from akbargumbira/develop
+cd7f387 Issue #1642 Update in getting started message to point out user to use keywords creation wizard in the Plugins > Inasafe menu
+fc9c5a5 Use auto server number of xvfb for jenkins script.
+46cf85a add the new icon about adding test layers fix #1630
+d612e92 Add a new button when developer mode is on about test layers #1630
+4a45e42 fix #1423 save .xml and .keywords when using 'saved as'
+6b7f625 fix pep8 issues
+b79de49 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_keywords_editor
+cfc8a4e Issue #1570: fix layer uri normalization for postgres and delimitedtext
+b26f63e Merge pull request #1640 from akbargumbira/develop
+91adb0f Update jenkins script to checkout its own inasafe_data in the workspace.
+6e290b9 Merge pull request #1638 from cchristelis/develop
+37d00a5 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_keywords_editor
+104d6c5 Issue #1281: Change priority so the xml file be read first
+8139858 Merge pull request #1636 from akbargumbira/develop
+df191f7 Fix pep8 issues
+f1a8846 Issue #1621. Fix pep8 use conventional function definition rather than lambdas
+8457712 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_keywords_editor
+e4129f8 Issue #1281: Bugs on Keywords Editor. Switch to xml iso metadata if .keywords file didn't exist
+5e481f3 [Travis] No need to clean the working dir.
+92bee5a Merge pull request #1634 from akbargumbira/develop
+fc42b52 Put a friendly message to highlight the importance of importing qgis in 2 places.
+b1d0f42 Remove importing qgis in __init__ of safe's submodules.
+e0de139 Don't set the SIP API V2 manually anymore.
+deedab1 Merge pull request #1633 from ismailsunni/fix_1625_1620
+30b0cf9 Pep8 and pylint.
+2d3b749 Fix #1625
+928c91b Fix #1620
+6f51e98 Merge pull request #1608 from lucernae/normalize_line_ending
+527cae2 Merge branch 'develop' into normalize_line_ending
+f63d1db Merge pull request #1622 from timlinux/develop
+ef8e56c Pre line endings normalization
+
 Changelog for version 3.0.0
 ================================
 

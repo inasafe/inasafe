@@ -8,145 +8,20 @@ import numpy
 from datetime import datetime
 from socket import gethostname
 import getpass
+from PyQt4.QtCore import QSettings
 
 from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
 from safe.impact_functions.core import extract_layers
 from safe.common.utilities import unique_filename, verify
 from safe.utilities.i18n import tr
+from safe.utilities.utilities import replace_accentuated_characters
 from safe.engine.utilities import REQUIRED_KEYWORDS
 
 
 # The LOGGER is intialised in utilities.py by init
 import logging
 LOGGER = logging.getLogger('InaSAFE')
-
-
-def calculate_impact(layers, impact_fcn, extent=None, check_integrity=True):
-    """Calculate impact levels as a function of list of input layers
-
-    Input
-        layers: List of Raster and Vector layer objects to be used for analysis
-
-        impact_fcn: Function of the form f(layers)
-
-        extent:     List of [xmin, ymin, xmax, ymax]
-                    the coordinates of the bounding box.
-
-        check_integrity:    If true, perform checking of input data integrity
-
-    Output
-        filename of resulting impact layer (GML). Comment is embedded as
-        metadata. Filename is generated from input data and date.
-
-    Note
-        The admissible file types are tif and asc/prj for raster and
-        gml or shp for vector data
-
-    Assumptions
-        1. All layers are in WGS84 geographic coordinates
-        2. Layers are equipped with metadata such as names and categories
-    """
-
-    LOGGER.debug(
-        'calculate_impact called with:\nLayers: %s\nFunction:%s' % (
-            layers, impact_fcn))
-
-    # Input checks
-    if check_integrity:
-        check_data_integrity(layers)
-
-    # Get an instance of the passed impact_fcn
-    impact_function = impact_fcn()
-    # Set extent if it is provided
-    if extent is not None:
-        impact_function.set_extent(extent)
-
-    # Start time
-    start_time = datetime.now()
-
-    # Pass input layers to plugin
-    F = impact_function.run(layers)
-
-    # End time
-    end_time = datetime.now()
-
-    # Elapsed time
-    elapsed_time = end_time - start_time
-    # Don's use this - see https://github.com/AIFDR/inasafe/issues/394
-    # elapsed_time_sec = elapsed_time.total_seconds()
-    elapsed_time_sec = elapsed_time.seconds + (elapsed_time.days * 24 * 3600)
-
-    # Eet current time stamp
-    # Need to change : to _ because : is forbidden in keywords
-    time_stamp = end_time.isoformat('_')
-
-    # Get user
-    user = getpass.getuser().replace(' ', '_')
-
-    # Get host
-    host_name = gethostname()
-
-    # Get input layer sources
-    # NOTE: We assume here that there is only one of each
-    #       If there are more only the first one is used
-    for cat in ['hazard', 'exposure']:
-        L = extract_layers(layers, 'category', cat)
-        keywords = L[0].get_keywords()
-        not_specified = tr('Not specified')
-        if 'title' in keywords:
-            title = keywords['title']
-        else:
-            title = not_specified
-
-        if 'source' in keywords:
-            source = keywords['source']
-        else:
-            source = not_specified
-
-        F.keywords['%s_title' % cat] = title
-        F.keywords['%s_source' % cat] = source
-
-    F.keywords['elapsed_time'] = elapsed_time_sec
-    F.keywords['time_stamp'] = time_stamp[:19]  # remove decimal part
-    F.keywords['host_name'] = host_name
-    F.keywords['user'] = user
-
-    msg = 'Impact function %s returned None' % str(impact_function)
-    verify(F is not None, msg)
-
-    # Write result and return filename
-    if F.is_raster:
-        extension = '.tif'
-        # use default style for raster
-    else:
-        extension = '.shp'
-        # use default style for vector
-
-    output_filename = unique_filename(suffix=extension)
-
-    F.filename = output_filename
-    F.write_to_file(output_filename)
-
-    # Establish default name (layer1 X layer1 x impact_function)
-    if not F.get_name():
-        default_name = ''
-        for layer in layers:
-            default_name += layer.name + ' X '
-
-        if hasattr(impact_function, 'plugin_name'):
-            default_name += impact_function.plugin_name
-        else:
-            # Strip trailing 'X'
-            default_name = default_name[:-2]
-
-        F.set_name(default_name)
-
-    # FIXME (Ole): If we need to save style as defined by the impact_function
-    # this is the place
-
-    # Return layer object
-    return F
 
 
 def check_data_integrity(layer_objects):
@@ -256,6 +131,165 @@ def check_data_integrity(layer_objects):
                                             refname, N))
             verify(layer.columns == N, msg)
 
+
+def calculate_impact(layers,
+                     impact_function,
+                     extent=None,
+                     check_integrity=True):
+    """Calculate impact levels as a function of list of input layers
+
+    :param layers: List of Raster and Vector layer objects to be used for
+        analysis.
+    :type layers: list
+
+    :param impact_function: An instance of impact function.
+    :type impact_function: safe.impact_function.base.ImpactFunction
+
+    :param extent: List of [xmin, ymin, xmax, ymax] the coordinates of the
+        bounding box.
+    :type extent: list
+
+    :param check_integrity: If true, perform checking of input data integrity
+    :type check_integrity: bool
+
+    Output
+        filename of resulting impact layer (GML). Comment is embedded as
+        metadata. Filename is generated from input data and date.
+
+    Note
+        The admissible file types are tif and asc/prj for raster and
+        gml or shp for vector data
+
+    Assumptions
+        1. All layers are in WGS84 geographic coordinates
+        2. Layers are equipped with metadata such as names and categories
+    """
+
+    LOGGER.debug(
+        'calculate_impact called with:\nLayers: %s\nFunction:%s' % (
+            layers, impact_function))
+
+    # Input checks
+    if check_integrity:
+        check_data_integrity(layers)
+
+    # Set extent if it is provided
+    if extent is not None:
+        impact_function.requested_extent = extent
+
+    # Start time
+    start_time = datetime.now()
+
+    # Pass input layers to plugin
+    F = impact_function.run(layers)
+
+    # End time
+    end_time = datetime.now()
+
+    # Elapsed time
+    elapsed_time = end_time - start_time
+    # Don's use this - see https://github.com/AIFDR/inasafe/issues/394
+    # elapsed_time_sec = elapsed_time.total_seconds()
+    elapsed_time_sec = elapsed_time.seconds + (elapsed_time.days * 24 * 3600)
+
+    # Eet current time stamp
+    # Need to change : to _ because : is forbidden in keywords
+    time_stamp = end_time.isoformat('_')
+
+    # Get user
+    user = getpass.getuser().replace(' ', '_')
+
+    # Get host
+    host_name = gethostname()
+
+    # Get input layer sources
+    # NOTE: We assume here that there is only one of each
+    #       If there are more only the first one is used
+    for cat in ['hazard', 'exposure']:
+        L = extract_layers(layers, 'category', cat)
+        keywords = L[0].get_keywords()
+        not_specified = tr('Not specified')
+        if 'title' in keywords:
+            title = keywords['title']
+        else:
+            title = not_specified
+
+        if 'source' in keywords:
+            source = keywords['source']
+        else:
+            source = not_specified
+
+        if 'subcategory' in keywords:
+            subcategory = keywords['subcategory']
+        else:
+            subcategory = not_specified
+
+        F.keywords['%s_title' % cat] = title
+        F.keywords['%s_source' % cat] = source
+        F.keywords['%s_subcategory' % cat] = subcategory
+
+    F.keywords['elapsed_time'] = elapsed_time_sec
+    F.keywords['time_stamp'] = time_stamp[:19]  # remove decimal part
+    F.keywords['host_name'] = host_name
+    F.keywords['user'] = user
+
+    msg = 'Impact function %s returned None' % str(impact_function)
+    verify(F is not None, msg)
+
+    # Set the filename : issue #1648
+    # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS.EXT
+    # FloodOnBuildings_12March2015_10h22.04.shp
+    exp = F.keywords['exposure_subcategory'].title()
+    haz = F.keywords['hazard_subcategory'].title()
+    date = end_time.strftime('%d%B%Y').decode('utf8')
+    time = end_time.strftime('%Hh%M.%S').decode('utf8')
+    prefix = u'%sOn%s_%s_%s-' % (haz, exp, date, time)
+    prefix = replace_accentuated_characters(prefix)
+
+    # Write result and return filename
+    if F.is_raster:
+        extension = '.tif'
+        # use default style for raster
+    else:
+        extension = '.shp'
+        # use default style for vector
+
+    # Check if user directory is specified
+    settings = QSettings()
+    default_user_directory = settings.value(
+        'inasafe/defaultUserDirectory', defaultValue='')
+
+    if default_user_directory:
+        output_filename = unique_filename(
+            dir=default_user_directory,
+            prefix=prefix,
+            suffix=extension)
+    else:
+        output_filename = unique_filename(
+            prefix=prefix, suffix=extension)
+
+    F.filename = output_filename
+    F.write_to_file(output_filename)
+
+    # Establish default name (layer1 X layer1 x impact_function)
+    if not F.get_name():
+        default_name = ''
+        for layer in layers:
+            default_name += layer.name + ' X '
+
+        if hasattr(impact_function, 'plugin_name'):
+            default_name += impact_function.plugin_name
+        else:
+            # Strip trailing 'X'
+            default_name = default_name[:-2]
+
+        F.set_name(default_name)
+
+    # FIXME (Ole): If we need to save style as defined by the impact_function
+    # this is the place
+
+    # Return layer object
+    return F
 # FIXME (Ole): This needs to be rewritten as it
 # directly depends on ows metadata. See issue #54
 # def get_linked_layers(main_layers):

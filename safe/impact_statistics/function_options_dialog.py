@@ -20,14 +20,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import ast
 from collections import OrderedDict
-
+import logging
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QGroupBox,
@@ -35,14 +33,12 @@ from PyQt4.QtGui import (
     QDialog,
     QLabel,
     QCheckBox,
-    QFormLayout,
-    QGridLayout,
-    QWidget)
+    QWidget,
+    QScrollArea,
+    QVBoxLayout)
 
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
-from safe.postprocessors.postprocessor_factory import (
-    get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe.common.resource_parameter import ResourceParameter
@@ -54,6 +50,7 @@ except AttributeError:
     def _fromUtf8(text):
         return text
 
+LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('function_options_dialog_base.ui')
 
 
@@ -114,7 +111,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         :param parameters: Parameters to be edited
         """
-
         for key, value in parameters.items():
             if key == 'postprocessors':
                 self.build_post_processor_form(value)
@@ -122,9 +118,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
                 self.build_minimum_needs_form(value)
             else:
                 self.values[key] = self.build_widget(
-                    self.configLayout,
-                    key,
-                    value)
+                    self.configLayout, key, value)
 
     def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab.
@@ -133,73 +127,64 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         :type parameters: list
         """
         # create minimum needs tab
+        scroll_layout = QVBoxLayout()
+        scroll_widget = QWidget()
+        scroll_widget.setLayout(scroll_layout)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(scroll_widget)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(scroll)
+
         tab = QWidget()
-        form_layout = QGridLayout(tab)
-        form_layout.setContentsMargins(0, 0, 0, 0)
+        tab.setLayout(main_layout)
+
         extra_parameters = [(ResourceParameter, ResourceParameterWidget)]
         parameter_container = ParameterContainer(parameters, extra_parameters)
-        form_layout.addWidget(parameter_container)
+        scroll_layout.addWidget(parameter_container)
+
         self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
         self.values['minimum needs'] = parameter_container.get_parameters
 
-    def build_post_processor_form(self, parameters):
+        scroll_layout.addStretch()
+
+    def build_post_processor_form(self, form_elements):
         """Build Post Processor Tab.
 
-        :param parameters: A Dictionary containing element of form
-        :type parameters: dict
+        :param form_elements: A Dictionary containing element of form.
+        :type form_elements: dict
         """
-        # create postprocessors tab
-        tab = QWidget()
-        form_layout = QFormLayout(tab)
-        form_layout.setLabelAlignment(Qt.AlignLeft)
-        self.tabWidget.addTab(tab, self.tr('Postprocessors'))
+        scroll_layout = QVBoxLayout()
+        scroll_widget = QWidget()
+        scroll_widget.setLayout(scroll_layout)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(scroll_widget)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(scroll)
+        main_widget = QWidget()
+        main_widget.setLayout(main_layout)
+
+        self.tabWidget.addTab(main_widget, self.tr('Postprocessors'))
         self.tabWidget.tabBar().setVisible(True)
 
-        # create element for the tab
+        # create elements for the tab
         values = OrderedDict()
-        for label, options in parameters.items():
-            input_values = OrderedDict()
-
-            # NOTE (gigih) : 'params' is assumed as dictionary
-            if 'params' in options:
-                group_box = QGroupBox()
-                group_box.setCheckable(True)
-                group_box.setTitle(get_postprocessor_human_name(label))
-
-                # NOTE (gigih): is 'on' always exist??
-                # (MB) should always be there
-                group_box.setChecked(options.get('on'))
-                input_values['on'] = self.bind(group_box, 'checked', bool)
-
-                layout = QFormLayout(group_box)
-                group_box.setLayout(layout)
-
-                # create widget element from 'params'
-                input_values['params'] = OrderedDict()
-                for key, value in options['params'].items():
-                    input_values['params'][key] = self.build_widget(
-                        layout, key, value)
-
-                form_layout.addRow(group_box, None)
-
-            elif 'on' in options:
-                checkbox = QCheckBox()
-                checkbox.setText(get_postprocessor_human_name(label))
-                checkbox.setChecked(options['on'])
-
-                input_values['on'] = self.bind(checkbox, 'checked', bool)
-                form_layout.addRow(checkbox, None)
-            else:
-                raise NotImplementedError('This case is not handled for now')
-
+        for label, parameters in form_elements.items():
+            parameter_container = ParameterContainer(parameters)
+            scroll_layout.addWidget(parameter_container)
+            input_values = parameter_container.get_parameters
             values[label] = input_values
 
         self.values['postprocessors'] = values
+        # spacer needs to be added last
+        scroll_layout.addStretch()
 
     def build_widget(self, form_layout, name, key_value):
-        """Create a new form element dynamically based from theValue type.
-        The element will be inserted to theFormLayout.
+        """Create a new form element dynamically based from key_value type.
+
+        The element will be inserted to form_layout.
 
         :param form_layout: Mandatory a layout instance
         :type form_layout: QFormLayout
@@ -216,7 +201,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         :raises: None
         """
-
         # create label
         if isinstance(name, str):
             label = QLabel()

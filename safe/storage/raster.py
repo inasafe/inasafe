@@ -28,6 +28,7 @@ from utilities import write_keywords
 from utilities import (geotransform_to_bbox, geotransform_to_resolution,
                        check_geotransform)
 from utilities import safe_to_qgis_layer
+from safe.utilities.unicode import get_string
 
 
 class Raster(Layer):
@@ -288,7 +289,7 @@ class Raster(Layer):
         #              precision even though Float64 is specified
         #              - see issue #17
         driver = gdal.GetDriverByName(file_format)
-        fid = driver.Create(filename, M, N, 1, gdal.GDT_Float64)
+        fid = driver.Create(get_string(filename), M, N, 1, gdal.GDT_Float64)
         if fid is None:
             msg = ('Gdal could not create filename %s using '
                    'format %s' % (filename, file_format))

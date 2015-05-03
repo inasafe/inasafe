@@ -34,6 +34,7 @@ from PyQt4.QtCore import (
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox, QWidget
 
+from safe.common.version import release_status
 from safe.common.exceptions import (
     TranslationLoadError,
     NoKeywordsFoundError,
@@ -42,7 +43,7 @@ from safe.common.exceptions import (
 from safe.utilities.resources import resources_path
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import is_raster_layer
-
+from safe.impact_functions import register_impact_functions
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -66,7 +67,8 @@ class Plugin(object):
             plugin.
         :type iface: QGisAppInterface
         """
-
+        # Register all the impact functions
+        register_impact_functions()
         # Save reference to the QGIS interface
         self.iface = iface
         self.dock_widget = None
@@ -102,7 +104,7 @@ class Plugin(object):
         Override the system locale  and then see if we can get a valid
         translation file for whatever locale is effectively being used.
 
-        :param new_locale: the new locale i.e. 'id', 'af', etc.
+        :param new_locale: The new locale i.e. 'id', 'af', etc.
         :type new_locale: str
 
         :raises: TranslationLoadException
@@ -162,26 +164,8 @@ class Plugin(object):
         if add_to_toolbar:
             self.toolbar.addAction(action)
 
-    # noinspection PyPep8Naming
-    def initGui(self):
-        """Gui initialisation procedure (for QGIS plugin api).
-
-        .. note:: Don't change the name of this method from initGui!
-
-        This method is called by QGIS and should be used to set up
-        any graphical user interface elements that should appear in QGIS by
-        default (i.e. before the user performs any explicit action with the
-        plugin).
-        """
-        self.toolbar = self.iface.addToolBar('InaSAFE')
-        self.toolbar.setObjectName('InaSAFEToolBar')
-        # Import dock here as it needs to be imported AFTER i18n is set up
-        from safe.gui.widgets.dock import Dock
-
-        self.dock_widget = None
-        # --------------------------------------
-        # Create action for plugin dockable window (show/hide)
-        # --------------------------------------
+    def _create_dock_toggle_action(self):
+        """Create action for plugin dockable window (show/hide)."""
         # pylint: disable=W0201
         icon = resources_path('img', 'icons', 'icon.svg')
         self.action_dock = QAction(
@@ -197,9 +181,8 @@ class Plugin(object):
         self.action_dock.triggered.connect(self.toggle_dock_visibility)
         self.add_action(self.action_dock)
 
-        # --------------------------------------
-        # Create action for keywords editor
-        # --------------------------------------
+    def _create_keywords_action(self):
+        """Create action for keywords editor."""
         icon = resources_path('img', 'icons', 'show-keyword-editor.svg')
         self.action_keywords_dialog = QAction(
             QIcon(icon),
@@ -210,16 +193,13 @@ class Plugin(object):
         self.action_keywords_dialog.setWhatsThis(self.tr(
             'Open InaSAFE keywords editor'))
         self.action_keywords_dialog.setEnabled(False)
-
         self.action_keywords_dialog.triggered.connect(
             self.show_keywords_editor)
-
         self.add_action(
             self.action_keywords_dialog, add_to_toolbar=self.full_toolbar)
 
-        # --------------------------------------
-        # Create action for keywords creation wizard
-        # -------------------------------------
+    def _create_keywords_wizard_action(self):
+        """Create action for keywords creation wizard."""
         icon = resources_path('img', 'icons', 'show-keyword-wizard.svg')
         self.action_keywords_wizard = QAction(
             QIcon(icon),
@@ -230,15 +210,12 @@ class Plugin(object):
         self.action_keywords_wizard.setWhatsThis(self.tr(
             'Open InaSAFE keywords creation wizard'))
         self.action_keywords_wizard.setEnabled(False)
-
         self.action_keywords_wizard.triggered.connect(
             self.show_keywords_wizard)
-
         self.add_action(self.action_keywords_wizard)
 
-        # --------------------------------------
-        # Create action for IF-centric wizard
-        # --------------------------------------
+    def _create_analysis_wizard_action(self):
+        """Create action for IF-centric wizard."""
         icon = resources_path('img', 'icons', 'show-wizard.svg')
         self.action_function_centric_wizard = QAction(
             QIcon(icon),
@@ -249,15 +226,12 @@ class Plugin(object):
         self.action_function_centric_wizard.setWhatsThis(self.tr(
             'Open InaSAFE impact function centric wizard'))
         self.action_function_centric_wizard.setEnabled(True)
-
         self.action_function_centric_wizard.triggered.connect(
             self.show_function_centric_wizard)
-
         self.add_action(self.action_function_centric_wizard)
 
-        # --------------------------------------
-        # Create action for options dialog
-        # --------------------------------------
+    def _create_options_dialog_action(self):
+        """Create action for options dialog."""
         icon = resources_path('img', 'icons', 'configure-inasafe.svg')
         self.action_options = QAction(
             QIcon(icon),
@@ -267,11 +241,10 @@ class Plugin(object):
         self.action_options.setWhatsThis(self.tr(
             'Open InaSAFE options dialog'))
         self.action_options.triggered.connect(self.show_options)
-
         self.add_action(self.action_options, add_to_toolbar=self.full_toolbar)
-        # ---------------------------------------
-        # Create action for minimum needs dialog
-        # ---------------------------------------
+
+    def _create_minimum_needs_action(self):
+        """Create action for minimum needs dialog."""
         icon = resources_path('img', 'icons', 'show-minimum-needs.svg')
         self.action_minimum_needs = QAction(
             QIcon(icon),
@@ -281,13 +254,11 @@ class Plugin(object):
         self.action_minimum_needs.setWhatsThis(self.tr(
             'Open InaSAFE minimum needs tool'))
         self.action_minimum_needs.triggered.connect(self.show_minimum_needs)
-
         self.add_action(
             self.action_minimum_needs, add_to_toolbar=self.full_toolbar)
 
-        # ----------------------------------------------
-        # Create action for global minimum needs dialog
-        # ----------------------------------------------
+    def _create_minimum_needs_options_action(self):
+        """Create action for global minimum needs dialog."""
         icon = resources_path('img', 'icons', 'show-global-minimum-needs.svg')
         self.action_global_minimum_needs = QAction(
             QIcon(icon),
@@ -299,13 +270,11 @@ class Plugin(object):
             'Open InaSAFE global minimum needs configuration'))
         self.action_global_minimum_needs.triggered.connect(
             self.show_global_minimum_needs_configuration)
-
         self.add_action(
             self.action_global_minimum_needs, add_to_toolbar=self.full_toolbar)
 
-        # ---------------------------------------
-        # Create action for converter dialog
-        # ---------------------------------------
+    def _create_shakemap_converter_action(self):
+        """Create action for converter dialog."""
         icon = resources_path('img', 'icons', 'show-converter-tool.svg')
         self.action_shake_converter = QAction(
             QIcon(icon),
@@ -316,13 +285,11 @@ class Plugin(object):
             'Open InaSAFE Converter'))
         self.action_shake_converter.triggered.connect(
             self.show_shakemap_importer)
-
         self.add_action(
             self.action_shake_converter, add_to_toolbar=self.full_toolbar)
 
-        # ---------------------------------------
-        # Create action for batch runner dialog
-        # ---------------------------------------
+    def _create_batch_runner_action(self):
+        """Create action for batch runner dialog."""
         icon = resources_path('img', 'icons', 'show-batch-runner.svg')
         self.action_batch_runner = QAction(
             QIcon(icon),
@@ -332,18 +299,15 @@ class Plugin(object):
         self.action_batch_runner.setWhatsThis(self.tr(
             'Open InaSAFE Batch Runner'))
         self.action_batch_runner.triggered.connect(self.show_batch_runner)
-
         self.add_action(
             self.action_batch_runner, add_to_toolbar=self.full_toolbar)
 
-        # ---------------------------------------
-        # Create action for save scenario dialog
-        # ---------------------------------------
+    def _create_save_scenario_action(self):
+        """Create action for save scenario dialog."""
         icon = resources_path('img', 'icons', 'save-as-scenario.svg')
         self.action_save_scenario = QAction(
             QIcon(icon),
-            self.tr('Save current scenario'), self.iface.mainWindow())
-
+            self.tr('Save Current Scenario'), self.iface.mainWindow())
         message = self.tr('Save current scenario to text file')
         self.action_save_scenario.setStatusTip(message)
         self.action_save_scenario.setWhatsThis(message)
@@ -352,9 +316,8 @@ class Plugin(object):
         self.add_action(
             self.action_save_scenario, add_to_toolbar=self.full_toolbar)
 
-        # --------------------------------------
-        # Create action for import OSM Dialog
-        # --------------------------------------
+    def _create_osm_downloader_action(self):
+        """Create action for import OSM Dialog."""
         icon = resources_path('img', 'icons', 'show-osm-download.svg')
         self.action_import_dialog = QAction(
             QIcon(icon),
@@ -365,12 +328,10 @@ class Plugin(object):
         self.action_import_dialog.setWhatsThis(self.tr(
             'InaSAFE OpenStreetMap Downloader'))
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
-
         self.add_action(self.action_import_dialog)
 
-        # --------------------------------------
-        # Create action for impact layer merge Dialog
-        # --------------------------------------
+    def _create_impact_merge_action(self):
+        """Create action for impact layer merge Dialog."""
         icon = resources_path('img', 'icons', 'show-impact-merge.svg')
         self.action_impact_merge_dlg = QAction(
             QIcon(icon),
@@ -381,42 +342,15 @@ class Plugin(object):
         self.action_impact_merge_dlg.setWhatsThis(self.tr(
             'InaSAFE Impact Layer Merge'))
         self.action_impact_merge_dlg.triggered.connect(self.show_impact_merge)
-
         self.add_action(
             self.action_impact_merge_dlg, add_to_toolbar=self.full_toolbar)
 
-        # --------------------------------------
-        # create dockwidget and tabify it with the legend
-        # --------------------------------------
-
-        self.dock_widget = Dock(self.iface)
-        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock_widget)
-        myLegendTab = self.iface.mainWindow().findChild(QApplication, 'Legend')
-
-        if myLegendTab:
-            self.iface.mainWindow().tabifyDockWidget(
-                myLegendTab, self.dock_widget)
-            self.dock_widget.raise_()
-
-        #
-        # Hook up a slot for when the dock is hidden using its close button
-        # or  view-panels
-        #
-        self.dock_widget.visibilityChanged.connect(self.toggle_inasafe_action)
-        # Also deal with the fact that on start of QGIS dock may already be
-        # hidden.
-        self.action_dock.setChecked(self.dock_widget.isVisible())
-
-        # pylint: disable=W0201
-
-        # ---------------------------------------
-        # Create action for toggling rubber bands
-        # ---------------------------------------
+    def _create_rubber_bands_action(self):
+        """Create action for toggling rubber bands."""
         icon = resources_path('img', 'icons', 'toggle-rubber-bands.svg')
         self.action_toggle_rubberbands = QAction(
             QIcon(icon),
-            self.tr('Toggle scenario outlines'), self.iface.mainWindow())
-
+            self.tr('Toggle Scenario Outlines'), self.iface.mainWindow())
         message = self.tr('Toggle rubber bands showing scenarion extents.')
         self.action_toggle_rubberbands.setStatusTip(message)
         self.action_toggle_rubberbands.setWhatsThis(message)
@@ -431,13 +365,12 @@ class Plugin(object):
             self.dock_widget.toggle_rubber_bands)
         self.add_action(self.action_toggle_rubberbands)
 
-        # ---------------------------------------
-        # Create action for analysis extent dialog
-        # ---------------------------------------
+    def _create_analysis_extent_action(self):
+        """Create action for analysis extent dialog."""
         icon = resources_path('img', 'icons', 'set-extents-tool.svg')
         self.action_extent_selector = QAction(
             QIcon(icon),
-            self.tr('Set the analysis area for InaSAFE'),
+            self.tr('Set InaSAFE Analysis Area'),
             self.iface.mainWindow())
         self.action_extent_selector.setStatusTip(self.tr(
             'Set the analysis area for InaSAFE'))
@@ -445,16 +378,93 @@ class Plugin(object):
             'Set the analysis area for InaSAFE'))
         self.action_extent_selector.triggered.connect(
             self.show_extent_selector)
-
         self.add_action(self.action_extent_selector)
 
-    # noinspection PyMethodMayBeStatic
+    def _create_test_layers_action(self):
+        """Create action for adding layers (developer mode, non final only)."""
+        final_release = release_status() == 'final'
+        settings = QSettings()
+        self.developer_mode = settings.value(
+            'inasafe/developer_mode', False, type=bool)
+        if not final_release and self.developer_mode:
+            icon = resources_path('img', 'icons', 'add-test-layers.svg')
+            self.action_add_layers = QAction(
+                QIcon(icon),
+                self.tr('Add Some Test Layers'),
+                self.iface.mainWindow())
+            self.action_add_layers.setStatusTip(self.tr(
+                'Add some test layers'))
+            self.action_add_layers.setWhatsThis(self.tr(
+                'Add some test layers'))
+            self.action_add_layers.triggered.connect(
+                self.add_test_layers)
+
+            self.add_action(self.action_add_layers)
+
+    def _create_dock(self):
+        """Create dockwidget and tabify it with the legend."""
+        # Import dock here as it needs to be imported AFTER i18n is set up
+        from safe.gui.widgets.dock import Dock
+        self.dock_widget = Dock(self.iface)
+        self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock_widget)
+        legend_tab = self.iface.mainWindow().findChild(QApplication, 'Legend')
+        if legend_tab:
+            self.iface.mainWindow().tabifyDockWidget(
+                legend_tab, self.dock_widget)
+            self.dock_widget.raise_()
+
+    def initGui(self):
+        """Gui initialisation procedure (for QGIS plugin api).
+
+        .. note:: Don't change the name of this method from initGui!
+
+        This method is called by QGIS and should be used to set up
+        any graphical user interface elements that should appear in QGIS by
+        default (i.e. before the user performs any explicit action with the
+        plugin).
+        """
+        self.toolbar = self.iface.addToolBar('InaSAFE')
+        self.toolbar.setObjectName('InaSAFEToolBar')
+
+        self.dock_widget = None
+        # Now create the actual dock
+        self._create_dock()
+        # And all the menu actions
+        # Configuration Group
+        self._create_options_dialog_action()
+        self._create_minimum_needs_options_action()
+        self._create_analysis_extent_action()
+        self._create_dock_toggle_action()
+        self._create_rubber_bands_action()
+        # TODO: add menu separator - Wizards
+        self._create_keywords_wizard_action()
+        self._create_analysis_wizard_action()
+        # TODO: add menu separator - Data
+        self._create_osm_downloader_action()
+        self._create_shakemap_converter_action()
+        self._create_minimum_needs_action()
+        self._create_test_layers_action()
+        # TODO: add menu separator - Analysis
+        self._create_batch_runner_action()
+        self._create_impact_merge_action()
+        self._create_save_scenario_action()
+        # TODO: This action (and related code) will be deprecated
+        # keywords dialog to be replaced by keywords wizard
+        self._create_keywords_action()
+
+        # Hook up a slot for when the dock is hidden using its close button
+        # or  view-panels
+        #
+        self.dock_widget.visibilityChanged.connect(self.toggle_inasafe_action)
+        # Also deal with the fact that on start of QGIS dock may already be
+        # hidden.
+        self.action_dock.setChecked(self.dock_widget.isVisible())
+
     def clear_modules(self):
         """Unload inasafe functions and try to return QGIS to before InaSAFE.
-        """
-        from safe.impact_functions import core
 
-        core.unload_plugins()
+        .. todo:: I think this function can be removed. TS.
+        """
         # next lets force remove any inasafe related modules
         modules = []
         for module in sys.modules:
@@ -525,6 +535,11 @@ class Plugin(object):
             self.dock_widget.setVisible(True)
             self.dock_widget.raise_()
 
+    def add_test_layers(self):
+        """Add standard test layers."""
+        from safe.test.utilities import load_standard_layers
+        load_standard_layers()
+
     def show_extent_selector(self):
         """Show the extent selector widget for defining analysis extents."""
         # import here only so that it is AFTER i18n set up
@@ -558,7 +573,9 @@ class Plugin(object):
         from safe.gui.tools.minimum_needs.needs_manager_dialog import (
             NeedsManagerDialog)
 
-        dialog = NeedsManagerDialog(self.iface.mainWindow())
+        dialog = NeedsManagerDialog(
+            parent=self.iface.mainWindow(),
+            dock=self.dock_widget)
         dialog.exec_()  # modal
 
     def show_impact_merge(self):
@@ -669,7 +686,7 @@ class Plugin(object):
         from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
 
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
-        dialog.exec_()  # modal
+        dialog.show()  # non modal
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""

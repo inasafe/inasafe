@@ -24,6 +24,7 @@ __copyright__ = '(C) 2010, Giuseppe Sucameli'
 __revision__ = '$Format:%H$'
 
 import logging
+import sqlite3
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
@@ -39,6 +40,7 @@ from qgis.core import (
     QgsPoint,
     QgsRectangle,
     QgsCoordinateReferenceSystem,
+    QgsApplication,
     QgsCoordinateTransform)
 
 from safe import messaging as m
@@ -118,8 +120,8 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         # Make sure to reshow this dialog when rectangle is captured
         self.tool.rectangle_created.connect(self.stop_capture)
         # Setup ok button
-        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
-        ok_button.clicked.connect(self.accept)
+        self.ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
+        self.ok_button.clicked.connect(self.accept)
         # Set up context help
         self.help_context = 'user_extents'
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -128,6 +130,11 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         clear_button = self.button_box.button(QtGui.QDialogButtonBox.Reset)
         clear_button.setText(self.tr('Clear'))
         clear_button.clicked.connect(self.clear)
+
+        # Populate the bookmarks list and connect the combobox
+        self._populate_bookmarks_list()
+        self.comboBox_bookmarks_list.currentIndexChanged.connect(
+            self.bookmarks_index_changed)
 
     def show_help(self):
         """Load the help text for the dialog."""
@@ -151,6 +158,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             'on map\' button - which will temporarily hide this window and '
             'allow you to drag a rectangle on the map. After you have '
             'finished dragging the rectangle, this window will reappear. '
+            'You can also use one of your bookmarks to set the region. '
             'If you enable the \'Toggle scenario outlines\' tool on the '
             'InaSAFE toolbar, your user defined extent will be shown on '
             'the map as a blue rectangle. Please note that when running '
@@ -274,3 +282,71 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             self.x_maximum.clear()
             self.y_maximum.clear()
         self.blockSignals(False)
+
+    def bookmarks_index_changed(self):
+        """Update the UI when the bookmarks combobox has changed.
+        """
+        index = self.comboBox_bookmarks_list.currentIndex()
+        if index >= 0:
+            self.tool.reset()
+            rectangle = self.comboBox_bookmarks_list.itemData(index)
+            self.tool.set_rectangle(rectangle)
+            self.canvas.setExtent(rectangle)
+            self.ok_button.setEnabled(True)
+        else:
+            self.ok_button.setDisabled(True)
+
+    def on_checkBox_use_bookmark_toggled(self, use_bookmark):
+        """Update the UI when the user toggles the bookmarks checkbox.
+
+        :param use_bookmark: The status of the checkbox.
+        :type use_bookmark: bool
+        """
+        if use_bookmark:
+            self.bookmarks_index_changed()
+            self.groupBox_coordinates.setDisabled(True)
+        else:
+            self.groupBox_coordinates.setEnabled(True)
+            self.ok_button.setEnabled(True)
+        self._populate_coordinates()
+
+    def _populate_bookmarks_list(self):
+        """Read the sqlite database and populate the bookmarks list.
+
+        Every bookmark are reprojected to mapcanvas crs.
+        """
+
+        # Connect to the QGIS sqlite database and check if the table exists.
+        db_file_path = QgsApplication.qgisUserDbFilePath()
+        db = sqlite3.connect(db_file_path)
+        cursor = db.cursor()
+        cursor.execute(
+            'SELECT COUNT(*) '
+            'FROM sqlite_master '
+            'WHERE type=\'table\' '
+            'AND name=\'tbl_bookmarks\';')
+
+        number_of_rows = cursor.fetchone()[0]
+        if number_of_rows > 0:
+            cursor.execute(
+                'SELECT * '
+                'FROM tbl_bookmarks;')
+            bookmarks = cursor.fetchall()
+
+            canvas_srid = self.canvas.mapRenderer().destinationCrs().srsid()
+
+            for bookmark in bookmarks:
+                name = bookmark[1]
+                srid = bookmark[7]
+                rectangle = QgsRectangle(
+                    bookmark[3], bookmark[4], bookmark[5], bookmark[6])
+
+                if srid != canvas_srid:
+                    transform = QgsCoordinateTransform(
+                        srid, canvas_srid)
+                    rectangle = transform.transform(rectangle)
+
+                if rectangle.isEmpty():
+                    pass
+
+                self.comboBox_bookmarks_list.addItem(name, rectangle)

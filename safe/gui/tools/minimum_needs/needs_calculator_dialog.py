@@ -164,7 +164,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         found_flag = False
         for layer in layers:
             name = layer.name()
-            source = str(layer.id())
+            source = layer.id()
             # check if layer is a vector polygon layer
             if is_polygon_layer(layer) or is_point_layer(layer):
                 found_flag = True
@@ -204,12 +204,12 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         # noinspection PyArgumentList
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
 
-        file_name = str(layer.source())
+        file_name = layer.source()
 
         input_layer = safe_read_layer(file_name)
 
         try:
-            output_layer = self.minimum_needs(input_layer, str(field_name))
+            output_layer = self.minimum_needs(input_layer, field_name)
         except ValueError:
             return
 

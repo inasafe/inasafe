@@ -59,7 +59,7 @@ from PyQt4.QtCore import (
 # noinspection PyPackageRequirements
 from PyQt4.QtXml import QDomDocument
 
-from safe.impact_functions.core import get_plugins as safe_get_plugins
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import read_layer as safe_read_layer
 from safe.engine.core import calculate_impact as safe_calculate_impact
 from safe.test.utilities import get_qgis_app
@@ -1043,7 +1043,7 @@ class ShakeEvent(QObject):
         layers = [clipped_hazard_layer, clipped_exposure_layer]
 
         function_id = 'ITBFatalityFunction'
-        function = safe_get_plugins(function_id)[0][function_id]
+        function = ImpactFunctionManager().get(function_id)
 
         result = safe_calculate_impact(layers, function)
         try:

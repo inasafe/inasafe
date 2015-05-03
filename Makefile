@@ -173,7 +173,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh 99073e03a63f9c67cd84016ffb88d43281d97545 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 031389d381dc774d25fdb3fa47e5920a384cd53f 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -285,12 +285,23 @@ indent:
 	python /usr/share/doc/python2.7/examples/Tools/scripts/reindent.py *.py
 
 
+##########################################################
+#
+# Make targets specific to Docker go below this point
+#
+##########################################################
 
-##########################################################
-#
-# Make targets specific to Jenkins go below this point
-#
-##########################################################
+docker-run-tests:
+    # The image is hosted in docker hub at
+    # https://registry.hub.docker.com/u/inasafe/inasafe-test-runner/
+	docker pull inasafe/inasafe-test-runner
+	#docker rm inasafe-test-runner
+	docker run -i -t --rm --name="inasafe-tests" \
+		-v /Users/timlinux/dev/python/inasafe_data/:/inasafe_data \
+		-v /Users/timlinux/dev/python/inasafe:/inasafe \
+		inasafe/inasafe-test-runner \
+		/bin/bash
+
 
 docker-test: testdata clean
 	@echo
@@ -298,7 +309,15 @@ docker-test: testdata clean
 	@echo "Regression Test Suite for running in docker"
 	@echo " against QGIS 2.x"
 	@echo "----------------------------------"
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe
+	@PYTHONPATH=`pwd`:$(PYTHONPATH) xvfb-run \
+		--server-args="-screen 0, 1024x768x24" \
+		nosetests \
+		-v \
+		--with-id \
+		--with-xcoverage \
+		--with-xunit \
+		--verbose \
+		--cover-package=safe safe
 
 
 ##########################################################

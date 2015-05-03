@@ -1,36 +1,30 @@
-979,000*
-Rice [kg] 2,741,200
-Drinking Water [l] 17,132,500
-Clean Water [l] 65,593,000
-Family Kits 195,800
-Toilets 48,950
-Total population: 10,474,000
+100*
+Rice [kg] 280
+Drinking Water [l] 1,750
+Clean Water [l] 6,700
+Family Kits 20
+Toilets 5
+Total population: 200
 People need evacuation if flood levels exceed 1.0 m
 Minimum needs are defined in BNPB regulation 7/2008
 All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.
+All affected people are assumed to be evacuated.
 Hazard details
-A flood in Jakarta like in 2007 - sourced from HKV
+Continuous Flood - sourced from Akbar Gumbira
 Exposure details
-People - sourced from Center for International Earth Science Information Network (CIESIN)
-Detailed gender report
-Kab_name Total Female count (affected) Weekly hygiene packs Additional weekly
-rice kg for pregnant and lactating women
-JAKARTA UTARA 344,468 172,234 136,702 16,049
-JAKARTA BARAT 278,763 139,381 110,627 12,988
-JAKARTA TIMUR 253,961 126,981 100,785 11,833
-JAKARTA PUSAT 66,693 33,347 26,467 3,107
-JAKARTA SELATAN 30,847 15,424 12,242 1,437
-Detailed age report
+Population - sourced from Not specified
+Detailed gender report (affected people)
+Kab_name Total Female count (affected) Weekly hygiene packs Additional weekly rice kg for pregnant and lactating women
+JAKARTA PúSAT 93 46 37 4
+JAKARTA BARAT 7 3 3 0
+Total in aggregation areas 100 49 40 4
+Detailed age report (affected people)
 Kab_name Total Youth count (affected) Adult count (affected) Elderly count (affected)
-JAKARTA UTARA 344,468 90,595 227,004 26,868
-JAKARTA BARAT 278,763 73,315 183,705 21,744
-JAKARTA TIMUR 253,961 66,792 167,361 19,809
-JAKARTA PUSAT 66,693 17,540 43,951 5,202
-JAKARTA SELATAN 30,847 8,113 20,328 2,406
-Detailed minimum needs report
+JAKARTA PúSAT 93 24 61 7
+JAKARTA BARAT 7 2 5 1
+Total in aggregation areas 100 26 66 8
+Detailed minimum needs report (affected people)
 Kab_name Rice [kg] Drinking Water [l] Clean Water [l] Family Kits Toilets
-JAKARTA UTARA 964,510 6,028,190 23,079,356 68,894 17,223
-JAKARTA BARAT 780,536 4,878,353 18,677,121 55,753 13,938
-JAKARTA TIMUR 711,091 4,444,318 17,015,387 50,792 12,698
-JAKARTA PUSAT 186,740 1,167,128 4,468,431 13,339 3,335
-JAKARTA SELATAN 86,372 539,823 2,066,749 6,169 1,542
+JAKARTA PúSAT 260 1,628 6,231 19 5
+JAKARTA BARAT 20 123 469 1 0
+Total in aggregation areas 280 1,751 6,700 20 5

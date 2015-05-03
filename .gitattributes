@@ -1,1 +1,26 @@
 *.py export-subst
+
+# Declare default as text files and have LF line endings
+* text eol=lf
+
+# Declare files that will always have CRLF line endings
+*.bat text eol=crlf
+
+# Declare files that is not a text
+# images:
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.tif binary
+*.gif binary
+*.idraw binary
+*.xcf binary
+*.shx binary
+*.db binary
+*.zip binary
+*.sqlite binary
+
+# fonts:
+*.eot binary
+*.ttf binary
+*.woff binary

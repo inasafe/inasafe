@@ -1,0 +1,6 @@
+category: hazard
+subcategory: flood
+title: Flood Polygon
+field: FLOODPRONE
+value_map: {'dry': ['NO'], 'wet': ['YES']}
+unit: wetdry

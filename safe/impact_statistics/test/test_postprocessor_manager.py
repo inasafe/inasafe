@@ -22,6 +22,7 @@ import logging
 
 from qgis.core import QgsMapLayerRegistry
 
+from safe.impact_functions import register_impact_functions
 from safe.test.utilities import (
     set_canvas_crs,
     set_jakarta_extent,
@@ -62,6 +63,8 @@ class PostprocessorManagerTest(unittest.TestCase):
         DOCK.show_intermediate_layers = False
         set_jakarta_extent()
 
+        register_impact_functions()
+
     def tearDown(self):
         """Run after each test."""
         # Let's use a fresh registry, canvas, and dock for each test!
@@ -78,10 +81,10 @@ class PostprocessorManagerTest(unittest.TestCase):
         # kabupaten_jakarta_singlepart.shp
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function_id='Flood Evacuation Function',
-            aggregation_layer='kabupaten jakarta singlepart')
+            hazard='Continuous Flood',
+            exposure='Population',
+            function_id='FloodEvacuationRasterHazardFunction',
+            aggregation_layer=u"Dístríct's of Jakarta")
         set_jakarta_extent(dock=DOCK)
         assert result, message
 
@@ -126,9 +129,9 @@ class PostprocessorManagerTest(unittest.TestCase):
         # kabupaten_jakarta_singlepart.shp
         result, message = setup_scenario(
             DOCK,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='People',
-            function_id='Flood Evacuation Function')
+            hazard='Continuous Flood',
+            exposure='Population',
+            function_id='FloodEvacuationRasterHazardFunction')
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)

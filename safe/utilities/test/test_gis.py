@@ -4,9 +4,6 @@ import unittest
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import safe.test.sip_api_2  # pylint: disable=unused-import
 from PyQt4.QtCore import QVariant
 
 from safe.utilities.gis import layer_attribute_names, is_polygon_layer
@@ -79,7 +76,7 @@ class TestQGIS(unittest.TestCase):
 
         # Point layer
         layer = clone_shp_layer(
-            name='Marapi',
+            name='volcano_point',
             include_keywords=True,
             source_directory=test_data_path('hazard'))
         message = '%s layer should be polygonal' % layer

@@ -441,7 +441,7 @@ def _clip_raster_layer(
             str(layer.type()))
         raise InvalidParameterError(message)
 
-    working_layer = str(layer.source())
+    working_layer = layer.source()
 
     # Check for existence of keywords file
     base, _ = os.path.splitext(working_layer)
@@ -625,8 +625,7 @@ def adjust_clip_extent(clip_extent, cell_size, layer_extent):
     :type clip_extent: list
 
     :param cell_size: The size of a pixel in geo reference unit in the form
-
-        (res_x, res_y)
+        (res_x, res_y).
     :type cell_size: tuple
 
     :param layer_extent: An array representing the full extents of the layer

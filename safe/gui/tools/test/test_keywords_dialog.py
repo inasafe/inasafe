@@ -26,9 +26,6 @@ from nose import SkipTest
 from qgis.core import (
     QgsRasterLayer,
     QgsMapLayerRegistry)
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import safe.test.sip_api_2  # pylint: disable=unused-import
 from PyQt4 import QtGui
 
 from safe.test.utilities import (
@@ -381,7 +378,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_remove_item_by_value(self):
         """Test remove_item_by_value works."""
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='tsunami_wgs84',
             extension='.tif',
             include_keywords=True,
             source_directory=test_data_path('hazard')
@@ -391,9 +388,10 @@ class KeywordsDialogTest(unittest.TestCase):
 
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'title': 'A tsunami in Padang (Mw 8.8)',
+            'unit': 'metres_depth',
             'subcategory': 'tsunami',
-            'unit': 'm'}
+            'data_type': 'continuous',
+            'title': 'Tsunami'}
         message = 'The keywords should be %s, but it returns %s' % (
             expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)
@@ -401,7 +399,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_get_value_for_key(self):
         """Test get_value_for_key works."""
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='tsunami_wgs84',
             extension='.tif',
             include_keywords=True,
             source_directory=test_data_path('hazard')
@@ -417,7 +415,7 @@ class KeywordsDialogTest(unittest.TestCase):
     def test_load_state_from_keywords(self):
         """Test load_state_from_keywords works."""
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='tsunami_wgs84',
             extension='.tif',
             include_keywords=True,
             source_directory=test_data_path('hazard')
@@ -426,10 +424,11 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog.load_state_from_keywords()
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'title': 'A tsunami in Padang (Mw 8.8)',
             'category': 'hazard',
+            'unit': 'metres_depth',
             'subcategory': 'tsunami',
-            'unit': 'm'}
+            'data_type': 'continuous',
+            'title': 'Tsunami'}
         message = 'The keyword should be %s, but it returns %s' % (
             expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)
@@ -473,16 +472,16 @@ class KeywordsDialogTest(unittest.TestCase):
         # Load existing keywords
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'category': 'postprocessing',
-            'aggregation attribute': 'KAB_NAME',
-            'title': 'District\'s of Jakarta',
-            'elderly ratio attribute': 'Global default',
-            'youth ratio default': '0.263',
-            'elderly ratio default': '0.078',
-            'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'PEREMPUAN',
-            'youth ratio attribute': 'Global default',
-            'adult ratio default': '0.659'}
+            u'category': u'postprocessing',
+            u'aggregation attribute': u'KAB_NAME',
+            u'title': u'D\xedstr\xedct\'s of Jakarta',
+            u'elderly ratio attribute': u'Global default',
+            u'youth ratio default': u'0.26',
+            u'elderly ratio default': u'0.08',
+            u'adult ratio attribute': u'Global default',
+            u'female ratio attribute': u'PEREMPUAN',
+            u'youth ratio attribute': u'Global default',
+            u'adult ratio default': u'0.66'}
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
 
@@ -495,15 +494,15 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog.cboYouthRatioAttribute.setCurrentIndex(1)
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'category': 'postprocessing',
-            'aggregation attribute': 'KAB_NAME',
-            'title': 'District\'s of Jakarta',
-            'elderly ratio attribute': 'Global default',
-            'elderly ratio default': '0.078',
-            'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'PEREMPUAN',
-            'youth ratio attribute': 'Don\'t use',
-            'adult ratio default': '0.659'}
+            u'category': u'postprocessing',
+            u'aggregation attribute': u'KAB_NAME',
+            u'title': u'D\xedstr\xedct\'s of Jakarta',
+            u'elderly ratio attribute': u'Global default',
+            u'elderly ratio default': u'0.08',
+            u'adult ratio attribute': u'Global default',
+            u'female ratio attribute': u'PEREMPUAN',
+            u'youth ratio attribute': u'Don\'t use',
+            u'adult ratio default': u'0.66'}
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
 
@@ -517,16 +516,16 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog.dsbYouthRatioDefault.setValue(0.99)
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'category': 'postprocessing',
-            'aggregation attribute': 'KAB_NAME',
-            'title': 'District\'s of Jakarta',
-            'elderly ratio attribute': 'Global default',
-            'elderly ratio default': '0.078',
-            'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'PEREMPUAN',
-            'youth ratio attribute': 'Global default',
-            'youth ratio default': '0.99',
-            'adult ratio default': '0.659'}
+            u'category': u'postprocessing',
+            u'aggregation attribute': u'KAB_NAME',
+            u'title': u'D\xedstr\xedct\'s of Jakarta',
+            u'elderly ratio attribute': u'Global default',
+            u'elderly ratio default': u'0.08',
+            u'adult ratio attribute': u'Global default',
+            u'female ratio attribute': u'PEREMPUAN',
+            u'youth ratio attribute': u'Global default',
+            u'youth ratio default': u'0.99',
+            u'adult ratio default': u'0.66'}
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
 

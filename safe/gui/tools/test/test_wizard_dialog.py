@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'borysjurgiel.pl'
 __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -21,10 +22,7 @@ import sys
 import os
 import shutil
 
-from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
-# this import required to enable PyQt API v2 - DO NOT REMOVE!
-# noinspection PyUnresolvedReferences
-import safe.test.sip_api_2  # pylint: disable=unused-import
+from qgis.core import QgsMapLayerRegistry
 from PyQt4 import QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
@@ -35,15 +33,13 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
-from safe.common.utilities import unique_filename, temp_dir
+from safe.impact_functions import register_impact_functions
+from safe.common.utilities import temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
     clone_shp_layer,
     get_qgis_app,
-    TESTDATA,
-    BOUNDDATA,
-    HAZDATA,
-    EXPDATA)
+    test_data_path)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard_dialog
@@ -62,25 +58,17 @@ from safe.gui.tools.wizard_dialog import (
 from safe.utilities.keyword_io import KeywordIO
 
 
-def clone_csv_layer():
-    """Helper function that copies a test csv layer and returns it."""
-    path = 'test_buildings.csv'
-    temp_path = unique_filename()
-    # copy to temp file
-    source_path = os.path.join(TESTDATA, path)
-    shutil.copy2(source_path, temp_path)
-    # return a single predefined layer
-    layer = QgsVectorLayer(temp_path, '', 'delimitedtext')
-    return layer
-
-
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
     """Test the InaSAFE wizard GUI"""
+    def setUp(self):
+        # register impact functions
+        register_impact_functions()
+
     def tearDown(self):
         """Run after each test."""
         # Remove the mess that we made on each test
-        shutil.rmtree(temp_dir(sub_dir='testing'))
+        shutil.rmtree(temp_dir(sub_dir='test'))
 
     def check_list(self, expected_list, list_widget):
         """Helper function to check that list_widget is equal to expected_list.
@@ -147,32 +135,35 @@ class WizardDialogTest(unittest.TestCase):
         expected_categories = ['exposure', 'hazard', 'aggregation']
         chosen_category = 'hazard'
 
-        expected_subcategory_count = 3
-        expected_subcategories = ['volcano', 'flood', 'tsunami']
-        chosen_subcategory = "tsunami"
+        expected_subcategory_count = 6
+        expected_subcategories = ['flood', 'tsunami', 'earthquake',
+                                  'volcanic_ash', 'volcano', 'generic']
 
-        expected_unit_count = 3
-        expected_units = ['wetdry', 'metres_depth', 'feet_depth']
-        expected_chosen_unit = 'feet_depth'
+        chosen_subcategory = 'flood'
 
-        expected_field_count = 5
-        expected_fields = ['OBJECTID', 'GRIDCODE', 'Shape_Leng', 'Shape_Area',
-                           'Category']
-        expected_chosen_field = 'GRIDCODE'
+        expected_unit_count = 4
+        expected_units = ['wetdry', 'metres_depth', 'feet_depth', 'classes']
+        expected_chosen_unit = 'wetdry'
+
+        expected_field_count = 6
+        expected_fields = ['OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME',
+                           'RW', 'FLOODPRONE']
+        expected_chosen_field = 'FLOODPRONE'
 
         expected_keywords = {
             'category': 'hazard',
-            'subcategory': 'tsunami',
-            'unit': 'feet_depth',
-            'field': 'GRIDCODE',
+            'subcategory': 'flood',
+            'unit': 'wetdry',
+            'field': 'FLOODPRONE',
+            'value_map': {'wet': ['YES']},
             'source': 'some source',
             'title': 'some title'
         }
 
         layer = clone_shp_layer(
-            name='tsunami_polygon',
+            name='flood_multipart_polygons',
             include_keywords=True,
-            source_directory=TESTDATA)
+            source_directory=test_data_path('hazard'))
 
         # check the environment first
         message = 'Test layer is not readable. Check environment variables.'
@@ -208,8 +199,9 @@ class WizardDialogTest(unittest.TestCase):
         # are already assigned
         message = ('Invalid Next button state in step 1! Enabled while '
                    'there\'s nothing selected yet')
-        self.assertTrue(not dialog.pbnNext.isEnabled() or
-                        len(dialog.lstCategories.selectedItems()), message)
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstCategories.selectedItems()), message)
         # Select hazard one
         dialog.lstCategories.setCurrentRow(hazard_index)
         message = ('Invalid Next button state in step 1! Still disabled after '
@@ -226,7 +218,7 @@ class WizardDialogTest(unittest.TestCase):
                    'were: %d') % (expected_subcategory_count, count)
         self.assertEqual(count, expected_subcategory_count, message)
 
-        # Get all the subcategories given and save the 'tsunami' index
+        # Get all the subcategories given and save the 'flood' index
         subcategories = []
         tsunami_index = -1
         for i in range(expected_subcategory_count):
@@ -244,10 +236,11 @@ class WizardDialogTest(unittest.TestCase):
             set(subcategories), set(expected_subcategories), message)
         # The Next button should be on disabled state first unless the keywords
         # are already assigned
-        self.assertTrue(not dialog.pbnNext.isEnabled() or
-                        len(dialog.lstSubcategories.selectedItems()),
-                        'Invalid Next button state in step 2! '
-                        'Enabled while there\'s nothing selected yet')
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstSubcategories.selectedItems()),
+            'Invalid Next button state in step 2! '
+            'Enabled while there\'s nothing selected yet')
         # Set to tsunami subcategories
         dialog.lstSubcategories.setCurrentRow(tsunami_index)
         message = ('Invalid Next button state in step 2! Still disabled after '
@@ -256,15 +249,15 @@ class WizardDialogTest(unittest.TestCase):
         # Click next button
         dialog.pbnNext.click()
 
-        # step 3 of 7 - select tsunami units
-        # Check if the number of unit for tsunami is 3
+        # step 3 of 7 - select flood units
+        # Check if the number of unit for flood is 3
         count = dialog.lstUnits.count()
         message = ('Invalid unit count! There should be %d while there were: '
                    '%d') % (expected_unit_count, count)
         self.assertEqual(count, expected_unit_count, message)
-        # Get all the units given and save the 'feet_depth' index
+        # Get all the units given and save the 'wet / dry' index
         units = []
-        feet_unit_index = -1
+        wetdry_unit_index = -1
         for i in range(expected_unit_count):
             # pylint: disable=eval-used
             unit_name = eval(
@@ -272,7 +265,7 @@ class WizardDialogTest(unittest.TestCase):
             # pylint: enable=eval-used
             units.append(unit_name)
             if unit_name == expected_chosen_unit:
-                feet_unit_index = i
+                wetdry_unit_index = i
         # Check if units is the same with expected_units
         message = ('Invalid units! It should be "%s" while it was '
                    '%s') % (expected_units, units)
@@ -282,9 +275,10 @@ class WizardDialogTest(unittest.TestCase):
         # are already assigned
         message = ('Invalid Next button state in step 3! Enabled while '
                    'there\'s nothing selected yet')
-        self.assertTrue(not dialog.pbnNext.isEnabled() or
-                        len(dialog.lstUnits.selectedItems()), message)
-        dialog.lstUnits.setCurrentRow(feet_unit_index)
+        self.assertTrue(
+            not dialog.pbnNext.isEnabled() or
+            len(dialog.lstUnits.selectedItems()), message)
+        dialog.lstUnits.setCurrentRow(wetdry_unit_index)
         message = ('Invalid Next button state in step 3! Enabled while '
                    'there\'s nothing selected yet')
         self.assertTrue(
@@ -292,34 +286,31 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()
 
-        # step 4 of 7 - select data field for tsunami feet
+        # step 4 of 7 - select data field for flood
         count = dialog.lstFields.count()
         message = ('Invalid field count! There should be %d while there were: '
                    '%d') % (expected_field_count, count)
         self.assertEqual(count, expected_field_count, message)
-        # Get all the fields given and save the 'GRIDCODE' index
+        # Get all the fields given and save the 'FLOODPRONE' index
         fields = []
-        gridcode_index = -1
+        floodprone_index = -1
         for i in range(expected_field_count):
             field_name = dialog.lstFields.item(i).text()
             fields.append(field_name)
             if field_name == expected_chosen_field:
-                gridcode_index = i
+                floodprone_index = i
         # Check if fields is the same with expected_fields
         message = ('Invalid fields! It should be "%s" while it was '
                    '%s') % (expected_fields, fields)
         self.assertEqual(
             set(expected_fields), set(fields), message)
-        # The Next button should be on disabled state first unless the keywords
-        # are already assigned
-        message = ('Invalid Next button state in step 4! Enabled while '
-                   'there\'s nothing selected yet')
-        self.assertTrue(not dialog.pbnNext.isEnabled() or
-                        len(dialog.lstFields.selectedItems()), message)
-        dialog.lstFields.setCurrentRow(gridcode_index)
+        dialog.lstFields.setCurrentRow(floodprone_index)
         message = ('Invalid Next button state in step 4! Still disabled after '
                    'an item selected')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
+        # Click next
+        dialog.pbnNext.click()
+
         # Click next
         dialog.pbnNext.click()
 
@@ -348,16 +339,13 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(keywords, expected_keywords, message)
 
     def test_existing_keywords(self):
-        """Test if keywords are already exist."""
-        expected_field_count = 5
-        expected_fields = [
-            'OBJECTID', 'GRIDCODE', 'Shape_Leng', 'Shape_Area', 'Category']
-        expected_chosen_field = 'GRIDCODE'
+        """Test if keywords already exist."""
+        expected_field_count = 6
 
         layer = clone_shp_layer(
-            name='tsunami_polygon',
+            name='flood_multipart_polygons',
             include_keywords=True,
-            source_directory=TESTDATA)
+            source_directory=test_data_path('hazard'))
 
         # check the environment first
         message = 'Test layer is not readable. Check environment variables.'
@@ -379,7 +367,8 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 2 of 7 - select subcategory
         # noinspection PyTypeChecker
-        self.check_current_text('tsunami', dialog.lstSubcategories)
+        # selecting tsunami
+        self.check_current_text('flood', dialog.lstSubcategories)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -388,7 +377,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 3 of 7 - select tsunami units
-        self.check_current_text('metres', dialog.lstUnits)
+        self.check_current_text('wet / dry', dialog.lstUnits)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -396,33 +385,16 @@ class WizardDialogTest(unittest.TestCase):
         # Click Next
         dialog.pbnNext.click()
 
-        # step 4 of 7 - select data field for tsunami feet
+        # step 4 of 7 - select data field for tsunami wet / dry
         count = dialog.lstFields.count()
         message = ('Invalid field count! There should be %d while there were: '
                    '%d') % (expected_field_count, count)
         self.assertEqual(count, expected_field_count, message)
-        # Get all the fields given and save the 'GRIDCODE' index
-        fields = []
-        gridcode_index = -1
-        for i in range(expected_field_count):
-            field_name = dialog.lstFields.item(i).text()
-            fields.append(field_name)
-            if field_name == expected_chosen_field:
-                gridcode_index = i
-        # Check if fields is the same with expected_fields
-        message = ('Invalid fields! It should be "%s" while it was '
-                   '%s') % (expected_fields, fields)
-        self.assertEqual(
-            set(expected_fields), set(fields), message)
-        # The button should be on disabled first
-        message = ('Invalid Next button state in step 4! Enabled while '
-                   'there\'s nothing selected yet')
-        self.assertTrue(not dialog.pbnNext.isEnabled(), message)
-        dialog.lstFields.setCurrentRow(gridcode_index)
-        message = ('Invalid Next button state in step 4! Still disabled after '
-                   'an item selected')
-        self.assertTrue(dialog.pbnNext.isEnabled(), message)
-        # Click next
+
+        # Select FLOODPRONE
+        dialog.pbnNext.click()
+
+        # Click Next
         dialog.pbnNext.click()
 
         # step 6 of 7 - enter source
@@ -450,9 +422,9 @@ class WizardDialogTest(unittest.TestCase):
 
     def test_existing_complex_keywords(self):
         layer = clone_shp_layer(
-            name='tsunami_polygon',
+            name='volcano_krb',
             include_keywords=True,
-            source_directory=TESTDATA)
+            source_directory=test_data_path('hazard'))
         # noinspection PyTypeChecker
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
@@ -469,17 +441,17 @@ class WizardDialogTest(unittest.TestCase):
         self.select_from_list_widget('volcano categorical', dialog.lstUnits)
         dialog.pbnNext.click()
 
-        # select GRIDCODE
-        self.select_from_list_widget('GRIDCODE', dialog.lstFields)
+        # select KRB
+        self.select_from_list_widget('KRB', dialog.lstFields)
         dialog.pbnNext.click()
 
         unit = dialog.selected_unit()
         default_classes = unit['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
-            'low': ['5.0'],
-            'medium': ['3.0', '4.0'],
-            'high': ['2.0']
+            'low': ['Kawasan Rawan Bencana I'],
+            'medium': ['Kawasan Rawan Bencana II'],
+            'high': ['Kawasan Rawan Bencana III']
         }
         dialog.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
@@ -521,7 +493,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 4 of 7 - select field
-        self.check_current_text('GRIDCODE', dialog.lstFields)
+        self.check_current_text('KRB', dialog.lstFields)
 
         # Click Next
         dialog.pbnNext.click()
@@ -560,9 +532,9 @@ class WizardDialogTest(unittest.TestCase):
     def test_existing_aggregation_keywords(self):
         """Test for case existing keywords in aggregation layer."""
         layer = clone_shp_layer(
-            name='kabupaten_jakarta',
+            name='district_osm_jakarta',
             include_keywords=True,
-            source_directory=BOUNDDATA)
+            source_directory=test_data_path('boundaries'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -582,7 +554,7 @@ class WizardDialogTest(unittest.TestCase):
             'youth ratio default': 0.26,
             'elderly ratio default': 0.08,
             'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'Global default',
+            'female ratio attribute': 'PEREMPUAN',
             'youth ratio attribute': 'Global default',
             'female ratio default': 0.5,
             'adult ratio default': 0.66
@@ -608,9 +580,9 @@ class WizardDialogTest(unittest.TestCase):
     def test_unit_building_generic(self):
         """Test for case existing building generic unit for structure."""
         layer = clone_shp_layer(
-            name='building_Maumere',
+            name='buildings',
             include_keywords=True,
-            source_directory=TESTDATA)
+            source_directory=test_data_path('exposure'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -632,18 +604,14 @@ class WizardDialogTest(unittest.TestCase):
     def test_default_attributes_value(self):
         """Checking that default attributes is set to the CIA's one."""
         layer = clone_shp_layer(
-            name='kecamatan_jakarta',
+            name='district_osm_jakarta',
             include_keywords=True,
-            source_directory=BOUNDDATA)
+            source_directory=test_data_path('boundaries'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose aggregation go to field step
-        dialog.pbnNext.click()  # choose KEC_NAME go to aggregation step
-
-        ratio_attribute = dialog.cboFemaleRatioAttribute.currentText()
-        message = 'Expected Global default but I got %s' % ratio_attribute
-        self.assertEqual('Global default', ratio_attribute, message)
+        dialog.pbnNext.click()  # choose KAB_NAME go to aggregation step
 
         ratio_attribute = dialog.cboElderlyRatioAttribute.currentText()
         message = 'Expected Global default but I got %s' % ratio_attribute
@@ -656,12 +624,6 @@ class WizardDialogTest(unittest.TestCase):
         ratio_attribute = dialog.cboYouthRatioAttribute.currentText()
         message = 'Expected Global default but I got %s' % ratio_attribute
         self.assertEqual('Global default', ratio_attribute, message)
-
-        default_value = dialog.dsbFemaleRatioDefault.value()
-        expected_default_value = 0.50
-        message = ('Expected %s but I got %s' % (
-            expected_default_value, default_value))
-        self.assertEqual(expected_default_value, default_value, message)
 
         default_value = dialog.dsbYouthRatioDefault.value()
         expected_default_value = 0.26
@@ -684,21 +646,21 @@ class WizardDialogTest(unittest.TestCase):
     def test_unknown_unit(self):
         """Checking that it works for unknown unit."""
         layer = clone_shp_layer(
-            name='Marapi_evac_zone_3000m',
+            name='volcano_krb',
             include_keywords=True,
-            source_directory=HAZDATA)
+            source_directory=test_data_path('hazard'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose hazard go to subcategory  step
         dialog.pbnNext.click()  # choose volcano  go to unit step
-        dialog.lstUnits.setCurrentRow(0)  # Choose volcano categorical
+        dialog.lstUnits.setCurrentRow(1)  # Choose volcano categorical
 
         self.check_current_text('volcano categorical', dialog.lstUnits)
 
         dialog.pbnNext.click()  # choose volcano  go to field step
-        dialog.lstFields.setCurrentRow(0)  # Choose Radius
-        self.check_current_text('Radius', dialog.lstFields)
+        dialog.lstFields.setCurrentRow(0)  # Choose KRB
+        self.check_current_text('KRB', dialog.lstFields)
 
         dialog.pbnNext.click()  # choose volcano  go to classify step
         # check if in step classify
@@ -715,9 +677,9 @@ class WizardDialogTest(unittest.TestCase):
     def test_point_layer(self):
         """Wizard for point layer."""
         layer = clone_shp_layer(
-            name='Marapi',
+            name='volcano_point',
             include_keywords=True,
-            source_directory=HAZDATA)
+            source_directory=test_data_path('hazard'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -736,9 +698,9 @@ class WizardDialogTest(unittest.TestCase):
     def test_auto_select_one_item(self):
         """Test auto select if there is only one item in a list."""
         layer = clone_shp_layer(
-            name='Marapi_evac_zone_3000m',
+            name='volcano_krb',
             include_keywords=True,
-            source_directory=HAZDATA)
+            source_directory=test_data_path('hazard'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -746,24 +708,24 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose volcano  go to unit  step
 
         message = 'It should auto select, but it does not.'
-        self.assertTrue(dialog.lstUnits.currentRow() == 0, message)
+        self.assertTrue(dialog.lstUnits.currentRow() == 1, message)
         num_item = dialog.lstUnits.count()
         message = 'There is should be only one item, I got %s' % num_item
-        self.assertTrue(num_item == 1, message)
+        self.assertTrue(num_item == 2, message)
 
-        dialog.pbnNext.click()  # choose volcano  go to field  step
+        dialog.pbnNext.click()  # choose volcano categorical go to field  step
         message = 'It should auto select, but it does not.'
         self.assertTrue(dialog.lstFields.currentRow() == 0, message)
         num_item = dialog.lstFields.count()
         message = 'There is should be only one item, I got %s' % num_item
-        self.assertTrue(num_item == 1, message)
+        self.assertTrue(num_item == 3, message)
 
     def test_integrated_point(self):
         """Test for point layer and all possibilities."""
         layer = clone_shp_layer(
-            name='Marapi',
+            name='volcano_point',
             include_keywords=True,
-            source_directory=HAZDATA)
+            source_directory=test_data_path('hazard'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -799,10 +761,10 @@ class WizardDialogTest(unittest.TestCase):
     def test_integrated_raster(self):
         """Test for raster layer and all possibilities."""
         layer = clone_raster_layer(
-            name='eq_yogya_2006',
-            extension='.asc',
+            name='earthquake',
+            extension='.tif',
             include_keywords=False,
-            source_directory=HAZDATA)
+            source_directory=test_data_path('hazard'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -934,9 +896,9 @@ class WizardDialogTest(unittest.TestCase):
     def test_integrated_line(self):
         """Test for line layer and all possibilities."""
         layer = clone_shp_layer(
-            name='jakarta_roads',
+            name='roads',
             include_keywords=True,
-            source_directory=EXPDATA)
+            source_directory=test_data_path('exposure'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -970,7 +932,7 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step field
         self.check_current_step(step_kw_field, dialog)
 
-        expected_fields = ['TYPE', 'NAME', 'ONEWAY', 'LANES']
+        expected_fields = ['NAME', 'OSM_TYPE', 'TYPE']
         self.check_list(expected_fields, dialog.lstFields)
 
         # select Type
@@ -984,8 +946,8 @@ class WizardDialogTest(unittest.TestCase):
     def test_integrated_polygon(self):
         """Test for polygon layer and all possibilities."""
         layer = clone_shp_layer(
-            name='Jakarta_RW_2007flood',
-            source_directory=HAZDATA,
+            name='flood_multipart_polygons',
+            source_directory=test_data_path('hazard'),
             include_keywords=False)
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
@@ -1025,7 +987,8 @@ class WizardDialogTest(unittest.TestCase):
 
         # check the values of field options
         expected_fields = [
-            'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW', 'FLOODPRONE']
+            'OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW',
+            'FLOODPRONE']
         self.check_list(expected_fields, dialog.lstFields)
 
         # choosing KAB_NAME
@@ -1057,7 +1020,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check the values of subcategories options
-        expected_subcategories = ['flood', 'tsunami', 'volcano']
+        expected_subcategories = ['flood', 'tsunami', 'earthquake',
+                                  'volcanic ash', 'volcano', 'generic']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # select flood
@@ -1065,7 +1029,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to unit
         self.check_current_step(step_kw_unit, dialog)
 
-        expected_units = ['wet / dry', 'metres', 'feet']
+        expected_units = ['wet / dry', 'metres', 'feet', 'classes']
         self.check_list(expected_units, dialog.lstUnits)
 
         # select wet / dry
@@ -1074,7 +1038,8 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_field, dialog)
 
         expected_fields = [
-            'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW', 'FLOODPRONE']
+            'OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW',
+            'FLOODPRONE']
         self.check_list(expected_fields, dialog.lstFields)
 
         # select FLOODPRONE
@@ -1083,7 +1048,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_classify, dialog)
 
         # check unclassified
-        expected_unique_values = ['Yes']  # Unclassified value
+        expected_unique_values = ['NO']  # Unclassified value
         self.check_list(expected_unique_values, dialog.lstUniqueValues)
 
         # check classified
@@ -1141,10 +1106,11 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to unit
 
-        expected_units = ['volcano categorical']
+        expected_units = ['classes', 'volcano categorical']
         self.check_list(expected_units, dialog.lstUnits)
 
-        # no need to select, use auto select
+        # select volcano_categorical
+        dialog.lstUnits.setCurrentRow(1)  # select no type
         dialog.pbnNext.click()  # go to field
         self.check_current_step(step_kw_field, dialog)
 
@@ -1153,7 +1119,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_classify, dialog)
 
         # check unclassified
-        expected_unique_values = ['Yes', 'YES']  # Unclassified value
+        expected_unique_values = ['NO', 'YES']  # Unclassified value
         self.check_list(expected_unique_values, dialog.lstUniqueValues)
 
         # check classified
@@ -1180,9 +1146,9 @@ class WizardDialogTest(unittest.TestCase):
     def test_sum_ratio_behavior(self):
         """Test for wizard's behavior related sum of age ratio."""
         layer = clone_shp_layer(
-            name='kabupaten_jakarta',
+            name='district_osm_jakarta',
             include_keywords=True,
-            source_directory=BOUNDDATA)
+            source_directory=test_data_path('boundaries'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
         dialog.suppress_warning_dialog = True
@@ -1233,7 +1199,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 1
         expected_functions_count = 1
-        chosen_if = 'FloodRasterBuildingImpactFunction'
+        chosen_if = 'FloodRasterBuildingFunction'
 
         expected_hazard_layers_count = 1
         expected_exposure_layers_count = 1
@@ -1242,11 +1208,11 @@ class WizardDialogTest(unittest.TestCase):
         # expected_summary_key = 'minimum needs'
         # expected_summary_value_fragment = 'rice'
 
-        # RMN : change it to 5793 from 5583 because of issue #1706
-        expected_report_size = 5793  # as saved on Debian
+        expected_report_size = 4361  # as saved on Ubuntu
         # TS : changed tolerance from 120 to 160 because above change
         # causes fail on fedora
-        tolerance = 180  # windows EOL etc
+        # AG: updated the tolerance from 160 to 190
+        tolerance = 190  # windows EOL etc
 
         # Initialize dialog
         # noinspection PyTypeChecker
@@ -1255,17 +1221,17 @@ class WizardDialogTest(unittest.TestCase):
 
         # Load test layers
         layer = clone_raster_layer(
-            name='Flood_Current_Depth_Jakarta_geographic',
+            name='continuous_flood_20_20',
             extension='.asc',
             include_keywords=True,
-            source_directory=HAZDATA)
+            source_directory=test_data_path('hazard'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
         layer = clone_shp_layer(
-            name='DKI_buildings',
+            name='buildings',
             include_keywords=True,
-            source_directory=EXPDATA)
+            source_directory=test_data_path('exposure'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -1434,10 +1400,11 @@ class WizardDialogTest(unittest.TestCase):
             'Please update expected_size if the generated output '
             'is acceptable on your system.'
             % (expected_report_size, tolerance, size))
-        self.assertTrue((
-            (expected_report_size - tolerance <= size) and
-            (size <= expected_report_size + tolerance)),
-            message)
+        self.assertTrue(
+            (
+                (expected_report_size - tolerance <= size) and
+                (size <= expected_report_size + tolerance)
+            ), message)
 
         # close the wizard
         dialog.pbnNext.click()
