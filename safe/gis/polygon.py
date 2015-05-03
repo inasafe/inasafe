@@ -1320,7 +1320,7 @@ def clip_grid_by_polygons(grid_data, geotransform, polygons):
             outer_ring = polygon
             inner_rings = None
 
-        inside, outside = in_and_outside_polygon(
+        inside, _ = in_and_outside_polygon(
             points,
             outer_ring,
             holes=inner_rings,
