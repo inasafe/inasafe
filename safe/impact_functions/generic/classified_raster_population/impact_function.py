@@ -25,7 +25,8 @@ import itertools
 
 from safe.impact_functions.core import (
     evacuated_population_needs,
-    population_rounding)
+    population_rounding,
+    has_no_data)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -92,7 +93,7 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
                     format_int(resource['amount'])]))
         return table_body, total_needs
 
-    def _tabulate_action_checklist(self, table_body, total):
+    def _tabulate_action_checklist(self, table_body, total, no_data_warning):
         table_body.append(
             TableRow(tr('Action Checklist:'), header=True))
         table_body.append(
@@ -116,6 +117,11 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
                'hazard class areas'),
             tr('Total population: %s') % format_int(total)
         ])
+        if no_data_warning:
+            table_body.extend([
+                tr(
+                    'The layers contained `no data`. This missing data was '
+                    'carried through to the impact layer.')])
         return table_body
 
     def run(self, layers=None):
@@ -157,7 +163,10 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
         exposure_layer = self.exposure  # Population Raster
 
         # Extract data as numeric arrays
-        hazard_data = hazard_layer.get_data()
+        hazard_data = hazard_layer.get_data(nan=True)  # Class
+        no_data_warning = False
+        if has_no_data(hazard_data):
+            no_data_warning = True
 
         # Calculate impact as population exposed to each class
         population = exposure_layer.get_data(scaling=True)
@@ -172,6 +181,16 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
         affected_population = (
             high_hazard_population + medium_hazard_population +
             low_hazard_population)
+
+        # Carry the no data values forward to the impact layer.
+        affected_population = numpy.where(
+            numpy.isnan(population),
+            numpy.nan,
+            affected_population)
+        affected_population = numpy.where(
+            numpy.isnan(hazard_data),
+            numpy.nan,
+            affected_population)
 
         # Count totals
         total_population = int(numpy.nansum(population))
@@ -209,7 +228,8 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
 
         table_body = self._tabulate_action_checklist(
             table_body,
-            population_rounding(total_population))
+            population_rounding(total_population),
+            no_data_warning)
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # Create style

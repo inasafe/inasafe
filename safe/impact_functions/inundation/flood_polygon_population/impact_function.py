@@ -24,7 +24,8 @@ from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
-    evacuated_population_needs)
+    evacuated_population_needs,
+    has_no_data)
 from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
 from safe.common.tables import Table, TableRow, TableCell
@@ -117,7 +118,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                     format_int(resource['amount'])]))
         return table_body, total_needs
 
-    def _tabulate_action_checklist(self, table_body, total):
+    def _tabulate_action_checklist(self, table_body, total, nan_warning):
         # Action Checklist
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
         table_body.append(TableRow(tr('How will warnings be disseminated?')))
@@ -135,10 +136,11 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         table_body.append(
             TableRow(tr('Total population: %s') % format_int(total)))
         table_body.append(TableRow(self.parameters['provenance']))
-        table_body.append(
-            TableRow(
-                tr('"nodata" values in the exposure layer are treated as 0 '
-                   'when counting the affected or total population')))
+        if nan_warning:
+            table_body.append(
+                TableRow(
+                    tr('"nodata" values in the exposure layer are treated as '
+                       '0 when counting the affected or total population')))
 
     def run(self, layers=None):
         """Risk plugin for flood population evacuation.
@@ -175,6 +177,10 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                     hazard_layer.get_name(),
                     hazard_layer.get_geometry_name()))
             raise Exception(message)
+
+        nan_warning = False
+        if has_no_data(exposure_layer.get_data(nan=True)):
+            nan_warning = True
 
         # Check that affected field exists in hazard layer
         if affected_field in hazard_layer.get_attribute_names():
@@ -258,7 +264,10 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
 
         impact_table = Table(table_body).toNewlineFreeString()
 
-        self._tabulate_action_checklist(table_body, total_population)
+        self._tabulate_action_checklist(
+            table_body,
+            total_population,
+            nan_warning)
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # Create style
