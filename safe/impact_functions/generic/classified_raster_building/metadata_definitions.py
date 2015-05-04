@@ -81,8 +81,8 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                 'exposed to the highest class (3) and a summary table '
                 'containing the number of structures in each class.'),
             'actions': tr(
-                'Provide details about how many buildings would likely be '
-                'impacted for each hazard class.'),
+                'Provide details about the number of buildings that are '
+                'within each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
             'citations': [],
             'categories': {

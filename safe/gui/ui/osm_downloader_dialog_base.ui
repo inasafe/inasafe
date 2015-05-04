@@ -14,6 +14,9 @@
    <string>OSM Downloader</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <property name="spacing">
+    <number>10</number>
+   </property>
    <item row="1" column="0">
     <widget class="QLabel" name="feature_type_label">
      <property name="text">
@@ -98,10 +101,22 @@
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
      </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="title">
       <string>Bounding box</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
      <layout class="QGridLayout" name="gridLayout">
+      <property name="spacing">
+       <number>10</number>
+      </property>
       <item row="3" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
@@ -175,8 +190,8 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QWebView" name="web_view" native="true">
-     <property name="url" stdset="0">
+    <widget class="QWebView" name="web_view">
+     <property name="url">
       <url>
        <string>about:blank</string>
       </url>
@@ -185,8 +200,11 @@
    </item>
    <item row="7" column="0">
     <widget class="QCheckBox" name="overwrite_checkBox">
+     <property name="styleSheet">
+      <string notr="true">padding-bottom: 10px;</string>
+     </property>
      <property name="text">
-      <string>Overwrite if existing files</string>
+      <string>Overwrite existing files</string>
      </property>
     </widget>
    </item>
@@ -196,7 +214,7 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
+   <header>QtWebKitWidgets/QWebView</header>
   </customwidget>
  </customwidgets>
  <resources/>

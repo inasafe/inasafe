@@ -235,7 +235,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         rectangle = self.rectangle_map_tool.rectangle()
         if rectangle:
-            self.groupBox.setTitle(self.tr('Bounding box from the rectangle'))
+            self.groupBox.setTitle(self.tr('Bounding box from rectangle'))
             extent = rectangle_geo_array(rectangle, self.iface.mapCanvas())
             self.update_extent(extent)
 

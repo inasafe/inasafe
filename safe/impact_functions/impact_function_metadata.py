@@ -52,7 +52,7 @@ class ImpactFunctionMetadata(object):
     def simplify_layer_constraint(layer_constraint):
         """Simplify layer constraint to layer_type and data_type only.
 
-        :param layer_constraint: Dictionary that represent layer_constraint
+        :param layer_constraint: Dictionary that represents layer_constraint
         :type layer_constraint: dict
 
         :returns: Simple version of layer_constraint

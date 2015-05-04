@@ -55,7 +55,7 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'FloodEvacuationRasterHazardFunction',
-            'name': tr('Raster flood hazard on population'),
+            'name': tr('Raster flood on population'),
             'impact': tr('Need evacuation'),
             'title': tr('Need evacuation'),
             'function_type': 'old-style',
@@ -68,11 +68,11 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                 'The population subject to inundation exceeding a '
                 'threshold (default 1m) is calculated and returned as a '
                 'raster layer. In addition the total number of affected '
-                'people and the  required needs in terms of the BNPB '
-                '(Perka 7) are reported. The threshold can be changed and '
-                'even contain multiple numbers in which case evacuation and '
-                'needs are calculated using the largest number with '
-                'population breakdowns provided for the smaller numbers. '
+                'people and the required needs based on the user '
+                'defined minimum needs are reported. The threshold can be '
+                'changed and even contain multiple numbers in which case '
+                'evacuation and needs are calculated using the largest number '
+                'with population breakdowns provided for the smaller numbers. '
                 'The population raster is resampled to the resolution of the '
                 'hazard raster and is rescaled so that the resampled '
                 'population counts reflect estimates of population count '

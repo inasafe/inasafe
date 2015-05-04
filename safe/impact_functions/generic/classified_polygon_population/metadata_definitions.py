@@ -71,12 +71,13 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                 'and an attribute representing the number of people affected '
                 'for each area.'),
             'actions': tr(
-                'Provide details about how many people would likely '
-                'be affected by each hazard zone.'),
+                'Provide details about the number of people that are '
+                'within each hazard zone.'),
             'limitations': [],
             'citations': [],
             'overview': tr(
-                'To assess the impact of each hazard zone on population.'),
+                'To assess the the number of people that may be impacted by '
+                'each hazard zone.'),
             'detailed_description': '',
             'categories': {
                 'hazard': {

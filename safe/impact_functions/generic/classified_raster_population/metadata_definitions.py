@@ -60,8 +60,8 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
         dict_meta = {
             'id': 'ClassifiedRasterHazardPopulationFunction',
             'name': tr('Classified raster hazard on population'),
-            'impact': tr('Be impacted by each class'),
-            'title': tr('Be impacted by each hazard class'),
+            'impact': tr('Be affected by each class'),
+            'title': tr('Be affected by each hazard class'),
             'function_type': 'old-style',
             'author': 'Dianne Bencito',
             'date_implemented': 'N/A',
@@ -73,7 +73,7 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 'layer as classes representing low, medium and high '
                 'impact. You need to ensure that the keywords for the hazard '
                 'layer have been set appropriately to define these classes.'
-                'The number of people that will be impacted will be '
+                'The number of people that will be affected will be '
                 'calculated for each class. The report will show the total '
                 'number of people that will be affected for each '
                 'hazard class.'),
@@ -86,7 +86,7 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 'population count for that cell.'),
             'output': tr(
                 'Map of population exposed to the highest class and a table '
-                'with number of people in each class'),
+                'with the number of people in each class'),
             'actions': tr(
                 'Provide details about how many people would likely be '
                 'affected for each hazard class.'),
