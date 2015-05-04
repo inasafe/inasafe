@@ -193,21 +193,22 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
          configurable parameters dictionary.
         :type name: str
 
-        :param key_value: Mandatory representing the value referenced by the
+        :param display_value: Mandatory representing the value referenced by the
          key.
-        :type key_value: object
+        :type display_value: object
 
         :returns: a function that return the value of widget
 
         :raises: None
         """
+        display_value = key_value.value
         # create label
         if isinstance(name, str):
             label = QLabel()
             label.setObjectName(_fromUtf8(name + "Label"))
             label_text = name.replace('_', ' ').capitalize()
             label.setText(tr(label_text))
-            label.setToolTip(str(type(key_value)))
+            label.setToolTip(str(type(display_value)))
         else:
             label = name
 
@@ -220,7 +221,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         # can be used for widgets that have their own text like QCheckBox
         hide_label = False
 
-        if isinstance(key_value, list):
+        if isinstance(display_value, list):
             def function(values_string):
                 """
                 :param values_string: This contains the list of values the user
@@ -230,12 +231,12 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
                 :returns: list of value types
                 :rtype: list
                 """
-                value_type = type(key_value[0])
+                value_type = type(display_value[0])
                 return [value_type(y) for y in str(values_string).split(',')]
             widget = QLineEdit()
-            value = ', '.join([str(x) for x in key_value])
+            value = ', '.join([str(x) for x in display_value])
             # NOTE: we assume that all element in list have same type
-        elif isinstance(key_value, dict):
+        elif isinstance(display_value, dict):
             def function(key_values_string):
                 """
                 :param key_values_string: This contains the dictionary that
@@ -247,18 +248,18 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
                 """
                 return ast.literal_eval(str(key_values_string))
             widget = QLineEdit()
-            value = str(key_value)
-        elif isinstance(key_value, bool):
+            value = str(display_value)
+        elif isinstance(display_value, bool):
             function = bool
             widget = QCheckBox()
-            widget.setChecked(key_value)
+            widget.setChecked(display_value)
             widget.setText(label.text())
             property_name = 'checked'
             hide_label = True
         else:
-            function = type(key_value)
+            function = type(display_value)
             widget = QLineEdit()
-            value = str(key_value)
+            value = str(display_value)
         if hide_label:
             form_layout.addRow(widget)
         else:
