@@ -2,8 +2,8 @@
     "resources": [
         {
             "Resource name": "Family Food pack**",
-            "Resource description": "A food pack for a family of 5-6 members. Family food packages should conform to the Required Dietary Allowance (RDA) of an individual which is 2,100k/cal/adult/day and 1,700k/cal/child per day, micronutrient, Vit A for 6-11 months old infants 100,000 I.U. and for 12-59 months old children-200,000 I.U. Some of the required foods are as follows: 3 kilos of rice, 9 canned goods (sardines/canned meat), 6 noodles, 6 pcs. 3 in one coffee or its nutritional alternative i.e. bread.",
-            "Readable sentence": "A food pack for a family of 5-6 members. Family food packages should conform to the Required Dietary Allowance (RDA) of an individual which is 2,100k/cal/adult/day and 1,700k/cal/child per day, micronutrient, Vit A for 6-11 months old infants 100,000 I.U. and for 12-59 months old children-200,000 I.U. Some of the required foods are as follows: 3 kilos of rice, 9 canned goods (sardines/canned meat), 6 noodles, 6 pcs. 3 in one coffee or its nutritional alternative i.e. bread.",
+            "Resource description": "A food pack for a family of 5-6 members.",
+            "Readable sentence": "Family food packages should conform to the Required Dietary Allowance (RDA) of an individual which is 2,100k/cal/adult/day and 1,700k/cal/child per day, micronutrient, Vit A for 6-11 months old infants 100,000 I.U. and for 12-59 months old children-200,000 I.U. Some of the required foods are as follows: 3 kilos of rice, 9 canned goods (sardines/canned meat), 6 noodles, 6 pcs. 3 in one coffee or its nutritional alternative i.e. bread.",
             "Unit": "piece",
             "Units": "pieces",
             "Unit abbreviation": "pc.",
@@ -14,8 +14,8 @@
         },
         {
             "Resource name": "Hygiene Kits",
-            "Resource description": "1 kit per family good for 30 days. 12 bars of bath soap (135 g), 4 bars of laundry soap (380 g), Toothbrush, Toothpaste (150ml), Toenail cutter, Sanitary napkins, Face towel, Bath towel/malong, Plastic dipper plastic pail with cover, Slippers, Underwear.",
-            "Readable sentence": "1 kit per family good for 30 days. 12 bars of bath soap (135 g), 4 bars of laundry soap (380 g), Toothbrush, Toothpaste (150ml), Toenail cutter, Sanitary napkins, Face towel, Bath towel/malong, Plastic dipper plastic pail with cover, Slippers, Underwear.",
+            "Resource description": "1 kit per family good for 30 days.",
+            "Readable sentence": "12 bars of bath soap (135 g), 4 bars of laundry soap (380 g), Toothbrush, Toothpaste (150ml), Toenail cutter, Sanitary napkins, Face towel, Bath towel/malong, Plastic dipper plastic pail with cover, Slippers, Underwear.",
             "Unit": "piece",
             "Units": "pieces",
             "Unit abbreviation": "pc.",
@@ -26,8 +26,8 @@
         },
         {
             "Resource name": "Family Kits",
-            "Resource description": "1 kit per family.  Mats/beddings, Blankets, Mosquito nets, stove and kitchen wares ( glass cup and saucer, spoon, fork, ladle, frying pan kettle, casserole), etc.",
-            "Readable sentence": "1 kit per family.  Mats/beddings, Blankets, Mosquito nets, stove and kitchen wares ( glass cup and saucer, spoon, fork, ladle, frying pan kettle, casserole), etc.",
+            "Resource description": "1 kit per family.",
+            "Readable sentence": "Mats/beddings, Blankets, Mosquito nets, stove and kitchen wares ( glass cup and saucer, spoon, fork, ladle, frying pan kettle, casserole), etc.",
             "Unit": "piece",
             "Units": "pieces",
             "Unit abbreviation": "pc.",
@@ -38,8 +38,8 @@
         },
         {
             "Resource name": "Water Kits",
-            "Resource description": "1 kit per family good for 30 days.  Jerry can (20 liters with faucet), Hyposol (1) 100 ml/bottle or aquatabs/pura tabs (67 mg/20 liter 30 tabs).",
-            "Readable sentence": "1 kit per family good for 30 days.  Jerry can (20 liters with faucet), Hyposol (1) 100 ml/bottle or aquatabs/pura tabs (67 mg/20 liter 30 tabs).",
+            "Resource description": "1 kit per family good for 30 days.",
+            "Readable sentence": "Jerry can (20 liters with faucet), Hyposol (1) 100 ml/bottle or aquatabs/pura tabs (67 mg/20 liter 30 tabs).",
             "Unit": "piece",
             "Units": "pieces",
             "Unit abbreviation": "pc.",
@@ -50,8 +50,8 @@
         },
         {
             "Resource name": "Drinking water",
-            "Resource description": "Drinking and food. 2.5-3 liters per person per day.",
-            "Readable sentence": "Drinking and food. 2.5-3 liters per person per day.",
+            "Resource description": "Drinking water and food.",
+            "Readable sentence": "2.5-3 liters per person per day.",
             "Unit": "liter",
             "Units": "liters",
             "Unit abbreviation": "l",
@@ -62,8 +62,8 @@
         },
         {
             "Resource name": "Clean Water",
-            "Resource description": "Basic hygiene paractices and cooking needs. 5-12 liters per person per day.",
-            "Readable sentence": "Basic hygiene paractices and cooking needs. 5-12 liters per person per day.",
+            "Resource description": "Basic hygiene practices and cooking needs.",
+            "Readable sentence": "5-12 liters per person per day.",
             "Unit": "liter",
             "Units": "liters",
             "Unit abbreviation": "l",
@@ -74,7 +74,7 @@
         },
         {
             "Resource name": "Minimum Water demand for prolonged period",
-            "Resource description": "Drinking, food preparation and cooking, bathing, laundry, sanitation and hygiene. 52 liters per person per day.",
+            "Resource description": "Non-potable and potable water.",
             "Readable sentence": "Drinking, food preparation and cooking, bathing, laundry, sanitation and hygiene. 52 liters per person per day.",
             "Unit": "liter",
             "Units": "liters",
@@ -98,7 +98,7 @@
         },
         {
             "Resource name": "Toilet",
-            "Resource description": "Short-term displacement (1/50 person), Long term displacement (1/20 person). 4 female toilets for every 3 male toilets. 1 in 10 should be PWD accessible.",
+            "Resource description": "Short-term displacement (1/50 person).",
             "Readable sentence": "Short-term displacement (1/50 person), Long term displacement (1/20 person). 4 female toilets for every 3 male toilets. 1 in 10 should be PWD accessible.",
             "Unit": "piece",
             "Units": "pieces",
@@ -110,7 +110,7 @@
         },
         {
             "Resource name": "Child friendly facilities",
-            "Resource description": " CFS are open spaces for outdoor play activities. 1 facility for every 100 families.  6x7 m floor area with toilets.",
+            "Resource description": " CFS are open spaces for outdoor play activities.",
             "Readable sentence": " CFS are open spaces for outdoor play activities. 1 facility for every 100 families.  6x7 m floor area with toilets.",
             "Unit": "square meter",
             "Units": "square meters",
@@ -122,7 +122,7 @@
         },
         {
             "Resource name": "Laundry spaces",
-            "Resource description": "1 hand basin per 10 persons. 1 wash bench (4-5 m) per 100 persons. 2 laundry platform per 100 persons.",
+            "Resource description": "1 hand basin per 10 persons.",
             "Readable sentence": "1 hand basin per 10 persons. 1 wash bench (4-5 m) per 100 persons. 2 laundry platform per 100 persons.",
             "Unit": "piece",
             "Units": "pieces",
@@ -134,7 +134,7 @@
         },
         {
             "Resource name": "Water spaces",
-            "Resource description": "15 litres of water per person/day. 500 meters between individual shelters and water supply. 250 persons per functioning water tap.",
+            "Resource description": "15 litres of water per person/day.",
             "Readable sentence": "15 litres of water per person/day. 500 meters between individual shelters and water supply. 250 persons per functioning water tap.",
             "Unit": "piece",
             "Units": "square pieces",

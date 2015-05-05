@@ -17,7 +17,8 @@ from safe.impact_functions.volcanic.volcano_polygon_population\
     .metadata_definitions import VolcanoPolygonPopulationFunctionMetadata
 from safe.impact_functions.core import (
     evacuated_population_needs,
-    population_rounding)
+    population_rounding,
+    has_no_data)
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
@@ -76,6 +77,10 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         # Identify hazard and exposure layers
         hazard_layer = self.hazard
         exposure_layer = self.exposure
+
+        nan_warning = False
+        if has_no_data(exposure_layer.get_data(nan=True)):
+            nan_warning = True
 
         # Input checks
         if not hazard_layer.is_polygon_data:
@@ -214,9 +219,16 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
              tr('Total population %s in the exposure layer') % format_int(
                  total_population),
              tr('People need evacuation if they are within the '
-                'volcanic hazard zones.'),
-             tr('"nodata" values in the exposure layer are treated as 0 '
-                'when counting the affected or total population')])
+                'volcanic hazard zones.')])
+
+        if nan_warning:
+            table_body.extend([
+                tr('The population layer contained `no data`. This missing '
+                   'data was carried through to the impact layer.'),
+                tr('`No data` values in the impact layer were treated as 0 '
+                   'when counting the affected or total population.')
+            ])
+
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # check for zero impact
