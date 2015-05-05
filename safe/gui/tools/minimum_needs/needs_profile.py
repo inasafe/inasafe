@@ -208,8 +208,9 @@ class NeedsProfile(MinimumNeeds):
             precision_influence = [
                 'Maximum allowed', 'Minimum allowed', 'Default']
             for element in precision_influence:
-                if resource[element] is not None and '.' in resource[element]:
-                    precisions.append(self.precision_of(resource[element]))
+                resource_element = str(resource[element])
+                if resource[element] is not None and '.' in resource_element:
+                    precisions.append(self.precision_of(resource_element))
 
             parameter.precision = max(precisions)
             parameters.append(parameter)
