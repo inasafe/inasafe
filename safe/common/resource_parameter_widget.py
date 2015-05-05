@@ -5,7 +5,6 @@ __project_name = 'parameters'
 __filename = 'float_parameter_widget'
 __date__ = '12/11/14'
 __copyright__ = 'kartoza.com'
-__doc__ = ''
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -20,6 +19,7 @@ from safe_extras.parameters.qt_widgets.float_parameter_widget import (
 # pylint: disable=super-on-old-class
 class ResourceParameterWidget(FloatParameterWidget):
     """Widget class for Resource parameter."""
+    # pylint: disable=super-on-old-class
     def __init__(self, parameter, parent=None):
         """Constructor
 

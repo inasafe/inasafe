@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+
 __author__ = 'qgis@borysjurgiel.pl'
 __revision__ = '$Format:%H$'
 __date__ = '21/02/2011'
@@ -77,7 +78,7 @@ from safe.common.exceptions import (
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-
+from safe_extras.parameters.generic_parameter import GenericParameter
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -206,6 +207,25 @@ road_road_type_question = QApplication.translate(
 structure_building_type_question = QApplication.translate(
     'WizardDialog',
     'type for your building')
+
+# Constants for [hazard]_classes_question
+flood_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your flood hazard')
+
+tsunami_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your tsunami hazard')
+
+earthquake_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your earthquake hazard')
+
+volcanic_ash_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your volcanic ash hazard')
+
+volcano_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your volcano hazard')
+
+generic_classes_question = QApplication.translate(
+    'WizardDialog', 'classes for your generic hazard')
 
 # Constants for field selection
 # noinspection PyCallByClass
@@ -351,12 +371,13 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
         """
         source_index = self.sourceModel().index(source_row, 0, source_parent)
         item = self.sourceModel().dataItem(source_index)
-        if item.metaObject().className() in ['QgsMssqlRootItem',
-                                             'QgsSLRootItem',
-                                             'QgsOWSRootItem',
-                                             'QgsWCSRootItem',
-                                             'QgsWFSRootItem',
-                                             'QgsWMSRootItem']:
+        if item.metaObject().className() in [
+                'QgsMssqlRootItem',
+                'QgsSLRootItem',
+                'QgsOWSRootItem',
+                'QgsWCSRootItem',
+                'QgsWFSRootItem',
+                'QgsWMSRootItem']:
             return False
         return True
 
@@ -609,7 +630,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.get_data_type() == 'polygon':
             categories += ['aggregation']
         for category in categories:
-            if type(category) != dict:
+            if not isinstance(category, dict):
                 # pylint: disable=eval-used
                 category = eval('definitions.%s_definition' % category)
                 # pylint: enable=eval-used
@@ -1034,10 +1055,13 @@ class WizardDialog(QDialog, FORM_CLASS):
             value_as_string = value and unicode(value) or 'NULL'
             assigned = False
             for default_class in default_classes:
-                if ((field_type > 9 and value_as_string
-                        in default_class['string_defaults']) or
-                        (field_type < 10 and
-                            (default_class['numeric_default_min'] <= value <
+                if (
+                        (
+                            field_type > 9 and
+                            value_as_string in default_class['string_defaults']
+                        ) or (
+                            field_type < 10 and (
+                                default_class['numeric_default_min'] <= value <
                                 default_class['numeric_default_max']))):
                     assigned_values[default_class['name']] += [value_as_string]
                     assigned = True
@@ -1072,7 +1096,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         assigned_values = dict()
         for default_class in default_classes:
             assigned_values[default_class['name']] = list()
-        if type(value_map) == str:
+        if isinstance(value_map, str):
             try:
                 value_map = json.loads(value_map)
             except ValueError:
@@ -1654,8 +1678,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             for row in range(len(exposure_data_types)):
                 hc = hazard_data_types[col]
                 ec = exposure_data_types[row]
-                functions = self.impact_function_manager\
-                    .get_functions_for_constraint(h, e, hc, ec)
+                functions = ImpactFunctionManager(
+                    ).get_functions_for_constraint(h, e, hc, ec)
                 item = QtGui.QTableWidgetItem()
                 if len(functions):
                     bgcolor = QtGui.QColor(120, 255, 120)
@@ -1735,7 +1759,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeFunction.setText('')
 
         h, e, hc, ec = self.selected_impact_function_constraints()
-        functions = self.impact_function_manager.get_functions_for_constraint(
+        functions = ImpactFunctionManager().get_functions_for_constraint(
             h, e, hc, ec)
         for f in functions:
             item = QtGui.QListWidgetItem(self.lstFunctions)
@@ -1803,10 +1827,11 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Get allowed units from selected IF if possible
         imfunc = self.selected_function()
-        if (imfunc and category in imfunc['categories'] and
-                    'units' in imfunc['categories'][category]):
+        if (
+                imfunc and category in imfunc['categories'] and
+                'units' in imfunc['categories'][category]):
             allowed_units = imfunc['categories'][category]['units']
-            if type(allowed_units) != list:
+            if not isinstance(allowed_units, list):
                 allowed_units = [allowed_units]
         else:
             allowed_units = None
@@ -2264,9 +2289,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 '<b>Subcategory</b>: %s<br/>'
                 '<b>Unit</b>: %s<br/>'
                 '<b>Source</b>: %s<br/><br/>') % (
-                keywords.get('title'), keywords.get('category'),
-                keywords.get('subcategory'), keywords.get('unit'),
-                keywords.get('source'))
+                    keywords.get('title'),
+                    keywords.get('category'),
+                    keywords.get('subcategory'),
+                    keywords.get('unit'),
+                    keywords.get('source'))
         else:
             if is_point_layer(layer):
                 geom_type = 'point'
@@ -2457,10 +2484,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         extent_a = layer_a.extent()
         extent_b = layer_b.extent()
         if self.iface.mapCanvas().hasCrsTransformEnabled():
-            coordTransform = QgsCoordinateTransform(layer_a.crs(),
-                                                    layer_b.crs())
-            extent_b = (coordTransform.transform(extent_b,
-                        QgsCoordinateTransform.ReverseTransform))
+            coordTransform = QgsCoordinateTransform(
+                layer_a.crs(),
+                layer_b.crs())
+            extent_b = (
+                coordTransform.transform(
+                    extent_b,
+                    QgsCoordinateTransform.ReverseTransform))
         return extent_a.intersects(extent_b)
 
     def set_widgets_step_fc_disjoint_layers(self):
@@ -2722,8 +2752,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         text = self.tr(
             'Please set impact functions parameters.<br/>Parameters for '
-            'impact function "%s" that can be modified are:' %
-            impact_function_id)
+            'impact function "%s" that can be modified are:') % (
+                impact_function_id)
         self.lblSelectIFParameters.setText(text)
 
         self.parameter_dialog = FunctionOptionsDialog(self)
@@ -2742,20 +2772,21 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_summary(self):
         """Set widgets on the Summary tab"""
-        def format_postprocessor(val):
-            """ make nested OrderedDicts more flat"""
-            if type(val) == OrderedDict:
+        def format_postprocessor(post_processor):
+            """Format postprocessor.
+
+            :param post_processor: A postprocessor (List of Generic Parameter)
+            :type post_processor: list
+            """
+            if isinstance(post_processor, list):
                 result = []
-                for v in val:
-                    if type(val[v]) == OrderedDict:
-                        # omit the v key and unpack the dict directly
-                        result += [u'%s: %s' % (unicode(k), unicode(val[v][k]))
-                                   for k in val[v]]
-                    else:
-                        result += [u'%s: %s' % (unicode(v), unicode(val[v]))]
+                for v in post_processor:
+                    result.append(unicode(v.value))
                 return u', '.join(result)
+            elif isinstance(post_processor, GenericParameter):
+                return unicode(post_processor.value)
             else:
-                return unicode(val)
+                return unicode(post_processor)
 
         self.if_params = self.parameter_dialog.parse_input(
             self.parameter_dialog.values)
@@ -2770,29 +2801,34 @@ class WizardDialog(QDialog, FORM_CLASS):
         impact_function.parameters = self.if_params
 
         params = []
-        for p in self.if_params:
-            if type(self.if_params[p]) == OrderedDict:
-                subparams = [u'<b>%s</b>: %s' % (unicode(pp),
-                             format_postprocessor(self.if_params[p][pp]))
-                             for pp in self.if_params[p]]
-                subparams = u'<br/>'.join(subparams)
-                print '!!!', subparams
-            elif type(self.if_params[p]) == list and p == 'minimum needs':
-                subparams = ''
-                for need in self.if_params[p]:
-                    subparams += '%s %.0f' % (need.name, need.value)
+        for parameter in self.if_params:
+            if isinstance(self.if_params[parameter], OrderedDict) and \
+                    parameter == 'postprocessors':
+                sub_parameters = [
+                    u'<b>%s</b>: %s' % (
+                        unicode(postprocessor),
+                        format_postprocessor(
+                            self.if_params[parameter][postprocessor]))
+                    for postprocessor in self.if_params[parameter]]
+                sub_parameters = u'<br/>'.join(sub_parameters)
+            elif isinstance(self.if_params[parameter], list) and \
+                    parameter == 'minimum needs':
+                sub_parameters = ''
+                for need in self.if_params[parameter]:
+                    sub_parameters += '%s %.1f' % (need.name, need.value)
                     if need.unit.abbreviation:
-                        subparams += need.unit.abbreviation
-                    if need != self.if_params[p][-1]:
-                        subparams += ', '
-                if not subparams:
-                    subparams = 'Not applicable'
-            elif type(self.if_params[p]) == list:
-                subparams = ', '.join([unicode(i) for i in self.if_params[p]])
+                        sub_parameters += need.unit.abbreviation
+                    if need != self.if_params[parameter][-1]:
+                        sub_parameters += ', '
+                if not sub_parameters:
+                    sub_parameters = 'Not applicable'
+            elif isinstance(self.if_params[parameter], list):
+                sub_parameters = ', '.join(
+                    [unicode(i) for i in self.if_params[parameter]])
             else:
-                subparams = unicode(self.if_params[p])
+                sub_parameters = unicode(self.if_params[parameter])
 
-            params += [(p, subparams)]
+            params += [(parameter, sub_parameters)]
 
         if self.aggregation_layer:
             aggr = self.aggregation_layer.name()
@@ -2841,10 +2877,10 @@ class WizardDialog(QDialog, FORM_CLASS):
             my_string = my_string.capitalize()
             return my_string
 
-        for p in params:
+        for parameter in params:
             html += ('<tr>'
                      '  <td><b>%s</b></td><td></td><td>%s</td>'
-                     '</tr>' % (humanize(p[0]), p[1]))
+                     '</tr>' % (humanize(parameter[0]), parameter[1]))
         html += '</table>'
 
         self.lblSummary.setText(html)
@@ -3352,7 +3388,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_classify
             elif self.selected_category()['id'] == 'aggregation':
                 new_step = step_kw_aggregation
-            elif (is_raster_layer(self.layer) and
+            elif (
+                    is_raster_layer(self.layer) and
                     self.selected_category()['id'] == 'exposure'):
                 new_step = step_kw_resample
             elif self.selected_field():

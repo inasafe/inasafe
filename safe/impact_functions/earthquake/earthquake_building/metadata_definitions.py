@@ -49,7 +49,7 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'EarthquakeBuildingFunction',
-            'name': tr('Earthquake Building Function'),
+            'name': tr('Earthquake on buildings'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
             'function_type': 'old-style',
@@ -58,7 +58,7 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
             'overview': tr(
                 'This impact function will calculate the impact of an '
                 'earthquake on buildings, reporting how many are expected '
-                'to be damaged etc.'),
+                'to be damaged.'),
             'detailed_description': '',
             'hazard_input': '',
             'exposure_input': '',

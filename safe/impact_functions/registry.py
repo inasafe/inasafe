@@ -57,7 +57,9 @@ class Registry(object):
         :type impact_function: ImpactFunction.
         """
         is_disabled = impact_function.metadata().is_disabled()
+        # pylint: disable=unused-variable
         is_valid, reason = impact_function.metadata().is_valid()
+        # pylint: enable=unused-variable
         impact_function_id = impact_function.metadata().as_dict()['id']
         if not is_disabled and is_valid and impact_function not in \
                 cls._impact_functions:
@@ -67,7 +69,6 @@ class Registry(object):
             else:
                 raise Exception('Impact Function with ID %s is already '
                                 'registered' % impact_function_id)
-
 
     @classmethod
     def clear(cls):

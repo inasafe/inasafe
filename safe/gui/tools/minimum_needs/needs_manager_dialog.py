@@ -440,7 +440,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         default_parameter = FloatParameter('UUID-8')
         default_parameter.name = 'Default'
         default_parameter.is_required = True
-        default_parameter.precision = 2
+        default_parameter.precision = 1
         default_parameter.minimum_allowed_value = -99999.0
         default_parameter.maximum_allowed_value = 99999.0
         default_parameter.help_text = (

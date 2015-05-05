@@ -15,6 +15,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import numpy
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.volcanic.volcano_polygon_population\
@@ -33,45 +34,18 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
 
     def test_run(self):
         """TestVolcanoPolygonPopulationFunction: Test running the IF."""
-        merapi_point_path = test_data_path('hazard', 'volcano_point.shp')
         merapi_krb_path = test_data_path('hazard', 'volcano_krb.shp')
         population_path = test_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
-        merapi_point_layer = read_layer(merapi_point_path)
         merapi_krb_layer = read_layer(merapi_krb_path)
         population_layer = read_layer(population_path)
 
         impact_function = VolcanoPolygonPopulationFunction.instance()
 
-        # 1. Run merapi point
-        impact_function.hazard = merapi_point_layer
-        impact_function.exposure = population_layer
-        impact_function.run()
-        impact_layer = impact_function.impact
-        # Check the question
-        expected_question = ('In the event of volcano point how many '
-                             'population might need evacuation')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
-        # Count by hand
-        impact = {
-            3000: 174,
-            5000: 26,
-            10000: 0
-        }
-        impact_features = impact_layer.get_data()
-        for i in range(len(impact_features)):
-            impact_feature = impact_features[i]
-            radius = impact_feature.get('Radius')
-            expected = impact[radius]
-            result = impact_feature['population']
-            message = 'Expecting %s, but it returns %s' % (expected, result)
-            self.assertEqual(expected, result, message)
-
         # 2. Run merapi krb
         impact_function.hazard = merapi_krb_layer
+        impact_function.exposure = population_layer
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
@@ -81,19 +55,9 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
         # Count by hand
-        impact = {
-            'Kawasan Rawan Bencana III': 49,
-            'Kawasan Rawan Bencana II': 132,
-            'Kawasan Rawan Bencana I': 0,
-        }
-        impact_features = impact_layer.get_data()
-        for i in range(len(impact_features)):
-            impact_feature = impact_features[i]
-            krb_zone = impact_feature.get('KRB')
-            expected = impact[krb_zone]
-            result = impact_feature['population']
-            message = 'Expecting %s, but it returns %s' % (expected, result)
-            self.assertEqual(expected, result, message)
+        expected_affected_population = 181
+        result = numpy.nansum(impact_layer.get_data())
+        self.assertEqual(expected_affected_population, result, message)
 
     def test_filter(self):
         """TestVolcanoPolygonPopulationFunction: Test filtering IF"""

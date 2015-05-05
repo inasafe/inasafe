@@ -48,7 +48,7 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'VolcanoPolygonBuildingFunction',
-            'name': tr('Volcano Polygon Building Impact Function'),
+            'name': tr('Polygon volcano on buildings'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
             'function_type': 'old-style',
@@ -66,7 +66,7 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'or "Kawasan  Rawan Bencana III." If you want to see the '
                 'name of the volcano in the result, you need to specify '
                 'the volcano name attribute in the Impact Function '
-                'option.'),
+                'options.'),
             'exposure_input': tr(
                 'Vector polygon layer extracted from OSM where each '
                 'polygon represents the footprint of a building.'),
@@ -74,8 +74,8 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'Vector layer contains Map of building exposed to '
                 'volcanic hazard zones for each Kawasan Rawan Bencana.'),
             'actions': tr(
-                'Provide details about how many building would likely be '
-                'affected by each hazard zones.'),
+                'Provide details about the number of buildings that are '
+                'within each hazard zone.'),
             'limitations': [],
             'citations': [],
             'categories': {

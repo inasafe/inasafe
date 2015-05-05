@@ -29,12 +29,12 @@ from safe.gis.qgis_raster_tools import polygonize, clip_raster
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 
 
-class FloodRasterRoadsExperimentalFunction(ImpactFunction):
-    """Simple experimental impact function for inundation."""
+class FloodRasterRoadsQGISFunction(ImpactFunction):
+    """Impact function for inundation on roads using QGIS libs."""
     _metadata = FloodRasterRoadsExperimentalMetadata
 
     def __init__(self):
-        super(FloodRasterRoadsExperimentalFunction, self).__init__()
+        super(FloodRasterRoadsQGISFunction, self).__init__()
         self.target_field = 'flooded'
 
     def _tabulate(self, flooded_len, question, road_len, roads_by_type):

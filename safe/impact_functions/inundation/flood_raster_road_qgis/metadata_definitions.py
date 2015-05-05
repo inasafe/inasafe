@@ -55,8 +55,8 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'FloodRasterRoadsExperimentalFunction',
-            'name': tr('Flood Raster Roads Experimental Function'),
+            'id': 'FloodRasterRoadsQGISFunction',
+            'name': tr('Raster flood on roads (QGIS)'),
             'impact': tr('Be flooded in given thresholds'),
             'title': tr('Be flooded in given thresholds'),
             'function_type': 'qgis2.0',

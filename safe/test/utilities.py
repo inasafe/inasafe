@@ -48,8 +48,8 @@ DEVNULL = open(os.devnull, 'w')
 # we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
 
 # Assuming test data three lvls up
-pardir = os.path.abspath(os.path.join(os.path.realpath(os.path.dirname(
-    __file__)),
+pardir = os.path.abspath(os.path.join(
+    os.path.realpath(os.path.dirname(__file__)),
     '..',
     '..',
     '..'))
@@ -232,7 +232,7 @@ def load_layer(layer_path):
         raise Exception(message)
 
     # noinspection PyUnresolvedReferences
-    message = 'Layer "%s" is not valid' % str(layer.source())
+    message = 'Layer "%s" is not valid' % layer.source()
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
         print message
@@ -922,6 +922,7 @@ def load_standard_layers(dock=None):
         test_data_path('hazard', 'volcano_point.shp'),
         test_data_path('exposure', 'roads.shp'),
         test_data_path('hazard', 'flood_multipart_polygons.shp'),
+        test_data_path('hazard', 'classified_generic_polygon.shp'),
         test_data_path('hazard', 'volcano_krb.shp'),
         test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
         test_data_path('hazard', 'classified_flood_20_20.asc'),
@@ -1045,7 +1046,7 @@ def clone_shp_layer(
     :type source_directory: str
 
     :param target_directory: Subdirectory in InaSAFE temp dir that we want to
-        put the files into. Default to 'testing'.
+        put the files into. Default to 'test'.
     :type target_directory: str
     """
     extensions = ['.shp', '.shx', '.dbf', '.prj']
@@ -1061,6 +1062,32 @@ def clone_shp_layer(
 
     shp_path = '%s.shp' % temp_path
     layer = QgsVectorLayer(shp_path, os.path.basename(shp_path), 'ogr')
+    return layer
+
+
+def clone_csv_layer(
+        name,
+        source_directory,
+        target_directory='test'):
+    """Helper function that copies a test csv layer and returns it.
+
+    :param name: The default name for the csv layer.
+    :type name: str
+
+    :param source_directory: Directory where the file is located.
+    :type source_directory: str
+
+    :param target_directory: Subdirectory in InaSAFE temp dir that we want to
+        put the files into. Default to 'test'.
+    :type target_directory: str
+    """
+    file_path = '%s.csv' % name
+    temp_path = unique_filename(dir=temp_dir(target_directory))
+    # copy to temp file
+    source_path = os.path.join(source_directory, file_path)
+    shutil.copy2(source_path, temp_path)
+    # return a single predefined layer
+    layer = QgsVectorLayer(temp_path, '', 'delimitedtext')
     return layer
 
 

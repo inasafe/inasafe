@@ -1,19 +1,35 @@
 # coding=utf-8
-"""Function to manage self-registering plugins
+"""Function to manage self-registering plugins.
 
 The design is based on http://effbot.org/zone/metaclass-plugins.htm
 
 To register the plugin, the module must be imported by the Python process
 using it.
+
+InaSAFE Disaster risk assessment tool developed by AusAid -
+  **IS Utilities implementation.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
 """
+__author__ = 'christian@kartoza.com <Christian Christelis>'
+__revision__ = '$Format:%H$'
+__date__ = '29/04/2015'
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
+
 
 import logging
 from math import ceil
+import numpy
 from collections import OrderedDict
 
-from safe.utilities.i18n import tr
 from safe.defaults import default_minimum_needs
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -205,3 +221,15 @@ def convert_to_old_keywords(converter, keywords):
                         break
             except KeyError:
                 pass
+
+
+def has_no_data(layer_data):
+    """Determine whether or not a layer contains nan values.
+
+    :param layer_data: Layer data that is to be inspected.
+    :type layer_data: ndarry
+
+    :return: The True if there is nodata in layer_data.
+    :rtype: bool
+    """
+    return numpy.isnan(numpy.sum(layer_data))

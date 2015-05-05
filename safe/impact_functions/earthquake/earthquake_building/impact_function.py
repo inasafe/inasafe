@@ -18,7 +18,7 @@ import logging
 from collections import OrderedDict
 
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.earthquake.earthquake_building\
+from safe.impact_functions.earthquake.earthquake_building \
     .metadata_definitions import EarthquakeBuildingMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
@@ -116,7 +116,8 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
 
         # Determine if exposure data have NEXIS attributes.
         attribute_names = exposure_layer.get_attribute_names()
-        if ('FLOOR_AREA' in attribute_names and
+        if (
+                'FLOOR_AREA' in attribute_names and
                 'BUILDING_C' in attribute_names and
                 'CONTENTS_C' in attribute_names):
             self.is_nexis = True
@@ -178,13 +179,15 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 self.buildings[usage] = 0
                 for category in self.affected_buildings.keys():
                     if self.is_nexis:
-                        self.affected_buildings[category][usage] = OrderedDict([
-                            (tr('Buildings Affected'), 0),
-                            (tr('Buildings value ($M)'), 0),
-                            (tr('Contents value ($M)'), 0)])
+                        self.affected_buildings[category][usage] = OrderedDict(
+                            [
+                                (tr('Buildings Affected'), 0),
+                                (tr('Buildings value ($M)'), 0),
+                                (tr('Contents value ($M)'), 0)])
                     else:
-                        self.affected_buildings[category][usage] = OrderedDict([
-                            (tr('Buildings Affected'), 0)])
+                        self.affected_buildings[category][usage] = OrderedDict(
+                            [
+                                (tr('Buildings Affected'), 0)])
             self.buildings[usage] += 1
             try:
                 mmi = float(attributes[i][hazard_attribute])  # MMI

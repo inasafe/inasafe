@@ -76,7 +76,7 @@ class TestQGIS(unittest.TestCase):
 
         # Point layer
         layer = clone_shp_layer(
-            name='Marapi',
+            name='volcano_point',
             include_keywords=True,
             source_directory=test_data_path('hazard'))
         message = '%s layer should be polygonal' % layer

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>442</width>
+    <width>571</width>
     <height>389</height>
    </rect>
   </property>
@@ -184,8 +184,11 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QWebView" name="web_view" native="true">
-     <property name="url" stdset="0">
+    <widget class="QWebView" name="web_view">
+     <property name="styleSheet">
+      <string notr="true">padding-bottom: 10px;</string>
+     </property>
+     <property name="url">
       <url>
        <string>about:blank</string>
       </url>
@@ -205,7 +208,7 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>QtWebKit/QWebView</header>
+   <header>QtWebKitWidgets/QWebView</header>
   </customwidget>
  </customwidgets>
  <tabstops>

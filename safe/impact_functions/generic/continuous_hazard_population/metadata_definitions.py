@@ -54,7 +54,7 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'ContinuousHazardPopulationFunction',
-            'name': tr('Continuous Hazard Population Function'),
+            'name': tr('Continuous raster hazard on population'),
             'impact': tr('Be impacted'),
             'title': tr('Be impacted'),
             'function_type': 'old-style',
@@ -80,9 +80,9 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                 'Map of population exposed to high category and a table '
                 'with number of people in each category'),
             'actions': tr(
-                'Provide details about how many people would likely need '
-                'to be impacted for each category.'),
-            'limitations': [tr('The number of categories is three.')],
+                'Provide details about how many people would likely '
+                'be impacted in each category.'),
+            'limitations': [tr('Only three categories can be used.')],
             'citations': [],
             'categories': {
                 'hazard': {
