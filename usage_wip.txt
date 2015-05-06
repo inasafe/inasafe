@@ -1,0 +1,35 @@
+Usage: accent.py [OPTION] --hazard=HAZARD_FILE --exposure=EXP_FILE --extent=XMIN,YMIN,XMAX,YMAX FILE
+
+Arguments:
+    FILE                    Output path for the impact layer and associated products.  If omitted,
+                            the impact layer will be written into the current working directory.
+    --hazard=HAZARD_FILE    Hazard layer file such as a shapefile or tif containing flood, tsunami,
+                            volcano, earthquake data. The layer should be accompanied with an appropriate
+                            keywords file.
+    --exposure=EXP_FILE     Exposure layer file such as a shapefile or tif containing population,
+                            structures (e.g. buildings), roads, etc. data. The layer should be accompanied with
+                            an appropriate keywords file.
+
+    --template=TEMPLATE     QGIS .qpt template file to be used for generating the PDF report.
+                            If ommitted, no PDF will be generated. PDF output file will follow prefix rules (see below).
+Options:
+    --extent=XMIN,YMIN,
+             XMAX,YMAX      a quartet of decimal degrees values representing the analysis extent that
+                            should be used. The order of the values is significant, representing XMIN, YMIN,
+                            XMAX, YMAX. This option is optional - if omitted the union of the hazard and
+                            exposure layer extents should be used.
+    --aggregation=AG_FILE   path to an aggregation layer such as a shapefile or tif containing village,
+                            boundaries, town subdivisions etc. data. The layer should be accompanied with
+                            an appropriate keywords file.
+
+-p --prefix : prefix for the impact layer and associated products. This option is optional
+        - if omitted, a randomly generated letter sequence will be used that is
+        guaranteed to be unique.
+-v --version : print the current version of InaSAFE and exit.
+-l --list : list the available impact functions and exit. Can be used along with -e and -h
+        options to produce a filtered list of Impact Functions that will work with the
+        specified hazard and exposure layers.
+-d --download : must be used in tandem with -e. You can also use the -o and -p options
+        but in this context the prefix and path will be used for the downloaded shapefiles.
+        The download option will download all road, building polygons and building points
+        for the defined extents from the InaSAFE OpenStreetMap download service.
