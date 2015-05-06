@@ -16,6 +16,8 @@ def target_field_value():
     field.value = 'FLOODED'
     return field
 
+from safe_extras.parameters.boolean_parameter import BooleanParameter
+from safe_extras.parameters.string_parameter import StringParameter
 
 def road_type_field():
     """Generate road type field parameter

@@ -30,6 +30,9 @@ from safe.definitions import (
     layer_raster_continuous, unit_feet_depth, unit_metres_depth)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.\
+    flood_population_evacuation_raster_hazard.parameter_definitions \
+    import threshold
 from safe.utilities.i18n import tr
 
 
@@ -115,7 +118,7 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('thresholds [m]', [1.0]),
+                ('thresholds', threshold()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

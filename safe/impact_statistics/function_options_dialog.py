@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe_extras.parameters.generic_parameter import GenericParameter
 
 __author__ = 'oz@tanoshiistudio.com'
 __revision__ = '$Format:%H$'
@@ -27,18 +28,24 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
+from PyQt4.QtCore import Qt
+# noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QGroupBox,
     QLineEdit,
     QDialog,
     QLabel,
     QCheckBox,
+    QFormLayout,
+    QGridLayout,
     QWidget,
     QScrollArea,
     QVBoxLayout)
 
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
+from safe.postprocessors.postprocessor_factory import (
+    get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe.common.resource_parameter import ResourceParameter
@@ -111,14 +118,25 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         :param parameters: Parameters to be edited
         """
+        scroll_layout = QVBoxLayout()
+        scroll_widget = QWidget()
+        scroll_widget.setLayout(scroll_layout)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(scroll_widget)
+        self.configLayout.addWidget(scroll)
+
         for key, value in parameters.items():
             if key == 'postprocessors':
                 self.build_post_processor_form(value)
             elif key == 'minimum needs':
                 self.build_minimum_needs_form(value)
             else:
-                self.values[key] = self.build_widget(
-                    self.configLayout, key, value)
+                self.build_widget(scroll_layout, key, value)
+
+        scroll_layout.addStretch()
+
+
 
     def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab.
@@ -127,27 +145,18 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         :type parameters: list
         """
         # create minimum needs tab
-        scroll_layout = QVBoxLayout()
-        scroll_widget = QWidget()
-        scroll_widget.setLayout(scroll_layout)
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setWidget(scroll_widget)
-        main_layout = QVBoxLayout()
-        main_layout.addWidget(scroll)
-
         tab = QWidget()
-        tab.setLayout(main_layout)
-
+        form_layout = QGridLayout(tab)
+        form_layout.setContentsMargins(0, 0, 0, 0)
         extra_parameters = [(ResourceParameter, ResourceParameterWidget)]
-        parameter_container = ParameterContainer(parameters, extra_parameters)
-        scroll_layout.addWidget(parameter_container)
-
+        parameter_container = ParameterContainer(
+            parameters=parameters, extra_parameters=extra_parameters)
+        parameter_container.setup_ui()
+        form_layout.addWidget(parameter_container)
         self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
         self.values['minimum needs'] = parameter_container.get_parameters
 
-        scroll_layout.addStretch()
 
     def build_post_processor_form(self, form_elements):
         """Build Post Processor Tab.
@@ -173,18 +182,17 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         values = OrderedDict()
         for label, parameters in form_elements.items():
             parameter_container = ParameterContainer(parameters)
+            parameter_container.setup_ui()
             scroll_layout.addWidget(parameter_container)
             input_values = parameter_container.get_parameters
             values[label] = input_values
 
         self.values['postprocessors'] = values
-        # spacer needs to be added last
-        scroll_layout.addStretch()
 
-    def build_widget(self, form_layout, name, key_value):
+    def build_widget(self, form_layout, name, parameter_value):
         """Create a new form element dynamically based from key_value type.
 
-        The element will be inserted to form_layout.
+        The Parametetr Container will be inserted to form_layout.
 
         :param form_layout: Mandatory a layout instance
         :type form_layout: QFormLayout
@@ -193,83 +201,28 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
          configurable parameters dictionary.
         :type name: str
 
-        :param display_value: Mandatory representing the value referenced by the
-         key.
-        :type display_value: object
+        :param parameter_value: Mandatory representing the value referenced
+        by the key.
+        :type parameter_value: object
 
         :returns: a function that return the value of widget
 
         :raises: None
         """
-        display_value = key_value.value
-        # create label
-        if isinstance(name, str):
-            label = QLabel()
-            label.setObjectName(_fromUtf8(name + "Label"))
-            label_text = name.replace('_', ' ').capitalize()
-            label.setText(tr(label_text))
-            label.setToolTip(str(type(display_value)))
+        input_values = None
+        if parameter_value is not None:
+            # create and add widget to the dialog box
+            # default tab's layout
+            parameter_container = ParameterContainer(parameter_value)
+            parameter_container.setup_ui()
+            form_layout.addWidget(parameter_container)
+            # bind parameter
+            input_values = parameter_container.get_parameters
+            self.values[name] = input_values
         else:
-            label = name
-
-        # create widget based on the type of key_value variable
-        # if widget is a QLineEdit, value needs to be set
-        # if widget is NOT a QLineEdit, property_name needs to be set
-        value = None
-        property_name = None
-
-        # can be used for widgets that have their own text like QCheckBox
-        hide_label = False
-
-        if isinstance(display_value, list):
-            def function(values_string):
-                """
-                :param values_string: This contains the list of values the user
-                    added to the line edit for the parameter.
-                :type values_string: basestring
-
-                :returns: list of value types
-                :rtype: list
-                """
-                value_type = type(display_value[0])
-                return [value_type(y) for y in str(values_string).split(',')]
-            widget = QLineEdit()
-            value = ', '.join([str(x) for x in display_value])
-            # NOTE: we assume that all element in list have same type
-        elif isinstance(display_value, dict):
-            def function(key_values_string):
-                """
-                :param key_values_string: This contains the dictionary that
-                    the used defined on the line edit for this parameter.
-                :type key_values_string: basestring
-
-                :returns: a safe evaluation of the dict
-                :rtype: dict
-                """
-                return ast.literal_eval(str(key_values_string))
-            widget = QLineEdit()
-            value = str(display_value)
-        elif isinstance(display_value, bool):
-            function = bool
-            widget = QCheckBox()
-            widget.setChecked(display_value)
-            widget.setText(label.text())
-            property_name = 'checked'
-            hide_label = True
-        else:
-            function = type(display_value)
-            widget = QLineEdit()
-            value = str(display_value)
-        if hide_label:
-            form_layout.addRow(widget)
-        else:
-            form_layout.addRow(label, widget)
-
-        if isinstance(widget, QLineEdit):
-            widget.setText(value)
-            property_name = 'text'
-
-        return self.bind(widget, property_name, function)
+            LOGGER.debug('build_widget : parameter is None')
+            LOGGER.debug(parameter_value)
+        return input_values
 
     def set_dialog_info(self, function_id):
         """Show help text in dialog.
