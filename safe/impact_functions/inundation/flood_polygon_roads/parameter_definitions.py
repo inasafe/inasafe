@@ -59,6 +59,19 @@ def affected_value():
     return field
 
 
+def road_type_field():
+    """Generate road type field parameter
+
+    :return: StringParameter
+    :rtype: StringParameter
+    """
+    field = StringParameter()
+    field.name = 'Road Type Field'
+    field.is_required = True
+    field.value = 'TYPE'
+    return field
+
+
 def building_type_field():
     field = BooleanParameter()
     field.name = 'Building Type Field'

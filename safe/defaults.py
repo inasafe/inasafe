@@ -25,6 +25,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QSettings
 
+from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.float_parameter import FloatParameter
 
@@ -336,7 +337,10 @@ def default_provenance():
     :return: default provenance.
     :rtype: str
     """
-    return 'The minimum needs are based on Perka 7/2008.'
+    field = StringParameter()
+    field.name = 'Provenanece'
+    field.value = 'The minimum needs are based on Perka 7/2008.'
+    return field
 
 
 def disclaimer():

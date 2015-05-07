@@ -50,13 +50,17 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <layout class="QFormLayout" name="configLayout"/>
+        <layout class="QVBoxLayout" name="configLayout">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetNoConstraint</enum>
+         </property>
+        </layout>
        </item>
       </layout>
      </widget>
     </widget>
    </item>
-   <item row="2" column="0" rowspan="2" colspan="2">
+   <item row="2" column="0" colspan="2">
     <widget class="QLabel" name="lblErrorMessage">
      <property name="font">
       <font>
@@ -98,8 +102,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>263</x>
+     <y>585</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -114,8 +118,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>331</x>
+     <y>585</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

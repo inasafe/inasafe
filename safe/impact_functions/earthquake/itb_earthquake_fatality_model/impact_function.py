@@ -17,7 +17,6 @@ __date__ = '24/03/15'
 import numpy
 import logging
 
-from safe.common.utilities import OrderedDict
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .metadata_definitions import ITBFatalityMetadata
@@ -108,19 +107,6 @@ class ITBFatalityFunction(ImpactFunction):
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
-        self.hardcoded_parameters = OrderedDict([
-            ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
-            # Rates of people displaced for each MMI level
-            ('displacement_rate', {
-                1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
-                7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
-            }),
-            ('mmi_range', range(2, 10)),
-            ('step', 0.5),
-            # Threshold below which layer should be transparent
-            ('tolerance', 0.01),
-            ('calculate_displaced_people', True)
-        ])
 
     def fatality_rate(self, mmi):
         """ITB method to compute fatality rate.
@@ -132,8 +118,8 @@ class ITBFatalityFunction(ImpactFunction):
         if mmi < 4:
             return 0
 
-        x = self.hardcoded_parameters['x']
-        y = self.hardcoded_parameters['y']
+        x = self.parameters['x'].value
+        y = self.parameters['y'].value
         # noinspection PyUnresolvedReferences
         return numpy.power(10.0, x * mmi - y)
 
@@ -151,10 +137,10 @@ class ITBFatalityFunction(ImpactFunction):
         self.validate()
         self.prepare(layers)
 
-        displacement_rate = self.hardcoded_parameters['displacement_rate']
+        displacement_rate = self.parameters['displacement_rate'].value
 
         # Tolerance for transparency
-        tolerance = self.hardcoded_parameters['tolerance']
+        tolerance = self.parameters['tolerance'].value
 
         # Extract input layers
         intensity = self.hazard
@@ -166,7 +152,7 @@ class ITBFatalityFunction(ImpactFunction):
 
         # Calculate people affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
-        mmi_range = self.hardcoded_parameters['mmi_range']
+        mmi_range = self.parameters['mmi_range'].value
         number_of_exposed = {}
         number_of_displaced = {}
         number_of_fatalities = {}
@@ -177,9 +163,10 @@ class ITBFatalityFunction(ImpactFunction):
         for mmi in mmi_range:
             # Identify cells where MMI is in class i and
             # count people affected by this shake level
+            step = self.parameters['step'].value
             mmi_matches = numpy.where(
-                (hazard > mmi - self.hardcoded_parameters['step']) * (
-                    hazard <= mmi + self.hardcoded_parameters['step']),
+                (hazard > mmi - step) * (
+                    hazard <= mmi + step),
                 exposure, 0)
 
             # Calculate expected number of fatalities per level
@@ -238,7 +225,7 @@ class ITBFatalityFunction(ImpactFunction):
         table_body.append(TableRow([tr('Number of fatalities'), s],
                                    header=True))
 
-        if self.hardcoded_parameters['calculate_displaced_people']:
+        if self.parameters['calculate_displaced_people'].value:
             # Add total estimate of people displaced
             s = format_int(displaced)
             table_body.append(TableRow([tr('Number of people displaced'), s],
@@ -280,7 +267,7 @@ class ITBFatalityFunction(ImpactFunction):
                     tr(resource['table name']),
                     format_int(resource['amount'])]))
         table_body.append(TableRow(tr('Provenance'), header=True))
-        table_body.append(TableRow(self.parameters['provenance']))
+        table_body.append(TableRow(self.parameters['provenance'].value))
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
 

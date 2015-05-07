@@ -31,6 +31,9 @@ from safe.definitions import (
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
+    .parameter_definitions import (
+        road_type_field, min_threshold, max_threshold)
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
 

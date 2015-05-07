@@ -1,15 +1,7 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Parameter definition for
-Volcano Polygon on Population Impact Function.
+__author__ = 'lucernae'
+__date__ = '11/04/15'
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
 
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.string_parameter import StringParameter
@@ -30,7 +22,11 @@ def target_field():
 
 
 def affected_field():
-    """"Generator for selection of affected field parameter."""
+    """Generate affected field parameter
+
+    :return: StringParameter
+    :rtype: StringParameter
+    """
     field = StringParameter()
     field.name = 'Affected Field'
     field.is_required = True
@@ -45,7 +41,11 @@ def affected_field():
 
 
 def affected_value():
-    """Generator for parameter stating what values constitute 'affected'."""
+    """Generate affected value parameter
+
+    :return: StringParameter
+    :rtype: StringParameter
+    """
     field = StringParameter()
     field.name = 'Affected Value'
     field.is_required = True

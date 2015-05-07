@@ -35,6 +35,9 @@ from safe.defaults import (
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.generic.classified_hazard_population\
+    .parameter_definitions import (
+        low_hazard_class, medium_hazard_class, high_hazard_class)
 
 
 class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
@@ -107,9 +110,9 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('low_hazard_class', 1.0),
-                ('medium_hazard_class', 2.0),
-                ('high_hazard_class', 3.0),
+                ('low_hazard_class', low_hazard_class()),
+                ('medium_hazard_class', medium_hazard_class()),
+                ('high_hazard_class', high_hazard_class()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),
