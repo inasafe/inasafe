@@ -78,10 +78,12 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
 
         self.iface = iface
-        self.buildings_url = 'http://osm.linfiniti.com/buildings-shp'
-        self.building_points_url = \
-            'http://osm.linfiniti.com/building-points-shp'
-        self.roads_url = 'http://osm.linfiniti.com/roads-shp'
+        self.url = {
+            'buildings': 'http://osm.linfiniti.com/buildings-shp',
+            'building-points': 'http://osm.linfiniti.com/building-points-shp',
+            'roads': 'http://osm.linfiniti.com/roads-shp',
+            'potential-idp': 'http://osm.linfiniti.com/potential-idp-shp'
+        }
 
         self.help_context = 'openstreetmap_downloader'
         # creating progress dialog for download
@@ -307,15 +309,15 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             return
 
         # Get all the feature types
-        index = self.feature_type.currentIndex()
-        if index == 0:
-            feature_types = ['buildings', 'roads', 'building-points']
-        elif index == 1:
-            feature_types = ['buildings']
-        elif index == 2:
-            feature_types = ['building-points']
-        else:
-            feature_types = ['roads']
+        feature_types = []
+        if self.roads_checkBox.isChecked():
+            feature_types.append('roads')
+        if self.buildings_checkBox.isChecked():
+            feature_types.append('buildings')
+        if self.building_points_checkBox.isChecked():
+            feature_types.append('building-points')
+        if self.potential_idp_checkBox.isChecked():
+            feature_types.append('potential-idp')
 
         try:
             self.save_state()
@@ -493,15 +495,9 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 max_longitude=max_longitude,
                 max_latitude=max_latitude
             )
-        if feature_type == 'buildings':
-            url = '{url}?bbox={box}&qgis_version=2'.format(
-                url=self.buildings_url, box=box)
-        elif feature_type == 'building-points':
-            url = '{url}?bbox={box}&qgis_version=2'.format(
-                url=self.building_points_url, box=box)
-        else:
-            url = '{url}?bbox={box}&qgis_version=2'.format(
-                url=self.roads_url, box=box)
+
+        url = '{url}?bbox={box}&qgis_version=2'.format(
+            url=self.url[feature_type], box=box)
 
         if 'LANG' in os.environ:
             env_lang = os.environ['LANG']
