@@ -17,6 +17,7 @@ from PyQt4.QtGui import (
     QLabel,
     QMessageBox)
 from qt_widgets.qt4_parameter_factory import Qt4ParameterFactory
+from PyQt4.QtCore import Qt
 from parameter_exceptions import RequiredException, InvalidValidationException
 
 
@@ -42,7 +43,6 @@ xt
 
         """
         QWidget.__init__(self, parent)
-
         # attributes
         if not parameters:
             self.parameters = []
@@ -126,7 +126,7 @@ xt
 
         return parameter_widgets
 
-    def setup_ui(self):
+    def setup_ui(self, must_scroll=True):
         """Setup the UI of this parameter container.
         """
         # Vertical layout to place the parameter widgets
@@ -140,30 +140,48 @@ xt
         # Label for description
         self.description_label.setText(self.description_text)
 
-        # Scroll area to make the container scroll-able
-        self.scroll_area.setWidgetResizable(True)
-        # self.scroll_area.setSizePolicy(QSizePolicy.Expanding)
-        self.scroll_area.setWidget(self.widget)
+        if must_scroll:
+            self.scroll_area.setWidgetResizable(True)
+            self.scroll_area.setWidget(self.widget)
 
-        # Main layout of the container
-        if self.description_text:
-            self.main_layout.addWidget(self.description_label)
-        self.main_layout.setContentsMargins(0, 0, 0, 0)
-        # self.main_layout.addStretch(1)
-        self.setLayout(self.main_layout)
+            # Main layout of the container
+            if self.description_text:
+                self.main_layout.addWidget(self.description_label)
+            self.main_layout.setContentsMargins(0, 0, 0, 0)
+            self.setLayout(self.main_layout)
 
-        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
+            self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
 
-        if not isinstance(self.parameters, list):
-            parameters = [self.parameters]
+            if not isinstance(self.parameters, list):
+                parameters = [self.parameters]
+            else:
+                parameters = self.parameters
+
+            if len(parameters) == 0:
+                self.set_empty_parameters()
+                return
+
+            self.main_layout.addWidget(self.scroll_area)
+
         else:
-            parameters = self.parameters
+            # Main layout of the container
+            if self.description_text:
+                self.main_layout.addWidget(self.description_label)
+            self.main_layout.setContentsMargins(0, 0, 0, 0)
+            self.setLayout(self.main_layout)
 
-        if len(parameters) == 0:
-            self.set_empty_parameters()
-            return
+            self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
 
-        self.main_layout.addWidget(self.scroll_area)
+            if not isinstance(self.parameters, list):
+                parameters = [self.parameters]
+            else:
+                parameters = self.parameters
+
+            if len(parameters) == 0:
+                self.set_empty_parameters()
+                return
+
+            self.main_layout.addWidget(self.widget)
 
         self.qt4_parameter_factory = Qt4ParameterFactory()
         if self.extra_parameters is not None:
@@ -189,6 +207,8 @@ xt
             palette.setColor(parameter_widget.backgroundRole(), color)
             parameter_widget.setPalette(palette)
             self.vertical_layout.addWidget(parameter_widget)
+
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
     def set_description(self, description):
         """Set description of the parameter container.

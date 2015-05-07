@@ -182,12 +182,13 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         values = OrderedDict()
         for label, parameters in form_elements.items():
             parameter_container = ParameterContainer(parameters)
-            parameter_container.setup_ui()
+            parameter_container.setup_ui(must_scroll=False)
             scroll_layout.addWidget(parameter_container)
             input_values = parameter_container.get_parameters
             values[label] = input_values
 
         self.values['postprocessors'] = values
+        scroll_layout.addStretch()
 
     def build_widget(self, form_layout, name, parameter_value):
         """Create a new form element dynamically based from key_value type.
@@ -214,7 +215,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             # create and add widget to the dialog box
             # default tab's layout
             parameter_container = ParameterContainer(parameter_value)
-            parameter_container.setup_ui()
+            parameter_container.setup_ui(must_scroll=False)
             form_layout.addWidget(parameter_container)
             # bind parameter
             input_values = parameter_container.get_parameters
