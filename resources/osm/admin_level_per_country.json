@@ -1,0 +1,26 @@
+{
+  "Indonesia": {
+	"1": "N/A",
+	"2": "National Border",
+	"3": "N/A",
+	"4": "Province",
+	"5": "City / Regency (Kotamadya / Kabupaten)",
+	"6": "Subdistrict (Kecamatan)",
+	"7": "Village (Kelurahan / Desa)",
+	"8": "Community Group (Rukun Warga)",
+	"9": "Neighborhood Unit (Rukun Tetangga)",
+	"10": "N/A"
+  },
+  "Philippines": {
+	"1": "N/A",
+	"2": "National Border",
+	"3": "Regions",
+	"4": "Provinces",
+	"5": "Sangguniang Panlalawigan (Provincial Council) districts (if any)",
+	"6": "Cities and Municipalities / Towns",
+	"7": "Sangguniang Panlungsod / Bayan (City/Town Council) districts (if any)",
+	"8": "Other administrative districts (if any)",
+	"9": "Zones (if any)",
+	"10": "Barangays"
+  }
+}

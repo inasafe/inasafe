@@ -37,6 +37,8 @@ from PyQt4.QtGui import (
 # noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
 
+import json
+
 from safe.common.exceptions import (
     CanceledImportDialogError,
     DownloadError,
@@ -44,7 +46,8 @@ from safe.common.exceptions import (
 from safe import messaging as m
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.gis import viewport_geo_array, rectangle_geo_array
-from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.utilities.resources import (
+    html_footer, html_header, get_ui_class, resources_path)
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.proxy import get_proxy
@@ -122,6 +125,42 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.pan_tool = QgsMapToolPan(self.canvas)
         self.canvas.setMapTool(self.pan_tool)
         self.update_extent_from_map_canvas()
+
+        # Setup helper for admin_level
+        json_file_path = resources_path('osm', 'admin_level_per_country.json')
+        if os.path.isfile(json_file_path):
+            self.countries = json.load(open(json_file_path))
+            self.populate_countries()
+            # connect
+            self.country_comboBox.currentIndexChanged.connect(
+                self.update_helper_political_level)
+            self.admin_level_comboBox.currentIndexChanged.connect(
+                self.update_helper_political_level)
+
+    def update_helper_political_level(self):
+        """To update the helper about the country and the admin_level."""
+        current_country = self.country_comboBox.currentText()
+        index = self.admin_level_comboBox.currentIndex()
+        current_level = self.admin_level_comboBox.itemData(index)
+        try:
+            content = self.countries[current_country][str(current_level)]
+            if content == 'N/A' or content == 'fixme' or content == '':
+                raise KeyError
+        except KeyError:
+            content = self.tr('undefined')
+        finally:
+            text = '<span style=" font-size:12pt; font-style:italic;">' \
+                   'level %s is : %s</span>' % (current_level, content)
+            self.boundary_helper.setText(text)
+
+    def populate_countries(self):
+        """Populate the combobox about countries and levels."""
+        for i in range(1, 10):
+            self.admin_level_comboBox.addItem(self.tr("Level %s" % i), i)
+
+        for country in self.countries.keys():
+            self.country_comboBox.addItem(country)
+        self.update_helper_political_level()
 
     def show_info(self):
         """Show usage info to the user."""
@@ -318,6 +357,9 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             feature_types.append('building-points')
         if self.potential_idp_checkBox.isChecked():
             feature_types.append('potential-idp')
+        if self.boundary_checkBox.isChecked():
+            level = self.admin_level_comboBox.currentIndex() + 1
+            feature_types.append('boundary-%s' % level)
 
         try:
             self.save_state()

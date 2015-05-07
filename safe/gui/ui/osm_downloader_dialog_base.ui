@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>612</width>
-    <height>664</height>
+    <height>759</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,47 @@
    <property name="spacing">
     <number>10</number>
    </property>
-   <item row="10" column="0">
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-style:italic;&quot;&gt;For information, in&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="country_comboBox"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="boundary_helper">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="11" column="0">
     <widget class="QCheckBox" name="overwrite_checkBox">
      <property name="styleSheet">
       <string notr="true">padding-bottom: 10px;</string>
@@ -27,75 +67,14 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="title">
-      <string>Feature type</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QCheckBox" name="roads_checkBox">
-        <property name="text">
-         <string>Roads</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="buildings_checkBox">
-        <property name="text">
-         <string>Buildings (polygon)</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="building_points_checkBox">
-        <property name="text">
-         <string>Buildings (point)</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="potential_idp_checkBox">
-        <property name="text">
-         <string extracomment="Internally displaced person">Potential internally displaced person camp</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="8" column="0">
+   <item row="9" column="0">
     <widget class="QLabel" name="filename_prefix_label">
      <property name="text">
       <string>File name prefix</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="0">
+   <item row="12" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
@@ -187,7 +166,7 @@
      </layout>
     </widget>
    </item>
-   <item row="12" column="0">
+   <item row="13" column="0">
     <widget class="QDialogButtonBox" name="button_box">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -212,7 +191,7 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
+   <item row="10" column="0">
     <widget class="QLineEdit" name="filename_prefix">
      <property name="inputMask">
       <string extracomment="Only A-Z a-z 0-9 and -_ chars allowed"/>
@@ -222,7 +201,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLineEdit" name="output_directory">
@@ -240,11 +219,86 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="0">
+   <item row="7" column="0">
     <widget class="QLabel" name="output_directory_label">
      <property name="text">
       <string>Output directory</string>
      </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Feature type</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QCheckBox" name="roads_checkBox">
+        <property name="text">
+         <string>Roads</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="buildings_checkBox">
+        <property name="text">
+         <string>Buildings (polygon)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="building_points_checkBox">
+        <property name="text">
+         <string>Buildings (point)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="potential_idp_checkBox">
+        <property name="text">
+         <string extracomment="Internally displaced person">Potential internally displaced person camp</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QCheckBox" name="boundary_checkBox">
+          <property name="text">
+           <string>Political boundaries</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="admin_level_comboBox"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
