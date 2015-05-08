@@ -150,15 +150,20 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             content = self.tr('undefined')
         finally:
             text = '<span style=" font-size:12pt; font-style:italic;">' \
-                   'level %s is : %s</span>' % (current_level, content)
+                   ', level %s is : %s</span>' % (current_level, content)
             self.boundary_helper.setText(text)
 
     def populate_countries(self):
         """Populate the combobox about countries and levels."""
-        for i in range(1, 10):
+        for i in range(1, 12):
             self.admin_level_comboBox.addItem(self.tr("Level %s" % i), i)
 
-        for country in self.countries.keys():
+        # Set current index to admin_level 8, the most common one
+        self.admin_level_comboBox.setCurrentIndex(7)
+
+        list_countries = self.countries.keys()
+        list_countries.sort()
+        for country in list_countries:
             self.country_comboBox.addItem(country)
         self.update_helper_political_level()
 
@@ -328,6 +333,26 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.canvas.unsetMapTool(self.pan_tool)
         self.canvas.setMapTool(self.rectangle_map_tool)
 
+    def get_checked_features(self):
+        """Create a tab with all checked features.
+
+        :return A list with all features which are checked in the UI.
+        :rtype list
+        """
+        feature_types = []
+        if self.roads_checkBox.isChecked():
+            feature_types.append('roads')
+        if self.buildings_checkBox.isChecked():
+            feature_types.append('buildings')
+        if self.building_points_checkBox.isChecked():
+            feature_types.append('building-points')
+        if self.potential_idp_checkBox.isChecked():
+            feature_types.append('potential-idp')
+        if self.boundary_checkBox.isChecked():
+            level = self.admin_level_comboBox.currentIndex() + 1
+            feature_types.append('boundary-%s' % level)
+        return feature_types
+
     def accept(self):
         """Do osm download and display it in QGIS."""
         error_dialog_title = self.tr('InaSAFE OpenStreetMap Downloader Error')
@@ -347,19 +372,16 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.groupBox.setEnabled(True)
             return
 
-        # Get all the feature types
-        feature_types = []
-        if self.roads_checkBox.isChecked():
-            feature_types.append('roads')
-        if self.buildings_checkBox.isChecked():
-            feature_types.append('buildings')
-        if self.building_points_checkBox.isChecked():
-            feature_types.append('building-points')
-        if self.potential_idp_checkBox.isChecked():
-            feature_types.append('potential-idp')
-        if self.boundary_checkBox.isChecked():
-            level = self.admin_level_comboBox.currentIndex() + 1
-            feature_types.append('boundary-%s' % level)
+        feature_types = self.get_checked_features()
+        if len(feature_types) < 1:
+            message = self.tr(
+                'No feature selected.'
+                'Please make sure you have checked one feature.')
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+            display_warning_message_box(self, error_dialog_title, message)
+            # Unlock the groupbox
+            self.groupBox.setEnabled(True)
+            return
 
         try:
             self.save_state()

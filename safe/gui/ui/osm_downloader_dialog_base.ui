@@ -277,7 +277,7 @@
       <item>
        <widget class="QCheckBox" name="potential_idp_checkBox">
         <property name="text">
-         <string extracomment="Internally displaced person">Potential internally displaced person camp</string>
+         <string extracomment="Internally displaced person">Potential internally displaced person camps</string>
         </property>
         <property name="checked">
          <bool>true</bool>
