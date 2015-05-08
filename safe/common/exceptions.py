@@ -341,3 +341,15 @@ class InvalidAggregationKeywords(Exception):
 class InvalidExtentError(Exception):
     """Raised if an extent is not valid."""
     pass
+
+
+class NoAttributeInLayerError(Exception):
+    """Raised if the attribute not exists in the vector layer"""
+    pass
+
+
+class NoImpactClassFoundError(Exception):
+    """Raised if the impacted object class is not present in the calculation
+    results
+    """
+    pass
