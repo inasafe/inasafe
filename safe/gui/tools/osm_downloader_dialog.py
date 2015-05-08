@@ -81,12 +81,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
 
         self.iface = iface
-        self.url = {
-            'buildings': 'http://osm.linfiniti.com/buildings-shp',
-            'building-points': 'http://osm.linfiniti.com/building-points-shp',
-            'roads': 'http://osm.linfiniti.com/roads-shp',
-            'potential-idp': 'http://osm.linfiniti.com/potential-idp-shp'
-        }
+        self.url_osm = 'http://osm.linfiniti.com/'
+        self.url_osm_suffix = '-shp'
 
         self.help_context = 'openstreetmap_downloader'
         # creating progress dialog for download
@@ -560,8 +556,9 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 max_latitude=max_latitude
             )
 
+        url = self.url_osm + feature_type + self.url_osm_suffix
         url = '{url}?bbox={box}&qgis_version=2'.format(
-            url=self.url[feature_type], box=box)
+            url=url, box=box)
 
         if 'LANG' in os.environ:
             env_lang = os.environ['LANG']
