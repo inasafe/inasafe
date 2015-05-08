@@ -33,6 +33,8 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.impact_functions.inundation.\
     flood_polygon_population.parameter_definitions import (
+        affected_field,
+        affected_value,
         evacuation_percentage)
 from safe.utilities.i18n import tr
 
@@ -111,10 +113,10 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 # This field of the  hazard layer contains information
                 # about inundated areas
-                ('affected_field', 'FLOODPRONE'),
+                ('affected_field', affected_field()),
                 # This value in 'affected_field' of the hazard layer
                 # marks the areas as inundated
-                ('affected_value', 'YES'),
+                ('affected_value', affected_value()),
                 # Percent of affected needing evacuation
                 ('evacuation_percentage', evacuation_percentage()),
                 ('postprocessors', OrderedDict([
