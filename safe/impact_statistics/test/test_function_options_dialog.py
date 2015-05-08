@@ -201,7 +201,6 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         try:
             add_button.click()
             value().value
-            LOGGER.debug('This is the value %s.' % value().value)
         except ValueError:
             # expected to raises this exception
             pass
