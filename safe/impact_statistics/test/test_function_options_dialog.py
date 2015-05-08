@@ -200,7 +200,8 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         widget.setText('bar')
         try:
             add_button.click()
-            value()
+            value().value
+            LOGGER.debug('This is the value %s.' % value().value)
         except ValueError:
             # expected to raises this exception
             pass
