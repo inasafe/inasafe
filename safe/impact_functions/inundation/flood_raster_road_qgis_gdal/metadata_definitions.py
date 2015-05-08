@@ -98,8 +98,8 @@ class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
                 # This field of the exposure layer contains
                 # information about road types
                 ('road_type_field', road_type_field()),
-                ('min threshold [m]', min_threshold()),
-                ('max threshold [m]', max_threshold()),
+                ('min threshold', min_threshold()),
+                ('max threshold', max_threshold()),
                 ('postprocessors', OrderedDict([
                     ('RoadType', road_type_postprocessor())
                 ]))
