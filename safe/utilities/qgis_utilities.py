@@ -51,7 +51,7 @@ def display_information_message_bar(
     :param duration: The duration for the display, default is 8 seconds.
     :type duration: int
     """
-
+    iface.messageBar().clearWidgets()
     widget = iface.messageBar().createMessage(title, message)
 
     if more_details:
@@ -87,6 +87,7 @@ def display_success_message_bar(
     :type duration: int
     """
 
+    iface.messageBar().clearWidgets()
     widget = iface.messageBar().createMessage(title, message)
 
     if more_details:
@@ -138,6 +139,7 @@ def display_warning_message_bar(
     :type duration: int
     """
 
+    iface.messageBar().clearWidgets()
     widget = iface.messageBar().createMessage(title, message)
 
     if more_details:
@@ -186,6 +188,7 @@ def display_critical_message_bar(
     :type duration: int
     """
 
+    iface.messageBar().clearWidgets()
     widget = iface.messageBar().createMessage(title, message)
 
     if more_details:

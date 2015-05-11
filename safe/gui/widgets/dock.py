@@ -1955,7 +1955,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         valid, extents = self.validate_extents()
         if valid:
             self.extent.show_next_analysis_extent(extents)
-            self.show_static_message(self.overlap_ok_message())
             display_information_message_bar(
                 self.tr('InaSAFE'),
                 self.tr('Analysis environment ready'),
