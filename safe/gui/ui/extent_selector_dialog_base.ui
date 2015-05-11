@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>621</width>
-    <height>351</height>
+    <width>609</width>
+    <height>339</height>
    </rect>
   </property>
   <property name="font">
@@ -71,21 +71,21 @@
        <item row="1" column="0">
         <widget class="QRadioButton" name="hazard_exposure_view_extent">
          <property name="text">
-          <string>Use union of hazard, exposure and current view extent</string>
+          <string>Use intersection of hazard, exposure and current view extent</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0">
         <widget class="QRadioButton" name="hazard_exposure_only">
          <property name="text">
-          <string>Use union of hazard and exposure layers</string>
+          <string>Use intersection of hazard and exposure layers</string>
          </property>
         </widget>
        </item>
        <item row="3" column="0">
         <widget class="QRadioButton" name="hazard_exposure_bookmark">
          <property name="text">
-          <string>Use union of hazard, exposure and this bookmark</string>
+          <string>Use intersection of hazard, exposure and this bookmark</string>
          </property>
         </widget>
        </item>
@@ -99,7 +99,7 @@
        <item row="5" column="0">
         <widget class="QRadioButton" name="hazard_exposure_user_extent">
          <property name="text">
-          <string>Use union of hazard, exposure and this bounding box</string>
+          <string>Use intersection of hazard, exposure and this bounding box</string>
          </property>
          <property name="checked">
           <bool>true</bool>
@@ -278,7 +278,19 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>button_box</tabstop>
+  <tabstop>hazard_exposure_view_extent</tabstop>
+  <tabstop>hazard_exposure_only</tabstop>
+  <tabstop>hazard_exposure_bookmark</tabstop>
+  <tabstop>comboBox_bookmarks_list</tabstop>
+  <tabstop>hazard_exposure_user_extent</tabstop>
+  <tabstop>y_maximum</tabstop>
+  <tabstop>x_maximum</tabstop>
+  <tabstop>x_minimum</tabstop>
+  <tabstop>y_minimum</tabstop>
+  <tabstop>capture_button</tabstop>
+  <tabstop>show_warnings</tabstop>
+  <tabstop>show_confirmations</tabstop>
+  <tabstop>web_view</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/resources.qrc"/>

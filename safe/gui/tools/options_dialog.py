@@ -115,10 +115,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.cbxHideExposure.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/clip_to_viewport', True, type=bool))
-        self.cbxClipToViewport.setChecked(flag)
-
-        flag = bool(settings.value(
             'inasafe/clip_hard', False, type=bool))
         self.cbxClipHard.setChecked(flag)
 
@@ -231,9 +227,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         settings.setValue(
             'inasafe/setHideExposureFlag',
             self.cbxHideExposure.isChecked())
-        settings.setValue(
-            'inasafe/clip_to_viewport',
-            self.cbxClipToViewport.isChecked())
         settings.setValue(
             'inasafe/clip_hard',
             self.cbxClipHard.isChecked())

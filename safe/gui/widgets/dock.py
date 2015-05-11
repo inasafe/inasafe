@@ -171,7 +171,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.set_layer_from_title_flag = None
         self.zoom_to_impact_flag = None
         self.hide_exposure_flag = None
-        self.clip_to_viewport = None
         self.clip_hard = None
         self.show_intermediate_layers = None
         self.developer_mode = None
@@ -391,10 +390,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         flag = settings.value(
             'inasafe/setHideExposureFlag', False, type=bool)
         self.hide_exposure_flag = flag
-
-        # whether to clip hazard and exposure layers to the view port
-        self.clip_to_viewport = settings.value(
-            'inasafe/clip_to_viewport', True, type=bool)
 
         # whether to 'hard clip' layers (e.g. cut buildings in half if they
         # lie partially in the AOI
@@ -1305,7 +1300,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             analysis.show_intermediate_layers = self.show_intermediate_layers
             analysis.run_in_thread_flag = self.run_in_thread_flag
             analysis.map_canvas = self.iface.mapCanvas()
-            analysis.clip_to_viewport = self.clip_to_viewport
             analysis.user_extent = self.extent.user_extent
             analysis.user_extent_crs = self.extent.user_extent_crs
 
@@ -1950,21 +1944,26 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 2.1.0
         """
-
+        settings = QSettings()
         self.extent.hide_next_analysis_extent()
         valid, extents = self.validate_extents()
         if valid:
             self.extent.show_next_analysis_extent(extents)
-            display_information_message_bar(
-                self.tr('InaSAFE'),
-                self.tr('Analysis environment ready'),
-                self.tr(
-                    'The hazard layer, exposure layer and your '
-                    'defined analysis area extents all overlap. Press the '
-                    'run button below to continue with the analysis.'),
-                self.tr('More info ...'),
-                2
-            )
+            show_confirmations = settings.value(
+                'inasafe/show_extent_confirmations',
+                True,
+                type=bool)
+            if show_confirmations:
+                display_information_message_bar(
+                    self.tr('InaSAFE'),
+                    self.tr('Analysis environment ready'),
+                    self.tr(
+                        'The hazard layer, exposure layer and your '
+                        'defined analysis area extents all overlap. Press the '
+                        'run button below to continue with the analysis.'),
+                    self.tr('More info ...'),
+                    2
+                )
         else:
             # For issue #618, #1811
             if self.show_only_visible_layers_flag:
@@ -1975,6 +1974,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if layer_count == 0:
                 self.show_static_message(self.getting_started_message())
             else:
+                show_warnings = settings.value(
+                    'inasafe/show_extent_warnings',
+                    True,
+                    type=bool)
+                if not show_warnings:
+                    return
                 display_warning_message_bar(
                     self.tr('InaSAFE'),
                     self.tr('No overlapping extents'),

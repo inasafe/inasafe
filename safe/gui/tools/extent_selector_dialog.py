@@ -31,7 +31,7 @@ import sqlite3
 from qgis.core import QGis  # force sip2 api
 
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignal
+from PyQt4.QtCore import pyqtSignal, QSettings
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
@@ -136,6 +136,38 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.comboBox_bookmarks_list.currentIndexChanged.connect(
             self.bookmarks_index_changed)
 
+        # Reinstate the last used radio button
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        if mode == 'HazardExposureView':
+            self.hazard_exposure_view_extent.setChecked(True)
+        elif mode == 'HazardExposure':
+            self.hazard_exposure_only.setChecked(True)
+        elif mode == 'HazardExposureBookmark':
+            self.hazard_exposure_bookmark.setChecked(True)
+        elif mode == 'HazardExposureBoundingBox':
+            self.hazard_exposure_user_extent.setChecked(True)
+
+        show_warnings = settings.value(
+            'inasafe/show_extent_warnings',
+            True,
+            type=bool)
+        if show_warnings:
+            self.show_warnings.setChecked(True)
+        else:
+            self.show_warnings.setChecked(False)
+
+        show_confirmations = settings.value(
+            'inasafe/show_extent_confirmations',
+            True,
+            type=bool)
+        if show_confirmations:
+            self.show_confirmations.setChecked(True)
+        else:
+            self.show_confirmations.setChecked(False)
+
     def show_help(self):
         """Load the help text for the dialog."""
         show_context_help(self.help_context)
@@ -196,6 +228,8 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         """
         self.tool.reset()
         self._populate_coordinates()
+        # Revert to using hazard, exposure and view as basis for analysis
+        self.hazard_exposure_view_extent.setChecked(True)
 
     def reject(self):
         """User rejected the rectangle.
@@ -210,6 +244,22 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     def accept(self):
         """User accepted the rectangle.
         """
+        mode = None
+        if self.hazard_exposure_view_extent.isChecked():
+            mode = 'HazardExposureView'
+        elif self.hazard_exposure_only.isChecked():
+            mode = 'HazardExposure'
+        elif self.hazard_exposure_bookmark.isChecked():
+            mode = 'HazardExposureBookmark'
+        elif self.hazard_exposure_user_extent.isChecked():
+            mode = 'HazardExposureBoundingBox'
+
+        LOGGER.info(
+            'Setting analysis extent mode to %s' % mode
+        )
+        settings = QSettings()
+        settings.setValue('inasafe/analysis_extents_mode', mode)
+
         self.canvas.unsetMapTool(self.tool)
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
@@ -226,6 +276,14 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             LOGGER.info(
                 'Extent selector setting user extents to nothing')
             self.clear_extent.emit()
+
+        # State handlers for showing warning message bars
+        settings.setValue(
+            'inasafe/show_extent_warnings',
+            self.show_warnings.isChecked())
+        settings.setValue(
+            'inasafe/show_extent_confirmations',
+            self.show_confirmations.isChecked())
 
         self.tool.reset()
         self.extent_selector_closed.emit()
@@ -296,17 +354,35 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         else:
             self.ok_button.setDisabled(True)
 
-    def on_checkBox_use_bookmark_toggled(self, use_bookmark):
-        """Update the UI when the user toggles the bookmarks checkbox.
+    def on_hazard_exposure_view_extent_toggled(self, enabled):
+        """Handler for hazard/exposure/view radiobutton toggle.
 
-        :param use_bookmark: The status of the checkbox.
-        :type use_bookmark: bool
+        :param enabled: The status of the radiobutton.
+        :type enabled: bool
         """
-        if use_bookmark:
+        if enabled:
+            self.tool.reset()
+            self._populate_coordinates()
+
+    def on_hazard_exposure_only_toggled(self, enabled):
+        """Handler for hazard/exposure radiobutton toggle.
+
+        :param enabled: The status of the radiobutton.
+        :type enabled: bool
+        """
+        if enabled:
+            self.tool.reset()
+            self._populate_coordinates()
+
+    def on_hazard_exposure_bookmark_toggled(self, enabled):
+        """Update the UI when the user toggles the bookmarks radiobutton.
+
+        :param enabled: The status of the radiobutton.
+        :type enabled: bool
+        """
+        if enabled:
             self.bookmarks_index_changed()
-            self.groupBox_coordinates.setDisabled(True)
         else:
-            self.groupBox_coordinates.setEnabled(True)
             self.ok_button.setEnabled(True)
         self._populate_coordinates()
 
