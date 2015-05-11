@@ -50,7 +50,7 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
         """
         dict_meta = {
             'id': 'PAGFatalityFunction',
-            'name': tr('PAG earthquake fatality'),
+            'name': tr('Earthquake PAGER fatality function'),
             'impact': tr('Die or be displaced according Pager model'),
             'title': tr('Die or be displaced according Pager model'),
             'function_type': 'old-style',
@@ -58,7 +58,7 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
             'date_implemented': 'N/A',
             'overview': tr(
                 'To assess the impact of an earthquake on population based '
-                'on the Population Vulnerability Model Pager.'),
+                'on the Population Vulnerability Pager Model.'),
             'detailed_description': '',
             'hazard_input': '',
             'exposure_input': '',

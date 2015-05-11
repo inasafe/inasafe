@@ -67,15 +67,15 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 'format on population.'),
             'detailed_description': tr(
                 'The population subject to inundation is determined by '
-                'whether they are in an area which affected or not. You can '
+                'whether they are in a flood affected area or not. You can '
                 'also set an evacuation percentage to calculate what '
-                'percent of the total population affected should be '
+                'percentage of the affected population should be '
                 'evacuated. This number will be used to estimate needs '
-                'based on BNPB Perka 7/2008 minimum bantuan.'),
+                'based on the user defined minimum needs file.'),
             'hazard_input': tr(
-                'A hazard vector layer which has an attribute "affected". The '
-                'value of the affected attribute should be either 1 '
-                '(for affected) or 0 (for unaffected).'),
+                'A hazard vector layer which has an affected attribute. If '
+                'it does not have that attribute, all polygons will be '
+                'considered as affected.'),
             'exposure_input': tr(
                 'An exposure raster layer where each cell represents a '
                 'population count.'),
@@ -106,6 +106,12 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
+                # This field of the  hazard layer contains information
+                # about inundated areas
+                ('affected_field', 'FLOODPRONE'),
+                # This value in 'affected_field' of the hazard layer
+                # marks the areas as inundated
+                ('affected_value', 'YES'),
                 # Percent of affected needing evacuation
                 ('evacuation_percentage', 1),
                 ('postprocessors', OrderedDict([

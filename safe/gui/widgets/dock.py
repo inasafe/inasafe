@@ -553,7 +553,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         message = m.Message()
         message.add(LOGO_ELEMENT)
-        message.add(m.Heading('Getting started', **INFO_STYLE))
+        message.add(m.Heading(self.tr('Getting started'), **INFO_STYLE))
         notes = m.Paragraph(
             self.tr(
                 'These are the minimum steps you need to follow in order '
@@ -583,13 +583,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.tr(' button below.')))
         message.add(basics_list)
 
-        message.add(m.Heading('Limitations', **WARNING_STYLE))
+        message.add(m.Heading(self.tr('Limitations'), **WARNING_STYLE))
         caveat_list = m.NumberedList()
         for limitation in limitations():
             caveat_list.add(limitation)
         message.add(caveat_list)
 
-        message.add(m.Heading('Disclaimer', **WARNING_STYLE))
+        message.add(m.Heading(self.tr('Disclaimer'), **WARNING_STYLE))
         message.add(m.Paragraph(disclaimer()))
 
         return message
@@ -682,8 +682,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         else:
             message = self.ready_message()
             return True, message
-
-
 
     @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
@@ -1410,7 +1408,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.show_intermediate_layers:
             layers_to_add.append(self.analysis.aggregator.layer)
         layers_to_add.append(qgis_impact_layer)
+        active_function = self.active_impact_function
         QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
+        self.active_impact_function = active_function
+        self.impact_function_parameters = \
+            self.active_impact_function.parameters
         # make sure it is active in the legend - needed since QGIS 2.4
         self.iface.setActiveLayer(qgis_impact_layer)
         # then zoom to it
@@ -1575,10 +1577,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.get_layers_lock:
             return
 
-        # do nothing if no layer is active - see #1861
+        # Do nothing if there is no active layer - see #1861
         if not self._has_active_layer():
-            return
+            self.show_static_message(self.getting_started_message())
 
+        # Now try to read the keywords and show them in the dock
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
@@ -1964,6 +1967,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.tr('More info ...'),
                     2
                 )
+            self.pbnRunStop.setEnabled(True)
         else:
             # For issue #618, #1811
             if self.show_only_visible_layers_flag:
@@ -1990,8 +1994,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         'area, clearing the analysis area or defining a new '
                         'one using the analysis area definition tool.')
                 )
-
-                # self.show_static_message(self.no_overlap_message())
+            self.pbnRunStop.setEnabled(False)
+            # self.show_static_message(self.no_overlap_message())
 
     def validate_extents(self):
         """Check if the current extents are valid.

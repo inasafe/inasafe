@@ -14,7 +14,7 @@
    <string>OSM Downloader</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <property name="verticalSpacing">
+   <property name="spacing">
     <number>10</number>
    </property>
    <item row="1" column="0">
@@ -101,15 +101,21 @@
      <property name="layoutDirection">
       <enum>Qt::LeftToRight</enum>
      </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="title">
       <string>Bounding box</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
      <property name="flat">
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="verticalSpacing">
-       <number>-1</number>
+      <property name="spacing">
+       <number>10</number>
       </property>
       <item row="3" column="0">
        <widget class="QLabel" name="label">
@@ -194,6 +200,9 @@
    </item>
    <item row="7" column="0">
     <widget class="QCheckBox" name="overwrite_checkBox">
+     <property name="styleSheet">
+      <string notr="true">padding-bottom: 10px;</string>
+     </property>
      <property name="text">
       <string>Overwrite existing files</string>
      </property>

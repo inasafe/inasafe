@@ -98,14 +98,14 @@ class TestEngine(unittest.TestCase):
         polygons = H.get_geometry(as_geometry_objects=True)
 
         # Clip
-        res_clip = clip_grid_by_polygons(E_clip.get_data(),
+        res_clip, _ = clip_grid_by_polygons(E_clip.get_data(),
                                          E_clip.get_geotransform(),
                                          polygons)
 
         # print res_clip
         # print len(res_clip)
 
-        res_full = clip_grid_by_polygons(E_full.get_data(),
+        res_full, _ = clip_grid_by_polygons(E_full.get_data(),
                                          E_full.get_geotransform(),
                                          polygons)
 
@@ -164,9 +164,10 @@ class TestEngine(unittest.TestCase):
         # Run and test the fundamental clipping routine
         # import time
         # t0 = time.time()
-        res = clip_grid_by_polygons(E.get_data(),
-                                    E.get_geotransform(),
-                                    H.get_geometry(as_geometry_objects=True))
+        res, _ = clip_grid_by_polygons(
+            E.get_data(),
+            E.get_geotransform(),
+            H.get_geometry(as_geometry_objects=True))
         # print 'Engine took %i seconds' % (time.time() - t0)
 
         assert len(res) == N
@@ -180,14 +181,13 @@ class TestEngine(unittest.TestCase):
         geom = res[0][0]
         vals = res[0][1]
         assert numpy.allclose(vals[17], 1481.98)
-        assert numpy.allclose(geom[17][0], 106.88746869)  # LON
-        assert numpy.allclose(geom[17][1], -6.11493812)  # LAT
+        assert numpy.allclose(geom[17][0], 106.88927)  # LON
+        assert numpy.allclose(geom[17][1], -6.114458)  # LAT
 
         # Then run and test the high level interpolation function
         # t0 = time.time()
-        P = interpolate_polygon_raster(H, E,
-                                       layer_name='poly2raster_test',
-                                       attribute_name='grid_value')
+        P, _ = interpolate_polygon_raster(
+            H, E, layer_name='poly2raster_test', attribute_name='grid_value')
         # print 'High level function took %i seconds' % (time.time() - t0)
         # P.write_to_file('polygon_raster_interpolation_example_big.shp')
 
@@ -202,8 +202,8 @@ class TestEngine(unittest.TestCase):
         assert attributes['polygon_id'] == 0
         assert numpy.allclose(attributes['grid_value'], 1481.984)
 
-        assert numpy.allclose(geometry[0], 106.88746869)  # LON
-        assert numpy.allclose(geometry[1], -6.11493812)  # LAT
+        assert numpy.allclose(geometry[0], 106.88927)  # LON
+        assert numpy.allclose(geometry[1], -6.11448)  # LAT
 
         # A second characterisation test
         attributes = P.get_data()[10000]
@@ -216,8 +216,8 @@ class TestEngine(unittest.TestCase):
         assert attributes['polygon_id'] == 93
         assert numpy.allclose(attributes['grid_value'], 715.6508)
 
-        assert numpy.allclose(geometry[0], 106.74092731)  # LON
-        assert numpy.allclose(geometry[1], -6.1081538)  # LAT
+        assert numpy.allclose(geometry[0], 106.74137)  # LON
+        assert numpy.allclose(geometry[1], -6.10634)  # LAT
 
         # A third characterisation test
         attributes = P.get_data()[99000]
@@ -231,7 +231,7 @@ class TestEngine(unittest.TestCase):
         assert numpy.allclose(attributes['grid_value'], 770.7628)
 
         assert numpy.allclose(geometry[0], 106.9675237)  # LON
-        assert numpy.allclose(geometry[1], -6.16966499)  # LAT
+        assert numpy.allclose(geometry[1], -6.16468982)  # LAT
 
     test_polygon_hazard_and_raster_exposure_big.slow = True
 
@@ -253,15 +253,15 @@ class TestEngine(unittest.TestCase):
         assert N == 4
 
         # Run underlying clipping routine
-        res0 = clip_grid_by_polygons(E.get_data(),
-                                     E.get_geotransform(),
-                                     H.get_geometry(as_geometry_objects=True))
+        res0, _ = clip_grid_by_polygons(
+            E.get_data(),
+            E.get_geotransform(),
+            H.get_geometry(as_geometry_objects=True))
         assert len(res0) == N
 
         # Run higher level interpolation routine
-        P = interpolate_polygon_raster(H, E,
-                                       layer_name='poly2raster_test',
-                                       attribute_name='grid_value')
+        P, _ = interpolate_polygon_raster(
+            H, E, layer_name='poly2raster_test', attribute_name='grid_value')
 
         # Verify result (numbers obtained from using QGIS)
         # P.write_to_file('poly2raster_test.shp')
@@ -293,21 +293,21 @@ class TestEngine(unittest.TestCase):
         assert attributes[6]['id'] == 1
         assert attributes[6]['name'] == 'B'
         assert numpy.allclose(attributes[6]['number'], 13)
-        assert numpy.allclose(attributes[6]['grid_value'], -15)
+        assert numpy.allclose(attributes[6]['grid_value'], 50.338)
         assert attributes[6]['polygon_id'] == 1
 
         assert attributes[11]['id'] == 1
         assert attributes[11]['name'] == 'B'
         assert numpy.allclose(attributes[11]['number'], 13)
-        assert numpy.isnan(attributes[11]['grid_value'])
+        assert numpy.allclose(attributes[11]['grid_value'], 50.5438)
         assert attributes[11]['polygon_id'] == 1
 
         assert attributes[13]['id'] == 1
         assert attributes[13]['name'] == 'B'
-        assert numpy.allclose(geometry[13][0], 97.063559372)  # Lon
+        assert numpy.allclose(geometry[13][0], 97.002111596)  # Lon
         assert numpy.allclose(geometry[13][1], -5.472621404)  # Lat
         assert numpy.allclose(attributes[13]['number'], 13)
-        assert numpy.allclose(attributes[13]['grid_value'], 50.8258)
+        assert numpy.allclose(attributes[13]['grid_value'], 50.988)
         assert attributes[13]['polygon_id'] == 1
 
         # Polygon 2 (overlapping)
@@ -382,9 +382,8 @@ class TestEngine(unittest.TestCase):
         assert H.get_data()[9]['KRB'] == 'Kawasan Rawan Bencana II'
 
         # Then run and test the high level interpolation function
-        P = interpolate_polygon_raster(H, E,
-                                       layer_name='poly2raster_test',
-                                       attribute_name='grid_value')
+        P, _ = interpolate_polygon_raster(
+            H, E, layer_name='poly2raster_test', attribute_name='grid_value')
 
         # Possibly write result to file for visual inspection, e.g. with QGIS
         # P.write_to_file('polygon_raster_interpolation_example_holes.shp')
