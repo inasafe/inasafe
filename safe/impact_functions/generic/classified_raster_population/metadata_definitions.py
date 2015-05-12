@@ -35,7 +35,7 @@ from safe.defaults import (
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.generic.classified_hazard_population\
+from safe.impact_functions.generic.classified_raster_population\
     .parameter_definitions import (
         low_hazard_class, medium_hazard_class, high_hazard_class)
 

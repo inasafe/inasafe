@@ -14,7 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 __date__ = '23/03/15'
 
-import logging
 from collections import OrderedDict
 from numpy import round as numpy_round
 
@@ -27,9 +26,6 @@ from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-
-
-LOGGER = logging.getLogger('InaSAFE')
 
 
 class ClassifiedRasterHazardBuildingFunction(
