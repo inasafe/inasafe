@@ -304,8 +304,6 @@ class ITBFatalityFunction(ImpactFunction):
                            tr('People are considered to be displaced if '
                               'they experience and survive a shake level'
                               'of more than 5 on the MMI scale '),
-                           tr('Minimum needs are defined in BNPB '
-                              'regulation 7/2008'),
                            tr('The fatality calculation assumes that '
                               'no fatalities occur for shake levels below 4 '
                               'and fatality counts of less than 50 are '
@@ -315,8 +313,8 @@ class ITBFatalityFunction(ImpactFunction):
                               'lives as fractions.')])
 
         table_body.append(TableRow(tr('Notes'), header=True))
-        table_body.append(tr('Fatality model is from '
-                             'Institute of Teknologi Bandung 2012.'))
+        table_body.append(
+            tr('Fatality model is from Institut Teknologi Bandung 2012.'))
         table_body.append(
             tr('Population numbers rounded up to the nearest %s.') % rounding)
 
