@@ -50,7 +50,6 @@ from safe.utilities.resources import resources_path, get_ui_class
 from safe.messaging import styles
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 
-
 INFO_STYLE = styles.INFO_STYLE
 FORM_CLASS = get_ui_class('needs_manager_dialog_base.ui')
 
@@ -70,7 +69,6 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         :param dock: Dock widget instance that we can notify of changes.
         :type dock: Dock
         """
-
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.dock = dock
@@ -444,7 +442,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         default_parameter = FloatParameter('UUID-8')
         default_parameter.name = 'Default'
         default_parameter.is_required = True
-        default_parameter.precision = 1
+        default_parameter.precision = 2
         default_parameter.minimum_allowed_value = -99999.0
         default_parameter.maximum_allowed_value = 99999.0
         default_parameter.help_text = (
