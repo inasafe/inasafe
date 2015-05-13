@@ -69,7 +69,6 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         :param dock: Dock widget instance that we can notify of changes.
         :type dock: Dock
         """
-
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.dock = dock
@@ -498,7 +497,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
         layout.addWidget(parameter_container)
-        self.resource_widget.setLayout(layout)
+        self.parameters_scrollarea.setLayout(layout)
 
     def remove_resource(self):
         """Remove the currently selected resource.
