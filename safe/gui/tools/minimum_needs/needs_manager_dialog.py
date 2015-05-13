@@ -44,6 +44,7 @@ from safe_extras.parameters.parameter_exceptions import (
     InvalidMaximumError,
     InvalidMinimumError)
 from safe_extras.parameters.string_parameter import StringParameter
+from safe_extras.parameters.text_parameter import TextParameter
 from safe.utilities.help import show_context_help
 from safe.utilities.resources import resources_path, get_ui_class
 from safe.messaging import styles
@@ -460,7 +461,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         frequency_parameter.is_required = True
         frequency_parameter.value = 'weekly'
 
-        sentence_parameter = StringParameter('UUID-10')
+        sentence_parameter = TextParameter('UUID-10')
         sentence_parameter.name = 'Readable sentence'
         sentence_parameter.help_text = (
             'A readable presentation of the resource.')
