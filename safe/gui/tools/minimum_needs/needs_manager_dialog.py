@@ -193,6 +193,9 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         self.profile_combo.activated.connect(self.select_profile)
         # noinspection PyUnresolvedReferences
         self.stacked_widget.currentChanged.connect(self.page_changed)
+        # initial sync profile_combo and resource list
+        self.clear_resource_list()
+        self.populate_resource_list()
 
     def reject(self):
         """Overload the base dialog reject event so we can handle state change.
