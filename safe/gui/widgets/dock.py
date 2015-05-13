@@ -717,11 +717,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         except (OSError, IOError):
             display_critical_message_bar(
+                self.iface,
                 title=self.tr('Error while saving'),
                 message=self.tr("The destination location must be writable."))
 
         except Exception:  # pylint: disable=broad-except
             display_critical_message_bar(
+                self.iface,
                 title=self.tr('Error while saving'),
                 message=self.tr("Something went wrong."))
 
@@ -1958,6 +1960,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 type=bool)
             if show_confirmations:
                 display_information_message_bar(
+                    self.iface,
                     self.tr('InaSAFE'),
                     self.tr('Analysis environment ready'),
                     self.tr(
@@ -1985,6 +1988,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 if not show_warnings:
                     return
                 display_warning_message_bar(
+                    self.iface,
                     self.tr('InaSAFE'),
                     self.tr('No overlapping extents'),
                     self.tr(

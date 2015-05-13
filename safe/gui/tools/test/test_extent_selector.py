@@ -23,7 +23,6 @@ import logging
 from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 from PyQt4 import QtGui
 from PyQt4.QtCore import Qt, QPoint
-from PyQt4.QtTest import QTest
 
 from safe.test.utilities import get_qgis_app
 
@@ -110,6 +109,8 @@ class ExtentSelectorTest(unittest.TestCase):
         interactions with the canvas.
 
         """
+        # Imported here because it is not available in OSX QGIS bundle
+        from PyQt4.QtTest import QTest
 
         # Click the capture button
         QTest.mouseClick(self.dialog.capture_button, Qt.LeftButton)
