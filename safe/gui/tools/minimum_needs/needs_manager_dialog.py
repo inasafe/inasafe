@@ -44,11 +44,11 @@ from safe_extras.parameters.parameter_exceptions import (
     InvalidMaximumError,
     InvalidMinimumError)
 from safe_extras.parameters.string_parameter import StringParameter
+from safe_extras.parameters.text_parameter import TextParameter
 from safe.utilities.help import show_context_help
 from safe.utilities.resources import resources_path, get_ui_class
 from safe.messaging import styles
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
-
 
 INFO_STYLE = styles.INFO_STYLE
 FORM_CLASS = get_ui_class('needs_manager_dialog_base.ui')
@@ -69,7 +69,6 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         :param dock: Dock widget instance that we can notify of changes.
         :type dock: Dock
         """
-
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.dock = dock
@@ -293,8 +292,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """Handle add new resource requests.
         """
         parameters_widget = [
-            self.resource_widget.layout().itemAt(i) for i in
-            range(self.resource_widget.layout().count())][0].widget()
+            self.parameters_scrollarea.layout().itemAt(i) for i in
+            range(self.parameters_scrollarea.layout().count())][0].widget()
         parameter_widgets = [
             parameters_widget.vertical_layout.itemAt(i).widget() for i in
             range(parameters_widget.vertical_layout.count())]
@@ -326,8 +325,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         if not resource:
             return
         parameters_widget = [
-            self.resource_widget.layout().itemAt(i) for i in
-            range(self.resource_widget.layout().count())][0].widget()
+            self.parameters_scrollarea.layout().itemAt(i) for i in
+            range(self.parameters_scrollarea.layout().count())][0].widget()
         parameter_widgets = [
             parameters_widget.vertical_layout.itemAt(i).widget() for i in
             range(parameters_widget.vertical_layout.count())]
@@ -462,7 +461,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         frequency_parameter.is_required = True
         frequency_parameter.value = 'weekly'
 
-        sentence_parameter = StringParameter('UUID-10')
+        sentence_parameter = TextParameter('UUID-10')
         sentence_parameter.name = 'Readable sentence'
         sentence_parameter.help_text = (
             'A readable presentation of the resource.')
@@ -498,7 +497,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
         layout.addWidget(parameter_container)
-        self.resource_widget.setLayout(layout)
+        self.parameters_scrollarea.setLayout(layout)
 
     def remove_resource(self):
         """Remove the currently selected resource.
@@ -520,8 +519,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         # Hackorama to get this working outside the method that the
         # parameters where defined in.
         parameters_widget = [
-            self.resource_widget.layout().itemAt(i) for i in
-            range(self.resource_widget.layout().count())][0]
+            self.parameters_scrollarea.layout().itemAt(i) for i in
+            range(self.parameters_scrollarea.layout().count())][0]
         parameters = parameters_widget.widget().get_parameters()
 
         resource = {}
