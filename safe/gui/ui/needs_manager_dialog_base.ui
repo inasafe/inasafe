@@ -82,31 +82,53 @@
        <property name="margin">
         <number>0</number>
        </property>
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="label">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
+       <item row="3" column="1" colspan="5">
+        <widget class="QLineEdit" name="provenance"/>
+       </item>
+       <item row="1" column="0" colspan="6">
+        <widget class="QListWidget" name="resources_list">
+         <property name="dragDropMode">
+          <enum>QAbstractItemView::InternalMove</enum>
          </property>
-         <property name="text">
-          <string>Resources for this profile</string>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <spacer name="horizontal_spacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
+       <item row="0" column="5">
+        <widget class="QPushButton" name="edit_resource_button">
+         <property name="maximumSize">
           <size>
-           <width>437</width>
-           <height>20</height>
+           <width>32</width>
+           <height>32</height>
           </size>
          </property>
-        </spacer>
+         <property name="baseSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="toolTip">
+          <string>Edit selected resource</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../safe/resources/img/icons/edit.svg</normaloff>../../safe/resources/img/icons/edit.svg</iconset>
+         </property>
+        </widget>
        </item>
        <item row="0" column="3">
         <widget class="QPushButton" name="add_resource_button">
@@ -161,6 +183,32 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Resources for this profile</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <spacer name="horizontal_spacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>437</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="0" column="4">
         <widget class="QPushButton" name="remove_resource_button">
          <property name="maximumSize">
@@ -193,60 +241,38 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="5">
-        <widget class="QPushButton" name="edit_resource_button">
-         <property name="maximumSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="baseSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="toolTip">
-          <string>Edit selected resource</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>../../safe/resources/img/icons/edit.svg</normaloff>../../safe/resources/img/icons/edit.svg</iconset>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="6">
-        <widget class="QListWidget" name="resources_list">
-         <property name="dragDropMode">
-          <enum>QAbstractItemView::InternalMove</enum>
-         </property>
-         <property name="alternatingRowColors">
-          <bool>true</bool>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
+       <item row="3" column="0">
         <widget class="QLabel" name="provenance_label">
          <property name="text">
           <string>Provenance</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1" colspan="5">
-        <widget class="QLineEdit" name="provenance"/>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="profile_changed">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -277,8 +303,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>717</width>
-               <height>430</height>
+               <width>98</width>
+               <height>28</height>
               </rect>
              </property>
             </widget>
