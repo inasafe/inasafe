@@ -21,6 +21,7 @@ from os.path import expanduser, basename
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
+from PyQt4 import QtCore
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
@@ -49,6 +50,8 @@ from safe.utilities.help import show_context_help
 from safe.utilities.resources import resources_path, get_ui_class
 from safe.messaging import styles
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
+import logging
+LOGGER = logging.getLogger('InaSAFE')
 
 
 INFO_STYLE = styles.INFO_STYLE
@@ -152,6 +155,14 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
 
         self.minimum_needs = NeedsProfile()
         self.edit_item = None
+
+        # set label text
+        self.profile_changed.setText(
+            'Warning: profile changed, please update the provenance statement.')
+        palette = QtGui.QPalette()
+        palette.setColor(QtGui.QPalette.Foreground, QtCore.Qt.red)
+        self.profile_changed.setPalette(palette)
+        self.profile_changed.hide()
 
         # Remove profile button
         # noinspection PyUnresolvedReferences
@@ -285,6 +296,11 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         index = self.profile_combo.currentIndex()
         item = self.profile_combo.model().item(index)
         item.setForeground(QtGui.QColor('red'))
+
+    def profile_changed_notification(self):
+        """Un-hides the profile changed warning.
+        """
+        self.profile_changed.show()
 
     def mark_current_profile_as_saved(self):
         """Mark the current profile as saved by colouring the text black.
@@ -572,6 +588,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         # end of test for parameter validity
 
         self.add_resource(resource)
+        self.profile_changed_notification()
         self.switch_context(self.profile_edit_page)
 
     def import_profile(self):
