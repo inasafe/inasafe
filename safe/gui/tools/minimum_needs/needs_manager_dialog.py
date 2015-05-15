@@ -157,7 +157,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         self.edit_item = None
 
         # set label text
-        self.profile_changed.setText('Warning: profile changed')
+        self.profile_changed.setText(
+            'Warning: profile changed, please update the provenance statement.')
         palette = QtGui.QPalette()
         palette.setColor(QtGui.QPalette.Foreground, QtCore.Qt.red)
         self.profile_changed.setPalette(palette)
