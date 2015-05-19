@@ -22,7 +22,7 @@ for delta in usage_file:
 
 
 import docopt
-
+import PyQt4
 # noinspection PyPackageRequirements
 #from PyQt4 import QtGui
 
@@ -38,8 +38,6 @@ from qgis.core import (
     QgsRectangle)
 import os
 import sys
-#from safe.utilities.analysis import Analysis
-import pydevd
 import logging
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -90,7 +88,7 @@ def get_qgis_app():
 
     global QGIS_APP  # pylint: disable=W0603
 
-    gui_flag = True  # All test will run qgis in gui mode
+    gui_flag = False  # All test will run qgis in gui mode
 
     # AG: For testing purposes, we use our own configuration file instead
     # of using the QGIS apps conf of the host
@@ -136,17 +134,17 @@ def run_if():
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
     HAZARD_BASE = test_data_path(default_dir, 'hazard', 'continuous_flood_20_20')
     LOGGER.debug(HAZARD_BASE)
-    qhazard = QgsRasterLayer(HAZARD_BASE + '.asc')
+    qhazard = QgsRasterLayer(PyQt4.QtCore.QString(HAZARD_BASE + '.asc'), 'raster')
     # noinspection PyUnresolvedReferences
-    #if not qhazard.isValid():
-    #    print message
+    if not qhazard.isValid():
+        print "asdf"
     hazard_extent = qhazard.extent()
     LOGGER.debug('hazard_extent')
     LOGGER.debug(hazard_extent)
     LOGGER.debug(qhazard.width())
     EXPOSURE_BASE = test_data_path(default_dir, 'exposure', 'buildings')
     LOGGER.debug(EXPOSURE_BASE)
-    qexposure = QgsVectorLayer(EXPOSURE_BASE + '.shp')
+    qexposure = QgsVectorLayer(EXPOSURE_BASE + '.shp', 'ogr')
     # noinspection PyUnresolvedReferences
     exposure_extent = qexposure.extent()
     LOGGER.debug('exposure_extent')
@@ -182,7 +180,6 @@ if __name__ == '__main__':
     LOGGER.debug("main")
     print "python accent.py"
     print ""
-
     # setup functions
     register_impact_functions()
     # globals
@@ -192,7 +189,6 @@ if __name__ == '__main__':
     version = None
     show_list = None
     extent = None
-    pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
     try:
         # Parse arguments, use file docstring as a parameter definition
         arguments = docopt.docopt(usage)
