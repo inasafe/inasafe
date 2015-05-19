@@ -1,18 +1,23 @@
-Usage:  accent.py [OPTION] --hazard=HAZARD_FILE --exposure=EXP_FILE [FILE]
-        accent.py [OPTION] --hazard=HAZARD_FILE --exposure=EXP_FILE --extent=XMIN,YMIN,XMAX,YMAX [FILE]
+Usage:  accent.py [OPTION] --hazard=HAZARD_FILE
+                    (--download --layers=LAYER_NAME [LAYER_NAME...] | --exposure=EXP_FILE)
+                    --extent=XMIN,YMIN,XMAX,YMAX --impact-function=IF_ID [FILE]
+        accent.py --list-functions
         accent.py --version
-        accent.py --list
 
 Arguments:
     FILE                    Output path for the impact layer and associated products.  If omitted,
                             the impact layer will be written into the current working directory.
+    --list-functions        List the available impact functions and exit. Can be used along
+                            with --exposure and --hazard options to produce a filtered list of
+                            Impact Functions that will work with the specified hazard
+                            and exposure layers.
+Options:
     --hazard=HAZARD_FILE    Hazard layer file such as a shapefile or tif containing flood, tsunami,
                             volcano, earthquake data. The layer should be accompanied with an appropriate
                             keywords file.
     --exposure=EXP_FILE     Exposure layer file such as a shapefile or tif containing population,
                             structures (e.g. buildings), roads, etc. data. The layer should be accompanied with
                             an appropriate keywords file.
-Options:
     --extent=XMIN,YMIN,XMAX,YMAX      A quartet of decimal degrees values representing the analysis extent that
                             should be used. The order of the values is significant, representing XMIN, YMIN,
                             XMAX, YMAX. If omitted the union of the hazard and exposure layer extents should be used.
@@ -22,12 +27,8 @@ Options:
     --template=TEMPLATE     QGIS .qpt template file to be used for generating the PDF report.
                             If omitted, no PDF will be generated.  PDF output file will follow
                             prefix rules (see below).
-
     --prefix=PATH           prefix for the impact layer and associated products.  If omitted, a randomly
                             generated letter sequence will be used that is guaranteed to be unique.
-    --version               Print the current version of InaSAFE and exit.
-    --list                  List the available impact functions and exit. Can be used along
-                            with --exposure and --hazard options to produce a filtered list of
-                            Impact Functions that will work with the specified hazard
-                            and exposure layers.
+    --impact_function=IF_ID Use one of the IDs given by the --list option.
+    --version               Print the current version of InaSAFE.
 
