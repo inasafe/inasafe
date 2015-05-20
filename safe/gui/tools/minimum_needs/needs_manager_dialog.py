@@ -8,6 +8,8 @@ Impact Layer Merge Dialog.
      (at your option) any later version.
 
 """
+from safe.utilities.i18n import tr
+
 __author__ = 'Christian Christelis christian@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/10/2014'
@@ -311,13 +313,13 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         parameter_widgets[5].set_value(10)
         parameter_widgets[6].set_value(0)
         parameter_widgets[7].set_value(100)
-        parameter_widgets[8].set_text('weekly')
-        parameter_widgets[9].set_text(
+        parameter_widgets[8].set_text(tr('weekly'))
+        parameter_widgets[9].set_text(tr(
             "A displaced person should be provided with "
             "{{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
             "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
             "and no more than {{ Maximum allowed }}. This should be provided "
-            "{{ Frequency }}.")
+            "{{ Frequency }}."))
         self.stacked_widget.setCurrentWidget(self.resource_edit_page)
 
     def edit_resource(self):
@@ -352,12 +354,12 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """Set up the resource parameter for the add/edit view.
         """
         name_parameter = StringParameter('UUID-1')
-        name_parameter.name = 'Resource name'
-        name_parameter.help_text = (
+        name_parameter.name = tr('Resource name')
+        name_parameter.help_text = tr(
             'Name of the resource that will be provided '
             'as part of minimum needs. '
             'e.g. Rice, Water etc.')
-        name_parameter.description = (
+        name_parameter.description = tr(
             'A <b>resource</b> is something that you provide to displaced '
             'persons in the event of a disaster. The resource will be made '
             'available at IDP camps and may need to be stockpiled by '
@@ -366,21 +368,21 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         name_parameter.value = ''
 
         description_parameter = StringParameter('UUID-2')
-        description_parameter.name = 'Resource description'
-        description_parameter.help_text = (
+        description_parameter.name = tr('Resource description')
+        description_parameter.help_text = tr(
             'Description of the resource that will be provided as part of '
             'minimum needs.')
-        description_parameter.description = (
+        description_parameter.description = tr(
             'This gives a detailed description of what the resource is and ')
         description_parameter.is_required = True
         description_parameter.value = ''
 
         unit_parameter = StringParameter('UUID-3')
-        unit_parameter.name = 'Unit'
-        unit_parameter.help_text = (
+        unit_parameter.name = tr('Unit')
+        unit_parameter.help_text = tr(
             'Single unit for the resources spelled out. e.g. litre, '
             'kilogram etc.')
-        unit_parameter.description = (
+        unit_parameter.description = tr(
             'A <b>unit</b> is the basic measurement unit used for computing '
             'the allowance per individual. For example when planning water '
             'rations the unit would be single litre.')
@@ -388,11 +390,11 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         unit_parameter.value = ''
 
         units_parameter = StringParameter('UUID-4')
-        units_parameter.name = 'Units'
-        units_parameter.help_text = (
+        units_parameter.name = tr('Units')
+        units_parameter.help_text = tr(
             'Multiple units for the resources spelled out. e.g. litres, '
             'kilogram etc.')
-        units_parameter.description = (
+        units_parameter.description = tr(
             '<b>Units</b> are the basic measurement used for computing the '
             'allowance per individual. For example when planning water '
             'rations the units would be litres.')
@@ -400,10 +402,10 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         units_parameter.value = ''
 
         unit_abbreviation_parameter = StringParameter('UUID-5')
-        unit_abbreviation_parameter.name = 'Unit abbreviation'
-        unit_abbreviation_parameter.help_text = (
+        unit_abbreviation_parameter.name = tr('Unit abbreviation')
+        unit_abbreviation_parameter.help_text = tr(
             'Abbreviations of unit for the resources. e.g. l, kg etc.')
-        unit_abbreviation_parameter.description = (
+        unit_abbreviation_parameter.description = tr(
             "A <b>unti abbreviation</b> is the basic measurement unit's "
             "shortened. For example when planning water rations "
             "the units would be l.")
@@ -411,14 +413,14 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         unit_abbreviation_parameter.value = ''
 
         minimum_parameter = FloatParameter('UUID-6')
-        minimum_parameter.name = 'Minimum allowed'
+        minimum_parameter.name = tr('Minimum allowed')
         minimum_parameter.is_required = True
         minimum_parameter.precision = 2
         minimum_parameter.minimum_allowed_value = -99999.0
         minimum_parameter.maximum_allowed_value = 99999.0
-        minimum_parameter.help_text = (
+        minimum_parameter.help_text = tr(
             'The minimum allowable quantity per person. ')
-        minimum_parameter.description = (
+        minimum_parameter.description = tr(
             'The <b>minimum</b> is the minimum allowed quantity of the '
             'resource per person. For example you may dictate that the water '
             'ration per person per day should never be allowed to be less '
@@ -427,14 +429,14 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         minimum_parameter.value = 0.00
 
         maximum_parameter = FloatParameter('UUID-7')
-        maximum_parameter.name = 'Maximum allowed'
+        maximum_parameter.name = tr('Maximum allowed')
         maximum_parameter.is_required = True
         maximum_parameter.precision = 2
         maximum_parameter.minimum_allowed_value = -99999.0
         maximum_parameter.maximum_allowed_value = 99999.0
-        maximum_parameter.help_text = (
+        maximum_parameter.help_text = tr(
             'The maximum allowable quantity per person. ')
-        maximum_parameter.description = (
+        maximum_parameter.description = tr(
             'The <b>maximum</b> is the maximum allowed quantity of the '
             'resource per person. For example you may dictate that the water '
             'ration per person per day should never be allowed to be more '
@@ -443,42 +445,42 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         maximum_parameter.value = 100.0
 
         default_parameter = FloatParameter('UUID-8')
-        default_parameter.name = 'Default'
+        default_parameter.name = tr('Default')
         default_parameter.is_required = True
         default_parameter.precision = 2
         default_parameter.minimum_allowed_value = -99999.0
         default_parameter.maximum_allowed_value = 99999.0
-        default_parameter.help_text = (
+        default_parameter.help_text = tr(
             'The default allowable quantity per person. ')
-        default_parameter.description = (
+        default_parameter.description = tr(
             "The <b>default</b> is the default allowed quantity of the "
             "resource per person. For example you may indicate that the water "
             "ration per person weekly should be 67l.")
         default_parameter.value = 10.0
 
         frequency_parameter = StringParameter('UUID-9')
-        frequency_parameter.name = 'Frequency'
-        frequency_parameter.help_text = (
+        frequency_parameter.name = tr('Frequency')
+        frequency_parameter.help_text = tr(
             "The frequency that this resource needs to be provided to a "
             "displaced person. e.g. weekly, daily, once etc.")
-        frequency_parameter.description = (
+        frequency_parameter.description = tr(
             "The <b>frequency</b> informs the aid worker how regularly this "
             "resource needs to be provided to the displaced person.")
         frequency_parameter.is_required = True
-        frequency_parameter.value = 'weekly'
+        frequency_parameter.value = tr('weekly')
 
         sentence_parameter = TextParameter('UUID-10')
-        sentence_parameter.name = 'Readable sentence'
-        sentence_parameter.help_text = (
+        sentence_parameter.name = tr('Readable sentence')
+        sentence_parameter.help_text = tr(
             'A readable presentation of the resource.')
-        sentence_parameter.description = (
+        sentence_parameter.description = tr(
             "A <b>readable sentence</b> is a presentation of the resource "
             "that displays all pertinent information. If you are unsure then "
             "use the default. Properties should be included using double "
             "curly brackets '{{' '}}'. Including the resource name would be "
             "achieved by including e.g. {{ Resource name }}")
         sentence_parameter.is_required = True
-        sentence_parameter.value = (
+        sentence_parameter.value = tr(
             "A displaced person should be provided with "
             "{{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
             "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
@@ -509,7 +511,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """Remove the currently selected resource.
         """
         self.mark_current_profile_as_pending()
-        for item in self.resources_list.selectedItems():
+        for item in self.resgiources_list.selectedItems():
             self.resources_list.takeItem(self.resources_list.row(item))
 
     def discard_changes(self):
