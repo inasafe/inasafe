@@ -22,9 +22,6 @@ for delta in usage_file:
 
 
 import docopt
-import PyQt4
-# noinspection PyPackageRequirements
-#from PyQt4 import QtGui
 
 from safe.impact_functions.registry import Registry
 from safe.impact_functions import register_impact_functions
@@ -49,13 +46,20 @@ version = None
 show_list = None
 extent = None
 
+QGIS_APP = None
+CANVAS = None
+IFACE = None
+PARENT = None
+
 # directories
 default_dir = os.path.abspath(os.path.join(
     os.path.realpath(os.path.dirname(__file__)), 'cli'))
 
 
 def get_ifunction_list():
+    LOGGER.debug('get IF list')
     registry = Registry()
+    LOGGER.debug(registry.impact_functions)
     return registry.impact_functions
 
 
@@ -130,18 +134,26 @@ def get_qgis_app():
     return QGIS_APP, CANVAS, IFACE, PARENT
 
 
-def run_if():
-    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-    HAZARD_BASE = test_data_path(default_dir, 'hazard', 'continuous_flood_20_20')
-    LOGGER.debug(HAZARD_BASE)
-    qhazard = QgsRasterLayer(PyQt4.QtCore.QString(HAZARD_BASE + '.asc'), 'raster')
-    # noinspection PyUnresolvedReferences
-    if not qhazard.isValid():
-        print "asdf"
-    hazard_extent = qhazard.extent()
-    LOGGER.debug('hazard_extent')
-    LOGGER.debug(hazard_extent)
-    LOGGER.debug(qhazard.width())
+def get_hazard():
+    qhazard = None
+    try:
+        HAZARD_BASE = test_data_path(default_dir, 'hazard', 'continuous_flood_20_20')
+        LOGGER.debug(HAZARD_BASE)
+        qhazard = QgsRasterLayer(HAZARD_BASE + '.tif', 'my raster')
+        # noinspection PyUnresolvedReferences
+        if not qhazard.isValid():
+            print "hazard raster layer not valid"
+        hazard_extent = qhazard.extent()
+        LOGGER.debug('hazard_extent')
+        LOGGER.debug(hazard_extent)
+        LOGGER.debug(qhazard.width())
+    except Exception as e:
+        print e.message()
+
+    return qhazard
+
+
+def get_exposure():
     EXPOSURE_BASE = test_data_path(default_dir, 'exposure', 'buildings')
     LOGGER.debug(EXPOSURE_BASE)
     qexposure = QgsVectorLayer(EXPOSURE_BASE + '.shp', 'ogr')
@@ -149,6 +161,24 @@ def run_if():
     exposure_extent = qexposure.extent()
     LOGGER.debug('exposure_extent')
     LOGGER.debug(exposure_extent)
+    return qexposure
+
+
+def run_if():
+    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+    x = sys.displayhook
+    LOGGER.debug(x)
+    #sys.displayhook = sys.__displayhook__
+    qhazard = get_hazard()
+    qexposure = get_exposure()
+
+    # IF
+    impact_function_manager = ImpactFunctionManager()
+    impact_function = impact_function_manager.get(
+        arguments['--impact-function'])
+    LOGGER.debug(arguments['--impact-function'])
+
+
     try:
         from safe.utilities.analysis import Analysis
         LOGGER.debug('imported')
@@ -159,12 +189,6 @@ def run_if():
     # Layers
     analysis.hazard_layer = qhazard
     analysis.exposure_layer = qexposure
-    # IF
-    impact_function_manager = ImpactFunctionManager()
-    impact_function = impact_function_manager.get(
-        arguments['--impact-function'])
-    LOGGER.debug(arguments['--impact-function'])
-
     analysis.user_extent(
         106.8054130000000015, -6.1913361000000000,
         106.8380719000000028, -6.1672457999999999)
@@ -189,6 +213,7 @@ if __name__ == '__main__':
     version = None
     show_list = None
     extent = None
+    QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
     try:
         # Parse arguments, use file docstring as a parameter definition
         arguments = docopt.docopt(usage)
@@ -210,6 +235,10 @@ if __name__ == '__main__':
             (hazard is not None) and\
             (exposure is not None):
         LOGGER.debug('--do an IF--')
-        run_if()
+        try:
+            run_if()
+        except Exception as e:
+            print e.message
+            print e.__doc__
         LOGGER.debug('-- just did an IF--')
 
