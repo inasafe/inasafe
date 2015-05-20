@@ -209,6 +209,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         See https://github.com/AIFDR/inasafe/issues/1387
         """
         if self.stacked_widget.currentWidget() == self.resource_edit_page:
+            self.edit_item = None
             self.switch_context(self.profile_edit_page)
         else:
             super(NeedsManagerDialog, self).reject()
@@ -729,8 +730,11 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         # noinspection PyUnresolvedReferences
         if page.objectName() == 'profile_edit_page':
             self.stacked_widget.setCurrentIndex(0)
+            self.button_box.button(QDialogButtonBox.Close).setHidden(False)
         else:  # resource_edit_page
             self.stacked_widget.setCurrentIndex(1)
+            # hide the close button
+            self.button_box.button(QDialogButtonBox.Close).setHidden(True)
 
     def remove_profile(self):
         """Remove the current profile.
