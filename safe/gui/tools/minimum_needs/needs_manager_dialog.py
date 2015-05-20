@@ -583,7 +583,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """
         # noinspection PyCallByClass,PyTypeChecker
         file_name_dialog = QFileDialog(self)
-        file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptSave)
+        file_name_dialog.setAcceptMode(QtGui.QFileDialog.AcceptOpen)
         file_name_dialog.setNameFilter(self.tr('JSON files (*.json *.JSON)'))
         file_name_dialog.setDefaultSuffix('json')
         current_directory = os.path.dirname(__file__)
