@@ -204,7 +204,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             QMessageBox.warning(
                 self,
                 self.tr('InaSAFE'),
-                (self.tr('Input file is not exist')))
+                (self.tr('Input file does not exist')))
             return
 
         if self.nearest_mode.isChecked():
@@ -220,7 +220,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             input_source,
             output_path,
             algorithm=algorithm,
-            algorithm_filename_flag=False)
+            algorithm_filename_flag=True)
 
         QtGui.qApp.restoreOverrideCursor()
 
