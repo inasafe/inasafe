@@ -82,7 +82,8 @@ class ShakemapImporterTest(unittest.TestCase):
         button.click()
 
         msg = 'Raster is not created'
-        self.assertTrue(os.path.exists(output_raster), msg)
+        output_path = '%s-nearest.tif' % output_raster[:-4]
+        self.assertTrue(os.path.exists(output_path), msg)
 
 
 if __name__ == "__main__":
