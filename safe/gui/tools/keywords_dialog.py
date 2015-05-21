@@ -42,7 +42,7 @@ from safe.common.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     NoKeywordsFoundError)
-from safe import definitions
+from safe.new_definitions import global_default_attribute, do_not_use_attribute
 from safe.utilities.unicode import get_unicode
 
 # Aggregations' keywords
@@ -93,11 +93,10 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         self.defaults = None
 
         # string constants
-        self.global_default_string = definitions.global_default_attribute[
-            'name']
-        self.do_not_use_string = definitions.do_not_use_attribute['name']
-        self.global_default_data = definitions.global_default_attribute['id']
-        self.do_not_use_data = definitions.do_not_use_attribute['id']
+        self.global_default_string = global_default_attribute['name']
+        self.do_not_use_string = do_not_use_attribute['name']
+        self.global_default_data = global_default_attribute['id']
+        self.do_not_use_data = do_not_use_attribute['id']
 
         if layer is None:
             self.layer = self.iface.activeLayer()
@@ -577,7 +576,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         """
         if not flag:
             return
-        self.set_category('hazard')
+        self.set_layer_purpose('hazard')
         self.update_controls_from_list()
 
     # prevents actions being handled twice
@@ -591,7 +590,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         """
         if not theFlag:
             return
-        self.set_category('exposure')
+        self.set_layer_purpose('exposure')
         self.update_controls_from_list()
 
     # prevents actions being handled twice
@@ -604,7 +603,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         :type flag: bool
         """
         if flag:
-            self.set_category('postprocessing')
+            self.set_layer_purpose('postprocessing')
             self.update_controls_from_list()
             return
         if self.defaults is not None:
@@ -655,11 +654,11 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
             return
         if tokens[1].find('[') < 0:
             return
-        category = self.get_value_for_key('category')
-        if 'hazard' == category:
+        layer_purpose = self.get_value_for_key('layer_purpose')
+        if 'hazard' == layer_purpose:
             units = tokens[1].replace('[', '').replace(']', '')
             self.add_list_entry('unit', units)
-        if 'exposure' == category:
+        if 'exposure' == layer_purpose:
             data_type = tokens[1].replace('[', '').replace(']', '')
             self.add_list_entry('datatype', data_type)
             # prevents actions being handled twice
@@ -722,17 +721,17 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
 
         current_key = self.leKey.text()
         current_value = self.leValue.text()
-        if current_key == 'category' and current_value == 'hazard':
+        if current_key == 'layer_purpose' and current_value == 'hazard':
             self.radHazard.blockSignals(True)
             self.radHazard.setChecked(True)
             self.set_subcategory_list(self.standard_hazard_list)
             self.radHazard.blockSignals(False)
-        elif current_key == 'category' and current_value == 'exposure':
+        elif current_key == 'layer_purpose' and current_value == 'exposure':
             self.radExposure.blockSignals(True)
             self.radExposure.setChecked(True)
             self.set_subcategory_list(self.standard_exposure_list)
             self.radExposure.blockSignals(False)
-        elif current_key == 'category':
+        elif current_key == 'layer_purpose':
             # .. todo:: notify the user their category is invalid
             pass
         self.add_list_entry(current_key, current_value)
@@ -800,24 +799,24 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         item.setData(QtCore.Qt.UserRole, data)
         self.lstKeywords.insertItem(0, item)
 
-    def set_category(self, category):
-        """Set the category radio button based on category.
+    def set_layer_purpose(self, layer_purpose):
+        """Set the layer_purpose radio button based on category.
 
-        :param category: Either 'hazard', 'exposure' or 'postprocessing'.
-        :type category: str
+        :param layer_purpose: Either 'hazard', 'exposure' or 'postprocessing'.
+        :type layer_purpose: str
 
         :returns: False if radio button could not be updated, otherwise True.
         :rtype: bool
         """
-        if self.get_value_for_key('category') == category:
+        if self.get_value_for_key('layer_purpose') == layer_purpose:
             # nothing to do, go home
             return True
-        if category not in ['hazard', 'exposure', 'postprocessing']:
+        if layer_purpose not in ['hazard', 'exposure', 'aggregation']:
             # .. todo:: report an error to the user
             return False
             # Special case when category changes, we start on a new slate!
 
-        if category == 'hazard':
+        if layer_purpose == 'hazard':
             # only cause a toggle if we actually changed the category
             # This will only really be apparent if user manually enters
             # category as a keyword
@@ -827,18 +826,18 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
             self.radHazard.blockSignals(False)
             self.remove_item_by_key('subcategory')
             self.remove_item_by_key('datatype')
-            self.add_list_entry('category', 'hazard')
+            self.add_list_entry('layer_purpose', 'hazard')
             hazard_list = self.standard_hazard_list
             self.set_subcategory_list(hazard_list)
 
-        elif category == 'exposure':
+        elif layer_purpose == 'exposure':
             self.reset()
             self.radExposure.blockSignals(True)
             self.radExposure.setChecked(True)
             self.radExposure.blockSignals(False)
             self.remove_item_by_key('subcategory')
             self.remove_item_by_key('unit')
-            self.add_list_entry('category', 'exposure')
+            self.add_list_entry('layer_purpose', 'exposure')
             exposure_list = self.standard_exposure_list
             self.set_subcategory_list(exposure_list)
 
@@ -848,7 +847,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
             self.radPostprocessing.setChecked(True)
             self.radPostprocessing.blockSignals(False)
             self.remove_item_by_key('subcategory')
-            self.add_list_entry('category', 'postprocessing')
+            self.add_list_entry('layer_purpose', 'postprocessing')
 
         return True
 
@@ -943,7 +942,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         when opening this dialog). See #751
 
         """
-        keywords = {'category': 'exposure'}
+        keywords = {'layer_purpose': 'exposure'}
 
         try:
             # Now read the layer with sub layer if needed
@@ -965,9 +964,9 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
 
         # if we have a category key, unpack it first
         # so radio button etc get set
-        if 'category' in keywords:
-            self.set_category(keywords['category'])
-            keywords.pop('category')
+        if 'layer_purpose' in keywords:
+            self.set_layer_purpose(keywords['layer_purpose'])
+            keywords.pop('layer_purpose')
         else:
             # assume exposure to match ui. See issue #751
             self.add_list_entry('category', 'exposure')
@@ -1153,7 +1152,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
         """
         temp_key = item.text().split(':')[0]
         temp_value = item.text().split(':')[1]
-        if temp_key == 'category':
+        if temp_key == 'layer_purpose':
             return
         if self.radUserDefined.isChecked():
             self.leKey.setText(temp_key)
@@ -1182,7 +1181,7 @@ class KeywordsDialog(QtGui.QDialog, FORM_CLASS):
             ratio do not use global default, the summation is set to 0.
         :rtype: tuple
         """
-        if keywords['category'] != 'postprocessing':
+        if keywords['layer_purpose'] != 'aggregation':
             return True, 0
         if (keywords.get(youth_ratio_attribute_key, '') !=
                 self.global_default_string):

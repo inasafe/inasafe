@@ -18,7 +18,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
-from safe.common.utilities import add_to_list
+from safe.common.utilities import add_to_list, get_list_key
+from safe.new_definitions import (
+    layer_purpose_exposure,
+    layer_purpose_hazard)
 
 
 class ImpactFunctionMetadata(object):
@@ -465,95 +468,6 @@ class ImpactFunctionMetadata(object):
             return []
 
     @classmethod
-    def categories_for_layer(cls, layer_type, data_type):
-        """Determine the valid categories for a layer.
-
-        This method is used to determine if a given layer can be used as a
-        hazard, exposure or aggregation layer.
-
-        In the returned the values are categories (if any) applicable for that
-        layer_type and data_type.
-
-        :param layer_type: The type for this layer. Valid values would be,
-            'raster' or 'vector'.
-        :type layer_type: str
-
-        :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for raster), point, line, polygon (for
-            vectors).
-        :type data_type: str
-
-        :returns: A list as per the example above where each value represents
-            a valid category.
-        :rtype: list
-        """
-        layer_constraints = {
-            'layer_type': layer_type,
-            'data_type': data_type
-        }
-        result = []
-
-        exposure_layer_constraints = cls.allowed_layer_constraints('exposure')
-        exposure_layer_constraints = [
-            cls.simplify_layer_constraint(e) for e in
-            exposure_layer_constraints]
-
-        hazard_layer_constraints = cls.allowed_layer_constraints('hazard')
-        hazard_layer_constraints = [
-            cls.simplify_layer_constraint(e) for e in
-            hazard_layer_constraints]
-
-        if layer_constraints in exposure_layer_constraints:
-            result = add_to_list(result, 'exposure')
-        if layer_constraints in hazard_layer_constraints:
-            result = add_to_list(result, 'hazard')
-        return result
-
-    @classmethod
-    def subcategories_for_layer(cls, category, layer_type, data_type):
-        """Return a list of valid subcategories for a layer.
-
-        This method is used to determine which subcategories a given layer
-        can be for.
-
-        In the returned the values are categories (if any) applicable for that
-        layer_type and data_type.
-
-        :param layer_type: The type for this layer. Valid values would be,
-            'raster' or 'vector'.
-        :type layer_type: str
-
-        :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for raster), point, line, polygon
-            (for vectors).
-        :type data_type: str
-
-        :param category: The category for this layer. Valid possibilities
-            would be 'hazard', 'exposure' and 'aggregation'.
-        :type category: str
-
-
-        :returns: A list as per the example above where each value represents
-            a valid subcategory.
-        :rtype: list
-        """
-        layer_constraints = {
-            'layer_type': layer_type,
-            'data_type': data_type
-        }
-
-        category_layer_constraints = cls.allowed_layer_constraints(category)
-        category_layer_constraints = [
-            cls.simplify_layer_constraint(e) for e in
-            category_layer_constraints
-        ]
-
-        if layer_constraints not in category_layer_constraints:
-            return []
-        else:
-            return cls.allowed_subcategories(category)
-
-    @classmethod
     def get_hazards(cls):
         """Return hazards of the impact function.
 
@@ -698,3 +612,313 @@ class ImpactFunctionMetadata(object):
 
         """
         return cls.as_dict().get('name', '')
+    # @classmethod
+    # def get_layer_requirements_by_key(cls, key):
+    #     """Obtain all layer_requirements for a key.
+    #     :param key:
+    #     :return:
+    #     """
+
+    @classmethod
+    def get_hazard_requirements(cls):
+        """Get hazard layer requirements."""
+        return cls.get_layer_requirements()['hazard']
+
+    @classmethod
+    def get_exposure_requirements(cls):
+        """Get exposure layer requirements."""
+        return cls.get_layer_requirements()['exposure']
+
+    @classmethod
+    def purposes_for_layer(cls, layer_geometry_key):
+        """Get purposes of a layer geometry id.
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :returns: List of purposes
+        :rtype: list
+        """
+        result = []
+
+        hazard_layer_req = cls.get_hazard_requirements()
+        hazard_geometries = hazard_layer_req['layer_geometries']
+        hazard_geometry_keys = get_list_key(hazard_geometries)
+        if layer_geometry_key in hazard_geometry_keys:
+            result.append(layer_purpose_hazard)
+
+        exposure_layer_req = cls.get_exposure_requirements()
+        exposure_geometries = exposure_layer_req['layer_geometries']
+        exposure_geometry_keys = get_list_key(exposure_geometries)
+        if layer_geometry_key in exposure_geometry_keys:
+            result.append(layer_purpose_exposure)
+
+        return result
+
+    @classmethod
+    def hazard_categories_for_layer(cls, layer_geometry_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :returns: List of hazard_categories
+        :rtype: list
+        """
+        hazard_layer_req = cls.get_hazard_requirements()
+        hazard_geometries = hazard_layer_req['layer_geometries']
+        hazard_geometry_keys = get_list_key(hazard_geometries)
+        if layer_geometry_key in hazard_geometry_keys:
+            return hazard_layer_req['hazard_categories']
+        else:
+            return {}
+
+    @classmethod
+    def hazard_for_layer(cls, layer_geometry_key, hazard_category_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :param hazard_category_key: The hazard category
+        :type hazard_category_key: str
+
+        :returns: List of hazard
+        :rtype: list
+        """
+        hazard_categories = cls.hazard_categories_for_layer(layer_geometry_key)
+        hazard_category_keys = get_list_key(hazard_categories)
+        if hazard_category_key in hazard_category_keys:
+            hazard_layer_req = cls.get_hazard_requirements()
+            return hazard_layer_req['hazard_types']
+        else:
+            return []
+
+    @classmethod
+    def exposure_for_layer(cls, layer_geometry_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :returns: List of exposure
+        :rtype: list
+        """
+        exposure_layer_req = cls.get_exposure_requirements()
+        layer_geometries = exposure_layer_req['layer_geometries']
+        layer_geometry_keys = get_list_key(layer_geometries)
+        if layer_geometry_key in layer_geometry_keys:
+            return exposure_layer_req['exposure_types']
+        else:
+            return []
+
+    @classmethod
+    def exposure_units_for_layer(
+            cls, exposure_key, layer_geometry_key, layer_mode_key):
+        """Get exposure units.
+
+        :param exposure_key: The exposure key
+        :type exposure_key: str
+
+        :param layer_geometry_key: The geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :returns: List of exposure unit
+        :rtype: list
+        """
+
+        exposure_layer_req = cls.get_exposure_requirements()
+
+        if not exposure_layer_req['exposure_units']:
+            return []
+
+        exposures = exposure_layer_req['exposure_types']
+        exposure_keys = get_list_key(exposures)
+        if exposure_key not in exposure_keys:
+            return []
+
+        layer_geometries = exposure_layer_req['layer_geometries']
+        layer_geometry_keys = get_list_key(layer_geometries)
+        if layer_geometry_key not in layer_geometry_keys:
+            return []
+
+        layer_mode = exposure_layer_req['layer_mode']
+        if layer_mode_key != layer_mode['key']:
+            return []
+
+        return exposure_layer_req['exposure_units']
+
+    @classmethod
+    def continuous_hazards_units_for_layer(
+            cls, hazard_key, layer_geometry_key, layer_mode_key,
+            hazard_category_key):
+        """Get continuous hazard units.
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of continuous hazard unit
+        :rtype: list
+        """
+
+        hazard_layer_req = cls.get_hazard_requirements()
+
+        if not hazard_layer_req['continuous_hazard_units']:
+            return []
+
+        hazards = hazard_layer_req['hazard_types']
+        hazard_keys = get_list_key(hazards)
+        if hazard_key not in hazard_keys:
+            return []
+
+        layer_geometries = hazard_layer_req['layer_geometries']
+        layer_geometry_keys = get_list_key(layer_geometries)
+        if layer_geometry_key not in layer_geometry_keys:
+            return []
+
+        layer_mode = hazard_layer_req['layer_mode']
+        if layer_mode_key != layer_mode['key']:
+            return []
+
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazard_category_keys = get_list_key(hazard_categories)
+        if hazard_category_key not in hazard_category_keys:
+            return []
+
+        return hazard_layer_req['continuous_hazard_units']
+
+    @classmethod
+    def vector_hazards_classifications_for_layer(
+            cls, hazard_key, layer_geometry_key, layer_mode_key,
+            hazard_category_key):
+        """Get vector_hazards_classifications.
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of continuous hazard unit
+        :rtype: list
+        """
+
+        hazard_layer_req = cls.get_hazard_requirements()
+
+        if not hazard_layer_req['vector_hazard_classifications']:
+            return []
+
+        hazards = hazard_layer_req['hazard_types']
+        hazard_keys = get_list_key(hazards)
+        if hazard_key not in hazard_keys:
+            return []
+
+        layer_geometries = hazard_layer_req['layer_geometries']
+        layer_geometry_keys = get_list_key(layer_geometries)
+        if layer_geometry_key not in layer_geometry_keys:
+            return []
+
+        layer_mode = hazard_layer_req['layer_mode']
+        if layer_mode_key != layer_mode['key']:
+            return []
+
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazard_category_keys = get_list_key(hazard_categories)
+        if hazard_category_key not in hazard_category_keys:
+            return []
+
+        return hazard_layer_req['vector_hazard_classifications']
+
+    @classmethod
+    def raster_hazards_classifications_for_layer(
+            cls, hazard_key, layer_geometry_key, layer_mode_key,
+            hazard_category_key):
+        """Get vector_hazards_classifications.
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of continuous hazard unit
+        :rtype: list
+        """
+
+        hazard_layer_req = cls.get_hazard_requirements()
+
+        if not hazard_layer_req['raster_hazard_classifications']:
+            return []
+
+        hazards = hazard_layer_req['hazard_types']
+        hazard_keys = get_list_key(hazards)
+        if hazard_key not in hazard_keys:
+            return []
+
+        layer_geometries = hazard_layer_req['layer_geometries']
+        layer_geometry_keys = get_list_key(layer_geometries)
+        if layer_geometry_key not in layer_geometry_keys:
+            return []
+
+        layer_mode = hazard_layer_req['layer_mode']
+        if layer_mode_key != layer_mode['key']:
+            return []
+
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazard_category_keys = get_list_key(hazard_categories)
+        if hazard_category_key not in hazard_category_keys:
+            return []
+
+        return hazard_layer_req['raster_hazard_classifications']
+
+    @classmethod
+    def get_available_hazards(cls, hazard_category_key):
+        """get_available_hazards from hazard_category_key
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of available hazards
+        :rtype: list
+        """
+
+        hazard_layer_req = cls.get_hazard_requirements()
+
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazard_category_keys = get_list_key(hazard_categories)
+        if hazard_category_key not in hazard_category_keys:
+            return []
+
+        return hazard_layer_req['hazard_types']
+
+    @classmethod
+    def get_available_exposures(cls):
+        """get_available_exposure
+
+        :returns: List of available exposure
+        :rtype: list
+        """
+
+        exposure_layer_req = cls.get_exposure_requirements()
+        return exposure_layer_req['exposure_types']

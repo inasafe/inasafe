@@ -171,7 +171,8 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[category: postprocessing
+<![CDATA[layer_purpose: aggregation
+layer_mode: classified
 aggregation attribute: KAB_NAME
 title: Dístríct's of Jakarta
 elderly ratio attribute: Global default

@@ -51,6 +51,7 @@ from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
 from safe import definitions
+from safe.new_definitions import global_default_attribute, do_not_use_attribute
 from safe.definitions import (
     layer_vector_point,
     layer_vector_line,
@@ -444,11 +445,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnCancel.released.connect(self.reject)
 
         # string constants
-        self.global_default_string = definitions.global_default_attribute[
-            'name']
-        self.global_default_data = definitions.global_default_attribute['id']
-        self.do_not_use_string = definitions.do_not_use_attribute['name']
-        self.do_not_use_data = definitions.do_not_use_attribute['id']
+        self.global_default_string = global_default_attribute['name']
+        self.global_default_data = global_default_attribute['id']
+        self.do_not_use_string = do_not_use_attribute['name']
+        self.do_not_use_data = do_not_use_attribute['id']
         self.defaults = get_defaults()
 
         # Initialize attributes

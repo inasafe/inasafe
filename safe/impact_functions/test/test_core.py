@@ -24,13 +24,11 @@ import logging
 from collections import OrderedDict
 
 from safe.impact_functions.core import (
-    convert_to_old_keywords,
     population_rounding_full,
     population_rounding,
     evacuated_population_needs)
 from safe.common.resource_parameter import ResourceParameter
 from safe.defaults import default_minimum_needs
-from safe.definitions import converter_dict
 from safe.test.utilities import TESTDATA, HAZDATA
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -143,24 +141,6 @@ class TestCore(unittest.TestCase):
         result = OrderedDict(
             [[r['table name'], r['amount']] for r in result])
         assert result['Toilets'] == 2
-
-    def test_convert_to_old_keywords(self):
-        """Test to convert new keywords to old keywords system."""
-        new_keywords = {
-            'category': 'hazard',
-            'subcategory': 'tsunami',
-            'unit': 'metres_depth'
-        }
-
-        convert_to_old_keywords(converter_dict, [new_keywords])
-        expected_keywords = {
-            'category': 'hazard',
-            'subcategory': 'tsunami',
-            'unit': 'm'
-        }
-        msg = 'Expected %s but I got %s' % (
-            expected_keywords, new_keywords)
-        self.assertDictEqual(new_keywords, expected_keywords, msg)
 
 
 if __name__ == '__main__':

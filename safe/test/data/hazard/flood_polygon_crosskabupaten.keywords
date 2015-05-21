@@ -1,8 +1,8 @@
-layer_purpose: hazard
-hazard: flood
+hazard_category: hazard_scenario
 title: Flood Polygon Cross Kabupaten
+hazard: flood
 field: FLOODPRONE
 value_map: {'dry': ['NO'], 'wet': ['YES']}
 vector_hazard_classification: flood_vector_hazard_classes
-hazard_category: hazard_scenario
+layer_purpose: hazard
 layer_mode: classified

@@ -851,3 +851,15 @@ def convert_to_list(var):
 
 def project_list(the_list, field):
     return [s[field] for s in the_list]
+
+
+def get_list_key(list_dict):
+    """Return list of key from a list of dictionary.
+
+    :param list_dict: List of dict, each dict has key as dictionary key.
+    :type list_dict: list
+
+    :returns: A list of key.
+    :rtype: list
+    """
+    return [x['key'] for x in list_dict]

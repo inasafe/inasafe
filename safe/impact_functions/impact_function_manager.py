@@ -445,38 +445,6 @@ class ImpactFunctionManager(object):
             result = add_to_list(result, subcategories)
         return result
 
-    def get_available_hazards(self, impact_function=None, ascending=True):
-        """Return a list of valid available hazards for an impact function.
-
-        If impact_function is None, return all available hazards
-
-        .. versionadded:: 2.2
-
-        :param impact_function: Impact Function object.
-        :type impact_function: FunctionProvider
-
-        :param ascending: Sort ascending or not.
-        :type ascending: bool
-
-        :returns: A list of hazard full metadata.
-        :rtype: list
-        """
-
-        hazards = []
-        if impact_function is None:
-            for impact_function in self.impact_functions:
-                add_to_list(hazards, impact_function.metadata().get_hazards())
-
-        else:
-            # noinspection PyUnresolvedReferences
-            hazards = impact_function.metadata().get_hazards()
-
-        # make it sorted
-        if ascending:
-            hazards = sorted(hazards, key=lambda k: k['id'])
-
-        return hazards
-
     def get_functions_for_hazard(self, hazard):
         """Return all function metadata that has hazard in their metadata.
 
@@ -514,39 +482,6 @@ class ImpactFunctionManager(object):
                     impact_function.metadata().as_dict())
 
         return impact_functions_metadata
-
-    def get_available_exposures(self, impact_function=None, ascending=True):
-        """Return a list of valid available exposures for an impact function.
-
-        If impact_function is None, return all available exposures
-
-        .. versionadded:: 2.2
-
-        :param impact_function: Impact Function object.
-        :type impact_function: FunctionProvider
-
-        :param ascending: Sort ascending or not.
-        :type ascending: bool
-
-        :returns: A list of exposures full metadata.
-        :rtype: list
-        """
-
-        exposures = []
-        if impact_function is None:
-            for impact_function in self.impact_functions:
-                add_to_list(
-                    exposures, impact_function.metadata().get_exposures())
-
-        else:
-            # noinspection PyUnresolvedReferences
-            exposures = impact_function.metadata().get_exposures()
-
-        # make it sorted
-        if ascending:
-            exposures = sorted(exposures, key=lambda k: k['id'])
-
-        return exposures
 
     def get_functions_for_exposure(self, exposure):
         """Return all function metadata that has exposure in their metadata.
@@ -618,3 +553,245 @@ class ImpactFunctionManager(object):
                         result.append(f)
 
         return result
+
+    def purposes_for_layer(self, layer_geometry_key):
+        """Get purposes of a layer geometry id.
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        """
+        layer_purposes = []
+        for impact_function in self.impact_functions:
+            if_layer_purposes = impact_function.metadata().purposes_for_layer(
+                layer_geometry_key)
+            if if_layer_purposes:
+                add_to_list(layer_purposes, if_layer_purposes)
+
+        return layer_purposes
+
+    def hazard_categories_for_layer(self, layer_geometry_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :returns: List of hazard_categories
+        :rtype: list
+        """
+        hazard_categories = []
+        for impact_function in self.impact_functions:
+            if_layer_purposes = impact_function.metadata()\
+                .hazard_categories_for_layer(layer_geometry_key)
+            if if_layer_purposes:
+                add_to_list(hazard_categories, if_layer_purposes)
+
+        return hazard_categories
+
+    def hazard_for_layer(self, layer_geometry_key, hazard_category_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :param hazard_category_key: The hazard category
+        :type hazard_category_key: str
+
+        :returns: List of hazard
+        :rtype: list
+        """
+        hazards = []
+        for impact_function in self.impact_functions:
+            if_hazards = impact_function.metadata().hazard_for_layer(
+                layer_geometry_key, hazard_category_key)
+            if if_hazards:
+                add_to_list(hazards, if_hazards)
+
+        return hazards
+
+    def exposure_for_layer(self, layer_geometry_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :returns: List of hazard
+        :rtype: list
+        """
+        exposures = []
+        for impact_function in self.impact_functions:
+            if_exposures = impact_function.metadata().exposure_for_layer(
+                layer_geometry_key)
+            if if_exposures:
+                add_to_list(exposures, if_exposures)
+
+        return exposures
+
+    def exposure_units_for_layer(
+            self, exposure_key, layer_geometry_key, layer_mode_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param exposure_key: The exposure key
+        :type exposure_key: str
+
+        :param layer_geometry_key: The geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :returns: List of exposure unit
+        :rtype: list
+        """
+        exposure_units = []
+        for impact_function in self.impact_functions:
+            if_exposure_units = impact_function.metadata().\
+                exposure_units_for_layer(
+                exposure_key, layer_geometry_key, layer_mode_key)
+            if if_exposure_units:
+                add_to_list(exposure_units, if_exposure_units)
+
+        return exposure_units
+
+    def continuous_hazards_units_for_layer(
+            self, hazard_key, layer_geometry_key, layer_mode_key,
+            hazard_category_key):
+        """Get continuous hazard units.
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of continuous hazard unit
+        :rtype: list
+        """
+        continuous_hazards_units = []
+        for impact_function in self.impact_functions:
+            if_continuous_hazard_units = impact_function.metadata(). \
+                continuous_hazards_units_for_layer(
+                hazard_key, layer_geometry_key, layer_mode_key,
+                hazard_category_key)
+            if if_continuous_hazard_units:
+                add_to_list(
+                    continuous_hazards_units, if_continuous_hazard_units)
+
+        return continuous_hazards_units
+
+    def vector_hazards_classifications_for_layer(
+            self, hazard_key, layer_geometry_key, layer_mode_key,
+            hazard_category_key):
+        """Get continuous hazard units.
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of vector_hazards_classifications
+        :rtype: list
+        """
+        vector_hazards_classifications = []
+        for impact_function in self.impact_functions:
+            if_vector_hazards_classifications = impact_function.metadata(). \
+                vector_hazards_classifications_for_layer(
+                hazard_key, layer_geometry_key, layer_mode_key,
+                hazard_category_key)
+            if if_vector_hazards_classifications:
+                add_to_list(
+                    vector_hazards_classifications,
+                    if_vector_hazards_classifications)
+
+        return vector_hazards_classifications
+
+    def raster_hazards_classifications_for_layer(
+            self, hazard_key, layer_geometry_key, layer_mode_key,
+            hazard_category_key):
+        """Get continuous hazard units.
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of raster_hazards_classifications
+        :rtype: list
+        """
+        raster_hazards_classifications = []
+        for impact_function in self.impact_functions:
+            if_vector_hazards_classifications = impact_function.metadata(). \
+                raster_hazards_classifications_for_layer(
+                hazard_key, layer_geometry_key, layer_mode_key,
+                hazard_category_key)
+            if if_vector_hazards_classifications:
+                add_to_list(
+                    raster_hazards_classifications,
+                    if_vector_hazards_classifications)
+
+        return raster_hazards_classifications
+
+    def get_available_hazards(self, hazard_category_key, ascending=True):
+        """get_available_hazards from hazard_category_key
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :param ascending: Sort ascending or not.
+        :type ascending: bool
+
+        :returns: List of available hazards
+        :rtype: list
+        """
+
+        hazards = []
+        for impact_function in self.impact_functions:
+            if_hazards = impact_function.metadata(). \
+                get_available_hazards(hazard_category_key)
+            if if_hazards:
+                add_to_list(hazards, if_hazards)
+
+        # make it sorted
+        if ascending and hazards:
+            hazards = sorted(hazards, key=lambda k: k['key'])
+
+        return hazards
+
+    def get_available_exposures(self, ascending=True):
+        """Return a list of valid available exposures
+
+        :param ascending: Sort ascending or not.
+        :type ascending: bool
+
+        :returns: A list of exposures full metadata.
+        :rtype: list
+        """
+
+        exposures = []
+        for impact_function in self.impact_functions:
+            if_exposures = impact_function.metadata().get_available_exposures()
+            if if_exposures:
+                add_to_list(exposures, if_exposures)
+
+        # make it sorted
+        if ascending and exposures:
+            exposures = sorted(exposures, key=lambda k: k['key'])
+
+        return exposures
