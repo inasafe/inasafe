@@ -445,38 +445,6 @@ class ImpactFunctionManager(object):
             result = add_to_list(result, subcategories)
         return result
 
-    def get_available_hazards(self, impact_function=None, ascending=True):
-        """Return a list of valid available hazards for an impact function.
-
-        If impact_function is None, return all available hazards
-
-        .. versionadded:: 2.2
-
-        :param impact_function: Impact Function object.
-        :type impact_function: FunctionProvider
-
-        :param ascending: Sort ascending or not.
-        :type ascending: bool
-
-        :returns: A list of hazard full metadata.
-        :rtype: list
-        """
-
-        hazards = []
-        if impact_function is None:
-            for impact_function in self.impact_functions:
-                add_to_list(hazards, impact_function.metadata().get_hazards())
-
-        else:
-            # noinspection PyUnresolvedReferences
-            hazards = impact_function.metadata().get_hazards()
-
-        # make it sorted
-        if ascending:
-            hazards = sorted(hazards, key=lambda k: k['id'])
-
-        return hazards
-
     def get_functions_for_hazard(self, hazard):
         """Return all function metadata that has hazard in their metadata.
 
@@ -812,3 +780,29 @@ class ImpactFunctionManager(object):
                     if_vector_hazards_classifications)
 
         return raster_hazards_classifications
+
+    def get_available_hazards(self, hazard_category_key, ascending=True):
+        """get_available_hazards from hazard_category_key
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :param ascending: Sort ascending or not.
+        :type ascending: bool
+
+        :returns: List of available hazards
+        :rtype: list
+        """
+
+        hazards = []
+        for impact_function in self.impact_functions:
+            if_hazards = impact_function.metadata(). \
+                get_available_hazards(hazard_category_key)
+            if if_hazards:
+                add_to_list(hazards, if_hazards)
+
+        # make it sorted
+        if ascending and hazards:
+            hazards = sorted(hazards, key=lambda k: k['key'])
+
+        return hazards

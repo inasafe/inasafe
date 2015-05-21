@@ -455,6 +455,19 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         expected = []
         self.assertItemsEqual(continuous_hazards_units, expected)
 
+    def test_get_available_hazards(self):
+        """Test get_available_hazards."""
+        impact_function = ITBFatalityFunction()
+        hazards = impact_function.metadata().get_available_hazards(
+            'hazard_scenario')
+        expected = [hazard_earthquake]
+        self.assertItemsEqual(hazards, expected)
+
+        hazards = impact_function.metadata().get_available_hazards(
+            'hazard_zone')
+        expected = []
+        self.assertItemsEqual(hazards, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

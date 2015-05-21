@@ -891,3 +891,23 @@ class ImpactFunctionMetadata(object):
             return []
 
         return hazard_layer_req['raster_hazard_classifications']
+
+    @classmethod
+    def get_available_hazards(cls, hazard_category_key):
+        """get_available_hazards from hazard_category_key
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of available hazards
+        :rtype: list
+        """
+
+        hazard_layer_req = cls.get_hazard_requirements()
+
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazard_category_keys = get_list_key(hazard_categories)
+        if hazard_category_key not in hazard_category_keys:
+            return []
+
+        return hazard_layer_req['hazard_types']

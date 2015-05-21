@@ -49,6 +49,10 @@ from safe.new_definitions import (
     hazard_category_hazard_zone,
     hazard_flood,
     hazard_tsunami,
+    hazard_generic,
+    hazard_earthquake,
+    hazard_volcanic_ash,
+    hazard_volcano,
     exposure_structure,
     exposure_road,
     count_exposure_unit,
@@ -277,22 +281,6 @@ class TestImpactFunctionManager(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-    # def test_get_available_hazards(self):
-    #     """Test get_available_hazards API."""
-    #     impact_function_manager = ImpactFunctionManager()
-    #
-    #     result = impact_function_manager.get_available_hazards()
-    #     expected_result = hazard_all
-    #     message = ('I expect %s but I got %s.' % (expected_result, result))
-    #     self.assertItemsEqual(result, expected_result, message)
-    #
-    #     impact_function = EarthquakeBuildingImpactFunction()
-    #     result = impact_function_manager\
-    #         .get_available_hazards(impact_function)
-    #     expected_result = [hazard_earthquake]
-    #     message = ('I expect %s but I got %s.' % (expected_result, result))
-    #     self.assertItemsEqual(result, expected_result, message)
-
     # def test_get_functions_for_hazard(self):
     #     """Test get_functions_for_hazard API."""
     #     impact_function_manager = ImpactFunctionManager()
@@ -518,6 +506,21 @@ class TestImpactFunctionManager(unittest.TestCase):
                     unit_kilometres,
                     unit_generic]
         self.assertItemsEqual(continuous_hazards_units, expected)
+
+    def test_get_available_hazards(self):
+        """Test get_available_hazards API."""
+        impact_function_manager = ImpactFunctionManager()
+
+        result = impact_function_manager.get_available_hazards(
+            'hazard_scenario')
+        expected_result = [hazard_flood,
+                           hazard_tsunami,
+                           hazard_generic,
+                           hazard_earthquake,
+                           hazard_volcanic_ash,
+                           hazard_volcano]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
 
 
 if __name__ == '__main__':
