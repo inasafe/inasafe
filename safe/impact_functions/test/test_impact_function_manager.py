@@ -44,10 +44,10 @@ from safe.definitions import (
 
 from safe.new_definitions import (
     layer_purpose_hazard,
-    layer_purpose_exposure
+    layer_purpose_exposure,
+    hazard_category_hazard_scenario,
+    hazard_category_hazard_zone,
 )
-
-
 
 class TestImpactFunctionManager(unittest.TestCase):
     """Test for ImpactFunctionManager.
@@ -432,6 +432,31 @@ class TestImpactFunctionManager(unittest.TestCase):
         layer_purposes = impact_function_manager.purposes_for_layer('raster')
         expected = [layer_purpose_hazard, layer_purpose_exposure]
         self.assertItemsEqual(layer_purposes, expected)
+
+    def test_hazard_categories_for_layer(self):
+        """Test for hazard_categories_for_layer"""
+        impact_function_manager = ImpactFunctionManager()
+        hazard_categories = impact_function_manager.hazard_categories_for_layer(
+            'polygon')
+        expected = [hazard_category_hazard_scenario,
+                    hazard_category_hazard_zone]
+        self.assertItemsEqual(hazard_categories, expected)
+
+        hazard_categories = impact_function_manager.hazard_categories_for_layer(
+            'line')
+        expected = []
+        self.assertItemsEqual(hazard_categories, expected)
+
+        hazard_categories = impact_function_manager.hazard_categories_for_layer(
+            'point')
+        expected = [hazard_category_hazard_zone]
+        self.assertItemsEqual(hazard_categories, expected)
+
+        hazard_categories = impact_function_manager.hazard_categories_for_layer(
+            'raster')
+        expected = [hazard_category_hazard_scenario, hazard_category_hazard_zone]
+        self.assertItemsEqual(hazard_categories, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -76,7 +76,8 @@ from safe.definitions import (
     hazard_tsunami)
 
 from safe.new_definitions import (
-    layer_purpose_exposure
+    layer_purpose_exposure,
+    hazard_category_hazard_scenario
 )
 
 
@@ -384,6 +385,19 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         self.assertIsNotNone(layer_purpose)
         expected_result = [layer_purpose_exposure]
         self.assertItemsEqual(layer_purpose, expected_result)
+
+    def test_hazard_categories_for_layer(self):
+        """Test for hazard_categories_for_layer"""
+        impact_function = EarthquakeBuildingFunction()
+        hazard_categories = impact_function.metadata()\
+            .hazard_categories_for_layer('raster')
+        expected = [hazard_category_hazard_scenario]
+        self.assertItemsEqual(hazard_categories, expected)
+
+        hazard_categories = impact_function.metadata() \
+            .hazard_categories_for_layer('polygon')
+        expected = []
+        self.assertItemsEqual(hazard_categories, expected)
 
 if __name__ == '__main__':
     unittest.main()

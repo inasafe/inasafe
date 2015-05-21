@@ -619,18 +619,36 @@ class ImpactFunctionManager(object):
 
         return result
 
-    def purposes_for_layer(self, geometry_key):
+    def purposes_for_layer(self, layer_geometry_key):
         """Get purposes of a layer geometry id.
 
-        :param geometry_key: The geometry id
-        :type geometry_key: str
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
 
         """
         layer_purposes = []
         for impact_function in self.impact_functions:
             if_layer_purposes = impact_function.metadata().purposes_for_layer(
-                geometry_key)
+                layer_geometry_key)
             if if_layer_purposes:
                 add_to_list(layer_purposes, if_layer_purposes)
 
         return layer_purposes
+
+    def hazard_categories_for_layer(self, layer_geometry_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :returns: List of hazard_categories
+        :rtype: list
+        """
+        hazard_categories = []
+        for impact_function in self.impact_functions:
+            if_layer_purposes = impact_function.metadata()\
+                .hazard_categories_for_layer(layer_geometry_key)
+            if if_layer_purposes:
+                add_to_list(hazard_categories, if_layer_purposes)
+
+        return hazard_categories

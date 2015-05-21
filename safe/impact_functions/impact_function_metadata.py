@@ -630,25 +630,45 @@ class ImpactFunctionMetadata(object):
         return cls.get_layer_requirements()['exposure']
 
     @classmethod
-    def purposes_for_layer(cls, geometry_key):
+    def purposes_for_layer(cls, layer_geometry_key):
         """Get purposes of a layer geometry id.
 
-        :param geometry_key: The geometry id
-        :type geometry_key: str
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
 
+        :returns: List of purposes
+        :rtype: list
         """
         result = []
 
         hazard_layer_req = cls.get_hazard_requirements()
         hazard_geometries = hazard_layer_req['layer_geometries']
         hazard_geometry_keys = get_list_key(hazard_geometries)
-        if geometry_key in hazard_geometry_keys:
+        if layer_geometry_key in hazard_geometry_keys:
             result.append(layer_purpose_hazard)
 
         exposure_layer_req = cls.get_exposure_requirements()
         exposure_geometries = exposure_layer_req['layer_geometries']
         exposure_geometry_keys = get_list_key(exposure_geometries)
-        if geometry_key in exposure_geometry_keys:
+        if layer_geometry_key in exposure_geometry_keys:
             result.append(layer_purpose_exposure)
 
         return result
+
+    @classmethod
+    def hazard_categories_for_layer(cls, layer_geometry_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :returns: List of hazard_categories
+        :rtype: list
+        """
+        hazard_layer_req = cls.get_hazard_requirements()
+        hazard_geometries = hazard_layer_req['layer_geometries']
+        hazard_geometry_keys = get_list_key(hazard_geometries)
+        if layer_geometry_key in hazard_geometry_keys:
+            return hazard_layer_req['hazard_categories']
+        else:
+            return {}
