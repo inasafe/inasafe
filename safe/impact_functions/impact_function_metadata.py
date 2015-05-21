@@ -18,7 +18,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
-from safe.common.utilities import add_to_list
+from safe.common.utilities import add_to_list, get_list_key
+from safe.new_definitions import (
+    layer_purpose_exposure,
+    layer_purpose_hazard)
 
 
 class ImpactFunctionMetadata(object):
@@ -465,95 +468,6 @@ class ImpactFunctionMetadata(object):
             return []
 
     @classmethod
-    def categories_for_layer(cls, layer_type, data_type):
-        """Determine the valid categories for a layer.
-
-        This method is used to determine if a given layer can be used as a
-        hazard, exposure or aggregation layer.
-
-        In the returned the values are categories (if any) applicable for that
-        layer_type and data_type.
-
-        :param layer_type: The type for this layer. Valid values would be,
-            'raster' or 'vector'.
-        :type layer_type: str
-
-        :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for raster), point, line, polygon (for
-            vectors).
-        :type data_type: str
-
-        :returns: A list as per the example above where each value represents
-            a valid category.
-        :rtype: list
-        """
-        layer_constraints = {
-            'layer_type': layer_type,
-            'data_type': data_type
-        }
-        result = []
-
-        exposure_layer_constraints = cls.allowed_layer_constraints('exposure')
-        exposure_layer_constraints = [
-            cls.simplify_layer_constraint(e) for e in
-            exposure_layer_constraints]
-
-        hazard_layer_constraints = cls.allowed_layer_constraints('hazard')
-        hazard_layer_constraints = [
-            cls.simplify_layer_constraint(e) for e in
-            hazard_layer_constraints]
-
-        if layer_constraints in exposure_layer_constraints:
-            result = add_to_list(result, 'exposure')
-        if layer_constraints in hazard_layer_constraints:
-            result = add_to_list(result, 'hazard')
-        return result
-
-    @classmethod
-    def subcategories_for_layer(cls, category, layer_type, data_type):
-        """Return a list of valid subcategories for a layer.
-
-        This method is used to determine which subcategories a given layer
-        can be for.
-
-        In the returned the values are categories (if any) applicable for that
-        layer_type and data_type.
-
-        :param layer_type: The type for this layer. Valid values would be,
-            'raster' or 'vector'.
-        :type layer_type: str
-
-        :param data_type: The data_type for this layer. Valid possibilities
-            would be 'numeric' (for raster), point, line, polygon
-            (for vectors).
-        :type data_type: str
-
-        :param category: The category for this layer. Valid possibilities
-            would be 'hazard', 'exposure' and 'aggregation'.
-        :type category: str
-
-
-        :returns: A list as per the example above where each value represents
-            a valid subcategory.
-        :rtype: list
-        """
-        layer_constraints = {
-            'layer_type': layer_type,
-            'data_type': data_type
-        }
-
-        category_layer_constraints = cls.allowed_layer_constraints(category)
-        category_layer_constraints = [
-            cls.simplify_layer_constraint(e) for e in
-            category_layer_constraints
-        ]
-
-        if layer_constraints not in category_layer_constraints:
-            return []
-        else:
-            return cls.allowed_subcategories(category)
-
-    @classmethod
     def get_hazards(cls):
         """Return hazards of the impact function.
 
@@ -698,10 +612,43 @@ class ImpactFunctionMetadata(object):
 
         """
         return cls.as_dict().get('name', '')
+    # @classmethod
+    # def get_layer_requirements_by_key(cls, key):
+    #     """Obtain all layer_requirements for a key.
+    #     :param key:
+    #     :return:
+    #     """
 
     @classmethod
-    def get_layer_requirements_by_key(cls, key):
-        """Obtain all layer_requirements for a key.
-        :param key:
-        :return:
+    def get_hazard_requirements(cls):
+        """Get hazard layer requirements."""
+        return cls.get_layer_requirements()['hazard']
+
+    @classmethod
+    def get_exposure_requirements(cls):
+        """Get exposure layer requirements."""
+        return cls.get_layer_requirements()['exposure']
+
+    @classmethod
+    def purposes_for_layer(cls, geometry_key):
+        """Get purposes of a layer geometry id.
+
+        :param geometry_key: The geometry id
+        :type geometry_key: str
+
         """
+        result = []
+
+        hazard_layer_req = cls.get_hazard_requirements()
+        hazard_geometries = hazard_layer_req['layer_geometries']
+        hazard_geometry_keys = get_list_key(hazard_geometries)
+        if geometry_key in hazard_geometry_keys:
+            result.append(layer_purpose_hazard)
+
+        exposure_layer_req = cls.get_exposure_requirements()
+        exposure_geometries = exposure_layer_req['layer_geometries']
+        exposure_geometry_keys = get_list_key(exposure_geometries)
+        if geometry_key in exposure_geometry_keys:
+            result.append(layer_purpose_exposure)
+
+        return result

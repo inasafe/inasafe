@@ -618,3 +618,19 @@ class ImpactFunctionManager(object):
                         result.append(f)
 
         return result
+
+    def purposes_for_layer(self, geometry_key):
+        """Get purposes of a layer geometry id.
+
+        :param geometry_key: The geometry id
+        :type geometry_key: str
+
+        """
+        layer_purposes = []
+        for impact_function in self.impact_functions:
+            if_layer_purposes = impact_function.metadata().purposes_for_layer(
+                geometry_key)
+            if if_layer_purposes:
+                add_to_list(layer_purposes, if_layer_purposes)
+
+        return layer_purposes
