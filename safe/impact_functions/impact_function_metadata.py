@@ -674,7 +674,7 @@ class ImpactFunctionMetadata(object):
             return {}
 
     @classmethod
-    def hazard_for_layer(cls, layer_geometry_key, hazard_category_key):
+    def hazards_for_layer(cls, layer_geometry_key, hazard_category_key):
         """Get hazard categories form layer_geometry_key
 
         :param layer_geometry_key: The geometry id
@@ -695,7 +695,7 @@ class ImpactFunctionMetadata(object):
             return []
 
     @classmethod
-    def exposure_for_layer(cls, layer_geometry_key):
+    def exposures_for_layer(cls, layer_geometry_key):
         """Get hazard categories form layer_geometry_key
 
         :param layer_geometry_key: The geometry id

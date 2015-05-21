@@ -440,28 +440,28 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected = [hazard_category_hazard_scenario, hazard_category_hazard_zone]
         self.assertItemsEqual(hazard_categories, expected)
 
-    def test_hazard_for_layer(self):
-        """Test for hazard_for_layer"""
+    def test_hazards_for_layer(self):
+        """Test for hazards_for_layer"""
         impact_function_manager = ImpactFunctionManager()
-        hazards = impact_function_manager.hazard_for_layer(
+        hazards = impact_function_manager.hazards_for_layer(
             'polygon', 'hazard_scenario')
         expected = [hazard_flood, hazard_tsunami]
         self.assertItemsEqual(hazards, expected)
 
-        hazards = impact_function_manager.hazard_for_layer(
+        hazards = impact_function_manager.hazards_for_layer(
             'point', 'hazard_scenario')
         expected = []
         self.assertItemsEqual(hazards, expected)
 
-    def test_exposure_for_layer(self):
-        """Test for exposure_for_layer"""
+    def test_exposures_for_layer(self):
+        """Test for exposures_for_layer"""
         impact_function_manager = ImpactFunctionManager()
-        exposures = impact_function_manager.exposure_for_layer(
+        exposures = impact_function_manager.exposures_for_layer(
             'polygon')
         expected = [exposure_structure]
         self.assertItemsEqual(exposures, expected)
 
-        exposures = impact_function_manager.exposure_for_layer(
+        exposures = impact_function_manager.exposures_for_layer(
             'line')
         expected = [exposure_road]
         self.assertItemsEqual(exposures, expected)
