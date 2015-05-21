@@ -820,6 +820,10 @@ class ShakeGrid(object):
             be replaced with 'nearest'.
         :type algorithm: str
         """
+        import pydevd
+
+        pydevd.settrace('localhost', port=5678, stdoutToServer=True,
+                        stderrToServer=True)
         if self.algorithm_name:
             keyword_path = os.path.join(
                 self.output_dir, '%s-%s.keywords' % (

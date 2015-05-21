@@ -43,7 +43,7 @@ LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('shakemap_importer_dialog_base.ui')
 
 
-class ShakemapImporterDialog(QDialog, FORM_CLASS):
+class ShakemapConverterDialog(QDialog, FORM_CLASS):
     """Importer for shakemap grid.xml files."""
     def __init__(self, parent=None):
         """Constructor for the dialog.
@@ -74,7 +74,7 @@ class ShakemapImporterDialog(QDialog, FORM_CLASS):
         self.output_path.textChanged.connect(self.on_output_path_textChanged)
         # Set up things for context help
         help_button = self.button_box.button(QDialogButtonBox.Help)
-        help_button.clicked.connect(ShakemapImporterDialog.show_help)
+        help_button.clicked.connect(ShakemapConverterDialog.show_help)
 
         self.show_info()
 
