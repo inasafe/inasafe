@@ -911,3 +911,14 @@ class ImpactFunctionMetadata(object):
             return []
 
         return hazard_layer_req['hazard_types']
+
+    @classmethod
+    def get_available_exposures(cls):
+        """get_available_exposure
+
+        :returns: List of available exposure
+        :rtype: list
+        """
+
+        exposure_layer_req = cls.get_exposure_requirements()
+        return exposure_layer_req['exposure_types']

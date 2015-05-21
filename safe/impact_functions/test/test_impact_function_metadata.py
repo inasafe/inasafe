@@ -81,7 +81,8 @@ from safe.new_definitions import (
     hazard_earthquake,
     exposure_structure,
     count_exposure_unit,
-    unit_mmi
+    unit_mmi,
+    exposure_population
 )
 
 
@@ -468,6 +469,12 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         expected = []
         self.assertItemsEqual(hazards, expected)
 
+    def test_get_available_exposures(self):
+        """Test get_available_exposure."""
+        impact_function = ITBFatalityFunction()
+        hazards = impact_function.metadata().get_available_exposures()
+        expected = [exposure_population]
+        self.assertItemsEqual(hazards, expected)
 
 if __name__ == '__main__':
     unittest.main()

@@ -55,6 +55,7 @@ from safe.new_definitions import (
     hazard_volcano,
     exposure_structure,
     exposure_road,
+    exposure_population,
     count_exposure_unit,
     density_exposure_unit,
     unit_feet,
@@ -311,25 +312,6 @@ class TestImpactFunctionManager(unittest.TestCase):
     #     message = ('I expect %s but I got %s.' % (expected_result, result))
     #     self.assertItemsEqual(result, expected_result, message)
 
-    # def test_get_available_exposures(self):
-    #     """Test get_available_exposures API."""
-    #     impact_function_manager = ImpactFunctionManager()
-    #
-    #     result = impact_function_manager.get_available_exposures()
-    #     expected_result = [
-    #         exposure_population,
-    #         exposure_road,
-    #         exposure_structure]
-    #     message = ('I expect %s but I got %s.' % (expected_result, result))
-    #     self.assertItemsEqual(result, expected_result, message)
-    #
-    #     impact_function = EarthquakeBuildingImpactFunction()
-    #     result = impact_function_manager.get_available_exposures(
-    #         impact_function)
-    #     expected_result = [exposure_structure]
-    #     message = ('I expect %s but I got %s.' % (expected_result, result))
-    #     self.assertItemsEqual(result, expected_result, message)
-
     # def test_get_functions_for_exposure(self):
     #     """Test get_functions_for_exposure API."""
     #     impact_function_manager = ImpactFunctionManager()
@@ -519,6 +501,17 @@ class TestImpactFunctionManager(unittest.TestCase):
                            hazard_earthquake,
                            hazard_volcanic_ash,
                            hazard_volcano]
+        message = ('I expect %s but I got %s.' % (expected_result, result))
+        self.assertItemsEqual(result, expected_result, message)
+
+    def test_get_available_exposures(self):
+        """Test get_available_exposures API."""
+        impact_function_manager = ImpactFunctionManager()
+        result = impact_function_manager.get_available_exposures()
+        print [x['key'] for x in result]
+        expected_result = [exposure_structure,
+                           exposure_road,
+                           exposure_population,]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 

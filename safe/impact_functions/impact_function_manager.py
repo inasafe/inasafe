@@ -483,39 +483,6 @@ class ImpactFunctionManager(object):
 
         return impact_functions_metadata
 
-    def get_available_exposures(self, impact_function=None, ascending=True):
-        """Return a list of valid available exposures for an impact function.
-
-        If impact_function is None, return all available exposures
-
-        .. versionadded:: 2.2
-
-        :param impact_function: Impact Function object.
-        :type impact_function: FunctionProvider
-
-        :param ascending: Sort ascending or not.
-        :type ascending: bool
-
-        :returns: A list of exposures full metadata.
-        :rtype: list
-        """
-
-        exposures = []
-        if impact_function is None:
-            for impact_function in self.impact_functions:
-                add_to_list(
-                    exposures, impact_function.metadata().get_exposures())
-
-        else:
-            # noinspection PyUnresolvedReferences
-            exposures = impact_function.metadata().get_exposures()
-
-        # make it sorted
-        if ascending:
-            exposures = sorted(exposures, key=lambda k: k['id'])
-
-        return exposures
-
     def get_functions_for_exposure(self, exposure):
         """Return all function metadata that has exposure in their metadata.
 
@@ -806,3 +773,25 @@ class ImpactFunctionManager(object):
             hazards = sorted(hazards, key=lambda k: k['key'])
 
         return hazards
+
+    def get_available_exposures(self, ascending=True):
+        """Return a list of valid available exposures
+
+        :param ascending: Sort ascending or not.
+        :type ascending: bool
+
+        :returns: A list of exposures full metadata.
+        :rtype: list
+        """
+
+        exposures = []
+        for impact_function in self.impact_functions:
+            if_exposures = impact_function.metadata().get_available_exposures()
+            if if_exposures:
+                add_to_list(exposures, if_exposures)
+
+        # make it sorted
+        if ascending and exposures:
+            exposures = sorted(exposures, key=lambda k: k['key'])
+
+        return exposures
