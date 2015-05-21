@@ -52,7 +52,14 @@ from safe.new_definitions import (
     exposure_structure,
     exposure_road,
     count_exposure_unit,
-    density_exposure_unit
+    density_exposure_unit,
+    unit_feet,
+    unit_metres,
+    unit_millimetres,
+    unit_mmi,
+    unit_kilogram_per_meter_square,
+    unit_kilometres,
+    unit_generic
 )
 
 class TestImpactFunctionManager(unittest.TestCase):
@@ -496,6 +503,21 @@ class TestImpactFunctionManager(unittest.TestCase):
             'population', 'raster', 'continuous')
         expected = [count_exposure_unit, density_exposure_unit]
         self.assertItemsEqual(exposure_units, expected)
+
+    def test_continuous_hazards_units_for_layer(self):
+        """Test for continuous_hazards_units_for_layer"""
+        impact_function_manager = ImpactFunctionManager()
+        continuous_hazards_units = impact_function_manager.\
+            continuous_hazards_units_for_layer(
+                'tsunami', 'raster', 'continuous', 'hazard_scenario')
+        expected = [unit_feet,
+                    unit_metres,
+                    unit_millimetres,
+                    unit_mmi,
+                    unit_kilogram_per_meter_square,
+                    unit_kilometres,
+                    unit_generic]
+        self.assertItemsEqual(continuous_hazards_units, expected)
 
 
 if __name__ == '__main__':

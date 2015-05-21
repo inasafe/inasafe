@@ -717,3 +717,34 @@ class ImpactFunctionManager(object):
                 add_to_list(exposure_units, if_exposure_units)
 
         return exposure_units
+
+    def continuous_hazards_units_for_layer(
+            self, hazard_key, layer_geometry_key, layer_mode_key,
+            hazard_category_key):
+        """Get continuous hazard units.
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of continuous hazard unit
+        :rtype: list
+        """
+        continuous_hazards_units = []
+        for impact_function in self.impact_functions:
+            if_continuous_hazard_units = impact_function.metadata(). \
+                continuous_hazards_units_for_layer(
+                hazard_key, layer_geometry_key, layer_mode_key,
+                hazard_category_key)
+            if if_continuous_hazard_units:
+                add_to_list(
+                    continuous_hazards_units, if_continuous_hazard_units)
+
+        return continuous_hazards_units

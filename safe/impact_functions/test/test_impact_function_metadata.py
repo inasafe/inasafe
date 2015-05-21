@@ -80,7 +80,8 @@ from safe.new_definitions import (
     hazard_category_hazard_scenario,
     hazard_earthquake,
     exposure_structure,
-    count_exposure_unit
+    count_exposure_unit,
+    unit_mmi
 )
 
 
@@ -438,6 +439,21 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             'population', 'raster', 'classified')
         expected = []
         self.assertItemsEqual(exposure_units, expected)
+
+    def test_continuous_hazards_units_for_layer(self):
+        """Test continuous_hazards_units_for_layer."""
+        impact_function = ITBFatalityFunction()
+        continuous_hazards_units = impact_function.metadata().\
+            continuous_hazards_units_for_layer(
+            'earthquake', 'raster', 'continuous', 'hazard_scenario')
+        expected = [unit_mmi]
+        self.assertItemsEqual(continuous_hazards_units, expected)
+
+        continuous_hazards_units = impact_function.metadata(). \
+            continuous_hazards_units_for_layer(
+            'flood', 'raster', 'continuous', 'hazard_scenario')
+        expected = []
+        self.assertItemsEqual(continuous_hazards_units, expected)
 
 
 if __name__ == '__main__':
