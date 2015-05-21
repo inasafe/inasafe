@@ -693,3 +693,21 @@ class ImpactFunctionMetadata(object):
             return hazard_layer_req['hazard_types']
         else:
             return []
+
+    @classmethod
+    def exposure_for_layer(cls, layer_geometry_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :returns: List of hazard
+        :rtype: list
+        """
+        exposure_layer_req = cls.get_exposure_requirements()
+        layer_geometries = exposure_layer_req['layer_geometries']
+        layer_geometry_keys = get_list_key(layer_geometries)
+        if layer_geometry_key in layer_geometry_keys:
+            return exposure_layer_req['exposure_types']
+        else:
+            return []

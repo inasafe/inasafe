@@ -78,7 +78,8 @@ from safe.definitions import (
 from safe.new_definitions import (
     layer_purpose_exposure,
     hazard_category_hazard_scenario,
-    hazard_earthquake
+    hazard_earthquake,
+    exposure_structure
 )
 
 
@@ -412,6 +413,17 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             'polygon', 'hazard_scenario')
         expected = []
         self.assertItemsEqual(hazards, expected)
+
+    def test_exposure_for_layer(self):
+        """Test exposure_for_layer."""
+        impact_function = EarthquakeBuildingFunction()
+        exposures = impact_function.metadata().exposure_for_layer('polygon')
+        expected = [exposure_structure]
+        self.assertItemsEqual(exposures, expected)
+
+        exposures = impact_function.metadata().exposure_for_layer('raster')
+        expected = []
+        self.assertItemsEqual(exposures, expected)
 
 if __name__ == '__main__':
     unittest.main()
