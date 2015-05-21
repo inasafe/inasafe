@@ -701,7 +701,7 @@ class ImpactFunctionMetadata(object):
         :param layer_geometry_key: The geometry id
         :type layer_geometry_key: str
 
-        :returns: List of hazard
+        :returns: List of exposure
         :rtype: list
         """
         exposure_layer_req = cls.get_exposure_requirements()
@@ -711,3 +711,39 @@ class ImpactFunctionMetadata(object):
             return exposure_layer_req['exposure_types']
         else:
             return []
+
+    @classmethod
+    def exposure_units_for_layer(
+            cls, exposure_key, layer_geometry_key, layer_mode_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param exposure_key: The exposure key
+        :type exposure_key: str
+
+        :param layer_geometry_key: The geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :returns: List of exposure unit
+        :rtype: list
+        """
+
+        exposure_layer_req = cls.get_exposure_requirements()
+
+        exposures = exposure_layer_req['exposure_types']
+        exposure_keys = get_list_key(exposures)
+        if exposure_key not in exposure_keys:
+            return []
+
+        layer_geometries = exposure_layer_req['layer_geometries']
+        layer_geometry_keys = get_list_key(layer_geometries)
+        if layer_geometry_key not in layer_geometry_keys:
+            return []
+
+        layer_mode = exposure_layer_req['layer_mode']
+        if layer_mode_key != layer_mode['key']:
+            return []
+
+        return exposure_layer_req['exposure_units']

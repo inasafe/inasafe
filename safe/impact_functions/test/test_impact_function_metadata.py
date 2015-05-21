@@ -79,7 +79,8 @@ from safe.new_definitions import (
     layer_purpose_exposure,
     hazard_category_hazard_scenario,
     hazard_earthquake,
-    exposure_structure
+    exposure_structure,
+    count_exposure_unit
 )
 
 
@@ -424,6 +425,20 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         exposures = impact_function.metadata().exposure_for_layer('raster')
         expected = []
         self.assertItemsEqual(exposures, expected)
+
+    def test_exposure_units_for_layer(self):
+        """Test exposure_units_for_layer."""
+        impact_function = ITBFatalityFunction()
+        exposure_units = impact_function.metadata().exposure_units_for_layer(
+            'population', 'raster', 'continuous')
+        expected = [count_exposure_unit]
+        self.assertItemsEqual(exposure_units, expected)
+
+        exposure_units = impact_function.metadata().exposure_units_for_layer(
+            'population', 'raster', 'classified')
+        expected = []
+        self.assertItemsEqual(exposure_units, expected)
+
 
 if __name__ == '__main__':
     unittest.main()

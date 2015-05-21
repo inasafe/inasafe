@@ -50,9 +50,9 @@ from safe.new_definitions import (
     hazard_flood,
     hazard_tsunami,
     exposure_structure,
-    exposure_land_cover,
-    exposure_people_in_building,
-    exposure_road
+    exposure_road,
+    count_exposure_unit,
+    density_exposure_unit
 )
 
 class TestImpactFunctionManager(unittest.TestCase):
@@ -488,6 +488,14 @@ class TestImpactFunctionManager(unittest.TestCase):
             'line')
         expected = [exposure_road]
         self.assertItemsEqual(exposures, expected)
+
+    def test_exposure_units_for_layer(self):
+        """Test for exposure_units_for_layer"""
+        impact_function_manager = ImpactFunctionManager()
+        exposure_units = impact_function_manager.exposure_units_for_layer(
+            'population', 'raster', 'continuous')
+        expected = [count_exposure_unit, density_exposure_unit]
+        self.assertItemsEqual(exposure_units, expected)
 
 
 if __name__ == '__main__':
