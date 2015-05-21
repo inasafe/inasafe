@@ -797,3 +797,97 @@ class ImpactFunctionMetadata(object):
             return []
 
         return hazard_layer_req['continuous_hazard_units']
+
+    @classmethod
+    def vector_hazards_classifications_for_layer(
+            cls, hazard_key, layer_geometry_key, layer_mode_key,
+            hazard_category_key):
+        """Get vector_hazards_classifications.
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of continuous hazard unit
+        :rtype: list
+        """
+
+        hazard_layer_req = cls.get_hazard_requirements()
+
+        if not hazard_layer_req['vector_hazard_classifications']:
+            return []
+
+        hazards = hazard_layer_req['hazard_types']
+        hazard_keys = get_list_key(hazards)
+        if hazard_key not in hazard_keys:
+            return []
+
+        layer_geometries = hazard_layer_req['layer_geometries']
+        layer_geometry_keys = get_list_key(layer_geometries)
+        if layer_geometry_key not in layer_geometry_keys:
+            return []
+
+        layer_mode = hazard_layer_req['layer_mode']
+        if layer_mode_key != layer_mode['key']:
+            return []
+
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazard_category_keys = get_list_key(hazard_categories)
+        if hazard_category_key not in hazard_category_keys:
+            return []
+
+        return hazard_layer_req['vector_hazard_classifications']
+
+    @classmethod
+    def raster_hazards_classifications_for_layer(
+            cls, hazard_key, layer_geometry_key, layer_mode_key,
+            hazard_category_key):
+        """Get vector_hazards_classifications.
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of continuous hazard unit
+        :rtype: list
+        """
+
+        hazard_layer_req = cls.get_hazard_requirements()
+
+        if not hazard_layer_req['raster_hazard_classifications']:
+            return []
+
+        hazards = hazard_layer_req['hazard_types']
+        hazard_keys = get_list_key(hazards)
+        if hazard_key not in hazard_keys:
+            return []
+
+        layer_geometries = hazard_layer_req['layer_geometries']
+        layer_geometry_keys = get_list_key(layer_geometries)
+        if layer_geometry_key not in layer_geometry_keys:
+            return []
+
+        layer_mode = hazard_layer_req['layer_mode']
+        if layer_mode_key != layer_mode['key']:
+            return []
+
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazard_category_keys = get_list_key(hazard_categories)
+        if hazard_category_key not in hazard_category_keys:
+            return []
+
+        return hazard_layer_req['raster_hazard_classifications']
