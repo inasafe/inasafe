@@ -652,3 +652,24 @@ class ImpactFunctionManager(object):
                 add_to_list(hazard_categories, if_layer_purposes)
 
         return hazard_categories
+
+    def hazard_for_layer(self, layer_geometry_key, hazard_category_key):
+        """Get hazard categories form layer_geometry_key
+
+        :param layer_geometry_key: The geometry id
+        :type layer_geometry_key: str
+
+        :param hazard_category_key: The hazard category
+        :type hazard_category_key: str
+
+        :returns: List of hazard
+        :rtype: list
+        """
+        hazards = []
+        for impact_function in self.impact_functions:
+            if_hazard = impact_function.metadata().hazard_for_layer(
+                layer_geometry_key, hazard_category_key)
+            if if_hazard:
+                add_to_list(hazards, if_hazard)
+
+        return hazards
