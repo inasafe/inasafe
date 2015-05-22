@@ -226,7 +226,7 @@ def run_if():
         print "Error : No impact layer generated"
     LOGGER.debug(impact_layer)
     LOGGER.debug(impact_layer.__doc__)
-    file_writer = QgsVectorFileWriter()
+    impact_layer.write_to_file(output_file)
 
 
 

@@ -1,6 +1,6 @@
 Usage:  accent.py [OPTION] --hazard=HAZARD_FILE
                     (--download --layers=LAYER_NAME [LAYER_NAME...] | --exposure=EXP_FILE)
-                    --extent=XMIN,YMIN,XMAX,YMAX --impact-function=IF_ID [FILE]
+                    --extent=XMIN,YMIN,XMAX,YMAX --impact-function=IF_ID --output-file=FILE
         accent.py --list-functions
         accent.py --version
 
