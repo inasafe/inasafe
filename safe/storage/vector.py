@@ -716,7 +716,9 @@ class Vector(Layer):
             # Create attribute fields in layer
             store_attributes = True
             for name in fields:
-                fd = ogr.FieldDefn(name, ogr_types[name])
+                # Rizky : OGR can't handle unicode field name, thus we
+                # convert it to ASCII
+                fd = ogr.FieldDefn(str(name), ogr_types[name])
                 # FIXME (Ole): Trying to address issue #16
                 #              But it doesn't work and
                 #              somehow changes the values of MMI in test
