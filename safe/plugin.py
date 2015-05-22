@@ -565,7 +565,7 @@ class Plugin(object):
         )
 
         dialog = NeedsCalculatorDialog(self.iface.mainWindow())
-        dialog.show()  # non modal
+        dialog.exec_()
 
     def show_global_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
