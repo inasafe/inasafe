@@ -424,12 +424,12 @@ class TestImpactFunctionManager(unittest.TestCase):
         """Test for hazards_for_layer"""
         impact_function_manager = ImpactFunctionManager()
         hazards = impact_function_manager.hazards_for_layer(
-            'polygon', 'hazard_scenario')
+            'polygon', 'single_hazard')
         expected = [hazard_flood, hazard_tsunami]
         self.assertItemsEqual(hazards, expected)
 
         hazards = impact_function_manager.hazards_for_layer(
-            'point', 'hazard_scenario')
+            'point', 'single_hazard')
         expected = []
         self.assertItemsEqual(hazards, expected)
 
@@ -459,7 +459,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         continuous_hazards_units = impact_function_manager.\
             continuous_hazards_units_for_layer(
-                'tsunami', 'raster', 'continuous', 'hazard_scenario')
+                'tsunami', 'raster', 'continuous', 'single_hazard')
         expected = [unit_feet,
                     unit_metres,
                     unit_millimetres,
@@ -474,7 +474,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.available_hazards(
-            'hazard_scenario')
+            'single_hazard')
         expected_result = [hazard_flood,
                            hazard_tsunami,
                            hazard_generic,
@@ -515,7 +515,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         """Test for available_hazard_constraints."""
         ifm = ImpactFunctionManager()
         hazard_constraints = ifm.available_hazard_constraints(
-            'earthquake', 'hazard_scenario')
+            'earthquake', 'single_hazard')
         print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
         expected = [
             (layer_mode_continuous, layer_geometry_raster),

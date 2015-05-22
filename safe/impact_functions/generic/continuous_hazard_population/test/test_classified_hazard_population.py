@@ -76,7 +76,7 @@ class TestContinuousHazardPopulationFunction(unittest.TestCase):
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
             'hazard': 'flood',
-            'hazard_category': 'hazard_zone',
+            'hazard_category': 'multi_hazard',
             'continuous_hazard_unit': 'generic'
         }
 

@@ -103,7 +103,7 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'volcano',
-            'hazard_category': 'hazard_zone',
+            'hazard_category': 'multi_hazard',
             'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 

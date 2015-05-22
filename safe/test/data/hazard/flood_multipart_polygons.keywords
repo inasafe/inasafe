@@ -1,4 +1,4 @@
-hazard_category: hazard_scenario
+hazard_category: single_hazard
 title: Flood Polygon
 hazard: flood
 field: FLOODPRONE

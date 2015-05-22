@@ -172,15 +172,15 @@ layer_geometry = {
 
 # Hazard Category
 hazard_category_single_hazard = {
-    'key': 'hazard_scenario',
-    'name': tr('Hazard Scenario'),
+    'key': 'single_hazard',
+    'name': tr('Single Hazard'),
     'description': tr(
         'To be added later')
 }
 
 hazard_category_multi_hazard = {
-    'key': 'hazard_zone',
-    'name': tr('Hazard Zone'),
+    'key': 'multi_hazard',
+    'name': tr('Multi Hazard'),
     'description': tr(
         'To be added later')
 }

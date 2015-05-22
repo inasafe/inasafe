@@ -63,7 +63,7 @@ class TestClassifiedHazardPopulationFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'raster',
             'hazard': 'flood',
-            'hazard_category': 'hazard_zone',
+            'hazard_category': 'multi_hazard',
             'raster_hazard_classification': 'generic_raster_hazard_classes'
         }
 

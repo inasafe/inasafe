@@ -78,7 +78,7 @@ class TestTsunamiEvacuationRaster(unittest.TestCase):
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
             'hazard': 'tsunami',
-            'hazard_category': 'hazard_scenario',
+            'hazard_category': 'single_hazard',
             'continuous_hazard_unit': 'metres'
         }
 

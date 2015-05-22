@@ -50,7 +50,7 @@ class KeywordIOTest(unittest.TestCase):
         hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
         self.raster_layer, _ = load_layer(hazard_path)
         self.expected_raster_keywords = {
-            'hazard_category': 'hazard_scenario',
+            'hazard_category': 'single_hazard',
             'title': 'Tsunami',
             'hazard': 'tsunami',
             'hazard_continuous_unit': 'metres',
@@ -181,7 +181,7 @@ class KeywordIOTest(unittest.TestCase):
         keywords = self.keyword_io.read_keywords(layer)
         expected_keywords = {
             'category': 'exposure',
-            'hazard_category': 'hazard_scenario',
+            'hazard_category': 'single_hazard',
             'title': 'Tsunami',
             'hazard': 'tsunami',
             'hazard_continuous_unit': 'metres',

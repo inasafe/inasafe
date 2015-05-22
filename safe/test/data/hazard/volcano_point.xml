@@ -168,7 +168,7 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[hazard_category: hazard_zone
+<![CDATA[hazard_category: multi_hazard
 title: Volcano Point
 source: smithsonian
 vector_hazard_classification: volcano_vector_hazard_classes

@@ -79,7 +79,7 @@ class TestFloodPolygonBuildingQgis(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'flood',
-            'hazard_category': 'hazard_scenario',
+            'hazard_category': 'single_hazard',
             'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
