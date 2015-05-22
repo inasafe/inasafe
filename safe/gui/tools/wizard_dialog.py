@@ -491,6 +491,22 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
         self.go_to_step(new_step)
 
+    def update_MessageViewer_size(self):
+        """Update maximumHeight size of the MessageViewer to fit its parent tab
+
+        This is a workaround for a bug that makes MessageViewer
+        flooding up to maximumHeight on Windows.
+        """
+        self.wvResults.setMaximumHeight(self.pgF25Progress.height() - 90)
+
+    def resizeEvent(self, ev):
+        """Trigger MessageViewer size update on window resize
+
+        .. note:: This is an automatic Qt slot
+           executed when the window size changes.
+        """
+        self.update_MessageViewer_size()
+
     def categories_for_layer(self, layer_type, data_type):
         """Return a list of valid categories for a layer.
 
@@ -3039,6 +3055,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Run analysis after switching to the new step
         if new_step == step_fc_analysis:
+            self.update_MessageViewer_size()
             self.setup_and_run_analysis()
 
         if new_step == step_kw_category and self.parent_step:

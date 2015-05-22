@@ -588,7 +588,7 @@ class ImpactFunctionManager(object):
 
         return hazard_categories
 
-    def hazard_for_layer(self, layer_geometry_key, hazard_category_key):
+    def hazards_for_layer(self, layer_geometry_key, hazard_category_key):
         """Get hazard categories form layer_geometry_key
 
         :param layer_geometry_key: The geometry id
@@ -602,14 +602,14 @@ class ImpactFunctionManager(object):
         """
         hazards = []
         for impact_function in self.impact_functions:
-            if_hazards = impact_function.metadata().hazard_for_layer(
+            if_hazards = impact_function.metadata().hazards_for_layer(
                 layer_geometry_key, hazard_category_key)
             if if_hazards:
                 add_to_list(hazards, if_hazards)
 
         return hazards
 
-    def exposure_for_layer(self, layer_geometry_key):
+    def exposures_for_layer(self, layer_geometry_key):
         """Get hazard categories form layer_geometry_key
 
         :param layer_geometry_key: The geometry id
@@ -620,7 +620,7 @@ class ImpactFunctionManager(object):
         """
         exposures = []
         for impact_function in self.impact_functions:
-            if_exposures = impact_function.metadata().exposure_for_layer(
+            if_exposures = impact_function.metadata().exposures_for_layer(
                 layer_geometry_key)
             if if_exposures:
                 add_to_list(exposures, if_exposures)
