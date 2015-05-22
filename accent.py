@@ -31,6 +31,7 @@ from qgis.core import (
     QgsRaster,
     QgsPoint,
     QgsVectorLayer,
+    QgsVectorFileWriter,
     QgsRectangle)
 from safe.utilities.keyword_io import KeywordIO
 import os
@@ -225,7 +226,7 @@ def run_if():
         print "Error : No impact layer generated"
     LOGGER.debug(impact_layer)
     LOGGER.debug(impact_layer.__doc__)
-    LOGGER.debug(impact_layer.result)
+    file_writer = QgsVectorFileWriter()
 
 
 
@@ -242,7 +243,7 @@ if __name__ == '__main__':
     try:
         # Parse arguments, use file docstring as a parameter definition
         arguments = docopt.docopt(usage)
-        output_file = arguments['FILE']
+        output_file = arguments['--output-file']
         hazard = arguments['--hazard']
         exposure = arguments['--exposure']
         version = arguments['--version']
