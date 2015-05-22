@@ -199,7 +199,7 @@ def run_if():
         analysis.show_intermediate_layers = False
         analysis.run_in_thread_flag = False
         analysis.map_canvas = CANVAS
-        #analysis.user_extent_crs(qexposure.extent)
+        # analysis.user_extent_crs(qexposure.extent)
         # analysis.user_extent(
         #      106.8054130000000015, -6.1913361000000000,
         #      106.8380719000000028, -6.1672457999999999)
@@ -213,9 +213,20 @@ def run_if():
     try:
         analysis.run_analysis()
         LOGGER.debug("end analysis :)")
-
     except Exception as exc:
         print exc.message
+
+    try:
+        impact_layer = analysis.get_impact_layer()
+    except Exception as exc:
+        print exc.message
+
+    if impact_layer is None:
+        print "Error : No impact layer generated"
+    LOGGER.debug(impact_layer)
+    LOGGER.debug(impact_layer.__doc__)
+    LOGGER.debug(impact_layer.result)
+
 
 
 if __name__ == '__main__':
@@ -250,13 +261,13 @@ if __name__ == '__main__':
     elif (extent is not None) and\
             (hazard is not None) and\
             (exposure is not None):
-        LOGGER.debug('--do an IF--')
+        LOGGER.debug('--RUN--')
         try:
             run_if()
         except Exception as e:
             print e.message
             print e.__doc__
-        LOGGER.debug('-- just did an IF--')
+        LOGGER.debug('--END RUN--')
 
 # run with :
 # python accent.py --hazard=jakarta_flood_design --exposure=buildings
