@@ -513,5 +513,16 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         ]
         self.assertItemsEqual(result, expected)
 
+    def test_get_available_exposure_constraints(self):
+        """Test for get_available_exposure_constraints."""
+        impact_function = ITBFatalityFunction()
+        result = impact_function.metadata().get_available_exposure_constraints(
+            'population'
+        )
+        expected = [
+            (layer_mode_continuous, layer_geometry_raster)
+        ]
+        self.assertItemsEqual(result, expected)
+
 if __name__ == '__main__':
     unittest.main()

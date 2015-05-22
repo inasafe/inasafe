@@ -522,5 +522,17 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         self.assertItemsEqual(hazard_constraints, expected)
 
+    def test_get_available_exposure_constraints(self):
+        """Test for get_available_exposure_constraints."""
+        ifm = ImpactFunctionManager()
+        exposure_constraints = ifm.get_available_exposure_constraints(
+            'population')
+        print [(x[0]['key'], x[1]['key']) for x in exposure_constraints]
+        expected = [
+            (layer_mode_continuous, layer_geometry_raster),
+        ]
+
+        self.assertItemsEqual(exposure_constraints, expected)
+
 if __name__ == '__main__':
     unittest.main()

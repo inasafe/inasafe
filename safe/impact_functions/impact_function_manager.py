@@ -820,3 +820,21 @@ class ImpactFunctionManager(object):
                 add_to_list(hazard_constraints, if_hazard_constraints)
 
         return hazard_constraints
+
+    def get_available_exposure_constraints(self, exposure_key):
+        """Get exposure constraints for exposure_key.
+
+        :param exposure_key: The exposure key
+        :type exposure_key: str
+
+        :returns: List of tuple of layer_mode and layer_geometry
+        :rtype: list
+        """
+        exposure_constraints = []
+        for impact_function in self.impact_functions:
+            if_exposure_constraints = impact_function.metadata(). \
+                get_available_exposure_constraints(exposure_key)
+            if if_exposure_constraints:
+                add_to_list(exposure_constraints, if_exposure_constraints)
+
+        return exposure_constraints

@@ -1005,3 +1005,28 @@ class ImpactFunctionMetadata(object):
             result.append((layer_mode, layer_geometry))
 
         return result
+
+    @classmethod
+    def get_available_exposure_constraints(cls, exposure_key):
+        """Get exposure constraints for exposure_key.
+
+        :param exposure_key: The exposure key
+        :type exposure_key: str
+
+        :returns: List of tuple of layer_mode and layer_geometry
+        :rtype: list
+        """
+        exposure_layer_req = cls.get_exposure_requirements()
+        exposures = exposure_layer_req['exposure_types']
+
+        if not is_key_exist(exposure_key, exposures):
+            return []
+
+        layer_mode = exposure_layer_req['layer_mode']
+        layer_geometries = exposure_layer_req['layer_geometries']
+
+        result = []
+        for layer_geometry in layer_geometries:
+            result.append((layer_mode, layer_geometry))
+
+        return result
