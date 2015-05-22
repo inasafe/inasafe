@@ -521,39 +521,6 @@ class ImpactFunctionManager(object):
 
         return impact_functions_metadata
 
-    def get_functions_for_constraint(
-            self,
-            hazard,
-            exposure,
-            hazard_constraint=None,
-            exposure_constraint=None):
-        """Get all impact functions that match the hazard n exposure metadata.
-
-        :param hazard: The hazard metadata.
-        :type hazard: dict
-
-        :param exposure: The exposure metadata.
-        :type exposure: dict
-
-        :param hazard_constraint:
-        :param exposure_constraint:
-        :return:
-        """
-        result = []
-        if_hazard = self.get_functions_for_hazard(hazard)
-        if_exposure = self.get_functions_for_exposure(exposure)
-        if_exposure_id = [function['id'] for function in if_exposure]
-
-        for f in if_hazard:
-            if f['id'] in if_exposure_id:
-                if (not hazard_constraint or hazard_constraint in
-                        f['categories']['hazard']['layer_constraints']):
-                    if (not exposure_constraint or exposure_constraint in
-                            f['categories']['exposure']['layer_constraints']):
-                        result.append(f)
-
-        return result
-
     def purposes_for_layer(self, layer_geometry_key):
         """Get purposes of a layer geometry id.
 
@@ -795,3 +762,38 @@ class ImpactFunctionManager(object):
             exposures = sorted(exposures, key=lambda k: k['key'])
 
         return exposures
+
+    def get_functions_for_constraint(
+            self, hazard_key, exposure_key, hazard_geometry_key,
+            exposure_geometry_key, hazard_mode_key, exposure_mode_key):
+        """Obtain all functions that match with the constraints
+
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param exposure_key: the exposure key
+        :type exposure_key: str
+
+        :param hazard_geometry_key: The hazard geometry key
+        :type hazard_geometry_key: str
+
+        :param exposure_geometry_key: The exposure geometry key
+        :type exposure_geometry_key: str
+
+        :param hazard_mode_key: The hazard mode key
+        :type hazard_mode_key: str
+
+        :param exposure_mode_key: The exposure mode key
+        :type exposure_mode_key: str
+
+        :returns: List of matched Impact Function
+        :rtype: list
+        """
+        impact_functions = []
+        for impact_function in self.impact_functions:
+            if impact_function.metadata().is_function_for_constraint(
+                    hazard_key, exposure_key, hazard_geometry_key,
+                    exposure_geometry_key, hazard_mode_key, exposure_mode_key):
+                impact_functions.append(impact_function)
+
+        return impact_functions

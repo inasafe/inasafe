@@ -476,5 +476,28 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         expected = [exposure_population]
         self.assertItemsEqual(hazards, expected)
 
+    def test_is_function_for_constraint(self):
+        """Test for is_function_for_constraint"""
+        impact_function = ITBFatalityFunction()
+        result = impact_function.metadata().is_function_for_constraint(
+            'earthquake',
+            'population',
+            'raster',
+            'raster',
+            'continuous',
+            'continuous',
+        )
+        self.assertTrue(result)
+
+        result = impact_function.metadata().is_function_for_constraint(
+            'earthquake',
+            'population',
+            'raster',
+            'raster',
+            'classified',
+            'continuous',
+        )
+        self.assertFalse(result)
+
 if __name__ == '__main__':
     unittest.main()

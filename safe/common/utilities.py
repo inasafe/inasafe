@@ -863,3 +863,18 @@ def get_list_key(list_dict):
     :rtype: list
     """
     return [x['key'] for x in list_dict]
+
+
+def is_key_exist(key, list_dictionary):
+    """Check if a key is in list_dictionary's key
+
+    :param key: The key
+    :type key: str
+
+    :param list_dictionary: List of dictionary
+    :type list_dictionary: list
+
+    :returns: True if exist, else False
+    :rtype: bool
+    """
+    return key in get_list_key(list_dictionary)

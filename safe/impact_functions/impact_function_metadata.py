@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
-from safe.common.utilities import add_to_list, get_list_key
+from safe.common.utilities import add_to_list, get_list_key, is_key_exist
 from safe.new_definitions import (
     layer_purpose_exposure,
     layer_purpose_hazard)
@@ -922,3 +922,55 @@ class ImpactFunctionMetadata(object):
 
         exposure_layer_req = cls.get_exposure_requirements()
         return exposure_layer_req['exposure_types']
+
+    @classmethod
+    def is_function_for_constraint(
+            cls, hazard_key, exposure_key, hazard_geometry_key,
+            exposure_geometry_key, hazard_mode_key, exposure_mode_key):
+        """Check if the constraints match with the function.
+
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param exposure_key: the exposure key
+        :type exposure_key: str
+
+        :param hazard_geometry_key: The hazard geometry key
+        :type hazard_geometry_key: str
+
+        :param exposure_geometry_key: The exposure geometry key
+        :type exposure_geometry_key: str
+
+        :param hazard_mode_key: The hazard mode key
+        :type hazard_mode_key: str
+
+        :param exposure_mode_key: The exposure mode key
+        :type exposure_mode_key: str
+
+        :returns: True if match, else False
+        :rtype: bool
+        """
+        hazard_layer_req = cls.get_hazard_requirements()
+        exposure_layer_req = cls.get_exposure_requirements()
+
+        hazards = hazard_layer_req['hazard_types']
+        exposures = exposure_layer_req['exposure_types']
+        hazard_geometries = hazard_layer_req['layer_geometries']
+        exposure_geometries = exposure_layer_req['layer_geometries']
+        hazard_mode = hazard_layer_req['layer_mode']
+        exposure_mode = exposure_layer_req['layer_mode']
+
+        if not is_key_exist(hazard_key, hazards):
+            return False
+        if not is_key_exist(exposure_key, exposures):
+            return False
+        if not is_key_exist(hazard_geometry_key, hazard_geometries):
+            return False
+        if not is_key_exist(exposure_geometry_key, exposure_geometries):
+            return False
+        if hazard_mode_key != hazard_mode['key']:
+            return False
+        if exposure_mode_key != exposure_mode['key']:
+            return False
+
+        return True
