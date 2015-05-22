@@ -30,7 +30,7 @@ from safe.new_definitions import (
     hazard_earthquake,
     exposure_population,
     count_exposure_unit,
-    hazard_category_hazard_scenario,
+    hazard_category_single_hazard,
     unit_mmi
 )
 
@@ -82,7 +82,7 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_hazard_scenario],
+                    'hazard_categories': [hazard_category_single_hazard],
                     'hazard_types': [hazard_earthquake],
                     'continuous_hazard_units': [unit_mmi],
                     'vector_hazard_classifications': [],

@@ -77,7 +77,7 @@ from safe.definitions import (
 
 from safe.new_definitions import (
     layer_purpose_exposure,
-    hazard_category_hazard_scenario,
+    hazard_category_single_hazard,
     hazard_earthquake,
     exposure_structure,
     count_exposure_unit,
@@ -399,7 +399,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = EarthquakeBuildingFunction()
         hazard_categories = impact_function.metadata()\
             .hazard_categories_for_layer('raster')
-        expected = [hazard_category_hazard_scenario]
+        expected = [hazard_category_single_hazard]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function.metadata() \

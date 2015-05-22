@@ -53,7 +53,7 @@ from safe.new_definitions import (
     hazard_earthquake,
     exposure_structure,
     unit_mmi,
-    hazard_category_hazard_scenario
+    hazard_category_single_hazard
 )
 
 
@@ -160,7 +160,7 @@ class TestRegistry(unittest.TestCase):
         hazard_metadata = {
             'layer_mode': layer_mode_continuous,
             'layer_geometry': layer_geometry_raster,
-            'hazard_category': hazard_category_hazard_scenario,
+            'hazard_category': hazard_category_single_hazard,
             'hazard': hazard_earthquake,
             'continuous_hazard_unit': unit_mmi,
         }
@@ -182,7 +182,7 @@ class TestRegistry(unittest.TestCase):
         hazard_metadata = {
             'layer_mode': layer_mode_continuous,
             'layer_geometry': layer_geometry_raster,
-            'hazard_category': hazard_category_hazard_scenario,
+            'hazard_category': hazard_category_single_hazard,
             'hazard': hazard_earthquake,
             # 'continuous_hazard_unit': unit_mmi,
             }
@@ -254,7 +254,7 @@ class TestRegistry(unittest.TestCase):
         hazard_metadata = {
             'layer_mode': layer_mode_continuous,
             'layer_geometry': layer_geometry_raster,
-            'hazard_category': hazard_category_hazard_scenario,
+            'hazard_category': hazard_category_single_hazard,
             'hazard': hazard_earthquake,
             'continuous_hazard_unit': unit_mmi
         }

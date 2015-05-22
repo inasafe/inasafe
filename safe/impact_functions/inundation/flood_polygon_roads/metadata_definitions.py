@@ -20,7 +20,7 @@ from safe.new_definitions import (
     layer_geometry_polygon,
     layer_geometry_line,
     hazard_flood,
-    hazard_category_hazard_scenario,
+    hazard_category_single_hazard,
     flood_vector_hazard_classes,
     exposure_road
 )
@@ -66,7 +66,7 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
-                    'hazard_categories': [hazard_category_hazard_scenario],
+                    'hazard_categories': [hazard_category_single_hazard],
                     'hazard_types': [hazard_flood],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
