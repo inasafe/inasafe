@@ -396,25 +396,28 @@ class TestImpactFunctionManager(unittest.TestCase):
     def test_hazard_categories_for_layer(self):
         """Test for hazard_categories_for_layer"""
         impact_function_manager = ImpactFunctionManager()
-        hazard_categories = impact_function_manager.hazard_categories_for_layer(
-            'polygon')
-        expected = [hazard_category_hazard_scenario,
-                    hazard_category_hazard_zone]
+        hazard_categories = impact_function_manager.\
+            hazard_categories_for_layer('polygon')
+        expected = [
+            hazard_category_hazard_scenario,
+            hazard_category_hazard_zone]
         self.assertItemsEqual(hazard_categories, expected)
 
-        hazard_categories = impact_function_manager.hazard_categories_for_layer(
-            'line')
+        hazard_categories = impact_function_manager.\
+            hazard_categories_for_layer('line')
         expected = []
         self.assertItemsEqual(hazard_categories, expected)
 
-        hazard_categories = impact_function_manager.hazard_categories_for_layer(
-            'point')
+        hazard_categories = impact_function_manager.\
+            hazard_categories_for_layer('point')
         expected = [hazard_category_hazard_zone]
         self.assertItemsEqual(hazard_categories, expected)
 
-        hazard_categories = impact_function_manager.hazard_categories_for_layer(
-            'raster')
-        expected = [hazard_category_hazard_scenario, hazard_category_hazard_zone]
+        hazard_categories = impact_function_manager.\
+            hazard_categories_for_layer('raster')
+        expected = [
+            hazard_category_hazard_scenario,
+            hazard_category_hazard_zone]
         self.assertItemsEqual(hazard_categories, expected)
 
     def test_hazards_for_layer(self):
@@ -486,9 +489,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.get_available_exposures()
         print [x['key'] for x in result]
-        expected_result = [exposure_structure,
-                           exposure_road,
-                           exposure_population,]
+        expected_result = [
+            exposure_structure, exposure_road, exposure_population]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 

@@ -388,7 +388,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
     def test_purposes_for_layer(self):
         """Test for purposes_for_layer."""
         impact_function = EarthquakeBuildingFunction()
-        layer_purpose = impact_function.metadata().purposes_for_layer('polygon')
+        layer_purpose = impact_function.metadata().purposes_for_layer(
+            'polygon')
         self.assertIsNotNone(layer_purpose)
         expected_result = [layer_purpose_exposure]
         self.assertItemsEqual(layer_purpose, expected_result)
