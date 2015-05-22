@@ -22,10 +22,6 @@ for delta in usage_file:
 
 
 import docopt
-# noinspection PyPackageRequirements
-# next line already done inside run_if
-#from PyQt4 import QtGui  # pylint: disable=W0621
-#import qgis.utils
 from safe.impact_functions.registry import Registry
 from safe.impact_functions import register_impact_functions
 from safe.test.utilities import test_data_path, get_qgis_app
@@ -36,10 +32,11 @@ from qgis.core import (
     QgsPoint,
     QgsVectorLayer,
     QgsRectangle)
+from safe.utilities.keyword_io import KeywordIO
 import os
 import sys
 import logging
-LOGGER = logging.getLogger('InaSAFE')
+
 
 # arguments/options
 output_file = None
@@ -54,6 +51,7 @@ default_dir = os.path.abspath(os.path.join(
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+LOGGER = logging.getLogger('InaSAFE')
 
 def get_ifunction_list():
     LOGGER.debug('get IF list')
@@ -134,7 +132,6 @@ def get_qgis_app():
 
 
 def get_hazard():
-    qhazard = None
     try:
         HAZARD_BASE = test_data_path(default_dir, 'hazard', 'continuous_flood_20_20')
         LOGGER.debug(HAZARD_BASE)
@@ -149,21 +146,26 @@ def get_hazard():
         LOGGER.debug('hazard_extent')
         LOGGER.debug(hazard_extent)
         LOGGER.debug(qhazard.width())
+        return qhazard
     except Exception as exc:
         print exc.message
-
-    return qhazard
 
 
 def get_exposure():
     try:
         EXPOSURE_BASE = test_data_path(default_dir, 'exposure', 'buildings')
         LOGGER.debug(EXPOSURE_BASE)
-        qexposure = QgsVectorLayer(EXPOSURE_BASE + '.shp', 'ogr')
+        qexposure = QgsVectorLayer(EXPOSURE_BASE + '.shp', 'testvector', 'ogr')
+        if not qexposure.isValid():
+            print "exposure vector layer not valid"
+            print "Perhaps run-env-linux.sh /usr"
+        else:
+            print "exposure vector layer is VALID!!"
         # noinspection PyUnresolvedReferences
         exposure_extent = qexposure.extent()
         LOGGER.debug('exposure_extent')
         LOGGER.debug(exposure_extent)
+        LOGGER.debug(qexposure.countSymbolFeatures())
         return qexposure
     except Exception as exc:
         print exc.message
@@ -179,121 +181,46 @@ def run_if():
         arguments['--impact-function'])
     LOGGER.debug(arguments['--impact-function'])
 
+    keyword_io = KeywordIO()
     try:
         from safe.utilities.analysis import Analysis
         LOGGER.debug('imported')
     except ImportError:
-        LOGGER.debug('**except** :(')
+        LOGGER.debug('**Import error** :(')
         return None, None, None, None
     analysis = Analysis()
     # Layers
-    analysis.hazard_layer = qhazard
-    analysis.exposure_layer = qexposure
-    # analysis.user_extent
-    # analysis.user_extent(
-    #     106.8054130000000015, -6.1913361000000000,
-    #     106.8380719000000028, -6.1672457999999999)
-    print 'after'
-    analysis.impact_function = impact_function
-    LOGGER.debug(analysis)
-    analysis.setup_analysis()
-    LOGGER.debug('eeee')
-    analysis.run_analysis()
-    LOGGER.debug("end :)")
-
-
-def set_pycharm_environ():
     try:
-        charm_settings = {
-            'PATH': '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games',
-            'PYTHONUNBUFFERED': '1',
-            'SESSION': 'ubuntu',
-            'LANG': 'en_ZA.UTF-8',
-            'DEFAULTS_PATH': '/usr/share/gconf/ubuntu.default.path',
-            'SHELL': '/bin/bash',
-            'XDG_SESSION_PATH': '/org/freedesktop/DisplayManager/Session0',
-            'XAUTHORITY': '/home/jannes/.Xauthority',
-            'LANGUAGE': 'en_ZA:en',
-            'SESSION_MANAGER': 'local/merensky:@/tmp/.ICE-unix/1702,unix/merensky:/tmp/.ICE-unix/1702',
-            'SHLVL': '0',
-            'MANDATORY_PATH': '/usr/share/gconf/ubuntu.mandatory.path',
-            'JOB': 'dbus',
-            'LD_LIBRARY_PATH': '/usr/local/src/pycharm-4.0.6/bin:',
-            'QT4_IM_MODULE': 'xim',
-            'COMPIZ_CONFIG_PROFILE': 'ubuntu',
-            'TEXTDOMAIN': 'im-config',
-            'SESSIONTYPE': 'gnome-session',
-            'IM_CONFIG_PHASE': '1',
-            'GIO_LAUNCHED_DESKTOP_FILE_PID': '2254',
-            'GPG_AGENT_INFO': '/run/user/1000/keyring-nEkiCw/gpg:0:1',
-            'HOME': '/home/jannes',
-            'CLUTTER_IM_MODULE': 'xim',
-            'SELINUX_INIT': 'YES',
-            'GIO_LAUNCHED_DESKTOP_FILE': '/usr/share/applications/jetbrains-pycharm.desktop',
-            'XDG_RUNTIME_DIR': '/run/user/1000',
-            'INSTANCE': '',
-            'PYTHONPATH': '$PYTHONPATH:/usr/share/qgis/python/plugins:/home/jannes/gitwork/inasafe/safe:/home/jannes/gitwork/inasafe',
-            'COMPIZ_BIN_PATH': '/usr/bin/',
-            'CLASSPATH': '/usr/local/src/pycharm-4.0.6/bin/../lib/bootstrap.jar:/usr/local/src/pycharm-4.0.6/bin/../lib/extensions.jar:/usr/local/src/pycharm-4.0.6/bin/../lib/util.jar:/usr/local/src/pycharm-4.0.6/bin/../lib/jdom.jar:/usr/local/src/pycharm-4.0.6/bin/../lib/log4j.jar:/usr/local/src/pycharm-4.0.6/bin/../lib/trove4j.jar:/usr/local/src/pycharm-4.0.6/bin/../lib/jna.jar',
-            'SSH_AUTH_SOCK': '/run/user/1000/keyring-nEkiCw/ssh',
-            'GDMSESSION': 'ubuntu',
-            'XMODIFIERS': '@im=ibus',
-            'INASAFE_POPULATION_PATH': '/home/jannes/gitwork/inasafe/realtime/fixtures/exposure/population.tif',
-            'TEXTDOMAINDIR': '/usr/share/locale/',
-            'XDG_SEAT_PATH': '/org/freedesktop/DisplayManager/Seat0',
-            'PYCHARM_HELPERS_DIR': '/usr/local/src/pycharm-4.0.6/helpers/pycharm',
-            'XDG_SESSION_ID': 'c1',
-            'DBUS_SESSION_BUS_ADDRESS': 'unix:abstract=/tmp/dbus-EdUWo0i0Yq',
-            'UPSTART_SESSION': 'unix:abstract=/com/ubuntu/upstart-session/1000/1534',
-            'XDG_CONFIG_DIRS': '/etc/xdg/xdg-ubuntu:/usr/share/upstart/xdg:/etc/xdg',
-            'GTK_MODULES': 'overlay-scrollbar:unity-gtk-module',
-            'XDG_MENU_PREFIX': 'gnome-',
-            'GDM_LANG': 'en_US',
-            'PYCHARM_HOSTED': '1',
-            'XDG_DATA_DIRS': '/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/',
-            'DISPLAY': ':0',
-            'XDG_MENU_PREFIX': 'gnome-',
-            }
-        for pycharm_setting in charm_settings:
-            if pycharm_setting not in os.environ:
-                os.environ[pycharm_setting] = charm_settings[pycharm_setting]
-                LOGGER.debug('setting ' + pycharm_setting)
-        pycharm_lines = ['/usr/share/qgis/python/plugins/processing',
-         '/home/jannes/gitwork/inasafe/safe/gis/test',
-         '/usr/local/lib/python2.7/dist-packages/pycharm-debug.egg',
-         '/usr/lib/python2.7/dist-packages',
-         '/home/jannes/gitwork/inasafe/safe/gis/test/$PYTHONPATH',
-         '/usr/share/qgis/python/plugins',
-         '/home/jannes/gitwork/inasafe/safe',
-         '/home/jannes/gitwork/inasafe',
-         '/usr/lib/python2.7',
-         '/usr/lib/python2.7/plat-x86_64-linux-gnu',
-         '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old',
-         '/usr/lib/python2.7/lib-dynload',
-         '/usr/local/lib/python2.7/dist-packages',
-         '/usr/lib/python2.7/dist-packages/PILcompat',
-         '/usr/lib/python2.7/dist-packages/gst-0.10',
-         '/usr/lib/python2.7/dist-packages/gtk-2.0',
-         '/usr/lib/pymodules/python2.7',
-         '/usr/lib/python2.7/dist-packages/ubuntu-sso-client',
-         '/home/jannes/gitwork/inasafe/safe_extras',
-         '/home/jannes/gitwork/inasafe/safe_extras/parameters']
-        for l in pycharm_lines:
-            if l not in sys.path:
-                sys.path.append(l)
-                LOGGER.debug('adding path:' + ' ' + l)
+        analysis.hazard_layer = qhazard
+        analysis.exposure_layer = qexposure
+        analysis.hazard_keyword = keyword_io.read_keywords(qhazard)
+        analysis.exposure_keyword = keyword_io.read_keywords(qexposure)
+        analysis.clip_hard = False
+        analysis.show_intermediate_layers = False
+        analysis.run_in_thread_flag = False
+        analysis.map_canvas = CANVAS
+        #analysis.user_extent_crs(qexposure.extent)
+        # analysis.user_extent(
+        #      106.8054130000000015, -6.1913361000000000,
+        #      106.8380719000000028, -6.1672457999999999)
+        analysis.impact_function = impact_function
+        print 'before'
+        analysis.setup_analysis()
+        print 'after'
     except Exception as exc:
         print exc.message
-        print exc.__doc__
+    LOGGER.debug('eeee')
+    try:
+        analysis.run_analysis()
+        LOGGER.debug("end analysis :)")
+
+    except Exception as exc:
+        print exc.message
 
 
 if __name__ == '__main__':
-    LOGGER.debug(sys.path)
-    #set_pycharm_environ()
     print "python accent.py"
     print ""
-    # setup functions
-    register_impact_functions()
     # globals
     output_file = None
     hazard = None
@@ -316,6 +243,8 @@ if __name__ == '__main__':
         print e.message
 
     if show_list:
+        # setup functions
+        register_impact_functions()
         show_names(get_ifunction_list())
 
     elif (extent is not None) and\
@@ -329,3 +258,7 @@ if __name__ == '__main__':
             print e.__doc__
         LOGGER.debug('-- just did an IF--')
 
+# run with :
+# python accent.py --hazard=jakarta_flood_design --exposure=buildings
+# --extent=106.8054130000000015,-6.1913361000000000,106.8380719000000028,-6.1672457999999999
+# --impact-function=FloodRasterBuildingFunction success
