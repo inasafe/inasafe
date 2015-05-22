@@ -70,7 +70,10 @@ from safe.new_definitions import (
     unit_mmi,
     unit_kilogram_per_meter_square,
     unit_kilometres,
-    unit_generic
+    unit_generic,
+    layer_mode_continuous,
+    layer_geometry_raster,
+    layer_mode_classified
 )
 
 
@@ -505,6 +508,19 @@ class TestImpactFunctionManager(unittest.TestCase):
             PAGFatalityFunction,
             ContinuousHazardPopulationFunction]
         self.assertItemsEqual(impact_functions, expected)
+
+    def test_get_available_hazard_constraints(self):
+        """Test for get_available_hazard_constraints."""
+        ifm = ImpactFunctionManager()
+        hazard_constraints = ifm.get_available_hazard_constraints(
+            'earthquake', 'hazard_scenario')
+        print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
+        expected = [
+            (layer_mode_continuous, layer_geometry_raster),
+            (layer_mode_classified, layer_geometry_raster)
+        ]
+
+        self.assertItemsEqual(hazard_constraints, expected)
 
 if __name__ == '__main__':
     unittest.main()

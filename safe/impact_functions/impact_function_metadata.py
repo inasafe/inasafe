@@ -974,3 +974,34 @@ class ImpactFunctionMetadata(object):
             return False
 
         return True
+
+    @classmethod
+    def get_available_hazard_constraints(cls, hazard_key, hazard_category_key):
+        """Get hazard constraints for hazard_key and hazard_category_key
+
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of tuple of layer_mode and layer_geometry
+        :rtype: list
+        """
+        hazard_layer_req = cls.get_hazard_requirements()
+        hazards = hazard_layer_req['hazard_types']
+        hazard_categories = hazard_layer_req['hazard_categories']
+
+        if not is_key_exist(hazard_key, hazards):
+            return []
+        if not is_key_exist(hazard_category_key, hazard_categories):
+            return []
+
+        layer_mode = hazard_layer_req['layer_mode']
+        layer_geometries = hazard_layer_req['layer_geometries']
+
+        result = []
+        for layer_geometry in layer_geometries:
+            result.append((layer_mode, layer_geometry))
+
+        return result

@@ -797,3 +797,26 @@ class ImpactFunctionManager(object):
                 impact_functions.append(impact_function)
 
         return impact_functions
+
+    def get_available_hazard_constraints(
+            self, hazard_key, hazard_category_key):
+        """Get hazard constraints for hazard_key and hazard_category_key
+
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of tuple of layer_mode and layer_geometry
+        :rtype: list
+        """
+        hazard_constraints = []
+        for impact_function in self.impact_functions:
+            if_hazard_constraints = impact_function.metadata().\
+                get_available_hazard_constraints(
+                hazard_key, hazard_category_key)
+            if if_hazard_constraints:
+                add_to_list(hazard_constraints, if_hazard_constraints)
+
+        return hazard_constraints

@@ -82,7 +82,9 @@ from safe.new_definitions import (
     exposure_structure,
     count_exposure_unit,
     unit_mmi,
-    exposure_population
+    exposure_population,
+    layer_mode_continuous,
+    layer_geometry_raster
 )
 
 
@@ -498,6 +500,18 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             'continuous',
         )
         self.assertFalse(result)
+
+    def test_get_available_hazard_constraints(self):
+        """Test for get_available_hazard_constraints."""
+        impact_function = ITBFatalityFunction()
+        result = impact_function.metadata().get_available_hazard_constraints(
+            'earthquake',
+            'hazard_scenario'
+        )
+        expected = [
+            (layer_mode_continuous, layer_geometry_raster)
+        ]
+        self.assertItemsEqual(result, expected)
 
 if __name__ == '__main__':
     unittest.main()
