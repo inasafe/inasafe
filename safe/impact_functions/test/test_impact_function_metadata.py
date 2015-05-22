@@ -459,23 +459,23 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         expected = []
         self.assertItemsEqual(continuous_hazards_units, expected)
 
-    def test_get_available_hazards(self):
-        """Test get_available_hazards."""
+    def test_available_hazards(self):
+        """Test available_hazards."""
         impact_function = ITBFatalityFunction()
-        hazards = impact_function.metadata().get_available_hazards(
+        hazards = impact_function.metadata().available_hazards(
             'hazard_scenario')
         expected = [hazard_earthquake]
         self.assertItemsEqual(hazards, expected)
 
-        hazards = impact_function.metadata().get_available_hazards(
+        hazards = impact_function.metadata().available_hazards(
             'hazard_zone')
         expected = []
         self.assertItemsEqual(hazards, expected)
 
-    def test_get_available_exposures(self):
-        """Test get_available_exposure."""
+    def test_available_exposures(self):
+        """Test available_exposure."""
         impact_function = ITBFatalityFunction()
-        hazards = impact_function.metadata().get_available_exposures()
+        hazards = impact_function.metadata().available_exposures()
         expected = [exposure_population]
         self.assertItemsEqual(hazards, expected)
 
@@ -502,10 +502,10 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         )
         self.assertFalse(result)
 
-    def test_get_available_hazard_constraints(self):
-        """Test for get_available_hazard_constraints."""
+    def test_available_hazard_constraints(self):
+        """Test for available_hazard_constraints."""
         impact_function = ITBFatalityFunction()
-        result = impact_function.metadata().get_available_hazard_constraints(
+        result = impact_function.metadata().available_hazard_constraints(
             'earthquake',
             'hazard_scenario'
         )
@@ -514,10 +514,10 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         ]
         self.assertItemsEqual(result, expected)
 
-    def test_get_available_exposure_constraints(self):
-        """Test for get_available_exposure_constraints."""
+    def test_available_exposure_constraints(self):
+        """Test for available_exposure_constraints."""
         impact_function = ITBFatalityFunction()
-        result = impact_function.metadata().get_available_exposure_constraints(
+        result = impact_function.metadata().available_exposure_constraints(
             'population'
         )
         expected = [

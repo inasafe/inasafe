@@ -469,11 +469,11 @@ class TestImpactFunctionManager(unittest.TestCase):
                     unit_generic]
         self.assertItemsEqual(continuous_hazards_units, expected)
 
-    def test_get_available_hazards(self):
-        """Test get_available_hazards API."""
+    def test_available_hazards(self):
+        """Test available_hazards API."""
         impact_function_manager = ImpactFunctionManager()
 
-        result = impact_function_manager.get_available_hazards(
+        result = impact_function_manager.available_hazards(
             'hazard_scenario')
         expected_result = [hazard_flood,
                            hazard_tsunami,
@@ -484,20 +484,20 @@ class TestImpactFunctionManager(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-    def test_get_available_exposures(self):
-        """Test get_available_exposures API."""
+    def test_available_exposures(self):
+        """Test available_exposures API."""
         impact_function_manager = ImpactFunctionManager()
-        result = impact_function_manager.get_available_exposures()
+        result = impact_function_manager.available_exposures()
         print [x['key'] for x in result]
         expected_result = [
             exposure_structure, exposure_road, exposure_population]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
-    def test_get_functions_for_constraint(self):
-        """Test get_functions_for_constraint."""
+    def test_functions_for_constraint(self):
+        """Test functions_for_constraint."""
         ifm = ImpactFunctionManager()
-        impact_functions = ifm.get_functions_for_constraint(
+        impact_functions = ifm.functions_for_constraint(
             'earthquake',
             'population',
             'raster',
@@ -511,10 +511,10 @@ class TestImpactFunctionManager(unittest.TestCase):
             ContinuousHazardPopulationFunction]
         self.assertItemsEqual(impact_functions, expected)
 
-    def test_get_available_hazard_constraints(self):
-        """Test for get_available_hazard_constraints."""
+    def test_available_hazard_constraints(self):
+        """Test for available_hazard_constraints."""
         ifm = ImpactFunctionManager()
-        hazard_constraints = ifm.get_available_hazard_constraints(
+        hazard_constraints = ifm.available_hazard_constraints(
             'earthquake', 'hazard_scenario')
         print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
         expected = [
@@ -524,10 +524,10 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         self.assertItemsEqual(hazard_constraints, expected)
 
-    def test_get_available_exposure_constraints(self):
-        """Test for get_available_exposure_constraints."""
+    def test_available_exposure_constraints(self):
+        """Test for available_exposure_constraints."""
         ifm = ImpactFunctionManager()
-        exposure_constraints = ifm.get_available_exposure_constraints(
+        exposure_constraints = ifm.available_exposure_constraints(
             'population')
         print [(x[0]['key'], x[1]['key']) for x in exposure_constraints]
         expected = [

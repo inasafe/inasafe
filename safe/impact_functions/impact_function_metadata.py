@@ -893,8 +893,8 @@ class ImpactFunctionMetadata(object):
         return hazard_layer_req['raster_hazard_classifications']
 
     @classmethod
-    def get_available_hazards(cls, hazard_category_key):
-        """get_available_hazards from hazard_category_key
+    def available_hazards(cls, hazard_category_key):
+        """Get available hazards from hazard_category_key
 
         :param hazard_category_key: The hazard category key
         :type hazard_category_key: str
@@ -913,7 +913,7 @@ class ImpactFunctionMetadata(object):
         return hazard_layer_req['hazard_types']
 
     @classmethod
-    def get_available_exposures(cls):
+    def available_exposures(cls):
         """get_available_exposure
 
         :returns: List of available exposure
@@ -976,7 +976,7 @@ class ImpactFunctionMetadata(object):
         return True
 
     @classmethod
-    def get_available_hazard_constraints(cls, hazard_key, hazard_category_key):
+    def available_hazard_constraints(cls, hazard_key, hazard_category_key):
         """Get hazard constraints for hazard_key and hazard_category_key
 
         :param hazard_key: The hazard key
@@ -1007,7 +1007,7 @@ class ImpactFunctionMetadata(object):
         return result
 
     @classmethod
-    def get_available_exposure_constraints(cls, exposure_key):
+    def available_exposure_constraints(cls, exposure_key):
         """Get exposure constraints for exposure_key.
 
         :param exposure_key: The exposure key

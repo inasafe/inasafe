@@ -1513,12 +1513,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.tblFunctions1.verticalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
 
-        hazards = self.impact_function_manager.get_available_hazards()
+        hazards = self.impact_function_manager.available_hazards()
         # Remove 'generic' from hazards
         for h in hazards:
             if h['id'] == 'generic':
                 hazards.remove(h)
-        exposures = self.impact_function_manager.get_available_exposures()
+        exposures = self.impact_function_manager.available_exposures()
 
         self.lblAvailableFunctions1.clear()
         self.tblFunctions1.setColumnCount(len(hazards))
@@ -1547,7 +1547,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             for e in exposures:
                 item = QtGui.QTableWidgetItem()
                 functions = \
-                    self.impact_function_manager.get_functions_for_constraint(
+                    self.impact_function_manager.functions_for_constraint(
                         h, e)
                 if len(functions):
                     background_colour = QtGui.QColor(120, 255, 120)
@@ -1671,7 +1671,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 hc = hazard_data_types[col]
                 ec = exposure_data_types[row]
                 functions = self.impact_function_manager\
-                    .get_functions_for_constraint(h, e, hc, ec)
+                    .functions_for_constraint(h, e, hc, ec)
                 item = QtGui.QTableWidgetItem()
                 if len(functions):
                     bgcolor = QtGui.QColor(120, 255, 120)
@@ -1751,7 +1751,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeFunction.setText('')
 
         h, e, hc, ec = self.selected_impact_function_constraints()
-        functions = self.impact_function_manager.get_functions_for_constraint(
+        functions = self.impact_function_manager.functions_for_constraint(
             h, e, hc, ec)
         for f in functions:
             item = QtGui.QListWidgetItem(self.lstFunctions)

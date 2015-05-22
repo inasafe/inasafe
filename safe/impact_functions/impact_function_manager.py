@@ -715,8 +715,8 @@ class ImpactFunctionManager(object):
 
         return raster_hazards_classifications
 
-    def get_available_hazards(self, hazard_category_key, ascending=True):
-        """get_available_hazards from hazard_category_key
+    def available_hazards(self, hazard_category_key, ascending=True):
+        """available_hazards from hazard_category_key
 
         :param hazard_category_key: The hazard category key
         :type hazard_category_key: str
@@ -731,7 +731,7 @@ class ImpactFunctionManager(object):
         hazards = []
         for impact_function in self.impact_functions:
             if_hazards = impact_function.metadata(). \
-                get_available_hazards(hazard_category_key)
+                available_hazards(hazard_category_key)
             if if_hazards:
                 add_to_list(hazards, if_hazards)
 
@@ -741,7 +741,7 @@ class ImpactFunctionManager(object):
 
         return hazards
 
-    def get_available_exposures(self, ascending=True):
+    def available_exposures(self, ascending=True):
         """Return a list of valid available exposures
 
         :param ascending: Sort ascending or not.
@@ -753,7 +753,7 @@ class ImpactFunctionManager(object):
 
         exposures = []
         for impact_function in self.impact_functions:
-            if_exposures = impact_function.metadata().get_available_exposures()
+            if_exposures = impact_function.metadata().available_exposures()
             if if_exposures:
                 add_to_list(exposures, if_exposures)
 
@@ -763,7 +763,7 @@ class ImpactFunctionManager(object):
 
         return exposures
 
-    def get_functions_for_constraint(
+    def functions_for_constraint(
             self, hazard_key, exposure_key, hazard_geometry_key,
             exposure_geometry_key, hazard_mode_key, exposure_mode_key):
         """Obtain all functions that match with the constraints
@@ -798,7 +798,7 @@ class ImpactFunctionManager(object):
 
         return impact_functions
 
-    def get_available_hazard_constraints(
+    def available_hazard_constraints(
             self, hazard_key, hazard_category_key):
         """Get hazard constraints for hazard_key and hazard_category_key
 
@@ -814,14 +814,14 @@ class ImpactFunctionManager(object):
         hazard_constraints = []
         for impact_function in self.impact_functions:
             if_hazard_constraints = impact_function.metadata().\
-                get_available_hazard_constraints(
+                available_hazard_constraints(
                 hazard_key, hazard_category_key)
             if if_hazard_constraints:
                 add_to_list(hazard_constraints, if_hazard_constraints)
 
         return hazard_constraints
 
-    def get_available_exposure_constraints(self, exposure_key):
+    def available_exposure_constraints(self, exposure_key):
         """Get exposure constraints for exposure_key.
 
         :param exposure_key: The exposure key
@@ -833,7 +833,7 @@ class ImpactFunctionManager(object):
         exposure_constraints = []
         for impact_function in self.impact_functions:
             if_exposure_constraints = impact_function.metadata(). \
-                get_available_exposure_constraints(exposure_key)
+                available_exposure_constraints(exposure_key)
             if if_exposure_constraints:
                 add_to_list(exposure_constraints, if_exposure_constraints)
 
