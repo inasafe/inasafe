@@ -5,7 +5,6 @@
     counts of people affected per polygon.
 
 """
-from matplotlib.backends.qt4_editor.formlayout import pyqtSignature
 
 __author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
 __revision__ = '$Format:%H$'
@@ -15,10 +14,10 @@ __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
+
+from PyQt4.QtCore import pyqtSignature
 
 from safe.common.version import get_version
 from safe.storage.core import read_layer as safe_read_layer
