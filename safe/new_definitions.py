@@ -447,7 +447,7 @@ generic_vector_hazard_classes = {
             'description': tr('The location that has medium impact.'),
             'string_defaults': ['medium'],
             'numeric_default_min': 3,
-            'numeric_default_max': 5,
+            'numeric_default_max': (5 - small_number),
             'optional': False
         },
         {
@@ -456,7 +456,7 @@ generic_vector_hazard_classes = {
             'description': tr('The location that has lowest impact.'),
             'string_defaults': ['low'],
             'numeric_default_min': 0,
-            'numeric_default_max': 3,
+            'numeric_default_max': (3 - small_number),
             'optional': False
         }
     ]
@@ -478,7 +478,7 @@ volcano_vector_hazard_classes = {
             'description': tr('The location that has highest impact.'),
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
             'numeric_default_min': 0,
-            'numeric_default_max': 3,
+            'numeric_default_max': (3 - small_number),
             'optional': False
         },
         {
@@ -487,7 +487,7 @@ volcano_vector_hazard_classes = {
             'description': tr('The location that has medium impact.'),
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
             'numeric_default_min': 3,
-            'numeric_default_max': 5,
+            'numeric_default_max': (5 - small_number),
             'optional': False
         },
         {
