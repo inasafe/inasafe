@@ -8,7 +8,6 @@ Impact Layer Merge Dialog.
      (at your option) any later version.
 
 """
-from safe.utilities.i18n import tr
 
 __author__ = 'Christian Christelis christian@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -51,6 +50,7 @@ from safe.utilities.help import show_context_help
 from safe.utilities.resources import resources_path, get_ui_class
 from safe.messaging import styles
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
+from safe.utilities.i18n import tr
 
 
 INFO_STYLE = styles.INFO_STYLE
