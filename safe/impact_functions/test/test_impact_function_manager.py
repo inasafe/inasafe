@@ -506,10 +506,18 @@ class TestImpactFunctionManager(unittest.TestCase):
             'continuous',
         )
         expected = [
-            ITBFatalityFunction,
-            PAGFatalityFunction,
-            ContinuousHazardPopulationFunction]
-        self.assertItemsEqual(impact_functions, expected)
+            ITBFatalityFunction.metadata().as_dict(),
+            PAGFatalityFunction.metadata().as_dict(),
+            ContinuousHazardPopulationFunction.metadata().as_dict()]
+
+        for key in impact_functions[0].keys():
+            if key == 'parameters':
+                # We do not check the parameters since they are mutable.
+                continue
+            result = [x[key] for x in impact_functions]
+            hope = [x[key] for x in expected]
+            message = key
+            self.assertItemsEqual(result, hope, message)
 
     def test_available_hazard_constraints(self):
         """Test for available_hazard_constraints."""

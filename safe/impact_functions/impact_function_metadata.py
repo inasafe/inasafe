@@ -925,8 +925,9 @@ class ImpactFunctionMetadata(object):
 
     @classmethod
     def is_function_for_constraint(
-            cls, hazard_key, exposure_key, hazard_geometry_key,
-            exposure_geometry_key, hazard_mode_key, exposure_mode_key):
+            cls, hazard_key, exposure_key, hazard_geometry_key=None,
+            exposure_geometry_key=None, hazard_mode_key=None,
+            exposure_mode_key=None):
         """Check if the constraints match with the function.
 
         :param hazard_key: The hazard key
@@ -964,14 +965,18 @@ class ImpactFunctionMetadata(object):
             return False
         if not is_key_exist(exposure_key, exposures):
             return False
-        if not is_key_exist(hazard_geometry_key, hazard_geometries):
-            return False
-        if not is_key_exist(exposure_geometry_key, exposure_geometries):
-            return False
-        if hazard_mode_key != hazard_mode['key']:
-            return False
-        if exposure_mode_key != exposure_mode['key']:
-            return False
+        if hazard_geometry_key:
+            if not is_key_exist(hazard_geometry_key, hazard_geometries):
+                return False
+        if exposure_geometry_key:
+            if not is_key_exist(exposure_geometry_key, exposure_geometries):
+                return False
+        if hazard_mode_key:
+            if hazard_mode_key != hazard_mode['key']:
+                return False
+        if exposure_mode_key:
+            if exposure_mode_key != exposure_mode['key']:
+                return False
 
         return True
 
