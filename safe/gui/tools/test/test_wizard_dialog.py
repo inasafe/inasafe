@@ -509,7 +509,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select multi_hazard
-        self.select_from_list_widget('Multi Hazard', dialog.lstHazardCategories)
+        self.select_from_list_widget('Multi Hazard',
+                                     dialog.lstHazardCategories)
         dialog.pbnNext.click()
 
         # select volcano
@@ -1239,7 +1240,8 @@ class WizardDialogTest(unittest.TestCase):
         # dialog.pbnBack.click()  # back to subcategory
 
         self.check_current_step(step_kw_hazard_category, dialog)
-        self.select_from_list_widget('Multi Hazard', dialog.lstHazardCategories)
+        self.select_from_list_widget('Multi Hazard',
+                                     dialog.lstHazardCategories)
         dialog.pbnNext.click()  # go to subcategory
 
         self.check_current_step(step_kw_subcategory, dialog)

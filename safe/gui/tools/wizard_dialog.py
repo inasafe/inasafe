@@ -1830,8 +1830,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             for e in exposures:
                 item = QtGui.QTableWidgetItem()
                 functions = \
-                   self.impact_function_manager.functions_for_constraint(
-                       h['key'], e['key'])
+                    self.impact_function_manager.functions_for_constraint(
+                        h['key'], e['key'])
                 if len(functions):
                     background_colour = QtGui.QColor(120, 255, 120)
                 else:
@@ -2143,8 +2143,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         if ('hazard_category' in keywords and
                 layer_purpose == layer_purpose_hazard['key']):
             hazard_category = (hazard_category_single_hazard['key']
-                if self.rbHazSingle.isChecked()
-                else hazard_category_multi_hazard['key'])
+                               if self.rbHazSingle.isChecked()
+                               else hazard_category_multi_hazard['key'])
             if keywords['hazard_category'] != hazard_category:
                 return False
 
@@ -2155,7 +2155,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Reject if layer mode doesn't match
         if ('layer_mode' in keywords and
-                 lay_req['layer_mode']['key'] != keywords['layer_mode']):
+                lay_req['layer_mode']['key'] != keywords['layer_mode']):
             return False
 
         # Reject if classification doesn't match
@@ -2173,8 +2173,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Reject if unit doesn't match
         unit_key = ('continuous_hazard_unit'
-            if layer_purpose == layer_purpose_hazard['key']
-            else 'exposure_unit')
+                    if layer_purpose == layer_purpose_hazard['key']
+                    else 'exposure_unit')
         unit_keys = unit_key + 's'
         if (lay_req['layer_mode'] == layer_mode_continuous
                 and unit_key in keywords
