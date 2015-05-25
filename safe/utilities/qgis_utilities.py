@@ -32,8 +32,11 @@ def display_information_message_box(
 
 def display_information_message_bar(
         iface,
-        title=None, message=None, more_details=None,
-        button_text=tr('Show details ...'), duration=8):
+        title=None,
+        message=None,
+        more_details=None,
+        button_text=tr('Show details ...'),
+        duration=8):
     """
     Display an information message bar.
 
@@ -73,8 +76,11 @@ def display_information_message_bar(
 
 def display_success_message_bar(
         iface,
-        title=None, message=None, more_details=None,
-        button_text=tr('Show details ...'), duration=8):
+        title=None,
+        message=None,
+        more_details=None,
+        button_text=tr('Show details ...'),
+        duration=8):
     """
     Display a success message bar.
 
@@ -130,10 +136,19 @@ def display_warning_message_box(parent=None, title=None, message=None):
 
 
 def display_warning_message_bar(
-        title=None, message=None, more_details=None,
-        button_text=tr('Show details ...'), duration=8):
+        iface,
+        title=None,
+        message=None,
+        more_details=None,
+        button_text=tr('Show details ...'),
+        duration=8):
     """
     Display a warning message bar.
+
+    :param iface: The QGIS IFace instance. Note that we cannot
+        use qgis.utils.iface since it is not available in our
+        test environment.
+    :type iface: QgisInterface
 
     :param title: The title of the message bar.
     :type title: str
@@ -180,8 +195,11 @@ def display_critical_message_box(parent=None, title=None, message=None):
 
 def display_critical_message_bar(
         iface,
-        title=None, message=None, more_details=None,
-        button_text=tr('Show details ...'), duration=8):
+        title=None,
+        message=None,
+        more_details=None,
+        button_text=tr('Show details ...'),
+        duration=8):
     """
     Display a critical message bar.
 
