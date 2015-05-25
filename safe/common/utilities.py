@@ -471,7 +471,10 @@ def humanize_class(my_classes):
     """
     min_value = 0
     if min_value - my_classes[0] == 0:
-        return humanize_class(my_classes[1:])
+        if len(my_classes) == 1:
+            return [('0', '0')]
+        else:
+            return humanize_class(my_classes[1:])
     humanize_classes = []
     interval = my_classes[-1] - my_classes[-2]
     for max_value in my_classes:
@@ -533,6 +536,9 @@ def create_classes(class_list, num_classes):
     """
     min_value = numpy.nanmin(class_list)
     max_value = numpy.nanmax(class_list)
+
+    if min_value == max_value == 0:
+        return [0]
 
     # If min_value == max_value (it only has 1 unique class), or
     # max_value <= 1.0, then we will populate the classes from 0 - max_value
