@@ -343,13 +343,13 @@ class KeywordsDialogTest(unittest.TestCase):
             (result, expected_result))
         self.assertEqual(result, expected_result, message)
 
-    def test_set_category(self):
+    def test_set_layer_purpose(self):
         """Test set category works."""
         dialog = KeywordsDialog(PARENT, IFACE)
         dialog.reset(False)
         dialog.set_layer_purpose('hazard')
         expected_result = 'hazard'
-        result = dialog.get_value_for_key('category')
+        result = dialog.get_value_for_key('layer_purpose')
         message = '\nGot: %s\nExpected: %s\n' % (result, expected_result)
         self.assertEqual(result, expected_result, message)
 
@@ -387,9 +387,10 @@ class KeywordsDialogTest(unittest.TestCase):
 
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'unit': 'metres_depth',
-            'subcategory': 'tsunami',
-            'data_type': 'continuous',
+            'hazard_category': 'single_hazard',
+            'layer_mode': 'continuous',
+            'hazard': 'tsunami',
+            'hazard_continuous_unit': 'metres',
             'title': 'Tsunami'}
         message = 'The keywords should be %s, but it returns %s' % (
             expected_keywords, keywords)
@@ -404,7 +405,7 @@ class KeywordsDialogTest(unittest.TestCase):
             source_directory=test_data_path('hazard')
         )
         dialog = KeywordsDialog(PARENT, IFACE, layer=layer)
-        key = 'category'
+        key = 'layer_purpose'
         expected_value = 'hazard'
         value = dialog.get_value_for_key(key)
         message = 'The value for key %s should be %s, but it returns %s' % (
@@ -423,10 +424,11 @@ class KeywordsDialogTest(unittest.TestCase):
         dialog.load_state_from_keywords()
         keywords = dialog.get_keywords()
         expected_keywords = {
-            'category': 'hazard',
-            'unit': 'metres_depth',
-            'subcategory': 'tsunami',
-            'data_type': 'continuous',
+            'hazard_category': 'single_hazard',
+            'layer_mode': 'continuous',
+            'hazard': 'tsunami',
+            'hazard_continuous_unit': 'metres',
+            'layer_purpose': 'hazard',
             'title': 'Tsunami'}
         message = 'The keyword should be %s, but it returns %s' % (
             expected_keywords, keywords)
@@ -483,8 +485,9 @@ class KeywordsDialogTest(unittest.TestCase):
             u'youth ratio attribute': u'Global default',
             u'adult ratio default': u'0.66'}
         message = 'Expected %s but I got %s' % (expected_keywords, keywords)
+        from pprint import pprint
+        pprint(keywords)
         self.assertDictEqual(expected_keywords, keywords, message)
-
         # Check age ratios are valid
         good_sum_ratio, _ = dialog.age_ratios_are_valid(keywords)
         message = 'Expected %s but I got %s' % (True, good_sum_ratio)

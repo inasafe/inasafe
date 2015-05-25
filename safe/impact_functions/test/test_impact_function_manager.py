@@ -51,8 +51,8 @@ from safe.definitions import (
 from safe.new_definitions import (
     layer_purpose_hazard,
     layer_purpose_exposure,
-    hazard_category_hazard_scenario,
-    hazard_category_hazard_zone,
+    hazard_category_single_hazard,
+    hazard_category_multi_hazard,
     hazard_flood,
     hazard_tsunami,
     hazard_generic,
@@ -399,8 +399,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         hazard_categories = impact_function_manager.\
             hazard_categories_for_layer('polygon')
         expected = [
-            hazard_category_hazard_scenario,
-            hazard_category_hazard_zone]
+            hazard_category_single_hazard,
+            hazard_category_multi_hazard]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function_manager.\
@@ -410,26 +410,26 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         hazard_categories = impact_function_manager.\
             hazard_categories_for_layer('point')
-        expected = [hazard_category_hazard_zone]
+        expected = [hazard_category_multi_hazard]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function_manager.\
             hazard_categories_for_layer('raster')
         expected = [
-            hazard_category_hazard_scenario,
-            hazard_category_hazard_zone]
+            hazard_category_single_hazard,
+            hazard_category_multi_hazard]
         self.assertItemsEqual(hazard_categories, expected)
 
     def test_hazards_for_layer(self):
         """Test for hazards_for_layer"""
         impact_function_manager = ImpactFunctionManager()
         hazards = impact_function_manager.hazards_for_layer(
-            'polygon', 'hazard_scenario')
+            'polygon', 'single_hazard')
         expected = [hazard_flood, hazard_tsunami]
         self.assertItemsEqual(hazards, expected)
 
         hazards = impact_function_manager.hazards_for_layer(
-            'point', 'hazard_scenario')
+            'point', 'single_hazard')
         expected = []
         self.assertItemsEqual(hazards, expected)
 
@@ -459,14 +459,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         continuous_hazards_units = impact_function_manager.\
             continuous_hazards_units_for_layer(
-                'tsunami', 'raster', 'continuous', 'hazard_scenario')
-        expected = [unit_feet,
-                    unit_metres,
-                    unit_millimetres,
-                    unit_mmi,
-                    unit_kilogram_per_meter_square,
-                    unit_kilometres,
-                    unit_generic]
+                'tsunami', 'raster', 'continuous', 'single_hazard')
+        expected = [unit_feet, unit_metres, unit_generic]
         self.assertItemsEqual(continuous_hazards_units, expected)
 
     def test_available_hazards(self):
@@ -474,7 +468,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.available_hazards(
-            'hazard_scenario')
+            'single_hazard')
         expected_result = [hazard_flood,
                            hazard_tsunami,
                            hazard_generic,
@@ -506,16 +500,24 @@ class TestImpactFunctionManager(unittest.TestCase):
             'continuous',
         )
         expected = [
-            ITBFatalityFunction,
-            PAGFatalityFunction,
-            ContinuousHazardPopulationFunction]
-        self.assertItemsEqual(impact_functions, expected)
+            ITBFatalityFunction.metadata().as_dict(),
+            PAGFatalityFunction.metadata().as_dict(),
+            ContinuousHazardPopulationFunction.metadata().as_dict()]
+
+        for key in impact_functions[0].keys():
+            if key == 'parameters':
+                # We do not check the parameters since they are mutable.
+                continue
+            result = [x[key] for x in impact_functions]
+            hope = [x[key] for x in expected]
+            message = key
+            self.assertItemsEqual(result, hope, message)
 
     def test_available_hazard_constraints(self):
         """Test for available_hazard_constraints."""
         ifm = ImpactFunctionManager()
         hazard_constraints = ifm.available_hazard_constraints(
-            'earthquake', 'hazard_scenario')
+            'earthquake', 'single_hazard')
         print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
         expected = [
             (layer_mode_continuous, layer_geometry_raster),

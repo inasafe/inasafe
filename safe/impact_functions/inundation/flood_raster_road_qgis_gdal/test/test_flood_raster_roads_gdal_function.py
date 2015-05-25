@@ -73,7 +73,7 @@ class TestFloodRasterRoadsGdalFunction(unittest.TestCase):
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
             'hazard': 'flood',
-            'hazard_category': 'hazard_scenario',
+            'hazard_category': 'single_hazard',
             'continuous_hazard_unit': 'metres'
         }
 

@@ -764,8 +764,9 @@ class ImpactFunctionManager(object):
         return exposures
 
     def functions_for_constraint(
-            self, hazard_key, exposure_key, hazard_geometry_key,
-            exposure_geometry_key, hazard_mode_key, exposure_mode_key):
+            self, hazard_key, exposure_key, hazard_geometry_key=None,
+            exposure_geometry_key=None, hazard_mode_key=None,
+            exposure_mode_key=None):
         """Obtain all functions that match with the constraints
 
         :param hazard_key: The hazard key
@@ -794,7 +795,7 @@ class ImpactFunctionManager(object):
             if impact_function.metadata().is_function_for_constraint(
                     hazard_key, exposure_key, hazard_geometry_key,
                     exposure_geometry_key, hazard_mode_key, exposure_mode_key):
-                impact_functions.append(impact_function)
+                impact_functions.append(impact_function.metadata().as_dict())
 
         return impact_functions
 

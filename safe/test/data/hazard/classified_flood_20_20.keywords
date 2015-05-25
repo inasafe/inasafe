@@ -1,4 +1,4 @@
-hazard_category: hazard_zone
+hazard_category: multi_hazard
 raster_hazard_classification: flood_raster_hazard_classes
 title: Classified Flood
 hazard: flood

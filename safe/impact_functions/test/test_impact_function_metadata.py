@@ -77,7 +77,7 @@ from safe.definitions import (
 
 from safe.new_definitions import (
     layer_purpose_exposure,
-    hazard_category_hazard_scenario,
+    hazard_category_single_hazard,
     hazard_earthquake,
     exposure_structure,
     count_exposure_unit,
@@ -399,7 +399,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = EarthquakeBuildingFunction()
         hazard_categories = impact_function.metadata()\
             .hazard_categories_for_layer('raster')
-        expected = [hazard_category_hazard_scenario]
+        expected = [hazard_category_single_hazard]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function.metadata() \
@@ -411,12 +411,12 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test hazards_for_layer"""
         impact_function = EarthquakeBuildingFunction()
         hazards = impact_function.metadata().hazards_for_layer(
-            'raster', 'hazard_scenario')
+            'raster', 'single_hazard')
         expected = [hazard_earthquake]
         self.assertItemsEqual(hazards, expected)
 
         hazards = impact_function.metadata().hazards_for_layer(
-            'polygon', 'hazard_scenario')
+            'polygon', 'single_hazard')
         expected = []
         self.assertItemsEqual(hazards, expected)
 
@@ -449,13 +449,13 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = ITBFatalityFunction()
         continuous_hazards_units = impact_function.metadata().\
             continuous_hazards_units_for_layer(
-            'earthquake', 'raster', 'continuous', 'hazard_scenario')
+            'earthquake', 'raster', 'continuous', 'single_hazard')
         expected = [unit_mmi]
         self.assertItemsEqual(continuous_hazards_units, expected)
 
         continuous_hazards_units = impact_function.metadata(). \
             continuous_hazards_units_for_layer(
-            'flood', 'raster', 'continuous', 'hazard_scenario')
+            'flood', 'raster', 'continuous', 'single_hazard')
         expected = []
         self.assertItemsEqual(continuous_hazards_units, expected)
 
@@ -463,12 +463,12 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test available_hazards."""
         impact_function = ITBFatalityFunction()
         hazards = impact_function.metadata().available_hazards(
-            'hazard_scenario')
+            'single_hazard')
         expected = [hazard_earthquake]
         self.assertItemsEqual(hazards, expected)
 
         hazards = impact_function.metadata().available_hazards(
-            'hazard_zone')
+            'multi_hazard')
         expected = []
         self.assertItemsEqual(hazards, expected)
 
@@ -507,7 +507,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = ITBFatalityFunction()
         result = impact_function.metadata().available_hazard_constraints(
             'earthquake',
-            'hazard_scenario'
+            'single_hazard'
         )
         expected = [
             (layer_mode_continuous, layer_geometry_raster)

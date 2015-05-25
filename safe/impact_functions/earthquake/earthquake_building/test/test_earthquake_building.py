@@ -79,7 +79,7 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
             'hazard': 'earthquake',
-            'hazard_category': 'hazard_scenario',
+            'hazard_category': 'single_hazard',
             'continuous_hazard_unit': 'mmi'
         }
 
