@@ -46,13 +46,25 @@ exposure = None
 version = None
 show_list = None
 extent = None
+
 # directories
-default_dir = os.path.abspath(os.path.join(
+# defaults look like cli\--hazard
+#                       |--exposure
+#                       |--results
+
+default_cli_dir = os.path.abspath(os.path.join(
     os.path.realpath(os.path.dirname(__file__)), 'cli'))
+default_hazard_dir = os.path.abspath(
+    os.path.join(default_cli_dir, 'hazard'))
+default_exposure_dir = os.path.abspath(
+    os.path.join(default_cli_dir, 'exposure'))
+default_results_dir = os.path.abspath(
+    os.path.join(default_cli_dir, 'results'))
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 LOGGER = logging.getLogger('InaSAFE')
+
 
 def get_ifunction_list():
     LOGGER.debug('get IF list')
@@ -90,7 +102,7 @@ def get_qgis_app():
 
     global QGIS_APP  # pylint: disable=W0603
 
-    gui_flag = False  # All test will run qgis in gui mode
+    gui_flag = False  # run qgis in gui mode? does this make a difference?
 
     # AG: For testing purposes, we use our own configuration file instead
     # of using the QGIS apps conf of the host
@@ -134,9 +146,9 @@ def get_qgis_app():
 
 def get_hazard():
     try:
-        HAZARD_BASE = test_data_path(default_dir, 'hazard', 'continuous_flood_20_20')
-        LOGGER.debug(HAZARD_BASE)
-        qhazard = QgsRasterLayer(HAZARD_BASE + '.asc', 'my raster')
+        hazard_base = test_data_path(default_hazard_dir, 'continuous_flood_20_20')
+        LOGGER.debug(hazard_base)
+        qhazard = QgsRasterLayer(hazard_base + '.asc', 'my raster')
         # noinspection PyUnresolvedReferences
         if not qhazard.isValid():
             print "hazard raster layer not valid"
@@ -154,9 +166,9 @@ def get_hazard():
 
 def get_exposure():
     try:
-        EXPOSURE_BASE = test_data_path(default_dir, 'exposure', 'buildings')
-        LOGGER.debug(EXPOSURE_BASE)
-        qexposure = QgsVectorLayer(EXPOSURE_BASE + '.shp', 'testvector', 'ogr')
+        exposure_base = test_data_path(default_exposure_dir, 'buildings')
+        LOGGER.debug(exposure_base)
+        qexposure = QgsVectorLayer(exposure_base + '.shp', 'testvector', 'ogr')
         if not qexposure.isValid():
             print "exposure vector layer not valid"
             print "Perhaps run-env-linux.sh /usr"
@@ -183,11 +195,12 @@ def run_if():
     LOGGER.debug(arguments['--impact-function'])
 
     keyword_io = KeywordIO()
+
     try:
         from safe.utilities.analysis import Analysis
-        LOGGER.debug('imported')
     except ImportError:
-        LOGGER.debug('**Import error** :(')
+        LOGGER.debug('**Import error**')
+        print ImportError.message
         return None, None, None, None
     analysis = Analysis()
     # Layers
@@ -205,12 +218,11 @@ def run_if():
         #      106.8054130000000015, -6.1913361000000000,
         #      106.8380719000000028, -6.1672457999999999)
         analysis.impact_function = impact_function
-        print 'before'
+        print 'begin analysis setup'
         analysis.setup_analysis()
-        print 'after'
+        print 'stop analysis setup'
     except Exception as exc:
         print exc.message
-    LOGGER.debug('eeee')
     try:
         analysis.run_analysis()
         LOGGER.debug("end analysis :)")
@@ -222,37 +234,60 @@ def run_if():
     except Exception as exc:
         print exc.message
 
+    # analysis result output
     if impact_layer is None:
         print "Error : No impact layer generated"
-    LOGGER.debug(impact_layer)
+    LOGGER.debug(type(impact_layer))
     LOGGER.debug(impact_layer.__doc__)
-    impact_layer.write_to_file(output_file)
+    write_results(impact_layer)
+    # do report
 
+
+def write_results(impact_layer):
+    """This function writes the impact_layer in shapefile format
+    :param impact_layer:
+    :type Vector
+    """
+    impact_layer.write_to_file(
+        os.path.join(default_results_dir, output_file))
 
 
 if __name__ == '__main__':
     print "python accent.py"
     print ""
-    # globals
-    output_file = None
-    hazard = None
-    exposure = None
-    version = None
-    show_list = None
-    extent = None
+
     try:
         # Parse arguments, use file docstring as a parameter definition
         arguments = docopt.docopt(usage)
-        output_file = arguments['--output-file']
-        hazard = arguments['--hazard']
-        exposure = arguments['--exposure']
-        version = arguments['--version']
-        show_list = arguments['--list-functions']
-        extent = arguments['--extent']
-        LOGGER.debug(arguments)
-    # Handle invalid options
     except docopt.DocoptExit as e:
         print e.message
+
+    # populate global vars with arguments from shell
+    try:
+        output_file = arguments['--output-file']
+    except Exception as e:
+        print e.message
+    try:
+        hazard = arguments['--hazard']
+    except Exception as e:
+        print e.message
+    try:
+        exposure = arguments['--exposure']
+    except Exception as e:
+        print e.message
+    try:
+        version = arguments['--version']
+    except Exception as e:
+        print e.message
+    try:
+        show_list = arguments['--list-functions']
+    except Exception as e:
+        print e.message
+    try:
+        extent = arguments['--extent']
+    except Exception as e:
+        print e.message
+    LOGGER.debug(arguments)
 
     if show_list:
         # setup functions
@@ -261,7 +296,8 @@ if __name__ == '__main__':
 
     elif (extent is not None) and\
             (hazard is not None) and\
-            (exposure is not None):
+            (exposure is not None) and\
+            (output_file is not None):
         LOGGER.debug('--RUN--')
         try:
             run_if()
