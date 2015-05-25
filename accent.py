@@ -41,8 +41,10 @@ import logging
 
 # arguments/options
 output_file = None
-hazard = None
-exposure = None
+vector_hazard = None
+raster_hazard = None
+vector_exposure = None
+raster_exposure = None
 version = None
 show_list = None
 extent = None
@@ -60,6 +62,7 @@ default_exposure_dir = os.path.abspath(
     os.path.join(default_cli_dir, 'exposure'))
 default_results_dir = os.path.abspath(
     os.path.join(default_cli_dir, 'results'))
+
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -146,9 +149,14 @@ def get_qgis_app():
 
 def get_hazard():
     try:
-        hazard_base = os.path.join(default_hazard_dir, hazard)
-        LOGGER.debug(hazard_base)
-        qhazard = QgsRasterLayer(hazard_base + '.asc', 'my raster')
+        if raster_hazard is not None:
+            hazard_base = os.path.join(default_hazard_dir, raster_hazard)
+            LOGGER.debug(hazard_base)
+            qhazard = QgsRasterLayer(hazard_base + '.asc', 'my raster')
+        elif vector_hazard is not None:
+            hazard_base = os.path.join(default_hazard_dir, vector_hazard)
+            LOGGER.debug(hazard_base)
+            qhazard = QgsVectorLayer(hazard_base + '.shp', 'my raster')
         # noinspection PyUnresolvedReferences
         if not qhazard.isValid():
             print "hazard raster layer not valid"
@@ -166,9 +174,17 @@ def get_hazard():
 
 def get_exposure():
     try:
-        exposure_base = os.path.join(default_exposure_dir, exposure)
-        LOGGER.debug(exposure_base)
-        qexposure = QgsVectorLayer(exposure_base + '.shp', 'testvector', 'ogr')
+        if vector_exposure is not None:
+            exposure_base = os.path.join(default_exposure_dir, vector_exposure)
+            LOGGER.debug(exposure_base)
+            qexposure = QgsVectorLayer(exposure_base + '.shp', 'cli_vector', 'ogr')
+        elif raster_exposure is not None:
+            exposure_base = os.path.join(default_exposure_dir,  raster_exposure)
+            LOGGER.debug(exposure_base)
+            qexposure = QgsVectorLayer(exposure_base + '.tif', 'cli_raster', 'ogr')
+        else:
+            print 'Error : Exposure layer'
+
         if not qexposure.isValid():
             print "exposure vector layer not valid"
             print "Perhaps run-env-linux.sh /usr"
@@ -265,11 +281,19 @@ if __name__ == '__main__':
     except Exception as e:
         print e.message
     try:
-        hazard = shell_arguments['--hazard']
+        vector_hazard = shell_arguments['--vector-hazard']
     except Exception as e:
         print e.message
     try:
-        exposure = shell_arguments['--exposure']
+        raster_hazard = shell_arguments['--raster-hazard']
+    except Exception as e:
+        print e.message
+    try:
+        vector_exposure = shell_arguments['--vector-exposure']
+    except Exception as e:
+        print e.message
+    try:
+        raster_exposure = shell_arguments['--raster-exposure']
     except Exception as e:
         print e.message
     try:
@@ -293,8 +317,8 @@ if __name__ == '__main__':
         show_names(get_ifunction_list())
 
     elif (extent is not None) and\
-            (hazard is not None) and\
-            (exposure is not None) and\
+            ((vector_hazard is not None) or (raster_hazard is not None)) and\
+            ((vector_exposure is not None) or (raster_exposure is not None)) and\
             (output_file is not None):
         LOGGER.debug('--RUN--')
         try:
