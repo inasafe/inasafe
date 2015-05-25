@@ -150,13 +150,20 @@ exposure_question = QApplication.translate(
     'able to use this exposure layer with impact functions such '
     'as <b>flood impact on population</b>.')
 
-# Constants for data types
-datatype_question = QApplication.translate(
+# Constants for layer modes
+layermode_raster_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> '
     'for this raster layer. We need to know whether each cell '
     'in this raster represents a continuous '
     'value or a classified code.')   # (subcategory, category)
+
+layermode_vector_question = QApplication.translate(
+    'WizardDialog',
+    'You have selected <b>%s %s</b> for this layer. '
+    'We need to know whether attribute data of this vector '
+    'represents a continuous value or a classified code.')
+# (subcategory, category)
 
 # Constants for units
 unit_question = QApplication.translate(
@@ -916,8 +923,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Set widgets
         category = self.selected_category()
         subcategory = self.selected_subcategory()
+        layermode_question = (layermode_raster_question
+                              if is_raster_layer(self.layer)
+                              else layermode_vector_question)
         self.lblSelectDataType .setText(
-            datatype_question % (subcategory['name'], category['name']))
+            layermode_question % (subcategory['name'], category['name']))
         self.lblDescribeDataType.setText('')
         self.lstDataTypes.clear()
         self.lstUnits.clear()
