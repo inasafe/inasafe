@@ -14,6 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 __date__ = '24/03/15'
 
+import numpy
 from safe.common.utilities import OrderedDict
 from safe.defaults import default_minimum_needs, default_provenance
 from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
@@ -26,6 +27,10 @@ from safe.defaults import (
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .metadata_definitions import ITBFatalityMetadata
 from safe.utilities.i18n import tr
+from safe.impact_functions.earthquake.pager_earthquake_fatality_model\
+    .parameter_definitions import \
+    theta, beta, displacement_rate, mmi_range, \
+    step, tolerance, calculate_displaced_people
 
 
 class PAGFatalityMetadata(ITBFatalityMetadata):
@@ -86,6 +91,16 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
                 }
             },
             'parameters': OrderedDict([
+                ('Theta', theta()),
+                ('Beta', beta()),  # Model coefficients
+                # Rates of people displaced for each MMI level
+                ('displacement_rate', displacement_rate()),
+                ('mmi_range', mmi_range()),
+                ('step', step()),
+                # Threshold below which layer should be transparent
+                ('tolerance', tolerance()),
+                ('calculate_displaced_people',
+                 calculate_displaced_people()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

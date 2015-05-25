@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.string_parameter import StringParameter
+from safe_extras.parameters.input_list_parameter import InputListParameter
 
 
 def target_field():
@@ -64,4 +65,16 @@ def building_type_field():
     field.name = 'Building Type Field'
     field.is_required = True
     field.value = True
+    return field
+
+
+def distance():
+    """"Generator for distance field"""
+    field = InputListParameter()
+    field.name = 'Distances [km]'
+    field.is_required = True
+    field.minimum_item_count = 1
+    field.maximum_item_count = 100
+    field.element_type = float
+    field.value = [3.0, 5.0, 10.0]
     return field

@@ -28,6 +28,8 @@ from safe.defaults import (
     minimum_needs_selector)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.volcanic.volcano_polygon_population.parameter_definitions import \
+    distance
 from safe.utilities.i18n import tr
 
 
@@ -94,10 +96,8 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', 'KRB'),
-                # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', 'NAME'),
+                ('distance', distance()),
+                ('minimum needs', default_minimum_needs()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

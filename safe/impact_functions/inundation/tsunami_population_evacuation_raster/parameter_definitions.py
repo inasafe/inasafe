@@ -19,5 +19,5 @@ def threshold():
     field.ordering = InputListParameter.AscendingOrder
     field.minimum_item_count = 1
     field.maximum_item_count = 3
-    field.value = [1.0]  # default value
+    field.value = [0.7]  # default value
     return field
