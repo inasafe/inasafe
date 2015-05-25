@@ -24,7 +24,7 @@ for delta in usage_file:
 import docopt
 from safe.impact_functions.registry import Registry
 from safe.impact_functions import register_impact_functions
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import get_qgis_app
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from qgis.core import (
     QgsRasterLayer,
@@ -146,7 +146,7 @@ def get_qgis_app():
 
 def get_hazard():
     try:
-        hazard_base = test_data_path(default_hazard_dir, 'continuous_flood_20_20')
+        hazard_base = os.path.join(default_hazard_dir, hazard)
         LOGGER.debug(hazard_base)
         qhazard = QgsRasterLayer(hazard_base + '.asc', 'my raster')
         # noinspection PyUnresolvedReferences
@@ -166,7 +166,7 @@ def get_hazard():
 
 def get_exposure():
     try:
-        exposure_base = test_data_path(default_exposure_dir, 'buildings')
+        exposure_base = os.path.join(default_exposure_dir, exposure)
         LOGGER.debug(exposure_base)
         qexposure = QgsVectorLayer(exposure_base + '.shp', 'testvector', 'ogr')
         if not qexposure.isValid():
@@ -178,7 +178,6 @@ def get_exposure():
         exposure_extent = qexposure.extent()
         LOGGER.debug('exposure_extent')
         LOGGER.debug(exposure_extent)
-        LOGGER.debug(qexposure.countSymbolFeatures())
         return qexposure
     except Exception as exc:
         print exc.message
@@ -191,8 +190,8 @@ def run_if():
     # IF
     impact_function_manager = ImpactFunctionManager()
     impact_function = impact_function_manager.get(
-        arguments['--impact-function'])
-    LOGGER.debug(arguments['--impact-function'])
+        shell_arguments['--impact-function'])
+    LOGGER.debug(shell_arguments['--impact-function'])
 
     keyword_io = KeywordIO()
 
@@ -214,9 +213,7 @@ def run_if():
         analysis.run_in_thread_flag = False
         analysis.map_canvas = CANVAS
         # analysis.user_extent_crs(qexposure.extent)
-        # analysis.user_extent(
-        #      106.8054130000000015, -6.1913361000000000,
-        #      106.8380719000000028, -6.1672457999999999)
+        # analysis.user_extent(extent[0], extent[1], extent[2], extent[3])
         analysis.impact_function = impact_function
         print 'begin analysis setup'
         analysis.setup_analysis()
@@ -258,38 +255,39 @@ if __name__ == '__main__':
 
     try:
         # Parse arguments, use file docstring as a parameter definition
-        arguments = docopt.docopt(usage)
+        shell_arguments = docopt.docopt(usage)
     except docopt.DocoptExit as e:
         print e.message
 
     # populate global vars with arguments from shell
     try:
-        output_file = arguments['--output-file']
+        output_file = shell_arguments['--output-file']
     except Exception as e:
         print e.message
     try:
-        hazard = arguments['--hazard']
+        hazard = shell_arguments['--hazard']
     except Exception as e:
         print e.message
     try:
-        exposure = arguments['--exposure']
+        exposure = shell_arguments['--exposure']
     except Exception as e:
         print e.message
     try:
-        version = arguments['--version']
+        version = shell_arguments['--version']
     except Exception as e:
         print e.message
     try:
-        show_list = arguments['--list-functions']
+        show_list = shell_arguments['--list-functions']
     except Exception as e:
         print e.message
     try:
-        extent = arguments['--extent']
+        extent = shell_arguments['--extent'].split(':')
+        LOGGER.debug(extent)
     except Exception as e:
         print e.message
-    LOGGER.debug(arguments)
+    LOGGER.debug(shell_arguments)
 
-    if show_list:
+    if show_list is True:
         # setup functions
         register_impact_functions()
         show_names(get_ifunction_list())
