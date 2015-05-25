@@ -27,8 +27,8 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox
 
-from safe.gui.tools.shake_grid.shakemap_importer_dialog import (
-    ShakemapImporterDialog)
+from safe.gui.tools.shake_grid.shakemap_converter_dialog import (
+    ShakemapConverterDialog)
 from safe.common.utilities import unique_filename, temp_dir
 from safe.test.utilities import test_data_path, get_qgis_app, TESTDATA
 
@@ -40,14 +40,14 @@ class ShakemapImporterTest(unittest.TestCase):
 
     def test_init_dialog(self):
         """Test for showing table in the first."""
-        shakemap_converter_dialog = ShakemapImporterDialog(PARENT)
+        shakemap_converter_dialog = ShakemapConverterDialog(PARENT)
         msg = 'Dialog is failed to create'
         self.assertIsNotNone(shakemap_converter_dialog, msg)
 
     def test_behaviour(self):
         """Test behaviour of elements in the dialog
         """
-        shakemap_importer_dialog = ShakemapImporterDialog(PARENT)
+        shakemap_importer_dialog = ShakemapConverterDialog(PARENT)
         shakemap_importer_dialog.use_output_default.setEnabled(True)
         my_grid_path = os.path.join(TESTDATA, 'grid.xml')
         shakemap_importer_dialog.input_path.setText(my_grid_path)
@@ -63,7 +63,7 @@ class ShakemapImporterTest(unittest.TestCase):
 
     def test_converting(self):
         """Test converting grif file to tiff."""
-        dialog = ShakemapImporterDialog(PARENT)
+        dialog = ShakemapConverterDialog(PARENT)
         dialog.use_output_default.setEnabled(False)
         grid_path = test_data_path(
             'hazard',
@@ -82,7 +82,8 @@ class ShakemapImporterTest(unittest.TestCase):
         button.click()
 
         msg = 'Raster is not created'
-        self.assertTrue(os.path.exists(output_raster), msg)
+        output_path = '%s-nearest.tif' % output_raster[:-4]
+        self.assertTrue(os.path.exists(output_path), msg)
 
 
 if __name__ == "__main__":
