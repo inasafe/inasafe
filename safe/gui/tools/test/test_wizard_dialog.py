@@ -138,8 +138,8 @@ class WizardDialogTest(unittest.TestCase):
         chosen_category = 'hazard'
 
         expected_hazard_category_count = 2
-        expected_hazard_categories = ['Hazard Scenario', 'Hazard Zone']
-        chosen_hazard_category = 'Hazard Scenario'
+        expected_hazard_categories = ['Single Hazard', 'Multi Hazard']
+        chosen_hazard_category = 'Single Hazard'
 
         expected_subcategory_count = 2
         expected_subcategories = ['flood', 'tsunami']
@@ -159,7 +159,7 @@ class WizardDialogTest(unittest.TestCase):
 
         expected_keywords = {
             'layer_purpose': 'hazard',
-            'hazard_category': 'hazard_scenario',
+            'hazard_category': 'single_hazard',
             'hazard': 'flood',
             'field': 'FLOODPRONE',
             'layer_mode': 'classified',
@@ -415,7 +415,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 2 of 9 - select hazard category
-        self.check_current_text('Hazard Scenario', dialog.lstHazardCategories)
+        self.check_current_text('Single Hazard', dialog.lstHazardCategories)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -508,8 +508,8 @@ class WizardDialogTest(unittest.TestCase):
         self.select_from_list_widget('hazard', dialog.lstCategories)
         dialog.pbnNext.click()
 
-        # select hazard_zone
-        self.select_from_list_widget('Hazard Zone', dialog.lstHazardCategories)
+        # select multi_hazard
+        self.select_from_list_widget('Multi Hazard', dialog.lstHazardCategories)
         dialog.pbnNext.click()
 
         # select volcano
@@ -566,7 +566,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 2 of 8 - select hazard category
-        self.check_current_text('Hazard Zone', dialog.lstHazardCategories)
+        self.check_current_text('Multi Hazard', dialog.lstHazardCategories)
 
         # Click Next
         dialog.pbnNext.click()
@@ -757,7 +757,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose hazard
-        dialog.pbnNext.click()  # choose hazard zone
+        dialog.pbnNext.click()  # choose multi hazard
         dialog.pbnNext.click()  # choose volcano
         dialog.lstUnits.setCurrentRow(1)
         self.check_current_text('classified', dialog.lstDataTypes)
@@ -816,7 +816,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose hazard
-        dialog.pbnNext.click()  # choose hazard zone
+        dialog.pbnNext.click()  # choose multi hazard
         dialog.pbnNext.click()  # choose volcano
         dialog.pbnNext.click()  # choose classified
         dialog.pbnNext.click()  # choose KRB
@@ -845,10 +845,10 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to hazard category
 
-        expected_hazard_categories = ['Hazard Zone']
+        expected_hazard_categories = ['Multi Hazard']
         self.check_list(expected_hazard_categories, dialog.lstHazardCategories)
 
-        self.check_current_text('Hazard Zone', dialog.lstHazardCategories)
+        self.check_current_text('Multi Hazard', dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # go to subcategory
 
@@ -904,7 +904,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to hazard category
 
         self.check_current_step(step_kw_hazard_category, dialog)
-        self.select_from_list_widget('Hazard Scenario',
+        self.select_from_list_widget('Single Hazard',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()  # Go to subcategory
 
@@ -955,7 +955,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_unit, dialog)
 
         # check the values of units options
-        expected_units = [u'metres', u'feet']
+        expected_units = [u'metres', u'feet', u'generic']
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing metres
@@ -1007,7 +1007,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_unit, dialog)
 
         # check the values of units options
-        expected_units = ['MMI']
+        expected_units = ['MMI', 'generic']
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing MMI
@@ -1142,7 +1142,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to hazard category
 
         # choosing single hazard scenario
-        self.select_from_list_widget('Hazard Scenario',
+        self.select_from_list_widget('Single Hazard',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()  # Go to subcategory
 
@@ -1239,7 +1239,7 @@ class WizardDialogTest(unittest.TestCase):
         # dialog.pbnBack.click()  # back to subcategory
 
         self.check_current_step(step_kw_hazard_category, dialog)
-        self.select_from_list_widget('Hazard Zone', dialog.lstHazardCategories)
+        self.select_from_list_widget('Multi Hazard', dialog.lstHazardCategories)
         dialog.pbnNext.click()  # go to subcategory
 
         self.check_current_step(step_kw_subcategory, dialog)
@@ -1335,16 +1335,13 @@ class WizardDialogTest(unittest.TestCase):
     def test_input_function_centric_wizard(self):
         """Test the IFCW mode."""
 
-        # TODO temporarily disabled
-        return
-
         expected_test_layer_count = 2
 
         expected_hazards_count = 5
         expected_exposures_count = 3
         expected_flood_structure_functions_count = 4
-        expected_raster_polygon_functions_count = 1
-        expected_functions_count = 1
+        expected_raster_polygon_functions_count = 2
+        expected_functions_count = 2
         chosen_if = 'FloodRasterBuildingFunction'
 
         expected_hazard_layers_count = 1
@@ -1418,7 +1415,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.tblFunctions2.setCurrentCell(3, 0)
 
         count = len(dialog.selected_functions_2())
-        message = ('Invalid functions count in the IF matrix 2! For continuous'
+        message = ('Invalid functions count in the IF matrix 2! For '
                    ' raster and polygon there should be %d while there'
                    ' were: %d') % (expected_raster_polygon_functions_count,
                                    count)
