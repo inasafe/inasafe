@@ -31,7 +31,7 @@ from safe.new_definitions import (
     count_exposure_unit,
     exposure_population,
     hazard_category_single_hazard,
-    continuous_hazard_unit_all,
+    unit_generic,
     density_exposure_unit
 )
 
@@ -97,7 +97,8 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                         hazard_category_single_hazard
                     ],
                     'hazard_types': hazard_all,
-                    'continuous_hazard_units': continuous_hazard_unit_all,
+                    'continuous_hazard_units': [
+                        unit_generic],
                     'vector_hazard_classifications': [],
                     'raster_hazard_classifications': []
                 },

@@ -24,7 +24,7 @@ from safe.new_definitions import (
     hazard_all,
     hazard_category_multi_hazard,
     exposure_structure,
-    all_raster_hazard_classes,
+    generic_raster_hazard_classes,
     hazard_category_single_hazard
 )
 
@@ -103,7 +103,8 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': all_raster_hazard_classes
+                    'raster_hazard_classifications': [
+                        generic_raster_hazard_classes]
                 },
                 'exposure': {
                     'layer_mode': layer_mode_classified,
@@ -121,7 +122,7 @@ class ClassifiedHazardBuildingMetadata(ImpactFunctionMetadata):
                 ('medium_hazard_class', 2.0),
                 ('high_hazard_class', 3.0),
                 ('postprocessors', OrderedDict([('BuildingType',
-                                                building_type_postprocessor())
+                                                 building_type_postprocessor())
                                                 ]))
             ])
         }

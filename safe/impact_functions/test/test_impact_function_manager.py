@@ -460,13 +460,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         continuous_hazards_units = impact_function_manager.\
             continuous_hazards_units_for_layer(
                 'tsunami', 'raster', 'continuous', 'single_hazard')
-        expected = [unit_feet,
-                    unit_metres,
-                    unit_millimetres,
-                    unit_mmi,
-                    unit_kilogram_per_meter_square,
-                    unit_kilometres,
-                    unit_generic]
+        expected = [unit_feet, unit_metres, unit_generic]
         self.assertItemsEqual(continuous_hazards_units, expected)
 
     def test_available_hazards(self):
