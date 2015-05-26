@@ -80,7 +80,6 @@ class Plugin(object):
         self.action_impact_merge_dlg = None
         self.key_action = None
         self.action_options = None
-        self.action_keywords_dialog = None
         self.action_keywords_wizard = None
         self.action_function_centric_wizard = None
         self.action_extent_selector = None
@@ -655,7 +654,6 @@ class Plugin(object):
 
     def _disable_keyword_tools(self):
         """Internal helper to disable the keyword and wizard actions."""
-        self.action_keywords_dialog.setEnabled(False)
         self.action_keywords_wizard.setEnabled(False)
 
     def layer_changed(self, layer):
@@ -677,7 +675,6 @@ class Plugin(object):
             self._disable_keyword_tools()
             return
 
-        self.action_keywords_dialog.setEnabled(True)
         self.action_keywords_wizard.setEnabled(True)
 
     def shortcut_f7(self):
