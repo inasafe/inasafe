@@ -171,7 +171,6 @@ class TestRegistry(unittest.TestCase):
             ITBFatalityFunction,
             EarthquakeBuildingFunction,
             PAGFatalityFunction,
-            ContinuousHazardPopulationFunction
         ]
         message = 'Expecting \n%s.\n\nGot \n%s instead' % (
             '\n'.join([x.__name__ for x in expected]),
