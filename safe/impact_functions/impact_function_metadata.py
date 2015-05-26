@@ -147,8 +147,9 @@ class ImpactFunctionMetadata(object):
                 .allowed_subcategories('hazard')
         else:
             metadata_dict = cls.as_dict()
-            categories = metadata_dict['categories']
-            result = add_to_list(result, categories[category]['subcategories'])
+            categories = metadata_dict['layer_requirements']
+            result = add_to_list(result,
+                                 categories[category]['%s_types' % category])
             return result
 
     @classmethod
@@ -394,8 +395,8 @@ class ImpactFunctionMetadata(object):
 
         else:
             metadata_dict = cls.as_dict()
-            categories = metadata_dict['categories']
-            return categories[category]['layer_constraints']
+            categories = metadata_dict['layer_requirements']
+            return categories[category]
 
     @classmethod
     def units_for_layer(cls, subcategory, layer_type, data_type):
@@ -447,10 +448,10 @@ class ImpactFunctionMetadata(object):
             'layer_type': layer_type,
             'data_type': data_type
         }
-        if subcategory in [x['id'] for x in
+        if subcategory in [x['key'] for x in
                            cls.allowed_subcategories('hazard')]:
             category = 'hazard'
-        elif subcategory in [x['id'] for x in
+        elif subcategory in [x['key'] for x in
                              cls.allowed_subcategories('exposure')]:
             category = 'exposure'
         else:
