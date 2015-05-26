@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>CIESIN</author>
+  </metadata>
+
+  <datafile>
+    <filename>Population_2010.asc</filename>
+    <checksum>890405802</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Ole Nielsen</accountable>
+    <source>Center for International Earth Science Information Network (CIESIN), Columbia University; and Centro Internacional de Agricultura Tropical (CIAT). 2005. Gridded Population of the World Version 3 (GPWv3): Population Density Grid. Palisades, NY: Socioeconomic Data and Applications Center (SEDAC), CIESIN, Columbia University. Available at http://sedac.ciesin.columbia.edu/gpw</source>
+    <IP_owner>CIESIN</IP_owner>
+    <IP_info>This is subset of the CIESIN population data used for Indonesia. See glp10ag.permission background IP info</IP_info>
+  </datafile>
+
+</ga_license_file>

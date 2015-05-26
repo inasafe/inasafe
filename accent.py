@@ -150,7 +150,7 @@ def get_qgis_app():
 # all paths are made to be absolute
 def join_if_relative(path_argument):
     if not os.path.isabs(path_argument):
-        LOGGER.debug('joining path ' + path_argument)
+        LOGGER.debug('joining path for ' + path_argument)
         return os.path.join(default_cli_dir, path_argument)
     else:
         return os.path.abspath(path_argument)
@@ -161,16 +161,16 @@ def get_hazard():
         if vector_hazard is not None:
             hazard_base = join_if_relative(vector_hazard)
             qhazard = QgsVectorLayer(
-                hazard_base + '.shp', 'cli_vector_hazard', 'ogr')
+                hazard_base, 'cli_vector_hazard', 'ogr')
         elif raster_hazard is not None:
             hazard_base = join_if_relative(raster_hazard)
             qhazard = QgsRasterLayer(
-                hazard_base + '.asc', 'cli_raster_hazard')
+                hazard_base, 'cli_raster_hazard')
         if not qhazard.isValid():
-            print "hazard raster layer not valid"
+            print "hazard raster layer is NOT VALID"
             print "Perhaps run-env-linux.sh /usr"
         else:
-            print "hazard raster layer is VALID!!"
+            print "hazard raster layer is VALID"
         return qhazard
     except Exception as exc:
         print exc.message
@@ -181,11 +181,11 @@ def get_exposure():
         if vector_exposure is not None:
             exposure_base = join_if_relative(vector_exposure)
             LOGGER.debug(exposure_base)
-            qexposure = QgsVectorLayer(exposure_base + '.shp', 'cli_vector', 'ogr')
+            qexposure = QgsVectorLayer(exposure_base, 'cli_vector', 'ogr')
         elif raster_exposure is not None:
             exposure_base = join_if_relative(raster_exposure)
             LOGGER.debug(exposure_base)
-            qexposure = QgsRasterLayer(exposure_base + '.tif', 'cli_raster')
+            qexposure = QgsRasterLayer(exposure_base, 'cli_raster')
         else:
             print 'Error : Exposure layer'
 
