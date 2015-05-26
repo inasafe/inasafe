@@ -199,26 +199,6 @@ class Plugin(object):
         self.add_action(self.action_dock)
 
         # --------------------------------------
-        # Create action for keywords editor
-        # --------------------------------------
-        icon = resources_path('img', 'icons', 'show-keyword-editor.svg')
-        self.action_keywords_dialog = QAction(
-            QIcon(icon),
-            self.tr('InaSAFE Keyword Editor'),
-            self.iface.mainWindow())
-        self.action_keywords_dialog.setStatusTip(self.tr(
-            'Open InaSAFE keywords editor'))
-        self.action_keywords_dialog.setWhatsThis(self.tr(
-            'Open InaSAFE keywords editor'))
-        self.action_keywords_dialog.setEnabled(False)
-
-        self.action_keywords_dialog.triggered.connect(
-            self.show_keywords_editor)
-
-        self.add_action(
-            self.action_keywords_dialog, add_to_toolbar=self.full_toolbar)
-
-        # --------------------------------------
         # Create action for keywords creation wizard
         # -------------------------------------
         icon = resources_path('img', 'icons', 'show-keyword-wizard.svg')
@@ -605,50 +585,6 @@ class Plugin(object):
             self.iface,
             self.dock_widget,
             self.iface.mainWindow())
-        dialog.exec_()  # modal
-
-    def show_keywords_editor(self):
-        """Show the keywords editor."""
-        # import here only so that it is AFTER i18n set up
-        from safe.gui.tools.keywords_dialog import KeywordsDialog
-
-        # Next block is a fix for #776
-        if self.iface.activeLayer() is None:
-            return
-
-        try:
-            keyword_io = KeywordIO()
-            keyword_io.read_keywords(self.iface.activeLayer())
-        except UnsupportedProviderError:
-            # noinspection PyUnresolvedReferences,PyCallByClass
-            # noinspection PyTypeChecker,PyArgumentList
-            QMessageBox.warning(
-                None,
-                self.tr('Unsupported layer type'),
-                self.tr(
-                    'The layer you have selected cannot be used for '
-                    'analysis because its data type is unsupported.'))
-            return
-        # End of fix for #776
-        # Fix for #793
-        except NoKeywordsFoundError:
-            # we will create them from scratch in the dialog
-            pass
-        # End of fix for #793
-        # Fix for filtered-layer
-        except InvalidParameterError, e:
-            # noinspection PyTypeChecker,PyTypeChecker,PyArgumentList
-            QMessageBox.warning(
-                None,
-                self.tr('Invalid Layer'),
-                e.message
-            )
-            return
-
-        dialog = KeywordsDialog(
-            self.iface.mainWindow(),
-            self.iface,
-            self.dock_widget)
         dialog.exec_()  # modal
 
     def show_keywords_wizard(self):
