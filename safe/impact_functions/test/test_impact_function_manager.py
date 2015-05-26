@@ -46,9 +46,7 @@ from safe.new_definitions import (
     exposure_population,
     count_exposure_unit,
     density_exposure_unit,
-    unit_feet,
-    unit_metres,
-    unit_generic,
+    continuous_hazard_unit_all,
     layer_mode_continuous,
     layer_geometry_raster,
     layer_mode_classified
@@ -196,7 +194,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         continuous_hazards_units = impact_function_manager.\
             continuous_hazards_units_for_layer(
                 'tsunami', 'raster', 'continuous', 'single_hazard')
-        expected = [unit_feet, unit_metres, unit_generic]
+        expected = continuous_hazard_unit_all
         self.assertItemsEqual(continuous_hazards_units, expected)
 
     def test_available_hazards(self):

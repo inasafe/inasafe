@@ -171,6 +171,7 @@ class TestRegistry(unittest.TestCase):
             ITBFatalityFunction,
             EarthquakeBuildingFunction,
             PAGFatalityFunction,
+            ContinuousHazardPopulationFunction
         ]
         message = 'Expecting \n%s.\n\nGot \n%s instead' % (
             '\n'.join([x.__name__ for x in expected]),
@@ -350,6 +351,8 @@ class TestRegistry(unittest.TestCase):
 
         impact_functions = registry.filter_by_keyword_string(
             hazard_keywords, exposure_keywords)
+
+        print len(impact_functions)
 
         for i in impact_functions:
             print i.__name__

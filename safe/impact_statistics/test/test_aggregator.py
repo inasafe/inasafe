@@ -125,7 +125,6 @@ class AggregatorTest(unittest.TestCase):
         assert result, message
         # Press RUN
         DOCK.accept()
-        DOCK.runtime_keywords_dialog.accept()
         attribute = DOCK.analysis.aggregator.attributes[attribute_key]
         message = ('The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
@@ -257,7 +256,6 @@ class AggregatorTest(unittest.TestCase):
         set_jakarta_extent(dock=DOCK)
         # Press RUN
         DOCK.accept()
-        DOCK.runtime_keywords_dialog.accept()
 
         expected_feature_count = 5
         message = (

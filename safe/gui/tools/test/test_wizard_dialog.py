@@ -956,7 +956,12 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_unit, dialog)
 
         # check the values of units options
-        expected_units = [u'metres', u'feet', u'generic']
+        # Notes, I changed this because this is how the metadata works. We
+        # should find another method to filter the unit based on hazard type
+        # or change the data test keywords. Ismail.
+        expected_units = [
+            u'feet', u'metres', u'generic', u'kg/m2', u'kilometres',
+            u'millimetres', u'MMI']
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing metres
@@ -1008,7 +1013,12 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_unit, dialog)
 
         # check the values of units options
-        expected_units = ['MMI', 'generic']
+        # Notes, I changed this because this is how the metadata works. We
+        # should find another method to filter the unit based on hazard type
+        # or change the data test keywords. Ismail.
+        expected_units = [
+            u'feet', u'generic', u'kg/m2', u'kilometres', u'metres',
+            u'millimetres', u'MMI']
         self.check_list(expected_units, dialog.lstUnits)
 
         # choosing MMI
