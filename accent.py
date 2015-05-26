@@ -29,6 +29,7 @@ from qgis.core import (
     QgsVectorFileWriter,
     QgsRectangle)
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.gis import qgis_version
 import os
 import sys
 import logging
@@ -261,8 +262,7 @@ def write_results(impact_layer):
     :param impact_layer:
     :type Vector
     """
-    impact_layer.write_to_file(
-        os.path.join(default_cli_dir, output_file))
+    impact_layer.write_to_file(join_if_relative(output_file))
 
 
 if __name__ == '__main__':
@@ -279,43 +279,44 @@ if __name__ == '__main__':
     try:
         output_file = shell_arguments['--output-file']
     except Exception as e:
-        print e.message
+        LOGGER.debug(e.message)
     try:
         vector_hazard = shell_arguments['--vector-hazard']
     except Exception as e:
-        print e.message
+        LOGGER.debug(e.message)
     try:
         raster_hazard = shell_arguments['--raster-hazard']
     except Exception as e:
-        print e.message
+        LOGGER.debug(e.message)
     try:
         vector_exposure = shell_arguments['--vector-exposure']
     except Exception as e:
-        print e.message
+        LOGGER.debug(e.message)
     try:
         raster_exposure = shell_arguments['--raster-exposure']
     except Exception as e:
-        print e.message
+        LOGGER.debug(e.message)
     try:
         version = shell_arguments['--version']
     except Exception as e:
-        print e.message
+        LOGGER.debug(e.message)
     try:
         show_list = shell_arguments['--list-functions']
     except Exception as e:
-        print e.message
+        LOGGER.debug(e.message)
     try:
         extent = shell_arguments['--extent'].split(':')
         LOGGER.debug(extent)
     except Exception as e:
-        print e.message
+        LOGGER.debug(e.message)
     LOGGER.debug(shell_arguments)
 
     if show_list is True:
         # setup functions
         register_impact_functions()
         show_names(get_ifunction_list())
-
+    elif version is True:
+        print "QGIS VERSION: " + str(qgis_version())
     elif (extent is not None) and\
             ((vector_hazard is not None) or (raster_hazard is not None)) and\
             ((vector_exposure is not None) or (raster_exposure is not None)) and\
@@ -328,7 +329,16 @@ if __name__ == '__main__':
             print e.__doc__
         LOGGER.debug('--END RUN--')
 
-# run with :
-# python accent.py --hazard=jakarta_flood_design --exposure=buildings
+# print line to make it look nice
+print " "
+
+# INSTALL on Ubuntu with:
+# chmod ug+x accent.py
+# sudo ln -s `pwd`/accent.py  /usr/bin
+#
+# RUN example :
+#
+# python accent.py to list all IFs then
+# python accent.py --raster-hazard=jakarta_flood_design.asc --vector-exposure=buildings.shp
 # --extent=106.8054130000000015,-6.1913361000000000,106.8380719000000028,-6.1672457999999999
 # --impact-function=FloodRasterBuildingFunction success
