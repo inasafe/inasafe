@@ -88,7 +88,6 @@ from safe.common.exceptions import (
     InsufficientMemoryWarning)
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
-from safe.gui.tools.keywords_dialog import KeywordsDialog
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
@@ -1134,18 +1133,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         self.enable_signal_receiver()
         try:
-            if self.get_aggregation_layer():
-                original_keywords = self.keyword_io.read_keywords(
-                    self.get_aggregation_layer())
-                self.runtime_keywords_dialog = KeywordsDialog(
-                    self.iface.mainWindow(),
-                    self.iface,
-                    self,
-                    self.get_aggregation_layer())
-                self.runtime_keywords_dialog.accepted.connect(self.accept)
-                self.runtime_keywords_dialog.rejected.connect(
-                    partial(self.accept_cancelled, original_keywords))
-
             self.enable_busy_cursor()
             self.show_next_analysis_extent()
             self.analysis = self.prepare_analysis()
@@ -1161,14 +1148,21 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             )
             self.analysis_error(e, context)
             return  # Will abort the analysis if there is exception
-        except InvalidAggregationKeywords:
-            self.runtime_keywords_dialog.set_layer(
-                self.get_aggregation_layer())
-            # disable gui elements that should not be applicable for this
-            self.runtime_keywords_dialog.radExposure.setEnabled(False)
-            self.runtime_keywords_dialog.radHazard.setEnabled(False)
-            self.runtime_keywords_dialog.setModal(True)
-            self.runtime_keywords_dialog.show()
+        except InvalidAggregationKeywords as e:
+            # TODO: Launch keywords wizard
+            # Show message box
+            message = self.tr(
+                'Your aggregation layer does not have valid keywords for '
+                'aggregation. Please launch keyword wizard to assign keywords '
+                'in this layer.'
+            )
+            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
+            context = self.tr(
+                'A problem was encountered because the aggregation layer '
+                'does not have proper keywords for aggregation layer.'
+            )
+            self.analysis_error(e, context)
+            return
         except InsufficientMemoryWarning:
             # noinspection PyCallByClass,PyTypeChecker
             result = QtGui.QMessageBox.warning(
@@ -1188,7 +1182,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.accept()
         finally:
             # Set back analysis to not ignore memory warning
-            self.analysis.force_memory = False
+            if self.analysis:
+                self.analysis.force_memory = False
             self.disable_signal_receiver()
 
     def accept_cancelled(self, old_keywords):
