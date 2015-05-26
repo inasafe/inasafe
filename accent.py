@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
@@ -14,12 +15,6 @@ Contact : jannes@kartoza.com
 
 __author__ = 'Jannes Engelbrecht'
 __date__ = '16/04/15'
-
-usage = r""
-usage_file = file('usage.txt')
-for delta in usage_file:
-    usage += delta
-
 
 import docopt
 from safe.impact_functions.registry import Registry
@@ -54,15 +49,19 @@ extent = None
 #                       |--exposure
 #                       |--results
 
-default_cli_dir = os.path.abspath(os.path.join(
-    os.path.realpath(os.path.dirname(__file__)), 'cli'))
-default_hazard_dir = os.path.abspath(
-    os.path.join(default_cli_dir, 'hazard'))
-default_exposure_dir = os.path.abspath(
-    os.path.join(default_cli_dir, 'exposure'))
-default_results_dir = os.path.abspath(
-    os.path.join(default_cli_dir, 'results'))
-
+default_cli_dir = os.path.abspath(
+    os.path.realpath(os.path.dirname(__file__)))
+# default_hazard_dir = os.path.abspath(
+#     os.path.join(default_cli_dir, 'hazard'))
+# default_exposure_dir = os.path.abspath(
+#     os.path.join(default_cli_dir, 'exposure'))
+# default_results_dir = os.path.abspath(
+#     os.path.join(default_cli_dir, 'results'))
+usage_dir = os.environ['InaSAFEQGIS']
+usage = r""
+usage_file = file(os.path.join(usage_dir, 'usage.txt'))
+for delta in usage_file:
+    usage += delta
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -147,26 +146,31 @@ def get_qgis_app():
     return QGIS_APP, CANVAS, IFACE, PARENT
 
 
+# now I want to use absolute paths so check first before joining
+# all paths are made to be absolute
+def join_if_relative(path_argument):
+    if not os.path.isabs(path_argument):
+        LOGGER.debug('joining path ' + path_argument)
+        return os.path.join(default_cli_dir, path_argument)
+    else:
+        return os.path.abspath(path_argument)
+
+
 def get_hazard():
     try:
-        if raster_hazard is not None:
-            hazard_base = os.path.join(default_hazard_dir, raster_hazard)
-            LOGGER.debug(hazard_base)
-            qhazard = QgsRasterLayer(hazard_base + '.asc', 'my raster')
-        elif vector_hazard is not None:
-            hazard_base = os.path.join(default_hazard_dir, vector_hazard)
-            LOGGER.debug(hazard_base)
-            qhazard = QgsVectorLayer(hazard_base + '.shp', 'my raster')
-        # noinspection PyUnresolvedReferences
+        if vector_hazard is not None:
+            hazard_base = join_if_relative(vector_hazard)
+            qhazard = QgsVectorLayer(
+                hazard_base + '.shp', 'cli_vector_hazard', 'ogr')
+        elif raster_hazard is not None:
+            hazard_base = join_if_relative(raster_hazard)
+            qhazard = QgsRasterLayer(
+                hazard_base + '.asc', 'cli_raster_hazard')
         if not qhazard.isValid():
             print "hazard raster layer not valid"
             print "Perhaps run-env-linux.sh /usr"
         else:
             print "hazard raster layer is VALID!!"
-        hazard_extent = qhazard.extent()
-        LOGGER.debug('hazard_extent')
-        LOGGER.debug(hazard_extent)
-        LOGGER.debug(qhazard.width())
         return qhazard
     except Exception as exc:
         print exc.message
@@ -175,13 +179,13 @@ def get_hazard():
 def get_exposure():
     try:
         if vector_exposure is not None:
-            exposure_base = os.path.join(default_exposure_dir, vector_exposure)
+            exposure_base = join_if_relative(vector_exposure)
             LOGGER.debug(exposure_base)
             qexposure = QgsVectorLayer(exposure_base + '.shp', 'cli_vector', 'ogr')
         elif raster_exposure is not None:
-            exposure_base = os.path.join(default_exposure_dir,  raster_exposure)
+            exposure_base = join_if_relative(raster_exposure)
             LOGGER.debug(exposure_base)
-            qexposure = QgsVectorLayer(exposure_base + '.tif', 'cli_raster', 'ogr')
+            qexposure = QgsRasterLayer(exposure_base + '.tif', 'cli_raster')
         else:
             print 'Error : Exposure layer'
 
@@ -190,10 +194,6 @@ def get_exposure():
             print "Perhaps run-env-linux.sh /usr"
         else:
             print "exposure vector layer is VALID!!"
-        # noinspection PyUnresolvedReferences
-        exposure_extent = qexposure.extent()
-        LOGGER.debug('exposure_extent')
-        LOGGER.debug(exposure_extent)
         return qexposure
     except Exception as exc:
         print exc.message
@@ -262,7 +262,7 @@ def write_results(impact_layer):
     :type Vector
     """
     impact_layer.write_to_file(
-        os.path.join(default_results_dir, output_file))
+        os.path.join(default_cli_dir, output_file))
 
 
 if __name__ == '__main__':
