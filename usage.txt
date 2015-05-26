@@ -38,3 +38,7 @@ Options:
     --impact_function=IF_ID Use one of the IDs given by the --list option.
     --version               Print the current version of InaSAFE.
 
+
+# INSTALL on Ubuntu with:
+# chmod ug+x accent.py
+# sudo ln -s `pwd`/accent.py  /usr/bin
