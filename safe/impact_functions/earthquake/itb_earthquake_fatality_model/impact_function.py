@@ -115,7 +115,7 @@ class ITBFatalityFunction(ImpactFunction):
                 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
                 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
             }),
-            ('mmi_range', range(2, 10)),
+            ('mmi_range', range(4, 11)), # from MMI 4 to 10
             ('step', 0.5),
             # Threshold below which layer should be transparent
             ('tolerance', 0.01),
