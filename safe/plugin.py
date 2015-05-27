@@ -434,9 +434,6 @@ class Plugin(object):
         self._create_batch_runner_action()
         self._create_impact_merge_action()
         self._create_save_scenario_action()
-        # TODO: This action (and related code) will be deprecated
-        # keywords dialog to be replaced by keywords wizard
-        self._create_keywords_action()
 
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
