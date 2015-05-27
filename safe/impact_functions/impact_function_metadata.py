@@ -753,3 +753,42 @@ class ImpactFunctionMetadata(object):
             result.append((layer_mode, layer_geometry))
 
         return result
+
+    @classmethod
+    def valid_layer_keywords(cls):
+        """Return a dictionary for valid layer keywords."""
+        hazard_layer_req = cls.get_hazard_requirements()
+        exposure_layer_req = cls.get_exposure_requirements()
+
+        hazard_keywords = {
+            'layer_mode': hazard_layer_req['layer_mode']['key'],
+            'layer_geometry': [x['key'] for x in hazard_layer_req[
+                'layer_geometries']],
+            'hazard_category': [x['key'] for x in hazard_layer_req[
+                'hazard_categories']],
+            'hazard': [x['key'] for x in hazard_layer_req[
+                'hazard_types']],
+            'continuous_hazard_unit': [x['key'] for x in hazard_layer_req[
+                'continuous_hazard_units']],
+            'vector_hazard_classification': [x['key'] for x in hazard_layer_req[
+                'vector_hazard_classifications']],
+            'raster_hazard_classification': [x['key'] for x in hazard_layer_req[
+                'raster_hazard_classifications']],
+        }
+
+        exposure_keywords = {
+            'layer_mode': exposure_layer_req['layer_mode']['key'],
+            'layer_geometry': [x['key'] for x in exposure_layer_req[
+                'layer_geometries']],
+            'exposure': [x['key'] for x in exposure_layer_req[
+                'exposure_types']],
+            'exposure_unit': [x['key'] for x in exposure_layer_req[
+                'exposure_units']],
+        }
+
+        keywords = {
+            'hazard_keywords': hazard_keywords,
+            'exposure_keywords': exposure_keywords,
+        }
+
+        return keywords

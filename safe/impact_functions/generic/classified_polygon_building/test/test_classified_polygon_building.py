@@ -77,20 +77,20 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """TestGenericPolygonBuildingFunction: Test filtering IF"""
         hazard_keywords = {
-            'title': 'Generic Polygon',
-            'category': 'hazard',
-            'subcategory': 'earthquake',
-            'unit': 'classes',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'flood',
+            'hazard_category': 'multi_hazard',
+            'raster_hazard_classification': 'generic_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'structure',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
-        }
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure',
+            }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)

@@ -22,8 +22,6 @@ import inspect
 
 from safe.impact_functions import register_impact_functions
 
-from safe.impact_functions.inundation.flood_vector_building_impact\
-    .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.earthquake.earthquake_building.impact_function \
     import EarthquakeBuildingFunction
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model \
@@ -43,6 +41,9 @@ from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
+from safe.impact_functions.generic.classified_raster_building.impact_function\
+    import ClassifiedRasterHazardBuildingFunction
+
 from safe.impact_functions.registry import Registry
 from safe.definitions import (
     layer_mode_classified,
@@ -210,14 +211,14 @@ class TestRegistry(unittest.TestCase):
         impact_functions = registry.filter_by_exposure(
             registry.impact_functions, exposure_metadata)
         expected = [
-            FloodPolygonBuildingFunction,
             FloodRasterBuildingFunction,
+            ClassifiedRasterHazardBuildingFunction,
             ClassifiedPolygonHazardBuildingFunction,
             EarthquakeBuildingFunction,
             VolcanoPointBuildingFunction,
             VolcanoPolygonBuildingFunction
         ]
-        message = 'Expecting \n%s.\n\nGot \n%s instead' % (
+        message = 'Expecting \n%s.\n\nGot \n%s \n instead' % (
             '\n'.join([x.__name__ for x in expected]),
             '\n'.join([x.__name__ for x in impact_functions]))
         self.assertItemsEqual(expected, impact_functions, message)
@@ -235,14 +236,12 @@ class TestRegistry(unittest.TestCase):
         expected = [
             FloodPolygonBuildingFunction,
             FloodRasterBuildingFunction,
+            ClassifiedRasterHazardBuildingFunction,
             ClassifiedPolygonHazardBuildingFunction,
             EarthquakeBuildingFunction,
             VolcanoPointBuildingFunction,
             VolcanoPolygonBuildingFunction,
         ]
-        message = 'Expecting %s IFs. Got %s IFs instead' % (
-            len(expected), len(impact_functions))
-        self.assertEqual(len(expected), len(impact_functions), message)
         message = 'Expecting \n%s.\n\nGot \n%s instead' % (
             '\n'.join([x.__name__ for x in expected]),
             '\n'.join([x.__name__ for x in impact_functions]))

@@ -30,6 +30,7 @@ from safe.definitions import (
     layer_geometry_raster,
     count_exposure_unit,
     density_exposure_unit,
+    layer_mode_continuous
 )
 
 
@@ -90,12 +91,10 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
                     'raster_hazard_classifications': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_classified,
-                    'layer_geometries': [
-                        layer_geometry_raster],
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
-                    'exposure_units': [
-                        density_exposure_unit, count_exposure_unit]
+                    'exposure_units': [count_exposure_unit]
                 }
             },
             'parameters': OrderedDict([

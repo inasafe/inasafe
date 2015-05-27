@@ -69,7 +69,7 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'point',
             'hazard': 'volcano',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'multi_hazard',
             'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 
@@ -77,9 +77,9 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
             'layer_purpose': 'exposure',
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
-            'exposure': 'population'
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
-
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \

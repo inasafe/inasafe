@@ -49,7 +49,8 @@ from safe.definitions import (
     continuous_hazard_unit_all,
     layer_mode_continuous,
     layer_geometry_raster,
-    layer_mode_classified
+    layer_mode_classified,
+    layer_geometry_polygon
 )
 
 
@@ -159,7 +160,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         hazards = impact_function_manager.hazards_for_layer(
             'polygon', 'single_hazard')
-        expected = [hazard_flood, hazard_tsunami]
+        expected = [hazard_flood, hazard_tsunami, hazard_earthquake,
+                    hazard_volcano, hazard_volcanic_ash, hazard_generic]
         self.assertItemsEqual(hazards, expected)
 
         hazards = impact_function_manager.hazards_for_layer(
@@ -255,7 +257,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
         expected = [
             (layer_mode_continuous, layer_geometry_raster),
-            (layer_mode_classified, layer_geometry_raster)
+            (layer_mode_classified, layer_geometry_raster),
+            (layer_mode_classified, layer_geometry_polygon),
         ]
 
         self.assertItemsEqual(hazard_constraints, expected)

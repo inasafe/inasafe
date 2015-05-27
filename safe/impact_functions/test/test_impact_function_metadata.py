@@ -302,5 +302,13 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         ]
         self.assertItemsEqual(result, expected)
 
+    def test_valid_layer_keywords(self):
+        """Test for valid_layer_keywords. For development."""
+        impact_function = VolcanoPointPopulationFunction()
+        layer_keywords = impact_function.metadata().valid_layer_keywords()
+        from pprint import pprint
+        pprint(layer_keywords)
+
+
 if __name__ == '__main__':
     unittest.main()
