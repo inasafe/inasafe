@@ -111,11 +111,8 @@ class ITBFatalityFunction(ImpactFunction):
         self.hardcoded_parameters = OrderedDict([
             ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
             # Rates of people displaced for each MMI level
-            ('displacement_rate', {
-                1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
-                7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
-            }),
-            ('mmi_range', range(4, 11)), # from MMI 4 to 10
+            ('displacement_threshold', 6.0), # mmi threshold for displacement
+            ('mmi_range', range(2, 11)), # from MMI 4 to 10
             ('step', 0.5),
             ('calculate_displaced_people', True)
         ])
@@ -135,6 +132,15 @@ class ITBFatalityFunction(ImpactFunction):
         # noinspection PyUnresolvedReferences
         return numpy.power(10.0, x * mmi - y)
 
+    def displacement_rate(self, mmi):
+        """A method to compute displacement rate.
+
+        : rate = 1.0 if mmi >= threshold
+        : rate = 0.0 otherwise
+        """
+        x = self.hardcoded_parameters['displacement_threshold']
+        return numpy.piecewise(mmi, [mmi < x, mmi >= x], [0, 1])
+
     def run(self, layers=None):
         """Indonesian Earthquake Fatality Model.
 
@@ -148,8 +154,6 @@ class ITBFatalityFunction(ImpactFunction):
         """
         self.validate()
         self.prepare(layers)
-
-        displacement_rate = self.hardcoded_parameters['displacement_rate']
 
         # Extract input layers
         intensity = self.hazard
@@ -183,7 +187,7 @@ class ITBFatalityFunction(ImpactFunction):
 
             # Calculate expected number of displaced people per level
             try:
-                displacements = displacement_rate[mmi] * mmi_matches
+                displacements = self.displacement_rate(mmi) * mmi_matches
             except KeyError, e:
                 msg = 'mmi = %i, mmi_matches = %s, Error msg: %s' % (
                     mmi, str(mmi_matches), str(e))
@@ -350,9 +354,10 @@ class ITBFatalityFunction(ImpactFunction):
             keywords={
                 'impact_summary': impact_summary,
                 'total_population': total_population,
+                'exposed_per_mmi': number_of_exposed,
                 'total_fatalities': total_fatalities,
                 'fatalities_per_mmi': number_of_fatalities,
-                'exposed_per_mmi': number_of_exposed,
+                'total_displaced': total_displaced,
                 'displaced_per_mmi': number_of_displaced,
                 'impact_table': impact_table,
                 'map_title': map_title,

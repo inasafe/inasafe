@@ -66,9 +66,9 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
 
         expected_result = {
             'total_population': 200,
-            'total_fatalities': 0
+            'total_fatalities': 0,
+            'total_displaced': 200
         }
-
         for key_ in expected_result.keys():
             result = impact_layer.get_keywords(key_)
             message = 'Expecting %s, but it returns %s' % (
@@ -77,6 +77,8 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
 
         expected_result = {}
         expected_result['fatalities_per_mmi'] = {
+            2: 0,
+            3: 0,
             4: 0,
             5: 0,
             6: 0,
@@ -86,6 +88,8 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             10: 0
         }
         expected_result['exposed_per_mmi'] = {
+            2: 0,
+            3: 0,
             4: 0,
             5: 0,
             6: 0,
@@ -95,6 +99,8 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             10: 0
         }
         expected_result['displaced_per_mmi'] = {
+            2: 0,
+            3: 0,
             4: 0,
             5: 0,
             6: 0,
