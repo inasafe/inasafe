@@ -770,10 +770,12 @@ class ImpactFunctionMetadata(object):
                 'hazard_types']],
             'continuous_hazard_unit': [x['key'] for x in hazard_layer_req[
                 'continuous_hazard_units']],
-            'vector_hazard_classification': [x['key'] for x in hazard_layer_req[
-                'vector_hazard_classifications']],
-            'raster_hazard_classification': [x['key'] for x in hazard_layer_req[
-                'raster_hazard_classifications']],
+            'vector_hazard_classification': [
+                x['key'] for x in hazard_layer_req[
+                    'vector_hazard_classifications']],
+            'raster_hazard_classification': [
+                x['key'] for x in hazard_layer_req[
+                    'raster_hazard_classifications']],
         }
 
         exposure_keywords = {

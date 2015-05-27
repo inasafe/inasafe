@@ -568,8 +568,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: list
         """
         layer_geometry_id = self.get_layer_geometry_id()
-        IFM = self.impact_function_manager
-        hazard_categories = IFM.hazard_categories_for_layer(
+        ifm = self.impact_function_manager
+        hazard_categories = ifm.hazard_categories_for_layer(
             layer_geometry_id)
         return hazard_categories
 
@@ -1680,16 +1680,6 @@ class WizardDialog(QDialog, FORM_CLASS):
     # STEP_FC_FUNCTION_1
     # ===========================
 
-    @staticmethod
-    def available_constraints():
-        """Collect available layer_constraints from all impact functions.
-
-        :returns: List of metadata of the available constraints.
-        :rtype: list
-        """
-        return [layer_vector_point, layer_vector_line, layer_vector_polygon,
-                layer_raster_continuous]
-
     def selected_functions_1(self):
         """Obtain functions available for hazard an exposure selected by user.
 
@@ -2119,7 +2109,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 return True
             return False
 
-        # Compare layer properties with explicitely set constraints
+        # Compare layer properties with explicitly set constraints
         # Reject if layer geometry doesn't match
         if layer_geometry != self.get_layer_geometry_id(layer):
             return False
@@ -2128,7 +2118,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not keywords:
             return True
 
-        # Compare layer keywords with explicitely set constraints
+        # Compare layer keywords with explicitly set constraints
         # Reject if layer purpose doesn't match
         if ('layer_purpose' in keywords and
                 keywords['layer_purpose'] != layer_purpose):
@@ -2163,12 +2153,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             'raster' if is_raster_layer(layer) else 'vector',
             layer_purpose)
         classification_keys = classification_key + 's'
-        if (lay_req['layer_mode'] == layer_mode_classified
-                and classification_key in keywords
-                and classification_keys in lay_req):
+        if (lay_req['layer_mode'] == layer_mode_classified and
+                classification_key in keywords and
+                classification_keys in lay_req):
             allowed_classifications = [
                 c['key'] for c in lay_req[classification_keys]]
-            if (keywords[classification_key] not in allowed_classifications):
+            if keywords[classification_key] not in allowed_classifications:
                 return False
 
         # Reject if unit doesn't match
@@ -2176,12 +2166,12 @@ class WizardDialog(QDialog, FORM_CLASS):
                     if layer_purpose == layer_purpose_hazard['key']
                     else 'exposure_unit')
         unit_keys = unit_key + 's'
-        if (lay_req['layer_mode'] == layer_mode_continuous
-                and unit_key in keywords
-                and unit_keys in lay_req):
+        if (lay_req['layer_mode'] == layer_mode_continuous and
+                unit_key in keywords and
+                unit_keys in lay_req):
             allowed_units = [
                 c['key'] for c in lay_req[unit_keys]]
-            if (keywords[unit_key] not in allowed_units):
+            if keywords[unit_key] not in allowed_units:
                 return False
 
         # Finally return True
@@ -3471,9 +3461,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             return bool(self.selected_unit())
         if step == step_kw_field:
             # Allow to leave field unset for classified data
-            return bool(self.selected_datatype() == layer_mode_classified
-                        or self.selected_field()
-                        or not self.lstFields.count())
+            return bool(self.selected_datatype() == layer_mode_classified or
+                        self.selected_field() or
+                        not self.lstFields.count())
         if step == step_kw_resample:
             return True
         if step == step_kw_classification:
@@ -3643,15 +3633,15 @@ class WizardDialog(QDialog, FORM_CLASS):
             #     new_step = step_kw_source
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
-            elif (self.selected_datatype() == layer_mode_classified
-                  and self.classifications_for_layer()
-                  and (is_raster_layer(self.layer) or self.selected_field())):
+            elif (self.selected_datatype() == layer_mode_classified and
+                      self.classifications_for_layer() and
+                      (is_raster_layer(self.layer) or self.selected_field())):
                 new_step = step_kw_classification
             else:
                 new_step = step_kw_source
         elif current_step == step_kw_resample:
-            if (self.selected_datatype() == layer_mode_classified
-                    and self.classifications_for_layer()):
+            if (self.selected_datatype() == layer_mode_classified and
+                    self.classifications_for_layer()):
                 new_step = step_kw_classification
             else:
                 new_step = step_kw_source
