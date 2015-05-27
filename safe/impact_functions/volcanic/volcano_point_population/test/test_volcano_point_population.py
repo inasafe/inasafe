@@ -67,17 +67,17 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
         hazard_keywords = {
             'layer_purpose': 'hazard',
             'layer_mode': 'classified',
-            'layer_geometry': 'polygon',
-            'hazard': 'flood',
+            'layer_geometry': 'point',
+            'hazard': 'volcano',
             'hazard_category': 'single_hazard',
-            'vector_hazard_classification': 'flood_vector_hazard_classes'
+            'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'classified',
-            'layer_geometry': 'polygon',
-            'exposure': 'structure'
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

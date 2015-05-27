@@ -190,3 +190,13 @@ def extract_layers(layers, keyword, value):
             extracted_layers.append(layer)
 
     return extracted_layers
+
+
+def has_no_data(layer_data):
+    """Determine whether or not a layer contains nan values.
+    :param layer_data: Layer data that is to be inspected.
+    :type layer_data: ndarry
+    :return: The True if there is nodata in layer_data.
+    :rtype: bool
+    """
+    return numpy.isnan(numpy.sum(layer_data))

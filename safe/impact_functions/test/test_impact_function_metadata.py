@@ -22,44 +22,54 @@ import unittest
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 
+# Importing IFs
+# Earthquake IFs
+from safe.impact_functions.earthquake.earthquake_building.impact_function \
+    import EarthquakeBuildingFunction
+from safe.impact_functions.earthquake.itb_earthquake_fatality_model. \
+    impact_function import ITBFatalityFunction
+from safe.impact_functions.earthquake.pager_earthquake_fatality_model. \
+    impact_function import PAGFatalityFunction
+
+# Generic IFs
+from safe.impact_functions.generic.classified_polygon_building\
+    .impact_function import ClassifiedPolygonHazardBuildingFunction
+from safe.impact_functions.generic.classified_polygon_population \
+    .impact_function import ClassifiedPolygonHazardPopulationFunction
+from safe.impact_functions.generic.classified_raster_building \
+    .impact_function import ClassifiedRasterHazardBuildingFunction
+from safe.impact_functions.generic.classified_raster_population \
+    .impact_function import ClassifiedRasterHazardPopulationFunction
+from safe.impact_functions.generic.continuous_hazard_population \
+    .impact_function import ContinuousHazardPopulationFunction
+
+# Inundation IFs
+from safe.impact_functions.inundation.flood_polygon_population\
+    .impact_function import FloodEvacuationVectorHazardFunction
+from safe.impact_functions.inundation.flood_polygon_roads.impact_function \
+    import FloodVectorRoadsExperimentalFunction
+from safe.impact_functions.inundation.flood_raster_osm_building_impact\
+    .impact_function import FloodRasterBuildingFunction
+from safe.impact_functions.inundation.flood_raster_population.impact_function\
+    import FloodEvacuationRasterHazardFunction
+from safe.impact_functions.inundation.flood_raster_road_qgis.impact_function \
+    import FloodRasterRoadsQGISFunction
+from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
+    .impact_function import FloodRasterRoadsGdalFunction
+from safe.impact_functions.inundation.flood_vector_building_impact\
+    .impact_function import FloodPolygonBuildingFunction
+from safe.impact_functions.inundation.tsunami_population_evacuation_raster\
+    .impact_function import TsunamiEvacuationFunction
+
+# Volcanic IFs
 from safe.impact_functions.volcanic.volcano_point_building.impact_function\
     import VolcanoPointBuildingFunction
+from safe.impact_functions.volcanic.volcano_point_population.impact_function \
+    import VolcanoPointPopulationFunction
 from safe.impact_functions.volcanic.volcano_polygon_building.impact_function\
     import VolcanoPolygonBuildingFunction
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .impact_function import VolcanoPolygonPopulationFunction
-from safe.impact_functions.generic.classified_hazard_building \
-    .impact_function import ClassifiedHazardBuildingFunction
-from safe.impact_functions.generic.classified_hazard_population \
-    .impact_function import ClassifiedHazardPopulationFunction
-from safe.impact_functions.generic.continuous_hazard_population \
-    .impact_function import ContinuousHazardPopulationFunction
-from safe.impact_functions.earthquake.earthquake_building.impact_function \
-    import EarthquakeBuildingFunction
-from safe.impact_functions.earthquake.itb_earthquake_fatality_model.\
-    impact_function import ITBFatalityFunction
-from safe.impact_functions.earthquake.pager_earthquake_fatality_model. \
-    impact_function import PAGFatalityFunction
-from safe.impact_functions.inundation.flood_polygon_roads.impact_function\
-    import FloodVectorRoadsExperimentalFunction
-from safe.impact_functions.inundation.\
-    flood_population_evacuation_polygon_hazard.impact_function \
-    import FloodEvacuationVectorHazardFunction
-from safe.impact_functions.inundation. \
-    flood_population_evacuation_raster_hazard.impact_function \
-    import FloodEvacuationRasterHazardFunction
-from safe.impact_functions.inundation.flood_raster_osm_building_impact \
-    .impact_function import FloodRasterBuildingFunction
-from safe.impact_functions.inundation.flood_raster_road_qgis.impact_function \
-    import FloodRasterRoadsExperimentalFunction
-from safe.impact_functions.inundation.flood_raster_road_qgis_gdal \
-    .impact_function import FloodRasterRoadsGdalFunction
-from safe.impact_functions.inundation.flood_vector_building_impact_qgis \
-    .impact_function import FloodPolygonBuildingQgisFunction
-from safe.impact_functions.inundation.flood_vector_osm_building_impact. \
-    impact_function import FloodVectorBuildingFunction
-from safe.impact_functions.inundation.tsunami_population_evacuation_raster. \
-    impact_function import TsunamiEvacuationFunction
 
 from safe.new_definitions import (
     layer_purpose_exposure,
@@ -90,24 +100,30 @@ class TestImpactFunctionMetadata(unittest.TestCase):
     def test_is_valid(self):
         """Test is_valid."""
         impact_functions = [
-            VolcanoPointBuildingFunction(),
-            VolcanoPolygonBuildingFunction(),
-            VolcanoPolygonPopulationFunction(),
-            ClassifiedHazardBuildingFunction(),
-            ClassifiedHazardPopulationFunction(),
-            ContinuousHazardPopulationFunction(),
+            # Earthquake
             EarthquakeBuildingFunction(),
             ITBFatalityFunction(),
             PAGFatalityFunction(),
-            FloodVectorRoadsExperimentalFunction(),
+            # Generic
+            ClassifiedPolygonHazardBuildingFunction(),
+            ClassifiedPolygonHazardPopulationFunction(),
+            ClassifiedRasterHazardBuildingFunction(),
+            ClassifiedRasterHazardPopulationFunction(),
+            ContinuousHazardPopulationFunction(),
+            # Inundation
             FloodEvacuationVectorHazardFunction(),
-            FloodEvacuationRasterHazardFunction(),
+            FloodVectorRoadsExperimentalFunction(),
             FloodRasterBuildingFunction(),
-            FloodRasterRoadsExperimentalFunction(),
+            FloodEvacuationRasterHazardFunction(),
+            FloodRasterRoadsQGISFunction(),
             FloodRasterRoadsGdalFunction(),
-            FloodPolygonBuildingQgisFunction(),
-            FloodVectorBuildingFunction(),
-            TsunamiEvacuationFunction()
+            FloodPolygonBuildingFunction(),
+            TsunamiEvacuationFunction(),
+            # Volcanic
+            VolcanoPointBuildingFunction(),
+            VolcanoPointPopulationFunction(),
+            VolcanoPolygonBuildingFunction(),
+            VolcanoPolygonPopulationFunction()
         ]
         for impact_function in impact_functions:
             valid = impact_function.metadata().is_valid()
