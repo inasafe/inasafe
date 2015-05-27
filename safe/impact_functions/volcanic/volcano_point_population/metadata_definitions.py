@@ -11,15 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_volcano,
-    unit_volcano_categorical,
-    layer_vector_point,
-    layer_raster_continuous,
-    exposure_population,
-    unit_people_per_pixel,
-    hazard_definition,
-    exposure_definition)
 from safe.defaults import (
     default_minimum_needs,
     default_provenance,
@@ -32,11 +23,9 @@ from safe.utilities.i18n import tr
 from safe.new_definitions import (
     layer_mode_classified,
     layer_geometry_point,
-    layer_geometry_polygon,
     hazard_volcano,
     volcano_vector_hazard_classes,
     hazard_category_multi_hazard,
-    exposure_structure,
     exposure_population,
     layer_geometry_raster,
     count_exposure_unit,
