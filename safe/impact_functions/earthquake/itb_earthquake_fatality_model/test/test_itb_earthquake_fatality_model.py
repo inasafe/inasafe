@@ -70,7 +70,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         }
 
         for key_ in expected_result.keys():
-            result = impact_layer.get_keywords(key_)       
+            result = impact_layer.get_keywords(key_)
             message = 'Expecting %s, but it returns %s' % (
                 expected_result[key_], result)
             self.assertEqual(expected_result[key_], result, message)
@@ -83,7 +83,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             7: 0,
             8: 0.17778,
             9: 0,
-           10: 0
+            10: 0
         }
         expected_result['exposed_per_mmi'] = {
             4: 0,
@@ -92,7 +92,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             7: 0,
             8: 200,
             9: 0,
-           10: 0
+            10: 0
         }
         expected_result['displaced_per_mmi'] = {
             4: 0,
@@ -101,15 +101,16 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             7: 0,
             8: 199.82221,
             9: 0,
-           10: 0
+            10: 0
         }
 
         for key_ in expected_result.keys():
-            result = impact_layer.get_keywords(key_)       
+            result = impact_layer.get_keywords(key_)
             for item in expected_result[key_].keys():
                 message = 'Expecting %s, but it returns %s' % (
                     expected_result[key_][item], result[item])
-                self.assertAlmostEqual(expected_result[key_][item], 
+                self.assertAlmostEqual(
+                    expected_result[key_][item],
                     result[item], places=4, msg=message)
 
     def test_filter(self):
