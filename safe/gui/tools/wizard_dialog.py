@@ -687,7 +687,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         for category in categories:
             if type(category) != dict:
                 # pylint: disable=eval-used
-                category = eval('new_definitions.layer_purpose_%s' % category)
+                category = eval('definitions.layer_purpose_%s' % category)
                 # pylint: enable=eval-used
             item = QListWidgetItem(category['name'], self.lstCategories)
             item.setData(QtCore.Qt.UserRole, unicode(category))
@@ -772,7 +772,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         for hazard_category in hazard_categories:
             if type(hazard_category) != dict:
                 # pylint: disable=eval-used
-                hazard_category = eval('new_definitions.hazard_category_%s'
+                hazard_category = eval('definitions.hazard_category_%s'
                                        % hazard_category)
                 # pylint: enable=eval-used
             item = QListWidgetItem(hazard_category['name'],
@@ -1217,7 +1217,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         for classification in classifications:
             if type(classification) != dict:
                 # pylint: disable=eval-used
-                classification = eval('new_definitions.%s' % classification)
+                classification = eval('definitions.%s' % classification)
                 # pylint: enable=eval-used
             item = QListWidgetItem(classification['name'],
                                    self.lstClassifications)

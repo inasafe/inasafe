@@ -141,8 +141,16 @@ class WizardDialogTest(unittest.TestCase):
         expected_hazard_categories = ['Single Hazard', 'Multi Hazard']
         chosen_hazard_category = 'Single Hazard'
 
-        expected_subcategory_count = 2
-        expected_subcategories = ['flood', 'tsunami']
+        expected_subcategory_count = 6
+        # expected_subcategories = ['flood', 'tsunami']
+        # Notes: IS, the generic IF makes the expected sub categories like this
+        expected_subcategories = [
+            'flood',
+            'tsunami',
+            'earthquake',
+            'volcano',
+            'volcanic_ash',
+            'generic']
         chosen_subcategory = 'flood'
 
         expected_mode_count = 2
@@ -204,7 +212,7 @@ class WizardDialogTest(unittest.TestCase):
         # Check if categories is the same with expected_categories
         message = 'Invalid categories! It should be "%s" while it was %s' % (
             expected_categories, categories)
-        self.assertEqual(set(categories), set(expected_categories), message)
+        self.assertItemsEqual(categories, expected_categories, message)
         # The Next button should be on disabled state first unless the keywords
         # are already assigned
         message = ('Invalid Next button state in step 1! Enabled while '
@@ -241,8 +249,8 @@ class WizardDialogTest(unittest.TestCase):
         # Check if categories is the same with expected_categories
         message = ('Invalid hazard categories! It should be "%s" while it'
                    'was %s' % (expected_hazard_categories, hazard_categories))
-        self.assertEqual(set(hazard_categories),
-                         set(expected_hazard_categories), message)
+        self.assertItemsEqual(
+            hazard_categories, expected_hazard_categories, message)
         # The Next button should be on disabled state first unless the keywords
         # are already assigned
         message = ('Invalid Next button state in step 2! Enabled while '
@@ -280,8 +288,7 @@ class WizardDialogTest(unittest.TestCase):
         # Check if subcategories is the same with expected_subcategories
         message = ('Invalid sub categories! It should be "%s" while it was '
                    '%s') % (expected_subcategories, subcategories)
-        self.assertEqual(
-            set(subcategories), set(expected_subcategories), message)
+        self.assertItemsEqual(subcategories, expected_subcategories, message)
         # The Next button should be on disabled state first unless the keywords
         # are already assigned
         self.assertTrue(
@@ -318,8 +325,7 @@ class WizardDialogTest(unittest.TestCase):
         # Check if units is the same with expected_units
         message = ('Invalid modes! It should be "%s" while it was '
                    '%s') % (expected_modes, modes)
-        self.assertEqual(
-            set(expected_modes), set(modes), message)
+        self.assertItemsEqual(expected_modes, modes, message)
 
         dialog.pbnNext.click()
 
@@ -340,8 +346,7 @@ class WizardDialogTest(unittest.TestCase):
         # Check if fields is the same with expected_fields
         message = ('Invalid fields! It should be "%s" while it was '
                    '%s') % (expected_fields, fields)
-        self.assertEqual(
-            set(expected_fields), set(fields), message)
+        self.assertItemsEqual(expected_fields, fields, message)
         dialog.lstFields.setCurrentRow(floodprone_index)
         message = ('Invalid Next button state in step 5! Still disabled after '
                    'an item selected')
@@ -1158,7 +1163,15 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check the values of subcategories options
-        expected_subcategories = ['flood', 'tsunami']
+        # expected_subcategories = ['flood', 'tsunami']
+        # Notes: IS, the generic IF makes the expected sub categories like this
+        expected_subcategories = [
+            'flood',
+            'tsunami',
+            'earthquake',
+            'volcano',
+            'volcanic ash',
+            'generic']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # select flood
