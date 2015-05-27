@@ -5,6 +5,7 @@
     counts of people affected per polygon.
 
 """
+
 __author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '20/1/2013'
@@ -13,9 +14,9 @@ __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 from PyQt4 import QtGui, QtCore
+
 from PyQt4.QtCore import pyqtSignature
 
 from safe.common.version import get_version
@@ -44,7 +45,6 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         :param parent: Parent widget of this dialog.
         :type parent: QWidget
         """
-
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
@@ -58,6 +58,8 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         cancel_button = self.button_box.button(QtGui.QDialogButtonBox.Cancel)
         cancel_button.clicked.connect(self.reject)
         # Fix ends
+        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
+        ok_button.clicked.connect(self.accept)
 
     def show_info(self):
         """Show basic usage instructions."""
@@ -172,15 +174,17 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         if found_flag:
             self.cboPolygonLayers.setCurrentIndex(0)
 
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
     @pyqtSignature('int')
-    def on_cboPolygonLayers_currentIndexChanged(self, theIndex=None):
+    def on_cboPolygonLayers_currentIndexChanged(self, index):
         """Automatic slot executed when the layer is changed to update fields.
 
-        :param theIndex: Passed by the signal that triggers this slot.
-        :type theIndex: int
+        :param index: Passed by the signal that triggers this slot.
+        :type index: int
         """
         layer_id = self.cboPolygonLayers.itemData(
-            theIndex, QtCore.Qt.UserRole)
+            index, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         fields = layer.dataProvider().fieldNameMap().keys()
