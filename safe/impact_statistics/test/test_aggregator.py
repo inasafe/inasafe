@@ -152,7 +152,6 @@ class AggregatorTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         DOCK.accept()
-        DOCK.runtime_keywords_dialog.accept()
         print attribute_key
         print DOCK.analysis.aggregator.attributes
         attribute = DOCK.analysis.aggregator.attributes[attribute_key]
@@ -181,7 +180,6 @@ class AggregatorTest(unittest.TestCase):
         assert result, message
         # Press RUN
         DOCK.accept()
-        DOCK.runtime_keywords_dialog.accept()
         attribute = DOCK.analysis.aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be None. Found: %s' % attribute)
@@ -208,7 +206,6 @@ class AggregatorTest(unittest.TestCase):
         assert result, message
         # Press RUN
         DOCK.accept()
-        DOCK.runtime_keywords_dialog.accept()
         attribute = DOCK.analysis.aggregator.attributes[attribute_key]
         message = ('The aggregation should be None. Found: %s' % attribute)
         assert attribute is None, message
