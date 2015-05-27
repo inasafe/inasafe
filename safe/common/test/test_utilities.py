@@ -20,6 +20,8 @@ __copyright__ += 'Disaster Reduction'
 
 import unittest
 import os
+import numpy
+
 from safe.common.utilities import (
     get_significant_decimal,
     humanize_class,
@@ -35,7 +37,8 @@ from safe.common.utilities import (
     log_file_path,
     romanise,
     humanize_file_size,
-    add_to_list)
+    add_to_list,
+    color_ramp)
 
 
 def print_class(array, result_class, expected_result):
@@ -237,7 +240,7 @@ class TestUtilities(unittest.TestCase):
         """Test create_classes.
         """
         # Normal case
-        class_list = [0, 1, 4, 2, 9, 2, float('nan')]
+        class_list = numpy.array([0, 1, 4, 2, 9, 2, float('nan')])
         num_classes = 2
         expected_classes = [1.0, 9.0]
         result = create_classes(class_list, num_classes)
@@ -245,7 +248,7 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(result, expected_classes, message)
 
         # There's only 1 value
-        class_list = [6]
+        class_list = numpy.array([6])
         num_classes = 3
         expected_classes = [2.0, 4.0, 6.0]
         result = create_classes(class_list, num_classes)
@@ -253,7 +256,7 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(result, expected_classes, message)
 
         # Max value <= 1.0
-        class_list = [0.1, 0.3, 0.9]
+        class_list = numpy.array([0.1, 0.3, 0.9])
         num_classes = 3
         expected_classes = [0.3, 0.6, 0.9]
         result = create_classes(class_list, num_classes)
@@ -261,7 +264,7 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(result, expected_classes, message)
 
         # There are only 2 values
-        class_list = [2, 6]
+        class_list = numpy.array([2, 6])
         num_classes = 3
         expected_classes = [1.0, 3.5, 6.0]
         result = create_classes(class_list, num_classes)
@@ -269,7 +272,7 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(result, expected_classes, message)
 
         # Another 2 values
-        class_list = [2.5, 6]
+        class_list = numpy.array([2.5, 6])
         num_classes = 3
         expected_classes = [2.0, 4.0, 6.0]
         result = create_classes(class_list, num_classes)
@@ -362,6 +365,19 @@ class TestUtilities(unittest.TestCase):
         assert len(list_b) == (len(list_original) + 1)
         assert list_b[-1] == 'c'
 
+    def test_color_ramp(self):
+        """Test for color_ramp function."""
+        number_of_colours = 1
+        expected_colors = ['#ff0000']
+        colors = color_ramp(number_of_colours)
+        message = 'Expecting %s, but it returns %s' % (expected_colors, colors)
+        self.assertEqual(colors, expected_colors, message)
+
+        number_of_colours = 2
+        expected_colors = ['#ff0000', '#00ffff']
+        colors = color_ramp(number_of_colours)
+        message = 'Expecting %s, but it returns %s' % (expected_colors, colors)
+        self.assertEqual(colors, expected_colors, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestUtilities)

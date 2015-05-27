@@ -124,7 +124,7 @@ class Aggregator(QtCore.QObject):
             'inasafe/use_native_zonal_stats', False, type=bool))
         self.use_native_zonal_stats = flag
 
-        self.extent = extent
+        self._extent = extent
         self._keyword_io = KeywordIO()
         self._defaults = get_defaults()
         self.error_message = None
@@ -170,6 +170,23 @@ class Aggregator(QtCore.QObject):
             keywords = {}
             self.write_keywords(
                 self.layer, keywords)
+
+    @property
+    def extent(self):
+        return self._extent
+
+    @extent.setter
+    def extent(self, value):
+        self._extent = value
+        # update layer extent to match impact layer if in aoi_mode
+        if self.aoi_mode:
+            try:
+                self.layer = self._extents_to_layer()
+                self.safe_layer = safe_read_layer(self.layer.source())
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
+                raise
 
     def read_keywords(self, layer, keyword=None):
         """It is a wrapper around self._keyword_io.read_keywords
@@ -331,17 +348,17 @@ class Aggregator(QtCore.QObject):
                     ('layer_purpose' in keywords and
                         layer_purpose == 'aggregation') and
                     (female_ratio in keywords and (
-                    female_ratio != global_default_attribute['name'] or
-                    female_ratio_key in keywords)) and
+                        female_ratio != global_default_attribute['name'] or
+                        female_ratio_key in keywords)) and
                     (youth_ratio in keywords and (
-                    youth_ratio != global_default_attribute['name'] or
-                    youth_ratio_key in keywords)) and
+                        youth_ratio != global_default_attribute['name'] or
+                        youth_ratio_key in keywords)) and
                     (adult_ratio in keywords and (
-                    adult_ratio != global_default_attribute['name'] or
-                    adult_ratio_key in keywords)) and
+                        adult_ratio != global_default_attribute['name'] or
+                        adult_ratio_key in keywords)) and
                     (elderly_ratio in keywords and (
-                    elderly_ratio != global_default_attribute['name'] or
-                    elderly_ratio_key in keywords))):
+                        elderly_ratio != global_default_attribute['name'] or
+                        elderly_ratio_key in keywords))):
                 self.is_valid = True
             # some keywords are needed
             else:
@@ -420,7 +437,7 @@ class Aggregator(QtCore.QObject):
         except (InvalidLayerError, UnsupportedProviderError, KeywordDbError):
             raise
 
-        self.safe_layer = safe_read_layer(str(self.layer.source()))
+        self.safe_layer = safe_read_layer(self.layer.source())
 
     def deintersect(self):
         """Ensure there are no intersecting features with self.layer.
@@ -537,7 +554,7 @@ class Aggregator(QtCore.QObject):
         else:
             message = self.tr(
                 '%s is %s but it should be either vector or raster') % (
-                qgis_impact_layer.name(), qgis_impact_layer.type())
+                    qgis_impact_layer.name(), qgis_impact_layer.type())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
@@ -1168,9 +1185,9 @@ class Aggregator(QtCore.QObject):
         self.attributes = {}
         self.attributes[self.get_default_keyword(
             'AGGR_ATTR_KEY')] = (
-            self.read_keywords(
-                self.layer,
-                self.get_default_keyword('AGGR_ATTR_KEY')))
+                self.read_keywords(
+                    self.layer,
+                    self.get_default_keyword('AGGR_ATTR_KEY')))
 
         female_ratio_key = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
         female_ratio_attribute = self.read_keywords(
@@ -1239,7 +1256,7 @@ class Aggregator(QtCore.QObject):
         # noinspection PyTypeChecker
         self._send_message(message)
 
-        layer_filename = str(layer.source())
+        layer_filename = layer.source()
         postprocessing_polygons = self.safe_layer.get_geometry()
         polygons_layer = safe_read_layer(layer_filename)
         remaining_polygons = numpy.array(
@@ -1578,12 +1595,18 @@ class Aggregator(QtCore.QObject):
         fields = provider.fields()
         feature.setFields(fields)
         # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-        feature.setGeometry(QgsGeometry.fromRect(
+        geom = QgsGeometry.fromRect(
             QgsRectangle(
                 QgsPoint(self.extent[0], self.extent[1]),
-                QgsPoint(self.extent[2], self.extent[3]))))
+                QgsPoint(self.extent[2], self.extent[3])))
+        feature.setGeometry(geom)
         feature[attribute_name] = self.tr('Entire area')
-        provider.addFeatures([feature])
+        if provider.featureCount() > 0:
+            # delete previous feature
+            for f in provider.getFeatures():
+                provider.changeGeometryValues({f.id(): geom})
+        else:
+            provider.addFeatures([feature])
         self.layer.updateExtents()
         try:
             self.update_keywords(
@@ -1640,7 +1663,7 @@ class Aggregator(QtCore.QObject):
                 self.tr(
                     'No "target_field" keyword found in the impact layer %s '
                     'keywords. The impact function should define this.') % (
-                    impact_layer.name()))
+                        impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
             return False
@@ -1652,7 +1675,7 @@ class Aggregator(QtCore.QObject):
                 self.tr('No attribute "%s" was found in the attribute table '
                         'for layer "%s". The impact function must define this'
                         ' attribute for postprocessing to work.') % (
-                    self.target_field, impact_layer.name()))
+                            self.target_field, impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
             return False

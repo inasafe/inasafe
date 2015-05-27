@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.impact_functions import register_impact_functions
 
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -20,15 +19,16 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 
+from safe.impact_functions import register_impact_functions
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.inundation.flood_vector_osm_building_impact\
-    .impact_function import FloodVectorBuildingFunction
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model \
     .impact_function import PAGFatalityFunction
 from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
+from safe.impact_functions.inundation.flood_vector_building_impact\
+    .impact_function import FloodPolygonBuildingFunction
 
 from safe.new_definitions import (
     layer_purpose_hazard,
@@ -81,7 +81,7 @@ class TestImpactFunctionManager(unittest.TestCase):
     def test_get_function_title(self):
         """TestImpactFunctionManager: Test getting function title."""
         impact_function_title = ImpactFunctionManager().get_function_title(
-            FloodVectorBuildingFunction)
+            FloodPolygonBuildingFunction)
         expected_title = 'Be flooded'
         message = 'Expecting %s but got %s' % (
             impact_function_title, expected_title)

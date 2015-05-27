@@ -62,7 +62,7 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'TsunamiEvacuationFunction',
-            'name': tr('Tsunami Evacuation Function'),
+            'name': tr('Tsunami evacuation'),
             'impact': tr('Need evacuation'),
             'title': tr('Need evacuation'),
             'function_type': 'old-style',

@@ -13,6 +13,7 @@ from subprocess import PIPE, Popen
 import ctypes
 from numbers import Integral
 import math
+import colorsys
 # pylint: disable=unused-import
 from collections import OrderedDict
 # pylint: enable=unused-import
@@ -467,7 +468,10 @@ def humanize_class(my_classes):
     """
     min_value = 0
     if min_value - my_classes[0] == 0:
-        return humanize_class(my_classes[1:])
+        if len(my_classes) == 1:
+            return [('0', '0')]
+        else:
+            return humanize_class(my_classes[1:])
     humanize_classes = []
     interval = my_classes[-1] - my_classes[-2]
     for max_value in my_classes:
@@ -527,9 +531,11 @@ def create_classes(class_list, num_classes):
     :param num_classes: The number of class to hold all values in class_list.
     :type num_classes: int
     """
-    unique_class_list = list(set(class_list))
-    min_value = numpy.nanmin(unique_class_list)
-    max_value = numpy.nanmax(unique_class_list)
+    min_value = numpy.nanmin(class_list)
+    max_value = numpy.nanmax(class_list)
+
+    if min_value == max_value == 0:
+        return [0]
 
     # If min_value == max_value (it only has 1 unique class), or
     # max_value <= 1.0, then we will populate the classes from 0 - max_value
@@ -545,11 +551,8 @@ def create_classes(class_list, num_classes):
     # 3. (AG) Yes! The idea is to classify the non affected value to the 1st
     #    class (see #637, #702)
 
-    # Now, Get the smallest value that is not 0
-    non_zero_min_value = max_value
-    for value in unique_class_list:
-        if value < non_zero_min_value and value != 0:
-            non_zero_min_value = value
+    # Now, Get the smallest value that is > 0
+    non_zero_min_value = class_list[class_list > 0].min()
 
     lower_bound = math.ceil(non_zero_min_value)
     if lower_bound != 1:
@@ -696,6 +699,39 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
     return new_name
 
 
+def color_ramp(number_of_colour):
+    """Generate list of color in hexadecimal.
+
+    This will generate colors using hsv model by playing around with the hue
+    (the saturation and the value are all set to 1).
+
+    :param number_of_colour: The number of intervals between R and G spectrum.
+    :type number_of_colour: int
+
+    :returns: List of color.
+    :rtype: list
+    """
+    if number_of_colour < 1:
+        raise Exception('The number of colours should be > 0')
+
+    colors = []
+    hue_interval = 1.0 / number_of_colour
+    for i in range(number_of_colour):
+        hue = i * hue_interval
+        saturation = 1
+        value = 1
+        # pylint: disable=bad-builtin
+        # pylint: disable=deprecated-lambda
+        rgb = map(
+            lambda x: int(x * 255), colorsys.hsv_to_rgb(
+                hue, saturation, value))
+        # pylint: enable=deprecated-lambda
+        # pylint: enable=bad-builtin
+        hex_color = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
+        colors.append(hex_color)
+    return colors
+
+
 def get_osm_building_usage(attribute_names, feature):
     """Get the usage of a row of OSM building data.
 
@@ -806,7 +842,7 @@ def add_to_list(my_list, my_element):
     :rtype: list
 
     """
-    if type(my_element) is list:
+    if isinstance(my_element, list):
         for element in my_element:
             my_list = add_to_list(my_list, element)
     else:
@@ -830,11 +866,11 @@ def is_subset(element, container):
     :returns: boolean of the membership
     :rtype: bool
     """
-    if type(element) is list:
-        if type(container) is list:
+    if isinstance(element, list):
+        if isinstance(container, list):
             return set(element) <= set(container)
     else:
-        if type(container) is list:
+        if isinstance(container, list):
             return element in container
         else:
             return element == container

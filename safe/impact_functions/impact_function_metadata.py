@@ -55,7 +55,7 @@ class ImpactFunctionMetadata(object):
     def simplify_layer_constraint(layer_constraint):
         """Simplify layer constraint to layer_type and data_type only.
 
-        :param layer_constraint: Dictionary that represent layer_constraint
+        :param layer_constraint: Dictionary that represents layer_constraint
         :type layer_constraint: dict
 
         :returns: Simple version of layer_constraint
@@ -83,11 +83,11 @@ class ImpactFunctionMetadata(object):
         :returns: boolean of the membership
         :rtype: bool
         """
-        if type(element) is list:
-            if type(container) is list:
+        if isinstance(element, list):
+            if isinstance(container, list):
                 return set(element) <= set(container)
         else:
-            if type(container) is list:
+            if isinstance(container, list):
                 return element in container
             else:
                 return element == container

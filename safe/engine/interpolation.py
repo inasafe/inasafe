@@ -17,54 +17,55 @@ from safe.gis.polygon import (
     clip_lines_by_polygons,
     clip_grid_by_polygons)
 from safe.storage.vector import Vector, convert_polygons_to_centroids
+from safe.storage.raster import Raster
 from safe.storage.utilities import geometry_type_to_string
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 
 
-def assign_hazard_values_to_exposure_data(hazard, exposure,
-                                          layer_name=None,
-                                          attribute_name=None,
-                                          mode='linear'):
-    """Assign hazard values to exposure data
+def assign_hazard_values_to_exposure_data(
+        hazard,
+        exposure,
+        layer_name=None,
+        attribute_name=None,
+        mode='linear'):
+    """Assign hazard values to exposure data.
 
-        This is the high level wrapper around interpolation functions for
-        different combinations of data types.
+    This is the high level wrapper around interpolation functions for
+    different combinations of data types.
 
-    Args:
-           * hazard: Layer representing the hazard levels
-           * exposure: Layer representing the exposure data
-           * layer_name: Optional name of returned layer.
-                 If None (default) the name of the exposure layer is used for
-                 the returned layer.
-           * attribute_name:
-                 If hazard layer is of type raster, this will be the name for
-                 new attribute in the result containing the hazard level.
+    :param hazard: Layer representing the hazard levels
 
-                 If None (default) the name of hazard layer is used.
+    :param exposure: Layer representing the exposure data
 
-                 If hazard layer is polygon and exposure layer raster,
-                 this will be the name of the new attribute containing the
-                 raster value at each point.
+    :param layer_name: Optional name of returned layer. If None (default)
+        the name of the exposure layer is used for the returned layer.
 
-                 If hazard and exposure layers are both of type vector,
-                 this attribute is ignored.
+    :param attribute_name:
+        If hazard layer is of type raster, this will be the name for new
+        attribute in the result containing the hazard level.
 
-                 If hazard and exposure layers are both of type raster,
-                 this attribute is ignored.
+        If None (default) the name of hazard layer is used.
 
-            * mode:
-                 Interpolation mode for raster to point interpolation only.
-                 Permissible values are 'linear' (default) which will employ
-                 billinear interpolation and 'constant' which will employ a
-                 piecewise constant interpolation. This parameter is passed
-                 all the way down to the underlying interpolation function
-                 interpolate2d (module common/interpolation2d.py)
+        If hazard layer is polygon and exposure layer raster, this will be
+        the name of the new attribute containing the raster value at each
+        point.
 
-    Returns:
-            Layer representing the exposure data with hazard levels assigned.
+        If hazard and exposure layers are both of type vector, this attribute
+        is ignored.
 
-    Raises:
-            Underlying exceptions are propagated
+        If hazard and exposure layers are both of type raster, this attribute
+        is ignored.
+
+    :param mode: Interpolation mode for raster to point interpolation only.
+        Permissible values are 'linear' (default) which will employ billinear
+        interpolation and 'constant' which will employ a piecewise constant
+        interpolation. This parameter is passed all the way down to the
+        underlying interpolation function interpolate2d (module
+        common/interpolation2d.py)
+
+    :returns: Layer representing the exposure data with hazard levels assigned.
+
+    :raises: Underlying exceptions are propagated
 
     Note:
             Admissible combinations of input layer types are
@@ -129,26 +130,34 @@ def assign_hazard_values_to_exposure_data(hazard, exposure,
                                                     attribute_name[:10]))
         raise InaSAFEError(msg)
 
-    layer_name, attribute_name = check_inputs(hazard, exposure,
-                                              layer_name, attribute_name)
+    layer_name, attribute_name = check_inputs(
+        hazard, exposure, layer_name, attribute_name)
     # Raster-Vector
     if hazard.is_raster and exposure.is_vector:
-        return interpolate_raster_vector(hazard, exposure,
-                                         layer_name=layer_name,
-                                         attribute_name=attribute_name,
-                                         mode=mode)
+        return interpolate_raster_vector(
+            hazard,
+            exposure,
+            layer_name=layer_name,
+            attribute_name=attribute_name,
+            mode=mode
+        )
     # Raster-Raster
     elif hazard.is_raster and exposure.is_raster:
         return interpolate_raster_raster(hazard, exposure)
+
     # Vector-Vector
     elif hazard.is_vector and exposure.is_vector:
-        return interpolate_polygon_vector(hazard, exposure,
-                                          layer_name=layer_name)
-    # Vector-Raster
+        return interpolate_polygon_vector(
+            hazard, exposure, layer_name=layer_name)
+
+    # Vector-Raster (returns tuple)
+    # (interpolated_layer, covered exposure layer)
     elif hazard.is_vector and exposure.is_raster:
-        return interpolate_polygon_raster(hazard, exposure,
-                                          layer_name=layer_name,
-                                          attribute_name=attribute_name)
+        return interpolate_polygon_raster(
+            hazard,
+            exposure,
+            layer_name=layer_name,
+            attribute_name=attribute_name)
     # Unknown
     else:
         msg = ('Unknown combination of types for hazard and exposure data. '
@@ -323,59 +332,74 @@ def interpolate_polygon_vector(source, target,
     return R
 
 
-def interpolate_polygon_raster(source, target,
-                               layer_name=None, attribute_name=None):
-    """Interpolate from polygon layer to raster data
+def interpolate_polygon_raster(
+        source, target, layer_name=None, attribute_name=None):
+    """Interpolate from polygon layer to raster data.
 
-    Args
-        * source: Polygon data set
-        * target: Raster data set
-        * layer_name: Optional name of returned interpolated layer.
-              If None the name of source is used for the returned layer.
-        * attribute_name: Name for new attribute.
-              If None (default) the name of layer target is used
-    Output
-        I: Vector data set; points located as target with
-           values interpolated from source
-
-    Note:
+    .. note:
         Each point in the resulting dataset will have an attribute
-        'polygon_id' which refers to the polygon it belongs to.
+        'polygon_id' which refers to the polygon it belongs to and
+        'grid_point' which refers to the grid point of the target.
 
+    :param source: Polygon data set.
+    :type source: Vector
+
+    :param target: Raster data set.
+    :type target: Raster
+
+    :param layer_name: Optional name of returned interpolated layer. If None
+        the name of source is used for the returned layer.
+    :type layer_name: basestring
+
+    :param attribute_name: Name for new attribute. If None (default) the name
+        of layer target is used
+    :type attribute_name: basestring
+
+    :returns: Tuple of Vector (points located as target with values
+        interpolated from source) and Raster  (raster data that are coincide
+        with the source)
+    :rtype: Vector
     """
-
     # Input checks
-    verify(target.is_raster)
-    verify(source.is_vector)
     verify(source.is_polygon_data)
+    verify(target.is_raster)
 
     # Run underlying clipping algorithm
     polygon_geometry = source.get_geometry(as_geometry_objects=True)
 
     polygon_attributes = source.get_data()
-    res = clip_grid_by_polygons(target.get_data(scaling=False),
-                                target.get_geotransform(),
-                                polygon_geometry)
+    covered_source, covered_target = clip_grid_by_polygons(
+        target.get_data(scaling=False),
+        target.get_geotransform(),
+        polygon_geometry
+    )
 
     # Create one new point layer with interpolated attributes
     new_geometry = []
     new_attributes = []
-    for i, (geometry, values) in enumerate(res):
-
+    for i, (geometry, values) in enumerate(covered_source):
         # For each polygon assign attributes to points that fall inside it
         for j, geom in enumerate(geometry):
             attr = polygon_attributes[i].copy()  # Attributes for this polygon
             attr[attribute_name] = values[j]  # Attribute value from grid cell
             attr['polygon_id'] = i  # Store id for associated polygon
-
+            attr['grid_point'] = geom  # Store grid point for associated grid
             new_attributes.append(attr)
             new_geometry.append(geom)
 
-    R = Vector(data=new_attributes,
-               projection=source.get_projection(),
-               geometry=new_geometry,
-               name=layer_name)
-    return R
+    interpolated_layer = Vector(
+        data=new_attributes,
+        projection=source.get_projection(),
+        geometry=new_geometry,
+        name=layer_name)
+
+    covered_target = Raster(
+        data=covered_target,
+        projection=target.get_projection(),
+        geotransform=target.get_geotransform(),
+        name=layer_name)
+
+    return interpolated_layer, covered_target
 
 
 def interpolate_raster_vector_points(source, target,
@@ -427,11 +451,14 @@ def interpolate_raster_vector_points(source, target,
         values = interpolate_raster(longitudes, latitudes, A,
                                     coordinates, mode=mode)
     except (BoundsError, InaSAFEError), e:
-        msg = (tr('Could not interpolate from raster layer %(raster)s to '
-                 'vector layer %(vector)s. Error message: %(error)s')
-               % {'raster': source.get_name(),
-                  'vector': target.get_name(),
-                  'error': str(e)})
+        msg = (
+            tr(
+                'Could not interpolate from raster layer %(raster)s to '
+                'vector layer %(vector)s. Error message: %(error)s'
+            ) % {
+                'raster': source.get_name(),
+                'vector': target.get_name(),
+                'error': str(e)})
         raise InaSAFEError(msg)
 
     # Add interpolated attribute to existing attributes and return
@@ -632,9 +659,10 @@ def tag_polygons_by_grid(polygons, grid, threshold=0, tag='affected'):
     polygon_geometry = polygons.get_geometry(as_geometry_objects=True)
 
     # Separate grid points by polygon
-    res = clip_grid_by_polygons(grid.get_data(),
-                                grid.get_geotransform(),
-                                polygon_geometry)
+    res, _ = clip_grid_by_polygons(
+        grid.get_data(),
+        grid.get_geotransform(),
+        polygon_geometry)
 
     # Create new polygon layer with tag set according to grid values
     # and threshold

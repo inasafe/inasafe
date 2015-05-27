@@ -48,8 +48,8 @@ DEVNULL = open(os.devnull, 'w')
 # we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
 
 # Assuming test data three lvls up
-pardir = os.path.abspath(os.path.join(os.path.realpath(os.path.dirname(
-    __file__)),
+pardir = os.path.abspath(os.path.join(
+    os.path.realpath(os.path.dirname(__file__)),
     '..',
     '..',
     '..'))
@@ -232,7 +232,7 @@ def load_layer(layer_path):
         raise Exception(message)
 
     # noinspection PyUnresolvedReferences
-    message = 'Layer "%s" is not valid' % str(layer.source())
+    message = 'Layer "%s" is not valid' % layer.source()
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
         print message
@@ -922,6 +922,7 @@ def load_standard_layers(dock=None):
         test_data_path('hazard', 'volcano_point.shp'),
         test_data_path('exposure', 'roads.shp'),
         test_data_path('hazard', 'flood_multipart_polygons.shp'),
+        test_data_path('hazard', 'classified_generic_polygon.shp'),
         test_data_path('hazard', 'volcano_krb.shp'),
         test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
         test_data_path('hazard', 'classified_flood_20_20.asc'),

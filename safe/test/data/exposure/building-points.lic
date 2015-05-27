@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Kristy Van Putten, AIFDR</author>
+  </metadata>
+
+  <datafile>
+    <filename>building-points.shp</filename>
+    <checksum>4214404931</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>building-points.shx</filename>
+    <checksum>1466010406</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>building-points.dbf</filename>
+    <checksum>1012652730</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>building-points.license</filename>
+    <checksum>1940204668</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+</ga_license_file>

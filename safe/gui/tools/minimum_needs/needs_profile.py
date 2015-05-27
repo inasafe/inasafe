@@ -63,8 +63,8 @@ class NeedsProfile(MinimumNeeds):
 
         if not self.minimum_needs or self.minimum_needs == u'':
             # Load the most relevant minimum needs
-            # If there are more than one profile exist, just use defaults so
-            # that user doesnt get confused.
+            # If more than one profile exists, just use defaults so
+            # the user doesn't get confused.
             profiles = self.get_profiles()
             if len(profiles) == 1:
                 profile = self.get_profiles()[0]
@@ -162,6 +162,21 @@ class NeedsProfile(MinimumNeeds):
         profiles = sort_by_locale(profiles, self.locale)
         return profiles
 
+    def precision_of(self, number_as_text):
+        """The number of digits after the decimal will be counted and used
+        as returned as the precision.
+
+        :param number_as_text: A textual representation of the number whose
+            precision we wish to determine.
+        :type number_as_text: basestring
+
+        :returns: The precision of the passed in textual
+         representation of a number.
+        :rtype: int
+        """
+        precision = number_as_text.split('.')[1]
+        return len(precision)
+
     def get_needs_parameters(self):
         """Get the minimum needs resources in parameter format
 
@@ -187,6 +202,17 @@ class NeedsProfile(MinimumNeeds):
             parameter.unit.plural = resource['Units']
             parameter.unit.abbreviation = resource['Unit abbreviation']
             parameter.value = float(resource['Default'])
+            # choose highest precision between resource's parameters
+            # start with default of 1
+            precisions = [1]
+            precision_influence = [
+                'Maximum allowed', 'Minimum allowed', 'Default']
+            for element in precision_influence:
+                resource_element = str(resource[element])
+                if resource[element] is not None and '.' in resource_element:
+                    precisions.append(self.precision_of(resource_element))
+
+            parameter.precision = max(precisions)
             parameters.append(parameter)
         return parameters
 

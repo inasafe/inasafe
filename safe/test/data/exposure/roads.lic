@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Tim Sutton, Kartoza</author>
+  </metadata>
+
+  <datafile>
+    <filename>roads.shp</filename>
+    <checksum>217969303</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>roads.shx</filename>
+    <checksum>2906663094</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>roads.dbf</filename>
+    <checksum>1950992452</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>roads.license</filename>
+    <checksum>1940204668</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Tim Sutton</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
+  </datafile>
+
+</ga_license_file>

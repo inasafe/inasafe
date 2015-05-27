@@ -424,34 +424,48 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
+        # Flag to check valid organization logo
+        invalid_logo_size = False
+        logo_not_exist = False
+
         if self.organisation_logo_path:
             dock_width = float(self.width())
 
             # Dont let the image be more tha 100px hight
             maximum_height = 100.0  # px
             pixmap = QtGui.QPixmap(self.organisation_logo_path)
-            height_ratio = maximum_height / pixmap.height()
-            maximum_width = int(pixmap.width() * height_ratio)
+            # it will throw Overflow Error if pixmap.height() == 0
+            if pixmap.height() > 0:
 
-            # Don't let the image be more than the dock width wide
-            if maximum_width > dock_width:
-                width_ratio = dock_width / float(pixmap.width())
-                maximum_height = int(pixmap.height() * width_ratio)
-                maximum_width = dock_width
+                height_ratio = maximum_height / pixmap.height()
+                maximum_width = int(pixmap.width() * height_ratio)
 
-            too_high = pixmap.height() > maximum_height
-            too_wide = pixmap.width() > dock_width
+                # Don't let the image be more than the dock width wide
+                if maximum_width > dock_width:
+                    width_ratio = dock_width / float(pixmap.width())
+                    maximum_height = int(pixmap.height() * width_ratio)
+                    maximum_width = dock_width
 
-            if too_wide or too_high:
-                pixmap = pixmap.scaled(
-                    maximum_width, maximum_height, Qt.KeepAspectRatio)
+                too_high = pixmap.height() > maximum_height
+                too_wide = pixmap.width() > dock_width
 
-            self.organisation_logo.setMaximumWidth(maximum_width)
-            # We have manually scaled using logic above
-            self.organisation_logo.setScaledContents(False)
-            self.organisation_logo.setPixmap(pixmap)
+                if too_wide or too_high:
+                    pixmap = pixmap.scaled(
+                        maximum_width, maximum_height, Qt.KeepAspectRatio)
 
-        if self.organisation_logo_path and flag:
+                self.organisation_logo.setMaximumWidth(maximum_width)
+                # We have manually scaled using logic above
+                self.organisation_logo.setScaledContents(False)
+                self.organisation_logo.setPixmap(pixmap)
+            else:
+                # handle zero pixmap height and or nonexistent files
+                if not os.path.exists(self.organisation_logo_path):
+                    logo_not_exist = True
+                else:
+                    invalid_logo_size = True
+
+        if (self.organisation_logo_path and flag and
+                not invalid_logo_size and not logo_not_exist):
             self._show_organisation_logo()
         else:
             self.organisation_logo.hide()
@@ -478,6 +492,28 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'Please check in Plugins -> InaSAFE -> Options that your '
                     'paths are still correct and update them if needed.'
                 ), QtGui.QMessageBox.Ok)
+
+        # RM: this is a fix for nonexistent organization logo or zero height
+        if logo_not_exist:
+            QtGui.QMessageBox.warning(
+                self, self.tr('InaSAFE %s' % get_version()),
+                self.tr(
+                    'The file for organization logo in %s doesn\'t exists. '
+                    'Please check in Plugins -> InaSAFE -> Options that your '
+                    'paths are still correct and update them if needed.' %
+                    self.organisation_logo_path
+                ), QtGui.QMessageBox.Ok)
+        if invalid_logo_size:
+            QtGui.QMessageBox.warning(
+                self, self.tr('InaSAFE %s' % get_version()),
+                self.tr(
+                    'The file for organization logo has zero height. Please '
+                    'provide valid file for organization logo.'
+                ), QtGui.QMessageBox.Ok)
+        if logo_not_exist or invalid_logo_size:
+            settings.setValue(
+                'inasafe/organisation_logo_path',
+                default_organisation_logo_path())
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
@@ -517,7 +553,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         message = m.Message()
         message.add(LOGO_ELEMENT)
-        message.add(m.Heading('Getting started', **INFO_STYLE))
+        message.add(m.Heading(self.tr('Getting started'), **INFO_STYLE))
         notes = m.Paragraph(
             self.tr(
                 'These are the minimum steps you need to follow in order '
@@ -547,13 +583,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.tr(' button below.')))
         message.add(basics_list)
 
-        message.add(m.Heading('Limitations', **WARNING_STYLE))
+        message.add(m.Heading(self.tr('Limitations'), **WARNING_STYLE))
         caveat_list = m.NumberedList()
         for limitation in limitations():
             caveat_list.add(limitation)
         message.add(caveat_list)
 
-        message.add(m.Heading('Disclaimer', **WARNING_STYLE))
+        message.add(m.Heading(self.tr('Disclaimer'), **WARNING_STYLE))
         message.add(m.Paragraph(disclaimer()))
 
         return message
@@ -567,8 +603,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # TODO refactor impact_functions so it is accessible and user here
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
-        notes = m.Paragraph(self.tr(
-            'You can now proceed to run your model by clicking the'),
+        notes = m.Paragraph(
+            self.tr('You can now proceed to run your model by clicking the'),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
@@ -683,7 +719,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 title=self.tr('Error while saving'),
                 message=self.tr("The destination location must be writable."))
 
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             display_critical_message_bar(
                 title=self.tr('Error while saving'),
                 message=self.tr("Something went wrong."))
@@ -1359,7 +1395,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         else:
             message = self.tr(
                 'Impact layer %s was neither a raster or a vector layer') % (
-                qgis_impact_layer.source())
+                    qgis_impact_layer.source())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
@@ -1368,7 +1404,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.show_intermediate_layers:
             layers_to_add.append(self.analysis.aggregator.layer)
         layers_to_add.append(qgis_impact_layer)
+        active_function = self.active_impact_function
         QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
+        self.active_impact_function = active_function
+        self.impact_function_parameters = \
+            self.active_impact_function.parameters
         # make sure it is active in the legend - needed since QGIS 2.4
         self.iface.setActiveLayer(qgis_impact_layer)
         # then zoom to it
@@ -1533,6 +1573,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.get_layers_lock:
             return
 
+        # Do nothing if there is no active layer - see #1861
+        if not self._has_active_layer():
+            self.show_static_message(self.getting_started_message())
+
+        # Now try to read the keywords and show them in the dock
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
@@ -1698,7 +1743,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             question = self.tr(
                 'The composer template you are printing to is missing '
                 'these elements: %s. Do you still want to continue') % (
-                ', '.join(impact_report.missing_elements))
+                    ', '.join(impact_report.missing_elements))
             # noinspection PyCallByClass,PyTypeChecker
             answer = QtGui.QMessageBox.question(
                 self,
@@ -1845,6 +1890,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         except InvalidGeometryError:
             return
 
+    def _has_active_layer(self):
+        """Check if there is a layer active in the legend.
+
+        .. versionadded:: 3.1
+
+        :returns: True if there is a layer highlighted in the legend.
+        :rtype: bool
+        """
+        layer = self.iface.activeLayer()
+        return layer is not None
+
     def show_next_analysis_extent(self):
         """Update the rubber band showing where the next analysis extent is.
 
@@ -1865,7 +1921,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             next_analysis_extent = analysis.clip_parameters[1]
 
             self.extent.show_next_analysis_extent(next_analysis_extent)
-
+            self.pbnRunStop.setEnabled(True)
         except (AttributeError, InsufficientOverlapError):
-            # No layers loaded etc.
-            return
+            # For issue #618
+            legend = self.iface.legendInterface()
+            # This logic for #1811
+            layers = legend.layers()
+            visible_count = len(layers)
+            if self.show_only_visible_layers_flag:
+                visible_count = 0
+                for layer in layers:
+                    if legend.isLayerVisible(layer):
+                        visible_count += 1
+            if visible_count == 0:
+                self.show_static_message(self.getting_started_message())
+            self.pbnRunStop.setEnabled(False)

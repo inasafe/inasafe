@@ -6,7 +6,8 @@ from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding_full,
-    population_rounding
+    population_rounding,
+    has_no_data
 )
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.inundation\
@@ -41,7 +42,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
         self.parameters = add_needs_parameters(self.parameters)
 
     def _tabulate(self, counts, evacuated, minimum_needs, question, rounding,
-                  thresholds, total):
+                  thresholds, total, no_data_warning):
         # noinspection PyListCreation
         table_body = [
             question,
@@ -91,6 +92,13 @@ class TsunamiEvacuationFunction(ImpactFunction):
                         'hi': thresholds[i + 1],
                         'val': format_int(val[0])})
                 table_body.append(TableRow(s))
+        if no_data_warning:
+            table_body.extend([
+                tr('The layers contained `no data`. This missing data was '
+                   'carried through to the impact layer.'),
+                tr('`No data` values in the impact layer were treated as 0 '
+                   'when counting the affected or total population.')
+            ])
 
         return table_body, total_needs
 
@@ -126,10 +134,15 @@ class TsunamiEvacuationFunction(ImpactFunction):
             'Expected thresholds to be a list. Got %s' % str(thresholds))
 
         # Extract data as numeric arrays
-        data = hazard_layer.get_data(nan=0.0)  # Depth
+        data = hazard_layer.get_data(nan=True)  # Depth
+        no_data_warning = False
+        if has_no_data(data):
+            no_data_warning = True
 
         # Calculate impact as population exposed to depths > max threshold
-        population = exposure_layer.get_data(nan=0.0, scaling=True)
+        population = exposure_layer.get_data(nan=True, scaling=True)
+        if has_no_data(population):
+            no_data_warning = True
 
         # Calculate impact to intermediate thresholds
         counts = []
@@ -145,15 +158,19 @@ class TsunamiEvacuationFunction(ImpactFunction):
                 medium = numpy.where((data >= lo) * (data < hi), population, 0)
 
             # Count
-            val = int(numpy.sum(medium))
+            val = int(numpy.nansum(medium))
 
             # Sensible rounding
             val, rounding = population_rounding_full(val)
             counts.append([val, rounding])
 
+        # Carry the no data values forward to the impact layer.
+        impact = numpy.where(numpy.isnan(population), numpy.nan, impact)
+        impact = numpy.where(numpy.isnan(data), numpy.nan, impact)
+
         # Count totals
         evacuated, rounding = counts[-1]
-        total = int(numpy.sum(population))
+        total = int(numpy.nansum(population))
         # Don't show digits less than a 1000
         total = population_rounding(total)
 
@@ -163,9 +180,15 @@ class TsunamiEvacuationFunction(ImpactFunction):
         ]
 
         # Generate impact report for the pdf map
-        table_body, total_needs = self._tabulate(counts, evacuated,
-                                                 minimum_needs, self.question,
-                                                 rounding, thresholds, total)
+        table_body, total_needs = self._tabulate(
+            counts,
+            evacuated,
+            minimum_needs,
+            self.question,
+            rounding,
+            thresholds,
+            total,
+            no_data_warning)
 
         # Result
         impact_summary = Table(table_body).toNewlineFreeString()

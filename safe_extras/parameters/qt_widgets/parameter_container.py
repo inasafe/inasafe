@@ -8,7 +8,7 @@ __copyright__ = 'ismail@kartoza.com'
 __doc__ = ''
 
 from PyQt4.QtGui import (
-    QWidget, QScrollArea, QVBoxLayout, QGridLayout, QSizePolicy, QColor)
+    QWidget, QVBoxLayout, QGridLayout, QSizePolicy, QColor)
 from qt_widgets.qt4_parameter_factory import Qt4ParameterFactory
 
 
@@ -37,15 +37,9 @@ class ParameterContainer(QWidget, object):
         self.widget = QWidget()
         self.widget.setLayout(self.vertical_layout)
 
-        # Scroll area to make the container scroll-able
-        self.scroll_area = QScrollArea()
-        self.scroll_area.setWidgetResizable(True)
-        # self.scroll_area.setSizePolicy(QSizePolicy.Expanding)
-        self.scroll_area.setWidget(self.widget)
-
         # Main layout of the container
         self.main_layout = QGridLayout()
-        self.main_layout.addWidget(self.scroll_area)
+        self.main_layout.addWidget(self.widget)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         # self.main_layout.addStretch(1)
         self.setLayout(self.main_layout)

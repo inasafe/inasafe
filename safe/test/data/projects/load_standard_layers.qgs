@@ -3,40 +3,43 @@
   <title></title>
   <layer-tree-group expanded="1" checked="Qt::Checked" name="">
     <customproperties/>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="building_points20150407115410621" name="Building centroids">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="building_points20150417145936946" name="Building centroids">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="buildings20150407115410641" name="Buildings">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="buildings20150417145936968" name="Buildings">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="volcano_point20150407115410660" name="Volcano Point">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="volcano_point20150417145936990" name="Volcano Point">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="roads20150407115410669" name="Roads">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="roads20150417145937000" name="Roads">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="flood_multipart_polygons20150407115410693" name="Flood Polygon">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="flood_multipart_polygons20150417145937026" name="Flood Polygon">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="volcano_krb20150407115410702" name="Volcano KRB">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="classified_generic_polygon20150417145952447" name="Generic Classified Polygon">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="0" checked="Qt::Checked" id="pop_binary_raster_20_2020150407115410720" name="Population">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="volcano_krb20150417145937036" name="Volcano KRB">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="0" checked="Qt::Checked" id="classified_flood_20_2020150407115410742" name="Classified Flood">
+    <layer-tree-layer expanded="0" checked="Qt::Checked" id="pop_binary_raster_20_2020150417145937058" name="Population">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="0" checked="Qt::Checked" id="continuous_flood_20_2020150407115410763" name="Continuous Flood">
+    <layer-tree-layer expanded="0" checked="Qt::Checked" id="classified_flood_20_2020150417145937084" name="Classified Flood">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="tsunami_wgs8420150407115410785" name="Tsunami">
+    <layer-tree-layer expanded="0" checked="Qt::Checked" id="continuous_flood_20_2020150417145937109" name="Continuous Flood">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="earthquake20150407115410798" name="Earthquake">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="tsunami_wgs8420150417145937134" name="Tsunami">
       <customproperties/>
     </layer-tree-layer>
-    <layer-tree-layer expanded="1" checked="Qt::Checked" id="district_osm_jakarta20150407115410810" name="Dístríct's of Jakarta">
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="earthquake20150417145937149" name="Earthquake">
+      <customproperties/>
+    </layer-tree-layer>
+    <layer-tree-layer expanded="1" checked="Qt::Checked" id="district_osm_jakarta20150417145937161" name="Dístríct's of Jakarta">
       <customproperties/>
     </layer-tree-layer>
   </layer-tree-group>
@@ -44,13 +47,13 @@
   <mapcanvas>
     <units>degrees</units>
     <extent>
-      <xmin>106.78426509375071873</xmin>
-      <ymin>-6.22736504605729468</ymin>
-      <xmax>106.84374985361458243</xmax>
-      <ymax>-6.16579642517908777</ymax>
+      <xmin>106.67876029820529027</xmin>
+      <ymin>-6.38075920313922751</ymin>
+      <xmax>106.9817481614830541</xmax>
+      <ymax>-6.0725474111842459</ymax>
     </extent>
     <rotation>0</rotation>
-    <projections>0</projections>
+    <projections>1</projections>
     <destinationsrs>
       <spatialrefsys>
         <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
@@ -63,90 +66,144 @@
         <geographicflag>true</geographicflag>
       </spatialrefsys>
     </destinationsrs>
-    <layer_coordinate_transform_info/>
+    <layer_coordinate_transform_info>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_Jakarta_geographic20150326002223631"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="penduduk_jawa20141129151756563"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="continuous_flood_20_2020150417145937109"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32748" srcDatumTransform="-1" destDatumTransform="-1" layerid="tes20141129222937891"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="volcano_point20150417145936990"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Padang_WGS8420150326002223516"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="earthquake20150417145937149"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="kabupaten_jakarta20141129151831282"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Estimated_buildings_affected20141112171654470"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="donut20150326002223810"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="penduduk_jawa20150107171519445"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_which_need_evacuation20150106102115077"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_which_need_evacuation20141218113729128"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="tsunami_wgs8420150417145937134"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20141201111741558"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Merapi_alert20150326002223825"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32748" srcDatumTransform="-1" destDatumTransform="-1" layerid="bangunan_jakarta20141112171644115"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="volcano_krb20150417145937036"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Buildings_affected_by_volcanic_hazard_zone20150312151211680"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="eq_yogya_200620150326002223661"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Jakarta_RW_2007flood20150326002223690"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="glp10ag20150326002223528"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="roads_Maumere20150326002223793"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="pop_binary_raster_20_2020150417145937058"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="building_points20150417145936946"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="kabupaten_jakarta20141129223723174"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="district_osm_jakarta20150417145937161"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="DKI_buildings20150326002223742"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="merapi20150107171452995"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150417145936968"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Flood_Current_Depth_Jakarta_geographic20150326002223603"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="jakarta_flood_category_12320150326002223761"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Buildings_affected_by_volcanic_buffered_point20150313112508341"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Population_which_need_evacuation20150107101503262"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="tsunami_building_exposure20150326002223590"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Shakemap_Padang_200920150326002223544"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="classified_flood_20_2020150417145937084"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="classified_generic_polygon20150417145952447"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32748" srcDatumTransform="-1" destDatumTransform="-1" layerid="tes20141129223632791"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:32756" srcDatumTransform="-1" destDatumTransform="-1" layerid="tsunami_max_inundation_depth_utm56s20150326002223569"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="merapi_krb20150107171444229"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="kabupaten_jakarta_singlepart20150326002223841"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="buildings20150107171505952"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="Banjir_jakarta_200720141112171610871"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="roads20150417145937000"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="OSM_building_polygons_2011090520150326002223719"/>
+      <layer_coordinate_transform destAuthId="EPSG:4326" srcAuthId="EPSG:4326" srcDatumTransform="-1" destDatumTransform="-1" layerid="flood_multipart_polygons20150417145937026"/>
+    </layer_coordinate_transform_info>
   </mapcanvas>
   <visibility-presets/>
   <layer-tree-canvas>
     <custom-order enabled="0">
-      <item>building_points20150407115410621</item>
-      <item>buildings20150407115410641</item>
-      <item>volcano_point20150407115410660</item>
-      <item>roads20150407115410669</item>
-      <item>flood_multipart_polygons20150407115410693</item>
-      <item>volcano_krb20150407115410702</item>
-      <item>pop_binary_raster_20_2020150407115410720</item>
-      <item>classified_flood_20_2020150407115410742</item>
-      <item>continuous_flood_20_2020150407115410763</item>
-      <item>tsunami_wgs8420150407115410785</item>
-      <item>earthquake20150407115410798</item>
-      <item>district_osm_jakarta20150407115410810</item>
+      <item>building_points20150417145936946</item>
+      <item>buildings20150417145936968</item>
+      <item>volcano_point20150417145936990</item>
+      <item>roads20150417145937000</item>
+      <item>flood_multipart_polygons20150417145937026</item>
+      <item>volcano_krb20150417145937036</item>
+      <item>pop_binary_raster_20_2020150417145937058</item>
+      <item>classified_flood_20_2020150417145937084</item>
+      <item>continuous_flood_20_2020150417145937109</item>
+      <item>tsunami_wgs8420150417145937134</item>
+      <item>earthquake20150417145937149</item>
+      <item>district_osm_jakarta20150417145937161</item>
+      <item>classified_generic_polygon20150417145952447</item>
     </custom-order>
   </layer-tree-canvas>
   <legend updateDrawingOrder="true">
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Building centroids" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="building_points20150407115410621" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="building_points20150417145936946" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Buildings" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="buildings20150407115410641" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="buildings20150417145936968" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Volcano Point" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="volcano_point20150407115410660" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="volcano_point20150417145936990" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Roads" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="roads20150407115410669" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="roads20150417145937000" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Flood Polygon" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="flood_multipart_polygons20150407115410693" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="flood_multipart_polygons20150417145937026" visible="1"/>
+      </filegroup>
+    </legendlayer>
+    <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Generic Classified Polygon" showFeatureCount="0">
+      <filegroup open="true" hidden="false">
+        <legendlayerfile isInOverview="0" layerid="classified_generic_polygon20150417145952447" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Volcano KRB" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="volcano_krb20150407115410702" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="volcano_krb20150417145937036" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Population" showFeatureCount="0">
       <filegroup open="false" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="pop_binary_raster_20_2020150407115410720" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="pop_binary_raster_20_2020150417145937058" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Classified Flood" showFeatureCount="0">
       <filegroup open="false" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="classified_flood_20_2020150407115410742" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="classified_flood_20_2020150417145937084" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="false" checked="Qt::Checked" name="Continuous Flood" showFeatureCount="0">
       <filegroup open="false" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="continuous_flood_20_2020150407115410763" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="continuous_flood_20_2020150417145937109" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Tsunami" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="tsunami_wgs8420150407115410785" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="tsunami_wgs8420150417145937134" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Earthquake" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="earthquake20150407115410798" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="earthquake20150417145937149" visible="1"/>
       </filegroup>
     </legendlayer>
     <legendlayer drawingOrder="-1" open="true" checked="Qt::Checked" name="Dístríct's of Jakarta" showFeatureCount="0">
       <filegroup open="true" hidden="false">
-        <legendlayerfile isInOverview="0" layerid="district_osm_jakarta20150407115410810" visible="1"/>
+        <legendlayerfile isInOverview="0" layerid="district_osm_jakarta20150417145937161" visible="1"/>
       </filegroup>
     </legendlayer>
   </legend>
-  <projectlayers layercount="12">
+  <projectlayers layercount="13">
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>building_points20150407115410621</id>
+      <id>building_points20150417145936946</id>
       <datasource>../exposure/building-points.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -421,10 +478,10 @@
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <editform>.</editform>
+      <editform>../../../../../../../Documents/InaSAFE scenario/QGS Project</editform>
       <editforminit/>
       <featformsuppress>0</featformsuppress>
-      <annotationform>.</annotationform>
+      <annotationform>../../../../../../../Documents/InaSAFE scenario/QGS Project</annotationform>
       <editorlayout>generatedlayout</editorlayout>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
@@ -484,7 +541,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>buildings20150407115410641</id>
+      <id>buildings20150417145936968</id>
       <datasource>../exposure/buildings.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -731,10 +788,10 @@
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <editform>/home/akbar/dev/python/inasafe-dev/gisdata/InaSAFEPackages/Jakarta</editform>
+      <editform>/home/gisdata/InaSAFEPackages/Jakarta</editform>
       <editforminit/>
       <featformsuppress>0</featformsuppress>
-      <annotationform>/home/akbar/dev/python/inasafe-dev/gisdata/InaSAFEPackages/Jakarta</annotationform>
+      <annotationform>/home/gisdata/InaSAFEPackages/Jakarta</annotationform>
       <editorlayout>generatedlayout</editorlayout>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
@@ -797,7 +854,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
-      <id>classified_flood_20_2020150407115410742</id>
+      <id>classified_flood_20_2020150417145937084</id>
       <datasource>../hazard/classified_flood_20_20.asc</datasource>
       <title></title>
       <abstract></abstract>
@@ -851,8 +908,303 @@
       </pipe>
       <blendMode>0</blendMode>
     </maplayer>
+    <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="1" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
+      <id>classified_generic_polygon20150417145952447</id>
+      <datasource>../hazard/classified_generic_polygon.shp</datasource>
+      <title></title>
+      <abstract></abstract>
+      <keywordList>
+        <value></value>
+      </keywordList>
+      <layername>Generic Classified Polygon</layername>
+      <srs>
+        <spatialrefsys>
+          <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+          <srsid>3452</srsid>
+          <srid>4326</srid>
+          <authid>EPSG:4326</authid>
+          <description>WGS 84</description>
+          <projectionacronym>longlat</projectionacronym>
+          <ellipsoidacronym>WGS84</ellipsoidacronym>
+          <geographicflag>true</geographicflag>
+        </spatialrefsys>
+      </srs>
+      <provider encoding="System">ogr</provider>
+      <previewExpression></previewExpression>
+      <vectorjoins/>
+      <expressionfields/>
+      <map-layer-style-manager current="">
+        <map-layer-style name=""/>
+      </map-layer-style-manager>
+      <edittypes>
+        <edittype widgetv2type="TextEdit" name="h_zone">
+          <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
+        </edittype>
+      </edittypes>
+      <renderer-v2 attr="h_zone" symbollevels="0" type="categorizedSymbol">
+        <categories>
+          <category render="true" symbol="0" value="High Hazard Zone" label="High Hazard Zone"/>
+          <category render="true" symbol="1" value="Medium Hazard Zone" label="Medium Hazard Zone"/>
+          <category render="true" symbol="2" value="Low Hazard Zone" label="Low Hazard Zone"/>
+        </categories>
+        <symbols>
+          <symbol alpha="0.392157" type="fill" name="0">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0"/>
+              <prop k="color" v="122,1,119,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+          <symbol alpha="0.392157" type="fill" name="1">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0"/>
+              <prop k="color" v="247,104,161,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+          <symbol alpha="0.392157" type="fill" name="2">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0"/>
+              <prop k="color" v="254,235,226,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+        </symbols>
+        <source-symbol>
+          <symbol alpha="0.392157" type="fill" name="0">
+            <layer pass="0" class="SimpleFill" locked="0">
+              <prop k="border_width_map_unit_scale" v="0,0"/>
+              <prop k="color" v="174,147,124,255"/>
+              <prop k="joinstyle" v="bevel"/>
+              <prop k="offset" v="0,0"/>
+              <prop k="offset_map_unit_scale" v="0,0"/>
+              <prop k="offset_unit" v="MM"/>
+              <prop k="outline_color" v="0,0,0,255"/>
+              <prop k="outline_style" v="solid"/>
+              <prop k="outline_width" v="0.26"/>
+              <prop k="outline_width_unit" v="MM"/>
+              <prop k="style" v="solid"/>
+            </layer>
+          </symbol>
+        </source-symbol>
+        <colorramp type="gradient" name="[source]">
+          <prop k="color1" v="254,235,226,255"/>
+          <prop k="color2" v="122,1,119,255"/>
+          <prop k="discrete" v="0"/>
+          <prop k="stops" v="0.25;251,180,185,255:0.5;247,104,161,255:0.75;197,27,138,255"/>
+        </colorramp>
+        <invertedcolorramp value="1"/>
+        <rotation/>
+        <sizescale scalemethod="area"/>
+      </renderer-v2>
+      <customproperties>
+        <property key="labeling" value="pal"/>
+        <property key="labeling/addDirectionSymbol" value="false"/>
+        <property key="labeling/angleOffset" value="0"/>
+        <property key="labeling/blendMode" value="0"/>
+        <property key="labeling/bufferBlendMode" value="0"/>
+        <property key="labeling/bufferColorA" value="255"/>
+        <property key="labeling/bufferColorB" value="255"/>
+        <property key="labeling/bufferColorG" value="255"/>
+        <property key="labeling/bufferColorR" value="255"/>
+        <property key="labeling/bufferDraw" value="false"/>
+        <property key="labeling/bufferJoinStyle" value="64"/>
+        <property key="labeling/bufferNoFill" value="false"/>
+        <property key="labeling/bufferSize" value="1"/>
+        <property key="labeling/bufferSizeInMapUnits" value="false"/>
+        <property key="labeling/bufferSizeMapUnitMaxScale" value="0"/>
+        <property key="labeling/bufferSizeMapUnitMinScale" value="0"/>
+        <property key="labeling/bufferTransp" value="0"/>
+        <property key="labeling/centroidInside" value="false"/>
+        <property key="labeling/centroidWhole" value="false"/>
+        <property key="labeling/decimals" value="3"/>
+        <property key="labeling/displayAll" value="false"/>
+        <property key="labeling/dist" value="0"/>
+        <property key="labeling/distInMapUnits" value="false"/>
+        <property key="labeling/distMapUnitMaxScale" value="0"/>
+        <property key="labeling/distMapUnitMinScale" value="0"/>
+        <property key="labeling/enabled" value="false"/>
+        <property key="labeling/fieldName" value="h_zone"/>
+        <property key="labeling/fontBold" value="true"/>
+        <property key="labeling/fontCapitals" value="0"/>
+        <property key="labeling/fontFamily" value="Ubuntu"/>
+        <property key="labeling/fontItalic" value="false"/>
+        <property key="labeling/fontLetterSpacing" value="0"/>
+        <property key="labeling/fontLimitPixelSize" value="false"/>
+        <property key="labeling/fontMaxPixelSize" value="10000"/>
+        <property key="labeling/fontMinPixelSize" value="3"/>
+        <property key="labeling/fontSize" value="11"/>
+        <property key="labeling/fontSizeInMapUnits" value="false"/>
+        <property key="labeling/fontSizeMapUnitMaxScale" value="0"/>
+        <property key="labeling/fontSizeMapUnitMinScale" value="0"/>
+        <property key="labeling/fontStrikeout" value="false"/>
+        <property key="labeling/fontUnderline" value="false"/>
+        <property key="labeling/fontWeight" value="63"/>
+        <property key="labeling/fontWordSpacing" value="0"/>
+        <property key="labeling/formatNumbers" value="false"/>
+        <property key="labeling/isExpression" value="false"/>
+        <property key="labeling/labelOffsetInMapUnits" value="true"/>
+        <property key="labeling/labelOffsetMapUnitMaxScale" value="0"/>
+        <property key="labeling/labelOffsetMapUnitMinScale" value="0"/>
+        <property key="labeling/labelPerPart" value="false"/>
+        <property key="labeling/leftDirectionSymbol" value="&lt;"/>
+        <property key="labeling/limitNumLabels" value="false"/>
+        <property key="labeling/maxCurvedCharAngleIn" value="20"/>
+        <property key="labeling/maxCurvedCharAngleOut" value="-20"/>
+        <property key="labeling/maxNumLabels" value="2000"/>
+        <property key="labeling/mergeLines" value="false"/>
+        <property key="labeling/minFeatureSize" value="0"/>
+        <property key="labeling/multilineAlign" value="0"/>
+        <property key="labeling/multilineHeight" value="1"/>
+        <property key="labeling/namedStyle" value="Medium"/>
+        <property key="labeling/obstacle" value="true"/>
+        <property key="labeling/placeDirectionSymbol" value="0"/>
+        <property key="labeling/placement" value="1"/>
+        <property key="labeling/placementFlags" value="0"/>
+        <property key="labeling/plussign" value="false"/>
+        <property key="labeling/preserveRotation" value="true"/>
+        <property key="labeling/previewBkgrdColor" value="#ffffff"/>
+        <property key="labeling/priority" value="5"/>
+        <property key="labeling/quadOffset" value="4"/>
+        <property key="labeling/repeatDistance" value="0"/>
+        <property key="labeling/repeatDistanceMapUnitMaxScale" value="0"/>
+        <property key="labeling/repeatDistanceMapUnitMinScale" value="0"/>
+        <property key="labeling/repeatDistanceUnit" value="1"/>
+        <property key="labeling/reverseDirectionSymbol" value="false"/>
+        <property key="labeling/rightDirectionSymbol" value=">"/>
+        <property key="labeling/scaleMax" value="10000000"/>
+        <property key="labeling/scaleMin" value="1"/>
+        <property key="labeling/scaleVisibility" value="false"/>
+        <property key="labeling/shadowBlendMode" value="6"/>
+        <property key="labeling/shadowColorB" value="0"/>
+        <property key="labeling/shadowColorG" value="0"/>
+        <property key="labeling/shadowColorR" value="0"/>
+        <property key="labeling/shadowDraw" value="false"/>
+        <property key="labeling/shadowOffsetAngle" value="135"/>
+        <property key="labeling/shadowOffsetDist" value="1"/>
+        <property key="labeling/shadowOffsetGlobal" value="true"/>
+        <property key="labeling/shadowOffsetMapUnitMaxScale" value="0"/>
+        <property key="labeling/shadowOffsetMapUnitMinScale" value="0"/>
+        <property key="labeling/shadowOffsetUnits" value="1"/>
+        <property key="labeling/shadowRadius" value="1.5"/>
+        <property key="labeling/shadowRadiusAlphaOnly" value="false"/>
+        <property key="labeling/shadowRadiusMapUnitMaxScale" value="0"/>
+        <property key="labeling/shadowRadiusMapUnitMinScale" value="0"/>
+        <property key="labeling/shadowRadiusUnits" value="1"/>
+        <property key="labeling/shadowScale" value="100"/>
+        <property key="labeling/shadowTransparency" value="30"/>
+        <property key="labeling/shadowUnder" value="0"/>
+        <property key="labeling/shapeBlendMode" value="0"/>
+        <property key="labeling/shapeBorderColorA" value="255"/>
+        <property key="labeling/shapeBorderColorB" value="128"/>
+        <property key="labeling/shapeBorderColorG" value="128"/>
+        <property key="labeling/shapeBorderColorR" value="128"/>
+        <property key="labeling/shapeBorderWidth" value="0"/>
+        <property key="labeling/shapeBorderWidthMapUnitMaxScale" value="0"/>
+        <property key="labeling/shapeBorderWidthMapUnitMinScale" value="0"/>
+        <property key="labeling/shapeBorderWidthUnits" value="1"/>
+        <property key="labeling/shapeDraw" value="false"/>
+        <property key="labeling/shapeFillColorA" value="255"/>
+        <property key="labeling/shapeFillColorB" value="255"/>
+        <property key="labeling/shapeFillColorG" value="255"/>
+        <property key="labeling/shapeFillColorR" value="255"/>
+        <property key="labeling/shapeJoinStyle" value="64"/>
+        <property key="labeling/shapeOffsetMapUnitMaxScale" value="0"/>
+        <property key="labeling/shapeOffsetMapUnitMinScale" value="0"/>
+        <property key="labeling/shapeOffsetUnits" value="1"/>
+        <property key="labeling/shapeOffsetX" value="0"/>
+        <property key="labeling/shapeOffsetY" value="0"/>
+        <property key="labeling/shapeRadiiMapUnitMaxScale" value="0"/>
+        <property key="labeling/shapeRadiiMapUnitMinScale" value="0"/>
+        <property key="labeling/shapeRadiiUnits" value="1"/>
+        <property key="labeling/shapeRadiiX" value="0"/>
+        <property key="labeling/shapeRadiiY" value="0"/>
+        <property key="labeling/shapeRotation" value="0"/>
+        <property key="labeling/shapeRotationType" value="0"/>
+        <property key="labeling/shapeSVGFile" value=""/>
+        <property key="labeling/shapeSizeMapUnitMaxScale" value="0"/>
+        <property key="labeling/shapeSizeMapUnitMinScale" value="0"/>
+        <property key="labeling/shapeSizeType" value="0"/>
+        <property key="labeling/shapeSizeUnits" value="1"/>
+        <property key="labeling/shapeSizeX" value="0"/>
+        <property key="labeling/shapeSizeY" value="0"/>
+        <property key="labeling/shapeTransparency" value="0"/>
+        <property key="labeling/shapeType" value="0"/>
+        <property key="labeling/textColorA" value="255"/>
+        <property key="labeling/textColorB" value="0"/>
+        <property key="labeling/textColorG" value="0"/>
+        <property key="labeling/textColorR" value="0"/>
+        <property key="labeling/textTransp" value="0"/>
+        <property key="labeling/upsidedownLabels" value="0"/>
+        <property key="labeling/wrapChar" value=""/>
+        <property key="labeling/xOffset" value="0"/>
+        <property key="labeling/yOffset" value="0"/>
+      </customproperties>
+      <blendMode>0</blendMode>
+      <featureBlendMode>0</featureBlendMode>
+      <layerTransparency>0</layerTransparency>
+      <displayfield>KRB</displayfield>
+      <label>0</label>
+      <labelattributes>
+        <label fieldname="" text="Label"/>
+        <family fieldname="" name="MS Shell Dlg 2"/>
+        <size fieldname="" units="pt" value="12"/>
+        <bold fieldname="" on="0"/>
+        <italic fieldname="" on="0"/>
+        <underline fieldname="" on="0"/>
+        <strikeout fieldname="" on="0"/>
+        <color fieldname="" red="0" blue="0" green="0"/>
+        <x fieldname=""/>
+        <y fieldname=""/>
+        <offset x="0" y="0" units="pt" yfieldname="" xfieldname=""/>
+        <angle fieldname="" value="0" auto="0"/>
+        <alignment fieldname="" value="center"/>
+        <buffercolor fieldname="" red="255" blue="255" green="255"/>
+        <buffersize fieldname="" units="pt" value="1"/>
+        <bufferenabled fieldname="" on=""/>
+        <multilineenabled fieldname="" on=""/>
+        <selectedonly on=""/>
+      </labelattributes>
+      <editform>../../../../../../../Documents/InaSAFE scenario/QGS Project</editform>
+      <editforminit/>
+      <featformsuppress>0</featformsuppress>
+      <annotationform>../../../../../../../Documents/InaSAFE scenario/QGS Project</annotationform>
+      <editorlayout>generatedlayout</editorlayout>
+      <excludeAttributesWMS/>
+      <excludeAttributesWFS/>
+      <attributeactions/>
+      <edittypes>
+        <edittype widgetv2type="TextEdit" name="h_zone">
+          <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
+        </edittype>
+      </edittypes>
+    </maplayer>
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
-      <id>continuous_flood_20_2020150407115410763</id>
+      <id>continuous_flood_20_2020150417145937109</id>
       <datasource>../hazard/continuous_flood_20_20.asc</datasource>
       <title></title>
       <abstract></abstract>
@@ -907,7 +1259,7 @@
       <blendMode>0</blendMode>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="1" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>district_osm_jakarta20150407115410810</id>
+      <id>district_osm_jakarta20150417145937161</id>
       <datasource>../boundaries/district_osm_jakarta.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -995,10 +1347,10 @@
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <editform>.</editform>
+      <editform>../../../../../../../Documents/InaSAFE scenario/QGS Project</editform>
       <editforminit/>
       <featformsuppress>0</featformsuppress>
-      <annotationform>.</annotationform>
+      <annotationform>../../../../../../../Documents/InaSAFE scenario/QGS Project</annotationform>
       <editorlayout>generatedlayout</editorlayout>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
@@ -1019,7 +1371,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
-      <id>earthquake20150407115410798</id>
+      <id>earthquake20150417145937149</id>
       <datasource>../hazard/earthquake.tif</datasource>
       <title></title>
       <abstract></abstract>
@@ -1065,7 +1417,7 @@
       <blendMode>0</blendMode>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>flood_multipart_polygons20150407115410693</id>
+      <id>flood_multipart_polygons20150417145937026</id>
       <datasource>../hazard/flood_multipart_polygons.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -1117,7 +1469,7 @@
           <symbol alpha="1" type="fill" name="0">
             <layer pass="0" class="SimpleFill" locked="0">
               <prop k="border_width_map_unit_scale" v="0,0"/>
-              <prop k="color" v="142,57,92,255"/>
+              <prop k="color" v="172,141,191,255"/>
               <prop k="joinstyle" v="bevel"/>
               <prop k="offset" v="0,0"/>
               <prop k="offset_map_unit_scale" v="0,0"/>
@@ -1189,7 +1541,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
-      <id>pop_binary_raster_20_2020150407115410720</id>
+      <id>pop_binary_raster_20_2020150417145937058</id>
       <datasource>../exposure/pop_binary_raster_20_20.asc</datasource>
       <title></title>
       <abstract></abstract>
@@ -1244,7 +1596,7 @@
       <blendMode>0</blendMode>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Line" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>roads20150407115410669</id>
+      <id>roads20150417145937000</id>
       <datasource>../exposure/roads.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -1283,26 +1635,26 @@
         </edittype>
       </edittypes>
       <renderer-v2 symbollevels="0" type="RuleRenderer">
-        <rules key="{21f0395c-119e-4882-b382-23f67180ce4d}">
-          <rule scalemaxdenom="25000" key="{22f50b19-0e36-4b60-9bad-6dc259560cc2}" scalemindenom="1" label="1:25000">
-            <rule filter="&quot;TYPE&quot; = 'Motorway or highway'" key="{df3c5b6d-5f07-4c67-91db-95a27c3ab53c}" symbol="0" label="Motorway or highway"/>
-            <rule filter="&quot;TYPE&quot; = 'Motorway link'" key="{c0085c83-506f-4d75-a9b6-767076fa804a}" symbol="1" label="Motorway Link"/>
-            <rule filter="&quot;TYPE&quot; = 'Primary road'" key="{150685bb-3ebe-4219-a1d4-5f1b1e60f38e}" symbol="2" label="Primary road"/>
-            <rule filter="&quot;TYPE&quot; = 'Primary link'" key="{965f1c2e-87ed-4b6c-98e9-a5348a1c4a83}" symbol="3" label="Primary link"/>
-            <rule filter="&quot;TYPE&quot; = 'Tertiary'" key="{6e655d14-3e0b-4718-b0f6-e5cdd17c0935}" symbol="4" label="Tertiary"/>
-            <rule filter="&quot;TYPE&quot; = 'Tertiary link'" key="{86cb0d5f-86a5-43a7-8dcc-d9194088d489}" symbol="5" label="Tertiary link"/>
-            <rule filter="&quot;TYPE&quot; = 'Secondary'" key="{263a8359-e58b-4d62-bc64-f747d1273b2a}" symbol="6" label="Secondary"/>
-            <rule filter="&quot;TYPE&quot; = 'Secondary link'" key="{548b960d-d3bc-41c5-b85e-6c1be0555f71}" symbol="7" label="Secondary link"/>
-            <rule filter="&quot;TYPE&quot; = 'Road, residential, living street, etc.'" key="{9e6c7560-fcc0-4875-ab37-09e1af61a904}" symbol="8" label="Road, residential, living street, etc."/>
-            <rule filter="&quot;TYPE&quot; = 'Track'" key="{4294c757-e7e1-4a45-9410-d8f729724e53}" symbol="9" label="Track"/>
-            <rule filter="&quot;TYPE&quot; = 'Cycleway, footpath, etc.'" key="{8d552a7d-c730-4559-9063-e7139bd95b70}" symbol="10" label="Cycleway, footpath etc."/>
+        <rules key="{4e1eb5ce-1e04-4fb4-839c-cc3d712e1c36}">
+          <rule scalemaxdenom="25000" key="{451c38b7-0c5d-45d9-b6d6-e7ff2b0c8c8b}" scalemindenom="1" label="1:25000">
+            <rule filter="&quot;TYPE&quot; = 'Motorway or highway'" key="{48a598dd-b006-43e7-afb8-3afdc417cc0f}" symbol="0" label="Motorway or highway"/>
+            <rule filter="&quot;TYPE&quot; = 'Motorway link'" key="{8a7dd05a-e767-46a1-8680-d77821c067ae}" symbol="1" label="Motorway Link"/>
+            <rule filter="&quot;TYPE&quot; = 'Primary road'" key="{c23c24bd-efce-40ed-86df-52b2edb72dd9}" symbol="2" label="Primary road"/>
+            <rule filter="&quot;TYPE&quot; = 'Primary link'" key="{7f35ce8e-dab6-4859-8a88-f117773c25f6}" symbol="3" label="Primary link"/>
+            <rule filter="&quot;TYPE&quot; = 'Tertiary'" key="{5123ce55-1cba-4e01-9ea8-869716f6ee0f}" symbol="4" label="Tertiary"/>
+            <rule filter="&quot;TYPE&quot; = 'Tertiary link'" key="{529b02b2-0bec-496c-b0c8-ddebee5fcb96}" symbol="5" label="Tertiary link"/>
+            <rule filter="&quot;TYPE&quot; = 'Secondary'" key="{bc06b60d-90c6-46f5-94bf-e8eee2d775f3}" symbol="6" label="Secondary"/>
+            <rule filter="&quot;TYPE&quot; = 'Secondary link'" key="{1ec731e5-10b8-4cf9-8774-3ea91ac3f8bf}" symbol="7" label="Secondary link"/>
+            <rule filter="&quot;TYPE&quot; = 'Road, residential, living street, etc.'" key="{79daba02-44fe-4c17-8f19-1e505fd779ab}" symbol="8" label="Road, residential, living street, etc."/>
+            <rule filter="&quot;TYPE&quot; = 'Track'" key="{d4b42b50-a0a0-4d63-a8a1-c48fed30d732}" symbol="9" label="Track"/>
+            <rule filter="&quot;TYPE&quot; = 'Cycleway, footpath, etc.'" key="{c2747e99-190b-4805-9218-40dfe6a47eaf}" symbol="10" label="Cycleway, footpath etc."/>
           </rule>
-          <rule scalemaxdenom="50000" key="{f848c3e5-3a18-40fc-96d7-cb2aacfec327}" symbol="11" scalemindenom="25001" label="25k to 50k">
-            <rule filter=" &quot;TYPE&quot;  =  'Motorway or highway'" key="{5149b725-0c88-4ef2-a1ed-f48a27eca0f2}" symbol="12" label="Motorway or highway"/>
-            <rule filter="&quot;TYPE&quot; = 'Primary road'" key="{28313afb-f0a6-4ede-a2c8-f0cdac325e01}" symbol="13" label="Primary"/>
+          <rule scalemaxdenom="50000" key="{696a220f-3ad0-47a3-9fe7-6cf1a7f6651c}" symbol="11" scalemindenom="25001" label="25k to 50k">
+            <rule filter=" &quot;TYPE&quot;  =  'Motorway or highway'" key="{ef39a25e-56c6-455a-a9e3-040782f756c6}" symbol="12" label="Motorway or highway"/>
+            <rule filter="&quot;TYPE&quot; = 'Primary road'" key="{08d420cb-dc5d-4f64-b613-1ed347cc51c4}" symbol="13" label="Primary"/>
           </rule>
-          <rule scalemaxdenom="10000000" key="{7b4b141a-c040-421f-8240-d60da30f56e9}" symbol="14" scalemindenom="50001" label="50k +">
-            <rule filter=" &quot;TYPE&quot;  =  'Motorway or highway' " key="{3df2802f-eaa0-40e9-b9a3-870c79ed70df}" symbol="15" label="Motorway or highway"/>
+          <rule scalemaxdenom="10000000" key="{ca0d944c-4e02-46d3-83c6-64dc9279b980}" symbol="14" scalemindenom="50001" label="50k +">
+            <rule filter=" &quot;TYPE&quot;  =  'Motorway or highway' " key="{2df2f53a-136d-42bc-8545-48c418f8dbdd}" symbol="15" label="Motorway or highway"/>
           </rule>
         </rules>
         <symbols>
@@ -2031,7 +2383,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="-4.65661e-10" maximumScale="1e+08" type="raster" hasScaleBasedVisibilityFlag="0">
-      <id>tsunami_wgs8420150407115410785</id>
+      <id>tsunami_wgs8420150417145937134</id>
       <datasource>../hazard/tsunami_wgs84.tif</datasource>
       <title></title>
       <abstract></abstract>
@@ -2085,7 +2437,7 @@
       <blendMode>0</blendMode>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="1" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>volcano_krb20150407115410702</id>
+      <id>volcano_krb20150417145937036</id>
       <datasource>../hazard/volcano_krb.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -2229,10 +2581,10 @@
         <multilineenabled fieldname="" on=""/>
         <selectedonly on=""/>
       </labelattributes>
-      <editform>.</editform>
+      <editform>../../../../../../../Documents/InaSAFE scenario/QGS Project</editform>
       <editforminit/>
       <featformsuppress>0</featformsuppress>
-      <annotationform>.</annotationform>
+      <annotationform>../../../../../../../Documents/InaSAFE scenario/QGS Project</annotationform>
       <editorlayout>generatedlayout</editorlayout>
       <excludeAttributesWMS/>
       <excludeAttributesWFS/>
@@ -2250,7 +2602,7 @@
       </edittypes>
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Point" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
-      <id>volcano_point20150407115410660</id>
+      <id>volcano_point20150417145936990</id>
       <datasource>../hazard/volcano_point.shp</datasource>
       <title></title>
       <abstract></abstract>
@@ -2326,7 +2678,7 @@
           <symbol alpha="1" type="marker" name="0">
             <layer pass="0" class="SimpleMarker" locked="0">
               <prop k="angle" v="0"/>
-              <prop k="color" v="219,159,5,255"/>
+              <prop k="color" v="100,227,187,255"/>
               <prop k="horizontal_anchor_point" v="1"/>
               <prop k="name" v="circle"/>
               <prop k="offset" v="0,0"/>
@@ -2429,15 +2781,39 @@
     </maplayer>
   </projectlayers>
   <properties>
-    <SpatialRefSys>
-      <ProjectCRSProj4String type="QString">+proj=longlat +datum=WGS84 +no_defs</ProjectCRSProj4String>
-      <ProjectCrs type="QString">EPSG:4326</ProjectCrs>
-      <ProjectCRSID type="int">3452</ProjectCRSID>
-      <ProjectionsEnabled type="int">0</ProjectionsEnabled>
-    </SpatialRefSys>
+    <WMSContactPerson type="QString"></WMSContactPerson>
+    <WMSOnlineResource type="QString"></WMSOnlineResource>
+    <WMSUseLayerIDs type="bool">false</WMSUseLayerIDs>
+    <WMSContactOrganization type="QString"></WMSContactOrganization>
+    <WMSKeywordList type="QStringList">
+      <value></value>
+    </WMSKeywordList>
+    <WFSUrl type="QString"></WFSUrl>
     <Paths>
       <Absolute type="bool">false</Absolute>
     </Paths>
+    <WMSServiceTitle type="QString"></WMSServiceTitle>
+    <WFSLayers type="QStringList"/>
+    <WMSContactMail type="QString"></WMSContactMail>
+    <PositionPrecision>
+      <DecimalPlaces type="int">2</DecimalPlaces>
+      <Automatic type="bool">true</Automatic>
+      <DegreeFormat type="QString">D</DegreeFormat>
+    </PositionPrecision>
+    <WCSUrl type="QString"></WCSUrl>
+    <WMSContactPhone type="QString"></WMSContactPhone>
+    <WMSServiceCapabilities type="bool">false</WMSServiceCapabilities>
+    <WMSServiceAbstract type="QString"></WMSServiceAbstract>
+    <WMSAddWktGeometry type="bool">false</WMSAddWktGeometry>
+    <Measure>
+      <Ellipsoid type="QString">NONE</Ellipsoid>
+    </Measure>
+    <WMSPrecision type="QString">8</WMSPrecision>
+    <WFSTLayers>
+      <Insert type="QStringList"/>
+      <Update type="QStringList"/>
+      <Delete type="QStringList"/>
+    </WFSTLayers>
     <Gui>
       <SelectionColorBluePart type="int">0</SelectionColorBluePart>
       <CanvasColorGreenPart type="int">255</CanvasColorGreenPart>
@@ -2449,22 +2825,87 @@
     </Gui>
     <Digitizing>
       <DefaultSnapToleranceUnit type="int">1</DefaultSnapToleranceUnit>
-      <LayerSnappingList type="QStringList"/>
-      <LayerSnappingEnabledList type="QStringList"/>
+      <LayerSnappingList type="QStringList">
+        <value>building_points20150417145936946</value>
+        <value>buildings20150417145936968</value>
+        <value>volcano_point20150417145936990</value>
+        <value>roads20150417145937000</value>
+        <value>flood_multipart_polygons20150417145937026</value>
+        <value>volcano_krb20150417145937036</value>
+        <value>district_osm_jakarta20150417145937161</value>
+        <value>classified_generic_polygon20150417145952447</value>
+      </LayerSnappingList>
+      <LayerSnappingEnabledList type="QStringList">
+        <value>disabled</value>
+        <value>disabled</value>
+        <value>disabled</value>
+        <value>disabled</value>
+        <value>disabled</value>
+        <value>disabled</value>
+        <value>disabled</value>
+        <value>disabled</value>
+      </LayerSnappingEnabledList>
       <SnappingMode type="QString">advanced</SnappingMode>
       <AvoidIntersectionsList type="QStringList"/>
-      <LayerSnappingToleranceUnitList type="QStringList"/>
-      <LayerSnapToList type="QStringList"/>
+      <LayerSnappingToleranceUnitList type="QStringList">
+        <value>1</value>
+        <value>1</value>
+        <value>1</value>
+        <value>1</value>
+        <value>1</value>
+        <value>1</value>
+        <value>1</value>
+        <value>1</value>
+      </LayerSnappingToleranceUnitList>
+      <LayerSnapToList type="QStringList">
+        <value>to_vertex_and_segment</value>
+        <value>to_vertex_and_segment</value>
+        <value>to_vertex_and_segment</value>
+        <value>to_vertex_and_segment</value>
+        <value>to_vertex_and_segment</value>
+        <value>to_vertex_and_segment</value>
+        <value>to_vertex_and_segment</value>
+        <value>to_vertex_and_segment</value>
+      </LayerSnapToList>
       <DefaultSnapType type="QString">off</DefaultSnapType>
       <DefaultSnapTolerance type="double">0</DefaultSnapTolerance>
-      <LayerSnappingToleranceList type="QStringList"/>
+      <LayerSnappingToleranceList type="QStringList">
+        <value>0.000000</value>
+        <value>0.000000</value>
+        <value>0.000000</value>
+        <value>0.000000</value>
+        <value>0.000000</value>
+        <value>0.000000</value>
+        <value>0.000000</value>
+        <value>0.000000</value>
+      </LayerSnappingToleranceList>
     </Digitizing>
-    <PositionPrecision>
-      <DecimalPlaces type="int">2</DecimalPlaces>
-      <Automatic type="bool">true</Automatic>
-    </PositionPrecision>
+    <Identify>
+      <disabledLayers type="QStringList"/>
+    </Identify>
+    <Macros>
+      <pythonCode type="QString"></pythonCode>
+    </Macros>
+    <WMSAccessConstraints type="QString"></WMSAccessConstraints>
+    <WCSLayers type="QStringList"/>
     <Legend>
       <filterByMap type="bool">false</filterByMap>
     </Legend>
+    <SpatialRefSys>
+      <ProjectCRSProj4String type="QString">+proj=longlat +datum=WGS84 +no_defs</ProjectCRSProj4String>
+      <ProjectCrs type="QString">EPSG:4326</ProjectCrs>
+      <ProjectCRSID type="int">3452</ProjectCRSID>
+    </SpatialRefSys>
+    <DefaultStyles>
+      <Fill type="QString"></Fill>
+      <Line type="QString"></Line>
+      <Marker type="QString"></Marker>
+      <RandomColors type="bool">true</RandomColors>
+      <AlphaInt type="int">255</AlphaInt>
+      <ColorRamp type="QString"></ColorRamp>
+    </DefaultStyles>
+    <WMSFees type="QString"></WMSFees>
+    <WMSImageQuality type="int">90</WMSImageQuality>
+    <WMSUrl type="QString"></WMSUrl>
   </properties>
 </qgis>

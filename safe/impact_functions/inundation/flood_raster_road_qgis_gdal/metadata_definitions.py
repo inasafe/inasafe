@@ -58,7 +58,7 @@ class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'FloodRasterRoadsGdalFunction',
-            'name': tr('Flood Raster Roads GDAL Function'),
+            'name': tr('Raster flood on roads (GDAL)'),
             'impact': tr('Be flooded in given thresholds (GDAL)'),
             'title': tr('Be flooded in given thresholds (GDAL)'),
             'function_type': 'qgis2.0',

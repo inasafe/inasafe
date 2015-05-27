@@ -20,7 +20,7 @@ import unittest
 import sys
 import os
 import logging
-from codecs import open
+import codecs
 from os.path import join
 from unittest import TestCase, skipIf
 
@@ -76,6 +76,8 @@ class TestDock(TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
+        register_impact_functions()
+
         DOCK.show_only_visible_layers_flag = True
         load_standard_layers(DOCK)
         DOCK.cboHazard.setCurrentIndex(0)
@@ -89,8 +91,6 @@ class TestDock(TestCase):
         DOCK.show_intermediate_layers = False
         DOCK.user_extent = None
         DOCK.user_extent_crs = None
-
-        register_impact_functions()
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -373,8 +373,7 @@ class TestDock(TestCase):
             'Exposure': 'Population Count (5kmx5km)'}
         message = ((
             'Run button was not disabled when exposure set to \n%s'
-            '\nUI State: \n%s\nExpected State:\n%s\n%s') %
-            (
+            '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
                 DOCK.cboExposure.currentText(),
                 actual_dict,
                 expected_dict,
@@ -430,7 +429,7 @@ class TestDock(TestCase):
             hazard='Flood Polygon',
             exposure='Buildings',
             function='Be flooded',
-            function_id='FloodVectorBuildingFunction')
+            function_id='FloodPolygonBuildingFunction')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -567,8 +566,10 @@ class TestDock(TestCase):
             'control',
             'files',
             'test-full-run-results.txt')
-        expected_result = open(control_file_path, mode='r',
-                               encoding='utf-8').readlines()
+        expected_result = codecs.open(
+            control_file_path,
+            mode='r',
+            encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
         for line in expected_result:
@@ -618,8 +619,10 @@ class TestDock(TestCase):
             'control',
             'files',
             'test-full-run-results-qgis.txt')
-        expected_result = open(control_file_path, mode='r',
-                               encoding='utf-8').readlines()
+        expected_result = codecs.open(
+            control_file_path,
+            mode='r',
+            encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
         for line in expected_result:
@@ -654,7 +657,9 @@ class TestDock(TestCase):
         """
 
         layer_path = os.path.join(TESTDATA, 'tsunami_building_assessment.shp')
-        layer, _ = load_layer(layer_path)
+        # pylint: disable=unused-variable
+        layer, layer_type = load_layer(layer_path)
+        # pylint: enable=unused-variable
 
         new_name = unique_filename(
             prefix='tsunami_building_assessment_saved_as_')
@@ -675,7 +680,9 @@ class TestDock(TestCase):
         """
 
         layer_path = os.path.join(TESTDATA, 'kecamatan_jakarta_osm.shp')
-        layer, _ = load_layer(layer_path)
+        # pylint: disable=unused-variable
+        layer, layer_type = load_layer(layer_path)
+        # pylint: enable=unused-variable
 
         new_name = unique_filename(prefix='kecamatan_jakarta_osm_saved_as')
         DOCK.save_auxiliary_files(

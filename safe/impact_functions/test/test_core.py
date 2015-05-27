@@ -21,12 +21,14 @@ import unittest
 import random
 import os
 import logging
+import numpy
 from collections import OrderedDict
 
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
-    evacuated_population_needs)
+    evacuated_population_needs,
+    has_no_data)
 from safe.common.resource_parameter import ResourceParameter
 from safe.defaults import default_minimum_needs
 from safe.test.utilities import TESTDATA, HAZDATA
@@ -141,7 +143,6 @@ class TestCore(unittest.TestCase):
         result = OrderedDict(
             [[r['table name'], r['amount']] for r in result])
         assert result['Toilets'] == 2
-
 
 if __name__ == '__main__':
     unittest.main()

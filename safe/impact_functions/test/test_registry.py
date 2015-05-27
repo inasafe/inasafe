@@ -21,10 +21,9 @@ import unittest
 import inspect
 
 from safe.impact_functions import register_impact_functions
-from safe.impact_functions.inundation.flood_vector_building_impact_qgis\
-    .impact_function import FloodPolygonBuildingQgisFunction
-from safe.impact_functions.inundation.flood_vector_osm_building_impact\
-    .impact_function import FloodVectorBuildingFunction
+
+from safe.impact_functions.inundation.flood_vector_building_impact\
+    .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.earthquake.earthquake_building.impact_function \
     import EarthquakeBuildingFunction
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model \
@@ -34,15 +33,16 @@ from safe.impact_functions.earthquake.pager_earthquake_fatality_model \
 
 from safe.impact_functions.inundation.flood_raster_osm_building_impact \
     .impact_function import FloodRasterBuildingFunction
-from safe.impact_functions.generic.classified_hazard_building.impact_function\
-    import ClassifiedHazardBuildingFunction
+from safe.impact_functions.generic.classified_polygon_building\
+    .impact_function import ClassifiedPolygonHazardBuildingFunction
 from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
     import VolcanoPolygonBuildingFunction
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
 from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
-
+from safe.impact_functions.inundation.flood_vector_building_impact\
+    .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.registry import Registry
 from safe.new_definitions import (
     layer_mode_classified,
@@ -70,14 +70,14 @@ class TestRegistry(unittest.TestCase):
                   'functions exists instead' % len(registry.impact_functions)
         self.assertEqual(0, len(registry.impact_functions), message)
 
-        registry.register(FloodPolygonBuildingQgisFunction)
+        registry.register(FloodPolygonBuildingFunction)
         message = 'Expecting registry will contains 1 impact functions. %s ' \
                   'impact functions exists' % len(registry.impact_functions)
         self.assertEqual(1, len(registry.impact_functions), message)
 
-        result = registry.get_instance('FloodPolygonBuildingQgisFunction')\
+        result = registry.get_instance('FloodPolygonBuildingFunction')\
             .metadata().as_dict()['id']
-        expected = 'FloodPolygonBuildingQgis'
+        expected = 'FloodPolygonBuildingFunction'
         message = 'Expected registered impact function ID should be %s. ' \
                   'Got %s instead' % (expected, result)
         self.assertEqual(expected, result, message)
@@ -87,37 +87,37 @@ class TestRegistry(unittest.TestCase):
         registry = Registry()
         impact_functions = registry.list()
         expected = [
-            'Flood Vector Building Function',
-            'Flood Polygon Building QGIS Function',
-            'Flood Vector Roads Experimental Function',
-            'Flood Evacuation Vector Hazard Function',
-            'Flood Evacuation Raster Hazard Function',
-            'Flood Raster Building Function',
-            'Flood Raster Roads Experimental Function',
-            'Flood Raster Roads GDAL Function',
-            'Tsunami Evacuation Function',
-            'Classified Hazard Building Function',
-            'Classified Hazard Population Function',
-            'Continuous Hazard Population Function',
-            'Earthquake Building Function',
-            'ITB Fatality Function',
-            'PAG Fatality Function',
-            'Volcano Point Building Impact Function',
-            'Volcano Polygon Building Impact Function',
-            'Volcano Polygon Population Impact Function']
-        self.assertTrue(
-            len(impact_functions) == len(expected) and
-            all(impact_functions.count(i) == expected.count(i) for i in
-                expected))
+            'Polygon flood on buildings',
+            'Polygon flood on roads',
+            'Polygon flood on people',
+            'Raster flood on population',
+            'Raster flood on buildings',
+            'Raster flood on roads (QGIS)',
+            'Raster flood on roads (GDAL)',
+            'Tsunami evacuation',
+            'Classified raster hazard on buildings',
+            'Classified raster hazard on population',
+            'Continuous raster hazard on population',
+            'Classified polygon hazard on population',
+            'Classified polygon hazard on buildings',
+            'Earthquake on buildings',
+            'Earthquake ITB fatality function',
+            'Earthquake PAGER fatality function',
+            'Point volcano on buildings',
+            'Polygon volcano on buildings',
+            'Point volcano on population',
+            'Polygon volcano on population']
+        self.assertTrue(len(impact_functions) == len(expected))
+        self.assertItemsEqual(expected, impact_functions)
 
     def test_get_impact_function_instance(self):
         """TestRegistry: Test we can get an impact function instance."""
         # Getting an IF instance using its class name
         registry = Registry()
-        class_name = 'FloodPolygonBuildingQgisFunction'
+        class_name = 'FloodPolygonBuildingFunction'
         impact_function = registry.get_instance(class_name)
         result = impact_function.__class__.__name__
-        message = 'Expecting FloodPolygonBuildingQgisFunction. Got %s ' \
+        message = 'Expecting FloodPolygonBuildingFunction. Got %s ' \
                   'instead.' % result
         self.assertEqual(class_name, result, message)
 
@@ -125,7 +125,7 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test we can get an impact function class."""
         # Getting an IF class using its class name
         registry = Registry()
-        expected = 'FloodPolygonBuildingQgisFunction'
+        expected = 'FloodPolygonBuildingFunction'
         impact_function = registry.get_class(expected)
 
         # Check that it should be a class, not an instance
@@ -141,16 +141,16 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test getting the impact functions by its metadata."""
         # Test getting the impact functions by 'id'
         registry = Registry()
-        impact_function_id = 'FloodPolygonBuildingQgis'
+        impact_function_id = 'FloodPolygonBuildingFunction'
         result = registry.filter_by_metadata('id', impact_function_id)
-        expected = [FloodPolygonBuildingQgisFunction]
+        expected = [FloodPolygonBuildingFunction]
         message = 'Expecting %s. Got %s instead' % (expected, result)
         self.assertEqual(expected, result, message)
 
         # Test getting the impact functions by 'name'
-        impact_function_name = 'Flood Polygon Building QGIS Function'
+        impact_function_name = 'Polygon flood on buildings'
         result = registry.filter_by_metadata('name', impact_function_name)
-        expected = [FloodPolygonBuildingQgisFunction]
+        expected = [FloodPolygonBuildingFunction]
         message = 'Expecting %s. Got %s instead.' % (expected, result)
         self.assertEqual(expected, result, message)
 
@@ -210,9 +210,9 @@ class TestRegistry(unittest.TestCase):
         impact_functions = registry.filter_by_exposure(
             registry.impact_functions, exposure_metadata)
         expected = [
-            FloodVectorBuildingFunction,
+            FloodPolygonBuildingFunction,
             FloodRasterBuildingFunction,
-            ClassifiedHazardBuildingFunction,
+            ClassifiedPolygonHazardBuildingFunction,
             EarthquakeBuildingFunction,
             VolcanoPointBuildingFunction,
             VolcanoPolygonBuildingFunction
@@ -233,13 +233,12 @@ class TestRegistry(unittest.TestCase):
         impact_functions = registry.filter_by_exposure(
             registry.impact_functions, exposure_metadata)
         expected = [
-            FloodVectorBuildingFunction,
+            FloodPolygonBuildingFunction,
             FloodRasterBuildingFunction,
-            ClassifiedHazardBuildingFunction,
+            ClassifiedPolygonHazardBuildingFunction,
             EarthquakeBuildingFunction,
             VolcanoPointBuildingFunction,
             VolcanoPolygonBuildingFunction,
-            FloodPolygonBuildingQgisFunction
         ]
         message = 'Expecting %s IFs. Got %s IFs instead' % (
             len(expected), len(impact_functions))

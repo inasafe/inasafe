@@ -58,7 +58,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'ITBFatalityFunction',
-            'name': tr('ITB Fatality Function'),
+            'name': tr('Earthquake ITB fatality function'),
             'impact': tr('Die or be displaced'),
             'title': tr('Die or be displaced'),
             'function_type': 'old-style',
@@ -66,7 +66,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             'date_implemented': 'N/A',
             'overview': tr(
                 'To assess the impact of earthquake on population based '
-                'on earthquake model developed by ITB'),
+                'on the earthquake model for Indonesia developed by ITB.'),
             'detailed_description': tr(
                 'This model was developed by Institut Teknologi Bandung '
                 '(ITB) and implemented by Dr. Hadi Ghasemi, Geoscience '
@@ -86,20 +86,19 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             'exposure_input': '',
             'output': '',
             'actions': tr(
-                'Provide details about the population will be die or '
-                'displaced'),
+                'Provide details about the population including '
+                'estimates for mortalities and displaced persons.'),
             'limitations': [
-                tr('The model is based on limited number of observed '
-                   'fatality rates during 4 past fatal events.'),
+                tr('The model is based on a limited number of observed '
+                   'fatality rates during four previous fatal events.'),
                 tr('The model clearly over-predicts the fatality rates at '
                    'intensities higher than VIII.'),
                 tr('The model only estimates the expected fatality rate '
-                   'for a given intensity level; however the associated '
+                   'for a given intensity level. The associated '
                    'uncertainty for the proposed model is not addressed.'),
-                tr('There are few known mistakes in developing the '
-                   'current model:\n\n'
+                tr('There are few known issues in the  current model:\n\n'
                    '* rounding MMI values to the nearest 0.5,\n'
-                   '* Implementing Finite-Fault models of candidate '
+                   '* Implemention of Finite-Fault models of candidate '
                    '  events, and\n'
                    '* consistency between selected GMPEs with those in '
                    '  use by BMKG.\n')
@@ -135,15 +134,6 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
-                # Rates of people displaced for each MMI level
-                ('displacement_rate', {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 1.0,
-                                       7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0}),
-                ('mmi_range', range(2, 10)),
-                ('step', 0.5),
-                # Threshold below which layer should be transparent
-                ('tolerance', 0.01),
-                ('calculate_displaced_people', True),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

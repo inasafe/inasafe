@@ -5,7 +5,7 @@
   </metadata>
 
   <datafile>
-    <filename>jakarta_crosskabupaten_polygons.shp</filename>
+    <filename>flood_polygon_crosskabupaten.shp</filename>
     <checksum>1620562646</checksum>
     <publishable>Yes</publishable>
     <accountable>Marco Bernasocchi</accountable>
@@ -15,7 +15,7 @@
   </datafile>
 
   <datafile>
-    <filename>jakarta_crosskabupaten_polygons.shx</filename>
+    <filename>flood_polygon_crosskabupaten.shx</filename>
     <checksum>1599125537</checksum>
     <publishable>Yes</publishable>
     <accountable>Marco Bernasocchi</accountable>
@@ -25,7 +25,7 @@
   </datafile>
 
   <datafile>
-    <filename>jakarta_crosskabupaten_polygons.dbf</filename>
+    <filename>flood_polygon_crosskabupaten.dbf</filename>
     <checksum>1653956669</checksum>
     <publishable>Yes</publishable>
     <accountable>Marco Bernasocchi</accountable>
