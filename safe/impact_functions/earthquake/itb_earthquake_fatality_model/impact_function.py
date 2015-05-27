@@ -135,8 +135,14 @@ class ITBFatalityFunction(ImpactFunction):
     def displacement_rate(self, mmi):
         """A method to compute displacement rate.
 
-        : rate = 1.0 if mmi >= threshold
-        : rate = 0.0 otherwise
+        The displacement rate will be 1 if mmi >= displacement_threshold.
+        Otherwise, it will be set to 0.
+
+        :param mmi: The mmi value.
+        :type mmi: float
+
+        :returns: The displacement rate given an MMI value.
+        :rtype: int
         """
         x = self.hardcoded_parameters['displacement_threshold']
         return numpy.piecewise(mmi, [mmi < x, mmi >= x], [0, 1])
