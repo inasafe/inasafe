@@ -53,8 +53,8 @@ from PyQt4.QtGui import (
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
-from safe import new_definitions
-from safe.new_definitions import (
+from safe import definitions
+from safe.definitions import (
     global_default_attribute,
     do_not_use_attribute,
     continuous_hazard_unit,

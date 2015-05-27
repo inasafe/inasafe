@@ -44,7 +44,7 @@ from safe.impact_functions.generic.continuous_hazard_population\
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.registry import Registry
-from safe.new_definitions import (
+from safe.definitions import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_point,

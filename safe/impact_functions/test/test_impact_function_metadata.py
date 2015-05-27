@@ -71,7 +71,7 @@ from safe.impact_functions.volcanic.volcano_polygon_building.impact_function\
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .impact_function import VolcanoPolygonPopulationFunction
 
-from safe.new_definitions import (
+from safe.definitions import (
     layer_purpose_exposure,
     hazard_category_single_hazard,
     hazard_earthquake,

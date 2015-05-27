@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.new_definitions import (
+from safe.definitions import (
     layer_mode_classified,
     layer_geometry_polygon,
     layer_geometry_point,
