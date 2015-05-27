@@ -15,7 +15,7 @@ Contact : jannes@kartoza.com
 
 __author__ = 'Jannes Engelbrecht'
 __date__ = '16/04/15'
-
+import pydevd
 import docopt
 from safe.impact_functions.registry import Registry
 from safe.impact_functions import register_impact_functions
@@ -23,11 +23,12 @@ from safe.test.utilities import get_qgis_app
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from qgis.core import (
     QgsRasterLayer,
-    QgsVectorLayer)
+    QgsVectorLayer,
+    QgsMapLayerRegistry)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import qgis_version
 import os
-import sys
+from safe.report.impact_report import ImpactReport
 import logging
 
 
@@ -68,6 +69,13 @@ def show_names(ifs):
 
 # all paths are made to be absolute
 def join_if_relative(path_argument):
+    """Make path absolute with current directory as base.
+
+    :param path_argument:
+    :type path_argument:
+    :returns:
+    :rtype
+    """
     if not os.path.isabs(path_argument):
         LOGGER.debug('joining path for ' + path_argument)
         return os.path.join(default_cli_dir, path_argument)
@@ -86,10 +94,10 @@ def get_hazard():
             qhazard = QgsRasterLayer(
                 hazard_base, 'cli_raster_hazard')
         if not qhazard.isValid():
-            print "hazard raster layer is NOT VALID"
+            print "hazard layer is NOT VALID"
             print "Perhaps run-env-linux.sh /usr"
         else:
-            print "hazard raster layer is VALID"
+            print "hazard layer is VALID"
         return qhazard
     except Exception as exc:
         print exc.message
@@ -109,10 +117,10 @@ def get_exposure():
             print 'Error : Exposure layer'
 
         if not qexposure.isValid():
-            print "exposure vector layer not valid"
+            print "exposure layer not valid"
             print "Perhaps run-env-linux.sh /usr"
         else:
-            print "exposure vector layer is VALID!!"
+            print "exposure layer is VALID!!"
         return qexposure
     except Exception as exc:
         print exc.message
@@ -151,24 +159,41 @@ def run_if():
         print 'begin analysis setup'
         analysis.setup_analysis()
         print 'stop analysis setup'
-    except Exception as exc:
-        print exc.message
-    try:
         analysis.run_analysis()
         LOGGER.debug("end analysis :)")
     except Exception as exc:
         print exc.message
+        print exc.__doc__
     try:
         impact_layer = analysis.get_impact_layer()
     except Exception as exc:
         print exc.message
-    # analysis result output
-    if impact_layer is None:
-        print "Error : No impact layer generated"
-    LOGGER.debug(type(impact_layer))
-    LOGGER.debug(impact_layer.__doc__)
-    write_results(impact_layer)
-    # do report
+    try:
+        LOGGER.debug(type(impact_layer))
+        LOGGER.debug(impact_layer.__doc__)
+        write_results(impact_layer)
+        build_report(impact_layer)
+    except Exception as exc:
+        print exc.message
+        print exc.__doc__
+
+
+def build_report(impact_layer):
+    try:
+        #pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+        template = '/home/jannes/gitwork/inasafe/resources/qgis-composer-templates/inasafe-portrait-a4.qpt'
+        impact_layer = QgsVectorLayer('/home/jannes/experiment/flood_on_road.shp', 'nm', 'ogr')
+        LOGGER.debug(impact_layer.__doc__)
+        #QgsMapLayerRegistry.instance().addMapLayer(impact_layer)
+        #CANVAS.setExtent(impact_layer.extent())
+        #CANVAS.refresh()
+        report = ImpactReport(IFACE, template, impact_layer)
+        LOGGER.debug(os.path.splitext(output_file)[0] + '.pdf')
+        report.print_to_pdf(os.path.splitext(output_file)[0] + '.pdf')
+    except Exception as exc:
+        print "HERE"
+        print exc.message
+        print exc.__doc__
 
 
 def write_results(impact_layer):
@@ -176,8 +201,10 @@ def write_results(impact_layer):
     :param impact_layer:
     :type Vector
     """
-    impact_layer.write_to_file(join_if_relative(output_file))
-
+    try:
+        impact_layer.write_to_file(join_if_relative(output_file))
+    except Exception as exc:
+        print exc.message
 
 if __name__ == '__main__':
     print "python accent.py"
@@ -236,15 +263,10 @@ if __name__ == '__main__':
             ((vector_exposure is not None) or (raster_exposure is not None)) and\
             (output_file is not None):
         LOGGER.debug('--RUN--')
-        try:
-            run_if()
-        except Exception as e:
-            print e.message
-            print e.__doc__
+        run_if()
         LOGGER.debug('--END RUN--')
 
 # print line to make it look nice
-print " "
 
 # INSTALL on Ubuntu with:
 # chmod ug+x accent.py
