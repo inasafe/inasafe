@@ -42,29 +42,20 @@ class ClassifiedRHClassifiedVE(ImpactFunction,
         if not valid:
             raise MetadataLayerConstraintError()
 
-    @property
-    def hazard(self):
-        return self._hazard
-
-    @hazard.setter
+    @ImpactFunction.hazard.setter
+    # pylint: disable=W0221
     def hazard(self, value):
         self._hazard = value
         self.set_up_hazard_layer(value)
 
-    @property
-    def exposure(self):
-        return self._exposure
-
-    @exposure.setter
+    @ImpactFunction.exposure.setter
+    # pylint: disable=W0221
     def exposure(self, value):
         self._exposure = value
         self.set_up_exposure_layer(value)
 
-    @property
-    def impact(self):
-        return self._impact
-
-    @impact.setter
+    @ImpactFunction.impact.setter
+    # pylint: disable=W0221
     def impact(self, value):
         self._impact = value
         self.set_up_impact_layer(value)

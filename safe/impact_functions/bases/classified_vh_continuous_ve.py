@@ -16,8 +16,8 @@ from safe.impact_functions.bases.layer_types.classified_vector_hazard import \
     ClassifiedVectorHazard
 from safe.impact_functions.bases.layer_types.vector_impact import \
     VectorImpact
-from safe.impact_functions.bases.layer_types.continuous_vector_exposure import \
-    ContinuousVectorExposure
+from safe.impact_functions.bases.layer_types.continuous_vector_exposure \
+    import ContinuousVectorExposure
 from safe.impact_functions.bases.utilities import get_qgis_vector_layer, \
     split_by_polygon_class
 
@@ -40,29 +40,20 @@ class ClassifiedVHContinuousVE(ImpactFunction,
     def __init__(self):
         super(ClassifiedVHContinuousVE, self).__init__()
 
-    @property
-    def hazard(self):
-        return self._hazard
-
-    @hazard.setter
+    @ImpactFunction.hazard.setter
+    # pylint: disable=W0221
     def hazard(self, value):
         self._hazard = value
         self.set_up_hazard_layer(value)
 
-    @property
-    def exposure(self):
-        return self._exposure
-
-    @exposure.setter
+    @ImpactFunction.exposure.setter
+    # pylint: disable=W0221
     def exposure(self, value):
         self._exposure = value
         self.set_up_exposure_layer(value)
 
-    @property
-    def impact(self):
-        return self._impact
-
-    @impact.setter
+    @ImpactFunction.impact.setter
+    # pylint: disable=W0221
     def impact(self, value):
         self._impact = value
         self.set_up_impact_layer(value)

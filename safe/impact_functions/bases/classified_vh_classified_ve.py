@@ -15,8 +15,8 @@ from safe.gis.qgis_vector_tools import clip_by_polygon
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.calculation_result import \
     VectorImpactCalculation
-from safe.impact_functions.bases.layer_types.classified_vector_exposure import \
-    ClassifiedVectorExposure
+from safe.impact_functions.bases.layer_types.classified_vector_exposure\
+    import ClassifiedVectorExposure
 from safe.impact_functions.bases.layer_types.classified_vector_hazard import \
     ClassifiedVectorHazard
 from safe.impact_functions.bases.layer_types.vector_impact import \
@@ -54,31 +54,22 @@ class ClassifiedVHClassifiedVE(ImpactFunction,
                                         layer_geometry_line,
                                         layer_geometry_polygon])
         if not valid:
-                raise MetadataLayerConstraintError()
+            raise MetadataLayerConstraintError()
 
-    @property
-    def hazard(self):
-        return self._hazard
-
-    @hazard.setter
+    @ImpactFunction.hazard.setter
+    # pylint: disable=W0221
     def hazard(self, value):
         self._hazard = value
         self.set_up_hazard_layer(value)
 
-    @property
-    def exposure(self):
-        return self._exposure
-
-    @exposure.setter
+    @ImpactFunction.exposure.setter
+    # pylint: disable=W0221
     def exposure(self, value):
         self._exposure = value
         self.set_up_exposure_layer(value)
 
-    @property
-    def impact(self):
-        return self._impact
-
-    @impact.setter
+    @ImpactFunction.impact.setter
+    # pylint: disable=W0221
     def impact(self, value):
         self._impact = value
         self.set_up_impact_layer(value)
@@ -120,7 +111,7 @@ class ClassifiedVHClassifiedVE(ImpactFunction,
             # if the hazard value doesn't belong to any class, skip it
             if (attributes[impact_class_index] not in
                     self.hazard_class_mapping):
-                    continue
+                continue
             hazard_class = attributes[impact_class_index]
             if hazard_class not in hazard_poly:
                 hazard_poly[hazard_class] = QgsGeometry(feature.geometry())

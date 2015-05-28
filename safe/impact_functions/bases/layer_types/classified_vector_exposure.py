@@ -27,7 +27,8 @@ class ClassifiedVectorExposure(object):
     @exposure_class_attribute.setter
     def exposure_class_attribute(self, value):
         exposure_layer = get_qgis_vector_layer(self._exposure_layer)
-        if exposure_layer and check_attribute_exist(self._exposure_layer, value):
+        if (exposure_layer and
+                check_attribute_exist(self._exposure_layer, value)):
             self._exposure_class_attribute = value
         else:
             message = ('The attribute "%s" is not exists in the exposure '

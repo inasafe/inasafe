@@ -50,6 +50,7 @@ def get_qgis_vector_layer(layer):
     else:
         return None
 
+
 def get_qgis_raster_layer(layer):
     """Get QgsRasterLayer if the layer param is a raster storage layer (
     old-style).
@@ -160,6 +161,7 @@ def split_by_polygon_class(
     result_layer.updateExtents()
 
     return result_layer
+
 
 def check_layer_constraint(metadata, hazard_layer_mode,
                            hazard_layer_geometries, exposure_layer_mode,

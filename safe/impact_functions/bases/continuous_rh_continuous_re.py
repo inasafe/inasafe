@@ -4,8 +4,8 @@ from safe.common.exceptions import (
     MetadataLayerConstraintError)
 from safe.definitions import layer_mode_continuous, layer_geometry_raster
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.bases.layer_types.continuous_raster_exposure import \
-    ContinuousRasterExposure
+from safe.impact_functions.bases.layer_types.continuous_raster_exposure \
+    import ContinuousRasterExposure
 from safe.impact_functions.bases.layer_types.continuous_raster_hazard import \
     ContinuousRasterHazard
 from safe.impact_functions.bases.layer_types.raster_impact import RasterImpact
@@ -37,29 +37,20 @@ class ContinuousRHContinuousRE(ImpactFunction,
         if not valid:
             raise MetadataLayerConstraintError()
 
-    @property
-    def hazard(self):
-        return self._hazard
-
-    @hazard.setter
+    @ImpactFunction.hazard.setter
+    # pylint: disable=W0221
     def hazard(self, value):
         self._hazard = value
         self.set_up_hazard_layer(value)
 
-    @property
-    def exposure(self):
-        return self._exposure
-
-    @exposure.setter
+    @ImpactFunction.exposure.setter
+    # pylint: disable=W0221
     def exposure(self, value):
         self._exposure = value
         self.set_up_exposure_layer(value)
 
-    @property
-    def impact(self):
-        return self._impact
-
-    @impact.setter
+    @ImpactFunction.impact.setter
+    # pylint: disable=W0221
     def impact(self, value):
         self._impact = value
         self.set_up_impact_layer(value)
