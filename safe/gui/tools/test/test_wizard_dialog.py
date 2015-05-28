@@ -48,7 +48,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.tools.wizard_dialog import (
     WizardDialog,
     step_kw_source,
-    step_kw_datatype,
+    step_kw_layermode,
     step_kw_title,
     step_kw_classification,
     step_kw_classify,
@@ -153,8 +153,8 @@ class WizardDialogTest(unittest.TestCase):
             'generic']
         chosen_subcategory = 'flood'
 
-        expected_mode_count = 2
-        expected_modes = ['continuous', 'classified']
+        expected_mode_count = 1
+        expected_modes = ['classified']
         expected_chosen_mode = 'classified'
 
         expected_field_count = 6
@@ -166,6 +166,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_classification = 'flood vector hazard classes'
 
         expected_keywords = {
+            'layer_geometry': 'polygon',
             'layer_purpose': 'hazard',
             'hazard_category': 'single_hazard',
             'hazard': 'flood',
@@ -306,8 +307,8 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 4 of 9 - select classified mode
         # Check if the number of modes is 2
-        self.check_current_step(step_kw_datatype, dialog)
-        count = dialog.lstDataTypes.count()
+        self.check_current_step(step_kw_layermode, dialog)
+        count = dialog.lstLayerModes.count()
         message = ('Invalid layer modes count! There should be %d while '
                    'there were: %d') % (expected_mode_count, count)
         self.assertEqual(count, expected_mode_count, message)
@@ -317,7 +318,7 @@ class WizardDialogTest(unittest.TestCase):
         for i in range(expected_mode_count):
             # pylint: disable=eval-used
             mode_name = eval(
-                dialog.lstDataTypes.item(i).data(Qt.UserRole))['key']
+                dialog.lstLayerModes.item(i).data(Qt.UserRole))['key']
             # pylint: enable=eval-used
             modes.append(mode_name)
             if mode_name == expected_chosen_mode:
@@ -440,7 +441,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 4 of 9 - select layer mode
         # noinspection PyTypeChecker
-        self.check_current_text('classified', dialog.lstDataTypes)
+        self.check_current_text('classified', dialog.lstLayerModes)
 
         message = ('Invalid Next button state in step 4! Still disabled after '
                    'an item selected')
@@ -523,7 +524,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select volcano classified mode
-        self.select_from_list_widget('classified', dialog.lstDataTypes)
+        self.select_from_list_widget('classified', dialog.lstLayerModes)
         dialog.pbnNext.click()
 
         # select KRB field
@@ -585,7 +586,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 4 of 8 - select layer mode
-        self.check_current_text('classified', dialog.lstDataTypes)
+        self.check_current_text('classified', dialog.lstLayerModes)
 
         # Click Next
         dialog.pbnNext.click()
@@ -697,7 +698,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to subcategory
         dialog.pbnNext.click()  # go to layer mode
-        dialog.lstDataTypes.setCurrentRow(1)  # select classified
+        dialog.lstLayerModes.setCurrentRow(0)  # select classified
         dialog.pbnNext.click()  # go to units
         dialog.pbnNext.click()  # don't select any unit, go to step source
 
@@ -766,7 +767,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose multi hazard
         dialog.pbnNext.click()  # choose volcano
         dialog.lstUnits.setCurrentRow(1)
-        self.check_current_text('classified', dialog.lstDataTypes)
+        self.check_current_text('classified', dialog.lstLayerModes)
         dialog.pbnNext.click()  # choose classified
 
         dialog.lstFields.setCurrentRow(0)  # Choose KRB
@@ -868,7 +869,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to layer mode
 
-        self.check_current_step(step_kw_datatype, dialog)
+        self.check_current_step(step_kw_layermode, dialog)
         dialog.pbnNext.click()  # go to field
 
         self.check_current_step(step_kw_field, dialog)
@@ -938,22 +939,22 @@ class WizardDialogTest(unittest.TestCase):
         # choosing flood
         self.select_from_list_widget('flood', dialog.lstSubcategories)
 
-        dialog.pbnNext.click()  # Go to data type
+        dialog.pbnNext.click()  # Go to layer mode
 
-        # check if in step data type
-        self.check_current_step(step_kw_datatype, dialog)
+        # check if in step layer mode
+        self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of subcategories options
-        expected_datatypes = ['continuous', 'classified']
-        self.check_list(expected_datatypes, dialog.lstDataTypes)
+        expected_layermodes = ['continuous', 'classified']
+        self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_datatype_index = 0
-        datatype_index = dialog.lstDataTypes.currentRow()
+        expected_layermode_index = 0
+        layermode_index = dialog.lstLayerModes.currentRow()
         message = ('Expected %s, but I got %s' %
-                   (expected_datatype_index, datatype_index))
+                   (expected_layermode_index, layermode_index))
         self.assertEqual(
-            expected_datatype_index, datatype_index, message)
+            expected_layermode_index, layermode_index, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -995,22 +996,22 @@ class WizardDialogTest(unittest.TestCase):
         # choosing earthquake
         self.select_from_list_widget('earthquake', dialog.lstSubcategories)
 
-        dialog.pbnNext.click()  # Go to data type
+        dialog.pbnNext.click()  # Go to layer mode
 
-        # check if in step data type
-        self.check_current_step(step_kw_datatype, dialog)
+        # check if in step layer mode
+        self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of subcategories options
-        expected_datatypes = ['continuous', 'classified']
-        self.check_list(expected_datatypes, dialog.lstDataTypes)
+        expected_layermodes = ['classified', 'continuous']
+        self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_datatype_index = 0
-        datatype_index = dialog.lstDataTypes.currentRow()
+        expected_layermode_index = 1
+        layermode_index = dialog.lstLayerModes.currentRow()
         message = ('Expected %s, but I got %s' %
-                   (expected_datatype_index, datatype_index))
+                   (expected_layermode_index, layermode_index))
         self.assertEqual(
-            expected_datatype_index, datatype_index, message)
+            expected_layermode_index, layermode_index, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -1061,12 +1062,12 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to laywr mode
 
         # check if in step layer mode
-        self.check_current_step(step_kw_datatype, dialog)
+        self.check_current_step(step_kw_layermode, dialog)
 
-        expected_modes = ['continuous', 'classified']
-        self.check_list(expected_modes, dialog.lstDataTypes)
+        expected_modes = ['classified']
+        self.check_list(expected_modes, dialog.lstLayerModes)
 
-        self.check_current_text(expected_modes[1], dialog.lstDataTypes)
+        self.check_current_text(expected_modes[0], dialog.lstLayerModes)
 
         dialog.pbnNext.click()  # go to fields
         expected_fields = ['NAME', 'OSM_TYPE', 'TYPE']
@@ -1110,14 +1111,14 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to layer mode
 
         # check if in step layer mode
-        self.check_current_step(step_kw_datatype, dialog)
+        self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of modes options
-        expected_modes = ['continuous', 'classified']
-        self.check_list(expected_modes, dialog.lstDataTypes)
+        expected_modes = ['classified']
+        self.check_list(expected_modes, dialog.lstLayerModes)
 
         # choosing classified
-        self.select_from_list_widget('classified', dialog.lstDataTypes)
+        self.select_from_list_widget('classified', dialog.lstLayerModes)
 
         dialog.pbnNext.click()  # Go to field
 
@@ -1140,16 +1141,6 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnBack.click()  # back to field step
         dialog.pbnBack.click()  # back to layer_mode step
-
-        # choosing continuous mode (no such units available)
-        self.select_from_list_widget('continuous', dialog.lstDataTypes)
-
-        dialog.pbnNext.click()  # Go to source
-
-        # check if in source source
-        self.check_current_step(step_kw_source, dialog)
-
-        dialog.pbnBack.click()  # back to layer mode step
         dialog.pbnBack.click()  # back to subcategory step
         dialog.pbnBack.click()  # back to category step
 
@@ -1179,8 +1170,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to mode
 
         # select classified
-        self.check_current_step(step_kw_datatype, dialog)
-        self.select_from_list_widget('classified', dialog.lstDataTypes)
+        self.check_current_step(step_kw_layermode, dialog)
+        self.select_from_list_widget('classified', dialog.lstLayerModes)
         dialog.pbnNext.click()  # go to field
 
         self.check_current_step(step_kw_field, dialog)
@@ -1271,8 +1262,8 @@ class WizardDialogTest(unittest.TestCase):
         self.select_from_list_widget('volcano', dialog.lstSubcategories)
         dialog.pbnNext.click()  # go to mode
 
-        self.check_current_step(step_kw_datatype, dialog)
-        self.select_from_list_widget('classified', dialog.lstDataTypes)
+        self.check_current_step(step_kw_layermode, dialog)
+        self.select_from_list_widget('classified', dialog.lstLayerModes)
         dialog.pbnNext.click()  # go to fields
 
         self.check_current_step(step_kw_field, dialog)

@@ -298,7 +298,7 @@ create_postGIS_connection_first = QApplication.translate(
 step_kw_category = 1  # to be renamed to PURPOSE
 step_kw_hazard_category = 2
 step_kw_subcategory = 3
-step_kw_datatype = 4  # to be renamed to LAYERMODE
+step_kw_layermode = 4  # to be renamed to LAYERMODE
 step_kw_unit = 5
 step_kw_field = 6
 step_kw_resample = 7
@@ -589,6 +589,23 @@ class WizardDialog(QDialog, FORM_CLASS):
             return self.impact_function_manager.exposures_for_layer(
                 layer_geometry_id)
 
+    def layermodes_for_layer(self):
+        """Return a list of valid layer modes for a layer.
+
+        :returns: A list where each value represents a valid layer mode.
+        :rtype: list
+        """
+        purpose = self.selected_category()
+        subcategory = self.selected_subcategory()
+        layer_geometry_id = self.get_layer_geometry_id()
+        if purpose == layer_purpose_hazard:
+            hazard_category = self.selected_hazard_category()
+            return self.impact_function_manager.available_hazard_layer_modes(
+                subcategory['key'], layer_geometry_id, hazard_category['key'])
+        elif purpose == layer_purpose_exposure:
+            return self.impact_function_manager.available_exposure_layer_modes(
+                subcategory['key'], layer_geometry_id)
+
     def classifications_for_layer(self):
         """Return a list of valid classifications for a layer.
 
@@ -596,7 +613,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: list
         """
         layer_geometry_id = self.get_layer_geometry_id()
-        layer_mode_id = self.selected_datatype()['key']
+        layer_mode_id = self.selected_layermode()['key']
         subcategory_id = self.selected_subcategory()['key']
         if self.selected_category() == layer_purpose_hazard:
             hazard_category_id = self.selected_hazard_category()['key']
@@ -634,7 +651,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Clear all further steps in order to properly calculate the prev step
         self.lstHazardCategories.clear()
         self.lstSubcategories.clear()
-        self.lstDataTypes.clear()
+        self.lstLayerModes.clear()
         self.lstUnits.clear()
         self.lstFields.clear()
         self.lstClassifications.clear()
@@ -671,7 +688,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Clear all further steps in order to properly calculate the prev step
         self.lstHazardCategories.clear()
         self.lstSubcategories.clear()
-        self.lstDataTypes.clear()
+        self.lstLayerModes.clear()
         self.lstUnits.clear()
         self.lstFields.clear()
         self.lstClassifications.clear()
@@ -726,7 +743,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         # Clear all further steps in order to properly calculate the prev step
         self.lstSubcategories.clear()
-        self.lstDataTypes.clear()
+        self.lstLayerModes.clear()
         self.lstUnits.clear()
         self.lstFields.clear()
         self.lstClassifications.clear()
@@ -759,7 +776,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Hazard Category tab."""
         # Clear all further steps in order to properly calculate the prev step
         self.lstSubcategories.clear()
-        self.lstDataTypes.clear()
+        self.lstLayerModes.clear()
         self.lstUnits.clear()
         self.lstFields.clear()
         self.lstClassifications.clear()
@@ -808,7 +825,7 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the subcategory selection changes.
         """
         # Clear all further steps in order to properly calculate the prev step
-        self.lstDataTypes.clear()
+        self.lstLayerModes.clear()
         self.lstUnits.clear()
         self.lstFields.clear()
         self.lstClassifications.clear()
@@ -842,7 +859,7 @@ class WizardDialog(QDialog, FORM_CLASS):
     def set_widgets_step_kw_subcategory(self):
         """Set widgets on the Subcategory tab."""
         # Clear all further steps in order to properly calculate the prev step
-        self.lstDataTypes.clear()
+        self.lstLayerModes.clear()
         self.lstUnits.clear()
         self.lstFields.clear()
         self.lstClassifications.clear()
@@ -876,12 +893,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.auto_select_one_item(self.lstSubcategories)
 
     # ===========================
-    # STEP_KW_DATATYPE
+    # STEP_KW_LAYERMODE
     # ===========================
 
     # noinspection PyPep8Naming
-    def on_lstDataTypes_itemSelectionChanged(self):
-        """Update data type description label and unit widgets.
+    def on_lstLayerModes_itemSelectionChanged(self):
+        """Update layer mode description label and unit widgets.
 
         .. note:: This is an automatic Qt slot
            executed when the subcategory selection changes.
@@ -891,22 +908,22 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lstFields.clear()
         self.lstClassifications.clear()
         # Set widgets
-        layer_mode = self.selected_datatype()
+        layer_mode = self.selected_layermode()
         # Exit if no selection
         if not layer_mode:
-            self.lblDescribeDataType.setText('')
+            self.lblDescribeLayerMode.setText('')
             return
         # Set description label
-        self.lblDescribeDataType.setText(layer_mode['description'])
+        self.lblDescribeLayerMode.setText(layer_mode['description'])
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
-    def selected_datatype(self):
+    def selected_layermode(self):
         """Obtain the layer mode selected by user.
         :returns: selected layer mode.
         :rtype: string, None
         """
-        item = self.lstDataTypes.currentItem()
+        item = self.lstLayerModes.currentItem()
         try:
             # pylint: disable=eval-used
             return eval(item.data(QtCore.Qt.UserRole))
@@ -914,8 +931,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         except (AttributeError, NameError):
             return None
 
-    def set_widgets_step_kw_datatype(self):
-        """Set widgets on the DataType tab."""
+    def set_widgets_step_kw_layermode(self):
+        """Set widgets on the LayerMode tab."""
         # Clear all further steps in order to properly calculate the prev step
         self.lstUnits.clear()
         self.lstFields.clear()
@@ -926,26 +943,29 @@ class WizardDialog(QDialog, FORM_CLASS):
         layermode_question = (layermode_raster_question
                               if is_raster_layer(self.layer)
                               else layermode_vector_question)
-        self.lblSelectDataType .setText(
+        self.lblSelectLayerMode .setText(
             layermode_question % (subcategory['name'], category['name']))
-        self.lblDescribeDataType.setText('')
-        self.lstDataTypes.clear()
+        self.lblDescribeLayerMode.setText('')
+        self.lstLayerModes.clear()
         self.lstUnits.clear()
         self.lstFields.clear()
-        layer_modes = [layer_mode_continuous, layer_mode_classified]
-        layer_mode_keys = [m['key'] for m in layer_modes]
+        layer_modes = self.layermodes_for_layer()
         for layer_mode in layer_modes:
-            item = QListWidgetItem(layer_mode['name'], self.lstDataTypes)
+            item = QListWidgetItem(layer_mode['name'], self.lstLayerModes)
             item.setData(QtCore.Qt.UserRole, unicode(layer_mode))
             self.lstUnits.addItem(item)
 
         # Set value to existing keyword or default value
-        datatype_keyword = self.get_existing_keyword('layer_mode')
-        if datatype_keyword in layer_mode_keys:
-            indx = layer_mode_keys.index(datatype_keyword)
+        layermode_keys = [m['key'] for m in layer_modes]
+        layermode_keyword = self.get_existing_keyword('layer_mode')
+        if layermode_keyword in layermode_keys:
+            indx = layermode_keys.index(layermode_keyword)
+        elif layer_mode_continuous['key'] in layermode_keys:
+            # Set default value
+            indx = layermode_keys.index(layer_mode_continuous['key'])
         else:
-            indx = layer_mode_keys.index('continuous')  # default
-        self.lstDataTypes.setCurrentRow(indx)
+            indx = -1
+        self.lstLayerModes.setCurrentRow(indx)
 
     # ===========================
     # STEP_KW_UNIT
@@ -998,7 +1018,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lstUnits.clear()
         subcat = self.selected_subcategory()['key']
         laygeo = self.get_layer_geometry_id()
-        laymod = self.selected_datatype()['key']
+        laymod = self.selected_layermode()['key']
         if category == layer_purpose_hazard:
             hazcat = self.selected_hazard_category()['key']
             units_for_layer = self.impact_function_manager\
@@ -1092,7 +1112,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         unit = self.selected_unit()
         if category == layer_purpose_aggregation:
             question_text = field_question_aggregation
-        elif self.selected_datatype() == layer_mode_continuous and unit:
+        elif self.selected_layermode() == layer_mode_continuous and unit:
             # unique values, continuous or categorical data
             subcategory_unit_relation = get_question_text(
                 '%s_%s_question' % (subcategory['key'], unit['key']))
@@ -1117,7 +1137,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                     and field_name == unit['default_attribute']:
                 default_item = item
             # For continuous data, gray out id, gid, fid and text fields
-            if self.selected_datatype() == layer_mode_continuous and unit:
+            if self.selected_layermode() == layer_mode_continuous and unit:
                 field_type = field.type()
                 if field_type > 9 or re.match(
                         '.{0,2}id$', field_name, re.I):
@@ -1167,7 +1187,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Resample tab."""
         category = self.selected_category()
         subcategory = self.selected_subcategory()
-        layer_mode = self.selected_datatype()
+        layer_mode = self.selected_layermode()
         self.lblSelectAllowResample.setText(
             allow_resampling_question % (subcategory['name'],
                                          category['name'], layer_mode['name']))
@@ -2180,9 +2200,9 @@ class WizardDialog(QDialog, FORM_CLASS):
     def get_compatible_layers_from_canvas(self, category):
         """Collect compatible layers from map canvas.
 
-        .. note:: Returns layers with keywords and datatype matching
+        .. note:: Returns layers with keywords and layermode matching
            the category and compatible with the selected impact function.
-           Also returns layers without keywords with datatype
+           Also returns layers without keywords with layermode
            compatible with the selected impact function.
 
         :param category: The category to filter for.
@@ -3325,8 +3345,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_kw_hazard_category()
         if new_step == step_kw_subcategory:
             self.set_widgets_step_kw_subcategory()
-        elif new_step == step_kw_datatype:
-            self.set_widgets_step_kw_datatype()
+        elif new_step == step_kw_layermode:
+            self.set_widgets_step_kw_layermode()
         elif new_step == step_kw_unit:
             self.set_widgets_step_kw_unit()
         elif new_step == step_kw_field:
@@ -3455,13 +3475,13 @@ class WizardDialog(QDialog, FORM_CLASS):
             return bool(self.selected_hazard_category())
         if step == step_kw_subcategory:
             return bool(self.selected_subcategory())
-        if step == step_kw_datatype:
-            return bool(self.selected_datatype())
+        if step == step_kw_layermode:
+            return bool(self.selected_layermode())
         if step == step_kw_unit:
             return bool(self.selected_unit())
         if step == step_kw_field:
             # Allow to leave field unset for classified data
-            return bool(self.selected_datatype() == layer_mode_classified or
+            return bool(self.selected_layermode() == layer_mode_classified or
                         self.selected_field() or
                         not self.lstFields.count())
         if step == step_kw_resample:
@@ -3553,15 +3573,15 @@ class WizardDialog(QDialog, FORM_CLASS):
             #         and subcategory['key'] == 'volcano'):
             #     new_step = step_kw_source
             # elif self.get_layer_geometry_id() == 'raster':
-            #     new_step = step_kw_datatype
+            #     new_step = step_kw_layermode
             # elif self.impact_function_manager.units_for_layer(
             #         subcategory['key'],
             #         self.get_layer_geometry_id(), self.get_layer_mode()):
             #     new_step = step_kw_unit
             # else:
             #     new_step = step_kw_field
-            new_step = step_kw_datatype
-        elif current_step == step_kw_datatype:
+            new_step = step_kw_layermode
+        elif current_step == step_kw_layermode:
             # if self.impact_function_manager.units_for_layer(
             #         self.selected_subcategory()['key'],
             #         self.get_layer_geometry_id(), self.get_layer_mode()):
@@ -3569,7 +3589,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             # else:
             #     new_step = step_kw_field
             if self.selected_category() == layer_purpose_hazard:
-                if self.selected_datatype() == layer_mode_classified:
+                if self.selected_layermode() == layer_mode_classified:
                     # CLASSIFIED HAZARD
                     if is_raster_layer(self.layer):
                         new_step = step_kw_classification
@@ -3579,7 +3599,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                     # CONTINUOUS HAZARD
                     subcat = self.selected_subcategory()['key']
                     laygeo = self.get_layer_geometry_id()
-                    laymod = self.selected_datatype()['key']
+                    laymod = self.selected_layermode()['key']
                     hazcat = self.selected_hazard_category()['key']
                     if self.impact_function_manager\
                             .continuous_hazards_units_for_layer(subcat,
@@ -3590,7 +3610,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                     else:
                         new_step = step_kw_source
             else:
-                if self.selected_datatype() == layer_mode_classified:
+                if self.selected_layermode() == layer_mode_classified:
                     # CLASSIFIED EXPOSURE
                     if is_raster_layer(self.layer):
                         new_step = step_kw_resample
@@ -3600,7 +3620,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                     # CONTINUOUS EXPOSURE
                     subcat = self.selected_subcategory()['key']
                     laygeo = self.get_layer_geometry_id()
-                    laymod = self.selected_datatype()['key']
+                    laymod = self.selected_layermode()['key']
                     if self.impact_function_manager.exposure_units_for_layer(
                             subcat,
                             laygeo,
@@ -3633,14 +3653,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             #     new_step = step_kw_source
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
-            elif (self.selected_datatype() == layer_mode_classified and
-                      self.classifications_for_layer() and
-                      (is_raster_layer(self.layer) or self.selected_field())):
+            elif (self.selected_layermode() == layer_mode_classified and
+                    self.classifications_for_layer() and
+                    (is_raster_layer(self.layer) or self.selected_field())):
                 new_step = step_kw_classification
             else:
                 new_step = step_kw_source
         elif current_step == step_kw_resample:
-            if (self.selected_datatype() == layer_mode_classified and
+            if (self.selected_layermode() == layer_mode_classified and
                     self.classifications_for_layer()):
                 new_step = step_kw_classification
             else:
@@ -3770,15 +3790,15 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_kw_category
         elif current_step == step_kw_unit:
-            if self.selected_datatype():
-                new_step = step_kw_datatype
+            if self.selected_layermode():
+                new_step = step_kw_layermode
             else:
                 new_step = step_kw_subcategory
         elif current_step == step_kw_field:
             if self.selected_unit():
                 new_step = step_kw_unit
-            elif self.selected_datatype():
-                new_step = step_kw_datatype
+            elif self.selected_layermode():
+                new_step = step_kw_layermode
             elif self.selected_subcategory():
                 new_step = step_kw_subcategory
             elif self.selected_hazard_category():
@@ -3789,12 +3809,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             if self.selected_unit():
                 new_step = step_kw_unit
             else:
-                new_step = step_kw_datatype
+                new_step = step_kw_layermode
         elif current_step == step_kw_classification:
             if self.selected_allowresample() is not None:
                 new_step = step_kw_resample
             elif is_raster_layer(self.layer):
-                new_step = step_kw_datatype
+                new_step = step_kw_layermode
             else:
                 new_step = step_kw_field
         elif current_step == step_kw_classify:
@@ -3812,8 +3832,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_field
             elif self.selected_unit():
                 new_step = step_kw_unit
-            elif self.selected_datatype():
-                new_step = step_kw_datatype
+            elif self.selected_layermode():
+                new_step = step_kw_layermode
             elif self.selected_subcategory():
                 new_step = step_kw_subcategory
             else:
@@ -3873,14 +3893,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         return self.stackedWidget.currentIndex() + 1
 
     def get_layer_geometry_id(self, layer=None):
-        """Obtain data type of a given layer.
+        """Obtain layer mode of a given layer.
 
         If no layer specified, the current layer is used
 
         :param layer : layer to examine
         :type layer: QgsMapLayer or None
 
-        :returns: The data type.
+        :returns: The layer mode.
         :rtype: str
         """
         if not layer:
@@ -3917,6 +3937,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: dict
         """
         keywords = {}
+        keywords['layer_geometry'] = self.get_layer_geometry_id()
         if self.selected_category():
             keywords['layer_purpose'] = self.selected_category()['key']
             if keywords['layer_purpose'] == 'aggregation':
@@ -3927,8 +3948,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.selected_hazard_category():
             keywords['hazard_category'] \
                 = self.selected_hazard_category()['key']
-        if self.selected_datatype():
-            keywords['layer_mode'] = self.selected_datatype()['key']
+        if self.selected_layermode():
+            keywords['layer_mode'] = self.selected_layermode()['key']
         if self.selected_unit():
             if self.selected_category() == layer_purpose_hazard:
                 key = continuous_hazard_unit['key']
