@@ -314,6 +314,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = ITBFatalityFunction()
         result = impact_function.metadata().available_hazard_layer_mode(
             'earthquake',
+            'raster',
             'single_hazard'
         )
 
@@ -324,7 +325,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for available_exposure_layer_mode."""
         impact_function = ITBFatalityFunction()
         result = impact_function.metadata().available_exposure_layer_mode(
-            'population'
+            'population',
+            'raster'
         )
         expected = layer_mode_continuous
         self.assertEqual(result, expected)
