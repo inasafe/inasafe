@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>MAkbar Gumbira</author>
+  </metadata>
+
+  <datafile>
+    <filename>classified_generic_polygon.shp</filename>
+    <checksum>1687234107</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Akbar Gumbira</accountable>
+    <source>AIFDR</source>
+    <IP_owner>AIFDR</IP_owner>
+    <IP_info>Polygons created at AIFDR for test purposes</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>classified_generic_polygon.shx</filename>
+    <checksum>440806013</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Akbar Gumbira</accountable>
+    <source>AIFDR</source>
+    <IP_owner>AIFDR</IP_owner>
+    <IP_info>Polygons created at AIFDR for test purposes</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>classified_generic_polygon.dbf</filename>
+    <checksum>1003706635</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Akbar Gumbira</accountable>
+    <source>AIFDR</source>
+    <IP_owner>AIFDR</IP_owner>
+    <IP_info>Polygons created at AIFDR for test purposes</IP_info>
+  </datafile>
+
+</ga_license_file>

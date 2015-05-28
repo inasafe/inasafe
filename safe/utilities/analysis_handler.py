@@ -63,6 +63,7 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -94,7 +95,7 @@ class AnalysisHandler(QObject):
         # Do not delete this
         self.iface = parent.iface
         self.keyword_io = KeywordIO()
-
+        self.impact_function_manager = ImpactFunctionManager()
         self.extent = Extent(self.iface)
         self.analysis = None
 
@@ -362,9 +363,10 @@ class AnalysisHandler(QObject):
                 self.parent.aggregation_layer)
 
         # Impact Function
-        self.analysis.impact_function_id = self.parent.selected_function()[
-            'id']
-        self.analysis.impact_function_parameters = self.parent.if_params
+        impact_function = self.impact_function_manager.get(
+            self.parent.selected_function()['id'])
+        impact_function.parameters = self.parent.if_params
+        self.analysis.impact_function = impact_function
 
         # Variables
         self.analysis.clip_hard = self.clip_hard
@@ -497,7 +499,7 @@ class AnalysisHandler(QObject):
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
         if self.hide_exposure_flag:
-            exposure_layer = self.parent.get_exposure_layer()
+            exposure_layer = self.analysis.exposure_layer
             legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
 
@@ -613,7 +615,7 @@ class AnalysisHandler(QObject):
             question = self.tr(
                 'The composer template you are printing to is missing '
                 'these elements: %s. Do you still want to continue') % (
-                ', '.join(impact_report.missing_elements))
+                    ', '.join(impact_report.missing_elements))
             # noinspection PyCallByClass,PyTypeChecker
             answer = QtGui.QMessageBox.question(
                 self.parent,
@@ -695,7 +697,7 @@ class AnalysisHandler(QObject):
             self.show_dynamic_message(self, status)
         except TemplateLoadingError, e:
             self.show_error_message(get_error_message(e))
-        except Exception, e:
+        except Exception, e:  # pylint: disable=broad-except
             self.show_error_message(get_error_message(e))
 
     def open_map_in_composer(self, impact_report):

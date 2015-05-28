@@ -1,1 +1,1 @@
-__author__ = 'akbar'
+# coding=utf-8

@@ -6,7 +6,7 @@
 
   <datafile>
     <filename>buildings_inundated_district_jakarta.shp</filename>
-    <checksum>2716676861</checksum>
+    <checksum>2872420343</checksum>
     <publishable>Yes</publishable>
     <accountable>Yewondwossen Assefa</accountable>
     <source>Open Street Map (OSM)</source>
@@ -18,7 +18,7 @@
 
   <datafile>
     <filename>buildings_inundated_district_jakarta.shx</filename>
-    <checksum>97812038</checksum>
+    <checksum>427635973</checksum>
     <publishable>Yes</publishable>
     <accountable>Yewondwossen Assefa</accountable>
     <source>Open Street Map (OSM)</source>
@@ -30,7 +30,7 @@
 
   <datafile>
     <filename>buildings_inundated_district_jakarta.dbf</filename>
-    <checksum>609335899</checksum>
+    <checksum>1088629286</checksum>
     <publishable>Yes</publishable>
     <accountable>Yewondwossen Assefa</accountable>
     <source>Open Street Map (OSM)</source>

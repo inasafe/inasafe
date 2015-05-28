@@ -1,0 +1,6 @@
+hazard_category: single_hazard
+title: Earthquake
+hazard: earthquake
+continuous_hazard_unit: mmi
+layer_purpose: hazard
+layer_mode: continuous

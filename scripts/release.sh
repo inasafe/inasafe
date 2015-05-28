@@ -37,6 +37,11 @@ rm -rf ${WORKDIR}/${DIR}/fabfile.py
 #rm -rf ${WORKDIR}/${DIR}/safe_qgis/resources
 rm -rf ${WORKDIR}/${DIR}/pylintrc_jenkins
 rm -rf ${WORKDIR}/${DIR}/.travis.yml
+rm -rf ${WORKDIR}/${DIR}/Dockerfile
+rm -rf ${WORKDIR}/${DIR}/docs/README.BEFORE.CHANGING.DOCS.txt
+rm -rf ${WORKDIR}/${DIR}/71-apt-cacher-ng
+rm -rf ${WORKDIR}/${DIR}/.dockerignore
+rm -rf ${WORKDIR}/${DIR}/REQUIREMENTS.txt
 
 find ${WORKDIR}/${DIR} -name test*.py -delete
 find ${WORKDIR}/${DIR} -name *_test.py -delete
@@ -52,11 +57,11 @@ pushd .
 cd ${WORKDIR}
 find . -name test -exec /bin/rm -rf {} \;
 # Compress all images shipped
-for FILE in `find . -type f -name "*.png"`
-do
-    echo "Compressing $FILE"
-    convert -dither FloydSteinberg -colors 128 $FILE $FILE
-done
+#for FILE in `find . -type f -name "*.png"`
+#do
+#    echo "Compressing $FILE"
+#    convert -dither FloydSteinberg -colors 128 $FILE $FILE
+#done
 
 # The \* tells zip to ignore recursively
 rm ${OUT}

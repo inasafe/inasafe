@@ -101,7 +101,7 @@ class TestWizardDialogLocale(unittest.TestCase):
                 return
         message = 'There is no %s in the list widget' % option
         message += '\n The options are %s' % items
-        self.assertTrue(False, message)
+        raise Exception(message)
 
     def test_translation(self):
         """Test for metadata translation."""

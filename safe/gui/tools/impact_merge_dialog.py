@@ -23,16 +23,19 @@ from xml.dom import minidom
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=F0401
-# pylint: disable=W0611
+# pylint: disable=unused-import
 from qgis.core import (
     QgsMapLayerRegistry,
-    QgsMapSettings,
     QgsComposition,
     QgsRectangle,
     QgsAtlasComposition
 )
 # pylint: enable=F0401
-# pylint: enable=W0611
+# pylint: enable=unused-import
+try:
+    from qgis.core import QgsMapSettings
+except ImportError:
+    from qgis.core import QgsMapRenderer
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
@@ -68,6 +71,7 @@ from safe.utilities.utilities import (
 from safe.utilities.help import show_context_help
 from safe.utilities.keyword_io import KeywordIO
 from safe.defaults import disclaimer
+from safe.utilities.unicode import get_string
 
 INFO_STYLE = styles.INFO_STYLE
 FORM_CLASS = get_ui_class('impact_merge_dialog_base.ui')
@@ -227,8 +231,9 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
     def on_directory_chooser_clicked(self):
         """Show a dialog to choose directory."""
         # noinspection PyCallByClass,PyTypeChecker
-        self.output_directory.setText(QFileDialog.getExistingDirectory(
-            self, self.tr("Select Output Directory")))
+        self.output_directory.setText(
+            QFileDialog.getExistingDirectory(
+                self, self.tr('Select Output Directory')))
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_report_template_chooser_clicked(self):
@@ -438,7 +443,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             the question dialog for creating directory, or 'Yes' but the output
             directory path is empty
         """
-        path = str(self.output_directory.text())
+        path = self.output_directory.text()
 
         if os.path.exists(path):
             return
@@ -554,8 +559,8 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         second_report = '<body>' + second_postprocessing_report + '</body>'
 
         # Now create a dom document for each
-        first_document = minidom.parseString(first_report)
-        second_document = minidom.parseString(second_report)
+        first_document = minidom.parseString(get_string(first_report))
+        second_document = minidom.parseString(get_string(second_report))
         first_impact_tables = first_document.getElementsByTagName('table')
         second_impact_tables = second_document.getElementsByTagName('table')
 
@@ -825,8 +830,12 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             layer_set.append(self.aggregation['layer'].id())
 
         # Instantiate Map Settings for Composition
-        map_settings = QgsMapSettings()
-        map_settings.setLayers(layer_set)
+        if qgis_version() < 20400:
+            map_settings = QgsMapRenderer()
+            map_settings.setLayerSet(layer_set)
+        else:
+            map_settings = QgsMapSettings()
+            map_settings.setLayers(layer_set)
 
         # Create composition
         composition = self.load_template(map_settings)
@@ -994,7 +1003,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         9. QgsComposerHTML with id 'merged-report-table' for the merged report.
 
         :param map_settings: Map settings.
-        :type map_settings: QgsMapSettings
+        :type map_settings: QgsMapSettings, QgsMapRenderer
 
         """
         # Create Composition
@@ -1040,8 +1049,14 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
 
         # Set Map Legend
         legend = composition.getComposerItemById('map-legend')
+
+        if qgis_version() < 20400:
+            layers = map_settings.layerSet()
+        else:
+            layers = map_settings.layers()
+
         if qgis_version() < 20600:
-            legend.model().setLayerSet(map_settings.layers())
+            legend.model().setLayerSet(layers)
             legend.synchronizeWithModel()
         else:
             root_group = legend.modelV2().rootGroup()

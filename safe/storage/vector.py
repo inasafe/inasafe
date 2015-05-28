@@ -10,7 +10,6 @@ OGR C++ reference: http://www.gdal.org/ogr
 
 
 """
-from safe.utilities.i18n import tr
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
 __revision__ = '$Format:%H$'
@@ -52,6 +51,9 @@ from utilities import get_ring_data, get_polygon_data
 from utilities import rings_equal
 from utilities import safe_to_qgis_layer
 from safe.common.utilities import unique_filename
+from safe.utilities.unicode import get_string
+from safe.utilities.i18n import tr
+
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(99999999)
@@ -561,7 +563,7 @@ class Vector(Layer):
         # FIXME (DK): this branch isn't covered by test
         if not QGIS_IS_AVAILABLE:
             msg = ('Used data is QgsVectorLayer instance, '
-                   'but QGIS is not avialable.')
+                   'but QGIS is not available.')
             raise TypeError(msg)
 
         base_name = unique_filename()
@@ -669,12 +671,12 @@ class Vector(Layer):
             msg = 'OGR driver %s not available' % driver
             raise WriteLayerError(msg)
 
-        ds = drv.CreateDataSource(filename)
+        ds = drv.CreateDataSource(get_string(filename))
         if ds is None:
             msg = 'Creation of output file %s failed' % filename
             raise WriteLayerError(msg)
 
-        lyr = ds.CreateLayer(layer_name,
+        lyr = ds.CreateLayer(get_string(layer_name),
                              self.projection.spatial_reference,
                              self.geometry_type)
         if lyr is None:
@@ -714,7 +716,9 @@ class Vector(Layer):
             # Create attribute fields in layer
             store_attributes = True
             for name in fields:
-                fd = ogr.FieldDefn(name, ogr_types[name])
+                # Rizky : OGR can't handle unicode field name, thus we
+                # convert it to ASCII
+                fd = ogr.FieldDefn(str(name), ogr_types[name])
                 # FIXME (Ole): Trying to address issue #16
                 #              But it doesn't work and
                 #              somehow changes the values of MMI in test
@@ -779,7 +783,7 @@ class Vector(Layer):
 
                     val = data[i][name]
 
-                    if type(val) == numpy.ndarray:
+                    if isinstance(val, numpy.ndarray):
                         # A singleton of type <type 'numpy.ndarray'> works
                         # for gdal version 1.6 but fails for version 1.8
                         # in SetField with error: NotImplementedError:

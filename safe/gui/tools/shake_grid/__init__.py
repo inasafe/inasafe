@@ -1,1 +1,1 @@
-__author__ = 'gumbia'
+# coding=utf-8

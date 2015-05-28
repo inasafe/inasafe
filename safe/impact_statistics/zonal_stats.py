@@ -23,12 +23,12 @@ import logging
 import numpy
 from osgeo import gdal, ogr, osr
 
-from PyQt4.QtCore import QCoreApplication
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsGeometry,
     QgsPoint)
+from PyQt4.QtCore import QCoreApplication
 
 from safe.utilities.gis import is_polygon_layer
 from safe.common.exceptions import InvalidParameterError, InvalidGeometryError
@@ -103,7 +103,7 @@ def calculate_zonal_stats(raster_layer, polygon_layer):
     LOGGER.debug('Vector: %s' % polygon_layer.source())
     results = {}
     raster_source = raster_layer.source()
-    feature_id = gdal.Open(str(raster_source), gdal.GA_ReadOnly)
+    feature_id = gdal.Open(raster_source, gdal.GA_ReadOnly)
     geo_transform = feature_id.GetGeoTransform()
     columns = feature_id.RasterXSize
     rows = feature_id.RasterYSize

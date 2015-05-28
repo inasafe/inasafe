@@ -21,15 +21,15 @@ __date__ = '11/17/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
     QgsPoint,
     QgsCoordinateReferenceSystem,
     QGis)
-from qgis.gui import QgsRubberBand
+from qgis.gui import QgsRubberBand  # pylint: disable=no-name-in-module
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QSettings
 
 from safe.common.exceptions import InvalidGeometryError
 # noinspection PyPackageRequirements

@@ -18,11 +18,16 @@ __date__ = '16/03/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QFile, QUrl, QByteArray
 # noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
+
+from safe.common.utilities import humanize_file_size
+from safe.utilities.i18n import tr
 
 
 class FileDownloader(object):
@@ -47,6 +52,8 @@ class FileDownloader(object):
         self.url = url
         self.output_path = output_path
         self.progress_dialog = progress_dialog
+        if self.progress_dialog:
+            self.prefix_text = self.progress_dialog.labelText()
         self.output_file = None
         self.reply = None
         self.downloaded_file_buffer = None
@@ -88,7 +95,14 @@ class FileDownloader(object):
                 # noinspection PyArgumentList
                 QCoreApplication.processEvents()
 
-                label_text = "%s / %s" % (received, total)
+                self.progress_dialog.adjustSize()
+
+                human_received = humanize_file_size(received)
+                human_total = humanize_file_size(total)
+
+                label_text = tr("%s : %s of %s" % (
+                    self.prefix_text, human_received, human_total))
+
                 self.progress_dialog.setLabelText(label_text)
                 self.progress_dialog.setMaximum(total)
                 self.progress_dialog.setValue(received)
@@ -113,7 +127,7 @@ class FileDownloader(object):
         if result == QNetworkReply.NoError:
             return True, None
         else:
-            return result, str(self.reply.errorString())
+            return result, self.reply.errorString()
 
     def get_buffer(self):
         """Get buffer from self.reply and store it to our buffer container."""

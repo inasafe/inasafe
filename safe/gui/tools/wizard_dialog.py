@@ -24,6 +24,18 @@ import re
 import json
 from collections import OrderedDict
 from sqlite3 import OperationalError
+from osgeo import gdal
+from osgeo.gdalconst import GA_ReadOnly
+import numpy
+
+from qgis.core import (
+    QgsCoordinateTransform,
+    QgsBrowserModel,
+    QgsDataItem,
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsDataSourceURI,
+    QgsMapLayerRegistry)
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
@@ -35,29 +47,29 @@ from PyQt4.QtGui import (
     QListWidgetItem,
     QPixmap,
     QApplication,
-    QDesktopWidget,
     QSortFilterProxyModel)
-
-from qgis.core import (
-    QgsCoordinateTransform,
-    QgsBrowserModel,
-    QgsDataItem,
-    QgsVectorLayer,
-    QgsRasterLayer,
-    QgsDataSourceURI,
-    QgsMapLayerRegistry)
 
 # pylint: disable=F0401
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
-from safe import metadata
-from safe.metadata import (
-    layer_vector_point,
-    layer_vector_line,
-    layer_vector_polygon,
-    layer_raster_continuous,
-    layer_raster_classified)
+from safe import definitions
+from safe.definitions import (
+    global_default_attribute,
+    do_not_use_attribute,
+    continuous_hazard_unit,
+    exposure_unit,
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_purpose_aggregation,
+    hazard_category_single_hazard,
+    hazard_category_multi_hazard,
+    layer_geometry_point,
+    layer_geometry_line,
+    layer_geometry_polygon,
+    layer_geometry_raster,
+    layer_mode_continuous,
+    layer_mode_classified)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.analysis_handler import AnalysisHandler
@@ -66,9 +78,7 @@ from safe.utilities.gis import (
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.utilities import (
-    get_error_message,
-    get_safe_impact_function)
+from safe.utilities.utilities import get_error_message
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -91,7 +101,7 @@ category_question = QApplication.translate(
     'WizardDialog',
     'By following the simple steps in this wizard, you can assign '
     'keywords to your layer: <b>%s</b>. First you need to define '
-    'the category of your layer.')   # (layer name)
+    'the purpose of your layer.')   # (layer name)
 
 
 category_question_hazard = QApplication.translate(
@@ -114,6 +124,12 @@ category_question_aggregation = QApplication.translate(
     'First you need to confirm the layer is an aggregation '
     'layer.')
 
+# Constants for hazard_categories
+hazard_category_question = QApplication.translate(
+    'WizardDialog',
+    'What category of <b>hazard</b> does this layer represent? '
+    'Is it a single hazard scenario or a zone of multiple hazards?')
+
 # Constants for hazards
 hazard_question = QApplication.translate(
     'WizardDialog',
@@ -134,17 +150,20 @@ exposure_question = QApplication.translate(
     'able to use this exposure layer with impact functions such '
     'as <b>flood impact on population</b>.')
 
-# Constants for data types
-datatype_question = QApplication.translate(
+# Constants for layer modes
+layermode_raster_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> '
     'for this raster layer. We need to know whether each cell '
     'in this raster represents a continuous '
     'value or a classified code.')   # (subcategory, category)
 
-continuous_datatype_description = metadata.unit_continuous['description']
-
-classified_datatype_description = metadata.unit_classified['description']
+layermode_vector_question = QApplication.translate(
+    'WizardDialog',
+    'You have selected <b>%s %s</b> for this layer. '
+    'We need to know whether attribute data of this vector '
+    'represents a continuous value or a classified code.')
+# (subcategory, category)
 
 # Constants for units
 unit_question = QApplication.translate(
@@ -164,7 +183,7 @@ allow_resampling_question = QApplication.translate(
     'For some exposure types you may want InaSAFE to not resample '
     'the raster to the hazard layer resolution during analyses. Please '
     'select the check box below if you want to set the <i>allow_resample</i> '
-    'keyword to <i>False</i>.')   # (subcategory, category, data_type)
+    'keyword to <i>False</i>.')   # (subcategory, category, layer_mode)
 
 # Constants for subcategory-unit relations
 # These texts below will be inserted as the fourth variable
@@ -219,6 +238,12 @@ field_question_subcategory_unit = QApplication.translate(
     'select the attribute in this layer that represents %s.')
 # (category, subcategory, unit, subcategory-unit relation))
 
+field_question_subcategory_classified = QApplication.translate(
+    'WizardDialog',
+    'You have selected a <b>classified %s %s</b> layer, and the selected '
+    'layeris a vector layer. Please select the attribute in this layer that '
+    'represents the classes.')  # (category, subcategory)
+
 # noinspection PyCallByClass,PyCallByClass
 field_question_aggregation = QApplication.translate(
     'WizardDialog',
@@ -226,22 +251,37 @@ field_question_aggregation = QApplication.translate(
     'layer. Please select the attribute in this layer that represents '
     'names of the aggregation areas.')
 
+# Constants for allow_resampling
+classification_question = QApplication.translate(
+    'WizardDialog',
+    'You have selected <b>%s %s</b> for this classified data. '
+    'Please select type of classification you want to use. ')
+# (subcategory, category)
+
 # Constants for classify values for categorized units
 # noinspection PyCallByClass
-classify_question = QApplication.translate(
+classify_vector_question = QApplication.translate(
     'WizardDialog',
-    'You have selected <b>%s %s</b> measured in <b>%s</b> categorical '
-    'unit, and the data column is <b>%s</b>. Below on the left you '
-    'can see all unique values found in that column. Please drag them '
-    'to the right panel in order to classify them to appropriate '
-    'categories.')   # (subcategory, category, unit, field)
+    'You have selected <b>%s %s</b> classified by <b>%s</b>, '
+    'and the data column is <b>%s</b>. Below on the left you '
+    'can see all unclassified unique values found in that column. Please '
+    'drag them to the right panel in order to classify them to appropriate '
+    'categories.')   # (subcategory, category, classification, field)
+
+classify_raster_question = QApplication.translate(
+    'WizardDialog',
+    'You have selected <b>%s %s</b> classified by <b>%s</b>, '
+    'and the layer is a raster layer. Below on the left you '
+    'can see all unclassified unique values found in the raster. Please '
+    'drag them to the right panel in order to classify them to appropriate '
+    'categories.')   # (subcategory, category, classification)
 
 # Constants for the layer origin selector
 layer_constraint_memo = QApplication.translate(
     'WizardDialog',
     'Based on your selection of <b>%s %s %s</b> on the previous page, '
     'you should select a <b>%s</b> layer containing <b>%s</b> data now.'
-    )  # (subcategory, data_type, category, data_type2, subcategory )
+    )  # (subcategory, layer_geometry, category, layer_geometry2, subcategory )
 
 # Constants for the browser
 # noinspection PyCallByClass
@@ -255,35 +295,38 @@ create_postGIS_connection_first = QApplication.translate(
 
 # Constants: tab numbers for steps
 
-step_kw_category = 1
-step_kw_subcategory = 2
-step_kw_datatype = 3
-step_kw_unit = 4
-step_kw_field = 5
-step_kw_resample = 6
-step_kw_classify = 7
-step_kw_aggregation = 8
-step_kw_source = 9
-step_kw_title = 10
-step_fc_function_1 = 11
-step_fc_function_2 = 12
-step_fc_function_3 = 13
-step_fc_hazlayer_origin = 14
-step_fc_hazlayer_from_canvas = 15
-step_fc_hazlayer_from_browser = 16
-step_fc_explayer_origin = 17
-step_fc_explayer_from_canvas = 18
-step_fc_explayer_from_browser = 19
-step_fc_disjoint_layers = 20
-step_fc_agglayer_origin = 21
-step_fc_agglayer_from_canvas = 22
-step_fc_agglayer_from_browser = 23
-step_fc_agglayer_disjoint = 24
-step_fc_extent = 25
-step_fc_extent_disjoint = 26
-step_fc_params = 27
-step_fc_summary = 28
-step_fc_analysis = 29
+step_kw_category = 1  # to be renamed to PURPOSE
+step_kw_hazard_category = 2
+step_kw_subcategory = 3
+step_kw_datatype = 4  # to be renamed to LAYERMODE
+step_kw_unit = 5
+step_kw_field = 6
+step_kw_resample = 7
+step_kw_classification = 8
+step_kw_classify = 9
+step_kw_aggregation = 10
+step_kw_source = 11
+step_kw_title = 12
+step_fc_function_1 = 13
+step_fc_function_2 = 14
+step_fc_function_3 = 15
+step_fc_hazlayer_origin = 16
+step_fc_hazlayer_from_canvas = 17
+step_fc_hazlayer_from_browser = 18
+step_fc_explayer_origin = 19
+step_fc_explayer_from_canvas = 20
+step_fc_explayer_from_browser = 21
+step_fc_disjoint_layers = 22
+step_fc_agglayer_origin = 23
+step_fc_agglayer_from_canvas = 24
+step_fc_agglayer_from_browser = 25
+step_fc_agglayer_disjoint = 26
+step_fc_extent = 27
+step_fc_extent_disjoint = 28
+step_fc_params = 29
+step_fc_summary = 30
+step_fc_analysis = 31
+
 
 # Aggregations' keywords
 DEFAULTS = get_defaults()
@@ -388,7 +431,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         QDialog.__init__(self, parent)
         self.setupUi(self)
-        self.fix_window_geometry()
         self.setWindowTitle('InaSAFE')
         # Note the keys should remain untranslated as we need to write
         # english to the keywords file.
@@ -428,7 +470,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.keyword_io = KeywordIO()
         self.twParams = None
 
-        # TODO document it:
         self.is_selected_layer_keywordless = False
         self.parent_step = None
 
@@ -448,13 +489,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnCancel.released.connect(self.reject)
 
         # string constants
-        self.global_default_string = metadata.global_default_attribute['name']
-        self.global_default_data = metadata.global_default_attribute['id']
-        self.do_not_use_string = metadata.do_not_use_attribute['name']
-        self.do_not_use_data = metadata.do_not_use_attribute['id']
+        self.global_default_string = global_default_attribute['name']
+        self.global_default_data = global_default_attribute['id']
+        self.do_not_use_string = do_not_use_attribute['name']
+        self.do_not_use_data = do_not_use_attribute['id']
         self.defaults = get_defaults()
 
         # Initialize attributes
+        self.impact_function_manager = ImpactFunctionManager()
         self.existing_keywords = None
         self.layer = None
         self.hazard_layer = None
@@ -462,49 +504,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.aggregation_layer = None
         self.if_params = None
         self.analysis_handler = None
-
-    def fix_window_geometry(self):
-        """Fix the wizard window geometry if overflows the screen.
-        .. note:: Because of a big variety of window decorations and desktop
-                  layouts, it simply reserves 30 px on the top for the window
-                  bar, 40 px on the bottom for the system panel, and 10 px of
-                  the width for vertical decorations
-        """
-        x_max = QDesktopWidget().screenGeometry().width() - 30  # for a panel
-        y_max = QDesktopWidget().screenGeometry().height()
-
-        # Don't do anything if the frame geometry fits the screen.
-        # Use 5 pixels tolerance for possible shadows.
-        (x0, y0, x1, y1) = self.frameGeometry().getCoords()
-        if x0 >= -5 and x1 <= x_max + 5 and y0 >= -5 and y1 <= y_max + 5:
-            return
-
-        x = self.geometry().x()
-        y = self.geometry().y()
-        w = self.geometry().width()
-        h = self.geometry().height()
-
-        if x < 0 or x > x_max:
-            x = 0
-            if w > x_max:
-                w = x_max - 10
-        if x + w > x_max or x + w < 200:
-            if w > x_max:
-                w = x_max - 10
-            x = x_max - w
-        if y < 12 or y > y_max:
-            # Leave a margin for the decoration: 12px for the test, 30 to set.
-            # Ignore if the margin is < 30px but > 12px - it should be possible
-            # to drag the bar anyway.
-            y = 30
-            if h > (y_max - 30):
-                h = (y_max - 30)
-        if y + h > y_max or y + h < 200:
-            if h > y_max:
-                h = y_max
-            y = y_max - h
-        if (x, y, x + w, y + h) != self.geometry().getCoords():
-            self.setGeometry(x, y, w, h)
 
     def set_keywords_creation_mode(self, layer=None):
         """Set the Wizard to the Keywords Creation mode
@@ -515,8 +514,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         try:
             self.existing_keywords = self.keyword_io.read_keywords(self.layer)
-            if 'category' not in self.existing_keywords:
-                self.existing_keywords = None
+            # if 'layer_purpose' not in self.existing_keywords:
+            #     self.existing_keywords = None
         except (HashNotFoundError,
                 OperationalError,
                 NoKeywordsFoundError,
@@ -536,66 +535,88 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
         self.go_to_step(new_step)
 
-    def categories_for_layer(self, layer_type, data_type):
-        """Return a list of valid categories for a layer.
+    def update_MessageViewer_size(self):
+        """Update maximumHeight size of the MessageViewer to fit its parent tab
 
-        This method is used to determine if a given layer can be used as a
-        hazard, exposure or aggregation layer.
+        This is a workaround for a bug that makes MessageViewer
+        flooding up to maximumHeight on Windows.
+        """
+        self.wvResults.setMaximumHeight(self.pgF25Progress.height() - 90)
 
-        :param layer_type: The type for this layer.
-        :type layer_type: str
+    def resizeEvent(self, ev):
+        """Trigger MessageViewer size update on window resize
 
-        :param data_type: The data_type for this layer.
-        :type data_type: str
+        .. note:: This is an automatic Qt slot
+           executed when the window size changes.
+        """
+        self.update_MessageViewer_size()
 
-        :returns: A list where each value represents a valid category.
+    def purposes_for_layer(self):
+        """Return a list of valid purposes for the current layer.
+
+        :returns: A list where each value represents a valid purpose.
         :rtype: list
         """
-        if layer_type == 'raster':
-            # Ignore data_type and collect categories for both continuous
-            # and classified rasters. Sort hazard prior to exposure.
-            categories = []
-            for data_type in ['continuous', 'classified']:
-                for c in ImpactFunctionManager().categories_for_layer(
-                        'raster', data_type):
-                    if c not in categories:
-                        categories += [c]
-        else:
-            categories = ImpactFunctionManager().categories_for_layer(
-                layer_type, data_type)
-        return categories
+        layer_geometry_id = self.get_layer_geometry_id()
+        return self.impact_function_manager.purposes_for_layer(
+            layer_geometry_id)
 
-    def subcategories_for_layer(self, category_id, layer_type, data_type):
+    def hazard_categories_for_layer(self):
+        """Return a list of valid hazard categories for a layer.
+
+        :returns: A list where each value represents a valid hazard category.
+        :rtype: list
+        """
+        layer_geometry_id = self.get_layer_geometry_id()
+        ifm = self.impact_function_manager
+        hazard_categories = ifm.hazard_categories_for_layer(
+            layer_geometry_id)
+        return hazard_categories
+
+    def subcategories_for_layer(self):
         """Return a list of valid subcategories for a layer.
-
-        This method is used to determine if a given layer can be used as a
-        hazard, exposure or aggregation layer.
-
-        :param category_id: The category for this layer.
-        :type category_id: str
-
-        :param layer_type: The type for this layer.
-        :type layer_type: str
-
-        :param data_type: The data_type for this layer.
-        :type data_type: str
 
         :returns: A list where each value represents a valid subcategory.
         :rtype: list
         """
-        if layer_type == 'raster':
-            # Ignore data_type and collect subcategories for both continuous
-            # and classified rasters. Sort hazard prior to exposure.
-            subcategories = []
-            for data_type in ['continuous', 'classified']:
-                for sc in ImpactFunctionManager().subcategories_for_layer(
-                        category_id, 'raster', data_type):
-                    if sc not in subcategories:
-                        subcategories += [sc]
+        purpose = self.selected_category()
+        layer_geometry_id = self.get_layer_geometry_id()
+        if purpose == layer_purpose_hazard:
+            hazard_category_id = self.selected_hazard_category()['key']
+            return self.impact_function_manager.hazards_for_layer(
+                layer_geometry_id, hazard_category_id)
+        elif purpose == layer_purpose_exposure:
+            return self.impact_function_manager.exposures_for_layer(
+                layer_geometry_id)
+
+    def classifications_for_layer(self):
+        """Return a list of valid classifications for a layer.
+
+        :returns: A list where each value represents a valid classification.
+        :rtype: list
+        """
+        layer_geometry_id = self.get_layer_geometry_id()
+        layer_mode_id = self.selected_datatype()['key']
+        subcategory_id = self.selected_subcategory()['key']
+        if self.selected_category() == layer_purpose_hazard:
+            hazard_category_id = self.selected_hazard_category()['key']
+            if is_raster_layer(self.layer):
+                return self.impact_function_manager.\
+                    raster_hazards_classifications_for_layer(
+                        subcategory_id,
+                        layer_geometry_id,
+                        layer_mode_id,
+                        hazard_category_id)
+            else:
+                return self.impact_function_manager\
+                    .vector_hazards_classifications_for_layer(
+                        subcategory_id,
+                        layer_geometry_id,
+                        layer_mode_id,
+                        hazard_category_id)
         else:
-            subcategories = ImpactFunctionManager().subcategories_for_layer(
-                category_id, layer_type, data_type)
-        return subcategories
+            # There are no classifications for exposures yet
+            return []
 
     # ===========================
     # STEP_KW_CATEGORY
@@ -605,12 +626,19 @@ class WizardDialog(QDialog, FORM_CLASS):
     # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_lstCategories_itemSelectionChanged(self):
-        """Update category description label and subcategory widgets.
+        """Update purpose description label.
 
         .. note:: This is an automatic Qt slot
            executed when the category selection changes.
         """
+        # Clear all further steps in order to properly calculate the prev step
+        self.lstHazardCategories.clear()
         self.lstSubcategories.clear()
+        self.lstDataTypes.clear()
+        self.lstUnits.clear()
+        self.lstFields.clear()
+        self.lstClassifications.clear()
+        # Set widgets
         category = self.selected_category()
         # Exit if no selection
         if not category:
@@ -619,14 +647,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeCategory.setText(category["description"])
         self.lblIconCategory.setPixmap(QPixmap(
             resources_path('img', 'wizard', 'keyword-category-%s.svg'
-                           % (category['id'] or 'notset'))))
+                           % (category['key'] or 'notset'))))
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
     def selected_category(self):
-        """Obtain the category selected by user.
+        """Obtain the layer purpose selected by user.
 
-        :returns: Metadata of the selected category.
+        :returns: Metadata of the selected layer purpose.
         :rtype: dict, None
         """
         item = self.lstCategories.currentItem()
@@ -639,31 +667,35 @@ class WizardDialog(QDialog, FORM_CLASS):
             return None
 
     def set_widgets_step_kw_category(self):
-        """Set widgets on the Category tab."""
-        self.lstCategories.clear()
+        """Set widgets on the layer purpose tab."""
+        # Clear all further steps in order to properly calculate the prev step
+        self.lstHazardCategories.clear()
         self.lstSubcategories.clear()
         self.lstDataTypes.clear()
         self.lstUnits.clear()
+        self.lstFields.clear()
+        self.lstClassifications.clear()
+        # Set widgets
+        self.lstCategories.clear()
         self.lblDescribeCategory.setText('')
         self.lblIconCategory.setPixmap(QPixmap())
         self.lblSelectCategory.setText(
             category_question % self.layer.name())
-        categories = self.categories_for_layer(
-            self.get_layer_type(), self.get_data_type())
-        if self.get_data_type() == 'polygon':
+        categories = self.purposes_for_layer()
+        if self.get_layer_geometry_id() == 'polygon':
             categories += ['aggregation']
         for category in categories:
             if type(category) != dict:
                 # pylint: disable=eval-used
-                category = eval('metadata.%s_definition' % category)
+                category = eval('definitions.layer_purpose_%s' % category)
                 # pylint: enable=eval-used
             item = QListWidgetItem(category['name'], self.lstCategories)
             item.setData(QtCore.Qt.UserRole, unicode(category))
             self.lstCategories.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
-        category_keyword = self.get_existing_keyword('category')
-        if category_keyword == 'postprocessing':
+        category_keyword = self.get_existing_keyword('layer_purpose')
+        if category_keyword == 'aggregation':
             category_keyword = 'aggregation'
         if category_keyword:
             categories = []
@@ -672,7 +704,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 # pylint: disable=eval-used
                 category = eval(item.data(QtCore.Qt.UserRole))
                 # pylint: enable=eval-used
-                categories.append(category['id'])
+                categories.append(category['key'])
             if category_keyword in categories:
                 self.lstCategories.setCurrentRow(
                     categories.index(category_keyword))
@@ -680,18 +712,107 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.auto_select_one_item(self.lstCategories)
 
     # ===========================
+    # STEP_KW_HAZARD_CATEGORY
+    # ===========================
+
+    # prevents actions being handled twice
+    # noinspection PyPep8Naming
+    @pyqtSignature('')
+    def on_lstHazardCategories_itemSelectionChanged(self):
+        """Update hazard category description label.
+
+        .. note:: This is an automatic Qt slot
+           executed when the category selection changes.
+        """
+        # Clear all further steps in order to properly calculate the prev step
+        self.lstSubcategories.clear()
+        self.lstDataTypes.clear()
+        self.lstUnits.clear()
+        self.lstFields.clear()
+        self.lstClassifications.clear()
+        # Set widgets
+        hazard_category = self.selected_hazard_category()
+        # Exit if no selection
+        if not hazard_category:
+            return
+        # Set description label
+        self.lblDescribeHazardCategory.setText(hazard_category["description"])
+        # Enable the next button
+        self.pbnNext.setEnabled(True)
+
+    def selected_hazard_category(self):
+        """Obtain the hazard category selected by user.
+
+        :returns: Metadata of the selected hazard category.
+        :rtype: dict, None
+        """
+        item = self.lstHazardCategories.currentItem()
+
+        try:
+            # pylint: disable=eval-used
+            return eval(item.data(QtCore.Qt.UserRole))
+            # pylint: enable=eval-used
+        except (AttributeError, NameError):
+            return None
+
+    def set_widgets_step_kw_hazard_category(self):
+        """Set widgets on the Hazard Category tab."""
+        # Clear all further steps in order to properly calculate the prev step
+        self.lstSubcategories.clear()
+        self.lstDataTypes.clear()
+        self.lstUnits.clear()
+        self.lstFields.clear()
+        self.lstClassifications.clear()
+        # Set widgets
+        self.lstHazardCategories.clear()
+        self.lblDescribeHazardCategory.setText('')
+        self.lblSelectHazardCategory.setText(
+            hazard_category_question)
+        hazard_categories = self.hazard_categories_for_layer()
+        for hazard_category in hazard_categories:
+            if type(hazard_category) != dict:
+                # pylint: disable=eval-used
+                hazard_category = eval('definitions.hazard_category_%s'
+                                       % hazard_category)
+                # pylint: enable=eval-used
+            item = QListWidgetItem(hazard_category['name'],
+                                   self.lstHazardCategories)
+            item.setData(QtCore.Qt.UserRole, unicode(hazard_category))
+            self.lstHazardCategories.addItem(item)
+
+        # Set values based on existing keywords (if already assigned)
+        category_keyword = self.get_existing_keyword('hazard_category')
+        if category_keyword:
+            categories = []
+            for index in xrange(self.lstHazardCategories.count()):
+                item = self.lstHazardCategories.item(index)
+                # pylint: disable=eval-used
+                hazard_category = eval(item.data(QtCore.Qt.UserRole))
+                # pylint: enable=eval-used
+                categories.append(hazard_category['key'])
+            if category_keyword in categories:
+                self.lstHazardCategories.setCurrentRow(
+                    categories.index(category_keyword))
+
+        self.auto_select_one_item(self.lstHazardCategories)
+
+    # ===========================
     # STEP_KW_SUBCATEGORY
     # ===========================
 
     # noinspection PyPep8Naming
     def on_lstSubcategories_itemSelectionChanged(self):
-        """Update subcategory description label and unit widgets.
+        """Update subcategory description label.
 
         .. note:: This is an automatic Qt slot
            executed when the subcategory selection changes.
         """
+        # Clear all further steps in order to properly calculate the prev step
         self.lstDataTypes.clear()
         self.lstUnits.clear()
+        self.lstFields.clear()
+        self.lstClassifications.clear()
+        # Set widgets
         subcategory = self.selected_subcategory()
         # Exit if no selection
         if not subcategory:
@@ -700,7 +821,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeSubcategory.setText(subcategory['description'])
         self.lblIconSubcategory.setPixmap(QPixmap(
             resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
-                           % (subcategory['id'] or 'notset'))))
+                           % (subcategory['key'] or 'notset'))))
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
@@ -720,33 +841,37 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_kw_subcategory(self):
         """Set widgets on the Subcategory tab."""
-        category = self.selected_category()
-        self.lstSubcategories.clear()
+        # Clear all further steps in order to properly calculate the prev step
         self.lstDataTypes.clear()
         self.lstUnits.clear()
+        self.lstFields.clear()
+        self.lstClassifications.clear()
+        # Set widgets
+        category = self.selected_category()
+        self.lstSubcategories.clear()
         self.lblDescribeSubcategory.setText('')
         self.lblIconSubcategory.setPixmap(QPixmap())
         self.lblSelectSubcategory.setText(
-            get_question_text('%s_question' % category['id']))
-        for i in self.subcategories_for_layer(
-                category['id'], self.get_layer_type(), self.get_data_type()):
+            get_question_text('%s_question' % category['key']))
+        for i in self.subcategories_for_layer():
             item = QListWidgetItem(i['name'], self.lstSubcategories)
             item.setData(QtCore.Qt.UserRole, unicode(i))
             self.lstSubcategories.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
-        subcategory_keyword = self.get_existing_keyword('subcategory')
-        if subcategory_keyword:
+        key = self.selected_category()['key']
+        keyword = self.get_existing_keyword(key)
+        if keyword:
             subcategories = []
             for index in xrange(self.lstSubcategories.count()):
                 item = self.lstSubcategories.item(index)
                 # pylint: disable=eval-used
                 subcategory = eval(item.data(QtCore.Qt.UserRole))
                 # pylint: enable=eval-used
-                subcategories.append(subcategory['id'])
-            if subcategory_keyword in subcategories:
+                subcategories.append(subcategory['key'])
+            if keyword in subcategories:
                 self.lstSubcategories.setCurrentRow(
-                    subcategories.index(subcategory_keyword))
+                    subcategories.index(keyword))
 
         self.auto_select_one_item(self.lstSubcategories)
 
@@ -761,54 +886,65 @@ class WizardDialog(QDialog, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the subcategory selection changes.
         """
+        # Clear all further steps in order to properly calculate the prev step
         self.lstUnits.clear()
-        # Set description label
-        if self.selected_datatype() == 'continuous':
-            self.lblDescribeDataType.setText(continuous_datatype_description)
-        elif self.selected_datatype() == 'classified':
-            self.lblDescribeDataType.setText(classified_datatype_description)
-        else:
+        self.lstFields.clear()
+        self.lstClassifications.clear()
+        # Set widgets
+        layer_mode = self.selected_datatype()
+        # Exit if no selection
+        if not layer_mode:
             self.lblDescribeDataType.setText('')
             return
+        # Set description label
+        self.lblDescribeDataType.setText(layer_mode['description'])
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
     def selected_datatype(self):
-        """Obtain the data type selected by user.
-        :returns: id of the selected datatype.
+        """Obtain the layer mode selected by user.
+        :returns: selected layer mode.
         :rtype: string, None
         """
-        if self.lstDataTypes.selectedItems():
-            item = self.lstDataTypes.currentItem()
-        else:
-            return None
+        item = self.lstDataTypes.currentItem()
         try:
-            return item.data(QtCore.Qt.UserRole)
+            # pylint: disable=eval-used
+            return eval(item.data(QtCore.Qt.UserRole))
+            # pylint: enable=eval-used
         except (AttributeError, NameError):
             return None
 
     def set_widgets_step_kw_datatype(self):
         """Set widgets on the DataType tab."""
+        # Clear all further steps in order to properly calculate the prev step
+        self.lstUnits.clear()
+        self.lstFields.clear()
+        self.lstClassifications.clear()
+        # Set widgets
         category = self.selected_category()
         subcategory = self.selected_subcategory()
+        layermode_question = (layermode_raster_question
+                              if is_raster_layer(self.layer)
+                              else layermode_vector_question)
         self.lblSelectDataType .setText(
-            datatype_question % (subcategory['name'], category['name']))
+            layermode_question % (subcategory['name'], category['name']))
         self.lblDescribeDataType.setText('')
         self.lstDataTypes.clear()
         self.lstUnits.clear()
         self.lstFields.clear()
-        data_types = ['continuous', 'classified']
-        for data_type in data_types:
-            item = QListWidgetItem(data_type, self.lstDataTypes)
-            item.setData(QtCore.Qt.UserRole, data_type)
+        layer_modes = [layer_mode_continuous, layer_mode_classified]
+        layer_mode_keys = [m['key'] for m in layer_modes]
+        for layer_mode in layer_modes:
+            item = QListWidgetItem(layer_mode['name'], self.lstDataTypes)
+            item.setData(QtCore.Qt.UserRole, unicode(layer_mode))
             self.lstUnits.addItem(item)
 
         # Set value to existing keyword or default value
-        datatype_keyword = self.get_existing_keyword('data_type')
-        if datatype_keyword in data_types:
-            indx = data_types.index(datatype_keyword)
+        datatype_keyword = self.get_existing_keyword('layer_mode')
+        if datatype_keyword in layer_mode_keys:
+            indx = layer_mode_keys.index(datatype_keyword)
         else:
-            indx = data_types.index('continuous')  # default
+            indx = layer_mode_keys.index('continuous')  # default
         self.lstDataTypes.setCurrentRow(indx)
 
     # ===========================
@@ -822,7 +958,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the unit selection changes.
         """
+        # Clear all further steps in order to properly calculate the prev step
         self.lstFields.clear()
+        self.lstClassifications.clear()
+        # Set widgets
         unit = self.selected_unit()
         # Exit if no selection
         if not unit:
@@ -847,28 +986,48 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_kw_unit(self):
         """Set widgets on the Unit tab."""
+        # Clear all further steps in order to properly calculate the prev step
+        self.lstFields.clear()
+        self.lstClassifications.clear()
+        # Set widgets
         category = self.selected_category()
         subcategory = self.selected_subcategory()
         self.lblSelectUnit.setText(
             unit_question % (subcategory['name'], category['name']))
         self.lblDescribeUnit.setText('')
         self.lstUnits.clear()
-        self.lstFields.clear()
-        for unit_for_layer in ImpactFunctionManager().units_for_layer(
-                subcategory['id'],
-                self.get_layer_type(), self.get_data_type()):
-            if (self.get_layer_type() == 'raster' and
-                    'constraint' in unit_for_layer and
-                    unit_for_layer['constraint'] == 'categorical'):
-                continue
-            else:
-                item = QListWidgetItem(unit_for_layer['name'], self.lstUnits)
-                item.setData(QtCore.Qt.UserRole, unicode(unit_for_layer))
-                self.lstUnits.addItem(item)
+        subcat = self.selected_subcategory()['key']
+        laygeo = self.get_layer_geometry_id()
+        laymod = self.selected_datatype()['key']
+        if category == layer_purpose_hazard:
+            hazcat = self.selected_hazard_category()['key']
+            units_for_layer = self.impact_function_manager\
+                .continuous_hazards_units_for_layer(subcat,
+                                                    laygeo,
+                                                    laymod,
+                                                    hazcat)
+        else:
+            units_for_layer = self.impact_function_manager\
+                .exposure_units_for_layer(subcat,
+                                          laygeo,
+                                          laymod)
+        for unit_for_layer in units_for_layer:
+            # if (self.get_layer_geometry_id() == 'raster' and
+            #         'constraint' in unit_for_layer and
+            #         unit_for_layer['constraint'] == 'categorical'):
+            #     continue
+            # else:
+            item = QListWidgetItem(unit_for_layer['name'], self.lstUnits)
+            item.setData(QtCore.Qt.UserRole, unicode(unit_for_layer))
+            self.lstUnits.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
-        unit_id = self.get_existing_keyword('unit')
-        unit_id = metadata.old_to_new_unit_id(unit_id)
+        if self.selected_category() == layer_purpose_hazard:
+            key = continuous_hazard_unit['key']
+        else:
+            key = exposure_unit['key']
+        unit_id = self.get_existing_keyword(key)
+        # unit_id = definitions.old_to_new_unit_id(unit_id)
         if unit_id:
             units = []
             for index in xrange(self.lstUnits.count()):
@@ -876,7 +1035,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 # pylint: disable=eval-used
                 unit = eval(item.data(QtCore.Qt.UserRole))
                 # pylint: enable=eval-used
-                units.append(unit['id'])
+                units.append(unit['key'])
             if unit_id in units:
                 self.lstUnits.setCurrentRow(units.index(unit_id))
 
@@ -893,6 +1052,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the field selection changes.
         """
+        self.lstClassifications.clear()
         self.treeClasses.clear()
         field = self.selected_field()
         # Exit if no selection
@@ -926,25 +1086,25 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_kw_field(self):
         """Set widgets on the Field tab."""
+        self.lstClassifications.clear()
         category = self.selected_category()
         subcategory = self.selected_subcategory()
         unit = self.selected_unit()
-        if subcategory and unit:
-            subcategory_unit_relation = get_question_text(
-                '%s_%s_question' % (subcategory['id'], unit['id']))
-        else:
-            subcategory_unit_relation = self.tr(
-                '<b><font color="red">ERROR! '
-                'Missing subcategory or unit!</font></b>')
-        if category['id'] == 'aggregation':
+        if category == layer_purpose_aggregation:
             question_text = field_question_aggregation
-        else:
+        elif self.selected_datatype() == layer_mode_continuous and unit:
             # unique values, continuous or categorical data
+            subcategory_unit_relation = get_question_text(
+                '%s_%s_question' % (subcategory['key'], unit['key']))
             question_text = field_question_subcategory_unit % (
                 category['name'],
                 subcategory['name'],
                 unit['name'],
                 subcategory_unit_relation)
+        else:
+            question_text = field_question_subcategory_classified % (
+                category['name'],
+                subcategory['name'])
         self.lblSelectField.setText(question_text)
         self.lstFields.clear()
         default_item = None
@@ -953,27 +1113,24 @@ class WizardDialog(QDialog, FORM_CLASS):
             item = QListWidgetItem(field_name, self.lstFields)
             item.setData(QtCore.Qt.UserRole, field_name)
             # Select the item if it match the unit's default_attribute
-            if unit and unit['id'] == 'building_generic':
-                pass
-            else:
-                if unit and 'default_attribute' in unit \
-                        and field_name == unit['default_attribute']:
-                    default_item = item
-                # For continuous data, gray out id, gid, fid and text fields
-                if unit and unit['constraint'] == 'continuous':
-                    field_type = field.type()
-                    if field_type > 9 or re.match(
-                            '.{0,2}id$', field_name, re.I):
-                        item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
+            if unit and 'default_attribute' in unit \
+                    and field_name == unit['default_attribute']:
+                default_item = item
+            # For continuous data, gray out id, gid, fid and text fields
+            if self.selected_datatype() == layer_mode_continuous and unit:
+                field_type = field.type()
+                if field_type > 9 or re.match(
+                        '.{0,2}id$', field_name, re.I):
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
         if default_item:
             self.lstFields.setCurrentItem(default_item)
         self.lblDescribeField.clear()
 
         # Set values based on existing keywords (if already assigned)
-        if self.selected_category()['id'] != 'aggregation':
-            field = self.get_existing_keyword('field')
-        else:
+        if self.selected_category() == layer_purpose_aggregation:
             field = self.get_existing_keyword('aggregation attribute')
+        else:
+            field = self.get_existing_keyword('field')
         if field:
             fields = []
             for index in xrange(self.lstFields.count()):
@@ -997,7 +1154,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not is_raster_layer(self.layer):
             return None
 
-        if self.selected_category()['id'] != 'exposure':
+        if self.selected_category() != layer_purpose_exposure:
             return None
 
         # Only return false if checked, otherwise None for not-set.
@@ -1010,10 +1167,80 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Resample tab."""
         category = self.selected_category()
         subcategory = self.selected_subcategory()
-        data_type = self.selected_datatype()
+        layer_mode = self.selected_datatype()
         self.lblSelectAllowResample.setText(
             allow_resampling_question % (subcategory['name'],
-                                         category['name'], data_type))
+                                         category['name'], layer_mode['name']))
+
+    # ===========================
+    # STEP_KW_CLASSIFICATION
+    # ===========================
+
+    def on_lstClassifications_itemSelectionChanged(self):
+        """Update classification description label and unlock the Next button.
+
+        .. note:: This is an automatic Qt slot
+           executed when the field selection changes.
+        """
+        classification = self.selected_classification()
+        # Exit if no selection
+        if not classification:
+            return
+        # Set description label
+        self.lblDescribeClassification.setText(classification["description"])
+        # Enable the next button
+        self.pbnNext.setEnabled(True)
+
+    def selected_classification(self):
+        """Obtain the classification selected by user.
+
+        :returns: Metadata of the selected classification.
+        :rtype: dict, None
+        """
+        item = self.lstClassifications.currentItem()
+        try:
+            # pylint: disable=eval-used
+            return eval(item.data(QtCore.Qt.UserRole))
+            # pylint: enable=eval-used
+        except (AttributeError, NameError):
+            return None
+
+    def set_widgets_step_kw_classification(self):
+        """Set widgets on the Classification tab."""
+        category = self.selected_category()['key']
+        subcategory = self.selected_subcategory()['key']
+        self.lstClassifications.clear()
+        self.lblDescribeClassification.setText('')
+        self.lblSelectClassification.setText(
+            classification_question % (subcategory, category))
+        classifications = self.classifications_for_layer()
+        for classification in classifications:
+            if type(classification) != dict:
+                # pylint: disable=eval-used
+                classification = eval('definitions.%s' % classification)
+                # pylint: enable=eval-used
+            item = QListWidgetItem(classification['name'],
+                                   self.lstClassifications)
+            item.setData(QtCore.Qt.UserRole, unicode(classification))
+            self.lstClassifications.addItem(item)
+
+        # Set values based on existing keywords (if already assigned)
+        geom = 'raster' if is_raster_layer(self.layer) else 'vector'
+        key = '%s_%s_classification' % (geom, self.selected_category()['key'])
+        classification_keyword = self.get_existing_keyword(key)
+        if classification_keyword:
+            classifications = []
+            for index in xrange(self.lstClassifications.count()):
+                item = self.lstClassifications.item(index)
+                # pylint: disable=eval-used
+                classification = eval(item.data(QtCore.Qt.UserRole))
+                # pylint: enable=eval-used
+                classifications.append(classification['key'])
+            if classification_keyword in classifications:
+                self.lstClassifications.setCurrentRow(
+                    classifications.index(classification_keyword))
+
+        self.auto_select_one_item(self.lstClassifications)
 
     # ===========================
     # STEP_KW_CLASSIFY
@@ -1060,30 +1287,41 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Classify tab."""
         category = self.selected_category()
         subcategory = self.selected_subcategory()
-        unit = self.selected_unit()
-        default_classes = unit['classes']
-        field = self.selected_field()
-        field_index = self.layer.dataProvider().fields().indexFromName(
-            self.selected_field())
-        field_type = self.layer.dataProvider().fields()[field_index].type()
-        self.lblClassify.setText(classify_question %
-                                 (subcategory['name'], category['name'],
-                                  unit['name'], field.upper()))
-        # Assign unique values to classes
+        classification = self.selected_classification()
+        default_classes = classification['classes']
+        if is_raster_layer(self.layer):
+            self.lblClassify.setText(classify_raster_question % (
+                subcategory['name'], category['name'],
+                classification['name']))
+            ds = gdal.Open(self.layer.source(), GA_ReadOnly)
+            unique_values = numpy.unique(numpy.array(
+                ds.GetRasterBand(1).ReadAsArray()))
+            field_type = 0
+        else:
+            field = self.selected_field()
+            field_index = self.layer.dataProvider().fields().indexFromName(
+                self.selected_field())
+            field_type = self.layer.dataProvider().fields()[field_index].type()
+            self.lblClassify.setText(classify_vector_question % (
+                subcategory['name'], category['name'],
+                classification['name'], field.upper()))
+            unique_values = self.layer.uniqueValues(field_index)
+
+        # Assign unique values to classes (according to defauls)
         unassigned_values = list()
         assigned_values = dict()
         for default_class in default_classes:
             assigned_values[default_class['name']] = list()
-        for value in self.layer.uniqueValues(field_index):
-            value_as_string = value and unicode(value) or 'NULL'
+        for value in unique_values:
+            value_as_string = value is not None and unicode(value) or 'NULL'
             assigned = False
             for default_class in default_classes:
-                if (field_type > 9
-                    and value_as_string in default_class['string_defaults']) \
-                        or (field_type < 10
-                            and (default_class['numeric_default_min'] <=
-                                 value < default_class[
-                                 'numeric_default_max'])):
+                if ((field_type > 9 and value_as_string.upper()
+                        in [c.upper()
+                            for c in default_class['string_defaults']]) or
+                        (field_type < 10 and
+                            (default_class['numeric_default_min'] <= value <=
+                                default_class['numeric_default_max']))):
                     assigned_values[default_class['name']] += [value_as_string]
                     assigned = True
             if not assigned:
@@ -1092,27 +1330,19 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
 
-        # Set values based on existing keywords (if already assigned)
-        unit_id = self.get_existing_keyword('unit')
-        unit_name = metadata.old_to_new_unit_id(unit_id)
-        # Do not continue if user select different unit
-        if unit_name != self.selected_unit()['name']:
-            return
+        # Overwrite assigned values according to existing keyword (if present).
+        # Note the default_classes and unique_values are already loaded!
 
-        field = self.get_existing_keyword('field')
-        # Do not continue if user select different field
-        if field != self.selected_field():
-            return
-
-        # Do not continue if there is no value_map in existing keywords
         value_map = self.get_existing_keyword('value_map')
-
+        # Do not continue if there is no value_map in existing keywords
         if value_map is None:
             return
 
-        # Assign unique values to classes
-        unit = self.selected_unit()
-        default_classes = unit['classes']
+        # Do not continue if user select different field
+        field = self.get_existing_keyword('field')
+        if not is_raster_layer(self.layer) and field != self.selected_field():
+            return
+
         unassigned_values = list()
         assigned_values = dict()
         for default_class in default_classes:
@@ -1122,15 +1352,13 @@ class WizardDialog(QDialog, FORM_CLASS):
                 value_map = json.loads(value_map)
             except ValueError:
                 return
-        field_index = self.layer.dataProvider().fields().indexFromName(
-            self.selected_field())
-        for unique_value in self.layer.uniqueValues(field_index):
+        for unique_value in unique_values:
             value_as_string = (
-                unique_value and unicode(unique_value) or 'NULL')
+                unique_value is not None and unicode(unique_value) or 'NULL')
             # check in value map
             assigned = False
             for key, value in value_map.iteritems():
-                if value_as_string in value:
+                if value_as_string in value and key in assigned_values:
                     assigned_values[key] += [value_as_string]
                     assigned = True
             if not assigned:
@@ -1419,12 +1647,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Just set values based on existing keywords
         source = self.get_existing_keyword('source')
         self.leSource.setText(source)
-        source_scale = self.get_existing_keyword('source_scale')
+        source_scale = self.get_existing_keyword('scale')
         self.leSource_scale.setText(source_scale)
-        source_date = self.get_existing_keyword('source_date')
+        source_date = self.get_existing_keyword('date')
         self.leSource_date.setText(source_date)
-        source_url = self.get_existing_keyword('source_url')
+        source_url = self.get_existing_keyword('url')
         self.leSource_url.setText(source_url)
+        source_license = self.get_existing_keyword('license')
+        self.leSource_license.setText(source_license)
 
     # ===========================
     # STEP_KW_TITLE
@@ -1450,17 +1680,8 @@ class WizardDialog(QDialog, FORM_CLASS):
     # STEP_FC_FUNCTION_1
     # ===========================
 
-    def available_constraints(self):
-        """Collect available layer_constraints from all impact functions.
-
-        :returns: List of metadata of the available constraints.
-        :rtype: list
-        """
-        return [layer_vector_point, layer_vector_line, layer_vector_polygon,
-                layer_raster_continuous]
-
     def selected_functions_1(self):
-        """Obtain functions available for hazarda an exposure selected by user.
+        """Obtain functions available for hazard an exposure selected by user.
 
         :returns: List of the available functions metadata.
         :rtype: list, None
@@ -1468,9 +1689,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         selection = self.tblFunctions1.selectedItems()
         if len(selection) != 1:
             return []
-        return selection[0].data(RoleFunctions)
+        try:
+            return selection[0].data(RoleFunctions)
+        except (AttributeError, NameError):
+            return None
 
-    def selected_imfunc_constraints(self):
+    def selected_impact_function_constraints(self):
         """Obtain impact function constraints selected by user.
 
         :returns: Tuple of metadata of hazard, exposure,
@@ -1524,6 +1748,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 item.setText((item == selItem) and u'\u2022' or '')
 
     # pylint: disable=W0613
+    # noinspection PyPep8Naming
     def on_tblFunctions1_cellDoubleClicked(self, row, column):
         """Choose selected hazard x exposure combination and go ahead.
 
@@ -1533,21 +1758,42 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnNext.click()
     # pylint: enable=W0613
 
-    def set_widgets_step_fc_function_1(self):
-        """Set widgets on the Impact Functions Table 1 tab."""
-        self.tblFunctions1.horizontalHeader().setResizeMode(
-            QtGui.QHeaderView.Stretch)
-        self.tblFunctions1.verticalHeader().setResizeMode(
-            QtGui.QHeaderView.Stretch)
+    # noinspection PyPep8Naming
+    def on_rbHazSingle_toggled(self):
+        """Reload the functions table
 
-        hazards = ImpactFunctionManager().get_available_hazards()
+        .. note:: This is an automatic Qt slot
+           executed when the radiobutton is activated.
+        """
+        if self.rbHazSingle.isChecked():
+            self.populate_function_table_1()
+
+    # noinspection PyPep8Naming
+    def on_rbHazMulti_toggled(self):
+        """Reload the functions table
+
+        .. note:: This is an automatic Qt slot
+           executed when the radiobutton is activated.
+        """
+        if self.rbHazMulti.isChecked():
+            self.populate_function_table_1()
+
+    def populate_function_table_1(self):
+        """Populate the tblFunctions1 table with available functions."""
+        if self.rbHazSingle.isChecked():
+            hazard_category = hazard_category_single_hazard
+        else:
+            hazard_category = hazard_category_multi_hazard
+        hazards = self.impact_function_manager\
+            .available_hazards(hazard_category['key'])
         # Remove 'generic' from hazards
         for h in hazards:
-            if h['id'] == 'generic':
+            if h['key'] == 'generic':
                 hazards.remove(h)
-        exposures = ImpactFunctionManager().get_available_exposures()
+        exposures = self.impact_function_manager.available_exposures()
 
         self.lblAvailableFunctions1.clear()
+        self.tblFunctions1.clear()
         self.tblFunctions1.setColumnCount(len(hazards))
         self.tblFunctions1.setRowCount(len(exposures))
         for i in range(len(hazards)):
@@ -1555,7 +1801,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             item = QtGui.QTableWidgetItem()
             item.setIcon(QtGui.QIcon(
                 resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
-                               % (h['id'] or 'notset'))))
+                               % (h['key'] or 'notset'))))
             item.setText(h['name'].capitalize())
             self.tblFunctions1.setHorizontalHeaderItem(i, item)
         for i in range(len(exposures)):
@@ -1563,7 +1809,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             item = QtGui.QTableWidgetItem()
             item.setIcon(QtGui.QIcon(
                 resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
-                               % (e['id'] or 'notset'))))
+                               % (e['key'] or 'notset'))))
             item.setText(e['name'].capitalize())
             self.tblFunctions1.setVerticalHeaderItem(i, item)
 
@@ -1573,15 +1819,16 @@ class WizardDialog(QDialog, FORM_CLASS):
         for h in hazards:
             for e in exposures:
                 item = QtGui.QTableWidgetItem()
-                functions = ImpactFunctionManager(
-                    ).get_functions_for_constraint(h, e)
+                functions = \
+                    self.impact_function_manager.functions_for_constraint(
+                        h['key'], e['key'])
                 if len(functions):
-                    bgcolor = QtGui.QColor(120, 255, 120)
+                    background_colour = QtGui.QColor(120, 255, 120)
                 else:
-                    bgcolor = QtGui.QColor(220, 220, 220)
+                    background_colour = QtGui.QColor(220, 220, 220)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
-                item.setBackground(QtGui.QBrush(bgcolor))
+                item.setBackground(QtGui.QBrush(background_colour))
                 item.setFont(big_font)
                 item.setTextAlignment(QtCore.Qt.AlignCenter |
                                       QtCore.Qt.AlignHCenter)
@@ -1591,6 +1838,17 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.tblFunctions1.setItem(exposures.index(e),
                                            hazards.index(h),
                                            item)
+        self.pbnNext.setEnabled(False)
+
+    def set_widgets_step_fc_function_1(self):
+        """Set widgets on the Impact Functions Table 1 tab."""
+
+        self.tblFunctions1.horizontalHeader().setResizeMode(
+            QtGui.QHeaderView.Stretch)
+        self.tblFunctions1.verticalHeader().setResizeMode(
+            QtGui.QHeaderView.Stretch)
+
+        self.rbHazSingle.setChecked(True)
 
     # ===========================
     # STEP_FC_FUNCTION_2
@@ -1635,12 +1893,18 @@ class WizardDialog(QDialog, FORM_CLASS):
                 item.setText((item == selItem) and u'\u2022' or '')
 
     # pylint: disable=W0613
+    # noinspection PyPep8Naming,PyUnusedLocal
     def on_tblFunctions2_cellDoubleClicked(self, row, column):
-        """Choose selected hazard x exposure constraints combination
-           and go ahead.
+        """Click handler for selecting hazard and exposure constraints.
 
-        .. note:: This is an automatic Qt slot
-           executed when the category selection changes.
+        :param row: The row that the user clicked on.
+        :type row: int
+
+        :param column: The column that the user clicked on.
+        :type column: int
+
+        .. note:: This is an automatic Qt slot executed when the category
+            selection changes.
         """
         self.pbnNext.click()
     # pylint: enable=W0613
@@ -1649,25 +1913,40 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Impact Functions Table 2 tab."""
 
         self.tblFunctions2.clear()
-        h, e, _hc, _ec = self.selected_imfunc_constraints()
-        haz_datatypes = [layer_raster_continuous, layer_raster_classified,
-                         layer_vector_polygon, layer_vector_point]
-        exp_datatypes = [layer_raster_continuous, layer_vector_point,
-                         layer_vector_line, layer_vector_polygon]
-        self.tblFunctions2.setColumnCount(len(haz_datatypes))
-        self.tblFunctions2.setRowCount(len(exp_datatypes))
+        h, e, _hc, _ec = self.selected_impact_function_constraints()
+        hazard_layer_geometries = [
+            layer_geometry_raster,
+            layer_geometry_point,
+            layer_geometry_line,
+            layer_geometry_polygon]
+        exposure_layer_geometries = [
+            layer_geometry_raster,
+            layer_geometry_point,
+            layer_geometry_line,
+            layer_geometry_polygon]
+        self.tblFunctions2.setColumnCount(len(hazard_layer_geometries))
+        self.tblFunctions2.setRowCount(len(exposure_layer_geometries))
+#         self.tblFunctions2.setHorizontalHeaderLabels(
+#             [i['layer_geometry'].capitalize() if i['layer_mode'] != 'raster'
+#              else ('%s %s' % (i['layer_geometry'],
+#                               i['layer_mode'])).capitalize()
+#              for i in hazard_layer_geometries])
+#         for i in range(len(exposure_layer_geometries)):
+#             constr = exposure_layer_geometries[i]
+#             item = QtGui.QTableWidgetItem()
+#             if constr['layer_mode'] == 'raster':
+#                 text = '%s\n%s' % (constr['layer_geometry'],
+#                                    constr['layer_mode'])
+#             else:
+#                 text = constr['layer_geometry']
+#             item.setText(text.capitalize())
+#             item.setTextAlignment(QtCore.Qt.AlignCenter)
+#             self.tblFunctions2.setVerticalHeaderItem(i, item)
         self.tblFunctions2.setHorizontalHeaderLabels(
-            [i['data_type'].capitalize() if i['layer_type'] != 'raster'
-             else ('%s %s' % (i['data_type'], i['layer_type'])).capitalize()
-             for i in haz_datatypes])
-        for i in range(len(exp_datatypes)):
-            constr = exp_datatypes[i]
+            [i['name'].capitalize() for i in hazard_layer_geometries])
+        for i in range(len(exposure_layer_geometries)):
             item = QtGui.QTableWidgetItem()
-            if constr['layer_type'] == 'raster':
-                text = '%s\n%s' % (constr['data_type'], constr['layer_type'])
-            else:
-                text = constr['data_type']
-            item.setText(text.capitalize())
+            item.setText(exposure_layer_geometries[i]['name'].capitalize())
             item.setTextAlignment(QtCore.Qt.AlignCenter)
             self.tblFunctions2.setVerticalHeaderItem(i, item)
 
@@ -1680,12 +1959,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         big_font.setPointSize(80)
 
         active_items = []
-        for col in range(len(haz_datatypes)):
-            for row in range(len(exp_datatypes)):
-                hc = haz_datatypes[col]
-                ec = exp_datatypes[row]
-                functions = ImpactFunctionManager(
-                    ).get_functions_for_constraint(h, e, hc, ec)
+        for col in range(len(hazard_layer_geometries)):
+            for row in range(len(exposure_layer_geometries)):
+                hc = hazard_layer_geometries[col]
+                ec = exposure_layer_geometries[row]
+                functions = self.impact_function_manager\
+                    .functions_for_constraint(h['key'], e['key'],
+                                              hc['key'], ec['key'])
                 item = QtGui.QTableWidgetItem()
                 if len(functions):
                     bgcolor = QtGui.QColor(120, 255, 120)
@@ -1764,9 +2044,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lstFunctions.clear()
         self.lblDescribeFunction.setText('')
 
-        h, e, hc, ec = self.selected_imfunc_constraints()
-        functions = ImpactFunctionManager().get_functions_for_constraint(
-            h, e, hc, ec)
+        h, e, hc, ec = self.selected_impact_function_constraints()
+        functions = self.impact_function_manager.functions_for_constraint(
+            h['key'], e['key'], hc['key'], ec['key'])
         for f in functions:
             item = QtGui.QListWidgetItem(self.lstFunctions)
             item.setText(f['name'])
@@ -1795,15 +2075,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         self.pbnNext.setEnabled(True)
 
-    def is_layer_compatible(self, layer, category, keywords=None):
+    def is_layer_compatible(self, layer, layer_purpose, keywords=None):
         """Validate if a given layer is compatible for selected IF
-           as a given category
+           as a given layer_purpose
 
         :param layer: The layer to be validated
         :type layer: QgsVectorLayer | QgsRasterLayer
 
-        :param category: The category the layer is validated for
-        :type category: string
+        :param layer_purpose: The layer_purpose the layer is validated for
+        :type layer_purpose: string
 
         :param keywords: The layer keywords
         :type keywords: KeywordIO | None
@@ -1812,78 +2092,87 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: boolean
         """
 
-        # Get allowed subcategory, layer_type and data_type from IF constraints
-        h, e, hc, ec = self.selected_imfunc_constraints()
-        if category == 'hazard':
-            subcategory = h['id']
-            layer_type = hc['layer_type']
-            data_type = hc['data_type']
-        elif category == 'exposure':
-            subcategory = e['id']
-            layer_type = ec['layer_type']
-            data_type = ec['data_type']
+        # Get allowed subcategory and layer_geometry from IF constraints
+        h, e, hc, ec = self.selected_impact_function_constraints()
+        if layer_purpose == 'hazard':
+            subcategory = h['key']
+            layer_geometry = hc['key']
+        elif layer_purpose == 'exposure':
+            subcategory = e['key']
+            layer_geometry = ec['key']
         else:
-            # For aggregation layers, use a simplified test
-            if (keywords and 'category' in keywords
-                    and keywords['category'] == category):
+            # For aggregation layers, use a simplified test and return
+            if (keywords and 'layer_purpose' in keywords and
+                    keywords['layer_purpose'] == layer_purpose):
                 return True
             if not keywords and is_polygon_layer(layer):
                 return True
             return False
 
-        # Get allowed units from selected IF if possible
+        # Compare layer properties with explicitly set constraints
+        # Reject if layer geometry doesn't match
+        if layer_geometry != self.get_layer_geometry_id(layer):
+            return False
+
+        # If no keywords, there's nothing more we can check
+        if not keywords:
+            return True
+
+        # Compare layer keywords with explicitly set constraints
+        # Reject if layer purpose doesn't match
+        if ('layer_purpose' in keywords and
+                keywords['layer_purpose'] != layer_purpose):
+            return False
+
+        # Reject if layer subcategory doesn't match
+        if (layer_purpose in keywords and
+                keywords[layer_purpose] != subcategory):
+            return False
+
+        # Reject if hazard category doesn't match
+        if ('hazard_category' in keywords and
+                layer_purpose == layer_purpose_hazard['key']):
+            hazard_category = (hazard_category_single_hazard['key']
+                               if self.rbHazSingle.isChecked()
+                               else hazard_category_multi_hazard['key'])
+            if keywords['hazard_category'] != hazard_category:
+                return False
+
+        # Compare layer keywords with the chosen function's constraints
+
         imfunc = self.selected_function()
-        if (imfunc and category in imfunc['categories']
-                and 'units' in imfunc['categories'][category]):
-            allowed_units = imfunc['categories'][category]['units']
-            if type(allowed_units) != list:
-                allowed_units = [allowed_units]
-        else:
-            allowed_units = None
+        lay_req = imfunc['layer_requirements'][layer_purpose]
 
-        # Test the layer type and the data type
-        if is_raster_layer(layer):
-            if layer_type != 'raster':
+        # Reject if layer mode doesn't match
+        if ('layer_mode' in keywords and
+                lay_req['layer_mode']['key'] != keywords['layer_mode']):
+            return False
+
+        # Reject if classification doesn't match
+        classification_key = '%s_%s_classification' % (
+            'raster' if is_raster_layer(layer) else 'vector',
+            layer_purpose)
+        classification_keys = classification_key + 's'
+        if (lay_req['layer_mode'] == layer_mode_classified and
+                classification_key in keywords and
+                classification_keys in lay_req):
+            allowed_classifications = [
+                c['key'] for c in lay_req[classification_keys]]
+            if keywords[classification_key] not in allowed_classifications:
                 return False
-            # Only test the data type if keywords present
-            # WARNING: if keywords present, but data_type not set,
-            # the value 'continuous' will be assumed by default.
-            if keywords:
-                if 'data_type' in keywords:
-                    # if set, get data_type from keywords
-                    layer_datatype = keywords['data_type']
-                else:
-                    # if not set, assume default value
-                    layer_datatype = 'continuous'  # default
-                if layer_datatype != data_type:
-                    return False
-        else:
-            if layer_type == 'raster':
+
+        # Reject if unit doesn't match
+        unit_key = ('continuous_hazard_unit'
+                    if layer_purpose == layer_purpose_hazard['key']
+                    else 'exposure_unit')
+        unit_keys = unit_key + 's'
+        if (lay_req['layer_mode'] == layer_mode_continuous and
+                unit_key in keywords and
+                unit_keys in lay_req):
+            allowed_units = [
+                c['key'] for c in lay_req[unit_keys]]
+            if keywords[unit_key] not in allowed_units:
                 return False
-            if is_point_layer(layer):
-                if data_type != 'point':
-                    return False
-            elif is_polygon_layer(layer):
-                if data_type != 'polygon':
-                    return False
-            else:
-                if data_type != 'line':
-                    return False
-
-        # Test the category if keywords provided
-        if (keywords and 'category' in keywords
-                and keywords['category'] != category):
-            return False
-
-        # Test the subcategory if keywords provided
-        if (keywords and 'subcategory' in keywords
-                and keywords['subcategory'] != subcategory):
-            return False
-
-        # Test the units if keywords provided
-        if (allowed_units and keywords and 'units' in keywords
-                and keywords['units'] in allowed_units):
-            return False
 
         # Finally return True
         return True
@@ -1908,7 +2197,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         for layer in self.iface.mapCanvas().layers():
             try:
                 keywords = self.keyword_io.read_keywords(layer)
-                if 'category' not in keywords:
+                if 'layer_purpose' not in keywords:
                     keywords = None
             except (HashNotFoundError,
                     OperationalError,
@@ -1983,13 +2272,22 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.rbHazLayerFromBrowser.click()
 
         # Set the memo labels on this and next (hazard) steps
-        h, e, hc, ec = self.selected_imfunc_constraints()
-        if hc['layer_type'] == 'raster':
-            data_type = '%s %s' % (hc['data_type'], hc['layer_type'])
-        else:
-            data_type = hc['data_type']
-        text = layer_constraint_memo % (h['name'], data_type,
-                                        'hazard', data_type, h['name'])
+        (hazard,
+         _,
+         hazard_constraints,
+         _) = self.selected_impact_function_constraints()
+#        if hazard_constraints['layer_mode'] == 'raster':
+#            layer_geometry = '%s %s' % (
+#                hazard_constraints['layer_geometry'],
+#                hazard_constraints['layer_mode'])
+#        else:
+#            layer_geometry = hazard_constraints['layer_geometry']
+        layer_geometry = hazard_constraints['name']
+        text = layer_constraint_memo % (hazard['name'],
+                                        layer_geometry,
+                                        'hazard',
+                                        layer_geometry,
+                                        hazard['name'])
 
         self.lblHazLayerOriginConstraint.setText(text)
         self.lblHazLayerFromCanvasConstraint.setText(text)
@@ -2017,7 +2315,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
-            if 'category' not in keywords:
+            if 'layer_purpose' not in keywords:
                 keywords = None
         except (HashNotFoundError,
                 OperationalError,
@@ -2030,16 +2328,33 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.is_selected_layer_keywordless = not bool(keywords)
 
         if keywords:
+            purpose = keywords.get('layer_purpose')
+            if purpose == layer_purpose_hazard['key']:
+                subcategory = '<b>%s</b>: %s<br/>' % (
+                    self.tr('Hazard'), keywords.get(purpose))
+                unit = keywords.get('continuous_hazard_unit')
+            elif purpose == layer_purpose_exposure['key']:
+                subcategory = '<b>%s</b>: %s<br/>' % (
+                    self.tr('Exposure'), keywords.get(purpose))
+                unit = keywords.get('exposure_unit')
+            else:
+                subcategory = ''
+                unit = None
+            if keywords.get('layer_mode') == layer_mode_classified['key']:
+                unit = self.tr('classified data')
+            if unit:
+                unit = '<b>%s</b>: %s<br/>' % (self.tr('Unit'), unit)
+
             label_text = """
                 <b>Title</b>: %s<br/>
-                <b>Category</b>: %s<br/>
-                <b>Subcategory</b>: %s<br/>
-                <b>Unit</b>: %s<br/>
+                <b>Purpose</b>: %s<br/>
+                %s
+                %s
                 <b>Source</b>: %s<br/><br/>
             """ % (keywords.get('title'),
-                   keywords.get('category'),
-                   keywords.get('subcategory'),
-                   keywords.get('unit'),
+                   keywords.get('layer_purpose'),
+                   subcategory,
+                   unit,
                    keywords.get('source'))
         else:
             if is_point_layer(layer):
@@ -2055,12 +2370,12 @@ class WizardDialog(QDialog, FORM_CLASS):
                             layer.source())
 
             label_text = """
-                This layer has no keywords assigned<br/><br/>
+                This layer has no valid keywords assigned<br/><br/>
                 <b>SOURCE</b>: %s<br/>
                 <b>TYPE</b>: %s<br/><br/>
                 In the next step you will be able to register this layer.
-            """ % (source, is_raster_layer(layer)
-                   and 'raster' or 'vector (%s)' % geom_type)
+            """ % (source, is_raster_layer(layer) and
+                   'raster' or 'vector (%s)' % geom_type)
 
         return label_text
 
@@ -2202,7 +2517,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             browser = self.tvBrowserHazard
         elif category == 'exposure':
             browser = self.tvBrowserExposure
-        elif category == 'postprocessing':
+        elif category == 'aggregation':
             browser = self.tvBrowserAggregation
         else:
             raise InaSAFEError
@@ -2252,7 +2567,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
-            if 'category' not in keywords:
+            if 'layer_purpose' not in keywords:
                 keywords = None
         except (HashNotFoundError,
                 OperationalError,
@@ -2283,15 +2598,34 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.is_selected_layer_keywordless = not bool(keywords)
 
         if keywords:
-            desc = (
-                '<b>Title</b>: %s<br/>'
-                '<b>Category</b>: %s<br/>'
-                '<b>Subcategory</b>: %s<br/>'
-                '<b>Unit</b>: %s<br/>'
-                '<b>Source</b>: %s<br/><br/>') % (
-                keywords.get('title'), keywords.get('category'),
-                keywords.get('subcategory'), keywords.get('unit'),
-                keywords.get('source'))
+            purpose = keywords.get('layer_purpose')
+            if purpose == layer_purpose_hazard['key']:
+                subcategory = '<b>%s</b>: %s<br/>' % (
+                    self.tr('Hazard'), keywords.get(purpose))
+                unit = keywords.get('continuous_hazard_unit')
+            elif purpose == layer_purpose_exposure['key']:
+                subcategory = '<b>%s</b>: %s<br/>' % (
+                    self.tr('Exposure'), keywords.get(purpose))
+                unit = keywords.get('exposure_unit')
+            else:
+                subcategory = ''
+                unit = None
+            if keywords.get('layer_mode') == layer_mode_classified['key']:
+                unit = self.tr('classified data')
+            if unit:
+                unit = '<b>%s</b>: %s<br/>' % (self.tr('Unit'), unit)
+
+            desc = """
+                <b>Title</b>: %s<br/>
+                <b>Purpose</b>: %s<br/>
+                %s
+                %s
+                <b>Source</b>: %s<br/><br/>
+            """ % (keywords.get('title'),
+                   keywords.get('layer_purpose'),
+                   subcategory,
+                   unit,
+                   keywords.get('source'))
         else:
             if is_point_layer(layer):
                 geom_type = 'point'
@@ -2306,7 +2640,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                             layer.source())
 
             desc = """
-                This layer has no keywords assigned<br/><br/>
+                This layer has no valid keywords assigned<br/><br/>
                 <b>SOURCE</b>: %s<br/>
                 <b>TYPE</b>: %s<br/><br/>
                 In the next step you will be able to register this layer.
@@ -2375,13 +2709,22 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.rbExpLayerFromBrowser.click()
 
         # Set the memo labels on this and next (exposure) steps
-        h, e, hc, ec = self.selected_imfunc_constraints()
-        if ec['layer_type'] == 'raster':
-            data_type = '%s %s' % (ec['data_type'], ec['layer_type'])
-        else:
-            data_type = ec['data_type']
-        text = layer_constraint_memo % (e['name'], data_type,
-                                        'exposure', data_type, e['name'])
+        (_,
+         exposure,
+         _,
+         exposure_constraints) = self.selected_impact_function_constraints()
+#         if exposure_constraints['layer_mode'] == 'raster':
+#             layer_geometry = '%s %s' % (
+#                 exposure_constraints['layer_geometry'],
+#                 exposure_constraints['layer_mode'])
+#         else:
+#             layer_geometry = exposure_constraints['layer_geometry']
+        layer_geometry = exposure_constraints['name']
+        text = layer_constraint_memo % (exposure['name'],
+                                        layer_geometry,
+                                        'exposure',
+                                        layer_geometry,
+                                        exposure['name'])
 
         self.lblExpLayerOriginConstraint.setText(text)
         self.lblExpLayerFromCanvasConstraint.setText(text)
@@ -2524,7 +2867,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         # set_widgets_step_fc_agglayer_from_canvas because we need
         # to list them again after coming back from the Keyword Wizard.
         self.list_compatible_layers_from_canvas(
-            'postprocessing', self.lstCanvasAggLayers)
+            'aggregation', self.lstCanvasAggLayers)
         if self.lstCanvasAggLayers.count():
             self.rbAggLayerFromCanvas.setText(QApplication.translate(
                 'WizardDialog',
@@ -2587,7 +2930,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         last_layer = self.layer and self.layer.id() or None
         self.lblDescribeCanvasAggLayer.clear()
         self.list_compatible_layers_from_canvas(
-            'postprocessing', self.lstCanvasAggLayers)
+            'aggregation', self.lstCanvasAggLayers)
         self.auto_select_one_item(self.lstCanvasAggLayers)
         # Try to select the last_layer, if found:
         if last_layer:
@@ -2606,7 +2949,7 @@ class WizardDialog(QDialog, FORM_CLASS):
     def tvBrowserAggregation_selection_changed(self):
         """Update layer description label"""
         (is_compatible, desc) = self.get_layer_description_from_browser(
-            'postprocessing')
+            'aggregation')
         self.lblDescribeBrowserAggLayer.setText(desc)
         self.pbnNext.setEnabled(is_compatible)
 
@@ -2730,21 +3073,23 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # TODO Put the params to metadata! Now we need to import the IF class.
         # Notes: Why don't we store impact_function to class attribute?
-        imfunc_id = self.selected_function()['id']
-        imfunctions = get_safe_impact_function(imfunc_id)
-        if not imfunctions:
+        impact_function_id = self.selected_function()['id']
+        impact_function = self.impact_function_manager.get(
+            impact_function_id)
+        if not impact_function:
             return
-        imfunc = imfunctions[0][imfunc_id]
         self.if_params = None
-        if hasattr(imfunc, 'parameters'):
-            self.if_params = imfunc.parameters
+        if hasattr(impact_function, 'parameters'):
+            self.if_params = impact_function.parameters
 
-        text = ('Please set impact functions parameters.<br/>Parameters for '
-                'impact function "%s" that can be modified are:' % imfunc_id)
+        text = self.tr(
+            'Please set impact functions parameters.<br/>Parameters for '
+            'impact function "%s" that can be modified are:' %
+            impact_function_id)
         self.lblSelectIFParameters.setText(text)
 
         self.parameter_dialog = FunctionOptionsDialog(self)
-        self.parameter_dialog.set_dialog_info(imfunc_id)
+        self.parameter_dialog.set_dialog_info(impact_function_id)
         self.parameter_dialog.build_form(self.if_params)
 
         if self.twParams:
@@ -2779,12 +3124,12 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # (IS) Set the current impact function to use parameter from user.
         # We should do it prettier (put it on analysis or impact calculator
-        imfunc_id = self.selected_function()['id']
-        imfunctions = get_safe_impact_function(imfunc_id)
-        if not imfunctions:
+        impact_function_id = self.selected_function()['id']
+        impact_function = self.impact_function_manager.get(
+            impact_function_id)
+        if not impact_function:
             return
-        imfunc = imfunctions[0][imfunc_id]
-        imfunc.parameters = self.if_params
+        impact_function.parameters = self.if_params
 
         params = []
         for p in self.if_params:
@@ -2793,7 +3138,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                              format_postprocessor(self.if_params[p][pp]))
                              for pp in self.if_params[p]]
                 subparams = u'<br/>'.join(subparams)
-                print '!!!', subparams
             elif type(self.if_params[p]) == list and p == 'minimum needs':
                 subparams = ''
                 for need in self.if_params[p]:
@@ -2963,7 +3307,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                         self, self.tr('InaSAFE'), message)
                 return
 
-        # After each browser step, add selected layer to map canvas
+        # After any step involving Browser, add selected layer to map canvas
         if current_step in [step_fc_hazlayer_from_browser,
                             step_fc_explayer_from_browser,
                             step_fc_agglayer_from_browser]:
@@ -2977,6 +3321,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Prepare the next tab
         if new_step == step_kw_category:
             self.set_widgets_step_kw_category()
+        if new_step == step_kw_hazard_category:
+            self.set_widgets_step_kw_hazard_category()
         if new_step == step_kw_subcategory:
             self.set_widgets_step_kw_subcategory()
         elif new_step == step_kw_datatype:
@@ -2987,6 +3333,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_kw_field()
         elif new_step == step_kw_resample:
             self.set_widgets_step_kw_resample()
+        elif new_step == step_kw_classification:
+            self.set_widgets_step_kw_classification()
         elif new_step == step_kw_classify:
             self.set_widgets_step_kw_classify()
         elif new_step == step_kw_aggregation:
@@ -3056,6 +3404,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Run analysis after switching to the new step
         if new_step == step_fc_analysis:
+            self.update_MessageViewer_size()
             self.setup_and_run_analysis()
 
         if new_step == step_kw_category and self.parent_step:
@@ -3102,6 +3451,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         if step == step_kw_category:
             return bool(self.selected_category())
+        if step == step_kw_hazard_category:
+            return bool(self.selected_hazard_category())
         if step == step_kw_subcategory:
             return bool(self.selected_subcategory())
         if step == step_kw_datatype:
@@ -3109,10 +3460,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         if step == step_kw_unit:
             return bool(self.selected_unit())
         if step == step_kw_field:
-            return bool(self.selected_field() or not self.lstFields.count())
+            # Allow to leave field unset for classified data
+            return bool(self.selected_datatype() == layer_mode_classified or
+                        self.selected_field() or
+                        not self.lstFields.count())
         if step == step_kw_resample:
-            # Allow to not set allow resample  # TODO: really?
             return True
+        if step == step_kw_classification:
+            return bool(self.selected_classification())
         if step == step_kw_classify:
             # Allow to not classify any values
             return True
@@ -3181,55 +3536,121 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         if current_step == step_kw_category:
             category = self.selected_category()
-            if category['id'] == 'aggregation':
+            if category == layer_purpose_aggregation:
                 new_step = step_kw_field
-            elif self.subcategories_for_layer(
-                    category['id'],
-                    self.get_layer_type(), self.get_data_type()):
+            elif category == layer_purpose_hazard:
+                new_step = step_kw_hazard_category
+            elif self.subcategories_for_layer():
                 new_step = step_kw_subcategory
             else:
                 new_step = step_kw_field
+        elif current_step == step_kw_hazard_category:
+            new_step = step_kw_subcategory
         elif current_step == step_kw_subcategory:
-            subcategory = self.selected_subcategory()
+            # subcategory = self.selected_subcategory()
             # skip field and classify step if point layer and it's a volcano
-            if (self.get_data_type() == 'point' and subcategory['id'] ==
-                    'volcano'):
-                new_step = step_kw_source
-            elif self.get_layer_type() == 'raster':
-                new_step = step_kw_datatype
-            elif ImpactFunctionManager().units_for_layer(
-                    subcategory['id'],
-                    self.get_layer_type(), self.get_data_type()):
-                new_step = step_kw_unit
-            else:
-                new_step = step_kw_field
+            # if (self.get_layer_geometry_id() == 'point'
+            #         and subcategory['key'] == 'volcano'):
+            #     new_step = step_kw_source
+            # elif self.get_layer_geometry_id() == 'raster':
+            #     new_step = step_kw_datatype
+            # elif self.impact_function_manager.units_for_layer(
+            #         subcategory['key'],
+            #         self.get_layer_geometry_id(), self.get_layer_mode()):
+            #     new_step = step_kw_unit
+            # else:
+            #     new_step = step_kw_field
+            new_step = step_kw_datatype
         elif current_step == step_kw_datatype:
-            if ImpactFunctionManager().units_for_layer(
-                    self.selected_subcategory()['id'],
-                    self.get_layer_type(), self.get_data_type()):
-                new_step = step_kw_unit
+            # if self.impact_function_manager.units_for_layer(
+            #         self.selected_subcategory()['key'],
+            #         self.get_layer_geometry_id(), self.get_layer_mode()):
+            #     new_step = step_kw_unit
+            # else:
+            #     new_step = step_kw_field
+            if self.selected_category() == layer_purpose_hazard:
+                if self.selected_datatype() == layer_mode_classified:
+                    # CLASSIFIED HAZARD
+                    if is_raster_layer(self.layer):
+                        new_step = step_kw_classification
+                    else:
+                        new_step = step_kw_field
+                else:
+                    # CONTINUOUS HAZARD
+                    subcat = self.selected_subcategory()['key']
+                    laygeo = self.get_layer_geometry_id()
+                    laymod = self.selected_datatype()['key']
+                    hazcat = self.selected_hazard_category()['key']
+                    if self.impact_function_manager\
+                            .continuous_hazards_units_for_layer(subcat,
+                                                                laygeo,
+                                                                laymod,
+                                                                hazcat):
+                        new_step = step_kw_unit
+                    else:
+                        new_step = step_kw_source
             else:
-                new_step = step_kw_field
+                if self.selected_datatype() == layer_mode_classified:
+                    # CLASSIFIED EXPOSURE
+                    if is_raster_layer(self.layer):
+                        new_step = step_kw_resample
+                    else:
+                        new_step = step_kw_field
+                else:
+                    # CONTINUOUS EXPOSURE
+                    subcat = self.selected_subcategory()['key']
+                    laygeo = self.get_layer_geometry_id()
+                    laymod = self.selected_datatype()['key']
+                    if self.impact_function_manager.exposure_units_for_layer(
+                            subcat,
+                            laygeo,
+                            laymod):
+                        new_step = step_kw_unit
+                    elif is_raster_layer(self.layer):
+                        new_step = step_kw_resample
+                    else:
+                        new_step = step_kw_source
         elif current_step == step_kw_unit:
-            unit = self.selected_unit()
-            if unit and unit['id'] == 'building_generic':
-                new_step = step_kw_source
-                # TODO: why not step_kw_aggregation ?
+            # unit = self.selected_unit()
+            # if unit and unit['key'] == 'building_generic':
+            #     new_step = step_kw_source
+            # else:
+            #     new_step = step_kw_field
+            if is_raster_layer(self.layer):
+                if self.selected_category() == layer_purpose_exposure:
+                    new_step = step_kw_resample
+                else:
+                    new_step = step_kw_source
             else:
                 new_step = step_kw_field
         elif current_step == step_kw_field:
-            unit = self.selected_unit()
-            if unit and unit['constraint'] == 'categorical':
-                new_step = step_kw_classify
-            elif self.selected_category()['id'] == 'aggregation':
+            # unit = self.selected_unit()
+            # if unit and unit['constraint'] == 'categorical':
+            #     new_step = step_kw_classify
+            # elif self.selected_category() == layer_purpose_aggregation:
+            #     new_step = step_kw_aggregation
+            # else:
+            #     new_step = step_kw_source
+            if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
+            elif (self.selected_datatype() == layer_mode_classified and
+                      self.classifications_for_layer() and
+                      (is_raster_layer(self.layer) or self.selected_field())):
+                new_step = step_kw_classification
             else:
                 new_step = step_kw_source
         elif current_step == step_kw_resample:
-            new_step = step_kw_source
+            if (self.selected_datatype() == layer_mode_classified and
+                    self.classifications_for_layer()):
+                new_step = step_kw_classification
+            else:
+                new_step = step_kw_source
+        elif current_step == step_kw_classification:
+            new_step = step_kw_classify
         elif current_step == step_kw_classify:
             new_step = step_kw_source
-        elif current_step in (step_kw_aggregation, step_kw_source):
+        elif current_step in (step_kw_aggregation,
+                              step_kw_source):
             new_step = current_step + 1
         elif current_step == step_kw_title:
             if self.parent_step:
@@ -3317,13 +3738,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             raise Exception('Unexpected number of steps')
 
-        # Skip the field and classify tab if raster layer
-        if new_step == step_kw_field and is_raster_layer(self.layer):
-            # Insert the resample step for exposure layers
-            if self.selected_category()['id'] == 'exposure':
-                new_step = step_kw_resample
-            else:
-                new_step = step_kw_source
+        # # Skip the field and classify tab if raster layer
+        # if new_step == step_kw_field and is_raster_layer(self.layer):
+        #     # Insert the resample step for exposure layers
+        #     if self.selected_category() == layer_purpose_exposure:
+        #         new_step = step_kw_resample
+        #     else:
+        #         new_step = step_kw_source
 
         return new_step
 
@@ -3343,6 +3764,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = None
             else:
                 new_step = step_kw_category
+        elif current_step == step_kw_subcategory:
+            if self.selected_category() == layer_purpose_hazard:
+                new_step = step_kw_hazard_category
+            else:
+                new_step = step_kw_category
         elif current_step == step_kw_unit:
             if self.selected_datatype():
                 new_step = step_kw_datatype
@@ -3351,10 +3777,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         elif current_step == step_kw_field:
             if self.selected_unit():
                 new_step = step_kw_unit
+            elif self.selected_datatype():
+                new_step = step_kw_datatype
             elif self.selected_subcategory():
                 new_step = step_kw_subcategory
-            elif self.selected_category()['id'] == 'aggregation':
-                new_step = step_kw_category
+            elif self.selected_hazard_category():
+                new_step = step_kw_hazard_category
             else:
                 new_step = step_kw_category
         elif current_step == step_kw_resample:
@@ -3362,15 +3790,23 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_unit
             else:
                 new_step = step_kw_datatype
+        elif current_step == step_kw_classification:
+            if self.selected_allowresample() is not None:
+                new_step = step_kw_resample
+            elif is_raster_layer(self.layer):
+                new_step = step_kw_datatype
+            else:
+                new_step = step_kw_field
+        elif current_step == step_kw_classify:
+            new_step = step_kw_classification
         elif current_step == step_kw_aggregation:
             new_step = step_kw_field
         elif current_step == step_kw_source:
-            if self.selected_mapping():
-                new_step = step_kw_classify
-            elif self.selected_category()['id'] == 'aggregation':
+            if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
-            elif (is_raster_layer(self.layer)
-                  and self.selected_category()['id'] == 'exposure'):
+            elif self.selected_classification():
+                new_step = step_kw_classify
+            elif self.selected_allowresample() is not None:
                 new_step = step_kw_resample
             elif self.selected_field():
                 new_step = step_kw_field
@@ -3384,7 +3820,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_category
 
         elif current_step == step_fc_function_1:
-            # TODO block the Back button
             new_step = step_fc_function_1
         elif current_step == step_fc_hazlayer_from_browser:
             new_step = step_fc_hazlayer_origin
@@ -3437,22 +3872,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         return self.stackedWidget.currentIndex() + 1
 
-    def get_layer_type(self, layer=None):
-        """Obtain the type of a given layer.
-
-        If no layer specified, the current layer is used
-
-        :param layer : layer to examine
-        :type layer: QgsMapLayer or None
-
-        :returns: The layer type.
-        :rtype: str
-        """
-        if not layer:
-            layer = self.layer
-        return is_raster_layer(layer) and 'raster' or 'vector'
-
-    def get_data_type(self, layer=None):
+    def get_layer_geometry_id(self, layer=None):
         """Obtain data type of a given layer.
 
         If no layer specified, the current layer is used
@@ -3465,22 +3885,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         if not layer:
             layer = self.layer
-        if self.get_layer_type() == 'vector':
-            if is_point_layer(layer):
-                return 'point'
-            elif is_polygon_layer(layer):
-                return 'polygon'
-            else:
-                return 'line'
+        if is_raster_layer(layer):
+            return 'raster'
+        elif is_point_layer(layer):
+            return 'point'
+        elif is_polygon_layer(layer):
+            return 'polygon'
         else:
-            # Try to get the value from the category list
-            item = self.lstDataTypes.currentItem()
-            if item:
-                data_type = item.data(QtCore.Qt.UserRole)
-                if data_type:
-                    return data_type
-            # Fallback to the default value
-            return 'continuous'
+            return 'line'
 
     def get_existing_keyword(self, keyword):
         """Obtain an existing keyword's value.
@@ -3506,38 +3918,51 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         keywords = {}
         if self.selected_category():
-            keywords['category'] = self.selected_category()['id']
-            if keywords['category'] == 'aggregation':
-                keywords['category'] = 'postprocessing'
+            keywords['layer_purpose'] = self.selected_category()['key']
+            if keywords['layer_purpose'] == 'aggregation':
                 keywords.update(self.get_aggregation_attributes())
         if self.selected_subcategory():
-            keywords['subcategory'] = self.selected_subcategory()['id']
-        if self.selected_datatype() and self.get_layer_type() == 'raster':
-            keywords['data_type'] = self.selected_datatype()
+            key = self.selected_category()['key']
+            keywords[key] = self.selected_subcategory()['key']
+        if self.selected_hazard_category():
+            keywords['hazard_category'] \
+                = self.selected_hazard_category()['key']
+        if self.selected_datatype():
+            keywords['layer_mode'] = self.selected_datatype()['key']
         if self.selected_unit():
-            keywords['unit'] = self.selected_unit()['id']
+            if self.selected_category() == layer_purpose_hazard:
+                key = continuous_hazard_unit['key']
+            else:
+                key = exposure_unit['key']
+            keywords[key] = self.selected_unit()['key']
         if self.selected_allowresample() is not None:
             keywords['allow_resample'] = self.selected_allowresample()
         if self.lstFields.currentItem():
-            if 'category' in keywords.keys():
-                if keywords['category'] != 'postprocessing':
-                    key_field = 'field'
-                else:
-                    key_field = 'aggregation attribute'
-                keywords[key_field] = self.lstFields.currentItem().text()
-        if self.leSource.text():
-            keywords['source'] = self.leSource.text()
-        if self.leSource_url.text():
-            keywords['source_url'] = self.leSource_url.text()
-        if self.leSource_scale.text():
-            keywords['source_scale'] = self.leSource_scale.text()
-        if self.leSource_date.text():
-            keywords['source_date'] = self.leSource_date.text()
-        if self.leTitle.text():
-            keywords['title'] = self.leTitle.text()
+            if self.selected_category() == layer_purpose_aggregation:
+                key_field = 'aggregation attribute'
+            else:
+                key_field = 'field'
+            keywords[key_field] = self.lstFields.currentItem().text()
+        if self.selected_classification():
+            geom = 'raster' if is_raster_layer(self.layer) else 'vector'
+            key = '%s_%s_classification' % (geom,
+                                            self.selected_category()['key'])
+            keywords[key] = self.selected_classification()['key']
         value_map = self.selected_mapping()
         if value_map:
             keywords['value_map'] = json.dumps(value_map)
+        if self.leSource.text():
+            keywords['source'] = self.leSource.text()
+        if self.leSource_url.text():
+            keywords['url'] = self.leSource_url.text()
+        if self.leSource_scale.text():
+            keywords['scale'] = self.leSource_scale.text()
+        if self.leSource_date.text():
+            keywords['date'] = self.leSource_date.text()
+        if self.leSource_license.text():
+            keywords['license'] = self.leSource_license.text()
+        if self.leTitle.text():
+            keywords['title'] = self.leTitle.text()
 
         return keywords
 

@@ -37,6 +37,7 @@ from safe.common.exceptions import (
     KeywordNotFoundError,
     InvalidLayerError)
 from safe.common.utilities import temp_dir
+from safe.utilities.unicode import get_string
 
 LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -423,8 +424,8 @@ class ImpactMergeDialogTest(unittest.TestCase):
             '</body>')
 
         # Now create a dom document for each
-        first_document = minidom.parseString(first_report)
-        second_document = minidom.parseString(second_report)
+        first_document = minidom.parseString(get_string(first_report))
+        second_document = minidom.parseString(get_string(second_report))
         tables = first_document.getElementsByTagName('table')
         tables += second_document.getElementsByTagName('table')
 
@@ -456,8 +457,8 @@ class ImpactMergeDialogTest(unittest.TestCase):
             '</body>')
 
         # Now create a dom document for each
-        first_document = minidom.parseString(first_report)
-        second_document = minidom.parseString(second_report)
+        first_document = minidom.parseString(get_string(first_report))
+        second_document = minidom.parseString(get_string(second_report))
         first_impact_tables = first_document.getElementsByTagName('table')
         second_impact_tables = second_document.getElementsByTagName('table')
 
@@ -497,8 +498,8 @@ class ImpactMergeDialogTest(unittest.TestCase):
             '</body>')
 
         # Now create a dom document for each
-        first_document = minidom.parseString(first_report)
-        second_document = minidom.parseString(second_report)
+        first_document = minidom.parseString(get_string(first_report))
+        second_document = minidom.parseString(get_string(second_report))
         first_impact_tables = first_document.getElementsByTagName('table')
         second_impact_tables = second_document.getElementsByTagName('table')
 
@@ -541,8 +542,8 @@ class ImpactMergeDialogTest(unittest.TestCase):
             '</body>')
 
         # Now create a dom document for each
-        first_document = minidom.parseString(first_report)
-        second_document = minidom.parseString(second_report)
+        first_document = minidom.parseString(get_string(first_report))
+        second_document = minidom.parseString(get_string(second_report))
         first_impact_tables = first_document.getElementsByTagName('table')
         second_impact_tables = second_document.getElementsByTagName('table')
 

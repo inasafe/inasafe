@@ -10,25 +10,27 @@ import logging
 import platform
 import glob
 import shutil
-from os.path import join
 from itertools import izip
 
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui  # pylint: disable=W0621
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsRectangle,
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
+# noinspection PyPackageRequirements
+from PyQt4 import QtGui  # pylint: disable=W0621
 
 # For testing and demoing
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 from safe.gis.numerics import axes_to_points
+from safe.impact_functions import register_impact_functions
 from safe.utilities.utilities import read_file_keywords
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
+from safe.utilities.clipper import extent_to_geoarray, clip_layer
+from safe.utilities.gis import get_wgs84_resolution
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -46,8 +48,8 @@ DEVNULL = open(os.devnull, 'w')
 # we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
 
 # Assuming test data three lvls up
-pardir = os.path.abspath(os.path.join(os.path.realpath(os.path.dirname(
-    __file__)),
+pardir = os.path.abspath(os.path.join(
+    os.path.realpath(os.path.dirname(__file__)),
     '..',
     '..',
     '..'))
@@ -75,7 +77,7 @@ def get_qgis_app():
 
     try:
         from qgis.core import QgsApplication
-        from qgis.gui import QgsMapCanvas
+        from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
         # noinspection PyPackageRequirements
         from PyQt4 import QtGui, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
@@ -127,6 +129,7 @@ def get_qgis_app():
         # QgisInterface is a stub implementation of the QGIS plugin interface
         # noinspection PyPep8Naming
         IFACE = QgisInterface(CANVAS)
+        register_impact_functions()
 
     return QGIS_APP, CANVAS, IFACE, PARENT
 
@@ -144,7 +147,8 @@ def assert_hashes_for_file(hashes, filename):
         '\nPlease check graphics %s visually '
         'and add to list of expected hashes '
         'if it is OK on this platform.' % (file_hash, hashes, filename))
-    assert file_hash in hashes, message
+    if file_hash not in hashes:
+        raise Exception(message)
 
 
 def assert_hash_for_file(hash_string, filename):
@@ -157,7 +161,8 @@ def assert_hash_for_file(hash_string, filename):
         'Unexpected hash'
         '\nGot: %s'
         '\nExpected: %s' % (file_hash, hash_string))
-    assert file_hash == hash_string, message
+    if file_hash != hash_string:
+        raise Exception(message)
 
 
 def hash_for_file(filename):
@@ -200,7 +205,7 @@ def load_layer(layer_path):
     :param layer_path: Path name to raster or vector file.
     :type layer_path: str
 
-    :returns: tuple containing layer and its category.
+    :returns: tuple containing layer and its layer_purpose.
     :rtype: (QgsMapLayer, str)
 
     """
@@ -209,11 +214,11 @@ def load_layer(layer_path):
     base_name, extension = os.path.splitext(file_name)
 
     # Determine if layer is hazard or exposure
-    category = 'undefined'
+    layer_purpose = 'undefined'
     try:
         keywords = read_file_keywords(layer_path)
-        if 'category' in keywords:
-            category = keywords['category']
+        if 'layer_purpose' in keywords:
+            layer_purpose = keywords['layer_purpose']
     except NoKeywordsFoundError:
         pass
 
@@ -227,13 +232,14 @@ def load_layer(layer_path):
         raise Exception(message)
 
     # noinspection PyUnresolvedReferences
-    message = 'Layer "%s" is not valid' % str(layer.source())
+    message = 'Layer "%s" is not valid' % layer.source()
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
         print message
     # noinspection PyUnresolvedReferences
-    assert layer.isValid(), message
-    return layer, category
+    if not layer.isValid():
+        raise Exception(message)
+    return layer, layer_purpose
 
 
 def set_canvas_crs(epsg_id, enable_projection=False):
@@ -335,7 +341,7 @@ def set_small_jakarta_extent(dock=None):
         set as the user extent and an appropriate CRS set.
     :type dock: Dock
     """
-    rect = QgsRectangle(106.7767, -6.1260, 106.7817, -6.1216)
+    rect = QgsRectangle(106.8382152, -6.1649805, 106.8382152, -6.1649805)
     CANVAS.setExtent(rect)
     if dock is not None:
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
@@ -479,8 +485,8 @@ def check_image(control_image_path, test_image_path, tolerance=1000):
         message = 'Control image:\n{0:s}\ncould not be loaded.\n'
         return False, message
 
-    if (control_image.width() != test_image.width()
-            or control_image.height() != test_image.height()):
+    if (control_image.width() != test_image.width() or
+            control_image.height() != test_image.height()):
         message = (
             'Control and test images are different sizes.\n'
             'Control image   : %s (%i x %i)\n'
@@ -680,7 +686,7 @@ def canvas_list():
     """
     list_string = ''
     for layer in CANVAS.layers():
-        list_string += str(layer.name()) + '\n'
+        list_string += layer.name() + '\n'
     return list_string
 
 
@@ -692,10 +698,10 @@ def combos_to_string(dock):
 
     :returns: A descriptive list of the contents of each combo with the
         active combo item highlighted with a >> symbol.
-    :rtype: str
+    :rtype: unicode
     """
 
-    string = 'Hazard Layers\n'
+    string = u'Hazard Layers\n'
     string += '-------------------------\n'
     current_id = dock.cboHazard.currentIndex()
     for count in range(0, dock.cboHazard.count()):
@@ -704,7 +710,7 @@ def combos_to_string(dock):
             string += '>> '
         else:
             string += '   '
-        string += str(item_text) + '\n'
+        string += item_text + '\n'
     string += '\n'
     string += 'Exposure Layers\n'
     string += '-------------------------\n'
@@ -715,7 +721,7 @@ def combos_to_string(dock):
             string += '>> '
         else:
             string += '   '
-        string += str(item_text) + '\n'
+        string += item_text + '\n'
 
     string += '\n'
     string += 'Functions\n'
@@ -728,7 +734,7 @@ def combos_to_string(dock):
         else:
             string += '   '
         string += '%s (Function ID: %s)\n' % (
-            str(item_text), dock.get_function_id(current_id))
+            item_text, dock.get_function_id(current_id))
 
     string += '\n'
     string += 'Aggregation Layers\n'
@@ -740,7 +746,7 @@ def combos_to_string(dock):
             string += '>> '
         else:
             string += '   '
-        string += str(item_text) + '\n'
+        string += item_text + '\n'
 
     string += '\n\n >> means combo item is selected'
     return string
@@ -909,33 +915,73 @@ def load_standard_layers(dock=None):
     # If changing the order does cause tests to fail, please update the tests
     # to also use find instead of relative position. (Tim)
     #
-    # WARNING: Please keep test_data/test/loadStandardLayers.qgs in sync with
-    # file_list
+    # WARNING: Please keep test/data/project/load_standard_layers.qgs in sync
     file_list = [
-        join(TESTDATA, 'Padang_WGS84.shp'),
-        join(EXPDATA, 'glp10ag.asc'),
-        join(HAZDATA, 'Shakemap_Padang_2009.asc'),
-        join(TESTDATA, 'tsunami_max_inundation_depth_utm56s.tif'),
-        join(TESTDATA, 'tsunami_building_exposure.shp'),
-        join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
-        join(TESTDATA, 'Population_Jakarta_geographic.asc'),
-        join(HAZDATA, 'eq_yogya_2006.asc'),
-        join(HAZDATA, 'Jakarta_RW_2007flood.shp'),
-        join(TESTDATA, 'OSM_building_polygons_20110905.shp'),
-        join(EXPDATA, 'DKI_buildings.shp'),
-        join(HAZDATA, 'jakarta_flood_category_123.asc'),
-        join(TESTDATA, 'roads_Maumere.shp'),
-        join(TESTDATA, 'donut.shp'),
-        join(TESTDATA, 'Merapi_alert.shp'),
-        join(TESTDATA, 'kabupaten_jakarta_singlepart.shp')]
+        test_data_path('exposure', 'building-points.shp'),
+        test_data_path('exposure', 'buildings.shp'),
+        test_data_path('hazard', 'volcano_point.shp'),
+        test_data_path('exposure', 'roads.shp'),
+        test_data_path('hazard', 'flood_multipart_polygons.shp'),
+        test_data_path('hazard', 'classified_generic_polygon.shp'),
+        test_data_path('hazard', 'volcano_krb.shp'),
+        test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
+        test_data_path('hazard', 'classified_flood_20_20.asc'),
+        test_data_path('hazard', 'continuous_flood_20_20.asc'),
+        test_data_path('hazard', 'tsunami_wgs84.tif'),
+        test_data_path('hazard', 'earthquake.tif'),
+        test_data_path('boundaries', 'district_osm_jakarta.shp'),
+    ]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, dock=dock)
     # FIXME (MB) -1 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
 
-    assert hazard_layer_count + exposure_layer_count == len(file_list) - 1
+    if hazard_layer_count + exposure_layer_count != len(file_list) - 1:
+        message = (
+            'Loading standard layers failed. Expecting layer the number of '
+            'hazard_layer and exposure_layer is equals to %d but got %d' % (
+                (len(file_list) - 1),
+                hazard_layer_count + exposure_layer_count))
+        raise Exception(message)
 
     return hazard_layer_count, exposure_layer_count
+
+
+def compare_wkt(a, b, tol=0.000001):
+    """Helper function to compare WKT geometries with given tolerance
+    Taken from QGIS test suite
+
+    :param a: Input WKT geometry
+    :type a: str
+
+    :param b: Expected WKT geometry
+    :type b: str
+
+    :param tol: compare tolerance
+    :type tol: float
+
+    :return: True on success, False on failure
+    :rtype: bool
+    """
+    r = re.compile(r'-?\d+(?:\.\d+)?(?:[eE]\d+)?')
+
+    # compare the structure
+    a0 = r.sub("#", a)
+    b0 = r.sub("#", b)
+    if a0 != b0:
+        return False
+
+    # compare the numbers with given tolerance
+    a0 = r.findall(a)
+    b0 = r.findall(b)
+    if len(a0) != len(b0):
+        return False
+
+    for (a1, b1) in izip(a0, b0):
+        if abs(float(a1) - float(b1)) > tol:
+            return False
+
+    return True
 
 
 def load_layers(
@@ -988,43 +1034,6 @@ def load_layers(
     return hazard_layer_count, exposure_layer_count
 
 
-def compare_wkt(a, b, tol=0.000001):
-    """Helper function to compare WKT geometries with given tolerance
-    Taken from QGIS test suite
-
-    :param a: Input WKT geometry
-    :type a: str
-
-    :param b: Expected WKT geometry
-    :type b: str
-
-    :param tol: compare tolerance
-    :type tol: float
-
-    :return: True on success, False on failure
-    :rtype: bool
-    """
-    r = re.compile(r'-?\d+(?:\.\d+)?(?:[eE]\d+)?')
-
-    # compare the structure
-    a0 = r.sub("#", a)
-    b0 = r.sub("#", b)
-    if a0 != b0:
-        return False
-
-    # compare the numbers with given tolerance
-    a0 = r.findall(a)
-    b0 = r.findall(b)
-    if len(a0) != len(b0):
-        return False
-
-    for (a1, b1) in izip(a0, b0):
-        if abs(float(a1) - float(b1)) > tol:
-            return False
-
-    return True
-
-
 def clone_shp_layer(
         name,
         include_keywords,
@@ -1042,7 +1051,7 @@ def clone_shp_layer(
     :type source_directory: str
 
     :param target_directory: Subdirectory in InaSAFE temp dir that we want to
-        put the files into. Default to 'testing'.
+        put the files into. Default to 'test'.
     :type target_directory: str
     """
     extensions = ['.shp', '.shx', '.dbf', '.prj']
@@ -1058,6 +1067,32 @@ def clone_shp_layer(
 
     shp_path = '%s.shp' % temp_path
     layer = QgsVectorLayer(shp_path, os.path.basename(shp_path), 'ogr')
+    return layer
+
+
+def clone_csv_layer(
+        name,
+        source_directory,
+        target_directory='test'):
+    """Helper function that copies a test csv layer and returns it.
+
+    :param name: The default name for the csv layer.
+    :type name: str
+
+    :param source_directory: Directory where the file is located.
+    :type source_directory: str
+
+    :param target_directory: Subdirectory in InaSAFE temp dir that we want to
+        put the files into. Default to 'test'.
+    :type target_directory: str
+    """
+    file_path = '%s.csv' % name
+    temp_path = unique_filename(dir=temp_dir(target_directory))
+    # copy to temp file
+    source_path = os.path.join(source_directory, file_path)
+    shutil.copy2(source_path, temp_path)
+    # return a single predefined layer
+    layer = QgsVectorLayer(temp_path, '', 'delimitedtext')
     return layer
 
 
@@ -1139,3 +1174,52 @@ class FakeLayer(object):
         :return: sources
         """
         return self.layer_source
+
+
+def clip_layers(first_layer_path, second_layer_path):
+    """Clip and resample layers with the reference to the first layer.
+
+    :param first_layer_path: Path to the first layer path.
+    :type first_layer_path: str
+
+    :param second_layer_path: Path to the second layer path.
+    :type second_layer_path: str
+
+    :return: Path to the clipped datasets (clipped 1st layer, clipped 2nd
+        layer).
+    :rtype: tuple(str, str)
+
+    :raise
+        FileNotFoundError
+    """
+    base_name, _ = os.path.splitext(first_layer_path)
+    # noinspection PyCallingNonCallable
+    first_layer = QgsRasterLayer(first_layer_path, base_name)
+    base_name, _ = os.path.splitext(second_layer_path)
+    # noinspection PyCallingNonCallable
+    second_layer = QgsRasterLayer(second_layer_path, base_name)
+
+    # Get the firs_layer extents as an array in EPSG:4326
+    first_layer_geo_extent = extent_to_geoarray(
+        first_layer.extent(),
+        first_layer.crs())
+
+    first_layer_geo_cell_size, _ = get_wgs84_resolution(first_layer)
+    second_layer_geo_cell_size, _ = get_wgs84_resolution(second_layer)
+
+    if first_layer_geo_cell_size < second_layer_geo_cell_size:
+        cell_size = first_layer_geo_cell_size
+    else:
+        cell_size = second_layer_geo_cell_size
+
+    clipped_first_layer = clip_layer(
+        layer=first_layer,
+        extent=first_layer_geo_extent,
+        cell_size=cell_size)
+
+    clipped_second_layer = clip_layer(
+        layer=second_layer,
+        extent=first_layer_geo_extent,
+        cell_size=cell_size)
+
+    return clipped_first_layer, clipped_second_layer

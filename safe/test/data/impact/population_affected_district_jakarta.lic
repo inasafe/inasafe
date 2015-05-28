@@ -6,7 +6,7 @@
 
   <datafile>
     <filename>population_affected_district_jakarta.shp</filename>
-    <checksum>88890662</checksum>
+    <checksum>4174179107</checksum>
     <publishable>Yes</publishable>
     <accountable>Yewondwossen Assefa</accountable>
     <source>Open Street Map (OSM)</source>
@@ -17,7 +17,7 @@
 
   <datafile>
     <filename>population_affected_district_jakarta.shx</filename>
-    <checksum>2967290069</checksum>
+    <checksum>1162263330</checksum>
     <publishable>Yes</publishable>
     <accountable>Yewondwossen Assefa</accountable>
     <source>Open Street Map (OSM)</source>
@@ -28,7 +28,7 @@
 
   <datafile>
     <filename>population_affected_district_jakarta.dbf</filename>
-    <checksum>3627966518</checksum>
+    <checksum>504905692</checksum>
     <publishable>Yes</publishable>
     <accountable>Yewondwossen Assefa</accountable>
     <source>Open Street Map (OSM)</source>

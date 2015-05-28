@@ -107,7 +107,7 @@ class StylingTest(unittest.TestCase):
 
         try:
             setRasterStyle(layer, style_info)
-        except Exception, e:  # pylint: disable=broad-exception
+        except Exception, e:  # pylint: disable=broad-except
             message = (
                 'Broken: Setting style info with generate valid transparent '
                 'floating point pixel entries such as 2.0, 3.0')
@@ -160,7 +160,7 @@ class StylingTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
         layer = clone_shp_layer(
-            name='Marapi',
+            name='volcano_point',
             include_keywords=True,
             source_directory=test_data_path('hazard'))
 
@@ -191,8 +191,7 @@ class StylingTest(unittest.TestCase):
             actual_size = symbol_layer.size()
             message = ((
                 'Expected symbol layer 0 for range %s to have'
-                ' a size of %s, got %s') %
-                (size, size, actual_size))
+                ' a size of %s, got %s') % (size, size, actual_size))
             assert size == actual_size, message
             size += 1
 
@@ -282,7 +281,7 @@ class StylingTest(unittest.TestCase):
         except StyleError:
             # Exactly what should have happened
             return
-        except Exception, e:
+        except Exception, e:  # pylint: disable=broad-except
             print str(e)
         assert False, 'Incorrect handling of broken styles'
 

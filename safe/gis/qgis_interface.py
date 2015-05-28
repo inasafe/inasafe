@@ -27,9 +27,10 @@ __copyright__ = (
 )
 
 import logging
+
+from qgis.core import QgsMapLayerRegistry, QGis, QgsMapLayer
+from qgis.gui import QgsMapCanvasLayer  # pylint: disable=no-name-in-module
 from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
-from qgis.core import QgsMapLayerRegistry, QGis
-from qgis.gui import QgsMapCanvasLayer
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -41,6 +42,7 @@ class QgisInterface(QObject):
     so most methods are simply stubs.
     """
     currentLayerChanged = pyqtSignal(QgsMapCanvasLayer)
+    layerSavedAs = pyqtSignal(QgsMapLayer, str)
 
     def __init__(self, canvas):
         """Constructor

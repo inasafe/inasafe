@@ -37,7 +37,8 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
-    bbox_intersection)
+    bbox_intersection,
+    safe_to_qgis_layer)
 from safe.common.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
@@ -70,7 +71,7 @@ from safe.common.signals import (
     ANALYSIS_DONE_SIGNAL)
 from safe_extras.pydispatch import dispatcher
 from safe.common.exceptions import BoundingBoxError, NoValidLayerError
-
+from safe.utilities.resources import resource_url
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -78,12 +79,16 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = styles.logo_element()
+LOGO_ELEMENT = m.Image(
+    resource_url(styles.logo_element()),
+    'InaSAFE Logo')
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class Analysis(object):
     """Class for running full analysis."""
+
     def __init__(self):
         """Constructor."""
         # Please set Layers, Impact Functions, and Variables to run Analysis
@@ -95,9 +100,8 @@ class Analysis(object):
         self.exposure_keyword = None
         self.aggregation_keyword = None
 
-        # Impact Functions
-        self.impact_function_id = None
-        self.impact_function_parameters = None
+        # Impact Function
+        self.impact_function = None
 
         # Variables
         self.clip_hard = None
@@ -205,7 +209,7 @@ class Analysis(object):
         :returns: Layer's title
         :rtype: str
         """
-        title = layer_keyword.get('title', str(layer.name()))
+        title = layer_keyword.get('title', layer.name())
         return title
 
     def get_impact_layer(self):
@@ -349,7 +353,7 @@ class Analysis(object):
             * cell_size: float - the cell size that is the best of the
                 hazard and exposure rasters.
             * exposure_layer: QgsMapLayer - layer representing exposure.
-            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unbuffered
+            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unadjusted
                 intersection of the two input layers extents and the viewport.
             * hazard_layer: QgsMapLayer - layer representing hazard.
         :rtype: dict, QgsRectangle, float, QgsMapLayer, QgsRectangle,
@@ -420,7 +424,7 @@ class Analysis(object):
         # the ideal WGS84 cell size and extents to the layer prep routines
         # and do all preprocessing in a single operation.
         # All this is done in the function getWGS84resolution
-        adjusted_geo_extent = geo_extent  # Bbox to use for hazard layer
+        adjusted_geo_extent = geo_extent
         cell_size = None
         extra_exposure_keywords = {}
         if hazard_layer.type() == QgsMapLayer.RasterLayer:
@@ -446,7 +450,7 @@ class Analysis(object):
 
                     # Adjust the geo extent to coincide with hazard grids
                     # so gdalwarp can do clipping properly
-                    geo_extent = adjust_clip_extent(
+                    adjusted_geo_extent = adjust_clip_extent(
                         geo_extent,
                         get_wgs84_resolution(hazard_layer),
                         hazard_geoextent)
@@ -455,12 +459,10 @@ class Analysis(object):
 
                     # Adjust extent to coincide with exposure grids
                     # so gdalwarp can do clipping properly
-                    geo_extent = adjust_clip_extent(
+                    adjusted_geo_extent = adjust_clip_extent(
                         geo_extent,
                         get_wgs84_resolution(exposure_layer),
                         exposure_geoextent)
-
-                adjusted_geo_extent = geo_extent
 
                 # Record native resolution to allow rescaling of exposure data
                 if not numpy.allclose(cell_size, exposure_geo_cell_size):
@@ -477,7 +479,7 @@ class Analysis(object):
 
                 # Adjust the geo extent to be at the edge of the pixel in
                 # so gdalwarp can do clipping properly
-                geo_extent = adjust_clip_extent(
+                adjusted_geo_extent = adjust_clip_extent(
                     geo_extent,
                     get_wgs84_resolution(hazard_layer),
                     hazard_geoextent)
@@ -487,17 +489,38 @@ class Analysis(object):
                 # the view port to be interpolated correctly. This requires
                 # resolution to be available
                 adjusted_geo_extent = get_buffered_extent(
-                    geo_extent,
+                    adjusted_geo_extent,
                     get_wgs84_resolution(hazard_layer))
         else:
             # Hazard layer is vector
-
-            # In case hazard data is a point data set, we will not clip the
-            # exposure data to it. The reason being that points may be used
-            # as centers for evacuation circles: See issue #285
+            # In case hazard data is a point data set, we will need to set
+            # the geo_extent to the extent of exposure and the analysis
+            # extent. We check the extent first if the point extent intersects
+            # with geo_extent.
             if hazard_layer.geometryType() == QGis.Point:
-                geo_extent = exposure_geoextent
+                user_extent_enabled = (
+                    self.user_extent is not None and
+                    self.user_extent_crs is not None)
+                if self.clip_to_viewport or user_extent_enabled:
+                    # Get intersection between exposure and analysis extent
+                    geo_extent = bbox_intersection(
+                        exposure_geoextent, analysis_geoextent)
+                    # Check if the point is within geo_extent
+                    if bbox_intersection(
+                            geo_extent, exposure_geoextent) is None:
+                        raise InsufficientOverlapError
+
+                else:
+                    geo_extent = exposure_geoextent
                 adjusted_geo_extent = geo_extent
+
+            if exposure_layer.type() == QgsMapLayer.RasterLayer:
+                # Adjust the geo extent to be at the edge of the pixel in
+                # so gdalwarp can do clipping properly
+                adjusted_geo_extent = adjust_clip_extent(
+                    geo_extent,
+                    get_wgs84_resolution(exposure_layer),
+                    exposure_geoextent)
 
         return (
             extra_exposure_keywords,
@@ -583,7 +606,12 @@ class Analysis(object):
         # Refactor from dock.prepare_aggregator
         if self.clip_parameters is None:
             raise Exception(self.tr('Clip parameters are not set!'))
-        buffered_geo_extent = self.clip_parameters[1]
+        try:
+            impact_layer = self.get_impact_layer()
+            buffered_geo_extent = impact_layer.extent
+        except AttributeError:
+            # if we have no runner, set dummy extent
+            buffered_geo_extent = self.clip_parameters[1]
 
         # setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
@@ -633,8 +661,7 @@ class Analysis(object):
                 text.add(m.Text(
                     self.tr('and bullet_list the results'),
                     m.ImportantText(self.tr('aggregated by')),
-                    m.EmphasizedText(aggregation_name))
-                )
+                    m.EmphasizedText(aggregation_name)))
             except AttributeError:
                 pass
 
@@ -648,13 +675,9 @@ class Analysis(object):
 
         try:
             # add which postprocessors will run when appropriated
-            post_processors_names = self.impact_function_parameters[
+            post_processors_names = self.impact_function.parameters[
                 'postprocessors']
-            # aggregator is not ready yet here so we can't use
-            # self.aggregator.aoi_mode
-            aoi_mode = self.aggregation_layer is None
-            post_processors = get_postprocessors(
-                post_processors_names, aoi_mode)
+            post_processors = get_postprocessors(post_processors_names)
             message.add(m.Paragraph(self.tr(
                 'The following postprocessors will be used:')))
 
@@ -742,10 +765,10 @@ class Analysis(object):
         # and other related parameters needed for clipping.
         try:
             extra_exposure_keywords = self.clip_parameters[0]
-            buffered_geo_extent = self.clip_parameters[1]
+            adjusted_geo_extent = self.clip_parameters[1]
             cell_size = self.clip_parameters[2]
             exposure_layer = self.clip_parameters[3]
-            geo_extent = self.clip_parameters[4]
+            # geo_extent = self.clip_parameters[4]
             hazard_layer = self.clip_parameters[5]
         except:
             raise
@@ -763,7 +786,7 @@ class Analysis(object):
         try:
             clipped_hazard = clip_layer(
                 layer=hazard_layer,
-                extent=buffered_geo_extent,
+                extent=adjusted_geo_extent,
                 cell_size=cell_size,
                 hard_clip_flag=self.clip_hard)
         except CallGDALError, e:
@@ -782,7 +805,7 @@ class Analysis(object):
 
         clipped_exposure = clip_layer(
             layer=exposure_layer,
-            extent=geo_extent,
+            extent=adjusted_geo_extent,
             cell_size=cell_size,
             extra_keywords=extra_exposure_keywords,
             hard_clip_flag=self.clip_hard)
@@ -790,19 +813,18 @@ class Analysis(object):
 
     def setup_impact_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
-
-        # Use canonical function name to identify selected function
-        self.impact_calculator.set_function(self.impact_function_id)
+        self.impact_calculator.set_function(self.impact_function)
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
-        # pylint: disable=W0612
-        (extra_exposure_keywords,
+        # pylint: disable=unpacking-non-sequence
+        (_,
          buffered_geo_extent,
-         cell_size,
+         _,
          exposure_layer,
-         geo_extent,
+         _,
          hazard_layer) = self.clip_parameters
+        # pylint: enable=unpacking-non-sequence
 
         if self.impact_calculator.requires_clipping():
             # The impact function uses SAFE layers,
@@ -861,7 +883,8 @@ class Analysis(object):
                 report.add(m.Text(self.tr(
                     'It appears that no %s are affected by %s. You may want '
                     'to consider:') % (
-                        exposure_layer_title, hazard_layer_title)))
+                        exposure_layer_title,
+                        hazard_layer_title)))
                 check_list = m.BulletedList()
                 check_list.add(self.tr(
                     'Check that you are not zoomed in too much and thus '
@@ -875,7 +898,7 @@ class Analysis(object):
                     'exclude all features unintentionally.'))
                 report.add(check_list)
                 self.send_static_message(report)
-                self.send_not_busy_signal()
+                self.send_analysis_done_signal()
                 return
             if exception is not None:
                 content = self.tr(
@@ -883,12 +906,21 @@ class Analysis(object):
                 ) % (self.runner.result())
                 message = get_error_message(exception, context=content)
             # noinspection PyTypeChecker
+            # RM: Send not busy signal to restore busy cursor
+            self.send_not_busy_signal()
             self.send_error_message(message)
+            # RM: Send analysis done signal because analysis failed and we
+            # want to restore the cursor
+            self.send_analysis_done_signal()
             # self.analysis_done.emit(False)
             return
-
         try:
-            self.aggregator.aggregate(self.runner.impact_layer())
+            impact_layer = self.get_impact_layer()
+            qgis_impact_layer = safe_to_qgis_layer(impact_layer)
+            self.aggregator.extent = extent_to_array(
+                qgis_impact_layer.extent(),
+                qgis_impact_layer.crs())
+            self.aggregator.aggregate(impact_layer)
         except InvalidGeometryError, e:
             message = get_error_message(e)
             self.send_error_message(message)
@@ -914,7 +946,7 @@ class Analysis(object):
         LOGGER.debug('Do postprocessing')
         self.postprocessor_manager = PostprocessorManager(self.aggregator)
         self.postprocessor_manager.function_parameters = \
-            self.impact_function_parameters
+            self.impact_function.parameters
         self.postprocessor_manager.run()
         self.send_not_busy_signal()
         self.send_analysis_done_signal()
@@ -933,8 +965,8 @@ class Analysis(object):
             return
         except InsufficientOverlapError, e:
             self.analysis_error(e, self.tr(
-                'An exception occurred when setting up the impact calculator.')
-            )
+                'An exception occurred when setting up the '
+                'impact calculator.'))
             return
         except NoFeaturesInExtentError, e:
             self.analysis_error(e, self.tr(
@@ -997,33 +1029,3 @@ class Analysis(object):
             self.analysis_error(
                 e,
                 self.tr('An exception occurred when starting the model.'))
-
-    def print_analysis(self):
-        """Print the variables in the analysis."""
-        print 'The properties of the analysis: '
-        # Layers
-        print self.hazard_layer
-        print self.exposure_layer
-        print self.aggregation_layer
-        print self.hazard_keyword
-        print self.exposure_keyword
-        print self.aggregation_keyword
-
-        # Impact Functions
-        print self.impact_function_id
-        print self.impact_function_parameters
-
-        # Variables
-        print self.clip_hard
-        print self.show_intermediate_layers
-        print self.run_in_thread_flag
-        print self.map_canvas
-        print self.clip_to_viewport
-
-        print self.force_memory
-
-        print self.clip_parameters
-        print self.impact_calculator
-        print self.runner
-        print self.aggregator
-        print self.postprocessor_manager

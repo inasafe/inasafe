@@ -1,0 +1,5 @@
+exposure_unit: count
+title: Population
+layer_purpose: exposure
+layer_mode: continuous
+exposure: population

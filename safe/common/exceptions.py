@@ -140,6 +140,11 @@ class TestNotImplementedError(Exception):
     pass
 
 
+class FunctionParametersError(Exception):
+    """Custom exception for when function parameters are not valid."""
+    pass
+
+
 class InsufficientParametersError(Exception):
     """Custom exception for when insufficient parameters have been set."""
     pass
@@ -259,6 +264,11 @@ class ImportDialogError(Exception):
     pass
 
 
+class FileMissingError(Exception):
+    """Raised if a file cannot be found."""
+    pass
+
+
 class CanceledImportDialogError(Exception):
     """Raised if import process canceled"""
     pass
@@ -325,4 +335,9 @@ class InsufficientMemoryWarning(Exception):
 
 class InvalidAggregationKeywords(Exception):
     """Raised when the aggregation keywords is invalid."""
+    pass
+
+
+class InvalidExtentError(Exception):
+    """Raised if an extent is not valid."""
     pass

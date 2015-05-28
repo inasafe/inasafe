@@ -1,0 +1,8 @@
+hazard_category: multi_hazard
+raster_hazard_classification: flood_raster_hazard_classes
+title: Classified Flood
+hazard: flood
+source: Akbar Gumbira
+layer_purpose: hazard
+layer_mode: classified
+unit: classes

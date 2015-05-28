@@ -77,11 +77,11 @@ class TestCase(unittest.TestCase):
         root = tree.getroot()
         self.assertIsNotNone(root.find(ISO_METADATA_KEYWORD_TAG))
 
-        data_identification = root.find(ISO_METADATA_KEYWORD_NESTING[0] + '/'
-                                        + ISO_METADATA_KEYWORD_NESTING[1])
-        supplemental_info = root.find(ISO_METADATA_KEYWORD_NESTING[0] + '/'
-                                      + ISO_METADATA_KEYWORD_NESTING[1] + '/'
-                                      + ISO_METADATA_KEYWORD_NESTING[2])
+        data_identification = root.find(ISO_METADATA_KEYWORD_NESTING[0] + '/' +
+                                        ISO_METADATA_KEYWORD_NESTING[1])
+        supplemental_info = root.find(ISO_METADATA_KEYWORD_NESTING[0] + '/' +
+                                      ISO_METADATA_KEYWORD_NESTING[1] + '/' +
+                                      ISO_METADATA_KEYWORD_NESTING[2])
 
         data_identification.remove(supplemental_info)
         # the xml should now miss the supplementalInformation tag

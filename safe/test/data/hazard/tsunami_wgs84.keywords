@@ -1,0 +1,6 @@
+hazard_category: single_hazard
+title: Tsunami
+hazard: tsunami
+hazard_continuous_unit: metres
+layer_purpose: hazard
+layer_mode: continuous
