@@ -15,7 +15,6 @@ Contact : jannes@kartoza.com
 
 __author__ = 'Jannes Engelbrecht'
 __date__ = '16/04/15'
-import pydevd
 import docopt
 from safe.impact_functions.registry import Registry
 from safe.impact_functions import register_impact_functions
@@ -28,6 +27,7 @@ from qgis.core import (
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import qgis_version
 import os
+import sys
 from safe.report.impact_report import ImpactReport
 import logging
 
@@ -41,6 +41,7 @@ raster_exposure = None
 version = None
 show_list = None
 extent = None
+report_template = None
 
 default_cli_dir = os.path.abspath(
     os.path.realpath(os.path.dirname(__file__)))
@@ -101,6 +102,7 @@ def get_hazard():
         return qhazard
     except Exception as exc:
         print exc.message
+        print exc.__doc__
 
 
 def get_exposure():
@@ -128,22 +130,26 @@ def get_exposure():
 
 
 def run_if():
-    qhazard = get_hazard()
-    qexposure = get_exposure()
-    # IF
-    impact_function_manager = ImpactFunctionManager()
-    impact_function = impact_function_manager.get(
-        shell_arguments['--impact-function'])
-    keyword_io = KeywordIO()
+    try:
+        qhazard = get_hazard()
+        qexposure = get_exposure()
+        # IF
+        impact_function_manager = ImpactFunctionManager()
+        impact_function = impact_function_manager.get(
+            shell_arguments['--impact-function'])
+        keyword_io = KeywordIO()
+    except Exception as exc:
+        print exc.__doc__
+        print exc.message
     try:
         from safe.utilities.analysis import Analysis
-    except ImportError:
+    except ImportError as ie:
         LOGGER.debug('Import error for Analysis module')
-        print ImportError.message
+        print ie.message
         return None, None, None, None
-    analysis = Analysis()
     # Layers
     try:
+        analysis = Analysis()
         analysis.hazard_layer = qhazard
         analysis.exposure_layer = qexposure
         analysis.hazard_keyword = keyword_io.read_keywords(qhazard)
@@ -156,21 +162,10 @@ def run_if():
         # analysis.user_extent_crs(qexposure.extent)
         # analysis.user_extent(extent[0], extent[1], extent[2], extent[3])
         analysis.impact_function = impact_function
-        print 'begin analysis setup'
         analysis.setup_analysis()
-        print 'stop analysis setup'
         analysis.run_analysis()
         LOGGER.debug("end analysis :)")
-    except Exception as exc:
-        print exc.message
-        print exc.__doc__
-    try:
         impact_layer = analysis.get_impact_layer()
-    except Exception as exc:
-        print exc.message
-    try:
-        LOGGER.debug(type(impact_layer))
-        LOGGER.debug(impact_layer.__doc__)
         write_results(impact_layer)
         build_report(impact_layer)
     except Exception as exc:
@@ -179,17 +174,28 @@ def run_if():
 
 
 def build_report(impact_layer):
+    """
+    To be called after shapefile has been written
+    :param: impact_layer:
+    :type: Vector
+    """
     try:
-        #pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
-        template = '/home/jannes/gitwork/inasafe/resources/qgis-composer-templates/inasafe-portrait-a4.qpt'
-        impact_layer = QgsVectorLayer('/home/jannes/experiment/flood_on_road.shp', 'nm', 'ogr')
+        report_template = '/home/jannes/gitwork/inasafe/resources/qgis-composer-templates/inasafe-portrait-a4.qpt'
+        impact_layer = QgsVectorLayer(output_file, 'cli_impact', 'ogr')
         LOGGER.debug(impact_layer.__doc__)
-        #QgsMapLayerRegistry.instance().addMapLayer(impact_layer)
-        #CANVAS.setExtent(impact_layer.extent())
-        #CANVAS.refresh()
-        report = ImpactReport(IFACE, template, impact_layer)
+        layer_registry = QgsMapLayerRegistry.instance()
+        layer_registry.removeAllMapLayers()
+        layer_registry.addMapLayer(impact_layer)
+        CANVAS.setExtent(impact_layer.extent())
+        CANVAS.refresh()
+        report = ImpactReport(IFACE, report_template, impact_layer)
         LOGGER.debug(os.path.splitext(output_file)[0] + '.pdf')
-        report.print_to_pdf(os.path.splitext(output_file)[0] + '.pdf')
+        map_path = report.print_map_to_pdf(os.path.splitext(output_file)[0] + '.pdf')
+        print "Impact Map : " + map_path
+        table_path = report.print_impact_table(os.path.splitext(output_file)[0] + '_table.pdf')
+        print "Impact Summary Table : " + table_path
+        layer_registry.removeAllMapLayers()
+
     except Exception as exc:
         print "HERE"
         print exc.message
@@ -209,7 +215,6 @@ def write_results(impact_layer):
 if __name__ == '__main__':
     print "python accent.py"
     print ""
-
     try:
         # Parse arguments, use usage.txt as a parameter definition
         shell_arguments = docopt.docopt(usage)
@@ -251,30 +256,27 @@ if __name__ == '__main__':
     except Exception as e:
         LOGGER.debug(e.message)
     LOGGER.debug(shell_arguments)
+    try:
+        if show_list is True:
+            # setup functions
+            register_impact_functions()
+            show_names(get_ifunction_list())
+        elif version is True:
+            print "QGIS VERSION: " + str(qgis_version())
+        elif (extent is not None) and\
+                ((vector_hazard is not None) or (raster_hazard is not None)) and\
+                ((vector_exposure is not None) or (raster_exposure is not None)) and\
+                (output_file is not None):
+            LOGGER.debug('--RUN--')
+            run_if()
+            LOGGER.debug('--END RUN--')
+    except Exception as excp:
+        print excp.message
+        print excp.__doc__
 
-    if show_list is True:
-        # setup functions
-        register_impact_functions()
-        show_names(get_ifunction_list())
-    elif version is True:
-        print "QGIS VERSION: " + str(qgis_version())
-    elif (extent is not None) and\
-            ((vector_hazard is not None) or (raster_hazard is not None)) and\
-            ((vector_exposure is not None) or (raster_exposure is not None)) and\
-            (output_file is not None):
-        LOGGER.debug('--RUN--')
-        run_if()
-        LOGGER.debug('--END RUN--')
 
-# print line to make it look nice
+print " "
 
 # INSTALL on Ubuntu with:
 # chmod ug+x accent.py
 # sudo ln -s `pwd`/accent.py  /usr/bin
-#
-# RUN example :
-#
-# python accent.py to list all IFs then
-# python accent.py --raster-hazard=jakarta_flood_design.asc --vector-exposure=buildings.shp
-# --extent=106.8054130000000015,-6.1913361000000000,106.8380719000000028,-6.1672457999999999
-# --impact-function=FloodRasterBuildingFunction success
