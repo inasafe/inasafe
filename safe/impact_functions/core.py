@@ -135,10 +135,10 @@ def population_rounding(number):
 # Helpers for individual impact functions
 # --------------------------------------
 def get_hazard_layers(layers):
-    """Get list of layers that have category=='hazard'
+    """Get list of layers that have layer_purpose=='hazard'
     """
 
-    return extract_layers(layers, 'category', 'hazard')
+    return extract_layers(layers, 'layer_purpose', 'hazard')
 
 
 def get_hazard_layer(layers):
@@ -158,10 +158,10 @@ def get_hazard_layer(layers):
 
 
 def get_exposure_layers(layers):
-    """Get list of layers that have category=='exposure'
+    """Get list of layers that have layer_purpose=='exposure'
     """
 
-    return extract_layers(layers, 'category', 'exposure')
+    return extract_layers(layers, 'layer_purpose', 'exposure')
 
 
 def get_exposure_layer(layers):
@@ -192,43 +192,10 @@ def extract_layers(layers, keyword, value):
     return extracted_layers
 
 
-def convert_to_old_keywords(converter, keywords):
-    """Convert new keywords system to old keywords system by aliases.
-
-    Since we have new keywords system in definitions.py and assigned by wizard,
-    it will have backward incompatibility because the current impact function
-    selector still use the old system.
-
-     This method will convert new keywords to old keyword that has the same
-     objective.
-
-     :param converter: a dictionary that contains all possible aliases
-        from new keywords to old keywords.
-     :type converter: dict
-
-     :param keywords: list of dictionary keyword
-     :type keywords: list
-
-     .. versionadded:: 2.1
-    """
-    for keyword in keywords:
-        for key, value in keyword.iteritems():
-            try:
-                aliases = converter[key]
-                for alias_key, alias_value in aliases.iteritems():
-                    if value.lower() in alias_value:
-                        keyword[key] = alias_key
-                        break
-            except KeyError:
-                pass
-
-
 def has_no_data(layer_data):
     """Determine whether or not a layer contains nan values.
-
     :param layer_data: Layer data that is to be inspected.
     :type layer_data: ndarry
-
     :return: The True if there is nodata in layer_data.
     :rtype: bool
     """

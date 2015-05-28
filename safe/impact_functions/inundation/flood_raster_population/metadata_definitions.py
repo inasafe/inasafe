@@ -21,16 +21,19 @@ from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    exposure_definition,
-    exposure_population,
-    unit_people_per_pixel,
-    layer_raster_continuous, unit_feet_depth, unit_metres_depth)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.definitions import (
+    layer_mode_continuous,
+    layer_geometry_raster,
+    hazard_flood,
+    hazard_category_single_hazard,
+    unit_metres,
+    unit_feet,
+    count_exposure_unit,
+    exposure_population
+)
 
 
 class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
@@ -97,21 +100,21 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                    'on consensus, not hard evidence.')
             ],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_flood],
-                    'units': [
-                        unit_feet_depth,
-                        unit_metres_depth
-                    ],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_single_hazard],
+                    'hazard_types': [hazard_flood],
+                    'continuous_hazard_units': [unit_feet, unit_metres],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'exposure_types': [exposure_population],
+                    'exposure_units': [count_exposure_unit]
                 }
             },
             'parameters': OrderedDict([

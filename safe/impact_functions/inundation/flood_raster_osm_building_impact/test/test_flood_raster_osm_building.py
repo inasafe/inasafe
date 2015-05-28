@@ -74,17 +74,19 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
 
     def test_filter(self):
         hazard_keywords = {
-            'subcategory': 'tsunami',
-            'unit': 'metres_depth',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'hazard': 'flood',
+            'hazard_category': 'single_hazard',
+            'continuous_hazard_unit': 'metres'
         }
 
         exposure_keywords = {
-            'subcategory': 'structure',
-            'unit': 'building_type',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

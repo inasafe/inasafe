@@ -81,7 +81,6 @@ class Plugin(object):
         self.action_impact_merge_dlg = None
         self.key_action = None
         self.action_options = None
-        self.action_keywords_dialog = None
         self.action_keywords_wizard = None
         self.action_function_centric_wizard = None
         self.action_extent_selector = None
@@ -181,22 +180,9 @@ class Plugin(object):
         self.action_dock.triggered.connect(self.toggle_dock_visibility)
         self.add_action(self.action_dock)
 
-    def _create_keywords_action(self):
-        """Create action for keywords editor."""
-        icon = resources_path('img', 'icons', 'show-keyword-editor.svg')
-        self.action_keywords_dialog = QAction(
-            QIcon(icon),
-            self.tr('InaSAFE Keyword Editor'),
-            self.iface.mainWindow())
-        self.action_keywords_dialog.setStatusTip(self.tr(
-            'Open InaSAFE keywords editor'))
-        self.action_keywords_dialog.setWhatsThis(self.tr(
-            'Open InaSAFE keywords editor'))
-        self.action_keywords_dialog.setEnabled(False)
-        self.action_keywords_dialog.triggered.connect(
-            self.show_keywords_editor)
-        self.add_action(
-            self.action_keywords_dialog, add_to_toolbar=self.full_toolbar)
+        # --------------------------------------
+        # Create action for keywords creation wizard
+        # -------------------------------------
 
     def _create_keywords_wizard_action(self):
         """Create action for keywords creation wizard."""
@@ -448,9 +434,6 @@ class Plugin(object):
         self._create_batch_runner_action()
         self._create_impact_merge_action()
         self._create_save_scenario_action()
-        # TODO: This action (and related code) will be deprecated
-        # keywords dialog to be replaced by keywords wizard
-        self._create_keywords_action()
 
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
@@ -565,7 +548,7 @@ class Plugin(object):
         )
 
         dialog = NeedsCalculatorDialog(self.iface.mainWindow())
-        dialog.show()  # non modal
+        dialog.exec_()
 
     def show_global_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
@@ -595,50 +578,6 @@ class Plugin(object):
             self.iface,
             self.dock_widget,
             self.iface.mainWindow())
-        dialog.exec_()  # modal
-
-    def show_keywords_editor(self):
-        """Show the keywords editor."""
-        # import here only so that it is AFTER i18n set up
-        from safe.gui.tools.keywords_dialog import KeywordsDialog
-
-        # Next block is a fix for #776
-        if self.iface.activeLayer() is None:
-            return
-
-        try:
-            keyword_io = KeywordIO()
-            keyword_io.read_keywords(self.iface.activeLayer())
-        except UnsupportedProviderError:
-            # noinspection PyUnresolvedReferences,PyCallByClass
-            # noinspection PyTypeChecker,PyArgumentList
-            QMessageBox.warning(
-                None,
-                self.tr('Unsupported layer type'),
-                self.tr(
-                    'The layer you have selected cannot be used for '
-                    'analysis because its data type is unsupported.'))
-            return
-        # End of fix for #776
-        # Fix for #793
-        except NoKeywordsFoundError:
-            # we will create them from scratch in the dialog
-            pass
-        # End of fix for #793
-        # Fix for filtered-layer
-        except InvalidParameterError, e:
-            # noinspection PyTypeChecker,PyTypeChecker,PyArgumentList
-            QMessageBox.warning(
-                None,
-                self.tr('Invalid Layer'),
-                e.message
-            )
-            return
-
-        dialog = KeywordsDialog(
-            self.iface.mainWindow(),
-            self.iface,
-            self.dock_widget)
         dialog.exec_()  # modal
 
     def show_keywords_wizard(self):
@@ -675,10 +614,10 @@ class Plugin(object):
     def show_shakemap_importer(self):
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe.gui.tools.shake_grid.shakemap_importer_dialog import (
-            ShakemapImporterDialog)
+        from safe.gui.tools.shake_grid.shakemap_converter_dialog import (
+            ShakemapConverterDialog)
 
-        dialog = ShakemapImporterDialog(self.iface.mainWindow())
+        dialog = ShakemapConverterDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_osm_downloader(self):
@@ -709,7 +648,6 @@ class Plugin(object):
 
     def _disable_keyword_tools(self):
         """Internal helper to disable the keyword and wizard actions."""
-        self.action_keywords_dialog.setEnabled(False)
         self.action_keywords_wizard.setEnabled(False)
 
     def layer_changed(self, layer):
@@ -731,7 +669,6 @@ class Plugin(object):
             self._disable_keyword_tools()
             return
 
-        self.action_keywords_dialog.setEnabled(True)
         self.action_keywords_wizard.setEnabled(True)
 
     def shortcut_f7(self):

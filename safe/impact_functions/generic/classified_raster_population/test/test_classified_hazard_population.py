@@ -59,16 +59,20 @@ class TestClassifiedHazardPopulationFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'classes',
-            'layer_type': 'raster',
-            'data_type': 'classified'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'raster',
+            'hazard': 'flood',
+            'hazard_category': 'multi_hazard',
+            'raster_hazard_classification': 'generic_raster_hazard_classes'
         }
 
         exposure_keywords = {
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
