@@ -2,7 +2,8 @@
 """Tsunami Evacuation Impact Function."""
 import numpy
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.continuous_rh_continuous_re import \
+    ContinuousRHContinuousRE
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding_full,
@@ -29,7 +30,7 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
 # noinspection PyClassHasNoInit
-class TsunamiEvacuationFunction(ImpactFunction):
+class TsunamiEvacuationFunction(ContinuousRHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Impact function for tsunami evacuation."""
     _metadata = TsunamiEvacuationMetadata()

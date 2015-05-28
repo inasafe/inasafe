@@ -353,3 +353,11 @@ class NoImpactClassFoundError(Exception):
     results
     """
     pass
+
+
+class MetadataLayerConstraintError(Exception):
+    """Raised if the metadata does not match with the IF base class.
+
+    It means the layer constraint specified in the metadata is not supported
+    by the base class
+    """

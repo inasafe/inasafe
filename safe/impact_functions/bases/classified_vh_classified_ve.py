@@ -6,8 +6,12 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsFeatureRequest,
     QgsGeometry)
-from safe.common.exceptions import WrongDataTypeException, GetDataError
-from safe.gis.qgis_vector_tools import clip_by_polygon, split_by_polygon
+
+from safe.common.exceptions import GetDataError, \
+    MetadataLayerConstraintError
+from safe.definitions import layer_mode_classified, layer_geometry_point, \
+    layer_geometry_line, layer_geometry_polygon
+from safe.gis.qgis_vector_tools import clip_by_polygon
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.calculation_result import \
     VectorImpactCalculation
@@ -15,10 +19,10 @@ from safe.impact_functions.bases.layer_types.classified_vector_exposure import \
     ClassifiedVectorExposure
 from safe.impact_functions.bases.layer_types.classified_vector_hazard import \
     ClassifiedVectorHazard
-from safe.impact_functions.bases.layer_types.classified_vector_impact import \
+from safe.impact_functions.bases.layer_types.vector_impact import \
     VectorImpact
 from safe.impact_functions.bases.utilities import get_qgis_vector_layer, \
-    split_by_polygon_class
+    split_by_polygon_class, check_layer_constraint
 from safe.utilities.i18n import tr
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
@@ -39,6 +43,18 @@ class ClassifiedVHClassifiedVE(ImpactFunction,
 
     def __init__(self):
         super(ClassifiedVHClassifiedVE, self).__init__()
+        # check constraint
+        valid = check_layer_constraint(self.metadata(),
+                                       layer_mode_classified,
+                                       [layer_geometry_point,
+                                        layer_geometry_line,
+                                        layer_geometry_polygon],
+                                       layer_mode_classified,
+                                       [layer_geometry_point,
+                                        layer_geometry_line,
+                                        layer_geometry_polygon])
+        if not valid:
+                raise MetadataLayerConstraintError()
 
     @property
     def hazard(self):

@@ -17,7 +17,6 @@ __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import unittest
-
 from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_manager\

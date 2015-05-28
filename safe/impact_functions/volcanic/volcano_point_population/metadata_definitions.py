@@ -29,7 +29,6 @@ from safe.definitions import (
     exposure_population,
     layer_geometry_raster,
     count_exposure_unit,
-    density_exposure_unit,
     layer_mode_continuous
 )
 

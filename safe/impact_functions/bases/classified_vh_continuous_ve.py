@@ -14,13 +14,12 @@ from safe.impact_functions.bases.calculation_result import \
     VectorImpactCalculation
 from safe.impact_functions.bases.layer_types.classified_vector_hazard import \
     ClassifiedVectorHazard
-from safe.impact_functions.bases.layer_types.classified_vector_impact import \
+from safe.impact_functions.bases.layer_types.vector_impact import \
     VectorImpact
 from safe.impact_functions.bases.layer_types.continuous_vector_exposure import \
     ContinuousVectorExposure
 from safe.impact_functions.bases.utilities import get_qgis_vector_layer, \
     split_by_polygon_class
-
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '08/05/15'

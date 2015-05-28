@@ -13,9 +13,10 @@ Contact : ole.moller.nielsen@gmail.com
 
 from collections import OrderedDict
 
+from safe.impact_functions.bases.classified_vh_classified_ve import \
+    ClassifiedVHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.classified_polygon_building\
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
@@ -32,7 +33,7 @@ from safe.impact_reports.building_exposure_report_mixin import (
 
 
 class ClassifiedPolygonHazardBuildingFunction(
-        ImpactFunction,
+        ClassifiedVHClassifiedVE,
         BuildingExposureReportMixin):
     """Impact Function for Generic Polygon on Building."""
 

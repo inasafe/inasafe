@@ -2,13 +2,17 @@
 from qgis.core import (
     QGis,
     QgsVectorLayer,
+    QgsRasterLayer,
     QgsFeature,
     QgsFeatureRequest,
     QgsField,
     QgsGeometry)
+
 from PyQt4.QtCore import QVariant
+
 from safe.common.exceptions import WrongDataTypeException
 from safe.gis.qgis_vector_tools import create_layer
+from safe.storage.raster import Raster
 from safe.storage.vector import Vector
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
@@ -32,8 +36,8 @@ def check_attribute_exist(layer, attribute):
 
 
 def get_qgis_vector_layer(layer):
-    """ Get QgsVectorLayer if the layer param is a vector storage layer (
-    old-style)
+    """Get QgsVectorLayer if the layer param is a vector storage layer (
+    old-style).
     :param layer: The layer to normalize
     :type layer: QgsMapLayer, Vector
     :return: QgsMapLayer returned
@@ -42,6 +46,21 @@ def get_qgis_vector_layer(layer):
     if isinstance(layer, Vector):
         return layer.get_layer()
     elif isinstance(layer, QgsVectorLayer):
+        return layer
+    else:
+        return None
+
+def get_qgis_raster_layer(layer):
+    """Get QgsRasterLayer if the layer param is a raster storage layer (
+    old-style).
+    :param layer: The layer to normalize
+    :type layer: QgsMapLayer, Raster
+    :return: QgsMapLayer returned
+    :rtype: QgsRasterLayer
+    """
+    if isinstance(layer, Raster):
+        return layer.get_layer()
+    elif isinstance(layer, QgsRasterLayer):
         return layer
     else:
         return None
@@ -141,3 +160,60 @@ def split_by_polygon_class(
     result_layer.updateExtents()
 
     return result_layer
+
+def check_layer_constraint(metadata, hazard_layer_mode,
+                           hazard_layer_geometries, exposure_layer_mode,
+                           exposure_layer_geometries):
+    """Check the layer constraint in metadata is relevant with the base class
+    used
+
+    :param metadata: the metadata of the class
+    :type metadata: ImpactFunctionMetadata
+
+    :param hazard_layer_mode: the layer_mode of hazard layer
+    :type hazard_layer_mode: dict
+
+    :param hazard_layer_geometries: the layer_geometry allowed for hazard layer
+    :type hazard_layer_geometries: list
+
+    :param exposure_layer_mode: the layer_mode of exposure_layer
+    :type exposure_layer_mode: dict
+
+    :param exposure_layer_geometries: the layer_geometry allowed for
+    exposure_layer
+    :type exposure_layer_geometries: list
+
+    :return: True if valid
+    :rtype: bool
+    """
+    valid_keywords = metadata.valid_layer_keywords()
+    hazard_keywords = valid_keywords['hazard_keywords']
+    exposure_keywords = valid_keywords['exposure_keywords']
+    valid = True
+    if not hazard_keywords['layer_mode'] == hazard_layer_mode['key']:
+        valid = False
+    hazard_geometries = hazard_layer_geometries
+    hazard_geometries = [k['key'] for k in hazard_geometries]
+    geom_exist = False
+    for key in hazard_geometries:
+        if key in hazard_keywords['layer_geometry']:
+            geom_exist = True
+            break
+
+    if not geom_exist:
+        valid = False
+
+    if not exposure_keywords['layer_mode'] == exposure_layer_mode['key']:
+        valid = False
+    exposure_geometries = exposure_layer_geometries
+    exposure_geometries = [k['key'] for k in exposure_geometries]
+    geom_exist = False
+    for key in exposure_geometries:
+        if key in exposure_keywords['layer_geometry']:
+            geom_exist = True
+            break
+
+    if not geom_exist:
+        valid = False
+
+    return valid

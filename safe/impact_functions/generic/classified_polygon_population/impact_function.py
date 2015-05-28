@@ -12,7 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import numpy
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_continuous_re import \
+    ClassifiedVHContinuousRE
 from safe.impact_functions.generic.classified_polygon_population\
     .metadata_definitions import \
     ClassifiedPolygonHazardPopulationFunctionMetadata
@@ -32,7 +33,7 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
-class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
+class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
     """Impact Function for Classified Polygon on Population."""
 
     _metadata = ClassifiedPolygonHazardPopulationFunctionMetadata()

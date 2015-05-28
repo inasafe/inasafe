@@ -11,29 +11,30 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'lucernae'
-__date__ = '23/03/15'
-
 import logging
 from collections import OrderedDict
 from numpy import round as numpy_round
 
+from safe.impact_functions.bases.classified_rh_classified_ve import \
+    ClassifiedRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.utilities.i18n import tr
 from safe.common.utilities import get_osm_building_usage
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+
+__author__ = 'lucernae'
+__date__ = '23/03/15'
 
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class ClassifiedRasterHazardBuildingFunction(
-        ImpactFunction,
+        ClassifiedRHClassifiedVE,
         BuildingExposureReportMixin):
     """Impact plugin for classified hazard impact on building data"""
 

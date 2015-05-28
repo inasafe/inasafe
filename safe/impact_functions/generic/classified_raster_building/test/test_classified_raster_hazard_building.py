@@ -15,7 +15,6 @@ __author__ = 'lucernae'
 __filename__ = 'test_classified_hazard_building'
 __date__ = '23/03/15'
 
-
 import unittest
 import math
 

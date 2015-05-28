@@ -6,13 +6,13 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsCoordinateTransform,
     QgsGeometry)
+
 from safe.common.exceptions import WrongDataTypeException, GetDataError
 from safe.gis.qgis_vector_tools import clip_by_polygon, split_by_polygon
-
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.calculation_result import \
     VectorImpactCalculation
-from safe.impact_functions.bases.layer_types.classified_vector_impact import \
+from safe.impact_functions.bases.layer_types.vector_impact import \
     VectorImpact
 from safe.impact_functions.bases.layer_types.continuous_vector_exposure import \
     ContinuousVectorExposure

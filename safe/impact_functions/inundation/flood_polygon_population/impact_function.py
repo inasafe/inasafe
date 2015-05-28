@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-__author__ = 'Rizky Maulana Nugraha'
 
 import logging
 from numbers import Number
@@ -20,7 +19,6 @@ import numpy
 
 from safe.utilities.i18n import tr
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
@@ -28,6 +26,8 @@ from safe.impact_functions.core import (
     has_no_data)
 from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
+from safe.impact_functions.bases.classified_vh_continuous_re import \
+    ClassifiedVHContinuousRE
 from safe.common.tables import Table, TableRow, TableCell
 from safe.storage.raster import Raster
 from safe.common.utilities import (
@@ -39,10 +39,12 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 from safe.utilities.unicode import get_unicode
 from safe.common.exceptions import ZeroImpactException
 
+__author__ = 'Rizky Maulana Nugraha'
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodEvacuationVectorHazardFunction(ImpactFunction):
+class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Impact function for vector flood evacuation."""
     _metadata = FloodEvacuationVectorHazardMetadata()

@@ -18,7 +18,6 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
-
 from qgis.core import QgsRasterLayer, QgsVectorLayer
 
 from safe.impact_functions.inundation\
