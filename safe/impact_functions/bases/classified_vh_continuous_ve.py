@@ -7,7 +7,9 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsGeometry)
 
-from safe.common.exceptions import GetDataError
+from safe.common.exceptions import GetDataError, MetadataLayerConstraintError
+from safe.definitions import layer_mode_classified, layer_geometry_point, \
+    layer_geometry_line, layer_geometry_polygon, layer_mode_continuous
 from safe.gis.qgis_vector_tools import clip_by_polygon
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.calculation_result import \
@@ -19,7 +21,7 @@ from safe.impact_functions.bases.layer_types.vector_impact import \
 from safe.impact_functions.bases.layer_types.continuous_vector_exposure \
     import ContinuousVectorExposure
 from safe.impact_functions.bases.utilities import get_qgis_vector_layer, \
-    split_by_polygon_class
+    split_by_polygon_class, check_layer_constraint
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '08/05/15'
@@ -39,6 +41,17 @@ class ClassifiedVHContinuousVE(ImpactFunction,
 
     def __init__(self):
         super(ClassifiedVHContinuousVE, self).__init__()
+        valid = check_layer_constraint(self.metadata(),
+                                       layer_mode_classified,
+                                       [layer_geometry_point,
+                                        layer_geometry_line,
+                                        layer_geometry_polygon],
+                                       layer_mode_continuous,
+                                       [layer_geometry_point,
+                                        layer_geometry_line,
+                                        layer_geometry_polygon])
+        if not valid:
+            raise MetadataLayerConstraintError()
 
     @ImpactFunction.hazard.setter
     # pylint: disable=W0221
