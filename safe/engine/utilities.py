@@ -8,7 +8,9 @@ from safe.storage.geometry import Polygon
 from safe.storage.vector import Vector
 
 # Mandatory keywords that must be present in layers
-REQUIRED_KEYWORDS = ['category', 'subcategory']
+REQUIRED_KEYWORDS = ['layer_purpose', 'layer_mode']
+REQUIRED_HAZARD_KEYWORDS = ['hazard', 'hazard_category']
+REQUIRED_EXPOSURE_KEYWORDS = ['exposure']
 
 
 def buffer_points(centers, radii, hazard_zone_attribute, data_table=None):
