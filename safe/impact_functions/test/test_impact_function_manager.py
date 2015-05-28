@@ -106,7 +106,6 @@ class TestImpactFunctionManager(unittest.TestCase):
                         for the_v in v:
                             print '\t-', the_v['key']
                 print ''
-            # pprint(impact_function.metadata().get_layer_requirements())
             print ''
 
     def test_purposes_for_layer(self):
@@ -218,7 +217,6 @@ class TestImpactFunctionManager(unittest.TestCase):
         """Test available_exposures API."""
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.available_exposures()
-        print [x['key'] for x in result]
         expected_result = [
             exposure_structure, exposure_road, exposure_population]
         message = ('I expect %s but I got %s.' % (expected_result, result))
@@ -254,7 +252,6 @@ class TestImpactFunctionManager(unittest.TestCase):
         ifm = ImpactFunctionManager()
         hazard_constraints = ifm.available_hazard_constraints(
             'earthquake', 'single_hazard')
-        print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
         expected = [
             (layer_mode_continuous, layer_geometry_raster),
             (layer_mode_classified, layer_geometry_raster),
@@ -268,12 +265,29 @@ class TestImpactFunctionManager(unittest.TestCase):
         ifm = ImpactFunctionManager()
         exposure_constraints = ifm.available_exposure_constraints(
             'population')
-        print [(x[0]['key'], x[1]['key']) for x in exposure_constraints]
         expected = [
             (layer_mode_continuous, layer_geometry_raster),
         ]
 
         self.assertItemsEqual(exposure_constraints, expected)
+
+    def test_available_hazard_layer_mode(self):
+        """Test for available_hazard_layer_mode."""
+        ifm = ImpactFunctionManager()
+        hazard_layer_mode = ifm.available_hazard_layer_mode(
+            'earthquake', 'single_hazard')
+        expected = [layer_mode_continuous, layer_mode_classified]
+
+        self.assertItemsEqual(hazard_layer_mode, expected)
+
+    def test_available_exposure_layer_mode(self):
+        """Test for available_exposure_layer_mode."""
+        ifm = ImpactFunctionManager()
+        exposure_layer_mode = ifm.available_exposure_layer_mode(
+            'population')
+        expected = [layer_mode_continuous]
+
+        self.assertItemsEqual(exposure_layer_mode, expected)
 
 if __name__ == '__main__':
     unittest.main()
