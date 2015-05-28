@@ -563,3 +563,52 @@ class ImpactFunctionManager(object):
                 add_to_list(exposure_constraints, if_exposure_constraints)
 
         return exposure_constraints
+
+    def available_hazard_layer_mode(
+            self, hazard_key, hazard_geometry_key, hazard_category_key):
+        """Return all available layer_mode.
+
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param hazard_geometry_key: The hazard geometry key
+        :type hazard_geometry_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: List of layer_mode
+        :rtype: list
+        """
+        layer_modes = []
+        for impact_function in self.impact_functions:
+            if_hazard_layer_mode = impact_function.metadata(). \
+                available_hazard_layer_mode(
+                hazard_key, hazard_geometry_key, hazard_category_key)
+            if if_hazard_layer_mode:
+                add_to_list(layer_modes, if_hazard_layer_mode)
+
+        return layer_modes
+
+    def available_exposure_layer_mode(
+            self, exposure_key, exposure_geometry_key):
+        """Get exposure layer mode for exposure_key.
+
+        :param exposure_key: The exposure key
+        :type exposure_key: str
+
+        :param exposure_geometry_key: The exposure geometry key
+        :type exposure_geometry_key: str
+
+        :returns: List of layer_mode
+        :rtype: list
+        """
+        layer_modes = []
+        for impact_function in self.impact_functions:
+            if_exposure_layer_mode = impact_function.metadata(). \
+                available_exposure_layer_mode(
+                exposure_key, exposure_geometry_key)
+            if if_exposure_layer_mode:
+                add_to_list(layer_modes, if_exposure_layer_mode)
+
+        return layer_modes

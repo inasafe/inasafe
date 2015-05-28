@@ -309,6 +309,27 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         from pprint import pprint
         pprint(layer_keywords)
 
+    def test_available_hazard_layer_mode(self):
+        """Test for available_hazard_layer_mode."""
+        impact_function = ITBFatalityFunction()
+        result = impact_function.metadata().available_hazard_layer_mode(
+            'earthquake',
+            'raster',
+            'single_hazard'
+        )
+
+        expected = layer_mode_continuous
+        self.assertEqual(result, expected)
+
+    def test_available_exposure_layer_mode(self):
+        """Test for available_exposure_layer_mode."""
+        impact_function = ITBFatalityFunction()
+        result = impact_function.metadata().available_exposure_layer_mode(
+            'population',
+            'raster'
+        )
+        expected = layer_mode_continuous
+        self.assertEqual(result, expected)
 
 if __name__ == '__main__':
     unittest.main()

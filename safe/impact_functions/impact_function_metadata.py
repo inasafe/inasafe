@@ -795,3 +795,64 @@ class ImpactFunctionMetadata(object):
         }
 
         return keywords
+
+    @classmethod
+    def available_hazard_layer_mode(
+            cls, hazard_key, hazard_geometry_key, hazard_category_key):
+        """Return all available layer_mode.
+
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :param hazard_geometry_key: The hazard geometry key
+        :type hazard_geometry_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :returns: A layer mode
+        :rtype: dict, None
+        """
+
+        hazard_layer_req = cls.get_hazard_requirements()
+        hazards = hazard_layer_req['hazard_types']
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazard_geometries = hazard_layer_req['layer_geometries']
+
+        if not is_key_exist(hazard_key, hazards):
+            return None
+        if not is_key_exist(hazard_geometry_key, hazard_geometries):
+            return None
+        if not is_key_exist(hazard_category_key, hazard_categories):
+            return None
+
+        layer_mode = hazard_layer_req['layer_mode']
+
+        return layer_mode
+
+    @classmethod
+    def available_exposure_layer_mode(
+            cls, exposure_key, exposure_geometry_key):
+        """Get exposure layer mode for exposure_key.
+
+        :param exposure_key: The exposure key
+        :type exposure_key: str
+
+        :param exposure_geometry_key: The exposure geometry key
+        :type exposure_geometry_key: str
+
+        :returns: A layer mode
+        :rtype: dict
+        """
+        exposure_layer_req = cls.get_exposure_requirements()
+        exposures = exposure_layer_req['exposure_types']
+        exposure_geometries = exposure_layer_req['layer_geometries']
+
+        if not is_key_exist(exposure_key, exposures):
+            return None
+        if not is_key_exist(exposure_geometry_key, exposure_geometries):
+            return None
+
+        layer_mode = exposure_layer_req['layer_mode']
+
+        return layer_mode
