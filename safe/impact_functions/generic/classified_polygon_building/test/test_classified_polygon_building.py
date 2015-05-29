@@ -82,7 +82,7 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
             'layer_geometry': 'polygon',
             'hazard': 'flood',
             'hazard_category': 'multi_hazard',
-            'raster_hazard_classification': 'generic_vector_hazard_classes'
+            'vector_hazard_classification': 'generic_vector_hazard_classes'
         }
 
         exposure_keywords = {

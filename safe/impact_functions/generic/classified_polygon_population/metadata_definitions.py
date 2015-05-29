@@ -92,8 +92,9 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                     ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
-                    'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': all_vector_hazard_classes
+                    'vector_hazard_classifications':
+                        all_vector_hazard_classes,
+                    'raster_hazard_classifications': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
