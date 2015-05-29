@@ -162,7 +162,7 @@ class WizardDialogTest(unittest.TestCase):
                            'RW', 'FLOODPRONE']
         expected_chosen_field = 'FLOODPRONE'
 
-        expected_classification_count = 1
+        expected_classification_count = 3
         expected_classification = 'flood vector hazard classes'
 
         expected_keywords = {
@@ -815,21 +815,16 @@ class WizardDialogTest(unittest.TestCase):
     def test_auto_select_one_item(self):
         """Test auto select if there is only one item in a list."""
         layer = clone_shp_layer(
-            name='volcano_krb',
+            name='buildings',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=test_data_path('exposure'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
-        dialog.pbnNext.click()  # choose hazard
-        dialog.pbnNext.click()  # choose multi hazard
-        dialog.pbnNext.click()  # choose volcano
-        dialog.pbnNext.click()  # choose classified
-        dialog.pbnNext.click()  # choose KRB
-
+        dialog.pbnNext.click()  # choose exposure
         message = 'It should auto select, but it does not.'
-        self.assertTrue(dialog.lstClassifications.currentRow() == 0, message)
-        num_item = dialog.lstClassifications.count()
+        self.assertTrue(dialog.lstSubcategories.currentRow() == 0, message)
+        num_item = dialog.lstSubcategories.count()
         message = 'There is should be only one item, I got %s' % num_item
         self.assertTrue(num_item == 1, message)
 
@@ -1195,7 +1190,9 @@ class WizardDialogTest(unittest.TestCase):
 
         self.check_current_step(step_kw_classification, dialog)
 
-        expected_values = ['flood vector hazard classes']
+        expected_values = ['flood vector hazard classes',
+                           'generic vector hazard classes',
+                           'volcano vector hazard classes']
         self.check_list(expected_values, dialog.lstClassifications)
         self.select_from_list_widget('flood vector hazard classes',
                                      dialog.lstClassifications)
@@ -1280,7 +1277,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to classifications
 
         self.check_current_step(step_kw_classification, dialog)
-        # No need to select, a single item will be autoselected
+        self.select_from_list_widget(
+            'volcano vector hazard classes', dialog.lstClassifications)
         dialog.pbnNext.click()  # go to classify
 
         self.check_current_step(step_kw_classify, dialog)
