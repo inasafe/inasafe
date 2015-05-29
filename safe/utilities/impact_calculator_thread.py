@@ -180,9 +180,9 @@ class ImpactCalculatorThread(threading.Thread, QObject):
                 'trying to run the analysis.')
             raise InsufficientParametersError(message)
         try:
-            layers = [self._hazard_layer, self._exposure_layer]
             self._impact_layer = calculate_impact(
-                layers=layers,
+                hazard_layer=self._hazard_layer,
+                exposure_layer=self._exposure_layer,
                 impact_function=self._impact_function,
                 extent=self._extent,
                 check_integrity=self._check_integrity)
