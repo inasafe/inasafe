@@ -11,6 +11,7 @@ __copyright__ += 'Disaster Reduction'
 
 from qgis.gui import QgsMessageBar
 from qgis.core import QGis
+from qgis.utils import iface
 from PyQt4.QtGui import QMessageBox, QPushButton
 
 from safe.utilities.i18n import tr
@@ -32,8 +33,11 @@ def display_information_message_box(
 
 def display_information_message_bar(
         iface,
-        title=None, message=None, more_details=None,
-        button_text=tr('Show details ...'), duration=8):
+        title=None,
+        message=None,
+        more_details=None,
+        button_text=tr('Show details ...'),
+        duration=8):
     """
     Display an information message bar.
 
@@ -72,9 +76,11 @@ def display_information_message_bar(
 
 
 def display_success_message_bar(
-        iface,
-        title=None, message=None, more_details=None,
-        button_text=tr('Show details ...'), duration=8):
+        title=None,
+        message=None,
+        more_details=None,
+        button_text=tr('Show details ...'),
+        duration=8):
     """
     Display a success message bar.
 
@@ -130,8 +136,11 @@ def display_warning_message_box(parent=None, title=None, message=None):
 
 
 def display_warning_message_bar(
-        title=None, message=None, more_details=None,
-        button_text=tr('Show details ...'), duration=8):
+        title=None,
+        message=None,
+        more_details=None,
+        button_text=tr('Show details ...'),
+        duration=8):
     """
     Display a warning message bar.
 
@@ -179,9 +188,11 @@ def display_critical_message_box(parent=None, title=None, message=None):
 
 
 def display_critical_message_bar(
-        iface,
-        title=None, message=None, more_details=None,
-        button_text=tr('Show details ...'), duration=8):
+        title=None,
+        message=None,
+        more_details=None,
+        button_text=tr('Show details ...'),
+        duration=8):
     """
     Display a critical message bar.
 
