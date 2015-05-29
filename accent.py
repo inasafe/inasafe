@@ -64,19 +64,11 @@ class CliArgs(object):
         except Exception as e:
             LOGGER.debug(e.message)
         try:
-            self.vector_hazard = _arguments_['--vector-hazard']
+            self.hazard = _arguments_['--hazard']
         except Exception as e:
             LOGGER.debug(e.message)
         try:
-            self.raster_hazard = _arguments_['--raster-hazard']
-        except Exception as e:
-            LOGGER.debug(e.message)
-        try:
-            self.vector_exposure = _arguments_['--vector-exposure']
-        except Exception as e:
-            LOGGER.debug(e.message)
-        try:
-            self.raster_exposure = _arguments_['--raster-exposure']
+            self.exposure = _arguments_['--exposure']
         except Exception as e:
             LOGGER.debug(e.message)
         try:
@@ -154,12 +146,12 @@ def get_hazard(cli_arguments):
     :raises: Exception
     """
     try:
-        if cli_arguments.vector_hazard is not None:
-            hazard_base = join_if_relative(cli_arguments.vector_hazard)
+        if os.path.splitext(cli_arguments.hazard)[1] == '.shp':
+            hazard_base = join_if_relative(cli_arguments.hazard)
             qhazard = QgsVectorLayer(
                 hazard_base, 'cli_vector_hazard', 'ogr')
-        elif cli_arguments.raster_hazard is not None:
-            hazard_base = join_if_relative(cli_arguments.raster_hazard)
+        elif os.path.splitext(cli_arguments.hazard)[1] == '.asc':
+            hazard_base = join_if_relative(cli_arguments.hazard)
             qhazard = QgsRasterLayer(
                 hazard_base, 'cli_raster_hazard')
         if not qhazard.isValid():
@@ -185,12 +177,12 @@ def get_exposure(cli_arguments):
     :raises: Exception
     """
     try:
-        if cli_arguments.vector_exposure is not None:
-            exposure_base = join_if_relative(cli_arguments.vector_exposure)
+        if os.path.splitext(cli_arguments.exposure)[1] == '.shp':
+            exposure_base = join_if_relative(cli_arguments.exposure)
             LOGGER.debug(exposure_base)
             qexposure = QgsVectorLayer(exposure_base, 'cli_vector', 'ogr')
-        elif cli_arguments.raster_exposure is not None:
-            exposure_base = join_if_relative(cli_arguments.raster_exposure)
+        elif os.path.splitext(cli_arguments.exposure)[1] == '.asc':
+            exposure_base = join_if_relative(cli_arguments.exposure)
             LOGGER.debug(exposure_base)
             qexposure = QgsRasterLayer(exposure_base, 'cli_raster')
         else:
@@ -333,10 +325,10 @@ if __name__ == '__main__':
         elif arguments.version is True:
             print "QGIS VERSION: " + str(qgis_version())
         elif (arguments.extent is not None) and\
-                ((arguments.vector_hazard is not None) or (arguments.raster_hazard is not None)) and\
-                ((arguments.vector_exposure is not None) or (arguments.raster_exposure is not None)) and\
+                (arguments.hazard is not None) and\
+                (arguments.exposure is not None) and\
                 (arguments.output_file is not None):
-            LOGGER.debug('--RUN--')
+            LOGGER.debug('--BEGIN-RUN--')
             run_if(arguments)
             LOGGER.debug('--END RUN--')
     except Exception as excp:
