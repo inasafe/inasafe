@@ -154,6 +154,13 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_category_multi_hazard]
         self.assertItemsEqual(hazard_categories, expected)
 
+        hazard_categories = impact_function_manager. \
+            hazard_categories_for_layer('raster', 'earthquake')
+        expected = [
+            hazard_category_single_hazard,
+            hazard_category_multi_hazard]
+        self.assertItemsEqual(hazard_categories, expected)
+
     def test_hazards_for_layer(self):
         """Test for hazards_for_layer"""
         impact_function_manager = ImpactFunctionManager()

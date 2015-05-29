@@ -180,6 +180,11 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function.metadata() \
+            .hazard_categories_for_layer('raster', 'earthquake')
+        expected = [hazard_category_single_hazard]
+        self.assertItemsEqual(hazard_categories, expected)
+
+        hazard_categories = impact_function.metadata() \
             .hazard_categories_for_layer('polygon')
         expected = []
         self.assertItemsEqual(hazard_categories, expected)
@@ -187,10 +192,10 @@ class TestImpactFunctionMetadata(unittest.TestCase):
     def test_hazards_for_layer(self):
         """Test hazards_for_layer"""
         impact_function = EarthquakeBuildingFunction()
-        # hazards = impact_function.metadata().hazards_for_layer(
-        #     'raster', 'single_hazard')
-        # expected = [hazard_earthquake]
-        # self.assertItemsEqual(hazards, expected)
+        hazards = impact_function.metadata().hazards_for_layer(
+            'raster', 'single_hazard')
+        expected = [hazard_earthquake]
+        self.assertItemsEqual(hazards, expected)
 
         hazards = impact_function.metadata().hazards_for_layer('raster',)
         expected = [hazard_earthquake]
