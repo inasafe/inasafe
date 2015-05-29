@@ -30,29 +30,15 @@ import os
 from safe.report.impact_report import ImpactReport
 import logging
 
-
-# arguments/options
-output_file = None
-vector_hazard = None
-raster_hazard = None
-vector_exposure = None
-raster_exposure = None
-version = None
-show_list = None
-extent = None
-report_template = None
-
-default_cli_dir = os.path.abspath(
-    os.path.realpath(os.path.dirname(__file__)))
-usage_dir = os.environ['InaSAFEQGIS']
+current_dir = os.path.abspath(
+    os.path.realpath(os.environ['PWD']))
+usage_dir = os.environ['InaSAFEQGIS'] + '/bin'
 usage = r""
 usage_file = file(os.path.join(usage_dir, 'usage.txt'))
 for delta in usage_file:
     usage += delta
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 LOGGER = logging.getLogger('InaSAFE')
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class CliArgs(object):
@@ -129,7 +115,7 @@ def join_if_relative(path_argument):
     """
     if not os.path.isabs(path_argument):
         LOGGER.debug('joining path for ' + path_argument)
-        return os.path.join(default_cli_dir, path_argument)
+        return os.path.join(current_dir, path_argument)
     else:
         return os.path.abspath(path_argument)
 
@@ -305,8 +291,9 @@ def write_results(cli_arguments, impact_layer):
         print exc.message
 
 if __name__ == '__main__':
-    print "python accent.py"
+    print "insafe"
     print ""
+    LOGGER.debug(current_dir)
 
     try:
         # Parse arguments, use usage.txt as syntax definition.
@@ -339,5 +326,5 @@ if __name__ == '__main__':
 print " "
 
 # INSTALL on Ubuntu with:
-# chmod ug+x accent.py
-# sudo ln -s `pwd`/accent.py  /usr/bin
+# chmod ug+x insaafe
+# sudo ln -s `pwd`/inasafe  /usr/bin
