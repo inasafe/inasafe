@@ -107,7 +107,7 @@ def get_ifunction_list():
     """Returns all available impact function ids.
 
     :returns: List of impact functions.
-    :rtype: List
+    :rtype: list
     """
     LOGGER.debug('get IF list')
     registry = Registry()
@@ -120,7 +120,6 @@ def show_names(ifs):
 
     :param ifs: A list of impact function ids.
     :type: list of strings.
-
     """
     for impact_function in ifs:
         print impact_function.__name__
@@ -151,6 +150,8 @@ def get_hazard(cli_arguments):
 
     :returns: Vector or Raster layer depending on input arguments.
     :rtype: QgsVectorLayer, QgsRasterLayer
+
+    :raises: Exception
     """
     try:
         if cli_arguments.vector_hazard is not None:
@@ -180,6 +181,8 @@ def get_exposure(cli_arguments):
 
     :returns: Vector or Raster layer depending on input arguments.
     :rtype: QgsVectorLayer, QgsRasterLayer
+
+    :raises: Exception
     """
     try:
         if cli_arguments.vector_exposure is not None:
@@ -205,6 +208,17 @@ def get_exposure(cli_arguments):
 
 
 def run_if(cli_arguments):
+    """Runs an analysis and delegates producing pdf and .shp results.
+
+        An impact layer object is created and used to write a shapefile.
+        The shapefile path is given by user and used by build_report
+        function to read from.
+
+    :param cli_arguments: User inputs.
+    :type cli_arguments: CliArgs
+
+    :raises: Exception
+    """
     try:
         qhazard = get_hazard(cli_arguments)
         qexposure = get_exposure(cli_arguments)
@@ -253,8 +267,10 @@ def build_report(cli_arguments):
         To be called after shapefile has been written into
         arguments.output_file.
 
-    :param: cli_arguments:
-    :type: CliArgs instance
+    :param cli_arguments: User inputs.
+    :type cli_arguments: CliArgs
+
+    :raises: Exception
     """
     try:
         impact_layer = QgsVectorLayer(cli_arguments.output_file, 'cli_impact', 'ogr')
@@ -282,8 +298,14 @@ def build_report(cli_arguments):
 
 def write_results(cli_arguments, impact_layer):
     """Write the impact_layer in shapefile format.
-    :param impact_layer:
-    :type Vector
+
+    :param cli_arguments: User inputs.
+    :type cli_arguments: CliArgs
+
+    :param impact_layer: Analysis result used to produce file.
+    :type QgsVectorLayer
+
+    :raises: Exception
     """
     try:
         impact_layer.write_to_file(join_if_relative(cli_arguments.output_file))
@@ -295,7 +317,7 @@ if __name__ == '__main__':
     print ""
 
     try:
-        # Parse arguments, use usage.txt as a parameter definition
+        # Parse arguments, use usage.txt as syntax definition.
         shell_arguments = docopt.docopt(usage)
     except docopt.DocoptExit as e:
         print e.message
