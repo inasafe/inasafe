@@ -75,7 +75,7 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
             'exposure': 'population',
-            'exposure_unit': 'density'
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
