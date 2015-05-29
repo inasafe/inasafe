@@ -279,7 +279,7 @@ class ImpactFunctionManager(object):
 
         return hazard_categories
 
-    def hazards_for_layer(self, layer_geometry_key, hazard_category_key):
+    def hazards_for_layer(self, layer_geometry_key, hazard_category_key=None):
         """Get hazard categories form layer_geometry_key
 
         :param layer_geometry_key: The geometry id

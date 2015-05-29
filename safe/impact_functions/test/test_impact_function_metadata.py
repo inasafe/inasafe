@@ -187,8 +187,12 @@ class TestImpactFunctionMetadata(unittest.TestCase):
     def test_hazards_for_layer(self):
         """Test hazards_for_layer"""
         impact_function = EarthquakeBuildingFunction()
-        hazards = impact_function.metadata().hazards_for_layer(
-            'raster', 'single_hazard')
+        # hazards = impact_function.metadata().hazards_for_layer(
+        #     'raster', 'single_hazard')
+        # expected = [hazard_earthquake]
+        # self.assertItemsEqual(hazards, expected)
+
+        hazards = impact_function.metadata().hazards_for_layer('raster',)
         expected = [hazard_earthquake]
         self.assertItemsEqual(hazards, expected)
 

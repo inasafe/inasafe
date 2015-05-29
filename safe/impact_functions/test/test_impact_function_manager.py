@@ -163,6 +163,11 @@ class TestImpactFunctionManager(unittest.TestCase):
                     hazard_volcano, hazard_volcanic_ash, hazard_generic]
         self.assertItemsEqual(hazards, expected)
 
+        hazards = impact_function_manager.hazards_for_layer('polygon')
+        expected = [hazard_flood, hazard_tsunami, hazard_earthquake,
+                    hazard_volcano, hazard_volcanic_ash, hazard_generic]
+        self.assertItemsEqual(hazards, expected)
+
         hazards = impact_function_manager.hazards_for_layer(
             'point', 'single_hazard')
         expected = []
