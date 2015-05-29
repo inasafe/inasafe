@@ -27,7 +27,6 @@ from qgis.core import (
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import qgis_version
 import os
-import sys
 from safe.report.impact_report import ImpactReport
 import logging
 
@@ -56,7 +55,60 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 
+class CliArgs(object):
+    """Instance objects class for shell arguments.
+    """
+    def __init__(self, _arguments_):
+        try:
+            self.output_file = _arguments_['--output-file']
+        except Exception as e:
+            LOGGER.debug(e.message)
+        try:
+            self.vector_hazard = _arguments_['--vector-hazard']
+        except Exception as e:
+            LOGGER.debug(e.message)
+        try:
+            self.raster_hazard = _arguments_['--raster-hazard']
+        except Exception as e:
+            LOGGER.debug(e.message)
+        try:
+            self.vector_exposure = _arguments_['--vector-exposure']
+        except Exception as e:
+            LOGGER.debug(e.message)
+        try:
+            self.raster_exposure = _arguments_['--raster-exposure']
+        except Exception as e:
+            LOGGER.debug(e.message)
+        try:
+            self.version = _arguments_['--version']
+        except Exception as e:
+            LOGGER.debug(e.message)
+        try:
+            self.show_list = _arguments_['--list-functions']
+        except Exception as e:
+            LOGGER.debug(e.message)
+        try:
+            self.impact_function = _arguments_['--impact-function']
+        except Exception as e:
+            LOGGER.debug(e.message)
+        try:
+            self.extent = _arguments_['--extent'].split(':')
+            LOGGER.debug(extent)
+        except Exception as e:
+            LOGGER.debug(e.message)
+        try:
+            self.report_template = _arguments_['--report-template']
+            LOGGER.debug(report_template)
+        except Exception as e:
+            LOGGER.debug(e.message)
+
+
 def get_ifunction_list():
+    """Returns all available impact function ids.
+
+    :returns: List of impact functions.
+    :rtype: List
+    """
     LOGGER.debug('get IF list')
     registry = Registry()
     LOGGER.debug(registry.impact_functions)
@@ -64,18 +116,25 @@ def get_ifunction_list():
 
 
 def show_names(ifs):
+    """Prints a list of strings.
+
+    :param ifs: A list of impact function ids.
+    :type: list of strings.
+
+    """
     for impact_function in ifs:
         print impact_function.__name__
 
 
 # all paths are made to be absolute
 def join_if_relative(path_argument):
-    """Make path absolute with current directory as base.
+    """Make path absolute.
 
-    :param path_argument:
-    :type path_argument:
-    :returns:
-    :rtype
+    :param path_argument: Absolute or relative path to a file.
+    :type path_argument: str
+
+    :returns: Absolute path to file.
+    :rtype: str
     """
     if not os.path.isabs(path_argument):
         LOGGER.debug('joining path for ' + path_argument)
@@ -84,14 +143,22 @@ def join_if_relative(path_argument):
         return os.path.abspath(path_argument)
 
 
-def get_hazard():
+def get_hazard(cli_arguments):
+    """Get hazard layer.
+
+    :param cli_arguments: User inputs.
+    :type cli_arguments: CliArgs
+
+    :returns: Vector or Raster layer depending on input arguments.
+    :rtype: QgsVectorLayer, QgsRasterLayer
+    """
     try:
-        if vector_hazard is not None:
-            hazard_base = join_if_relative(vector_hazard)
+        if cli_arguments.vector_hazard is not None:
+            hazard_base = join_if_relative(cli_arguments.vector_hazard)
             qhazard = QgsVectorLayer(
                 hazard_base, 'cli_vector_hazard', 'ogr')
-        elif raster_hazard is not None:
-            hazard_base = join_if_relative(raster_hazard)
+        elif cli_arguments.raster_hazard is not None:
+            hazard_base = join_if_relative(cli_arguments.raster_hazard)
             qhazard = QgsRasterLayer(
                 hazard_base, 'cli_raster_hazard')
         if not qhazard.isValid():
@@ -105,14 +172,22 @@ def get_hazard():
         print exc.__doc__
 
 
-def get_exposure():
+def get_exposure(cli_arguments):
+    """Get exposure layer.
+
+    :param cli_arguments: User inputs.
+    :type cli_arguments: CliArgs
+
+    :returns: Vector or Raster layer depending on input arguments.
+    :rtype: QgsVectorLayer, QgsRasterLayer
+    """
     try:
-        if vector_exposure is not None:
-            exposure_base = join_if_relative(vector_exposure)
+        if cli_arguments.vector_exposure is not None:
+            exposure_base = join_if_relative(cli_arguments.vector_exposure)
             LOGGER.debug(exposure_base)
             qexposure = QgsVectorLayer(exposure_base, 'cli_vector', 'ogr')
-        elif raster_exposure is not None:
-            exposure_base = join_if_relative(raster_exposure)
+        elif cli_arguments.raster_exposure is not None:
+            exposure_base = join_if_relative(cli_arguments.raster_exposure)
             LOGGER.debug(exposure_base)
             qexposure = QgsRasterLayer(exposure_base, 'cli_raster')
         else:
@@ -129,14 +204,13 @@ def get_exposure():
         print exc.__doc__
 
 
-def run_if():
+def run_if(cli_arguments):
     try:
-        qhazard = get_hazard()
-        qexposure = get_exposure()
+        qhazard = get_hazard(cli_arguments)
+        qexposure = get_exposure(cli_arguments)
         # IF
         impact_function_manager = ImpactFunctionManager()
-        impact_function = impact_function_manager.get(
-            shell_arguments['--impact-function'])
+        impact_function = impact_function_manager.get(arguments.impact_function)
         keyword_io = KeywordIO()
     except Exception as exc:
         print exc.__doc__
@@ -166,33 +240,37 @@ def run_if():
         analysis.run_analysis()
         LOGGER.debug("end analysis :)")
         impact_layer = analysis.get_impact_layer()
-        write_results(impact_layer)
-        build_report(impact_layer)
+        write_results(cli_arguments, impact_layer)
+        build_report(cli_arguments)
     except Exception as exc:
         print exc.message
         print exc.__doc__
 
 
-def build_report(impact_layer):
-    """
-    To be called after shapefile has been written
-    :param: impact_layer:
-    :type: Vector
+def build_report(cli_arguments):
+    """Produces pdf products.
+
+        To be called after shapefile has been written into
+        arguments.output_file.
+
+    :param: cli_arguments:
+    :type: CliArgs instance
     """
     try:
-        report_template = '/home/jannes/gitwork/inasafe/resources/qgis-composer-templates/inasafe-portrait-a4.qpt'
-        impact_layer = QgsVectorLayer(output_file, 'cli_impact', 'ogr')
+        impact_layer = QgsVectorLayer(cli_arguments.output_file, 'cli_impact', 'ogr')
         LOGGER.debug(impact_layer.__doc__)
         layer_registry = QgsMapLayerRegistry.instance()
         layer_registry.removeAllMapLayers()
         layer_registry.addMapLayer(impact_layer)
         CANVAS.setExtent(impact_layer.extent())
         CANVAS.refresh()
-        report = ImpactReport(IFACE, report_template, impact_layer)
-        LOGGER.debug(os.path.splitext(output_file)[0] + '.pdf')
-        map_path = report.print_map_to_pdf(os.path.splitext(output_file)[0] + '.pdf')
+        report = ImpactReport(IFACE, cli_arguments.report_template, impact_layer)
+        LOGGER.debug(os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
+        map_path = report.print_map_to_pdf(
+            os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
         print "Impact Map : " + map_path
-        table_path = report.print_impact_table(os.path.splitext(output_file)[0] + '_table.pdf')
+        table_path = report.print_impact_table(
+            os.path.splitext(cli_arguments.output_file)[0] + '_table.pdf')
         print "Impact Summary Table : " + table_path
         layer_registry.removeAllMapLayers()
 
@@ -202,73 +280,42 @@ def build_report(impact_layer):
         print exc.__doc__
 
 
-def write_results(impact_layer):
-    """This function writes the impact_layer in shapefile format
+def write_results(cli_arguments, impact_layer):
+    """Write the impact_layer in shapefile format.
     :param impact_layer:
     :type Vector
     """
     try:
-        impact_layer.write_to_file(join_if_relative(output_file))
+        impact_layer.write_to_file(join_if_relative(cli_arguments.output_file))
     except Exception as exc:
         print exc.message
 
 if __name__ == '__main__':
     print "python accent.py"
     print ""
+
     try:
         # Parse arguments, use usage.txt as a parameter definition
         shell_arguments = docopt.docopt(usage)
     except docopt.DocoptExit as e:
         print e.message
 
-    # populate global vars with arguments from shell
-    try:
-        output_file = shell_arguments['--output-file']
-    except Exception as e:
-        LOGGER.debug(e.message)
-    try:
-        vector_hazard = shell_arguments['--vector-hazard']
-    except Exception as e:
-        LOGGER.debug(e.message)
-    try:
-        raster_hazard = shell_arguments['--raster-hazard']
-    except Exception as e:
-        LOGGER.debug(e.message)
-    try:
-        vector_exposure = shell_arguments['--vector-exposure']
-    except Exception as e:
-        LOGGER.debug(e.message)
-    try:
-        raster_exposure = shell_arguments['--raster-exposure']
-    except Exception as e:
-        LOGGER.debug(e.message)
-    try:
-        version = shell_arguments['--version']
-    except Exception as e:
-        LOGGER.debug(e.message)
-    try:
-        show_list = shell_arguments['--list-functions']
-    except Exception as e:
-        LOGGER.debug(e.message)
-    try:
-        extent = shell_arguments['--extent'].split(':')
-        LOGGER.debug(extent)
-    except Exception as e:
-        LOGGER.debug(e.message)
+    arguments = CliArgs(shell_arguments)
+
     LOGGER.debug(shell_arguments)
     try:
-        if show_list is True:
+        if arguments.show_list is True:
             # setup functions
             register_impact_functions()
             show_names(get_ifunction_list())
-        elif version is True:
+        elif arguments.version is True:
             print "QGIS VERSION: " + str(qgis_version())
-        elif (extent is not None) and\
-                ((vector_hazard is not None) or (raster_hazard is not None)) and\
-                ((vector_exposure is not None) or (raster_exposure is not None)) and\
-                (output_file is not None):
+        elif (arguments.extent is not None) and\
+                ((arguments.vector_hazard is not None) or (arguments.raster_hazard is not None)) and\
+                ((arguments.vector_exposure is not None) or (arguments.raster_exposure is not None)) and\
+                (arguments.output_file is not None):
             LOGGER.debug('--RUN--')
-            run_if()
+            run_if(arguments)
             LOGGER.debug('--END RUN--')
     except Exception as excp:
         print excp.message
