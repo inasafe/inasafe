@@ -22,7 +22,8 @@ from safe.definitions import (
     hazard_flood,
     hazard_category_single_hazard,
     flood_vector_hazard_classes,
-    exposure_road
+    exposure_road,
+    layer_mode_none
 )
 
 
@@ -74,7 +75,7 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                     'raster_hazard_classifications': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_none,
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
                     'exposure_units': []

@@ -24,7 +24,8 @@ from safe.definitions import (
     hazard_flood,
     hazard_category_single_hazard,
     exposure_structure,
-    flood_vector_hazard_classes
+    flood_vector_hazard_classes,
+    layer_mode_none
 )
 
 
@@ -76,7 +77,7 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'raster_hazard_classifications': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_none,
                     'layer_geometries': [layer_geometry_polygon],
                     'exposure_types': [exposure_structure],
                     'exposure_units': []
