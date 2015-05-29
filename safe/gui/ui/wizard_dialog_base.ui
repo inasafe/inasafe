@@ -363,7 +363,7 @@
        <widget class="QWidget" name="pg3LayerMode">
         <layout class="QVBoxLayout" name="verticalLayout_27">
          <item>
-          <widget class="QLabel" name="lblSelectDataType">
+          <widget class="QLabel" name="lblSelectLayerMode">
            <property name="styleSheet">
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
@@ -381,7 +381,7 @@
          <item>
           <layout class="QGridLayout" name="gridLayout_23">
            <item row="0" column="0">
-            <widget class="QListWidget" name="lstDataTypes">
+            <widget class="QListWidget" name="lstLayerModes">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -409,7 +409,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLabel" name="lblDescribeDataType">
+            <widget class="QLabel" name="lblDescribeLayerMode">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>

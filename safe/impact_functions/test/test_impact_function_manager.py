@@ -271,19 +271,19 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         self.assertItemsEqual(exposure_constraints, expected)
 
-    def test_available_hazard_layer_mode(self):
-        """Test for available_hazard_layer_mode."""
+    def test_available_hazard_layer_modes(self):
+        """Test for available_hazard_layer_modes."""
         ifm = ImpactFunctionManager()
-        hazard_layer_mode = ifm.available_hazard_layer_mode(
+        hazard_layer_mode = ifm.available_hazard_layer_modes(
             'earthquake', 'raster', 'single_hazard')
         expected = [layer_mode_continuous, layer_mode_classified]
 
         self.assertItemsEqual(hazard_layer_mode, expected)
 
-    def test_available_exposure_layer_mode(self):
-        """Test for available_exposure_layer_mode."""
+    def test_available_exposure_layer_modes(self):
+        """Test for available_exposure_layer_modes."""
         ifm = ImpactFunctionManager()
-        exposure_layer_mode = ifm.available_exposure_layer_mode(
+        exposure_layer_mode = ifm.available_exposure_layer_modes(
             'population', 'raster')
         expected = [layer_mode_continuous]
 
