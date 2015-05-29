@@ -102,6 +102,15 @@ layer_mode_classified = {
     ),
 }
 
+layer_mode_none = {
+    'key': 'none',
+    'name': tr('None'),
+    'description': tr(
+        'Layer mode <b>None</b> means that the layer is not continuous or '
+        'classified.'
+    )
+}
+
 layer_mode = {
     'key': 'layer_mode',
     'name': tr('Layer Mode'),
@@ -173,16 +182,16 @@ layer_geometry = {
 # Hazard Category
 hazard_category_single_hazard = {
     'key': 'single_hazard',
-    'name': tr('Single Hazard'),
+    'name': tr('Single Event'),
     'description': tr(
-        'To be added later')
+        'TBA')
 }
 
 hazard_category_multi_hazard = {
     'key': 'multi_hazard',
-    'name': tr('Multi Hazard'),
+    'name': tr('Multiple Event'),
     'description': tr(
-        'To be added later')
+        'TBA')
 }
 
 hazard_category = {
@@ -272,7 +281,7 @@ hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
     'description': tr(
-        'To be added later. I am not sure we want this. IS.'),
+        'TBA'),
     'types': [
         hazard_flood,
         hazard_tsunami,
@@ -336,7 +345,7 @@ exposure = {
     'key': 'exposure',
     'name': tr('Exposure'),
     'description': tr(
-        'To be added later. I am not sure we want this. IS.'),
+        'TBA'),
     'types': [
         exposure_land_cover,
         exposure_people_in_building,
@@ -407,7 +416,7 @@ continuous_hazard_unit = {
     'key': 'continuous_hazard_unit',
     'name': tr('Continuous Hazard Unit'),
     'description': tr(
-        'To be added later.'),
+        'TBA'),
     'types': [
         unit_feet,
         unit_generic,
@@ -538,7 +547,7 @@ vector_hazard_classification = {
     'key': 'vector_hazard_classification',
     'name': tr('Vector Hazard Classification'),
     'description': tr(
-        'To be added later.'),
+        'TBA'),
     'types': [
         generic_vector_hazard_classes,
         volcano_vector_hazard_classes,
