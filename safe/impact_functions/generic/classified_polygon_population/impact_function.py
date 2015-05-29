@@ -39,7 +39,6 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
 
     def __init__(self):
         super(ClassifiedPolygonHazardPopulationFunction, self).__init__()
-        self.target_field = 'population'
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
         # AG: Use the proper minimum needs, update the parameters
@@ -99,16 +98,15 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
 
         # Find the target field name that has no conflict with default target
         attribute_names = hazard_layer.get_attribute_names()
-        new_target_field = get_non_conflicting_attribute_name(
+        target_field = get_non_conflicting_attribute_name(
             self.target_field, attribute_names)
-        self.target_field = new_target_field
 
         # Interpolated layer represents grid cell that lies in the polygon
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
                 hazard_layer,
                 exposure_layer,
-                attribute_name=self.target_field
+                attribute_name=target_field
             )
 
         # Initialise total population affected by each hazard zone
@@ -119,7 +117,7 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         # Count total affected population per hazard zone
         for row in interpolated_layer.get_data():
             # Get population at this location
-            population = row[self.target_field]
+            population = row[target_field]
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this hazard zone
@@ -244,7 +242,7 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             name=tr('People impacted by each hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
-                      'target_field': self.target_field,
+                      'target_field': target_field,
                       'map_title': map_title,
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,

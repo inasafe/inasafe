@@ -41,7 +41,6 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
 
     def __init__(self):
         super(VolcanoPolygonPopulationFunction, self).__init__()
-        self.target_field = 'population'
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
 
@@ -117,16 +116,15 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
 
         # Find the target field name that has no conflict with default target
         attribute_names = hazard_layer.get_attribute_names()
-        new_target_field = get_non_conflicting_attribute_name(
+        target_field = get_non_conflicting_attribute_name(
             self.target_field, attribute_names)
-        self.target_field = new_target_field
 
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
                 hazard_layer,
                 exposure_layer,
-                attribute_name=self.target_field)
+                attribute_name=target_field)
 
         # Initialise total affected per category
         affected_population = {}
@@ -136,7 +134,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
             # Get population at this location
-            population = row[self.target_field]
+            population = row[target_field]
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this category
@@ -300,7 +298,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
             name=tr('People affected by volcanic hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
-                      'target_field': self.target_field,
+                      'target_field': target_field,
                       'map_title': map_title,
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,

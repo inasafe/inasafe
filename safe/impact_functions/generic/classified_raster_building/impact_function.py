@@ -42,8 +42,6 @@ class ClassifiedRasterHazardBuildingFunction(
 
     def __init__(self):
         super(ClassifiedRasterHazardBuildingFunction, self).__init__()
-
-        self.target_field = 'DAMAGED'
         self.affected_field = 'affected'
 
     def notes(self):

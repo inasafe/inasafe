@@ -54,7 +54,8 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
 
-        zone_sum = impact_layer.get_data(attribute='zone')
+        zone_sum = impact_layer.get_data(
+            attribute=impact_function.target_field)
         high_zone_count = zone_sum.count('High Hazard Zone')
         medium_zone_count = zone_sum.count('Medium Hazard Zone')
         low_zone_count = zone_sum.count('Low Hazard Zone')

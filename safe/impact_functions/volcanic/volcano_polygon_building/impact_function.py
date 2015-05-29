@@ -83,11 +83,6 @@ class VolcanoPolygonBuildingFunction(
         """
         self.validate()
         self.prepare(layers)
-        # Target Field
-        target_field = 'zone'
-
-        # Not affected string
-        not_affected_value = 'Not Affected'
 
         # Parameters
         hazard_zone_attribute = self.parameters['hazard zone attribute']
@@ -127,7 +122,7 @@ class VolcanoPolygonBuildingFunction(
         # target
         attribute_names = hazard_layer.get_attribute_names()
         target_field = get_non_conflicting_attribute_name(
-            target_field, attribute_names)
+            self.target_field, attribute_names)
 
         # Run interpolation function for polygon2raster
         interpolated_layer = assign_hazard_values_to_exposure_data(
@@ -149,7 +144,7 @@ class VolcanoPolygonBuildingFunction(
         for i in range(len(features)):
             hazard_value = features[i][hazard_zone_attribute]
             if not hazard_value:
-                hazard_value = not_affected_value
+                hazard_value = self._not_affected_value
             features[i][target_field] = hazard_value
             usage = get_osm_building_usage(attribute_names, features[i])
             if usage in [None, 'NULL', 'null', 'Null', 0]:
@@ -171,7 +166,7 @@ class VolcanoPolygonBuildingFunction(
         # Generate simple impact report
         impact_summary = impact_table = self.generate_html_report()
         category_names = hazard_zone_categories
-        category_names.append(not_affected_value)
+        category_names.append(self._not_affected_value)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',

@@ -66,7 +66,7 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         impact_features = impact_layer.get_data()
         for i in range(len(impact_features)):
             impact_feature = impact_features[i]
-            level = impact_feature.get('Shake_cls')
+            level = impact_feature.get(impact_function.target_field)
             result[level] += 1
 
         message = 'Expecting %s, but it returns %s' % (impact, result)

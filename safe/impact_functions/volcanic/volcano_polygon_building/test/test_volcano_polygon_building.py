@@ -53,7 +53,7 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         self.assertEqual(expected_question, impact_function.question, message)
 
         # The buildings should all be categorised into 5000 zone
-        zone_sum = impact_layer.get_data(attribute='zone')
+        zone_sum = impact_layer.get_data(attribute=impact_function.target_field)
         krb3_zone_count = zone_sum.count('Kawasan Rawan Bencana III')
         krb2_zone_count = zone_sum.count('Kawasan Rawan Bencana II')
         # The result (counted by hand)
