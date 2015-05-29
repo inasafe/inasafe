@@ -1718,8 +1718,8 @@ class TestEngine(unittest.TestCase):
                              impact_function=impact_function)
 
             # Make keyword value empty and verify exception is raised
-            expected_category = exposure_layer.keywords['category']
-            exposure_layer.keywords['category'] = ''
+            expected_layer_purpose = exposure_layer.keywords['layer_purpose']
+            exposure_layer.keywords['layer_purpose'] = ''
             try:
                 calculate_impact(layers=[hazard_layer, exposure_layer],
                                  impact_function=impact_function)
@@ -1731,13 +1731,13 @@ class TestEngine(unittest.TestCase):
                 raise Exception(msg)
 
             # Restore for next test
-            exposure_layer.keywords['category'] = expected_category
+            exposure_layer.keywords['layer_purpose'] = expected_layer_purpose
 
             # Remove critical keywords and verify exception is raised
             if i == 0:
-                del hazard_layer.keywords['category']
+                del hazard_layer.keywords['layer_purpose']
             else:
-                del hazard_layer.keywords['subcategory']
+                del hazard_layer.keywords['layer_mode']
 
             try:
                 calculate_impact(layers=[hazard_layer, exposure_layer],

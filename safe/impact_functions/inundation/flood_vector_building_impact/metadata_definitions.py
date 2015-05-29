@@ -14,19 +14,18 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    hazard_tsunami,
-    unit_wetdry,
-    layer_vector_polygon,
-    exposure_definition,
-    exposure_structure,
-    unit_building_type_type)
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.definitions import (
+    layer_mode_classified,
+    layer_geometry_polygon,
+    hazard_flood,
+    hazard_category_single_hazard,
+    exposure_structure,
+    flood_vector_hazard_classes
+)
 
 
 class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
@@ -65,18 +64,22 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
             'actions': '',
             'limitations': [],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_flood, hazard_tsunami],
-                    'units': [unit_wetdry],
-                    'layer_constraints': [layer_vector_polygon]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_polygon],
+                    'hazard_categories': [hazard_category_single_hazard],
+                    'hazard_types': [hazard_flood],
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': [
+                        flood_vector_hazard_classes],
+                    'raster_hazard_classifications': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [unit_building_type_type],
-                    'layer_constraints': [layer_vector_polygon]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_polygon],
+                    'exposure_types': [exposure_structure],
+                    'exposure_units': []
                 }
             },
             'parameters': OrderedDict([

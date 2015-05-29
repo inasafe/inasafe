@@ -11,15 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_volcano,
-    unit_volcano_categorical,
-    layer_vector_polygon,
-    layer_raster_continuous,
-    exposure_population,
-    unit_people_per_pixel,
-    hazard_definition,
-    exposure_definition)
 from safe.defaults import (
     default_minimum_needs,
     default_provenance,
@@ -29,6 +20,18 @@ from safe.defaults import (
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    layer_geometry_point,
+    layer_geometry_raster,
+    hazard_volcano,
+    volcano_vector_hazard_classes,
+    hazard_category_multi_hazard,
+    exposure_population,
+    count_exposure_unit
+)
 
 
 class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
@@ -77,20 +80,25 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
             'overview': tr(
                 'To assess the impact of a volcano eruption on people.'),
             'detailed_description': '',
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_volcano],
-                    'units': [unit_volcano_categorical],
-                    'layer_constraints': [
-                        layer_vector_polygon
-                    ]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [
+                        layer_geometry_polygon,
+                        layer_geometry_point
+                    ],
+                    'hazard_categories': [hazard_category_multi_hazard],
+                    'hazard_types': [hazard_volcano],
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': [
+                        volcano_vector_hazard_classes],
+                    'raster_hazard_classifications': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'exposure_types': [exposure_population],
+                    'exposure_units': [count_exposure_unit]
                 }
             },
             'parameters': OrderedDict([
