@@ -564,7 +564,7 @@ class ImpactFunctionManager(object):
 
         return exposure_constraints
 
-    def available_hazard_layer_mode(
+    def available_hazard_layer_modes(
             self, hazard_key, hazard_geometry_key, hazard_category_key):
         """Return all available layer_mode.
 
@@ -590,7 +590,7 @@ class ImpactFunctionManager(object):
 
         return layer_modes
 
-    def available_exposure_layer_mode(
+    def available_exposure_layer_modes(
             self, exposure_key, exposure_geometry_key):
         """Get exposure layer mode for exposure_key.
 
