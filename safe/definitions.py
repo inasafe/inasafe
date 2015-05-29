@@ -104,7 +104,7 @@ layer_mode_classified = {
 
 layer_mode_none = {
     'key': 'none',
-    'name': tr('None'),
+    'name': tr('none'),
     'description': tr(
         'Layer mode <b>None</b> means that the layer is not continuous or '
         'classified.'
