@@ -281,7 +281,11 @@ hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
     'description': tr(
-        'TBA'),
+        '<b>Hazards</b> (also called disasters) are what we call the data '
+        'layers that describe the extent and magnitude of natural events '
+        '(such as earthquakes, tsunamis and volcanic eruptions) that could '
+        'potentially cause an event or series of events that threaten and '
+        'disrupt the lives and livelihoods of people.'),
     'types': [
         hazard_flood,
         hazard_tsunami,
@@ -345,7 +349,8 @@ exposure = {
     'key': 'exposure',
     'name': tr('Exposure'),
     'description': tr(
-        'TBA'),
+        '<b>Exposure</b> data represents things that are at risk when faced '
+        'with a potential hazard. '),
     'types': [
         exposure_land_cover,
         exposure_people_in_building,
@@ -416,7 +421,7 @@ continuous_hazard_unit = {
     'key': 'continuous_hazard_unit',
     'name': tr('Continuous Hazard Unit'),
     'description': tr(
-        'TBA'),
+        'Continuous hazard unit represent unit for continuous layer mode.'),
     'types': [
         unit_feet,
         unit_generic,
@@ -547,7 +552,8 @@ vector_hazard_classification = {
     'key': 'vector_hazard_classification',
     'name': tr('Vector Hazard Classification'),
     'description': tr(
-        'TBA'),
+        'Vector Hazard Classification is a way to classify a value in one of '
+        'the attribute or field in vector layer.'),
     'types': [
         generic_vector_hazard_classes,
         volcano_vector_hazard_classes,
@@ -627,7 +633,10 @@ tsunami_raster_hazard_classes = {
     'key': 'tsunami_raster_hazard_classes',
     'name': tr('tsunami raster hazard classes'),
     'description': tr(
-        'TBA'),
+        'This is a binary description for an area. The area is either '
+        '<b>wet</b> (affected by tsunami) or <b>dry</b> (not affected '
+        'by tsunami). This unit does not describe how <b>wet</b> or '
+        '<b>dry</b> an area is.'),
     'default_class': 'dry',  # unclassified value will go to this class
     'classes': [
         {
@@ -653,7 +662,8 @@ raster_hazard_classification = {
     'key': 'raster_hazard_classification',
     'name': tr('Raster Hazard Classification'),
     'description': tr(
-        'TBA.'),
+        'Raster Hazard Classification is a way to classify a value in each '
+        'cell in raster layer.'),
     'types': [
         flood_raster_hazard_classes,
         generic_raster_hazard_classes,
@@ -682,7 +692,8 @@ exposure_unit = {
     'key': 'exposure_unit',
     'name': tr('Exposure Unit'),
     'description': tr(
-        'TBA.'),
+        'Exposure unit defines what is the unit for the exposure, for example '
+        'people can have count unit or density unit.'),
     'types': [
         count_exposure_unit,
         density_exposure_unit
