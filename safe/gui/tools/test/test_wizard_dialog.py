@@ -699,8 +699,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to subcategory
         dialog.pbnNext.click()  # go to layer mode
         dialog.lstLayerModes.setCurrentRow(0)  # select classified
-        dialog.pbnNext.click()  # go to units
-        dialog.pbnNext.click()  # don't select any unit, go to step source
+        dialog.pbnNext.click()  # go to source
 
         # check if in step source
         self.check_current_step(step_kw_source, dialog)
@@ -801,8 +800,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose hazard
         dialog.pbnNext.click()  # choose hazard category
         dialog.pbnNext.click()  # choose volcano
-        dialog.pbnNext.click()  # choose classified
-        dialog.pbnNext.click()  # choose no field
+        dialog.lstLayerModes.setCurrentRow(0)  # choose none
+        dialog.pbnNext.click()  # choose none
 
         # check if in step source
         self.check_current_step(step_kw_source, dialog)
@@ -865,9 +864,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to layer mode
 
         self.check_current_step(step_kw_layermode, dialog)
-        dialog.pbnNext.click()  # go to field
+        dialog.lstLayerModes.setCurrentRow(0) # select the None mode
 
-        self.check_current_step(step_kw_field, dialog)
         dialog.pbnNext.click()  # go to source
 
         # check if in step source
@@ -1059,10 +1057,10 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step layer mode
         self.check_current_step(step_kw_layermode, dialog)
 
-        expected_modes = ['classified', 'none']
+        expected_modes = ['none']
         self.check_list(expected_modes, dialog.lstLayerModes)
 
-        self.check_current_text(expected_modes[1], dialog.lstLayerModes)
+        self.check_current_text(expected_modes[0], dialog.lstLayerModes)
 
         # dialog.pbnNext.click()  # go to fields
         # expected_fields = ['NAME', 'OSM_TYPE', 'TYPE']
@@ -1109,32 +1107,17 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of modes options
-        expected_modes = ['classified']
+        expected_modes = ['none']
         self.check_list(expected_modes, dialog.lstLayerModes)
 
         # choosing classified
-        self.select_from_list_widget('classified', dialog.lstLayerModes)
-
-        dialog.pbnNext.click()  # Go to field
-
-        # check if in step field
-        self.check_current_step(step_kw_field, dialog)
-
-        # check the values of field options
-        expected_fields = [
-            'OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW',
-            'FLOODPRONE']
-        self.check_list(expected_fields, dialog.lstFields)
-
-        # choosing KAB_NAME
-        self.select_from_list_widget('KAB_NAME', dialog.lstFields)
+        self.select_from_list_widget('none', dialog.lstLayerModes)
 
         dialog.pbnNext.click()  # Go to source
 
         # check if in source step
         self.check_current_step(step_kw_source, dialog)
 
-        dialog.pbnBack.click()  # back to field step
         dialog.pbnBack.click()  # back to layer_mode step
         dialog.pbnBack.click()  # back to subcategory step
         dialog.pbnBack.click()  # back to category step
