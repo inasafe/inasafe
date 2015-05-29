@@ -68,6 +68,10 @@ class ImpactFunction(object):
         # formalise this into a more natural model
         # ABC's will normally set this property.
         self._impact_style = None
+        # The target field for vector impact layer
+        self._target_field = 'safe_ag'
+        # The string to mark not affected value in the vector impact layer
+        self._not_affected_value = tr('Not Affected')
 
     @classmethod
     def metadata(cls):
@@ -272,6 +276,18 @@ class ImpactFunction(object):
         :rtype: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
         """
         return self._impact
+
+    @property
+    def target_field(self):
+        """Property for the target_field of the impact layer.
+
+        .. note:: It is not guaranteed that all impact functions produce a
+            spatial layer.
+
+        :returns: The target field in the impact layer in case it's a vector.
+        :rtype: basestring
+        """
+        return self._target_field
 
     @property
     def tabulated_impact(self):

@@ -82,12 +82,6 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.validate()
         self.prepare(layers)
 
-        # Target Field
-        target_field = 'zone'
-
-        # Not affected string in the target field
-        not_affected_value = 'Not Affected'
-
         # Parameters
         hazard_zone_attribute = self.parameters['hazard zone attribute']
 
@@ -115,7 +109,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         # target
         attribute_names = hazard_layer.get_attribute_names()
         target_field = get_non_conflicting_attribute_name(
-            target_field, attribute_names)
+            self.target_field, attribute_names)
 
         # Hazard zone categories from hazard layer
         self.hazard_zones = list(
@@ -137,7 +131,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         for i in range(len(features)):
             hazard_value = features[i][hazard_zone_attribute]
             if not hazard_value:
-                hazard_value = not_affected_value
+                hazard_value = self._not_affected_value
             features[i][target_field] = hazard_value
             usage = get_osm_building_usage(attribute_names, features[i])
             if usage is None:
@@ -160,7 +154,7 @@ class ClassifiedPolygonHazardBuildingFunction(
 
         # Create style
         categories = self.hazard_zones
-        categories.append(not_affected_value)
+        categories.append(self._not_affected_value)
         colours = color_ramp(len(categories))
         style_classes = []
 
