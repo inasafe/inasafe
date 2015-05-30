@@ -19,7 +19,8 @@ from safe.definitions import (
     hazard_category_multi_hazard,
     exposure_structure,
     all_vector_hazard_classes,
-    hazard_category_single_hazard
+    hazard_category_single_hazard,
+    layer_mode_none
 )
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -87,7 +88,7 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'raster_hazard_classifications': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_none,
                     'layer_geometries': [
                         layer_geometry_point,
                         layer_geometry_polygon

@@ -21,7 +21,8 @@ from safe.definitions import (
     hazard_volcano,
     volcano_vector_hazard_classes,
     hazard_category_multi_hazard,
-    exposure_structure
+    exposure_structure,
+    layer_mode_none
 )
 
 
@@ -89,7 +90,7 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'raster_hazard_classifications': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_none,
                     'layer_geometries': [
                         layer_geometry_polygon,
                         layer_geometry_point

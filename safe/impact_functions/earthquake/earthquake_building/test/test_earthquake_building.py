@@ -85,7 +85,7 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'classified',
+            'layer_mode': 'none',
             'layer_geometry': 'point',
             'exposure': 'structure'
         }

@@ -69,7 +69,8 @@ from safe.definitions import (
     layer_geometry_polygon,
     layer_geometry_raster,
     layer_mode_continuous,
-    layer_mode_classified)
+    layer_mode_classified,
+    layer_mode_none)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.analysis_handler import AnalysisHandler
@@ -106,29 +107,27 @@ category_question = QApplication.translate(
 
 category_question_hazard = QApplication.translate(
     'WizardDialog',
-    'You have selected a layer that has no keywords assigned. '
-    'In the next steps you can assign keywords to that layer. '
+    'You have selected a layer that needs to have keywords assigned or '
+    'updated. In the next steps you can assign keywords to that layer. '
     'First you need to confirm the layer represents a hazard.')
 
 category_question_exposure = QApplication.translate(
     'WizardDialog',
-    'You have selected a layer that has no keywords assigned. '
-    'In the next steps you can assign keywords to that layer. '
-    'First you need to confirm the layer represents an '
-    'exposure.')
+    'You have selected a layer that needs to have keywords assigned or '
+    'updated. In the next steps you can assign keywords to that layer. '
+    'First you need to confirm the layer represents an exposure.')
 
 category_question_aggregation = QApplication.translate(
     'WizardDialog',
-    'You have selected a layer that has no keywords assigned. '
-    'In the next steps you can assign keywords to that layer. '
-    'First you need to confirm the layer is an aggregation '
-    'layer.')
+    'You have selected a layer that needs to have keywords assigned or '
+    'updated. In the next steps you can assign keywords to that layer. '
+    'First you need to confirm the layer is an aggregation layer.')
 
 # Constants for hazard_categories
 hazard_category_question = QApplication.translate(
     'WizardDialog',
-    'What category of <b>hazard</b> does this layer represent? '
-    'Is it a single hazard scenario or a zone of multiple hazards?')
+    'What <b>hazard scenario</b> does this layer represent? '
+    'Is it a single event or a zone of multiple hazards?')
 
 # Constants for hazards
 hazard_question = QApplication.translate(
@@ -304,28 +303,29 @@ step_kw_field = 6
 step_kw_resample = 7
 step_kw_classification = 8
 step_kw_classify = 9
-step_kw_aggregation = 10
-step_kw_source = 11
-step_kw_title = 12
-step_fc_function_1 = 13
-step_fc_function_2 = 14
-step_fc_function_3 = 15
-step_fc_hazlayer_origin = 16
-step_fc_hazlayer_from_canvas = 17
-step_fc_hazlayer_from_browser = 18
-step_fc_explayer_origin = 19
-step_fc_explayer_from_canvas = 20
-step_fc_explayer_from_browser = 21
-step_fc_disjoint_layers = 22
-step_fc_agglayer_origin = 23
-step_fc_agglayer_from_canvas = 24
-step_fc_agglayer_from_browser = 25
-step_fc_agglayer_disjoint = 26
-step_fc_extent = 27
-step_fc_extent_disjoint = 28
-step_fc_params = 29
-step_fc_summary = 30
-step_fc_analysis = 31
+step_kw_parameters = 10
+step_kw_aggregation = 11
+step_kw_source = 12
+step_kw_title = 13
+step_fc_function_1 = 14
+step_fc_function_2 = 15
+step_fc_function_3 = 16
+step_fc_hazlayer_origin = 17
+step_fc_hazlayer_from_canvas = 18
+step_fc_hazlayer_from_browser = 19
+step_fc_explayer_origin = 20
+step_fc_explayer_from_canvas = 21
+step_fc_explayer_from_browser = 22
+step_fc_disjoint_layers = 23
+step_fc_agglayer_origin = 24
+step_fc_agglayer_from_canvas = 25
+step_fc_agglayer_from_browser = 26
+step_fc_agglayer_disjoint = 27
+step_fc_extent = 28
+step_fc_extent_disjoint = 29
+step_fc_params = 30
+step_fc_summary = 31
+step_fc_analysis = 32
 
 
 # Aggregations' keywords
@@ -1436,6 +1436,12 @@ class WizardDialog(QDialog, FORM_CLASS):
                                    QtCore.Qt.ItemIsSelectable |
                                    QtCore.Qt.ItemIsDragEnabled)
                 tree_leaf.setText(0, value)
+
+    # ===========================
+    # STEP_KW_PARAMETERS
+    # ===========================
+
+    # TODO: implement this step
 
     # ===========================
     # STEP_KW_AGGREGATION
@@ -3480,10 +3486,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if step == step_kw_unit:
             return bool(self.selected_unit())
         if step == step_kw_field:
-            # Allow to leave field unset for classified data
-            return bool(self.selected_layermode() == layer_mode_classified or
-                        self.selected_field() or
-                        not self.lstFields.count())
+            return bool(self.selected_field() or not self.lstFields.count())
         if step == step_kw_resample:
             return True
         if step == step_kw_classification:
@@ -3567,75 +3570,20 @@ class WizardDialog(QDialog, FORM_CLASS):
         elif current_step == step_kw_hazard_category:
             new_step = step_kw_subcategory
         elif current_step == step_kw_subcategory:
-            # subcategory = self.selected_subcategory()
-            # skip field and classify step if point layer and it's a volcano
-            # if (self.get_layer_geometry_id() == 'point'
-            #         and subcategory['key'] == 'volcano'):
-            #     new_step = step_kw_source
-            # elif self.get_layer_geometry_id() == 'raster':
-            #     new_step = step_kw_layermode
-            # elif self.impact_function_manager.units_for_layer(
-            #         subcategory['key'],
-            #         self.get_layer_geometry_id(), self.get_layer_mode()):
-            #     new_step = step_kw_unit
-            # else:
-            #     new_step = step_kw_field
             new_step = step_kw_layermode
         elif current_step == step_kw_layermode:
-            # if self.impact_function_manager.units_for_layer(
-            #         self.selected_subcategory()['key'],
-            #         self.get_layer_geometry_id(), self.get_layer_mode()):
-            #     new_step = step_kw_unit
-            # else:
-            #     new_step = step_kw_field
-            if self.selected_category() == layer_purpose_hazard:
-                if self.selected_layermode() == layer_mode_classified:
-                    # CLASSIFIED HAZARD
-                    if is_raster_layer(self.layer):
-                        new_step = step_kw_classification
-                    else:
-                        new_step = step_kw_field
+            if self.selected_layermode() == layer_mode_none:
+                new_step = step_kw_source
+            elif self.selected_layermode() == layer_mode_classified:
+                if not is_raster_layer(self.layer):
+                    new_step = step_kw_field  # CLASSIFIED VECTOR
+                elif self.selected_category() == layer_purpose_hazard:
+                    new_step = step_kw_classification  # CLASSIF. RASTER HAZARD
                 else:
-                    # CONTINUOUS HAZARD
-                    subcat = self.selected_subcategory()['key']
-                    laygeo = self.get_layer_geometry_id()
-                    laymod = self.selected_layermode()['key']
-                    hazcat = self.selected_hazard_category()['key']
-                    if self.impact_function_manager\
-                            .continuous_hazards_units_for_layer(subcat,
-                                                                laygeo,
-                                                                laymod,
-                                                                hazcat):
-                        new_step = step_kw_unit
-                    else:
-                        new_step = step_kw_source
+                    new_step = step_kw_resample  # CLASSIFIED RASTER EXPOSURE
             else:
-                if self.selected_layermode() == layer_mode_classified:
-                    # CLASSIFIED EXPOSURE
-                    if is_raster_layer(self.layer):
-                        new_step = step_kw_resample
-                    else:
-                        new_step = step_kw_field
-                else:
-                    # CONTINUOUS EXPOSURE
-                    subcat = self.selected_subcategory()['key']
-                    laygeo = self.get_layer_geometry_id()
-                    laymod = self.selected_layermode()['key']
-                    if self.impact_function_manager.exposure_units_for_layer(
-                            subcat,
-                            laygeo,
-                            laymod):
-                        new_step = step_kw_unit
-                    elif is_raster_layer(self.layer):
-                        new_step = step_kw_resample
-                    else:
-                        new_step = step_kw_source
+                new_step = step_kw_unit  # ALL DATA CONTINUOUS MODE
         elif current_step == step_kw_unit:
-            # unit = self.selected_unit()
-            # if unit and unit['key'] == 'building_generic':
-            #     new_step = step_kw_source
-            # else:
-            #     new_step = step_kw_field
             if is_raster_layer(self.layer):
                 if self.selected_category() == layer_purpose_exposure:
                     new_step = step_kw_resample
@@ -3644,24 +3592,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_kw_field
         elif current_step == step_kw_field:
-            # unit = self.selected_unit()
-            # if unit and unit['constraint'] == 'categorical':
-            #     new_step = step_kw_classify
-            # elif self.selected_category() == layer_purpose_aggregation:
-            #     new_step = step_kw_aggregation
-            # else:
-            #     new_step = step_kw_source
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
-            elif (self.selected_layermode() == layer_mode_classified and
-                    self.classifications_for_layer() and
-                    (is_raster_layer(self.layer) or self.selected_field())):
+            elif self.selected_layermode() == layer_mode_classified:
                 new_step = step_kw_classification
             else:
                 new_step = step_kw_source
         elif current_step == step_kw_resample:
-            if (self.selected_layermode() == layer_mode_classified and
-                    self.classifications_for_layer()):
+            if self.selected_layermode() == layer_mode_classified:
                 new_step = step_kw_classification
             else:
                 new_step = step_kw_source
@@ -3669,9 +3607,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             new_step = step_kw_classify
         elif current_step == step_kw_classify:
             new_step = step_kw_source
-        elif current_step in (step_kw_aggregation,
-                              step_kw_source):
-            new_step = current_step + 1
+        elif current_step == step_kw_parameters:
+            new_step = step_kw_source
+        elif current_step == step_kw_aggregation:
+            new_step = step_kw_source
+        elif current_step == step_kw_source:
+            new_step = step_kw_title
         elif current_step == step_kw_title:
             if self.parent_step:
                 # Come back to the parent thread
@@ -3784,29 +3725,26 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.parent_step = None
             else:
                 new_step = step_kw_category
+        elif current_step == step_kw_hazard_category:
+                new_step = step_kw_category
         elif current_step == step_kw_subcategory:
             if self.selected_category() == layer_purpose_hazard:
                 new_step = step_kw_hazard_category
             else:
                 new_step = step_kw_category
+        elif current_step == step_kw_layermode:
+                new_step = step_kw_subcategory
         elif current_step == step_kw_unit:
-            if self.selected_layermode():
-                new_step = step_kw_layermode
-            else:
-                new_step = step_kw_subcategory
+            new_step = step_kw_layermode
         elif current_step == step_kw_field:
-            if self.selected_unit():
-                new_step = step_kw_unit
-            elif self.selected_layermode():
-                new_step = step_kw_layermode
-            elif self.selected_subcategory():
-                new_step = step_kw_subcategory
-            elif self.selected_hazard_category():
-                new_step = step_kw_hazard_category
-            else:
+            if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_category
+            elif self.selected_layermode() == layer_mode_continuous:
+                new_step = step_kw_unit
+            else:
+                new_step = step_kw_layermode
         elif current_step == step_kw_resample:
-            if self.selected_unit():
+            if self.selected_layermode() == layer_mode_continuous:
                 new_step = step_kw_unit
             else:
                 new_step = step_kw_layermode
@@ -3824,21 +3762,16 @@ class WizardDialog(QDialog, FORM_CLASS):
         elif current_step == step_kw_source:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
-            elif self.selected_classification():
-                new_step = step_kw_classify
-            elif self.selected_allowresample() is not None:
-                new_step = step_kw_resample
-            elif self.selected_field():
-                new_step = step_kw_field
-            elif self.selected_unit():
-                new_step = step_kw_unit
-            elif self.selected_layermode():
+            elif self.selected_layermode() == layer_mode_none:
                 new_step = step_kw_layermode
-            elif self.selected_subcategory():
-                new_step = step_kw_subcategory
+            elif self.selected_layermode() == layer_mode_classified:
+                new_step = step_kw_classify
+            elif self.selected_category() == layer_purpose_exposure:
+                new_step = step_kw_resample
+            elif not is_raster_layer(self.layer):
+                new_step = step_kw_field
             else:
-                new_step = step_kw_category
-
+                new_step = step_kw_unit
         elif current_step == step_fc_function_1:
             new_step = step_fc_function_1
         elif current_step == step_fc_hazlayer_from_browser:

@@ -54,7 +54,8 @@ from safe.definitions import (
     hazard_earthquake,
     exposure_structure,
     unit_mmi,
-    hazard_category_single_hazard
+    hazard_category_single_hazard,
+    layer_mode_none
 )
 
 
@@ -202,7 +203,7 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test filtering IF by exposure metadata."""
         # Full metadata
         exposure_metadata = {
-            'layer_mode': layer_mode_classified,
+            'layer_mode': layer_mode_none,
             'layer_geometry': layer_geometry_point,
             'exposure': exposure_structure,
             'exposure_unit': []
@@ -225,7 +226,7 @@ class TestRegistry(unittest.TestCase):
 
         # Full metadata
         exposure_metadata = {
-            'layer_mode': layer_mode_classified,
+            'layer_mode': layer_mode_none,
             'layer_geometry': layer_geometry_polygon,
             'exposure': exposure_structure,
             # 'exposure_unit': []
@@ -258,7 +259,7 @@ class TestRegistry(unittest.TestCase):
         }
 
         exposure_metadata = {
-            'layer_mode': layer_mode_classified,
+            'layer_mode': layer_mode_none,
             'layer_geometry': layer_geometry_point,
             'exposure': exposure_structure,
         }
@@ -291,7 +292,7 @@ class TestRegistry(unittest.TestCase):
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'classified',
+            'layer_mode': 'none',
             'layer_geometry': 'polygon',
             'exposure': 'structure',
         }
