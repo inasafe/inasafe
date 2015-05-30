@@ -24,7 +24,8 @@ from safe.definitions import (
     hazard_earthquake,
     exposure_structure,
     unit_mmi,
-    hazard_category_single_hazard
+    hazard_category_single_hazard,
+    building_type_field
 )
 
 
@@ -82,7 +83,8 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                     'hazard_types': [hazard_earthquake],
                     'continuous_hazard_units': [unit_mmi],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_none,
@@ -91,7 +93,8 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
-                    'exposure_units': []
+                    'exposure_units': [],
+                    'additional_keywords': [building_type_field]
                 }
             },
             'parameters': OrderedDict(

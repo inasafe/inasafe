@@ -20,7 +20,8 @@ from safe.definitions import (
     exposure_structure,
     all_vector_hazard_classes,
     hazard_category_single_hazard,
-    layer_mode_none
+    layer_mode_none,
+    hazard_zone_field
 )
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -85,7 +86,8 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications':
                         all_vector_hazard_classes,
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [hazard_zone_field]
                 },
                 'exposure': {
                     'layer_mode': layer_mode_none,
@@ -94,7 +96,8 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
-                    'exposure_units': []
+                    'exposure_units': [],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([

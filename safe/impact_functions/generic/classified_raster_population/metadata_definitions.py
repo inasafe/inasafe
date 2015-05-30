@@ -105,14 +105,16 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': all_raster_hazard_classes
+                    'raster_hazard_classifications': all_raster_hazard_classes,
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
                     'exposure_units': [
-                        count_exposure_unit, density_exposure_unit]
+                        count_exposure_unit, density_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([

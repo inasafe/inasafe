@@ -32,7 +32,8 @@ from safe.definitions import (
     exposure_road,
     unit_metres,
     unit_feet,
-    hazard_tsunami
+    hazard_tsunami,
+    road_type_field
 )
 
 
@@ -80,13 +81,15 @@ class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
                     'hazard_types': [hazard_flood, hazard_tsunami],
                     'continuous_hazard_units': [unit_feet, unit_metres],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_none,
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
-                    'exposure_units': []
+                    'exposure_units': [],
+                    'additional_keywords': [road_type_field]
                 }
             },
             'parameters': OrderedDict([

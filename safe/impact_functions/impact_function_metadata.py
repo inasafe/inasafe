@@ -272,7 +272,8 @@ class ImpactFunctionMetadata(object):
             'hazard_types': list,
             'continuous_hazard_units': list,
             'vector_hazard_classifications': list,
-            'raster_hazard_classifications': list
+            'raster_hazard_classifications': list,
+            'additional_keywords': list
         }
 
         hazard = layer_requirements['hazard']
@@ -288,7 +289,8 @@ class ImpactFunctionMetadata(object):
             'layer_mode': dict,
             'layer_geometries': list,
             'exposure_types': list,
-            'exposure_units': list
+            'exposure_units': list,
+            'additional_keywords': list
         }
 
         exposure = layer_requirements['exposure']

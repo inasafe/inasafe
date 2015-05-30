@@ -23,7 +23,10 @@ from safe.definitions import (
     hazard_category_single_hazard,
     flood_vector_hazard_classes,
     exposure_road,
-    layer_mode_none
+    layer_mode_none,
+    road_type_field,
+    affected_value,
+    affected_field
 )
 
 
@@ -72,13 +75,15 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
                         flood_vector_hazard_classes],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [affected_field, affected_value]
                 },
                 'exposure': {
                     'layer_mode': layer_mode_none,
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
-                    'exposure_units': []
+                    'exposure_units': [],
+                    'additional_keywords': [road_type_field]
                 }
             },
             'parameters': OrderedDict([

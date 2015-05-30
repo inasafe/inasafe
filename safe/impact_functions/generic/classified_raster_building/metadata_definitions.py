@@ -104,7 +104,8 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': all_raster_hazard_classes
+                    'raster_hazard_classifications': all_raster_hazard_classes,
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_none,
@@ -113,7 +114,8 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
-                    'exposure_units': []
+                    'exposure_units': [],
+                    'additional_keywords': []
                 }
             },
             # parameters

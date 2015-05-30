@@ -21,7 +21,8 @@ from safe.definitions import (
     exposure_population,
     all_vector_hazard_classes,
     hazard_category_single_hazard,
-    count_exposure_unit
+    count_exposure_unit,
+    hazard_zone_field
 )
 from safe.defaults import (
     default_minimum_needs,
@@ -92,19 +93,16 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                     ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
-                    'vector_hazard_classifications':
-                        all_vector_hazard_classes,
-                    'raster_hazard_classifications': []
+                    'vector_hazard_classifications': all_vector_hazard_classes,
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [hazard_zone_field]
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
-                    'layer_geometries': [
-                        layer_geometry_raster
-                    ],
+                    'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
-                    'exposure_units': [
-                        count_exposure_unit
-                    ]
+                    'exposure_units': [count_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([

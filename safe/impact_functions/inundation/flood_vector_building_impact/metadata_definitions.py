@@ -25,7 +25,10 @@ from safe.definitions import (
     hazard_category_single_hazard,
     exposure_structure,
     flood_vector_hazard_classes,
-    layer_mode_none
+    layer_mode_none,
+    building_type_field,
+    affected_field,
+    affected_value
 )
 
 
@@ -74,13 +77,15 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
                         flood_vector_hazard_classes],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [affected_field, affected_value]
                 },
                 'exposure': {
                     'layer_mode': layer_mode_none,
                     'layer_geometries': [layer_geometry_polygon],
                     'exposure_types': [exposure_structure],
-                    'exposure_units': []
+                    'exposure_units': [],
+                    'additional_keywords': [building_type_field]
                 }
             },
             'parameters': OrderedDict([

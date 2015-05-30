@@ -85,13 +85,15 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
                     'hazard_types': [hazard_earthquake],
                     'continuous_hazard_units': [unit_mmi],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
-                    'exposure_units': [count_exposure_unit]
+                    'exposure_units': [count_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([

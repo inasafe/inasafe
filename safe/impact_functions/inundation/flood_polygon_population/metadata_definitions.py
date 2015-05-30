@@ -32,7 +32,9 @@ from safe.definitions import (
     hazard_category_single_hazard,
     flood_vector_hazard_classes,
     count_exposure_unit,
-    exposure_population
+    exposure_population,
+    affected_field,
+    affected_value
 )
 
 
@@ -100,13 +102,15 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
                         flood_vector_hazard_classes],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [affected_field, affected_value]
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
-                    'exposure_units': [count_exposure_unit]
+                    'exposure_units': [count_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([

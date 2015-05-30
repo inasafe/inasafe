@@ -99,14 +99,16 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': continuous_hazard_unit_all,
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
                     'exposure_units': [
-                        count_exposure_unit, density_exposure_unit]
+                        count_exposure_unit, density_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             # Configurable parameters
