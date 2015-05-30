@@ -182,14 +182,14 @@ layer_geometry = {
 }
 
 # Hazard Category
-hazard_category_single_hazard = {
+hazard_category_single_event = {
     'key': 'single_hazard',
     'name': tr('Single Event'),
     'description': tr(
         'TBA')
 }
 
-hazard_category_multi_hazard = {
+hazard_category_multiple_event = {
     'key': 'multi_hazard',
     'name': tr('Multiple Event'),
     'description': tr(
@@ -204,8 +204,8 @@ hazard_category = {
         'layer. There are two possible values for this attribute, hazard '
         'scenario and hazard zone.'),
     'types': [
-        hazard_category_single_hazard,
-        hazard_category_multi_hazard
+        hazard_category_single_event,
+        hazard_category_multiple_event
     ]
 }
 

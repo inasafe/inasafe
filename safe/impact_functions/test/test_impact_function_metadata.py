@@ -73,7 +73,7 @@ from safe.impact_functions.volcanic.volcano_polygon_population\
 
 from safe.definitions import (
     layer_purpose_exposure,
-    hazard_category_single_hazard,
+    hazard_category_single_event,
     hazard_earthquake,
     exposure_structure,
     count_exposure_unit,
@@ -179,12 +179,12 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = EarthquakeBuildingFunction()
         hazard_categories = impact_function.metadata()\
             .hazard_categories_for_layer('raster')
-        expected = [hazard_category_single_hazard]
+        expected = [hazard_category_single_event]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function.metadata() \
             .hazard_categories_for_layer('raster', 'earthquake')
-        expected = [hazard_category_single_hazard]
+        expected = [hazard_category_single_event]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function.metadata() \

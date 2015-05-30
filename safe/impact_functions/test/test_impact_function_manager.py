@@ -33,8 +33,8 @@ from safe.impact_functions.inundation.flood_vector_building_impact\
 from safe.definitions import (
     layer_purpose_hazard,
     layer_purpose_exposure,
-    hazard_category_single_hazard,
-    hazard_category_multi_hazard,
+    hazard_category_single_event,
+    hazard_category_multiple_event,
     hazard_flood,
     hazard_tsunami,
     hazard_generic,
@@ -137,8 +137,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         hazard_categories = impact_function_manager.\
             hazard_categories_for_layer('polygon')
         expected = [
-            hazard_category_single_hazard,
-            hazard_category_multi_hazard]
+            hazard_category_single_event,
+            hazard_category_multiple_event]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function_manager.\
@@ -148,21 +148,21 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         hazard_categories = impact_function_manager.\
             hazard_categories_for_layer('point')
-        expected = [hazard_category_multi_hazard]
+        expected = [hazard_category_multiple_event]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function_manager.\
             hazard_categories_for_layer('raster')
         expected = [
-            hazard_category_single_hazard,
-            hazard_category_multi_hazard]
+            hazard_category_single_event,
+            hazard_category_multiple_event]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function_manager. \
             hazard_categories_for_layer('raster', 'earthquake')
         expected = [
-            hazard_category_single_hazard,
-            hazard_category_multi_hazard]
+            hazard_category_single_event,
+            hazard_category_multiple_event]
         self.assertItemsEqual(hazard_categories, expected)
 
     def test_hazards_for_layer(self):

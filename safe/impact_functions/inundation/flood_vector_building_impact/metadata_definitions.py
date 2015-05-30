@@ -22,7 +22,7 @@ from safe.definitions import (
     layer_mode_classified,
     layer_geometry_polygon,
     hazard_flood,
-    hazard_category_single_hazard,
+    hazard_category_single_event,
     exposure_structure,
     flood_vector_hazard_classes,
     layer_mode_none,
@@ -72,7 +72,7 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
-                    'hazard_categories': [hazard_category_single_hazard],
+                    'hazard_categories': [hazard_category_single_event],
                     'hazard_types': [hazard_flood],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [

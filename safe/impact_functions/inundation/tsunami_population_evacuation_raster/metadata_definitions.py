@@ -31,7 +31,7 @@ from safe.common.utilities import OrderedDict
 from safe.definitions import (
     layer_mode_continuous,
     layer_geometry_raster,
-    hazard_category_single_hazard,
+    hazard_category_single_event,
     unit_metres,
     unit_feet,
     count_exposure_unit,
@@ -107,7 +107,7 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_single_hazard],
+                    'hazard_categories': [hazard_category_single_event],
                     'hazard_types': [hazard_tsunami],
                     'continuous_hazard_units': [unit_feet, unit_metres],
                     'vector_hazard_classifications': [],

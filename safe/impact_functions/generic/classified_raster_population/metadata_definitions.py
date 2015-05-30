@@ -31,11 +31,11 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_all,
-    hazard_category_multi_hazard,
+    hazard_category_multiple_event,
     count_exposure_unit,
     all_raster_hazard_classes,
     exposure_population,
-    hazard_category_single_hazard,
+    hazard_category_single_event,
     density_exposure_unit
 )
 
@@ -100,8 +100,8 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_raster],
                     'hazard_categories': [
-                        hazard_category_multi_hazard,
-                        hazard_category_single_hazard],
+                        hazard_category_multiple_event,
+                        hazard_category_single_event],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [],

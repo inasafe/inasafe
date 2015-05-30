@@ -27,7 +27,7 @@ from safe.definitions import (
     layer_geometry_raster,
     hazard_volcano,
     volcano_vector_hazard_classes,
-    hazard_category_multi_hazard,
+    hazard_category_multiple_event,
     exposure_population,
     count_exposure_unit,
     volcano_name_field,
@@ -85,7 +85,7 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
-                    'hazard_categories': [hazard_category_multi_hazard],
+                    'hazard_categories': [hazard_category_multiple_event],
                     'hazard_types': [hazard_volcano],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
