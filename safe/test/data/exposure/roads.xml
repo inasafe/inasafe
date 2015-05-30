@@ -176,7 +176,7 @@
 title: Roads
 field: TYPE
 layer_purpose: exposure
-layer_mode: classified
+layer_mode: none
 exposure: road
 ]]>
 </inasafe_keywords>

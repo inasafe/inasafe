@@ -16,7 +16,7 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.definitions import (
-    layer_mode_classified,
+    layer_mode_none,
     layer_mode_continuous,
     layer_geometry_polygon,
     layer_geometry_point,
@@ -85,7 +85,7 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                     'raster_hazard_classifications': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_none,
                     'layer_geometries': [
                         layer_geometry_point,
                         layer_geometry_polygon

@@ -154,11 +154,23 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_category_multi_hazard]
         self.assertItemsEqual(hazard_categories, expected)
 
+        hazard_categories = impact_function_manager. \
+            hazard_categories_for_layer('raster', 'earthquake')
+        expected = [
+            hazard_category_single_hazard,
+            hazard_category_multi_hazard]
+        self.assertItemsEqual(hazard_categories, expected)
+
     def test_hazards_for_layer(self):
         """Test for hazards_for_layer"""
         impact_function_manager = ImpactFunctionManager()
         hazards = impact_function_manager.hazards_for_layer(
             'polygon', 'single_hazard')
+        expected = [hazard_flood, hazard_tsunami, hazard_earthquake,
+                    hazard_volcano, hazard_volcanic_ash, hazard_generic]
+        self.assertItemsEqual(hazards, expected)
+
+        hazards = impact_function_manager.hazards_for_layer('polygon')
         expected = [hazard_flood, hazard_tsunami, hazard_earthquake,
                     hazard_volcano, hazard_volcanic_ash, hazard_generic]
         self.assertItemsEqual(hazards, expected)
@@ -271,19 +283,19 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         self.assertItemsEqual(exposure_constraints, expected)
 
-    def test_available_hazard_layer_mode(self):
-        """Test for available_hazard_layer_mode."""
+    def test_available_hazard_layer_modes(self):
+        """Test for available_hazard_layer_modes."""
         ifm = ImpactFunctionManager()
-        hazard_layer_mode = ifm.available_hazard_layer_mode(
+        hazard_layer_mode = ifm.available_hazard_layer_modes(
             'earthquake', 'raster', 'single_hazard')
         expected = [layer_mode_continuous, layer_mode_classified]
 
         self.assertItemsEqual(hazard_layer_mode, expected)
 
-    def test_available_exposure_layer_mode(self):
-        """Test for available_exposure_layer_mode."""
+    def test_available_exposure_layer_modes(self):
+        """Test for available_exposure_layer_modes."""
         ifm = ImpactFunctionManager()
-        exposure_layer_mode = ifm.available_exposure_layer_mode(
+        exposure_layer_mode = ifm.available_exposure_layer_modes(
             'population', 'raster')
         expected = [layer_mode_continuous]
 

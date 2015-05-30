@@ -374,29 +374,37 @@ class ImpactFunctionMetadata(object):
         return result
 
     @classmethod
-    def hazard_categories_for_layer(cls, layer_geometry_key):
+    def hazard_categories_for_layer(cls, layer_geometry_key, hazard_key=None):
         """Get hazard categories form layer_geometry_key
 
         :param layer_geometry_key: The geometry id
         :type layer_geometry_key: str
+
+            :param hazard_key: The hazard key
+        :type hazard_key: str
+
 
         :returns: List of hazard_categories
         :rtype: list
         """
         hazard_layer_req = cls.get_hazard_requirements()
+        hazards = hazard_layer_req['hazard_types']
         hazard_geometries = hazard_layer_req['layer_geometries']
-        hazard_geometry_keys = get_list_key(hazard_geometries)
-        if layer_geometry_key in hazard_geometry_keys:
-            return hazard_layer_req['hazard_categories']
-        else:
-            return {}
+
+        if not is_key_exist(layer_geometry_key, hazard_geometries):
+            return []
+        if hazard_key:
+            if not is_key_exist(hazard_key, hazards):
+                return []
+
+        return hazard_layer_req['hazard_categories']
 
     @classmethod
-    def hazards_for_layer(cls, layer_geometry_key, hazard_category_key):
+    def hazards_for_layer(cls, hazard_geometry_key, hazard_category_key=None):
         """Get hazard categories form layer_geometry_key
 
-        :param layer_geometry_key: The geometry id
-        :type layer_geometry_key: str
+        :param hazard_geometry_key: The geometry id
+        :type hazard_geometry_key: str
 
         :param hazard_category_key: The hazard category
         :type hazard_category_key: str
@@ -404,13 +412,17 @@ class ImpactFunctionMetadata(object):
         :returns: List of hazard
         :rtype: list
         """
-        hazard_categories = cls.hazard_categories_for_layer(layer_geometry_key)
-        hazard_category_keys = get_list_key(hazard_categories)
-        if hazard_category_key in hazard_category_keys:
-            hazard_layer_req = cls.get_hazard_requirements()
-            return hazard_layer_req['hazard_types']
-        else:
+        hazard_layer_req = cls.get_hazard_requirements()
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazard_geometries = hazard_layer_req['layer_geometries']
+
+        if not is_key_exist(hazard_geometry_key, hazard_geometries):
             return []
+        if hazard_category_key:
+            if not is_key_exist(hazard_category_key, hazard_categories):
+                return []
+
+        return hazard_layer_req['hazard_types']
 
     @classmethod
     def exposures_for_layer(cls, layer_geometry_key):

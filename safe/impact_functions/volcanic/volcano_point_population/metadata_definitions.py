@@ -21,7 +21,7 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.definitions import (
-    layer_mode_classified,
+    layer_mode_none,
     layer_geometry_point,
     hazard_volcano,
     volcano_vector_hazard_classes,
@@ -29,7 +29,6 @@ from safe.definitions import (
     exposure_population,
     layer_geometry_raster,
     count_exposure_unit,
-    density_exposure_unit,
     layer_mode_continuous
 )
 
@@ -81,7 +80,7 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
             'detailed_description': '',
             'layer_requirements': {
                 'hazard': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_none,
                     'layer_geometries': [layer_geometry_point],
                     'hazard_categories': [hazard_category_multi_hazard],
                     'hazard_types': [hazard_volcano],

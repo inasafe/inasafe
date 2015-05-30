@@ -21,7 +21,7 @@ from safe.definitions import (
     exposure_population,
     all_vector_hazard_classes,
     hazard_category_single_hazard,
-    density_exposure_unit
+    count_exposure_unit
 )
 from safe.defaults import (
     default_minimum_needs,
@@ -103,7 +103,7 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                     ],
                     'exposure_types': [exposure_population],
                     'exposure_units': [
-                        density_exposure_unit
+                        count_exposure_unit
                     ]
                 }
             },
