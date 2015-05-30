@@ -53,7 +53,9 @@ from PyQt4.QtGui import (
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
+# pylint: disable=unused-import
 from safe import definitions
+# pylint: enable=unused-import
 from safe.definitions import (
     global_default_attribute,
     do_not_use_attribute,
@@ -558,6 +560,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         self.wvResults.setMaximumHeight(self.pgF25Progress.height() - 90)
 
+    # pylint: disable=unused-argument
     def resizeEvent(self, ev):
         """Trigger MessageViewer size update on window resize
 
@@ -565,6 +568,7 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the window size changes.
         """
         self.update_MessageViewer_size()
+    # pylint: disable=unused-argument
 
     def purposes_for_layer(self):
         """Return a list of valid purposes for the current layer.
