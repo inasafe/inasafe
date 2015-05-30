@@ -81,7 +81,7 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'flood',
-            'hazard_category': 'multi_hazard',
+            'hazard_category': 'multiple_event',
             'vector_hazard_classification': 'generic_vector_hazard_classes'
         }
 

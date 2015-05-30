@@ -183,14 +183,14 @@ layer_geometry = {
 
 # Hazard Category
 hazard_category_single_event = {
-    'key': 'single_hazard',
+    'key': 'single_event',
     'name': tr('Single Event'),
     'description': tr(
         'TBA')
 }
 
 hazard_category_multiple_event = {
-    'key': 'multi_hazard',
+    'key': 'multiple_event',
     'name': tr('Multiple Event'),
     'description': tr(
         'TBA')

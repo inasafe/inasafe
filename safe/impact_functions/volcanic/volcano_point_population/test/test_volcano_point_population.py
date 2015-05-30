@@ -69,7 +69,7 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
             'layer_mode': 'none',
             'layer_geometry': 'point',
             'hazard': 'volcano',
-            'hazard_category': 'multi_hazard',
+            'hazard_category': 'multiple_event',
             'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 

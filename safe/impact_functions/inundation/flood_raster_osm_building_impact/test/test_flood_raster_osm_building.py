@@ -78,7 +78,7 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
             'hazard': 'flood',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'continuous_hazard_unit': 'metres'
         }
 
