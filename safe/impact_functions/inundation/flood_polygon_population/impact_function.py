@@ -36,7 +36,7 @@ from safe.common.utilities import (
     humanize_class,
     create_label)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
-    get_needs_provenance_value
+    get_needs_provenance_value, filter_needs_parameters
 from safe.utilities.unicode import get_unicode
 from safe.common.exceptions import ZeroImpactException
 
@@ -248,7 +248,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         # Rounding

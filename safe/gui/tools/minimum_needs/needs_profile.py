@@ -54,6 +54,7 @@ def get_needs_provenance(parameters):
         return provenance[0]
     return None
 
+
 def get_needs_provenance_value(parameters):
     """Get the value of provenance.
 
@@ -68,6 +69,7 @@ def get_needs_provenance_value(parameters):
         return provenance_param.value
     return None
 
+
 def filter_needs_parameters(parameter_list):
     """Get all minimum needs parameters.
 
@@ -78,6 +80,7 @@ def filter_needs_parameters(parameter_list):
     :rtype: list
     """
     return [n for n in parameter_list if isinstance(n, ResourceParameter)]
+
 
 class NeedsProfile(MinimumNeeds):
     """The concrete MinimumNeeds class to be used in a QGIS environment.

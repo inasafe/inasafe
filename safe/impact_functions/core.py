@@ -80,7 +80,8 @@ def evacuated_population_needs(population, minimum_needs):
     :returns: The needs for the evacuated population.
     :rtype: dict
     """
-    minimum_needs = filter_needs_parameters(minimum_needs)
+    # Rizky : filter, only for valid serialized ResourceParameter
+    minimum_needs = [n for n in minimum_needs if 'frequency' in n]
     frequencies = []
     for resource in minimum_needs:
         if resource['frequency'] not in frequencies:
