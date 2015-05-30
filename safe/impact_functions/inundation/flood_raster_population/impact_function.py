@@ -26,8 +26,8 @@ from safe.common.utilities import (
     create_label,
     verify,
     get_thousand_separator)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    get_needs_provenance_value
 
 LOGGER = logging.getLogger('InaSAFE')
 

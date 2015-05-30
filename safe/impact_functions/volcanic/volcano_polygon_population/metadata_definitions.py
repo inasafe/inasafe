@@ -111,8 +111,7 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                 ])),
-                ('minimum needs', default_minimum_needs()),
-                ('provenance', default_provenance())
+                ('minimum needs', default_minimum_needs())
             ])
         }
         return dict_meta

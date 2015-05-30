@@ -2,6 +2,8 @@
 """**Postprocessors package.**
 
 """
+from safe.common.resource_parameter import ResourceParameter
+from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
 from safe.utilities.i18n import tr
 
 __author__ = 'Marco Bernasocchi <marco@opengis.ch>'
@@ -62,7 +64,8 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
                                           evacuation_percentage))
         except (ValueError, TypeError):
             self.impact_total = self.NO_DATA_TEXT
-        self.minimum_needs = params['function_params']['minimum needs']
+        self.minimum_needs = filter_needs_parameters(
+            params['function_params']['minimum needs'])
 
     def process(self):
         """concrete implementation it takes care of the needed parameters being
