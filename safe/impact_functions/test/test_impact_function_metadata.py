@@ -80,7 +80,10 @@ from safe.definitions import (
     unit_mmi,
     exposure_population,
     layer_mode_continuous,
-    layer_geometry_raster
+    layer_geometry_raster,
+    affected_value,
+    affected_field,
+    building_type_field
 )
 
 
@@ -339,6 +342,45 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         )
         expected = layer_mode_continuous
         self.assertEqual(result, expected)
+
+    def test_hazard_additional_keywords(self):
+        """Test for hazard_additional_keywords."""
+        impact_function = FloodPolygonBuildingFunction()
+        result = impact_function.metadata().hazard_additional_keywords(
+            layer_mode_key='classified',
+            layer_geometry_key='polygon',
+            hazard_category_key='single_hazard',
+            hazard_key='flood'
+        )
+        expected = [affected_field, affected_value]
+        self.assertItemsEqual(result, expected)
+
+        result = impact_function.metadata().hazard_additional_keywords(
+            layer_mode_key='classified',
+            layer_geometry_key='polygon',
+            hazard_category_key='single_hazard',
+        )
+        expected = [affected_field, affected_value]
+        print [x['key'] for x in result]
+        self.assertItemsEqual(result, expected)
+
+    def test_exposure_additional_keywords(self):
+        """Test for exposure_additional_keywords."""
+        impact_function = FloodPolygonBuildingFunction()
+        result = impact_function.metadata().exposure_additional_keywords(
+            layer_mode_key='none',
+            layer_geometry_key='polygon',
+            exposure_key='structure'
+        )
+        expected = [building_type_field]
+        self.assertItemsEqual(result, expected)
+
+        result = impact_function.metadata().exposure_additional_keywords(
+            layer_geometry_key='polygon',
+            exposure_key='structure'
+        )
+        expected = [building_type_field]
+        self.assertItemsEqual(result, expected)
 
 if __name__ == '__main__':
     unittest.main()

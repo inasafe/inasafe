@@ -740,4 +740,3 @@ road_type_field = {
     'type': 'field',
     'description': tr('Field where the building type is located.')
 }
-# 'additional_keywords': [building_type_field]

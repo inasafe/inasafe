@@ -50,7 +50,11 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_geometry_raster,
     layer_mode_classified,
-    layer_geometry_polygon
+    layer_geometry_polygon,
+    affected_field,
+    affected_value,
+    hazard_zone_field,
+    building_type_field
 )
 
 
@@ -300,6 +304,31 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected = [layer_mode_continuous]
 
         self.assertItemsEqual(exposure_layer_mode, expected)
+
+    def test_hazard_additional_keywords(self):
+        """Test for hazard_additional_keywords."""
+        ifm = ImpactFunctionManager()
+        additional_keywords = ifm.hazard_additional_keywords(
+            layer_mode_key='classified',
+            layer_geometry_key='polygon',
+            hazard_category_key='single_hazard',
+            hazard_key='flood'
+        )
+        expected = [affected_field, affected_value, hazard_zone_field]
+
+        self.assertItemsEqual(additional_keywords, expected)
+
+    def test_exposure_additional_keywords(self):
+        """Test for exposure_additional_keywords."""
+        ifm = ImpactFunctionManager()
+        additional_keywords = ifm.exposure_additional_keywords(
+            layer_mode_key='none',
+            layer_geometry_key='polygon',
+            exposure_key='structure'
+        )
+        expected = [building_type_field]
+
+        self.assertItemsEqual(additional_keywords, expected)
 
 if __name__ == '__main__':
     unittest.main()
