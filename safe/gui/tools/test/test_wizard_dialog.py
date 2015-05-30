@@ -168,7 +168,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_keywords = {
             'layer_geometry': 'polygon',
             'layer_purpose': 'hazard',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'hazard': 'flood',
             'field': 'FLOODPRONE',
             'layer_mode': 'classified',
@@ -514,7 +514,7 @@ class WizardDialogTest(unittest.TestCase):
         self.select_from_list_widget('hazard', dialog.lstCategories)
         dialog.pbnNext.click()
 
-        # select multi_hazard
+        # select multiple_event
         self.select_from_list_widget('Multiple Event',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()

@@ -25,11 +25,12 @@ from safe.definitions import (
     layer_geometry_point,
     layer_geometry_raster,
     hazard_flood,
-    hazard_category_single_hazard,
+    hazard_category_single_event,
     exposure_structure,
     unit_metres,
     unit_feet,
-    hazard_tsunami
+    hazard_tsunami,
+    building_type_field
 )
 
 
@@ -107,11 +108,12 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_single_hazard],
+                    'hazard_categories': [hazard_category_single_event],
                     'hazard_types': [hazard_flood, hazard_tsunami],
                     'continuous_hazard_units': [unit_feet, unit_metres],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_none,
@@ -120,7 +122,8 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
-                    'exposure_units': []
+                    'exposure_units': [],
+                    'additional_keywords': [building_type_field]
                 }
             },
             'parameters': OrderedDict([

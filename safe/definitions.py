@@ -182,15 +182,15 @@ layer_geometry = {
 }
 
 # Hazard Category
-hazard_category_single_hazard = {
-    'key': 'single_hazard',
+hazard_category_single_event = {
+    'key': 'single_event',
     'name': tr('Single Event'),
     'description': tr(
         'TBA')
 }
 
-hazard_category_multi_hazard = {
-    'key': 'multi_hazard',
+hazard_category_multiple_event = {
+    'key': 'multiple_event',
     'name': tr('Multiple Event'),
     'description': tr(
         'TBA')
@@ -204,8 +204,8 @@ hazard_category = {
         'layer. There are two possible values for this attribute, hazard '
         'scenario and hazard zone.'),
     'types': [
-        hazard_category_single_hazard,
-        hazard_category_multi_hazard
+        hazard_category_single_event,
+        hazard_category_multiple_event
     ]
 }
 
@@ -700,4 +700,43 @@ exposure_unit = {
         count_exposure_unit,
         density_exposure_unit
     ]
+}
+
+# Additional keywords
+# Hazard related
+hazard_zone_field = {
+    'key': 'hazard_zone_field',
+    'type': 'field',
+    'description': tr('Field where the hazard zone value is located.')
+}
+
+affected_field = {
+    'key': 'affected_field',
+    'type': 'field',
+    'description': tr('Field where the affected value is located.')
+}
+
+affected_value = {
+    'key': 'affected_field',
+    'type': 'value',
+    'description': tr('Value for affected field.')
+}
+
+volcano_name_field = {
+    'key': 'volcano_name_field',
+    'type': 'field',
+    'description': tr('Field where the volcano name is located.')
+}
+
+# Exposure related
+building_type_field = {
+    'key': 'building_type_field',
+    'type': 'field',
+    'description': tr('Field where the building type is located.')
+}
+
+road_type_field = {
+    'key': 'road_type_field',
+    'type': 'field',
+    'description': tr('Field where the building type is located.')
 }

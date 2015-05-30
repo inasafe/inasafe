@@ -62,8 +62,8 @@ from safe.definitions import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation,
-    hazard_category_single_hazard,
-    hazard_category_multi_hazard,
+    hazard_category_single_event,
+    hazard_category_multiple_event,
     layer_geometry_point,
     layer_geometry_line,
     layer_geometry_polygon,
@@ -1807,9 +1807,9 @@ class WizardDialog(QDialog, FORM_CLASS):
     def populate_function_table_1(self):
         """Populate the tblFunctions1 table with available functions."""
         if self.rbHazSingle.isChecked():
-            hazard_category = hazard_category_single_hazard
+            hazard_category = hazard_category_single_event
         else:
-            hazard_category = hazard_category_multi_hazard
+            hazard_category = hazard_category_multiple_event
         hazards = self.impact_function_manager\
             .available_hazards(hazard_category['key'])
         # Remove 'generic' from hazards
@@ -2158,9 +2158,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Reject if hazard category doesn't match
         if ('hazard_category' in keywords and
                 layer_purpose == layer_purpose_hazard['key']):
-            hazard_category = (hazard_category_single_hazard['key']
+            hazard_category = (hazard_category_single_event['key']
                                if self.rbHazSingle.isChecked()
-                               else hazard_category_multi_hazard['key'])
+                               else hazard_category_multiple_event['key'])
             if keywords['hazard_category'] != hazard_category:
                 return False
 

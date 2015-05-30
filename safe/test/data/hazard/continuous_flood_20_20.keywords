@@ -1,4 +1,4 @@
-hazard_category: single_hazard
+hazard_category: single_event
 title: Continuous Flood
 hazard: flood
 continuous_hazard_unit: metres

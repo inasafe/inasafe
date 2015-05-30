@@ -24,13 +24,14 @@ from safe.definitions import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,
-    layer_geometry_point,
     layer_geometry_raster,
     hazard_volcano,
     volcano_vector_hazard_classes,
-    hazard_category_multi_hazard,
+    hazard_category_multiple_event,
     exposure_population,
-    count_exposure_unit
+    count_exposure_unit,
+    volcano_name_field,
+    hazard_zone_field
 )
 
 
@@ -84,18 +85,21 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
-                    'hazard_categories': [hazard_category_multi_hazard],
+                    'hazard_categories': [hazard_category_multiple_event],
                     'hazard_types': [hazard_volcano],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
                         volcano_vector_hazard_classes],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [
+                        volcano_name_field, hazard_zone_field]
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
-                    'exposure_units': [count_exposure_unit]
+                    'exposure_units': [count_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
