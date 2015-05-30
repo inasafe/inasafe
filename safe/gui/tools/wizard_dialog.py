@@ -1644,7 +1644,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             extra_keywords_widget['key'] = extra_keyword['key']
             extra_keywords_widget['lbl'].setText(extra_keyword['description'])
             if extra_keyword['type'] == 'value':
-                field_widget = self.extra_keywords_widgets[i-1]['cbo']
+                field_widget = self.extra_keywords_widgets[i - 1]['cbo']
                 field_name = field_widget.itemData(
                     field_widget.currentIndex(), QtCore.Qt.UserRole)
                 self.populate_value_widget_from_field(
@@ -1657,8 +1657,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                         field_name, field_type), field_name)
             # If there is a master keyword, attach this widget as a slave
             # to the master widget. It's used for values of a given field.
-            if ('master_keyword' in extra_keyword
-                    and extra_keyword['master_keyword']):
+            if ('master_keyword' in extra_keyword and
+                    extra_keyword['master_keyword']):
                 master_key = extra_keyword['master_keyword']['key']
                 for master_candidate in self.extra_keywords_widgets:
                     if master_candidate['key'] == master_key:
@@ -3938,8 +3938,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             raise Exception('Unexpected number of steps')
 
         # Skip the extra_keywords tab if no extra keywords available:
-        if (new_step == step_kw_extrakeywords
-                and not self.additional_keywords_for_the_layer()):
+        if (new_step == step_kw_extrakeywords and not
+                self.additional_keywords_for_the_layer()):
             new_step = step_kw_source
 
         return new_step
