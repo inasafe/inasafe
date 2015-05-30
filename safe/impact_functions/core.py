@@ -55,6 +55,7 @@ def evacuated_population_weekly_needs(
     if not minimum_needs:
         minimum_needs = default_minimum_needs()
 
+    minimum_needs = filter_needs_parameters(minimum_needs)
     population_needs = OrderedDict()
     for resource in minimum_needs:
         resource = resource.serialize()
