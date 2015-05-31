@@ -47,38 +47,38 @@ class CliArgs(object):
     def __init__(self, _arguments_):
         try:
             self.output_file = _arguments_['--output-file']
-        except Exception as e:
-            LOGGER.debug(e.message)
+        except Exception as cli_error:
+            LOGGER.debug(cli_error.message)
         try:
             self.hazard = _arguments_['--hazard']
-        except Exception as e:
-            LOGGER.debug(e.message)
+        except Exception as cli_error:
+            LOGGER.debug(cli_error.message)
         try:
             self.exposure = _arguments_['--exposure']
-        except Exception as e:
-            LOGGER.debug(e.message)
+        except Exception as cli_error:
+            LOGGER.debug(cli_error.message)
         try:
             self.version = _arguments_['--version']
-        except Exception as e:
-            LOGGER.debug(e.message)
+        except Exception as cli_error:
+            LOGGER.debug(cli_error.message)
         try:
             self.show_list = _arguments_['--list-functions']
-        except Exception as e:
-            LOGGER.debug(e.message)
+        except Exception as cli_error:
+            LOGGER.debug(cli_error.message)
         try:
             self.impact_function = _arguments_['--impact-function']
-        except Exception as e:
-            LOGGER.debug(e.message)
+        except Exception as cli_error:
+            LOGGER.debug(cli_error.message)
         try:
             self.extent = _arguments_['--extent'].split(':')
-            LOGGER.debug(extent)
-        except Exception as e:
-            LOGGER.debug(e.message)
+            LOGGER.debug(self.extent)
+        except Exception as cli_error:
+            LOGGER.debug(cli_error.message)
         try:
             self.report_template = _arguments_['--report-template']
-            LOGGER.debug(report_template)
-        except Exception as e:
-            LOGGER.debug(e.message)
+            LOGGER.debug(self.report_template)
+        except Exception as cli_error:
+            LOGGER.debug(cli_error.message)
 
 
 def get_ifunction_list():
@@ -131,20 +131,24 @@ def get_hazard(cli_arguments):
 
     :raises: Exception
     """
+    qhazard = None
     try:
         if os.path.splitext(cli_arguments.hazard)[1] == '.shp':
             hazard_base = join_if_relative(cli_arguments.hazard)
             qhazard = QgsVectorLayer(
                 hazard_base, 'cli_vector_hazard', 'ogr')
-        elif os.path.splitext(cli_arguments.hazard)[1] == '.asc':
+        elif os.path.splitext(cli_arguments.hazard)[1] in \
+                ['.asc', '.tif', '.tiff']:
             hazard_base = join_if_relative(cli_arguments.hazard)
             qhazard = QgsRasterLayer(
                 hazard_base, 'cli_raster_hazard')
-        if not qhazard.isValid():
+        else:
+            print "Unknown filetype " + cli_arguments.hazard
+        if qhazard is not None and qhazard.isValid():
+            print "hazard layer is VALID"
+        else:
             print "hazard layer is NOT VALID"
             print "Perhaps run-env-linux.sh /usr"
-        else:
-            print "hazard layer is VALID"
         return qhazard
     except Exception as exc:
         print exc.message
@@ -162,23 +166,24 @@ def get_exposure(cli_arguments):
 
     :raises: Exception
     """
+    qexposure = None
     try:
         if os.path.splitext(cli_arguments.exposure)[1] == '.shp':
             exposure_base = join_if_relative(cli_arguments.exposure)
             LOGGER.debug(exposure_base)
             qexposure = QgsVectorLayer(exposure_base, 'cli_vector', 'ogr')
-        elif os.path.splitext(cli_arguments.exposure)[1] == '.asc':
+        elif os.path.splitext(cli_arguments.exposure)[1] in \
+                ['.asc', '.tif', '.tiff']:
             exposure_base = join_if_relative(cli_arguments.exposure)
             LOGGER.debug(exposure_base)
             qexposure = QgsRasterLayer(exposure_base, 'cli_raster')
         else:
-            print 'Error : Exposure layer'
-
-        if not qexposure.isValid():
+            print "Unknown filetype " + cli_arguments.exposure
+        if qexposure is not None and qexposure.isValid():
+            print "exposure layer is VALID"
+        else:
             print "exposure layer not valid"
             print "Perhaps run-env-linux.sh /usr"
-        else:
-            print "exposure layer is VALID!!"
         return qexposure
     except Exception as exc:
         print exc.message
@@ -197,46 +202,38 @@ def run_if(cli_arguments):
 
     :raises: Exception
     """
-    try:
-        qhazard = get_hazard(cli_arguments)
-        qexposure = get_exposure(cli_arguments)
-        # IF
-        impact_function_manager = ImpactFunctionManager()
-        impact_function = impact_function_manager.get(arguments.impact_function)
-        keyword_io = KeywordIO()
-    except Exception as exc:
-        print exc.__doc__
-        print exc.message
+    qhazard = get_hazard(cli_arguments)
+    qexposure = get_exposure(cli_arguments)
+    # IF
+    impact_function_manager = ImpactFunctionManager()
+    impact_function = impact_function_manager.get(arguments.impact_function)
+    keyword_io = KeywordIO()
+
     try:
         from safe.utilities.analysis import Analysis
     except ImportError as ie:
         LOGGER.debug('Import error for Analysis module')
         print ie.message
-        return None, None, None, None
-    # Layers
-    try:
-        analysis = Analysis()
-        analysis.hazard_layer = qhazard
-        analysis.exposure_layer = qexposure
-        analysis.hazard_keyword = keyword_io.read_keywords(qhazard)
-        analysis.exposure_keyword = keyword_io.read_keywords(qexposure)
-        analysis.clip_hard = False
-        analysis.show_intermediate_layers = False
-        analysis.run_in_thread_flag = False
-        analysis.map_canvas = CANVAS
-        # WIP
-        # analysis.user_extent_crs(qexposure.extent)
-        # analysis.user_extent(extent[0], extent[1], extent[2], extent[3])
-        analysis.impact_function = impact_function
-        analysis.setup_analysis()
-        analysis.run_analysis()
-        LOGGER.debug("end analysis :)")
-        impact_layer = analysis.get_impact_layer()
-        write_results(cli_arguments, impact_layer)
-        build_report(cli_arguments)
-    except Exception as exc:
-        print exc.message
-        print exc.__doc__
+        raise ImportError
+    analysis = Analysis()
+    analysis.hazard_layer = qhazard
+    analysis.exposure_layer = qexposure
+    analysis.hazard_keyword = keyword_io.read_keywords(qhazard)
+    analysis.exposure_keyword = keyword_io.read_keywords(qexposure)
+    analysis.clip_hard = False
+    analysis.show_intermediate_layers = False
+    analysis.run_in_thread_flag = False
+    analysis.map_canvas = CANVAS
+    # WIP
+    # analysis.user_extent_crs(qexposure.extent)
+    # analysis.user_extent(extent[0], extent[1], extent[2], extent[3])
+    analysis.impact_function = impact_function
+    analysis.setup_analysis()
+    analysis.run_analysis()
+    LOGGER.debug("end analysis :)")
+    impact_layer = analysis.get_impact_layer()
+    write_results(cli_arguments, impact_layer)
+    build_report(cli_arguments)
 
 
 def build_report(cli_arguments):
@@ -251,14 +248,16 @@ def build_report(cli_arguments):
     :raises: Exception
     """
     try:
-        impact_layer = QgsVectorLayer(cli_arguments.output_file, 'cli_impact', 'ogr')
+        impact_layer = QgsVectorLayer(
+            cli_arguments.output_file, 'cli_impact', 'ogr')
         LOGGER.debug(impact_layer.__doc__)
         layer_registry = QgsMapLayerRegistry.instance()
         layer_registry.removeAllMapLayers()
         layer_registry.addMapLayer(impact_layer)
         CANVAS.setExtent(impact_layer.extent())
         CANVAS.refresh()
-        report = ImpactReport(IFACE, cli_arguments.report_template, impact_layer)
+        report = ImpactReport(
+            IFACE, cli_arguments.report_template, impact_layer)
         LOGGER.debug(os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
         map_path = report.print_map_to_pdf(
             os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
@@ -269,9 +268,9 @@ def build_report(cli_arguments):
         layer_registry.removeAllMapLayers()
 
     except Exception as exc:
-        print "HERE"
         print exc.message
         print exc.__doc__
+        raise RuntimeError
 
 
 def write_results(cli_arguments, impact_layer):
@@ -281,7 +280,7 @@ def write_results(cli_arguments, impact_layer):
     :type cli_arguments: CliArgs
 
     :param impact_layer: Analysis result used to produce file.
-    :type QgsVectorLayer
+    :type impact_layer: QgsVectorLayer
 
     :raises: Exception
     """
@@ -289,12 +288,13 @@ def write_results(cli_arguments, impact_layer):
         impact_layer.write_to_file(join_if_relative(cli_arguments.output_file))
     except Exception as exc:
         print exc.message
+        raise RuntimeError
 
 if __name__ == '__main__':
     print "insafe"
     print ""
     LOGGER.debug(current_dir)
-
+    shell_arguments = None
     try:
         # Parse arguments, use usage.txt as syntax definition.
         shell_arguments = docopt.docopt(usage)
