@@ -35,7 +35,8 @@ from safe.common.utilities import (
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
 from safe.utilities.i18n import tr
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    get_needs_provenance_value, filter_needs_parameters
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -244,7 +245,7 @@ class ITBFatalityFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         # Generate impact report for the pdf map
@@ -271,7 +272,8 @@ class ITBFatalityFunction(ImpactFunction):
                     tr(resource['table name']),
                     format_int(resource['amount'])]))
         table_body.append(TableRow(tr('Provenance'), header=True))
-        table_body.append(TableRow(self.parameters['provenance']))
+        table_body.append(TableRow(get_needs_provenance_value(
+            self.parameters)))
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
 

@@ -1,6 +1,8 @@
 # coding=utf-8
 """This is the concrete Minimum Needs class that contains the logic to load
 the minimum needs to and from the QSettings"""
+from safe.utilities.i18n import tr
+from safe_extras.parameters.text_parameter import TextParameter
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '05/10/2014'
@@ -32,8 +34,52 @@ def add_needs_parameters(parameters):
     """
     minimum_needs = NeedsProfile()
     parameters['minimum needs'] = minimum_needs.get_needs_parameters()
-    parameters['provenance'] = minimum_needs.provenance
     return parameters
+
+
+def get_needs_provenance(parameters):
+    """Get the provenance of minimum needs.
+
+    :param parameters: A dictionary of impact function parameters.
+    :type parameters: dict
+
+    :returns: A parameter of provenance
+    :rtype: TextParameter
+    """
+    if 'minimum needs' not in parameters:
+        return None
+    needs = parameters['minimum needs']
+    provenance = [p for p in needs if p.name == tr('Provenance')]
+    if provenance:
+        return provenance[0]
+    return None
+
+
+def get_needs_provenance_value(parameters):
+    """Get the value of provenance.
+
+    :param parameters: A dictionary of impact function parameters.
+    :type parameters: dict
+
+    :returns: A string value of provenance
+    :rtype: str
+    """
+    provenance_param = get_needs_provenance(parameters)
+    if provenance_param:
+        return provenance_param.value
+    return None
+
+
+def filter_needs_parameters(parameter_list):
+    """Get all minimum needs parameters.
+
+    :param parameter_list: A list of parameters
+    :type parameter_list: list
+
+    :return: A list of ResourceParameter
+    :rtype: list
+    """
+    return [n for n in parameter_list if isinstance(n, ResourceParameter)]
 
 
 class NeedsProfile(MinimumNeeds):
@@ -214,6 +260,14 @@ class NeedsProfile(MinimumNeeds):
 
             parameter.precision = max(precisions)
             parameters.append(parameter)
+
+        prov_parameter = TextParameter()
+        prov_parameter.name = tr('Provenance')
+        prov_parameter.description = tr('The provenance of minimum needs')
+        prov_parameter.help_text = tr('The provenance of minimum needs')
+        prov_parameter.value = self.provenance
+        parameters.append(prov_parameter)
+
         return parameters
 
     @property
