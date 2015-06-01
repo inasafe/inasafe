@@ -93,7 +93,7 @@ from safe.common.exceptions import (
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
-
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -738,13 +738,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             category_question % self.layer.name())
         categories = self.purposes_for_layer()
         if self.get_layer_geometry_id() == 'polygon':
-            categories += ['aggregation']
+            categories += [tr('aggregation')]
         for category in categories:
             if type(category) != dict:
                 # pylint: disable=eval-used
                 category = eval('definitions.layer_purpose_%s' % category)
                 # pylint: enable=eval-used
-            item = QListWidgetItem(category['name'], self.lstCategories)
+            item = QListWidgetItem(
+                category['name'].capitalize(), self.lstCategories)
             item.setData(QtCore.Qt.UserRole, unicode(category))
             self.lstCategories.addItem(item)
 
@@ -830,8 +831,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 hazard_category = eval('definitions.hazard_category_%s'
                                        % hazard_category)
                 # pylint: enable=eval-used
-            item = QListWidgetItem(hazard_category['name'],
-                                   self.lstHazardCategories)
+            item = QListWidgetItem(
+                hazard_category['name'].capitalize(), self.lstHazardCategories)
             item.setData(QtCore.Qt.UserRole, unicode(hazard_category))
             self.lstHazardCategories.addItem(item)
 
@@ -909,7 +910,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblSelectSubcategory.setText(
             get_question_text('%s_question' % category['key']))
         for i in self.subcategories_for_layer():
-            item = QListWidgetItem(i['name'], self.lstSubcategories)
+            item = QListWidgetItem(i['name'].capitalize(), self.lstSubcategories)
             item.setData(QtCore.Qt.UserRole, unicode(i))
             self.lstSubcategories.addItem(item)
 
@@ -981,7 +982,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         layermode_question = (layermode_raster_question
                               if is_raster_layer(self.layer)
                               else layermode_vector_question)
-        self.lblSelectLayerMode .setText(
+        self.lblSelectLayerMode.setText(
             layermode_question % (subcategory['name'], category['name']))
         self.lblDescribeLayerMode.setText('')
         self.lstLayerModes.clear()
@@ -989,7 +990,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lstFields.clear()
         layer_modes = self.layermodes_for_layer()
         for layer_mode in layer_modes:
-            item = QListWidgetItem(layer_mode['name'], self.lstLayerModes)
+            item = QListWidgetItem(
+                layer_mode['name'].capitalize(), self.lstLayerModes)
             item.setData(QtCore.Qt.UserRole, unicode(layer_mode))
             self.lstUnits.addItem(item)
 
@@ -1277,8 +1279,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 # pylint: disable=eval-used
                 classification = eval('definitions.%s' % classification)
                 # pylint: enable=eval-used
-            item = QListWidgetItem(classification['name'],
-                                   self.lstClassifications)
+            item = QListWidgetItem(
+                classification['name'].capitalize(), self.lstClassifications)
             item.setData(QtCore.Qt.UserRole, unicode(classification))
             self.lstClassifications.addItem(item)
 
