@@ -184,7 +184,7 @@ def run_if(cli_arguments):
     qexposure = get_exposure(cli_arguments)
     # IF
     impact_function_manager = ImpactFunctionManager()
-    impact_function = impact_function_manager.get(arguments.impact_function)
+    impact_function = impact_function_manager.get(cli_arguments.impact_function)
     keyword_io = KeywordIO()
 
     try:
