@@ -15,13 +15,14 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.definitions import (
-    layer_mode_classified,
     layer_geometry_point,
     layer_geometry_polygon,
     hazard_volcano,
     volcano_vector_hazard_classes,
-    hazard_category_multi_hazard,
+    hazard_category_multiple_event,
     exposure_structure,
+    layer_mode_none,
+    volcano_name_field
 )
 
 
@@ -76,22 +77,24 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
             'citations': [],
             'layer_requirements': {
                 'hazard': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_none,
                     'layer_geometries': [layer_geometry_point],
-                    'hazard_categories': [hazard_category_multi_hazard],
+                    'hazard_categories': [hazard_category_multiple_event],
                     'hazard_types': [hazard_volcano],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
                         volcano_vector_hazard_classes],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [volcano_name_field]
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_none,
                     'layer_geometries': [
                         layer_geometry_polygon,
                         layer_geometry_point],
                     'exposure_types': [exposure_structure],
-                    'exposure_units': []
+                    'exposure_units': [],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([

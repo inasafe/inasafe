@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe_extras.parameters.text_parameter import TextParameter
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -320,12 +321,19 @@ def default_minimum_needs():
         'installed toilets will be usable on a continuous basis.'
     )
 
+    provenance = TextParameter()
+    provenance.name = tr('Provenance')
+    provenance.description = tr('The provenance of minimum needs')
+    provenance.help_text = tr('The provenance of minimum needs')
+    provenance.value = default_provenance()
+
     minimum_needs = [
         rice,
         drinking_water,
         water,
         family_kits,
         toilets,
+        provenance
     ]
     return minimum_needs
 

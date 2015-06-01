@@ -54,7 +54,8 @@ from safe.definitions import (
     hazard_earthquake,
     exposure_structure,
     unit_mmi,
-    hazard_category_single_hazard
+    hazard_category_single_event,
+    layer_mode_none
 )
 
 
@@ -161,7 +162,7 @@ class TestRegistry(unittest.TestCase):
         hazard_metadata = {
             'layer_mode': layer_mode_continuous,
             'layer_geometry': layer_geometry_raster,
-            'hazard_category': hazard_category_single_hazard,
+            'hazard_category': hazard_category_single_event,
             'hazard': hazard_earthquake,
             'continuous_hazard_unit': unit_mmi,
         }
@@ -183,7 +184,7 @@ class TestRegistry(unittest.TestCase):
         hazard_metadata = {
             'layer_mode': layer_mode_continuous,
             'layer_geometry': layer_geometry_raster,
-            'hazard_category': hazard_category_single_hazard,
+            'hazard_category': hazard_category_single_event,
             'hazard': hazard_earthquake,
             # 'continuous_hazard_unit': unit_mmi,
             }
@@ -202,7 +203,7 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test filtering IF by exposure metadata."""
         # Full metadata
         exposure_metadata = {
-            'layer_mode': layer_mode_classified,
+            'layer_mode': layer_mode_none,
             'layer_geometry': layer_geometry_point,
             'exposure': exposure_structure,
             'exposure_unit': []
@@ -225,7 +226,7 @@ class TestRegistry(unittest.TestCase):
 
         # Full metadata
         exposure_metadata = {
-            'layer_mode': layer_mode_classified,
+            'layer_mode': layer_mode_none,
             'layer_geometry': layer_geometry_polygon,
             'exposure': exposure_structure,
             # 'exposure_unit': []
@@ -252,13 +253,13 @@ class TestRegistry(unittest.TestCase):
         hazard_metadata = {
             'layer_mode': layer_mode_continuous,
             'layer_geometry': layer_geometry_raster,
-            'hazard_category': hazard_category_single_hazard,
+            'hazard_category': hazard_category_single_event,
             'hazard': hazard_earthquake,
             'continuous_hazard_unit': unit_mmi
         }
 
         exposure_metadata = {
-            'layer_mode': layer_mode_classified,
+            'layer_mode': layer_mode_none,
             'layer_geometry': layer_geometry_point,
             'exposure': exposure_structure,
         }
@@ -285,13 +286,13 @@ class TestRegistry(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'flood',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'classified',
+            'layer_mode': 'none',
             'layer_geometry': 'polygon',
             'exposure': 'structure',
         }
@@ -333,7 +334,7 @@ class TestRegistry(unittest.TestCase):
         hazard_keywords = {
             'continuous_hazard_unit': 'metres',
             'hazard': 'flood',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'layer_mode': 'continuous',
             'layer_purpose': 'hazard',
             'title': 'Jakarta flood like 2007 with structural improvements'

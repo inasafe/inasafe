@@ -172,7 +172,7 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[hazard_category: multi_hazard
+<![CDATA[hazard_category: multiple_event
 title: Earthquake Polygon
 hazard: earthquake
 field: h_zone

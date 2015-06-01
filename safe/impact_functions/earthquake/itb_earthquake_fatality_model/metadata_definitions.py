@@ -25,7 +25,7 @@ from safe.definitions import (
     hazard_earthquake,
     exposure_population,
     count_exposure_unit,
-    hazard_category_single_hazard,
+    hazard_category_single_event,
     unit_mmi
 )
 
@@ -120,17 +120,19 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_single_hazard],
+                    'hazard_categories': [hazard_category_single_event],
                     'hazard_types': [hazard_earthquake],
                     'continuous_hazard_units': [unit_mmi],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
-                    'exposure_units': [count_exposure_unit]
+                    'exposure_units': [count_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
@@ -139,8 +141,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                     ])),
-                ('minimum needs', default_minimum_needs()),
-                ('provenance', default_provenance())
+                ('minimum needs', default_minimum_needs())
             ])
         }
         return dict_meta
