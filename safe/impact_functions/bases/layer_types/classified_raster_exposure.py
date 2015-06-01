@@ -9,7 +9,8 @@ class ClassifiedRasterExposureMixin(object):
         self._exposure_layer = None
 
     def set_up_exposure_layer(self, exposure):
-        """Set up the hazard value
+        """Set up the hazard value.
+
         :param exposure: QgsRasterLayer or Raster data types
         :type exposure: QgsRasterLayer, Raster
         """

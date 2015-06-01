@@ -10,7 +10,8 @@ class RasterImpactMixin(object):
         self._impact_layer = None
 
     def set_up_impact_layer(self, impact):
-        """Set up the hazard value
+        """Set up the hazard value.
+
         :param impact: QgsVectorLayer or Vector data types
         :type impact: QgsVectorLayer, Vector
         """

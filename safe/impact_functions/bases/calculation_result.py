@@ -6,9 +6,9 @@ __date__ = '07/05/15'
 
 
 class VectorImpactCalculation(object):
-    """Class to store impact function calculation results
-    """
+    """Class to store impact function calculation results.
 
+    """
     def __init__(self):
         self._impact_map = None
         self._hazard_map = None
@@ -22,8 +22,9 @@ class VectorImpactCalculation(object):
 
     @hazard_map.setter
     def hazard_map(self, value):
-        """The classified hazard map by hazard type. Only valid for
-        Classified Hazard
+        """The classified hazard map by hazard type.
+
+        Only valid for Classified Hazard.
         :param value: The dictionary of the classified hazard
         :type value: dict
         """
@@ -35,8 +36,9 @@ class VectorImpactCalculation(object):
 
     @impact_map.setter
     def impact_map(self, value):
-        """The classified impact map by exposure type. Only valid for
-        Classified Exposure
+        """The classified impact map by exposure type.
+
+        Only valid for Classified Exposure
         :param value: The dictionary of the calculation results
         :type value: dict
         """

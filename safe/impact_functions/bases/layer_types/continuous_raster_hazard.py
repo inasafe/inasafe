@@ -11,7 +11,8 @@ class ContinuousRasterHazardMixin(object):
         self._hazard_layer = None
 
     def set_up_hazard_layer(self, hazard):
-        """Set up the hazard value
+        """Set up the hazard value.
+
         :param hazard: QgsRasterLayer or Raster data types
         :type hazard: QgsRasterLayer, Raster
         """

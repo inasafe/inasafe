@@ -15,7 +15,8 @@ class ClassifiedVectorHazardMixin(object):
         self._hazard_layer = None
 
     def set_up_hazard_layer(self, hazard):
-        """Set up the hazard value
+        """Set up the hazard value.
+
         :param hazard: QgsVectorLayer or Vector data types
         :type hazard: QgsVectorLayer, Vector
         """

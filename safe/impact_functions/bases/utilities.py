@@ -18,7 +18,7 @@ __date__ = '07/05/15'
 
 
 def check_attribute_exist(layer, attribute):
-    """Check an attribute is exists in the layer
+    """Check an attribute is exists in the layer.
 
     :param layer: A layer to check
     :type layer: QgsVectorLayer
@@ -36,6 +36,7 @@ def check_attribute_exist(layer, attribute):
 def get_qgis_vector_layer(layer):
     """Get QgsVectorLayer if the layer param is a vector storage layer (
     old-style).
+
     :param layer: The layer to normalize
     :type layer: QgsMapLayer, Vector
     :return: QgsMapLayer returned
@@ -52,6 +53,7 @@ def get_qgis_vector_layer(layer):
 def get_qgis_raster_layer(layer):
     """Get QgsRasterLayer if the layer param is a raster storage layer (
     old-style).
+
     :param layer: The layer to normalize
     :type layer: QgsMapLayer, Raster
     :return: QgsMapLayer returned
@@ -71,8 +73,8 @@ def split_by_polygon_class(
         request=None,
         attribute=None):
     """Split the target layer using several polygons and categorizes it.
-    Also assigns category values in the attribute
 
+    Also assigns category values in the attribute
     :param target_layer: The target layer to be split and categorizes
     :type target_layer: QgsVectorLayer
 
@@ -165,7 +167,7 @@ def check_layer_constraint(metadata, hazard_layer_mode,
                            hazard_layer_geometries, exposure_layer_mode,
                            exposure_layer_geometries):
     """Check the layer constraint in metadata is relevant with the base class
-    used
+    used.
 
     :param metadata: the metadata of the class
     :type metadata: ImpactFunctionMetadata
