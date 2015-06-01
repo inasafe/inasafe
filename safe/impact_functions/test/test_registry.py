@@ -21,14 +21,12 @@ import unittest
 import inspect
 
 from safe.impact_functions import register_impact_functions
-
 from safe.impact_functions.earthquake.earthquake_building.impact_function \
     import EarthquakeBuildingFunction
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model \
     .impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model \
     .impact_function import PAGFatalityFunction
-
 from safe.impact_functions.inundation.flood_raster_osm_building_impact \
     .impact_function import FloodRasterBuildingFunction
 from safe.impact_functions.generic.classified_polygon_building\
@@ -43,10 +41,8 @@ from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.generic.classified_raster_building.impact_function\
     import ClassifiedRasterHazardBuildingFunction
-
 from safe.impact_functions.registry import Registry
 from safe.definitions import (
-    layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_point,
     layer_geometry_polygon,

@@ -7,7 +7,6 @@
 """
 __author__ = 'lucernae'
 
-
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,

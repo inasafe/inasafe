@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import logging
-
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
@@ -30,7 +29,6 @@ from safe.common.tables import Table, TableRow
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
-
 
 LOGGER = logging.getLogger('InaSAFE')
 

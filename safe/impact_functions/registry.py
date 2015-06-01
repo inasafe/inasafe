@@ -245,7 +245,7 @@ class Registry(object):
                 continue
             if (layer_geometries and not is_subset(
                     exposure_keywords.get(
-                            'layer_geometry'), layer_geometries)):
+                        'layer_geometry'), layer_geometries)):
                 continue
             if (exposure_types and not is_subset(
                     exposure_keywords.get('exposure'),
