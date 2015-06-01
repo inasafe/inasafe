@@ -172,11 +172,11 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[source: OpenStreetMap - www.openstreetmap.org
+<![CDATA[field: TYPE
 title: Roads
-field: TYPE
+source: OpenStreetMap - www.openstreetmap.org
 layer_purpose: exposure
-layer_mode: classified
+layer_mode: none
 exposure: road
 ]]>
 </inasafe_keywords>

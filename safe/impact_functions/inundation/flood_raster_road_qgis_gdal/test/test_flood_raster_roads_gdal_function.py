@@ -18,7 +18,6 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
-
 from qgis.core import QgsRasterLayer, QgsVectorLayer
 
 from safe.impact_functions.inundation\
@@ -73,13 +72,13 @@ class TestFloodRasterRoadsGdalFunction(unittest.TestCase):
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
             'hazard': 'flood',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'continuous_hazard_unit': 'metres'
         }
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'classified',
+            'layer_mode': 'none',
             'layer_geometry': 'line',
             'exposure': 'road'
         }

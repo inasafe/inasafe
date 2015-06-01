@@ -25,7 +25,8 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    filter_needs_parameters
 
 
 # noinspection PyClassHasNoInit
@@ -176,7 +177,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         # Generate impact report for the pdf map

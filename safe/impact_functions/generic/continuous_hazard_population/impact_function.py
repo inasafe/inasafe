@@ -37,7 +37,8 @@ from safe.common.tables import Table, TableRow
 from safe.common.utilities import create_classes, create_label, humanize_class
 from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    filter_needs_parameters
 
 
 class ContinuousHazardPopulationFunction(ImpactFunction):
@@ -203,7 +204,7 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         table_body = self._tabulate(

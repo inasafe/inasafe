@@ -17,7 +17,6 @@ from safe.common.utilities import OrderedDict
 
 from safe.defaults import (
     default_minimum_needs,
-    default_provenance,
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
@@ -28,7 +27,7 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_flood,
-    hazard_category_single_hazard,
+    hazard_category_single_event,
     unit_metres,
     unit_feet,
     count_exposure_unit,
@@ -104,17 +103,19 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_single_hazard],
+                    'hazard_categories': [hazard_category_single_event],
                     'hazard_types': [hazard_flood],
                     'continuous_hazard_units': [unit_feet, unit_metres],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
-                    'exposure_units': [count_exposure_unit]
+                    'exposure_units': [count_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
@@ -124,8 +125,7 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                 ])),
-                ('minimum needs', default_minimum_needs()),
-                ('provenance', default_provenance())
+                ('minimum needs', default_minimum_needs())
             ])
         }
         return dict_meta

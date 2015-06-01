@@ -15,7 +15,6 @@ __author__ = 'lucernae'
 __filename__ = 'test_classified_hazard_building'
 __date__ = '24/03/15'
 
-
 import unittest
 
 from safe.impact_functions.impact_function_manager\
@@ -63,7 +62,7 @@ class TestClassifiedHazardPopulationFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'raster',
             'hazard': 'flood',
-            'hazard_category': 'multi_hazard',
+            'hazard_category': 'multiple_event',
             'raster_hazard_classification': 'generic_raster_hazard_classes'
         }
 

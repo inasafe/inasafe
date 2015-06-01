@@ -79,13 +79,13 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
             'hazard': 'earthquake',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'continuous_hazard_unit': 'mmi'
         }
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'classified',
+            'layer_mode': 'none',
             'layer_geometry': 'point',
             'exposure': 'structure'
         }

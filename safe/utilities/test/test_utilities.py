@@ -139,7 +139,7 @@ class UtilitiesTest(unittest.TestCase):
         # Test if all the keywords are all ready correctly
         keywords = read_file_keywords(raster_shake_path)
         expected_keywords = {
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'hazard': 'flood',
             'continuous_hazard_unit': 'metres',
             'layer_purpose': 'hazard',
@@ -165,7 +165,7 @@ class UtilitiesTest(unittest.TestCase):
         # tsunami example
         keywords = read_file_keywords(raster_tsunami_path)
         expected_keywords = {
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'title': 'Tsunami',
             'hazard': 'tsunami',
             'hazard_continuous_unit': 'metres',

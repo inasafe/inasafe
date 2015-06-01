@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '24/10/14'
@@ -21,14 +22,12 @@ import unittest
 import random
 import os
 import logging
-import numpy
 from collections import OrderedDict
 
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
-    evacuated_population_needs,
-    has_no_data)
+    evacuated_population_needs)
 from safe.common.resource_parameter import ResourceParameter
 from safe.defaults import default_minimum_needs
 from safe.test.utilities import TESTDATA, HAZDATA
