@@ -19,7 +19,6 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
-
 from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 from safe.impact_functions.impact_function_manager \

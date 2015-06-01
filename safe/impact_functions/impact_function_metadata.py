@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
+
 from safe.common.utilities import add_to_list, get_list_key, is_key_exist
 from safe.definitions import (
     layer_purpose_exposure,
@@ -280,7 +281,7 @@ class ImpactFunctionMetadata(object):
         for key, value in expected_hazard_metadata.iteritems():
             if key not in hazard.keys():
                 return False, 'key %s is not in hazard' % key
-            if type(hazard[key]) is not value:
+            if not isinstance(hazard[key], value):
                 message = 'key %s in hazard is not a %s, but %s ' % (
                     key, value, type(hazard[key]))
                 return False, message
@@ -297,7 +298,7 @@ class ImpactFunctionMetadata(object):
         for key, value in expected_exposure_metadata.iteritems():
             if key not in exposure.keys():
                 return False, 'key %s is not in exposure' % key
-            if type(exposure[key]) is not value:
+            if not isinstance(exposure[key], value):
                 message = 'key %s in exposure not a %s, but %s ' % (
                     key, value, type(exposure[key]))
                 return False, message

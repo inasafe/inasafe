@@ -2,7 +2,6 @@
 """**Postprocessors package.**
 
 """
-from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
 
 __author__ = 'Marco Bernasocchi <marco@opengis.ch>'
 __revision__ = '$Format:%H$'

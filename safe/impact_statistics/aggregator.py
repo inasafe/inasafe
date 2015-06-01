@@ -344,21 +344,32 @@ class Aggregator(QtCore.QObject):
             elderly_ratio = self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY')
             elderly_ratio_key = self.get_default_keyword('ELDERLY_RATIO_KEY')
 
-            if (aggregation_attribute in keywords and
-                    ('layer_purpose' in keywords and
-                        layer_purpose == 'aggregation') and
-                    (female_ratio in keywords and (
-                        female_ratio != global_default_attribute['name'] or
-                        female_ratio_key in keywords)) and
-                    (youth_ratio in keywords and (
-                        youth_ratio != global_default_attribute['name'] or
-                        youth_ratio_key in keywords)) and
-                    (adult_ratio in keywords and (
-                        adult_ratio != global_default_attribute['name'] or
-                        adult_ratio_key in keywords)) and
-                    (elderly_ratio in keywords and (
-                        elderly_ratio != global_default_attribute['name'] or
-                        elderly_ratio_key in keywords))):
+            aggregation_in_keywords = aggregation_attribute in keywords
+            layer_purpose_in_keywords = (
+                'layer_purpose' in keywords and
+                layer_purpose == 'aggregation')
+            female_ratio_in_keywords = (
+                female_ratio in keywords and (
+                    female_ratio != global_default_attribute['name'] or
+                    female_ratio_key in keywords))
+            youth_ratio_in_keywords = (
+                youth_ratio in keywords and (
+                    youth_ratio != global_default_attribute['name'] or
+                    youth_ratio_key in keywords))
+            adult_ratio_in_keywords = (
+                adult_ratio in keywords and (
+                    adult_ratio != global_default_attribute['name'] or
+                    adult_ratio_key in keywords))
+            elderly_ratio_in_keywords = (
+                elderly_ratio in keywords and (
+                    elderly_ratio != global_default_attribute['name'] or
+                    elderly_ratio_key in keywords))
+            if (aggregation_in_keywords and
+                    layer_purpose_in_keywords and
+                    female_ratio_in_keywords and
+                    youth_ratio_in_keywords and
+                    adult_ratio_in_keywords and
+                    elderly_ratio_in_keywords):
                 self.is_valid = True
             # some keywords are needed
             else:

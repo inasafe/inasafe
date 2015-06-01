@@ -18,7 +18,7 @@ __date__ = '24/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 from safe.common.utilities import OrderedDict
-from safe.defaults import default_minimum_needs, default_provenance
+from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,

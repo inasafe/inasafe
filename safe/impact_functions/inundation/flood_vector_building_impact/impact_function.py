@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from collections import OrderedDict
-
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
@@ -22,6 +21,7 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsCoordinateReferenceSystem,
     QgsGeometry)
+
 from PyQt4.QtCore import QVariant
 
 from safe.impact_functions.base import ImpactFunction

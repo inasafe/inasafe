@@ -26,7 +26,6 @@ from safe.definitions import (
 )
 from safe.defaults import (
     default_minimum_needs,
-    default_provenance,
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)

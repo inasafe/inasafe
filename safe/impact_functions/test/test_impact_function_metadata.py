@@ -238,13 +238,13 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = ITBFatalityFunction()
         continuous_hazards_units = impact_function.metadata().\
             continuous_hazards_units_for_layer(
-            'earthquake', 'raster', 'continuous', 'single_event')
+                'earthquake', 'raster', 'continuous', 'single_event')
         expected = [unit_mmi]
         self.assertItemsEqual(continuous_hazards_units, expected)
 
-        continuous_hazards_units = impact_function.metadata(). \
+        continuous_hazards_units = impact_function.metadata().\
             continuous_hazards_units_for_layer(
-            'flood', 'raster', 'continuous', 'single_event')
+                'flood', 'raster', 'continuous', 'single_event')
         expected = []
         self.assertItemsEqual(continuous_hazards_units, expected)
 

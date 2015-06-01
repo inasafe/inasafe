@@ -16,7 +16,6 @@ __author__ = 'Rizky Maulana Nugraha'
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     default_minimum_needs,
-    default_provenance,
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)

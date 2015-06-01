@@ -15,7 +15,7 @@ __author__ = 'lucernae'
 __date__ = '24/03/15'
 
 from safe.common.utilities import OrderedDict
-from safe.defaults import default_minimum_needs, default_provenance
+from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,

@@ -740,7 +740,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.get_layer_geometry_id() == 'polygon':
             categories += ['aggregation']
         for category in categories:
-            if type(category) != dict:
+            if not isinstance(category, dict):
                 # pylint: disable=eval-used
                 category = eval('definitions.layer_purpose_%s' % category)
                 # pylint: enable=eval-used
@@ -825,7 +825,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             hazard_category_question)
         hazard_categories = self.hazard_categories_for_layer()
         for hazard_category in hazard_categories:
-            if type(hazard_category) != dict:
+            if not isinstance(hazard_category, dict):
                 # pylint: disable=eval-used
                 hazard_category = eval('definitions.hazard_category_%s'
                                        % hazard_category)
@@ -1273,7 +1273,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             classification_question % (subcategory, category))
         classifications = self.classifications_for_layer()
         for classification in classifications:
-            if type(classification) != dict:
+            if not isinstance(classification, dict):
                 # pylint: disable=eval-used
                 classification = eval('definitions.%s' % classification)
                 # pylint: enable=eval-used
@@ -1374,12 +1374,15 @@ class WizardDialog(QDialog, FORM_CLASS):
             value_as_string = value is not None and unicode(value) or 'NULL'
             assigned = False
             for default_class in default_classes:
-                if ((field_type > 9 and value_as_string.upper()
-                        in [c.upper()
-                            for c in default_class['string_defaults']]) or
-                        (field_type < 10 and
-                            (default_class['numeric_default_min'] <= value <=
-                                default_class['numeric_default_max']))):
+                condition_1 = (
+                    field_type > 9 and
+                    value_as_string.upper() in [
+                        c.upper() for c in default_class['string_defaults']])
+                condition_2 = (
+                    field_type < 10 and (
+                        default_class['numeric_default_min'] <= value <=
+                        default_class['numeric_default_max']))
+                if condition_1 or condition_2:
                     assigned_values[default_class['name']] += [value_as_string]
                     assigned = True
             if not assigned:
@@ -1405,7 +1408,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         assigned_values = dict()
         for default_class in default_classes:
             assigned_values[default_class['name']] = list()
-        if type(value_map) == str:
+        if isinstance(value_map, str):
             try:
                 value_map = json.loads(value_map)
             except ValueError:
@@ -1487,7 +1490,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param indx: The new index.
         :type indx: int or str
         """
-        if type(indx) == int and indx > -1:
+        if isinstance(indx, int) and indx > -1:
             self.extra_keyword_changed(self.extra_keywords_widgets[0])
 
     # noinspection PyPep8Naming
@@ -1498,7 +1501,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param indx: The new index.
         :type indx: int or str
         """
-        if type(indx) == int and indx > -1:
+        if isinstance(indx, int) and indx > -1:
             self.extra_keyword_changed(self.extra_keywords_widgets[1])
 
     # noinspection PyPep8Naming
@@ -1509,7 +1512,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param indx: The new index.
         :type indx: int or str
         """
-        if type(indx) == int and indx > -1:
+        if isinstance(indx, int) and indx > -1:
             self.extra_keyword_changed(self.extra_keywords_widgets[2])
 
     # noinspection PyPep8Naming
@@ -1520,7 +1523,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param indx: The new index.
         :type indx: int or str
         """
-        if type(indx) == int and indx > -1:
+        if isinstance(indx, int) and indx > -1:
             self.extra_keyword_changed(self.extra_keywords_widgets[3])
 
     # noinspection PyPep8Naming
@@ -1531,7 +1534,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param indx: The new index.
         :type indx: int or str
         """
-        if type(indx) == int and indx > -1:
+        if isinstance(indx, int) and indx > -1:
             self.extra_keyword_changed(self.extra_keywords_widgets[4])
 
     # noinspection PyPep8Naming
@@ -1542,7 +1545,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param indx: The new index.
         :type indx: int or str
         """
-        if type(indx) == int and indx > -1:
+        if isinstance(indx, int) and indx > -1:
             self.extra_keyword_changed(self.extra_keywords_widgets[5])
 
     # noinspection PyPep8Naming
@@ -1553,7 +1556,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param indx: The new index.
         :type indx: int or str
         """
-        if type(indx) == int and indx > -1:
+        if isinstance(indx, int) and indx > -1:
             self.extra_keyword_changed(self.extra_keywords_widgets[6])
 
     # noinspection PyPep8Naming
@@ -1564,7 +1567,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param indx: The new index.
         :type indx: int or str
         """
-        if type(indx) == int and indx > -1:
+        if isinstance(indx, int) and indx > -1:
             self.extra_keyword_changed(self.extra_keywords_widgets[7])
 
     def extra_keyword_changed(self, widget):
@@ -3081,8 +3084,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.iface.mapCanvas().hasCrsTransformEnabled():
             coordTransform = QgsCoordinateTransform(layer_a.crs(),
                                                     layer_b.crs())
-            extent_b = (coordTransform.transform(extent_b,
-                        QgsCoordinateTransform.ReverseTransform))
+            extent_b = (coordTransform.transform(
+                extent_b, QgsCoordinateTransform.ReverseTransform))
         return extent_a.intersects(extent_b)
 
     def set_widgets_step_fc_disjoint_layers(self):
@@ -3366,10 +3369,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Summary tab"""
         def format_postprocessor(val):
             """ make nested OrderedDicts more flat"""
-            if type(val) == OrderedDict:
+            if isinstance(val, OrderedDict):
                 result = []
                 for v in val:
-                    if type(val[v]) == OrderedDict:
+                    if isinstance(val[v], OrderedDict):
                         # omit the v key and unpack the dict directly
                         result += [u'%s: %s' % (unicode(k), unicode(val[v][k]))
                                    for k in val[v]]
@@ -3393,12 +3396,15 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         params = []
         for p in self.if_params:
-            if type(self.if_params[p]) == OrderedDict:
-                subparams = [u'<b>%s</b>: %s' % (unicode(pp),
-                             format_postprocessor(self.if_params[p][pp]))
-                             for pp in self.if_params[p]]
+            if isinstance(self.if_params[p], OrderedDict):
+                subparams = [
+                    u'<b>%s</b>: %s' % (
+                        unicode(pp),
+                        format_postprocessor(self.if_params[p][pp]))
+                    for pp in self.if_params[p]
+                    ]
                 subparams = u'<br/>'.join(subparams)
-            elif type(self.if_params[p]) == list and p == 'minimum needs':
+            elif isinstance(self.if_params[p], list) and p == 'minimum needs':
                 subparams = ''
                 for need in self.if_params[p]:
                     subparams += '%s %.0f' % (need.name, need.value)
@@ -3408,7 +3414,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                         subparams += ', '
                 if not subparams:
                     subparams = 'Not applicable'
-            elif type(self.if_params[p]) == list:
+            elif isinstance(self.if_params[p], list):
                 subparams = ', '.join([unicode(i) for i in self.if_params[p]])
             else:
                 subparams = unicode(self.if_params[p])
