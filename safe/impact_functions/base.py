@@ -380,7 +380,7 @@ class ImpactFunction(object):
                 'Impact Function with QGIS function type is used, but no '
                 'extent is provided.')
 
-    def prepare(self, layers):
+    def prepare(self):
         """Prepare this impact function for running the analysis.
 
         This method should normally be called in your concrete class's
@@ -402,13 +402,5 @@ class ImpactFunction(object):
         ..note: For 3.1, we will still do those preprocessing in analysis
             class. We will just need to check if the function_type is
             'qgis2.0', it needs to have the extent set.
-
-        :param layers: List of layers (hazard and exposure). This is
-            necessary now, until we streamline the preprocess in the base class
-            and remove unnecessary routines in analysis, impact_calculator,
-            impact_calculator_thread, and calculate_safe_impact module.
-        :type layers: list
         # """
-        if layers is not None:
-            self.hazard = get_hazard_layer(layers)
-            self.exposure = get_exposure_layer(layers)
+        pass

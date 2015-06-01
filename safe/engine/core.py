@@ -176,7 +176,9 @@ def calculate_impact(
     start_time = datetime.now()
 
     # Pass input layers to plugin
-    result_layer = impact_function.run(layers)
+    impact_function.hazard = hazard_layer
+    impact_function.exposure = exposure_layer
+    result_layer = impact_function.run()
 
     # End time
     end_time = datetime.now()
