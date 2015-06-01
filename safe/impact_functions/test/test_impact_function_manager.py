@@ -54,7 +54,10 @@ from safe.definitions import (
     affected_field,
     affected_value,
     hazard_zone_field,
-    building_type_field
+    building_type_field,
+    unit_metres,
+    unit_feet,
+    unit_generic
 )
 
 
@@ -211,7 +214,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         continuous_hazards_units = impact_function_manager.\
             continuous_hazards_units_for_layer(
                 'tsunami', 'raster', 'continuous', 'single_event')
-        expected = continuous_hazard_unit_all
+        expected = [unit_feet, unit_generic, unit_metres]
         self.assertItemsEqual(continuous_hazards_units, expected)
 
     def test_available_hazards(self):

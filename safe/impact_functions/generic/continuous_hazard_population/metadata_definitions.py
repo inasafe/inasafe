@@ -15,7 +15,7 @@ __author__ = 'lucernae'
 __date__ = '24/03/15'
 
 from safe.common.utilities import OrderedDict
-from safe.defaults import default_minimum_needs, default_provenance
+from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
@@ -31,7 +31,7 @@ from safe.definitions import (
     count_exposure_unit,
     exposure_population,
     hazard_category_single_event,
-    continuous_hazard_unit_all,
+    unit_generic,
     density_exposure_unit
 )
 
@@ -97,7 +97,7 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                         hazard_category_single_event
                     ],
                     'hazard_types': hazard_all,
-                    'continuous_hazard_units': continuous_hazard_unit_all,
+                    'continuous_hazard_units': [unit_generic],
                     'vector_hazard_classifications': [],
                     'raster_hazard_classifications': [],
                     'additional_keywords': []
