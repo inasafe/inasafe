@@ -45,40 +45,18 @@ class CliArgs(object):
     """Instance objects class for shell arguments.
     """
     def __init__(self, _arguments_):
-        try:
-            self.output_file = _arguments_['--output-file']
-        except Exception as cli_error:
-            LOGGER.debug(cli_error.message)
-        try:
-            self.hazard = _arguments_['--hazard']
-        except Exception as cli_error:
-            LOGGER.debug(cli_error.message)
-        try:
-            self.exposure = _arguments_['--exposure']
-        except Exception as cli_error:
-            LOGGER.debug(cli_error.message)
-        try:
-            self.version = _arguments_['--version']
-        except Exception as cli_error:
-            LOGGER.debug(cli_error.message)
-        try:
-            self.show_list = _arguments_['--list-functions']
-        except Exception as cli_error:
-            LOGGER.debug(cli_error.message)
-        try:
-            self.impact_function = _arguments_['--impact-function']
-        except Exception as cli_error:
-            LOGGER.debug(cli_error.message)
-        try:
+        self.output_file = _arguments_['--output-file']
+        self.hazard = _arguments_['--hazard']
+        self.exposure = _arguments_['--exposure']
+        self.version = _arguments_['--version']
+        self.show_list = _arguments_['--list-functions']
+        self.impact_function = _arguments_['--impact-function']
+        self.report_template = _arguments_['--report-template']
+        # optional arguments
+        if not _arguments_['--extent'] is None:
             self.extent = _arguments_['--extent'].split(':')
-            LOGGER.debug(self.extent)
-        except Exception as cli_error:
-            LOGGER.debug(cli_error.message)
-        try:
-            self.report_template = _arguments_['--report-template']
-            LOGGER.debug(self.report_template)
-        except Exception as cli_error:
-            LOGGER.debug(cli_error.message)
+        else:
+            LOGGER.debug('no extent specified')
 
 
 def get_ifunction_list():
@@ -93,13 +71,13 @@ def get_ifunction_list():
     return registry.impact_functions
 
 
-def show_names(ifs):
+def show_names(impact_functions):
     """Prints a list of strings.
 
-    :param ifs: A list of impact function ids.
+    :param impact_functions: A list of impact function ids.
     :type: list of strings.
     """
-    for impact_function in ifs:
+    for impact_function in impact_functions:
         print impact_function.__name__
 
 
@@ -294,11 +272,13 @@ if __name__ == '__main__':
     print "insafe"
     print ""
     LOGGER.debug(current_dir)
-    shell_arguments = None
     try:
         # Parse arguments, use usage.txt as syntax definition.
+        LOGGER.debug('BEFORE parsing')
         shell_arguments = docopt.docopt(usage)
     except docopt.DocoptExit as e:
+        print shell_arguments
+        print "Invalid arguments."
         print e.message
 
     arguments = CliArgs(shell_arguments)
@@ -311,13 +291,14 @@ if __name__ == '__main__':
             show_names(get_ifunction_list())
         elif arguments.version is True:
             print "QGIS VERSION: " + str(qgis_version())
-        elif (arguments.extent is not None) and\
-                (arguments.hazard is not None) and\
+        elif (arguments.hazard is not None) and\
                 (arguments.exposure is not None) and\
                 (arguments.output_file is not None):
             LOGGER.debug('--BEGIN-RUN--')
             run_if(arguments)
             LOGGER.debug('--END RUN--')
+        else:
+            print "Argument combination not recognised"
     except Exception as excp:
         print excp.message
         print excp.__doc__
@@ -326,5 +307,5 @@ if __name__ == '__main__':
 print " "
 
 # INSTALL on Ubuntu with:
-# chmod ug+x insaafe
+# chmod ug+x inasafe
 # sudo ln -s `pwd`/inasafe  /usr/bin
