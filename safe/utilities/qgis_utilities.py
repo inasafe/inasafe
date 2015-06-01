@@ -32,7 +32,6 @@ def display_information_message_box(
 
 
 def display_information_message_bar(
-        iface,
         title=None,
         message=None,
         more_details=None,

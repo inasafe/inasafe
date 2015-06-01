@@ -565,7 +565,7 @@ class Plugin(object):
         )
 
         dialog = NeedsCalculatorDialog(self.iface.mainWindow())
-        dialog.show()  # non modal
+        dialog.exec_()
 
     def show_global_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
@@ -675,10 +675,10 @@ class Plugin(object):
     def show_shakemap_importer(self):
         """Show the converter dialog."""
         # import here only so that it is AFTER i18n set up
-        from safe.gui.tools.shake_grid.shakemap_importer_dialog import (
-            ShakemapImporterDialog)
+        from safe.gui.tools.shake_grid.shakemap_converter_dialog import (
+            ShakemapConverterDialog)
 
-        dialog = ShakemapImporterDialog(self.iface.mainWindow())
+        dialog = ShakemapConverterDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_osm_downloader(self):

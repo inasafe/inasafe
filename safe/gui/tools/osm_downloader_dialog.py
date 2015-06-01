@@ -631,6 +631,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 self.canvas.setCrsTransformEnabled(True)
             else:
                 display_warning_message_bar(
+                    self.iface,
                     self.tr('Enable \'on the fly\''),
                     self.tr(
                         'Your current projection is different than EPSG:4326. '
