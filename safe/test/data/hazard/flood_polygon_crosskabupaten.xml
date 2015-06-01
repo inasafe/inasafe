@@ -172,7 +172,7 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[hazard_category: single_hazard
+<![CDATA[hazard_category: single_event
 title: Flood Polygon Cross Kabupaten
 hazard: flood
 field: FLOODPRONE

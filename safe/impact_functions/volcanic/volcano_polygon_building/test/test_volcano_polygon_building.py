@@ -74,7 +74,7 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'volcano',
-            'hazard_category': 'multi_hazard',
+            'hazard_category': 'multiple_event',
             'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 

@@ -615,3 +615,67 @@ class ImpactFunctionManager(object):
                 add_to_list(layer_modes, if_exposure_layer_mode)
 
         return layer_modes
+
+    def hazard_additional_keywords(
+            self, layer_mode_key=None, layer_geometry_key=None,
+            hazard_category_key=None, hazard_key=None):
+        """Return additional_keywords for hazard.
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :returns: List of additional keywords
+        :rtype: list
+        """
+        additional_keywords = []
+        for impact_function in self.impact_functions:
+            if_additional_keywords = impact_function.metadata(). \
+                hazard_additional_keywords(
+                layer_mode_key=layer_mode_key,
+                layer_geometry_key=layer_geometry_key,
+                hazard_category_key=hazard_category_key,
+                hazard_key=hazard_key
+            )
+            if if_additional_keywords:
+                add_to_list(additional_keywords, if_additional_keywords)
+
+        return additional_keywords
+
+    def exposure_additional_keywords(
+            self, layer_mode_key=None, layer_geometry_key=None,
+            exposure_key=None):
+        """Return additional_keywords for exposure.
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param exposure_key: The hazard key
+        :type exposure_key: str
+
+        :returns: List of additional keywords
+        :rtype: list
+        """
+        additional_keywords = []
+        for impact_function in self.impact_functions:
+            if_additional_keywords = impact_function.metadata(). \
+                exposure_additional_keywords(
+                layer_mode_key=layer_mode_key,
+                layer_geometry_key=layer_geometry_key,
+                exposure_key=exposure_key
+            )
+            if if_additional_keywords:
+                add_to_list(additional_keywords, if_additional_keywords)
+
+        return additional_keywords

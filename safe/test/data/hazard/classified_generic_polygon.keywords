@@ -1,4 +1,4 @@
-hazard_category: multi_hazard
+hazard_category: multiple_event
 title: Earthquake Polygon
 hazard: earthquake
 field: h_zone

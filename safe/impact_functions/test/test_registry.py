@@ -54,7 +54,7 @@ from safe.definitions import (
     hazard_earthquake,
     exposure_structure,
     unit_mmi,
-    hazard_category_single_hazard,
+    hazard_category_single_event,
     layer_mode_none
 )
 
@@ -162,7 +162,7 @@ class TestRegistry(unittest.TestCase):
         hazard_metadata = {
             'layer_mode': layer_mode_continuous,
             'layer_geometry': layer_geometry_raster,
-            'hazard_category': hazard_category_single_hazard,
+            'hazard_category': hazard_category_single_event,
             'hazard': hazard_earthquake,
             'continuous_hazard_unit': unit_mmi,
         }
@@ -184,7 +184,7 @@ class TestRegistry(unittest.TestCase):
         hazard_metadata = {
             'layer_mode': layer_mode_continuous,
             'layer_geometry': layer_geometry_raster,
-            'hazard_category': hazard_category_single_hazard,
+            'hazard_category': hazard_category_single_event,
             'hazard': hazard_earthquake,
             # 'continuous_hazard_unit': unit_mmi,
             }
@@ -253,7 +253,7 @@ class TestRegistry(unittest.TestCase):
         hazard_metadata = {
             'layer_mode': layer_mode_continuous,
             'layer_geometry': layer_geometry_raster,
-            'hazard_category': hazard_category_single_hazard,
+            'hazard_category': hazard_category_single_event,
             'hazard': hazard_earthquake,
             'continuous_hazard_unit': unit_mmi
         }
@@ -286,7 +286,7 @@ class TestRegistry(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'flood',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
@@ -334,7 +334,7 @@ class TestRegistry(unittest.TestCase):
         hazard_keywords = {
             'continuous_hazard_unit': 'metres',
             'hazard': 'flood',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'layer_mode': 'continuous',
             'layer_purpose': 'hazard',
             'title': 'Jakarta flood like 2007 with structural improvements'

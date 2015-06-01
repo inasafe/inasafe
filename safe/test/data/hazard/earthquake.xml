@@ -172,7 +172,7 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[hazard_category: single_hazard
+<![CDATA[hazard_category: single_event
 title: Earthquake
 hazard: earthquake
 continuous_hazard_unit: mmi

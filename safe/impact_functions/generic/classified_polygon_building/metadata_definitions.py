@@ -16,11 +16,12 @@ from safe.definitions import (
     layer_geometry_polygon,
     layer_geometry_point,
     hazard_all,
-    hazard_category_multi_hazard,
+    hazard_category_multiple_event,
     exposure_structure,
     all_vector_hazard_classes,
-    hazard_category_single_hazard,
-    layer_mode_none
+    hazard_category_single_event,
+    layer_mode_none,
+    hazard_zone_field
 )
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -78,14 +79,15 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'hazard_categories': [
-                        hazard_category_multi_hazard,
-                        hazard_category_single_hazard
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
                     ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications':
                         all_vector_hazard_classes,
-                    'raster_hazard_classifications': []
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [hazard_zone_field]
                 },
                 'exposure': {
                     'layer_mode': layer_mode_none,
@@ -94,7 +96,8 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
-                    'exposure_units': []
+                    'exposure_units': [],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
