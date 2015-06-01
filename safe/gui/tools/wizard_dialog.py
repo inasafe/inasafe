@@ -53,7 +53,9 @@ from PyQt4.QtGui import (
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
+# pylint: disable=unused-import
 from safe import definitions
+# pylint: enable=unused-import
 from safe.definitions import (
     global_default_attribute,
     do_not_use_attribute,
@@ -303,7 +305,7 @@ step_kw_field = 6
 step_kw_resample = 7
 step_kw_classification = 8
 step_kw_classify = 9
-step_kw_parameters = 10
+step_kw_extrakeywords = 10
 step_kw_aggregation = 11
 step_kw_source = 12
 step_kw_title = 13
@@ -476,6 +478,21 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnBack.setEnabled(False)
         self.pbnNext.setEnabled(False)
 
+        # Collect some serial widgets
+        self.extra_keywords_widgets = [
+            {'cbo': self.cboExtraKeyword1, 'lbl': self.lblExtraKeyword1},
+            {'cbo': self.cboExtraKeyword2, 'lbl': self.lblExtraKeyword2},
+            {'cbo': self.cboExtraKeyword3, 'lbl': self.lblExtraKeyword3},
+            {'cbo': self.cboExtraKeyword4, 'lbl': self.lblExtraKeyword4},
+            {'cbo': self.cboExtraKeyword5, 'lbl': self.lblExtraKeyword5},
+            {'cbo': self.cboExtraKeyword6, 'lbl': self.lblExtraKeyword6},
+            {'cbo': self.cboExtraKeyword7, 'lbl': self.lblExtraKeyword7},
+            {'cbo': self.cboExtraKeyword8, 'lbl': self.lblExtraKeyword8}
+        ]
+        for ekw in self.extra_keywords_widgets:
+            ekw['key'] = None
+            ekw['slave_key'] = None
+
         # noinspection PyUnresolvedReferences
         self.tvBrowserHazard.selectionModel().selectionChanged.connect(
             self.tvBrowserHazard_selection_changed)
@@ -543,6 +560,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         self.wvResults.setMaximumHeight(self.pgF25Progress.height() - 90)
 
+    # pylint: disable=unused-argument
     def resizeEvent(self, ev):
         """Trigger MessageViewer size update on window resize
 
@@ -550,6 +568,7 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the window size changes.
         """
         self.update_MessageViewer_size()
+    # pylint: disable=unused-argument
 
     def purposes_for_layer(self):
         """Return a list of valid purposes for the current layer.
@@ -632,8 +651,27 @@ class WizardDialog(QDialog, FORM_CLASS):
                         layer_mode_id,
                         hazard_category_id)
         else:
-            # There are no classifications for exposures yet
+            # There are no classifications for exposures defined yet
             return []
+
+    def additional_keywords_for_the_layer(self):
+        """Return a list of valid additional keywords for the current layer.
+
+        :returns: A list where each value represents a valid additional kw.
+        :rtype: list
+        """
+        layer_geometry_key = self.get_layer_geometry_id()
+        layer_mode_key = self.selected_layermode()['key']
+        if self.selected_category() == layer_purpose_hazard:
+            hazard_category_key = self.selected_hazard_category()['key']
+            hazard_key = self.selected_subcategory()['key']
+            return self.impact_function_manager.hazard_additional_keywords(
+                layer_mode_key, layer_geometry_key,
+                hazard_category_key, hazard_key)
+        else:
+            exposure_key = self.selected_subcategory()['key']
+            return self.impact_function_manager.exposure_additional_keywords(
+                layer_mode_key, layer_geometry_key, exposure_key)
 
     # ===========================
     # STEP_KW_CATEGORY
@@ -1438,10 +1476,206 @@ class WizardDialog(QDialog, FORM_CLASS):
                 tree_leaf.setText(0, value)
 
     # ===========================
-    # STEP_KW_PARAMETERS
+    # STEP_KW_EXTRAKEYWORDS
     # ===========================
 
-    # TODO: implement this step
+    # noinspection PyPep8Naming
+    def on_cboExtraKeyword1_currentIndexChanged(self, indx):
+        """This is an automatic Qt slot executed when the
+           1st extra keyword combobox selection changes.
+
+        :param indx: The new index.
+        :type indx: int or str
+        """
+        if type(indx) == int and indx > -1:
+            self.extra_keyword_changed(self.extra_keywords_widgets[0])
+
+    # noinspection PyPep8Naming
+    def on_cboExtraKeyword2_currentIndexChanged(self, indx):
+        """This is an automatic Qt slot executed when the
+           2nd extra keyword combobox selection changes.
+
+        :param indx: The new index.
+        :type indx: int or str
+        """
+        if type(indx) == int and indx > -1:
+            self.extra_keyword_changed(self.extra_keywords_widgets[1])
+
+    # noinspection PyPep8Naming
+    def on_cboExtraKeyword3_currentIndexChanged(self, indx):
+        """This is an automatic Qt slot executed when the
+           3rd extra keyword combobox selection changes.
+
+        :param indx: The new index.
+        :type indx: int or str
+        """
+        if type(indx) == int and indx > -1:
+            self.extra_keyword_changed(self.extra_keywords_widgets[2])
+
+    # noinspection PyPep8Naming
+    def on_cboExtraKeyword4_currentIndexChanged(self, indx):
+        """This is an automatic Qt slot executed when the
+           4th extra keyword combobox selection changes.
+
+        :param indx: The new index.
+        :type indx: int or str
+        """
+        if type(indx) == int and indx > -1:
+            self.extra_keyword_changed(self.extra_keywords_widgets[3])
+
+    # noinspection PyPep8Naming
+    def on_cboExtraKeyword5_currentIndexChanged(self, indx):
+        """This is an automatic Qt slot executed when the
+           5th extra keyword combobox selection changes.
+
+        :param indx: The new index.
+        :type indx: int or str
+        """
+        if type(indx) == int and indx > -1:
+            self.extra_keyword_changed(self.extra_keywords_widgets[4])
+
+    # noinspection PyPep8Naming
+    def on_cboExtraKeyword6_currentIndexChanged(self, indx):
+        """This is an automatic Qt slot executed when the
+           6th extra keyword combobox selection changes.
+
+        :param indx: The new index.
+        :type indx: int or str
+        """
+        if type(indx) == int and indx > -1:
+            self.extra_keyword_changed(self.extra_keywords_widgets[5])
+
+    # noinspection PyPep8Naming
+    def on_cboExtraKeyword7_currentIndexChanged(self, indx):
+        """This is an automatic Qt slot executed when the
+           7th extra keyword combobox selection changes.
+
+        :param indx: The new index.
+        :type indx: int or str
+        """
+        if type(indx) == int and indx > -1:
+            self.extra_keyword_changed(self.extra_keywords_widgets[6])
+
+    # noinspection PyPep8Naming
+    def on_cboExtraKeyword8_currentIndexChanged(self, indx):
+        """This is an automatic Qt slot executed when the
+           8th extra keyword combobox selection changes.
+
+        :param indx: The new index.
+        :type indx: int or str
+        """
+        if type(indx) == int and indx > -1:
+            self.extra_keyword_changed(self.extra_keywords_widgets[7])
+
+    def extra_keyword_changed(self, widget):
+        """Populate slave widget if exists and enable the Next button
+           if all extra keywords are set.
+
+        :param widget: Metadata of the widget where the event happened.
+        :type widget: dict
+        """
+        if 'slave_key' in widget and widget['slave_key']:
+            for w in self.extra_keywords_widgets:
+                if w['key'] == widget['slave_key']:
+                    field_name = widget['cbo'].itemData(
+                        widget['cbo'].currentIndex(), QtCore.Qt.UserRole)
+                    self.populate_value_widget_from_field(w['cbo'], field_name)
+
+        self.pbnNext.setEnabled(self.are_all_extra_keywords_selected())
+
+    def selected_extra_keywords(self):
+        """Obtain the extra keywords selected by user.
+
+        :returns: Metadata of the extra keywords.
+        :rtype: dict, None
+        """
+        extra_keywords = {}
+        for ekw in self.extra_keywords_widgets:
+            if ekw['key'] is not None and ekw['cbo'].currentIndex() != -1:
+                key = ekw['key']
+                val = ekw['cbo'].itemData(ekw['cbo'].currentIndex(),
+                                          QtCore.Qt.UserRole)
+                extra_keywords[key] = val
+        return extra_keywords
+
+    def are_all_extra_keywords_selected(self):
+        """Ensure all all additional keyword are set by user
+
+        :returns: True if all additional keyword widgets are set
+        :rtype: boolean
+        """
+        for ekw in self.extra_keywords_widgets:
+            if ekw['key'] is not None and ekw['cbo'].currentIndex() == -1:
+                return False
+        return True
+
+    def populate_value_widget_from_field(self, widget, field_name):
+        """Populate the slave widget with unique values of the field
+           selected in the master widget.
+
+        :param widget: The widget to be populated
+        :type widget: QComboBox
+
+        :param field_name: Name of the field to take the values from
+        :type widget: str
+        """
+        fields = self.layer.dataProvider().fields()
+        field_index = fields.indexFromName(field_name)
+        widget.clear()
+        for v in self.layer.uniqueValues(field_index):
+            widget.addItem(unicode(v), unicode(v))
+        widget.setCurrentIndex(-1)
+
+    def set_widgets_step_kw_extrakeywords(self):
+        """Set widgets on the Extra Keywords tab."""
+        # Hide all widgets
+        for ekw in self.extra_keywords_widgets:
+            ekw['cbo'].clear()
+            ekw['cbo'].hide()
+            ekw['lbl'].hide()
+            ekw['key'] = None
+            ekw['master_key'] = None
+
+        # Set and show used widgets
+        extra_keywords = self.additional_keywords_for_the_layer()
+        for i in range(len(extra_keywords)):
+            extra_keyword = extra_keywords[i]
+            extra_keywords_widget = self.extra_keywords_widgets[i]
+            extra_keywords_widget['key'] = extra_keyword['key']
+            extra_keywords_widget['lbl'].setText(extra_keyword['description'])
+            if extra_keyword['type'] == 'value':
+                field_widget = self.extra_keywords_widgets[i - 1]['cbo']
+                field_name = field_widget.itemData(
+                    field_widget.currentIndex(), QtCore.Qt.UserRole)
+                self.populate_value_widget_from_field(
+                    extra_keywords_widget['cbo'], field_name)
+            else:
+                for field in self.layer.dataProvider().fields():
+                    field_name = field.name()
+                    field_type = field.typeName()
+                    extra_keywords_widget['cbo'].addItem('%s (%s)' % (
+                        field_name, field_type), field_name)
+            # If there is a master keyword, attach this widget as a slave
+            # to the master widget. It's used for values of a given field.
+            if ('master_keyword' in extra_keyword and
+                    extra_keyword['master_keyword']):
+                master_key = extra_keyword['master_keyword']['key']
+                for master_candidate in self.extra_keywords_widgets:
+                    if master_candidate['key'] == master_key:
+                        master_candidate['slave_key'] = extra_keyword['key']
+            # Show the widget
+            extra_keywords_widget['cbo'].setCurrentIndex(-1)
+            extra_keywords_widget['lbl'].show()
+            extra_keywords_widget['cbo'].show()
+
+        # Set values based on existing keywords (if already assigned)
+        for ekw in self.extra_keywords_widgets:
+            if not ekw['key']:
+                continue
+            value = self.get_existing_keyword(ekw['key'])
+            indx = ekw['cbo'].findData(value, QtCore.Qt.UserRole)
+            if indx != -1:
+                ekw['cbo'].setCurrentIndex(indx)
 
     # ===========================
     # STEP_KW_AGGREGATION
@@ -3363,6 +3597,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_kw_classification()
         elif new_step == step_kw_classify:
             self.set_widgets_step_kw_classify()
+        elif new_step == step_kw_extrakeywords:
+            self.set_widgets_step_kw_extrakeywords()
         elif new_step == step_kw_aggregation:
             self.set_widgets_step_kw_aggregation()
         elif new_step == step_kw_source:
@@ -3494,6 +3730,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         if step == step_kw_classify:
             # Allow to not classify any values
             return True
+        if step == step_kw_extrakeywords:
+            return self.are_all_extra_keywords_selected()
         if step == step_kw_aggregation:
             # Not required
             return True
@@ -3573,7 +3811,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             new_step = step_kw_layermode
         elif current_step == step_kw_layermode:
             if self.selected_layermode() == layer_mode_none:
-                new_step = step_kw_source
+                new_step = step_kw_extrakeywords
             elif self.selected_layermode() == layer_mode_classified:
                 if not is_raster_layer(self.layer):
                     new_step = step_kw_field  # CLASSIFIED VECTOR
@@ -3588,7 +3826,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 if self.selected_category() == layer_purpose_exposure:
                     new_step = step_kw_resample
                 else:
-                    new_step = step_kw_source
+                    new_step = step_kw_extrakeywords
             else:
                 new_step = step_kw_field
         elif current_step == step_kw_field:
@@ -3597,17 +3835,17 @@ class WizardDialog(QDialog, FORM_CLASS):
             elif self.selected_layermode() == layer_mode_classified:
                 new_step = step_kw_classification
             else:
-                new_step = step_kw_source
+                new_step = step_kw_extrakeywords
         elif current_step == step_kw_resample:
             if self.selected_layermode() == layer_mode_classified:
                 new_step = step_kw_classification
             else:
-                new_step = step_kw_source
+                new_step = step_kw_extrakeywords
         elif current_step == step_kw_classification:
             new_step = step_kw_classify
         elif current_step == step_kw_classify:
-            new_step = step_kw_source
-        elif current_step == step_kw_parameters:
+            new_step = step_kw_extrakeywords
+        elif current_step == step_kw_extrakeywords:
             new_step = step_kw_source
         elif current_step == step_kw_aggregation:
             new_step = step_kw_source
@@ -3699,13 +3937,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             raise Exception('Unexpected number of steps')
 
-        # # Skip the field and classify tab if raster layer
-        # if new_step == step_kw_field and is_raster_layer(self.layer):
-        #     # Insert the resample step for exposure layers
-        #     if self.selected_category() == layer_purpose_exposure:
-        #         new_step = step_kw_resample
-        #     else:
-        #         new_step = step_kw_source
+        # Skip the extra_keywords tab if no extra keywords available:
+        if (new_step == step_kw_extrakeywords and not
+                self.additional_keywords_for_the_layer()):
+            new_step = step_kw_source
 
         return new_step
 
@@ -3726,14 +3961,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_kw_category
         elif current_step == step_kw_hazard_category:
-                new_step = step_kw_category
+            new_step = step_kw_category
         elif current_step == step_kw_subcategory:
             if self.selected_category() == layer_purpose_hazard:
                 new_step = step_kw_hazard_category
             else:
                 new_step = step_kw_category
         elif current_step == step_kw_layermode:
-                new_step = step_kw_subcategory
+            new_step = step_kw_subcategory
         elif current_step == step_kw_unit:
             new_step = step_kw_layermode
         elif current_step == step_kw_field:
@@ -3759,9 +3994,23 @@ class WizardDialog(QDialog, FORM_CLASS):
             new_step = step_kw_classification
         elif current_step == step_kw_aggregation:
             new_step = step_kw_field
+        elif current_step == step_kw_extrakeywords:
+            if self.selected_layermode() == layer_mode_none:
+                new_step = step_kw_layermode
+            elif self.selected_layermode() == layer_mode_classified:
+                new_step = step_kw_classify
+            elif self.selected_category() == layer_purpose_exposure:
+                new_step = step_kw_resample
+            elif not is_raster_layer(self.layer):
+                new_step = step_kw_field
+            else:
+                new_step = step_kw_unit
         elif current_step == step_kw_source:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
+            elif self.selected_extra_keywords():
+                new_step = step_kw_extrakeywords
+            # otherwise behave like it was step_kw_extrakeywords
             elif self.selected_layermode() == layer_mode_none:
                 new_step = step_kw_layermode
             elif self.selected_layermode() == layer_mode_classified:
@@ -3905,6 +4154,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         value_map = self.selected_mapping()
         if value_map:
             keywords['value_map'] = json.dumps(value_map)
+        extra_keywords = self.selected_extra_keywords()
+        for key in extra_keywords:
+            keywords[key] = extra_keywords[key]
         if self.leSource.text():
             keywords['source'] = self.leSource.text()
         if self.leSource_url.text():

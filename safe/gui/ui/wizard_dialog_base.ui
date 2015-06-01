@@ -33,7 +33,7 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout_13">
-   <item row="1" column="0">
+   <item row="2" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <property name="spacing">
       <number>0</number>
@@ -62,7 +62,7 @@
         <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>9</number>
        </property>
        <widget class="QWidget" name="pg1Category">
         <property name="styleSheet">
@@ -552,7 +552,7 @@
               <string>[placeholder]</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -580,6 +580,22 @@
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_13">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <widget class="QCheckBox" name="chkAllowResample">
@@ -641,7 +657,7 @@
               <string>[placeholder]</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -766,10 +782,10 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg10Parameters">
+       <widget class="QWidget" name="pg10ExtraKeywords">
         <layout class="QVBoxLayout" name="verticalLayout_33">
          <item>
-          <widget class="QLabel" name="lblSelectParameters">
+          <widget class="QLabel" name="lblSelectExtraKeywords">
            <property name="styleSheet">
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
@@ -785,26 +801,126 @@
           </widget>
          </item>
          <item>
-          <layout class="QGridLayout" name="kwParametersGridLayout">
+          <spacer name="verticalSpacer_10">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>16</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="kwExtraKeywordsGridLayout">
+           <item row="0" column="1">
+            <widget class="QComboBox" name="cboExtraKeyword1"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="cboExtraKeyword2"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="cboExtraKeyword3"/>
+           </item>
+           <item row="3" column="1">
+            <widget class="QComboBox" name="cboExtraKeyword4"/>
+           </item>
+           <item row="4" column="1">
+            <widget class="QComboBox" name="cboExtraKeyword5"/>
+           </item>
+           <item row="5" column="1">
+            <widget class="QComboBox" name="cboExtraKeyword6"/>
+           </item>
+           <item row="6" column="1">
+            <widget class="QComboBox" name="cboExtraKeyword7"/>
+           </item>
+           <item row="7" column="1">
+            <widget class="QComboBox" name="cboExtraKeyword8"/>
+           </item>
            <item row="0" column="0">
-            <widget class="QLabel" name="lblKwParamAttribute1">
+            <widget class="QLabel" name="lblExtraKeyword1">
              <property name="text">
               <string>Attribute 1</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
            <item row="1" column="0">
-            <widget class="QLabel" name="lblKwParamAttribute2">
+            <widget class="QLabel" name="lblExtraKeyword2">
              <property name="text">
               <string>Attribute 2</string>
              </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="cbKwParamAttribute1"/>
+           <item row="2" column="0">
+            <widget class="QLabel" name="lblExtraKeyword3">
+             <property name="text">
+              <string>Attribute 3</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QComboBox" name="cbKwParamAttribute2"/>
+           <item row="3" column="0">
+            <widget class="QLabel" name="lblExtraKeyword4">
+             <property name="text">
+              <string>Attribute 4</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="lblExtraKeyword5">
+             <property name="text">
+              <string>Attribute 5</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="lblExtraKeyword6">
+             <property name="text">
+              <string>Attribute 6</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="lblExtraKeyword7">
+             <property name="text">
+              <string>Attribute 7</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="lblExtraKeyword8">
+             <property name="text">
+              <string>Attribute 8</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -2571,8 +2687,8 @@ Please step back and select another layer.</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>908</width>
-              <height>505</height>
+              <width>95</width>
+              <height>65</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_32">
@@ -2682,14 +2798,14 @@ Please step back and select another layer.</string>
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <property name="leftMargin">
       <number>0</number>
@@ -2812,6 +2928,22 @@ Please step back and select another layer.</string>
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="1" column="0">
+    <spacer name="verticalSpacer_11">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>16</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
