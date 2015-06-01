@@ -77,13 +77,13 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'flood',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'classified',
+            'layer_mode': 'none',
             'layer_geometry': 'line',
             'exposure': 'road'
         }

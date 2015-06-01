@@ -17,6 +17,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
+
 __author__ = 'christian@kartoza.com <Christian Christelis>'
 __revision__ = '$Format:%H$'
 __date__ = '29/04/2015'
@@ -52,6 +54,7 @@ def evacuated_population_weekly_needs(
     if not minimum_needs:
         minimum_needs = default_minimum_needs()
 
+    minimum_needs = filter_needs_parameters(minimum_needs)
     population_needs = OrderedDict()
     for resource in minimum_needs:
         resource = resource.serialize()
@@ -76,6 +79,8 @@ def evacuated_population_needs(population, minimum_needs):
     :returns: The needs for the evacuated population.
     :rtype: dict
     """
+    # Rizky : filter, only for valid serialized ResourceParameter
+    minimum_needs = [n for n in minimum_needs if 'frequency' in n]
     frequencies = []
     for resource in minimum_needs:
         if resource['frequency'] not in frequencies:

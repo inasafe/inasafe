@@ -5,6 +5,7 @@
     favour of flood_raster_roads_qgis_gdal which provides
     better performance. TS 11 June 2014
 """
+__author__ = 'lucernae'
 
 from qgis.core import (
     QgsRectangle,
@@ -26,8 +27,6 @@ from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.gis.qgis_raster_tools import polygonize, clip_raster
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
-
-__author__ = 'lucernae'
 
 
 class FloodRasterRoadsQGISFunction(ContinuousRHClassifiedVE):

@@ -1,4 +1,4 @@
-hazard_category: single_hazard
+hazard_category: single_event
 title: Earthquake
 hazard: earthquake
 continuous_hazard_unit: mmi

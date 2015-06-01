@@ -1,5 +1,6 @@
 # coding=utf-8
 """Flood Evacuation Impact Function."""
+__author__ = 'Rizky Maulana Nugraha'
 
 import logging
 import numpy
@@ -26,10 +27,8 @@ from safe.common.utilities import (
     create_label,
     verify,
     get_thousand_separator)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-
-__author__ = 'Rizky Maulana Nugraha'
-
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    filter_needs_parameters
 
 LOGGER = logging.getLogger('InaSAFE')
 

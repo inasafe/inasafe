@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+
 import logging
 from collections import OrderedDict
 
@@ -24,9 +27,6 @@ from safe.common.utilities import get_osm_building_usage
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-
-__author__ = 'lucernae'
-__date__ = '24/03/15'
 
 LOGGER = logging.getLogger('InaSAFE')
 

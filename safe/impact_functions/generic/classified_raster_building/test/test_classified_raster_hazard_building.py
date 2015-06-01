@@ -75,13 +75,13 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'raster',
             'hazard': 'flood',
-            'hazard_category': 'multi_hazard',
+            'hazard_category': 'multiple_event',
             'raster_hazard_classification': 'generic_raster_hazard_classes'
         }
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'classified',
+            'layer_mode': 'none',
             'layer_geometry': 'polygon',
             'exposure': 'structure',
         }

@@ -48,13 +48,14 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.tools.wizard_dialog import (
     WizardDialog,
     step_kw_source,
-    step_kw_datatype,
+    step_kw_layermode,
     step_kw_title,
     step_kw_classification,
     step_kw_classify,
     step_kw_hazard_category,
     step_kw_subcategory,
     step_kw_unit,
+    step_kw_extrakeywords,
     step_kw_aggregation,
     step_kw_field)
 from safe.utilities.keyword_io import KeywordIO
@@ -138,8 +139,8 @@ class WizardDialogTest(unittest.TestCase):
         chosen_category = 'hazard'
 
         expected_hazard_category_count = 2
-        expected_hazard_categories = ['Single Hazard', 'Multi Hazard']
-        chosen_hazard_category = 'Single Hazard'
+        expected_hazard_categories = ['Single Event', 'Multiple Event']
+        chosen_hazard_category = 'Single Event'
 
         expected_subcategory_count = 6
         # expected_subcategories = ['flood', 'tsunami']
@@ -153,27 +154,30 @@ class WizardDialogTest(unittest.TestCase):
             'generic']
         chosen_subcategory = 'flood'
 
-        expected_mode_count = 2
-        expected_modes = ['continuous', 'classified']
-        expected_chosen_mode = 'classified'
+        expected_mode_count = 1
+        expected_modes = ['classified']
 
         expected_field_count = 6
         expected_fields = ['OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME',
                            'RW', 'FLOODPRONE']
         expected_chosen_field = 'FLOODPRONE'
 
-        expected_classification_count = 1
+        expected_classification_count = 3
         expected_classification = 'flood vector hazard classes'
 
         expected_keywords = {
+            'layer_geometry': 'polygon',
             'layer_purpose': 'hazard',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'hazard': 'flood',
             'field': 'FLOODPRONE',
             'layer_mode': 'classified',
             'vector_hazard_classification':
                 'flood_vector_hazard_classes',
             'value_map': {'wet': ['YES'], 'dry': ['NO']},
+            'affected_field': 'FLOODPRONE',
+            'affected_value': 'YES',
+            'hazard_zone_field': 'FLOODPRONE',
             'source': 'some source',
             'title': 'some title'
         }
@@ -306,22 +310,19 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 4 of 9 - select classified mode
         # Check if the number of modes is 2
-        self.check_current_step(step_kw_datatype, dialog)
-        count = dialog.lstDataTypes.count()
+        self.check_current_step(step_kw_layermode, dialog)
+        count = dialog.lstLayerModes.count()
         message = ('Invalid layer modes count! There should be %d while '
                    'there were: %d') % (expected_mode_count, count)
         self.assertEqual(count, expected_mode_count, message)
         # Get all the modes given and save the classified index
         modes = []
-        classified_mode_index = -1
         for i in range(expected_mode_count):
             # pylint: disable=eval-used
             mode_name = eval(
-                dialog.lstDataTypes.item(i).data(Qt.UserRole))['key']
+                dialog.lstLayerModes.item(i).data(Qt.UserRole))['key']
             # pylint: enable=eval-used
             modes.append(mode_name)
-            if mode_name == expected_chosen_mode:
-                classified_mode_index = i
         # Check if units is the same with expected_units
         message = ('Invalid modes! It should be "%s" while it was '
                    '%s') % (expected_modes, modes)
@@ -368,14 +369,23 @@ class WizardDialogTest(unittest.TestCase):
         # Click next
         dialog.pbnNext.click()
 
-        # step 8 of 9 - enter source
+        # step 8 of 10 - set extra keywords
+        self.check_current_step(step_kw_extrakeywords, dialog)
+        dialog.cboExtraKeyword1.setCurrentIndex(5)
+        dialog.cboExtraKeyword2.setCurrentIndex(1)
+        dialog.cboExtraKeyword3.setCurrentIndex(5)
+
+        # Click next
+        dialog.pbnNext.click()
+
+        # step 9 of 10 - enter source
         message = ('Invalid Next button state in step 8! Disabled while '
                    'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
         dialog.leSource.setText('some source')
         dialog.pbnNext.click()
 
-        # step 9 of 9 - enter title
+        # step 10 of 10 - enter title
         dialog.leTitle.setText('some title')
         message = ('Invalid Next button state in step 9! Still disabled '
                    'after a text entered')
@@ -410,7 +420,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
-        # step 1 of 9 - select layer purpose
+        # step 1 - select layer purpose
         self.check_current_text('hazard', dialog.lstCategories)
 
         message = ('Invalid Next button state in step 1! Still disabled after '
@@ -419,8 +429,8 @@ class WizardDialogTest(unittest.TestCase):
         # Click Next
         dialog.pbnNext.click()
 
-        # step 2 of 9 - select hazard category
-        self.check_current_text('Single Hazard', dialog.lstHazardCategories)
+        # step 2 - select hazard category
+        self.check_current_text('Single Event', dialog.lstHazardCategories)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -428,7 +438,7 @@ class WizardDialogTest(unittest.TestCase):
         # Click Next
         dialog.pbnNext.click()
 
-        # step 3 of 9 - select subcategory
+        # step 3 - select subcategory
         # noinspection PyTypeChecker
         self.check_current_text('flood', dialog.lstSubcategories)
 
@@ -438,9 +448,9 @@ class WizardDialogTest(unittest.TestCase):
         # Click Next
         dialog.pbnNext.click()
 
-        # step 4 of 9 - select layer mode
+        # step 4 - select layer mode
         # noinspection PyTypeChecker
-        self.check_current_text('classified', dialog.lstDataTypes)
+        self.check_current_text('classified', dialog.lstLayerModes)
 
         message = ('Invalid Next button state in step 4! Still disabled after '
                    'an item selected')
@@ -448,7 +458,7 @@ class WizardDialogTest(unittest.TestCase):
         # Click Next
         dialog.pbnNext.click()
 
-        # step 5 of 9 - select field
+        # step 5 - select field
         # noinspection PyTypeChecker
         self.check_current_text('FLOODPRONE', dialog.lstFields)
 
@@ -464,11 +474,11 @@ class WizardDialogTest(unittest.TestCase):
         # Click Next
         dialog.pbnNext.click()
 
-        # step 6 of 9 - select tsunami classification
+        # step 6 - select tsunami classification
         self.check_current_text('flood vector hazard classes',
                                 dialog.lstClassifications)
 
-        message = ('Invalid Next button state in step 2! Still disabled after '
+        message = ('Invalid Next button state in step 6! Still disabled after '
                    'an item selected')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
         # Click Next
@@ -477,8 +487,34 @@ class WizardDialogTest(unittest.TestCase):
         # Click Next
         dialog.pbnNext.click()
 
-        # step 8 of 9 - enter source
-        message = ('Invalid Next button state in step 6! Disabled while '
+        # step 8 - assign additional keywords
+        expected_field = 'FLOODPRONE'
+        indx = dialog.cboExtraKeyword1.findData(expected_field, Qt.UserRole)
+        dialog.cboExtraKeyword1.setCurrentIndex(indx)
+        message = 'The sixth field shoud be %s' % expected_field
+        self.assertEqual(indx, 5, message)
+
+        expected_value = 'YES'
+        indx = dialog.cboExtraKeyword2.findData(expected_value, Qt.UserRole)
+        dialog.cboExtraKeyword2.setCurrentIndex(indx)
+        message = 'The second value shoud be %s' % expected_value
+        self.assertEqual(indx, 1, message)
+
+        expected_field = 'FLOODPRONE'
+        indx = dialog.cboExtraKeyword3.findData(expected_field, Qt.UserRole)
+        dialog.cboExtraKeyword3.setCurrentIndex(indx)
+        message = 'The sixth field shoud be %s' % expected_field
+        self.assertEqual(indx, 5, message)
+
+        message = ('Invalid Next button state in step 8! Still disabled after '
+                   'all fields are assigned')
+        self.assertTrue(dialog.pbnNext.isEnabled(), message)
+
+        # Click Next
+        dialog.pbnNext.click()
+
+        # step 9 - enter source
+        message = ('Invalid Next button state in step 8! Disabled while '
                    'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
         message = 'Source should be empty'
@@ -491,7 +527,7 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(dialog.leSource_scale.text(), '', message)
         dialog.pbnNext.click()
 
-        # step 9 of 9 - enter title
+        # step 10 - enter title
         message = 'Title should be %s but I got %s' % (
             dialog.layer.name(), dialog.leTitle.text())
         self.assertEqual(dialog.layer.name(), dialog.leTitle.text(), message)
@@ -513,8 +549,8 @@ class WizardDialogTest(unittest.TestCase):
         self.select_from_list_widget('hazard', dialog.lstCategories)
         dialog.pbnNext.click()
 
-        # select multi_hazard
-        self.select_from_list_widget('Multi Hazard',
+        # select multiple_event
+        self.select_from_list_widget('Multiple Event',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()
 
@@ -523,7 +559,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select volcano classified mode
-        self.select_from_list_widget('classified', dialog.lstDataTypes)
+        self.select_from_list_widget('classified', dialog.lstLayerModes)
         dialog.pbnNext.click()
 
         # select KRB field
@@ -535,6 +571,7 @@ class WizardDialogTest(unittest.TestCase):
                                      dialog.lstClassifications)
         dialog.pbnNext.click()
 
+        # select mapping
         classification = dialog.selected_classification()
         default_classes = classification['classes']
         unassigned_values = []  # no need to check actually, not save in file
@@ -547,6 +584,23 @@ class WizardDialogTest(unittest.TestCase):
             unassigned_values, assigned_values, default_classes)
         dialog.pbnNext.click()
 
+        # select additional keywords
+        self.check_current_step(step_kw_extrakeywords, dialog)
+        first_field = 'KRB'
+        indx = dialog.cboExtraKeyword1.findData(first_field, Qt.UserRole)
+        dialog.cboExtraKeyword1.setCurrentIndex(indx)
+        message = 'The first field shoud be %s' % first_field
+        self.assertEqual(indx, 0, message)
+
+        third_field = 'volcano'
+        indx = dialog.cboExtraKeyword2.findData(third_field, Qt.UserRole)
+        dialog.cboExtraKeyword2.setCurrentIndex(indx)
+        message = 'The third field shoud be %s' % third_field
+        self.assertEqual(indx, 2, message)
+
+        dialog.pbnNext.click()
+
+        self.check_current_step(step_kw_source, dialog)
         source = 'Source'
         source_scale = 'Source Scale'
         source_url = 'Source Url'
@@ -565,45 +619,45 @@ class WizardDialogTest(unittest.TestCase):
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
-        # step 1 of 8 - select layer purpose
+        # step 1 - select layer purpose
         self.check_current_text('hazard', dialog.lstCategories)
 
         # Click Next
         dialog.pbnNext.click()
 
-        # step 2 of 8 - select hazard category
-        self.check_current_text('Multi Hazard', dialog.lstHazardCategories)
+        # step 2 - select hazard category
+        self.check_current_text('Multiple Event', dialog.lstHazardCategories)
 
         # Click Next
         dialog.pbnNext.click()
 
-        # step 3 of 8 - select subcategory
+        # step 3 - select subcategory
         # noinspection PyTypeChecker
         self.check_current_text('volcano', dialog.lstSubcategories)
 
         # Click Next
         dialog.pbnNext.click()
 
-        # step 4 of 8 - select layer mode
-        self.check_current_text('classified', dialog.lstDataTypes)
+        # step - select layer mode
+        self.check_current_text('classified', dialog.lstLayerModes)
 
         # Click Next
         dialog.pbnNext.click()
 
-        # step 5 of 8 - select field
+        # step 5 - select field
         self.check_current_text('KRB', dialog.lstFields)
 
         # Click Next
         dialog.pbnNext.click()
 
-        # step 6 of 8 - select classification
+        # step 6 - select classification
         self.check_current_text('volcano vector hazard classes',
                                 dialog.lstClassifications)
 
         # Click Next
         dialog.pbnNext.click()
 
-        # step 7 of 8 - select mapping
+        # step 7 - select mapping
         for index in range(dialog.lstUniqueValues.count()):
             message = ('%s Should be in unassigned values' %
                        dialog.lstUniqueValues.item(index).text())
@@ -617,8 +671,17 @@ class WizardDialogTest(unittest.TestCase):
         # Click Next
         dialog.pbnNext.click()
 
-        # step 8 of 8 - enter source
-        message = ('Invalid Next button state in step 6! Disabled while '
+        # step 8 - additional keywords
+        message = ('Invalid Next button state in step 8! Disabled while '
+                   'all data should be autoselected')
+        self.assertTrue(dialog.pbnNext.isEnabled(), message)
+
+        # Click Next
+        dialog.pbnNext.click()
+
+        # step 9 - enter source
+        self.check_current_step(step_kw_source, dialog)
+        message = ('Invalid Next button state in step 9! Disabled while '
                    'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
@@ -697,14 +760,16 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to subcategory
         dialog.pbnNext.click()  # go to layer mode
-        dialog.lstDataTypes.setCurrentRow(1)  # select classified
-        dialog.pbnNext.click()  # go to units
-        dialog.pbnNext.click()  # don't select any unit, go to step source
+        dialog.lstLayerModes.setCurrentRow(0)  # select classified
+        dialog.pbnNext.click()  # go to extra keywords
+
+        self.check_current_step(step_kw_extrakeywords, dialog)
+        dialog.cboExtraKeyword1.setCurrentIndex(1)  # choose TYPE
+        dialog.pbnNext.click()  # go to source
 
         # check if in step source
         self.check_current_step(step_kw_source, dialog)
-
-        dialog.pbnNext.click()  # should be in step title
+        dialog.pbnNext.click()  # go to title
 
         # check if in step title
         self.check_current_step(step_kw_title, dialog)
@@ -763,10 +828,10 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose hazard
-        dialog.pbnNext.click()  # choose multi hazard
+        dialog.pbnNext.click()  # choose multiple event
         dialog.pbnNext.click()  # choose volcano
         dialog.lstUnits.setCurrentRow(1)
-        self.check_current_text('classified', dialog.lstDataTypes)
+        self.check_current_text('classified', dialog.lstLayerModes)
         dialog.pbnNext.click()  # choose classified
 
         dialog.lstFields.setCurrentRow(0)  # Choose KRB
@@ -780,6 +845,12 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step classify
         self.check_current_step(step_kw_classify, dialog)
         dialog.pbnNext.click()  # accept mapping
+
+        # check if in step extra keywords
+        self.check_current_step(step_kw_extrakeywords, dialog)
+        dialog.cboExtraKeyword1.setCurrentIndex(0)
+        dialog.cboExtraKeyword2.setCurrentIndex(2)
+        dialog.pbnNext.click()  # accept extra keywords
 
         # check if in step source
         self.check_current_step(step_kw_source, dialog)
@@ -798,10 +869,12 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose hazard
-        dialog.pbnNext.click()  # choose hazard category
+        dialog.pbnNext.click()  # choose multiple event
         dialog.pbnNext.click()  # choose volcano
-        dialog.pbnNext.click()  # choose classified
-        dialog.pbnNext.click()  # choose no field
+        dialog.lstLayerModes.setCurrentRow(0)  # choose none
+        dialog.pbnNext.click()  # choose none
+        dialog.cboExtraKeyword1.setCurrentIndex(4)  # choose NAME
+        dialog.pbnNext.click()  # choose NAME
 
         # check if in step source
         self.check_current_step(step_kw_source, dialog)
@@ -815,21 +888,16 @@ class WizardDialogTest(unittest.TestCase):
     def test_auto_select_one_item(self):
         """Test auto select if there is only one item in a list."""
         layer = clone_shp_layer(
-            name='volcano_krb',
+            name='buildings',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=test_data_path('exposure'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
-        dialog.pbnNext.click()  # choose hazard
-        dialog.pbnNext.click()  # choose multi hazard
-        dialog.pbnNext.click()  # choose volcano
-        dialog.pbnNext.click()  # choose classified
-        dialog.pbnNext.click()  # choose KRB
-
+        dialog.pbnNext.click()  # choose exposure
         message = 'It should auto select, but it does not.'
-        self.assertTrue(dialog.lstClassifications.currentRow() == 0, message)
-        num_item = dialog.lstClassifications.count()
+        self.assertTrue(dialog.lstSubcategories.currentRow() == 0, message)
+        num_item = dialog.lstSubcategories.count()
         message = 'There is should be only one item, I got %s' % num_item
         self.assertTrue(num_item == 1, message)
 
@@ -851,10 +919,10 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to hazard category
 
-        expected_hazard_categories = ['Multi Hazard']
+        expected_hazard_categories = ['Multiple Event']
         self.check_list(expected_hazard_categories, dialog.lstHazardCategories)
 
-        self.check_current_text('Multi Hazard', dialog.lstHazardCategories)
+        self.check_current_text('Multiple Event', dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # go to subcategory
 
@@ -868,10 +936,18 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to layer mode
 
-        self.check_current_step(step_kw_datatype, dialog)
-        dialog.pbnNext.click()  # go to field
+        self.check_current_step(step_kw_layermode, dialog)
+        dialog.lstLayerModes.setCurrentRow(0)  # select the None mode
 
-        self.check_current_step(step_kw_field, dialog)
+        dialog.pbnNext.click()  # go to extra keywords
+        self.check_current_step(step_kw_extrakeywords, dialog)
+        dialog.cboExtraKeyword1.setCurrentIndex(4)
+        expected_field = 'NAME (String)'
+        actual_field = dialog.cboExtraKeyword1.currentText()
+        message = ('Invalid volcano name field! There should be '
+                   '%s while there were: %s') % (expected_field, actual_field)
+        self.assertEqual(actual_field, expected_field, message)
+
         dialog.pbnNext.click()  # go to source
 
         # check if in step source
@@ -910,7 +986,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to hazard category
 
         self.check_current_step(step_kw_hazard_category, dialog)
-        self.select_from_list_widget('Single Hazard',
+        self.select_from_list_widget('Single Event',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()  # Go to subcategory
 
@@ -938,22 +1014,22 @@ class WizardDialogTest(unittest.TestCase):
         # choosing flood
         self.select_from_list_widget('flood', dialog.lstSubcategories)
 
-        dialog.pbnNext.click()  # Go to data type
+        dialog.pbnNext.click()  # Go to layer mode
 
-        # check if in step data type
-        self.check_current_step(step_kw_datatype, dialog)
+        # check if in step layer mode
+        self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of subcategories options
-        expected_datatypes = ['continuous', 'classified']
-        self.check_list(expected_datatypes, dialog.lstDataTypes)
+        expected_layermodes = ['continuous', 'classified']
+        self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_datatype_index = 0
-        datatype_index = dialog.lstDataTypes.currentRow()
+        expected_layermode_index = 0
+        layermode_index = dialog.lstLayerModes.currentRow()
         message = ('Expected %s, but I got %s' %
-                   (expected_datatype_index, datatype_index))
+                   (expected_layermode_index, layermode_index))
         self.assertEqual(
-            expected_datatype_index, datatype_index, message)
+            expected_layermode_index, layermode_index, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -995,22 +1071,22 @@ class WizardDialogTest(unittest.TestCase):
         # choosing earthquake
         self.select_from_list_widget('earthquake', dialog.lstSubcategories)
 
-        dialog.pbnNext.click()  # Go to data type
+        dialog.pbnNext.click()  # Go to layer mode
 
-        # check if in step data type
-        self.check_current_step(step_kw_datatype, dialog)
+        # check if in step layer mode
+        self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of subcategories options
-        expected_datatypes = ['continuous', 'classified']
-        self.check_list(expected_datatypes, dialog.lstDataTypes)
+        expected_layermodes = ['classified', 'continuous']
+        self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_datatype_index = 0
-        datatype_index = dialog.lstDataTypes.currentRow()
+        expected_layermode_index = 1
+        layermode_index = dialog.lstLayerModes.currentRow()
         message = ('Expected %s, but I got %s' %
-                   (expected_datatype_index, datatype_index))
+                   (expected_layermode_index, layermode_index))
         self.assertEqual(
-            expected_datatype_index, datatype_index, message)
+            expected_layermode_index, layermode_index, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -1061,17 +1137,23 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to laywr mode
 
         # check if in step layer mode
-        self.check_current_step(step_kw_datatype, dialog)
+        self.check_current_step(step_kw_layermode, dialog)
 
-        expected_modes = ['continuous', 'classified']
-        self.check_list(expected_modes, dialog.lstDataTypes)
+        expected_modes = ['none']
+        self.check_list(expected_modes, dialog.lstLayerModes)
 
-        self.check_current_text(expected_modes[1], dialog.lstDataTypes)
+        self.check_current_text(expected_modes[0], dialog.lstLayerModes)
 
-        dialog.pbnNext.click()  # go to fields
-        expected_fields = ['NAME', 'OSM_TYPE', 'TYPE']
-        self.check_list(expected_fields, dialog.lstFields)
-        self.select_from_list_widget('TYPE', dialog.lstFields)
+        # dialog.pbnNext.click()  # go to fields
+        # expected_fields = ['NAME', 'OSM_TYPE', 'TYPE']
+        # self.check_list(expected_fields, dialog.lstFields)
+        # self.select_from_list_widget('TYPE', dialog.lstFields)
+
+        dialog.pbnNext.click()  # go to source
+
+        # check if in step extrakeywords
+        self.check_current_step(step_kw_extrakeywords, dialog)
+        dialog.cboExtraKeyword1.setCurrentIndex(2)
 
         dialog.pbnNext.click()  # go to source
 
@@ -1110,46 +1192,28 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to layer mode
 
         # check if in step layer mode
-        self.check_current_step(step_kw_datatype, dialog)
+        self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of modes options
-        expected_modes = ['continuous', 'classified']
-        self.check_list(expected_modes, dialog.lstDataTypes)
+        expected_modes = ['none']
+        self.check_list(expected_modes, dialog.lstLayerModes)
 
         # choosing classified
-        self.select_from_list_widget('classified', dialog.lstDataTypes)
+        self.select_from_list_widget('none', dialog.lstLayerModes)
 
-        dialog.pbnNext.click()  # Go to field
+        dialog.pbnNext.click()  # Go to extra keywords
 
-        # check if in step field
-        self.check_current_step(step_kw_field, dialog)
-
-        # check the values of field options
-        expected_fields = [
-            'OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW',
-            'FLOODPRONE']
-        self.check_list(expected_fields, dialog.lstFields)
-
-        # choosing KAB_NAME
-        self.select_from_list_widget('KAB_NAME', dialog.lstFields)
+        # check if in step extrakeywords
+        self.check_current_step(step_kw_extrakeywords, dialog)
+        dialog.cboExtraKeyword1.setCurrentIndex(5)
 
         dialog.pbnNext.click()  # Go to source
 
         # check if in source step
         self.check_current_step(step_kw_source, dialog)
 
-        dialog.pbnBack.click()  # back to field step
+        dialog.pbnBack.click()  # back to extra_keywords step
         dialog.pbnBack.click()  # back to layer_mode step
-
-        # choosing continuous mode (no such units available)
-        self.select_from_list_widget('continuous', dialog.lstDataTypes)
-
-        dialog.pbnNext.click()  # Go to source
-
-        # check if in source source
-        self.check_current_step(step_kw_source, dialog)
-
-        dialog.pbnBack.click()  # back to layer mode step
         dialog.pbnBack.click()  # back to subcategory step
         dialog.pbnBack.click()  # back to category step
 
@@ -1157,8 +1221,8 @@ class WizardDialogTest(unittest.TestCase):
         self.select_from_list_widget('hazard', dialog.lstCategories)
         dialog.pbnNext.click()  # Go to hazard category
 
-        # choosing single hazard scenario
-        self.select_from_list_widget('Single Hazard',
+        # choosing single event scenario
+        self.select_from_list_widget('Single Event',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()  # Go to subcategory
 
@@ -1179,8 +1243,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to mode
 
         # select classified
-        self.check_current_step(step_kw_datatype, dialog)
-        self.select_from_list_widget('classified', dialog.lstDataTypes)
+        self.check_current_step(step_kw_layermode, dialog)
+        self.select_from_list_widget('classified', dialog.lstLayerModes)
         dialog.pbnNext.click()  # go to field
 
         self.check_current_step(step_kw_field, dialog)
@@ -1195,7 +1259,9 @@ class WizardDialogTest(unittest.TestCase):
 
         self.check_current_step(step_kw_classification, dialog)
 
-        expected_values = ['flood vector hazard classes']
+        expected_values = ['flood vector hazard classes',
+                           'generic vector hazard classes',
+                           'volcano vector hazard classes']
         self.check_list(expected_values, dialog.lstClassifications)
         self.select_from_list_widget('flood vector hazard classes',
                                      dialog.lstClassifications)
@@ -1229,9 +1295,28 @@ class WizardDialogTest(unittest.TestCase):
                 message = 'The child of dry should be %s' % expected_num_child
                 self.assertEqual(expected_num_child, num_child, message)
 
+        dialog.pbnNext.click()  # Go to Extra keywords
+
+        # check if in step extrakeywords
+        self.check_current_step(step_kw_extrakeywords, dialog)
+        dialog.cboExtraKeyword1.setCurrentIndex(5)
+        dialog.cboExtraKeyword2.setCurrentIndex(1)
+        dialog.cboExtraKeyword3.setCurrentIndex(5)
+        expected_field = 'FLOODPRONE (String)'
+        expected_value = 'YES'
+        actual_field = dialog.cboExtraKeyword1.currentText()
+        actual_value = dialog.cboExtraKeyword2.currentText()
+        message = ('Invalid field in the first extra keyword! There should be '
+                   '%s while there were: %s') % (expected_field, actual_field)
+        self.assertEqual(actual_field, expected_field, message)
+        message = ('Invalid value in the 2nd extra keyword! There should be '
+                   '%s while there were: %s') % (expected_value, actual_value)
+        self.assertEqual(actual_value, expected_value, message)
+
         dialog.pbnNext.click()  # go to source
         self.check_current_step(step_kw_source, dialog)
 
+        dialog.pbnBack.click()  # back to extra keywords
         dialog.pbnBack.click()  # back to classify
         dialog.pbnBack.click()  # back to classification
         dialog.pbnBack.click()  # back to field
@@ -1263,7 +1348,7 @@ class WizardDialogTest(unittest.TestCase):
         # dialog.pbnBack.click()  # back to subcategory
 
         self.check_current_step(step_kw_hazard_category, dialog)
-        self.select_from_list_widget('Multi Hazard',
+        self.select_from_list_widget('Multiple Event',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()  # go to subcategory
 
@@ -1271,8 +1356,8 @@ class WizardDialogTest(unittest.TestCase):
         self.select_from_list_widget('volcano', dialog.lstSubcategories)
         dialog.pbnNext.click()  # go to mode
 
-        self.check_current_step(step_kw_datatype, dialog)
-        self.select_from_list_widget('classified', dialog.lstDataTypes)
+        self.check_current_step(step_kw_layermode, dialog)
+        self.select_from_list_widget('classified', dialog.lstLayerModes)
         dialog.pbnNext.click()  # go to fields
 
         self.check_current_step(step_kw_field, dialog)
@@ -1280,7 +1365,8 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to classifications
 
         self.check_current_step(step_kw_classification, dialog)
-        # No need to select, a single item will be autoselected
+        self.select_from_list_widget(
+            'volcano vector hazard classes', dialog.lstClassifications)
         dialog.pbnNext.click()  # go to classify
 
         self.check_current_step(step_kw_classify, dialog)
@@ -1304,6 +1390,11 @@ class WizardDialogTest(unittest.TestCase):
             num_child = item.childCount()
             message = 'The child of wet should be %s' % expected_num_child
             self.assertEqual(expected_num_child, num_child, message)
+
+        dialog.pbnNext.click()  # go to extra keywords
+        self.check_current_step(step_kw_extrakeywords, dialog)
+        dialog.cboExtraKeyword1.setCurrentIndex(5)
+        dialog.cboExtraKeyword2.setCurrentIndex(1)
 
         dialog.pbnNext.click()  # go to source
         self.check_current_step(step_kw_source, dialog)

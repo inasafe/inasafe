@@ -17,15 +17,15 @@ from safe.definitions import (
     layer_geometry_polygon,
     layer_geometry_raster,
     hazard_all,
-    hazard_category_multi_hazard,
+    hazard_category_multiple_event,
     exposure_population,
     all_vector_hazard_classes,
-    hazard_category_single_hazard,
-    density_exposure_unit
+    hazard_category_single_event,
+    count_exposure_unit,
+    hazard_zone_field
 )
 from safe.defaults import (
     default_minimum_needs,
-    default_provenance,
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
@@ -87,23 +87,21 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'hazard_categories': [
-                        hazard_category_multi_hazard,
-                        hazard_category_single_hazard
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
                     ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
-                    'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': all_vector_hazard_classes
+                    'vector_hazard_classifications': all_vector_hazard_classes,
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [hazard_zone_field]
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
-                    'layer_geometries': [
-                        layer_geometry_raster
-                    ],
+                    'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
-                    'exposure_units': [
-                        density_exposure_unit
-                    ]
+                    'exposure_units': [count_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
@@ -114,8 +112,7 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                 ])),
-                ('minimum needs', default_minimum_needs()),
-                ('provenance', default_provenance())
+                ('minimum needs', default_minimum_needs())
             ])
         }
         return dict_meta

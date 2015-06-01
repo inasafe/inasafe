@@ -66,8 +66,8 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'flood',
-            'hazard_category': 'multi_hazard',
-            'raster_hazard_classification': 'generic_vector_hazard_classes'
+            'hazard_category': 'multiple_event',
+            'vector_hazard_classification': 'generic_vector_hazard_classes'
         }
 
         exposure_keywords = {
@@ -75,7 +75,7 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
             'exposure': 'population',
-            'exposure_unit': 'density'
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
