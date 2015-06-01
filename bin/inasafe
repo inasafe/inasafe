@@ -15,7 +15,7 @@ Contact : jannes@kartoza.com
 
 __author__ = 'Jannes Engelbrecht'
 __date__ = '16/04/15'
-import docopt
+from docopt import docopt, DocoptExit
 from safe.impact_functions.registry import Registry
 from safe.impact_functions import register_impact_functions
 from safe.test.utilities import get_qgis_app
@@ -268,18 +268,15 @@ def write_results(cli_arguments, impact_layer):
         print exc.message
         raise RuntimeError
 
+
 if __name__ == '__main__':
     print "insafe"
     print ""
-    LOGGER.debug(current_dir)
     try:
         # Parse arguments, use usage.txt as syntax definition.
-        LOGGER.debug('BEFORE parsing')
-        shell_arguments = docopt.docopt(usage)
-    except docopt.DocoptExit as e:
-        print shell_arguments
-        print "Invalid arguments."
-        print e.message
+        shell_arguments = docopt(usage)
+    except DocoptExit as exc:
+        print exc.message
 
     arguments = CliArgs(shell_arguments)
 
@@ -290,13 +287,11 @@ if __name__ == '__main__':
             register_impact_functions()
             show_names(get_ifunction_list())
         elif arguments.version is True:
-            print "QGIS VERSION: " + str(qgis_version())
+            print "QGIS VERSION: " + str(qgis_version()).replace('0', '.')
         elif (arguments.hazard is not None) and\
                 (arguments.exposure is not None) and\
                 (arguments.output_file is not None):
-            LOGGER.debug('--BEGIN-RUN--')
             run_if(arguments)
-            LOGGER.debug('--END RUN--')
         else:
             print "Argument combination not recognised"
     except Exception as excp:
