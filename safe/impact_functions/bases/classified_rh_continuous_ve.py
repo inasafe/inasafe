@@ -7,11 +7,11 @@ from safe.definitions import layer_geometry_raster, \
     layer_geometry_polygon, layer_mode_continuous
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.layer_types.classified_raster_hazard import \
-    ClassifiedRasterHazard
-from safe.impact_functions.bases.layer_types.continuous_vector_exposure import \
-    ContinuousVectorExposure
+    ClassifiedRasterHazardMixin
+from safe.impact_functions.bases.layer_types.continuous_vector_exposure \
+    import ContinuousVectorExposureMixin
 from safe.impact_functions.bases.layer_types.vector_impact import \
-    VectorImpact
+    VectorImpactMixin
 from safe.impact_functions.bases.utilities import (
     check_layer_constraint)
 
@@ -20,9 +20,9 @@ __date__ = '28/05/15'
 
 
 class ClassifiedRHContinuousVE(ImpactFunction,
-                               ClassifiedRasterHazard,
-                               ContinuousVectorExposure,
-                               VectorImpact):
+                               ClassifiedRasterHazardMixin,
+                               ContinuousVectorExposureMixin,
+                               VectorImpactMixin):
     """Intermediate base class for:
     Continuous Vector Hazard, Classified Vector Exposure
 

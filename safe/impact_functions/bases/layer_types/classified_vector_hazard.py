@@ -7,7 +7,7 @@ __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '07/05/15'
 
 
-class ClassifiedVectorHazard(object):
+class ClassifiedVectorHazardMixin(object):
 
     def __init__(self):
         self._hazard_class_attribute = None

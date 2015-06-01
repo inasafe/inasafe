@@ -3,7 +3,7 @@ __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '08/05/15'
 
 
-class VectorImpact(object):
+class VectorImpactMixin(object):
 
     def __init__(self):
         self._impact_attribute = None

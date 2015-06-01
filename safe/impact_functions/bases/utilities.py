@@ -4,9 +4,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
     QgsFeature,
-    QgsFeatureRequest,
-    QgsField,
-    QgsGeometry)
+    QgsField)
 
 from PyQt4.QtCore import QVariant
 

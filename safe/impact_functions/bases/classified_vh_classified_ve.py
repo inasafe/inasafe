@@ -6,11 +6,11 @@ from safe.definitions import layer_mode_classified, layer_geometry_point, \
     layer_geometry_line, layer_geometry_polygon
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.layer_types.classified_vector_exposure\
-    import ClassifiedVectorExposure
+    import ClassifiedVectorExposureMixin
 from safe.impact_functions.bases.layer_types.classified_vector_hazard import \
-    ClassifiedVectorHazard
+    ClassifiedVectorHazardMixin
 from safe.impact_functions.bases.layer_types.vector_impact import \
-    VectorImpact
+    VectorImpactMixin
 from safe.impact_functions.bases.utilities import check_layer_constraint
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
@@ -21,9 +21,9 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class ClassifiedVHClassifiedVE(ImpactFunction,
-                               ClassifiedVectorHazard,
-                               ClassifiedVectorExposure,
-                               VectorImpact):
+                               ClassifiedVectorHazardMixin,
+                               ClassifiedVectorExposureMixin,
+                               VectorImpactMixin):
     """Intermediate base class for:
     Classified Vector Hazard, Classified Vector Exposure
 

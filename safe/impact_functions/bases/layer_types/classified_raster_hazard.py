@@ -4,7 +4,7 @@ __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '07/05/15'
 
 
-class ClassifiedRasterHazard(object):
+class ClassifiedRasterHazardMixin(object):
 
     def __init__(self):
         self._hazard_class_mapping = None

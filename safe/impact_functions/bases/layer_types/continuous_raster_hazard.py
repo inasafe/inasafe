@@ -4,7 +4,7 @@ __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '28/05/15'
 
 
-class ContinuousRasterHazard(object):
+class ContinuousRasterHazardMixin(object):
 
     def __init__(self):
         self._hazard_threshold = None

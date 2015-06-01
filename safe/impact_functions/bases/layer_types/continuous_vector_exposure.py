@@ -7,7 +7,7 @@ __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '08/05/15'
 
 
-class ContinuousVectorExposure(object):
+class ContinuousVectorExposureMixin(object):
 
     def __init__(self):
         self._exposure_value_attribute = None
