@@ -272,7 +272,8 @@ class ImpactFunctionMetadata(object):
             'hazard_types': list,
             'continuous_hazard_units': list,
             'vector_hazard_classifications': list,
-            'raster_hazard_classifications': list
+            'raster_hazard_classifications': list,
+            'additional_keywords': list
         }
 
         hazard = layer_requirements['hazard']
@@ -288,7 +289,8 @@ class ImpactFunctionMetadata(object):
             'layer_mode': dict,
             'layer_geometries': list,
             'exposure_types': list,
-            'exposure_units': list
+            'exposure_units': list,
+            'additional_keywords': list
         }
 
         exposure = layer_requirements['exposure']
@@ -374,29 +376,37 @@ class ImpactFunctionMetadata(object):
         return result
 
     @classmethod
-    def hazard_categories_for_layer(cls, layer_geometry_key):
+    def hazard_categories_for_layer(cls, layer_geometry_key, hazard_key=None):
         """Get hazard categories form layer_geometry_key
 
         :param layer_geometry_key: The geometry id
         :type layer_geometry_key: str
+
+            :param hazard_key: The hazard key
+        :type hazard_key: str
+
 
         :returns: List of hazard_categories
         :rtype: list
         """
         hazard_layer_req = cls.get_hazard_requirements()
+        hazards = hazard_layer_req['hazard_types']
         hazard_geometries = hazard_layer_req['layer_geometries']
-        hazard_geometry_keys = get_list_key(hazard_geometries)
-        if layer_geometry_key in hazard_geometry_keys:
-            return hazard_layer_req['hazard_categories']
-        else:
-            return {}
+
+        if not is_key_exist(layer_geometry_key, hazard_geometries):
+            return []
+        if hazard_key:
+            if not is_key_exist(hazard_key, hazards):
+                return []
+
+        return hazard_layer_req['hazard_categories']
 
     @classmethod
-    def hazards_for_layer(cls, layer_geometry_key, hazard_category_key):
+    def hazards_for_layer(cls, hazard_geometry_key, hazard_category_key=None):
         """Get hazard categories form layer_geometry_key
 
-        :param layer_geometry_key: The geometry id
-        :type layer_geometry_key: str
+        :param hazard_geometry_key: The geometry id
+        :type hazard_geometry_key: str
 
         :param hazard_category_key: The hazard category
         :type hazard_category_key: str
@@ -404,13 +414,17 @@ class ImpactFunctionMetadata(object):
         :returns: List of hazard
         :rtype: list
         """
-        hazard_categories = cls.hazard_categories_for_layer(layer_geometry_key)
-        hazard_category_keys = get_list_key(hazard_categories)
-        if hazard_category_key in hazard_category_keys:
-            hazard_layer_req = cls.get_hazard_requirements()
-            return hazard_layer_req['hazard_types']
-        else:
+        hazard_layer_req = cls.get_hazard_requirements()
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazard_geometries = hazard_layer_req['layer_geometries']
+
+        if not is_key_exist(hazard_geometry_key, hazard_geometries):
             return []
+        if hazard_category_key:
+            if not is_key_exist(hazard_category_key, hazard_categories):
+                return []
+
+        return hazard_layer_req['hazard_types']
 
     @classmethod
     def exposures_for_layer(cls, layer_geometry_key):
@@ -855,3 +869,84 @@ class ImpactFunctionMetadata(object):
         layer_mode = exposure_layer_req['layer_mode']
 
         return layer_mode
+
+    @classmethod
+    def hazard_additional_keywords(
+            cls, layer_mode_key=None, layer_geometry_key=None,
+            hazard_category_key=None, hazard_key=None):
+        """Return additional_keywords for hazard.
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param hazard_category_key: The hazard category key
+        :type hazard_category_key: str
+
+        :param hazard_key: The hazard key
+        :type hazard_key: str
+
+        :returns: List of additional keywords
+        :rtype: list
+        """
+        hazard_layer_req = cls.get_hazard_requirements()
+        layer_mode = hazard_layer_req['layer_mode']
+        layer_geometries = hazard_layer_req['layer_geometries']
+        hazard_categories = hazard_layer_req['hazard_categories']
+        hazards = hazard_layer_req['hazard_types']
+
+        if layer_mode_key:
+            if layer_mode_key != layer_mode['key']:
+                return []
+        if layer_geometry_key:
+            if not is_key_exist(layer_geometry_key, layer_geometries):
+                return []
+        if hazard_category_key:
+            if not is_key_exist(hazard_category_key, hazard_categories):
+                return []
+        if hazard_key:
+            if not is_key_exist(hazard_key, hazards):
+                return []
+
+        additional_keywords = hazard_layer_req['additional_keywords']
+
+        return additional_keywords
+
+    @classmethod
+    def exposure_additional_keywords(
+            cls, layer_mode_key=None, layer_geometry_key=None,
+            exposure_key=None):
+        """Return additional_keywords for exposure.
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param exposure_key: The hazard key
+        :type exposure_key: str
+
+        :returns: List of additional keywords
+        :rtype: list
+        """
+        exposure_layer_req = cls.get_exposure_requirements()
+        layer_mode = exposure_layer_req['layer_mode']
+        layer_geometries = exposure_layer_req['layer_geometries']
+        exposures = exposure_layer_req['exposure_types']
+
+        if layer_mode_key:
+            if layer_mode_key != layer_mode['key']:
+                return []
+        if layer_geometry_key:
+            if not is_key_exist(layer_geometry_key, layer_geometries):
+                return []
+        if exposure_key:
+            if not is_key_exist(exposure_key, exposures):
+                return []
+
+        additional_keywords = exposure_layer_req['additional_keywords']
+
+        return additional_keywords

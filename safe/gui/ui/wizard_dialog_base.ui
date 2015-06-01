@@ -62,7 +62,7 @@
         <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
        </property>
        <property name="currentIndex">
-        <number>12</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="pg1Category">
         <property name="styleSheet">
@@ -172,7 +172,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pgHazardCategory">
+       <widget class="QWidget" name="pg3HazardCategory">
         <layout class="QVBoxLayout" name="verticalLayout_30">
          <item>
           <widget class="QLabel" name="lblSelectHazardCategory">
@@ -360,10 +360,10 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg3LayerMode">
+       <widget class="QWidget" name="pg4LayerMode">
         <layout class="QVBoxLayout" name="verticalLayout_27">
          <item>
-          <widget class="QLabel" name="lblSelectDataType">
+          <widget class="QLabel" name="lblSelectLayerMode">
            <property name="styleSheet">
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
@@ -381,7 +381,7 @@
          <item>
           <layout class="QGridLayout" name="gridLayout_23">
            <item row="0" column="0">
-            <widget class="QListWidget" name="lstDataTypes">
+            <widget class="QListWidget" name="lstLayerModes">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -409,7 +409,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLabel" name="lblDescribeDataType">
+            <widget class="QLabel" name="lblDescribeLayerMode">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -437,7 +437,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg3Units">
+       <widget class="QWidget" name="pg5Units">
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
           <widget class="QLabel" name="lblSelectUnit">
@@ -514,7 +514,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg4Field">
+       <widget class="QWidget" name="pg6Field">
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
           <widget class="QLabel" name="lblSelectField">
@@ -563,7 +563,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg5Resample">
+       <widget class="QWidget" name="pg7Resample">
         <layout class="QVBoxLayout" name="verticalLayout_29">
          <item>
           <widget class="QLabel" name="lblSelectAllowResample">
@@ -603,7 +603,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pgClassification">
+       <widget class="QWidget" name="pg8Classification">
         <layout class="QVBoxLayout" name="verticalLayout_31">
          <item>
           <widget class="QLabel" name="lblSelectClassification">
@@ -652,7 +652,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg6Classify">
+       <widget class="QWidget" name="pg9Classify">
         <layout class="QVBoxLayout" name="verticalLayout_14">
          <item>
           <widget class="QLabel" name="lblClassify">
@@ -766,7 +766,64 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg7Aggregations">
+       <widget class="QWidget" name="pg10Parameters">
+        <layout class="QVBoxLayout" name="verticalLayout_33">
+         <item>
+          <widget class="QLabel" name="lblSelectParameters">
+           <property name="styleSheet">
+            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+           </property>
+           <property name="text">
+            <string>Please input attribute(s) in this layer that represents specified parameters:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="kwParametersGridLayout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lblKwParamAttribute1">
+             <property name="text">
+              <string>Attribute 1</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lblKwParamAttribute2">
+             <property name="text">
+              <string>Attribute 2</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="cbKwParamAttribute1"/>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="cbKwParamAttribute2"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_9">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>419</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="pg11Aggregations">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -977,7 +1034,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg8Source">
+       <widget class="QWidget" name="pg12Source">
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
           <widget class="QLabel" name="lblSelectSource">
@@ -1122,7 +1179,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg9Title">
+       <widget class="QWidget" name="pg13Title">
         <layout class="QVBoxLayout" name="verticalLayout_7">
          <item>
           <widget class="QLabel" name="lblSelectTitle">
@@ -1280,7 +1337,7 @@
              <item>
               <widget class="QRadioButton" name="rbHazSingle">
                <property name="text">
-                <string>Single Hazard</string>
+                <string>Single Event</string>
                </property>
               </widget>
              </item>
@@ -1303,7 +1360,7 @@
              <item>
               <widget class="QRadioButton" name="rbHazMulti">
                <property name="text">
-                <string>Multi-Hazard</string>
+                <string>Multiple Event</string>
                </property>
               </widget>
              </item>
@@ -1389,7 +1446,7 @@
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Now, please select the data types for the &lt;span style=&quot; font-weight:600;&quot;&gt;hazard&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layers you want to use. Click on the cell in the table below that matches the data type for each. A &lt;span style=&quot; font-weight:600;&quot;&gt;continuous&lt;/span&gt; raster is one where cell values are real data values such as: &lt;span style=&quot; font-style:italic;&quot;&gt;depth of flood water in meters&lt;/span&gt; or the &lt;span style=&quot; font-style:italic;&quot;&gt;number of people per cell&lt;/span&gt;. A &lt;span style=&quot; font-weight:600;&quot;&gt;classified&lt;/span&gt; raster is one where cell values represent classes or zones such as: &lt;span style=&quot; font-style:italic;&quot;&gt;high hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;medium hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;low hazard zones&lt;/span&gt;.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Now, please select the geometry types for the &lt;span style=&quot; font-weight:600;&quot;&gt;hazard&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layers you want to use. Click on the cell in the table below that matches the geometry type for each.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1550,7 +1607,7 @@
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
            <property name="text">
-            <string>&lt;p&gt;Below you can see a list of available &lt;b&gt;impact functions&lt;/b&gt; matching the selected hazard, exposure and their data types. Please choose which impact function would you like to use from the list below.&lt;/p&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Below you can see a list of available &lt;span style=&quot; font-weight:600;&quot;&gt;impact functions&lt;/span&gt; matching the selected hazard, exposure and their geometries. Please choose which impact function would you like to use from the list below.&lt;/p&gt;&lt;p&gt;Please note some functions may require either continuous or classified input data. A &lt;span style=&quot; font-weight:600;&quot;&gt;continuous&lt;/span&gt; raster is one where cell values are real data values such as: &lt;span style=&quot; font-style:italic;&quot;&gt;depth of flood water in meters&lt;/span&gt; or the &lt;span style=&quot; font-style:italic;&quot;&gt;number of people per cell&lt;/span&gt;. A &lt;span style=&quot; font-weight:600;&quot;&gt;classified&lt;/span&gt; raster is one where cell values represent classes or zones such as: &lt;span style=&quot; font-style:italic;&quot;&gt;high hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;medium hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;low hazard zones&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -2514,8 +2571,8 @@ Please step back and select another layer.</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>95</width>
-              <height>65</height>
+              <width>908</width>
+              <height>505</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_32">

@@ -75,13 +75,13 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
             'layer_mode': 'continuous',
             'layer_geometry': 'raster',
             'hazard': 'flood',
-            'hazard_category': 'single_hazard',
+            'hazard_category': 'single_event',
             'continuous_hazard_unit': 'metres'
         }
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'classified',
+            'layer_mode': 'none',
             'layer_geometry': 'line',
             'exposure': 'road'
         }
