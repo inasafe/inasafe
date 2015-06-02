@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from collections import OrderedDict
-
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
@@ -22,6 +21,7 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsCoordinateReferenceSystem,
     QgsGeometry)
+
 from PyQt4.QtCore import QVariant
 
 from safe.impact_functions.base import ImpactFunction
@@ -77,9 +77,6 @@ class FloodPolygonBuildingFunction(
         self.validate()
         self.prepare(layers)
 
-        # Set the target field in impact layer
-        target_field = 'INUNDATED'
-
         # Get the IF parameters
         building_type_field = self.parameters['building_type_field']
         affected_field = self.parameters['affected_field']
@@ -118,10 +115,11 @@ class FloodPolygonBuildingFunction(
             raise GetDataError(message)
 
         # If target_field does not exist, add it:
-        if exposure_fields.indexFromName(target_field) == -1:
+        if exposure_fields.indexFromName(self.target_field) == -1:
             exposure_provider.addAttributes(
-                [QgsField(target_field, QVariant.Int)])
-        target_field_index = exposure_provider.fieldNameIndex(target_field)
+                [QgsField(self.target_field, QVariant.Int)])
+        target_field_index = exposure_provider.fieldNameIndex(
+            self.target_field)
         exposure_fields = exposure_provider.fields()
 
         # Create layer to store the lines from E and extent
@@ -237,7 +235,7 @@ class FloodPolygonBuildingFunction(
             dict(label=tr('Inundated'), value=1, colour='#F31A1C',
                  transparency=0, size=0.5)]
         style_info = dict(
-            target_field=target_field,
+            target_field=self.target_field,
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
@@ -248,7 +246,7 @@ class FloodPolygonBuildingFunction(
             keywords={
                 'impact_summary': impact_summary,
                 'map_title': map_title,
-                'target_field': target_field,
+                'target_field': self.target_field,
                 'buildings_total': self.total_buildings,
                 'buildings_affected': self.total_affected_buildings},
             style_info=style_info)

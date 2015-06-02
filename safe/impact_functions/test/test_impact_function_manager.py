@@ -29,7 +29,6 @@ from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
-
 from safe.definitions import (
     layer_purpose_hazard,
     layer_purpose_exposure,
@@ -104,7 +103,7 @@ class TestImpactFunctionManager(unittest.TestCase):
                 print '###', key
                 for k, v in value.iteritems():
                     print '1. ', k
-                    if type(v) is dict:
+                    if isinstance(v, dict):
                         print '\t-', v['key']
                     else:
                         for the_v in v:

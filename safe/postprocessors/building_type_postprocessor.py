@@ -136,9 +136,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         This indicator reports the total population.
         """
 
-        name = tr('Total')
-        if self.target_field is not None:
-            name = '%s %s' % (name, tr(self.target_field).lower())
+        name = tr('Total Affected')
 
         result = self.impact_total
         try:
@@ -159,8 +157,6 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         """
 
         title = tr(title)
-        if self.target_field is not None:
-            title = '%s %s' % (title, tr(self.target_field).lower())
 
         result = 0
         if self.type_fields is not None:

@@ -2,10 +2,6 @@
 """**Postprocessors package.**
 
 """
-from safe.common.resource_parameter import ResourceParameter
-from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
-from safe.utilities.i18n import tr
-
 __author__ = 'Marco Bernasocchi <marco@opengis.ch>'
 __revision__ = '$Format:%H$'
 __date__ = '22/08/2013'
@@ -15,6 +11,8 @@ __copyright__ += 'Disaster Reduction'
 
 
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
+from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
+from safe.utilities.i18n import tr
 
 
 class MinimumNeedsPostprocessor(AbstractPostprocessor):

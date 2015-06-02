@@ -89,8 +89,11 @@ def check_data_integrity(layer_objects):
                 message = (
                     'Geotransforms in input raster layers are different:\n'
                     '%s\n%s' % (geo_transform, layer.get_geotransform()))
-                verify(numpy.allclose(
-                    geo_transform, layer.get_geotransform(), rtol=tolerance),
+                verify(
+                    numpy.allclose(
+                        geo_transform,
+                        layer.get_geotransform(),
+                        rtol=tolerance),
                     message)
 
         # In case of vector layers, we just check that they are non-empty

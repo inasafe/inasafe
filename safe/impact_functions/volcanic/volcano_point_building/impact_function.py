@@ -81,12 +81,9 @@ class VolcanoPointBuildingFunction(
         """
         self.validate()
         self.prepare(layers)
-        # Target Field
-        target_field = 'zone'
+
         # Hazard Zone Attribute
         hazard_zone_attribute = 'radius'
-        # Not Affected Value
-        not_affected_value = 'Not Affected'
 
         # Parameters
         radii = self.parameters['distances [km]']
@@ -115,7 +112,7 @@ class VolcanoPointBuildingFunction(
             data_table=features)
         # Category names for the impact zone
         category_names = radii_meter
-        category_names.append(not_affected_value)
+        category_names.append(self._not_affected_value)
 
         # Get names of volcanoes considered
         if volcano_name_attribute in hazard_layer.get_attribute_names():
@@ -131,7 +128,7 @@ class VolcanoPointBuildingFunction(
         # names in the hazard layer
         hazard_attribute_names = hazard_layer.get_attribute_names()
         target_field = get_non_conflicting_attribute_name(
-            target_field, hazard_attribute_names)
+            self.target_field, hazard_attribute_names)
 
         # Run interpolation function for polygon2polygon
         interpolated_layer = assign_hazard_values_to_exposure_data(
@@ -150,7 +147,7 @@ class VolcanoPointBuildingFunction(
         for i in range(len(features)):
             hazard_value = features[i][hazard_zone_attribute]
             if not hazard_value:
-                hazard_value = not_affected_value
+                hazard_value = self._not_affected_value
             features[i][target_field] = hazard_value
 
             # Count affected buildings by usage type if available

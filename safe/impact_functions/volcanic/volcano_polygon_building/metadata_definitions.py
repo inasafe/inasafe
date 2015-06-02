@@ -23,7 +23,6 @@ from safe.definitions import (
     hazard_category_multiple_event,
     exposure_structure,
     layer_mode_none,
-    building_type_field,
     volcano_name_field,
     hazard_zone_field
 )

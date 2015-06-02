@@ -18,8 +18,7 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 from safe.defaults import (
-    default_minimum_needs,
-    default_provenance)
+    default_minimum_needs)
 from safe.defaults import (
     default_gender_postprocessor,
     minimum_needs_selector,

@@ -28,7 +28,6 @@ from safe.impact_functions.generic.classified_raster_building\
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -42,8 +41,6 @@ class ClassifiedRasterHazardBuildingFunction(
 
     def __init__(self):
         super(ClassifiedRasterHazardBuildingFunction, self).__init__()
-
-        self.target_field = 'DAMAGED'
         self.affected_field = 'affected'
 
     def notes(self):
