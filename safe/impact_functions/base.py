@@ -17,10 +17,15 @@ __date__ = '15/03/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from qgis.core import QgsVectorLayer
+
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.storage.core import Vector
 from safe.common.exceptions import InvalidExtentError
+from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
+from safe.utilities.qgis_layer_wrapper import QgisWrapper
 from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 
 
@@ -208,10 +213,21 @@ class ImpactFunction(object):
         """Setter for hazard layer property.
 
         :param layer: Hazard layer to be used for the analysis.
-        :type layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        :type layer: QgsVectorLayer, QgsRasterLayer, Vector, Raster
         """
-        # add more robust checks here
         self._hazard = layer
+        # Update the target field to a non-conflicting one
+        if isinstance(layer, QgisWrapper):
+            if isinstance(layer.data, QgsVectorLayer):
+                self._target_field = get_non_conflicting_attribute_name(
+                    self.target_field,
+                    layer.data.dataProvider().fieldNameMap().keys()
+                )
+        elif isinstance(layer, Vector):
+            attribute_names = layer.get_attribute_names()
+            self._target_field = get_non_conflicting_attribute_name(
+                self.target_field, attribute_names)
+
 
     @property
     def exposure(self):
@@ -229,8 +245,12 @@ class ImpactFunction(object):
         :param layer: exposure layer to be used for the analysis.
         :type layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
         """
-        # add more robust checks here
         self._exposure = layer
+        # Update the target field to a non-conflicting one
+        if isinstance(layer, QgsVectorLayer):
+            pass
+        elif isinstance(layer, Vector):
+            pass
 
     @property
     def aggregation(self):
