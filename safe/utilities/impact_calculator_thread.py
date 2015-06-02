@@ -75,18 +75,10 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         print 'hello'
 
     def __init__(self,
-                 hazard_layer,
-                 exposure_layer,
                  impact_function,
                  extent=None,
                  check_integrity=True):
         """Constructor for the impact calculator thread.
-
-        :param hazard_layer: read_layer object containing the Hazard data.
-        :type hazard_layer: read_layer
-
-        :param exposure_layer: read_layer object containing the Exposure data.
-        :type exposure_layer: read_layer
 
         :param impact_function: An instance of impact function.
         :type impact_function: safe.impact_function.base.ImpactFunction
@@ -103,8 +95,6 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         """
         threading.Thread.__init__(self)
         QObject.__init__(self)
-        self._hazard_layer = hazard_layer
-        self._exposure_layer = exposure_layer
         self._impact_function = impact_function
         self._extent = extent
         self._impact_layer = None
@@ -172,8 +162,8 @@ class ImpactCalculatorThread(threading.Thread, QObject):
 
         .. note:: a done signal is emitted when the analysis is complete.
         """
-        if (self._hazard_layer is None) or \
-                (self._exposure_layer is None) or \
+        if (self._impact_function.hazard is None) or \
+                (self._impact_function.exposure is None) or \
                 (self._impact_function is None):
             message = self.tr(
                 'Ensure that hazard, exposure and function are all set before '
@@ -181,8 +171,6 @@ class ImpactCalculatorThread(threading.Thread, QObject):
             raise InsufficientParametersError(message)
         try:
             self._impact_layer = calculate_impact(
-                hazard_layer=self._hazard_layer,
-                exposure_layer=self._exposure_layer,
                 impact_function=self._impact_function,
                 extent=self._extent,
                 check_integrity=self._check_integrity)

@@ -131,18 +131,10 @@ def check_data_integrity(layer_objects):
 
 
 def calculate_impact(
-        hazard_layer,
-        exposure_layer,
         impact_function,
         extent=None,
         check_integrity=True):
     """Calculate impact levels as a function of list of input layers
-
-    :param hazard_layer: The hazard Layer.
-    :type: SAFE Layer, QgsWrapper
-
-    :param exposure_layer: The exposure Layer.
-    :type: SAFE Layer, QgsWrapper
 
     :param impact_function: An instance of impact function.
     :type impact_function: safe.impact_function.base.ImpactFunction
@@ -166,7 +158,7 @@ def calculate_impact(
         1. All layers are in WGS84 geographic coordinates
         2. Layers are equipped with metadata such as names and categories
     """
-    layers = [hazard_layer, exposure_layer]
+    layers = [impact_function.hazard, impact_function.exposure]
     # Input checks
     if check_integrity:
         check_data_integrity(layers)
@@ -178,9 +170,7 @@ def calculate_impact(
     # Start time
     start_time = datetime.now()
 
-    # Pass input layers to plugin
-    impact_function.hazard = hazard_layer
-    impact_function.exposure = exposure_layer
+    # Run IF
     result_layer = impact_function.run()
 
     # End time
