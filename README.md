@@ -11,7 +11,7 @@ For more information about InaSAFE and its documentation please visit [inasafe.o
 
 The latest source code is available at
 [https://github.com/AIFDR/inasafe](https://github.com/AIFDR/inasafe),
-which contains modules for "risk" calculations, GIS functionality and
+which contains modules for risk calculations, GIS functionality and
 functions for impact modelling.
 
 
