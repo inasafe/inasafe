@@ -40,7 +40,6 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
     def __init__(self):
         """Constructor."""
         super(FloodEvacuationRasterHazardFunction, self).__init__()
-        self.target_field = 'population'
         self.impact_function_manager = ImpactFunctionManager()
 
         # AG: Use the proper minimum needs, update the parameters

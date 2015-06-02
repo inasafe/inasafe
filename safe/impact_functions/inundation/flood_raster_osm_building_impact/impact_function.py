@@ -37,7 +37,6 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
     def __init__(self):
         """Constructor (calls ctor of base class)."""
         super(FloodRasterBuildingFunction, self).__init__()
-        self.target_field = 'INUNDATED'
 
     def notes(self):
         """Return the notes section of the report.
