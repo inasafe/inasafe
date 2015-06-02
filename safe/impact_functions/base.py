@@ -228,7 +228,6 @@ class ImpactFunction(object):
             self._target_field = get_non_conflicting_attribute_name(
                 self.target_field, attribute_names)
 
-
     @property
     def exposure(self):
         """Property for the exposure layer to be used for the analysis.
@@ -243,14 +242,20 @@ class ImpactFunction(object):
         """Setter for exposure layer property.
 
         :param layer: exposure layer to be used for the analysis.
-        :type layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        :type layer: QgsVectorLayer, QgsRasterLayer, Vector, Raster
         """
         self._exposure = layer
         # Update the target field to a non-conflicting one
-        if isinstance(layer, QgsVectorLayer):
-            pass
+        if isinstance(layer, QgisWrapper):
+            if isinstance(layer.data, QgsVectorLayer):
+                self._target_field = get_non_conflicting_attribute_name(
+                    self.target_field,
+                    layer.data.dataProvider().fieldNameMap().keys()
+                )
         elif isinstance(layer, Vector):
-            pass
+            attribute_names = layer.get_attribute_names()
+            self._target_field = get_non_conflicting_attribute_name(
+                self.target_field, attribute_names)
 
     @property
     def aggregation(self):
