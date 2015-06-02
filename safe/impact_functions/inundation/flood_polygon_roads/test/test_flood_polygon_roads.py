@@ -66,7 +66,7 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
         # Count of flooded objects is calculated "by the hands"
         # the count = 69
         expected_feature_total = 69
-        count = sum(impact.get_data(attribute='FLOODED'))
+        count = sum(impact.get_data(attribute=function.target_field))
         message = 'Expecting %s, but it returns %s' % (
             expected_feature_total, count)
         self.assertEquals(count, expected_feature_total, message)
