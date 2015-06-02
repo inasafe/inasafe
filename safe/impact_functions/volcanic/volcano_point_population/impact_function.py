@@ -50,15 +50,8 @@ class VolcanoPointPopulationFunction(ImpactFunction):
             'In the event of a volcano point how many people might be impacted'
         )
 
-    def run(self, layers=None):
+    def run(self):
         """Run volcano point population evacuation Impact Function.
-
-        :param layers: List of layers expected to contain where two layers
-            should be present.
-
-            * hazard_layer: Vector point layer.
-            * exposure_layer: Raster layer of population data on the same grid
-                as hazard_layer
 
         Counts number of people exposed to volcano event.
 
@@ -73,7 +66,7 @@ class VolcanoPointPopulationFunction(ImpactFunction):
                 monotonically increasing)
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Parameters
         radii = self.parameters['distance [km]']

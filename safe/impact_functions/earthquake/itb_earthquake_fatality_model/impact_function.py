@@ -136,19 +136,10 @@ class ITBFatalityFunction(ImpactFunction):
         # noinspection PyUnresolvedReferences
         return numpy.power(10.0, x * mmi - y)
 
-    def run(self, layers=None):
-        """Indonesian Earthquake Fatality Model.
-
-        Input:
-
-        :param layers: List of layers expected to contain,
-
-                hazard: Raster layer of MMI ground shaking
-
-                exposure: Raster layer of population count
-        """
+    def run(self):
+        """Indonesian Earthquake Fatality Model."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         displacement_rate = self.hardcoded_parameters['displacement_rate']
 
