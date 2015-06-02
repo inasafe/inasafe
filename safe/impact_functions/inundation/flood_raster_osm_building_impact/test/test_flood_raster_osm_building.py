@@ -66,7 +66,7 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
             3: 0
         }
         for feature in impact_data:
-            inundated_status = feature['INUNDATED']
+            inundated_status = feature[impact_function.target_field]
             result[inundated_status] += 1
 
         message = 'Expecting %s, but it returns %s' % (expected_result, result)
