@@ -6,10 +6,8 @@ from safe.common.exceptions import (
 from safe.definitions import layer_mode_continuous, layer_geometry_point, \
     layer_geometry_line, layer_geometry_polygon, layer_mode_classified
 from safe.impact_functions.base import ImpactFunction
-from safe.impact_functions.bases.layer_types.\
+from safe.impact_functions.bases.layer_types. \
     classified_vector_exposure import ClassifiedVectorExposureMixin
-from safe.impact_functions.bases.layer_types.vector_impact import \
-    VectorImpactMixin
 from safe.impact_functions.bases.layer_types.continuous_vector_hazard import \
     ContinuousVectorHazardMixin
 from safe.impact_functions.bases.utilities import (
@@ -18,16 +16,14 @@ from safe.impact_functions.bases.utilities import (
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '05/05/15'
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ContinuousVHClassifiedVE(ImpactFunction,
-                               ContinuousVectorHazardMixin,
-                               ClassifiedVectorExposureMixin,
-                               VectorImpactMixin):
-    """Intermediate base class for:
-    Continuous Vector Hazard, Classified Vector Exposure
+class ContinuousVHClassifiedVE(
+    ImpactFunction,
+    ContinuousVectorHazardMixin,
+    ClassifiedVectorExposureMixin):
+    """Continuous Vector Hazard, Classified Vector Exposure base class.
 
     """
 
@@ -35,15 +31,16 @@ class ContinuousVHClassifiedVE(ImpactFunction,
         """Constructor"""
         super(ContinuousVHClassifiedVE, self).__init__()
         # check constraint
-        valid = check_layer_constraint(self.metadata(),
-                                       layer_mode_continuous,
-                                       [layer_geometry_point,
-                                        layer_geometry_line,
-                                        layer_geometry_polygon],
-                                       layer_mode_classified,
-                                       [layer_geometry_point,
-                                        layer_geometry_line,
-                                        layer_geometry_polygon])
+        valid = check_layer_constraint(
+            self.metadata(),
+            layer_mode_continuous,
+            [layer_geometry_point,
+             layer_geometry_line,
+             layer_geometry_polygon],
+            layer_mode_classified,
+            [layer_geometry_point,
+             layer_geometry_line,
+             layer_geometry_polygon])
         if not valid:
             raise MetadataLayerConstraintError()
 
@@ -58,9 +55,3 @@ class ContinuousVHClassifiedVE(ImpactFunction,
     def exposure(self, value):
         self._exposure = value
         self.set_up_exposure_layer(value)
-
-    @ImpactFunction.impact.setter
-    # pylint: disable=W0221
-    def impact(self, value):
-        self._impact = value
-        self.set_up_impact_layer(value)

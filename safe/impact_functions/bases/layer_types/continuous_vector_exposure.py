@@ -11,6 +11,8 @@ class ContinuousVectorExposureMixin(object):
 
     def __init__(self):
         self._exposure_value_attribute = None
+        self._exposure_min_value = None
+        self._exposure_max_value = None
         self._exposure_layer = None
 
     def set_up_exposure_layer(self, exposure):
@@ -32,6 +34,22 @@ class ContinuousVectorExposureMixin(object):
                 check_attribute_exist(self._exposure_layer, value)):
             self._exposure_value_attribute = value
         else:
-            message = ('The attribute "%s" is not exists in the hazard '
+            message = ('The attribute "%s" does not exist in the hazard '
                        'layer.') % value
             raise NoAttributeInLayerError(message)
+
+    @property
+    def exposure_min_value(self):
+        return self._exposure_min_value
+
+    @exposure_min_value.setter
+    def exposure_min_value(self, value):
+        self._exposure_min_value = value
+
+    @property
+    def exposure_max_value(self):
+        return self._exposure_max_value
+
+    @exposure_max_value.setter
+    def exposure_max_value(self, value):
+        self._exposure_max_value = value

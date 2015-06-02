@@ -8,29 +8,31 @@ from safe.impact_functions.bases.layer_types.classified_vector_hazard import \
     ClassifiedVectorHazardMixin
 from safe.impact_functions.bases.layer_types.continuous_raster_exposure \
     import ContinuousRasterExposureMixin
-from safe.impact_functions.bases.layer_types.raster_impact import \
-    RasterImpactMixin
 from safe.impact_functions.bases.utilities import check_layer_constraint
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '28/05/15'
 
 
-class ClassifiedVHContinuousRE(ImpactFunction,
-                               ClassifiedVectorHazardMixin,
-                               ContinuousRasterExposureMixin,
-                               RasterImpactMixin):
+class ClassifiedVHContinuousRE(
+    ImpactFunction,
+    ClassifiedVectorHazardMixin,
+    ContinuousRasterExposureMixin):
+    """Continuous Vector Hazard Continuous Raster Exposure base class.
+
+    """
 
     def __init__(self):
         super(ClassifiedVHContinuousRE, self).__init__()
         # checks the metadata
-        valid = check_layer_constraint(self.metadata(),
-                                       layer_mode_classified,
-                                       [layer_geometry_point,
-                                        layer_geometry_line,
-                                        layer_geometry_polygon],
-                                       layer_mode_continuous,
-                                       [layer_geometry_raster])
+        valid = check_layer_constraint(
+            self.metadata(),
+            layer_mode_classified,
+            [layer_geometry_point,
+             layer_geometry_line,
+             layer_geometry_polygon],
+            layer_mode_continuous,
+            [layer_geometry_raster])
         if not valid:
             raise MetadataLayerConstraintError()
 
@@ -45,9 +47,3 @@ class ClassifiedVHContinuousRE(ImpactFunction,
     def exposure(self, value):
         self._exposure = value
         self.set_up_exposure_layer(value)
-
-    @ImpactFunction.impact.setter
-    # pylint: disable=W0221
-    def impact(self, value):
-        self._impact = value
-        self.set_up_impact_layer(value)

@@ -32,7 +32,7 @@ class ClassifiedVectorHazardMixin(object):
         if hazard_layer and check_attribute_exist(self._hazard_layer, value):
             self._hazard_class_attribute = value
         else:
-            message = ('The attribute "%s" is not exists in the hazard '
+            message = ('The attribute "%s" does not exist in the hazard '
                        'layer.') % value
             raise NoAttributeInLayerError(message)
 

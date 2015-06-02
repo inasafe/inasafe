@@ -29,7 +29,6 @@ from safe.impact_functions.generic.classified_raster_building\
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 

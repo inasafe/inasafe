@@ -10,8 +10,6 @@ from safe.impact_functions.bases.layer_types.classified_raster_hazard import \
     ClassifiedRasterHazardMixin
 from safe.impact_functions.bases.layer_types.continuous_vector_exposure \
     import ContinuousVectorExposureMixin
-from safe.impact_functions.bases.layer_types.vector_impact import \
-    VectorImpactMixin
 from safe.impact_functions.bases.utilities import (
     check_layer_constraint)
 
@@ -19,12 +17,11 @@ __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '28/05/15'
 
 
-class ClassifiedRHContinuousVE(ImpactFunction,
-                               ClassifiedRasterHazardMixin,
-                               ContinuousVectorExposureMixin,
-                               VectorImpactMixin):
-    """Intermediate base class for:
-    Continuous Vector Hazard, Classified Vector Exposure
+class ClassifiedRHContinuousVE(
+    ImpactFunction,
+    ClassifiedRasterHazardMixin,
+    ContinuousVectorExposureMixin):
+    """Classified Raster Hazard, Continuous Vector Exposure base class.
 
     """
 
@@ -32,13 +29,14 @@ class ClassifiedRHContinuousVE(ImpactFunction,
         """Constructor"""
         super(ClassifiedRHContinuousVE, self).__init__()
         # check constraint
-        valid = check_layer_constraint(self.metadata(),
-                                       layer_mode_classified,
-                                       [layer_geometry_raster],
-                                       layer_mode_continuous,
-                                       [layer_geometry_point,
-                                        layer_geometry_line,
-                                        layer_geometry_polygon])
+        valid = check_layer_constraint(
+            self.metadata(),
+            layer_mode_classified,
+            [layer_geometry_raster],
+            layer_mode_continuous,
+            [layer_geometry_point,
+             layer_geometry_line,
+             layer_geometry_polygon])
         if not valid:
             raise MetadataLayerConstraintError()
 
@@ -53,9 +51,3 @@ class ClassifiedRHContinuousVE(ImpactFunction,
     def exposure(self, value):
         self._exposure = value
         self.set_up_exposure_layer(value)
-
-    @ImpactFunction.impact.setter
-    # pylint: disable=W0221
-    def impact(self, value):
-        self._impact = value
-        self.set_up_impact_layer(value)

@@ -16,7 +16,7 @@ class ContinuousVectorHazardMixin(object):
 
     def set_up_hazard_layer(self, hazard):
         """Set up the hazard value.
-        
+
         :param hazard: QgsVectorLayer or Vector data types
         :type hazard: QgsVectorLayer, Vector
         """
@@ -32,7 +32,7 @@ class ContinuousVectorHazardMixin(object):
         if hazard_layer and check_attribute_exist(self._hazard_layer, value):
             self._hazard_value_attribute = value
         else:
-            message = ('The attribute "%s" is not exists in the hazard '
+            message = ('The attribute "%s" does not exist in the hazard '
                        'layer.') % value
             raise NoAttributeInLayerError(message)
 

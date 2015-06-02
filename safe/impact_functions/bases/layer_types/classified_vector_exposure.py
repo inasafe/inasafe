@@ -11,6 +11,7 @@ class ClassifiedVectorExposureMixin(object):
 
     def __init__(self):
         self._exposure_class_attribute = None
+        self._exposure_unique_values = None
         self._exposure_layer = None
 
     def set_up_exposure_layer(self, exposure):
@@ -32,6 +33,14 @@ class ClassifiedVectorExposureMixin(object):
                 check_attribute_exist(self._exposure_layer, value)):
             self._exposure_class_attribute = value
         else:
-            message = ('The attribute "%s" is not exists in the exposure '
+            message = ('The attribute "%s" does not exist in the exposure '
                        'layer.') % value
             raise NoAttributeInLayerError(message)
+
+    @property
+    def exposure_unique_values(self):
+        return self._exposure_unique_values
+
+    @exposure_unique_values.setter
+    def exposure_unique_values(self, value):
+        self._exposure_unique_values = value
