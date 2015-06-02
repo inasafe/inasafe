@@ -37,6 +37,7 @@ class Registry(object):
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
+            # noinspection PyArgumentList
             cls._instance = super(Registry, cls).__new__(cls, *args, **kwargs)
             cls._impact_functions = []
         return cls._instance
@@ -243,9 +244,10 @@ class Registry(object):
             if (layer_mode and not is_subset(
                     exposure_keywords.get('layer_mode'), layer_mode)):
                 continue
-            if (layer_geometries and not is_subset(
-                    exposure_keywords.get(
-                            'layer_geometry'), layer_geometries)):
+            if (layer_geometries and
+                    not is_subset(
+                    exposure_keywords.get('layer_geometry'),
+                        layer_geometries)):
                 continue
             if (exposure_types and not is_subset(
                     exposure_keywords.get('exposure'),

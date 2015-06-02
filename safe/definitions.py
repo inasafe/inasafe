@@ -702,47 +702,27 @@ exposure_unit = {
     ]
 }
 
-# Additional keywords
-# Hazard related
-hazard_zone_field = {
-    'key': 'hazard_zone_field',
-    'type': 'field',
-    'master_keyword': None,
-    'description': tr('Field where the hazard zone value is located.')
-}
-
-affected_field = {
-    'key': 'affected_field',
-    'type': 'field',
-    'master_keyword': None,
-    'description': tr('Field where the affected value is located.')
-}
-
-affected_value = {
-    'key': 'affected_value',
-    'type': 'value',
-    'master_keyword': affected_field,
-    'description': tr('Value for affected field.')
-}
-
-volcano_name_field = {
-    'key': 'volcano_name_field',
-    'type': 'field',
-    'master_keyword': None,
-    'description': tr('Field where the volcano name is located.')
-}
-
-# Exposure related
-building_type_field = {
-    'key': 'building_type_field',
-    'type': 'field',
-    'master_keyword': None,
-    'description': tr('Field where the building type is located.')
+# vector_type_fields for exposure
+structure_type_field = {
+    'key': 'structure_type_field',
+    'name': tr('Structure Type Field'),
+    'description': tr(
+        'This field will specify where the type for structure is located.'),
+    'default_field': 'type'
 }
 
 road_type_field = {
     'key': 'road_type_field',
+    'name': tr('Road Type Field'),
+    'description': tr(
+        'This field will specify where the type for road is located.'),
+    'default_field': 'road_type'
+}
+
+# Additional keywords
+volcano_name_field = {
+    'key': 'volcano_name_field',
+    'name': tr('Volcano name field'),
     'type': 'field',
-    'master_keyword': None,
-    'description': tr('Field where the building type is located.')
+    'description': tr('Field where the volcano name is located.')
 }

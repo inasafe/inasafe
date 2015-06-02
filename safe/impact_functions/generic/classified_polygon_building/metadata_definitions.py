@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.common.utilities import OrderedDict
 from safe.definitions import (
-    layer_mode_classified,
     layer_geometry_polygon,
     layer_geometry_point,
     hazard_all,
@@ -20,8 +19,8 @@ from safe.definitions import (
     exposure_structure,
     generic_vector_hazard_classes,
     hazard_category_single_event,
-    layer_mode_none,
-    hazard_zone_field
+    layer_mode_classified,
+    structure_type_field
 )
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -87,16 +86,17 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'vector_hazard_classifications':
                         [generic_vector_hazard_classes],
                     'raster_hazard_classifications': [],
-                    'additional_keywords': [hazard_zone_field]
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [
                         layer_geometry_point,
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
+                    'vector_type_fields': [structure_type_field],
                     'additional_keywords': []
                 }
             },

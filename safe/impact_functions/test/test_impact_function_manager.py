@@ -46,18 +46,14 @@ from safe.definitions import (
     exposure_population,
     count_exposure_unit,
     density_exposure_unit,
-    continuous_hazard_unit_all,
     layer_mode_continuous,
     layer_geometry_raster,
     layer_mode_classified,
     layer_geometry_polygon,
-    affected_field,
-    affected_value,
-    hazard_zone_field,
-    building_type_field,
     unit_metres,
     unit_feet,
-    unit_generic
+    unit_generic,
+    structure_type_field
 )
 
 
@@ -317,7 +313,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_category_key='single_event',
             hazard_key='flood'
         )
-        expected = [affected_field, affected_value, hazard_zone_field]
+        expected = []
 
         self.assertItemsEqual(additional_keywords, expected)
 
@@ -325,11 +321,11 @@ class TestImpactFunctionManager(unittest.TestCase):
         """Test for exposure_additional_keywords."""
         ifm = ImpactFunctionManager()
         additional_keywords = ifm.exposure_additional_keywords(
-            layer_mode_key='none',
+            layer_mode_key='classified',
             layer_geometry_key='polygon',
             exposure_key='structure'
         )
-        expected = [building_type_field]
+        expected = []
 
         self.assertItemsEqual(additional_keywords, expected)
 

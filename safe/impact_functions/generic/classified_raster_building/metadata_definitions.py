@@ -17,7 +17,7 @@ from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 from safe.definitions import (
-    layer_mode_classified,
+    structure_type_field,
     layer_geometry_polygon,
     layer_geometry_point,
     layer_geometry_raster,
@@ -26,7 +26,7 @@ from safe.definitions import (
     exposure_structure,
     generic_raster_hazard_classes,
     hazard_category_single_event,
-    layer_mode_none
+    layer_mode_classified
 )
 
 __author__ = 'lucernae'
@@ -109,13 +109,14 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [
                         layer_geometry_point,
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
+                    'vector_type_fields': [structure_type_field],
                     'additional_keywords': []
                 }
             },

@@ -17,7 +17,6 @@ from safe.common.utilities import OrderedDict
 
 from safe.defaults import (
     default_minimum_needs,
-    default_provenance,
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
@@ -116,6 +115,7 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
                     'exposure_units': [count_exposure_unit],
+                    'vector_type_fields': [],
                     'additional_keywords': []
                 }
             },

@@ -1,3 +1,4 @@
+# coding=utf-8
 """Library of styles that can be used by impact functions
 
 E.g.::

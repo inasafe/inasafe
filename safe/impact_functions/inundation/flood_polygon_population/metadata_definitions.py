@@ -16,7 +16,6 @@ __author__ = 'Rizky Maulana Nugraha'
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     default_minimum_needs,
-    default_provenance,
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
@@ -33,8 +32,6 @@ from safe.definitions import (
     flood_vector_hazard_classes,
     count_exposure_unit,
     exposure_population,
-    affected_field,
-    affected_value
 )
 
 
@@ -103,13 +100,14 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                     'vector_hazard_classifications': [
                         flood_vector_hazard_classes],
                     'raster_hazard_classifications': [],
-                    'additional_keywords': [affected_field, affected_value]
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
                     'exposure_units': [count_exposure_unit],
+                    'vector_type_fields': [],
                     'additional_keywords': []
                 }
             },

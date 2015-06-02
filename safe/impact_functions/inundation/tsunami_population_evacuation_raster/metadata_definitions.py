@@ -18,8 +18,7 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 from safe.defaults import (
-    default_minimum_needs,
-    default_provenance)
+    default_minimum_needs)
 from safe.defaults import (
     default_gender_postprocessor,
     minimum_needs_selector,
@@ -119,6 +118,7 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
                     'exposure_units': [count_exposure_unit],
+                    'vector_type_fields': [],
                     'additional_keywords': []
                 }
             },

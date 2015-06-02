@@ -55,7 +55,7 @@ from safe.definitions import (
     exposure_structure,
     unit_mmi,
     hazard_category_single_event,
-    layer_mode_none
+    layer_mode_classified
 )
 
 
@@ -202,7 +202,7 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test filtering IF by exposure metadata."""
         # Full metadata
         exposure_metadata = {
-            'layer_mode': layer_mode_none,
+            'layer_mode': layer_mode_classified,
             'layer_geometry': layer_geometry_point,
             'exposure': exposure_structure,
             'exposure_unit': []
@@ -225,7 +225,7 @@ class TestRegistry(unittest.TestCase):
 
         # Full metadata
         exposure_metadata = {
-            'layer_mode': layer_mode_none,
+            'layer_mode': layer_mode_classified,
             'layer_geometry': layer_geometry_polygon,
             'exposure': exposure_structure,
             # 'exposure_unit': []
@@ -258,7 +258,7 @@ class TestRegistry(unittest.TestCase):
         }
 
         exposure_metadata = {
-            'layer_mode': layer_mode_none,
+            'layer_mode': layer_mode_classified,
             'layer_geometry': layer_geometry_point,
             'exposure': exposure_structure,
         }

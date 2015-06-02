@@ -15,7 +15,7 @@ __author__ = 'lucernae'
 __date__ = '24/03/15'
 
 from safe.common.utilities import OrderedDict
-from safe.defaults import default_minimum_needs, default_provenance
+from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
@@ -93,6 +93,7 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
                     'exposure_units': [count_exposure_unit],
+                    'vector_type_fields': [],
                     'additional_keywords': []
                 }
             },

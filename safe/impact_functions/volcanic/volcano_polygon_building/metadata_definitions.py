@@ -15,17 +15,15 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.definitions import (
-    layer_mode_classified,
     layer_geometry_polygon,
     layer_geometry_point,
     hazard_volcano,
     volcano_vector_hazard_classes,
     hazard_category_multiple_event,
     exposure_structure,
-    layer_mode_none,
-    building_type_field,
+    layer_mode_classified,
     volcano_name_field,
-    hazard_zone_field
+    structure_type_field
 )
 
 
@@ -91,17 +89,17 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'vector_hazard_classifications': [
                         volcano_vector_hazard_classes],
                     'raster_hazard_classifications': [],
-                    'additional_keywords': [
-                        volcano_name_field, hazard_zone_field]
+                    'additional_keywords': [volcano_name_field]
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [
                         layer_geometry_polygon,
                         layer_geometry_point
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
+                    'vector_type_fields': [structure_type_field],
                     'additional_keywords': []
                 }
             },

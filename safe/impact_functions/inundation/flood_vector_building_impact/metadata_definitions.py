@@ -19,16 +19,13 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.definitions import (
-    layer_mode_classified,
     layer_geometry_polygon,
     hazard_flood,
     hazard_category_single_event,
     exposure_structure,
     flood_vector_hazard_classes,
-    layer_mode_none,
-    building_type_field,
-    affected_field,
-    affected_value
+    layer_mode_classified,
+    structure_type_field,
 )
 
 
@@ -78,14 +75,15 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'vector_hazard_classifications': [
                         flood_vector_hazard_classes],
                     'raster_hazard_classifications': [],
-                    'additional_keywords': [affected_field, affected_value]
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
-                    'additional_keywords': [building_type_field]
+                    'vector_type_fields': [structure_type_field],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
