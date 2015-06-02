@@ -306,9 +306,6 @@ class ImpactFunction(object):
     def target_field(self):
         """Property for the target_field of the impact layer.
 
-        .. note:: It is not guaranteed that all impact functions produce a
-            spatial layer.
-
         :returns: The target field in the impact layer in case it's a vector.
         :rtype: basestring
         """
