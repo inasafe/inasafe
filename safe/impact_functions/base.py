@@ -26,7 +26,6 @@ from safe.common.exceptions import InvalidExtentError
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
 
 
 class ImpactFunction(object):
