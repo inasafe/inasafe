@@ -115,17 +115,12 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         else:
             volcano_names = tr('Not specified in data')
 
-        # Find the target field name that has no conflict with default target
-        attribute_names = hazard_layer.get_attribute_names()
-        target_field = get_non_conflicting_attribute_name(
-            self.target_field, attribute_names)
-
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
                 hazard_layer,
                 exposure_layer,
-                attribute_name=target_field)
+                attribute_name=self.target_field)
 
         # Initialise total affected per category
         affected_population = {}
@@ -135,7 +130,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
             # Get population at this location
-            population = row[target_field]
+            population = row[self.target_field]
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this category
@@ -299,7 +294,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
             name=tr('People affected by volcanic hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
-                      'target_field': target_field,
+                      'target_field': self.target_field,
                       'map_title': map_title,
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,
