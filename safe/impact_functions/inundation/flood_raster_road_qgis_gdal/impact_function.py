@@ -32,7 +32,6 @@ class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
     def __init__(self):
         """Constructor."""
         super(FloodRasterRoadsGdalFunction, self).__init__()
-        self.target_field = 'flooded'
 
     def _tabulate(self, flooded_len, question, road_len, roads_by_type):
         table_body = [

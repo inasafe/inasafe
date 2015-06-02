@@ -62,9 +62,9 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         impact = function.impact
 
         keywords = impact.get_keywords()
-        self.assertEquals('flooded', keywords['target_field'])
+        self.assertEquals(function.target_field, keywords['target_field'])
         expected_inundated_feature = 193
-        count = sum(impact.get_data(attribute=keywords['target_field']))
+        count = sum(impact.get_data(attribute=function.target_field))
         self.assertEquals(count, expected_inundated_feature)
 
     def test_filter(self):

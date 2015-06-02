@@ -66,7 +66,7 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
 
         # Count of flooded objects is calculated "by the hands"
         # total flooded = 27, total buildings = 129
-        count = sum(impact.get_data(attribute='INUNDATED'))
+        count = sum(impact.get_data(attribute=function.target_field))
         self.assertEquals(count, 33)
         count = len(impact.get_data())
         self.assertEquals(count, 176)

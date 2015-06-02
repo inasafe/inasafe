@@ -54,9 +54,6 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         """Constructor."""
         super(FloodEvacuationVectorHazardFunction, self).__init__()
 
-        # Target field in the impact layer
-        self.target_field = 'population'
-
         # Use affected field flag (if False, all polygon will be considered as
         # affected)
         self.use_affected_field = False
