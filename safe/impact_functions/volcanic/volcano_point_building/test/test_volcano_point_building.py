@@ -53,7 +53,8 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         self.assertEqual(expected_question, impact_function.question, message)
 
         # The buildings should all be categorised into 3000 zone
-        zone_sum = sum(impact_layer.get_data(attribute='zone'))
+        zone_sum = sum(impact_layer.get_data(
+            attribute=impact_function.target_field))
         expected_sum = 3000 * 181
         message = 'Expecting %s, but it returns %s' % (expected_sum, zone_sum)
         self.assertEqual(zone_sum, expected_sum, message)

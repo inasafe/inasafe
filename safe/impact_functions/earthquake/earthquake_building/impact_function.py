@@ -27,7 +27,6 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -39,8 +38,6 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
 
     def __init__(self):
         super(EarthquakeBuildingFunction, self).__init__()
-
-        self.target_field = 'Shake_cls'
         self.is_nexis = False
         self.statistics_type = 'class_count'
         self.statistics_classes = [0, 1, 2, 3]

@@ -681,7 +681,7 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
     must be less than 10 character.
 
     :param default_name: The default name for the attribute.
-    :type default_name: str
+    :type default_name: basestring
 
     :param attribute_names: Set of attribute names that should not be
         conflicted.

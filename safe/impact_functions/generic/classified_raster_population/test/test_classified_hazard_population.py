@@ -15,7 +15,6 @@ __author__ = 'lucernae'
 __filename__ = 'test_classified_hazard_building'
 __date__ = '24/03/15'
 
-
 import unittest
 
 from safe.impact_functions.impact_function_manager\

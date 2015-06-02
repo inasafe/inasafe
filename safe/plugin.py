@@ -32,16 +32,12 @@ from PyQt4.QtCore import (
     Qt,
     QSettings)
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QAction, QIcon, QApplication, QMessageBox, QWidget
+from PyQt4.QtGui import QAction, QIcon, QApplication, QWidget
 
 from safe.common.version import release_status
 from safe.common.exceptions import (
-    TranslationLoadError,
-    NoKeywordsFoundError,
-    InvalidParameterError,
-    UnsupportedProviderError)
+    TranslationLoadError,)
 from safe.utilities.resources import resources_path
-from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import is_raster_layer
 from safe.impact_functions import register_impact_functions
 LOGGER = logging.getLogger('InaSAFE')

@@ -341,7 +341,7 @@ class ImpactFunctionManager(object):
         for impact_function in self.impact_functions:
             if_exposure_units = impact_function.metadata().\
                 exposure_units_for_layer(
-                exposure_key, layer_geometry_key, layer_mode_key)
+                    exposure_key, layer_geometry_key, layer_mode_key)
             if if_exposure_units:
                 add_to_list(exposure_units, if_exposure_units)
 
@@ -368,10 +368,10 @@ class ImpactFunctionManager(object):
         """
         continuous_hazards_units = []
         for impact_function in self.impact_functions:
-            if_continuous_hazard_units = impact_function.metadata(). \
+            if_continuous_hazard_units = impact_function.metadata().\
                 continuous_hazards_units_for_layer(
-                hazard_key, layer_geometry_key, layer_mode_key,
-                hazard_category_key)
+                    hazard_key, layer_geometry_key, layer_mode_key,
+                    hazard_category_key)
             if if_continuous_hazard_units:
                 add_to_list(
                     continuous_hazards_units, if_continuous_hazard_units)
@@ -399,10 +399,10 @@ class ImpactFunctionManager(object):
         """
         vector_hazards_classifications = []
         for impact_function in self.impact_functions:
-            if_vector_hazards_classifications = impact_function.metadata(). \
+            if_vector_hazards_classifications = impact_function.metadata().\
                 vector_hazards_classifications_for_layer(
-                hazard_key, layer_geometry_key, layer_mode_key,
-                hazard_category_key)
+                    hazard_key, layer_geometry_key, layer_mode_key,
+                    hazard_category_key)
             if if_vector_hazards_classifications:
                 add_to_list(
                     vector_hazards_classifications,
@@ -431,10 +431,10 @@ class ImpactFunctionManager(object):
         """
         raster_hazards_classifications = []
         for impact_function in self.impact_functions:
-            if_vector_hazards_classifications = impact_function.metadata(). \
+            if_vector_hazards_classifications = impact_function.metadata().\
                 raster_hazards_classifications_for_layer(
-                hazard_key, layer_geometry_key, layer_mode_key,
-                hazard_category_key)
+                    hazard_key, layer_geometry_key, layer_mode_key,
+                    hazard_category_key)
             if if_vector_hazards_classifications:
                 add_to_list(
                     raster_hazards_classifications,
@@ -543,7 +543,7 @@ class ImpactFunctionManager(object):
         for impact_function in self.impact_functions:
             if_hazard_constraints = impact_function.metadata().\
                 available_hazard_constraints(
-                hazard_key, hazard_category_key)
+                    hazard_key, hazard_category_key)
             if if_hazard_constraints:
                 add_to_list(hazard_constraints, if_hazard_constraints)
 
@@ -585,9 +585,9 @@ class ImpactFunctionManager(object):
         """
         layer_modes = []
         for impact_function in self.impact_functions:
-            if_hazard_layer_mode = impact_function.metadata(). \
+            if_hazard_layer_mode = impact_function.metadata().\
                 available_hazard_layer_mode(
-                hazard_key, hazard_geometry_key, hazard_category_key)
+                    hazard_key, hazard_geometry_key, hazard_category_key)
             if if_hazard_layer_mode:
                 add_to_list(layer_modes, if_hazard_layer_mode)
 
@@ -608,9 +608,9 @@ class ImpactFunctionManager(object):
         """
         layer_modes = []
         for impact_function in self.impact_functions:
-            if_exposure_layer_mode = impact_function.metadata(). \
+            if_exposure_layer_mode = impact_function.metadata().\
                 available_exposure_layer_mode(
-                exposure_key, exposure_geometry_key)
+                    exposure_key, exposure_geometry_key)
             if if_exposure_layer_mode:
                 add_to_list(layer_modes, if_exposure_layer_mode)
 
@@ -638,13 +638,12 @@ class ImpactFunctionManager(object):
         """
         additional_keywords = []
         for impact_function in self.impact_functions:
-            if_additional_keywords = impact_function.metadata(). \
+            if_additional_keywords = impact_function.metadata().\
                 hazard_additional_keywords(
-                layer_mode_key=layer_mode_key,
-                layer_geometry_key=layer_geometry_key,
-                hazard_category_key=hazard_category_key,
-                hazard_key=hazard_key
-            )
+                    layer_mode_key=layer_mode_key,
+                    layer_geometry_key=layer_geometry_key,
+                    hazard_category_key=hazard_category_key,
+                    hazard_key=hazard_key)
             if if_additional_keywords:
                 add_to_list(additional_keywords, if_additional_keywords)
 
@@ -669,12 +668,11 @@ class ImpactFunctionManager(object):
         """
         additional_keywords = []
         for impact_function in self.impact_functions:
-            if_additional_keywords = impact_function.metadata(). \
+            if_additional_keywords = impact_function.metadata().\
                 exposure_additional_keywords(
-                layer_mode_key=layer_mode_key,
-                layer_geometry_key=layer_geometry_key,
-                exposure_key=exposure_key
-            )
+                    layer_mode_key=layer_mode_key,
+                    layer_geometry_key=layer_geometry_key,
+                    exposure_key=exposure_key)
             if if_additional_keywords:
                 add_to_list(additional_keywords, if_additional_keywords)
 

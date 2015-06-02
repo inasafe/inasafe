@@ -18,7 +18,6 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
-
 from qgis.core import QgsRasterLayer, QgsVectorLayer
 
 from safe.impact_functions.inundation\
@@ -61,9 +60,9 @@ class TestFloodRasterRoadsGdalFunction(unittest.TestCase):
         impact = function.impact
 
         keywords = impact.get_keywords()
-        self.assertEquals('flooded', keywords['target_field'])
+        self.assertEquals(function.target_field, keywords['target_field'])
         expected_inundated_feature = 182
-        count = sum(impact.get_data(attribute=keywords['target_field']))
+        count = sum(impact.get_data(attribute=function.target_field))
         self.assertEquals(count, expected_inundated_feature)
 
     def test_filter(self):
