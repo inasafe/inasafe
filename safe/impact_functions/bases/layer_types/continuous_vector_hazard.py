@@ -29,7 +29,7 @@ class ContinuousVectorHazardMixin(object):
     @hazard_value_attribute.setter
     def hazard_value_attribute(self, value):
         hazard_layer = get_qgis_vector_layer(self._hazard_layer)
-        if hazard_layer and check_attribute_exist(self._hazard_layer, value):
+        if hazard_layer and check_attribute_exist(hazard_layer, value):
             self._hazard_value_attribute = value
         else:
             message = ('The attribute "%s" does not exist in the hazard '

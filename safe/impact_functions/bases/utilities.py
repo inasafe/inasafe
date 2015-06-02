@@ -34,7 +34,7 @@ def get_qgis_vector_layer(layer):
     :rtype: QgsVectorLayer
     """
     if isinstance(layer, Vector):
-        return layer.get_layer()
+        return layer.as_qgis_native()
     elif isinstance(layer, QgsVectorLayer):
         return layer
     else:

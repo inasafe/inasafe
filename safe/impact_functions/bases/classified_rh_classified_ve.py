@@ -4,7 +4,7 @@ from safe.common.exceptions import (
     MetadataLayerConstraintError)
 from safe.definitions import layer_geometry_raster, \
     layer_mode_classified, layer_geometry_point, layer_geometry_line, \
-    layer_geometry_polygon
+    layer_geometry_polygon, layer_mode_none
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.layer_types.classified_raster_hazard import \
     ClassifiedRasterHazardMixin
@@ -33,7 +33,7 @@ class ClassifiedRHClassifiedVE(
             self.metadata(),
             layer_mode_classified,
             [layer_geometry_raster],
-            layer_mode_classified,
+            layer_mode_none,
             [layer_geometry_point,
              layer_geometry_line,
              layer_geometry_polygon])
