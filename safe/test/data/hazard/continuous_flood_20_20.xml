@@ -171,12 +171,13 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[category: hazard
-subcategory: flood
-data_type: continuous
+<![CDATA[hazard_category: single_event
 title: Continuous Flood
+hazard: flood
+continuous_hazard_unit: metres
 source: Akbar Gumbira
-unit: metres_depth
+layer_purpose: hazard
+layer_mode: continuous
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

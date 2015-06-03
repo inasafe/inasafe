@@ -11,25 +11,25 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    unit_wetdry,
-    layer_vector_polygon,
-    exposure_definition,
-    exposure_road,
-    unit_road_type_type,
-    layer_vector_line)
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.flood_polygon_roads\
-    .parameter_definitions import (
-        road_type_field,
-        affected_field,
-        affected_value,
-        target_field)
+from safe.impact_functions.inundation.flood_polygon_roads import \
+    parameter_definitions
 from safe.utilities.i18n import tr
+from safe.definitions import (
+    layer_mode_classified,
+    layer_geometry_polygon,
+    layer_geometry_line,
+    hazard_flood,
+    hazard_category_single_event,
+    flood_vector_hazard_classes,
+    exposure_road,
+    layer_mode_none,
+    road_type_field,
+    affected_value,
+    affected_field
+)
 
 
 class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
@@ -68,31 +68,39 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
             'actions': tr(''),
             'limitations': [],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_flood],
-                    'units': [unit_wetdry],
-                    'layer_constraints': [layer_vector_polygon]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_polygon],
+                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_types': [hazard_flood],
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': [
+                        flood_vector_hazard_classes],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [affected_field, affected_value]
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_road],
-                    'units': [unit_road_type_type],
-                    'layer_constraints': [layer_vector_line]
+                    'layer_mode': layer_mode_none,
+                    'layer_geometries': [layer_geometry_line],
+                    'exposure_types': [exposure_road],
+                    'exposure_units': [],
+                    'additional_keywords': [road_type_field]
                 }
             },
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about road types
-                ('target_field_value', target_field()),
-                ('road_type_field', road_type_field()),
+                ('road_type_field',
+                 parameter_definitions.road_type_field()),
                 # This field of the  hazard layer contains information
                 # about inundated areas
-                ('affected_field', affected_field()),
+                ('affected_field',
+                 parameter_definitions.affected_field()),
                 # This value in 'affected_field' of the hazard layer
                 # marks the areas as inundated
-                ('affected_value', affected_value()),
+                ('affected_value',
+                 parameter_definitions.affected_value()),
                 ('postprocessors', OrderedDict([
                     ('RoadType', road_type_postprocessor())
                 ]))

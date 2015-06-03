@@ -27,11 +27,11 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator,
-    get_non_conflicting_attribute_name)
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    filter_needs_parameters
 
 
 class VolcanoPolygonPopulationFunction(ImpactFunction):
@@ -41,7 +41,6 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
 
     def __init__(self):
         super(VolcanoPolygonPopulationFunction, self).__init__()
-        self.target_field = 'population'
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
 
@@ -115,12 +114,6 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         else:
             volcano_names = tr('Not specified in data')
 
-        # Find the target field name that has no conflict with default target
-        attribute_names = hazard_layer.get_attribute_names()
-        new_target_field = get_non_conflicting_attribute_name(
-            self.target_field, attribute_names)
-        self.target_field = new_target_field
-
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
@@ -158,7 +151,7 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         # Generate impact report for the pdf map

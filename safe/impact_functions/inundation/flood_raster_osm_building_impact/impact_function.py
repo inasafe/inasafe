@@ -26,7 +26,6 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -38,7 +37,6 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
     def __init__(self):
         """Constructor (calls ctor of base class)."""
         super(FloodRasterBuildingFunction, self).__init__()
-        self.target_field = 'INUNDATED'
 
     def notes(self):
         """Return the notes section of the report.
@@ -108,7 +106,7 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         exposure_layer = self.exposure  # Building locations
 
         # Determine attribute name for hazard levels
-        hazard_attribute = self.parameters['hazard_level_name'].value
+        hazard_attribute = 'depth'
 
         # Interpolate hazard level to building locations
         interpolated_layer = assign_hazard_values_to_exposure_data(

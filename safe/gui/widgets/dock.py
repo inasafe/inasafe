@@ -21,7 +21,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import logging
-from functools import partial
 
 # noinspection PyPackageRequirements
 from qgis.core import (
@@ -88,7 +87,6 @@ from safe.common.exceptions import (
     InsufficientMemoryWarning)
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
-from safe.gui.tools.keywords_dialog import KeywordsDialog
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
@@ -976,16 +974,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # the layer will be ignored.
             # noinspection PyBroadException
             try:
-                category = self.keyword_io.read_keywords(layer, 'category')
+                layer_purpose = self.keyword_io.read_keywords(
+                    layer, 'layer_purpose')
             except:  # pylint: disable=W0702
                 # continue ignoring this layer
                 continue
 
-            if category == 'hazard':
+            if layer_purpose == 'hazard':
                 add_ordered_combo_item(self.cboHazard, title, source)
-            elif category == 'exposure':
+            elif layer_purpose == 'exposure':
                 add_ordered_combo_item(self.cboExposure, title, source)
-            elif category == 'postprocessing':
+            elif layer_purpose == 'aggregation':
                 add_ordered_combo_item(self.cboAggregation, title, source)
 
         self.unblock_signals()
@@ -1026,27 +1025,26 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         hazard_keywords = self.keyword_io.read_keywords(hazard_layer)
         # We need to add the layer type to the returned keywords
         if hazard_layer.type() == QgsMapLayer.VectorLayer:
-            hazard_keywords['layer_type'] = 'vector'
-            hazard_keywords['data_type'] = vector_geometry_string(hazard_layer)
+            hazard_keywords['layer_geometry'] = vector_geometry_string(
+                hazard_layer)
         elif hazard_layer.type() == QgsMapLayer.RasterLayer:
-            hazard_keywords['layer_type'] = 'raster'
-            if hazard_keywords.get('data_type') is None:
-                hazard_keywords['data_type'] = 'continuous'
+            hazard_keywords['layer_geometry'] = 'raster'
 
         # noinspection PyTypeChecker
         exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
         # We need to add the layer type to the returned keywords
         if exposure_layer.type() == QgsMapLayer.VectorLayer:
-            exposure_keywords['layer_type'] = 'vector'
-            exposure_keywords['data_type'] = vector_geometry_string(
+            exposure_keywords['layer_geometry'] = vector_geometry_string(
                 exposure_layer)
         elif exposure_layer.type() == QgsMapLayer.RasterLayer:
-            exposure_keywords['layer_type'] = 'raster'
-            if exposure_keywords.get('data_type') is None:
-                exposure_keywords['data_type'] = 'continuous'
+            exposure_keywords['layer_geometry'] = 'raster'
 
         # Find out which functions can be used with these layers
         try:
+            from pprint import pprint
+            pprint(hazard_keywords)
+            pprint(exposure_keywords)
+            print '---------------------------------------------------------'
             impact_functions = self.impact_function_manager.filter_by_keywords(
                 hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions
@@ -1170,18 +1168,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         self.enable_signal_receiver()
         try:
-            if self.get_aggregation_layer():
-                original_keywords = self.keyword_io.read_keywords(
-                    self.get_aggregation_layer())
-                self.runtime_keywords_dialog = KeywordsDialog(
-                    self.iface.mainWindow(),
-                    self.iface,
-                    self,
-                    self.get_aggregation_layer())
-                self.runtime_keywords_dialog.accepted.connect(self.accept)
-                self.runtime_keywords_dialog.rejected.connect(
-                    partial(self.accept_cancelled, original_keywords))
-
             self.enable_busy_cursor()
             self.show_next_analysis_extent()
             self.analysis = self.prepare_analysis()
@@ -1197,14 +1183,21 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             )
             self.analysis_error(e, context)
             return  # Will abort the analysis if there is exception
-        except InvalidAggregationKeywords:
-            self.runtime_keywords_dialog.set_layer(
-                self.get_aggregation_layer())
-            # disable gui elements that should not be applicable for this
-            self.runtime_keywords_dialog.radExposure.setEnabled(False)
-            self.runtime_keywords_dialog.radHazard.setEnabled(False)
-            self.runtime_keywords_dialog.setModal(True)
-            self.runtime_keywords_dialog.show()
+        except InvalidAggregationKeywords as e:
+            # TODO: Launch keywords wizard
+            # Show message box
+            message = self.tr(
+                'Your aggregation layer does not have valid keywords for '
+                'aggregation. Please launch keyword wizard to assign keywords '
+                'in this layer.'
+            )
+            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
+            context = self.tr(
+                'A problem was encountered because the aggregation layer '
+                'does not have proper keywords for aggregation layer.'
+            )
+            self.analysis_error(e, context)
+            return
         except InsufficientMemoryWarning:
             # noinspection PyCallByClass,PyTypeChecker
             result = QtGui.QMessageBox.warning(
@@ -1224,7 +1217,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.accept()
         finally:
             # Set back analysis to not ignore memory warning
-            self.analysis.force_memory = False
+            if self.analysis:
+                self.analysis.force_memory = False
             self.disable_signal_receiver()
 
     def accept_cancelled(self, old_keywords):

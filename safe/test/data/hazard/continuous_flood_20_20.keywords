@@ -1,6 +1,7 @@
-category: hazard
-subcategory: flood
-data_type: continuous
+hazard_category: single_event
 title: Continuous Flood
+hazard: flood
+continuous_hazard_unit: metres
 source: Akbar Gumbira
-unit: metres_depth
+layer_purpose: hazard
+layer_mode: continuous

@@ -11,10 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.defaults import default_minimum_needs, default_provenance
-from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
-    layer_raster_continuous, exposure_definition, exposure_population, \
-    unit_people_per_pixel
+from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
@@ -22,16 +19,15 @@ from safe.defaults import (
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.earthquake.\
-    itb_earthquake_fatality_model.parameter_definitions import (
-        mmi_range,
-        displacement_rate,
-        x_coefficient,
-        y_coefficient,
-        step,
-        tolerance,
-        displaced_people,
-        default_provenance)
+from safe.definitions import (
+    layer_mode_continuous,
+    layer_geometry_raster,
+    hazard_earthquake,
+    exposure_population,
+    count_exposure_unit,
+    hazard_category_single_event,
+    unit_mmi
+)
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -120,38 +116,32 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                    'for global earthquake fatality estimation, Earthq. '
                    'Spectra 26, 1017-1037.')
             ],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_earthquake],
-                    'units': [unit_mmi],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_types': [hazard_earthquake],
+                    'continuous_hazard_units': [unit_mmi],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'exposure_types': [exposure_population],
+                    'exposure_units': [count_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
-                # Model coefficients
-                ('x', x_coefficient()),
-                ('y', y_coefficient()),
-                # Rates of people displaced for each MMI level
-                ('displacement_rate', displacement_rate()),
-                ('mmi_range', mmi_range()),
-                ('step', step()),
-                # Threshold below which layer should be transparent
-                ('tolerance', tolerance()),
-                ('calculate_displaced_people', displaced_people()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                     ])),
-                ('minimum needs', default_minimum_needs()),
-                ('provenance', default_provenance())
+                ('minimum needs', default_minimum_needs())
             ])
         }
         return dict_meta

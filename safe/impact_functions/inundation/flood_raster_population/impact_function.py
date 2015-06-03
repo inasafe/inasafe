@@ -26,8 +26,8 @@ from safe.common.utilities import (
     create_label,
     verify,
     get_thousand_separator)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    filter_needs_parameters
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -40,7 +40,6 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
     def __init__(self):
         """Constructor."""
         super(FloodEvacuationRasterHazardFunction, self).__init__()
-        self.target_field = 'population'
         self.impact_function_manager = ImpactFunctionManager()
 
         # AG: Use the proper minimum needs, update the parameters
@@ -218,7 +217,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         # Generate impact report for the pdf map

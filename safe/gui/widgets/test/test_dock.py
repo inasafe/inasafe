@@ -506,8 +506,10 @@ class TestDock(TestCase):
             test_data_path('exposure', 'pop_binary_raster_20_20.asc')
         ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
-        self.assertTrue(hazard_layer_count == 2)
-        self.assertTrue(exposure_layer_count == 1)
+        message = 'Expecting 2 hazard layers, got %s' % hazard_layer_count
+        self.assertTrue(hazard_layer_count == 2, message)
+        message = 'Expecting 1 exposure layer, got %s' % exposure_layer_count
+        self.assertTrue(exposure_layer_count == 1, message)
         # we will have 2 impact function available right now:
         # - ContinuousHazardPopulationFunction, titled: 'Be impacted'
         # - FloodEvacuationRasterHazardFunction, titled: 'Need evacuation'
@@ -685,14 +687,14 @@ class TestDock(TestCase):
         new_name = unique_filename(prefix='kecamatan_jakarta_osm_saved_as')
         DOCK.save_auxiliary_files(
             layer, join(TESTDATA, '%s.shp' % new_name))
-        new_keywords_filepath = os.path.join(
+        new_keywords_file_path = os.path.join(
             TESTDATA, '%s.keywords' % new_name)
-        new_xml_filepath = os.path.join(TESTDATA, '%s.xml' % new_name)
+        new_xml_file_path = os.path.join(TESTDATA, '%s.xml' % new_name)
 
         message = 'New auxiliary file exist : '
         self.assertFalse(
-            os.path.isfile(new_keywords_filepath), '%s keywords' % message)
-        self.assertFalse(os.path.isfile(new_xml_filepath), '%s xml' % message)
+            os.path.isfile(new_keywords_file_path), '%s keywords' % message)
+        self.assertFalse(os.path.isfile(new_xml_file_path), '%s xml' % message)
 
     def test_new_layers_show_in_canvas(self):
         """Check that when we add a layer we can see it in the canvas list."""

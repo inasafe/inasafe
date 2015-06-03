@@ -168,10 +168,13 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[category: hazard
-source: smithsonian
-subcategory: volcano
+<![CDATA[hazard_category: multiple_event
 title: Volcano Point
+hazard: volcano
+source: smithsonian
+vector_hazard_classification: volcano_vector_hazard_classes
+layer_purpose: hazard
+layer_mode: classified
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

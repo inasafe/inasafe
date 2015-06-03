@@ -66,7 +66,7 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         impact_features = impact_layer.get_data()
         for i in range(len(impact_features)):
             impact_feature = impact_features[i]
-            level = impact_feature.get('Shake_cls')
+            level = impact_feature.get(impact_function.target_field)
             result[level] += 1
 
         message = 'Expecting %s, but it returns %s' % (impact, result)
@@ -75,19 +75,21 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """TestEarthquakeBuildingFunction: Test filtering IF"""
         hazard_keywords = {
-            'category': 'hazard',
-            'subcategory': 'earthquake',
-            'layer_type': 'raster',
-            'data_type': 'continuous',
-            'unit': 'mmi'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'hazard': 'earthquake',
+            'hazard_category': 'single_event',
+            'continuous_hazard_unit': 'mmi'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'structure',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'none',
+            'layer_geometry': 'point',
+            'exposure': 'structure'
         }
+
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \

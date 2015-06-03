@@ -18,9 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import math
-import numpy
 
-from safe.common.utilities import OrderedDict
 from safe.impact_functions.earthquake.\
     itb_earthquake_fatality_model.impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake\

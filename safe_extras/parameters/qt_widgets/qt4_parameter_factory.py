@@ -11,6 +11,7 @@ from qt_widgets.boolean_parameter_widget import BooleanParameterWidget
 from qt_widgets.float_parameter_widget import FloatParameterWidget
 from qt_widgets.integer_parameter_widget import IntegerParameterWidget
 from qt_widgets.string_parameter_widget import StringParameterWidget
+from qt_widgets.text_parameter_widget import TextParameterWidget
 from qt_widgets.generic_parameter_widget import GenericParameterWidget
 from qt_widgets.list_parameter_widget import ListParameterWidget
 from qt_widgets.input_list_parameter_widget import InputListParameterWidget
@@ -29,7 +30,8 @@ class Qt4ParameterFactory(object):
             'StringParameter': StringParameterWidget,
             'ListParameter': ListParameterWidget,
             'InputListParameter': InputListParameterWidget,
-            'DictParameter': DictParameterWidget
+            'DictParameter': DictParameterWidget,
+            'TextParameter': TextParameterWidget
         }
 
     def register_widget(self, parameter, parameter_widget):

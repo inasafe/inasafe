@@ -50,22 +50,25 @@ class KeywordIOTest(unittest.TestCase):
         hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
         self.raster_layer, _ = load_layer(hazard_path)
         self.expected_raster_keywords = {
-            'category': 'hazard',
-            'subcategory': 'tsunami',
-            'data_type': 'continuous',
-            'unit': 'metres_depth',
-            'title': 'Tsunami'}
+            'hazard_category': 'single_event',
+            'title': 'Tsunami',
+            'hazard': 'tsunami',
+            'hazard_continuous_unit': 'metres',
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous'
+        }
 
         # Vector Layer keywords
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
-            'category': 'exposure',
-            'datatype': 'osm',
-            'subcategory': 'structure',
             'title': 'buildings_osm_4326',
-            'purpose': 'dki'}
-
+            'datatype': 'osm',
+            'purpose': 'dki',
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'exposure': 'structure'
+        }
         # Keyword less layer
         keywordless_path = test_data_path('other', 'keywordless_layer.shp')
         self.keywordless_layer, _ = load_layer(keywordless_path)
@@ -78,7 +81,7 @@ class KeywordIOTest(unittest.TestCase):
         hash_value = self.keyword_io.hash_for_datasource(PG_URI)
         expected_hash = '7cc153e1b119ca54a91ddb98a56ea95e'
         message = "Got: %s\nExpected: %s" % (hash_value, expected_hash)
-        assert hash_value == expected_hash, message
+        self.assertEqual(hash_value, expected_hash, message)
 
     def test_write_read_keyword_from_uri(self):
         """Test we can set and get keywords for a non local datasource"""
@@ -112,18 +115,18 @@ class KeywordIOTest(unittest.TestCase):
         keywords = self.keyword_io.read_keyword_from_uri(PG_URI)
         message = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
             keywords, expected_keywords, filename)
-        assert keywords == expected_keywords, message
+        self.assertDictEqual(keywords, expected_keywords, message)
         # Test getting just a single keyword
         keyword = self.keyword_io.read_keyword_from_uri(PG_URI, 'datatype')
         expected_keyword = 'OSM'
         message = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
             keyword, expected_keyword, filename)
-        assert keyword == expected_keyword, message
+        self.assertDictEqual(keywords, expected_keywords, message)
         # Test deleting keywords actually does delete
         self.keyword_io.delete_keywords_for_uri(PG_URI)
         try:
             _ = self.keyword_io.read_keyword_from_uri(PG_URI, 'datatype')
-            # if the above didnt cause an exception then bad
+            # if the above didn't cause an exception then bad
             message = 'Expected a HashNotFoundError to be raised'
             assert message
         except HashNotFoundError:
@@ -145,7 +148,7 @@ class KeywordIOTest(unittest.TestCase):
         source = self.raster_layer.source()
         message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
             keywords, expected_keywords, source)
-        self.assertEquals(keywords, expected_keywords, message)
+        self.assertDictEqual(keywords, expected_keywords, message)
 
     def test_read_vector_file_keywords(self):
         """Test read vector file keywords with the generic readKeywords method.
@@ -155,7 +158,7 @@ class KeywordIOTest(unittest.TestCase):
         source = self.vector_layer.source()
         message = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
             keywords, expected_keywords, source)
-        assert keywords == expected_keywords, message
+        self.assertDictEqual(keywords, expected_keywords, message)
 
     def test_read_keywordless_layer(self):
         """Test read 'keyword' file from keywordless layer.
@@ -178,14 +181,16 @@ class KeywordIOTest(unittest.TestCase):
         keywords = self.keyword_io.read_keywords(layer)
         expected_keywords = {
             'category': 'exposure',
-            'subcategory': 'tsunami',
-            'data_type': 'continuous',
+            'hazard_category': 'single_event',
             'title': 'Tsunami',
+            'hazard': 'tsunami',
+            'hazard_continuous_unit': 'metres',
             'test': 'TEST',
-            'unit': 'metres_depth'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous'
         }
-        message = 'Keywords: %s. Expected: %s' % (keywords, expected_keywords)
-        self.assertEqual(keywords, expected_keywords, message)
+        message = 'Got:\n%s\nExpected:\n%s' % (keywords, expected_keywords)
+        self.assertDictEqual(keywords, expected_keywords, message)
 
     def test_read_db_keywords(self):
         """Can we read sqlite kw with the generic read_keywords method
@@ -219,7 +224,7 @@ class KeywordIOTest(unittest.TestCase):
         expected_keywords = self.expected_sqlite_keywords
         message = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
             keywords, expected_keywords, self.sqlite_layer.source())
-        self.assertEqual(keywords, expected_keywords, message)
+        self.assertDictEqual(keywords, expected_keywords, message)
 
         # Delete SQL Layer so that we can delete the file
         del sqlite_layer
@@ -234,7 +239,7 @@ class KeywordIOTest(unittest.TestCase):
         expected_keywords = self.expected_raster_keywords
         message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
             copied_keywords, expected_keywords, out_path)
-        self.assertEquals(copied_keywords, expected_keywords, message)
+        self.assertDictEqual(copied_keywords, expected_keywords, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordIOTest)

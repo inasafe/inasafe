@@ -172,10 +172,11 @@
             <gmd:supplementalInformation>
                 <inasafe_keywords>
 <![CDATA[datatype: osm
-category: exposure
-subcategory: structure
+layer_purpose: exposure
+exposure: structure
 purpose: dki
 title: buildings_osm_4326
+layer_mode: classified
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

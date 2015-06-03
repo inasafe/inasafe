@@ -3,8 +3,8 @@
 __author__ = 'lucernae'
 __date__ = '11/04/15'
 
-
 import sys
+
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.string_parameter import StringParameter
 

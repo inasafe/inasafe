@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '24/10/14'
@@ -21,18 +22,14 @@ import unittest
 import random
 import os
 import logging
-import numpy
 from collections import OrderedDict
 
 from safe.impact_functions.core import (
-    convert_to_old_keywords,
     population_rounding_full,
     population_rounding,
-    evacuated_population_needs,
-    has_no_data)
+    evacuated_population_needs)
 from safe.common.resource_parameter import ResourceParameter
 from safe.defaults import default_minimum_needs
-from safe.definitions import converter_dict
 from safe.test.utilities import TESTDATA, HAZDATA
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -145,32 +142,6 @@ class TestCore(unittest.TestCase):
         result = OrderedDict(
             [[r['table name'], r['amount']] for r in result])
         assert result['Toilets'] == 2
-
-    def test_convert_to_old_keywords(self):
-        """Test to convert new keywords to old keywords system."""
-        new_keywords = {
-            'category': 'hazard',
-            'subcategory': 'tsunami',
-            'unit': 'metres_depth'
-        }
-
-        convert_to_old_keywords(converter_dict, [new_keywords])
-        expected_keywords = {
-            'category': 'hazard',
-            'subcategory': 'tsunami',
-            'unit': 'm'
-        }
-        msg = 'Expected %s but I got %s' % (
-            expected_keywords, new_keywords)
-        self.assertDictEqual(new_keywords, expected_keywords, msg)
-
-    def test_0005_has_no_data(self):
-        """Test whether the nodata tester detects nan's in arrays."""
-        layer_data = numpy.array([[1, 2.0], [2.0, 3]])
-        layer_data_nan = numpy.array([[1, 2.0], [numpy.nan, 3]])
-        self.assertFalse(has_no_data(layer_data))
-        self.assertTrue(has_no_data(layer_data_nan))
-
 
 if __name__ == '__main__':
     unittest.main()

@@ -14,24 +14,24 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    hazard_tsunami,
-    unit_wetdry,
-    layer_vector_polygon,
-    exposure_definition,
-    exposure_structure,
-    unit_building_type_type)
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.impact_functions.inundation.flood_vector_building_impact\
-    .parameter_definitions import (
-        building_type_field,
-        affected_field,
-        affected_value)
+    import parameter_definitions
 from safe.utilities.i18n import tr
+from safe.definitions import (
+    layer_mode_classified,
+    layer_geometry_polygon,
+    hazard_flood,
+    hazard_category_single_event,
+    exposure_structure,
+    flood_vector_hazard_classes,
+    layer_mode_none,
+    building_type_field,
+    affected_field,
+    affected_value
+)
 
 
 class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
@@ -70,31 +70,39 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
             'actions': '',
             'limitations': [],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_flood, hazard_tsunami],
-                    'units': [unit_wetdry],
-                    'layer_constraints': [layer_vector_polygon]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_polygon],
+                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_types': [hazard_flood],
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': [
+                        flood_vector_hazard_classes],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [affected_field, affected_value]
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [unit_building_type_type],
-                    'layer_constraints': [layer_vector_polygon]
+                    'layer_mode': layer_mode_none,
+                    'layer_geometries': [layer_geometry_polygon],
+                    'exposure_types': [exposure_structure],
+                    'exposure_units': [],
+                    'additional_keywords': [building_type_field]
                 }
             },
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about building types
-                ('building_type_field', building_type_field()),
+                ('building_type_field',
+                 parameter_definitions.building_type_field()),
                 # This field of the  hazard layer contains information
                 # about inundated areas
-                ('affected_field', affected_field()),
+                ('affected_field',
+                 parameter_definitions.affected_field()),
                 # This value in 'affected_field' of the hazard layer
                 # marks the areas as inundated
-                ('affected_value', affected_value()),
-
+                ('affected_value',
+                 parameter_definitions.affected_value()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))
