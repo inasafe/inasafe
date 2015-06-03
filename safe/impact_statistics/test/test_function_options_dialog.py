@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe_extras.parameters.boolean_parameter import BooleanParameter
+from safe_extras.parameters.dict_parameter import DictParameter
 
 __author__ = 'misugijunz@gmail.com'
 __date__ = '15/10/2012'
@@ -34,7 +36,8 @@ from collections import OrderedDict
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QLineEdit, QCheckBox, QPushButton, QListWidget
+from PyQt4.QtGui import QLineEdit, QCheckBox, QPushButton, QListWidget, \
+    QTreeWidget
 
 from safe.test.utilities import get_qgis_app
 from safe.defaults import (
@@ -198,17 +201,22 @@ class FunctionOptionsDialogTest(unittest.TestCase):
         self.assertEqual(expected_value, real_value, message)
 
         widget.setText('bar')
-        try:
-            add_button.click()
-            value().value
-        except ValueError:
-            # expected to raises this exception
-            pass
-        else:
-            raise Exception("Fail: must raise an exception")
+        self.assertEqual('bar', widget.text())
+
+        def trigger_error(error):
+            message = 'Expected %s type but got %s' % (
+                ValueError, type(error))
+            self.assertIsInstance(error, ValueError, message)
+
+        threshold.add_row_error_handler = trigger_error
+        add_button.click()
+
+        bool_param = BooleanParameter()
+        bool_param.name = 'boolean checkbox'
+        bool_param.value = True
 
         dialog = FunctionOptionsDialog()
-        value = dialog.build_widget(dialog.configLayout, 'foo', True)
+        value = dialog.build_widget(dialog.configLayout, 'foo', bool_param)
         widget = dialog.findChild(QCheckBox)
 
         # initial value must be same with default
@@ -219,24 +227,31 @@ class FunctionOptionsDialogTest(unittest.TestCase):
 
         widget.setChecked(False)
         expected_value = False
-        real_value = value()
+        real_value = value().value
         message = 'Expected %s but got %s' % (expected_value, real_value)
         self.assertEqual(expected_value, real_value, message)
 
-        original_value = {'a': 1, 'b': 2}
+        dict_param = DictParameter()
+        dict_param.name = 'Dictionary tree'
+        dict_param.element_type = int
+        dict_param.value = {'a': 1, 'b': 2}
         dialog = FunctionOptionsDialog()
-        value = dialog.build_widget(dialog.configLayout, 'foo', original_value)
-        widget = dialog.findChild(QLineEdit)
+        value = dialog.build_widget(dialog.configLayout, 'foo', dict_param)
+        widget = dialog.findChild(QTreeWidget)
 
         # initial value must be same with default
-        expected_value = original_value
-        real_value = value()
+        expected_value = {'a': 1, 'b': 2}
+        real_value = value().value
         message = 'Expected %s but got %s' % (expected_value, real_value)
         self.assertEqual(expected_value, real_value, message)
 
         expected_value = {'a': 2, 'b': 1}
-        widget.setText(str(expected_value))
-        real_value = value()
+        # get tree items
+        tree_items = widget.invisibleRootItem()
+        # set the input
+        tree_items.child(0).setText(1, str(2))
+        tree_items.child(1).setText(1, str(1))
+        real_value = value().value
         message = 'Expected %s but got %s' % (expected_value, real_value)
         self.assertEqual(expected_value, real_value, message)
 

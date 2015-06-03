@@ -41,7 +41,8 @@ class DictParameterWidget(GenericParameterWidget):
         widget_items = self.generate_tree_model(self._parameter.value)
         self._input.addTopLevelItems(widget_items)
         # set header
-        self._input.headerItem().setText(0, 'Values')
+        self._input.headerItem().setText(0, 'Keys')
+        self._input.headerItem().setText(1, 'Values')
 
         self._inner_input_layout.addWidget(self._input)
 
@@ -83,10 +84,10 @@ class DictParameterWidget(GenericParameterWidget):
                 items = self.generate_tree_model(entry)
                 key_item.addChildren(items)
             else:
-                value_item = QTreeWidgetItem()
-                value_item.setText(0, str(entry))
-                value_item.setFlags(value_item.flags() | Qt.ItemIsEditable)
-                key_item.addChild(value_item)
+                # value_item = QTreeWidgetItem()
+                key_item.setText(1, str(entry))
+                key_item.setFlags(key_item.flags() | Qt.ItemIsEditable)
+                # key_item.addChild(key_item)
             widget_items.append(key_item)
 
         return widget_items
@@ -108,9 +109,9 @@ class DictParameterWidget(GenericParameterWidget):
         for key_item in widget_items:
             key = str(key_item.text(0))
             value = None
-            if key_item.childCount() == 1:
-                value_item = key_item.child(0)
-                value = element_type(value_item.text(0))
+            if key_item.childCount() == 0:
+                # value_item = key_item.child(0)
+                value = element_type(key_item.text(1))
             elif key_item.childCount() > 1:
                 value_items = [key_item.child(i)
                                for i in range(key_item.childCount())]
