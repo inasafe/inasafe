@@ -260,7 +260,7 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-converter-tool.svg')
         self.action_shake_converter = QAction(
             QIcon(icon),
-            self.tr('InaSAFE Converter'), self.iface.mainWindow())
+            self.tr('InaSAFE Xml Shakemap Converter'), self.iface.mainWindow())
         self.action_shake_converter.setStatusTip(self.tr(
             'Open InaSAFE Converter'))
         self.action_shake_converter.setWhatsThis(self.tr(
