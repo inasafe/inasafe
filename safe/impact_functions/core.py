@@ -136,18 +136,6 @@ def population_rounding(number):
     return population_rounding_full(number)[0]
 
 
-def extract_layers(layers, keyword, value):
-    """Extract layers with specified keyword/value pair
-    """
-
-    extracted_layers = []
-    for layer in layers:
-        if value in layer.get_keywords(keyword):
-            extracted_layers.append(layer)
-
-    return extracted_layers
-
-
 def has_no_data(layer_data):
     """Determine whether or not a layer contains nan values.
     :param layer_data: Layer data that is to be inspected.

@@ -12,7 +12,6 @@ from PyQt4.QtCore import QSettings
 
 from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
-from safe.impact_functions.core import extract_layers
 from safe.common.utilities import unique_filename, verify
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import replace_accentuated_characters
@@ -195,30 +194,24 @@ def calculate_impact(
     # Get input layer sources
     # NOTE: We assume here that there is only one of each
     #       If there are more only the first one is used
-    for layer_purpose in ['hazard', 'exposure']:
-        layer = extract_layers(layers, 'layer_purpose', layer_purpose)
-        keywords = layer[0].get_keywords()
+    for layer in layers:
+        keywords = layer.get_keywords()
         not_specified = tr('Not specified')
-        if 'title' in keywords:
-            title = keywords['title']
-        else:
-            title = not_specified
 
-        if 'source' in keywords:
-            source = keywords['source']
-        else:
-            source = not_specified
+        layer_purpose = keywords.get('layer_purpose', not_specified)
+        title = keywords.get('title', not_specified)
+        source = keywords.get('source', not_specified)
 
-        if 'hazard' in keywords:
-            subcategory = keywords['hazard']
-        elif 'exposure' in keywords:
-            subcategory = keywords['exposure']
+        if layer_purpose == 'hazard':
+            category = keywords['hazard']
+        elif layer_purpose == 'exposure':
+            category = keywords['exposure']
         else:
-            subcategory = not_specified
+            category = not_specified
 
         result_layer.keywords['%s_title' % layer_purpose] = title
         result_layer.keywords['%s_source' % layer_purpose] = source
-        result_layer.keywords['%s_subcategory' % layer_purpose] = subcategory
+        result_layer.keywords['%s' % layer_purpose] = category
 
     result_layer.keywords['elapsed_time'] = elapsed_time_sec
     result_layer.keywords['time_stamp'] = time_stamp[:19]  # remove decimal
@@ -231,8 +224,8 @@ def calculate_impact(
     # Set the filename : issue #1648
     # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS.EXT
     # FloodOnBuildings_12March2015_10h22.04.shp
-    exp = result_layer.keywords['exposure_subcategory'].title()
-    haz = result_layer.keywords['hazard_subcategory'].title()
+    exp = result_layer.keywords['exposure'].title()
+    haz = result_layer.keywords['hazard'].title()
     date = end_time.strftime('%d%B%Y').decode('utf8')
     time = end_time.strftime('%Hh%M.%S').decode('utf8')
     prefix = u'%sOn%s_%s_%s-' % (haz, exp, date, time)
