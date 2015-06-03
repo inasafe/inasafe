@@ -18,17 +18,7 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 from safe.defaults import (
-    default_minimum_needs,
-    default_provenance)
-from safe.definitions import (
-    hazard_definition,
-    hazard_tsunami,
-    unit_feet_depth,
-    unit_metres_depth,
-    layer_raster_continuous,
-    exposure_definition,
-    exposure_population,
-    unit_people_per_pixel)
+    default_minimum_needs)
 from safe.defaults import (
     default_gender_postprocessor,
     minimum_needs_selector,
@@ -37,6 +27,16 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
+from safe.definitions import (
+    layer_mode_continuous,
+    layer_geometry_raster,
+    hazard_category_single_event,
+    unit_metres,
+    unit_feet,
+    count_exposure_unit,
+    exposure_population,
+    hazard_tsunami
+)
 
 
 class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
@@ -102,21 +102,23 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                 'The default threshold of 0.7 meter was selected based on '
                 'consensus, not hard evidence.')],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_tsunami],
-                    'units': [
-                        unit_feet_depth,
-                        unit_metres_depth
-                    ],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_types': [hazard_tsunami],
+                    'continuous_hazard_units': [unit_feet, unit_metres],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'exposure_types': [exposure_population],
+                    'exposure_units': [count_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
@@ -126,8 +128,7 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                 ])),
-                ('minimum needs', default_minimum_needs()),
-                ('provenance', default_provenance())
+                ('minimum needs', default_minimum_needs())
             ])
         }
         return dict_meta

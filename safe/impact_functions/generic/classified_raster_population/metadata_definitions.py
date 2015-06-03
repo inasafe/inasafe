@@ -18,16 +18,7 @@ __date__ = '24/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 from safe.common.utilities import OrderedDict
-from safe.defaults import default_minimum_needs, default_provenance
-from safe.definitions import (
-    hazard_definition,
-    hazard_all,
-    unit_classified,
-    layer_raster_classified,
-    exposure_definition,
-    exposure_population,
-    unit_people_per_pixel,
-    layer_raster_continuous)
+from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
@@ -35,6 +26,18 @@ from safe.defaults import (
 from safe.utilities.i18n import tr
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_raster,
+    hazard_all,
+    hazard_category_multiple_event,
+    count_exposure_unit,
+    all_raster_hazard_classes,
+    exposure_population,
+    hazard_category_single_event,
+    density_exposure_unit
+)
 
 
 class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
@@ -92,18 +95,26 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 'affected for each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': hazard_all,
-                    'units': [unit_classified],
-                    'layer_constraints': [layer_raster_classified]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [
+                        hazard_category_multiple_event,
+                        hazard_category_single_event],
+                    'hazard_types': hazard_all,
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': all_raster_hazard_classes,
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'exposure_types': [exposure_population],
+                    'exposure_units': [
+                        count_exposure_unit, density_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
@@ -115,8 +126,7 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                 ])),
-                ('minimum needs', default_minimum_needs()),
-                ('provenance', default_provenance())
+                ('minimum needs', default_minimum_needs())
             ])
         }
         return dict_meta

@@ -124,10 +124,11 @@ class UtilitiesTest(unittest.TestCase):
         raster_tsunami_path = test_data_path(
             'hazard', 'tsunami_wgs84.tif')
 
-        keyword = read_file_keywords(raster_shake_path, 'category')
+        keyword = read_file_keywords(raster_shake_path, 'layer_purpose')
         expected_keyword = 'hazard'
-        message = ('The keyword "category" for %s is %s. Expected keyword is: '
-                   '%s') % (raster_shake_path, keyword, expected_keyword)
+        message = (
+            'The keyword "layer_purpose" for %s is %s. Expected keyword is: '
+            '%s') % (raster_shake_path, keyword, expected_keyword)
         self.assertEqual(keyword, expected_keyword, message)
 
         # Test we get an exception if keyword is not found
@@ -138,33 +139,38 @@ class UtilitiesTest(unittest.TestCase):
         # Test if all the keywords are all ready correctly
         keywords = read_file_keywords(raster_shake_path)
         expected_keywords = {
-            'category': 'hazard',
-            'subcategory': 'flood',
-            'data_type': 'continuous',
-            'unit': 'metres_depth',
-            'title': 'Jakarta flood like 2007 with structural improvements'}
+            'hazard_category': 'single_event',
+            'hazard': 'flood',
+            'continuous_hazard_unit': 'metres',
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous',
+            'title': 'Jakarta flood like 2007 with structural improvements'
+        }
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
-        self.assertEqual(keywords, expected_keywords, message)
+        self.assertDictEqual(keywords, expected_keywords, message)
 
         # Test reading keywords from vector layer
         keywords = read_file_keywords(vector_path)
         expected_keywords = {
-            'category': 'exposure',
-            'datatype': 'osm',
-            'subcategory': 'structure',
             'title': 'buildings_osm_4326',
-            'purpose': 'dki'}
+            'datatype': 'osm',
+            'purpose': 'dki',
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'exposure': 'structure'
+        }
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
-        self.assertEqual(keywords, expected_keywords, message)
+        self.assertDictEqual(keywords, expected_keywords, message)
 
         # tsunami example
         keywords = read_file_keywords(raster_tsunami_path)
         expected_keywords = {
-            'category': 'hazard',
-            'unit': 'metres_depth',
-            'subcategory': 'tsunami',
-            'data_type': 'continuous',
-            'title': 'Tsunami'
+            'hazard_category': 'single_event',
+            'title': 'Tsunami',
+            'hazard': 'tsunami',
+            'hazard_continuous_unit': 'metres',
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous'
         }
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)

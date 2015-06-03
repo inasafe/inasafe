@@ -54,7 +54,8 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
 
-        zone_sum = impact_layer.get_data(attribute='zone')
+        zone_sum = impact_layer.get_data(
+            attribute=impact_function.target_field)
         high_zone_count = zone_sum.count('High Hazard Zone')
         medium_zone_count = zone_sum.count('Medium Hazard Zone')
         low_zone_count = zone_sum.count('Low Hazard Zone')
@@ -77,20 +78,20 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """TestGenericPolygonBuildingFunction: Test filtering IF"""
         hazard_keywords = {
-            'title': 'Generic Polygon',
-            'category': 'hazard',
-            'subcategory': 'earthquake',
-            'unit': 'classes',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'flood',
+            'hazard_category': 'multiple_event',
+            'vector_hazard_classification': 'generic_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'structure',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
-        }
+            'layer_purpose': 'exposure',
+            'layer_mode': 'none',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure',
+            }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)

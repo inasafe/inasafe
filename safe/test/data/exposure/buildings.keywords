@@ -1,6 +1,7 @@
-category: exposure
-subcategory: structure
 license: Open Data Commons Open Database License (ODbL)
 title: Buildings
 source: OpenStreetMap - www.openstreetmap.org
 date: 26-03-2015 14:03
+layer_purpose: exposure
+layer_mode: none
+exposure: structure

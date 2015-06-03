@@ -1,6 +1,8 @@
-category: hazard
-subcategory: flood
+hazard_category: single_event
 title: Flood Polygon Cross Kabupaten
+hazard: flood
 field: FLOODPRONE
 value_map: {'dry': ['NO'], 'wet': ['YES']}
-unit: wetdry
+vector_hazard_classification: flood_vector_hazard_classes
+layer_purpose: hazard
+layer_mode: classified

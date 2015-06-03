@@ -11,19 +11,19 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_definition,
-    hazard_volcano,
-    unit_volcano_categorical,
-    layer_vector_point,
-    layer_vector_polygon,
-    exposure_definition,
-    exposure_structure,
-    unit_building_type_type,
-    unit_building_generic)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.definitions import (
+    layer_geometry_point,
+    layer_geometry_polygon,
+    hazard_volcano,
+    volcano_vector_hazard_classes,
+    hazard_category_multiple_event,
+    exposure_structure,
+    layer_mode_none,
+    volcano_name_field
+)
 
 
 class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
@@ -75,24 +75,26 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'affected by each hazard zones.'),
             'limitations': [],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_volcano],
-                    'units': [unit_volcano_categorical],
-                    'layer_constraints': [
-                        layer_vector_point
-                    ]
+                    'layer_mode': layer_mode_none,
+                    'layer_geometries': [layer_geometry_point],
+                    'hazard_categories': [hazard_category_multiple_event],
+                    'hazard_types': [hazard_volcano],
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': [
+                        volcano_vector_hazard_classes],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [volcano_name_field]
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [
-                        unit_building_type_type,
-                        unit_building_generic],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point]
+                    'layer_mode': layer_mode_none,
+                    'layer_geometries': [
+                        layer_geometry_polygon,
+                        layer_geometry_point],
+                    'exposure_types': [exposure_structure],
+                    'exposure_units': [],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([

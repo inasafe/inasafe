@@ -74,16 +74,20 @@ class TestTsunamiEvacuationRaster(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'tsunami',
-            'unit': 'metres_depth',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'hazard': 'tsunami',
+            'hazard_category': 'single_event',
+            'continuous_hazard_unit': 'metres'
         }
 
         exposure_keywords = {
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

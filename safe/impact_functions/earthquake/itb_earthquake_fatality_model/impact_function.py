@@ -33,9 +33,10 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.common.exceptions import InaSAFEError
 from safe.utilities.i18n import tr
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    get_needs_provenance_value, filter_needs_parameters
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -117,8 +118,6 @@ class ITBFatalityFunction(ImpactFunction):
             }),
             ('mmi_range', range(2, 10)),
             ('step', 0.5),
-            # Threshold below which layer should be transparent
-            ('tolerance', 0.01),
             ('calculate_displaced_people', True)
         ])
 
@@ -153,9 +152,6 @@ class ITBFatalityFunction(ImpactFunction):
 
         displacement_rate = self.hardcoded_parameters['displacement_rate']
 
-        # Tolerance for transparency
-        tolerance = self.hardcoded_parameters['tolerance']
-
         # Extract input layers
         intensity = self.hazard
         population = self.exposure
@@ -184,7 +180,6 @@ class ITBFatalityFunction(ImpactFunction):
 
             # Calculate expected number of fatalities per level
             fatality_rate = self.fatality_rate(mmi)
-
             fatalities = fatality_rate * mmi_matches
 
             # Calculate expected number of displaced people per level
@@ -211,63 +206,60 @@ class ITBFatalityFunction(ImpactFunction):
             # noinspection PyUnresolvedReferences
             number_of_fatalities[mmi] = numpy.nansum(fatalities.flat)
 
-        # Set resulting layer to NaN when less than a threshold. This is to
-        # achieve transparency (see issue #126).
-        mask[mask < tolerance] = numpy.nan
-
         # Total statistics
-        total, rounding = population_rounding_full(numpy.nansum(exposure.flat))
+        total_population, rounding = population_rounding_full(
+            numpy.nansum(exposure.flat))
 
         # Compute number of fatalities
-        fatalities = population_rounding(numpy.nansum(
+        total_fatalities = population_rounding(numpy.nansum(
             number_of_fatalities.values()))
         # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
         # will be rounded down to 0 - Tim
-        if fatalities < 50:
-            fatalities = 0
+        if total_fatalities < 50:
+            total_fatalities = 0
 
         # Compute number of people displaced due to building collapse
-        displaced = population_rounding(numpy.nansum(
-            number_of_displaced.values()))
+        total_displaced = population_rounding(
+            numpy.nansum(number_of_displaced.values()))
 
         # Generate impact report
         table_body = [self.question]
 
         # Add total fatality estimate
-        s = format_int(fatalities)
+        s = format_int(total_fatalities)
         table_body.append(TableRow([tr('Number of fatalities'), s],
                                    header=True))
 
         if self.hardcoded_parameters['calculate_displaced_people']:
             # Add total estimate of people displaced
-            s = format_int(displaced)
+            s = format_int(total_displaced)
             table_body.append(TableRow([tr('Number of people displaced'), s],
                                        header=True))
         else:
-            displaced = 0
+            total_displaced = 0
 
         # Add estimate of total population in area
-        s = format_int(int(total))
+        s = format_int(int(total_population))
         table_body.append(TableRow([tr('Total number of people'), s],
                                    header=True))
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         # Generate impact report for the pdf map
         table_body = [
             self.question, TableRow(
-                [tr('Fatalities'), '%s' % format_int(fatalities)],
+                [tr('Fatalities'), '%s' % format_int(total_fatalities)],
                 header=True),
             TableRow(
-                [tr('People displaced'), '%s' % format_int(displaced)],
+                [tr('People displaced'), '%s' % format_int(total_displaced)],
                 header=True),
             TableRow(tr('Map shows the estimation of displaced population'))]
 
         total_needs = evacuated_population_needs(
-            displaced, minimum_needs)
+            total_displaced, minimum_needs)
         for frequency, needs in total_needs.items():
             table_body.append(TableRow(
                 [
@@ -280,18 +272,19 @@ class ITBFatalityFunction(ImpactFunction):
                     tr(resource['table name']),
                     format_int(resource['amount'])]))
         table_body.append(TableRow(tr('Provenance'), header=True))
-        table_body.append(TableRow(self.parameters['provenance']))
+        table_body.append(TableRow(get_needs_provenance_value(
+            self.parameters)))
 
         table_body.append(TableRow(tr('Action Checklist:'), header=True))
 
-        if fatalities > 0:
+        if total_fatalities > 0:
             table_body.append(tr('Are there enough victim identification '
                                  'units available for %s people?') %
-                              format_int(fatalities))
-        if displaced > 0:
+                              format_int(total_fatalities))
+        if total_displaced > 0:
             table_body.append(tr('Are there enough shelters and relief items '
                                  'available for %s people?')
-                              % format_int(displaced))
+                              % format_int(total_displaced))
             table_body.append(TableRow(tr('If yes, where are they located and '
                                           'how will we distribute them?')))
             table_body.append(TableRow(tr('If no, where can we obtain '
@@ -300,12 +293,11 @@ class ITBFatalityFunction(ImpactFunction):
 
         # Extend impact report for on-screen display
         table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population: %s') % format_int(total),
+                           tr('Total population: %s') % format_int(
+                               total_population),
                            tr('People are considered to be displaced if '
                               'they experience and survive a shake level'
                               'of more than 5 on the MMI scale '),
-                           tr('Minimum needs are defined in BNPB '
-                              'regulation 7/2008'),
                            tr('The fatality calculation assumes that '
                               'no fatalities occur for shake levels below 4 '
                               'and fatality counts of less than 50 are '
@@ -315,8 +307,8 @@ class ITBFatalityFunction(ImpactFunction):
                               'lives as fractions.')])
 
         table_body.append(TableRow(tr('Notes'), header=True))
-        table_body.append(tr('Fatality model is from '
-                             'Institute of Teknologi Bandung 2012.'))
+        table_body.append(
+            tr('Fatality model is from Institut Teknologi Bandung 2012.'))
         table_body.append(
             tr('Population numbers rounded up to the nearest %s.') % rounding)
 
@@ -324,21 +316,12 @@ class ITBFatalityFunction(ImpactFunction):
         impact_summary = Table(table_body).toNewlineFreeString()
         impact_table = impact_summary
 
-        # check for zero impact
-        if numpy.nanmax(mask) == 0 == numpy.nanmin(mask):
-            table_body = [
-                self.question,
-                TableRow([tr('Fatalities'), '%s' % format_int(fatalities)],
-                         header=True)]
-            my_message = Table(table_body).toNewlineFreeString()
-            raise ZeroImpactException(my_message)
-
         # Create style
         colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']
         classes = create_classes(mask.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
-        for i in xrange(len(colours)):
+        for i in xrange(len(interval_classes)):
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
             style_class['quantity'] = classes[i]
@@ -368,8 +351,8 @@ class ITBFatalityFunction(ImpactFunction):
             geotransform=population.get_geotransform(),
             keywords={
                 'impact_summary': impact_summary,
-                'total_population': total,
-                'total_fatalities': fatalities,
+                'total_population': total_population,
+                'total_fatalities': total_fatalities,
                 'fatalities_per_mmi': number_of_fatalities,
                 'exposed_per_mmi': number_of_exposed,
                 'displaced_per_mmi': number_of_displaced,

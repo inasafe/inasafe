@@ -1,5 +1,6 @@
-category: hazard
-subcategory: tsunami
-data_type: continuous
+hazard_category: single_event
 title: Tsunami
-unit: metres_depth
+hazard: tsunami
+hazard_continuous_unit: metres
+layer_purpose: hazard
+layer_mode: continuous

@@ -11,15 +11,23 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import hazard_definition, hazard_all, unit_classified, \
-    layer_raster_classified, exposure_definition, exposure_structure, \
-    unit_building_type_type, unit_building_generic, layer_vector_polygon, \
-    layer_vector_point
 from safe.utilities.i18n import tr
 
 from safe.defaults import building_type_postprocessor
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
+from safe.definitions import (
+    layer_mode_classified,
+    layer_geometry_polygon,
+    layer_geometry_point,
+    layer_geometry_raster,
+    hazard_all,
+    hazard_category_multiple_event,
+    exposure_structure,
+    all_raster_hazard_classes,
+    hazard_category_single_event,
+    layer_mode_none
+)
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -85,23 +93,29 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                 'within each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': hazard_all,
-                    'units': [unit_classified],
-                    'layer_constraints': [layer_raster_classified]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
+                    ],
+                    'hazard_types': hazard_all,
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': all_raster_hazard_classes,
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [
-                        unit_building_type_type,
-                        unit_building_generic],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point
-                    ]
+                    'layer_mode': layer_mode_none,
+                    'layer_geometries': [
+                        layer_geometry_point,
+                        layer_geometry_polygon
+                    ],
+                    'exposure_types': [exposure_structure],
+                    'exposure_units': [],
+                    'additional_keywords': []
                 }
             },
             # parameters

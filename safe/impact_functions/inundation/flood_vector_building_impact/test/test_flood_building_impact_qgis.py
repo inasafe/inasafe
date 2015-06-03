@@ -17,7 +17,6 @@ __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import unittest
-
 from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_manager\
@@ -67,7 +66,7 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
 
         # Count of flooded objects is calculated "by the hands"
         # total flooded = 27, total buildings = 129
-        count = sum(impact.get_data(attribute='INUNDATED'))
+        count = sum(impact.get_data(attribute=function.target_field))
         self.assertEquals(count, 33)
         count = len(impact.get_data())
         self.assertEquals(count, 176)
@@ -75,17 +74,19 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'wetdry',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'flood',
+            'hazard_category': 'single_event',
+            'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'subcategory': 'structure',
-            'units': 'building_type',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'none',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

@@ -35,7 +35,8 @@ from safe.common.utilities import (
     create_classes,
     humanize_class,
     create_label)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    get_needs_provenance_value, filter_needs_parameters
 from safe.utilities.unicode import get_unicode
 from safe.common.exceptions import ZeroImpactException
 
@@ -50,9 +51,6 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
     def __init__(self):
         """Constructor."""
         super(FloodEvacuationVectorHazardFunction, self).__init__()
-
-        # Target field in the impact layer
-        self.target_field = 'population'
 
         # Use affected field flag (if False, all polygon will be considered as
         # affected)
@@ -135,7 +133,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(
             TableRow(tr('Total population: %s') % format_int(total)))
-        table_body.append(TableRow(self.parameters['provenance']))
+        table_body.append(TableRow(get_needs_provenance_value(
+            self.parameters)))
         if nan_warning:
             table_body.extend([
                 tr('The population layer contained `no data`. This missing '
@@ -246,7 +245,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         # Rounding
