@@ -383,12 +383,9 @@ class ShakeGrid(object):
             '                      x="lon" y="lat" z="mmi"/>'
             '  </OGRVRTLayer>'
             '</OGRVRTDataSource>' % csv_path)
+
         with codecs.open(vrt_path, 'w', encoding='utf-8') as f:
             f.write(vrt_string)
-
-        # vrt_file = file(vrt_path, 'w')
-        # vrt_file.write(vrt_string)
-        # vrt_file.close()
 
         return vrt_path
 
