@@ -102,17 +102,6 @@ layer_mode_classified = {
     ),
 }
 
-layer_mode_none = {
-    'key': 'none',
-    'name': tr('none'),
-    'description': tr(
-        'Layer mode <b>None</b> means that the layer is not continuous or '
-        'classified. All vector features regardless of their attributes or '
-        'all raster non-null cells regardess of their values have the '
-        'same meaning.'
-    )
-}
-
 layer_mode = {
     'key': 'layer_mode',
     'name': tr('Layer Mode'),

@@ -25,7 +25,6 @@ from safe.definitions import (
     hazard_category_single_event,
     exposure_structure,
     flood_vector_hazard_classes,
-    layer_mode_none,
     building_type_field,
     affected_field,
     affected_value
@@ -81,7 +80,7 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'additional_keywords': [affected_field, affected_value]
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],

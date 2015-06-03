@@ -22,7 +22,7 @@ from safe.defaults import road_type_postprocessor
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
 from safe.definitions import (
-    layer_mode_none,
+    layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_raster,
     layer_geometry_line,
@@ -84,7 +84,7 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
                     'exposure_units': [],

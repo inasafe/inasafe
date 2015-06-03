@@ -64,7 +64,7 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         hazard_keywords = {
             'title': 'merapi',
             'layer_purpose': 'hazard',
-            'layer_mode': 'none',
+            'layer_mode': 'classified',
             'layer_geometry': 'point',
             'hazard': 'volcano',
             'hazard_category': 'multiple_event',
@@ -73,7 +73,7 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'none',
+            'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'exposure': 'structure'
         }

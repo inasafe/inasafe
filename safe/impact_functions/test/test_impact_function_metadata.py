@@ -368,7 +368,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for exposure_additional_keywords."""
         impact_function = FloodPolygonBuildingFunction()
         result = impact_function.metadata().exposure_additional_keywords(
-            layer_mode_key='none',
+            layer_mode_key='classified',
             layer_geometry_key='polygon',
             exposure_key='structure'
         )

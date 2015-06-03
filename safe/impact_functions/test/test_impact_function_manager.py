@@ -321,7 +321,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         """Test for exposure_additional_keywords."""
         ifm = ImpactFunctionManager()
         additional_keywords = ifm.exposure_additional_keywords(
-            layer_mode_key='none',
+            layer_mode_key='classified',
             layer_geometry_key='polygon',
             exposure_key='structure'
         )
