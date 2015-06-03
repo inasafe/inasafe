@@ -27,11 +27,9 @@ from PyQt4.QtCore import QObject
 
 # Do not import any QGIS or SAFE modules in this module!
 from safe.utilities.impact_calculator_thread import ImpactCalculatorThread
-from safe.utilities.qgis_layer_wrapper import QgisWrapper
 from safe.common.exceptions import (
     InsufficientParametersError,
     InvalidParameterError)
-from safe.utilities.gis import convert_to_safe_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 
@@ -56,48 +54,13 @@ class ImpactCalculator(QObject):
         self._result = None
         self._extent = None
 
-    def _get_layer(self, layer):
-        """Analyze style of self._function and return appropriate
-            class of the layer.
-
-        :param layer: A layer.
-        :type layer:  QgsMapLayer or SAFE layer.
-
-        :returns:   The layer of appropriate type
-        :rtype:     SAFE or QgisWrapper
-
-        :raises: InsufficientParametersError if self._function is not set,
-                 InvalidParameterError if style of self._function is not
-                     in ('old-style', 'qgis2.0')
-                 Any exceptions raised by other libraries will be propagated.
-        """
-        if self._impact_function is None:
-            message = self.tr('Error: Impact Function not set.')
-            raise InsufficientParametersError(message)
-
-        # Get type of the impact function (old-style or new-style)
-        try:
-            impact_function_type = \
-                self.impact_function_manager.get_function_type(
-                    self._impact_function)
-            if impact_function_type == 'old-style':
-                return convert_to_safe_layer(layer)
-            elif impact_function_type == 'qgis2.0':
-                # convert for new style impact function
-                return QgisWrapper(layer)
-            else:
-                message = self.tr('Error: Impact Function has unknown style.')
-                raise InvalidParameterError(message)
-        except:
-            raise
-
     def exposure_layer(self):
         """Accessor for the exposure layer.
 
         :returns: The exposure layer.
-        :rtype: read_layer
+        :rtype: QgsMapLayer.
         """
-        return self._get_layer(self._exposure_layer)
+        return self._exposure_layer
 
     def set_exposure_layer(self, layer):
         """Mutator for Exposure layer property.
@@ -116,10 +79,10 @@ class ImpactCalculator(QObject):
         """Accessor for the hazard layer.
 
         :returns: The hazard layer.
-        :rtype:   QgsMapLayer or SAFE layer.
+        :rtype:   QgsMapLayer.
 
         """
-        return self._get_layer(self._hazard_layer)
+        return self._hazard_layer
 
     def set_hazard_layer(self, layer):
         """Mutator for hazard layer property.

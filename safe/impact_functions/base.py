@@ -21,11 +21,11 @@ from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.storage.core import Vector
 from safe.common.exceptions import InvalidExtentError
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
+from safe.utilities.gis import convert_to_safe_layer
 
 
 class ImpactFunction(object):
@@ -214,18 +214,21 @@ class ImpactFunction(object):
         :param layer: Hazard layer to be used for the analysis.
         :type layer: QgsVectorLayer, QgsRasterLayer, Vector, Raster
         """
-        self._hazard = layer
+        if self.function_type() == 'old-style':
+            self._hazard = convert_to_safe_layer(layer)
+        elif self.function_type() == 'qgis2.0':
+            # convert for new style impact function
+            self._hazard = QgisWrapper(layer)
+        else:
+            message = tr('Error: Impact Function has unknown style.')
+            raise Exception(message)
+
         # Update the target field to a non-conflicting one
-        if isinstance(layer, QgisWrapper):
-            if isinstance(layer.data, QgsVectorLayer):
-                self._target_field = get_non_conflicting_attribute_name(
-                    self.target_field,
-                    layer.data.dataProvider().fieldNameMap().keys()
-                )
-        elif isinstance(layer, Vector):
-            attribute_names = layer.get_attribute_names()
+        if isinstance(layer, QgsVectorLayer):
             self._target_field = get_non_conflicting_attribute_name(
-                self.target_field, attribute_names)
+                self.target_field,
+                layer.dataProvider().fieldNameMap().keys()
+            )
 
     @property
     def exposure(self):
@@ -243,18 +246,21 @@ class ImpactFunction(object):
         :param layer: exposure layer to be used for the analysis.
         :type layer: QgsVectorLayer, QgsRasterLayer, Vector, Raster
         """
-        self._exposure = layer
+        if self.function_type() == 'old-style':
+            self._exposure = convert_to_safe_layer(layer)
+        elif self.function_type() == 'qgis2.0':
+            # convert for new style impact function
+            self._exposure = QgisWrapper(layer)
+        else:
+            message = tr('Error: Impact Function has unknown style.')
+            raise Exception(message)
+
         # Update the target field to a non-conflicting one
-        if isinstance(layer, QgisWrapper):
-            if isinstance(layer.data, QgsVectorLayer):
-                self._target_field = get_non_conflicting_attribute_name(
-                    self.target_field,
-                    layer.data.dataProvider().fieldNameMap().keys()
-                )
-        elif isinstance(layer, Vector):
-            attribute_names = layer.get_attribute_names()
+        if isinstance(layer, QgsVectorLayer):
             self._target_field = get_non_conflicting_attribute_name(
-                self.target_field, attribute_names)
+                self.target_field,
+                layer.dataProvider().fieldNameMap().keys()
+            )
 
     @property
     def aggregation(self):

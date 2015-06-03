@@ -55,8 +55,8 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
 
-        function.hazard = QgisWrapper(hazard_layer)
-        function.exposure = QgisWrapper(exposure_layer)
+        function.hazard = hazard_layer
+        function.exposure = exposure_layer
         function.requested_extent = rect_extent
         function.parameters['building_type_field'] = 'TYPE'
         function.parameters['affected_field'] = 'FLOODPRONE'
