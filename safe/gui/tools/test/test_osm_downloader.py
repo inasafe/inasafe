@@ -187,6 +187,73 @@ class ImportDialogTest(unittest.TestCase):
         # provide Fake QNetworkAccessManager for self.network_manager
         self.dialog.network_manager = FakeQNetworkAccessManager()
 
+    def test_checked_features(self):
+        """Test checked features"""
+        self.dialog.roads_checkBox.setChecked(False)
+        self.dialog.buildings_checkBox.setChecked(False)
+        self.dialog.building_points_checkBox.setChecked(False)
+        self.dialog.potential_idp_checkBox.setChecked(False)
+        self.dialog.boundary_checkBox.setChecked(False)
+        expected = []
+        get = self.dialog.get_checked_features()
+        self.assertItemsEqual(expected, get)
+
+        self.dialog.roads_checkBox.setChecked(True)
+        self.dialog.buildings_checkBox.setChecked(True)
+        self.dialog.building_points_checkBox.setChecked(True)
+        self.dialog.potential_idp_checkBox.setChecked(True)
+        self.dialog.boundary_checkBox.setChecked(False)
+        expected = ['roads', 'buildings', 'building-points', 'potential-idp']
+        get = self.dialog.get_checked_features()
+        self.assertItemsEqual(expected, get)
+
+        admin_level = 6
+        self.dialog.admin_level_comboBox.setCurrentIndex(admin_level - 1)
+        self.dialog.roads_checkBox.setChecked(False)
+        self.dialog.buildings_checkBox.setChecked(True)
+        self.dialog.building_points_checkBox.setChecked(True)
+        self.dialog.potential_idp_checkBox.setChecked(True)
+        self.dialog.boundary_checkBox.setChecked(True)
+        expected = [
+            'buildings', 'building-points', 'potential-idp', 'boundary-6']
+        get = self.dialog.get_checked_features()
+        self.assertItemsEqual(expected, get)
+
+    def test_populate_countries(self):
+        """Test if items are in the combobox.
+        For instance every admin_level from 1 to 11 and
+        the first and last country (alphabetical order)."""
+        self.assertTrue(self.dialog.admin_level_comboBox.count() == 11)
+        self.assertTrue(
+            self.dialog.country_comboBox.itemText(0) == 'Afghanistan')
+        nb_items = self.dialog.country_comboBox.count()
+        self.assertTrue(
+            self.dialog.country_comboBox.itemText(nb_items - 1) == 'Zimbabwe')
+
+    def test_admin_level_helper(self):
+        """Test the helper by setting a country and an admin level"""
+        admin_level = 8
+        country = 'Indonesia'
+        expected = \
+            '<span style=" font-size:12pt; font-style:italic;">, ' \
+            'level 8 is : Community Group (Rukun Warga)</span>'
+
+        self.dialog.admin_level_comboBox.setCurrentIndex(admin_level - 1)
+        index = self.dialog.country_comboBox.findText(country)
+        self.dialog.country_comboBox.setCurrentIndex(index)
+        self.assertTrue(expected == self.dialog.boundary_helper.text())
+
+        admin_level = 6
+        country = 'Madagascar'
+        expected = \
+            '<span style=" font-size:12pt; font-style:italic;">, ' \
+            'level 6 is : Distrika (districts)</span>'
+
+        self.dialog.admin_level_comboBox.setCurrentIndex(admin_level - 1)
+        index = self.dialog.country_comboBox.findText(country)
+        self.dialog.country_comboBox.setCurrentIndex(index)
+        self.assertTrue(expected == self.dialog.boundary_helper.text())
+
     def test_validate_extent(self):
         """Test validate extent method."""
         # Normal case
@@ -244,8 +311,7 @@ class ImportDialogTest(unittest.TestCase):
         url = (
             'http://osm.linfiniti.com/buildings-shp?'
             'bbox=20.389938354492188,-34.10782492987083'
-            ',20.712661743164062,'
-            '-34.008273470938335&obj=%s' % feature)
+            ',20.712661743164062,-34.008273470938335')
         path = tempfile.mktemp('shapefiles')
         self.dialog.fetch_zip(url, path, feature)
 
