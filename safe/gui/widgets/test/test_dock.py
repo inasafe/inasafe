@@ -406,8 +406,6 @@ class TestDock(TestCase):
         exposure_path = exposure_layer.source()
         hazard_path = hazard_layer.source()
 
-        # exposure_path = test_data_path('exposure', 'buildings.shp')
-        # hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         # print 'Using QGIS: %s' % qgis_version()
