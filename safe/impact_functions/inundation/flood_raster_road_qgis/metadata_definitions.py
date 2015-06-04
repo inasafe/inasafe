@@ -32,7 +32,6 @@ from safe.definitions import (
     unit_metres,
     unit_feet,
     hazard_tsunami,
-    road_type_field
 )
 
 
@@ -88,7 +87,7 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
                     'exposure_units': [],
-                    'additional_keywords': [road_type_field]
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([

@@ -81,9 +81,6 @@ from safe.definitions import (
     exposure_population,
     layer_mode_continuous,
     layer_geometry_raster,
-    affected_value,
-    affected_field,
-    building_type_field
 )
 
 
@@ -352,7 +349,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             hazard_category_key='single_event',
             hazard_key='flood'
         )
-        expected = [affected_field, affected_value]
+        expected = []
         self.assertItemsEqual(result, expected)
 
         result = impact_function.metadata().hazard_additional_keywords(
@@ -360,7 +357,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             layer_geometry_key='polygon',
             hazard_category_key='single_event',
         )
-        expected = [affected_field, affected_value]
+        expected = []
         print [x['key'] for x in result]
         self.assertItemsEqual(result, expected)
 
@@ -372,14 +369,14 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             layer_geometry_key='polygon',
             exposure_key='structure'
         )
-        expected = [building_type_field]
+        expected = []
         self.assertItemsEqual(result, expected)
 
         result = impact_function.metadata().exposure_additional_keywords(
             layer_geometry_key='polygon',
             exposure_key='structure'
         )
-        expected = [building_type_field]
+        expected = []
         self.assertItemsEqual(result, expected)
 
 if __name__ == '__main__':

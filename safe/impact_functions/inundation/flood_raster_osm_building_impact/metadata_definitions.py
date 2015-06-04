@@ -30,7 +30,6 @@ from safe.definitions import (
     unit_metres,
     unit_feet,
     hazard_tsunami,
-    building_type_field
 )
 
 
@@ -123,7 +122,7 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
-                    'additional_keywords': [building_type_field]
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([

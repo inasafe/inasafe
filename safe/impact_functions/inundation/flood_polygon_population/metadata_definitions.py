@@ -32,8 +32,6 @@ from safe.definitions import (
     flood_vector_hazard_classes,
     count_exposure_unit,
     exposure_population,
-    affected_field,
-    affected_value
 )
 
 
@@ -102,7 +100,7 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                     'vector_hazard_classifications': [
                         flood_vector_hazard_classes],
                     'raster_hazard_classifications': [],
-                    'additional_keywords': [affected_field, affected_value]
+                    'additional_keywords': []
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
