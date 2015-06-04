@@ -176,7 +176,7 @@
 title: Roads
 source: OpenStreetMap - www.openstreetmap.org
 layer_purpose: exposure
-layer_mode: none
+layer_mode: classified
 exposure: road
 ]]>
 </inasafe_keywords>
