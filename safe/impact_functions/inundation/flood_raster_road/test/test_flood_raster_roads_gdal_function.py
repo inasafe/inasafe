@@ -11,36 +11,34 @@ Contact : kolesov.dm@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
-__filename__ = 'test_flood_raster_road_qgis'
+__filename__ = 'test_flood_raster_road'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
-from qgis.core import QgsVectorLayer, QgsRasterLayer
+from qgis.core import QgsRasterLayer, QgsVectorLayer
 
-from safe.impact_functions.impact_function_manager \
-    import ImpactFunctionManager
 from safe.impact_functions.inundation\
-    .flood_raster_road_qgis.impact_function import \
-    FloodRasterRoadsQGISFunction
+    .flood_raster_road.impact_function import \
+    FloodRasterRoadsFunction
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.test.utilities import get_qgis_app, test_data_path
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodRasterRoadsFunction(unittest.TestCase):
+class TestFloodRasterRoadsGdalFunction(unittest.TestCase):
     """Test for Flood Raster Roads Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(FloodRasterRoadsQGISFunction)
+        registry.register(FloodRasterRoadsFunction)
 
     def test_run(self):
-        function = FloodRasterRoadsQGISFunction.instance()
+        function = FloodRasterRoadsFunction.instance()
 
         hazard_path = test_data_path('hazard', 'continuous_flood_20_20.asc')
         exposure_path = test_data_path('exposure', 'roads.shp')
@@ -62,7 +60,7 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
 
         keywords = impact.get_keywords()
         self.assertEquals(function.target_field, keywords['target_field'])
-        expected_inundated_feature = 193
+        expected_inundated_feature = 182
         count = sum(impact.get_data(attribute=function.target_field))
         self.assertEquals(count, expected_inundated_feature)
 
@@ -92,7 +90,7 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
 
         retrieved_if = impact_functions[0].metadata().as_dict()['id']
         expected = ImpactFunctionManager().get_function_id(
-            FloodRasterRoadsQGISFunction)
+            FloodRasterRoadsFunction)
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)

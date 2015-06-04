@@ -19,8 +19,8 @@ from PyQt4.QtCore import QVariant
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
-from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
-    .metadata_definitions import FloodRasterRoadsGdalMetadata
+from safe.impact_functions.inundation.flood_raster_road\
+    .metadata_definitions import FloodRasterRoadsMetadata
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
@@ -177,14 +177,14 @@ def _intersect_roads_flood(roads, request, index,
     output_layer.dataProvider().addFeatures(features)
 
 
-class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
+class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
     # noinspection PyUnresolvedReferences
     """Simple impact function for inundation for road."""
-    _metadata = FloodRasterRoadsGdalMetadata()
+    _metadata = FloodRasterRoadsMetadata()
 
     def __init__(self):
         """Constructor."""
-        super(FloodRasterRoadsGdalFunction, self).__init__()
+        super(FloodRasterRoadsFunction, self).__init__()
 
     def _tabulate(self, flooded_len, question, road_len, roads_by_type):
         table_body = [

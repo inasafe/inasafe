@@ -29,10 +29,8 @@ from safe.impact_functions.generic.classified_polygon_building\
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import FloodRasterBuildingFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.impact_functions.inundation.flood_raster_road_qgis\
-    .impact_function import FloodRasterRoadsQGISFunction
-from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
-    .impact_function import FloodRasterRoadsGdalFunction
+from safe.impact_functions.inundation.flood_raster_road\
+    .impact_function import FloodRasterRoadsFunction
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.inundation.flood_polygon_roads\
@@ -63,8 +61,7 @@ def register_impact_functions():
     impact_function_registry.register(FloodEvacuationVectorHazardFunction)
     impact_function_registry.register(FloodEvacuationRasterHazardFunction)
     impact_function_registry.register(FloodRasterBuildingFunction)
-    impact_function_registry.register(FloodRasterRoadsQGISFunction)
-    impact_function_registry.register(FloodRasterRoadsGdalFunction)
+    impact_function_registry.register(FloodRasterRoadsFunction)
     impact_function_registry.register(TsunamiEvacuationFunction)
     # Generic IF's
     impact_function_registry.register(ClassifiedRasterHazardBuildingFunction)
