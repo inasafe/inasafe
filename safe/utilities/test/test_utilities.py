@@ -168,7 +168,8 @@ class UtilitiesTest(unittest.TestCase):
             'hazard_category': 'single_event',
             'title': 'Tsunami',
             'hazard': 'tsunami',
-            'hazard_continuous_unit': 'metres',
+            'continuous_hazard_unit': 'metres',
+            'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous'
         }
