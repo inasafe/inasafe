@@ -55,7 +55,8 @@ from safe.test.utilities import (
     set_small_jakarta_extent,
     get_qgis_app,
     TESTDATA,
-    HAZDATA)
+    HAZDATA,
+    clone_shp_layer)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.widgets.dock
@@ -392,16 +393,28 @@ class TestDock(TestCase):
     def test_issue160(self):
         """Test that multipart features can be used in a scenario - issue #160
         """
+        exposure_layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=True,
+            source_directory=test_data_path('exposure'))
 
-        exposure = test_data_path('exposure', 'buildings.shp')
-        hazard = test_data_path('hazard', 'flood_multipart_polygons.shp')
+        hazard_layer = clone_shp_layer(
+            name='flood_multipart_polygons',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
+
+        exposure_path = exposure_layer.source()
+        hazard_path = hazard_layer.source()
+
+        # exposure_path = test_data_path('exposure', 'buildings.shp')
+        # hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         # print 'Using QGIS: %s' % qgis_version()
         self.tearDown()
         button = DOCK.pbnRunStop
         # First part of scenario should have enabled run
-        file_list = [hazard, exposure]
+        file_list = [hazard_path, exposure_path]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
         message = (
