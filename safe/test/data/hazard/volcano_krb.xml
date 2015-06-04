@@ -171,11 +171,14 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[category: hazard
-subcategory: volcano
+<![CDATA[hazard_category: multiple_event
 title: Volcano KRB
+hazard: volcano
 field: KRB
 value_map: {'high': ['Kawasan Rawan Bencana III'], 'medium': ['Kawasan Rawan Bencana II'], 'low': ['Kawasan Rawan Bencana I']}
+vector_hazard_classification: volcano_vector_hazard_classes
+layer_purpose: hazard
+layer_mode: classified
 unit: volcano_categorical
 ]]>
 </inasafe_keywords>

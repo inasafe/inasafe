@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-
 from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -66,7 +65,7 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
         # Count of flooded objects is calculated "by the hands"
         # the count = 69
         expected_feature_total = 69
-        count = sum(impact.get_data(attribute='FLOODED'))
+        count = sum(impact.get_data(attribute=function.target_field))
         message = 'Expecting %s, but it returns %s' % (
             expected_feature_total, count)
         self.assertEquals(count, expected_feature_total, message)
@@ -74,17 +73,19 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'wetdry',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'flood',
+            'hazard_category': 'single_event',
+            'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'subcategory': 'road',
-            'units': 'road_type',
-            'layer_type': 'vector',
-            'data_type': 'line'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'none',
+            'layer_geometry': 'line',
+            'exposure': 'road'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

@@ -25,8 +25,7 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator,
-    get_non_conflicting_attribute_name)
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
@@ -39,7 +38,6 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
 
     def __init__(self):
         super(ClassifiedPolygonHazardPopulationFunction, self).__init__()
-        self.target_field = 'population'
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
         # AG: Use the proper minimum needs, update the parameters
@@ -96,12 +94,6 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         # Get unique hazard zones from the layer attribute
         self.hazard_zones = list(
             set(hazard_layer.get_data(hazard_zone_attribute)))
-
-        # Find the target field name that has no conflict with default target
-        attribute_names = hazard_layer.get_attribute_names()
-        new_target_field = get_non_conflicting_attribute_name(
-            self.target_field, attribute_names)
-        self.target_field = new_target_field
 
         # Interpolated layer represents grid cell that lies in the polygon
         interpolated_layer, covered_exposure_layer = \

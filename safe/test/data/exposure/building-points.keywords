@@ -1,6 +1,7 @@
-category: exposure
-subcategory: structure
 license: Open Data Commons Open Database License (ODbL)
 title: Building centroids
 source: OpenStreetMap - www.openstreetmap.org
 date: 02-04-2015 03:23
+layer_purpose: exposure
+layer_mode: none
+exposure: structure

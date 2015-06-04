@@ -16,22 +16,24 @@ __filename__ = 'metadata_definitions.py'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    hazard_tsunami,
-    unit_metres_depth,
-    unit_feet_depth,
-    layer_raster_continuous,
-    exposure_definition,
-    exposure_road,
-    unit_road_type_type,
-    layer_vector_line)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.defaults import road_type_postprocessor
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
+from safe.definitions import (
+    layer_mode_none,
+    layer_mode_continuous,
+    layer_geometry_raster,
+    layer_geometry_line,
+    hazard_flood,
+    hazard_category_single_event,
+    exposure_road,
+    unit_metres,
+    unit_feet,
+    hazard_tsunami,
+    road_type_field
+)
 
 
 class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
@@ -70,24 +72,23 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
             'actions': '',
             'limitations': [],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [
-                        hazard_flood,
-                        hazard_tsunami
-                    ],
-                    'units': [
-                        unit_metres_depth,
-                        unit_feet_depth
-                    ],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_types': [hazard_flood, hazard_tsunami],
+                    'continuous_hazard_units': [unit_feet, unit_metres],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_road],
-                    'units': [unit_road_type_type],
-                    'layer_constraints': [layer_vector_line]
+                    'layer_mode': layer_mode_none,
+                    'layer_geometries': [layer_geometry_line],
+                    'exposure_types': [exposure_road],
+                    'exposure_units': [],
+                    'additional_keywords': [road_type_field]
                 }
             },
             'parameters': OrderedDict([

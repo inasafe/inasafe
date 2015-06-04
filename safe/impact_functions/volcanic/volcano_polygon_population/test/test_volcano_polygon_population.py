@@ -62,18 +62,21 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
     def test_filter(self):
         """TestVolcanoPolygonPopulationFunction: Test filtering IF"""
         hazard_keywords = {
-            'category': 'hazard',
-            'subcategory': 'volcano',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'title': 'merapi',
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'volcano',
+            'hazard_category': 'multiple_event',
+            'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous',
-            'unit': 'people_per_pixel'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

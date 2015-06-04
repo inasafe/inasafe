@@ -12,17 +12,20 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.common.utilities import OrderedDict
 from safe.definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    layer_geometry_raster,
     hazard_all,
-    unit_classified,
-    layer_vector_polygon,
-    layer_raster_continuous,
+    hazard_category_multiple_event,
     exposure_population,
-    unit_people_per_pixel,
-    hazard_definition,
-    exposure_definition)
+    all_vector_hazard_classes,
+    hazard_category_single_event,
+    count_exposure_unit,
+    hazard_zone_field
+)
 from safe.defaults import (
     default_minimum_needs,
-    default_provenance,
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
@@ -79,20 +82,26 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                 'To assess the the number of people that may be impacted by '
                 'each hazard zone.'),
             'detailed_description': '',
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': hazard_all,
-                    'units': [unit_classified],
-                    'layer_constraints': [
-                        layer_vector_polygon
-                    ]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_polygon],
+                    'hazard_categories': [
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
+                    ],
+                    'hazard_types': hazard_all,
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': all_vector_hazard_classes,
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [hazard_zone_field]
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'exposure_types': [exposure_population],
+                    'exposure_units': [count_exposure_unit],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
@@ -103,8 +112,7 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                 ])),
-                ('minimum needs', default_minimum_needs()),
-                ('provenance', default_provenance())
+                ('minimum needs', default_minimum_needs())
             ])
         }
         return dict_meta

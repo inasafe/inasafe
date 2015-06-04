@@ -11,14 +11,23 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import hazard_definition, hazard_earthquake, unit_mmi, \
-    layer_raster_continuous, exposure_definition, exposure_structure, \
-    unit_building_type_type, unit_building_generic, layer_vector_polygon, \
-    layer_vector_point
 from safe.defaults import aggregation_categorical_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.definitions import (
+    layer_mode_none,
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    layer_geometry_point,
+    layer_geometry_raster,
+    hazard_earthquake,
+    exposure_structure,
+    unit_mmi,
+    hazard_category_single_event,
+    building_type_field
+)
+
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
@@ -66,23 +75,26 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
             'actions': '',
             'limitations': [],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_earthquake],
-                    'units': [unit_mmi],
-                    'layer_constraints': [layer_raster_continuous],
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_types': [hazard_earthquake],
+                    'continuous_hazard_units': [unit_mmi],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [
-                        unit_building_type_type,
-                        unit_building_generic],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point
-                    ]
+                    'layer_mode': layer_mode_none,
+                    'layer_geometries': [
+                        layer_geometry_point,
+                        layer_geometry_polygon
+                    ],
+                    'exposure_types': [exposure_structure],
+                    'exposure_units': [],
+                    'additional_keywords': [building_type_field]
                 }
             },
             'parameters': OrderedDict(

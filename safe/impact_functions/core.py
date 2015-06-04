@@ -17,6 +17,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
+
 __author__ = 'christian@kartoza.com <Christian Christelis>'
 __revision__ = '$Format:%H$'
 __date__ = '29/04/2015'
@@ -53,6 +55,7 @@ def evacuated_population_weekly_needs(
     if not minimum_needs:
         minimum_needs = default_minimum_needs()
 
+    minimum_needs = filter_needs_parameters(minimum_needs)
     population_needs = OrderedDict()
     for resource in minimum_needs:
         resource = resource.serialize()
@@ -77,6 +80,8 @@ def evacuated_population_needs(population, minimum_needs):
     :returns: The needs for the evacuated population.
     :rtype: dict
     """
+    # Rizky : filter, only for valid serialized ResourceParameter
+    minimum_needs = [n for n in minimum_needs if 'frequency' in n]
     frequencies = []
     for resource in minimum_needs:
         if resource['frequency'] not in frequencies:
@@ -135,10 +140,10 @@ def population_rounding(number):
 # Helpers for individual impact functions
 # --------------------------------------
 def get_hazard_layers(layers):
-    """Get list of layers that have category=='hazard'
+    """Get list of layers that have layer_purpose=='hazard'
     """
 
-    return extract_layers(layers, 'category', 'hazard')
+    return extract_layers(layers, 'layer_purpose', 'hazard')
 
 
 def get_hazard_layer(layers):
@@ -158,10 +163,10 @@ def get_hazard_layer(layers):
 
 
 def get_exposure_layers(layers):
-    """Get list of layers that have category=='exposure'
+    """Get list of layers that have layer_purpose=='exposure'
     """
 
-    return extract_layers(layers, 'category', 'exposure')
+    return extract_layers(layers, 'layer_purpose', 'exposure')
 
 
 def get_exposure_layer(layers):
@@ -192,43 +197,10 @@ def extract_layers(layers, keyword, value):
     return extracted_layers
 
 
-def convert_to_old_keywords(converter, keywords):
-    """Convert new keywords system to old keywords system by aliases.
-
-    Since we have new keywords system in definitions.py and assigned by wizard,
-    it will have backward incompatibility because the current impact function
-    selector still use the old system.
-
-     This method will convert new keywords to old keyword that has the same
-     objective.
-
-     :param converter: a dictionary that contains all possible aliases
-        from new keywords to old keywords.
-     :type converter: dict
-
-     :param keywords: list of dictionary keyword
-     :type keywords: list
-
-     .. versionadded:: 2.1
-    """
-    for keyword in keywords:
-        for key, value in keyword.iteritems():
-            try:
-                aliases = converter[key]
-                for alias_key, alias_value in aliases.iteritems():
-                    if value.lower() in alias_value:
-                        keyword[key] = alias_key
-                        break
-            except KeyError:
-                pass
-
-
 def has_no_data(layer_data):
     """Determine whether or not a layer contains nan values.
-
     :param layer_data: Layer data that is to be inspected.
     :type layer_data: ndarry
-
     :return: The True if there is nodata in layer_data.
     :rtype: bool
     """
