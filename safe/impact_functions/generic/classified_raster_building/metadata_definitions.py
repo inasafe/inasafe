@@ -114,6 +114,7 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
+                    'exposure_class_fields': [],
                     'additional_keywords': []
                 }
             },

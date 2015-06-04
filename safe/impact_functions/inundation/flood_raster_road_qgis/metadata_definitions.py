@@ -87,6 +87,7 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
                     'exposure_units': [],
+                    'exposure_class_fields': [],
                     'additional_keywords': []
                 }
             },

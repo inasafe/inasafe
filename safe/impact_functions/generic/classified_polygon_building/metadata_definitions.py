@@ -37,15 +37,6 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
 
     @staticmethod
     def as_dict():
-        """Return metadata as a dictionary.
-
-        This is a static method. You can use it to get the metadata in
-        dictionary format for an impact function.
-
-        :returns: A dictionary representing all the metadata for the
-            concrete impact function.
-        :rtype: dict
-        """
         dict_meta = {
             'id': 'ClassifiedPolygonHazardBuildingFunction',
             'name': tr('Classified polygon hazard on buildings'),
@@ -95,6 +86,7 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
+                    'exposure_class_fields': [],
                     'additional_keywords': []
                 }
             },
@@ -103,4 +95,13 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                 ('hazard zone attribute', 'KRB')
             ])
         }
+        """Return metadata as a dictionary.
+
+        This is a static method. You can use it to get the metadata in
+        dictionary format for an impact function.
+
+        :returns: A dictionary representing all the metadata for the
+            concrete impact function.
+        :rtype: dict
+        """
         return dict_meta

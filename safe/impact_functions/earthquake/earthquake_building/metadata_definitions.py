@@ -92,6 +92,7 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
+                    'exposure_class_fields': [],
                     'exposure_units': [],
                     'additional_keywords': []
                 }

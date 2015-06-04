@@ -81,6 +81,7 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_polygon],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
+                    'exposure_class_fields': [],
                     'additional_keywords': []
                 }
             },

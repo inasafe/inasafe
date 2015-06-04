@@ -691,6 +691,19 @@ exposure_unit = {
     ]
 }
 
+# Exposure class field
+building_class_field = {
+    'key': 'building_class_field',
+    'name': tr('Building class field'),
+    'description': tr('Field where the building type is located.')
+}
+
+road_class_field = {
+    'key': 'road_class_field',
+    'name': tr('Road class field'),
+    'description': tr('Field where the road type is located.')
+}
+
 # Additional keywords
 # Hazard related
 volcano_name_field = {

@@ -291,6 +291,7 @@ class ImpactFunctionMetadata(object):
             'layer_geometries': list,
             'exposure_types': list,
             'exposure_units': list,
+            'exposure_class_fields': list,
             'additional_keywords': list
         }
 
