@@ -50,6 +50,7 @@ from safe.definitions import (
     layer_geometry_raster,
     layer_mode_classified,
     layer_geometry_polygon,
+    structure_class_field
 )
 
 
@@ -322,6 +323,18 @@ class TestImpactFunctionManager(unittest.TestCase):
             exposure_key='structure'
         )
         expected = []
+
+        self.assertItemsEqual(additional_keywords, expected)
+
+    def test_exposure_class_fields(self):
+        """Test for exposure_class_fields."""
+        ifm = ImpactFunctionManager()
+        additional_keywords = ifm.exposure_class_fields(
+            layer_mode_key='classified',
+            layer_geometry_key='polygon',
+            exposure_key='structure'
+        )
+        expected = [structure_class_field]
 
         self.assertItemsEqual(additional_keywords, expected)
 

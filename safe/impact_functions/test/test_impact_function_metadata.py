@@ -81,6 +81,7 @@ from safe.definitions import (
     exposure_population,
     layer_mode_continuous,
     layer_geometry_raster,
+    structure_class_field
 )
 
 
@@ -377,6 +378,24 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             exposure_key='structure'
         )
         expected = []
+        self.assertItemsEqual(result, expected)
+
+    def test_exposure_class_fields(self):
+        """Test for exposure_class_fields."""
+        impact_function = FloodPolygonBuildingFunction()
+        result = impact_function.metadata().exposure_class_fields(
+            layer_mode_key='classified',
+            layer_geometry_key='polygon',
+            exposure_key='structure'
+        )
+        expected = [structure_class_field]
+        self.assertItemsEqual(result, expected)
+
+        result = impact_function.metadata().exposure_class_fields(
+            layer_geometry_key='polygon',
+            exposure_key='structure'
+        )
+        expected = [structure_class_field]
         self.assertItemsEqual(result, expected)
 
 if __name__ == '__main__':
