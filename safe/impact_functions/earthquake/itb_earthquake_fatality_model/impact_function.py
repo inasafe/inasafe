@@ -113,7 +113,7 @@ class ITBFatalityFunction(ImpactFunction):
             ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
             # Rates of people displaced for each MMI level
             ('displacement_threshold', 6.0), # mmi threshold for displacement
-            ('mmi_range', range(2, 11)), # from MMI 4 to 10
+            ('mmi_range', range(2, 11)), # from MMI 2 to 10
             ('step', 0.5),
             ('calculate_displaced_people', True)
         ])
@@ -189,12 +189,13 @@ class ITBFatalityFunction(ImpactFunction):
                 exposure, 0)
 
             # Calculate expected number of fatalities per level
-            fatality_rate = self.fatality_rate(mmi)
-            fatalities = fatality_rate * mmi_matches
+            exposed = numpy.nansum(mmi_matches)
+            fatalities = self.fatality_rate(mmi) * exposed
 
             # Calculate expected number of displaced people per level
             try:
-                displacements = self.displacement_rate(mmi) * mmi_matches
+                displacements = self.displacement_rate(mmi) * (
+                    exposed-fatalities)
             except KeyError, e:
                 msg = 'mmi = %i, mmi_matches = %s, Error msg: %s' % (
                     mmi, str(mmi_matches), str(e))
@@ -203,34 +204,38 @@ class ITBFatalityFunction(ImpactFunction):
 
             # Adjust displaced people to disregard fatalities.
             # Set to zero if there are more fatalities than displaced.
-            displacements = numpy.where(
-                displacements > fatalities, displacements - fatalities, 0)
+            #displacements = numpy.where(
+            #    displacements > fatalities, displacements - fatalities, 0)
 
             # Sum up numbers for map
             mask += displacements   # Displaced
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
-            number_of_exposed[mmi] = numpy.nansum(mmi_matches.flat)
-            number_of_displaced[mmi] = numpy.nansum(displacements.flat)
+            number_of_exposed[mmi] = exposed
+            number_of_displaced[mmi] = displacements
             # noinspection PyUnresolvedReferences
-            number_of_fatalities[mmi] = numpy.nansum(fatalities.flat)
+            number_of_fatalities[mmi] = fatalities
 
         # Total statistics
+        total_population_raw = numpy.nansum(number_of_exposed.values())
+        total_fatalities_raw = numpy.nansum(number_of_fatalities.values())
+        total_displaced_raw = numpy.nansum(number_of_displaced.values())
+
         total_population, rounding = population_rounding_full(
-            numpy.nansum(exposure.flat))
+            total_population_raw)
 
         # Compute number of fatalities
-        total_fatalities = population_rounding(numpy.nansum(
-            number_of_fatalities.values()))
+        total_fatalities = population_rounding(total_fatalities_raw)
         # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
         # will be rounded down to 0 - Tim
-        if total_fatalities < 50:
-            total_fatalities = 0
+        # This seems redudant to the assumption in the fatality model:
+        # (zero fatality if MMI < 4) - Hyeuk
+        #if total_fatalities < 50:
+        #    total_fatalities = 0
 
         # Compute number of people displaced due to building collapse
-        total_displaced = population_rounding(
-            numpy.nansum(number_of_displaced.values()))
+        total_displaced = population_rounding(total_displaced_raw)
 
         # Generate impact report
         table_body = [self.question]
