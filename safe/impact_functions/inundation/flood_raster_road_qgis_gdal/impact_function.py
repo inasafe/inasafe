@@ -1,11 +1,20 @@
 # coding=utf-8
 """Impact of flood on roads."""
 from qgis.core import (
-    QgsRectangle,
-    QgsFeatureRequest,
+    QGis,
     QgsCoordinateReferenceSystem,
-    QgsCoordinateTransform
+    QgsCoordinateTransform,
+    QgsFeature,
+    QgsFeatureRequest,
+    QgsField,
+    QgsGeometry,
+    QgsPoint,
+    QgsRectangle,
+    QgsSpatialIndex,
+    QgsVectorFileWriter,
+    QgsVectorLayer
 )
+from PyQt4.QtCore import QVariant
 
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
@@ -14,14 +23,114 @@ from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
     .metadata_definitions import FloodRasterRoadsGdalMetadata
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
-from safe.common.utilities import get_utm_epsg
+from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.common.exceptions import GetDataError
 from safe.gis.qgis_raster_tools import (
     clip_raster, polygonize_gdal)
 from safe.gis.qgis_vector_tools import (
     split_by_polygon_in_out,
     extent_to_geo_array,
+    create_layer,
     reproject_vector_layer)
+
+
+
+def _raster_to_vector_cells(flood, thr_min, thr_max):
+    """ take raster and generate vectors features (rectangles) for cells
+        which are within threshold (thr_min < V < thr_max) """
+
+    rp = flood.dataProvider()
+    rb = rp.block(1, rp.extent(), rp.xSize(), rp.ySize())
+    rp_xmin = rp.extent().xMinimum()
+    rp_ymax = rp.extent().yMaximum()
+    cellx = rp.extent().width() / rp.xSize()
+    celly = rp.extent().height() / rp.ySize()
+
+    vl = QgsVectorLayer("Polygon?crs=epsg:4326", "flood polygons", "memory")
+    feats = []
+
+    for y in xrange(rp.ySize()):
+        for x in xrange(rp.xSize()):
+            v = rb.value(y,x)
+            if v < thr_min or v > thr_max: continue
+            x0,x1 = rp_xmin+(x*cellx), rp_xmin+((x+1)*cellx)
+            y0,y1 = rp_ymax-(y*celly), rp_ymax-((y+1)*celly)
+            outer_ring = [QgsPoint(x0,y0),QgsPoint(x1,y0),QgsPoint(x1,y1),QgsPoint(x0,y1),QgsPoint(x0,y0)]
+            f = QgsFeature()
+            f.setGeometry(QgsGeometry.fromPolygon([outer_ring]))
+            feats.append(f)
+
+    res, feats = vl.dataProvider().addFeatures(feats)
+
+    flood_cells_map = {}
+    for f in feats:
+        flood_cells_map[f.id()] = f
+
+    if QGis.QGIS_VERSION_INT >= 20800:
+        # woohoo we can use bulk insert (much faster)
+        index = QgsSpatialIndex(vl.getFeatures())
+    else:
+        index = QgsSpatialIndex()
+        for f in vl.getFeatures():
+            index.insertFeature(f)
+
+    return index, flood_cells_map
+
+
+def _add_output_feature(feats, geom, is_flooded, fields, orig_attrs, target_field):
+    # make sure to explode multi-part features
+    geoms = geom.asGeometryCollection() if geom.isMultipart() else [ geom ]
+    for g in geoms:
+        f = QgsFeature(fields)
+        f.setGeometry(g)
+        for attr_no, attr_val in enumerate(orig_attrs):
+            f.setAttribute(attr_no, attr_val)
+        f.setAttribute(target_field, is_flooded)
+        feats.append(f)
+
+
+
+def _union_geometries(geoms):
+    """ Return a geometry which is union of the passed list of geometries """
+    if QGis.QGIS_VERSION_INT >= 20400:
+        # woohoo we can use fast union (needs GEOS >= 3.3)
+        return QgsGeometry.unaryUnion(geoms)
+    else:
+        # uhh we need to use slow iterative union
+        if len(geoms) == 0:
+            return QgsGeometry()
+        result_geometry = QgsGeometry(geoms[0])
+        for g in geoms[1:]:
+            result_geometry = result_geometry.combine(g)
+        return result_geometry
+
+
+def _intersect_roads_flood(roads, request, index, flood_cells_map, output_layer, target_field):
+
+    feats = []
+    fields = output_layer.dataProvider().fields()
+
+    rd = 0
+    for f in roads.getFeatures(request):
+        ids = index.intersects(f.geometry().boundingBox())
+        geoms = [ flood_cells_map[i].geometry() for i in ids ]
+        flood_geom = _union_geometries(geoms)
+
+        in_geom = f.geometry().intersection(flood_geom)
+        if in_geom and (in_geom.wkbType() == QGis.WKBLineString or in_geom.wkbType() == QGis.WKBMultiLineString):
+            _add_output_feature(feats, in_geom, 1, fields, f.attributes(), target_field)
+
+        out_geom = f.geometry().difference(flood_geom)
+        if out_geom and (out_geom.wkbType() == QGis.WKBLineString or out_geom.wkbType() == QGis.WKBMultiLineString):
+            _add_output_feature(feats, out_geom, 0, fields, f.attributes(), target_field)
+
+        rd += 1
+        if rd % 1000 == 0:
+            output_layer.dataProvider().addFeatures(feats)
+            feats = []
+
+    output_layer.dataProvider().addFeatures(feats)
+
 
 
 class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
@@ -140,18 +249,21 @@ class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
             y += y_delta
         clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
 
-        # Clip and polygonize
+        # Clip hazard raster
         small_raster = clip_raster(
             H, width, height, QgsRectangle(*clip_extent))
-        (flooded_polygon_inside, flooded_polygon_outside) = polygonize_gdal(
-            small_raster, threshold_min, threshold_max)
+
+        # Create vector features from the flood raster
+        # For each raster cell there is one rectangular polygon
+        # Data also get spatially indexed for faster operation
+        index, flood_cells_map = _raster_to_vector_cells(small_raster, threshold_min, threshold_max)
 
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.requested_extent)
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
 
-        if flooded_polygon_inside is None:
+        if len(flood_cells_map) == 0:
             message = tr(
                 'There are no objects in the hazard layer with "value">%s.'
                 'Please check the value or use other extent.' % (
@@ -159,28 +271,27 @@ class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
             raise GetDataError(message)
 
         # reproject the flood polygons to exposure projection
-        exposure_crs = E.crs()
-        exposure_authid = exposure_crs.authid()
+        # TODO[MD] reprojection
+        #exposure_crs = E.crs()
+        #exposure_authid = exposure_crs.authid()
+        #
+        #if hazard_authid != exposure_authid:
+        #    flooded_polygons = reproject_vector_layer(
+        #        flooded_polygons, E.crs())
 
-        if hazard_authid != exposure_authid:
-            flooded_polygon_inside = reproject_vector_layer(
-                flooded_polygon_inside, E.crs())
-            flooded_polygon_outside = reproject_vector_layer(
-                flooded_polygon_outside, E.crs())
+        line_layer_tmp = create_layer(E)
+        new_field = QgsField(target_field, QVariant.Int)
+        line_layer_tmp.dataProvider().addAttributes([new_field])
+        line_layer_tmp.updateFields()
 
-        # Clip exposure by the extent
-        # extent_as_polygon = QgsGeometry().fromRect(extent)
-        # no need to clip since It is using a bbox request
-        # line_layer = clip_by_polygon(
-        #    E,
-        #    extent_as_polygon
-        # )
-        # Find inundated roads, mark them
-        line_layer = split_by_polygon_in_out(
-            E,
-            flooded_polygon_inside,
-            flooded_polygon_outside,
-            target_field, 1, request)
+        filename = unique_filename(suffix='.shp')
+        QgsVectorFileWriter.writeAsVectorFormat(
+            line_layer_tmp, filename, "utf-8", None, "ESRI Shapefile")
+        line_layer = QgsVectorLayer(filename, "flooded roads", "ogr")
+
+        # Do the heavy work - for each road get flood polygon for that area
+        # and do the intersection/difference to find out which parts are flooded
+        _intersect_roads_flood(E, request, index, flood_cells_map, line_layer, target_field)
 
         target_field_index = line_layer.dataProvider().\
             fieldNameIndex(target_field)
