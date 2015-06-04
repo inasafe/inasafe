@@ -76,16 +76,11 @@ class ImpactCalculatorThread(threading.Thread, QObject):
 
     def __init__(self,
                  impact_function,
-                 extent=None,
                  check_integrity=True):
         """Constructor for the impact calculator thread.
 
         :param impact_function: An instance of impact function.
         :type impact_function: safe.impact_function.base.ImpactFunction
-
-        :param extent: Bounding box [xmin, ymin, xmax, ymax] of the working
-            region.
-        :type extent: list
 
         :param check_integrity: If true, perform checking of input data
             integrity before running impact calculation
@@ -96,7 +91,6 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         threading.Thread.__init__(self)
         QObject.__init__(self)
         self._impact_function = impact_function
-        self._extent = extent
         self._impact_layer = None
         self._result = None
         self._exception = None
@@ -172,7 +166,6 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         try:
             self._impact_layer = calculate_impact(
                 impact_function=self._impact_function,
-                extent=self._extent,
                 check_integrity=self._check_integrity)
         except MemoryError, e:
             message = self.tr(

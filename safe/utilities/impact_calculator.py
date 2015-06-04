@@ -49,7 +49,6 @@ class ImpactCalculator(QObject):
         QObject.__init__(self)
         self.impact_function_manager = ImpactFunctionManager()
         self._impact_function = None
-        self._extent = None
 
     @property
     def impact_function(self):
@@ -105,7 +104,6 @@ class ImpactCalculator(QObject):
 
         return ImpactCalculatorThread(
             self._impact_function,
-            extent=self.extent(),
             check_integrity=self.requires_clipping())
 
     def function(self):
@@ -142,24 +140,3 @@ class ImpactCalculator(QObject):
         else:
             message = self.tr('Error: Impact Function has unknown style.')
             raise InvalidParameterError(message)
-
-    def set_extent(self, extent):
-        """Mutator for the extent property.
-
-        Set extent that can be used as bounding box of the
-            calculator's working region.
-
-        :param extent:  Bounding box [xmin, ymin, xmax, ymax]
-            of the working region.
-        :type extent: list, None
-
-        """
-        self._extent = extent
-
-    def extent(self):
-        """Accessor for the extent property.
-
-        :returns: Bounding box [xmin, ymin, xmax, ymax] of the working region.
-        :rtype: list, None
-        """
-        return self._extent

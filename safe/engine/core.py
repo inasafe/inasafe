@@ -138,18 +138,11 @@ def check_data_integrity(layer_objects):
             verify(layer.columns == layer_columns, message)
 
 
-def calculate_impact(
-        impact_function,
-        extent=None,
-        check_integrity=True):
+def calculate_impact(impact_function, check_integrity=True):
     """Calculate impact levels as a function of list of input layers
 
     :param impact_function: An instance of impact function.
     :type impact_function: safe.impact_function.base.ImpactFunction
-
-    :param extent: List of [xmin, ymin, xmax, ymax] the coordinates of the
-        bounding box.
-    :type extent: list
 
     :param check_integrity: If true, perform checking of input data integrity
     :type check_integrity: bool
@@ -170,10 +163,6 @@ def calculate_impact(
     # Input checks
     if check_integrity:
         check_data_integrity(layers)
-
-    # Set extent if it is provided
-    if extent is not None:
-        impact_function.requested_extent = extent
 
     # Start time
     start_time = datetime.now()
