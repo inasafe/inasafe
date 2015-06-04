@@ -8,20 +8,28 @@ import numpy
 from datetime import datetime
 from socket import gethostname
 import getpass
+import logging
+
 from PyQt4.QtCore import QSettings
 
+from safe.common.exceptions import RadiiException
+from safe.gis.geodesy import Point
+from safe.storage.geometry import Polygon
 from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
-from safe.impact_functions.core import extract_layers
 from safe.common.utilities import unique_filename, verify
+from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import replace_accentuated_characters
-from safe.engine.utilities import REQUIRED_KEYWORDS
 
 
-# The LOGGER is intialised in utilities.py by init
-import logging
+# The LOGGER is initialised in utilities.py by init
 LOGGER = logging.getLogger('InaSAFE')
+
+# Mandatory keywords that must be present in layers
+REQUIRED_KEYWORDS = ['layer_purpose', 'layer_mode']
+REQUIRED_HAZARD_KEYWORDS = ['hazard', 'hazard_category']
+REQUIRED_EXPOSURE_KEYWORDS = ['exposure']
 
 
 def check_data_integrity(layer_objects):
@@ -130,20 +138,11 @@ def check_data_integrity(layer_objects):
             verify(layer.columns == layer_columns, message)
 
 
-def calculate_impact(
-        layers, impact_function, extent=None, check_integrity=True):
+def calculate_impact(impact_function, check_integrity=True):
     """Calculate impact levels as a function of list of input layers
-
-    :param layers: List of Raster and Vector layer objects to be used for
-        analysis.
-    :type layers: list
 
     :param impact_function: An instance of impact function.
     :type impact_function: safe.impact_function.base.ImpactFunction
-
-    :param extent: List of [xmin, ymin, xmax, ymax] the coordinates of the
-        bounding box.
-    :type extent: list
 
     :param check_integrity: If true, perform checking of input data integrity
     :type check_integrity: bool
@@ -160,24 +159,16 @@ def calculate_impact(
         1. All layers are in WGS84 geographic coordinates
         2. Layers are equipped with metadata such as names and categories
     """
-
-    LOGGER.debug(
-        'calculate_impact called with:\nLayers: %s\nFunction:%s' % (
-            layers, impact_function))
-
+    layers = [impact_function.hazard, impact_function.exposure]
     # Input checks
     if check_integrity:
         check_data_integrity(layers)
 
-    # Set extent if it is provided
-    if extent is not None:
-        impact_function.requested_extent = extent
-
     # Start time
     start_time = datetime.now()
 
-    # Pass input layers to plugin
-    result_layer = impact_function.run(layers)
+    # Run IF
+    result_layer = impact_function.run()
 
     # End time
     end_time = datetime.now()
@@ -201,30 +192,24 @@ def calculate_impact(
     # Get input layer sources
     # NOTE: We assume here that there is only one of each
     #       If there are more only the first one is used
-    for layer_purpose in ['hazard', 'exposure']:
-        layer = extract_layers(layers, 'layer_purpose', layer_purpose)
-        keywords = layer[0].get_keywords()
+    for layer in layers:
+        keywords = layer.get_keywords()
         not_specified = tr('Not specified')
-        if 'title' in keywords:
-            title = keywords['title']
-        else:
-            title = not_specified
 
-        if 'source' in keywords:
-            source = keywords['source']
-        else:
-            source = not_specified
+        layer_purpose = keywords.get('layer_purpose', not_specified)
+        title = keywords.get('title', not_specified)
+        source = keywords.get('source', not_specified)
 
-        if 'hazard' in keywords:
-            subcategory = keywords['hazard']
-        elif 'exposure' in keywords:
-            subcategory = keywords['exposure']
+        if layer_purpose == 'hazard':
+            category = keywords['hazard']
+        elif layer_purpose == 'exposure':
+            category = keywords['exposure']
         else:
-            subcategory = not_specified
+            category = not_specified
 
         result_layer.keywords['%s_title' % layer_purpose] = title
         result_layer.keywords['%s_source' % layer_purpose] = source
-        result_layer.keywords['%s_subcategory' % layer_purpose] = subcategory
+        result_layer.keywords['%s' % layer_purpose] = category
 
     result_layer.keywords['elapsed_time'] = elapsed_time_sec
     result_layer.keywords['time_stamp'] = time_stamp[:19]  # remove decimal
@@ -237,8 +222,8 @@ def calculate_impact(
     # Set the filename : issue #1648
     # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS.EXT
     # FloodOnBuildings_12March2015_10h22.04.shp
-    exp = result_layer.keywords['exposure_subcategory'].title()
-    haz = result_layer.keywords['hazard_subcategory'].title()
+    exp = result_layer.keywords['exposure'].title()
+    haz = result_layer.keywords['hazard'].title()
     date = end_time.strftime('%d%B%Y').decode('utf8')
     time = end_time.strftime('%Hh%M.%S').decode('utf8')
     prefix = u'%sOn%s_%s_%s-' % (haz, exp, date, time)
@@ -283,62 +268,69 @@ def calculate_impact(
 
         result_layer.set_name(default_name)
 
-    # FIXME (Ole): If we need to save style as defined by the impact_function
-    # this is the place
-
     # Return layer object
     return result_layer
-# FIXME (Ole): This needs to be rewritten as it
-# directly depends on ows metadata. See issue #54
-# def get_linked_layers(main_layers):
-#     """Get list of layers that are required by main layers
-
-#     Input
-#        main_layers: List of layers of the form (server, layer_name,
-#                                                 bbox, metadata)
-#     Output
-#        new_layers: New layers flagged by the linked keywords in main layers
 
 
-#     Algorithm will recursively pull layers from new layers if their
-#     keyword linked exists and points to available layers.
-#     """
+def buffer_points(centers, radii, hazard_zone_attribute, data_table=None):
+    """Buffer points for each center with defined radii.
 
-#     # FIXME: I don't think the naming is very robust.
-#     # Main layer names and workspaces come from the app, while
-#     # we just use the basename from the keywords for the linked layers.
-#     # Not sure if the basename will always work as layer name.
+    If the data_table is defined, then the data will also be copied to the
+    result. This function is used for making buffer of volcano point hazard.
 
-#     new_layers = []
-#     for server, name, bbox, metadata in main_layers:
+    :param centers: All center of each point (longitude, latitude)
+    :type centers: list
 
-#         workspace, layername = name.split(':')
+    :param radii: Desired approximate radii in meters (must be
+        monotonically ascending). Can be either one number or list of numbers
+    :type radii: int, list
 
-#         keywords = metadata['keywords']
-#         if 'linked' in keywords:
-#             basename, _ = os.path.splitext(keywords['linked'])
+    :param hazard_zone_attribute: The name of the attributes representing
+        hazard zone.
+    :type hazard_zone_attribute: str
 
-#             # FIXME (Ole): Geoserver converts names to lowercase @#!!
-#             basename = basename.lower()
+    :param data_table: Data for each center (optional)
+    :type data_table: list
 
-#             new_layer = '%s:%s' % (workspace, basename)
-#             if new_layer == name:
-#                 msg = 'Layer %s linked to itself' % name
-#                 raise Exception(msg)
+    :return: Vector polygon layer representing circle in WGS84
+    :rtype: Vector
+    """
+    if not isinstance(radii, list):
+        radii = [radii]
 
-#             try:
-#                 new_metadata = get_metadata(server, new_layer)
-#             except Exception, e:
-#                 msg = ('Linked layer %s could not be found: %s'
-#                        % (basename, str(e)))
-#                 LOGGER.info(msg)
-#                 # raise Exception(msg)
-#             else:
-#                 new_layers.append((server, new_layer, bbox, new_metadata))
+    # Check that radii are monotonically increasing
+    monotonically_increasing_flag = all(
+        x < y for x, y in zip(radii, radii[1:]))
+    if not monotonically_increasing_flag:
+        raise RadiiException(RadiiException.suggestion)
 
-#     # Recursively search for linked layers required by the newly added layers
-#     if len(new_layers) > 0:
-#         new_layers += get_linked_layers(new_layers)
+    circles = []
+    new_data_table = []
+    for i, center in enumerate(centers):
+        p = Point(longitude=center[0], latitude=center[1])
+        inner_rings = None
+        for radius in radii:
+            # Generate circle polygon
+            C = p.generate_circle(radius)
+            circles.append(Polygon(outer_ring=C, inner_rings=inner_rings))
 
-#     # Return list of new layers
-#     return new_layers
+            # Store current circle and inner ring for next poly
+            inner_rings = [C]
+
+            # Carry attributes for center forward (deep copy)
+            row = {}
+            if data_table is not None:
+                for key in data_table[i]:
+                    row[key] = data_table[i][key]
+
+            # Add radius to this ring
+            row[hazard_zone_attribute] = radius
+
+            new_data_table.append(row)
+
+    circular_polygon = Vector(
+        geometry=circles,  # List with circular polygons
+        data=new_data_table,  # Associated attributes
+        geometry_type='polygon')
+
+    return circular_polygon

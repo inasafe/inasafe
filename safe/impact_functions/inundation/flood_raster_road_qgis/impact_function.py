@@ -55,10 +55,10 @@ class FloodRasterRoadsQGISFunction(ImpactFunction):
             )
         return table_body
 
-    def run(self, layers=None):
+    def run(self):
         """Experimental impact function."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         target_field = self.target_field
         road_type_field = self.parameters['road_type_field'].value

@@ -79,13 +79,10 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 'condition': is_nexis
             }]
 
-    def run(self, layers=None):
-        """Earthquake impact to buildings (e.g. from OpenStreetMap).
-
-        :param layers: All the input layers (Hazard Layer and Exposure Layer)
-        """
+    def run(self):
+        """Earthquake impact to buildings (e.g. from OpenStreetMap)."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         LOGGER.debug('Running earthquake building impact')
 

@@ -18,7 +18,7 @@ from safe.impact_functions.volcanic.volcano_point_building\
     .metadata_definitions import VolcanoPointBuildingFunctionMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.engine.utilities import buffer_points
+from safe.engine.core import buffer_points
 from safe.common.utilities import (
     get_thousand_separator,
     get_non_conflicting_attribute_name,
@@ -67,20 +67,15 @@ class VolcanoPointBuildingFunction(
             }
         ]
 
-    def run(self, layers=None):
+    def run(self):
         """Counts number of building exposed to each volcano hazard zones.
-
-        :param layers: List of layers expected to contain.
-                * hazard_layer: Hazard layer of volcano
-                * exposure_layer: Vector layer of structure data on
-                the same grid as hazard_layer
 
         :returns: Map of building exposed to volcanic hazard zones.
                   Table with number of buildings affected
         :rtype: dict
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Hazard Zone Attribute
         hazard_zone_attribute = 'radius'

@@ -46,15 +46,8 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         self.question = ('In each of the hazard zones how many people '
                          'might be impacted.')
 
-    def run(self, layers=None):
+    def run(self):
         """Run classified population evacuation Impact Function.
-
-        :param layers: List of layers expected to contain where two layers
-            should be present.
-
-            * hazard_layer: Vector polygon layer
-            * exposure_layer: Raster layer of population data on the same grid
-                as hazard_layer
 
         Counts number of people exposed to each hazard zones.
 
@@ -67,7 +60,7 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             * Exception - When hazard layer is not vector layer
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Parameters
         hazard_zone_attribute = self.parameters['hazard zone attribute'].value

@@ -66,22 +66,17 @@ class VolcanoPolygonBuildingFunction(
             }
         ]
 
-    def run(self, layers=None):
+    def run(self):
         """Risk plugin for volcano hazard on building/structure.
 
         Counts number of building exposed to each volcano hazard zones.
-
-        :param layers: List of layers expected to contain.
-                * hazard_layer: Hazard layer of volcano
-                * exposure_layer: Vector layer of structure data on
-                the same grid as hazard_layer
 
         :returns: Map of building exposed to volcanic hazard zones.
                   Table with number of buildings affected
         :rtype: dict
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Parameters
         hazard_zone_attribute = self.parameters['hazard zone attribute'].value

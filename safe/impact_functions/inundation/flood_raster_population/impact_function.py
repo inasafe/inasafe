@@ -145,13 +145,8 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
                      header=True)]
         return table_body
 
-    def run(self, layers=None):
+    def run(self):
         """Risk plugin for flood population evacuation.
-
-        :param layers: List of layers expected to contain
-              hazard_layer: Raster layer of flood depth
-              exposure_layer: Raster layer of population data on the same grid
-              as hazard_layer
 
         Counts number of people exposed to flood levels exceeding
         specified threshold.
@@ -162,7 +157,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
         :rtype: tuple
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Flood inundation

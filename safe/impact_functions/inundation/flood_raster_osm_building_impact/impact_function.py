@@ -84,16 +84,10 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         """
         return [tr('Number Inundated'), tr('Number of Wet Buildings')]
 
-    def run(self, layers=None):
-        """Flood impact to buildings (e.g. from Open Street Map).
-
-         :param layers: List of layers expected to contain.
-                * hazard_layer: Hazard raster layer of flood
-                * exposure_layer: Vector layer of structure data on
-                the same grid as hazard_layer
-        """
+    def run(self):
+        """Flood impact to buildings (e.g. from Open Street Map)."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         threshold = self.parameters['threshold'].value
         # Flood threshold [m]
