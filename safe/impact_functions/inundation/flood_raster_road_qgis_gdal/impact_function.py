@@ -31,7 +31,7 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 
 
-def _raster_to_vector_cells(raster, threshold_min, threshold_max):
+def _raster_to_vector_cells(raster, threshold_min, threshold_max, roads_crs):
     """ take raster and generate vectors features (rectangles) for cells
         which are within threshold (thr_min < V < thr_max) """
 
@@ -46,8 +46,12 @@ def _raster_to_vector_cells(raster, threshold_min, threshold_max):
     cell_width = extent.width() / raster_cols
     cell_height = extent.height() / raster_rows
 
-    vl = QgsVectorLayer("Polygon?crs=epsg:4326", "flood polygons", "memory")
+    uri = "Polygon?crs=" + roads_crs.authid()
+    vl = QgsVectorLayer(uri, "flood polygons", "memory")
     features = []
+
+    # prepare coordinate transform to reprojection
+    ct = QgsCoordinateTransform(raster.crs(), roads_crs)
 
     for y in xrange(raster_rows):
         for x in xrange(raster_cols):
@@ -64,8 +68,10 @@ def _raster_to_vector_cells(raster, threshold_min, threshold_max):
             outer_ring = [QgsPoint(x0, y0), QgsPoint(x1, y0),
                           QgsPoint(x1, y1), QgsPoint(x0, y1),
                           QgsPoint(x0, y0)]
+            geometry = QgsGeometry.fromPolygon([outer_ring])
+            geometry.transform(ct)
             f = QgsFeature()
-            f.setGeometry(QgsGeometry.fromPolygon([outer_ring]))
+            f.setGeometry(geometry)
             features.append(f)
 
     _, features = vl.dataProvider().addFeatures(features)
@@ -295,10 +301,12 @@ class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
         # For each raster cell there is one rectangular polygon
         # Data also get spatially indexed for faster operation
         index, flood_cells_map = _raster_to_vector_cells(
-            small_raster, threshold_min, threshold_max)
+            small_raster, threshold_min, threshold_max, E.crs())
 
         # Filter geometry and data using the extent
-        extent = QgsRectangle(*self.requested_extent)
+        ct = QgsCoordinateTransform(
+            QgsCoordinateReferenceSystem("EPSG:4326"), E.crs())
+        extent = ct.transformBoundingBox(QgsRectangle(*self.requested_extent))
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
 
@@ -309,20 +317,13 @@ class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
                     threshold_min, ))
             raise GetDataError(message)
 
-        # reproject the flood polygons to exposure projection
-        # TODO[MD] reprojection
-        #exposure_crs = E.crs()
-        #exposure_authid = exposure_crs.authid()
-        #
-        #if hazard_authid != exposure_authid:
-        #    flooded_polygons = reproject_vector_layer(
-        #        flooded_polygons, E.crs())
-
+        # create template for the output layer
         line_layer_tmp = create_layer(E)
         new_field = QgsField(target_field, QVariant.Int)
         line_layer_tmp.dataProvider().addAttributes([new_field])
         line_layer_tmp.updateFields()
 
+        # create empty output layer and load it
         filename = unique_filename(suffix='.shp')
         QgsVectorFileWriter.writeAsVectorFormat(
             line_layer_tmp, filename, "utf-8", None, "ESRI Shapefile")
