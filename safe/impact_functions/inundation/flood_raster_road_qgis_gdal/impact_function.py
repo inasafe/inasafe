@@ -25,47 +25,59 @@ from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.common.exceptions import GetDataError
-from safe.gis.qgis_raster_tools import (
-    clip_raster, polygonize_gdal)
+from safe.gis.qgis_raster_tools import clip_raster
 from safe.gis.qgis_vector_tools import (
-    split_by_polygon_in_out,
     extent_to_geo_array,
-    create_layer,
-    reproject_vector_layer)
+    create_layer)
 
 
-
-def _raster_to_vector_cells(flood, thr_min, thr_max):
+def _raster_to_vector_cells(raster, threshold_min, threshold_max):
     """ take raster and generate vectors features (rectangles) for cells
         which are within threshold (thr_min < V < thr_max) """
 
-    rp = flood.dataProvider()
-    rb = rp.block(1, rp.extent(), rp.xSize(), rp.ySize())
-    rp_xmin = rp.extent().xMinimum()
-    rp_ymax = rp.extent().yMaximum()
-    cellx = rp.extent().width() / rp.xSize()
-    celly = rp.extent().height() / rp.ySize()
+    # get raster data
+    provider = raster.dataProvider()
+    extent = provider.extent()
+    raster_cols = provider.xSize()
+    raster_rows = provider.ySize()
+    block = provider.block(1, extent, raster_cols, raster_rows)
+    raster_xmin = extent.xMinimum()
+    raster_ymax = extent.yMaximum()
+    cell_width = extent.width() / raster_cols
+    cell_height = extent.height() / raster_rows
 
     vl = QgsVectorLayer("Polygon?crs=epsg:4326", "flood polygons", "memory")
-    feats = []
+    features = []
 
-    for y in xrange(rp.ySize()):
-        for x in xrange(rp.xSize()):
-            v = rb.value(y,x)
-            if v < thr_min or v > thr_max: continue
-            x0,x1 = rp_xmin+(x*cellx), rp_xmin+((x+1)*cellx)
-            y0,y1 = rp_ymax-(y*celly), rp_ymax-((y+1)*celly)
-            outer_ring = [QgsPoint(x0,y0),QgsPoint(x1,y0),QgsPoint(x1,y1),QgsPoint(x0,y1),QgsPoint(x0,y0)]
+    for y in xrange(raster_rows):
+        for x in xrange(raster_cols):
+            # only use cells that are within the specified threshold
+            value = block.value(y, x)
+            if value < threshold_min or value > threshold_max:
+                continue
+
+            # construct rectangular polygon feature for the cell
+            x0 = raster_xmin+(x*cell_width)
+            x1 = raster_xmin+((x+1)*cell_width)
+            y0 = raster_ymax-(y*cell_height)
+            y1 = raster_ymax-((y+1)*cell_height)
+            outer_ring = [QgsPoint(x0, y0), QgsPoint(x1, y0),
+                          QgsPoint(x1, y1), QgsPoint(x0, y1),
+                          QgsPoint(x0, y0)]
             f = QgsFeature()
             f.setGeometry(QgsGeometry.fromPolygon([outer_ring]))
-            feats.append(f)
+            features.append(f)
 
-    res, feats = vl.dataProvider().addFeatures(feats)
+    _, features = vl.dataProvider().addFeatures(features)
 
+    # construct a temporary map for fast access to features by their IDs
+    # (we will be getting feature IDs from spatial index)
     flood_cells_map = {}
-    for f in feats:
+    for f in features:
         flood_cells_map[f.id()] = f
 
+    # build a spatial index so we can quickly identify
+    # flood cells overlapping roads
     if QGis.QGIS_VERSION_INT >= 20800:
         # woohoo we can use bulk insert (much faster)
         index = QgsSpatialIndex(vl.getFeatures())
@@ -77,17 +89,22 @@ def _raster_to_vector_cells(flood, thr_min, thr_max):
     return index, flood_cells_map
 
 
-def _add_output_feature(feats, geom, is_flooded, fields, orig_attrs, target_field):
-    # make sure to explode multi-part features
-    geoms = geom.asGeometryCollection() if geom.isMultipart() else [ geom ]
+def _add_output_feature(features, geom, is_flooded,
+                        fields, orig_attributes, target_field):
+    """ Utility function to construct road features from geometry.
+
+    Newly created features get the attributes from the original feature.
+    If the geometry is multi-part, it will be exploded into several
+    single-part features.
+    """
+    geoms = geom.asGeometryCollection() if geom.isMultipart() else [geom]
     for g in geoms:
         f = QgsFeature(fields)
         f.setGeometry(g)
-        for attr_no, attr_val in enumerate(orig_attrs):
+        for attr_no, attr_val in enumerate(orig_attributes):
             f.setAttribute(attr_no, attr_val)
         f.setAttribute(target_field, is_flooded)
-        feats.append(f)
-
+        features.append(f)
 
 
 def _union_geometries(geoms):
@@ -105,32 +122,53 @@ def _union_geometries(geoms):
         return result_geometry
 
 
-def _intersect_roads_flood(roads, request, index, flood_cells_map, output_layer, target_field):
+def _intersect_roads_flood(roads, request, index,
+                           flood_cells_map, output_layer, target_field):
+    """
+    :param roads: Vector layer with roads
+    :param request: QgsFeatureRequest for fetching features from roads layer
+    :param index: QgsSpatialIndex with flood features
+    :param flood_cells_map: map from flood feature IDs to actual features
+    :param output_layer: layer to which features will be written
+    :param target_field: name of the field in output_layer which will receive
+                information whether the feature is flooded or not
+    :return: None
+    """
 
-    feats = []
+    features = []
     fields = output_layer.dataProvider().fields()
 
     rd = 0
     for f in roads.getFeatures(request):
+        # query flood cells located in the area of the road and build
+        # a (multi-)polygon geometry with flooded area relevant to this road
         ids = index.intersects(f.geometry().boundingBox())
-        geoms = [ flood_cells_map[i].geometry() for i in ids ]
+        geoms = [flood_cells_map[i].geometry() for i in ids]
         flood_geom = _union_geometries(geoms)
 
+        # find out which parts of the road are flooded
         in_geom = f.geometry().intersection(flood_geom)
-        if in_geom and (in_geom.wkbType() == QGis.WKBLineString or in_geom.wkbType() == QGis.WKBMultiLineString):
-            _add_output_feature(feats, in_geom, 1, fields, f.attributes(), target_field)
+        if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
+                        in_geom.wkbType() == QGis.WKBMultiLineString):
+            _add_output_feature(
+                features, in_geom, 1,
+                fields, f.attributes(), target_field)
 
+        # find out which parts of the road are not flooded
         out_geom = f.geometry().difference(flood_geom)
-        if out_geom and (out_geom.wkbType() == QGis.WKBLineString or out_geom.wkbType() == QGis.WKBMultiLineString):
-            _add_output_feature(feats, out_geom, 0, fields, f.attributes(), target_field)
+        if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
+                         out_geom.wkbType() == QGis.WKBMultiLineString):
+            _add_output_feature(
+                features, out_geom, 0,
+                fields, f.attributes(), target_field)
 
+        # every once in a while commit the created features to the output layer
         rd += 1
         if rd % 1000 == 0:
-            output_layer.dataProvider().addFeatures(feats)
-            feats = []
+            output_layer.dataProvider().addFeatures(features)
+            features = []
 
-    output_layer.dataProvider().addFeatures(feats)
-
+    output_layer.dataProvider().addFeatures(features)
 
 
 class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
@@ -256,7 +294,8 @@ class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
         # Create vector features from the flood raster
         # For each raster cell there is one rectangular polygon
         # Data also get spatially indexed for faster operation
-        index, flood_cells_map = _raster_to_vector_cells(small_raster, threshold_min, threshold_max)
+        index, flood_cells_map = _raster_to_vector_cells(
+            small_raster, threshold_min, threshold_max)
 
         # Filter geometry and data using the extent
         extent = QgsRectangle(*self.requested_extent)
@@ -289,9 +328,10 @@ class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
             line_layer_tmp, filename, "utf-8", None, "ESRI Shapefile")
         line_layer = QgsVectorLayer(filename, "flooded roads", "ogr")
 
-        # Do the heavy work - for each road get flood polygon for that area
-        # and do the intersection/difference to find out which parts are flooded
-        _intersect_roads_flood(E, request, index, flood_cells_map, line_layer, target_field)
+        # Do the heavy work - for each road get flood polygon for that area and
+        # do the intersection/difference to find out which parts are flooded
+        _intersect_roads_flood(
+            E, request, index, flood_cells_map, line_layer, target_field)
 
         target_field_index = line_layer.dataProvider().\
             fieldNameIndex(target_field)
