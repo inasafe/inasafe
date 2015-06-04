@@ -94,15 +94,19 @@ class ImpactFunction(object):
         return cls.metadata().as_dict().get('function_type', None)
 
     @classmethod
-    def data_type(cls):
-        """Property for the data type of impact function.
+    def function_category(cls):
+        """Property for function category based on hazard categories.
 
-         This property holds value either 'single-scenario' or 'hazard-map'.
-         Single scenario data type means that the data is captured by a
-         single observation, while 'hazard-map' has been aggregated for some
+         Function category could be 'single_event' or/and 'multiple_event'.
+         Single event data type means that the data is captured by a
+         single observation, while 'multiple_event' has been aggregated for some
          observations.
+
+         :returns: The hazard categories that this function supports.
+         :rtype: list
         """
-        return cls.metadata().as_dict().get('data_type', None)
+        return cls.metadata().as_dict().get('layer_requirements').get(
+            'hazard').get('hazard_categories')
 
     @property
     def requested_extent(self):
