@@ -82,7 +82,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.prepare(layers)
 
         # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute']
+        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard

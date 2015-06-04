@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
+from safe.impact_functions.generic.classified_raster_building\
+    .parameter_definitions import (
+        low_hazard_class, medium_hazard_class, high_hazard_class)
 from safe.utilities.i18n import tr
 
 from safe.defaults import building_type_postprocessor
@@ -121,9 +124,9 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
             },
             # parameters
             'parameters': OrderedDict([
-                ('low_hazard_class', 1.0),
-                ('medium_hazard_class', 2.0),
-                ('high_hazard_class', 3.0),
+                ('low_hazard_class', low_hazard_class()),
+                ('medium_hazard_class', medium_hazard_class()),
+                ('high_hazard_class', high_hazard_class()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))

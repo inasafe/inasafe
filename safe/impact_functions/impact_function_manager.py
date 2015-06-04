@@ -699,9 +699,9 @@ class ImpactFunctionManager(object):
         for impact_function in self.impact_functions:
             if_exposure_class_field = impact_function.metadata(). \
                 exposure_class_fields(
-                layer_mode_key=layer_mode_key,
-                layer_geometry_key=layer_geometry_key,
-                exposure_key=exposure_key)
+                    layer_mode_key=layer_mode_key,
+                    layer_geometry_key=layer_geometry_key,
+                    exposure_key=exposure_key)
             if if_exposure_class_field:
                 add_to_list(result, if_exposure_class_field)
 

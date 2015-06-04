@@ -27,8 +27,7 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator,
-    get_non_conflicting_attribute_name)
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
@@ -71,8 +70,8 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         self.prepare(layers)
 
         # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute']
-        name_attribute = self.parameters['volcano name attribute']
+        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
+        name_attribute = self.parameters['volcano name attribute'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard

@@ -13,6 +13,9 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.volcanic.volcano_point_building\
+    .parameter_definitions import (
+        distance, volcano_name_attribute)
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_geometry_point,
@@ -101,9 +104,9 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
             },
             'parameters': OrderedDict([
                 # The list of radii in km for volcano point hazard
-                ('distances [km]', [3, 5, 10]),
+                ('distances', distance()),
                 # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', 'NAME')
+                ('volcano name attribute', volcano_name_attribute())
             ])
         }
         return dict_meta

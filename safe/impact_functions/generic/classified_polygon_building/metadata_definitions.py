@@ -22,6 +22,9 @@ from safe.definitions import (
     hazard_category_single_event,
     structure_class_field
 )
+from safe.impact_functions.generic.classified_polygon_building.\
+    parameter_definitions import \
+    hazard_zone_attribute_field
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -38,6 +41,15 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
 
     @staticmethod
     def as_dict():
+        """Return metadata as a dictionary.
+
+        This is a static method. You can use it to get the metadata in
+        dictionary format for an impact function.
+
+        :returns: A dictionary representing all the metadata for the
+            concrete impact function.
+        :rtype: dict
+        """
         dict_meta = {
             'id': 'ClassifiedPolygonHazardBuildingFunction',
             'name': tr('Classified polygon hazard on buildings'),
@@ -93,16 +105,7 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
             },
             'parameters': OrderedDict([
                 # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', 'KRB')
+                ('hazard zone attribute', hazard_zone_attribute_field())
             ])
         }
-        """Return metadata as a dictionary.
-
-        This is a static method. You can use it to get the metadata in
-        dictionary format for an impact function.
-
-        :returns: A dictionary representing all the metadata for the
-            concrete impact function.
-        :rtype: dict
-        """
         return dict_meta

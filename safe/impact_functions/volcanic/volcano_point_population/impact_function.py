@@ -76,8 +76,8 @@ class VolcanoPointPopulationFunction(ImpactFunction):
         self.prepare(layers)
 
         # Parameters
-        radii = self.parameters['distance [km]']
-        name_attribute = self.parameters['volcano name attribute']
+        radii = self.parameters['distances'].value
+        name_attribute = self.parameters['volcano name attribute'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard

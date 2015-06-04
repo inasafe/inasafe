@@ -173,9 +173,10 @@ class ITBFatalityFunction(ImpactFunction):
         for mmi in mmi_range:
             # Identify cells where MMI is in class i and
             # count people affected by this shake level
+            step = self.hardcoded_parameters['step']
             mmi_matches = numpy.where(
-                (hazard > mmi - self.hardcoded_parameters['step']) * (
-                    hazard <= mmi + self.hardcoded_parameters['step']),
+                (hazard > mmi - step) * (
+                    hazard <= mmi + step),
                 exposure, 0)
 
             # Calculate expected number of fatalities per level

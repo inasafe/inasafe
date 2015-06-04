@@ -25,6 +25,8 @@ from safe.defaults import (
     age_postprocessor)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.tsunami_population_evacuation_raster\
+    .parameter_definitions import threshold
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
 from safe.definitions import (
@@ -123,7 +125,7 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('thresholds [m]', [0.7]),
+                ('thresholds', threshold()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

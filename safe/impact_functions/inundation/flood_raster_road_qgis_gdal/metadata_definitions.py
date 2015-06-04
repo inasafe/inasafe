@@ -20,6 +20,8 @@ __copyright__ = 'lana.pcfre@gmail.com'
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
+    import parameter_definitions
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
 from safe.definitions import (
@@ -96,9 +98,12 @@ class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about road types
-                ('road_type_field', 'TYPE'),
-                ('min threshold [m]', 1.0),
-                ('max threshold [m]', float('inf')),
+                ('road_type_field',
+                 parameter_definitions.road_type_field()),
+                ('min threshold',
+                 parameter_definitions.min_threshold()),
+                ('max threshold',
+                 parameter_definitions.max_threshold()),
                 ('postprocessors', OrderedDict([
                     ('RoadType', road_type_postprocessor())
                 ]))

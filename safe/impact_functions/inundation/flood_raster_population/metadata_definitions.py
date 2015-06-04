@@ -22,6 +22,9 @@ from safe.defaults import (
     minimum_needs_selector)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.\
+    flood_raster_population.parameter_definitions \
+    import threshold
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_continuous,
@@ -120,7 +123,7 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('thresholds [m]', [1.0]),
+                ('thresholds', threshold()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),
