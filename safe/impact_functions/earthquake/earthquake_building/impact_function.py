@@ -49,9 +49,9 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         :rtype: list
         """
         # Thresholds for mmi breakdown.
-        t0 = self.parameters['low_threshold']
-        t1 = self.parameters['medium_threshold']
-        t2 = self.parameters['high_threshold']
+        t0 = self.parameters['low_threshold'].value
+        t1 = self.parameters['medium_threshold'].value
+        t2 = self.parameters['high_threshold'].value
         is_nexis = self.is_nexis
         return [
             {
@@ -79,13 +79,10 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 'condition': is_nexis
             }]
 
-    def run(self, layers=None):
-        """Earthquake impact to buildings (e.g. from OpenStreetMap).
-
-        :param layers: All the input layers (Hazard Layer and Exposure Layer)
-        """
+    def run(self):
+        """Earthquake impact to buildings (e.g. from OpenStreetMap)."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         LOGGER.debug('Running earthquake building impact')
 
@@ -94,9 +91,9 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         contents_value = 0
 
         # Thresholds for mmi breakdown.
-        t0 = self.parameters['low_threshold']
-        t1 = self.parameters['medium_threshold']
-        t2 = self.parameters['high_threshold']
+        t0 = self.parameters['low_threshold'].value
+        t1 = self.parameters['medium_threshold'].value
+        t2 = self.parameters['high_threshold'].value
 
         # Class Attribute and Label.
 
@@ -182,9 +179,8 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                                 (tr('Buildings value ($M)'), 0),
                                 (tr('Contents value ($M)'), 0)])
                     else:
-                        self.affected_buildings[category][usage] = OrderedDict(
-                            [
-                                (tr('Buildings Affected'), 0)])
+                        self.affected_buildings[category][usage] = \
+                            OrderedDict([(tr('Buildings Affected'), 0)])
             self.buildings[usage] += 1
             try:
                 mmi = float(attributes[i][hazard_attribute])  # MMI

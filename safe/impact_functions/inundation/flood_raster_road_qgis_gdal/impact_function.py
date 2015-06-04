@@ -51,24 +51,19 @@ class FloodRasterRoadsGdalFunction(ImpactFunction):
             )
         return table_body
 
-    def run(self, layers=None):
+    def run(self):
         """Run the impact function.
-
-        :param layers: List of layers expected to contain at least:
-            H: Polygon layer of inundation areas
-            E: Vector layer of roads
-        :type layers: list
 
         :returns: A new line layer with inundated roads marked.
         :type: safe_layer
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         target_field = self.target_field
-        road_type_field = self.parameters['road_type_field']
-        threshold_min = self.parameters['min threshold [m]']
-        threshold_max = self.parameters['max threshold [m]']
+        road_type_field = self.parameters['road_type_field'].value
+        threshold_min = self.parameters['min threshold'].value
+        threshold_max = self.parameters['max threshold'].value
 
         if threshold_min > threshold_max:
             message = tr(

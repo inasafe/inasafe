@@ -103,13 +103,8 @@ class TsunamiEvacuationFunction(ImpactFunction):
 
         return table_body, total_needs
 
-    def run(self, layers=None):
+    def run(self):
         """Risk plugin for tsunami population evacuation.
-
-        :param layers: List of layers expected to contain
-              hazard_layer: Raster layer of tsunami depth
-              exposure_layer: Raster layer of population data on the same grid
-              as hazard_layer
 
         Counts number of people exposed to tsunami levels exceeding
         specified threshold.
@@ -120,7 +115,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
         :rtype: tuple
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Tsunami inundation [m]
@@ -128,7 +123,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
 
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
-        thresholds = self.parameters['thresholds [m]']
+        thresholds = self.parameters['thresholds'].value
 
         verify(
             isinstance(thresholds, list),

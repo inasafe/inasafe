@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
+from safe.impact_functions.generic.classified_raster_building\
+    .parameter_definitions import (
+        low_hazard_class, medium_hazard_class, high_hazard_class)
 from safe.utilities.i18n import tr
 
 from safe.defaults import building_type_postprocessor
@@ -26,7 +29,7 @@ from safe.definitions import (
     exposure_structure,
     all_raster_hazard_classes,
     hazard_category_single_event,
-    layer_mode_none
+    structure_class_field
 )
 
 __author__ = 'lucernae'
@@ -108,21 +111,22 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [
                         layer_geometry_point,
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
+                    'exposure_class_fields': [structure_class_field],
                     'additional_keywords': []
                 }
             },
             # parameters
             'parameters': OrderedDict([
-                ('low_hazard_class', 1.0),
-                ('medium_hazard_class', 2.0),
-                ('high_hazard_class', 3.0),
+                ('low_hazard_class', low_hazard_class()),
+                ('medium_hazard_class', medium_hazard_class()),
+                ('high_hazard_class', high_hazard_class()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))

@@ -1,8 +1,6 @@
 # coding=utf-8
 """This is the concrete Minimum Needs class that contains the logic to load
 the minimum needs to and from the QSettings"""
-from safe.utilities.i18n import tr
-from safe_extras.parameters.text_parameter import TextParameter
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '05/10/2014'
@@ -21,6 +19,8 @@ from PyQt4.QtCore import QSettings
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 from safe.utilities.resources import resources_path
+from safe.utilities.i18n import tr
+from safe_extras.parameters.text_parameter import TextParameter
 
 
 def add_needs_parameters(parameters):

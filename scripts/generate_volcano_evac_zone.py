@@ -1,4 +1,4 @@
-from safe.engine.utilities import buffer_points
+from safe.engine.core import buffer_points
 from safe.storage.core import read_layer
 
 H = read_layer('/data_area/InaSAFE/public_data/hazard/Marapi.shp')

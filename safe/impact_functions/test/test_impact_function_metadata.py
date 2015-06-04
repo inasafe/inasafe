@@ -81,9 +81,7 @@ from safe.definitions import (
     exposure_population,
     layer_mode_continuous,
     layer_geometry_raster,
-    affected_value,
-    affected_field,
-    building_type_field
+    structure_class_field
 )
 
 
@@ -352,7 +350,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             hazard_category_key='single_event',
             hazard_key='flood'
         )
-        expected = [affected_field, affected_value]
+        expected = []
         self.assertItemsEqual(result, expected)
 
         result = impact_function.metadata().hazard_additional_keywords(
@@ -360,7 +358,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             layer_geometry_key='polygon',
             hazard_category_key='single_event',
         )
-        expected = [affected_field, affected_value]
+        expected = []
         print [x['key'] for x in result]
         self.assertItemsEqual(result, expected)
 
@@ -368,18 +366,36 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         """Test for exposure_additional_keywords."""
         impact_function = FloodPolygonBuildingFunction()
         result = impact_function.metadata().exposure_additional_keywords(
-            layer_mode_key='none',
+            layer_mode_key='classified',
             layer_geometry_key='polygon',
             exposure_key='structure'
         )
-        expected = [building_type_field]
+        expected = []
         self.assertItemsEqual(result, expected)
 
         result = impact_function.metadata().exposure_additional_keywords(
             layer_geometry_key='polygon',
             exposure_key='structure'
         )
-        expected = [building_type_field]
+        expected = []
+        self.assertItemsEqual(result, expected)
+
+    def test_exposure_class_fields(self):
+        """Test for exposure_class_fields."""
+        impact_function = FloodPolygonBuildingFunction()
+        result = impact_function.metadata().exposure_class_fields(
+            layer_mode_key='classified',
+            layer_geometry_key='polygon',
+            exposure_key='structure'
+        )
+        expected = [structure_class_field]
+        self.assertItemsEqual(result, expected)
+
+        result = impact_function.metadata().exposure_class_fields(
+            layer_geometry_key='polygon',
+            exposure_key='structure'
+        )
+        expected = [structure_class_field]
         self.assertItemsEqual(result, expected)
 
 if __name__ == '__main__':

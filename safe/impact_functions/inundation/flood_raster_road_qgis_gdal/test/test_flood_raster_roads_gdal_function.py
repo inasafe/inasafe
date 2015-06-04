@@ -25,7 +25,6 @@ from safe.impact_functions.inundation\
     FloodRasterRoadsGdalFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.test.utilities import get_qgis_app, test_data_path
-from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -53,8 +52,8 @@ class TestFloodRasterRoadsGdalFunction(unittest.TestCase):
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
-        function.hazard = QgisWrapper(hazard_layer)
-        function.exposure = QgisWrapper(exposure_layer)
+        function.hazard = hazard_layer
+        function.exposure = exposure_layer
         function.requested_extent = rect_extent
         function.run()
         impact = function.impact
@@ -78,7 +77,7 @@ class TestFloodRasterRoadsGdalFunction(unittest.TestCase):
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'none',
+            'layer_mode': 'classified',
             'layer_geometry': 'line',
             'exposure': 'road'
         }

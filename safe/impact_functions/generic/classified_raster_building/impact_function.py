@@ -60,21 +60,16 @@ class ClassifiedRasterHazardBuildingFunction(
                     'high hazard class areas.')
             }]
 
-    def run(self, layers=None):
+    def run(self):
         """Classified hazard impact to buildings (e.g. from Open Street Map).
-
-         :param layers: List of layers expected to contain.
-                * hazard: Classified Hazard layer
-                * exposure: Vector layer of structure data on
-                the same grid as hazard
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # The 3 classes
-        low_t = self.parameters['low_hazard_class']
-        medium_t = self.parameters['medium_hazard_class']
-        high_t = self.parameters['high_hazard_class']
+        low_t = self.parameters['low_hazard_class'].value
+        medium_t = self.parameters['medium_hazard_class'].value
+        high_t = self.parameters['high_hazard_class'].value
 
         # Extract data
         hazard = self.hazard      # Classified Hazard

@@ -43,7 +43,7 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
         impact_function = ClassifiedPolygonHazardBuildingFunction.instance()
         impact_function.hazard = hazard_layer
         impact_function.exposure = exposure_layer
-        impact_function.parameters['hazard zone attribute'] = 'h_zone'
+        impact_function.parameters['hazard zone attribute'].value = 'h_zone'
         impact_function.run()
         impact_layer = impact_function.impact
 
@@ -88,7 +88,7 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'none',
+            'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'exposure': 'structure',
             }

@@ -34,6 +34,8 @@ from safe.definitions import (
     continuous_hazard_unit_all,
     density_exposure_unit
 )
+from safe.impact_functions.generic.continuous_hazard_population\
+    .parameter_definitions import categorical_thresholds
 
 
 class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
@@ -108,12 +110,13 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                     'exposure_types': [exposure_population],
                     'exposure_units': [
                         count_exposure_unit, density_exposure_unit],
+                    'exposure_class_fields': [],
                     'additional_keywords': []
                 }
             },
             # Configurable parameters
             'parameters': OrderedDict([
-                ('Categorical thresholds', [0.34, 0.67, 1]),
+                ('Categorical thresholds', categorical_thresholds()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

@@ -12,12 +12,15 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.common.utilities import OrderedDict
 from safe.defaults import aggregation_categorical_postprocessor
+from safe.impact_functions.earthquake.earthquake_building\
+    .parameter_definitions import (
+        low_threshold, medium_threshold, high_threshold)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.definitions import (
-    layer_mode_none,
     layer_mode_continuous,
+    layer_mode_classified,
     layer_geometry_polygon,
     layer_geometry_point,
     layer_geometry_raster,
@@ -25,7 +28,7 @@ from safe.definitions import (
     exposure_structure,
     unit_mmi,
     hazard_category_single_event,
-    building_type_field
+    structure_class_field
 )
 
 
@@ -87,20 +90,21 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [
                         layer_geometry_point,
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
-                    'additional_keywords': [building_type_field]
+                    'exposure_class_fields': [structure_class_field],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict(
-                [('low_threshold', 6),
-                 ('medium_threshold', 7),
-                 ('high_threshold', 8),
+                [('low_threshold', low_threshold()),
+                 ('medium_threshold', medium_threshold()),
+                 ('high_threshold', high_threshold()),
                  ('postprocessors', OrderedDict([
                      ('AggregationCategorical',
                       aggregation_categorical_postprocessor())]))]

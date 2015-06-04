@@ -114,6 +114,10 @@ class ITBFatalityFunction(ImpactFunction):
             # Rates of people displaced for each MMI level
             ('displacement_threshold', 6.0), # mmi threshold for displacement
             ('mmi_range', range(2, 11)), # from MMI 2 to 10
+            ('displacement_rate', {
+                2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0, 6: 1.0,
+                7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
+            }),
             ('step', 0.5),
             ('calculate_displaced_people', True)
         ])
@@ -133,21 +137,6 @@ class ITBFatalityFunction(ImpactFunction):
         # noinspection PyUnresolvedReferences
         return numpy.power(10.0, x * mmi - y)
 
-    def displacement_rate(self, mmi):
-        """A method to compute displacement rate.
-
-        The displacement rate will be 1 if mmi >= displacement_threshold.
-        Otherwise, it will be set to 0.
-
-        :param mmi: The mmi value.
-        :type mmi: float
-
-        :returns: The displacement rate given an MMI value.
-        :rtype: int
-        """
-        x = self.hardcoded_parameters['displacement_threshold']
-        return numpy.piecewise(mmi, [mmi < x, mmi >= x], [0, 1])
-
     def run(self, layers=None):
         """Indonesian Earthquake Fatality Model.
 
@@ -160,7 +149,9 @@ class ITBFatalityFunction(ImpactFunction):
                 exposure: Raster layer of population count
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
+
+        displacement_rate = self.hardcoded_parameters['displacement_rate']
 
         # Extract input layers
         intensity = self.hazard
@@ -183,9 +174,10 @@ class ITBFatalityFunction(ImpactFunction):
         for mmi in mmi_range:
             # Identify cells where MMI is in class i and
             # count people affected by this shake level
+            step = self.hardcoded_parameters['step']
             mmi_matches = numpy.where(
-                (hazard > mmi - self.hardcoded_parameters['step']) * (
-                    hazard <= mmi + self.hardcoded_parameters['step']),
+                (hazard > mmi - step) * (
+                    hazard <= mmi + step),
                 exposure, 0)
 
             # Calculate expected number of fatalities per level
@@ -194,7 +186,7 @@ class ITBFatalityFunction(ImpactFunction):
 
             # Calculate expected number of displaced people per level
             try:
-                displacements = self.displacement_rate(mmi) * (
+                displacements = displacement_rate[mmi] * (
                     exposed-fatalities)
             except KeyError, e:
                 msg = 'mmi = %i, mmi_matches = %s, Error msg: %s' % (
