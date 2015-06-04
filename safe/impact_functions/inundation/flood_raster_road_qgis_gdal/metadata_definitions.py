@@ -20,10 +20,12 @@ __copyright__ = 'lana.pcfre@gmail.com'
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
+    import parameter_definitions
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
 from safe.definitions import (
-    layer_mode_none,
+    layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_raster,
     layer_geometry_line,
@@ -33,7 +35,7 @@ from safe.definitions import (
     unit_metres,
     unit_feet,
     hazard_tsunami,
-    road_type_field
+    road_class_field
 )
 
 
@@ -85,19 +87,23 @@ class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
                     'exposure_units': [],
-                    'additional_keywords': [road_type_field]
+                    'exposure_class_fields': [road_class_field],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about road types
-                ('road_type_field', 'TYPE'),
-                ('min threshold [m]', 1.0),
-                ('max threshold [m]', float('inf')),
+                ('road_type_field',
+                 parameter_definitions.road_type_field()),
+                ('min threshold',
+                 parameter_definitions.min_threshold()),
+                ('max threshold',
+                 parameter_definitions.max_threshold()),
                 ('postprocessors', OrderedDict([
                     ('RoadType', road_type_postprocessor())
                 ]))

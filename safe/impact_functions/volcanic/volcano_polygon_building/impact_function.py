@@ -85,8 +85,8 @@ class VolcanoPolygonBuildingFunction(
         self.prepare(layers)
 
         # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute']
-        name_attribute = self.parameters['volcano name attribute']
+        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
+        name_attribute = self.parameters['volcano name attribute'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Volcano hazard layer

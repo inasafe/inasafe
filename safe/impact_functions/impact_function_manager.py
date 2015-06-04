@@ -677,3 +677,32 @@ class ImpactFunctionManager(object):
                 add_to_list(additional_keywords, if_additional_keywords)
 
         return additional_keywords
+
+    def exposure_class_fields(
+            self, layer_mode_key=None, layer_geometry_key=None,
+            exposure_key=None):
+        """Return list of exposure class field.
+
+        :param layer_mode_key: The layer mode key
+        :type layer_mode_key: str
+
+        :param layer_geometry_key: The layer geometry key
+        :type layer_geometry_key: str
+
+        :param exposure_key: The exposure key
+        :type exposure_key: str
+
+        :returns: List of exposure class field.
+        :rtype: list
+        """
+        result = []
+        for impact_function in self.impact_functions:
+            if_exposure_class_field = impact_function.metadata(). \
+                exposure_class_fields(
+                    layer_mode_key=layer_mode_key,
+                    layer_geometry_key=layer_geometry_key,
+                    exposure_key=exposure_key)
+            if if_exposure_class_field:
+                add_to_list(result, if_exposure_class_field)
+
+        return result

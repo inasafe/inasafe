@@ -75,8 +75,8 @@ class NumericParameter(GenericParameter):
         :raises: InvalidMaximumError, TypeError
         """
         self._check_type(value)
-        # If maximum is not set, we can set minimum regardless
-        if self._maximum_allowed_value is None:
+        # If minimum is not set, we can set maximum regardless
+        if self._minimum_allowed_value is None:
             self._maximum_allowed_value = value
             return
         # Otherwise it must be more than the minimum

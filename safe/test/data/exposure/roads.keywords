@@ -2,5 +2,5 @@ source: OpenStreetMap - www.openstreetmap.org
 title: Roads
 field: TYPE
 layer_purpose: exposure
-layer_mode: none
+layer_mode: classified
 exposure: road

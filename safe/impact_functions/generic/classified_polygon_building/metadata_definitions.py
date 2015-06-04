@@ -20,9 +20,11 @@ from safe.definitions import (
     exposure_structure,
     all_vector_hazard_classes,
     hazard_category_single_event,
-    layer_mode_none,
-    hazard_zone_field
+    structure_class_field
 )
+from safe.impact_functions.generic.classified_polygon_building.\
+    parameter_definitions import \
+    hazard_zone_attribute_field
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -87,22 +89,23 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'vector_hazard_classifications':
                         all_vector_hazard_classes,
                     'raster_hazard_classifications': [],
-                    'additional_keywords': [hazard_zone_field]
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [
                         layer_geometry_point,
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
+                    'exposure_class_fields': [structure_class_field],
                     'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
                 # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', 'KRB')
+                ('hazard zone attribute', hazard_zone_attribute_field())
             ])
         }
         return dict_meta

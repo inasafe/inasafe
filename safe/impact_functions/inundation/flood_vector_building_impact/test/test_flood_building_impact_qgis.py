@@ -25,7 +25,8 @@ from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 from safe.test.utilities import (
     get_qgis_app,
-    test_data_path)
+    test_data_path,
+    clone_shp_layer)
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -43,12 +44,16 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
         function = FloodPolygonBuildingFunction.instance()
 
         hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
-        exposure_path = test_data_path('exposure', 'buildings.shp')
+        # exposure_path = test_data_path('exposure', 'buildings.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
         # noinspection PyCallingNonCallable
-        exposure_layer = QgsVectorLayer(exposure_path, 'Buildings', 'ogr')
+        # exposure_layer = QgsVectorLayer(exposure_path, 'Buildings', 'ogr')
 
+        exposure_layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=True,
+            source_directory=test_data_path('exposure'))
         # Let's set the extent to the hazard extent
         extent = hazard_layer.extent()
         rect_extent = [
@@ -58,9 +63,9 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
         function.hazard = QgisWrapper(hazard_layer)
         function.exposure = QgisWrapper(exposure_layer)
         function.requested_extent = rect_extent
-        function.parameters['building_type_field'] = 'TYPE'
-        function.parameters['affected_field'] = 'FLOODPRONE'
-        function.parameters['affected_value'] = 'YES'
+        function.parameters['building_type_field'].value = 'TYPE'
+        function.parameters['affected_field'].value = 'FLOODPRONE'
+        function.parameters['affected_value'].value = 'YES'
         function.run()
         impact = function.impact
 
@@ -84,7 +89,7 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'none',
+            'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'exposure': 'structure'
         }
