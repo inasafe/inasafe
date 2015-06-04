@@ -71,8 +71,7 @@ from safe.definitions import (
     layer_geometry_polygon,
     layer_geometry_raster,
     layer_mode_continuous,
-    layer_mode_classified,
-    layer_mode_none)
+    layer_mode_classified)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.analysis_handler import AnalysisHandler
@@ -3816,7 +3815,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         elif current_step == step_kw_subcategory:
             new_step = step_kw_layermode
         elif current_step == step_kw_layermode:
-            if self.selected_layermode() == layer_mode_none:
+            if self.selected_layermode() == layer_mode_classified:
                 new_step = step_kw_extrakeywords
             elif self.selected_layermode() == layer_mode_classified:
                 if not is_raster_layer(self.layer):
@@ -4001,7 +4000,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         elif current_step == step_kw_aggregation:
             new_step = step_kw_field
         elif current_step == step_kw_extrakeywords:
-            if self.selected_layermode() == layer_mode_none:
+            if self.selected_layermode() == layer_mode_classified:
                 new_step = step_kw_layermode
             elif self.selected_layermode() == layer_mode_classified:
                 new_step = step_kw_classify
@@ -4017,7 +4016,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             elif self.selected_extra_keywords():
                 new_step = step_kw_extrakeywords
             # otherwise behave like it was step_kw_extrakeywords
-            elif self.selected_layermode() == layer_mode_none:
+            elif self.selected_layermode() == layer_mode_classified:
                 new_step = step_kw_layermode
             elif self.selected_layermode() == layer_mode_classified:
                 new_step = step_kw_classify
