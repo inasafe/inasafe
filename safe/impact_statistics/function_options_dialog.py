@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe_extras.parameters.generic_parameter import GenericParameter
 
 __author__ = 'oz@tanoshiistudio.com'
 __revision__ = '$Format:%H$'
@@ -19,7 +18,6 @@ __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import ast
 from collections import OrderedDict
 import logging
 # This import is to enable SIP API V2
@@ -28,15 +26,11 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QGroupBox,
     QLineEdit,
     QDialog,
-    QLabel,
     QCheckBox,
-    QFormLayout,
     QGridLayout,
     QWidget,
     QScrollArea,
@@ -187,7 +181,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
     def build_widget(self, form_layout, name, parameter_value):
         """Create a new form element dynamically based from key_value type.
 
-        The Parametetr Container will be inserted to form_layout.
+        The Parameter Container will be inserted to form_layout.
 
         :param form_layout: Mandatory a layout instance
         :type form_layout: QFormLayout
