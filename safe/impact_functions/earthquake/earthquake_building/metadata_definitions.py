@@ -25,6 +25,7 @@ from safe.definitions import (
     exposure_structure,
     unit_mmi,
     hazard_category_single_event,
+    structure_class_field
 )
 
 
@@ -92,8 +93,8 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
-                    'exposure_class_fields': [],
                     'exposure_units': [],
+                    'exposure_class_fields': [structure_class_field],
                     'additional_keywords': []
                 }
             },

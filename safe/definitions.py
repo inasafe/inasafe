@@ -692,10 +692,10 @@ exposure_unit = {
 }
 
 # Exposure class field
-building_class_field = {
-    'key': 'building_class_field',
-    'name': tr('Building class field'),
-    'description': tr('Field where the building type is located.')
+structure_class_field = {
+    'key': 'structure_class_field',
+    'name': tr('Structure class field'),
+    'description': tr('Field where the structure type is located.')
 }
 
 road_class_field = {

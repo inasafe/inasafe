@@ -23,6 +23,7 @@ from safe.definitions import (
     hazard_category_single_event,
     flood_vector_hazard_classes,
     exposure_road,
+    road_class_field
 )
 
 
@@ -79,7 +80,7 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
                     'exposure_units': [],
-                    'exposure_class_fields': [],
+                    'exposure_class_fields': [road_class_field],
                     'additional_keywords': []
                 }
             },
