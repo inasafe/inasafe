@@ -213,7 +213,6 @@ def run_if(cli_arguments):
     settings = QSettings()
     crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
     analysis.user_extent_crs = QgsCoordinateReferenceSystem(crs)
-    LOGGER.debug(cli_arguments.extent[0])
     analysis.user_extent = QgsRectangle(
         float(cli_arguments.extent[0]),
         float(cli_arguments.extent[1]),
@@ -242,7 +241,6 @@ def build_report(cli_arguments):
     try:
         impact_layer = QgsVectorLayer(
             cli_arguments.output_file, 'cli_impact', 'ogr')
-        LOGGER.debug(impact_layer.__doc__)
         layer_registry = QgsMapLayerRegistry.instance()
         layer_registry.removeAllMapLayers()
         layer_registry.addMapLayer(impact_layer)
