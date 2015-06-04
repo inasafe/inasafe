@@ -31,6 +31,7 @@ from safe.common.exceptions import (
     InsufficientParametersError,
     InvalidParameterError)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_functions.base import ImpactFunction
 
 
 class ImpactCalculator(QObject):
@@ -47,71 +48,33 @@ class ImpactCalculator(QObject):
         """Constructor for the impact calculator."""
         QObject.__init__(self)
         self.impact_function_manager = ImpactFunctionManager()
-        self._hazard_layer = None
-        self._exposure_layer = None
         self._impact_function = None
-        self._filename = None
-        self._result = None
         self._extent = None
 
-    def exposure_layer(self):
-        """Accessor for the exposure layer.
+    @property
+    def impact_function(self):
+        """Property for the impact_function instance.
 
-        :returns: The exposure layer.
-        :rtype: QgsMapLayer.
+        :returns: An impact function instance.
+        :rtype: ImpactFunction
         """
-        return self._exposure_layer
+        return self._impact_function
 
-    def set_exposure_layer(self, layer):
-        """Mutator for Exposure layer property.
+    @impact_function.setter
+    def impact_function(self, function):
+        """Setter for impact function property.
 
-        e.g. buildings or features that will be affected.
-
-        :param layer: An exposure layer.
-        :type layer:  QgsMapLayer or SAFE layer.
+        :param function: A valid impact function.
+        :type function: basestring, ImpactFunction
         """
-        if layer is None:
-            self._exposure_layer = None
+        if isinstance(function, basestring):
+            self._impact_function = self.impact_function_manager \
+                .get(function)
+        elif isinstance(function, ImpactFunction):
+            self._impact_function = function
         else:
-            self._exposure_layer = layer
-
-    def hazard_layer(self):
-        """Accessor for the hazard layer.
-
-        :returns: The hazard layer.
-        :rtype:   QgsMapLayer.
-
-        """
-        return self._hazard_layer
-
-    def set_hazard_layer(self, layer):
-        """Mutator for hazard layer property.
-
-        e.g. buildings or features that will be affected.
-
-        :param layer: A hazard layer.
-        :type layer: QgsMapLayer or SAFE layer.
-        """
-        if layer is None:
-            self._hazard_layer = None
-        else:
-            self._hazard_layer = layer
-
-    def set_function(self, impact_function):
-        """Mutator for the impact function.
-
-        The function property specifies which inasafe function to use to
-        process the hazard and exposure layers with.
-
-        :param impact_function: The identifier of a valid SAFE impact_function.
-        :type impact_function: str
-
-        """
-        if isinstance(impact_function, str):
-            self._impact_function = self.impact_function_manager\
-                .get(impact_function)
-        else:
-            self._impact_function = impact_function
+            message = self.tr('Error: Invalid Impact Function.')
+            raise InvalidParameterError(message)
 
     def get_runner(self):
         """ Factory to create a new runner thread.
@@ -128,27 +91,17 @@ class ImpactCalculator(QObject):
 
         :raises: InsufficientParametersError if not all parameters are set.
         """
-        self._filename = None
-        self._result = None
-        if self._hazard_layer is None:
-            message = self.tr('Error: Hazard layer not set.')
-            raise InsufficientParametersError(message)
-
-        if self._exposure_layer is None:
-            message = self.tr('Error: Exposure layer not set.')
-            raise InsufficientParametersError(message)
-
-        if self._impact_function is None:
+        if self.impact_function is None:
             message = self.tr('Error: Function not set.')
             raise InsufficientParametersError(message)
 
-        # Call impact calculation engine
-        hazard_layer = self.hazard_layer()
-        exposure_layer = self.exposure_layer()
+        if self.impact_function.hazard is None:
+            message = self.tr('Error: Hazard layer not set.')
+            raise InsufficientParametersError(message)
 
-        # Set hazard and exposure to impact function
-        self._impact_function.hazard = hazard_layer
-        self._impact_function.exposure = exposure_layer
+        if self.impact_function.exposure is None:
+            message = self.tr('Error: Exposure layer not set.')
+            raise InsufficientParametersError(message)
 
         return ImpactCalculatorThread(
             self._impact_function,

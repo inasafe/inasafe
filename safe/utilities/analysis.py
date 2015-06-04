@@ -813,7 +813,8 @@ class Analysis(object):
 
     def setup_impact_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
-        self.impact_calculator.set_function(self.impact_function)
+        # Set impact function
+        self.impact_calculator.impact_function = self.impact_function
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
@@ -853,8 +854,8 @@ class Analysis(object):
             self.impact_calculator.set_extent(buffered_geo_extent)
 
         # Identify input layers
-        self.impact_calculator.set_hazard_layer(hazard_layer)
-        self.impact_calculator.set_exposure_layer(exposure_layer)
+        self.impact_calculator.impact_function.hazard = hazard_layer
+        self.impact_calculator.impact_function.exposure = exposure_layer
 
     def run_aggregator(self):
         """Run all post processing steps.
