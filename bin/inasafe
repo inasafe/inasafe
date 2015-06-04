@@ -25,11 +25,14 @@ from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from qgis.core import (
     QgsRasterLayer,
     QgsVectorLayer,
-    QgsMapLayerRegistry)
+    QgsRectangle,
+    QgsMapLayerRegistry,
+    QgsCoordinateReferenceSystem)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import qgis_version
 import os
 from safe.report.impact_report import ImpactReport
+from PyQt4.QtCore import QSettings
 import logging
 
 current_dir = os.path.abspath(
@@ -56,7 +59,7 @@ class CliArgs(object):
         self.report_template = _arguments_['--report-template']
         # optional arguments
         if not _arguments_['--extent'] is None:
-            self.extent = _arguments_['--extent'].split(':')
+            self.extent = _arguments_['--extent'].replace(',', '.').split(':')
         else:
             LOGGER.debug('no extent specified')
 
@@ -205,12 +208,21 @@ def run_if(cli_arguments):
     analysis.run_in_thread_flag = False
     analysis.map_canvas = CANVAS
     # WIP
-    # analysis.user_extent_crs(qexposure.extent)
-    # analysis.user_extent(extent[0], extent[1], extent[2], extent[3])
+    # specify extent mode
+    # Qsetting context
+    settings = QSettings()
+    crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+    analysis.user_extent_crs = QgsCoordinateReferenceSystem(crs)
+    LOGGER.debug(cli_arguments.extent[0])
+    analysis.user_extent = QgsRectangle(
+        float(cli_arguments.extent[0]),
+        float(cli_arguments.extent[1]),
+        float(cli_arguments.extent[2]),
+        float(cli_arguments.extent[3])
+    )
     analysis.impact_function = impact_function
     analysis.setup_analysis()
     analysis.run_analysis()
-    LOGGER.debug("end analysis :)")
     impact_layer = analysis.get_impact_layer()
     write_results(cli_arguments, impact_layer)
     build_report(cli_arguments)
