@@ -97,7 +97,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         table_body.append(
             TableRow(
                 [tr('Evacuation threshold'), '%s%%' % format_int(
-                    self.parameters['evacuation_percentage'].value)], header=True))
+                    self.parameters['evacuation_percentage'].value)],
+                header=True))
         table_body.append(
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')))

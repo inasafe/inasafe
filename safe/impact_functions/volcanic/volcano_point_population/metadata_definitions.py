@@ -18,8 +18,8 @@ from safe.defaults import (
     minimum_needs_selector)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.volcanic.volcano_point_population.parameter_definitions import \
-    distance, volcano_name_attribute
+from safe.impact_functions.volcanic.volcano_point_population\
+    .parameter_definitions import distance, volcano_name_attribute
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,

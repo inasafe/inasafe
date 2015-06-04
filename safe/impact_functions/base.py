@@ -99,8 +99,8 @@ class ImpactFunction(object):
 
          Function category could be 'single_event' or/and 'multiple_event'.
          Single event data type means that the data is captured by a
-         single observation, while 'multiple_event' has been aggregated for some
-         observations.
+         single observation, while 'multiple_event' has been aggregated for
+         some observations.
 
          :returns: The hazard categories that this function supports.
          :rtype: list

@@ -42,10 +42,7 @@ from PyQt4.QtGui import (
     QScrollArea,
     QVBoxLayout)
 
-from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
-from safe.postprocessors.postprocessor_factory import (
-    get_postprocessor_human_name)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe.common.resource_parameter import ResourceParameter
@@ -136,8 +133,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         scroll_layout.addStretch()
 
-
-
     def build_minimum_needs_form(self, parameters):
         """Build minimum needs tab.
 
@@ -156,7 +151,6 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
         self.values['minimum needs'] = parameter_container.get_parameters
-
 
     def build_post_processor_form(self, form_elements):
         """Build Post Processor Tab.

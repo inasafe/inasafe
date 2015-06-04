@@ -38,6 +38,3 @@ def affected_value():
     field.is_required = True
     field.value = 'YES'  # default value
     return field
-
-
-
