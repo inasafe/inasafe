@@ -30,7 +30,6 @@ from safe.definitions import (
     exposure_population,
     count_exposure_unit,
     volcano_name_field,
-    hazard_zone_field
 )
 
 
@@ -91,13 +90,14 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                         volcano_vector_hazard_classes],
                     'raster_hazard_classifications': [],
                     'additional_keywords': [
-                        volcano_name_field, hazard_zone_field]
+                        volcano_name_field]
                 },
                 'exposure': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
                     'exposure_units': [count_exposure_unit],
+                    'exposure_class_fields': [],
                     'additional_keywords': []
                 }
             },

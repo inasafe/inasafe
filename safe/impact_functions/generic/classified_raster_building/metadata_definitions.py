@@ -26,7 +26,7 @@ from safe.definitions import (
     exposure_structure,
     all_raster_hazard_classes,
     hazard_category_single_event,
-    layer_mode_none
+    structure_class_field
 )
 
 __author__ = 'lucernae'
@@ -108,13 +108,14 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [
                         layer_geometry_point,
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
+                    'exposure_class_fields': [structure_class_field],
                     'additional_keywords': []
                 }
             },

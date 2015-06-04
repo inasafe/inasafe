@@ -84,7 +84,7 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'none',
+            'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'exposure': 'structure'
         }

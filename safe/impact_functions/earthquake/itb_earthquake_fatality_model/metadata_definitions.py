@@ -132,6 +132,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
                     'exposure_units': [count_exposure_unit],
+                    'exposure_class_fields': [],
                     'additional_keywords': []
                 }
             },

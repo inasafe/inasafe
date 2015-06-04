@@ -19,7 +19,7 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.definitions import (
-    layer_mode_none,
+    layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,
     layer_geometry_point,
@@ -30,7 +30,7 @@ from safe.definitions import (
     unit_metres,
     unit_feet,
     hazard_tsunami,
-    building_type_field
+    structure_class_field
 )
 
 
@@ -116,14 +116,15 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [
                         layer_geometry_point,
                         layer_geometry_polygon
                     ],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
-                    'additional_keywords': [building_type_field]
+                    'exposure_class_fields': [structure_class_field],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
