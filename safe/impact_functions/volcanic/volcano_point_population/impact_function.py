@@ -19,7 +19,7 @@ from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding,
     has_no_data)
-from safe.engine.utilities import buffer_points
+from safe.engine.core import buffer_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
