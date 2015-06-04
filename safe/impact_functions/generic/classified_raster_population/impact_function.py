@@ -126,14 +126,8 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
             ])
         return table_body
 
-    def run(self, layers=None):
+    def run(self):
         """Plugin for impact of population as derived by classified hazard.
-
-        Input
-        :param layers: List of layers expected to contain
-
-              * hazard_layer: Raster layer of classified hazard
-              * exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each class of the hazard
 
@@ -142,13 +136,13 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
           Table with number of people in each class
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # The 3 classes
         # TODO (3.2): shouldnt these be defined in keywords rather? TS
-        low_class = self.parameters['low_hazard_class']
-        medium_class = self.parameters['medium_hazard_class']
-        high_class = self.parameters['high_hazard_class']
+        low_class = self.parameters['low_hazard_class'].value
+        medium_class = self.parameters['medium_hazard_class'].value
+        high_class = self.parameters['high_hazard_class'].value
 
         # The classes must be different to each other
         unique_classes_flag = all(

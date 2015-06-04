@@ -74,8 +74,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                     tr('* People are considered to be affected if they are '
                        'within the area where the value of the hazard field ('
                        '"%s") is "%s"') %
-                    (self.parameters['affected_field'],
-                     self.parameters['affected_value'])))
+                    (self.parameters['affected_field'].value,
+                     self.parameters['affected_value'].value)))
         else:
             table_body.append(
                 TableRow(
@@ -97,7 +97,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         table_body.append(
             TableRow(
                 [tr('Evacuation threshold'), '%s%%' % format_int(
-                    self.parameters['evacuation_percentage'])], header=True))
+                    self.parameters['evacuation_percentage'].value)],
+                header=True))
         table_body.append(
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')))
@@ -143,14 +144,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                    'when counting the affected or total population.')
             ])
 
-    def run(self, layers=None):
+    def run(self):
         """Risk plugin for flood population evacuation.
-
-        :param layers: List of layers expected to contain
-
-            * hazard_layer : Vector polygon layer of flood depth
-            * exposure_layer : Raster layer of population data on the same grid
-                as hazard_layer
 
         Counts number of people exposed to areas identified as flood prone
 
@@ -159,12 +154,12 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         :rtype: tuple
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Get the IF parameters
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
-        evacuation_percentage = self.parameters['evacuation_percentage']
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
+        evacuation_percentage = self.parameters['evacuation_percentage'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard

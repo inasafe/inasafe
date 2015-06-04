@@ -51,8 +51,8 @@ class FloodPolygonBuildingFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
         return [
             {
                 'content': tr('Notes'),
@@ -66,21 +66,15 @@ class FloodPolygonBuildingFunction(
             }
         ]
 
-    def run(self, layers=None):
-        """Experimental impact function.
-
-        Input
-          layers: List of layers expected to contain
-              H: Polygon layer of inundation areas
-              E: Vector layer of buildings
-        """
+    def run(self):
+        """Experimental impact function."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Get the IF parameters
-        building_type_field = self.parameters['building_type_field']
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        building_type_field = self.parameters['building_type_field'].value
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
 
         # Extract data
         hazard_layer = self.hazard    # Flood

@@ -24,6 +24,7 @@ import shutil
 from xml.dom import minidom
 from subprocess import call, CalledProcessError
 import logging
+import codecs
 
 from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
@@ -382,9 +383,9 @@ class ShakeGrid(object):
             '                      x="lon" y="lat" z="mmi"/>'
             '  </OGRVRTLayer>'
             '</OGRVRTDataSource>' % csv_path)
-        vrt_file = file(vrt_path, 'w')
-        vrt_file.write(vrt_string)
-        vrt_file.close()
+
+        with codecs.open(vrt_path, 'w', encoding='utf-8') as f:
+            f.write(vrt_string)
 
         return vrt_path
 

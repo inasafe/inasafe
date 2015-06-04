@@ -54,9 +54,9 @@ class NumericParameterWidget(GenericParameterWidget):
         self._description_label.setText(description)
 
     def get_parameter(self):
-        """Obtain boolean parameter object from the current widget state.
+        """Obtain numeric parameter object from the current widget state.
 
-        :returns: A BooleanParameter from the current state of widget
+        :returns: A NumericParameter from the current state of widget
 
         """
         self._parameter.value = self._input.value()

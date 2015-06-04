@@ -116,13 +116,8 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
                     format_int(resource['amount'])]))
         return table_body, total_needs
 
-    def run(self, layers=None):
+    def run(self):
         """Plugin for impact of population as derived by categorised hazard.
-
-        :param layers: List of layers expected to contain
-
-            * hazard_layer: Raster layer of categorised hazard
-            * exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each category of the hazard
 
@@ -131,7 +126,7 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
           Table with number of people in each category
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         thresholds = self.parameters['Categorical thresholds']
 

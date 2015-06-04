@@ -14,6 +14,8 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_polygon_roads import \
+    parameter_definitions
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
@@ -23,10 +25,7 @@ from safe.definitions import (
     hazard_category_single_event,
     flood_vector_hazard_classes,
     exposure_road,
-    layer_mode_none,
-    road_type_field,
-    affected_value,
-    affected_field
+    road_class_field
 )
 
 
@@ -76,26 +75,30 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                     'vector_hazard_classifications': [
                         flood_vector_hazard_classes],
                     'raster_hazard_classifications': [],
-                    'additional_keywords': [affected_field, affected_value]
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
                     'exposure_units': [],
-                    'additional_keywords': [road_type_field]
+                    'exposure_class_fields': [road_class_field],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about road types
-                ('road_type_field', 'TYPE'),
+                ('road_type_field',
+                 parameter_definitions.road_type_field()),
                 # This field of the  hazard layer contains information
                 # about inundated areas
-                ('affected_field', 'affected'),
+                ('affected_field',
+                 parameter_definitions.affected_field()),
                 # This value in 'affected_field' of the hazard layer
                 # marks the areas as inundated
-                ('affected_value', '1'),
+                ('affected_value',
+                 parameter_definitions.affected_value()),
                 ('postprocessors', OrderedDict([
                     ('RoadType', road_type_postprocessor())
                 ]))
