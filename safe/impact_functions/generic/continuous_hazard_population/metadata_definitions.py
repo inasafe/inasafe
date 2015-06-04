@@ -110,6 +110,7 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                     'exposure_types': [exposure_population],
                     'exposure_units': [
                         count_exposure_unit, density_exposure_unit],
+                    'exposure_class_fields': [],
                     'additional_keywords': []
                 }
             },
