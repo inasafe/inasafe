@@ -18,11 +18,22 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
-from qgis.core import QgsRasterLayer, QgsVectorLayer
+from PyQt4.QtCore import QVariant
+from qgis.core import (
+    QgsFeatureRequest,
+    QgsField,
+    QgsRasterLayer,
+    QgsRectangle,
+    QgsVectorLayer
+)
 
 from safe.impact_functions.inundation\
-    .flood_raster_road.impact_function import \
-    FloodRasterRoadsFunction
+    .flood_raster_road.impact_function import (
+    FloodRasterRoadsFunction,
+    _raster_to_vector_cells,
+    _intersect_lines_with_vector_cells
+)
+from safe.gis.qgis_vector_tools import create_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.test.utilities import get_qgis_app, test_data_path
 
@@ -94,3 +105,52 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
+
+
+    def test_raster_to_vector_and_line_intersection(self):
+        """Test the core part of the analysis.
+
+        1. Test creation of spatial index of flood cells
+        2. Test intersection of flood cells with roads layer
+        """
+
+        raster_name = test_data_path(
+            'hazard',
+            'jakarta_flood_design.tif')
+        exposure_name = test_data_path(
+            'exposure',
+            'roads_osm_4326.shp')
+
+        raster = QgsRasterLayer(raster_name, 'Flood')
+        exposure = QgsVectorLayer(exposure_name, 'Exposure', 'ogr')
+
+        index, flood_cells_map = _raster_to_vector_cells(
+            raster, 0.1, 1e10, exposure.crs())
+
+        self.assertEqual(len(flood_cells_map), 221)
+
+        rect_with_all_cells = raster.extent()
+        rect_with_4_cells = QgsRectangle(106.824,-6.177,106.825,-6.179)
+        rect_with_0_cells = QgsRectangle(106.818,-6.168,106.828,-6.175)
+        self.assertEqual(len(index.intersects(rect_with_all_cells)), 221)
+        self.assertEqual(len(index.intersects(rect_with_4_cells)), 4)
+        self.assertEqual(len(index.intersects(rect_with_0_cells)), 0)
+
+        layer = create_layer(exposure)
+        new_field = QgsField('flooded', QVariant.Int)
+        layer.dataProvider().addAttributes([new_field])
+
+        request = QgsFeatureRequest()
+        _intersect_lines_with_vector_cells(
+            exposure, request, index, flood_cells_map, layer, 'flooded')
+
+        feature_count = layer.featureCount()
+        self.assertEqual(feature_count, 184)
+
+        flooded = 0
+        iterator = layer.getFeatures()
+        for feature in iterator:
+            attributes = feature.attributes()
+            if attributes[3] == 1:
+                flooded += 1
+        self.assertEqual(flooded, 25)
