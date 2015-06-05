@@ -271,7 +271,25 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
         """Constructor."""
         super(FloodRasterRoadsFunction, self).__init__()
 
-    def _tabulate(self, flooded_len, question, road_len, roads_by_type):
+    def _tabulate(self, flooded_length, question, road_length, roads_by_type):
+        """Helper to generate table for impact summary.
+
+        :param flooded_length: Total length of flooded roads
+        :type flooded_length: float
+
+        :param question: Question asked by the user.
+        :type question: str
+
+        :param road_length: Total length of roads.
+        :type road_length: float
+
+        :param roads_by_type: Length of flooded roads by types.
+            Road types are keys, values are {'flooded': X, 'total': Y}
+        :type roads_by_type: dict
+
+        :returns: List of table rows
+        :rtype: list
+        """
         table_body = [
             question,
             TableRow(
@@ -281,8 +299,8 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
                 header=True),
             TableRow(
                 [tr('All'),
-                 int(flooded_len),
-                 int(road_len)]),
+                 int(flooded_length),
+                 int(road_length)]),
             TableRow(tr('Breakdown by road type'), header=True)]
         for t, v in roads_by_type.iteritems():
             table_body.append(
@@ -426,7 +444,7 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
         epsg = get_utm_epsg(self.requested_extent[0], self.requested_extent[1])
         output_crs = QgsCoordinateReferenceSystem(epsg)
         transform = QgsCoordinateTransform(E.crs(), output_crs)
-        road_len = flooded_len = 0  # Length of roads
+        road_length = flooded_length = 0  # Length of roads
         roads_by_type = dict()      # Length of flooded roads by types
 
         roads_data = line_layer.getFeatures()
@@ -439,18 +457,18 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
-            road_len += length
+            road_length += length
 
             if road_type not in roads_by_type:
                 roads_by_type[road_type] = {'flooded': 0, 'total': 0}
             roads_by_type[road_type]['total'] += length
 
             if attributes[target_field_index] == 1:
-                flooded_len += length
+                flooded_length += length
                 roads_by_type[road_type]['flooded'] += length
 
-        table_body = self._tabulate(flooded_len, self.question, road_len,
-                                    roads_by_type)
+        table_body = self._tabulate(
+            flooded_length, self.question, road_length, roads_by_type)
 
         impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('Roads inundated')
