@@ -18,6 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import math
+import numpy
+import heapq
 
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.earthquake.\
@@ -60,10 +62,20 @@ class PAGFatalityFunction(ITBFatalityFunction):
             ('step', 0.5),
             # Threshold below which layer should be transparent
             ('tolerance', 0.01),
-            ('calculate_displaced_people', True)
+            ('calculate_displaced_people', True),
+            ('magnitude_bin', numpy.power(10, range(0, 6), dtype=float))
         ])
 
     # noinspection PyPep8Naming
+    def cdf_normal(self, x):
+        """cumulative distribution function (CDF) of
+        the standard normal distribution
+        :param x
+        :returns: phi of (x)
+        (http://en.wikipedia.org/wiki/Normal_distribution)
+        """
+        return (1.0 + math.erf(x / math.sqrt(2.0))) / 2.0
+
     def fatality_rate(self, mmi):
         """Pager method to compute fatality rate.
 
@@ -74,6 +86,51 @@ class PAGFatalityFunction(ITBFatalityFunction):
         """
         THETA = self.hardcoded_parameters['Theta']
         BETA = self.hardcoded_parameters['Beta']
-
         x = math.log(mmi / THETA) / BETA
-        return (1.0 + math.erf(x / math.sqrt(2.0))) / 2.0
+        return self.cdf_normal(x)
+
+    def roundtosum(self, l, r):
+        """
+        http://stackoverflow.com/questions/15769948/
+        round-a-python-list-of-numbers-and-maintain-the-sum
+        l: array
+        r: decimal place
+        """
+        q = 10**(-r)
+        d = int((round(sum(l), r) - sum([round(x, r) for x in l])) * (10**r))
+        if d == 0:
+            return [round(x, r) for x in l]
+        elif d in [-1, 1]:
+            c, _ = max(enumerate(l), key=lambda x: math.copysign(
+                1, d) * math.fmod(x[1] - 0.5*q, q))
+            return [round(x, r) + q * math.copysign(1, d) if i == c else round(
+                x, r) for (i, x) in enumerate(l)]
+        else:
+            c = [i for i, _ in heapq.nlargest(abs(d), enumerate(
+                l), key=lambda x: math.copysign(1, d) * math.fmod(
+                    x[1]-0.5*q, q))]
+            return [round(x, r) + q * math.copysign(
+                1, d) if i in c else round(x, r) for (i, x) in enumerate(l)]
+
+    def compute_probability(self, total_fatalities):
+        """Pager method to compute probaility of fatality in
+        each magnitude bin: (0,1), (1,10), (10,10^2), (10^2,10^3),
+        (10^3, 10^4), (10^4, 10^5), (10^5, 10^6+)
+
+        :param total_fatalities
+
+        :returns: probability of fatality magnitude bin
+            lognorm.cdf(bin, shape=Zeta, scale=total_fatalities)
+        """
+        ZETA = self.hardcoded_parameters['Zeta']
+        magnitude_bin = self.hardcoded_parameters['magnitude_bin']
+        cprob = numpy.ones_like(magnitude_bin, dtype=float)
+
+        if total_fatalities > 1:
+            for (i, mbin) in enumerate(magnitude_bin):
+                x = math.log(mbin / total_fatalities) / ZETA
+                cprob[i] = self.cdf_normal(x)
+
+        cprob = numpy.append(cprob, 1.0) # 1000+
+        prob = numpy.hstack((cprob[0], numpy.diff(cprob)))*100.0 # percentage
+        return self.roundtosum(prob, 0) # rounding to decimal

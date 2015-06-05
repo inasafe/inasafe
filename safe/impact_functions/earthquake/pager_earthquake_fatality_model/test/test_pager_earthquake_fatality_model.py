@@ -119,6 +119,14 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
                     expected_result[key_][item],
                     result[item], places=4, msg=message)
 
+        expected_result = [
+            8.0, 42.0, 42.0, 8.0, 0.0, 0.0, 0.0]
+        result = impact_function.compute_probability(
+            impact_layer.get_keywords('total_fatalities'))
+        message = 'Expecting %s, but it returns %s' % (
+            expected_result, result)
+        self.assertEqual(expected_result, result, message)
+
     def test_filter(self):
         """TestPagerEarthquakeFatalityFunction: Test filtering IF"""
         hazard_keywords = {
@@ -152,4 +160,3 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-    
