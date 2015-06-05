@@ -36,8 +36,7 @@ from safe.gis.qgis_vector_tools import (
     union_geometry,
     create_layer,
     clip_by_polygon,
-    split_by_polygon,
-    split_by_polygon_in_out)
+    split_by_polygon)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -243,43 +242,6 @@ class TestQGISVectorTools(unittest.TestCase):
         point_layer.commitChanges()
 
         return point_layer
-
-    def test_split_by_polygon_in_out(self):
-        """Test split_by_polygon in-out work"""
-
-        raster_name = test_data_path(
-            'hazard',
-            'jakarta_flood_design.tif')
-        exposure_name = test_data_path(
-            'exposure',
-            'roads_osm_4326.shp')
-
-        qgis_exposure = QgsVectorLayer(
-            exposure_name,
-            'EXPOSURE',
-            'ogr')
-
-        inside_file_name, inside_layer_name, outside_file_name, \
-            outside_layer_name = polygonize_thresholds(raster_name, 0.1)
-
-        polygon_in = \
-            QgsVectorLayer(inside_file_name, inside_layer_name, 'ogr')
-        polygon_out = \
-            QgsVectorLayer(outside_file_name, outside_layer_name, 'ogr')
-
-        layer = split_by_polygon_in_out(
-            qgis_exposure, polygon_in, polygon_out, 'flooded', 1)
-
-        feature_count = layer.featureCount()
-        self.assertEqual(feature_count, 184)
-
-        flooded = 0
-        iterator = layer.getFeatures()
-        for feature in iterator:
-            attributes = feature.attributes()
-            if attributes[3] == 1:
-                flooded += 1
-        self.assertEqual(flooded, 25)
 
 
 if __name__ == '__main__':
