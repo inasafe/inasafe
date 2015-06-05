@@ -942,7 +942,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to layer mode
 
         self.check_current_step(step_kw_layermode, dialog)
-        dialog.lstLayerModes.setCurrentRow(0)  # select the None mode
+        dialog.lstLayerModes.setCurrentRow(0)  # select the Classified mode
 
         dialog.pbnNext.click()  # go to extra keywords
         self.check_current_step(step_kw_extrakeywords, dialog)

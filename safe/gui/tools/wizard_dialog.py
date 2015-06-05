@@ -672,6 +672,36 @@ class WizardDialog(QDialog, FORM_CLASS):
             return self.impact_function_manager.exposure_additional_keywords(
                 layer_mode_key, layer_geometry_key, exposure_key)
 
+    def field_keyword_for_the_layer(self):
+        """Return the proper keyword for field for the current layer.
+        Expected values are: 'field', 'structure_class_field', road_class_field
+
+        :returns: the field keyword
+        :rtype: string
+        """
+
+        if self.selected_category() == layer_purpose_aggregation:
+            # purpose: aggregation
+            return 'aggregation attribute'
+        elif self.selected_category() == layer_purpose_hazard:
+            # purpose: hazard
+            if (self.selected_layermode() == layer_mode_classified and
+                    is_point_layer(self.layer)):
+                # No field for classified point hazards
+                return ''
+        else:
+            # purpose: exposure
+            layer_mode_key = self.selected_layermode()['key']
+            layer_geometry_key = self.get_layer_geometry_id()
+            exposure_key = self.selected_subcategory()['key']
+            exposure_class_fields = self.impact_function_manager.\
+                exposure_class_fields(
+                    layer_mode_key, layer_geometry_key, exposure_key)
+            if exposure_class_fields and len(exposure_class_fields) == 1:
+                return exposure_class_fields[0]['key']
+        # Fallback to default
+        return 'field'
+
     # ===========================
     # STEP_KW_CATEGORY
     # ===========================
@@ -1184,10 +1214,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblDescribeField.clear()
 
         # Set values based on existing keywords (if already assigned)
-        if self.selected_category() == layer_purpose_aggregation:
-            field = self.get_existing_keyword('aggregation attribute')
-        else:
-            field = self.get_existing_keyword('field')
+        field_keyword = self.field_keyword_for_the_layer()
+        field = self.get_existing_keyword(field_keyword)
         if field:
             fields = []
             for index in xrange(self.lstFields.count()):
@@ -1399,7 +1427,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             return
 
         # Do not continue if user select different field
-        field = self.get_existing_keyword('field')
+        field_keyword = self.field_keyword_for_the_layer()
+        field = self.get_existing_keyword(field_keyword)
         if not is_raster_layer(self.layer) and field != self.selected_field():
             return
 
@@ -3806,33 +3835,33 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_field
             elif category == layer_purpose_hazard:
                 new_step = step_kw_hazard_category
-            elif self.subcategories_for_layer():
-                new_step = step_kw_subcategory
             else:
-                new_step = step_kw_field
+                new_step = step_kw_subcategory
         elif current_step == step_kw_hazard_category:
             new_step = step_kw_subcategory
         elif current_step == step_kw_subcategory:
             new_step = step_kw_layermode
         elif current_step == step_kw_layermode:
             if self.selected_layermode() == layer_mode_classified:
-                new_step = step_kw_extrakeywords
-            elif self.selected_layermode() == layer_mode_classified:
-                if not is_raster_layer(self.layer):
-                    new_step = step_kw_field  # CLASSIFIED VECTOR
-                elif self.selected_category() == layer_purpose_hazard:
-                    new_step = step_kw_classification  # CLASSIF. RASTER HAZARD
+                if is_raster_layer(self.layer):
+                    new_step = step_kw_classification  # CLASSIFIED RASTER
+                elif is_point_layer(self.layer) \
+                        and self.selected_category() == layer_purpose_hazard:
+                    # Skip FIELD and CLASSIFICATION for point volcanos
+                    new_step = step_kw_extrakeywords  # CLASSIFIED POINT
                 else:
-                    new_step = step_kw_resample  # CLASSIFIED RASTER EXPOSURE
+                    new_step = step_kw_field  # CLASSIFIED LINE | POLY
             else:
-                new_step = step_kw_unit  # ALL DATA CONTINUOUS MODE
+                new_step = step_kw_unit  # CONTINUOUS DATA, ALL GEOMETRIES
         elif current_step == step_kw_unit:
             if is_raster_layer(self.layer):
                 if self.selected_category() == layer_purpose_exposure:
+                    # Only go to resample for continuous raster exposures
                     new_step = step_kw_resample
                 else:
                     new_step = step_kw_extrakeywords
             else:
+                # Currently not used, as we don't have continuous vectors
                 new_step = step_kw_field
         elif current_step == step_kw_field:
             if self.selected_category() == layer_purpose_aggregation:
@@ -3842,10 +3871,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_kw_extrakeywords
         elif current_step == step_kw_resample:
-            if self.selected_layermode() == layer_mode_classified:
-                new_step = step_kw_classification
-            else:
-                new_step = step_kw_extrakeywords
+            new_step = step_kw_extrakeywords
         elif current_step == step_kw_classification:
             new_step = step_kw_classify
         elif current_step == step_kw_classify:
@@ -3942,6 +3968,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             raise Exception('Unexpected number of steps')
 
+        # Skip the classification and classify tabs if no classifications
+        # available:
+        if (new_step == step_kw_classification and not
+                self.classifications_for_layer()):
+            new_step = step_kw_extrakeywords
+
         # Skip the extra_keywords tab if no extra keywords available:
         if (new_step == step_kw_extrakeywords and not
                 self.additional_keywords_for_the_layer()):
@@ -3989,27 +4021,27 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 new_step = step_kw_layermode
         elif current_step == step_kw_classification:
-            if self.selected_allowresample() is not None:
-                new_step = step_kw_resample
-            elif is_raster_layer(self.layer):
-                new_step = step_kw_layermode
-            else:
+            if self.selected_field():
                 new_step = step_kw_field
+            else:
+                new_step = step_kw_layermode
         elif current_step == step_kw_classify:
             new_step = step_kw_classification
         elif current_step == step_kw_aggregation:
             new_step = step_kw_field
         elif current_step == step_kw_extrakeywords:
             if self.selected_layermode() == layer_mode_classified:
-                new_step = step_kw_layermode
-            elif self.selected_layermode() == layer_mode_classified:
-                new_step = step_kw_classify
-            elif self.selected_category() == layer_purpose_exposure:
-                new_step = step_kw_resample
-            elif not is_raster_layer(self.layer):
-                new_step = step_kw_field
+                if self.selected_classification():
+                    new_step = step_kw_classify
+                elif self.selected_field():
+                    new_step = step_kw_field
+                else:
+                    new_step = step_kw_layermode
             else:
-                new_step = step_kw_unit
+                if self.selected_allowresample() is not None:
+                    new_step = step_kw_resample
+                else:
+                    new_step = step_kw_unit
         elif current_step == step_kw_source:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
@@ -4017,15 +4049,19 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_extrakeywords
             # otherwise behave like it was step_kw_extrakeywords
             elif self.selected_layermode() == layer_mode_classified:
-                new_step = step_kw_layermode
-            elif self.selected_layermode() == layer_mode_classified:
-                new_step = step_kw_classify
-            elif self.selected_category() == layer_purpose_exposure:
-                new_step = step_kw_resample
-            elif not is_raster_layer(self.layer):
-                new_step = step_kw_field
+                if self.selected_classification():
+                    new_step = step_kw_classify
+                elif self.selected_field():
+                    new_step = step_kw_field
+                else:
+                    new_step = step_kw_layermode
             else:
-                new_step = step_kw_unit
+                if self.selected_allowresample() is not None:
+                    new_step = step_kw_resample
+                else:
+                    new_step = step_kw_unit
+        elif current_step == step_kw_title:
+            new_step = step_kw_source
         elif current_step == step_fc_function_1:
             new_step = step_fc_function_1
         elif current_step == step_fc_hazlayer_from_browser:
@@ -4146,11 +4182,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.selected_allowresample() is not None:
             keywords['allow_resample'] = self.selected_allowresample()
         if self.lstFields.currentItem():
-            if self.selected_category() == layer_purpose_aggregation:
-                key_field = 'aggregation attribute'
-            else:
-                key_field = 'field'
-            keywords[key_field] = self.lstFields.currentItem().text()
+            field_keyword = self.field_keyword_for_the_layer()
+            keywords[field_keyword] = self.lstFields.currentItem().text()
         if self.selected_classification():
             geom = 'raster' if is_raster_layer(self.layer) else 'vector'
             key = '%s_%s_classification' % (geom,
