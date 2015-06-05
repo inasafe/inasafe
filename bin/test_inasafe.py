@@ -15,8 +15,8 @@ inasafe = imp.load_source('inasafe', usage_dir, source_file)
 from inasafe import (
     get_exposure,
     get_hazard,
-    get_ifunction_list,
-    run_if,
+    get_impact_function_list,
+    run_impact_function,
     build_report,
     CommandLineArguments)
 
@@ -50,14 +50,14 @@ class TestInasafeCommandLine(unittest.TestCase):
         haz = get_hazard(self.args)
         self.assertEqual(haz.isValid(), True, 'Hazard layer is not valid')
 
-    def test_get_ifunction_list(self):
+    def test_get_impact_function_list(self):
         """Test getting a list of IF ids."""
-        impact_function_list = get_ifunction_list()
+        impact_function_list = get_impact_function_list()
         self.assertEqual(type(impact_function_list), list)
 
     def test_run_if(self):
         """Run an IF and check if vector file was created."""
-        run_if(self.args)
+        run_impact_function(self.args)
         # check if impact file exists
         self.assertEqual(os.path.isfile(self.args.output_file), True)
 

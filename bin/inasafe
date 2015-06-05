@@ -69,7 +69,7 @@ class CommandLineArguments(object):
             LOGGER.debug('no extent specified')
 
 
-def get_ifunction_list():
+def get_impact_function_list():
     """Returns all available impact function ids.
 
     :returns: List of impact functions.
@@ -178,23 +178,24 @@ def get_exposure(cli_arguments):
         print exc.__doc__
 
 
-def run_if(cli_arguments):
+def run_impact_function(command_line_arguments):
     """Runs an analysis and delegates producing pdf and .shp results.
 
         An impact layer object is created and used to write a shapefile.
         The shapefile path is given by user and used by build_report
         function to read from.
 
-    :param cli_arguments: User inputs.
-    :type cli_arguments: CommandLineArguments
+    :param command_line_arguments: User inputs.
+    :type command_line_arguments: CommandLineArguments
 
     :raises: Exception
     """
-    hazard = get_hazard(cli_arguments)
-    exposure = get_exposure(cli_arguments)
+    hazard = get_hazard(command_line_arguments)
+    exposure = get_exposure(command_line_arguments)
     # IF
     impact_function_manager = ImpactFunctionManager()
-    impact_function = impact_function_manager.get(cli_arguments.impact_function)
+    impact_function = impact_function_manager.get(
+        command_line_arguments.impact_function)
     keyword_io = KeywordIO()
 
     try:
@@ -219,17 +220,17 @@ def run_if(cli_arguments):
     crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
     analysis.user_extent_crs = QgsCoordinateReferenceSystem(crs)
     analysis.user_extent = QgsRectangle(
-        float(cli_arguments.extent[0]),
-        float(cli_arguments.extent[1]),
-        float(cli_arguments.extent[2]),
-        float(cli_arguments.extent[3])
+        float(command_line_arguments.extent[0]),
+        float(command_line_arguments.extent[1]),
+        float(command_line_arguments.extent[2]),
+        float(command_line_arguments.extent[3])
     )
     analysis.impact_function = impact_function
     analysis.setup_analysis()
     analysis.run_analysis()
     impact_layer = analysis.get_impact_layer()
-    write_results(cli_arguments, impact_layer)
-    build_report(cli_arguments)
+    write_results(command_line_arguments, impact_layer)
+    build_report(command_line_arguments)
 
 
 def build_report(cli_arguments):
@@ -302,13 +303,13 @@ if __name__ == '__main__':
         if arguments.show_list is True:
             # setup functions
             register_impact_functions()
-            show_impact_function_names(get_ifunction_list())
+            show_impact_function_names(get_impact_function_list())
         elif arguments.version is True:
             print "QGIS VERSION: " + str(qgis_version()).replace('0', '.')
         elif (arguments.hazard is not None) and\
                 (arguments.exposure is not None) and\
                 (arguments.output_file is not None):
-            run_if(arguments)
+            run_impact_function(arguments)
         else:
             print "Argument combination not recognised"
     except Exception as excp:
