@@ -112,7 +112,6 @@ class ITBFatalityFunction(ImpactFunction):
         self.hardcoded_parameters = OrderedDict([
             ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
             # Rates of people displaced for each MMI level
-            ('displacement_threshold', 6.0), # mmi threshold for displacement
             ('mmi_range', range(2, 11)), # from MMI 2 to 10
             ('displacement_rate', {
                 2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0, 6: 1.0,
@@ -142,8 +141,6 @@ class ITBFatalityFunction(ImpactFunction):
         self.validate()
         self.prepare()
 
-        displacement_rate = self.hardcoded_parameters['displacement_rate']
-
         # Extract input layers
         intensity = self.hazard
         population = self.exposure
@@ -155,6 +152,8 @@ class ITBFatalityFunction(ImpactFunction):
         # Calculate people affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
         mmi_range = self.hardcoded_parameters['mmi_range']
+        displacement_rate = self.hardcoded_parameters['displacement_rate']
+
         number_of_exposed = {}
         number_of_displaced = {}
         number_of_fatalities = {}
