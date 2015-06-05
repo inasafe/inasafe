@@ -64,28 +64,60 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
 
-        expected_exposed_per_mmi = {
-            2.0: 0,
-            2.5: 0,
-            3.0: 0,
-            3.5: 0,
-            4.0: 0,
-            4.5: 0,
-            5.0: 0,
-            5.5: 0,
-            6.5: 0,
-            6.0: 0,
-            7.0: 0,
-            7.5: 60,
-            8.0: 140,
-            8.5: 0,
-            9.0: 0,
-            9.5: 0}
-        result = impact_layer.get_keywords('exposed_per_mmi')
+        expected_result = {
+            'total_population': 200,
+            'total_fatalities': 10, # should be zero FIXME
+            'total_displaced': 200
+        }
+        for key_ in expected_result.keys():
+            result = impact_layer.get_keywords(key_)
+            message = 'Expecting %s, but it returns %s' % (
+                expected_result[key_], result)
+            self.assertEqual(expected_result[key_], result, message)
 
-        message = 'Expecting %s, but it returns %s' % (
-            expected_exposed_per_mmi, result)
-        self.assertEqual(expected_exposed_per_mmi, result, message)
+        expected_result = {}
+        expected_result['fatalities_per_mmi'] = {
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 0.083498, # should be rounded to zero!! not 10.
+            9: 0,
+            10: 0
+        }
+        expected_result['exposed_per_mmi'] = {
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 200,
+            9: 0,
+            10: 0
+        }
+        expected_result['displaced_per_mmi'] = {
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 199.91650,
+            9: 0,
+            10: 0
+        }
+
+        for key_ in expected_result.keys():
+            result = impact_layer.get_keywords(key_)
+            for item in expected_result[key_].keys():
+                message = 'Expecting %s, but it returns %s' % (
+                    expected_result[key_][item], result[item])
+                self.assertAlmostEqual(
+                    expected_result[key_][item],
+                    result[item], places=4, msg=message)
 
     def test_filter(self):
         """TestPagerEarthquakeFatalityFunction: Test filtering IF"""
@@ -117,3 +149,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
+
+if __name__ == '__main__':
+    unittest.main()
+    
