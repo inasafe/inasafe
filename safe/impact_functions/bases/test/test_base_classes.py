@@ -2,14 +2,14 @@
 import unittest
 
 from safe.common.exceptions import NoAttributeInLayerError
-from safe.impact_functions.bases.layer_types.classified_vector_exposure import \
-    ClassifiedVectorExposureMixin
-from safe.impact_functions.bases.layer_types.classified_vector_hazard import \
-    ClassifiedVectorHazardMixin
-from safe.impact_functions.bases.layer_types.continuous_vector_exposure import \
-    ContinuousVectorExposureMixin
-from safe.impact_functions.bases.layer_types.continuous_vector_hazard import \
-    ContinuousVectorHazardMixin
+from safe.impact_functions.bases.layer_types.classified_vector_exposure \
+    import ClassifiedVectorExposureMixin
+from safe.impact_functions.bases.layer_types.classified_vector_hazard \
+    import ClassifiedVectorHazardMixin
+from safe.impact_functions.bases.layer_types.continuous_vector_exposure \
+    import ContinuousVectorExposureMixin
+from safe.impact_functions.bases.layer_types.continuous_vector_hazard \
+    import ContinuousVectorHazardMixin
 from safe.storage.core import read_layer
 from safe.test.utilities import test_data_path, get_qgis_app
 
@@ -48,6 +48,7 @@ class TestBaseClassesMixin(unittest.TestCase):
         try:
             # test correct attribute
             classified_vh.hazard_class_attribute = 'h_zone'
+        # pylint: disable=broad-except
         except Exception as e:
             self.fail(e.message)
 
@@ -59,6 +60,7 @@ class TestBaseClassesMixin(unittest.TestCase):
         try:
             # test correct attribute
             continuous_vh.hazard_value_attribute = 'h_zone'
+        # pylint: disable=broad-except
         except Exception as e:
             self.fail(e.message)
 
@@ -77,6 +79,7 @@ class TestBaseClassesMixin(unittest.TestCase):
                 expected_unique_values,
                 actual_unique_values,
                 message)
+        # pylint: disable=broad-except
         except Exception as e:
             self.fail(e.message)
 
@@ -108,5 +111,6 @@ class TestBaseClassesMixin(unittest.TestCase):
                 expected_min_value,
                 actual_min_value,
                 message)
+        # pylint: disable=broad-except
         except Exception as e:
             self.fail(e.message)

@@ -16,9 +16,9 @@ __date__ = '28/05/15'
 
 
 class ContinuousRHContinuousRE(
-    ImpactFunction,
-    ContinuousRasterHazardMixin,
-    ContinuousRasterExposureMixin):
+        ImpactFunction,
+        ContinuousRasterHazardMixin,
+        ContinuousRasterExposureMixin):
     """Continuous Raster Hazarad, Continuous Raster Exposure base class.
 
     """

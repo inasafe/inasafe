@@ -18,9 +18,9 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class ClassifiedVHContinuousVE(
-    ImpactFunction,
-    ClassifiedVectorHazardMixin,
-    ContinuousVectorExposureMixin):
+        ImpactFunction,
+        ClassifiedVectorHazardMixin,
+        ContinuousVectorExposureMixin):
     """Classified Vector Hazard, Continuous Vector Exposure base class.
 
     """

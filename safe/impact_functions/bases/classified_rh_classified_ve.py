@@ -18,9 +18,9 @@ __date__ = '28/05/15'
 
 
 class ClassifiedRHClassifiedVE(
-    ImpactFunction,
-    ClassifiedRasterHazardMixin,
-    ClassifiedVectorExposureMixin):
+        ImpactFunction,
+        ClassifiedRasterHazardMixin,
+        ClassifiedVectorExposureMixin):
     """Classified Raster Hazard, Classified Vector Exposure base class.
 
     """
