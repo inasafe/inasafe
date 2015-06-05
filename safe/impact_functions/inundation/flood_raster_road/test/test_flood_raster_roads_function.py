@@ -29,7 +29,7 @@ from safe.test.utilities import get_qgis_app, test_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class TestFloodRasterRoadsGdalFunction(unittest.TestCase):
+class TestFloodRasterRoadsFunction(unittest.TestCase):
     """Test for Flood Raster Roads Impact Function."""
 
     def setUp(self):
