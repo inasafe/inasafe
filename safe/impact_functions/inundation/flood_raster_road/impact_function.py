@@ -68,7 +68,7 @@ def _raster_to_vector_cells(
     cell_height = extent.height() / raster_rows
 
     uri = "Polygon?crs=" + output_crs.authid()
-    vl = QgsVectorLayer(uri, "flood polygons", "memory")
+    vl = QgsVectorLayer(uri, "cells", "memory")
     features = []
 
     # prepare coordinate transform to reprojection
@@ -129,7 +129,6 @@ def _add_output_feature(
 
     Newly created features get the attributes from the original feature.
 
-
     :param features: A collection of features that the new feature will
         be added to.
     :type features: list
@@ -138,7 +137,7 @@ def _add_output_feature(
         multi-part, it will be exploded into several single-part features.
     :type geometry: QgsGeometry
 
-    :param is_flooded: Flag indicating whenther the feature should be marked
+    :param is_flooded: Flag indicating whether the feature should be marked
         as flooded.
     :type is_flooded: bool
 
@@ -153,12 +152,11 @@ def _add_output_feature(
         is flooded.
     :type target_field: QgsField
 
-    :returns: A collection of features with the new feature appended.
-    :rtype: list
+    :returns: None
     """
-    geoms = geometry.asGeometryCollection() if geometry.isMultipart() else [
-        geometry]
-    for g in geoms:
+    geometries = geometry.asGeometryCollection() if geometry.isMultipart() \
+        else [geometry]
+    for g in geometries:
         f = QgsFeature(fields)
         f.setGeometry(g)
         for attr_no, attr_val in enumerate(original_attributes):
@@ -167,17 +165,24 @@ def _add_output_feature(
         features.append(f)
 
 
-def _union_geometries(geoms):
-    """ Return a geometry which is union of the passed list of geometries """
+def _union_geometries(geometries):
+    """ Return a geometry which is union of the passed list of geometries.
+
+    :param geometries: Geometries for the union operation.
+    :type geometries: list
+
+    :returns: union of geometries
+    :rtype: QgsGeometry
+    """
     if QGis.QGIS_VERSION_INT >= 20400:
         # woohoo we can use fast union (needs GEOS >= 3.3)
-        return QgsGeometry.unaryUnion(geoms)
+        return QgsGeometry.unaryUnion(geometries)
     else:
         # uhh we need to use slow iterative union
-        if len(geoms) == 0:
+        if len(geometries) == 0:
             return QgsGeometry()
-        result_geometry = QgsGeometry(geoms[0])
-        for g in geoms[1:]:
+        result_geometry = QgsGeometry(geometries[0])
+        for g in geometries[1:]:
             result_geometry = result_geometry.combine(g)
         return result_geometry
 
