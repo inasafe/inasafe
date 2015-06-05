@@ -127,14 +127,8 @@ class ClassifiedRasterHazardPopulationFunction(ClassifiedRHContinuousRE):
             ])
         return table_body
 
-    def run(self, layers=None):
+    def run(self):
         """Plugin for impact of population as derived by classified hazard.
-
-        Input
-        :param layers: List of layers expected to contain
-
-              * hazard_layer: Raster layer of classified hazard
-              * exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each class of the hazard
 
@@ -143,7 +137,7 @@ class ClassifiedRasterHazardPopulationFunction(ClassifiedRHContinuousRE):
           Table with number of people in each class
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # The 3 classes
         # TODO (3.2): shouldnt these be defined in keywords rather? TS

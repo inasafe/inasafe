@@ -65,22 +65,17 @@ class ClassifiedPolygonHazardBuildingFunction(
             }
         ]
 
-    def run(self, layers=None):
+    def run(self):
         """Risk plugin for classified polygon hazard on building/structure.
 
         Counts number of building exposed to each hazard zones.
-
-        :param layers: List of layers expected to contain.
-                * hazard_layer: Hazard layer
-                * exposure_layer: Vector layer of structure data on
-                the same grid as hazard_layer
 
         :returns: Map of building exposed to each hazard zones.
                   Table with number of buildings affected
         :rtype: dict
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Parameters
         hazard_zone_attribute = self.parameters['hazard zone attribute'].value

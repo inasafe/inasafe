@@ -67,16 +67,10 @@ class FloodPolygonBuildingFunction(
             }
         ]
 
-    def run(self, layers=None):
-        """Experimental impact function.
-
-        Input
-          layers: List of layers expected to contain
-              H: Polygon layer of inundation areas
-              E: Vector layer of buildings
-        """
+    def run(self):
+        """Experimental impact function."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Get the IF parameters
         building_type_field = self.parameters['building_type_field'].value

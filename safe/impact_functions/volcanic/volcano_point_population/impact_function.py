@@ -20,7 +20,7 @@ from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding,
     has_no_data)
-from safe.engine.utilities import buffer_points
+from safe.engine.core import buffer_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
@@ -51,15 +51,8 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             'In the event of a volcano point how many people might be impacted'
         )
 
-    def run(self, layers=None):
+    def run(self):
         """Run volcano point population evacuation Impact Function.
-
-        :param layers: List of layers expected to contain where two layers
-            should be present.
-
-            * hazard_layer: Vector point layer.
-            * exposure_layer: Raster layer of population data on the same grid
-                as hazard_layer
 
         Counts number of people exposed to volcano event.
 
@@ -74,7 +67,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
                 monotonically increasing)
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Parameters
         radii = self.parameters['distances'].value

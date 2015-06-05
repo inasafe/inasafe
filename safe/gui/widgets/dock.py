@@ -60,7 +60,6 @@ from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
     set_vector_categorized_style)
-from safe.utilities.impact_calculator import ImpactCalculator
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import temp_dir
@@ -144,7 +143,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.impact_function_manager = ImpactFunctionManager()
 
         self.analysis = None
-        self.calculator = ImpactCalculator()
         self.keyword_io = KeywordIO()
         self.active_impact_function = None
         self.impact_function_parameters = None

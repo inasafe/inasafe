@@ -60,14 +60,10 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
             )
         return table_body
 
-    def run(self, layers=None):
-        """Experimental impact function for flood polygons on roads.
-
-        :param layers: List of layers expected to contain H: Polygon layer of
-            inundation areas E: Vector layer of roads
-        """
+    def run(self):
+        """Experimental impact function for flood polygons on roads."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Get the parameters from IF options
         road_type_field = self.parameters['road_type_field'].value
