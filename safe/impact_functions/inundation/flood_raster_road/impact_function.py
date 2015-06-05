@@ -31,9 +31,30 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 
 
-def _raster_to_vector_cells(raster, threshold_min, threshold_max, roads_crs):
-    """ take raster and generate vectors features (rectangles) for cells
-        which are within threshold (thr_min < V < thr_max) """
+def _raster_to_vector_cells(
+        raster, minimum_threshold, maximum_threshold, output_crs):
+    """Generate vectors features (rectangles) for raster cells.
+
+     Cells which are not within threshold (threshold_min < V < threshold_max)
+     will be excluded. The provided CRS will be used to determine the
+     CRS of the output vector cells layer.
+
+    :param minimum_threshold: The minimum threshold for pixels to be included.
+    :type minimum_threshold: float
+
+    :param maximum_threshold: The maximum threshold for pixels to be included.
+    :type maximum_threshold: float
+
+    :param raster: A raster layer that will be vectorised.
+    :type raster: QgsRasterLayer
+
+    :param output_crs: The CRS to use for the output vector cells layer.
+    :type output_crs: QgsCoordinateReferenceSystem
+
+    :returns: A two-tuple containing a spatial index and a map (dict) where
+        map keys are feature id's and the value is the feature for that id.
+    :rtype: (QgsSpatialIndex, dict)
+    """
 
     # get raster data
     provider = raster.dataProvider()
@@ -46,18 +67,18 @@ def _raster_to_vector_cells(raster, threshold_min, threshold_max, roads_crs):
     cell_width = extent.width() / raster_cols
     cell_height = extent.height() / raster_rows
 
-    uri = "Polygon?crs=" + roads_crs.authid()
+    uri = "Polygon?crs=" + output_crs.authid()
     vl = QgsVectorLayer(uri, "flood polygons", "memory")
     features = []
 
     # prepare coordinate transform to reprojection
-    ct = QgsCoordinateTransform(raster.crs(), roads_crs)
+    ct = QgsCoordinateTransform(raster.crs(), output_crs)
 
     for y in xrange(raster_rows):
         for x in xrange(raster_cols):
             # only use cells that are within the specified threshold
             value = block.value(y, x)
-            if value < threshold_min or value > threshold_max:
+            if value < minimum_threshold or value > maximum_threshold:
                 continue
 
             # construct rectangular polygon feature for the cell
@@ -65,9 +86,11 @@ def _raster_to_vector_cells(raster, threshold_min, threshold_max, roads_crs):
             x1 = raster_xmin+((x+1)*cell_width)
             y0 = raster_ymax-(y*cell_height)
             y1 = raster_ymax-((y+1)*cell_height)
-            outer_ring = [QgsPoint(x0, y0), QgsPoint(x1, y0),
-                          QgsPoint(x1, y1), QgsPoint(x0, y1),
-                          QgsPoint(x0, y0)]
+            outer_ring = [
+                QgsPoint(x0, y0), QgsPoint(x1, y0),
+                QgsPoint(x1, y1), QgsPoint(x0, y1),
+                QgsPoint(x0, y0)]
+            # noinspection PyCallByClass
             geometry = QgsGeometry.fromPolygon([outer_ring])
             geometry.transform(ct)
             f = QgsFeature()
@@ -95,19 +118,50 @@ def _raster_to_vector_cells(raster, threshold_min, threshold_max, roads_crs):
     return index, flood_cells_map
 
 
-def _add_output_feature(features, geom, is_flooded,
-                        fields, orig_attributes, target_field):
+def _add_output_feature(
+        features,
+        geometry,
+        is_flooded,
+        fields,
+        original_attributes,
+        target_field):
     """ Utility function to construct road features from geometry.
 
     Newly created features get the attributes from the original feature.
-    If the geometry is multi-part, it will be exploded into several
-    single-part features.
+
+
+    :param features: A collection of features that the new feature will
+        be added to.
+    :type features: list
+
+    :param geometry: The geometry for the new feature. If the geometry is
+        multi-part, it will be exploded into several single-part features.
+    :type geometry: QgsGeometry
+
+    :param is_flooded: Flag indicating whenther the feature should be marked
+        as flooded.
+    :type is_flooded: bool
+
+    :param fields: Fields that should be assigned to the new feature.
+    :type fields: list
+
+    :param original_attributes: Attributes for the feature before the new
+        target field (see below) is added.
+    :type original_attributes: list
+
+    :param target_field: Output field used to indicate if the road segment
+        is flooded.
+    :type target_field: QgsField
+
+    :returns: A collection of features with the new feature appended.
+    :rtype: list
     """
-    geoms = geom.asGeometryCollection() if geom.isMultipart() else [geom]
+    geoms = geometry.asGeometryCollection() if geometry.isMultipart() else [
+        geometry]
     for g in geoms:
         f = QgsFeature(fields)
         f.setGeometry(g)
-        for attr_no, attr_val in enumerate(orig_attributes):
+        for attr_no, attr_val in enumerate(original_attributes):
             f.setAttribute(attr_no, attr_val)
         f.setAttribute(target_field, is_flooded)
         features.append(f)
@@ -128,16 +182,42 @@ def _union_geometries(geoms):
         return result_geometry
 
 
-def _intersect_roads_flood(roads, request, index,
-                           flood_cells_map, output_layer, target_field):
+def _intersect_lines_with_vector_cells(
+        line_layer,
+        request,
+        index,
+        flood_cells_map,
+        output_layer,
+        target_field):
     """
-    :param roads: Vector layer with roads
-    :param request: QgsFeatureRequest for fetching features from roads layer
-    :param index: QgsSpatialIndex with flood features
-    :param flood_cells_map: map from flood feature IDs to actual features
-    :param output_layer: layer to which features will be written
-    :param target_field: name of the field in output_layer which will receive
-                information whether the feature is flooded or not
+    A helper function to find all vector cells that intersect with lines.
+
+    In typical usage, you will have a roads layer and polygon cells from
+    vectorising a raster layer. The goal is to obtain a subset of cells
+    which intersect with the roads. This will then be used to determine
+    if any given road segment is flooded.
+
+    :param line_layer: Vector layer with containing linear features
+        such as roads.
+    :type line_layer: QgsVectorLayer
+
+    :param request: Request for fetching features from lines layer.
+    :type request: QgsFeatureRequest
+
+    :param index: Spatial index with flood features.
+    :type index: QgsSpatialIndex
+
+    :param flood_cells_map: Map from flood feature IDs to actual features.
+        See :func:`_raster_to_vector_cells` for more details.
+    :type flood_cells_map: dict
+
+    :param output_layer: Layer to which features will be written.
+    :type output_layer: QgsVectorLayer
+
+    :param target_field: Name of the field in output_layer which will receive
+        information whether the feature is flooded or not.
+    :type target_field: basestring
+
     :return: None
     """
 
@@ -145,7 +225,7 @@ def _intersect_roads_flood(roads, request, index,
     fields = output_layer.dataProvider().fields()
 
     rd = 0
-    for f in roads.getFeatures(request):
+    for f in line_layer.getFeatures(request):
         # query flood cells located in the area of the road and build
         # a (multi-)polygon geometry with flooded area relevant to this road
         ids = index.intersects(f.geometry().boundingBox())
@@ -331,7 +411,7 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
 
         # Do the heavy work - for each road get flood polygon for that area and
         # do the intersection/difference to find out which parts are flooded
-        _intersect_roads_flood(
+        _intersect_lines_with_vector_cells(
             E, request, index, flood_cells_map, line_layer, target_field)
 
         target_field_index = line_layer.dataProvider().\
