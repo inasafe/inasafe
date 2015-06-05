@@ -15,10 +15,11 @@ from qgis.core import (
     QgsCoordinateTransform
 )
 
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.inundation\
     .flood_raster_road_qgis.metadata_definitions import \
     FloodRasterRoadsExperimentalMetadata
+from safe.impact_functions.bases.continuous_rh_classified_ve import \
+    ContinuousRHClassifiedVE
 from safe.common.tables import Table, TableRow
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
@@ -28,7 +29,7 @@ from safe.gis.qgis_raster_tools import polygonize, clip_raster
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 
 
-class FloodRasterRoadsQGISFunction(ImpactFunction):
+class FloodRasterRoadsQGISFunction(ContinuousRHClassifiedVE):
     """Impact function for inundation on roads using QGIS libs."""
     _metadata = FloodRasterRoadsExperimentalMetadata
 

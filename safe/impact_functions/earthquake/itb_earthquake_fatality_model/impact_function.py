@@ -11,14 +11,12 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-
 import numpy
 import logging
 
 from safe.common.utilities import OrderedDict
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.continuous_rh_continuous_re import \
+    ContinuousRHContinuousRE
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .metadata_definitions import ITBFatalityMetadata
 from safe.impact_functions.core import (
@@ -38,10 +36,13 @@ from safe.utilities.i18n import tr
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
 
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ITBFatalityFunction(ImpactFunction):
+class ITBFatalityFunction(ContinuousRHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Indonesian Earthquake Fatality Model.
 

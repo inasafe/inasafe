@@ -13,18 +13,14 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-__revision__ = '$Format:%H$'
-__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import numpy
 
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic\
     .continuous_hazard_population.metadata_definitions import \
     ContinuousHazardPopulationMetadata
+from safe.impact_functions.bases.continuous_rh_continuous_re import \
+    ContinuousRHContinuousRE
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.core import (
     evacuated_population_needs,
@@ -40,8 +36,14 @@ from safe.common.exceptions import (
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters
 
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
-class ContinuousHazardPopulationFunction(ImpactFunction):
+
+class ContinuousHazardPopulationFunction(ContinuousRHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by continuous hazard."""
     _metadata = ContinuousHazardPopulationMetadata()
