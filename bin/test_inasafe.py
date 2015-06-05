@@ -18,7 +18,7 @@ from inasafe import (
     get_ifunction_list,
     run_if,
     build_report,
-    CliArgs)
+    CommandLineArguments)
 
 
 class TestInasafeCommandLine(unittest.TestCase):
@@ -26,7 +26,7 @@ class TestInasafeCommandLine(unittest.TestCase):
             run from safe/ directory
     """
     def setUp(self):
-        self.args = CliArgs({
+        self.args = CommandLineArguments({
             '--download': False,
             '--exposure': 'safe/test/data/exposure/buildings.shp',
             '--extent': '106,8525945:-6,2085970:106,7999364:-6,1676174',

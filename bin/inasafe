@@ -17,23 +17,28 @@ Contact : jannes@kartoza.com
 
 __author__ = 'Jannes Engelbrecht'
 __date__ = '16/04/15'
+
+import os
+import logging
+
 from docopt import docopt, DocoptExit
-from safe.impact_functions.registry import Registry
-from safe.impact_functions import register_impact_functions
-from safe.test.utilities import get_qgis_app
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from qgis.core import (
     QgsRasterLayer,
     QgsVectorLayer,
     QgsRectangle,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem)
+from PyQt4.QtCore import QSettings
+
+from safe.impact_functions.registry import Registry
+from safe.impact_functions import register_impact_functions
+from safe.test.utilities import get_qgis_app
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import qgis_version
-import os
 from safe.report.impact_report import ImpactReport
-from PyQt4.QtCore import QSettings
-import logging
+
+
 
 current_dir = os.path.abspath(
     os.path.realpath(os.environ['PWD']))
@@ -46,20 +51,20 @@ LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
-class CliArgs(object):
+class CommandLineArguments(object):
     """Instance objects class for shell arguments.
     """
-    def __init__(self, _arguments_):
-        self.output_file = _arguments_['--output-file']
-        self.hazard = _arguments_['--hazard']
-        self.exposure = _arguments_['--exposure']
-        self.version = _arguments_['--version']
-        self.show_list = _arguments_['--list-functions']
-        self.impact_function = _arguments_['--impact-function']
-        self.report_template = _arguments_['--report-template']
+    def __init__(self, arguments_):
+        self.output_file = arguments_['--output-file']
+        self.hazard = arguments_['--hazard']
+        self.exposure = arguments_['--exposure']
+        self.version = arguments_['--version']
+        self.show_list = arguments_['--list-functions']
+        self.impact_function = arguments_['--impact-function']
+        self.report_template = arguments_['--report-template']
         # optional arguments
-        if not _arguments_['--extent'] is None:
-            self.extent = _arguments_['--extent'].replace(',', '.').split(':')
+        if not arguments_['--extent'] is None:
+            self.extent = arguments_['--extent'].replace(',', '.').split(':')
         else:
             LOGGER.debug('no extent specified')
 
@@ -76,8 +81,8 @@ def get_ifunction_list():
     return registry.impact_functions
 
 
-def show_names(impact_functions):
-    """Prints a list of strings.
+def show_impact_function_names(impact_functions):
+    """Prints a list of impact functions.
 
     :param impact_functions: A list of impact function ids.
     :type: list of strings.
@@ -107,32 +112,32 @@ def get_hazard(cli_arguments):
     """Get hazard layer.
 
     :param cli_arguments: User inputs.
-    :type cli_arguments: CliArgs
+    :type cli_arguments: CommandLineArguments
 
     :returns: Vector or Raster layer depending on input arguments.
     :rtype: QgsVectorLayer, QgsRasterLayer
 
     :raises: Exception
     """
-    qhazard = None
+    hazard = None
     try:
         if os.path.splitext(cli_arguments.hazard)[1] == '.shp':
             hazard_base = join_if_relative(cli_arguments.hazard)
-            qhazard = QgsVectorLayer(
+            hazard = QgsVectorLayer(
                 hazard_base, 'cli_vector_hazard', 'ogr')
         elif os.path.splitext(cli_arguments.hazard)[1] in \
                 ['.asc', '.tif', '.tiff']:
             hazard_base = join_if_relative(cli_arguments.hazard)
-            qhazard = QgsRasterLayer(
+            hazard = QgsRasterLayer(
                 hazard_base, 'cli_raster_hazard')
         else:
             print "Unknown filetype " + cli_arguments.hazard
-        if qhazard is not None and qhazard.isValid():
+        if hazard is not None and hazard.isValid():
             print "hazard layer is VALID"
         else:
             print "hazard layer is NOT VALID"
             print "Perhaps run-env-linux.sh /usr"
-        return qhazard
+        return hazard
     except Exception as exc:
         print exc.message
         print exc.__doc__
@@ -142,32 +147,32 @@ def get_exposure(cli_arguments):
     """Get exposure layer.
 
     :param cli_arguments: User inputs.
-    :type cli_arguments: CliArgs
+    :type cli_arguments: CommandLineArguments
 
     :returns: Vector or Raster layer depending on input arguments.
     :rtype: QgsVectorLayer, QgsRasterLayer
 
     :raises: Exception
     """
-    qexposure = None
+    exposure = None
     try:
         if os.path.splitext(cli_arguments.exposure)[1] == '.shp':
             exposure_base = join_if_relative(cli_arguments.exposure)
             LOGGER.debug(exposure_base)
-            qexposure = QgsVectorLayer(exposure_base, 'cli_vector', 'ogr')
+            exposure = QgsVectorLayer(exposure_base, 'cli_vector', 'ogr')
         elif os.path.splitext(cli_arguments.exposure)[1] in \
                 ['.asc', '.tif', '.tiff']:
             exposure_base = join_if_relative(cli_arguments.exposure)
             LOGGER.debug(exposure_base)
-            qexposure = QgsRasterLayer(exposure_base, 'cli_raster')
+            exposure = QgsRasterLayer(exposure_base, 'cli_raster')
         else:
             print "Unknown filetype " + cli_arguments.exposure
-        if qexposure is not None and qexposure.isValid():
+        if exposure is not None and exposure.isValid():
             print "exposure layer is VALID"
         else:
             print "exposure layer not valid"
             print "Perhaps run-env-linux.sh /usr"
-        return qexposure
+        return exposure
     except Exception as exc:
         print exc.message
         print exc.__doc__
@@ -181,12 +186,12 @@ def run_if(cli_arguments):
         function to read from.
 
     :param cli_arguments: User inputs.
-    :type cli_arguments: CliArgs
+    :type cli_arguments: CommandLineArguments
 
     :raises: Exception
     """
-    qhazard = get_hazard(cli_arguments)
-    qexposure = get_exposure(cli_arguments)
+    hazard = get_hazard(cli_arguments)
+    exposure = get_exposure(cli_arguments)
     # IF
     impact_function_manager = ImpactFunctionManager()
     impact_function = impact_function_manager.get(cli_arguments.impact_function)
@@ -199,10 +204,10 @@ def run_if(cli_arguments):
         print ie.message
         raise ImportError
     analysis = Analysis()
-    analysis.hazard_layer = qhazard
-    analysis.exposure_layer = qexposure
-    analysis.hazard_keyword = keyword_io.read_keywords(qhazard)
-    analysis.exposure_keyword = keyword_io.read_keywords(qexposure)
+    analysis.hazard_layer = hazard
+    analysis.exposure_layer = exposure
+    analysis.hazard_keyword = keyword_io.read_keywords(hazard)
+    analysis.exposure_keyword = keyword_io.read_keywords(exposure)
     analysis.clip_hard = False
     analysis.show_intermediate_layers = False
     analysis.run_in_thread_flag = False
@@ -234,7 +239,7 @@ def build_report(cli_arguments):
         arguments.output_file.
 
     :param cli_arguments: User inputs.
-    :type cli_arguments: CliArgs
+    :type cli_arguments: CommandLineArguments
 
     :raises: Exception
     """
@@ -267,7 +272,7 @@ def write_results(cli_arguments, impact_layer):
     """Write the impact_layer in shapefile format.
 
     :param cli_arguments: User inputs.
-    :type cli_arguments: CliArgs
+    :type cli_arguments: CommandLineArguments
 
     :param impact_layer: Analysis result used to produce file.
     :type impact_layer: QgsVectorLayer
@@ -290,14 +295,14 @@ if __name__ == '__main__':
     except DocoptExit as exc:
         print exc.message
 
-    arguments = CliArgs(shell_arguments)
+    arguments = CommandLineArguments(shell_arguments)
 
     LOGGER.debug(shell_arguments)
     try:
         if arguments.show_list is True:
             # setup functions
             register_impact_functions()
-            show_names(get_ifunction_list())
+            show_impact_function_names(get_ifunction_list())
         elif arguments.version is True:
             print "QGIS VERSION: " + str(qgis_version()).replace('0', '.')
         elif (arguments.hazard is not None) and\
