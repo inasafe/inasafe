@@ -13,9 +13,10 @@ Contact : ole.moller.nielsen@gmail.com
 
 from collections import OrderedDict
 
+from safe.impact_functions.bases.classified_vh_classified_ve import \
+    ClassifiedVHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.volcanic.volcano_polygon_building\
     .metadata_definitions import VolcanoPolygonBuildingFunctionMetadata
 from safe.common.exceptions import InaSAFEError
@@ -29,7 +30,7 @@ from safe.impact_reports.building_exposure_report_mixin import (
 
 
 class VolcanoPolygonBuildingFunction(
-        ImpactFunction,
+        ClassifiedVHClassifiedVE,
         BuildingExposureReportMixin):
     """Impact Function for Volcano Point on Building."""
 

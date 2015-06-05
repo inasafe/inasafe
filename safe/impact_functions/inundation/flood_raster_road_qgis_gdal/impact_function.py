@@ -7,8 +7,9 @@ from qgis.core import (
     QgsCoordinateTransform
 )
 
-from safe.impact_functions.base import ImpactFunction
 from safe.common.tables import Table, TableRow
+from safe.impact_functions.bases.continuous_rh_classified_ve import \
+    ContinuousRHClassifiedVE
 from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
     .metadata_definitions import FloodRasterRoadsGdalMetadata
 from safe.utilities.i18n import tr
@@ -23,7 +24,7 @@ from safe.gis.qgis_vector_tools import (
     reproject_vector_layer)
 
 
-class FloodRasterRoadsGdalFunction(ImpactFunction):
+class FloodRasterRoadsGdalFunction(ContinuousRHClassifiedVE):
     # noinspection PyUnresolvedReferences
     """Simple impact function for inundation for road."""
     _metadata = FloodRasterRoadsGdalMetadata()

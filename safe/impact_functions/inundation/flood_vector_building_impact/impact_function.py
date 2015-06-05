@@ -24,7 +24,8 @@ from qgis.core import (
 
 from PyQt4.QtCore import QVariant
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_classified_ve import \
+    ClassifiedVHClassifiedVE
 from safe.impact_functions.inundation.flood_vector_building_impact.\
     metadata_definitions import FloodPolygonBuildingFunctionMetadata
 from safe.utilities.i18n import tr
@@ -35,7 +36,7 @@ from safe.impact_reports.building_exposure_report_mixin import (
 
 
 class FloodPolygonBuildingFunction(
-        ImpactFunction,
+        ClassifiedVHClassifiedVE,
         BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Impact function for inundation (polygon-polygon)."""

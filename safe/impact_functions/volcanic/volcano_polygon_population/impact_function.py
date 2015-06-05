@@ -12,7 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import numpy
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_continuous_re import \
+    ClassifiedVHContinuousRE
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .metadata_definitions import VolcanoPolygonPopulationFunctionMetadata
 from safe.impact_functions.core import (
@@ -34,7 +35,7 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters
 
 
-class VolcanoPolygonPopulationFunction(ImpactFunction):
+class VolcanoPolygonPopulationFunction(ClassifiedVHContinuousRE):
     """Impact Function for Volcano Point on Building."""
 
     _metadata = VolcanoPolygonPopulationFunctionMetadata()
