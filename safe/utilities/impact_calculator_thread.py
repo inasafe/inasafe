@@ -31,7 +31,6 @@ import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QObject, pyqtSignal
 
 from safe.engine.core import calculate_impact
-from safe.common.exceptions import InsufficientParametersError
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -156,13 +155,6 @@ class ImpactCalculatorThread(threading.Thread, QObject):
 
         .. note:: a done signal is emitted when the analysis is complete.
         """
-        if (self._impact_function.hazard is None) or \
-                (self._impact_function.exposure is None) or \
-                (self._impact_function is None):
-            message = self.tr(
-                'Ensure that hazard, exposure and function are all set before '
-                'trying to run the analysis.')
-            raise InsufficientParametersError(message)
         try:
             self._impact_layer = calculate_impact(
                 impact_function=self._impact_function,
