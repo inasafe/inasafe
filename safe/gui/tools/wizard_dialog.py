@@ -40,7 +40,7 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, QSettings
+from PyQt4.QtCore import pyqtSignature, QSettings, QPyNullVariant
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog,
@@ -1151,7 +1151,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         field_type = fields.field(field).typeName()
         field_index = fields.indexFromName(self.selected_field())
         unique_values = self.layer.uniqueValues(field_index)[0:48]
-        unique_values_str = [i and unicode(i) or 'NULL' for i in unique_values]
+        unique_values_str = [i is not None and unicode(i) or 'NULL'
+                             for i in unique_values]
         if unique_values != self.layer.uniqueValues(field_index):
             unique_values_str += ['...']
         desc = '<br/>%s: %s<br/><br/>' % (self.tr('Field type'), field_type)
@@ -1364,7 +1365,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         for tree_branch in tree_clone.takeChildren():
             value_list = []
             for tree_leaf in tree_branch.takeChildren():
-                value_list += [tree_leaf.text(0)]
+                value_list += [tree_leaf.data(0, QtCore.Qt.UserRole)]
             if value_list:
                 value_map[tree_branch.text(0)] = value_list
         return value_map
@@ -1398,8 +1399,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         assigned_values = dict()
         for default_class in default_classes:
             assigned_values[default_class['name']] = list()
-        for value in unique_values:
-            value_as_string = value is not None and unicode(value) or 'NULL'
+        for unique_value in unique_values:
+            if unique_value is None or isinstance(unique_value,
+                                                  QPyNullVariant):
+                # Don't classify features with NULL value
+                continue
+            value_as_string = unicode(unique_value)
             assigned = False
             for default_class in default_classes:
                 condition_1 = (
@@ -1408,14 +1413,14 @@ class WizardDialog(QDialog, FORM_CLASS):
                         c.upper() for c in default_class['string_defaults']])
                 condition_2 = (
                     field_type < 10 and (
-                        default_class['numeric_default_min'] <= value <=
+                        default_class['numeric_default_min'] <= unique_value <=
                         default_class['numeric_default_max']))
                 if condition_1 or condition_2:
-                    assigned_values[default_class['name']] += [value_as_string]
+                    assigned_values[default_class['name']] += [unique_value]
                     assigned = True
             if not assigned:
                 # add to unassigned values list otherwise
-                unassigned_values += [value_as_string]
+                unassigned_values += [unique_value]
         self.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
 
@@ -1427,7 +1432,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if value_map is None:
             return
 
-        # Do not continue if user select different field
+        # Do not continue if user selected different field
         field_keyword = self.field_keyword_for_the_layer()
         field = self.get_existing_keyword(field_keyword)
         if not is_raster_layer(self.layer) and field != self.selected_field():
@@ -1442,17 +1447,21 @@ class WizardDialog(QDialog, FORM_CLASS):
                 value_map = json.loads(value_map)
             except ValueError:
                 return
+        print 'AA', unassigned_values, assigned_values
         for unique_value in unique_values:
-            value_as_string = (
-                unique_value is not None and unicode(unique_value) or 'NULL')
+            print unique_value, isinstance(unique_value, QPyNullVariant)
+            if unique_value is None or isinstance(unique_value,
+                                                  QPyNullVariant):
+                # Don't classify features with NULL value
+                continue
             # check in value map
             assigned = False
-            for key, value in value_map.iteritems():
-                if value_as_string in value and key in assigned_values:
-                    assigned_values[key] += [value_as_string]
+            for key, value_list in value_map.iteritems():
+                if unique_value in value_list and key in assigned_values:
+                    assigned_values[key] += [unique_value]
                     assigned = True
             if not assigned:
-                unassigned_values += [value_as_string]
+                unassigned_values += [unique_value]
         self.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
 
@@ -1475,11 +1484,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Populate the unique values list
         self.lstUniqueValues.clear()
         for value in unassigned_values:
+            value_as_string = value is not None and unicode(value) or 'NULL'
             list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
             list_item.setFlags(QtCore.Qt.ItemIsEnabled |
                                QtCore.Qt.ItemIsSelectable |
                                QtCore.Qt.ItemIsDragEnabled)
-            list_item.setText(value)
+            list_item.setData(QtCore.Qt.UserRole, value)
+            list_item.setText(value_as_string)
             self.lstUniqueValues.addItem(list_item)
         # Populate assigned values tree
         self.treeClasses.clear()
@@ -1501,11 +1512,13 @@ class WizardDialog(QDialog, FORM_CLASS):
                 tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
             for value in assigned_values[default_class['name']]:
+                string_value = value is not None and unicode(value) or 'NULL'
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
                                    QtCore.Qt.ItemIsSelectable |
                                    QtCore.Qt.ItemIsDragEnabled)
-                tree_leaf.setText(0, value)
+                tree_leaf.setData(0, QtCore.Qt.UserRole, value)
+                tree_leaf.setText(0, string_value)
 
     # ===========================
     # STEP_KW_EXTRAKEYWORDS
