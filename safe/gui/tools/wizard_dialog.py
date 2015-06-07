@@ -1447,9 +1447,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 value_map = json.loads(value_map)
             except ValueError:
                 return
-        print 'AA', unassigned_values, assigned_values
         for unique_value in unique_values:
-            print unique_value, isinstance(unique_value, QPyNullVariant)
             if unique_value is None or isinstance(unique_value,
                                                   QPyNullVariant):
                 # Don't classify features with NULL value
