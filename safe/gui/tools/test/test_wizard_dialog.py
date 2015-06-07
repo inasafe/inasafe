@@ -922,13 +922,6 @@ class WizardDialogTest(unittest.TestCase):
 
         self.check_current_text('hazard', dialog.lstCategories)
 
-        dialog.pbnNext.click()  # go to hazard category
-
-        expected_hazard_categories = ['Multiple Event']
-        self.check_list(expected_hazard_categories, dialog.lstHazardCategories)
-
-        self.check_current_text('Multiple Event', dialog.lstHazardCategories)
-
         dialog.pbnNext.click()  # go to subcategory
 
         # check if in step subcategory
@@ -938,6 +931,13 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         self.check_current_text('volcano', dialog.lstSubcategories)
+
+        dialog.pbnNext.click()  # go to hazard category
+
+        expected_hazard_categories = ['Multiple Event']
+        self.check_list(expected_hazard_categories, dialog.lstHazardCategories)
+
+        self.check_current_text('Multiple Event', dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # go to layer mode
 
@@ -988,11 +988,6 @@ class WizardDialogTest(unittest.TestCase):
         # choosing hazard
         self.select_from_list_widget('hazard', dialog.lstCategories)
 
-        dialog.pbnNext.click()  # Go to hazard category
-
-        self.check_current_step(step_kw_hazard_category, dialog)
-        self.select_from_list_widget('Single Event',
-                                     dialog.lstHazardCategories)
         dialog.pbnNext.click()  # Go to subcategory
 
         # check if in step subcategory
@@ -1018,6 +1013,12 @@ class WizardDialogTest(unittest.TestCase):
 
         # choosing flood
         self.select_from_list_widget('flood', dialog.lstSubcategories)
+
+        dialog.pbnNext.click()  # Go to hazard category
+
+        self.check_current_step(step_kw_hazard_category, dialog)
+        self.select_from_list_widget('Single Event',
+                                     dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # Go to layer mode
 
@@ -1060,6 +1061,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnBack.click()  # back to step unit
         dialog.pbnBack.click()  # back to step data_type
+        dialog.pbnBack.click()  # back to step hazard_category
         dialog.pbnBack.click()  # back to step subcategory
 
         # check if in step subcategory
@@ -1075,6 +1077,12 @@ class WizardDialogTest(unittest.TestCase):
 
         # choosing earthquake
         self.select_from_list_widget('earthquake', dialog.lstSubcategories)
+
+        dialog.pbnNext.click()  # Go to hazard category
+
+        # choosing single event
+        self.select_from_list_widget('Single Event',
+                                     dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # Go to layer mode
 
