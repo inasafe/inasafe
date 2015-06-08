@@ -82,10 +82,10 @@ def _raster_to_vector_cells(
                 continue
 
             # construct rectangular polygon feature for the cell
-            x0 = raster_xmin+(x*cell_width)
-            x1 = raster_xmin+((x+1)*cell_width)
-            y0 = raster_ymax-(y*cell_height)
-            y1 = raster_ymax-((y+1)*cell_height)
+            x0 = raster_xmin + (x * cell_width)
+            x1 = raster_xmin + ((x + 1) * cell_width)
+            y0 = raster_ymax - (y * cell_height)
+            y1 = raster_ymax - ((y + 1) * cell_height)
             outer_ring = [
                 QgsPoint(x0, y0), QgsPoint(x1, y0),
                 QgsPoint(x1, y1), QgsPoint(x0, y1),

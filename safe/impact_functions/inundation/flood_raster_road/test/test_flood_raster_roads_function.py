@@ -27,12 +27,11 @@ from qgis.core import (
     QgsVectorLayer
 )
 
-from safe.impact_functions.inundation\
-    .flood_raster_road.impact_function import (
-    FloodRasterRoadsFunction,
-    _raster_to_vector_cells,
-    _intersect_lines_with_vector_cells
-)
+from safe.impact_functions.inundation.flood_raster_road.impact_function \
+    import (
+        FloodRasterRoadsFunction,
+        _raster_to_vector_cells,
+        _intersect_lines_with_vector_cells)
 from safe.gis.qgis_vector_tools import create_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.test.utilities import get_qgis_app, test_data_path
@@ -106,7 +105,6 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
 
-
     def test_raster_to_vector_and_line_intersection(self):
         """Test the core part of the analysis.
 
@@ -130,8 +128,8 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         self.assertEqual(len(flood_cells_map), 221)
 
         rect_with_all_cells = raster.extent()
-        rect_with_4_cells = QgsRectangle(106.824,-6.177,106.825,-6.179)
-        rect_with_0_cells = QgsRectangle(106.818,-6.168,106.828,-6.175)
+        rect_with_4_cells = QgsRectangle(106.824, -6.177, 106.825, -6.179)
+        rect_with_0_cells = QgsRectangle(106.818, -6.168, 106.828, -6.175)
         self.assertEqual(len(index.intersects(rect_with_all_cells)), 221)
         self.assertEqual(len(index.intersects(rect_with_4_cells)), 4)
         self.assertEqual(len(index.intersects(rect_with_0_cells)), 0)

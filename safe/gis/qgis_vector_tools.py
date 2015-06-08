@@ -9,7 +9,6 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import itertools
 
 from qgis.core import (
     QgsField,

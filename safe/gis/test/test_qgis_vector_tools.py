@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-
 from qgis.core import (
     QgsVectorLayer,
     QgsPoint,
@@ -26,10 +25,9 @@ from qgis.core import (
     QgsFeature,
     QgsGeometry,
     QgsRectangle)
+
 from PyQt4.QtCore import QVariant
 
-from safe.gis.gdal_ogr_tools import (
-    polygonize_thresholds)
 from safe.test.utilities import test_data_path, get_qgis_app
 from safe.gis.qgis_vector_tools import (
     points_to_rectangles,
