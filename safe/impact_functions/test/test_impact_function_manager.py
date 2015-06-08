@@ -57,6 +57,8 @@ from safe.definitions import (
     unit_generic,
     unit_feet
 )
+
+
 class TestImpactFunctionManager(unittest.TestCase):
     """Test for ImpactFunctionManager.
 
