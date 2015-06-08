@@ -19,7 +19,7 @@ from safe.definitions import (
     hazard_all,
     hazard_category_multiple_event,
     exposure_population,
-    all_vector_hazard_classes,
+    generic_vector_hazard_classes,
     hazard_category_single_event,
     count_exposure_unit,
 )
@@ -94,7 +94,9 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                     ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
-                    'vector_hazard_classifications': all_vector_hazard_classes,
+                    'vector_hazard_classifications': [
+                        generic_vector_hazard_classes
+                    ],
                     'raster_hazard_classifications': [],
                     'additional_keywords': []
                 },
