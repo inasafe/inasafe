@@ -149,7 +149,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             content = self.tr('undefined')
         finally:
             text = '<span style=" font-size:12pt; font-style:italic;">' \
-                   ',level %s is : %s</span>' % (current_level, content)
+                   'level %s is : %s</span>' % (current_level, content)
             self.boundary_helper.setText(text)
 
     def populate_countries(self):
