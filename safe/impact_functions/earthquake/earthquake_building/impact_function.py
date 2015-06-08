@@ -17,7 +17,8 @@ __date__ = '24/03/15'
 import logging
 from collections import OrderedDict
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.continuous_rh_classified_ve import \
+    ContinuousRHClassifiedVE
 from safe.impact_functions.earthquake.earthquake_building \
     .metadata_definitions import EarthquakeBuildingMetadata
 from safe.storage.vector import Vector
@@ -30,7 +31,8 @@ from safe.impact_reports.building_exposure_report_mixin import (
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
+class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
+                                 BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Earthquake impact on building data."""
 

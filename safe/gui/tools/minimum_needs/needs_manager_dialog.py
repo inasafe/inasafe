@@ -188,6 +188,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         if self.profile_combo.count() > 0:
             self.select_profile(0)
 
+        # initial sync profile_combo and resource list
         self.clear_resource_list()
         self.populate_resource_list()
         self.set_up_resource_parameters()
@@ -197,9 +198,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         self.profile_combo.activated.connect(self.select_profile)
         # noinspection PyUnresolvedReferences
         self.stacked_widget.currentChanged.connect(self.page_changed)
-        # initial sync profile_combo and resource list
-        self.clear_resource_list()
-        self.populate_resource_list()
+        self.select_profile(self.profile_combo.currentIndex())
 
     def reject(self):
         """Overload the base dialog reject event so we can handle state change.
@@ -321,6 +320,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             "and no more than {{ Maximum allowed }}. This should be provided "
             "{{ Frequency }}."))
         self.stacked_widget.setCurrentWidget(self.resource_edit_page)
+        # hide the close button
+        self.button_box.button(QDialogButtonBox.Close).setHidden(True)
 
     def edit_resource(self):
         """Handle edit resource requests.
@@ -500,6 +501,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             sentence_parameter
         ]
         parameter_container = ParameterContainer(parameters)
+        parameter_container.setup_ui()
 
         layout = QGridLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -511,7 +513,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """Remove the currently selected resource.
         """
         self.mark_current_profile_as_pending()
-        for item in self.resgiources_list.selectedItems():
+        for item in self.resources_list.selectedItems():
             self.resources_list.takeItem(self.resources_list.row(item))
 
     def discard_changes(self):

@@ -28,6 +28,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QFileInfo, pyqtSignature
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
+from qgis.utils import iface
 
 from safe.common.version import get_version
 from safe import messaging as m
@@ -235,6 +236,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             else:
                 # noinspection PyArgumentList
                 QgsMapLayerRegistry.instance().addMapLayers([layer])
+                iface.zoomToActiveLayer()
         self.done(self.Accepted)
 
     @pyqtSignature('')  # prevents actions being handled twice

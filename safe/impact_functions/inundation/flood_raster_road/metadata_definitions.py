@@ -12,15 +12,15 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
-__filename__ = 'metadata_definitions.py'
+__filename__ = 'metadata_definitions'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
+from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.flood_raster_road_qgis\
+from safe.impact_functions.inundation.flood_raster_road\
     import parameter_definitions
-from safe.defaults import road_type_postprocessor
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
 from safe.definitions import (
@@ -38,8 +38,8 @@ from safe.definitions import (
 )
 
 
-class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
-    """Metadata for FloodRasterRoadsExperimentalFunction
+class FloodRasterRoadsMetadata(ImpactFunctionMetadata):
+    """Metadata for FloodRasterRoadsFunction
 
     .. versionadded:: 2.1
 
@@ -59,8 +59,8 @@ class FloodRasterRoadsExperimentalMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'FloodRasterRoadsQGISFunction',
-            'name': tr('Raster flood on roads (QGIS)'),
+            'id': 'FloodRasterRoadsFunction',
+            'name': tr('Raster flood on roads'),
             'impact': tr('Be flooded in given thresholds'),
             'title': tr('Be flooded in given thresholds'),
             'function_type': 'qgis2.0',

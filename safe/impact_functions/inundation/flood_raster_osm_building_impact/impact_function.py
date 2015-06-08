@@ -15,10 +15,11 @@ __author__ = 'lucernae'
 import logging
 from collections import OrderedDict
 
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.inundation\
     .flood_raster_osm_building_impact.metadata_definitions import \
     FloodRasterBuildingMetadata
+from safe.impact_functions.bases.continuous_rh_classified_ve import \
+    ContinuousRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.common.utilities import get_osm_building_usage, verify
@@ -29,7 +30,8 @@ from safe.impact_reports.building_exposure_report_mixin import (
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
+class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
+                                  BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Inundation raster impact on building data."""
     _metadata = FloodRasterBuildingMetadata()
