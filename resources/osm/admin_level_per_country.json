@@ -1,99 +1,124 @@
 {
   "Afghanistan": {
-	"1": "N/A",
-	"2": "National Border",
-	"3": "N/A",
-	"4": "Province (ولايت wilayat)",
-	"5": "N/A",
-	"6": "Districts (Wuleswali)",
-	"7": "N/A",
-	"8": "N/A",
-	"9": "N/A",
-	"10": "N/A"
+	"_comments": "BBOX format : West, North, East, South",
+	"bbox": [60.33, 38.56, 75.03, 29.32],
+	"levels": {
+	  "1": "N/A",
+	  "2": "National Border",
+	  "3": "N/A",
+	  "4": "Province (ولايت wilayat)",
+	  "5": "N/A",
+	  "6": "Districts (Wuleswali)",
+	  "7": "N/A",
+	  "8": "N/A",
+	  "9": "N/A",
+	  "10": "N/A"
+	}
   },
   "Ethiopia": {
-	"1": "",
-	"2": "National Borders",
-	"3": "",
-	"4": "Administrative States",
-	"5": "",
-	"6": "Zones",
-	"7": "",
-	"8": "Woreda",
-	"9": "Subcities",
-	"10": "Kebele"
+	"bbox": [32.89, 14.95, 48.05, 3.29],
+	"levels": {
+	  "1": "",
+	  "2": "National Borders",
+	  "3": "",
+	  "4": "Administrative States",
+	  "5": "",
+	  "6": "Zones",
+	  "7": "",
+	  "8": "Woreda",
+	  "9": "Subcities",
+	  "10": "Kebele"
+	}
   },
   "Indonesia": {
-	"1": "N/A",
-	"2": "National Border",
-	"3": "N/A",
-	"4": "Province",
-	"5": "City / Regency (Kotamadya / Kabupaten)",
-	"6": "Subdistrict (Kecamatan)",
-	"7": "Village (Kelurahan / Desa)",
-	"8": "Community Group (Rukun Warga)",
-	"9": "Neighborhood Unit (Rukun Tetangga)",
-	"10": "N/A"
+	"bbox": [94.96, 7.01, 141.54, -11.65],
+	"levels": {
+	  "1": "N/A",
+	  "2": "National Border",
+	  "3": "N/A",
+	  "4": "Province",
+	  "5": "City / Regency (Kotamadya / Kabupaten)",
+	  "6": "Subdistrict (Kecamatan)",
+	  "7": "Village (Kelurahan / Desa)",
+	  "8": "Community Group (Rukun Warga)",
+	  "9": "Neighborhood Unit (Rukun Tetangga)",
+	  "10": "N/A"
+	}
   },
   "Madagascar": {
-	"1": "",
-	"2": "National Border",
-	"3": "",
-	"4": "Faritra (regions)",
-	"5": "",
-	"6": "Distrika (districts)",
-	"7": "",
-	"8": "Kaominina (communes)",
-	"9": "",
-	"10": "Fokontany"
+	"bbox": [42.75, -11.69, 50.84, -25.74],
+	"levels": {
+	  "1": "",
+	  "2": "National Border",
+	  "3": "",
+	  "4": "Faritra (regions)",
+	  "5": "",
+	  "6": "Distrika (districts)",
+	  "7": "",
+	  "8": "Kaominina (communes)",
+	  "9": "",
+	  "10": "Fokontany"
+	}
   },
   "Malawi": {
-	"1": "",
-	"2": "National Border",
-	"3": "Regions",
-	"4": "Districts",
-	"5": "",
-	"6": "Traditional authorities (rural areas), Urban administrative wards (urban centers)",
-	"7": "",
-	"8": "Sub-Chiefs, Wards, Area.",
-	"9": "GVH",
-	"10": "Village"
+	"bbox": [32.59, -9.29, 35.95, -17.16],
+	"levels": {
+	  "1": "",
+	  "2": "National Border",
+	  "3": "Regions",
+	  "4": "Districts",
+	  "5": "",
+	  "6": "Traditional authorities (rural areas), Urban administrative wards (urban centers)",
+	  "7": "",
+	  "8": "Sub-Chiefs, Wards, Area.",
+	  "9": "GVH",
+	  "10": "Village"
+	}
   },
   "Mozambique": {
-	"1": "",
-	"2": "National Border",
-	"3": "",
-	"4": "States (Províncias)",
-	"5": "",
-	"6": "",
-	"7": "",
-	"8": "Municipalities (Municípios)",
-	"9": "Districts (Distritos Municipais)",
-	"10": "Postos Administrativos",
-	"11": "Neighbourhoods (Bairros)"
+	"bbox": [30.08, -9.14, 41.04, -26.98],
+	"levels": {
+	  "1": "",
+	  "2": "National Border",
+	  "3": "",
+	  "4": "States (Províncias)",
+	  "5": "",
+	  "6": "",
+	  "7": "",
+	  "8": "Municipalities (Municípios)",
+	  "9": "Districts (Distritos Municipais)",
+	  "10": "Postos Administrativos",
+	  "11": "Neighbourhoods (Bairros)"
+	}
   },
   "Philippines": {
-	"1": "N/A",
-	"2": "National Border",
-	"3": "Regions",
-	"4": "Provinces",
-	"5": "Sangguniang Panlalawigan (Provincial Council) districts (if any)",
-	"6": "Cities and Municipalities / Towns",
-	"7": "Sangguniang Panlungsod / Bayan (City/Town Council) districts (if any)",
-	"8": "Other administrative districts (if any)",
-	"9": "Zones (if any)",
-	"10": "Barangays"
+	"bbox": [114, 21, 128, 5],
+	"levels": {
+	  "1": "N/A",
+	  "2": "National Border",
+	  "3": "Regions",
+	  "4": "Provinces",
+	  "5": "Sangguniang Panlalawigan (Provincial Council) districts (if any)",
+	  "6": "Cities and Municipalities / Towns",
+	  "7": "Sangguniang Panlungsod / Bayan (City/Town Council) districts (if any)",
+	  "8": "Other administrative districts (if any)",
+	  "9": "Zones (if any)",
+	  "10": "Barangays"
+	}
   },
   "Zimbabwe": {
-	"1": "",
-	"2": "",
-	"3": "",
-	"4": "",
-	"5": "",
-	"6": "",
-	"7": "",
-	"8": "",
-	"9": "",
-	"10": ""
+	"bbox": [24.65, -15.40, 33.18, -22.47],
+	"levels": {
+	  "1": "",
+	  "2": "",
+	  "3": "",
+	  "4": "",
+	  "5": "",
+	  "6": "",
+	  "7": "",
+	  "8": "",
+	  "9": "",
+	  "10": ""
+	}
   }
 }
