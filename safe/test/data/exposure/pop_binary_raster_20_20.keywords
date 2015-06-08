@@ -1,5 +1,5 @@
-category: exposure
-subcategory: population
-data_type: continuous
+exposure_unit: count
 title: Population
-unit: people_per_pixel
+layer_purpose: exposure
+layer_mode: continuous
+exposure: population

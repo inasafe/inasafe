@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import logging
-
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
@@ -20,7 +19,8 @@ from qgis.core import (
     QgsCoordinateTransform
 )
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_classified_ve import \
+    ClassifiedVHClassifiedVE
 from safe.impact_functions.inundation.\
     flood_polygon_roads.metadata_definitions import \
     FloodPolygonRoadsMetadata
@@ -31,11 +31,10 @@ from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodVectorRoadsExperimentalFunction(ImpactFunction):
+class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation."""
     _metadata = FloodPolygonRoadsMetadata()
@@ -61,22 +60,15 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
             )
         return table_body
 
-    def run(self, layers=None):
-        """Experimental impact function for flood polygons on roads.
-
-        :param layers: List of layers expected to contain H: Polygon layer of
-            inundation areas E: Vector layer of roads
-        """
+    def run(self):
+        """Experimental impact function for flood polygons on roads."""
         self.validate()
-        self.prepare(layers)
-
-        # Set the target field
-        target_field = 'FLOODED'
+        self.prepare()
 
         # Get the parameters from IF options
-        road_type_field = self.parameters['road_type_field']
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        road_type_field = self.parameters['road_type_field'].value
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
 
         # Extract data
         hazard_layer = self.hazard    # Flood
@@ -170,7 +162,10 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
         line_layer = clip_by_polygon(exposure_layer, extent_as_polygon)
         # Find inundated roads, mark them
         line_layer = split_by_polygon(
-            line_layer, hazard_poly, request, mark_value=(target_field, 1))
+            line_layer,
+            hazard_poly,
+            request,
+            mark_value=(self.target_field, 1))
 
         # Generate simple impact report
         epsg = get_utm_epsg(self.requested_extent[0], self.requested_extent[1])
@@ -182,7 +177,7 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
 
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(road_type_field)
-        target_field_index = line_layer.fieldNameIndex(target_field)
+        target_field_index = line_layer.fieldNameIndex(self.target_field)
 
         for road in roads_data:
             attributes = road.attributes()
@@ -212,9 +207,10 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
                               colour='#1EFC7C', transparency=0, size=0.5),
                          dict(label=tr('Inundated'), value=1,
                               colour='#F31A1C', transparency=0, size=0.5)]
-        style_info = dict(target_field=target_field,
-                          style_classes=style_classes,
-                          style_type='categorizedSymbol')
+        style_info = dict(
+            target_field=self.target_field,
+            style_classes=style_classes,
+            style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it
         line_layer = Vector(
@@ -223,7 +219,7 @@ class FloodVectorRoadsExperimentalFunction(ImpactFunction):
             keywords={
                 'impact_summary': impact_summary,
                 'map_title': map_title,
-                'target_field': target_field},
+                'target_field': self.target_field},
             style_info=style_info)
 
         self._impact = line_layer

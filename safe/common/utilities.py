@@ -48,16 +48,13 @@ class MEMORYSTATUSEX(ctypes.Structure):
 def verify(statement, message=None):
     """Verification of logical statement similar to assertions.
 
-    Input:
-      statement: expression
+    :param statement: Expression
+    :type statement: type, bool
 
-      message: error message in case statement evaluates as False
+    :param message: error message in case statement evaluates as False
+    :type message: str
 
-    Output:
-        None
-
-    Raises:
-        VerificationError in case statement evaluates to False
+    :raises: VerificationError
     """
 
     if bool(statement) is False:
@@ -471,7 +468,10 @@ def humanize_class(my_classes):
     """
     min_value = 0
     if min_value - my_classes[0] == 0:
-        return humanize_class(my_classes[1:])
+        if len(my_classes) == 1:
+            return [('0', '0')]
+        else:
+            return humanize_class(my_classes[1:])
     humanize_classes = []
     interval = my_classes[-1] - my_classes[-2]
     for max_value in my_classes:
@@ -533,6 +533,9 @@ def create_classes(class_list, num_classes):
     """
     min_value = numpy.nanmin(class_list)
     max_value = numpy.nanmax(class_list)
+
+    if min_value == max_value == 0:
+        return [0]
 
     # If min_value == max_value (it only has 1 unique class), or
     # max_value <= 1.0, then we will populate the classes from 0 - max_value
@@ -678,7 +681,7 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
     must be less than 10 character.
 
     :param default_name: The default name for the attribute.
-    :type default_name: str
+    :type default_name: basestring
 
     :param attribute_names: Set of attribute names that should not be
         conflicted.
@@ -884,3 +887,30 @@ def convert_to_list(var):
 
 def project_list(the_list, field):
     return [s[field] for s in the_list]
+
+
+def get_list_key(list_dict):
+    """Return list of key from a list of dictionary.
+
+    :param list_dict: List of dict, each dict has key as dictionary key.
+    :type list_dict: list
+
+    :returns: A list of key.
+    :rtype: list
+    """
+    return [x['key'] for x in list_dict]
+
+
+def is_key_exist(key, list_dictionary):
+    """Check if a key is in list_dictionary's key
+
+    :param key: The key
+    :type key: str
+
+    :param list_dictionary: List of dictionary
+    :type list_dictionary: list
+
+    :returns: True if exist, else False
+    :rtype: bool
+    """
+    return key in get_list_key(list_dictionary)

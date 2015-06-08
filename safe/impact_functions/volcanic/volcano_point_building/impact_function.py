@@ -13,12 +13,13 @@ Contact : ole.moller.nielsen@gmail.com
 
 from collections import OrderedDict
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_classified_ve import \
+    ClassifiedVHClassifiedVE
 from safe.impact_functions.volcanic.volcano_point_building\
     .metadata_definitions import VolcanoPointBuildingFunctionMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.engine.utilities import buffer_points
+from safe.engine.core import buffer_points
 from safe.common.utilities import (
     get_thousand_separator,
     get_non_conflicting_attribute_name,
@@ -30,7 +31,7 @@ from safe.impact_reports.building_exposure_report_mixin import (
 
 
 class VolcanoPointBuildingFunction(
-        ImpactFunction,
+        ClassifiedVHClassifiedVE,
         BuildingExposureReportMixin):
     """Impact Function for Volcano Point on Building."""
 
@@ -67,30 +68,23 @@ class VolcanoPointBuildingFunction(
             }
         ]
 
-    def run(self, layers=None):
+    def run(self):
         """Counts number of building exposed to each volcano hazard zones.
-
-        :param layers: List of layers expected to contain.
-                * hazard_layer: Hazard layer of volcano
-                * exposure_layer: Vector layer of structure data on
-                the same grid as hazard_layer
 
         :returns: Map of building exposed to volcanic hazard zones.
                   Table with number of buildings affected
         :rtype: dict
         """
         self.validate()
-        self.prepare(layers)
-        # Target Field
-        target_field = 'zone'
+        self.prepare()
+
         # Hazard Zone Attribute
         hazard_zone_attribute = 'radius'
-        # Not Affected Value
-        not_affected_value = 'Not Affected'
 
         # Parameters
-        radii = self.parameters['distances [km]']
-        volcano_name_attribute = self.parameters['volcano name attribute']
+        radii = self.parameters['distances'].value
+        volcano_name_attribute = self.parameters[
+            'volcano name attribute'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Volcano hazard layer
@@ -115,7 +109,7 @@ class VolcanoPointBuildingFunction(
             data_table=features)
         # Category names for the impact zone
         category_names = radii_meter
-        category_names.append(not_affected_value)
+        category_names.append(self._not_affected_value)
 
         # Get names of volcanoes considered
         if volcano_name_attribute in hazard_layer.get_attribute_names():
@@ -131,7 +125,7 @@ class VolcanoPointBuildingFunction(
         # names in the hazard layer
         hazard_attribute_names = hazard_layer.get_attribute_names()
         target_field = get_non_conflicting_attribute_name(
-            target_field, hazard_attribute_names)
+            self.target_field, hazard_attribute_names)
 
         # Run interpolation function for polygon2polygon
         interpolated_layer = assign_hazard_values_to_exposure_data(
@@ -150,7 +144,7 @@ class VolcanoPointBuildingFunction(
         for i in range(len(features)):
             hazard_value = features[i][hazard_zone_attribute]
             if not hazard_value:
-                hazard_value = not_affected_value
+                hazard_value = self._not_affected_value
             features[i][target_field] = hazard_value
 
             # Count affected buildings by usage type if available

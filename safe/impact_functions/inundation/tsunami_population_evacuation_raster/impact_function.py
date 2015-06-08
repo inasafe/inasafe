@@ -2,7 +2,8 @@
 """Tsunami Evacuation Impact Function."""
 import numpy
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.continuous_rh_continuous_re import \
+    ContinuousRHContinuousRE
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding_full,
@@ -25,11 +26,12 @@ from safe.common.utilities import (
 )
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    filter_needs_parameters
 
 
 # noinspection PyClassHasNoInit
-class TsunamiEvacuationFunction(ImpactFunction):
+class TsunamiEvacuationFunction(ContinuousRHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Impact function for tsunami evacuation."""
     _metadata = TsunamiEvacuationMetadata()
@@ -102,13 +104,8 @@ class TsunamiEvacuationFunction(ImpactFunction):
 
         return table_body, total_needs
 
-    def run(self, layers=None):
+    def run(self):
         """Risk plugin for tsunami population evacuation.
-
-        :param layers: List of layers expected to contain
-              hazard_layer: Raster layer of tsunami depth
-              exposure_layer: Raster layer of population data on the same grid
-              as hazard_layer
 
         Counts number of people exposed to tsunami levels exceeding
         specified threshold.
@@ -119,7 +116,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
         :rtype: tuple
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Tsunami inundation [m]
@@ -127,7 +124,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
 
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
-        thresholds = self.parameters['thresholds [m]']
+        thresholds = self.parameters['thresholds'].value
 
         verify(
             isinstance(thresholds, list),
@@ -176,7 +173,7 @@ class TsunamiEvacuationFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         # Generate impact report for the pdf map

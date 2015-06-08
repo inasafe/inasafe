@@ -171,11 +171,12 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[category: hazard
-subcategory: flood
-data_type: continuous
+<![CDATA[hazard_category: single_event
 title: Jakarta flood like 2007 with structural improvements
-unit: metres_depth
+hazard: flood
+continuous_hazard_unit: metres
+layer_purpose: hazard
+layer_mode: continuous
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

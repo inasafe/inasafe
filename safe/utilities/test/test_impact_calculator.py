@@ -23,7 +23,6 @@ import os
 import unittest
 
 from safe.utilities.impact_calculator import ImpactCalculator
-from safe.common.exceptions import InsufficientParametersError
 from safe.test.utilities import HAZDATA, EXPDATA, TESTDATA
 from safe.storage.core import read_layer as read_safe_layer
 
@@ -49,9 +48,9 @@ class ImpactCalculatorTest(unittest.TestCase):
             TESTDATA, 'tsunami_building_exposure.shp')
 
         self.raster_population_path = os.path.join(EXPDATA, 'glp10ag.asc')
-        self.calculator.set_hazard_layer(self.raster_shake)
-        self.calculator.set_exposure_layer(self.vector_layer)
-        self.calculator.set_function('EarthquakeBuildingFunction')
+        self.calculator.impact_function = 'EarthquakeBuildingFunction'
+        self.calculator.impact_function.hazard = self.raster_shake
+        self.calculator.impact_function.exposure = self.vector_layer
 
         self.impact_function_manager = ImpactFunctionManager()
 
@@ -63,11 +62,11 @@ class ImpactCalculatorTest(unittest.TestCase):
         """Test if the properties work as expected."""
 
         message = 'Vector property incorrect.'
-        assert (self.calculator.exposure_layer() ==
+        assert (self.calculator.impact_function.exposure ==
                 self.vector_layer), message
 
         message = 'Raster property incorrect.'
-        assert (self.calculator.hazard_layer() ==
+        assert (self.calculator.impact_function.hazard ==
                 self.raster_shake), message
 
         message = 'Function property incorrect.'
@@ -108,27 +107,6 @@ class ImpactCalculatorTest(unittest.TestCase):
             message = 'Calculator run failed:\n' + str(e)
             assert(), message
 
-    def test_start_with_no_parameters(self):
-        """Test that run raises an error properly when no parameters defined.
-        """
-        # noinspection PyBroadException
-        try:
-            self.calculator.set_exposure_layer(None)
-            self.calculator.set_hazard_layer(None)
-            # Next line should raise an error
-            function_runner = self.calculator.get_runner()
-            function_runner.start()
-        except RuntimeError, e:
-            message = 'Runtime error encountered: %s' % str(e)
-            assert(), message
-        except InsufficientParametersError:
-            return  # expected outcome
-        except Exception:  # pylint: disable=broad-except
-            message = 'Missing parameters not raised as error.'
-            assert(), message
-        message = 'Expected an error, none encountered.'
-        assert(), message
-
     def test_issue100(self):
         """Test for issue 100: unhashable type dict"""
         exposure_path = os.path.join(
@@ -138,9 +116,9 @@ class ImpactCalculatorTest(unittest.TestCase):
         # Verify relevant metada is ok
         h = read_safe_layer(hazard_path)
         e = read_safe_layer(exposure_path)
-        self.calculator.set_hazard_layer(h)
-        self.calculator.set_exposure_layer(e)
-        self.calculator.set_function('FloodRasterBuildingFunction')
+        self.calculator.impact_function = 'FloodRasterBuildingFunction'
+        self.calculator.impact_function.hazard = h
+        self.calculator.impact_function.exposure = e
         try:
             function_runner = self.calculator.get_runner()
             # Run non threaded
@@ -161,8 +139,8 @@ class ImpactCalculatorTest(unittest.TestCase):
         message = 'True expected, but False returned'
         assert self.calculator.requires_clipping(), message
 
-        self.calculator.set_function(
-            'FloodVectorRoadsExperimentalFunction')
+        self.calculator.impact_function =\
+            'FloodVectorRoadsExperimentalFunction'
         message = 'False expected, but True returned'
         assert not self.calculator.requires_clipping(), message
 

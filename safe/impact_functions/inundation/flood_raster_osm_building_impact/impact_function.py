@@ -15,10 +15,11 @@ __author__ = 'lucernae'
 import logging
 from collections import OrderedDict
 
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.inundation\
     .flood_raster_osm_building_impact.metadata_definitions import \
     FloodRasterBuildingMetadata
+from safe.impact_functions.bases.continuous_rh_classified_ve import \
+    ContinuousRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.common.utilities import get_osm_building_usage, verify
@@ -26,11 +27,11 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
+class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
+                                  BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Inundation raster impact on building data."""
     _metadata = FloodRasterBuildingMetadata()
@@ -38,7 +39,6 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
     def __init__(self):
         """Constructor (calls ctor of base class)."""
         super(FloodRasterBuildingFunction, self).__init__()
-        self.target_field = 'INUNDATED'
 
     def notes(self):
         """Return the notes section of the report.
@@ -46,7 +46,7 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        threshold = self.parameters['threshold [m]']
+        threshold = self.parameters['threshold'].value
         return [
             {
                 'content': tr('Notes'),
@@ -86,18 +86,13 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         """
         return [tr('Number Inundated'), tr('Number of Wet Buildings')]
 
-    def run(self, layers=None):
-        """Flood impact to buildings (e.g. from Open Street Map).
-
-         :param layers: List of layers expected to contain.
-                * hazard_layer: Hazard raster layer of flood
-                * exposure_layer: Vector layer of structure data on
-                the same grid as hazard_layer
-        """
+    def run(self):
+        """Flood impact to buildings (e.g. from Open Street Map)."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
-        threshold = self.parameters['threshold [m]']  # Flood threshold [m]
+        threshold = self.parameters['threshold'].value
+        # Flood threshold [m]
 
         verify(isinstance(threshold, float),
                'Expected thresholds to be a float. Got %s' % str(threshold))

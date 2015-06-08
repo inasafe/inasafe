@@ -1,6 +1,8 @@
-category: hazard
-subcategory: flood
-data_type: classified
+hazard_category: multiple_event
+raster_hazard_classification: flood_raster_hazard_classes
 title: Classified Flood
+hazard: flood
 source: Akbar Gumbira
+layer_purpose: hazard
+layer_mode: classified
 unit: classes

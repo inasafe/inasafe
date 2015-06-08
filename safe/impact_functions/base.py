@@ -17,11 +17,15 @@ __date__ = '15/03/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from qgis.core import QgsVectorLayer
+
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import InvalidExtentError
+from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
-from safe.impact_functions.core import get_hazard_layer, get_exposure_layer
+from safe.utilities.qgis_layer_wrapper import QgisWrapper
+from safe.utilities.gis import convert_to_safe_layer
 
 
 class ImpactFunction(object):
@@ -68,6 +72,10 @@ class ImpactFunction(object):
         # formalise this into a more natural model
         # ABC's will normally set this property.
         self._impact_style = None
+        # The target field for vector impact layer
+        self._target_field = 'safe_ag'
+        # The string to mark not affected value in the vector impact layer
+        self._not_affected_value = 'Not Affected'
 
     @classmethod
     def metadata(cls):
@@ -85,15 +93,19 @@ class ImpactFunction(object):
         return cls.metadata().as_dict().get('function_type', None)
 
     @classmethod
-    def data_type(cls):
-        """Property for the data type of impact function.
+    def function_category(cls):
+        """Property for function category based on hazard categories.
 
-         This property holds value either 'single-scenario' or 'hazard-map'.
-         Single scenario data type means that the data is captured by a
-         single observation, while 'hazard-map' has been aggregated for some
-         observations.
+         Function category could be 'single_event' or/and 'multiple_event'.
+         Single event data type means that the data is captured by a
+         single observation, while 'multiple_event' has been aggregated for
+         some observations.
+
+         :returns: The hazard categories that this function supports.
+         :rtype: list
         """
-        return cls.metadata().as_dict().get('data_type', None)
+        return cls.metadata().as_dict().get('layer_requirements').get(
+            'hazard').get('hazard_categories')
 
     @property
     def requested_extent(self):
@@ -204,10 +216,23 @@ class ImpactFunction(object):
         """Setter for hazard layer property.
 
         :param layer: Hazard layer to be used for the analysis.
-        :type layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        :type layer: QgsVectorLayer, QgsRasterLayer, Vector, Raster
         """
-        # add more robust checks here
-        self._hazard = layer
+        if self.function_type() == 'old-style':
+            self._hazard = convert_to_safe_layer(layer)
+        elif self.function_type() == 'qgis2.0':
+            # convert for new style impact function
+            self._hazard = QgisWrapper(layer)
+        else:
+            message = tr('Error: Impact Function has unknown style.')
+            raise Exception(message)
+
+        # Update the target field to a non-conflicting one
+        if isinstance(layer, QgsVectorLayer):
+            self._target_field = get_non_conflicting_attribute_name(
+                self.target_field,
+                layer.dataProvider().fieldNameMap().keys()
+            )
 
     @property
     def exposure(self):
@@ -223,10 +248,23 @@ class ImpactFunction(object):
         """Setter for exposure layer property.
 
         :param layer: exposure layer to be used for the analysis.
-        :type layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        :type layer: QgsVectorLayer, QgsRasterLayer, Vector, Raster
         """
-        # add more robust checks here
-        self._exposure = layer
+        if self.function_type() == 'old-style':
+            self._exposure = convert_to_safe_layer(layer)
+        elif self.function_type() == 'qgis2.0':
+            # convert for new style impact function
+            self._exposure = QgisWrapper(layer)
+        else:
+            message = tr('Error: Impact Function has unknown style.')
+            raise Exception(message)
+
+        # Update the target field to a non-conflicting one
+        if isinstance(layer, QgsVectorLayer):
+            self._target_field = get_non_conflicting_attribute_name(
+                self.target_field,
+                layer.dataProvider().fieldNameMap().keys()
+            )
 
     @property
     def aggregation(self):
@@ -272,6 +310,15 @@ class ImpactFunction(object):
         :rtype: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
         """
         return self._impact
+
+    @property
+    def target_field(self):
+        """Property for the target_field of the impact layer.
+
+        :returns: The target field in the impact layer in case it's a vector.
+        :rtype: basestring
+        """
+        return self._target_field
 
     @property
     def tabulated_impact(self):
@@ -380,7 +427,7 @@ class ImpactFunction(object):
                 'Impact Function with QGIS function type is used, but no '
                 'extent is provided.')
 
-    def prepare(self, layers):
+    def prepare(self):
         """Prepare this impact function for running the analysis.
 
         This method should normally be called in your concrete class's
@@ -402,13 +449,5 @@ class ImpactFunction(object):
         ..note: For 3.1, we will still do those preprocessing in analysis
             class. We will just need to check if the function_type is
             'qgis2.0', it needs to have the extent set.
-
-        :param layers: List of layers (hazard and exposure). This is
-            necessary now, until we streamline the preprocess in the base class
-            and remove unnecessary routines in analysis, impact_calculator,
-            impact_calculator_thread, and calculate_safe_impact module.
-        :type layers: list
         # """
-        if layers is not None:
-            self.hazard = get_hazard_layer(layers)
-            self.exposure = get_exposure_layer(layers)
+        pass

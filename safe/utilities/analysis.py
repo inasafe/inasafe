@@ -813,7 +813,8 @@ class Analysis(object):
 
     def setup_impact_calculator(self):
         """Initialise ImpactCalculator based on the current state of the ui."""
-        self.impact_calculator.set_function(self.impact_function)
+        # Set impact function
+        self.impact_calculator.impact_function = self.impact_function
 
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
@@ -831,8 +832,6 @@ class Analysis(object):
             # clip them
             hazard_layer, exposure_layer = self.optimal_clip()
             self.aggregator.set_layers(hazard_layer, exposure_layer)
-            # Extent is calculated in the aggregator:
-            self.impact_calculator.set_extent(None)
 
             # See if the inputs need further refinement for aggregations
             try:
@@ -847,14 +846,15 @@ class Analysis(object):
             hazard_layer = self.aggregator.hazard_layer
             exposure_layer = self.aggregator.exposure_layer
         else:
-            # It is a 'new-style' impact function,
-            # clipping doesn't needed, but we need to set up extent
+            # It is a QGIS impact function,
+            # clipping isn't needed, but we need to set up extent
             self.aggregator.set_layers(hazard_layer, exposure_layer)
-            self.impact_calculator.set_extent(buffered_geo_extent)
+            self.impact_calculator.impact_function.requested_extent \
+                = buffered_geo_extent
 
-        # Identify input layers
-        self.impact_calculator.set_hazard_layer(hazard_layer)
-        self.impact_calculator.set_exposure_layer(exposure_layer)
+        # Set input layers
+        self.impact_calculator.impact_function.hazard = hazard_layer
+        self.impact_calculator.impact_function.exposure = exposure_layer
 
     def run_aggregator(self):
         """Run all post processing steps.

@@ -19,7 +19,9 @@ E.g.::
 """
 
 import colorsys
+
 from safe.utilities.i18n import tr
+
 
 # Flood population impact raster style
 style_classes = [dict(colour='#FFFFFF', quantity=2, transparency=100),

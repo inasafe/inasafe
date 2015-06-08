@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from collections import OrderedDict
-
 from qgis.core import (
     QgsField,
     QgsVectorLayer,
@@ -22,9 +21,11 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsCoordinateReferenceSystem,
     QgsGeometry)
+
 from PyQt4.QtCore import QVariant
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_classified_ve import \
+    ClassifiedVHClassifiedVE
 from safe.impact_functions.inundation.flood_vector_building_impact.\
     metadata_definitions import FloodPolygonBuildingFunctionMetadata
 from safe.utilities.i18n import tr
@@ -35,7 +36,7 @@ from safe.impact_reports.building_exposure_report_mixin import (
 
 
 class FloodPolygonBuildingFunction(
-        ImpactFunction,
+        ClassifiedVHClassifiedVE,
         BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Impact function for inundation (polygon-polygon)."""
@@ -51,8 +52,8 @@ class FloodPolygonBuildingFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
         return [
             {
                 'content': tr('Notes'),
@@ -66,24 +67,15 @@ class FloodPolygonBuildingFunction(
             }
         ]
 
-    def run(self, layers=None):
-        """Experimental impact function.
-
-        Input
-          layers: List of layers expected to contain
-              H: Polygon layer of inundation areas
-              E: Vector layer of buildings
-        """
+    def run(self):
+        """Experimental impact function."""
         self.validate()
-        self.prepare(layers)
-
-        # Set the target field in impact layer
-        target_field = 'INUNDATED'
+        self.prepare()
 
         # Get the IF parameters
-        building_type_field = self.parameters['building_type_field']
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        building_type_field = self.parameters['building_type_field'].value
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
 
         # Extract data
         hazard_layer = self.hazard    # Flood
@@ -118,10 +110,11 @@ class FloodPolygonBuildingFunction(
             raise GetDataError(message)
 
         # If target_field does not exist, add it:
-        if exposure_fields.indexFromName(target_field) == -1:
+        if exposure_fields.indexFromName(self.target_field) == -1:
             exposure_provider.addAttributes(
-                [QgsField(target_field, QVariant.Int)])
-        target_field_index = exposure_provider.fieldNameIndex(target_field)
+                [QgsField(self.target_field, QVariant.Int)])
+        target_field_index = exposure_provider.fieldNameIndex(
+            self.target_field)
         exposure_fields = exposure_provider.fields()
 
         # Create layer to store the lines from E and extent
@@ -237,7 +230,7 @@ class FloodPolygonBuildingFunction(
             dict(label=tr('Inundated'), value=1, colour='#F31A1C',
                  transparency=0, size=0.5)]
         style_info = dict(
-            target_field=target_field,
+            target_field=self.target_field,
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
@@ -248,7 +241,7 @@ class FloodPolygonBuildingFunction(
             keywords={
                 'impact_summary': impact_summary,
                 'map_title': map_title,
-                'target_field': target_field,
+                'target_field': self.target_field,
                 'buildings_total': self.total_buildings,
                 'buildings_affected': self.total_affected_buildings},
             style_info=style_info)

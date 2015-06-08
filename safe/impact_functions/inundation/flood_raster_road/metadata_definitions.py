@@ -1,6 +1,5 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on
-Roads using QGIS and GDAL libaries.
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on Roads
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -17,25 +16,29 @@ __filename__ = 'metadata_definitions'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    hazard_tsunami,
-    unit_metres_depth,
-    unit_feet_depth,
-    layer_raster_continuous,
-    exposure_definition,
-    exposure_road,
-    unit_road_type_type,
-    layer_vector_line)
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_raster_road\
+    import parameter_definitions
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
+from safe.definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_raster,
+    layer_geometry_line,
+    hazard_flood,
+    hazard_category_single_event,
+    exposure_road,
+    unit_metres,
+    unit_feet,
+    hazard_tsunami,
+    road_class_field
+)
 
 
-class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
+class FloodRasterRoadsMetadata(ImpactFunctionMetadata):
     """Metadata for FloodRasterRoadsFunction
 
     .. versionadded:: 2.1
@@ -56,10 +59,10 @@ class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'FloodRasterRoadsGdalFunction',
-            'name': tr('Raster flood on roads (GDAL)'),
-            'impact': tr('Be flooded in given thresholds (GDAL)'),
-            'title': tr('Be flooded in given thresholds (GDAL)'),
+            'id': 'FloodRasterRoadsFunction',
+            'name': tr('Raster flood on roads'),
+            'impact': tr('Be flooded in given thresholds'),
+            'title': tr('Be flooded in given thresholds'),
             'function_type': 'qgis2.0',
             'author': 'Dmitry Kolesov',
             'date_implemented': 'N/A',
@@ -71,32 +74,35 @@ class FloodRasterRoadsGdalMetadata(ImpactFunctionMetadata):
             'actions': '',
             'limitations': [],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [
-                        hazard_flood,
-                        hazard_tsunami
-                    ],
-                    'units': [
-                        unit_metres_depth,
-                        unit_feet_depth
-                    ],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_types': [hazard_flood, hazard_tsunami],
+                    'continuous_hazard_units': [unit_feet, unit_metres],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_road],
-                    'units': [unit_road_type_type],
-                    'layer_constraints': [layer_vector_line]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_line],
+                    'exposure_types': [exposure_road],
+                    'exposure_units': [],
+                    'exposure_class_fields': [road_class_field],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about road types
-                ('road_type_field', 'TYPE'),
-                ('min threshold [m]', 1.0),
-                ('max threshold [m]', float('inf')),
+                ('road_type_field',
+                 parameter_definitions.road_type_field()),
+                ('min threshold',
+                 parameter_definitions.min_threshold()),
+                ('max threshold',
+                 parameter_definitions.max_threshold()),
                 ('postprocessors', OrderedDict([
                     ('RoadType', road_type_postprocessor())
                 ]))

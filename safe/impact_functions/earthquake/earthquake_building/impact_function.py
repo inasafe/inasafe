@@ -17,7 +17,8 @@ __date__ = '24/03/15'
 import logging
 from collections import OrderedDict
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.continuous_rh_classified_ve import \
+    ContinuousRHClassifiedVE
 from safe.impact_functions.earthquake.earthquake_building \
     .metadata_definitions import EarthquakeBuildingMetadata
 from safe.storage.vector import Vector
@@ -27,11 +28,11 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
+class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
+                                 BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Earthquake impact on building data."""
 
@@ -39,8 +40,6 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
 
     def __init__(self):
         super(EarthquakeBuildingFunction, self).__init__()
-
-        self.target_field = 'Shake_cls'
         self.is_nexis = False
         self.statistics_type = 'class_count'
         self.statistics_classes = [0, 1, 2, 3]
@@ -52,9 +51,9 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         :rtype: list
         """
         # Thresholds for mmi breakdown.
-        t0 = self.parameters['low_threshold']
-        t1 = self.parameters['medium_threshold']
-        t2 = self.parameters['high_threshold']
+        t0 = self.parameters['low_threshold'].value
+        t1 = self.parameters['medium_threshold'].value
+        t2 = self.parameters['high_threshold'].value
         is_nexis = self.is_nexis
         return [
             {
@@ -82,13 +81,10 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 'condition': is_nexis
             }]
 
-    def run(self, layers=None):
-        """Earthquake impact to buildings (e.g. from OpenStreetMap).
-
-        :param layers: All the input layers (Hazard Layer and Exposure Layer)
-        """
+    def run(self):
+        """Earthquake impact to buildings (e.g. from OpenStreetMap)."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         LOGGER.debug('Running earthquake building impact')
 
@@ -97,9 +93,9 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         contents_value = 0
 
         # Thresholds for mmi breakdown.
-        t0 = self.parameters['low_threshold']
-        t1 = self.parameters['medium_threshold']
-        t2 = self.parameters['high_threshold']
+        t0 = self.parameters['low_threshold'].value
+        t1 = self.parameters['medium_threshold'].value
+        t2 = self.parameters['high_threshold'].value
 
         # Class Attribute and Label.
 
@@ -185,9 +181,8 @@ class EarthquakeBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                                 (tr('Buildings value ($M)'), 0),
                                 (tr('Contents value ($M)'), 0)])
                     else:
-                        self.affected_buildings[category][usage] = OrderedDict(
-                            [
-                                (tr('Buildings Affected'), 0)])
+                        self.affected_buildings[category][usage] = \
+                            OrderedDict([(tr('Buildings Affected'), 0)])
             self.buildings[usage] += 1
             try:
                 mmi = float(attributes[i][hazard_attribute])  # MMI

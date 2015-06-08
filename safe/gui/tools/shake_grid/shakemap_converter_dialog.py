@@ -28,6 +28,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QFileInfo, pyqtSignature
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
+from qgis.utils import iface
 
 from safe.common.version import get_version
 from safe import messaging as m
@@ -43,7 +44,7 @@ LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('shakemap_importer_dialog_base.ui')
 
 
-class ShakemapImporterDialog(QDialog, FORM_CLASS):
+class ShakemapConverterDialog(QDialog, FORM_CLASS):
     """Importer for shakemap grid.xml files."""
     def __init__(self, parent=None):
         """Constructor for the dialog.
@@ -74,7 +75,7 @@ class ShakemapImporterDialog(QDialog, FORM_CLASS):
         self.output_path.textChanged.connect(self.on_output_path_textChanged)
         # Set up things for context help
         help_button = self.button_box.button(QDialogButtonBox.Help)
-        help_button.clicked.connect(ShakemapImporterDialog.show_help)
+        help_button.clicked.connect(ShakemapConverterDialog.show_help)
 
         self.show_info()
 
@@ -123,8 +124,8 @@ class ShakemapImporterDialog(QDialog, FORM_CLASS):
     def on_output_path_textChanged(self):
         """Action when output file name is changed.
         """
-        output_path = str(self.output_path.text())
-        output_not_xml_msg = str(self.tr('output file is not .tif'))
+        output_path = self.output_path.text()
+        output_not_xml_msg = self.tr('output file is not .tif')
         if not output_path.endswith('.tif'):
             self.warning_text.add(output_not_xml_msg)
         elif output_not_xml_msg in self.warning_text:
@@ -135,9 +136,8 @@ class ShakemapImporterDialog(QDialog, FORM_CLASS):
     def on_input_path_textChanged(self):
         """Action when input file name is changed.
         """
-        input_path = str(self.input_path.text())
-        # input_not_exist_msg = str(self.tr('input file is not existed'))
-        input_not_grid_msg = str(self.tr('input file is not .xml'))
+        input_path = self.input_path.text()
+        input_not_grid_msg = self.tr('input file is not .xml')
 
         if not input_path.endswith('.xml'):
             self.warning_text.add(input_not_grid_msg)
@@ -173,7 +173,7 @@ class ShakemapImporterDialog(QDialog, FORM_CLASS):
     def get_output_from_input(self):
         """Create default output location based on input location.
         """
-        input_path = str(self.input_path.text())
+        input_path = self.input_path.text()
         if input_path.endswith('.xml'):
             output_path = input_path[:-3] + 'tif'
         elif input_path == '':
@@ -204,7 +204,7 @@ class ShakemapImporterDialog(QDialog, FORM_CLASS):
             QMessageBox.warning(
                 self,
                 self.tr('InaSAFE'),
-                (self.tr('Input file is not exist')))
+                (self.tr('Input file does not exist')))
             return
 
         if self.nearest_mode.isChecked():
@@ -220,7 +220,7 @@ class ShakemapImporterDialog(QDialog, FORM_CLASS):
             input_source,
             output_path,
             algorithm=algorithm,
-            algorithm_filename_flag=False)
+            algorithm_filename_flag=True)
 
         QtGui.qApp.restoreOverrideCursor()
 
@@ -236,6 +236,7 @@ class ShakemapImporterDialog(QDialog, FORM_CLASS):
             else:
                 # noinspection PyArgumentList
                 QgsMapLayerRegistry.instance().addMapLayers([layer])
+                iface.zoomToActiveLayer()
         self.done(self.Accepted)
 
     @pyqtSignature('')  # prevents actions being handled twice

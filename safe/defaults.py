@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe_extras.parameters.text_parameter import TextParameter
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -320,12 +321,15 @@ def default_minimum_needs():
         'installed toilets will be usable on a continuous basis.'
     )
 
+    provenance = default_provenance()
+
     minimum_needs = [
         rice,
         drinking_water,
         water,
         family_kits,
         toilets,
+        provenance
     ]
     return minimum_needs
 
@@ -336,7 +340,11 @@ def default_provenance():
     :return: default provenance.
     :rtype: str
     """
-    return 'The minimum needs are based on Perka 7/2008.'
+    field = TextParameter()
+    field.name = tr('Provenance')
+    field.description = tr('The provenance of minimum needs')
+    field.value = 'The minimum needs are based on Perka 7/2008.'
+    return field
 
 
 def disclaimer():
