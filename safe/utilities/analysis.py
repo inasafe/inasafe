@@ -989,9 +989,7 @@ class Analysis(object):
             return
 
         try:
-            self.runner = ImpactCalculatorThread(
-                self.impact_function,
-                check_integrity=self.impact_function.requires_clipping)
+            self.runner = ImpactCalculatorThread(self.impact_function)
         except (InsufficientParametersError, ReadLayerError), e:
             self.analysis_error(
                 e,

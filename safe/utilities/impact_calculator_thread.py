@@ -73,17 +73,11 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         """For testing only"""
         print 'hello'
 
-    def __init__(self,
-                 impact_function,
-                 check_integrity=True):
+    def __init__(self, impact_function):
         """Constructor for the impact calculator thread.
 
         :param impact_function: An instance of impact function.
         :type impact_function: safe.impact_function.base.ImpactFunction
-
-        :param check_integrity: If true, perform checking of input data
-            integrity before running impact calculation
-        :type check_integrity: bool
 
         :raises: InsufficientParametersError if not all parameters are set.
         """
@@ -94,7 +88,6 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         self._result = None
         self._exception = None
         self._traceback = None
-        self._check_integrity = check_integrity
 
     def impact_layer(self):
         """Get the impact output from the last run.
@@ -157,8 +150,7 @@ class ImpactCalculatorThread(threading.Thread, QObject):
         """
         try:
             self._impact_layer = calculate_impact(
-                impact_function=self._impact_function,
-                check_integrity=self._check_integrity)
+                impact_function=self._impact_function)
         except MemoryError, e:
             message = self.tr(
                 'An error occurred because it appears that your system does '

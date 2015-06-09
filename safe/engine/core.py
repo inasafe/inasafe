@@ -138,14 +138,11 @@ def check_data_integrity(layer_objects):
             verify(layer.columns == layer_columns, message)
 
 
-def calculate_impact(impact_function, check_integrity=True):
+def calculate_impact(impact_function):
     """Calculate impact levels as a function of list of input layers
 
     :param impact_function: An instance of impact function.
     :type impact_function: safe.impact_function.base.ImpactFunction
-
-    :param check_integrity: If true, perform checking of input data integrity
-    :type check_integrity: bool
 
     Output
         filename of resulting impact layer (GML). Comment is embedded as
@@ -161,7 +158,7 @@ def calculate_impact(impact_function, check_integrity=True):
     """
     layers = [impact_function.hazard, impact_function.exposure]
     # Input checks
-    if check_integrity:
+    if impact_function.requires_clipping:
         check_data_integrity(layers)
 
     # Start time
