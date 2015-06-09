@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
+InaSAFE Disaster risk assessment tool developed by AusAid / DFAT -
 **New Metadata for SAFE.**
 
 Contact : ole.moller.nielsen@gmail.com
