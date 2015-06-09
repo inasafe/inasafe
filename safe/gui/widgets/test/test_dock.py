@@ -339,8 +339,8 @@ class TestDock(TestCase):
         button = DOCK.pbnRunStop
         # First part of scenario should have enabled run
         file_list = [
-            join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
-            join(TESTDATA, 'Population_Jakarta_geographic.asc')]
+            test_data_path('hazard', 'continuous_flood_20_20.asc'),
+            test_data_path('exposure', 'pop_binary_raster_20_20.asc')]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
         message = (
@@ -370,7 +370,7 @@ class TestDock(TestCase):
             'Run Button Enabled': False,
             'Impact Function Id': '',
             'Impact Function Title': '',
-            'Hazard': 'A flood in Jakarta like in 2007',
+            'Hazard': 'Continuous Flood',
             'Exposure': 'Population Count (5kmx5km)'}
         message = ((
             'Run button was not disabled when exposure set to \n%s'
