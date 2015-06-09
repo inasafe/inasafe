@@ -7,6 +7,7 @@ import sys
 
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.string_parameter import StringParameter
+from safe.utilities.i18n import tr
 
 
 def road_type_field():
@@ -33,6 +34,10 @@ def min_threshold():
     field.is_required = True
     field.precision = 2
     field.value = 1.0  # default value
+    field.help_text = tr(
+        'Minimum value of hazard considered as inundated.')
+    field.description = tr(
+        'The depth of flood in meter as threshold.')
     return field
 
 
@@ -47,4 +52,8 @@ def max_threshold():
     field.is_required = True
     field.precision = 2
     field.value = sys.float_info.max  # default value
+    field.help_text = tr(
+        'Maximum value of hazard considered as inundated.')
+    field.description = tr(
+        'The depth of flood in meter as threshold.')
     return field

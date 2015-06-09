@@ -3,6 +3,7 @@ __author__ = 'lucernae'
 __date__ = '11/04/15'
 
 from safe_extras.parameters.input_list_parameter import InputListParameter
+from safe.utilities.i18n import tr
 
 
 def threshold():
@@ -20,4 +21,8 @@ def threshold():
     field.minimum_item_count = 1
     field.maximum_item_count = 3
     field.value = [0.7]  # default value
+    field.help_text = tr(
+        'Thresholds value to categorize inundated area.')
+    field.description = tr(
+        'Up to 3 thresholds in meter can be set in an increasing order.')
     return field

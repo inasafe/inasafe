@@ -1,4 +1,5 @@
 # coding=utf-8
+from safe.utilities.i18n import tr
 from safe_extras.parameters.integer_parameter import IntegerParameter
 
 __author__ = 'lucernae'
@@ -15,6 +16,12 @@ def low_threshold():
     field.is_required = True
     field.name = 'Low Threshold'
     field.value = 6
+    field.minimum_allowed_value = 1
+    field.maximum_allowed_value = 10
+    field.help_text = tr('Low Hazard class threshold.')
+    field.description = tr(
+        'The threshold of hazard categorized as Low Hazard class in MMI '
+        'scale.')
     return field
 
 
@@ -28,6 +35,12 @@ def medium_threshold():
     field.is_required = True
     field.name = 'Medium Threshold'
     field.value = 7
+    field.minimum_allowed_value = 1
+    field.maximum_allowed_value = 10
+    field.help_text = tr('Medium Hazard class threshold.')
+    field.description = tr(
+        'The threshold of hazard categorized as Medium Hazard class in MMI '
+        'scale.')
     return field
 
 
@@ -41,4 +54,10 @@ def high_threshold():
     field.is_required = True
     field.name = 'High Threshold'
     field.value = 8
+    field.minimum_allowed_value = 1
+    field.maximum_allowed_value = 10
+    field.help_text = tr('High Hazard class threshold.')
+    field.description = tr(
+        'The threshold of hazard categorized as High Hazard class in MMI '
+        'scale.')
     return field

@@ -36,10 +36,10 @@ class ParameterContainer(QWidget, object):
 
         :param parameters: List of Parameter Widget
         :type parameters: list
-xt
+
         :param description_text: Text for description of the parameter
             container.
-        :type description_te: str
+        :type description_text: str
 
         """
         QWidget.__init__(self, parent)

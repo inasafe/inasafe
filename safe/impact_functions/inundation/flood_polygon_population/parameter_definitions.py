@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.i18n import tr
 
 from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.float_parameter import FloatParameter
@@ -27,6 +28,10 @@ def evacuation_percentage():
     field.minimum_allowed_value = 0
     field.value = 1
     field.precision = 2
+    field.help_text = tr('Percentage value of affected population.')
+    field.description = tr(
+        'The value in percentage of the population that '
+        'represent the number of people needed to be evacuated.')
     return field
 
 

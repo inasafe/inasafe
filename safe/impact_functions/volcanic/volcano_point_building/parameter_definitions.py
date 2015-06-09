@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.i18n import tr
 
 from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.input_list_parameter import InputListParameter
@@ -22,7 +23,11 @@ def distance():
     field.minimum_item_count = 1
     field.maximum_item_count = 100
     field.element_type = float
+    field.ordering = InputListParameter.AscendingOrder
     field.value = [3.0, 5.0, 10.0]
+    field.help_text = tr('The list of radii for volcano buffer.')
+    field.description = tr(
+        'This list contains radii of volcano buffer in increasing order.')
     return field
 
 

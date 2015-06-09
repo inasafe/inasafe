@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 
 from safe_extras.parameters.float_parameter import FloatParameter
+from safe.utilities.i18n import tr
 
 
 def threshold():
@@ -26,4 +27,9 @@ def threshold():
     field.is_required = True
     field.precision = 2
     field.value = 1.0  # default value
+    field.help_text = tr(
+        'Threshold value to categorize inundated area.')
+    field.description = tr(
+        'Hazard value above the threshold in meter will be considered '
+        'inundated.')
     return field

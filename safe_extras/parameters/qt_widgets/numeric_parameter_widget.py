@@ -43,14 +43,15 @@ class NumericParameterWidget(GenericParameterWidget):
 
         # Add unit description to description
         description = self._description_label.text()
-        description += '<br><br>Available units:'
-        description += '<ul>'
-        for allowed_unit in self._parameter.allowed_units:
-            description += '<li>'
-            description += '<b>' + allowed_unit.name + '</b>: '
-            description += allowed_unit.description
-            description += '</li>'
-        description += '</ul>'
+        if self._parameter.allowed_units:
+            description += '<br><br>Available units:'
+            description += '<ul>'
+            for allowed_unit in self._parameter.allowed_units:
+                description += '<li>'
+                description += '<b>' + allowed_unit.name + '</b>: '
+                description += allowed_unit.description
+                description += '</li>'
+            description += '</ul>'
         self._description_label.setText(description)
 
     def get_parameter(self):

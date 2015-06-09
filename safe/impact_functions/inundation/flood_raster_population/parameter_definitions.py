@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.utilities.i18n import tr
 
 from safe_extras.parameters.input_list_parameter import InputListParameter
 
@@ -29,4 +30,8 @@ def threshold():
     field.minimum_item_count = 1
     field.maximum_item_count = 3
     field.value = [1.0]  # default value
+    field.help_text = tr(
+        'Thresholds value to categorize inundated area.')
+    field.description = tr(
+        'Up to 3 thresholds in meter can be set in an increasing order.')
     return field
