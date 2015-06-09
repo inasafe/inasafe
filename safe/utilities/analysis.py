@@ -53,7 +53,6 @@ from safe.common.exceptions import (
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
 from safe import messaging as m
-from safe.utilities.impact_calculator_thread import ImpactCalculatorThread
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.gis import (
     get_wgs84_resolution,
@@ -72,6 +71,7 @@ from safe.common.signals import (
 from safe_extras.pydispatch import dispatcher
 from safe.common.exceptions import BoundingBoxError, NoValidLayerError
 from safe.utilities.resources import resource_url
+from safe.engine.core import calculate_impact
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -96,6 +96,7 @@ class Analysis(object):
         self._hazard_layer = None
         self._exposure_layer = None
         self._aggregation_layer = None
+        self._impact_layer = None
         self.hazard_keyword = None
         self.exposure_keyword = None
         self.aggregation_keyword = None
@@ -115,7 +116,7 @@ class Analysis(object):
         self.force_memory = False
 
         self.clip_parameters = None
-        self.runner = None
+
         self.aggregator = None
         self.postprocessor_manager = None
 
@@ -181,6 +182,20 @@ class Analysis(object):
         """
         self._aggregation_layer = aggregation_layer
 
+    @property
+    def impact_layer(self):
+        """Obtain impact layer from the runner."""
+        return self._impact_layer
+
+    @impact_layer.setter
+    def impact_layer(self, layer):
+        """Set impact layer.
+
+        :param layer: The impact layer that would be assigned.
+        :type layer: SAFE Layer, QgsMapLayer, QgsWrapper
+        """
+        self._impact_layer = layer
+
     # noinspection PyMethodMayBeStatic
     def tr(self, string):
         """We implement this since we do not inherit QObject.
@@ -210,10 +225,6 @@ class Analysis(object):
         """
         title = layer_keyword.get('title', layer.name())
         return title
-
-    def get_impact_layer(self):
-        """Obtain impact layer from the runner."""
-        return self.runner.impact_layer()
 
     def send_static_message(self, message):
         """Send a static message to the listeners.
@@ -606,8 +617,7 @@ class Analysis(object):
         if self.clip_parameters is None:
             raise Exception(self.tr('Clip parameters are not set!'))
         try:
-            impact_layer = self.get_impact_layer()
-            buffered_geo_extent = impact_layer.extent
+            buffered_geo_extent = self.impact_layer.extent
         except AttributeError:
             # if we have no runner, set dummy extent
             buffered_geo_extent = self.clip_parameters[1]
@@ -852,70 +862,21 @@ class Analysis(object):
         self.impact_function.exposure = exposure_layer
 
     def run_aggregator(self):
-        """Run all post processing steps.
-
-        Called on self.runner SIGNAL('done()') starts aggregation steps.
-        """
+        """Run all post processing steps."""
         LOGGER.debug('Do aggregation')
-        if self.runner.impact_layer() is None:
+        if self.impact_layer is None:
             # Done was emitted, but no impact layer was calculated
-            result = self.runner.result()
-            message = str(self.tr(
-                'No impact layer was calculated. Error message: %s\n'
-            ) % (str(result)))
-            exception = self.runner.last_exception()
-            if isinstance(exception, ZeroImpactException):
-                report = m.Message()
-                report.add(LOGO_ELEMENT)
-                report.add(m.Heading(self.tr(
-                    'Analysis Results'), **INFO_STYLE))
-                report.add(m.Text(exception.message))
-                report.add(m.Heading(self.tr('Notes'), **SUGGESTION_STYLE))
-                exposure_layer_title = self.get_layer_title(
-                    self.exposure_layer, self.exposure_keyword)
-                hazard_layer_title = self.get_layer_title(
-                    self.hazard_layer, self.hazard_keyword)
-                report.add(m.Text(self.tr(
-                    'It appears that no %s are affected by %s. You may want '
-                    'to consider:') % (
-                        exposure_layer_title,
-                        hazard_layer_title)))
-                check_list = m.BulletedList()
-                check_list.add(self.tr(
-                    'Check that you are not zoomed in too much and thus '
-                    'excluding %s from your analysis area.') % (
-                        exposure_layer_title))
-                check_list.add(self.tr(
-                    'Check that the exposure is not no-data or zero for the '
-                    'entire area of your analysis.'))
-                check_list.add(self.tr(
-                    'Check that your impact function thresholds do not '
-                    'exclude all features unintentionally.'))
-                report.add(check_list)
-                self.send_static_message(report)
-                self.send_analysis_done_signal()
-                return
-            if exception is not None:
-                content = self.tr(
-                    'An exception occurred when calculating the results. %s'
-                ) % (self.runner.result())
-                message = get_error_message(exception, context=content)
-            # noinspection PyTypeChecker
-            # RM: Send not busy signal to restore busy cursor
+            message = self.tr('No impact layer was generated.\n')
             self.send_not_busy_signal()
             self.send_error_message(message)
-            # RM: Send analysis done signal because analysis failed and we
-            # want to restore the cursor
             self.send_analysis_done_signal()
-            # self.analysis_done.emit(False)
             return
         try:
-            impact_layer = self.get_impact_layer()
-            qgis_impact_layer = safe_to_qgis_layer(impact_layer)
+            qgis_impact_layer = safe_to_qgis_layer(self.impact_layer)
             self.aggregator.extent = extent_to_array(
                 qgis_impact_layer.extent(),
                 qgis_impact_layer.crs())
-            self.aggregator.aggregate(impact_layer)
+            self.aggregator.aggregate(self.impact_layer)
         except InvalidGeometryError, e:
             message = get_error_message(e)
             self.send_error_message(message)
@@ -988,17 +949,6 @@ class Analysis(object):
                     'cell size.'))
             return
 
-        try:
-            self.runner = ImpactCalculatorThread(self.impact_function)
-        except (InsufficientParametersError, ReadLayerError), e:
-            self.analysis_error(
-                e,
-                self.tr(
-                    'An exception occurred when setting up the model runner.'))
-            return
-
-        self.runner.done.connect(self.run_aggregator)
-
         self.send_busy_signal()
 
         title = self.tr('Calculating impact')
@@ -1012,15 +962,49 @@ class Analysis(object):
         self.send_dynamic_message(message)
 
         try:
-            if self.run_in_thread_flag:
-                self.runner.start()  # Run in different thread
-            else:
-                self.runner.run()  # Run in same thread
-            # .. todo :: Disconnect done slot/signal
-
+            self.impact_layer = calculate_impact(self.impact_function)
+            self.run_aggregator()
+        except ZeroImpactException, e:
+            report = m.Message()
+            report.add(LOGO_ELEMENT)
+            report.add(m.Heading(self.tr(
+                'Analysis Results'), **INFO_STYLE))
+            report.add(m.Text(e.message))
+            report.add(m.Heading(self.tr('Notes'), **SUGGESTION_STYLE))
+            exposure_layer_title = self.get_layer_title(
+                self.exposure_layer, self.exposure_keyword)
+            hazard_layer_title = self.get_layer_title(
+                self.hazard_layer, self.hazard_keyword)
+            report.add(m.Text(self.tr(
+                'It appears that no %s are affected by %s. You may want '
+                'to consider:') % (
+                exposure_layer_title, hazard_layer_title)))
+            check_list = m.BulletedList()
+            check_list.add(self.tr(
+                'Check that you are not zoomed in too much and thus '
+                'excluding %s from your analysis area.') % (
+                exposure_layer_title))
+            check_list.add(self.tr(
+                'Check that the exposure is not no-data or zero for the '
+                'entire area of your analysis.'))
+            check_list.add(self.tr(
+                'Check that your impact function thresholds do not '
+                'exclude all features unintentionally.'))
+            report.add(check_list)
+            self.send_static_message(report)
+            self.send_analysis_done_signal()
+            return
+        except MemoryError, e:
+            message = self.tr(
+                'An error occurred because it appears that your system does '
+                'not have sufficient memory. Upgrading your computer so that '
+                'it has more memory may help. Alternatively, consider using a '
+                'smaller geographical area for your analysis, or using '
+                'rasters with a larger cell size.')
+            self.analysis_error(e, message)
         except Exception, e:  # pylint: disable=W0703
-
             # FIXME (Ole): This branch is not covered by the tests
             self.analysis_error(
                 e,
-                self.tr('An exception occurred when starting the model.'))
+                self.tr(
+                    'An exception occurred when running the impact analysis.'))
