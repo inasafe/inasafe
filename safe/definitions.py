@@ -41,7 +41,7 @@ layer_purpose_hazard = {
     'description': tr(
         'A <b>hazard</b> layer represents '
         'something that will impact on the people or infrastructure '
-        'in an area. For example; flood, earthquake, tsunami and  '
+        'in an area. For example; flood, earthquake, tsunami and '
         'volcano are all examples of hazards.')
 }
 layer_purpose_exposure = {
@@ -57,9 +57,9 @@ layer_purpose_aggregation = {
     'name': tr('aggregation'),
     'description': tr(
         'An <b>aggregation</b> layer represents '
-        'regions you can use when summarise analysis results. For '
-        'example, we might summarise the affected people after'
-        'a flood according to city districts.')
+        'regions that can be used to summarise analysis results. For '
+        'example, we might summarise the affected people after '
+        'a flood according to administration boundaries.')
 }
 
 layer_purpose = {
@@ -138,8 +138,8 @@ layer_geometry_polygon = {
     'description': tr(
         'A layer composed on polygon features that represent areas of hazard '
         'or exposure. For example areas of flood represented as polygons '
-        '(for a hazard) or building footprints represented as polygons ( '
-        'for an exposure). The polygon layer will often need the presence '
+        '(for a hazard) or building footprints represented as polygons '
+        '(for an exposure). The polygon layer will often need the presence '
         'of specific layer attributes too - these will vary from impact '
         'function to impact function and whether the layer represents '
         'a hazard or an exposure layer. Polygon layers can also be used '
