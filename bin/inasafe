@@ -178,20 +178,20 @@ def get_exposure(cli_arguments):
         print exc.__doc__
 
 
-def run_impact_function(command_line_arguments):
-    """Runs an analysis and delegates producing pdf and .shp results.
-
-        An impact layer object is created and used to write a shapefile.
-        The shapefile path is given by user and used by build_report
-        function to read from.
+def analysis_setup(command_line_arguments, hazard, exposure):
+    """Sets up an analysis object.
 
     :param command_line_arguments: User inputs.
     :type command_line_arguments: CommandLineArguments
 
+    :param hazard: Hazard layer
+    :type hazard: QgsLayer
+
+    :param exposure: Exposure Layer
+    :type exposure: QgsLayer
+
     :raises: Exception
     """
-    hazard = get_hazard(command_line_arguments)
-    exposure = get_exposure(command_line_arguments)
     # IF
     impact_function_manager = ImpactFunctionManager()
     impact_function = impact_function_manager.get(
@@ -213,9 +213,7 @@ def run_impact_function(command_line_arguments):
     analysis.show_intermediate_layers = False
     analysis.run_in_thread_flag = False
     analysis.map_canvas = CANVAS
-    # WIP
-    # specify extent mode
-    # Qsetting context
+    # QSetting context
     settings = QSettings()
     crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
     analysis.user_extent_crs = QgsCoordinateReferenceSystem(crs)
@@ -227,6 +225,22 @@ def run_impact_function(command_line_arguments):
     )
     analysis.impact_function = impact_function
     analysis.setup_analysis()
+    return analysis
+
+
+def run_impact_function(command_line_arguments):
+    """Runs an analysis and delegates producing pdf and .shp results.
+
+        An impact layer object is created and used to write a shapefile.
+        The shapefile path is given by user and used by build_report
+        function to read from.
+
+    :param command_line_arguments: User inputs.
+    :type command_line_arguments: CommandLineArguments
+    """
+    hazard = get_hazard(command_line_arguments)
+    exposure = get_exposure(command_line_arguments)
+    analysis = analysis_setup(command_line_arguments, hazard, exposure)
     analysis.run_analysis()
     impact_layer = analysis.get_impact_layer()
     write_results(command_line_arguments, impact_layer)

@@ -8,6 +8,7 @@ __copyright__ = 'jannes@kartoza.com'
 
 import unittest
 import os
+import re
 usage_dir = os.environ['InaSAFEQGIS'] + '/bin' + '/'
 source_file = file(usage_dir + 'inasafe', 'r')
 import imp
@@ -18,6 +19,7 @@ from inasafe import (
     get_impact_function_list,
     run_impact_function,
     build_report,
+    analysis_setup,
     CommandLineArguments)
 
 
@@ -42,34 +44,49 @@ class TestInasafeCommandLine(unittest.TestCase):
 
     def test_get_exposure(self):
         """Test building an exposure layer from file."""
-        ex = get_exposure(self.args)
-        self.assertEqual(ex.isValid(), True, 'Exposure layer is not valid')
+        exposure = get_exposure(self.args)
+        self.assertEqual(
+            exposure.isValid(), True, 'Exposure layer is not valid')
 
-    def test_hazard(self):
+    def test_get_hazard(self):
         """Test building a hazard layer from file."""
-        haz = get_hazard(self.args)
-        self.assertEqual(haz.isValid(), True, 'Hazard layer is not valid')
+        hazard = get_hazard(self.args)
+        self.assertEqual(hazard.isValid(), True, 'Hazard layer is not valid')
 
     def test_get_impact_function_list(self):
         """Test getting a list of IF ids."""
         impact_function_list = get_impact_function_list()
         self.assertEqual(type(impact_function_list), list)
 
-    def test_run_if(self):
-        """Run an IF and check if vector file was created."""
-        run_impact_function(self.args)
-        # check if impact file exists
-        self.assertEqual(os.path.isfile(self.args.output_file), True)
+    def test_analysis_setup(self):
+        exposure = get_exposure(self.args)
+        hazard = get_hazard(self.args)
+        analysis = analysis_setup(self.args, hazard, exposure)
+        self.assertEqual(
+            str(type(analysis)),
+            "<class 'inasafe.safe.utilities.analysis.Analysis'>")
 
     def test_build_report(self):
-        """Test whether a pdf can be created from run_if's product."""
-        # delete pdfs in inasafe
+        """Test whether a pdf can be created from
+            run_impact_function's product.
+        """
+        run_impact_function(self.args)
         output_name = os.path.splitext(self.args.output_file)[0]
-        os.remove(output_name + '.pdf')
-        os.remove(output_name + '_table.pdf')
         build_report(self.args)
         self.assertEqual(os.path.isfile(output_name + '.pdf'), True)
         self.assertEqual(os.path.isfile(output_name + '_table.pdf'), True)
 
+    def tearDown(self):
+        # remove output files
+        output_name = os.path.splitext(self.args.output_file)[0]
+        dirname = os.path.dirname(output_name)
+        names = os.listdir(dirname)
 
-
+        for name in names:
+            if os.path.exists(dirname + '/' + name) and \
+                    re.search(os.path.basename(
+                        os.path.splitext(output_name)[0]), name):
+                os.remove(dirname + '/' + name)
+                print dirname + '/' + name
+        # close file used for import workaround
+        source_file.close()
