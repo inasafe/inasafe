@@ -53,7 +53,7 @@ from safe.common.exceptions import (
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
 from safe import messaging as m
-from safe.utilities.impact_calculator import ImpactCalculator
+from safe.utilities.impact_calculator_thread import ImpactCalculatorThread
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.gis import (
     get_wgs84_resolution,
@@ -115,7 +115,6 @@ class Analysis(object):
         self.force_memory = False
 
         self.clip_parameters = None
-        self.impact_calculator = ImpactCalculator()
         self.runner = None
         self.aggregator = None
         self.postprocessor_manager = None
@@ -811,11 +810,8 @@ class Analysis(object):
             hard_clip_flag=self.clip_hard)
         return clipped_hazard, clipped_exposure
 
-    def setup_impact_calculator(self):
-        """Initialise ImpactCalculator based on the current state of the ui."""
-        # Set impact function
-        self.impact_calculator.impact_function = self.impact_function
-
+    def setup_impact_function(self):
+        """Setup impact function."""
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
         # pylint: disable=unpacking-non-sequence
@@ -827,7 +823,7 @@ class Analysis(object):
          hazard_layer) = self.clip_parameters
         # pylint: enable=unpacking-non-sequence
 
-        if self.impact_calculator.impact_function.requires_clipping:
+        if self.impact_function.requires_clipping:
             # The impact function uses SAFE layers,
             # clip them
             hazard_layer, exposure_layer = self.optimal_clip()
@@ -849,12 +845,11 @@ class Analysis(object):
             # It is a QGIS impact function,
             # clipping isn't needed, but we need to set up extent
             self.aggregator.set_layers(hazard_layer, exposure_layer)
-            self.impact_calculator.impact_function.requested_extent \
-                = buffered_geo_extent
+            self.impact_function.requested_extent = buffered_geo_extent
 
         # Set input layers
-        self.impact_calculator.impact_function.hazard = hazard_layer
-        self.impact_calculator.impact_function.exposure = exposure_layer
+        self.impact_function.hazard = hazard_layer
+        self.impact_function.exposure = exposure_layer
 
     def run_aggregator(self):
         """Run all post processing steps.
@@ -954,7 +949,7 @@ class Analysis(object):
     def run_analysis(self):
         """It's similar with run function in previous dock.py"""
         try:
-            self.setup_impact_calculator()
+            self.setup_impact_function()
         except CallGDALError, e:
             self.analysis_error(e, self.tr(
                 'An error occurred when calling a GDAL command'))
@@ -994,7 +989,9 @@ class Analysis(object):
             return
 
         try:
-            self.runner = self.impact_calculator.get_runner()
+            self.runner = ImpactCalculatorThread(
+                self.impact_function,
+                check_integrity=self.impact_function.requires_clipping)
         except (InsufficientParametersError, ReadLayerError), e:
             self.analysis_error(
                 e,
