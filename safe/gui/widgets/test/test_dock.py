@@ -55,7 +55,6 @@ from safe.test.utilities import (
     set_small_jakarta_extent,
     get_qgis_app,
     TESTDATA,
-    HAZDATA,
     clone_shp_layer)
 
 # AG: get_qgis_app() should be called before importing modules from
@@ -542,9 +541,6 @@ class TestDock(TestCase):
         self.assertTrue(expected_function == current_function, message)
         DOCK.cboHazard.setCurrentIndex(0)
         # Selected function should remain the same
-        # RM: modified it, because there is generic one right now as the first.
-        # the selected one should be FloodEvacuationRasterHazardFunction
-        DOCK.cboFunction.setCurrentIndex(1)
         expected = 'Need evacuation'
         function = DOCK.cboFunction.currentText()
         message = 'Expected: %s, Got: %s' % (expected, function)
