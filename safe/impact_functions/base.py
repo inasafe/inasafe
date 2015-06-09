@@ -312,6 +312,24 @@ class ImpactFunction(object):
         return self._impact
 
     @property
+    def requires_clipping(self):
+        """Check to clip or not to clip layers.
+
+        If function type is a 'qgis2.0' impact function, then
+        return False -- clipping is unnecessary, else return True.
+
+        :returns: To clip or not to clip.
+        :rtype: bool
+        """
+        if self.function_type() == 'old-style':
+            return True
+        elif self.function_type() == 'qgis2.0':
+            return False
+        else:
+            message = tr('Error: Impact Function has unknown style.')
+            raise Exception(message)
+
+    @property
     def target_field(self):
         """Property for the target_field of the impact layer.
 

@@ -827,7 +827,7 @@ class Analysis(object):
          hazard_layer) = self.clip_parameters
         # pylint: enable=unpacking-non-sequence
 
-        if self.impact_calculator.requires_clipping():
+        if self.impact_calculator.impact_function.requires_clipping:
             # The impact function uses SAFE layers,
             # clip them
             hazard_layer, exposure_layer = self.optimal_clip()

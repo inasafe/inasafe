@@ -104,7 +104,7 @@ class ImpactCalculator(QObject):
 
         return ImpactCalculatorThread(
             self._impact_function,
-            check_integrity=self.requires_clipping())
+            check_integrity=self.impact_function.requires_clipping)
 
     def function(self):
         """Accessor for the impact function.
@@ -113,30 +113,3 @@ class ImpactCalculator(QObject):
         :rtype: safe.impact_functions.base.ImpactFunction, None
         """
         return self._impact_function
-
-    def requires_clipping(self):
-        """Check to clip or not to clip layers.
-
-        If self._function is a 'new-style' impact function, then
-        return False -- clipping is unnecessary, else return True
-
-        :returns:   To clip or not to clip.
-        :rtype:     bool
-
-        :raises: InsufficientParametersError if function parameter is not set.
-                 InvalidParameterError if the function has unknown style.
-        """
-        if self._impact_function is None:
-            message = self.tr('Error: Impact Function is not provided.')
-            raise InsufficientParametersError(message)
-
-        impact_function_type = \
-            self.impact_function_manager.get_function_type(
-                self._impact_function)
-        if impact_function_type == 'old-style':
-            return True
-        elif impact_function_type == 'qgis2.0':
-            return False
-        else:
-            message = self.tr('Error: Impact Function has unknown style.')
-            raise InvalidParameterError(message)
