@@ -175,14 +175,21 @@ hazard_category_single_event = {
     'key': 'single_event',
     'name': tr('Single Event'),
     'description': tr(
-        'TBA')
+        A single hazard event can be based on either a specific event that has 
+        happen in the past, eg a flood like Jakarta 2013, or a possible event 
+        eg the tsunami that results from an earthquake near Bima that might 
+        happen in the future.)
 }
 
 hazard_category_multiple_event = {
     'key': 'multiple_event',
     'name': tr('Multiple Event'),
     'description': tr(
-        'TBA')
+        A multiple hazard event data can be based on historical observations 
+        eg a hzard map of all observed volcanic deposits around a volcano 
+        showing those locations that might be impacted by a volcanic eruption 
+        or a probabalistic hazard model that shows the liklihood of a 
+        magnitude 7 earthquake happening in the next 50 years)
 }
 
 hazard_category = {
