@@ -105,11 +105,3 @@ class ImpactCalculator(QObject):
         return ImpactCalculatorThread(
             self._impact_function,
             check_integrity=self.impact_function.requires_clipping)
-
-    def function(self):
-        """Accessor for the impact function.
-
-        :returns: An InaSAFE impact function or None depending on if it is set.
-        :rtype: safe.impact_functions.base.ImpactFunction, None
-        """
-        return self._impact_function

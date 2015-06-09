@@ -72,7 +72,7 @@ class ImpactCalculatorTest(unittest.TestCase):
         message = 'Function property incorrect.'
         self.assertEqual(
             self.impact_function_manager.get_function_id(
-                self.calculator.function()),
+                self.calculator.impact_function),
             'EarthquakeBuildingFunction',
             message)
 
