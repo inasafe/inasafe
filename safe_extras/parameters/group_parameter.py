@@ -22,6 +22,7 @@ class GroupParameter(CollectionParameter):
         super(GroupParameter, self).__init__(guid)
         self.expected_type = list
         self.element_type = GenericParameter
+        self.is_required = False
         self._enable_parameter = True
         self._custom_validator = None
         self._must_scroll = True

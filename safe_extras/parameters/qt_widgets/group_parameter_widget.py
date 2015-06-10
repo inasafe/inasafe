@@ -27,14 +27,11 @@ class GroupParameterWidget(GenericParameterWidget):
         self._enable_check_box = QCheckBox()
         # Tooltips
         self.setToolTip('Tick here to enable ' + self._parameter.name)
-        self._enable_check_box.setChecked(self._parameter.enable_parameter)
 
-        # add handlers
-        # noinspection PyUnresolvedReferences
-        self._enable_check_box.stateChanged.connect(
-            self.on_enable_checkbox_changed)
-
-        self._inner_input_layout.addWidget(self._enable_check_box)
+        if not self._parameter.is_required:
+            self._inner_input_layout.addWidget(self._enable_check_box)
+        else:
+            self._parameter.enable_parameter = True
 
         # add all widget in the group
         self._group_layout = QVBoxLayout()
@@ -48,6 +45,13 @@ class GroupParameterWidget(GenericParameterWidget):
             parameters=self._parameter.value)
         self.param_container.setup_ui(must_scroll=parameter.must_scroll)
 
+        # add handlers
+        # noinspection PyUnresolvedReferences
+        self._enable_check_box.stateChanged.connect(
+            self.on_enable_checkbox_changed)
+        self._enable_check_box.setChecked(self._parameter.enable_parameter)
+        self.on_enable_checkbox_changed(self._parameter.enable_parameter)
+
         self._group_layout.addWidget(self.param_container)
 
     def on_enable_checkbox_changed(self, state):
@@ -55,6 +59,7 @@ class GroupParameterWidget(GenericParameterWidget):
             self.param_container.show()
         else:
             self.param_container.hide()
+        self._parameter.enable_parameter = state
 
     def get_parameter(self):
         """Obtain list parameter object from the current widget state.
@@ -62,8 +67,9 @@ class GroupParameterWidget(GenericParameterWidget):
         :returns: A ListParameter from the current state of widget
 
         """
-        parameters = self.param_container.get_parameters()
-        self._parameter.value = parameters
-        self._parameter.validate()
+        if self._parameter.enable_parameter:
+            parameters = self.param_container.get_parameters()
+            self._parameter.value = parameters
+            self._parameter.validate()
 
         return self._parameter
