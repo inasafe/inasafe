@@ -81,7 +81,6 @@ class CollectionParameter(GenericParameter):
             return
 
         raise InvalidMaximumError('Maximum must be greater than minimum')
-        self._maximum_item_count = maximum_count
 
     def count(self):
         """Obtain the number of element in the list.
@@ -121,17 +120,30 @@ class CollectionParameter(GenericParameter):
         :raises: TypeError
         """
         # Checking that the type of _value is the same as the expected _value
-        if type(value) is not self.expected_type:
+        if not isinstance(value, self.expected_type):
             message = (
                 'The type of the value is [%s] but a [%s] is expected.' % (
-                    str(type(value), str(self.expected_type))))
+                    str(type(value)), str(self.expected_type)))
             raise TypeError(message)
 
-        for element in value:
-            if type(element) is not self.element_type:
+        if isinstance(value, dict):
+            inspected_values = [value[key] for key in value.keys()]
+        elif isinstance(value, list):
+            inspected_values = value
+        else:
+            message = 'The value type is not a collection type'
+            raise TypeError(message)
+
+        self._check_sub_values(inspected_values)
+
+    def _check_sub_values(self, values):
+        for element in values:
+            if isinstance(element, dict) or isinstance(element, list):
+                self._check_sub_values(element)
+            elif not isinstance(element, self.element_type):
                 message = (
                     'The type of the element is [%s] but an [%s] is expected.'
-                    % (str(type(value), str(self.element_type))))
+                    % (str(type(element)), str(self.element_type)))
                 raise TypeError(message)
 
     def check_length(self, value):
@@ -141,7 +153,7 @@ class CollectionParameter(GenericParameter):
         """
 
         if (self._maximum_item_count is None and
-                    self._minimum_item_count is None):
+                self._minimum_item_count is None):
             return
 
         length = len(value)

@@ -17,6 +17,8 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_vector_building_impact\
+    import parameter_definitions
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
@@ -25,10 +27,7 @@ from safe.definitions import (
     hazard_category_single_event,
     exposure_structure,
     flood_vector_hazard_classes,
-    layer_mode_none,
-    building_type_field,
-    affected_field,
-    affected_value
+    structure_class_field
 )
 
 
@@ -78,27 +77,30 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'vector_hazard_classifications': [
                         flood_vector_hazard_classes],
                     'raster_hazard_classifications': [],
-                    'additional_keywords': [affected_field, affected_value]
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
-                    'additional_keywords': [building_type_field]
+                    'exposure_class_fields': [structure_class_field],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
                 # This field of the exposure layer contains
                 # information about building types
-                ('building_type_field', 'TYPE'),
+                ('building_type_field',
+                 parameter_definitions.building_type_field()),
                 # This field of the  hazard layer contains information
                 # about inundated areas
-                ('affected_field', 'FLOODPRONE'),
+                ('affected_field',
+                 parameter_definitions.affected_field()),
                 # This value in 'affected_field' of the hazard layer
                 # marks the areas as inundated
-                ('affected_value', 'YES'),
-
+                ('affected_value',
+                 parameter_definitions.affected_value()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))

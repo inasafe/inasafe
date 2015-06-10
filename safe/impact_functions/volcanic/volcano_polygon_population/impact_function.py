@@ -12,7 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import numpy
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_continuous_re import \
+    ClassifiedVHContinuousRE
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .metadata_definitions import VolcanoPolygonPopulationFunctionMetadata
 from safe.impact_functions.core import (
@@ -27,15 +28,14 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator,
-    get_non_conflicting_attribute_name)
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters
 
 
-class VolcanoPolygonPopulationFunction(ImpactFunction):
+class VolcanoPolygonPopulationFunction(ClassifiedVHContinuousRE):
     """Impact Function for Volcano Point on Building."""
 
     _metadata = VolcanoPolygonPopulationFunctionMetadata()
@@ -45,15 +45,8 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
 
-    def run(self, layers=None):
+    def run(self):
         """Run volcano population evacuation Impact Function.
-
-        :param layers: List of layers expected to contain where two layers
-            should be present.
-
-            * hazard_layer: Vector polygon layer of volcano impact zones
-            * exposure_layer: Raster layer of population data on the same grid
-                as hazard_layer
 
         Counts number of people exposed to volcano event.
 
@@ -68,11 +61,11 @@ class VolcanoPolygonPopulationFunction(ImpactFunction):
                 monotonically increasing)
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute']
-        name_attribute = self.parameters['volcano name attribute']
+        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
+        name_attribute = self.parameters['volcano name attribute'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard

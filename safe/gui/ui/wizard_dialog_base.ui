@@ -172,77 +172,6 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg3HazardCategory">
-        <layout class="QVBoxLayout" name="verticalLayout_30">
-         <item>
-          <widget class="QLabel" name="lblSelectHazardCategory">
-           <property name="styleSheet">
-            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QGridLayout" name="gridLayout_17">
-           <item row="0" column="0" rowspan="2">
-            <widget class="QListWidget" name="lstHazardCategories">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>220</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>220</width>
-               <height>16777215</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="lblDescribeHazardCategory">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>[placeholder]</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
        <widget class="QWidget" name="pg2Subcategory">
         <property name="styleSheet">
          <string notr="true"/>
@@ -353,6 +282,77 @@
                <width>0</width>
                <height>0</height>
               </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="pg3HazardCategory">
+        <layout class="QVBoxLayout" name="verticalLayout_30">
+         <item>
+          <widget class="QLabel" name="lblSelectHazardCategory">
+           <property name="styleSheet">
+            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="gridLayout_17">
+           <item row="0" column="0" rowspan="2">
+            <widget class="QListWidget" name="lstHazardCategories">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>220</width>
+               <height>100</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>220</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="lblDescribeHazardCategory">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+             </property>
+             <property name="text">
+              <string>[placeholder]</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
              </property>
             </widget>
            </item>

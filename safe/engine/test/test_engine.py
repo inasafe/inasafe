@@ -441,8 +441,9 @@ class TestEngine(unittest.TestCase):
         plugin_list = self.impact_function_manager.filter_by_metadata(
             'id', plugin_name)
         IF = plugin_list[0].instance()
-
-        calculate_impact(layers=[H, E], impact_function=IF)
+        IF.hazard = H
+        IF.exposure = E
+        calculate_impact(impact_function=IF)
 
         message = 'The user directory is empty : %s' % temp_directory
         assert os.listdir(temp_directory) != [], message
@@ -466,9 +467,9 @@ class TestEngine(unittest.TestCase):
 
         function_id = 'FloodRasterBuildingFunction'
         impact_function = self.impact_function_manager.get(function_id)
-        impact_vector = calculate_impact(
-            layers=[hazard_layer, exposure_layer],
-            impact_function=impact_function)
+        impact_function.hazard = hazard_layer
+        impact_function.exposure = exposure_layer
+        impact_vector = calculate_impact(impact_function=impact_function)
 
         self.assertEqual(
             impact_vector.get_keywords()['hazard_title'], hazard_title)
@@ -1712,17 +1713,16 @@ class TestEngine(unittest.TestCase):
 
             impact_function = self.impact_function_manager.get(
                 function_id)
-
+            impact_function.hazard = hazard_layer
+            impact_function.exposure = exposure_layer
             # Call impact calculation engine normally
-            calculate_impact(layers=[hazard_layer, exposure_layer],
-                             impact_function=impact_function)
+            calculate_impact(impact_function=impact_function)
 
             # Make keyword value empty and verify exception is raised
             expected_layer_purpose = exposure_layer.keywords['layer_purpose']
             exposure_layer.keywords['layer_purpose'] = ''
             try:
-                calculate_impact(layers=[hazard_layer, exposure_layer],
-                                 impact_function=impact_function)
+                calculate_impact(impact_function=impact_function)
             except VerificationError, e:
                 # Check expected error message
                 assert 'No value found' in str(e)
@@ -1740,8 +1740,7 @@ class TestEngine(unittest.TestCase):
                 del hazard_layer.keywords['layer_mode']
 
             try:
-                calculate_impact(layers=[hazard_layer, exposure_layer],
-                                 impact_function=impact_function)
+                calculate_impact(impact_function=impact_function)
             except VerificationError, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)

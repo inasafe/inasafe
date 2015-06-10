@@ -11,14 +11,12 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-
 import numpy
 import logging
 
 from safe.common.utilities import OrderedDict
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.continuous_rh_continuous_re import \
+    ContinuousRHContinuousRE
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .metadata_definitions import ITBFatalityMetadata
 from safe.impact_functions.core import (
@@ -38,10 +36,13 @@ from safe.utilities.i18n import tr
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
 
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ITBFatalityFunction(ImpactFunction):
+class ITBFatalityFunction(ContinuousRHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Indonesian Earthquake Fatality Model.
 
@@ -136,19 +137,10 @@ class ITBFatalityFunction(ImpactFunction):
         # noinspection PyUnresolvedReferences
         return numpy.power(10.0, x * mmi - y)
 
-    def run(self, layers=None):
-        """Indonesian Earthquake Fatality Model.
-
-        Input:
-
-        :param layers: List of layers expected to contain,
-
-                hazard: Raster layer of MMI ground shaking
-
-                exposure: Raster layer of population count
-        """
+    def run(self):
+        """Indonesian Earthquake Fatality Model."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         displacement_rate = self.hardcoded_parameters['displacement_rate']
 
@@ -173,9 +165,10 @@ class ITBFatalityFunction(ImpactFunction):
         for mmi in mmi_range:
             # Identify cells where MMI is in class i and
             # count people affected by this shake level
+            step = self.hardcoded_parameters['step']
             mmi_matches = numpy.where(
-                (hazard > mmi - self.hardcoded_parameters['step']) * (
-                    hazard <= mmi + self.hardcoded_parameters['step']),
+                (hazard > mmi - step) * (
+                    hazard <= mmi + step),
                 exposure, 0)
 
             # Calculate expected number of fatalities per level

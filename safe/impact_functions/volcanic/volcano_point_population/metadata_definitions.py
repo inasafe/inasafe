@@ -18,9 +18,11 @@ from safe.defaults import (
     minimum_needs_selector)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.volcanic.volcano_point_population\
+    .parameter_definitions import distance, volcano_name_attribute
 from safe.utilities.i18n import tr
 from safe.definitions import (
-    layer_mode_none,
+    layer_mode_classified,
     layer_geometry_point,
     hazard_volcano,
     volcano_vector_hazard_classes,
@@ -80,7 +82,7 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
             'detailed_description': '',
             'layer_requirements': {
                 'hazard': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_point],
                     'hazard_categories': [hazard_category_multiple_event],
                     'hazard_types': [hazard_volcano],
@@ -95,14 +97,15 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_raster],
                     'exposure_types': [exposure_population],
                     'exposure_units': [count_exposure_unit],
+                    'exposure_class_fields': [],
                     'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
                 # The radii
-                ('distance [km]', [3, 5, 10]),
+                ('distances', distance()),
                 # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', 'NAME'),
+                ('volcano name attribute', volcano_name_attribute()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

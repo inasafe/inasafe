@@ -63,7 +63,6 @@ from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
     set_vector_categorized_style)
-from safe.utilities.impact_calculator import ImpactCalculator
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import temp_dir
@@ -147,7 +146,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.impact_function_manager = ImpactFunctionManager()
 
         self.analysis = None
-        self.calculator = ImpactCalculator()
         self.keyword_io = KeywordIO()
         self.active_impact_function = None
         self.impact_function_parameters = None
@@ -1310,7 +1308,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             LOGGER.debug(datetime.now())
             LOGGER.debug('get engine impact layer')
             LOGGER.debug(self.analysis is None)
-            engine_impact_layer = self.analysis.get_impact_layer()
+            engine_impact_layer = self.analysis.impact_layer
 
             # Load impact layer into QGIS
             qgis_impact_layer = read_impact_layer(engine_impact_layer)
@@ -1433,15 +1431,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def hide_busy(self):
         """A helper function to indicate processing is done."""
-        # self.pbnRunStop.setText('Run')
-        if self.analysis:
-            if self.analysis.runner:
-                try:
-                    self.analysis.runner.done.disconnect(
-                        self.analysis.run_aggregator)
-                except TypeError:
-                    # happens when object is not connected - see #621
-                    pass
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)

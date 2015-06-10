@@ -25,7 +25,6 @@ __date__ = '29/04/2015'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-
 import logging
 from math import ceil
 import numpy
@@ -134,67 +133,6 @@ def population_rounding(number):
     :rtype: int
     """
     return population_rounding_full(number)[0]
-
-
-# ---------------------------------------
-# Helpers for individual impact functions
-# --------------------------------------
-def get_hazard_layers(layers):
-    """Get list of layers that have layer_purpose=='hazard'
-    """
-
-    return extract_layers(layers, 'layer_purpose', 'hazard')
-
-
-def get_hazard_layer(layers):
-    """Get hazard layer from list of layers
-
-    If there are more than one, only the first is returned.
-    Use get_hazard_layers if more are expected and needed
-
-    If no layers fit the description None is returned
-    """
-
-    L = get_hazard_layers(layers)
-    if len(L) > 0:
-        return L[0]
-    else:
-        return None
-
-
-def get_exposure_layers(layers):
-    """Get list of layers that have layer_purpose=='exposure'
-    """
-
-    return extract_layers(layers, 'layer_purpose', 'exposure')
-
-
-def get_exposure_layer(layers):
-    """Get exposure layer from list of layers
-
-    If there are more than one, only the first is returned.
-    Use get_hazard_layers if more are expected and needed
-
-    If no layers fit the description None is returned
-    """
-
-    L = get_exposure_layers(layers)
-    if len(L) > 0:
-        return L[0]
-    else:
-        return None
-
-
-def extract_layers(layers, keyword, value):
-    """Extract layers with specified keyword/value pair
-    """
-
-    extracted_layers = []
-    for layer in layers:
-        if value in layer.get_keywords(keyword):
-            extracted_layers.append(layer)
-
-    return extracted_layers
 
 
 def has_no_data(layer_data):

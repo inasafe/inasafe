@@ -13,6 +13,9 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.volcanic.volcano_point_building\
+    .parameter_definitions import (
+        distance, volcano_name_attribute)
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_geometry_point,
@@ -21,8 +24,9 @@ from safe.definitions import (
     volcano_vector_hazard_classes,
     hazard_category_multiple_event,
     exposure_structure,
-    layer_mode_none,
-    volcano_name_field
+    layer_mode_classified,
+    volcano_name_field,
+    structure_class_field
 )
 
 
@@ -77,7 +81,7 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
             'citations': [],
             'layer_requirements': {
                 'hazard': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_point],
                     'hazard_categories': [hazard_category_multiple_event],
                     'hazard_types': [hazard_volcano],
@@ -88,20 +92,21 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'additional_keywords': [volcano_name_field]
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_none,
+                    'layer_mode': layer_mode_classified,
                     'layer_geometries': [
                         layer_geometry_polygon,
                         layer_geometry_point],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
+                    'exposure_class_fields': [structure_class_field],
                     'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
                 # The list of radii in km for volcano point hazard
-                ('distances [km]', [3, 5, 10]),
+                ('distances', distance()),
                 # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', 'NAME')
+                ('volcano name attribute', volcano_name_attribute())
             ])
         }
         return dict_meta

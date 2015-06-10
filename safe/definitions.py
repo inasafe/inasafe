@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
+InaSAFE Disaster risk assessment tool developed by AusAid / DFAT -
 **New Metadata for SAFE.**
 
 Contact : ole.moller.nielsen@gmail.com
@@ -41,7 +41,7 @@ layer_purpose_hazard = {
     'description': tr(
         'A <b>hazard</b> layer represents '
         'something that will impact on the people or infrastructure '
-        'in an area. For example; flood, earthquake, tsunami and  '
+        'in an area. For example; flood, earthquake, tsunami and '
         'volcano are all examples of hazards.')
 }
 layer_purpose_exposure = {
@@ -57,9 +57,9 @@ layer_purpose_aggregation = {
     'name': tr('aggregation'),
     'description': tr(
         'An <b>aggregation</b> layer represents '
-        'regions you can use when summarise analysis results. For '
-        'example, we might summarise the affected people after'
-        'a flood according to city districts.')
+        'regions that can be used to summarise analysis results. For '
+        'example, we might summarise the affected people after '
+        'a flood according to administration boundaries.')
 }
 
 layer_purpose = {
@@ -102,17 +102,6 @@ layer_mode_classified = {
     ),
 }
 
-layer_mode_none = {
-    'key': 'none',
-    'name': tr('none'),
-    'description': tr(
-        'Layer mode <b>None</b> means that the layer is not continuous or '
-        'classified. All vector features regardless of their attributes or '
-        'all raster non-null cells regardess of their values have the '
-        'same meaning.'
-    )
-}
-
 layer_mode = {
     'key': 'layer_mode',
     'name': tr('Layer Mode'),
@@ -149,8 +138,8 @@ layer_geometry_polygon = {
     'description': tr(
         'A layer composed on polygon features that represent areas of hazard '
         'or exposure. For example areas of flood represented as polygons '
-        '(for a hazard) or building footprints represented as polygons ( '
-        'for an exposure). The polygon layer will often need the presence '
+        '(for a hazard) or building footprints represented as polygons '
+        '(for an exposure). The polygon layer will often need the presence '
         'of specific layer attributes too - these will vary from impact '
         'function to impact function and whether the layer represents '
         'a hazard or an exposure layer. Polygon layers can also be used '
@@ -702,47 +691,24 @@ exposure_unit = {
     ]
 }
 
+# Exposure class field
+structure_class_field = {
+    'key': 'structure_class_field',
+    'name': tr('Structure class field'),
+    'description': tr('Field where the structure type is located.')
+}
+
+road_class_field = {
+    'key': 'road_class_field',
+    'name': tr('Road class field'),
+    'description': tr('Field where the road type is located.')
+}
+
 # Additional keywords
 # Hazard related
-hazard_zone_field = {
-    'key': 'hazard_zone_field',
-    'type': 'field',
-    'master_keyword': None,
-    'description': tr('Field where the hazard zone value is located.')
-}
-
-affected_field = {
-    'key': 'affected_field',
-    'type': 'field',
-    'master_keyword': None,
-    'description': tr('Field where the affected value is located.')
-}
-
-affected_value = {
-    'key': 'affected_value',
-    'type': 'value',
-    'master_keyword': affected_field,
-    'description': tr('Value for affected field.')
-}
-
 volcano_name_field = {
     'key': 'volcano_name_field',
     'type': 'field',
     'master_keyword': None,
     'description': tr('Field where the volcano name is located.')
-}
-
-# Exposure related
-building_type_field = {
-    'key': 'building_type_field',
-    'type': 'field',
-    'master_keyword': None,
-    'description': tr('Field where the building type is located.')
-}
-
-road_type_field = {
-    'key': 'road_type_field',
-    'type': 'field',
-    'master_keyword': None,
-    'description': tr('Field where the building type is located.')
 }

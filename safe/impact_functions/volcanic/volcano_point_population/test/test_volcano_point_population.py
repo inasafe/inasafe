@@ -66,7 +66,7 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
         """TestVolcanoPointPopulationFunction: Test filtering IF"""
         hazard_keywords = {
             'layer_purpose': 'hazard',
-            'layer_mode': 'none',
+            'layer_mode': 'classified',
             'layer_geometry': 'point',
             'hazard': 'volcano',
             'hazard_category': 'multiple_event',

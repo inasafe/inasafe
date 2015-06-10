@@ -45,7 +45,7 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
         impact_function = ClassifiedPolygonHazardPopulationFunction.instance()
         impact_function.hazard = generic_polygon_layer
         impact_function.exposure = population_layer
-        impact_function.parameters['hazard zone attribute'] = 'h_zone'
+        impact_function.parameters['hazard zone attribute'].value = 'h_zone'
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question

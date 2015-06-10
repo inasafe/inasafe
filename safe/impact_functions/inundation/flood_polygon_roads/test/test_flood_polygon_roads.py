@@ -26,7 +26,6 @@ from safe.impact_functions.inundation.flood_polygon_roads\
 from safe.test.utilities import (
     get_qgis_app,
     test_data_path)
-from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -54,11 +53,11 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
-        function.hazard = QgisWrapper(hazard_layer)
-        function.exposure = QgisWrapper(exposure_layer)
+        function.hazard = hazard_layer
+        function.exposure = exposure_layer
         function.requested_extent = rect_extent
-        function.parameters['affected_field'] = 'FLOODPRONE'
-        function.parameters['affected_value'] = 'YES'
+        function.parameters['affected_field'].value = 'FLOODPRONE'
+        function.parameters['affected_value'].value = 'YES'
         function.run()
         impact = function.impact
 
@@ -83,7 +82,7 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'none',
+            'layer_mode': 'classified',
             'layer_geometry': 'line',
             'exposure': 'road'
         }

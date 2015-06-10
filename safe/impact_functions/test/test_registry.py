@@ -51,7 +51,7 @@ from safe.definitions import (
     exposure_structure,
     unit_mmi,
     hazard_category_single_event,
-    layer_mode_none
+    layer_mode_classified
 )
 
 
@@ -90,8 +90,7 @@ class TestRegistry(unittest.TestCase):
             'Polygon flood on people',
             'Raster flood on population',
             'Raster flood on buildings',
-            'Raster flood on roads (QGIS)',
-            'Raster flood on roads (GDAL)',
+            'Raster flood on roads',
             'Tsunami evacuation',
             'Classified raster hazard on buildings',
             'Classified raster hazard on population',
@@ -199,7 +198,7 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test filtering IF by exposure metadata."""
         # Full metadata
         exposure_metadata = {
-            'layer_mode': layer_mode_none,
+            'layer_mode': layer_mode_classified,
             'layer_geometry': layer_geometry_point,
             'exposure': exposure_structure,
             'exposure_unit': []
@@ -222,7 +221,7 @@ class TestRegistry(unittest.TestCase):
 
         # Full metadata
         exposure_metadata = {
-            'layer_mode': layer_mode_none,
+            'layer_mode': layer_mode_classified,
             'layer_geometry': layer_geometry_polygon,
             'exposure': exposure_structure,
             # 'exposure_unit': []
@@ -255,7 +254,7 @@ class TestRegistry(unittest.TestCase):
         }
 
         exposure_metadata = {
-            'layer_mode': layer_mode_none,
+            'layer_mode': layer_mode_classified,
             'layer_geometry': layer_geometry_point,
             'exposure': exposure_structure,
         }
@@ -288,7 +287,7 @@ class TestRegistry(unittest.TestCase):
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'none',
+            'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'exposure': 'structure',
         }

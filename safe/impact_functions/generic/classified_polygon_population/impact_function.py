@@ -12,7 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import numpy
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_continuous_re import \
+    ClassifiedVHContinuousRE
 from safe.impact_functions.generic.classified_polygon_population\
     .metadata_definitions import \
     ClassifiedPolygonHazardPopulationFunctionMetadata
@@ -31,7 +32,7 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
-class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
+class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
     """Impact Function for Classified Polygon on Population."""
 
     _metadata = ClassifiedPolygonHazardPopulationFunctionMetadata()
@@ -46,15 +47,8 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         self.question = ('In each of the hazard zones how many people '
                          'might be impacted.')
 
-    def run(self, layers=None):
+    def run(self):
         """Run classified population evacuation Impact Function.
-
-        :param layers: List of layers expected to contain where two layers
-            should be present.
-
-            * hazard_layer: Vector polygon layer
-            * exposure_layer: Raster layer of population data on the same grid
-                as hazard_layer
 
         Counts number of people exposed to each hazard zones.
 
@@ -67,10 +61,10 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             * Exception - When hazard layer is not vector layer
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute']
+        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard
