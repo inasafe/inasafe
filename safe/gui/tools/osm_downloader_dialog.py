@@ -23,7 +23,7 @@ import logging
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
-from qgis.core import QGis  # force sip2 api
+from qgis.core import QGis, QgsRectangle  # force sip2 api
 from qgis.gui import QgsMapToolPan
 # pylint: enable=unused-import
 
@@ -120,12 +120,12 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         # Setup pan tool
         self.pan_tool = QgsMapToolPan(self.canvas)
         self.canvas.setMapTool(self.pan_tool)
-        self.update_extent_from_map_canvas()
 
         # Setup helper for admin_level
         json_file_path = resources_path('osm', 'admin_level_per_country.json')
         if os.path.isfile(json_file_path):
             self.countries = json.load(open(json_file_path))
+            self.bbox_countries = None
             self.populate_countries()
             # connect
             self.country_comboBox.currentIndexChanged.connect(
@@ -133,20 +133,23 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.admin_level_comboBox.currentIndexChanged.connect(
                 self.update_helper_political_level)
 
+        self.update_extent_from_map_canvas()
+
     def update_helper_political_level(self):
         """To update the helper about the country and the admin_level."""
         current_country = self.country_comboBox.currentText()
         index = self.admin_level_comboBox.currentIndex()
         current_level = self.admin_level_comboBox.itemData(index)
         try:
-            content = self.countries[current_country][str(current_level)]
+            content = \
+                self.countries[current_country]['levels'][str(current_level)]
             if content == 'N/A' or content == 'fixme' or content == '':
                 raise KeyError
         except KeyError:
             content = self.tr('undefined')
         finally:
             text = '<span style=" font-size:12pt; font-style:italic;">' \
-                   ', level %s is : %s</span>' % (current_level, content)
+                   'level %s is : %s</span>' % (current_level, content)
             self.boundary_helper.setText(text)
 
     def populate_countries(self):
@@ -161,6 +164,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         list_countries.sort()
         for country in list_countries:
             self.country_comboBox.addItem(country)
+
+        self.bbox_countries = {}
+        for country in list_countries:
+            coords = self.countries[country]['bbox']
+            self.bbox_countries[country] = QgsRectangle(
+                coords[0], coords[3], coords[2], coords[1])
+
         self.update_helper_political_level()
 
     def show_info(self):
@@ -253,6 +263,17 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.min_latitude.setText(str(extent[1]))
         self.max_longitude.setText(str(extent[2]))
         self.max_latitude.setText(str(extent[3]))
+
+        # Updating the country if possible.
+        rectangle = QgsRectangle(extent[0], extent[1], extent[2], extent[3])
+        center = rectangle.center()
+        for country in self.bbox_countries:
+            if self.bbox_countries[country].contains(center):
+                index = self.country_comboBox.findText(country)
+                self.country_comboBox.setCurrentIndex(index)
+                break
+        else:
+            self.country_comboBox.setCurrentIndex(0)
 
     def update_extent_from_map_canvas(self):
         """Update extent value in GUI based from value in map.

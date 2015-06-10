@@ -52,10 +52,8 @@ from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import FloodRasterBuildingFunction
 from safe.impact_functions.inundation.flood_raster_population.impact_function\
     import FloodEvacuationRasterHazardFunction
-from safe.impact_functions.inundation.flood_raster_road_qgis.impact_function \
-    import FloodRasterRoadsQGISFunction
-from safe.impact_functions.inundation.flood_raster_road_qgis_gdal\
-    .impact_function import FloodRasterRoadsGdalFunction
+from safe.impact_functions.inundation.flood_raster_road\
+    .impact_function import FloodRasterRoadsFunction
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.inundation.tsunami_population_evacuation_raster\
@@ -116,8 +114,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             FloodVectorRoadsExperimentalFunction(),
             FloodRasterBuildingFunction(),
             FloodEvacuationRasterHazardFunction(),
-            FloodRasterRoadsQGISFunction(),
-            FloodRasterRoadsGdalFunction(),
+            FloodRasterRoadsFunction(),
             FloodPolygonBuildingFunction(),
             TsunamiEvacuationFunction(),
             # Volcanic

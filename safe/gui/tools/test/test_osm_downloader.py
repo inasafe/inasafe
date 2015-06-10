@@ -219,6 +219,26 @@ class ImportDialogTest(unittest.TestCase):
         get = self.dialog.get_checked_features()
         self.assertItemsEqual(expected, get)
 
+    def test_detect_country(self):
+        """Test if the country is well detected according to the extent."""
+        # Extent in Zimbabwe.
+        self.dialog.update_extent([29.4239, -18.2391, 29.4676, -18.2068])
+        index = self.dialog.country_comboBox.currentIndex()
+        country = self.dialog.country_comboBox.itemText(index)
+        self.assertTrue(country == 'Zimbabwe')
+
+        # Extent in Indonesia.
+        self.dialog.update_extent([106.7741, -6.2609, 106.8874, -6.1859])
+        index = self.dialog.country_comboBox.currentIndex()
+        country = self.dialog.country_comboBox.itemText(index)
+        self.assertTrue(country == 'Indonesia')
+
+        # Extent in the middle of nowhere in the Indian Ocean, default value.
+        self.dialog.update_extent([75.0586, -31.7477, 75.8867, -30.9022])
+        index = self.dialog.country_comboBox.currentIndex()
+        country = self.dialog.country_comboBox.itemText(index)
+        self.assertTrue(country == 'Afghanistan')
+
     def test_populate_countries(self):
         """Test if items are in the combobox.
         For instance every admin_level from 1 to 11 and
@@ -231,28 +251,28 @@ class ImportDialogTest(unittest.TestCase):
             self.dialog.country_comboBox.itemText(nb_items - 1) == 'Zimbabwe')
 
     def test_admin_level_helper(self):
-        """Test the helper by setting a country and an admin level"""
+        """Test the helper by setting a country and an admin level."""
         admin_level = 8
         country = 'Indonesia'
         expected = \
-            '<span style=" font-size:12pt; font-style:italic;">, ' \
+            '<span style=" font-size:12pt; font-style:italic;">' \
             'level 8 is : Community Group (Rukun Warga)</span>'
 
         self.dialog.admin_level_comboBox.setCurrentIndex(admin_level - 1)
         index = self.dialog.country_comboBox.findText(country)
         self.dialog.country_comboBox.setCurrentIndex(index)
-        self.assertTrue(expected == self.dialog.boundary_helper.text())
+        self.assertEquals(expected, self.dialog.boundary_helper.text())
 
         admin_level = 6
         country = 'Madagascar'
         expected = \
-            '<span style=" font-size:12pt; font-style:italic;">, ' \
+            '<span style=" font-size:12pt; font-style:italic;">' \
             'level 6 is : Distrika (districts)</span>'
 
         self.dialog.admin_level_comboBox.setCurrentIndex(admin_level - 1)
         index = self.dialog.country_comboBox.findText(country)
         self.dialog.country_comboBox.setCurrentIndex(index)
-        self.assertTrue(expected == self.dialog.boundary_helper.text())
+        self.assertEquals(expected, self.dialog.boundary_helper.text())
 
     def test_validate_extent(self):
         """Test validate extent method."""
