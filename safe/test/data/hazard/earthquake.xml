@@ -176,6 +176,7 @@
 title: Earthquake
 hazard: earthquake
 continuous_hazard_unit: mmi
+layer_geometry: raster
 layer_purpose: hazard
 layer_mode: continuous
 ]]>

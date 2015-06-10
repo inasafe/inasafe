@@ -173,6 +173,7 @@
                 <inasafe_keywords>
 <![CDATA[exposure_unit: count
 title: Population
+layer_geometry: raster
 layer_purpose: exposure
 layer_mode: continuous
 exposure: population

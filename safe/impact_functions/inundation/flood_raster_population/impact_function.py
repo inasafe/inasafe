@@ -10,11 +10,12 @@ from safe.impact_functions.core import (
     population_rounding,
     evacuated_population_needs,
     has_no_data)
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.impact_function_manager \
     import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_raster_population\
     .metadata_definitions import FloodEvacuationRasterHazardMetadata
+from safe.impact_functions.bases.continuous_rh_continuous_re import \
+    ContinuousRHContinuousRE
 from safe.utilities.i18n import tr
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
@@ -26,13 +27,12 @@ from safe.common.utilities import (
     create_label,
     verify,
     get_thousand_separator)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
-    filter_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodEvacuationRasterHazardFunction(ImpactFunction):
+class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Risk plugin for flood population evacuation."""
     _metadata = FloodEvacuationRasterHazardMetadata()
@@ -212,7 +212,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            filter_needs_parameters(self.parameters['minimum needs'])
+            self.parameters['minimum needs']
         ]
 
         # Generate impact report for the pdf map

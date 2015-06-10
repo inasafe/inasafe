@@ -27,7 +27,6 @@ from safe.test.utilities import (
     get_qgis_app,
     test_data_path,
     clone_shp_layer)
-from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 

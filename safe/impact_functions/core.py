@@ -25,7 +25,6 @@ __date__ = '29/04/2015'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-
 import logging
 from math import ceil
 import numpy

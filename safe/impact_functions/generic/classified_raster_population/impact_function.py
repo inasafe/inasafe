@@ -14,15 +14,11 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-__revision__ = '$Format:%H$'
-__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 import numpy
 import itertools
 
+from safe.impact_functions.bases.classified_rh_continuous_re import \
+    ClassifiedRHContinuousRE
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding,
@@ -36,7 +32,6 @@ from safe.common.utilities import (
     get_thousand_separator)
 from safe.utilities.i18n import tr
 from safe.common.tables import Table, TableRow
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.\
     classified_raster_population.metadata_definitions import \
     ClassifiedRasterHazardPopulationMetadata
@@ -46,8 +41,14 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
 
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
-class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
+
+class ClassifiedRasterHazardPopulationFunction(ClassifiedRHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by classified hazard."""
 
