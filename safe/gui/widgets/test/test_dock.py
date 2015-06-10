@@ -534,9 +534,10 @@ class TestDock(TestCase):
         current_function = str(DOCK.cboFunction.currentText())
         message = (
             'Expected selected impact function to remain unchanged when '
-            'choosing a different hazard of the same category:'
-            ' %s\nExpected: %s\n%s' % (
-                expected_function, current_function, combos_to_string(DOCK)))
+            'choosing a different hazard of the same category.\n')
+        message += 'Expected IF: "%s"\n' % expected_function
+        message += 'Current IF: "%s"\n' % current_function
+        message += 'Current Dock State: %s' % combos_to_string(DOCK)
 
         self.assertTrue(expected_function == current_function, message)
         DOCK.cboHazard.setCurrentIndex(0)
