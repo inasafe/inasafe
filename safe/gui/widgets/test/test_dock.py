@@ -520,24 +520,43 @@ class TestDock(TestCase):
         self.assertTrue(hazard_layer_count == 2, message)
         message = 'Expecting 1 exposure layer, got %s' % exposure_layer_count
         self.assertTrue(exposure_layer_count == 1, message)
-        # we will have 2 impact function available right now:
-        # - ContinuousHazardPopulationFunction, titled: 'Be impacted'
+        # we will have 1 impact function available right now:
         # - FloodEvacuationRasterHazardFunction, titled: 'Need evacuation'
         # set it to the second for testing purposes
-        DOCK.cboFunction.setCurrentIndex(1)
+        DOCK.cboFunction.setCurrentIndex(0)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         expected_function = str(DOCK.cboFunction.currentText())
+
+        hazard_layer = DOCK.get_hazard_layer()
+        hazard_keywords = DOCK.keyword_io.read_keywords(hazard_layer)
+        exposure_layer = DOCK.get_exposure_layer()
+        exposure_keywords = DOCK.keyword_io.read_keywords(exposure_layer)
+
         # Now move down one hazard in the combo then verify
         # the function remains unchanged
         DOCK.cboHazard.setCurrentIndex(1)
         current_function = str(DOCK.cboFunction.currentText())
+
+        hazard_layer = DOCK.get_hazard_layer()
+        hazard_keywords = DOCK.keyword_io.read_keywords(hazard_layer)
+        exposure_layer = DOCK.get_exposure_layer()
+        exposure_keywords = DOCK.keyword_io.read_keywords(exposure_layer)
+        from pprint import pprint
+        print 'Exposure keywords'
+        pprint(exposure_keywords)
+        print 'Hazard keywords'
+        pprint(hazard_keywords)
         message = (
             'Expected selected impact function to remain unchanged when '
             'choosing a different hazard of the same category.\n')
         message += 'Expected IF: "%s"\n' % expected_function
         message += 'Current IF: "%s"\n' % current_function
         message += 'Current Dock State: %s' % combos_to_string(DOCK)
+        message += 'Hazard Keywords\n'
+        message += str(hazard_keywords) + '\n'
+        message += 'Exposure Keywords\n'
+        message += str(exposure_keywords) + '\n'
 
         self.assertTrue(expected_function == current_function, message)
         DOCK.cboHazard.setCurrentIndex(0)
@@ -545,6 +564,7 @@ class TestDock(TestCase):
         expected = 'Need evacuation'
         function = DOCK.cboFunction.currentText()
         message = 'Expected: %s, Got: %s' % (expected, function)
+
         self.assertTrue(function == expected, message)
 
     def test_full_run_pyzstats(self):
