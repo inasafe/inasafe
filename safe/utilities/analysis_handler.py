@@ -394,7 +394,7 @@ class AnalysisHandler(QObject):
             LOGGER.debug(datetime.now())
             LOGGER.debug('get engine impact layer')
             LOGGER.debug(self.analysis is None)
-            engine_impact_layer = self.analysis.get_impact_layer()
+            engine_impact_layer = self.analysis.impact_layer
 
             # Load impact layer into QGIS
             qgis_impact_layer = read_impact_layer(engine_impact_layer)

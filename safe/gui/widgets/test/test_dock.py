@@ -237,7 +237,7 @@ class TestDock(TestCase):
 
         DOCK.accept()
         # DOCK.analysis.get_impact_layer()
-        safe_layer = DOCK.analysis.get_impact_layer()
+        safe_layer = DOCK.analysis.impact_layer
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()
         setRasterStyle(qgis_layer, style)
@@ -485,7 +485,7 @@ class TestDock(TestCase):
         self.assertTrue('IndexError' not in result, message)
         self.assertTrue(
             'It appears that no Population are affected by Continuous Flood.'
-            ' You may want to consider:' in result, message)
+            in result, message)
 
     def test_state(self):
         """Check if the save/restore state methods work. See also
