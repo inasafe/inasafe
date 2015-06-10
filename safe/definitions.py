@@ -77,8 +77,8 @@ layer_purpose = {
 
 # Layer mode
 layer_mode_continuous = {
-    'key': 'Continuous',
-    'name': tr('continuous'),
+    'key': 'continuous',
+    'name': tr('Continuous'),
     'description': tr(
         '<b>Continuous</b> data can be hazard or exposure data '
         'where the values are are either integers or decimal numbers '
@@ -90,8 +90,8 @@ layer_mode_continuous = {
         '= 2, high depth = 3).'),
 }
 layer_mode_classified = {
-    'key': 'Classified',
-    'name': tr('classified'),
+    'key': 'classified',
+    'name': tr('Classified'),
     'description': tr(
         '<b>Classified</b> data can be hazard data where the '
         'values have been classified or coded such that each raster cell '
