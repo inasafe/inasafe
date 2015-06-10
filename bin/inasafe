@@ -88,7 +88,12 @@ def download_exposure(command_line_arguments):
     :param command_line_arguments:  User inputs.
     :type command_line_arguments: CommandLineArguments
     """
-    extent = command_line_arguments.extent
+    extent = [
+        float(command_line_arguments.extent[0]),
+        float(command_line_arguments.extent[1]),
+        float(command_line_arguments.extent[2]),
+        float(command_line_arguments.extent[3])
+        ]
     dialog = OsmDownloaderDialog(PARENT, IFACE)
     # make a temporary directory for exposure download
     command_line_arguments.exposure = tempfile.mkdtemp() + '/exposure'
