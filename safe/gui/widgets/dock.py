@@ -1309,7 +1309,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             LOGGER.debug(datetime.now())
             LOGGER.debug('get engine impact layer')
             LOGGER.debug(self.analysis is None)
-            engine_impact_layer = self.analysis.get_impact_layer()
+            engine_impact_layer = self.analysis.impact_layer
 
             # Load impact layer into QGIS
             qgis_impact_layer = read_impact_layer(engine_impact_layer)
@@ -1432,15 +1432,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def hide_busy(self):
         """A helper function to indicate processing is done."""
-        # self.pbnRunStop.setText('Run')
-        if self.analysis:
-            if self.analysis.runner:
-                try:
-                    self.analysis.runner.done.disconnect(
-                        self.analysis.run_aggregator)
-                except TypeError:
-                    # happens when object is not connected - see #621
-                    pass
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)
