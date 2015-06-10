@@ -279,7 +279,7 @@ def run_impact_function(command_line_arguments):
     exposure = get_exposure(command_line_arguments)
     analysis = analysis_setup(command_line_arguments, hazard, exposure)
     analysis.run_analysis()
-    impact_layer = analysis.get_impact_layer()
+    impact_layer = analysis.impact_layer
     write_results(command_line_arguments, impact_layer)
     build_report(command_line_arguments)
 
