@@ -47,7 +47,6 @@ from safe.definitions import (
     exposure_population,
     count_exposure_unit,
     density_exposure_unit,
-    continuous_hazard_unit_all,
     layer_mode_continuous,
     layer_geometry_raster,
     layer_mode_classified,

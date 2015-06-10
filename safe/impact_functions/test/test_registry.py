@@ -35,8 +35,6 @@ from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
     import VolcanoPolygonBuildingFunction
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
-from safe.impact_functions.generic.continuous_hazard_population\
-    .impact_function import ContinuousHazardPopulationFunction
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.generic.classified_raster_building.impact_function\
