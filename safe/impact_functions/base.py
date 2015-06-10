@@ -21,7 +21,7 @@ from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.common.exceptions import InvalidExtentError
+from safe.common.exceptions import InvalidExtentError, FunctionParametersError
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
@@ -312,6 +312,24 @@ class ImpactFunction(object):
         return self._impact
 
     @property
+    def requires_clipping(self):
+        """Check to clip or not to clip layers.
+
+        If function type is a 'qgis2.0' impact function, then
+        return False -- clipping is unnecessary, else return True.
+
+        :returns: To clip or not to clip.
+        :rtype: bool
+        """
+        if self.function_type() == 'old-style':
+            return True
+        elif self.function_type() == 'qgis2.0':
+            return False
+        else:
+            message = tr('Error: Impact Function has unknown style.')
+            raise Exception(message)
+
+    @property
     def target_field(self):
         """Property for the target_field of the impact layer.
 
@@ -420,12 +438,20 @@ class ImpactFunction(object):
         print 'Task progress: %i of %i' % (current, maximum)
 
     def validate(self):
-        """Validate things needed to run the analysis."""
+        """Validate things needed before running the analysis."""
+        # Validate that input layers are valid
+        if (self.hazard is None) or (self.exposure is None):
+            message = tr(
+                'Ensure that hazard and exposure layers are all set before '
+                'trying to run the impact function.')
+            raise FunctionParametersError(message)
+
         # Validate extent, with the QGIS IF, we need requested_extent set
         if self.function_type() == 'qgis2.0' and self.requested_extent is None:
-            raise InvalidExtentError(
+            message = tr(
                 'Impact Function with QGIS function type is used, but no '
                 'extent is provided.')
+            raise InvalidExtentError(message)
 
     def prepare(self):
         """Prepare this impact function for running the analysis.
