@@ -1259,6 +1259,10 @@ class WizardDialog(QDialog, FORM_CLASS):
             allow_resampling_question % (subcategory['name'],
                                          category['name'], layer_mode['name']))
 
+        # Set value based on existing keyword (if already assigned)
+        if self.get_existing_keyword('allow_resample') == False:
+            self.chkAllowResample.setChecked(True)
+
     # ===========================
     # STEP_KW_CLASSIFICATION
     # ===========================
