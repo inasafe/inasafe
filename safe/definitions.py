@@ -203,7 +203,7 @@ hazard_generic = {
 
 hazard_earthquake = {
     'key': 'earthquake',
-    'name': tr('earthquake'),
+    'name': tr('Earthquake'),
     'description': tr(
         'An <b>earthquake</b> describes the sudden violent shaking of the '
         'ground that occurs as a result of volcanic activity or movement '
