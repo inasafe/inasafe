@@ -22,6 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 import logging
 
+# noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
 from qgis.core import (
@@ -31,7 +32,7 @@ from qgis.core import (
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe.impact_statistics.aggregator import Aggregator
-from safe.common.exceptions import ReadLayerError, ZeroImpactException
+from safe.common.exceptions import ZeroImpactException
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
     get_postprocessor_human_name)
@@ -43,7 +44,6 @@ from safe.common.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
     InvalidLayerError,
-    InsufficientParametersError,
     CallGDALError,
     NoFeaturesInExtentError,
     InvalidProjectionError,
@@ -513,7 +513,7 @@ class Analysis(object):
                 user_extent_enabled = (
                     self.user_extent is not None and
                     self.user_extent_crs is not None)
-                if self.clip_to_viewport or user_extent_enabled:
+                if user_extent_enabled:
                     # Get intersection between exposure and analysis extent
                     geo_extent = bbox_intersection(
                         exposure_geoextent, analysis_geoextent)
@@ -705,6 +705,7 @@ class Analysis(object):
             # KeyError is for when ['postprocessors'] is unavailable
             pass
 
+        # noinspection PyTypeChecker
         self.send_static_message(message)
 
         # Find out what the usable extent and cell size are
@@ -793,6 +794,7 @@ class Analysis(object):
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
+        # noinspection PyTypeChecker
         self.send_dynamic_message(message)
         try:
             clipped_hazard = clip_layer(
@@ -812,6 +814,7 @@ class Analysis(object):
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
+        # noinspection PyTypeChecker
         self.send_dynamic_message(message)
 
         clipped_exposure = clip_layer(
@@ -961,6 +964,7 @@ class Analysis(object):
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
+        # noinspection PyTypeChecker
         self.send_dynamic_message(message)
 
         try:
@@ -993,6 +997,7 @@ class Analysis(object):
                 'Check that your impact function thresholds do not '
                 'exclude all features unintentionally.'))
             report.add(check_list)
+            # noinspection PyTypeChecker
             self.send_static_message(report)
             self.send_analysis_done_signal()
             return

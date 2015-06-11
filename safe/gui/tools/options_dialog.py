@@ -298,6 +298,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.dock.read_settings()
         self.close()
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolKeywordCachePath_clicked(self):
         """Auto-connect slot activated when cache file tool button is clicked.
@@ -310,6 +311,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(file_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolUserDirectoryPath_clicked(self):
         """Auto-connect slot activated when user directory tool button is
@@ -323,6 +325,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             QtGui.QFileDialog.ShowDirsOnly)
         self.leUserDirectoryPath.setText(dir_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolNorthArrowPath_clicked(self):
         """Auto-connect slot activated when north arrow tool button is clicked.
@@ -336,6 +339,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         if file_name != '':
             self.leNorthArrowPath.setText(file_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolOrganisationLogoPath_clicked(self):
         """Auto-connect slot activated when logo file tool button is clicked.
@@ -349,6 +353,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         if file_name != '':
             self.leOrganisationLogoPath.setText(file_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolReportTemplatePath_clicked(self):
         """Auto-connect slot activated when report file tool button is clicked.

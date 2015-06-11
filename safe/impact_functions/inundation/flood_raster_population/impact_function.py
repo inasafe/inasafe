@@ -126,6 +126,7 @@ class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
                         'lo': thresholds[i],
                         'val': format_int(val)})
                 else:
+                    # all other classes show lower/upper range
                     s = tr(
                         'People in %(lo).1f m to %(hi).1f m of water: '
                         '%(val)s') % {
@@ -281,7 +282,7 @@ class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
 
         # Create raster object and return
         raster = Raster(
-            impact,
+            impact,  # The last class
             projection=hazard_layer.get_projection(),
             geotransform=hazard_layer.get_geotransform(),
             name=tr('Population which %s') % (

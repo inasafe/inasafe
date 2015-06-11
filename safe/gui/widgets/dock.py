@@ -154,6 +154,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.extent = Extent(self.iface)
         self.composer = None
         self.composition = None
+        self.map_canvas = None
 
         # Flag used to prevent recursion and allow bulk loads of layers to
         # trigger a single event only
@@ -168,6 +169,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.zoom_to_impact_flag = None
         self.hide_exposure_flag = None
         self.clip_hard = None
+        self.map_canvas = None
         self.show_intermediate_layers = None
         self.developer_mode = None
         self.organisation_logo_path = None
@@ -478,6 +480,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'inasafe/north_arrow_path', default_north_arrow_path())
 
         if invalid_path_flag:
+            # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE %s' % get_version()),
                 self.tr(
@@ -490,6 +493,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # RM: this is a fix for nonexistent organization logo or zero height
         if logo_not_exist:
+            # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE %s' % get_version()),
                 self.tr(
@@ -499,6 +503,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.organisation_logo_path
                 ), QtGui.QMessageBox.Ok)
         if invalid_logo_size:
+            # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
                 self,
                 self.tr('InaSAFE %s' % get_version()),
@@ -690,7 +695,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type layer: QgsMapLayer
 
         :param destination: The new filename of the layer.
-        :type str
+        :type destination: str
 
         """
 
@@ -702,6 +707,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         destination_keywords = "%s.keywords" % destination_basename
         destination_xml = "%s.xml" % destination_basename
 
+        # noinspection PyBroadException,PyBroadException
         try:
             # Keywords
             if os.path.isfile(source_keywords):
@@ -1023,6 +1029,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         hazard_keywords = self.keyword_io.read_keywords(hazard_layer)
         # We need to add the layer type to the returned keywords
         if hazard_layer.type() == QgsMapLayer.VectorLayer:
+            # noinspection PyTypeChecker
             hazard_keywords['layer_geometry'] = vector_geometry_string(
                 hazard_layer)
         elif hazard_layer.type() == QgsMapLayer.RasterLayer:
@@ -1032,6 +1039,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
         # We need to add the layer type to the returned keywords
         if exposure_layer.type() == QgsMapLayer.VectorLayer:
+            # noinspection PyTypeChecker
             exposure_keywords['layer_geometry'] = vector_geometry_string(
                 exposure_layer)
         elif exposure_layer.type() == QgsMapLayer.RasterLayer:
@@ -1189,6 +1197,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'aggregation. Please launch keyword wizard to assign keywords '
                 'in this layer.'
             )
+            # noinspection PyCallByClass
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
             context = self.tr(
                 'A problem was encountered because the aggregation layer '
@@ -1262,6 +1271,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def prepare_analysis(self):
         """Create analysis as a representation of current situation of dock."""
         analysis = Analysis()
+        analysis.map_canvas = self.iface.mapCanvas()
+
         # Layers
         analysis.hazard_layer = self.get_hazard_layer()
         analysis.exposure_layer = self.get_exposure_layer()
@@ -1326,6 +1337,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # message.add(m.Heading(self.tr('View processing log as HTML'),
             # **INFO_STYLE))
             # message.add(m.Link('file://%s' % self.wvResults.log_path))
+            # noinspection PyTypeChecker
             self.show_static_message(message)
             self.wvResults.impact_path = impact_path
 
@@ -1479,6 +1491,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             report.add(keywords['postprocessing_report'])
         report.add(impact_attribution(keywords))
         self.pbnPrint.setEnabled(True)
+        # noinspection PyTypeChecker
         self.show_static_message(report)
         # also hide the question and show the show question button
         self.pbnShowQuestion.setVisible(True)
@@ -1516,6 +1529,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         report.add(keywords_list)
         self.pbnPrint.setEnabled(False)
+        # noinspection PyTypeChecker
         self.show_static_message(report)
 
     def show_no_keywords_message(self):
@@ -1542,6 +1556,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 ' icon in the toolbar.'))
         report.add(context)
         self.pbnPrint.setEnabled(False)
+        # noinspection PyTypeChecker
         self.show_static_message(report)
 
     @pyqtSlot('QgsMapLayer')
@@ -1640,8 +1655,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 break
 
     def print_map(self):
-        """Open impact report dialog that used to tune report when print map
-            button pressed."""
+        """Open impact report dialog used to tune report when printing."""
         # Check if selected layer is valid
         impact_layer = self.iface.activeLayer()
         if impact_layer is None:
@@ -1656,6 +1670,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Open Impact Report Dialog
         print_dialog = ImpactReportDialog(self.iface)
         if not print_dialog.exec_() == QtGui.QDialog.Accepted:
+            # noinspection PyTypeChecker
             self.show_dynamic_message(
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
@@ -1695,6 +1710,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         create_pdf_flag = print_dialog.create_pdf
 
         # Instantiate and prepare Report
+        # noinspection PyTypeChecker
         self.show_dynamic_message(
             m.Message(
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
@@ -1776,6 +1792,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         output_path = str(output_path)
 
         if output_path is None or output_path == '':
+            # noinspection PyTypeChecker
             self.show_dynamic_message(
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
@@ -1807,6 +1824,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(map_pdf_path))
 
+            # noinspection PyTypeChecker
             self.show_dynamic_message(status)
         except TemplateLoadingError, e:
             self.show_error_message(get_error_message(e))
@@ -1994,6 +2012,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             be a rectangle for the analysis extent (if valid) or None.
         :rtype: (bool, QgisRectangle)
         """
+
         try:
             # Temporary only, for checking the user extent
             analysis = self.prepare_analysis()

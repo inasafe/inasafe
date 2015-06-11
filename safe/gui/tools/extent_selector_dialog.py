@@ -391,8 +391,8 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
         Every bookmark are reprojected to mapcanvas crs.
         """
-
         # Connect to the QGIS sqlite database and check if the table exists.
+        # noinspection PyArgumentList
         db_file_path = QgsApplication.qgisUserDbFilePath()
         db = sqlite3.connect(db_file_path)
         cursor = db.cursor()
