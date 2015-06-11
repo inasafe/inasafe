@@ -302,9 +302,9 @@ step_kw_subcategory = 2
 step_kw_hazard_category = 3
 step_kw_layermode = 4
 step_kw_unit = 5
-step_kw_field = 6
-step_kw_resample = 7
-step_kw_classification = 8
+step_kw_classification = 6
+step_kw_field = 7
+step_kw_resample = 8
 step_kw_classify = 9
 step_kw_extrakeywords = 10
 step_kw_aggregation = 11
@@ -1132,6 +1132,80 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.auto_select_one_item(self.lstUnits)
 
     # ===========================
+    # STEP_KW_CLASSIFICATION
+    # ===========================
+
+    def on_lstClassifications_itemSelectionChanged(self):
+        """Update classification description label and unlock the Next button.
+
+        .. note:: This is an automatic Qt slot
+           executed when the field selection changes.
+        """
+        self.lstFields.clear()
+        self.treeClasses.clear()
+        classification = self.selected_classification()
+        # Exit if no selection
+        if not classification:
+            return
+        # Set description label
+        self.lblDescribeClassification.setText(classification["description"])
+        # Enable the next button
+        self.pbnNext.setEnabled(True)
+
+    def selected_classification(self):
+        """Obtain the classification selected by user.
+
+        :returns: Metadata of the selected classification.
+        :rtype: dict, None
+        """
+        item = self.lstClassifications.currentItem()
+        try:
+            # pylint: disable=eval-used
+            return eval(item.data(QtCore.Qt.UserRole))
+            # pylint: enable=eval-used
+        except (AttributeError, NameError):
+            return None
+
+    def set_widgets_step_kw_classification(self):
+        """Set widgets on the Classification tab."""
+        self.lstFields.clear()
+        self.treeClasses.clear()
+        category = self.selected_category()['key']
+        subcategory = self.selected_subcategory()['key']
+        self.lstClassifications.clear()
+        self.lblDescribeClassification.setText('')
+        self.lblSelectClassification.setText(
+            classification_question % (subcategory, category))
+        classifications = self.classifications_for_layer()
+        for classification in classifications:
+            if not isinstance(classification, dict):
+                # pylint: disable=eval-used
+                classification = eval('definitions.%s' % classification)
+                # pylint: enable=eval-used
+            item = QListWidgetItem(classification['name'],
+                                   self.lstClassifications)
+            item.setData(QtCore.Qt.UserRole, unicode(classification))
+            self.lstClassifications.addItem(item)
+
+        # Set values based on existing keywords (if already assigned)
+        geom = 'raster' if is_raster_layer(self.layer) else 'vector'
+        key = '%s_%s_classification' % (geom, self.selected_category()['key'])
+        classification_keyword = self.get_existing_keyword(key)
+        if classification_keyword:
+            classifications = []
+            for index in xrange(self.lstClassifications.count()):
+                item = self.lstClassifications.item(index)
+                # pylint: disable=eval-used
+                classification = eval(item.data(QtCore.Qt.UserRole))
+                # pylint: enable=eval-used
+                classifications.append(classification['key'])
+            if classification_keyword in classifications:
+                self.lstClassifications.setCurrentRow(
+                    classifications.index(classification_keyword))
+
+        self.auto_select_one_item(self.lstClassifications)
+
+    # ===========================
     # STEP_KW_FIELD
     # ===========================
 
@@ -1142,7 +1216,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the field selection changes.
         """
-        self.lstClassifications.clear()
         self.treeClasses.clear()
         field = self.selected_field()
         # Exit if no selection
@@ -1177,7 +1250,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_kw_field(self):
         """Set widgets on the Field tab."""
-        self.lstClassifications.clear()
+        self.treeClasses.clear()
         category = self.selected_category()
         subcategory = self.selected_subcategory()
         unit = self.selected_unit()
@@ -1264,76 +1337,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Set value based on existing keyword (if already assigned)
         if self.get_existing_keyword('allow_resample') is False:
             self.chkAllowResample.setChecked(True)
-
-    # ===========================
-    # STEP_KW_CLASSIFICATION
-    # ===========================
-
-    def on_lstClassifications_itemSelectionChanged(self):
-        """Update classification description label and unlock the Next button.
-
-        .. note:: This is an automatic Qt slot
-           executed when the field selection changes.
-        """
-        classification = self.selected_classification()
-        # Exit if no selection
-        if not classification:
-            return
-        # Set description label
-        self.lblDescribeClassification.setText(classification["description"])
-        # Enable the next button
-        self.pbnNext.setEnabled(True)
-
-    def selected_classification(self):
-        """Obtain the classification selected by user.
-
-        :returns: Metadata of the selected classification.
-        :rtype: dict, None
-        """
-        item = self.lstClassifications.currentItem()
-        try:
-            # pylint: disable=eval-used
-            return eval(item.data(QtCore.Qt.UserRole))
-            # pylint: enable=eval-used
-        except (AttributeError, NameError):
-            return None
-
-    def set_widgets_step_kw_classification(self):
-        """Set widgets on the Classification tab."""
-        category = self.selected_category()['key']
-        subcategory = self.selected_subcategory()['key']
-        self.lstClassifications.clear()
-        self.lblDescribeClassification.setText('')
-        self.lblSelectClassification.setText(
-            classification_question % (subcategory, category))
-        classifications = self.classifications_for_layer()
-        for classification in classifications:
-            if not isinstance(classification, dict):
-                # pylint: disable=eval-used
-                classification = eval('definitions.%s' % classification)
-                # pylint: enable=eval-used
-            item = QListWidgetItem(classification['name'],
-                                   self.lstClassifications)
-            item.setData(QtCore.Qt.UserRole, unicode(classification))
-            self.lstClassifications.addItem(item)
-
-        # Set values based on existing keywords (if already assigned)
-        geom = 'raster' if is_raster_layer(self.layer) else 'vector'
-        key = '%s_%s_classification' % (geom, self.selected_category()['key'])
-        classification_keyword = self.get_existing_keyword(key)
-        if classification_keyword:
-            classifications = []
-            for index in xrange(self.lstClassifications.count()):
-                item = self.lstClassifications.item(index)
-                # pylint: disable=eval-used
-                classification = eval(item.data(QtCore.Qt.UserRole))
-                # pylint: enable=eval-used
-                classifications.append(classification['key'])
-            if classification_keyword in classifications:
-                self.lstClassifications.setCurrentRow(
-                    classifications.index(classification_keyword))
-
-        self.auto_select_one_item(self.lstClassifications)
 
     # ===========================
     # STEP_KW_CLASSIFY
@@ -3675,12 +3678,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_kw_layermode()
         elif new_step == step_kw_unit:
             self.set_widgets_step_kw_unit()
+        elif new_step == step_kw_classification:
+            self.set_widgets_step_kw_classification()
         elif new_step == step_kw_field:
             self.set_widgets_step_kw_field()
         elif new_step == step_kw_resample:
             self.set_widgets_step_kw_resample()
-        elif new_step == step_kw_classification:
-            self.set_widgets_step_kw_classification()
         elif new_step == step_kw_classify:
             self.set_widgets_step_kw_classify()
         elif new_step == step_kw_extrakeywords:
@@ -3807,12 +3810,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             return bool(self.selected_layermode())
         if step == step_kw_unit:
             return bool(self.selected_unit())
+        if step == step_kw_classification:
+            return bool(self.selected_classification())
         if step == step_kw_field:
             return bool(self.selected_field() or not self.lstFields.count())
         if step == step_kw_resample:
             return True
-        if step == step_kw_classification:
-            return bool(self.selected_classification())
         if step == step_kw_classify:
             # Allow to not classify any values
             return True
@@ -3895,16 +3898,19 @@ class WizardDialog(QDialog, FORM_CLASS):
             new_step = step_kw_layermode
         elif current_step == step_kw_layermode:
             if self.selected_layermode() == layer_mode_classified:
-                if is_raster_layer(self.layer):
-                    new_step = step_kw_classification  # CLASSIFIED RASTER
-                elif is_point_layer(self.layer) \
+                if is_point_layer(self.layer) \
                         and self.selected_category() == layer_purpose_hazard:
                     # Skip FIELD and CLASSIFICATION for point volcanos
-                    new_step = step_kw_extrakeywords  # CLASSIFIED POINT
+                    new_step = step_kw_extrakeywords
+                elif self.classifications_for_layer():
+                    new_step = step_kw_classification
+                elif is_raster_layer(self.layer):
+                    new_step = step_kw_extrakeywords
                 else:
-                    new_step = step_kw_field  # CLASSIFIED LINE | POLY
+                    new_step = step_kw_field
             else:
-                new_step = step_kw_unit  # CONTINUOUS DATA, ALL GEOMETRIES
+                # CONTINUOUS DATA, ALL GEOMETRIES
+                new_step = step_kw_unit
         elif current_step == step_kw_unit:
             if is_raster_layer(self.layer):
                 if self.selected_category() == layer_purpose_exposure:
@@ -3915,17 +3921,21 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 # Currently not used, as we don't have continuous vectors
                 new_step = step_kw_field
+        elif current_step == step_kw_classification:
+            if is_raster_layer(self.layer):
+                new_step = step_kw_classify
+            else:
+                new_step = step_kw_field
         elif current_step == step_kw_field:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
-            elif self.selected_layermode() == layer_mode_classified:
-                new_step = step_kw_classification
+            elif (self.selected_layermode() == layer_mode_classified
+                    and self.classifications_for_layer()):
+                new_step = step_kw_classify
             else:
                 new_step = step_kw_extrakeywords
         elif current_step == step_kw_resample:
             new_step = step_kw_extrakeywords
-        elif current_step == step_kw_classification:
-            new_step = step_kw_classify
         elif current_step == step_kw_classify:
             new_step = step_kw_extrakeywords
         elif current_step == step_kw_extrakeywords:
@@ -4020,12 +4030,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             raise Exception('Unexpected number of steps')
 
-        # Skip the classification and classify tabs if no classifications
-        # available:
-        if (new_step == step_kw_classification and not
-                self.classifications_for_layer()):
-            new_step = step_kw_extrakeywords
-
         # Skip the extra_keywords tab if no extra keywords available:
         if (new_step == step_kw_extrakeywords and not
                 self.additional_keywords_for_the_layer()):
@@ -4060,25 +4064,24 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_subcategory
         elif current_step == step_kw_unit:
             new_step = step_kw_layermode
+        elif current_step == step_kw_classification:
+                new_step = step_kw_layermode
         elif current_step == step_kw_field:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_category
             elif self.selected_layermode() == layer_mode_continuous:
                 new_step = step_kw_unit
+            elif self.classifications_for_layer():
+                new_step = step_kw_classification
             else:
                 new_step = step_kw_layermode
         elif current_step == step_kw_resample:
-            if self.selected_layermode() == layer_mode_continuous:
-                new_step = step_kw_unit
-            else:
-                new_step = step_kw_layermode
-        elif current_step == step_kw_classification:
-            if self.selected_field():
-                new_step = step_kw_field
-            else:
-                new_step = step_kw_layermode
+            new_step = step_kw_unit
         elif current_step == step_kw_classify:
-            new_step = step_kw_classification
+            if is_raster_layer(self.layer):
+                new_step = step_kw_classification
+            else:
+                new_step = step_kw_field
         elif current_step == step_kw_aggregation:
             new_step = step_kw_field
         elif current_step == step_kw_extrakeywords:
