@@ -212,7 +212,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             continuous_hazards_units_for_layer(
                 'tsunami', 'raster', 'continuous', 'single_event')
         print [x['key'] for x in continuous_hazards_units]
-        expected = [unit_metres, unit_feet]
+        expected = [unit_metres, unit_feet, unit_generic]
         self.assertItemsEqual(continuous_hazards_units, expected)
 
     def test_available_hazards(self):
@@ -224,7 +224,10 @@ class TestImpactFunctionManager(unittest.TestCase):
         print [x['key'] for x in result]
         expected_result = [hazard_flood,
                            hazard_tsunami,
-                           hazard_earthquake]
+                           hazard_earthquake,
+                           hazard_generic,
+                           hazard_volcanic_ash,
+                           hazard_volcano]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 

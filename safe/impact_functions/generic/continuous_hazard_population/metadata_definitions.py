@@ -95,7 +95,8 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
                     'hazard_categories': [
-                        hazard_category_multiple_event
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
                     ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [unit_generic],

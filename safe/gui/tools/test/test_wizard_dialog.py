@@ -1469,7 +1469,7 @@ class WizardDialogTest(unittest.TestCase):
 
         expected_test_layer_count = 2
 
-        expected_hazards_count = 3
+        expected_hazards_count = 5
         expected_exposures_count = 3
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 2
