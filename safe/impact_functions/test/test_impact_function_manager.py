@@ -29,6 +29,8 @@ from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
+
+
 from safe.definitions import (
     layer_purpose_hazard,
     layer_purpose_exposure,
@@ -45,12 +47,14 @@ from safe.definitions import (
     exposure_population,
     count_exposure_unit,
     density_exposure_unit,
-    continuous_hazard_unit_all,
     layer_mode_continuous,
     layer_geometry_raster,
     layer_mode_classified,
     layer_geometry_polygon,
-    structure_class_field
+    structure_class_field,
+    unit_metres,
+    unit_generic,
+    unit_feet
 )
 
 
@@ -207,7 +211,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         continuous_hazards_units = impact_function_manager.\
             continuous_hazards_units_for_layer(
                 'tsunami', 'raster', 'continuous', 'single_event')
-        expected = continuous_hazard_unit_all
+        print [x['key'] for x in continuous_hazards_units]
+        expected = [unit_generic, unit_metres, unit_feet]
         self.assertItemsEqual(continuous_hazards_units, expected)
 
     def test_available_hazards(self):

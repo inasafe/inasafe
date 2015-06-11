@@ -1039,10 +1039,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Find out which functions can be used with these layers
         try:
-            from pprint import pprint
-            pprint(hazard_keywords)
-            pprint(exposure_keywords)
-            print '---------------------------------------------------------'
+            # from pprint import pprint
+            # pprint(hazard_keywords)
+            # pprint(exposure_keywords)
+            # print '---------------------------------------------------------'
             impact_functions = self.impact_function_manager.filter_by_keywords(
                 hazard_keywords, exposure_keywords)
             # Populate the hazard combo with the available functions

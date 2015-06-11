@@ -27,7 +27,7 @@ from safe.definitions import (
     hazard_all,
     hazard_category_multiple_event,
     exposure_structure,
-    all_raster_hazard_classes,
+    generic_raster_hazard_classes,
     hazard_category_single_event,
     structure_class_field
 )
@@ -107,7 +107,9 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': all_raster_hazard_classes,
+                    'raster_hazard_classifications': [
+                        generic_raster_hazard_classes
+                    ],
                     'additional_keywords': []
                 },
                 'exposure': {
