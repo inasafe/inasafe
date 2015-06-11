@@ -80,26 +80,19 @@ layer_mode_continuous = {
     'key': 'continuous',
     'name': tr('Continuous'),
     'description': tr(
-        '<b>Continuous</b> data can be hazard or exposure data '
-        'where the values are are either integers or decimal numbers '
-        'resulting a continuously varying phenomenon. For example flood depth '
-        'is a continuous value from 0 to the maximum reported depth during a '
-        'flood. Raster data is considered to be continuous by default and you '
-        'should explicitly indicate that it is classified if each cell in the '
-        'raster represents a discrete class (e.g. low depth = 1, medium depth '
-        '= 2, high depth = 3).'),
+        '<b>Continuous</b> data can be hazard or exposure data where the '
+        'values are are either integers or decimal numbers resulting a '
+        'continuously varying phenomenon. For example flood depth is a '
+        'continuous value from 0 to the maximum reported depth during a '
+        'flood.')
 }
 layer_mode_classified = {
     'key': 'classified',
     'name': tr('Classified'),
     'description': tr(
-        '<b>Classified</b> data can be hazard data where the '
-        'values have been classified or coded such that each raster cell '
-        'represents a discrete class. For example if the raster represents '
-        'a flood layer, permissible cell values may be 1, 2, 3 where 1 '
-        'represents low water, 2 represents medium inundation and 3 '
-        'represents high inundation.'
-    ),
+        '<b>Classified</b> data can be hazard data where the values have been '
+        'classified or coded. For raster layer, the value lies on the raster '
+        'cell, while for vector layer the values lies on one of the field.')
 }
 
 layer_mode = {
