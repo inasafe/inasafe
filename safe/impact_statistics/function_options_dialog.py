@@ -29,16 +29,18 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtGui import (
     QGroupBox,
     QLineEdit,
+    QLabel,
     QDialog,
     QCheckBox,
-    QGridLayout,
     QWidget,
     QScrollArea,
     QVBoxLayout)
 
+from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
+from safe_extras.parameters.parameter_exceptions import CollectionLengthError
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.resource_parameter_widget import ResourceParameterWidget
 
@@ -125,6 +127,14 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             else:
                 self.build_widget(scroll_layout, key, value)
 
+        if scroll_layout.count() == 0:
+            # Rizky: in case empty impact function, let's show some messages
+            label = QLabel()
+            message = tr('This impact function does not have any options to '
+                         'configure')
+            label.setText(message)
+            scroll_layout.addWidget(label)
+
         scroll_layout.addStretch()
 
     def build_minimum_needs_form(self, parameters):
@@ -134,15 +144,23 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         :type parameters: list
         """
         # create minimum needs tab
-        tab = QWidget()
-        form_layout = QGridLayout(tab)
-        form_layout.setContentsMargins(0, 0, 0, 0)
+        scroll_layout = QVBoxLayout()
+        scroll_widget = QWidget()
+        scroll_widget.setLayout(scroll_layout)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(scroll_widget)
+        main_layout = QVBoxLayout()
+        main_layout.addWidget(scroll)
+        main_widget = QWidget()
+        main_widget.setLayout(main_layout)
+
         extra_parameters = [(ResourceParameter, ResourceParameterWidget)]
         parameter_container = ParameterContainer(
             parameters=parameters, extra_parameters=extra_parameters)
         parameter_container.setup_ui()
-        form_layout.addWidget(parameter_container)
-        self.tabWidget.addTab(tab, self.tr('Minimum Needs'))
+        scroll_layout.addWidget(parameter_container)
+        self.tabWidget.addTab(main_widget, self.tr('Minimum Needs'))
         self.tabWidget.tabBar().setVisible(True)
         self.values['minimum needs'] = parameter_container.get_parameters
 
@@ -204,6 +222,11 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
             # default tab's layout
             parameter_container = ParameterContainer(parameter_value)
             parameter_container.setup_ui(must_scroll=False)
+            for w in [w.widget() for w in
+                      parameter_container.get_parameter_widgets()]:
+                # Rizky : assign error handler for
+                # InputListParameterWidget
+                w.add_row_error_handler = self.explain_errors
             form_layout.addWidget(parameter_container)
             # bind parameter
             input_values = parameter_container.get_parameters
@@ -258,9 +281,13 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         try:
             self._result = self.parse_input(self.values)
             self.done(QDialog.Accepted)
-        except (SyntaxError, ValueError) as ex:
-            text = self.tr("Unexpected error: %s " % ex)
-            self.lblErrorMessage.setText(text)
+        except (SyntaxError, ValueError, TypeError,
+                CollectionLengthError) as ex:
+            self.explain_errors(ex)
+
+    def explain_errors(self, exception):
+        text = self.tr("Unexpected error: %s " % exception)
+        self.lblErrorMessage.setText(text)
 
     def result(self):
         """Get the result."""

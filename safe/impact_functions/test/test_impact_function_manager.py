@@ -49,8 +49,6 @@ from safe.definitions import (
     density_exposure_unit,
     layer_mode_continuous,
     layer_geometry_raster,
-    layer_mode_classified,
-    layer_geometry_polygon,
     structure_class_field,
     unit_metres,
     unit_generic,

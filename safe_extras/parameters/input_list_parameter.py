@@ -45,12 +45,3 @@ class InputListParameter(CollectionParameter):
         self.check_types(value)
         self.check_length(value)
         self._value = value
-
-    def __len__(self):
-        return self._value.__len__()
-
-    def __getitem__(self, i):
-        return self._value[i]
-
-    def __setitem__(self, i, val):
-        return self._value.__setitem__(i, val)

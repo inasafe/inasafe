@@ -10,12 +10,11 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
-from safe.impact_functions.generic.classified_raster_building\
-    .parameter_definitions import (
-        low_hazard_class, medium_hazard_class, high_hazard_class)
-from safe.utilities.i18n import tr
 
+from safe.common.utilities import OrderedDict
+from safe.impact_functions.generic.parameter_definitions import \
+    categorical_hazards
+from safe.utilities.i18n import tr
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
@@ -28,7 +27,6 @@ from safe.definitions import (
     hazard_category_multiple_event,
     exposure_structure,
     generic_raster_hazard_classes,
-    hazard_category_single_event,
     structure_class_field
 )
 
@@ -125,9 +123,7 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
             },
             # parameters
             'parameters': OrderedDict([
-                ('low_hazard_class', low_hazard_class()),
-                ('medium_hazard_class', medium_hazard_class()),
-                ('high_hazard_class', high_hazard_class()),
+                ('Categorical hazards', categorical_hazards()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))

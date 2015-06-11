@@ -141,9 +141,10 @@ class ClassifiedRasterHazardPopulationFunction(ClassifiedRHContinuousRE):
 
         # The 3 classes
         # TODO (3.2): shouldnt these be defined in keywords rather? TS
-        low_class = self.parameters['low_hazard_class'].value
-        medium_class = self.parameters['medium_hazard_class'].value
-        high_class = self.parameters['high_hazard_class'].value
+        categorical_hazards = self.parameters['Categorical hazards'].value
+        low_class = categorical_hazards[0].value
+        medium_class = categorical_hazards[1].value
+        high_class = categorical_hazards[2].value
 
         # The classes must be different to each other
         unique_classes_flag = all(

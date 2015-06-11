@@ -42,6 +42,7 @@ class TestTsunamiEvacuationRaster(unittest.TestCase):
         exposure_layer = read_layer(clipped_exposure.source())
 
         # Let's set the extent to the hazard extent
+        function.parameters['thresholds'].value = [0.7, 0.8, 0.9]
         function.hazard = hazard_layer
         function.exposure = exposure_layer
         function.run()
@@ -63,13 +64,13 @@ class TestTsunamiEvacuationRaster(unittest.TestCase):
 
         # #FIXME: This doesn't make sense due to clipping above. Update
         # clip_layers
-        expected_evacuated = 1300
+        expected_evacuated = 1200
         self.assertEqual(evacuated, expected_evacuated)
-        self.assertEqual(total_needs_weekly['Rice [kg]'], 3640)
-        self.assertEqual(total_needs_weekly['Family Kits'], 260)
-        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 22750)
-        self.assertEqual(total_needs_weekly['Clean Water [l]'], 87100)
-        self.assertEqual(total_needs_single['Toilets'], 65)
+        self.assertEqual(total_needs_weekly['Rice [kg]'], 3360)
+        self.assertEqual(total_needs_weekly['Family Kits'], 240)
+        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 21000)
+        self.assertEqual(total_needs_weekly['Clean Water [l]'], 80400)
+        self.assertEqual(total_needs_single['Toilets'], 60)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""

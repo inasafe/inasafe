@@ -149,6 +149,7 @@ class InputListParameterWidget(GenericParameterWidget):
             prev_value = self._value_cache[index]
             self._value_cache[index] = self._parameter.element_type(
                 item.text())
+            self.refresh_list()
         except ValueError:
             item.setText(str(prev_value))
             self.raise_invalid_type_exception()
