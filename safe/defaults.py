@@ -29,6 +29,7 @@ from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.group_parameter import GroupParameter
 from safe_extras.parameters.text_parameter import TextParameter
+from safe_extras.parameters.unit import Unit
 
 from safe.common.resource_parameter import ResourceParameter
 from safe.utilities.i18n import tr
@@ -183,10 +184,20 @@ def age_postprocessor():
         'Check this option if you wish to calculate age ratios breakdown on '
         'the affected population. '
     )
+    
+    unit_ratio = Unit()
+    unit_ratio.name = tr('ratio')
+    unit_ratio.plural = tr('ratios')
+    unit_ratio.abbreviation = tr('ratio')
+    unit_ratio.description = tr(
+        'Ratio represents a fraction of 1, so it ranges from 0 to 1.'
+    )
 
     youth_ratio = FloatParameter()
     youth_ratio.name = 'Youth ratio'
     youth_ratio.value = get_defaults('YOUTH_RATIO')
+    youth_ratio.unit = unit_ratio
+    youth_ratio.allowed_units = [unit_ratio]
     youth_ratio.help_text = tr('Youth ratio value.')
     youth_ratio.description = tr(
         'Youth ratio defines what proportion of the population have not yet '
@@ -200,6 +211,8 @@ def age_postprocessor():
     adult_ratio = FloatParameter()
     adult_ratio.name = 'Adult ratio'
     adult_ratio.value = get_defaults('ADULT_RATIO')
+    adult_ratio.unit = unit_ratio
+    adult_ratio.allowed_units = [unit_ratio]
     adult_ratio.help_text = tr('Adult ratio value.')
     adult_ratio.description = tr(
         'Adult ratio defines what proportion of the population have '
@@ -214,6 +227,8 @@ def age_postprocessor():
     elderly_ratio = FloatParameter()
     elderly_ratio.name = 'Elderly ratio'
     elderly_ratio.value = get_defaults('ELDERLY_RATIO')
+    elderly_ratio.unit = unit_ratio
+    elderly_ratio.allowed_units = [unit_ratio]
     elderly_ratio.help_text = tr('Elderly ratio value.')
     elderly_ratio.description = tr(
         'Elderly ratio defines what proportion of the population have '

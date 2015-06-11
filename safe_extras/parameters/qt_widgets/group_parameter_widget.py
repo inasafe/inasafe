@@ -8,6 +8,7 @@ __copyright__ = 'lana.pcfre@gmail.com'
 
 from PyQt4.QtGui import (
     QVBoxLayout, QCheckBox)
+
 from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
 

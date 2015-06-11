@@ -1,4 +1,5 @@
 # coding=utf-8
+from safe.impact_functions.unit_definitions import parameter_unit_metres
 
 __author__ = 'lucernae'
 __date__ = '11/04/15'
@@ -34,6 +35,9 @@ def min_threshold():
     field.is_required = True
     field.precision = 2
     field.value = 1.0  # default value
+    unit_metres = parameter_unit_metres()
+    field.unit = unit_metres
+    field.allowed_units = [unit_metres]
     field.help_text = tr(
         'Minimum value of hazard considered as inundated.')
     field.description = tr(
@@ -52,6 +56,9 @@ def max_threshold():
     field.is_required = True
     field.precision = 2
     field.value = sys.float_info.max  # default value
+    unit_metres = parameter_unit_metres()
+    field.unit = unit_metres
+    field.allowed_units = [unit_metres]
     field.help_text = tr(
         'Maximum value of hazard considered as inundated.')
     field.description = tr(

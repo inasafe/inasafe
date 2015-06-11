@@ -1,4 +1,5 @@
 # coding=utf-8
+from safe.impact_functions.unit_definitions import parameter_unit_mmi
 from safe.utilities.i18n import tr
 from safe_extras.parameters.integer_parameter import IntegerParameter
 
@@ -18,6 +19,9 @@ def low_threshold():
     field.value = 6
     field.minimum_allowed_value = 1
     field.maximum_allowed_value = 10
+    unit_mmi = parameter_unit_mmi()
+    field.unit = unit_mmi
+    field.allowed_units = [unit_mmi]
     field.help_text = tr('Low Hazard class threshold.')
     field.description = tr(
         'The threshold of hazard categorized as Low Hazard class in MMI '
@@ -37,6 +41,9 @@ def medium_threshold():
     field.value = 7
     field.minimum_allowed_value = 1
     field.maximum_allowed_value = 10
+    unit_mmi = parameter_unit_mmi()
+    field.unit = unit_mmi
+    field.allowed_units = [unit_mmi]
     field.help_text = tr('Medium Hazard class threshold.')
     field.description = tr(
         'The threshold of hazard categorized as Medium Hazard class in MMI '
@@ -56,6 +63,9 @@ def high_threshold():
     field.value = 8
     field.minimum_allowed_value = 1
     field.maximum_allowed_value = 10
+    unit_mmi = parameter_unit_mmi()
+    field.unit = unit_mmi
+    field.allowed_units = [unit_mmi]
     field.help_text = tr('High Hazard class threshold.')
     field.description = tr(
         'The threshold of hazard categorized as High Hazard class in MMI '

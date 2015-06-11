@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.unit_definitions import parameter_unit_percentage
 from safe.utilities.i18n import tr
 
 from safe_extras.parameters.string_parameter import StringParameter
@@ -28,6 +29,9 @@ def evacuation_percentage():
     field.minimum_allowed_value = 0
     field.value = 1
     field.precision = 2
+    unit_percentage = parameter_unit_percentage()
+    field.unit = unit_percentage
+    field.allowed_units = [unit_percentage]
     field.help_text = tr('Percentage value of affected population.')
     field.description = tr(
         'The value in percentage of the population that '

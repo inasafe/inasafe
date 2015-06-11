@@ -15,10 +15,10 @@ from PyQt4.QtGui import (
     QSizePolicy,
     QColor,
     QLabel,
-    QMessageBox)
+    QMessageBox,
+    QFrame)
+
 from qt_widgets.qt4_parameter_factory import Qt4ParameterFactory
-from PyQt4.QtCore import Qt
-from parameter_exceptions import RequiredException, InvalidValidationException
 
 
 class ParameterContainer(QWidget, object):
@@ -58,6 +58,7 @@ class ParameterContainer(QWidget, object):
         self.widget = QWidget()
         self.description_label = QLabel()
         self.scroll_area = QScrollArea()
+        self.group_frame = QFrame()
         self.qt4_parameter_factory = Qt4ParameterFactory()
         self.main_layout = QGridLayout()
 
@@ -140,48 +141,38 @@ class ParameterContainer(QWidget, object):
         # Label for description
         self.description_label.setText(self.description_text)
 
+        self.group_frame.setLineWidth(1)
+        self.group_frame.setFrameStyle(QFrame.Panel)
+        vlayout = QVBoxLayout()
+        vlayout.setContentsMargins(0, 0, 0, 0)
+        vlayout.setSpacing(0)
+        self.group_frame.setLayout(vlayout)
+
         if must_scroll:
+            vlayout.addWidget(self.scroll_area)
             self.scroll_area.setWidgetResizable(True)
             self.scroll_area.setWidget(self.widget)
-
-            # Main layout of the container
-            if self.description_text:
-                self.main_layout.addWidget(self.description_label)
-            self.main_layout.setContentsMargins(0, 0, 0, 0)
-            self.setLayout(self.main_layout)
-
-            self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
-
-            if not isinstance(self.parameters, list):
-                parameters = [self.parameters]
-            else:
-                parameters = self.parameters
-
-            if len(parameters) == 0:
-                self.set_empty_parameters()
-                return
-
-            self.main_layout.addWidget(self.scroll_area)
-
         else:
-            # Main layout of the container
-            if self.description_text:
-                self.main_layout.addWidget(self.description_label)
-            self.main_layout.setContentsMargins(0, 0, 0, 0)
-            self.setLayout(self.main_layout)
+            vlayout.addWidget(self.widget)
 
-            self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
+        # Main layout of the container
+        if self.description_text:
+            self.main_layout.addWidget(self.description_label)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(self.main_layout)
 
-            if not isinstance(self.parameters, list):
-                parameters = [self.parameters]
-            else:
-                parameters = self.parameters
+        self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.MinimumExpanding)
 
-            if len(parameters) == 0:
-                self.set_empty_parameters()
-                return
+        if not isinstance(self.parameters, list):
+            parameters = [self.parameters]
+        else:
+            parameters = self.parameters
 
-            self.main_layout.addWidget(self.widget)
+        if len(parameters) == 0:
+            self.set_empty_parameters()
+            return
+
+        self.main_layout.addWidget(self.group_frame)
 
         self.qt4_parameter_factory = Qt4ParameterFactory()
         if self.extra_parameters is not None:

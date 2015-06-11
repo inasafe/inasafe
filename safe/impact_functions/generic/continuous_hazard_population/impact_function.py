@@ -131,7 +131,7 @@ class ContinuousHazardPopulationFunction(ContinuousRHContinuousRE):
         self.prepare()
 
         thresholds = [
-            p.value for p in self.parameters['Catfegorical thresholds']]
+            p.value for p in self.parameters['Categorical thresholds'].value]
 
         # Thresholds must contain 3 thresholds
         if len(thresholds) != 3:

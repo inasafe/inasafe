@@ -10,6 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.unit_definitions import parameter_unit_metres
+
 __author__ = 'lucernae'
 
 from safe_extras.parameters.float_parameter import FloatParameter
@@ -23,10 +25,13 @@ def threshold():
     :rtype: list[FloatParameter]
     """
     field = FloatParameter()
-    field.name = 'Thresholds [m]'
+    field.name = tr('Thresholds [m]')
     field.is_required = True
     field.precision = 2
     field.value = 1.0  # default value
+    unit_metres = parameter_unit_metres()
+    field.unit = unit_metres
+    field.allowed_units = [unit_metres]
     field.help_text = tr(
         'Threshold value to categorize inundated area.')
     field.description = tr(

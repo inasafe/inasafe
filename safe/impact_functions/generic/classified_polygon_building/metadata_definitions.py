@@ -22,8 +22,7 @@ from safe.definitions import (
     hazard_category_single_event,
     structure_class_field
 )
-from safe.impact_functions.generic.classified_polygon_building.\
-    parameter_definitions import \
+from safe.impact_functions.generic.parameter_definitions import \
     hazard_zone_attribute_field
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata

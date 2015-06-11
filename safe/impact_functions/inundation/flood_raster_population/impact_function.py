@@ -27,7 +27,8 @@ from safe.common.utilities import (
     create_label,
     verify,
     get_thousand_separator)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    get_needs_provenance_value
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -105,7 +106,7 @@ class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
             tr('Total population: %s') % format_int(total),
             tr('People need evacuation if flood levels exceed %(eps).1f m') %
             {'eps': thresholds[-1]},
-            tr('Minimum needs are defined in BNPB regulation 7/2008'),
+            tr(get_needs_provenance_value(self.parameters)),
             tr('All values are rounded up to the nearest integer in order to '
                'avoid representing human lives as fractions.'),
             tr('All affected people are assumed to be evacuated.')])

@@ -1,19 +1,31 @@
 # coding=utf-8
+from safe.impact_functions.generic.utilities import increasing_validator
 from safe.utilities.i18n import tr
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.group_parameter import GroupParameter
-from safe_extras.parameters.input_list_parameter import InputListParameter
 
 __author__ = 'lucernae'
 __date__ = '13/04/15'
 
 
 def categorical_thresholds():
-    return [
+
+    field = GroupParameter()
+    field.must_scroll = False
+    field.name = 'Categorical thresholds'
+    field.is_required = True
+    field.help_text = tr('Hazard classes thresholds.')
+    field.description = tr(
+        'Describe the upper thresholds of each hazard class. Each threshold '
+        'should be greater value than previous one.')
+    field.value = [
         low_hazard_class(),
         medium_hazard_class(),
         high_hazard_class()
     ]
+
+    field.custom_validator = increasing_validator
+    return field
 
 
 def low_hazard_class():
@@ -25,7 +37,7 @@ def low_hazard_class():
     field = FloatParameter()
     field.name = 'Low Hazard Threshold'
     field.element_type = float
-    field.value = 1.0
+    field.value = 0.34
     field.help_text = tr('Low Hazard class thresholds.')
     field.description = tr(
         'Threshold value of hazard categorized as Low Hazard class.')
@@ -41,7 +53,7 @@ def medium_hazard_class():
     field = FloatParameter()
     field.name = 'Medium Hazard Threshold'
     field.element_type = float
-    field.value = 2.0
+    field.value = 0.67
     field.help_text = tr('Medium Hazard class threshold.')
     field.description = tr(
         'Threshold value of hazard categorized as Medium Hazard class. It '
@@ -58,7 +70,7 @@ def high_hazard_class():
     field = FloatParameter()
     field.name = 'High Hazard Threshold'
     field.element_type = float
-    field.value = 3.0
+    field.value = 1.0
     field.help_text = tr('High Hazard class threshold.')
     field.description = tr(
         'Threshold value of hazard categorized as High Hazard class. It '

@@ -49,7 +49,7 @@ class NumericParameterWidget(GenericParameterWidget):
             for allowed_unit in self._parameter.allowed_units:
                 description += '<li>'
                 description += '<b>' + allowed_unit.name + '</b>: '
-                description += allowed_unit.description
+                description += allowed_unit.description or ''
                 description += '</li>'
             description += '</ul>'
         self._description_label.setText(description)

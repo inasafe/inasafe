@@ -28,10 +28,18 @@ def threshold():
     field.expected_type = list
     field.ordering = InputListParameter.AscendingOrder
     field.minimum_item_count = 1
-    field.maximum_item_count = 3
+    # Rizky: no reason for the number below. It can be any values to describe
+    # maximum item count. Feel free to change it when necessary.
+    # PS: it was my birthdate
+    field.maximum_item_count = 19
     field.value = [1.0]  # default value
     field.help_text = tr(
         'Thresholds value to categorize inundated area.')
     field.description = tr(
-        'Up to 3 thresholds in meter can be set in an increasing order.')
+        'Up to three thresholds (in meters) can be set in an increasing '
+        'order. The impact function will report the number of people per '
+        'threshold you define here. Specify the upper bound for each '
+        'threshold. The lower bound of the first threshold shall be zero. '
+        'People in water depths above the maximum threshold will be '
+        'classified as needing evacuation.')
     return field
