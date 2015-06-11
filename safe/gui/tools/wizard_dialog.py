@@ -90,6 +90,7 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     InaSAFEError)
 from safe.common.resource_parameter import ResourceParameter
+from safe_extras.parameters.group_parameter import GroupParameter
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
@@ -3431,6 +3432,19 @@ class WizardDialog(QDialog, FORM_CLASS):
                     val = i.serialize()['value']
                     if isinstance(val, bool):
                         val = val and self.tr('Enabled') or self.tr('Disabled')
+                    if isinstance(i, GroupParameter):
+                        # val is a list od *Parameter instances
+                        jresult = []
+                        for j in val:
+                            jname = j.serialize()['name']
+                            jval = j.serialize()['value']
+                            if isinstance(jval, bool):
+                                jval = (jval and self.tr('Enabled')
+                                        or self.tr('Disabled'))
+                            else:
+                                jval = unicode(jval)
+                            jresult += [u'%s: %s' % (jname, jval)]
+                        val = u', '.join(jresult)
                     else:
                         val = unicode(val)
                     if pp.index(i) == 0:
@@ -3457,32 +3471,28 @@ class WizardDialog(QDialog, FORM_CLASS):
         for p in self.if_params:
             if isinstance(self.if_params[p], OrderedDict):
                 subparams = [
-                    u'<b>%s</b>: %s' % (
+                    u'<tr><td>%s &nbsp;</td><td>%s</td></tr>' % (
                         unicode(pp),
                         format_postprocessor(self.if_params[p][pp]))
                     for pp in self.if_params[p]
                     ]
-                subparams = u'<br/>'.join(subparams)
+                if subparams:
+                    subparams = ''.join(subparams)
+                    subparams = '<table border="0">%s</table>' % subparams
             elif isinstance(self.if_params[p], list) and p == 'minimum needs':
-                subparam_list = []
+                subparams = ''
                 for need in self.if_params[p]:
                     # concatenate all ResourceParameter
-                    if not isinstance(need, ResourceParameter):
-                        continue
-                    if isinstance(need.value, float):
-                        subparam = u'%s %.0f' % (need.name, need.value)
-                    else:
-                        subparam = u'%s %s' % (need.name, unicode(need.value))
-                    if need.unit and need.unit.abbreviation:
-                        subparam += need.unit.abbreviation
-                    subparam_list += [subparam]
-                subparams = ', '.join(subparam_list)
-                for need in self.if_params[p]:
-                    # now append all non-ResourceParameter needs
-                    if not isinstance(need, ResourceParameter):
-                        subparams += u'<br/>%s: %s' % (need.name,
-                                                       unicode(need.value))
-                if not subparams:
+                    name = unicode(need.serialize()['name'])
+                    val = unicode(need.serialize()['value'])
+                    if isinstance(need, ResourceParameter):
+                        if need.unit and need.unit.abbreviation:
+                            val += need.unit.abbreviation
+                    subparams += u'<tr><td>%s &nbsp;</td><td>%s</td></tr>' % (
+                        name, val)
+                if subparams:
+                    subparams = '<table border="0">%s</table>' % subparams
+                else:
                     subparams = 'Not applicable'
             elif isinstance(self.if_params[p], list):
                 subparams = ', '.join([unicode(i) for i in self.if_params[p]])
