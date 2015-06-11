@@ -89,6 +89,7 @@ from safe.common.exceptions import (
     InvalidParameterError,
     UnsupportedProviderError,
     InaSAFEError)
+from safe.common.resource_parameter import ResourceParameter
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
@@ -3411,20 +3412,34 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_summary(self):
         """Set widgets on the Summary tab"""
-        def format_postprocessor(val):
+        def format_postprocessor(pp):
             """ make nested OrderedDicts more flat"""
-            if isinstance(val, OrderedDict):
+            if isinstance(pp, OrderedDict):
                 result = []
-                for v in val:
-                    if isinstance(val[v], OrderedDict):
+                for v in pp:
+                    if isinstance(pp[v], OrderedDict):
                         # omit the v key and unpack the dict directly
-                        result += [u'%s: %s' % (unicode(k), unicode(val[v][k]))
-                                   for k in val[v]]
+                        result += [u'%s: %s' % (unicode(k), unicode(pp[v][k]))
+                                   for k in pp[v]]
                     else:
-                        result += [u'%s: %s' % (unicode(v), unicode(val[v]))]
+                        result += [u'%s: %s' % (unicode(v), unicode(pp[v]))]
+                return u', '.join(result)
+            elif isinstance(pp, list):
+                result = []
+                for i in pp:
+                    name = i.serialize()['name']
+                    val = i.serialize()['value']
+                    if isinstance(val, bool):
+                        val = val and self.tr('Enabled') or self.tr('Disabled')
+                    else:
+                        val = unicode(val)
+                    if pp.index(i) == 0:
+                        result += [val]
+                    else:
+                        result += [u'%s: %s' % (name, val)]
                 return u', '.join(result)
             else:
-                return unicode(val)
+                return unicode(pp)
 
         self.if_params = self.parameter_dialog.parse_input(
             self.parameter_dialog.values)
@@ -3449,19 +3464,30 @@ class WizardDialog(QDialog, FORM_CLASS):
                     ]
                 subparams = u'<br/>'.join(subparams)
             elif isinstance(self.if_params[p], list) and p == 'minimum needs':
-                subparams = ''
+                subparam_list = []
                 for need in self.if_params[p]:
-                    subparams += '%s %.0f' % (need.name, need.value)
-                    if need.unit.abbreviation:
-                        subparams += need.unit.abbreviation
-                    if need != self.if_params[p][-1]:
-                        subparams += ', '
+                    # concatenate all ResourceParameter
+                    if not isinstance(need, ResourceParameter):
+                        continue
+                    if isinstance(need.value, float):
+                        subparam = u'%s %.0f' % (need.name, need.value)
+                    else:
+                        subparam = u'%s %s' % (need.name, unicode(need.value))
+                    if need.unit and need.unit.abbreviation:
+                        subparam += need.unit.abbreviation
+                    subparam_list += [subparam]
+                subparams = ', '.join(subparam_list)
+                for need in self.if_params[p]:
+                    # now append all non-ResourceParameter needs
+                    if not isinstance(need, ResourceParameter):
+                        subparams += u'<br/>%s: %s' % (need.name,
+                                                       unicode(need.value))
                 if not subparams:
                     subparams = 'Not applicable'
             elif isinstance(self.if_params[p], list):
                 subparams = ', '.join([unicode(i) for i in self.if_params[p]])
             else:
-                subparams = unicode(self.if_params[p])
+                subparams = unicode(self.if_params[p].serialize()['value'])
 
             params += [(p, subparams)]
 
