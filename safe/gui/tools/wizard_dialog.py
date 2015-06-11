@@ -3929,8 +3929,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         elif current_step == step_kw_field:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
-            elif (self.selected_layermode() == layer_mode_classified
-                    and self.classifications_for_layer()):
+            elif self.selected_layermode() == layer_mode_classified and \
+                    self.classifications_for_layer():
                 new_step = step_kw_classify
             else:
                 new_step = step_kw_extrakeywords
@@ -4065,7 +4065,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         elif current_step == step_kw_unit:
             new_step = step_kw_layermode
         elif current_step == step_kw_classification:
-                new_step = step_kw_layermode
+            new_step = step_kw_layermode
         elif current_step == step_kw_field:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_category
