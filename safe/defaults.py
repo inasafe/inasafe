@@ -184,7 +184,7 @@ def age_postprocessor():
         'Check this option if you wish to calculate age ratios breakdown on '
         'the affected population. '
     )
-    
+
     unit_ratio = Unit()
     unit_ratio.name = tr('ratio')
     unit_ratio.plural = tr('ratios')

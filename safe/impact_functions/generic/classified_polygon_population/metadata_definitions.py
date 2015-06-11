@@ -20,7 +20,6 @@ from safe.definitions import (
     hazard_category_multiple_event,
     exposure_population,
     generic_vector_hazard_classes,
-    hazard_category_single_event,
     count_exposure_unit,
 )
 from safe.defaults import (

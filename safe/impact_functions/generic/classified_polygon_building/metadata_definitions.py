@@ -19,7 +19,6 @@ from safe.definitions import (
     hazard_category_multiple_event,
     exposure_structure,
     generic_vector_hazard_classes,
-    hazard_category_single_event,
     structure_class_field
 )
 from safe.impact_functions.generic.parameter_definitions import \

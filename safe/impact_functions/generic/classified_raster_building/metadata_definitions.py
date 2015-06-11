@@ -27,7 +27,6 @@ from safe.definitions import (
     hazard_category_multiple_event,
     exposure_structure,
     generic_raster_hazard_classes,
-    hazard_category_single_event,
     structure_class_field
 )
 

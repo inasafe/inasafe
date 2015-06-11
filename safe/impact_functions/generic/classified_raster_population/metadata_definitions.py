@@ -35,7 +35,6 @@ from safe.definitions import (
     count_exposure_unit,
     generic_raster_hazard_classes,
     exposure_population,
-    hazard_category_single_event,
     density_exposure_unit
 )
 from safe.impact_functions.generic.parameter_definitions import \

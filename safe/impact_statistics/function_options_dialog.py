@@ -32,7 +32,6 @@ from PyQt4.QtGui import (
     QLabel,
     QDialog,
     QCheckBox,
-    QGridLayout,
     QWidget,
     QScrollArea,
     QVBoxLayout)
