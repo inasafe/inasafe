@@ -35,12 +35,10 @@ from safe.definitions import (
     count_exposure_unit,
     generic_raster_hazard_classes,
     exposure_population,
-    hazard_category_single_event,
     density_exposure_unit
 )
-from safe.impact_functions.generic.classified_raster_population\
-    .parameter_definitions import \
-    low_hazard_class, medium_hazard_class, high_hazard_class
+from safe.impact_functions.generic.parameter_definitions import \
+    categorical_hazards
 
 
 class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
@@ -123,9 +121,7 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('low_hazard_class', low_hazard_class()),
-                ('medium_hazard_class', medium_hazard_class()),
-                ('high_hazard_class', high_hazard_class()),
+                ('Categorical hazards', categorical_hazards()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

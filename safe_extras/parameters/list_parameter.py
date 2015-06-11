@@ -79,12 +79,3 @@ class ListParameter(CollectionParameter):
             if val not in self.options_list:
                 message = message % val
                 raise ValueNotAllowedException(message)
-
-    def __len__(self):
-        return self._value.__len__()
-
-    def __getitem__(self, i):
-        return self._value[i]
-
-    def __setitem__(self, i, val):
-        return self._value.__setitem__(i, val)
