@@ -1261,7 +1261,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                                          category['name'], layer_mode['name']))
 
         # Set value based on existing keyword (if already assigned)
-        if self.get_existing_keyword('allow_resample') == False:
+        if self.get_existing_keyword('allow_resample') is False:
             self.chkAllowResample.setChecked(True)
 
     # ===========================
