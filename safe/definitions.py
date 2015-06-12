@@ -40,8 +40,8 @@ layer_purpose_hazard = {
     'name': tr('Hazard'),
     'description': tr(
         'A <b>hazard</b> layer represents '
-        'something that will impact on the people, infrastructure or land cover '
-        'in an area. For example; flood, earthquake, tsunami and '
+        'something that will impact on the people, infrastructure or  '
+        'land cover in an area. For example; flood, earthquake, tsunami and '
         'volcano are all examples of hazards.')
 }
 layer_purpose_exposure = {
@@ -81,10 +81,11 @@ layer_mode_continuous = {
     'name': tr('Continuous'),
     'description': tr(
         '<b>Continuous</b> data can be used in raster hazard or exposure data '
-        'where the values in the data are are either integers or decimal numbers '
-        'representing a continuously varying phenomenon. For example flood depth '
-        'is a continuous value from 0 to the maximum reported depth during a '
-        'flood. Raster data is considered to be continuous by default and you '
+        'where the values in the data are are either integers or decimal  '
+        'values representing a continuously varying phenomenon. '
+        'For example flood depth is a continuous value from 0 to the maximum '
+        'reported depth during a flood. '
+        'Raster data is considered to be continuous by default and you '
         'should explicitly indicate that it is classified if each cell in the '
         'raster represents a discrete class (e.g. low depth = 1, medium depth '
         '= 2, high depth = 3).'),
@@ -96,14 +97,15 @@ layer_mode_classified = {
         '<b>Classified</b> data can be used for either hazard or exposure data '
         'and can be used for both raster and vector layer types where the '
         'attribute values represent a classified or coded value. '
-        'For example, classified values in a flood raster data set might represent '
-        'discrete classes where a value of 1 might represent the low inundation class, '
-        'a value of 2 might represent the medium inundation class and a value of 3 '
-        'might represent the high inundation class.'
+        'For example, classified values in a flood raster data set might '
+        'represent discrete classes where a value of 1 might represent the '
+        'low inundation class, a value of 2 might represent the medium '
+        'inundation class and a value of 3 might represent the '
+        'high inundation class.'
         'Classified values in a vector Volcano data set might represent '
-        'discrete clases where a value of I might represent low volcanic hazard, '
-        'a value of II might represent medium volcanic hazard and a value of III '
-        ' might represent a high volcanic hazard. '
+        'discrete clases where a value of I might represent low volcanic '
+        'hazard, a value of II might represent medium volcanic hazard and '
+        'a value of III  might represent a high volcanic hazard. '
     ),
 }
 
@@ -181,10 +183,10 @@ hazard_category_single_event = {
     'key': 'single_event',
     'name': tr('Single Event'),
     'description': tr(
-        'A <b>single hazard event/<b> can be based on either a specific event that has '
-        'happen in the past, for example a flood like Jakarta 2013, or a possible '
-        'event such as the tsunami that results from an earthquake near Bima that might '
-        'happen in the future.')
+        'A <b>single hazard event/<b> can be based on either a specific event '
+        'that has happened in the past, for example a flood like Jakarta 2013, '
+        'or a possible event such as the tsunami that results from an '
+        'earthquake near Bima that might happen in the future.')
 }
 
 hazard_category_multiple_event = {
@@ -192,12 +194,12 @@ hazard_category_multiple_event = {
     'name': tr('Multiple Event'),
     'description': tr(
         'A <b>multiple hazard event/<b> data can be based on historical '
-        'observations '
-        'such as a hazard map of all observed volcanic deposits around a volcano. '
-        'This type of hazard data shows those locations that might be impacted by a '
-        'volcanic eruption in the future '.
-        'Another example might be a probabalistic hazard model that shows the likelihood '
-        'of a magnitude 7 earthquake happening in the next 50 years.')
+        'observations such as a hazard map of all observed volcanic '
+        ' deposits around a volcano. '
+        'This type of hazard data shows those locations that might be impacted '
+        'by a volcanic eruption in the future .'
+        'Another example might be a probabilistic hazard model that shows the '
+        'likelihood of a magnitude 7 earthquake happening in the next 50 yrs.')
 }
 
 hazard_category = {
@@ -218,9 +220,9 @@ hazard_generic = {
     'key': 'generic',
     'name': tr('Generic'),
     'description': tr(
-        'A <b>generic hazard/<b> can be used for any type of hazard where the data '
-        'have been classified or generalised. For example: earthquake, flood, '
-        'volcano, or tsunami.')
+        'A <b>generic hazard/<b> can be used for any type of hazard where the  '
+        'data have been classified or generalised. For example: earthquake, '
+        'flood, volcano, or tsunami.')
 }
 
 hazard_earthquake = {
@@ -396,8 +398,8 @@ unit_kilogram_per_meter_square = {
     'description': tr(
         '<b>Kilograms per square metre/<b> is a metric unit of measure where '
         'the weight is specified according to area.  This unit is relevant '
-        'for hazards such as volcanic ash.),
-    }
+        'for hazards such as volcanic ash.')
+}
 
 unit_kilometres = {
     'key': 'kilometres',
@@ -504,7 +506,7 @@ volcano_vector_hazard_classes = {
         {
             'key': 'high',
             'name': tr('high'),
-            'description': tr('The location that has the highest hazard class.'),
+            'description': tr('The highest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
             'numeric_default_min': 0,
             'numeric_default_max': (3 - small_number),
@@ -513,7 +515,7 @@ volcano_vector_hazard_classes = {
         {
             'key': 'medium',
             'name': tr('medium'),
-            'description': tr('The location that has the medium hazard class.'),
+            'description': tr('The medium hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
             'numeric_default_min': 3,
             'numeric_default_max': (5 - small_number),
@@ -522,7 +524,7 @@ volcano_vector_hazard_classes = {
         {
             'key': 'low',
             'name': tr('low'),
-            'description': tr('The location that has lowest hazard class.'),
+            'description': tr('The lowest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
             'numeric_default_min': 5,
             'numeric_default_max': 10,
@@ -619,7 +621,7 @@ generic_raster_hazard_classes = {
         {
             'key': 'high',
             'name': tr('high'),
-            'description': tr('The location with the highest hazard classification.'),
+            'description': tr('The highest hazard classification.'),
             'numeric_default_min': 3,
             'numeric_default_max': 3,
             'optional': False
@@ -627,7 +629,7 @@ generic_raster_hazard_classes = {
         {
             'key': 'medium',
             'name': tr('medium'),
-            'description': tr('The location that has medium hazard classification.'),
+            'description': tr('The medium hazard classification.'),
             'numeric_default_min': 2,
             'numeric_default_max': 2,
             'optional': False
@@ -635,7 +637,7 @@ generic_raster_hazard_classes = {
         {
             'key': 'low',
             'name': tr('low'),
-            'description': tr('The location that has lowest hazard classification.'),
+            'description': tr('The lowest hazard classification.'),
             'numeric_default_min': 1,
             'numeric_default_max': 1,
             'optional': False
