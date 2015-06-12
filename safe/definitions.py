@@ -40,7 +40,7 @@ layer_purpose_hazard = {
     'name': tr('Hazard'),
     'description': tr(
         'A <b>hazard</b> layer represents '
-        'something that will impact on the people or infrastructure '
+        'something that will impact on the people, infrastructure or land cover '
         'in an area. For example; flood, earthquake, tsunami and '
         'volcano are all examples of hazards.')
 }
@@ -49,7 +49,7 @@ layer_purpose_exposure = {
     'name': tr('Exposure'),
     'description': tr(
         'An <b>exposure</b> layer represents '
-        'people, property or infrastructure that may be affected '
+        'people, property, infrastructure or land cover that may be affected '
         'in the event of a flood, earthquake, volcano etc.')
 }
 layer_purpose_aggregation = {
@@ -57,8 +57,8 @@ layer_purpose_aggregation = {
     'name': tr('Aggregation'),
     'description': tr(
         'An <b>aggregation</b> layer represents '
-        'regions that can be used to summarise analysis results. For '
-        'example, we might summarise the affected people after '
+        'regions that can be used to summarise impact analysis results. '
+        'For example, we might summarise the affected people after '
         'a flood according to administration boundaries.')
 }
 
@@ -80,27 +80,39 @@ layer_mode_continuous = {
     'key': 'continuous',
     'name': tr('Continuous'),
     'description': tr(
-        '<b>Continuous</b> data can be hazard or exposure data where the '
-        'values are are either integers or decimal numbers resulting a '
-        'continuously varying phenomenon. For example flood depth is a '
-        'continuous value from 0 to the maximum reported depth during a '
-        'flood.')
+        '<b>Continuous</b> data can be used in raster hazard or exposure data '
+        'where the values in the data are are either integers or decimal numbers '
+        'representing a continuously varying phenomenon. For example flood depth '
+        'is a continuous value from 0 to the maximum reported depth during a '
+        'flood. Raster data is considered to be continuous by default and you '
+        'should explicitly indicate that it is classified if each cell in the '
+        'raster represents a discrete class (e.g. low depth = 1, medium depth '
+        '= 2, high depth = 3).'),
 }
 layer_mode_classified = {
     'key': 'classified',
     'name': tr('Classified'),
     'description': tr(
-        '<b>Classified</b> data can be hazard data where the values have been '
-        'classified or coded. For raster layer, the value lies on the raster '
-        'cell, while for vector layer the values lies on one of the field.')
+        '<b>Classified</b> data can be used for either hazard or exposure data '
+        'and can be used for both raster and vector layer types where the '
+        'attribute values represent a classified or coded value. '
+        'For example, classified values in a flood raster data set might represent '
+        'discrete classes where a value of 1 might represent the low inundation class, '
+        'a value of 2 might represent the medium inundation class and a value of 3 '
+        'might represent the high inundation class.'
+        'Classified values in a vector Volcano data set might represent '
+        'discrete clases where a value of I might represent low volcanic hazard, '
+        'a value of II might represent medium volcanic hazard and a value of III '
+        ' might represent a high volcanic hazard. '
+    ),
 }
 
 layer_mode = {
     'key': 'layer_mode',
     'name': tr('Layer Mode'),
     'description': tr(
-        'The mode of the layer describe the type of the value of the layer '
-        'data. It can be continuous or classified'),
+        'The mode of the layer describes the type of data value in the layer. '
+        'It can be continuous or classified'),
     'types': [
         layer_mode_continuous,
         layer_mode_classified
@@ -144,17 +156,18 @@ layer_geometry_raster = {
     'key': 'raster',
     'name': tr('Raster'),
     'description': tr(
-        'A raster data type is, in essence, any type of digital image '
-        'represented by reducible and enlargeable grids.')
+        'A raster data layer consists of a matrix of cells organised into '
+        'rows and columns. The value in the cells represents information such '
+        'as a flood depth value or a hazard class. ')
 }
 
 layer_geometry = {
     'key': 'layer_geometry',
     'name': tr('Layer Geometry'),
     'description': tr(
-        'This describes which format of the layer, and the type of it. There '
+        'This describes the format and type of the layer. There '
         'are four possible values : raster, point, line, and polygon. The '
-        'last three values are implicitly included in vector format.'),
+        'last three values are implicitly included in the vector format.'),
     'types': [
         layer_geometry_raster,
         layer_geometry_point,
@@ -168,23 +181,32 @@ hazard_category_single_event = {
     'key': 'single_event',
     'name': tr('Single Event'),
     'description': tr(
-        'TBA')
+        'A <b>single hazard event/<b> can be based on either a specific event that has '
+        'happen in the past, for example a flood like Jakarta 2013, or a possible '
+        'event such as the tsunami that results from an earthquake near Bima that might '
+        'happen in the future.')
 }
 
 hazard_category_multiple_event = {
     'key': 'multiple_event',
     'name': tr('Multiple Event'),
     'description': tr(
-        'TBA')
+        'A <b>multiple hazard event/<b> data can be based on historical '
+        'observations '
+        'such as a hazard map of all observed volcanic deposits around a volcano. '
+        'This type of hazard data shows those locations that might be impacted by a '
+        'volcanic eruption in the future '.
+        'Another example might be a probabalistic hazard model that shows the likelihood '
+        'of a magnitude 7 earthquake happening in the next 50 years.')
 }
 
 hazard_category = {
     'key': 'hazard_category',
     'name': tr('Hazard Category'),
     'description': tr(
-        'This describes which category of the hazard that represented by the '
-        'layer. There are two possible values for this attribute, hazard '
-        'scenario and hazard zone.'),
+        'This describes the category of the hazard that is represented by the '
+        'layer. There are two possible values for this attribute, single event '
+        'and multiple event.'),
     'types': [
         hazard_category_single_event,
         hazard_category_multiple_event
@@ -196,7 +218,7 @@ hazard_generic = {
     'key': 'generic',
     'name': tr('Generic'),
     'description': tr(
-        'A generic hazard can be used for any type of hazard where the data '
+        'A <b>generic hazard/<b> can be used for any type of hazard where the data '
         'have been classified or generalised. For example: earthquake, flood, '
         'volcano, or tsunami.')
 }
@@ -224,7 +246,7 @@ hazard_flood = {
 
 hazard_volcanic_ash = {
     'key': 'volcanic_ash',
-    'name': tr('Volcanic ash'),
+    'name': tr('Volcanic Ash'),
     'description': tr(
         '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
         'and volcanic glass, created during volcanic eruptions, less than '
@@ -285,14 +307,21 @@ exposure_land_cover = {
     'key': 'land_cover',
     'name': tr('Land Cover'),
     'description': tr(
-        'TBA')
+        'The <b>land cover/<b> exposure data describes features on '
+        'the surface of the earth that might be exposed to a particular '
+        ' hazard. This might include crops, forest and urban areas. ')
 }
 
 exposure_people_in_building = {
     'key': 'people_in_building',
-    'name': tr('People in Building'),
+    'name': tr('People in Buildings'),
     'description': tr(
-        'TBA')
+        'The <b>people in buildings/<b> exposure data is an experimental '
+        'data set that assigns the population of a specific administrative '
+        'area to the buildings with a residential function in that area.'
+        'The process of assigning people to buildings assumes that all people '
+        'and buildings in the area are mapped. There are no InaSAFE impact '
+        'functions that use this exposure data yet.')
 }
 
 exposure_population = {
@@ -365,22 +394,24 @@ unit_kilogram_per_meter_square = {
     'key': 'kilogram_per_meter_square',
     'name': tr('Kg/m2'),
     'description': tr(
-        'TBA'),
+        '<b>Kilograms per square metre/<b> is a metric unit of measure where '
+        'the weight is specified according to area.  This unit is relevant '
+        'for hazards such as volcanic ash.),
     }
 
 unit_kilometres = {
     'key': 'kilometres',
     'name': tr('Kilometres'),
     'description': tr(
-        '<b>kilometres</b> are a metric unit of measure. There are 1000 '
-        'metres in 1 kilometer (km).'),
+        '<b>Kilometres</b> are a metric unit of measure. There are 1000 '
+        'metres in 1 kilometre (km).'),
     }
 
 unit_metres = {
     'key': 'metres',
     'name': tr('Metres'),
     'description': tr(
-        '<b>metres</b> are a metric unit of measure. There are 100 '
+        '<b>Metres</b> are a metric unit of measure. There are 100 '
         'centimetres in 1 meter.'),
 }
 
@@ -388,8 +419,8 @@ unit_millimetres = {
     'key': 'millimetres',
     'name': tr('Millimetres'),
     'description': tr(
-        '<b>metres</b> are a metric unit of measure. There are 1000 '
-        'millimetres in 1 meter.'),
+        '<b>Millimetres</b> are a metric unit of measure. There are 1000 '
+        'millimetres in 1 metre.'),
     }
 
 unit_mmi = {
@@ -405,7 +436,7 @@ continuous_hazard_unit = {
     'key': 'continuous_hazard_unit',
     'name': tr('Continuous Hazard Unit'),
     'description': tr(
-        'Continuous hazard unit represent unit for continuous layer mode.'),
+        'Continuous hazard unit is the unit used for continuous layer mode.'),
     'types': [
         unit_feet,
         unit_generic,
@@ -424,8 +455,8 @@ generic_vector_hazard_classes = {
     'key': 'generic_vector_hazard_classes',
     'name': tr('Generic classes'),
     'description': tr(
-        'This is a ternary description for an area. The area is either '
-        'has <b>low</b>, <b>medium</b>, or <b>high</b> impact from the '
+        'This is a ternary description for an area. The area may have either '
+        '<b>low</b>, <b>medium</b>, or <b>high</b> impact from the '
         'hazard.'),
     'default_attribute': 'affected',
     'default_class': 'high',  # unclassified value will go to this class
@@ -464,16 +495,16 @@ volcano_vector_hazard_classes = {
     'key': 'volcano_vector_hazard_classes',
     'name': tr('Volcano classes'),
     'description': tr(
-        'This is a ternary description for an area. The area is either '
-        'has <b>low</b>, <b>medium</b>, or <b>high</b> impact from the '
-        'volcano.'),
+        'This is a ternary description for an area. The area has either a '
+        '<b>low</b>, <b>medium</b>, or <b>high</b> classification for '
+        'volcano hazard.'),
     'default_attribute': 'affected',
     'default_class': 'high',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'high',
             'name': tr('high'),
-            'description': tr('The location that has highest impact.'),
+            'description': tr('The location that has the highest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
             'numeric_default_min': 0,
             'numeric_default_max': (3 - small_number),
@@ -482,7 +513,7 @@ volcano_vector_hazard_classes = {
         {
             'key': 'medium',
             'name': tr('medium'),
-            'description': tr('The location that has medium impact.'),
+            'description': tr('The location that has the medium hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
             'numeric_default_min': 3,
             'numeric_default_max': (5 - small_number),
@@ -491,7 +522,7 @@ volcano_vector_hazard_classes = {
         {
             'key': 'low',
             'name': tr('low'),
-            'description': tr('The location that has lowest impact.'),
+            'description': tr('The location that has lowest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
             'numeric_default_min': 5,
             'numeric_default_max': 10,
@@ -537,7 +568,7 @@ vector_hazard_classification = {
     'name': tr('Vector Hazard Classification'),
     'description': tr(
         'Vector Hazard Classification is a way to classify a value in one of '
-        'the attribute or field in vector layer.'),
+        'the attributes or fields in a vector layer.'),
     'types': [
         generic_vector_hazard_classes,
         volcano_vector_hazard_classes,
@@ -581,15 +612,14 @@ generic_raster_hazard_classes = {
     'key': 'generic_raster_hazard_classes',
     'name': tr('Generic classes'),
     'description': tr(
-        'This is a ternary description for an area. The area is either '
-        'has <b>low</b>, <b>medium</b>, or <b>high</b> impact from the '
-        'hazard.'),
+        'This is a ternary description for an area. The area is classified as '
+        'either a <b>low</b>, <b>medium</b>, or <b>high</b> hazard class.'),
     'default_class': 'high',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'high',
             'name': tr('high'),
-            'description': tr('The location that has highest impact.'),
+            'description': tr('The location with the highest hazard classification.'),
             'numeric_default_min': 3,
             'numeric_default_max': 3,
             'optional': False
@@ -597,7 +627,7 @@ generic_raster_hazard_classes = {
         {
             'key': 'medium',
             'name': tr('medium'),
-            'description': tr('The location that has medium impact.'),
+            'description': tr('The location that has medium hazard classification.'),
             'numeric_default_min': 2,
             'numeric_default_max': 2,
             'optional': False
@@ -605,7 +635,7 @@ generic_raster_hazard_classes = {
         {
             'key': 'low',
             'name': tr('low'),
-            'description': tr('The location that has lowest impact.'),
+            'description': tr('The location that has lowest hazard classification.'),
             'numeric_default_min': 1,
             'numeric_default_max': 1,
             'optional': False
@@ -646,8 +676,8 @@ raster_hazard_classification = {
     'key': 'raster_hazard_classification',
     'name': tr('Raster Hazard Classification'),
     'description': tr(
-        'Raster Hazard Classification is a way to classify a value in each '
-        'cell in raster layer.'),
+        'Raster Hazard Classification is a way to classify the cell values '
+        'in a raster layer.'),
     'types': [
         flood_raster_hazard_classes,
         generic_raster_hazard_classes,
@@ -688,13 +718,13 @@ exposure_unit = {
 structure_class_field = {
     'key': 'structure_class_field',
     'name': tr('Structure class field'),
-    'description': tr('Field where the structure type is located.')
+    'description': tr('Field where the structure type is defined.')
 }
 
 road_class_field = {
     'key': 'road_class_field',
     'name': tr('Road class field'),
-    'description': tr('Field where the road type is located.')
+    'description': tr('Field where the road type is defined.')
 }
 
 # Additional keywords
