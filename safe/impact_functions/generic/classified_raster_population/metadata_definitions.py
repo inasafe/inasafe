@@ -33,14 +33,12 @@ from safe.definitions import (
     hazard_all,
     hazard_category_multiple_event,
     count_exposure_unit,
-    all_raster_hazard_classes,
+    generic_raster_hazard_classes,
     exposure_population,
-    hazard_category_single_event,
     density_exposure_unit
 )
-from safe.impact_functions.generic.classified_raster_population\
-    .parameter_definitions import \
-    low_hazard_class, medium_hazard_class, high_hazard_class
+from safe.impact_functions.generic.parameter_definitions import \
+    categorical_hazards
 
 
 class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
@@ -103,12 +101,13 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_raster],
                     'hazard_categories': [
-                        hazard_category_multiple_event,
-                        hazard_category_single_event],
+                        hazard_category_multiple_event],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [],
-                    'raster_hazard_classifications': all_raster_hazard_classes,
+                    'raster_hazard_classifications': [
+                        generic_raster_hazard_classes
+                    ],
                     'additional_keywords': []
                 },
                 'exposure': {
@@ -122,9 +121,7 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                ('low_hazard_class', low_hazard_class()),
-                ('medium_hazard_class', medium_hazard_class()),
-                ('high_hazard_class', high_hazard_class()),
+                ('Categorical hazards', categorical_hazards()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

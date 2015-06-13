@@ -47,6 +47,7 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
+        function.parameters['thresholds'].value = [0.5, 0.7, 1.0]
         function.hazard = hazard_layer
         function.exposure = exposure_layer
         function.run()
