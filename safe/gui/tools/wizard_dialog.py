@@ -2327,9 +2327,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Set description label
         description = '<table border="0">'
         if "name" in imfunc.keys():
-            description += '<tr><td><b>Name</b>: </td><td>%s</td></tr>' % imfunc['name']
+            description += '<tr><td><b>Name</b>: </td><td>%s</td></tr>' % (
+                imfunc['name'])
         if "overview" in imfunc.keys():
-            description += '<tr><td><b>Overview</b>: </td><td>%s</td></tr>' % imfunc['overview']
+            description += '<tr><td><b>Overview</b>: </td><td>%s</td></tr>' % (
+                imfunc['overview'])
         description += '</table>'
 
         self.lblDescribeFunction.setText(description)
@@ -2656,7 +2658,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             if keywords.get('layer_mode') == layer_mode_classified['key']:
                 unit = self.tr('classified data')
             if unit:
-                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (self.tr('Unit'), unit)
+                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                    self.tr('Unit'), unit)
 
             label_text = """
                 <table border=0>
@@ -2928,7 +2931,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             if keywords.get('layer_mode') == layer_mode_classified['key']:
                 unit = self.tr('classified data')
             if unit:
-                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (self.tr('Unit'), unit)
+                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                    self.tr('Unit'), unit)
 
             desc = """
                 <table border=0>
