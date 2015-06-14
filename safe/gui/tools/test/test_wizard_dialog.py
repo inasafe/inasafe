@@ -955,7 +955,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_subcategories = [
             u'Earthquake',
             u'Flood',
-            u'Volcanic ash',
+            u'Volcanic Ash',
             u'Tsunami',
             u'Volcano',
             u'Generic']
@@ -1187,7 +1187,7 @@ class WizardDialogTest(unittest.TestCase):
             'Tsunami',
             'Earthquake',
             'Volcano',
-            'Volcanic ash',
+            'Volcanic Ash',
             'Generic']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
