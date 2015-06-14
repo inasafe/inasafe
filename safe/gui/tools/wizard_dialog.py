@@ -2325,11 +2325,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             return
 
         # Set description label
-        description = ""
+        description = '<table border="0">'
         if "name" in imfunc.keys():
-            description += "<b>Name</b>: %s<br/>" % imfunc['name']
+            description += '<tr><td><b>Name</b>: </td><td>%s</td></tr>' % imfunc['name']
         if "overview" in imfunc.keys():
-            description += "<b>Overview</b>: %s<br/>" % imfunc['overview']
+            description += '<tr><td><b>Overview</b>: </td><td>%s</td></tr>' % imfunc['overview']
+        description += '</table>'
 
         self.lblDescribeFunction.setText(description)
         # Enable the next button if anything selected
@@ -2642,11 +2643,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         if keywords:
             purpose = keywords.get('layer_purpose')
             if purpose == layer_purpose_hazard['key']:
-                subcategory = '<b>%s</b>: %s<br/>' % (
+                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                     self.tr('Hazard'), keywords.get(purpose))
                 unit = keywords.get('continuous_hazard_unit')
             elif purpose == layer_purpose_exposure['key']:
-                subcategory = '<b>%s</b>: %s<br/>' % (
+                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                     self.tr('Exposure'), keywords.get(purpose))
                 unit = keywords.get('exposure_unit')
             else:
@@ -2655,14 +2656,16 @@ class WizardDialog(QDialog, FORM_CLASS):
             if keywords.get('layer_mode') == layer_mode_classified['key']:
                 unit = self.tr('classified data')
             if unit:
-                unit = '<b>%s</b>: %s<br/>' % (self.tr('Unit'), unit)
+                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (self.tr('Unit'), unit)
 
             label_text = """
-                <b>Title</b>: %s<br/>
-                <b>Purpose</b>: %s<br/>
+                <table border=0>
+                <tr><td><b>Title</b>: </td><td>%s</td></tr>
+                <tr><td><b>Purpose</b>: </td><td>%s</td></tr>
                 %s
                 %s
-                <b>Source</b>: %s<br/><br/>
+                <tr><td><b>Source</b>: </td><td>%s</td></tr>
+                </table>
             """ % (keywords.get('title'),
                    keywords.get('layer_purpose'),
                    subcategory,
@@ -2912,11 +2915,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         if keywords:
             purpose = keywords.get('layer_purpose')
             if purpose == layer_purpose_hazard['key']:
-                subcategory = '<b>%s</b>: %s<br/>' % (
+                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                     self.tr('Hazard'), keywords.get(purpose))
                 unit = keywords.get('continuous_hazard_unit')
             elif purpose == layer_purpose_exposure['key']:
-                subcategory = '<b>%s</b>: %s<br/>' % (
+                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                     self.tr('Exposure'), keywords.get(purpose))
                 unit = keywords.get('exposure_unit')
             else:
@@ -2925,14 +2928,16 @@ class WizardDialog(QDialog, FORM_CLASS):
             if keywords.get('layer_mode') == layer_mode_classified['key']:
                 unit = self.tr('classified data')
             if unit:
-                unit = '<b>%s</b>: %s<br/>' % (self.tr('Unit'), unit)
+                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (self.tr('Unit'), unit)
 
             desc = """
-                <b>Title</b>: %s<br/>
-                <b>Purpose</b>: %s<br/>
+                <table border=0>
+                <tr><td><b>Title</b>: </td><td>%s</td></tr>
+                <tr><td><b>Purpose</b>: </td><td>%s</td></tr>
                 %s
                 %s
-                <b>Source</b>: %s<br/><br/>
+                <tr><td><b>Source</b>: </td><td>%s</td></tr>
+                </table>
             """ % (keywords.get('title'),
                    keywords.get('layer_purpose'),
                    subcategory,
