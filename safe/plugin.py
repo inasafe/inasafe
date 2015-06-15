@@ -75,6 +75,7 @@ class Plugin(object):
         self.action_minimum_needs = None
         self.action_global_minimum_needs = None
         self.action_impact_merge_dlg = None
+        self.action_routing_analysis = None
         self.key_action = None
         self.action_options = None
         self.action_keywords_wizard = None
@@ -383,6 +384,27 @@ class Plugin(object):
 
             self.add_action(self.action_add_layers)
 
+    def _create_routing_analysis_action(self):
+        """Action about routing analysis (developer mode, non final only)."""
+        final_release = release_status() == 'final'
+        settings = QSettings()
+        self.developer_mode = settings.value(
+            'inasafe/developer_mode', False, type=bool)
+        if not final_release and self.developer_mode:
+            icon = resources_path('img', 'icons', 'show-routing-analysis.svg')
+            self.action_routing_analysis = QAction(
+                QIcon(icon),
+                self.tr('Show the Routing Analysis'),
+                self.iface.mainWindow())
+            self.action_routing_analysis.setStatusTip(self.tr(
+                'Show the Routing Analysis'))
+            self.action_routing_analysis.setWhatsThis(self.tr(
+                'Show the Routing Analysis'))
+            self.action_routing_analysis.triggered.connect(
+                self.show_routing_analysis)
+
+            self.add_action(self.action_routing_analysis)
+
     def _create_dock(self):
         """Create dockwidget and tabify it with the legend."""
         # Import dock here as it needs to be imported AFTER i18n is set up
@@ -426,6 +448,7 @@ class Plugin(object):
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
+        self._create_routing_analysis_action()
         # TODO: add menu separator - Analysis
         self._create_batch_runner_action()
         self._create_impact_merge_action()
@@ -588,6 +611,20 @@ class Plugin(object):
             self.iface,
             self.dock_widget)
         dialog.set_keywords_creation_mode()
+        dialog.exec_()  # modal
+
+    def show_routing_analysis(self):
+        """Show the routing analysis wizard."""
+        # import here only so that it is AFTER i18n set up
+        from safe.routing.gui.tools.routing_dialog import RoutingDialog
+
+        if self.iface.activeLayer() is None:
+            return
+
+        dialog = RoutingDialog(
+            self.iface.mainWindow(),
+            self.iface,
+            self.dock_widget)
         dialog.exec_()  # modal
 
     def show_function_centric_wizard(self):
