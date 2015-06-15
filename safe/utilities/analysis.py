@@ -31,7 +31,7 @@ from PyQt4 import QtCore
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe.impact_statistics.aggregator import Aggregator
-from safe.common.exceptions import ReadLayerError, ZeroImpactException
+from safe.common.exceptions import ZeroImpactException
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
     get_postprocessor_human_name)
@@ -43,7 +43,6 @@ from safe.common.exceptions import (
     KeywordDbError,
     InsufficientOverlapError,
     InvalidLayerError,
-    InsufficientParametersError,
     CallGDALError,
     NoFeaturesInExtentError,
     InvalidProjectionError,
@@ -978,12 +977,12 @@ class Analysis(object):
             report.add(m.Text(self.tr(
                 'It appears that no %s are affected by %s. You may want '
                 'to consider:') % (
-                exposure_layer_title, hazard_layer_title)))
+                    exposure_layer_title, hazard_layer_title)))
             check_list = m.BulletedList()
             check_list.add(self.tr(
                 'Check that you are not zoomed in too much and thus '
                 'excluding %s from your analysis area.') % (
-                exposure_layer_title))
+                    exposure_layer_title))
             check_list.add(self.tr(
                 'Check that the exposure is not no-data or zero for the '
                 'entire area of your analysis.'))

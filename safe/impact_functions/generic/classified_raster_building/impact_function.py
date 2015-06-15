@@ -68,9 +68,10 @@ class ClassifiedRasterHazardBuildingFunction(
         self.prepare()
 
         # The 3 classes
-        low_t = self.parameters['low_hazard_class'].value
-        medium_t = self.parameters['medium_hazard_class'].value
-        high_t = self.parameters['high_hazard_class'].value
+        categorical_hazards = self.parameters['Categorical hazards'].value
+        low_t = categorical_hazards[0].value
+        medium_t = categorical_hazards[1].value
+        high_t = categorical_hazards[2].value
 
         # Extract data
         hazard = self.hazard      # Classified Hazard

@@ -1,9 +1,9 @@
 hazard_category: multiple_event
-raster_hazard_classification: flood_raster_hazard_classes
+raster_hazard_classification: generic_raster_hazard_classes
 title: Classified Flood
 hazard: flood
 source: Akbar Gumbira
-value_map: {'dry': [1.0], 'wet': [2.0, 3.0]}
+value_map: {'high': [3.0], 'medium': [2.0], 'low': [1.0]}
 layer_geometry: raster
 layer_purpose: hazard
 layer_mode: classified

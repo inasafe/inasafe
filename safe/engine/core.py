@@ -6,8 +6,6 @@ Provides the function calculate_impact()
 
 import numpy
 from datetime import datetime
-from socket import gethostname
-import getpass
 import logging
 
 from PyQt4.QtCore import QSettings
@@ -180,12 +178,6 @@ def calculate_impact(impact_function):
     # Need to change : to _ because : is forbidden in keywords
     time_stamp = end_time.isoformat('_')
 
-    # Get user
-    user = getpass.getuser().replace(' ', '_')
-
-    # Get host
-    host_name = gethostname()
-
     # Get input layer sources
     # NOTE: We assume here that there is only one of each
     #       If there are more only the first one is used
@@ -210,8 +202,8 @@ def calculate_impact(impact_function):
 
     result_layer.keywords['elapsed_time'] = elapsed_time_sec
     result_layer.keywords['time_stamp'] = time_stamp[:19]  # remove decimal
-    result_layer.keywords['host_name'] = host_name
-    result_layer.keywords['user'] = user
+    result_layer.keywords['host_name'] = impact_function.host_name
+    result_layer.keywords['user'] = impact_function.user
 
     msg = 'Impact function %s returned None' % str(impact_function)
     verify(result_layer is not None, msg)
