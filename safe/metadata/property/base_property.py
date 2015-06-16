@@ -1,0 +1,108 @@
+# -*- coding: utf-8 -*-
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid - **metadata module.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+
+__author__ = 'marco@opengis.ch'
+__revision__ = '$Format:%H$'
+__date__ = '27/05/2015'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
+from safe.common.exceptions import MetadataInvalidPathError
+
+
+class BaseProperty(object):
+    def __init__(self, name, value, xml_path, xml_type, allowed_python_types):
+
+        # private members
+        self._value = None
+        self._xml_type = xml_type
+        self._allowed_python_types = allowed_python_types
+        self._python_type = None
+        self._xml_path = None
+
+        # check if the desired xml path is correct
+        if self._is_valid_xml_path(xml_path):
+            self._xml_path = xml_path
+
+        # check if the desired type is correct
+        self.is_allowed_type(value)
+
+        # check if value is valid
+        self.is_valid(value)
+
+        # public properties
+        self.name = name
+        self.value = value
+
+    def __str__(self):
+        return "%s: %s\n%s" % (self.name, self.value, self.xml_path)
+
+    def is_allowed_type(self, value):
+        if type(value) in self.allowed_python_types:
+            self._python_type = type(value)
+            return True
+        else:
+            error_message = (
+                'The value %s (type: %s) is not of the correct type (valid'
+                ' types: %s' % (value, type(value), self.allowed_python_types))
+            raise TypeError(error_message)
+
+    def is_valid(self, value):
+        raise NotImplementedError(
+            'This method has to be implemented in a subclass')
+
+    @property
+    def xml_value(self):
+        raise NotImplementedError(
+            'This method has to be implemented in a subclass')
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        if self.is_allowed_type(value):
+            self._value = value
+
+    @property
+    # there is no setter because the type of a MetadataProperty should not
+    # change overtime
+    def xml_type(self):
+        return self._xml_type
+
+    @property
+    # there is no setter because the type of a MetadataProperty should not
+    # change overtime
+    def python_type(self):
+        return self._python_type
+
+    @property
+    # there is no setter because the allowed_python_types should not
+    # change overtime
+    def allowed_python_types(self):
+        return self._allowed_python_types
+
+    @property
+    # there is no setter because the path of a MetadataProperty should not
+    # change overtime
+    def xml_path(self):
+        return self._xml_path
+
+    @staticmethod
+    def _is_valid_xml_path(xml_path):
+        # TODO (MB) implement meaningful check
+        if type(xml_path) is str:
+            return True
+        else:
+            raise MetadataInvalidPathError(
+                'The xml path %s is invalid' % xml_path)
