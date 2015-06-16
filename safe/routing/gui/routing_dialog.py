@@ -1,30 +1,22 @@
 # coding=utf-8
 
+import os
 import logging
 
 from qgis.gui import QgsMapToolPan
 from PyQt4.QtGui import QDialog
+from PyQt4 import uic
 
-from safe.utilities.resources import get_ui_class
 from safe.utilities.qgis_utilities import display_information_message_box
 
 
 LOGGER = logging.getLogger('InaSAFE')
 
-    ui_file_path = os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__),
-            os.pardir,
-            'gui',
-            'ui',
-            ui_file
-        )
-    )
-    return uic.loadUiType(ui_file_path)[0]
-FORM_CLASS = get_ui_class('routing_dialog_base.ui')
+ui_file = os.path.join(os.path.dirname(__file__), 'routing_dialog_base.ui')
+FORM_CLASS, BASE_CLASS = uic.loadUiType(ui_file)
 
 
-class RoutingAnalysisDialog(QDialog, FORM_CLASS):
+class RoutingDialog(QDialog, FORM_CLASS):
     """Routing analysis."""
 
     def __init__(self, parent=None, iface=None):

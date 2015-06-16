@@ -616,15 +616,11 @@ class Plugin(object):
     def show_routing_analysis(self):
         """Show the routing analysis wizard."""
         # import here only so that it is AFTER i18n set up
-        from safe.routing.gui.tools.routing_dialog import RoutingDialog
-
-        if self.iface.activeLayer() is None:
-            return
+        from safe.routing.gui.routing_dialog import RoutingDialog
 
         dialog = RoutingDialog(
             self.iface.mainWindow(),
-            self.iface,
-            self.dock_widget)
+            self.iface)
         dialog.exec_()  # modal
 
     def show_function_centric_wizard(self):
