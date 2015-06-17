@@ -205,7 +205,7 @@ def load_layer(layer_path):
     :param layer_path: Path name to raster or vector file.
     :type layer_path: str
 
-    :returns: tuple containing layer and its category.
+    :returns: tuple containing layer and its layer_purpose.
     :rtype: (QgsMapLayer, str)
 
     """
@@ -214,11 +214,11 @@ def load_layer(layer_path):
     base_name, extension = os.path.splitext(file_name)
 
     # Determine if layer is hazard or exposure
-    category = 'undefined'
+    layer_purpose = 'undefined'
     try:
         keywords = read_file_keywords(layer_path)
-        if 'category' in keywords:
-            category = keywords['category']
+        if 'layer_purpose' in keywords:
+            layer_purpose = keywords['layer_purpose']
     except NoKeywordsFoundError:
         pass
 
@@ -239,7 +239,7 @@ def load_layer(layer_path):
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
         raise Exception(message)
-    return layer, category
+    return layer, layer_purpose
 
 
 def set_canvas_crs(epsg_id, enable_projection=False):
@@ -937,7 +937,12 @@ def load_standard_layers(dock=None):
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
 
     if hazard_layer_count + exposure_layer_count != len(file_list) - 1:
-        raise Exception('Loading standard layers failed.')
+        message = (
+            'Loading standard layers failed. Expecting layer the number of '
+            'hazard_layer and exposure_layer is equals to %d but got %d' % (
+                (len(file_list) - 1),
+                hazard_layer_count + exposure_layer_count))
+        raise Exception(message)
 
     return hazard_layer_count, exposure_layer_count
 

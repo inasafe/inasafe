@@ -172,11 +172,15 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[category: hazard
-field: h_zone
-subcategory: earthquake
+<![CDATA[hazard_category: multiple_event
 title: Earthquake Polygon
-unit: classes
+hazard: earthquake
+field: h_zone
+value_map: {'high': ['High Hazard Zone'], 'medium': ['Medium Hazard Zone'], 'low': ['Low Hazard Zone']}
+vector_hazard_classification: generic_vector_hazard_classes
+layer_geometry: polygon
+layer_purpose: hazard
+layer_mode: classified
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

@@ -582,8 +582,15 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         # Delete html report files:
         for area in self.html_reports:
             report_path = self.html_reports[area]
-            if os.path.exists(report_path):
-                os.remove(report_path)
+            # Rizky : Fix possible bugs in Windows related to issue:
+            # https://github.com/AIFDR/inasafe/issues/1862
+            try:
+                # avoid race condition using with statement
+                with open(report_path, 'w') as report_file:
+                    report_file.close()
+                    os.remove(report_path)
+            except OSError:
+                pass
 
     @staticmethod
     def generate_report_dictionary_from_dom(html_dom):

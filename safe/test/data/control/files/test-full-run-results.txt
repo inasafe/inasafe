@@ -6,7 +6,7 @@ Family Kits 20
 Toilets 5
 Total population: 200
 People need evacuation if flood levels exceed 1.0 m
-Minimum needs are defined in BNPB regulation 7/2008
+The minimum needs are based on Perka 7/2008.
 All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.
 All affected people are assumed to be evacuated.
 Hazard details

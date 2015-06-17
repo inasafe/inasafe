@@ -333,7 +333,7 @@ class Aggregator(QtCore.QObject):
             self._send_message(message)
 
             # keywords are already complete
-            category = keywords['category']
+            layer_purpose = keywords['layer_purpose']
             aggregation_attribute = self.get_default_keyword('AGGR_ATTR_KEY')
             female_ratio = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
             female_ratio_key = self.get_default_keyword('FEMALE_RATIO_KEY')
@@ -344,28 +344,37 @@ class Aggregator(QtCore.QObject):
             elderly_ratio = self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY')
             elderly_ratio_key = self.get_default_keyword('ELDERLY_RATIO_KEY')
 
-            if (
-                    aggregation_attribute in keywords and
-                    (
-                        'category' in keywords and
-                        category == 'postprocessing') and
-                    (female_ratio in keywords and (
-                        female_ratio != global_default_attribute['name'] or
-                        female_ratio_key in keywords)) and
-                    (youth_ratio in keywords and (
-                        youth_ratio != global_default_attribute['name'] or
-                        youth_ratio_key in keywords)) and
-                    (adult_ratio in keywords and (
-                        adult_ratio != global_default_attribute['name'] or
-                        adult_ratio_key in keywords)) and
-                    (elderly_ratio in keywords and (
-                        elderly_ratio != global_default_attribute['name'] or
-                        elderly_ratio_key in keywords))):
+            aggregation_in_keywords = aggregation_attribute in keywords
+            layer_purpose_in_keywords = (
+                'layer_purpose' in keywords and
+                layer_purpose == 'aggregation')
+            female_ratio_in_keywords = (
+                female_ratio in keywords and (
+                    female_ratio != global_default_attribute['name'] or
+                    female_ratio_key in keywords))
+            youth_ratio_in_keywords = (
+                youth_ratio in keywords and (
+                    youth_ratio != global_default_attribute['name'] or
+                    youth_ratio_key in keywords))
+            adult_ratio_in_keywords = (
+                adult_ratio in keywords and (
+                    adult_ratio != global_default_attribute['name'] or
+                    adult_ratio_key in keywords))
+            elderly_ratio_in_keywords = (
+                elderly_ratio in keywords and (
+                    elderly_ratio != global_default_attribute['name'] or
+                    elderly_ratio_key in keywords))
+            if (aggregation_in_keywords and
+                    layer_purpose_in_keywords and
+                    female_ratio_in_keywords and
+                    youth_ratio_in_keywords and
+                    adult_ratio_in_keywords and
+                    elderly_ratio_in_keywords):
                 self.is_valid = True
             # some keywords are needed
             else:
                 # set the default values by writing to the keywords
-                keywords['category'] = 'postprocessing'
+                keywords['layer_purpose'] = 'aggregation'
 
                 # noinspection PyTypeChecker
                 my_attributes, _ = layer_attribute_names(
@@ -469,11 +478,11 @@ class Aggregator(QtCore.QObject):
                     self.hazard_layer)
 
             if is_polygon_layer(self.exposure_layer):
-                # Find out the subcategory for this layer
-                subcategory = self.read_keywords(
-                    self.exposure_layer, 'subcategory')
+                # Find out the exposure for this layer
+                exposure = self.read_keywords(
+                    self.exposure_layer, 'exposure')
                 # We don't want to chop up buildings!
-                if subcategory != 'structure':
+                if exposure != 'structure':
                     self.exposure_layer = self._prepare_polygon_layer(
                         self.exposure_layer)
 

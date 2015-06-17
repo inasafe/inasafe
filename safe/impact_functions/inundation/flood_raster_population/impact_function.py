@@ -10,11 +10,12 @@ from safe.impact_functions.core import (
     population_rounding,
     evacuated_population_needs,
     has_no_data)
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.impact_function_manager \
     import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_raster_population\
     .metadata_definitions import FloodEvacuationRasterHazardMetadata
+from safe.impact_functions.bases.continuous_rh_continuous_re import \
+    ContinuousRHContinuousRE
 from safe.utilities.i18n import tr
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
@@ -26,13 +27,13 @@ from safe.common.utilities import (
     create_label,
     verify,
     get_thousand_separator)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    get_needs_provenance_value
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodEvacuationRasterHazardFunction(ImpactFunction):
+class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Risk plugin for flood population evacuation."""
     _metadata = FloodEvacuationRasterHazardMetadata()
@@ -40,7 +41,6 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
     def __init__(self):
         """Constructor."""
         super(FloodEvacuationRasterHazardFunction, self).__init__()
-        self.target_field = 'population'
         self.impact_function_manager = ImpactFunctionManager()
 
         # AG: Use the proper minimum needs, update the parameters
@@ -106,7 +106,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
             tr('Total population: %s') % format_int(total),
             tr('People need evacuation if flood levels exceed %(eps).1f m') %
             {'eps': thresholds[-1]},
-            tr('Minimum needs are defined in BNPB regulation 7/2008'),
+            tr(get_needs_provenance_value(self.parameters)),
             tr('All values are rounded up to the nearest integer in order to '
                'avoid representing human lives as fractions.'),
             tr('All affected people are assumed to be evacuated.')])
@@ -146,13 +146,8 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
                      header=True)]
         return table_body
 
-    def run(self, layers=None):
+    def run(self):
         """Risk plugin for flood population evacuation.
-
-        :param layers: List of layers expected to contain
-              hazard_layer: Raster layer of flood depth
-              exposure_layer: Raster layer of population data on the same grid
-              as hazard_layer
 
         Counts number of people exposed to flood levels exceeding
         specified threshold.
@@ -163,7 +158,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
         :rtype: tuple
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Flood inundation
@@ -171,7 +166,7 @@ class FloodEvacuationRasterHazardFunction(ImpactFunction):
 
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
-        thresholds = self.parameters['thresholds [m]']
+        thresholds = self.parameters['thresholds'].value
 
         verify(
             isinstance(thresholds, list),

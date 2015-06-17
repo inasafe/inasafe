@@ -17,7 +17,6 @@ __date__ = '11/12/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import unittest
-
 from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_manager\
@@ -26,8 +25,8 @@ from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 from safe.test.utilities import (
     get_qgis_app,
-    test_data_path)
-from safe.utilities.qgis_layer_wrapper import QgisWrapper
+    test_data_path,
+    clone_shp_layer)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -44,30 +43,34 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
         function = FloodPolygonBuildingFunction.instance()
 
         hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
-        exposure_path = test_data_path('exposure', 'buildings.shp')
+        # exposure_path = test_data_path('exposure', 'buildings.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
         # noinspection PyCallingNonCallable
-        exposure_layer = QgsVectorLayer(exposure_path, 'Buildings', 'ogr')
+        # exposure_layer = QgsVectorLayer(exposure_path, 'Buildings', 'ogr')
 
+        exposure_layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=True,
+            source_directory=test_data_path('exposure'))
         # Let's set the extent to the hazard extent
         extent = hazard_layer.extent()
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
 
-        function.hazard = QgisWrapper(hazard_layer)
-        function.exposure = QgisWrapper(exposure_layer)
+        function.hazard = hazard_layer
+        function.exposure = exposure_layer
         function.requested_extent = rect_extent
-        function.parameters['building_type_field'] = 'TYPE'
-        function.parameters['affected_field'] = 'FLOODPRONE'
-        function.parameters['affected_value'] = 'YES'
+        function.parameters['building_type_field'].value = 'TYPE'
+        function.parameters['affected_field'].value = 'FLOODPRONE'
+        function.parameters['affected_value'].value = 'YES'
         function.run()
         impact = function.impact
 
         # Count of flooded objects is calculated "by the hands"
         # total flooded = 27, total buildings = 129
-        count = sum(impact.get_data(attribute='INUNDATED'))
+        count = sum(impact.get_data(attribute=function.target_field))
         self.assertEquals(count, 33)
         count = len(impact.get_data())
         self.assertEquals(count, 176)
@@ -75,17 +78,19 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'wetdry',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'flood',
+            'hazard_category': 'single_event',
+            'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'subcategory': 'structure',
-            'units': 'building_type',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

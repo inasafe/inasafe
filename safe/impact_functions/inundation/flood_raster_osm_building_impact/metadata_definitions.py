@@ -14,21 +14,26 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = "lucernae"
 
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    hazard_tsunami,
-    layer_vector_polygon,
-    exposure_definition,
-    exposure_structure,
-    unit_building_type_type,
-    unit_building_generic,
-    layer_vector_point, unit_metres_depth, unit_feet_depth,
-    layer_raster_continuous)
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_raster_osm_building_impact\
+    .parameter_definitions import threshold
 from safe.utilities.i18n import tr
+from safe.definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    layer_geometry_point,
+    layer_geometry_raster,
+    hazard_flood,
+    hazard_category_single_event,
+    exposure_structure,
+    unit_metres,
+    unit_feet,
+    hazard_tsunami,
+    structure_class_field
+)
 
 
 class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
@@ -101,34 +106,31 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                    'in case of vector hazard.')
             ],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [
-                        hazard_flood,
-                        hazard_tsunami
-                    ],
-                    'units': [
-                        unit_metres_depth,
-                        unit_feet_depth],
-                    'layer_constraints': [
-                        layer_raster_continuous,
-                        ]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_types': [hazard_flood, hazard_tsunami],
+                    'continuous_hazard_units': [unit_feet, unit_metres],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [
-                        unit_building_type_type,
-                        unit_building_generic],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point
-                    ]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [
+                        layer_geometry_point,
+                        layer_geometry_polygon
+                    ],
+                    'exposure_types': [exposure_structure],
+                    'exposure_units': [],
+                    'exposure_class_fields': [structure_class_field],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
-                ('threshold [m]', 1.0),
+                ('threshold', threshold()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))

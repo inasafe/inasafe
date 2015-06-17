@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-
 from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -27,7 +26,6 @@ from safe.impact_functions.inundation.flood_polygon_roads\
 from safe.test.utilities import (
     get_qgis_app,
     test_data_path)
-from safe.utilities.qgis_layer_wrapper import QgisWrapper
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -55,18 +53,18 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
-        function.hazard = QgisWrapper(hazard_layer)
-        function.exposure = QgisWrapper(exposure_layer)
+        function.hazard = hazard_layer
+        function.exposure = exposure_layer
         function.requested_extent = rect_extent
-        function.parameters['affected_field'] = 'FLOODPRONE'
-        function.parameters['affected_value'] = 'YES'
+        function.parameters['affected_field'].value = 'FLOODPRONE'
+        function.parameters['affected_value'].value = 'YES'
         function.run()
         impact = function.impact
 
         # Count of flooded objects is calculated "by the hands"
         # the count = 69
         expected_feature_total = 69
-        count = sum(impact.get_data(attribute='FLOODED'))
+        count = sum(impact.get_data(attribute=function.target_field))
         message = 'Expecting %s, but it returns %s' % (
             expected_feature_total, count)
         self.assertEquals(count, expected_feature_total, message)
@@ -74,17 +72,19 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'wetdry',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'flood',
+            'hazard_category': 'single_event',
+            'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'subcategory': 'road',
-            'units': 'road_type',
-            'layer_type': 'vector',
-            'data_type': 'line'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'line',
+            'exposure': 'road'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

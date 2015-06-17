@@ -55,7 +55,7 @@ from safe.test.utilities import (
     set_small_jakarta_extent,
     get_qgis_app,
     TESTDATA,
-    HAZDATA)
+    clone_shp_layer)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.widgets.dock
@@ -236,7 +236,7 @@ class TestDock(TestCase):
 
         DOCK.accept()
         # DOCK.analysis.get_impact_layer()
-        safe_layer = DOCK.analysis.get_impact_layer()
+        safe_layer = DOCK.analysis.impact_layer
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()
         setRasterStyle(qgis_layer, style)
@@ -338,8 +338,8 @@ class TestDock(TestCase):
         button = DOCK.pbnRunStop
         # First part of scenario should have enabled run
         file_list = [
-            join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
-            join(TESTDATA, 'Population_Jakarta_geographic.asc')]
+            test_data_path('hazard', 'continuous_flood_20_20.asc'),
+            test_data_path('exposure', 'pop_binary_raster_20_20.asc')]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
         message = (
@@ -369,7 +369,7 @@ class TestDock(TestCase):
             'Run Button Enabled': False,
             'Impact Function Id': '',
             'Impact Function Title': '',
-            'Hazard': 'A flood in Jakarta like in 2007',
+            'Hazard': 'Continuous Flood',
             'Exposure': 'Population Count (5kmx5km)'}
         message = ((
             'Run button was not disabled when exposure set to \n%s'
@@ -392,16 +392,26 @@ class TestDock(TestCase):
     def test_issue160(self):
         """Test that multipart features can be used in a scenario - issue #160
         """
+        exposure_layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=True,
+            source_directory=test_data_path('exposure'))
 
-        exposure = test_data_path('exposure', 'buildings.shp')
-        hazard = test_data_path('hazard', 'flood_multipart_polygons.shp')
+        hazard_layer = clone_shp_layer(
+            name='flood_multipart_polygons',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
+
+        exposure_path = exposure_layer.source()
+        hazard_path = hazard_layer.source()
+
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         # print 'Using QGIS: %s' % qgis_version()
         self.tearDown()
         button = DOCK.pbnRunStop
         # First part of scenario should have enabled run
-        file_list = [hazard, exposure]
+        file_list = [hazard_path, exposure_path]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
         message = (
@@ -474,7 +484,7 @@ class TestDock(TestCase):
         self.assertTrue('IndexError' not in result, message)
         self.assertTrue(
             'It appears that no Population are affected by Continuous Flood.'
-            ' You may want to consider:' in result, message)
+            in result, message)
 
     def test_state(self):
         """Check if the save/restore state methods work. See also
@@ -506,35 +516,55 @@ class TestDock(TestCase):
             test_data_path('exposure', 'pop_binary_raster_20_20.asc')
         ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
-        self.assertTrue(hazard_layer_count == 2)
-        self.assertTrue(exposure_layer_count == 1)
-        # we will have 2 impact function available right now:
-        # - ContinuousHazardPopulationFunction, titled: 'Be impacted'
+        message = 'Expecting 2 hazard layers, got %s' % hazard_layer_count
+        self.assertTrue(hazard_layer_count == 2, message)
+        message = 'Expecting 1 exposure layer, got %s' % exposure_layer_count
+        self.assertTrue(exposure_layer_count == 1, message)
+        # we will have 1 impact function available right now:
         # - FloodEvacuationRasterHazardFunction, titled: 'Need evacuation'
         # set it to the second for testing purposes
-        DOCK.cboFunction.setCurrentIndex(1)
+        DOCK.cboFunction.setCurrentIndex(0)
         DOCK.cboHazard.setCurrentIndex(0)
         DOCK.cboExposure.setCurrentIndex(0)
         expected_function = str(DOCK.cboFunction.currentText())
+
+        hazard_layer = DOCK.get_hazard_layer()
+        hazard_keywords = DOCK.keyword_io.read_keywords(hazard_layer)
+        exposure_layer = DOCK.get_exposure_layer()
+        exposure_keywords = DOCK.keyword_io.read_keywords(exposure_layer)
+
         # Now move down one hazard in the combo then verify
         # the function remains unchanged
         DOCK.cboHazard.setCurrentIndex(1)
         current_function = str(DOCK.cboFunction.currentText())
+
+        hazard_layer = DOCK.get_hazard_layer()
+        hazard_keywords = DOCK.keyword_io.read_keywords(hazard_layer)
+        exposure_layer = DOCK.get_exposure_layer()
+        exposure_keywords = DOCK.keyword_io.read_keywords(exposure_layer)
+        from pprint import pprint
+        print 'Exposure keywords'
+        pprint(exposure_keywords)
+        print 'Hazard keywords'
+        pprint(hazard_keywords)
         message = (
             'Expected selected impact function to remain unchanged when '
-            'choosing a different hazard of the same category:'
-            ' %s\nExpected: %s\n%s' % (
-                expected_function, current_function, combos_to_string(DOCK)))
+            'choosing a different hazard of the same category.\n')
+        message += 'Expected IF: "%s"\n' % expected_function
+        message += 'Current IF: "%s"\n' % current_function
+        message += 'Current Dock State: %s' % combos_to_string(DOCK)
+        message += 'Hazard Keywords\n'
+        message += str(hazard_keywords) + '\n'
+        message += 'Exposure Keywords\n'
+        message += str(exposure_keywords) + '\n'
 
         self.assertTrue(expected_function == current_function, message)
         DOCK.cboHazard.setCurrentIndex(0)
         # Selected function should remain the same
-        # RM: modified it, because there is generic one right now as the first.
-        # the selected one should be FloodEvacuationRasterHazardFunction
-        DOCK.cboFunction.setCurrentIndex(1)
         expected = 'Need evacuation'
         function = DOCK.cboFunction.currentText()
         message = 'Expected: %s, Got: %s' % (expected, function)
+
         self.assertTrue(function == expected, message)
 
     def test_full_run_pyzstats(self):
@@ -685,14 +715,14 @@ class TestDock(TestCase):
         new_name = unique_filename(prefix='kecamatan_jakarta_osm_saved_as')
         DOCK.save_auxiliary_files(
             layer, join(TESTDATA, '%s.shp' % new_name))
-        new_keywords_filepath = os.path.join(
+        new_keywords_file_path = os.path.join(
             TESTDATA, '%s.keywords' % new_name)
-        new_xml_filepath = os.path.join(TESTDATA, '%s.xml' % new_name)
+        new_xml_file_path = os.path.join(TESTDATA, '%s.xml' % new_name)
 
         message = 'New auxiliary file exist : '
         self.assertFalse(
-            os.path.isfile(new_keywords_filepath), '%s keywords' % message)
-        self.assertFalse(os.path.isfile(new_xml_filepath), '%s xml' % message)
+            os.path.isfile(new_keywords_file_path), '%s keywords' % message)
+        self.assertFalse(os.path.isfile(new_xml_file_path), '%s xml' % message)
 
     def test_new_layers_show_in_canvas(self):
         """Check that when we add a layer we can see it in the canvas list."""

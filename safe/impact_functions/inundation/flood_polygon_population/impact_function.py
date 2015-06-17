@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-__author__ = 'Rizky Maulana Nugraha'
 
 import logging
 from numbers import Number
@@ -20,7 +19,6 @@ import numpy
 
 from safe.utilities.i18n import tr
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
@@ -28,6 +26,8 @@ from safe.impact_functions.core import (
     has_no_data)
 from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
+from safe.impact_functions.bases.classified_vh_continuous_re import \
+    ClassifiedVHContinuousRE
 from safe.common.tables import Table, TableRow, TableCell
 from safe.storage.raster import Raster
 from safe.common.utilities import (
@@ -35,14 +35,17 @@ from safe.common.utilities import (
     create_classes,
     humanize_class,
     create_label)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    get_needs_provenance_value, filter_needs_parameters
 from safe.utilities.unicode import get_unicode
 from safe.common.exceptions import ZeroImpactException
+
+__author__ = 'Rizky Maulana Nugraha'
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodEvacuationVectorHazardFunction(ImpactFunction):
+class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Impact function for vector flood evacuation."""
     _metadata = FloodEvacuationVectorHazardMetadata()
@@ -50,9 +53,6 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
     def __init__(self):
         """Constructor."""
         super(FloodEvacuationVectorHazardFunction, self).__init__()
-
-        # Target field in the impact layer
-        self.target_field = 'population'
 
         # Use affected field flag (if False, all polygon will be considered as
         # affected)
@@ -76,8 +76,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                     tr('* People are considered to be affected if they are '
                        'within the area where the value of the hazard field ('
                        '"%s") is "%s"') %
-                    (self.parameters['affected_field'],
-                     self.parameters['affected_value'])))
+                    (self.parameters['affected_field'].value,
+                     self.parameters['affected_value'].value)))
         else:
             table_body.append(
                 TableRow(
@@ -99,7 +99,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         table_body.append(
             TableRow(
                 [tr('Evacuation threshold'), '%s%%' % format_int(
-                    self.parameters['evacuation_percentage'])], header=True))
+                    self.parameters['evacuation_percentage'].value)],
+                header=True))
         table_body.append(
             TableRow(tr('Table below shows the weekly minimum needs for all '
                         'evacuated people')))
@@ -135,7 +136,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         table_body.append(TableRow(tr('Notes'), header=True))
         table_body.append(
             TableRow(tr('Total population: %s') % format_int(total)))
-        table_body.append(TableRow(self.parameters['provenance']))
+        table_body.append(TableRow(get_needs_provenance_value(
+            self.parameters)))
         if nan_warning:
             table_body.extend([
                 tr('The population layer contained `no data`. This missing '
@@ -144,14 +146,8 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
                    'when counting the affected or total population.')
             ])
 
-    def run(self, layers=None):
+    def run(self):
         """Risk plugin for flood population evacuation.
-
-        :param layers: List of layers expected to contain
-
-            * hazard_layer : Vector polygon layer of flood depth
-            * exposure_layer : Raster layer of population data on the same grid
-                as hazard_layer
 
         Counts number of people exposed to areas identified as flood prone
 
@@ -160,12 +156,12 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
         :rtype: tuple
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Get the IF parameters
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
-        evacuation_percentage = self.parameters['evacuation_percentage']
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
+        evacuation_percentage = self.parameters['evacuation_percentage'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard
@@ -246,7 +242,7 @@ class FloodEvacuationVectorHazardFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         # Rounding
