@@ -13,6 +13,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.metadata.property.character_string_property import \
+    CharacterStringProperty
+from safe.metadata.property.date_property import DateProperty
+from safe.metadata.property.url_property import UrlProperty
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -25,13 +29,12 @@ from unittest import TestCase
 from PyQt4.QtCore import QDate, QUrl
 
 from safe.common.exceptions import MetadataInvalidPathError
-from safe.metadata.property.base_property import BaseProperty
 
 
 class TestMetadataProperty(TestCase):
 
     def test_value_date(self):
-        test_property = BaseProperty(
+        test_property = DateProperty(
             'test name',
             QDate.currentDate(),
             '',
@@ -44,7 +47,7 @@ class TestMetadataProperty(TestCase):
             test_property.value = 20150607
 
     def test_value_str(self):
-        test_property = BaseProperty(
+        test_property = CharacterStringProperty(
             'test string',
             'random string',
             '',
@@ -52,10 +55,11 @@ class TestMetadataProperty(TestCase):
         )
 
         with self.assertRaises(TypeError):
-            test_property.value = 20150607
+            # list is not a valid datatype
+            test_property.value = ['20150607']
 
     def test_value_url(self):
-        test_property = BaseProperty(
+        test_property = UrlProperty(
             'test url',
             QUrl('http://inasafe.org'),
             '',
@@ -70,9 +74,10 @@ class TestMetadataProperty(TestCase):
 
     def test_xml_path(self):
         valid_path = ''
+        error_path = '\\test\\path'
         invalid_path = 2345
 
-        test_property = BaseProperty(
+        test_property = UrlProperty(
             'test url',
             QUrl('http://inasafe.org'),
             valid_path,
@@ -83,15 +88,25 @@ class TestMetadataProperty(TestCase):
             test_property.xml_path = 'random string'
 
         with self.assertRaises(MetadataInvalidPathError):
-            BaseProperty(
+            UrlProperty(
                 'test url',
                 QUrl('http://inasafe.org'),
                 invalid_path,
                 'gmd:URL'
             )
 
+        with self.assertRaises(MetadataInvalidPathError):
+            # TODO (MB) this test should fail (the expected exception is not
+            # risen) until a better _is_valid_path is implemented
+            UrlProperty(
+                'test url',
+                QUrl('http://inasafe.org'),
+                error_path,
+                'gmd:URL'
+            )
+
     def test_xml_type(self):
-        test_property = BaseProperty(
+        test_property = UrlProperty(
             'test url',
             QUrl('http://inasafe.org'),
             '',
