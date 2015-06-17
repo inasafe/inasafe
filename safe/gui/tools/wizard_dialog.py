@@ -3139,7 +3139,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         extent_a = layer_a.extent()
         extent_b = layer_b.extent()
-        if self.iface.mapCanvas().hasCrsTransformEnabled():
+        if layer_a.crs() != layer_b.crs():
             coordTransform = QgsCoordinateTransform(layer_a.crs(),
                                                     layer_b.crs())
             extent_b = (coordTransform.transform(
