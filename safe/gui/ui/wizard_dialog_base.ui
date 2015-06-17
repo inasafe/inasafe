@@ -514,7 +514,56 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg6Field">
+       <widget class="QWidget" name="pg6Classification">
+        <layout class="QVBoxLayout" name="verticalLayout_31">
+         <item>
+          <widget class="QLabel" name="lblSelectClassification">
+           <property name="styleSheet">
+            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+           </property>
+           <property name="text">
+            <string>[placeholder]</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
+           <item>
+            <widget class="QListWidget" name="lstClassifications"/>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblDescribeClassification">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+             </property>
+             <property name="text">
+              <string>[placeholder]</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="pg7Field">
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
           <widget class="QLabel" name="lblSelectField">
@@ -563,7 +612,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pg7Resample">
+       <widget class="QWidget" name="pg8Resample">
         <layout class="QVBoxLayout" name="verticalLayout_29">
          <item>
           <widget class="QLabel" name="lblSelectAllowResample">
@@ -616,55 +665,6 @@
             </size>
            </property>
           </spacer>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="pg8Classification">
-        <layout class="QVBoxLayout" name="verticalLayout_31">
-         <item>
-          <widget class="QLabel" name="lblSelectClassification">
-           <property name="styleSheet">
-            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-           </property>
-           <property name="text">
-            <string>[placeholder]</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
-           <item>
-            <widget class="QListWidget" name="lstClassifications"/>
-           </item>
-           <item>
-            <widget class="QLabel" name="lblDescribeClassification">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>[placeholder]</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
          </item>
         </layout>
        </widget>

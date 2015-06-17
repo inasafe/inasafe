@@ -89,6 +89,8 @@ from safe.common.exceptions import (
     InvalidParameterError,
     UnsupportedProviderError,
     InaSAFEError)
+from safe.common.resource_parameter import ResourceParameter
+from safe_extras.parameters.group_parameter import GroupParameter
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
@@ -300,9 +302,9 @@ step_kw_subcategory = 2
 step_kw_hazard_category = 3
 step_kw_layermode = 4
 step_kw_unit = 5
-step_kw_field = 6
-step_kw_resample = 7
-step_kw_classification = 8
+step_kw_classification = 6
+step_kw_field = 7
+step_kw_resample = 8
 step_kw_classify = 9
 step_kw_extrakeywords = 10
 step_kw_aggregation = 11
@@ -1130,6 +1132,80 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.auto_select_one_item(self.lstUnits)
 
     # ===========================
+    # STEP_KW_CLASSIFICATION
+    # ===========================
+
+    def on_lstClassifications_itemSelectionChanged(self):
+        """Update classification description label and unlock the Next button.
+
+        .. note:: This is an automatic Qt slot
+           executed when the field selection changes.
+        """
+        self.lstFields.clear()
+        self.treeClasses.clear()
+        classification = self.selected_classification()
+        # Exit if no selection
+        if not classification:
+            return
+        # Set description label
+        self.lblDescribeClassification.setText(classification["description"])
+        # Enable the next button
+        self.pbnNext.setEnabled(True)
+
+    def selected_classification(self):
+        """Obtain the classification selected by user.
+
+        :returns: Metadata of the selected classification.
+        :rtype: dict, None
+        """
+        item = self.lstClassifications.currentItem()
+        try:
+            # pylint: disable=eval-used
+            return eval(item.data(QtCore.Qt.UserRole))
+            # pylint: enable=eval-used
+        except (AttributeError, NameError):
+            return None
+
+    def set_widgets_step_kw_classification(self):
+        """Set widgets on the Classification tab."""
+        self.lstFields.clear()
+        self.treeClasses.clear()
+        category = self.selected_category()['key']
+        subcategory = self.selected_subcategory()['key']
+        self.lstClassifications.clear()
+        self.lblDescribeClassification.setText('')
+        self.lblSelectClassification.setText(
+            classification_question % (subcategory, category))
+        classifications = self.classifications_for_layer()
+        for classification in classifications:
+            if not isinstance(classification, dict):
+                # pylint: disable=eval-used
+                classification = eval('definitions.%s' % classification)
+                # pylint: enable=eval-used
+            item = QListWidgetItem(classification['name'],
+                                   self.lstClassifications)
+            item.setData(QtCore.Qt.UserRole, unicode(classification))
+            self.lstClassifications.addItem(item)
+
+        # Set values based on existing keywords (if already assigned)
+        geom = 'raster' if is_raster_layer(self.layer) else 'vector'
+        key = '%s_%s_classification' % (geom, self.selected_category()['key'])
+        classification_keyword = self.get_existing_keyword(key)
+        if classification_keyword:
+            classifications = []
+            for index in xrange(self.lstClassifications.count()):
+                item = self.lstClassifications.item(index)
+                # pylint: disable=eval-used
+                classification = eval(item.data(QtCore.Qt.UserRole))
+                # pylint: enable=eval-used
+                classifications.append(classification['key'])
+            if classification_keyword in classifications:
+                self.lstClassifications.setCurrentRow(
+                    classifications.index(classification_keyword))
+
+        self.auto_select_one_item(self.lstClassifications)
+
+    # ===========================
     # STEP_KW_FIELD
     # ===========================
 
@@ -1140,7 +1216,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the field selection changes.
         """
-        self.lstClassifications.clear()
         self.treeClasses.clear()
         field = self.selected_field()
         # Exit if no selection
@@ -1175,7 +1250,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_kw_field(self):
         """Set widgets on the Field tab."""
-        self.lstClassifications.clear()
+        self.treeClasses.clear()
         category = self.selected_category()
         subcategory = self.selected_subcategory()
         unit = self.selected_unit()
@@ -1259,75 +1334,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             allow_resampling_question % (subcategory['name'],
                                          category['name'], layer_mode['name']))
 
-    # ===========================
-    # STEP_KW_CLASSIFICATION
-    # ===========================
-
-    def on_lstClassifications_itemSelectionChanged(self):
-        """Update classification description label and unlock the Next button.
-
-        .. note:: This is an automatic Qt slot
-           executed when the field selection changes.
-        """
-        classification = self.selected_classification()
-        # Exit if no selection
-        if not classification:
-            return
-        # Set description label
-        self.lblDescribeClassification.setText(classification["description"])
-        # Enable the next button
-        self.pbnNext.setEnabled(True)
-
-    def selected_classification(self):
-        """Obtain the classification selected by user.
-
-        :returns: Metadata of the selected classification.
-        :rtype: dict, None
-        """
-        item = self.lstClassifications.currentItem()
-        try:
-            # pylint: disable=eval-used
-            return eval(item.data(QtCore.Qt.UserRole))
-            # pylint: enable=eval-used
-        except (AttributeError, NameError):
-            return None
-
-    def set_widgets_step_kw_classification(self):
-        """Set widgets on the Classification tab."""
-        category = self.selected_category()['key']
-        subcategory = self.selected_subcategory()['key']
-        self.lstClassifications.clear()
-        self.lblDescribeClassification.setText('')
-        self.lblSelectClassification.setText(
-            classification_question % (subcategory, category))
-        classifications = self.classifications_for_layer()
-        for classification in classifications:
-            if not isinstance(classification, dict):
-                # pylint: disable=eval-used
-                classification = eval('definitions.%s' % classification)
-                # pylint: enable=eval-used
-            item = QListWidgetItem(classification['name'],
-                                   self.lstClassifications)
-            item.setData(QtCore.Qt.UserRole, unicode(classification))
-            self.lstClassifications.addItem(item)
-
-        # Set values based on existing keywords (if already assigned)
-        geom = 'raster' if is_raster_layer(self.layer) else 'vector'
-        key = '%s_%s_classification' % (geom, self.selected_category()['key'])
-        classification_keyword = self.get_existing_keyword(key)
-        if classification_keyword:
-            classifications = []
-            for index in xrange(self.lstClassifications.count()):
-                item = self.lstClassifications.item(index)
-                # pylint: disable=eval-used
-                classification = eval(item.data(QtCore.Qt.UserRole))
-                # pylint: enable=eval-used
-                classifications.append(classification['key'])
-            if classification_keyword in classifications:
-                self.lstClassifications.setCurrentRow(
-                    classifications.index(classification_keyword))
-
-        self.auto_select_one_item(self.lstClassifications)
+        # Set value based on existing keyword (if already assigned)
+        if self.get_existing_keyword('allow_resample') is False:
+            self.chkAllowResample.setChecked(True)
 
     # ===========================
     # STEP_KW_CLASSIFY
@@ -2316,11 +2325,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             return
 
         # Set description label
-        description = ""
+        description = '<table border="0">'
         if "name" in imfunc.keys():
-            description += "<b>Name</b>: %s<br/>" % imfunc['name']
+            description += '<tr><td><b>Name</b>: </td><td>%s</td></tr>' % (
+                imfunc['name'])
         if "overview" in imfunc.keys():
-            description += "<b>Overview</b>: %s<br/>" % imfunc['overview']
+            description += '<tr><td><b>Overview</b>: </td><td>%s</td></tr>' % (
+                imfunc['overview'])
+        description += '</table>'
 
         self.lblDescribeFunction.setText(description)
         # Enable the next button if anything selected
@@ -2633,11 +2645,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         if keywords:
             purpose = keywords.get('layer_purpose')
             if purpose == layer_purpose_hazard['key']:
-                subcategory = '<b>%s</b>: %s<br/>' % (
+                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                     self.tr('Hazard'), keywords.get(purpose))
                 unit = keywords.get('continuous_hazard_unit')
             elif purpose == layer_purpose_exposure['key']:
-                subcategory = '<b>%s</b>: %s<br/>' % (
+                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                     self.tr('Exposure'), keywords.get(purpose))
                 unit = keywords.get('exposure_unit')
             else:
@@ -2646,14 +2658,17 @@ class WizardDialog(QDialog, FORM_CLASS):
             if keywords.get('layer_mode') == layer_mode_classified['key']:
                 unit = self.tr('classified data')
             if unit:
-                unit = '<b>%s</b>: %s<br/>' % (self.tr('Unit'), unit)
+                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                    self.tr('Unit'), unit)
 
             label_text = """
-                <b>Title</b>: %s<br/>
-                <b>Purpose</b>: %s<br/>
+                <table border=0>
+                <tr><td><b>Title</b>: </td><td>%s</td></tr>
+                <tr><td><b>Purpose</b>: </td><td>%s</td></tr>
                 %s
                 %s
-                <b>Source</b>: %s<br/><br/>
+                <tr><td><b>Source</b>: </td><td>%s</td></tr>
+                </table>
             """ % (keywords.get('title'),
                    keywords.get('layer_purpose'),
                    subcategory,
@@ -2903,11 +2918,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         if keywords:
             purpose = keywords.get('layer_purpose')
             if purpose == layer_purpose_hazard['key']:
-                subcategory = '<b>%s</b>: %s<br/>' % (
+                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                     self.tr('Hazard'), keywords.get(purpose))
                 unit = keywords.get('continuous_hazard_unit')
             elif purpose == layer_purpose_exposure['key']:
-                subcategory = '<b>%s</b>: %s<br/>' % (
+                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                     self.tr('Exposure'), keywords.get(purpose))
                 unit = keywords.get('exposure_unit')
             else:
@@ -2916,14 +2931,17 @@ class WizardDialog(QDialog, FORM_CLASS):
             if keywords.get('layer_mode') == layer_mode_classified['key']:
                 unit = self.tr('classified data')
             if unit:
-                unit = '<b>%s</b>: %s<br/>' % (self.tr('Unit'), unit)
+                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                    self.tr('Unit'), unit)
 
             desc = """
-                <b>Title</b>: %s<br/>
-                <b>Purpose</b>: %s<br/>
+                <table border=0>
+                <tr><td><b>Title</b>: </td><td>%s</td></tr>
+                <tr><td><b>Purpose</b>: </td><td>%s</td></tr>
                 %s
                 %s
-                <b>Source</b>: %s<br/><br/>
+                <tr><td><b>Source</b>: </td><td>%s</td></tr>
+                </table>
             """ % (keywords.get('title'),
                    keywords.get('layer_purpose'),
                    subcategory,
@@ -3407,20 +3425,47 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_summary(self):
         """Set widgets on the Summary tab"""
-        def format_postprocessor(val):
+        def format_postprocessor(pp):
             """ make nested OrderedDicts more flat"""
-            if isinstance(val, OrderedDict):
+            if isinstance(pp, OrderedDict):
                 result = []
-                for v in val:
-                    if isinstance(val[v], OrderedDict):
+                for v in pp:
+                    if isinstance(pp[v], OrderedDict):
                         # omit the v key and unpack the dict directly
-                        result += [u'%s: %s' % (unicode(k), unicode(val[v][k]))
-                                   for k in val[v]]
+                        result += [u'%s: %s' % (unicode(k), unicode(pp[v][k]))
+                                   for k in pp[v]]
                     else:
-                        result += [u'%s: %s' % (unicode(v), unicode(val[v]))]
+                        result += [u'%s: %s' % (unicode(v), unicode(pp[v]))]
+                return u', '.join(result)
+            elif isinstance(pp, list):
+                result = []
+                for i in pp:
+                    name = i.serialize()['name']
+                    val = i.serialize()['value']
+                    if isinstance(val, bool):
+                        val = val and self.tr('Enabled') or self.tr('Disabled')
+                    if isinstance(i, GroupParameter):
+                        # val is a list od *Parameter instances
+                        jresult = []
+                        for j in val:
+                            jname = j.serialize()['name']
+                            jval = j.serialize()['value']
+                            if isinstance(jval, bool):
+                                jval = (jval and self.tr('Enabled')
+                                        or self.tr('Disabled'))
+                            else:
+                                jval = unicode(jval)
+                            jresult += [u'%s: %s' % (jname, jval)]
+                        val = u', '.join(jresult)
+                    else:
+                        val = unicode(val)
+                    if pp.index(i) == 0:
+                        result += [val]
+                    else:
+                        result += [u'%s: %s' % (name, val)]
                 return u', '.join(result)
             else:
-                return unicode(val)
+                return unicode(pp)
 
         self.if_params = self.parameter_dialog.parse_input(
             self.parameter_dialog.values)
@@ -3438,26 +3483,33 @@ class WizardDialog(QDialog, FORM_CLASS):
         for p in self.if_params:
             if isinstance(self.if_params[p], OrderedDict):
                 subparams = [
-                    u'<b>%s</b>: %s' % (
+                    u'<tr><td>%s &nbsp;</td><td>%s</td></tr>' % (
                         unicode(pp),
                         format_postprocessor(self.if_params[p][pp]))
                     for pp in self.if_params[p]
                     ]
-                subparams = u'<br/>'.join(subparams)
+                if subparams:
+                    subparams = ''.join(subparams)
+                    subparams = '<table border="0">%s</table>' % subparams
             elif isinstance(self.if_params[p], list) and p == 'minimum needs':
                 subparams = ''
                 for need in self.if_params[p]:
-                    subparams += '%s %.0f' % (need.name, need.value)
-                    if need.unit.abbreviation:
-                        subparams += need.unit.abbreviation
-                    if need != self.if_params[p][-1]:
-                        subparams += ', '
-                if not subparams:
+                    # concatenate all ResourceParameter
+                    name = unicode(need.serialize()['name'])
+                    val = unicode(need.serialize()['value'])
+                    if isinstance(need, ResourceParameter):
+                        if need.unit and need.unit.abbreviation:
+                            val += need.unit.abbreviation
+                    subparams += u'<tr><td>%s &nbsp;</td><td>%s</td></tr>' % (
+                        name, val)
+                if subparams:
+                    subparams = '<table border="0">%s</table>' % subparams
+                else:
                     subparams = 'Not applicable'
             elif isinstance(self.if_params[p], list):
                 subparams = ', '.join([unicode(i) for i in self.if_params[p]])
             else:
-                subparams = unicode(self.if_params[p])
+                subparams = unicode(self.if_params[p].serialize()['value'])
 
             params += [(p, subparams)]
 
@@ -3635,12 +3687,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_kw_layermode()
         elif new_step == step_kw_unit:
             self.set_widgets_step_kw_unit()
+        elif new_step == step_kw_classification:
+            self.set_widgets_step_kw_classification()
         elif new_step == step_kw_field:
             self.set_widgets_step_kw_field()
         elif new_step == step_kw_resample:
             self.set_widgets_step_kw_resample()
-        elif new_step == step_kw_classification:
-            self.set_widgets_step_kw_classification()
         elif new_step == step_kw_classify:
             self.set_widgets_step_kw_classify()
         elif new_step == step_kw_extrakeywords:
@@ -3767,12 +3819,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             return bool(self.selected_layermode())
         if step == step_kw_unit:
             return bool(self.selected_unit())
+        if step == step_kw_classification:
+            return bool(self.selected_classification())
         if step == step_kw_field:
             return bool(self.selected_field() or not self.lstFields.count())
         if step == step_kw_resample:
             return True
-        if step == step_kw_classification:
-            return bool(self.selected_classification())
         if step == step_kw_classify:
             # Allow to not classify any values
             return True
@@ -3855,16 +3907,19 @@ class WizardDialog(QDialog, FORM_CLASS):
             new_step = step_kw_layermode
         elif current_step == step_kw_layermode:
             if self.selected_layermode() == layer_mode_classified:
-                if is_raster_layer(self.layer):
-                    new_step = step_kw_classification  # CLASSIFIED RASTER
-                elif is_point_layer(self.layer) \
+                if is_point_layer(self.layer) \
                         and self.selected_category() == layer_purpose_hazard:
                     # Skip FIELD and CLASSIFICATION for point volcanos
-                    new_step = step_kw_extrakeywords  # CLASSIFIED POINT
+                    new_step = step_kw_extrakeywords
+                elif self.classifications_for_layer():
+                    new_step = step_kw_classification
+                elif is_raster_layer(self.layer):
+                    new_step = step_kw_extrakeywords
                 else:
-                    new_step = step_kw_field  # CLASSIFIED LINE | POLY
+                    new_step = step_kw_field
             else:
-                new_step = step_kw_unit  # CONTINUOUS DATA, ALL GEOMETRIES
+                # CONTINUOUS DATA, ALL GEOMETRIES
+                new_step = step_kw_unit
         elif current_step == step_kw_unit:
             if is_raster_layer(self.layer):
                 if self.selected_category() == layer_purpose_exposure:
@@ -3875,17 +3930,21 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 # Currently not used, as we don't have continuous vectors
                 new_step = step_kw_field
+        elif current_step == step_kw_classification:
+            if is_raster_layer(self.layer):
+                new_step = step_kw_classify
+            else:
+                new_step = step_kw_field
         elif current_step == step_kw_field:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
-            elif self.selected_layermode() == layer_mode_classified:
-                new_step = step_kw_classification
+            elif self.selected_layermode() == layer_mode_classified and \
+                    self.classifications_for_layer():
+                new_step = step_kw_classify
             else:
                 new_step = step_kw_extrakeywords
         elif current_step == step_kw_resample:
             new_step = step_kw_extrakeywords
-        elif current_step == step_kw_classification:
-            new_step = step_kw_classify
         elif current_step == step_kw_classify:
             new_step = step_kw_extrakeywords
         elif current_step == step_kw_extrakeywords:
@@ -3980,12 +4039,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             raise Exception('Unexpected number of steps')
 
-        # Skip the classification and classify tabs if no classifications
-        # available:
-        if (new_step == step_kw_classification and not
-                self.classifications_for_layer()):
-            new_step = step_kw_extrakeywords
-
         # Skip the extra_keywords tab if no extra keywords available:
         if (new_step == step_kw_extrakeywords and not
                 self.additional_keywords_for_the_layer()):
@@ -4020,25 +4073,24 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_subcategory
         elif current_step == step_kw_unit:
             new_step = step_kw_layermode
+        elif current_step == step_kw_classification:
+            new_step = step_kw_layermode
         elif current_step == step_kw_field:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_category
             elif self.selected_layermode() == layer_mode_continuous:
                 new_step = step_kw_unit
+            elif self.classifications_for_layer():
+                new_step = step_kw_classification
             else:
                 new_step = step_kw_layermode
         elif current_step == step_kw_resample:
-            if self.selected_layermode() == layer_mode_continuous:
-                new_step = step_kw_unit
-            else:
-                new_step = step_kw_layermode
-        elif current_step == step_kw_classification:
-            if self.selected_field():
-                new_step = step_kw_field
-            else:
-                new_step = step_kw_layermode
+            new_step = step_kw_unit
         elif current_step == step_kw_classify:
-            new_step = step_kw_classification
+            if is_raster_layer(self.layer):
+                new_step = step_kw_classification
+            else:
+                new_step = step_kw_field
         elif current_step == step_kw_aggregation:
             new_step = step_kw_field
         elif current_step == step_kw_extrakeywords:
