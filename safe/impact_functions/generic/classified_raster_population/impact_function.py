@@ -14,15 +14,11 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-__revision__ = '$Format:%H$'
-__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 import numpy
 import itertools
 
+from safe.impact_functions.bases.classified_rh_continuous_re import \
+    ClassifiedRHContinuousRE
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding,
@@ -36,7 +32,6 @@ from safe.common.utilities import (
     get_thousand_separator)
 from safe.utilities.i18n import tr
 from safe.common.tables import Table, TableRow
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.\
     classified_raster_population.metadata_definitions import \
     ClassifiedRasterHazardPopulationMetadata
@@ -46,8 +41,14 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
 
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
-class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
+
+class ClassifiedRasterHazardPopulationFunction(ClassifiedRHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by classified hazard."""
 
@@ -126,14 +127,8 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
             ])
         return table_body
 
-    def run(self, layers=None):
+    def run(self):
         """Plugin for impact of population as derived by classified hazard.
-
-        Input
-        :param layers: List of layers expected to contain
-
-              * hazard_layer: Raster layer of classified hazard
-              * exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each class of the hazard
 
@@ -142,13 +137,14 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
           Table with number of people in each class
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # The 3 classes
         # TODO (3.2): shouldnt these be defined in keywords rather? TS
-        low_class = self.parameters['low_hazard_class']
-        medium_class = self.parameters['medium_hazard_class']
-        high_class = self.parameters['high_hazard_class']
+        categorical_hazards = self.parameters['Categorical hazards'].value
+        low_class = categorical_hazards[0].value
+        medium_class = categorical_hazards[1].value
+        high_class = categorical_hazards[2].value
 
         # The classes must be different to each other
         unique_classes_flag = all(

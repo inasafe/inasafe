@@ -12,9 +12,9 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from collections import OrderedDict
-
 from qgis.core import (
     QgsField,
+    QgsSpatialIndex,
     QgsVectorLayer,
     QgsFeature,
     QgsRectangle,
@@ -22,9 +22,11 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsCoordinateReferenceSystem,
     QgsGeometry)
+
 from PyQt4.QtCore import QVariant
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_classified_ve import \
+    ClassifiedVHClassifiedVE
 from safe.impact_functions.inundation.flood_vector_building_impact.\
     metadata_definitions import FloodPolygonBuildingFunctionMetadata
 from safe.utilities.i18n import tr
@@ -35,7 +37,7 @@ from safe.impact_reports.building_exposure_report_mixin import (
 
 
 class FloodPolygonBuildingFunction(
-        ImpactFunction,
+        ClassifiedVHClassifiedVE,
         BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Impact function for inundation (polygon-polygon)."""
@@ -51,8 +53,8 @@ class FloodPolygonBuildingFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
         return [
             {
                 'content': tr('Notes'),
@@ -66,24 +68,15 @@ class FloodPolygonBuildingFunction(
             }
         ]
 
-    def run(self, layers=None):
-        """Experimental impact function.
-
-        Input
-          layers: List of layers expected to contain
-              H: Polygon layer of inundation areas
-              E: Vector layer of buildings
-        """
+    def run(self):
+        """Experimental impact function."""
         self.validate()
-        self.prepare(layers)
-
-        # Set the target field in impact layer
-        target_field = 'INUNDATED'
+        self.prepare()
 
         # Get the IF parameters
-        building_type_field = self.parameters['building_type_field']
-        affected_field = self.parameters['affected_field']
-        affected_value = self.parameters['affected_value']
+        building_type_field = self.parameters['building_type_field'].value
+        affected_field = self.parameters['affected_field'].value
+        affected_value = self.parameters['affected_value'].value
 
         # Extract data
         hazard_layer = self.hazard    # Flood
@@ -118,10 +111,11 @@ class FloodPolygonBuildingFunction(
             raise GetDataError(message)
 
         # If target_field does not exist, add it:
-        if exposure_fields.indexFromName(target_field) == -1:
+        if exposure_fields.indexFromName(self.target_field) == -1:
             exposure_provider.addAttributes(
-                [QgsField(target_field, QVariant.Int)])
-        target_field_index = exposure_provider.fieldNameIndex(target_field)
+                [QgsField(self.target_field, QVariant.Int)])
+        target_field_index = exposure_provider.fieldNameIndex(
+            self.target_field)
         exposure_fields = exposure_provider.fields()
 
         # Create layer to store the lines from E and extent
@@ -160,25 +154,18 @@ class FloodPolygonBuildingFunction(
         if affected_field_type in ['Real', 'Integer']:
             affected_value = float(affected_value)
 
-        hazard_data = hazard_layer.getFeatures(request)
-        hazard_poly = None
-        for feature in hazard_data:
-            record = feature.attributes()
-            if record[affected_field_index] != affected_value:
+        # make spatial index of affected polygons
+        hazard_index = QgsSpatialIndex()
+        hazard_geometries = {}  # key = feature id, value = geometry
+        has_hazard_objects = False
+        for feature in hazard_layer.getFeatures(request):
+            if feature[affected_field_index] != affected_value:
                 continue
-            if hazard_poly is None:
-                hazard_poly = QgsGeometry(feature.geometry())
-            else:
-                # Make geometry union of inundated polygons
-                # But some polygon.geometry() could be invalid, skip them
-                tmp_geometry = hazard_poly.combine(feature.geometry())
-                try:
-                    if tmp_geometry.isGeosValid():
-                        hazard_poly = tmp_geometry
-                except AttributeError:
-                    pass
+            hazard_index.insertFeature(feature)
+            hazard_geometries[feature.id()] = QgsGeometry(feature.geometry())
+            has_hazard_objects = True
 
-        if hazard_poly is None:
+        if not has_hazard_objects:
             message = tr(
                 'There are no objects in the hazard layer with %s '
                 'value=%s. Please check your data or use another '
@@ -187,18 +174,31 @@ class FloodPolygonBuildingFunction(
                     affected_value)
             raise GetDataError(message)
 
-        exposure_data = exposure_layer.getFeatures(request)
-        for feature in exposure_data:
+        features = []
+        for feature in exposure_layer.getFeatures(request):
             building_geom = feature.geometry()
-            record = feature.attributes()
-            l_feat = QgsFeature()
-            l_feat.setGeometry(building_geom)
-            l_feat.setAttributes(record)
-            if hazard_poly.intersects(building_geom):
-                l_feat.setAttribute(target_field_index, 1)
-            else:
-                l_feat.setAttribute(target_field_index, 0)
-            (_, __) = building_layer.dataProvider().addFeatures([l_feat])
+            affected = False
+            # get tentative list of intersecting hazard features
+            # only based on intersection of bounding boxes
+            ids = hazard_index.intersects(building_geom.boundingBox())
+            for fid in ids:
+                # run (slow) exact intersection test
+                if hazard_geometries[fid].intersects(building_geom):
+                    affected = True
+                    break
+            f = QgsFeature()
+            f.setGeometry(building_geom)
+            f.setAttributes(feature.attributes())
+            f[target_field_index] = 1 if affected else 0
+            features.append(f)
+
+            # every once in a while commit the created features
+            # to the output layer
+            if len(features) == 1000:
+                (_, __) = building_provider.addFeatures(features)
+                features = []
+
+        (_, __) = building_provider.addFeatures(features)
         building_layer.updateExtents()
 
         # Generate simple impact report
@@ -237,7 +237,7 @@ class FloodPolygonBuildingFunction(
             dict(label=tr('Inundated'), value=1, colour='#F31A1C',
                  transparency=0, size=0.5)]
         style_info = dict(
-            target_field=target_field,
+            target_field=self.target_field,
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
@@ -248,7 +248,7 @@ class FloodPolygonBuildingFunction(
             keywords={
                 'impact_summary': impact_summary,
                 'map_title': map_title,
-                'target_field': target_field,
+                'target_field': self.target_field,
                 'buildings_total': self.total_buildings,
                 'buildings_affected': self.total_affected_buildings},
             style_info=style_info)

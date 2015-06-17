@@ -10,58 +10,56 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.unit_definitions import parameter_unit_percentage
+from safe.utilities.i18n import tr
 
-from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.string_parameter import StringParameter
+from safe_extras.parameters.float_parameter import FloatParameter
 
 
-def target_field():
-    """Generator for the flooded target field parameter."""
-    field = StringParameter()
-    field.name = 'Target Field'
+def evacuation_percentage():
+    """Generator for the default evaluation percentage parameter.
+    :return: List of Float parameter
+    :rtype: list[FloatParameter]
+    """
+    field = FloatParameter()
+    field.name = 'Evacuation Percentage'
     field.is_required = True
-    field.help_text = (
-        'This field of impact layer marks inundated roads by \'1\' value')
-    field.description = (
-        'This field of impact layer marks inundated roads by \'1\' value. '
-        'This is the longer description of this parameter.')
-    field.value = 'INUNDATED'  # default value
+    field.maximum_allowed_value = 100
+    field.minimum_allowed_value = 0
+    field.value = 1
+    field.precision = 2
+    unit_percentage = parameter_unit_percentage()
+    field.unit = unit_percentage
+    field.allowed_units = [unit_percentage]
+    field.help_text = tr('Percentage value of affected population.')
+    field.description = tr(
+        'The value in percentage of the population that '
+        'represent the number of people needed to be evacuated.')
     return field
 
 
 def affected_field():
-    """"Generator for selection of affected field parameter."""
+    """Generate affected field parameter
+
+    :return: list of StringParameter
+    :rtype: list[StringParameter]
+    """
     field = StringParameter()
     field.name = 'Affected Field'
     field.is_required = True
-    field.help_text = (
-        'This field of the  hazard layer contains information about inundated '
-        'areas')
-    field.description = (
-        'This field of the  hazard layer contains information about inundated '
-        'areas. This is the longer description of this parameter.')
-    field.value = 'affected'  # default value
+    field.value = 'FLOODPRONE'  # default value
     return field
 
 
 def affected_value():
-    """Generator for parameter stating what values constitute 'affected'."""
+    """Generate affected value parameter
+
+    :return: list of String Parameter
+    :rtype: list[StringParameter]
+    """
     field = StringParameter()
     field.name = 'Affected Value'
     field.is_required = True
-    field.help_text = (
-        'This value in \'affected_field\' of the hazard layer marks the areas '
-        'as inundated')
-    field.description = (
-        'This value in \'affected_field\' of the hazard layer marks the areas '
-        'as inundated. This is the longer description of this parameter.')
-    field.value = '1'  # default value
-    return field
-
-
-def building_type_field():
-    field = BooleanParameter()
-    field.name = 'Building Type Field'
-    field.is_required = True
-    field.value = True
+    field.value = 'YES'  # default value
     return field

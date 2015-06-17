@@ -28,6 +28,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QFileInfo, pyqtSignature
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
+from qgis.utils import iface
 
 from safe.common.version import get_version
 from safe import messaging as m
@@ -123,8 +124,8 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
     def on_output_path_textChanged(self):
         """Action when output file name is changed.
         """
-        output_path = str(self.output_path.text())
-        output_not_xml_msg = str(self.tr('output file is not .tif'))
+        output_path = self.output_path.text()
+        output_not_xml_msg = self.tr('output file is not .tif')
         if not output_path.endswith('.tif'):
             self.warning_text.add(output_not_xml_msg)
         elif output_not_xml_msg in self.warning_text:
@@ -135,9 +136,8 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
     def on_input_path_textChanged(self):
         """Action when input file name is changed.
         """
-        input_path = str(self.input_path.text())
-        # input_not_exist_msg = str(self.tr('input file is not existed'))
-        input_not_grid_msg = str(self.tr('input file is not .xml'))
+        input_path = self.input_path.text()
+        input_not_grid_msg = self.tr('input file is not .xml')
 
         if not input_path.endswith('.xml'):
             self.warning_text.add(input_not_grid_msg)
@@ -173,7 +173,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
     def get_output_from_input(self):
         """Create default output location based on input location.
         """
-        input_path = str(self.input_path.text())
+        input_path = self.input_path.text()
         if input_path.endswith('.xml'):
             output_path = input_path[:-3] + 'tif'
         elif input_path == '':
@@ -236,6 +236,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             else:
                 # noinspection PyArgumentList
                 QgsMapLayerRegistry.instance().addMapLayers([layer])
+                iface.zoomToActiveLayer()
         self.done(self.Accepted)
 
     @pyqtSignature('')  # prevents actions being handled twice

@@ -80,9 +80,11 @@ class GenericParameterWidget(QWidget, object):
         self._input_layout.addLayout(self._inner_input_layout)
         # self._input_layout.addSpacing(100)
 
-        self._help_layout.addWidget(self._switch_button, 0, 0)
-        self._help_layout.addWidget(self._help_text_label, 0, 1)
-        self._help_layout.addWidget(self._description_label, 1, 1)
+        if self._parameter.description:
+            self._help_layout.addWidget(self._switch_button, 0, 0)
+            self._help_layout.addWidget(self._description_label, 1, 1)
+        if self._parameter.help_text:
+            self._help_layout.addWidget(self._help_text_label, 0, 1)
 
         self._main_layout.addLayout(self._input_layout)
         self._main_layout.addLayout(self._help_layout)

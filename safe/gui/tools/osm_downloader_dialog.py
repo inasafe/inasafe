@@ -23,7 +23,7 @@ import logging
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
-from qgis.core import QGis  # force sip2 api
+from qgis.core import QGis, QgsRectangle  # force sip2 api
 from qgis.gui import QgsMapToolPan
 # pylint: enable=unused-import
 
@@ -37,6 +37,8 @@ from PyQt4.QtGui import (
 # noinspection PyPackageRequirements
 from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
 
+import json
+
 from safe.common.exceptions import (
     CanceledImportDialogError,
     DownloadError,
@@ -44,7 +46,8 @@ from safe.common.exceptions import (
 from safe import messaging as m
 from safe.utilities.file_downloader import FileDownloader
 from safe.utilities.gis import viewport_geo_array, rectangle_geo_array
-from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.utilities.resources import (
+    html_footer, html_header, get_ui_class, resources_path)
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.proxy import get_proxy
@@ -78,10 +81,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
 
         self.iface = iface
-        self.buildings_url = 'http://osm.linfiniti.com/buildings-shp'
-        self.building_points_url = \
-            'http://osm.linfiniti.com/building-points-shp'
-        self.roads_url = 'http://osm.linfiniti.com/roads-shp'
+        self.url_osm = 'http://osm.linfiniti.com/'
+        self.url_osm_suffix = '-shp'
 
         self.help_context = 'openstreetmap_downloader'
         # creating progress dialog for download
@@ -119,7 +120,58 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         # Setup pan tool
         self.pan_tool = QgsMapToolPan(self.canvas)
         self.canvas.setMapTool(self.pan_tool)
+
+        # Setup helper for admin_level
+        json_file_path = resources_path('osm', 'admin_level_per_country.json')
+        if os.path.isfile(json_file_path):
+            self.countries = json.load(open(json_file_path))
+            self.bbox_countries = None
+            self.populate_countries()
+            # connect
+            self.country_comboBox.currentIndexChanged.connect(
+                self.update_helper_political_level)
+            self.admin_level_comboBox.currentIndexChanged.connect(
+                self.update_helper_political_level)
+
         self.update_extent_from_map_canvas()
+
+    def update_helper_political_level(self):
+        """To update the helper about the country and the admin_level."""
+        current_country = self.country_comboBox.currentText()
+        index = self.admin_level_comboBox.currentIndex()
+        current_level = self.admin_level_comboBox.itemData(index)
+        try:
+            content = \
+                self.countries[current_country]['levels'][str(current_level)]
+            if content == 'N/A' or content == 'fixme' or content == '':
+                raise KeyError
+        except KeyError:
+            content = self.tr('undefined')
+        finally:
+            text = '<span style=" font-size:12pt; font-style:italic;">' \
+                   'level %s is : %s</span>' % (current_level, content)
+            self.boundary_helper.setText(text)
+
+    def populate_countries(self):
+        """Populate the combobox about countries and levels."""
+        for i in range(1, 12):
+            self.admin_level_comboBox.addItem(self.tr("Level %s" % i), i)
+
+        # Set current index to admin_level 8, the most common one
+        self.admin_level_comboBox.setCurrentIndex(7)
+
+        list_countries = self.countries.keys()
+        list_countries.sort()
+        for country in list_countries:
+            self.country_comboBox.addItem(country)
+
+        self.bbox_countries = {}
+        for country in list_countries:
+            coords = self.countries[country]['bbox']
+            self.bbox_countries[country] = QgsRectangle(
+                coords[0], coords[3], coords[2], coords[1])
+
+        self.update_helper_political_level()
 
     def show_info(self):
         """Show usage info to the user."""
@@ -212,6 +264,17 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.max_longitude.setText(str(extent[2]))
         self.max_latitude.setText(str(extent[3]))
 
+        # Updating the country if possible.
+        rectangle = QgsRectangle(extent[0], extent[1], extent[2], extent[3])
+        center = rectangle.center()
+        for country in self.bbox_countries:
+            if self.bbox_countries[country].contains(center):
+                index = self.country_comboBox.findText(country)
+                self.country_comboBox.setCurrentIndex(index)
+                break
+        else:
+            self.country_comboBox.setCurrentIndex(0)
+
     def update_extent_from_map_canvas(self):
         """Update extent value in GUI based from value in map.
 
@@ -287,6 +350,26 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.canvas.unsetMapTool(self.pan_tool)
         self.canvas.setMapTool(self.rectangle_map_tool)
 
+    def get_checked_features(self):
+        """Create a tab with all checked features.
+
+        :return A list with all features which are checked in the UI.
+        :rtype list
+        """
+        feature_types = []
+        if self.roads_checkBox.isChecked():
+            feature_types.append('roads')
+        if self.buildings_checkBox.isChecked():
+            feature_types.append('buildings')
+        if self.building_points_checkBox.isChecked():
+            feature_types.append('building-points')
+        if self.potential_idp_checkBox.isChecked():
+            feature_types.append('potential-idp')
+        if self.boundary_checkBox.isChecked():
+            level = self.admin_level_comboBox.currentIndex() + 1
+            feature_types.append('boundary-%s' % level)
+        return feature_types
+
     def accept(self):
         """Do osm download and display it in QGIS."""
         error_dialog_title = self.tr('InaSAFE OpenStreetMap Downloader Error')
@@ -306,16 +389,16 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.groupBox.setEnabled(True)
             return
 
-        # Get all the feature types
-        index = self.feature_type.currentIndex()
-        if index == 0:
-            feature_types = ['buildings', 'roads', 'building-points']
-        elif index == 1:
-            feature_types = ['buildings']
-        elif index == 2:
-            feature_types = ['building-points']
-        else:
-            feature_types = ['roads']
+        feature_types = self.get_checked_features()
+        if len(feature_types) < 1:
+            message = self.tr(
+                'No feature selected.'
+                'Please make sure you have checked one feature.')
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+            display_warning_message_box(self, error_dialog_title, message)
+            # Unlock the groupbox
+            self.groupBox.setEnabled(True)
+            return
 
         try:
             self.save_state()
@@ -493,15 +576,10 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 max_longitude=max_longitude,
                 max_latitude=max_latitude
             )
-        if feature_type == 'buildings':
-            url = '{url}?bbox={box}&qgis_version=2'.format(
-                url=self.buildings_url, box=box)
-        elif feature_type == 'building-points':
-            url = '{url}?bbox={box}&qgis_version=2'.format(
-                url=self.building_points_url, box=box)
-        else:
-            url = '{url}?bbox={box}&qgis_version=2'.format(
-                url=self.roads_url, box=box)
+
+        url = self.url_osm + feature_type + self.url_osm_suffix
+        url = '{url}?bbox={box}&qgis_version=2'.format(
+            url=url, box=box)
 
         if 'LANG' in os.environ:
             env_lang = os.environ['LANG']

@@ -12,7 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import numpy
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_continuous_re import \
+    ClassifiedVHContinuousRE
 from safe.impact_functions.generic.classified_polygon_population\
     .metadata_definitions import \
     ClassifiedPolygonHazardPopulationFunctionMetadata
@@ -25,21 +26,19 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator,
-    get_non_conflicting_attribute_name)
+    get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
-class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
+class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
     """Impact Function for Classified Polygon on Population."""
 
     _metadata = ClassifiedPolygonHazardPopulationFunctionMetadata()
 
     def __init__(self):
         super(ClassifiedPolygonHazardPopulationFunction, self).__init__()
-        self.target_field = 'population'
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
         # AG: Use the proper minimum needs, update the parameters
@@ -48,15 +47,8 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         self.question = ('In each of the hazard zones how many people '
                          'might be impacted.')
 
-    def run(self, layers=None):
+    def run(self):
         """Run classified population evacuation Impact Function.
-
-        :param layers: List of layers expected to contain where two layers
-            should be present.
-
-            * hazard_layer: Vector polygon layer
-            * exposure_layer: Raster layer of population data on the same grid
-                as hazard_layer
 
         Counts number of people exposed to each hazard zones.
 
@@ -69,10 +61,10 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             * Exception - When hazard layer is not vector layer
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute']
+        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard
@@ -96,12 +88,6 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         # Get unique hazard zones from the layer attribute
         self.hazard_zones = list(
             set(hazard_layer.get_data(hazard_zone_attribute)))
-
-        # Find the target field name that has no conflict with default target
-        attribute_names = hazard_layer.get_attribute_names()
-        new_target_field = get_non_conflicting_attribute_name(
-            self.target_field, attribute_names)
-        self.target_field = new_target_field
 
         # Interpolated layer represents grid cell that lies in the polygon
         interpolated_layer, covered_exposure_layer = \

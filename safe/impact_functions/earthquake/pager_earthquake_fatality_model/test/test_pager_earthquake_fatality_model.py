@@ -90,19 +90,20 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
     def test_filter(self):
         """TestPagerEarthquakeFatalityFunction: Test filtering IF"""
         hazard_keywords = {
-            'category': 'hazard',
-            'subcategory': 'earthquake',
-            'layer_type': 'raster',
-            'data_type': 'continuous',
-            'unit': 'mmi'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'hazard': 'earthquake',
+            'hazard_category': 'single_event',
+            'continuous_hazard_unit': 'mmi'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous',
-            'unit': 'people_per_pixel'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)

@@ -13,18 +13,14 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-__revision__ = '$Format:%H$'
-__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import numpy
 
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic\
     .continuous_hazard_population.metadata_definitions import \
     ContinuousHazardPopulationMetadata
+from safe.impact_functions.bases.continuous_rh_continuous_re import \
+    ContinuousRHContinuousRE
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.core import (
     evacuated_population_needs,
@@ -37,10 +33,17 @@ from safe.common.tables import Table, TableRow
 from safe.common.utilities import create_classes, create_label, humanize_class
 from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    filter_needs_parameters
+
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 
-class ContinuousHazardPopulationFunction(ImpactFunction):
+class ContinuousHazardPopulationFunction(ContinuousRHContinuousRE):
     # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by continuous hazard."""
     _metadata = ContinuousHazardPopulationMetadata()
@@ -115,13 +118,8 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
                     format_int(resource['amount'])]))
         return table_body, total_needs
 
-    def run(self, layers=None):
+    def run(self):
         """Plugin for impact of population as derived by categorised hazard.
-
-        :param layers: List of layers expected to contain
-
-            * hazard_layer: Raster layer of categorised hazard
-            * exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each category of the hazard
 
@@ -130,9 +128,10 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
           Table with number of people in each category
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
-        thresholds = self.parameters['Categorical thresholds']
+        thresholds = [
+            p.value for p in self.parameters['Categorical thresholds'].value]
 
         # Thresholds must contain 3 thresholds
         if len(thresholds) != 3:
@@ -203,7 +202,7 @@ class ContinuousHazardPopulationFunction(ImpactFunction):
 
         minimum_needs = [
             parameter.serialize() for parameter in
-            self.parameters['minimum needs']
+            filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
         table_body = self._tabulate(

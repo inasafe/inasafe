@@ -13,15 +13,15 @@ Contact : ole.moller.nielsen@gmail.com
 
 from collections import OrderedDict
 
+from safe.impact_functions.bases.classified_vh_classified_ve import \
+    ClassifiedVHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.volcanic.volcano_polygon_building\
     .metadata_definitions import VolcanoPolygonBuildingFunctionMetadata
 from safe.common.exceptions import InaSAFEError
 from safe.common.utilities import (
     get_thousand_separator,
-    get_non_conflicting_attribute_name,
     get_osm_building_usage)
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
@@ -30,7 +30,7 @@ from safe.impact_reports.building_exposure_report_mixin import (
 
 
 class VolcanoPolygonBuildingFunction(
-        ImpactFunction,
+        ClassifiedVHClassifiedVE,
         BuildingExposureReportMixin):
     """Impact Function for Volcano Point on Building."""
 
@@ -67,31 +67,21 @@ class VolcanoPolygonBuildingFunction(
             }
         ]
 
-    def run(self, layers=None):
+    def run(self):
         """Risk plugin for volcano hazard on building/structure.
 
         Counts number of building exposed to each volcano hazard zones.
-
-        :param layers: List of layers expected to contain.
-                * hazard_layer: Hazard layer of volcano
-                * exposure_layer: Vector layer of structure data on
-                the same grid as hazard_layer
 
         :returns: Map of building exposed to volcanic hazard zones.
                   Table with number of buildings affected
         :rtype: dict
         """
         self.validate()
-        self.prepare(layers)
-        # Target Field
-        target_field = 'zone'
-
-        # Not affected string
-        not_affected_value = 'Not Affected'
+        self.prepare()
 
         # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute']
-        name_attribute = self.parameters['volcano name attribute']
+        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
+        name_attribute = self.parameters['volcano name attribute'].value
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Volcano hazard layer
@@ -123,12 +113,6 @@ class VolcanoPolygonBuildingFunction(
         else:
             self.volcano_names = tr('Not specified in data')
 
-        # Find the target field name that has no conflict with default
-        # target
-        attribute_names = hazard_layer.get_attribute_names()
-        target_field = get_non_conflicting_attribute_name(
-            target_field, attribute_names)
-
         # Run interpolation function for polygon2raster
         interpolated_layer = assign_hazard_values_to_exposure_data(
             hazard_layer, exposure_layer, attribute_name=None)
@@ -149,8 +133,8 @@ class VolcanoPolygonBuildingFunction(
         for i in range(len(features)):
             hazard_value = features[i][hazard_zone_attribute]
             if not hazard_value:
-                hazard_value = not_affected_value
-            features[i][target_field] = hazard_value
+                hazard_value = self._not_affected_value
+            features[i][self.target_field] = hazard_value
             usage = get_osm_building_usage(attribute_names, features[i])
             if usage in [None, 'NULL', 'null', 'Null', 0]:
                 usage = tr('Unknown')
@@ -171,7 +155,7 @@ class VolcanoPolygonBuildingFunction(
         # Generate simple impact report
         impact_summary = impact_table = self.generate_html_report()
         category_names = hazard_zone_categories
-        category_names.append(not_affected_value)
+        category_names.append(self._not_affected_value)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -198,7 +182,7 @@ class VolcanoPolygonBuildingFunction(
             style_classes.append(style_class)
 
         # Override style info with new classes and name
-        style_info = dict(target_field=target_field,
+        style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
@@ -217,7 +201,7 @@ class VolcanoPolygonBuildingFunction(
             name=tr('Buildings affected by volcanic hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
-                      'target_field': target_field,
+                      'target_field': self.target_field,
                       'map_title': map_title,
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,

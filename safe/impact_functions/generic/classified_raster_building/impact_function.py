@@ -18,22 +18,22 @@ import logging
 from collections import OrderedDict
 from numpy import round as numpy_round
 
+from safe.impact_functions.bases.classified_rh_classified_ve import \
+    ClassifiedRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.utilities.i18n import tr
 from safe.common.utilities import get_osm_building_usage
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class ClassifiedRasterHazardBuildingFunction(
-        ImpactFunction,
+        ClassifiedRHClassifiedVE,
         BuildingExposureReportMixin):
     """Impact plugin for classified hazard impact on building data"""
 
@@ -42,8 +42,6 @@ class ClassifiedRasterHazardBuildingFunction(
 
     def __init__(self):
         super(ClassifiedRasterHazardBuildingFunction, self).__init__()
-
-        self.target_field = 'DAMAGED'
         self.affected_field = 'affected'
 
     def notes(self):
@@ -63,21 +61,17 @@ class ClassifiedRasterHazardBuildingFunction(
                     'high hazard class areas.')
             }]
 
-    def run(self, layers=None):
+    def run(self):
         """Classified hazard impact to buildings (e.g. from Open Street Map).
-
-         :param layers: List of layers expected to contain.
-                * hazard: Classified Hazard layer
-                * exposure: Vector layer of structure data on
-                the same grid as hazard
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # The 3 classes
-        low_t = self.parameters['low_hazard_class']
-        medium_t = self.parameters['medium_hazard_class']
-        high_t = self.parameters['high_hazard_class']
+        categorical_hazards = self.parameters['Categorical hazards'].value
+        low_t = categorical_hazards[0].value
+        medium_t = categorical_hazards[1].value
+        high_t = categorical_hazards[2].value
 
         # Extract data
         hazard = self.hazard      # Classified Hazard
