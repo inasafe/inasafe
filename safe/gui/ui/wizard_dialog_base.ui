@@ -62,7 +62,7 @@
         <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
        </property>
        <property name="currentIndex">
-        <number>9</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="pg1Category">
         <property name="styleSheet">
@@ -87,6 +87,19 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_6">
+           <item row="1" column="1">
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item row="0" column="0" rowspan="3">
             <widget class="QListWidget" name="lstCategories">
              <property name="enabled">
@@ -112,29 +125,7 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QLabel" name="lblDescribeCategory">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>[placeholder]</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
+           <item row="1" column="2">
             <widget class="QLabel" name="lblIconCategory">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -168,6 +159,57 @@
              </property>
             </widget>
            </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_7">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="1" colspan="3">
+            <widget class="QLabel" name="lblDescribeCategory">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+             </property>
+             <property name="text">
+              <string>[placeholder]</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <spacer name="verticalSpacer_14">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
         </layout>
@@ -195,32 +237,20 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="2" column="1">
-            <widget class="QLabel" name="lblDescribeSubcategory">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
              </property>
-             <property name="text">
-              <string>[placeholder]</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-             <property name="margin">
-              <number>0</number>
-             </property>
-            </widget>
+            </spacer>
            </item>
-           <item row="1" column="1">
+           <item row="1" column="2">
             <widget class="QLabel" name="lblIconSubcategory">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -284,6 +314,60 @@
               </size>
              </property>
             </widget>
+           </item>
+           <item row="1" column="1">
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="1" colspan="3">
+            <widget class="QLabel" name="lblDescribeSubcategory">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+             </property>
+             <property name="text">
+              <string>[placeholder]</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <spacer name="verticalSpacer_15">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>
@@ -1562,7 +1646,7 @@
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Now, please select the geometry types for the &lt;span style=&quot; font-weight:600;&quot;&gt;hazard&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layers you want to use. Click on the cell in the table below that matches the geometry type for each.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1723,7 +1807,7 @@
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Below you can see a list of available &lt;span style=&quot; font-weight:600;&quot;&gt;impact functions&lt;/span&gt; matching the selected hazard, exposure and their geometries. Please choose which impact function would you like to use from the list below.&lt;/p&gt;&lt;p&gt;Please note some functions may require either continuous or classified input data. A &lt;span style=&quot; font-weight:600;&quot;&gt;continuous&lt;/span&gt; raster is one where cell values are real data values such as: &lt;span style=&quot; font-style:italic;&quot;&gt;depth of flood water in meters&lt;/span&gt; or the &lt;span style=&quot; font-style:italic;&quot;&gt;number of people per cell&lt;/span&gt;. A &lt;span style=&quot; font-weight:600;&quot;&gt;classified&lt;/span&gt; raster is one where cell values represent classes or zones such as: &lt;span style=&quot; font-style:italic;&quot;&gt;high hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;medium hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;low hazard zones&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -2687,8 +2771,8 @@ Please step back and select another layer.</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>95</width>
-              <height>65</height>
+              <width>908</width>
+              <height>435</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_32">
