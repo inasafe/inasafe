@@ -553,9 +553,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         layer_title = self.get_existing_keyword('title')
         if layer_title:
-            mode_name = self.tr('Keywords update wizard for layer <b>%s</b>') % layer_title
+            mode_name = (self.tr(
+                'Keywords update wizard for layer <b>%s</b>'
+                ) % layer_title)
         else:
-            mode_name = self.tr('Keywords creation wizard for layer <b>%s</b>') % self.layer.name()
+            mode_name = (self.tr(
+                'Keywords creation wizard for layer <b>%s</b>'
+                ) % self.layer.name())
         self.lblSubtitle.setText(mode_name)
 
     def set_mode_label_to_ifcw(self):
