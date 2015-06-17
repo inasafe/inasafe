@@ -174,22 +174,29 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         impact_layer = QgsVectorLayer(filename, "Impacted Land Cover", "ogr")
 
         # Generate the report of affected areas
+        total_affected_area = round(sum(imp_landcovers.values()), 1)
+        total_area = round(sum(all_landcovers.values()), 1)
         table_body = [
             self.question,
             TableRow(
                 [tr('Land Cover Type'),
                  tr('Affected Area (ha)'),
+                 tr('Affected Area (%)'),
                  tr('Total (ha)')],
                 header=True),
             TableRow(
                 [tr('All'),
-                 round(sum(imp_landcovers.values()), 1),
-                 round(sum(all_landcovers.values()), 1)]),
+                 total_affected_area,
+                 "%.0f%%" % (total_affected_area / total_area * 100),
+                 total_area]),
             TableRow(tr('Breakdown by land cover type'), header=True)]
         for t, v in all_landcovers.iteritems():
             affected = imp_landcovers[t] if t in imp_landcovers else 0.
+            affected_area = round(affected, 1)
+            area = round(v, 1)
+            percent_affected = affected_area / area * 100
             table_body.append(
-                TableRow([t, round(affected, 1), round(v, 1)])
+                TableRow([t, affected_area, "%.0f%%" % percent_affected, area])
             )
         impact_summary = Table(table_body).toNewlineFreeString()
 
