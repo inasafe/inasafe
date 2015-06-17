@@ -548,12 +548,26 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.if_params = None
         self.analysis_handler = None
 
+    def set_mode_label_to_keywords_creation(self):
+        """Set the mode label to the Keywords Creation/Update mode
+        """
+        layer_title = self.get_existing_keyword('title')
+        if layer_title:
+            mode_name = self.tr('Keywords update wizard for layer <b>%s</b>') % layer_title
+        else:
+            mode_name = self.tr('Keywords creation wizard for layer <b>%s</b>') % self.layer.name()
+        self.lblSubtitle.setText(mode_name)
+
+    def set_mode_label_to_ifcw(self):
+        """Set the mode label to the IFCW
+        """
+        self.lblSubtitle.setText(self.tr('Guided impact assessment wizard'))
+
     def set_keywords_creation_mode(self, layer=None):
         """Set the Wizard to the Keywords Creation mode
         :param layer: Layer to set the keywords for
         :type layer: QgsMapLayer
         """
-        self.lblSubtitle.setText(self.tr('Keywords creation...'))
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         try:
             self.existing_keywords = self.keyword_io.read_keywords(self.layer)
@@ -566,13 +580,13 @@ class WizardDialog(QDialog, FORM_CLASS):
                 InvalidParameterError,
                 UnsupportedProviderError):
             self.existing_keywords = None
-
+        self.set_mode_label_to_keywords_creation()
         self.set_widgets_step_kw_category()
         self.go_to_step(step_kw_category)
 
     def set_function_centric_mode(self):
         """Set the Wizard to the Function Centric mode"""
-        self.lblSubtitle.setText(self.tr('Guided impact assessment wizard...'))
+        self.set_mode_label_to_ifcw()
         new_step = step_fc_function_1
         self.set_widgets_step_fc_function_1()
         self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
@@ -3988,8 +4002,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = self.parent_step
                 self.parent_step = None
                 self.is_selected_layer_keywordless = False
-                self.lblSubtitle.setText(self.tr(
-                    'Guided InaSAFE analysis wizard...'))
+                self.set_mode_label_to_ifcw()
             else:
                 # Wizard complete
                 new_step = None
@@ -4004,7 +4017,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             if self.is_selected_layer_keywordless:
                 # insert keyword creation thread here
                 self.parent_step = current_step
-                self.set_keywords_creation_mode(self.layer)
+                self.set_mode_label_to_keywords_creation()
                 new_step = step_kw_category
             else:
                 new_step = step_fc_explayer_origin
@@ -4018,7 +4031,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             if self.is_selected_layer_keywordless:
                 # insert keyword creation thread here
                 self.parent_step = current_step
-                self.existing_keywords = None
+                self.set_mode_label_to_keywords_creation()
                 new_step = step_kw_category
             else:
                 if not self.layers_intersect(self.hazard_layer,
@@ -4087,6 +4100,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if current_step == step_kw_category:
             if self.parent_step:
                 # Come back to the parent thread
+                self.set_mode_label_to_ifcw()
                 new_step = self.parent_step
                 self.parent_step = None
             else:
