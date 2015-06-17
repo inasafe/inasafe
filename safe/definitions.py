@@ -183,7 +183,7 @@ hazard_category_single_event = {
     'key': 'single_event',
     'name': tr('Single Event'),
     'description': tr(
-        'A <b>single hazard event/<b> can be based on either a specific event '
+        'A <b>single hazard event</b> can be based on either a specific event '
         'that has happened in the past, for example a flood like Jakarta 2013, '
         'or a possible event such as the tsunami that results from an '
         'earthquake near Bima that might happen in the future.')
@@ -193,7 +193,7 @@ hazard_category_multiple_event = {
     'key': 'multiple_event',
     'name': tr('Multiple Event'),
     'description': tr(
-        'A <b>multiple hazard event/<b> data can be based on historical '
+        'A <b>multiple hazard event</b> data can be based on historical '
         'observations such as a hazard map of all observed volcanic '
         ' deposits around a volcano. '
         'This type of hazard data shows those locations that might be impacted '
@@ -220,7 +220,7 @@ hazard_generic = {
     'key': 'generic',
     'name': tr('Generic'),
     'description': tr(
-        'A <b>generic hazard/<b> can be used for any type of hazard where the  '
+        'A <b>generic hazard</b> can be used for any type of hazard where the  '
         'data have been classified or generalised. For example: earthquake, '
         'flood, volcano, or tsunami.')
 }
@@ -309,7 +309,7 @@ exposure_land_cover = {
     'key': 'land_cover',
     'name': tr('Land Cover'),
     'description': tr(
-        'The <b>land cover/<b> exposure data describes features on '
+        'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
         ' hazard. This might include crops, forest and urban areas. ')
 }
@@ -318,7 +318,7 @@ exposure_people_in_building = {
     'key': 'people_in_building',
     'name': tr('People in Buildings'),
     'description': tr(
-        'The <b>people in buildings/<b> exposure data is an experimental '
+        'The <b>people in buildings</b> exposure data is an experimental '
         'data set that assigns the population of a specific administrative '
         'area to the buildings with a residential function in that area.'
         'The process of assigning people to buildings assumes that all people '
@@ -396,7 +396,7 @@ unit_kilogram_per_meter_square = {
     'key': 'kilogram_per_meter_square',
     'name': tr('Kg/m2'),
     'description': tr(
-        '<b>Kilograms per square metre/<b> is a metric unit of measure where '
+        '<b>Kilograms per square metre</b> is a metric unit of measure where '
         'the weight is specified according to area.  This unit is relevant '
         'for hazards such as volcanic ash.')
 }
