@@ -246,7 +246,7 @@ field_question_subcategory_classified = QApplication.translate(
     'layeris a vector layer. Please select the attribute in this layer that '
     'represents the classes.')  # (category, subcategory)
 
-# noinspection PyCallByClass,PyCallByClass
+# noinspection PyCallByClass
 field_question_aggregation = QApplication.translate(
     'WizardDialog',
     'You have selected an aggregation layer, and it is a vector '
@@ -277,6 +277,31 @@ classify_raster_question = QApplication.translate(
     'can see all unclassified unique values found in the raster. Please '
     'drag them to the right panel in order to classify them to appropriate '
     'categories.')   # (subcategory, category, classification)
+
+# Constants for the impact function constraints second table
+# noinspection PyCallByClass
+select_function_constraints2_question = QApplication.translate(
+    'WizardDialog',
+    'You selected <b>%s</b> Hazard and <b>%s</b> Exposure. Now, please select '
+    'the <b>geometry types</b> for the hazard and exposure layers you want to '
+    'use. Click on the cell in the table below that matches the geometry type '
+    'for each.')  # (hazard, exposure)
+
+# Constants for the impact function list
+# noinspection PyCallByClass
+select_function_question = QApplication.translate(
+    'WizardDialog',
+    '<p>You selected <b>%s %s</b> Hazard and <b>%s %s</b> Exposure.</p>'
+    '<p>Below you can see a list of available <b>impact functions</b> '
+    'matching the selected hazard, exposure and their geometries. Please '
+    'choose which impact function would you like to use from the list '
+    'below.</p> '
+    '<p>Please note some functions may require either continuous or '
+    'classified input data. A <b>continuous</b> raster is one where cell '
+    'values are real data values such as: depth of flood water in meters or '
+    'the number of people per cell. A <b>classified</b> raster is one where '
+    'cell values represent classes or zones such as: high hazard zone, medium '
+    'hazard zone, low hazard zones.</p>')  # (haz_geom, haz, expo_geom, exp)
 
 # Constants for the layer origin selector
 layer_constraint_memo = QApplication.translate(
@@ -2223,7 +2248,6 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def set_widgets_step_fc_function_2(self):
         """Set widgets on the Impact Functions Table 2 tab."""
-
         self.tblFunctions2.clear()
         h, e, _hc, _ec = self.selected_impact_function_constraints()
         hazard_layer_geometries = [
@@ -2236,6 +2260,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer_geometry_point,
             layer_geometry_line,
             layer_geometry_polygon]
+        self.lblSelectFunction2.setText(
+            select_function_constraints2_question % (h['name'], e['name']))
         self.tblFunctions2.setColumnCount(len(hazard_layer_geometries))
         self.tblFunctions2.setRowCount(len(exposure_layer_geometries))
 #         self.tblFunctions2.setHorizontalHeaderLabels(
@@ -2362,6 +2388,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         h, e, hc, ec = self.selected_impact_function_constraints()
         functions = self.impact_function_manager.functions_for_constraint(
             h['key'], e['key'], hc['key'], ec['key'])
+        self.lblSelectFunction.setText(
+            select_function_question % (
+                hc['name'], h['name'], ec['name'], e['name']))
         for f in functions:
             item = QtGui.QListWidgetItem(self.lstFunctions)
             item.setText(f['name'])
