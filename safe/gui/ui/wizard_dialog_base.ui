@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>932</width>
-    <height>632</height>
+    <width>1045</width>
+    <height>619</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -62,7 +62,7 @@
         <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="pg1Category">
         <property name="styleSheet">
@@ -2014,23 +2014,123 @@
            <property name="horizontalSpacing">
             <number>12</number>
            </property>
-           <item row="0" column="0">
+           <item row="0" column="1">
+            <spacer name="horizontalSpacer_8">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>60</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="lblIconFunctionHazard">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>127</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="lblIconFunctionExposure">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="baseSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" rowspan="2">
             <widget class="QListWidget" name="lstFunctions">
              <property name="minimumSize">
               <size>
-               <width>460</width>
+               <width>0</width>
                <height>99</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>460</width>
+               <width>9999</width>
                <height>16777215</height>
               </size>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item row="0" column="4">
+            <spacer name="horizontalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>60</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="1" colspan="4">
             <widget class="QLabel" name="lblDescribeFunction">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -2042,7 +2142,7 @@
               <string>[placeholder]</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              <set>Qt::AlignCenter</set>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -2054,8 +2154,113 @@
         </layout>
        </widget>
        <widget class="QWidget" name="pgF10HazLayerOrigin">
-        <layout class="QVBoxLayout" name="verticalLayout_11">
-         <item>
+        <layout class="QGridLayout" name="gridLayout_18">
+         <item row="4" column="0">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="rbHazLayerFromCanvas">
+           <property name="text">
+            <string>I would like to use a hazard layer already loaded in QGIS
+(launches the hazard data registration wizard if needed)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1" rowspan="2">
+          <spacer name="horizontalSpacer_10">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="3" rowspan="2">
+          <spacer name="horizontalSpacer_12">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="0">
+          <spacer name="verticalSpacer_17">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="3" column="0">
+          <widget class="QRadioButton" name="rbHazLayerFromBrowser">
+           <property name="text">
+            <string>I would like to pick a hazard layer from disk
+(launches the hazard data registration wizard if needed)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2" rowspan="2">
+          <widget class="QLabel" name="lblIconIFCWHazardOrigin">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>128</width>
+             <height>128</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>128</width>
+             <height>128</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>icon</string>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="4">
           <widget class="QLabel" name="lblSelectHazLayerOriginType">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
@@ -2077,57 +2282,18 @@
            </property>
           </widget>
          </item>
-         <item>
-          <spacer name="verticalSpacer_17">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="rbHazLayerFromCanvas">
-           <property name="text">
-            <string>I would like to use a hazard layer already loaded in QGIS
-(launches the hazard data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="rbHazLayerFromBrowser">
-           <property name="text">
-            <string>I would like to pick a hazard layer from disk
-(launches the hazard data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
         </layout>
        </widget>
        <widget class="QWidget" name="pgF11HazLayerTOC">
         <layout class="QVBoxLayout" name="verticalLayout_10">
          <item>
           <widget class="QLabel" name="lblSelectHazardLayer">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="styleSheet">
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
@@ -2160,7 +2326,57 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_16">
-           <item row="0" column="0">
+           <item row="1" column="2" colspan="3">
+            <widget class="QLabel" name="lblDescribeCanvasHazLayer">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="lblIconIFCWHazardFromCanvas">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" rowspan="2">
             <widget class="QListWidget" name="lstCanvasHazLayers">
              <property name="enabled">
               <bool>true</bool>
@@ -2185,18 +2401,50 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="lblDescribeCanvasHazLayer">
-             <property name="text">
-              <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <item row="0" column="4">
+            <spacer name="horizontalSpacer_13">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
              </property>
-             <property name="wordWrap">
-              <bool>true</bool>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
              </property>
-            </widget>
+            </spacer>
+           </item>
+           <item row="1" column="1">
+            <spacer name="horizontalSpacer_16">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="1" colspan="2">
+            <spacer name="horizontalSpacer_11">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>
@@ -2235,20 +2483,67 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_11">
-           <item row="0" column="1">
+           <item row="0" column="3">
+            <widget class="QLabel" name="lblIconIFCWHazardFromBrowser">
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2" colspan="3">
             <widget class="QLabel" name="lblDescribeBrowserHazLayer">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
+           <item row="0" column="4">
+            <spacer name="horizontalSpacer_15">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="0" rowspan="2">
             <widget class="QTreeView" name="tvBrowserHazard">
              <property name="minimumSize">
               <size>
@@ -2267,29 +2562,71 @@
              </attribute>
             </widget>
            </item>
+           <item row="1" column="1">
+            <spacer name="horizontalSpacer_17">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="1" colspan="2">
+            <spacer name="horizontalSpacer_14">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </item>
         </layout>
        </widget>
        <widget class="QWidget" name="pgF13ExpLayerOrigin">
-        <layout class="QVBoxLayout" name="verticalLayout_25">
-         <item>
-          <widget class="QLabel" name="lblSelectExpLayerOriginType">
-           <property name="styleSheet">
-            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-           </property>
+        <layout class="QGridLayout" name="gridLayout_24">
+         <item row="3" column="0">
+          <widget class="QRadioButton" name="rbExpLayerFromBrowser">
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
+            <string>I would like to pick an exposure layer from disk
+(launches the exposure data registration wizard if needed)</string>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="4" column="0">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="rbExpLayerFromCanvas">
+           <property name="text">
+            <string>I would like to use an exposure layer already loaded in QGIS
+(launches the exposure data registration wizard if needed)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
           <spacer name="verticalSpacer_20">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -2305,34 +2642,81 @@
            </property>
           </spacer>
          </item>
-         <item>
-          <widget class="QRadioButton" name="rbExpLayerFromCanvas">
+         <item row="2" column="2" rowspan="2">
+          <widget class="QLabel" name="lblIconIFCWExposureOrigin">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>128</width>
+             <height>128</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>128</width>
+             <height>128</height>
+            </size>
+           </property>
            <property name="text">
-            <string>I would like to use an exposure layer already loaded in QGIS
-(launches the exposure data registration wizard if needed)</string>
+            <string>icon</string>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QRadioButton" name="rbExpLayerFromBrowser">
-           <property name="text">
-            <string>I would like to pick an exposure layer from disk
-(launches the exposure data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_2">
+         <item row="2" column="1" rowspan="2">
+          <spacer name="horizontalSpacer_18">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
+            <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>20</width>
-             <height>40</height>
+             <width>40</width>
+             <height>20</height>
             </size>
            </property>
           </spacer>
+         </item>
+         <item row="2" column="3" rowspan="2">
+          <spacer name="horizontalSpacer_19">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="0" colspan="4">
+          <widget class="QLabel" name="lblSelectExpLayerOriginType">
+           <property name="styleSheet">
+            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -2372,7 +2756,102 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_19">
-           <item row="0" column="0">
+           <item row="1" column="1">
+            <spacer name="horizontalSpacer_22">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="4">
+            <spacer name="horizontalSpacer_27">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="lblIconIFCWExposureFromCanvas">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="2">
+            <spacer name="horizontalSpacer_26">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="2" colspan="3">
+            <widget class="QLabel" name="lblDescribeCanvasExpLayer">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" rowspan="2">
             <widget class="QListWidget" name="lstCanvasExpLayers">
              <property name="enabled">
               <bool>true</bool>
@@ -2394,19 +2873,6 @@
                <width>460</width>
                <height>16777215</height>
               </size>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="lblDescribeCanvasExpLayer">
-             <property name="text">
-              <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -2447,20 +2913,102 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_21">
-           <item row="0" column="1">
+           <item row="1" column="1">
+            <spacer name="horizontalSpacer_23">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="4">
+            <spacer name="horizontalSpacer_29">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="lblIconIFCWExposureFromBrowser">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2" colspan="3">
             <widget class="QLabel" name="lblDescribeBrowserExpLayer">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
+           <item row="0" column="1" colspan="2">
+            <spacer name="horizontalSpacer_28">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="0" rowspan="2">
             <widget class="QTreeView" name="tvBrowserExposure">
              <property name="minimumSize">
               <size>
@@ -2540,8 +3088,8 @@ Please step back and select another layer.</string>
         </layout>
        </widget>
        <widget class="QWidget" name="pgF17AggLayerOrigin">
-        <layout class="QVBoxLayout" name="verticalLayout_21">
-         <item>
+        <layout class="QGridLayout" name="gridLayout_25">
+         <item row="0" column="0" colspan="4">
           <widget class="QLabel" name="lblSelectAggLayerOriginType">
            <property name="styleSheet">
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
@@ -2557,7 +3105,83 @@ Please step back and select another layer.</string>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="2" column="3" rowspan="2">
+          <spacer name="horizontalSpacer_21">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="1" rowspan="2">
+          <spacer name="horizontalSpacer_20">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="2" column="2" rowspan="2">
+          <widget class="QLabel" name="lblIconIFCWAggregationOrigin">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>128</width>
+             <height>128</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>128</width>
+             <height>128</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>icon</string>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QRadioButton" name="rbAggLayerFromBrowser">
+           <property name="text">
+            <string>I would like to pick an aggregation layer from disk
+(launches the aggregation data registration wizard if needed)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="rbAggLayerFromCanvas">
+           <property name="text">
+            <string>I would like to use an aggregation layer already loaded in QGIS
+(launches the aggregation data registration wizard if needed)</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
           <spacer name="verticalSpacer_24">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -2573,30 +3197,14 @@ Please step back and select another layer.</string>
            </property>
           </spacer>
          </item>
-         <item>
-          <widget class="QRadioButton" name="rbAggLayerFromCanvas">
-           <property name="text">
-            <string>I would like to use an aggregation layer already loaded in QGIS
-(launches the aggregation data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="rbAggLayerFromBrowser">
-           <property name="text">
-            <string>I would like to pick an aggregation layer from disk
-(launches the aggregation data registration wizard if needed)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
+         <item row="5" column="0">
           <widget class="QRadioButton" name="rbAggLayerNoAggregation">
            <property name="text">
             <string>No thanks, I am happy to aggregate results for the entire analysis window</string>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="6" column="0">
           <spacer name="verticalSpacer_3">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -2605,6 +3213,22 @@ Please step back and select another layer.</string>
             <size>
              <width>20</width>
              <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="4" column="0">
+          <spacer name="verticalSpacer_38">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>10</width>
+             <height>16</height>
             </size>
            </property>
           </spacer>
@@ -2647,7 +3271,70 @@ Please step back and select another layer.</string>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_20">
-           <item row="0" column="0">
+           <item row="1" column="1">
+            <spacer name="horizontalSpacer_24">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="4">
+            <spacer name="horizontalSpacer_31">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="lblIconIFCWAggregationFromCanvas">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" rowspan="2">
             <widget class="QListWidget" name="lstCanvasAggLayers">
              <property name="enabled">
               <bool>true</bool>
@@ -2672,13 +3359,32 @@ Please step back and select another layer.</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item row="0" column="1" colspan="2">
+            <spacer name="horizontalSpacer_30">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="2" colspan="3">
             <widget class="QLabel" name="lblDescribeCanvasAggLayer">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -2722,20 +3428,89 @@ Please step back and select another layer.</string>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_22">
-           <item row="0" column="1">
+           <item row="1" column="1">
+            <spacer name="horizontalSpacer_25">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="4">
+            <spacer name="horizontalSpacer_33">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="lblIconIFCWAggregationFromBrowser">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2" colspan="3">
             <widget class="QLabel" name="lblDescribeBrowserAggLayer">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="text">
               <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
+           <item row="0" column="0" rowspan="2">
             <widget class="QTreeView" name="tvBrowserAggregation">
              <property name="minimumSize">
               <size>
@@ -2753,6 +3528,19 @@ Please step back and select another layer.</string>
               <bool>false</bool>
              </attribute>
             </widget>
+           </item>
+           <item row="0" column="1" colspan="2">
+            <spacer name="horizontalSpacer_32">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>
@@ -3020,8 +3808,8 @@ Please step back and select another layer.</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>908</width>
-              <height>485</height>
+              <width>95</width>
+              <height>65</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_32">

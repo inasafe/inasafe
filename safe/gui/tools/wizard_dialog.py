@@ -2423,14 +2423,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Set description label
         description = '<table border="0">'
         if "name" in imfunc.keys():
-            description += '<tr><td><b>Name</b>: </td><td>%s</td></tr>' % (
+            description += '<tr><td><b>Function</b>: </td><td>%s</td></tr>' % (
                 imfunc['name'])
         if "overview" in imfunc.keys():
             description += '<tr><td><b>Overview</b>: </td><td>%s</td></tr>' % (
                 imfunc['overview'])
         description += '</table>'
-
         self.lblDescribeFunction.setText(description)
+
         # Enable the next button if anything selected
         self.pbnNext.setEnabled(bool(self.selected_function()))
 
@@ -2466,6 +2466,28 @@ class WizardDialog(QDialog, FORM_CLASS):
             item.setText(f['name'])
             item.setData(QtCore.Qt.UserRole, f)
         self.auto_select_one_item(self.lstFunctions)
+
+        # Set hazard and exposure icons on next steps
+        icon_path = resources_path('img', 'wizard',
+                                   'keyword-subcategory-%s.svg'
+                                   % (h['key'] or 'notset'))
+        self.lblIconFunctionHazard.setPixmap(QPixmap(icon_path))
+        self.lblIconIFCWHazardOrigin.setPixmap(QPixmap(icon_path))
+        self.lblIconIFCWHazardFromCanvas.setPixmap(QPixmap(icon_path))
+        self.lblIconIFCWHazardFromBrowser.setPixmap(QPixmap(icon_path))
+        icon_path = resources_path('img', 'wizard',
+                                   'keyword-subcategory-%s.svg'
+                                   % (e['key'] or 'notset'))
+        self.lblIconFunctionExposure.setPixmap(QPixmap(icon_path))
+        self.lblIconIFCWExposureOrigin.setPixmap(QPixmap(icon_path))
+        self.lblIconIFCWExposureFromCanvas.setPixmap(QPixmap(icon_path))
+        self.lblIconIFCWExposureFromBrowser.setPixmap(QPixmap(icon_path))
+
+        icon_path = resources_path('img', 'wizard',
+                                   'keyword-category-aggregation.svg')
+        self.lblIconIFCWAggregationOrigin.setPixmap(QPixmap(icon_path))
+        self.lblIconIFCWAggregationFromCanvas.setPixmap(QPixmap(icon_path))
+        self.lblIconIFCWAggregationFromBrowser.setPixmap(QPixmap(icon_path))
 
     # ===========================
     # STEP_FC_HAZLAYER_ORIGIN
