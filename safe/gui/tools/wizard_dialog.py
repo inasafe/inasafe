@@ -868,10 +868,21 @@ class WizardDialog(QDialog, FORM_CLASS):
             item.setData(QtCore.Qt.UserRole, unicode(category))
             self.lstCategories.addItem(item)
 
-        # Set values based on existing keywords (if already assigned)
+        # Check if layer keywords are already assigned
         category_keyword = self.get_existing_keyword('layer_purpose')
-        if category_keyword == 'aggregation':
-            category_keyword = 'aggregation'
+
+        # Check if it's KW mode embedded in IFCW mode
+        if self.parent_step:
+            if self.parent_step in [step_fc_hazlayer_from_canvas,
+                                    step_fc_hazlayer_from_browser]:
+                category_keyword = layer_purpose_hazard['key']
+            elif self.parent_step in [step_fc_explayer_from_canvas,
+                                      step_fc_explayer_from_browser]:
+                category_keyword = layer_purpose_exposure['key']
+            else:
+                category_keyword = layer_purpose_aggregation['key']
+
+        # Set values based on existing keywords or parent mode
         if category_keyword:
             categories = []
             for index in xrange(self.lstCategories.count()):
@@ -957,9 +968,21 @@ class WizardDialog(QDialog, FORM_CLASS):
             item.setData(QtCore.Qt.UserRole, unicode(i))
             self.lstSubcategories.addItem(item)
 
-        # Set values based on existing keywords (if already assigned)
+        # Check if layer keywords are already assigned
         key = self.selected_category()['key']
         keyword = self.get_existing_keyword(key)
+
+        # Check if it's KW mode embedded in IFCW
+        if self.parent_step:
+            h, e, _hc, _ec = self.selected_impact_function_constraints()
+            if self.parent_step in [step_fc_hazlayer_from_canvas,
+                                    step_fc_hazlayer_from_browser]:
+                keyword = h['key']
+            elif self.parent_step in [step_fc_explayer_from_canvas,
+                                      step_fc_explayer_from_browser]:
+                keyword = e['key']
+
+        # Set values based on existing keywords or parent mode
         if keyword:
             subcategories = []
             for index in xrange(self.lstSubcategories.count()):
