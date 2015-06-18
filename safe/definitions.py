@@ -94,9 +94,9 @@ layer_mode_classified = {
     'key': 'classified',
     'name': tr('Classified'),
     'description': tr(
-        '<b>Classified</b> data can be used for either hazard or exposure data '
-        'and can be used for both raster and vector layer types where the '
-        'attribute values represent a classified or coded value. '
+        '<b>Classified</b> data can be used for either hazard or exposure '
+        'data and can be used for both raster and vector layer types where '
+        'the attribute values represent a classified or coded value. '
         'For example, classified values in a flood raster data set might '
         'represent discrete classes where a value of 1 might represent the '
         'low inundation class, a value of 2 might represent the medium '
@@ -184,8 +184,8 @@ hazard_category_single_event = {
     'name': tr('Single Event'),
     'description': tr(
         'A <b>single hazard event</b> can be based on either a specific event '
-        'that has happened in the past, for example a flood like Jakarta 2013, '
-        'or a possible event such as the tsunami that results from an '
+        'that has happened in the past, for example a flood like Jakarta '
+        '2013, or a possible event such as the tsunami that results from an '
         'earthquake near Bima that might happen in the future.')
 }
 
@@ -196,10 +196,10 @@ hazard_category_multiple_event = {
         'A <b>multiple hazard event</b> data can be based on historical '
         'observations such as a hazard map of all observed volcanic '
         ' deposits around a volcano. '
-        'This type of hazard data shows those locations that might be impacted '
-        'by a volcanic eruption in the future .'
-        'Another example might be a probabilistic hazard model that shows the '
-        'likelihood of a magnitude 7 earthquake happening in the next 50 yrs.')
+        'This type of hazard data shows those locations that might be '
+        'impacted by a volcanic eruption in the future . Another example '
+        'might be a probabilistic hazard model that shows the likelihood of a '
+        'magnitude 7 earthquake happening in the next 50 yrs.')
 }
 
 hazard_category = {
@@ -207,8 +207,8 @@ hazard_category = {
     'name': tr('Hazard Category'),
     'description': tr(
         'This describes the category of the hazard that is represented by the '
-        'layer. There are two possible values for this attribute, single event '
-        'and multiple event.'),
+        'layer. There are two possible values for this attribute, single '
+        'event and multiple event.'),
     'types': [
         hazard_category_single_event,
         hazard_category_multiple_event
@@ -220,7 +220,7 @@ hazard_generic = {
     'key': 'generic',
     'name': tr('Generic'),
     'description': tr(
-        'A <b>generic hazard</b> can be used for any type of hazard where the  '
+        'A <b>generic hazard</b> can be used for any type of hazard where the '
         'data have been classified or generalised. For example: earthquake, '
         'flood, volcano, or tsunami.')
 }
