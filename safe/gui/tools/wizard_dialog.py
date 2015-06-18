@@ -4131,6 +4131,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             if self.is_selected_layer_keywordless:
                 # insert keyword creation thread here
                 self.parent_step = current_step
+                self.existing_keywords = None
                 self.set_mode_label_to_keywords_creation()
                 new_step = step_kw_category
             else:
@@ -4145,6 +4146,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             if self.is_selected_layer_keywordless:
                 # insert keyword creation thread here
                 self.parent_step = current_step
+                self.existing_keywords = None
                 self.set_mode_label_to_keywords_creation()
                 new_step = step_kw_category
             else:
@@ -4168,6 +4170,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 # insert keyword creation thread here
                 self.parent_step = current_step
                 self.existing_keywords = None
+                self.set_mode_label_to_keywords_creation()
                 new_step = step_kw_category
             else:
                 flag = self.layers_intersect(
