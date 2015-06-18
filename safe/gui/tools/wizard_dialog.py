@@ -551,11 +551,10 @@ class WizardDialog(QDialog, FORM_CLASS):
     def set_mode_label_to_keywords_creation(self):
         """Set the mode label to the Keywords Creation/Update mode
         """
-        layer_title = self.get_existing_keyword('title')
-        if layer_title:
+        if self.get_existing_keyword('layer_purpose'):
             mode_name = (self.tr(
                 'Keywords update wizard for layer <b>%s</b>'
-                ) % layer_title)
+                ) % self.layer.name())
         else:
             mode_name = (self.tr(
                 'Keywords creation wizard for layer <b>%s</b>'
