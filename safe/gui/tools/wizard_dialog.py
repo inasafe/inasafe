@@ -3498,8 +3498,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                             jname = j.serialize()['name']
                             jval = j.serialize()['value']
                             if isinstance(jval, bool):
-                                jval = (jval and self.tr('Enabled')
-                                        or self.tr('Disabled'))
+                                jval = (jval and self.tr('Enabled') or
+                                        self.tr('Disabled'))
                             else:
                                 jval = unicode(jval)
                             jresult += [u'%s: %s' % (jname, jval)]
