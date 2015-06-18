@@ -214,9 +214,7 @@
  <tabstops>
   <tabstop>button_box</tabstop>
  </tabstops>
- <resources>
-  <include location="../resources/resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>checkBox_use_bookmark</sender>
