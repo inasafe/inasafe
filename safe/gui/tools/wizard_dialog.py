@@ -910,9 +910,16 @@ class WizardDialog(QDialog, FORM_CLASS):
             return
         # Set description label
         self.lblDescribeSubcategory.setText(subcategory['description'])
-        self.lblIconSubcategory.setPixmap(QPixmap(
-            resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
-                           % (subcategory['key'] or 'notset'))))
+
+        icon_path = resources_path('img', 'wizard',
+                                   'keyword-subcategory-%s.svg'
+                                   % (subcategory['key'] or 'notset'))
+        if not os.path.exists(icon_path):
+            category = self.selected_category()
+            icon_path = resources_path('img', 'wizard',
+                                       'keyword-category-%s.svg'
+                                       % (category['key']))
+        self.lblIconSubcategory.setPixmap(QPixmap(icon_path))
         # Enable the next button
         self.pbnNext.setEnabled(True)
 
