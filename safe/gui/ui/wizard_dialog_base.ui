@@ -62,7 +62,7 @@
         <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="pg1Category">
         <property name="styleSheet">
@@ -84,6 +84,22 @@
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_27">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_6">
@@ -234,6 +250,22 @@
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_28">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout">
@@ -392,6 +424,22 @@
           </widget>
          </item>
          <item>
+          <spacer name="verticalSpacer_29">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <layout class="QGridLayout" name="gridLayout_17">
            <item row="0" column="0" rowspan="2">
             <widget class="QListWidget" name="lstHazardCategories">
@@ -461,6 +509,22 @@
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_30">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_23">
@@ -540,6 +604,22 @@
           </widget>
          </item>
          <item>
+          <spacer name="verticalSpacer_31">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="0" column="0">
             <widget class="QListWidget" name="lstUnits">
@@ -617,6 +697,22 @@
           </widget>
          </item>
          <item>
+          <spacer name="verticalSpacer_32">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
            <item>
             <widget class="QListWidget" name="lstClassifications"/>
@@ -664,6 +760,22 @@
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_33">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_3">
@@ -769,6 +881,22 @@
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_34">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_15">
@@ -1050,6 +1178,22 @@
           </widget>
          </item>
          <item>
+          <spacer name="verticalSpacer_35">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <layout class="QGridLayout" name="gridLayout_7">
            <property name="verticalSpacing">
             <number>9</number>
@@ -1251,6 +1395,22 @@
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_36">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_4">
@@ -1657,6 +1817,22 @@
           </widget>
          </item>
          <item>
+          <spacer name="verticalSpacer_37">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <layout class="QGridLayout" name="gridLayout_14">
            <item row="0" column="1">
             <widget class="QLabel" name="label_4">
@@ -1818,6 +1994,22 @@
           </widget>
          </item>
          <item>
+          <spacer name="verticalSpacer_16">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <layout class="QGridLayout" name="gridLayout_8">
            <property name="horizontalSpacing">
             <number>12</number>
@@ -1847,7 +2039,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string>[placeholder]</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1875,7 +2067,7 @@
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
            <property name="text">
-            <string>Please help us to find your &lt;b&gt;hazard&lt;/b&gt; layer. A hazard layer represents something that will impact the people or infrastructure in an area. For example flood, earthquake and tsunami inundation are all different kinds of hazards. Select the appropriate option below to indicate where you data resides:</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1886,26 +2078,20 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="lblHazLayerOriginConstraint">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
+          <spacer name="verticalSpacer_17">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-           <property name="styleSheet">
-            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
            </property>
-           <property name="text">
-            <string>[placeholder]</string>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-          </widget>
+          </spacer>
          </item>
          <item>
           <widget class="QRadioButton" name="rbHazLayerFromCanvas">
@@ -1946,7 +2132,7 @@
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
            <property name="text">
-            <string>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;hazard&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1957,17 +2143,20 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="lblHazLayerFromCanvasConstraint">
-           <property name="styleSheet">
-            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+          <spacer name="verticalSpacer_18">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-           <property name="text">
-            <string>[placeholder]</string>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
            </property>
-           <property name="wordWrap">
-            <bool>true</bool>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
            </property>
-          </widget>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_16">
@@ -2021,7 +2210,7 @@
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;hazard&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -2029,17 +2218,20 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="lblHazLayerFromBrowserConstraint">
-           <property name="styleSheet">
-            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+          <spacer name="verticalSpacer_19">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-           <property name="text">
-            <string>[placeholder]</string>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
            </property>
-           <property name="wordWrap">
-            <bool>true</bool>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
            </property>
-          </widget>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_11">
@@ -2087,7 +2279,7 @@
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
            <property name="text">
-            <string>Please help us to find your &lt;b&gt;exposure&lt;/b&gt; layer. An exposure layer represents people, property or infrastructure that may be affected in the event of a flood, earthquake, volcano etc. Select an appropriate option below to indicate where your data can be found:</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -2098,17 +2290,20 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="lblExpLayerOriginConstraint">
-           <property name="styleSheet">
-            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+          <spacer name="verticalSpacer_20">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-           <property name="text">
-            <string>[placeholder]</string>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
            </property>
-           <property name="wordWrap">
-            <bool>true</bool>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
            </property>
-          </widget>
+          </spacer>
          </item>
          <item>
           <widget class="QRadioButton" name="rbExpLayerFromCanvas">
@@ -2149,7 +2344,7 @@
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
            <property name="text">
-            <string>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;exposure&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -2160,17 +2355,20 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="lblExpLayerFromCanvasConstraint">
-           <property name="styleSheet">
-            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+          <spacer name="verticalSpacer_21">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-           <property name="text">
-            <string>[placeholder]</string>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
            </property>
-           <property name="wordWrap">
-            <bool>true</bool>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
            </property>
-          </widget>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_19">
@@ -2224,7 +2422,7 @@
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
            </property>
            <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -2232,17 +2430,20 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="lblExpLayerFromBrowserConstraint">
-           <property name="styleSheet">
-            <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+          <spacer name="verticalSpacer_23">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-           <property name="text">
-            <string>[placeholder]</string>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
            </property>
-           <property name="wordWrap">
-            <bool>true</bool>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
            </property>
-          </widget>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_21">
@@ -2357,6 +2558,22 @@ Please step back and select another layer.</string>
           </widget>
          </item>
          <item>
+          <spacer name="verticalSpacer_24">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QRadioButton" name="rbAggLayerFromCanvas">
            <property name="text">
             <string>I would like to use an aggregation layer already loaded in QGIS
@@ -2411,6 +2628,22 @@ Please step back and select another layer.</string>
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_25">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_20">
@@ -2470,6 +2703,22 @@ Please step back and select another layer.</string>
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_26">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_22">
@@ -2772,7 +3021,7 @@ Please step back and select another layer.</string>
               <x>0</x>
               <y>0</y>
               <width>908</width>
-              <height>435</height>
+              <height>485</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_32">

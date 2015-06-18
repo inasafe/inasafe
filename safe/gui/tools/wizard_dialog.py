@@ -164,19 +164,17 @@ layermode_vector_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> for this layer. '
     'We need to know whether attribute data of this vector '
-    'represents a continuous value or a classified code.')
-# (subcategory, category)
+    'represents a continuous value or a classified code.'
+    )  # (subcategory, category)
 
 # Constants for units
 unit_question = QApplication.translate(
     'WizardDialog',
-    'You have selected <b>%s</b> '
-    'for this <b>%s</b> layer type. We need to know what units the '
+    'You have selected <b>%s</b> for this <b>%s</b> '
+    'layer type. We need to know what units the continuous '
     'data are in. For example in a raster layer, each cell might '
-    'represent depth in metres or depth in feet. If the dataset '
-    'is a vector layer, each polygon might represent an inundated '
-    'area, while areas with no polygon coverage would be assumed '
-    'to be dry.')   # (subcategory, category)
+    'represent depth in metres or depth in feet.'
+    )   # (subcategory, category)
 
 # Constants for allow_resampling
 allow_resampling_question = QApplication.translate(
@@ -237,14 +235,14 @@ field_question_subcategory_unit = QApplication.translate(
     'WizardDialog',
     'You have selected a <b>%s %s</b> layer measured in '
     '<b>%s</b>, and the selected layer is a vector layer. Please '
-    'select the attribute in this layer that represents %s.')
-# (category, subcategory, unit, subcategory-unit relation))
+    'select the attribute in this layer that represents %s.'
+    )  # (category, subcategory, unit, subcategory-unit relation)
 
 field_question_subcategory_classified = QApplication.translate(
     'WizardDialog',
     'You have selected a <b>classified %s %s</b> layer, and the selected '
-    'layeris a vector layer. Please select the attribute in this layer that '
-    'represents the classes.')  # (category, subcategory)
+    'layer is a vector layer. Please select the attribute in this layer '
+    'that represents the classes.')  # (category, subcategory)
 
 # noinspection PyCallByClass
 field_question_aggregation = QApplication.translate(
@@ -253,12 +251,12 @@ field_question_aggregation = QApplication.translate(
     'layer. Please select the attribute in this layer that represents '
     'names of the aggregation areas.')
 
-# Constants for allow_resampling
+# Constants for classification type
 classification_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> for this classified data. '
-    'Please select type of classification you want to use. ')
-# (subcategory, category)
+    'Please select type of classification you want to use. '
+    )  # (subcategory, category)
 
 # Constants for classify values for categorized units
 # noinspection PyCallByClass
@@ -282,33 +280,81 @@ classify_raster_question = QApplication.translate(
 # noinspection PyCallByClass
 select_function_constraints2_question = QApplication.translate(
     'WizardDialog',
-    'You selected <b>%s</b> Hazard and <b>%s</b> Exposure. Now, please select '
-    'the <b>geometry types</b> for the hazard and exposure layers you want to '
-    'use. Click on the cell in the table below that matches the geometry type '
-    'for each.')  # (hazard, exposure)
+    'You selected <b>%s</b> Hazard and <b>%s</b> Exposure. Now, please '
+    'select the <b>geometry types</b> for the hazard and exposure layers '
+    'you want to use. Click on the cell in the table below that matches '
+    'the geometry type for each.')  # (hazard, exposure)
 
 # Constants for the impact function list
 # noinspection PyCallByClass
 select_function_question = QApplication.translate(
     'WizardDialog',
-    '<p>You selected <b>%s %s</b> Hazard and <b>%s %s</b> Exposure.</p>'
-    '<p>Below you can see a list of available <b>impact functions</b> '
-    'matching the selected hazard, exposure and their geometries. Please '
-    'choose which impact function would you like to use from the list '
-    'below.</p> '
+    '<p>You selected <b>%s %s</b> Hazard and <b>%s %s</b> Exposure. Below '
+    'you can see a list of available <b>impact functions</b> matching the '
+    'selected hazard, exposure and their geometries. Please choose which '
+    'impact function would you like to use from the list below.</p> '
     '<p>Please note some functions may require either continuous or '
     'classified input data. A <b>continuous</b> raster is one where cell '
     'values are real data values such as: depth of flood water in meters or '
     'the number of people per cell. A <b>classified</b> raster is one where '
-    'cell values represent classes or zones such as: high hazard zone, medium '
-    'hazard zone, low hazard zones.</p>')  # (haz_geom, haz, expo_geom, exp)
+    'cell values represent classes or zones such as: high hazard zone, '
+    'medium hazard zone, low hazard zones.</p>'
+    )  # (haz_geom, haz, expo_geom, exp)
 
-# Constants for the layer origin selector
-layer_constraint_memo = QApplication.translate(
+# Constants for the hazard layer origin selector
+select_hazard_origin_question = QApplication.translate(
     'WizardDialog',
-    'Based on your selection of <b>%s %s %s</b> on the previous page, '
-    'you should select a <b>%s</b> layer containing <b>%s</b> data now.'
-    )  # (subcategory, layer_geometry, category, layer_geometry2, subcategory )
+    '<p>You selected <b>%s %s</b> as Hazard input to <b>%s</b> function.</p> '
+    '<p>Please help us to find your <b>hazard</b> layer. A hazard layer '
+    'represents something that will impact the people or infrastructure '
+    'in an area. '
+    'For example flood, earthquake and tsunami inundation are all different '
+    'kinds of hazards. Select the appropriate option below to indicate '
+    'where you data resides:</p>')  # (hazard_geom, hazard, imfunc)
+
+# Constants for the hazard layer from canvas list
+select_hazlayer_from_canvas_question = QApplication.translate(
+    'WizardDialog',
+    '<p>You selected <b>%s %s</b> as Hazard input to <b>%s</b> function.</p> '
+    '<p>These are suitable layers currently loaded in QGIS. Please choose '
+    'one layer that you would like to use as hazard for your assessment.</p>'
+    )  # (hazard_geom, hazard, imfunc)
+
+# Constants for the hazard layer from browser list
+select_hazlayer_from_browser_question = QApplication.translate(
+    'WizardDialog',
+    '<p>You selected <b>%s %s</b> as Hazard input to <b>%s</b> '
+    'function.</p> '
+    '<p>Please choose one layer that you would like to use as hazard '
+    'for your assessment.</p>')  # (exposure_geom, exposure, imfunc)
+
+# Constants for the exposure layer origin selector
+select_exposure_origin_question = QApplication.translate(
+    'WizardDialog',
+    '<p>You selected <b>%s %s</b> as Exposure input to <b>%s</b> '
+    'function.</p>'
+    '<p>Please help us to find your <b>exposure</b> layer. An exposure layer '
+    'represents people, property or infrastructure that may be affected in '
+    'the event of a flood, earthquake, volcano etc. Select an appropriate '
+    'option below to indicate where your data can be found:</p>'
+    )  # (exposure_geom, exposure, imfunc)
+
+# Constants for the exposure layer from canvas list
+select_explayer_from_canvas_question = QApplication.translate(
+    'WizardDialog',
+    '<p>You selected <b>%s %s</b> as Exposure input to <b>%s</b> '
+    'function.</p>'
+    '<p>These are suitable layers currently loaded in QGIS. Please choose '
+    'one layer that you would like to use as exposure for your '
+    'assessment.</p>')  # (exposure_geom, exposure, imfunc)
+
+# Constants for the exposure layer from browser list
+select_explayer_from_browser_question = QApplication.translate(
+    'WizardDialog',
+    '<p>You selected <b>%s %s</b> as Exposure input to <b>%s</b> '
+    'function.</p> '
+    '<p>Please choose one layer that you would like to use as exposure '
+    'for your assessment.</p>')  # (exposure_geom, exposure, imfunc)
 
 # Constants for the browser
 # noinspection PyCallByClass
@@ -320,9 +366,9 @@ create_postGIS_connection_first = QApplication.translate(
     '<i>Layer</i> > <i>Add Layer</i> > <i>Add PostGIS Layers</i> '
     'menu.</html>')
 
-# Constants: tab numbers for steps
 
-step_kw_category = 1  # to be renamed to PURPOSE
+# Constants: tab numbers for steps
+step_kw_category = 1
 step_kw_subcategory = 2
 step_kw_hazard_category = 3
 step_kw_layermode = 4
@@ -1212,8 +1258,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Classification tab."""
         self.lstFields.clear()
         self.treeClasses.clear()
-        category = self.selected_category()['key']
-        subcategory = self.selected_subcategory()['key']
+        category = self.selected_category()['name']
+        subcategory = self.selected_subcategory()['name']
         self.lstClassifications.clear()
         self.lblDescribeClassification.setText('')
         self.lblSelectClassification.setText(
@@ -2637,22 +2683,26 @@ class WizardDialog(QDialog, FORM_CLASS):
          _,
          hazard_constraints,
          _) = self.selected_impact_function_constraints()
-#        if hazard_constraints['layer_mode'] == 'raster':
-#            layer_geometry = '%s %s' % (
-#                hazard_constraints['layer_geometry'],
-#                hazard_constraints['layer_mode'])
-#        else:
-#            layer_geometry = hazard_constraints['layer_geometry']
-        layer_geometry = hazard_constraints['name']
-        text = layer_constraint_memo % (hazard['name'],
-                                        layer_geometry,
-                                        'hazard',
-                                        layer_geometry,
-                                        hazard['name'])
 
-        self.lblHazLayerOriginConstraint.setText(text)
-        self.lblHazLayerFromCanvasConstraint.setText(text)
-        self.lblHazLayerFromBrowserConstraint.setText(text)
+        layer_geometry = hazard_constraints['name']
+
+        text = (select_hazard_origin_question % (
+            layer_geometry,
+            hazard['name'],
+            self.selected_function()['name']))
+        self.lblSelectHazLayerOriginType.setText(text)
+
+        text = (select_hazlayer_from_canvas_question % (
+            layer_geometry,
+            hazard['name'],
+            self.selected_function()['name']))
+        self.lblSelectHazardLayer.setText(text)
+
+        text = (select_hazlayer_from_browser_question % (
+            layer_geometry,
+            hazard['name'],
+            self.selected_function()['name']))
+        self.lblSelectBrowserHazLayer.setText(text)
 
     # ===========================
     # STEP_FC_HAZLAYER_FROM_CANVAS
@@ -2733,11 +2783,16 @@ class WizardDialog(QDialog, FORM_CLASS):
                             r'password=*****',
                             layer.source())
 
-            label_text = """
-                This layer has no valid keywords assigned<br/><br/>
+            label_text = """<html>
+                This layer has no valid keywords assigned, so we don't know
+                if it's suitable for this purpose, however, it may be, as it
+                has proper geometry type.
+                <br/><br/>
                 <b>SOURCE</b>: %s<br/>
                 <b>TYPE</b>: %s<br/><br/>
-                In the next step you will be able to register this layer.
+                If you want to use this layer, in the next step
+                you will be able to assign proper keywords to it.
+                </html>
             """ % (source, is_raster_layer(layer) and
                    'raster' or 'vector (%s)' % geom_type)
 
@@ -3080,22 +3135,26 @@ class WizardDialog(QDialog, FORM_CLASS):
          exposure,
          _,
          exposure_constraints) = self.selected_impact_function_constraints()
-#         if exposure_constraints['layer_mode'] == 'raster':
-#             layer_geometry = '%s %s' % (
-#                 exposure_constraints['layer_geometry'],
-#                 exposure_constraints['layer_mode'])
-#         else:
-#             layer_geometry = exposure_constraints['layer_geometry']
-        layer_geometry = exposure_constraints['name']
-        text = layer_constraint_memo % (exposure['name'],
-                                        layer_geometry,
-                                        'exposure',
-                                        layer_geometry,
-                                        exposure['name'])
 
-        self.lblExpLayerOriginConstraint.setText(text)
-        self.lblExpLayerFromCanvasConstraint.setText(text)
-        self.lblExpLayerFromBrowserConstraint.setText(text)
+        layer_geometry = exposure_constraints['name']
+
+        text = (select_exposure_origin_question % (
+            layer_geometry,
+            exposure['name'],
+            self.selected_function()['name']))
+        self.lblSelectExpLayerOriginType.setText(text)
+
+        text = (select_explayer_from_canvas_question % (
+            layer_geometry,
+            exposure['name'],
+            self.selected_function()['name']))
+        self.lblSelectExposureLayer.setText(text)
+
+        text = (select_explayer_from_browser_question % (
+            layer_geometry,
+            exposure['name'],
+            self.selected_function()['name']))
+        self.lblSelectBrowserExpLayer.setText(text)
 
     # ===========================
     # STEP_FC_EXPLAYER_FROM_CANVAS
