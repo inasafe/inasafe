@@ -87,3 +87,44 @@ class Metadata(object):
         print destination_path
         print self
         raise NotImplementedError('Still need to write this')
+
+    # Standard properties
+    @property
+    def organisation(self):
+        return self.get('organisation')
+
+    @organisation.setter
+    def organisation(self, value):
+        path = ('gmd:MD_Metadata/gmd:contact/gmd:CI_ResponsibleParty/'
+                'gmd:organisationName')
+        return self.set('organisation', value, path, 'gco:CharacterString')
+
+    @property
+    def email(self):
+        return self.get('email')
+
+    @email.setter
+    def email(self, value):
+        path = ('gmd:MD_Metadata/gmd:contact/gmd:CI_ResponsibleParty/'
+                'gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/'
+                'gmd:electronicMailAddress')
+        return self.set('email', value, path, 'gco:CharacterString')
+
+    @property
+    def document_date(self):
+        return self.get('document_date')
+
+    @document_date.setter
+    def document_date(self, value):
+        path = ('gmd:MD_Metadata/gmd:dateStamp')
+        return self.set('document_date', value, path, 'gco:Date')
+
+    @property
+    def abstract(self):
+        return self.get('abstract')
+
+    @abstract.setter
+    def abstract(self, value):
+        path = ('gmd:MD_Metadata/gmd:dateStamp')
+        return self.set('abstract', value, path, 'gco:Date')
+
