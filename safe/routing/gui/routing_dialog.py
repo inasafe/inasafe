@@ -1,7 +1,8 @@
 # coding=utf-8
 
 import logging
-from os.path import dirname, join
+import shutil
+from os.path import dirname, join, splitext
 
 from processing.core.Processing import Processing
 from processing.modeler import ModelerAlgorithm
@@ -15,6 +16,7 @@ from PyQt4.QtCore import Qt
 from safe.utilities.qgis_utilities import display_information_message_box
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import add_ordered_combo_item
+from safe.common.utilities import temp_dir, unique_filename
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -174,7 +176,39 @@ class RoutingDialog(QDialog, FORM_CLASS):
         return layer
 
     @staticmethod
+    def replace_value(file_path, old, new):
+        """Replace a value in a file by another one.
+
+        :param file_path: The file path to edit.
+        :type file_path: str
+
+        :param old: The old value to replace.
+        :type old: str
+
+        :param new: The new value.
+        :type new: str
+        """
+        new = unicode(new)
+        f = open(file_path, 'r')
+        file_data = f.read()
+        f.close()
+
+        new_data = file_data.replace(old, new)
+
+        f = open(file_path, 'w')
+        f.write(new_data)
+        f.close()
+
+    @staticmethod
     def add_processing_model(file_path):
+        """Add a model file path to processing.
+
+        :param file_path: The file path for the model.
+        :type file_path: str
+
+        :return The command line to use to call the model.
+        :rtype str
+        """
         model = ModelerAlgorithm.ModelerAlgorithm.fromFile(file_path)
         model.provider = Processing.modeler
         Processing.modeler.algs.append(model)
@@ -183,12 +217,16 @@ class RoutingDialog(QDialog, FORM_CLASS):
         return command_line
 
     def accept(self):
+        # Get forms input.
         roads_layer = self.get_roads_layer()
         flood_layer = self.get_hazard_layer()
         idp_layer = self.get_idp_layer()
 
+        coefficient_flood_edge = self.spin_flood_edge.value()
+        coefficient_road = self.spin_road.value()
+
         routable_model = join(
-            dirname(dirname(__file__)), 'models', 'routable_layer.model')
+            dirname(dirname(__file__)), 'models', 'inasafe_network.model')
         model = self.add_processing_model(routable_model)
 
         flood_value_map = self.keyword_io.read_keywords(
@@ -197,4 +235,32 @@ class RoutingDialog(QDialog, FORM_CLASS):
 
         flood_field = self.keyword_io.read_keywords(flood_layer, 'field')
 
-        # TODO
+        # Get outputs.
+        file_name_exit = unique_filename(suffix='-exit.shp')
+        file_name_network = unique_filename(suffix='-network.shp')
+
+        # Run the model
+        runalg(
+            model,
+            roads_layer.source(),
+            flood_layer.source(),
+            flood_field,
+            wet_value,
+            coefficient_road,
+            coefficient_flood_edge,
+            file_name_exit,
+            file_name_network)
+
+        # Styling
+        network_qml = join(dirname(dirname(__file__)), 'styles', 'network.qml')
+        base_name_network = splitext(file_name_network)[0]
+        destination_network_qml = '%s.qml' % base_name_network
+        shutil.copyfile(network_qml, destination_network_qml)
+        self.replace_value(
+            destination_network_qml, '{{flood_edge}}', coefficient_flood_edge)
+        self.replace_value(
+            destination_network_qml, '{{dry}}', coefficient_road)
+
+        # Adding layers to the map canvas.
+        self.iface.addVectorLayer(file_name_exit, 'Exits', 'ogr')
+        self.iface.addVectorLayer(file_name_network, 'Network', 'ogr')
