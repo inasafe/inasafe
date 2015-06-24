@@ -33,6 +33,7 @@ from PyQt4.QtCore import (
     QSettings)
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QAction, QIcon, QApplication, QWidget
+from processing.core.Processing import Processing
 
 from safe.common.version import release_status
 from safe.common.exceptions import (
@@ -40,6 +41,7 @@ from safe.common.exceptions import (
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
 from safe.impact_functions import register_impact_functions
+from safe.inasafe_processing.provider import InaSafeProvider
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -87,6 +89,7 @@ class Plugin(object):
         self.action_dock = None
         self.action_toggle_rubberbands = None
         self.message_bar_item = None
+        self.provider = None
         # Flag indicating if toolbar should show only common icons or not
         self.full_toolbar = False
         # print self.tr('InaSAFE')
@@ -454,6 +457,8 @@ class Plugin(object):
         self._create_impact_merge_action()
         self._create_save_scenario_action()
 
+        self.inasafe_processing()
+
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
         #
@@ -461,6 +466,11 @@ class Plugin(object):
         # Also deal with the fact that on start of QGIS dock may already be
         # hidden.
         self.action_dock.setChecked(self.dock_widget.isVisible())
+
+    def inasafe_processing(self):
+        """Add InaSAFE to the Processing framework."""
+        self.provider = InaSafeProvider()
+        Processing.addProvider(self.provider, True)
 
     def clear_modules(self):
         """Unload inasafe functions and try to return QGIS to before InaSAFE.
@@ -515,6 +525,7 @@ class Plugin(object):
         self.dock_widget.setVisible(False)
         self.dock_widget.destroy()
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
+        Processing.removeProvider(self.provider)
 
     def toggle_inasafe_action(self, checked):
         """Check or un-check the toggle inaSAFE toolbar button.
