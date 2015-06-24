@@ -183,7 +183,7 @@
                         }, 
                         "OVERLAY": {
                             "values": {
-                                "alg": "ROUTINGDELETEHOLES_1", 
+                                "alg": "QGISDELETEHOLES_1",
                                 "output": "OUTPUT"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
@@ -212,7 +212,7 @@
                     "params": {
                         "INPUT": {
                             "values": {
-                                "alg": "ROUTINGDELETEHOLES_1", 
+                                "alg": "QGISDELETEHOLES_1",
                                 "output": "OUTPUT"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
@@ -259,9 +259,9 @@
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }, 
-            "ROUTINGLINEINTERSECTIONS_1": {
+            "QGISLINEINTERSECTIONS_1": {
                 "values": {
-                    "name": "ROUTINGLINEINTERSECTIONS_1", 
+                    "name": "QGISLINEINTERSECTIONS_1",
                     "paramsFolded": true, 
                     "outputs": {
                         "OUTPUT": {
@@ -306,7 +306,7 @@
                         }
                     }, 
                     "active": true, 
-                    "consoleName": "routing:lineintersections", 
+                    "consoleName": "qgis:lineintersections",
                     "description": "Line intersections"
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
@@ -328,7 +328,7 @@
                     "params": {
                         "INPUT2": {
                             "values": {
-                                "alg": "ROUTINGDELETEHOLES_1", 
+                                "alg": "QGISDELETEHOLES_1",
                                 "output": "OUTPUT"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
@@ -457,9 +457,9 @@
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }, 
-            "ROUTINGDELETEHOLES_1": {
+            "QGISDELETEHOLES_1": {
                 "values": {
-                    "name": "ROUTINGDELETEHOLES_1", 
+                    "name": "QGISDELETEHOLES_1",
                     "paramsFolded": true, 
                     "outputs": {}, 
                     "pos": {
@@ -481,7 +481,7 @@
                         }
                     }, 
                     "active": true, 
-                    "consoleName": "routing:deleteholes", 
+                    "consoleName": "qgis:deleteholes",
                     "description": "Delete holes"
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
