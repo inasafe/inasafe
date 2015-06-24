@@ -39,6 +39,7 @@ from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
 
 import json
 
+from safe.common.version import get_version
 from safe.common.exceptions import (
     CanceledImportDialogError,
     DownloadError,
@@ -580,6 +581,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         url = self.url_osm + feature_type + self.url_osm_suffix
         url = '{url}?bbox={box}&qgis_version=2'.format(
             url=url, box=box)
+
+        url += '&inasafe_version=%s' % get_version()
 
         if 'LANG' in os.environ:
             env_lang = os.environ['LANG']

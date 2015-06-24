@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='iso-8859-1'?>
 <ga_license_file>
   <metadata>
-    <author>Tim Sutton, Kartoza</author>
+    <author>Etienne Trimaille, Kartoza</author>
   </metadata>
 
   <datafile>
-    <filename>buildings.shp</filename>
-    <checksum>2129393271</checksum>
+    <filename>potential-idp.shp</filename>
+    <checksum>1857518634</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
     <source>Open Street Map (OSM)</source>
@@ -15,8 +15,8 @@
   </datafile>
 
   <datafile>
-    <filename>buildings.shx</filename>
-    <checksum>3398749823</checksum>
+    <filename>potential-idp.shx</filename>
+    <checksum>87975229</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
     <source>Open Street Map (OSM)</source>
@@ -25,8 +25,8 @@
   </datafile>
 
   <datafile>
-    <filename>buildings.dbf</filename>
-    <checksum>396893714</checksum>
+    <filename>potential-idp.dbf</filename>
+    <checksum>1458653884</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
     <source>Open Street Map (OSM)</source>
@@ -34,8 +34,8 @@
     <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small aread from the DKI_Buildings InaSAFE sample dataset.</IP_info>
   </datafile>
 
- <datafile>
-    <filename>buildings.license</filename>
+  <datafile>
+    <filename>potential-idp.license</filename>
     <checksum>1940204668</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
