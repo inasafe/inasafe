@@ -3,6 +3,7 @@ from processing.core.AlgorithmProvider import AlgorithmProvider
 from PyQt4.QtGui import QIcon
 
 from safe.utilities.resources import resources_path
+from safe.inasafe_processing.routing.allocate_exits import AllocatExits
 
 
 class InaSafeProvider(AlgorithmProvider):
@@ -13,6 +14,7 @@ class InaSafeProvider(AlgorithmProvider):
         self.activate = True
 
         self.alglist = [
+            AllocatExits()
         ]
 
         for alg in self.alglist:

@@ -13,6 +13,9 @@ from PyQt4.QtGui import QDialog
 from PyQt4 import uic
 from PyQt4.QtCore import Qt
 
+from safe.common.exceptions import (
+    KeywordNotFoundError,
+    NoKeywordsFoundError)
 from safe.utilities.qgis_utilities import display_information_message_box
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import add_ordered_combo_item
