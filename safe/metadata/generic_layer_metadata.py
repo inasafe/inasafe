@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+import json
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -16,10 +17,25 @@ __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import os
-from safe.common.utilities import temp_dir
+from safe.metadata.base_metadata import BaseMetadata
 
-TEMP_DIR = temp_dir(sub_dir='test')
-TEST_DIR = os.path.dirname(__file__)
-JSON_TEST_FILE = os.path.join(TEST_DIR, 'test.json')
-JSON_GENERIC_TEST_FILE = os.path.join(TEST_DIR, 'test_generic.json')
+
+class GenericLayerMetadata(BaseMetadata):
+
+    def __init__(self, layer):
+        super(GenericLayerMetadata, self).__init__(layer)
+
+        # public members
+        self.report = None
+
+    @property
+    def json(self):
+        metadata = super(GenericLayerMetadata, self).dict
+
+        metadata['report'] = self.report
+
+        return json.dumps(metadata, indent=2, sort_keys=True)
+
+    def update_report(self):
+        # TODO (MB) implement this by reading the kw and definitions.py
+        self.report = self.report

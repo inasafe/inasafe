@@ -20,10 +20,10 @@ __date__ = '12/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 from datetime import datetime
 from unittest import TestCase
-from safe.metadata.provenance_step import ProvenanceStep
+
+from safe.metadata.provenance.provenance_step import ProvenanceStep
 
 
 class TestProvenanceStep(TestCase):

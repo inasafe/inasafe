@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from unittest import TestCase
-from safe.metadata.provenance import Provenance
+from safe.metadata.provenance.provenance import Provenance
 
 
 class TestProvenance(TestCase):

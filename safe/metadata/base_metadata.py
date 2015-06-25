@@ -24,16 +24,14 @@ import json
 import os
 
 from safe.metadata.utils import TYPE_CONVERSIONS
-from safe.metadata.provenance import Provenance
 
 
-class Metadata(object):
+class BaseMetadata(object):
 
     def __init__(self, layer):
         # private members
         self._layer = layer
         self._last_update = datetime.now()
-        self._provenance = Provenance()
         self._xml_properties = {}
 
     @property
@@ -51,11 +49,6 @@ class Metadata(object):
 
     def set_last_update_to_now(self):
         self._last_update = datetime.now()
-
-    @property
-    # there is no setter. provenance can only grow. use append_provenance_step
-    def provenance(self):
-        return self._provenance
 
     @property
     # there is no setter. use the appropriate setter for each property or set()
@@ -82,34 +75,30 @@ class Metadata(object):
         self._xml_properties[name] = metadata_property
         self.set_last_update_to_now()
 
-    def append_provenance_step(self, name, description):
-        step_time = self._provenance.append_step(name, description)
-        self.last_update = step_time
-
+    @property
     def xml(self):
         # TODO (MB): implement this
         raise NotImplementedError('Still need to write this')
 
+    @property
     def json(self):
-        metadata_json = {'layer': self.layer}
+        return json.dumps(self.dict, indent=2, sort_keys=True)
 
-        provenance = []
-        for step in self.provenance:
-            provenance.append(step.json)
-        metadata_json['provenance'] = provenance
-
+    @property
+    def dict(self):
+        metadata = {'layer': self.layer}
         properties = {}
         for name, property in self.properties.iteritems():
-            properties[name] = property.json
-        metadata_json['properties'] = properties
-        return json.dumps(metadata_json, indent=2, sort_keys=True)
+            properties[name] = property.dict
+        metadata['properties'] = properties
+        return metadata
 
     def write(self, destination_path):
         file_format = os.path.splitext(destination_path)[1]
         if file_format == '.json':
-            metadata = self.json()
+            metadata = self.json
         elif file_format == '.xml':
-            metadata = self.xml()
+            metadata = self.xml
         else:
             raise TypeError('The requested file type (%s) is not yet supported'
                             % file_format)

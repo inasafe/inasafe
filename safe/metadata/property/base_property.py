@@ -9,7 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-import json
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -48,7 +47,7 @@ class BaseProperty(object):
         return "%s: %s\n%s" % (self.name, self.value, self.xml_path)
 
     @property
-    def json(self):
+    def dict(self):
         return {
             'name': self.name,
             'value': self.value,

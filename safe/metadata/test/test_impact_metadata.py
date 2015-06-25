@@ -27,13 +27,13 @@ from PyQt4.QtCore import QDate, QUrl
 
 from safe.metadata.test import JSON_TEST_FILE, TEMP_DIR
 from safe.common.utilities import unique_filename
-from safe.metadata.metadata import Metadata
+from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
 
 
 class TestMetadata(TestCase):
     
     def test_metadata(self):
-        metadata = Metadata('random_layer_id')
+        metadata = ImpactLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/'
 
         # using unsupported xml types
@@ -47,7 +47,7 @@ class TestMetadata(TestCase):
         self.assertEqual(metadata.provenance.last.title, 'Title 3')
 
     def test_metadata_date(self):
-        metadata = Metadata('random_layer_id')
+        metadata = ImpactLayerMetadata('random_layer_id')
         path = '+'
 
         # using QDate
@@ -71,7 +71,7 @@ class TestMetadata(TestCase):
             metadata.update('ISO19115_TEST', test_value)
 
     def test_metadata_url(self):
-        metadata = Metadata('random_layer_id')
+        metadata = ImpactLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/'
 
         # using QUrl
@@ -91,7 +91,7 @@ class TestMetadata(TestCase):
             metadata.set('ISO19115_TEST', test_value, path, 'gmd:URL')
 
     def test_metadata_str(self):
-        metadata = Metadata('random_layer_id')
+        metadata = ImpactLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/'
 
         # using str
@@ -135,7 +135,7 @@ class TestMetadata(TestCase):
         self.assertEquals(written_json, test_json)
 
     def generate_test_metadata(self):
-        metadata = Metadata('random_layer_id')
+        metadata = ImpactLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/'
         # using str
         test_value = 'Random string'
@@ -144,7 +144,12 @@ class TestMetadata(TestCase):
         metadata.set('ISO19115_INT', test_value, path, 'gco:CharacterString')
         test_value = 1234.5678
         metadata.set('ISO19115_FLOAT', test_value, path, 'gco:CharacterString')
+
+        metadata.report = 'My super report'
+        metadata.summary_data = {'res1': 1234, 'res2': 4321}
+
         metadata.append_provenance_step('Title 1', 'Description of step 1')
         metadata.append_provenance_step('Title 2', 'Description of step 2')
         metadata.append_provenance_step('Title 3', 'Description of step 3')
+
         return metadata
