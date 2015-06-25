@@ -80,7 +80,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
 
         self.iface = iface
-        self.osm_downloader = None
 
         self.help_context = 'openstreetmap_downloader'
         # creating progress dialog for download
@@ -338,18 +337,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         # Lock the groupbox
         self.groupBox.setDisabled(True)
 
-        # Validate features
-        feature_types = self.get_checked_features()
-        if len(feature_types) < 1:
-            message = self.tr(
-                'No feature selected.'
-                'Please make sure you have checked one feature.')
-            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            display_warning_message_box(self, error_dialog_title, message)
-            # Unlock the groupbox
-            self.groupBox.setEnabled(True)
-            return
-
         # Get the extent
         min_latitude = float(str(self.min_latitude.text()))
         max_latitude = float(str(self.max_latitude.text()))
@@ -363,6 +350,18 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             message = self.tr(
                 'The bounding box is not valid. Please make sure it is '
                 'valid or check your projection!')
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
+            display_warning_message_box(self, error_dialog_title, message)
+            # Unlock the groupbox
+            self.groupBox.setEnabled(True)
+            return
+
+        # Validate features
+        feature_types = self.get_checked_features()
+        if len(feature_types) < 1:
+            message = self.tr(
+                'No feature selected.'
+                'Please make sure you have checked one feature.')
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             display_warning_message_box(self, error_dialog_title, message)
             # Unlock the groupbox
