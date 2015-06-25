@@ -139,7 +139,7 @@ class FakeQNetworkAccessManager:
         reply = MockQNetworkReply()
 
         version = get_version()
-        
+
         if url == 'http://hot-export.geofabrik.de/newjob':
             reply.content = read_all('test-importdlg-newjob.html')
         elif url == 'http://hot-export.geofabrik.de/wizard_area':

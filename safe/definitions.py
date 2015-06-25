@@ -461,7 +461,6 @@ generic_vector_hazard_classes = {
         '<b>low</b>, <b>medium</b>, or <b>high</b> impact from the '
         'hazard.'),
     'default_attribute': 'affected',
-    'default_class': 'high',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'high',
@@ -501,7 +500,6 @@ volcano_vector_hazard_classes = {
         '<b>low</b>, <b>medium</b>, or <b>high</b> classification for '
         'volcano hazard.'),
     'default_attribute': 'affected',
-    'default_class': 'high',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'high',
@@ -542,7 +540,6 @@ flood_vector_hazard_classes = {
         'by flood water). This unit does not describe how <b>wet</b> or '
         '<b>dry</b> an area is.'),
     'default_attribute': 'affected',
-    'default_class': 'wet',
     'classes': [
         {
             'key': 'wet',
@@ -589,7 +586,6 @@ flood_raster_hazard_classes = {
         '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
         'by flood water). This unit does not describe how <b>wet</b> or '
         '<b>dry</b> an area is.'),
-    'default_class': 'dry',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'wet',
@@ -616,7 +612,6 @@ generic_raster_hazard_classes = {
     'description': tr(
         'This is a ternary description for an area. The area is classified as '
         'either a <b>low</b>, <b>medium</b>, or <b>high</b> hazard class.'),
-    'default_class': 'high',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'high',
@@ -653,7 +648,6 @@ tsunami_raster_hazard_classes = {
         '<b>wet</b> (affected by tsunami) or <b>dry</b> (not affected '
         'by tsunami). This unit does not describe how <b>wet</b> or '
         '<b>dry</b> an area is.'),
-    'default_class': 'dry',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'wet',
