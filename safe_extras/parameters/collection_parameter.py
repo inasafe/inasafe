@@ -54,9 +54,9 @@ class CollectionParameter(GenericParameter):
             self._minimum_item_count = minimum_count
             return
 
+        self._minimum_item_count = minimum_count
         raise InvalidMinimumError(
             'Minimum item count must be less than maximum')
-        self._minimum_item_count = minimum_count
 
     @property
     def maximum_item_count(self):
@@ -79,7 +79,6 @@ class CollectionParameter(GenericParameter):
         if maximum_count > self._minimum_item_count:
             self._maximum_item_count = maximum_count
             return
-
         raise InvalidMaximumError('Maximum must be greater than minimum')
 
     def count(self):
@@ -178,6 +177,8 @@ class CollectionParameter(GenericParameter):
     @property
     def value(self):
         """Property for value of this parameter."""
+        if self._value is None:
+            self._value = []
         return self._value
 
     @value.setter
@@ -194,3 +195,12 @@ class CollectionParameter(GenericParameter):
         self.check_types(value)
         self.check_length(value)
         self._value = value
+
+    def __len__(self):
+        return self.value.__len__()
+
+    def __getitem__(self, i):
+        return self.value[i]
+
+    def __setitem__(self, i, val):
+        return self.value.__setitem__(i, val)

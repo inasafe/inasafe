@@ -1,9 +1,9 @@
-date: 26-03-2015 14:03
 license: Open Data Commons Open Database License (ODbL)
 title: Buildings
 structure_class_field: TYPE
 source: OpenStreetMap - www.openstreetmap.org
 layer_geometry: polygon
+date: 26-03-2015 14:03
 layer_purpose: exposure
 layer_mode: classified
 exposure: structure

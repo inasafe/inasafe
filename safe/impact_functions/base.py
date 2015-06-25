@@ -17,6 +17,9 @@ __date__ = '15/03/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from socket import gethostname
+import getpass
+
 from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_metadata import \
@@ -43,6 +46,11 @@ class ImpactFunction(object):
                 super(FloodImpactFunction, self).__init__()
 
         """
+        # User who runs this
+        self._user = getpass.getuser().replace(' ', '_')
+        # The host that runs this
+        self._host_name = gethostname()
+
         # Requested extent to use
         self._requested_extent = None
         # Requested extent's CRS as EPSG number
@@ -106,6 +114,24 @@ class ImpactFunction(object):
         """
         return cls.metadata().as_dict().get('layer_requirements').get(
             'hazard').get('hazard_categories')
+
+    @property
+    def user(self):
+        """Property for the user who runs this.
+
+        :returns: User who runs this
+        :rtype: basestring
+        """
+        return self._user
+
+    @property
+    def host_name(self):
+        """Property for the host name that runs this.
+
+        :returns: The host name.
+        :rtype: basestring
+        """
+        return self._host_name
 
     @property
     def requested_extent(self):

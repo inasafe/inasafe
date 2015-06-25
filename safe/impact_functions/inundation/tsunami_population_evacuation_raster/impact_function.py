@@ -89,7 +89,8 @@ class TsunamiEvacuationFunction(ContinuousRHContinuousRE):
             table_body.append(TableRow(tr('Detailed breakdown'), header=True))
 
             for i, val in enumerate(counts[:-1]):
-                s = (tr('People in %(lo).1f m to %(hi).1f m of water: %(val)i')
+                s = (tr('People in %(lo).1f m to %(hi).1f m of water: '
+                        '%(val)s')
                      % {'lo': thresholds[i],
                         'hi': thresholds[i + 1],
                         'val': format_int(val[0])})
