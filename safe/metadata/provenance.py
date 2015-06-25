@@ -29,6 +29,9 @@ class Provenance(object):
     def __str__(self):
         return str(self._steps)
 
+    def __iter__(self):
+        return iter(self._steps)
+
     @property
     def steps(self):
         return self._steps

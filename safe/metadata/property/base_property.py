@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+import json
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -45,6 +46,18 @@ class BaseProperty(object):
 
     def __str__(self):
         return "%s: %s\n%s" % (self.name, self.value, self.xml_path)
+
+    @property
+    def json(self):
+        return {
+            'name': self.name,
+            'value': self.value,
+            'xml_type': self.xml_type,
+            'xml_path': self._xml_path,
+            'python_type': self.python_type.__name__,
+            'allowed_python_types': [t.__name__ for t in
+                                     self.allowed_python_types]
+        }
 
     def is_allowed_type(self, value):
         if type(value) in self.allowed_python_types:

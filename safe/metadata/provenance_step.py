@@ -42,3 +42,11 @@ class ProvenanceStep(object):
     @property
     def time(self):
         return self._time
+
+    @property
+    def json(self):
+        return {
+            'title': self.title,
+            'description': self.description,
+            'time': str(self.time),
+        }

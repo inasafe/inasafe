@@ -22,7 +22,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from datetime import datetime, date
 from unittest import TestCase
+
 from PyQt4.QtCore import QDate, QUrl
+
+from safe.metadata.test import JSON_TEST_FILE, TEMP_DIR
+from safe.common.utilities import unique_filename
 from safe.metadata.metadata import Metadata
 
 
@@ -38,16 +42,13 @@ class TestMetadata(TestCase):
             metadata.set('ISO19115_TEST', test_value, path, 'gco:RandomString')
 
     def test_metadata_provenance(self):
-        metadata = Metadata('random_layer_id')
-        metadata.append_provenance_step('Title 1', 'Description of step 1')
-        metadata.append_provenance_step('Title 2', 'Description of step 2')
-        metadata.append_provenance_step('Title 3', 'Description of step 3')
+        metadata = self.generate_test_metadata()
         self.assertEqual(metadata.provenance.count, 3)
         self.assertEqual(metadata.provenance.last.title, 'Title 3')
 
     def test_metadata_date(self):
         metadata = Metadata('random_layer_id')
-        path = 'gmd:MD_Metadata/gmd:dateStamp/'
+        path = '+'
 
         # using QDate
         test_value = QDate(2015, 6, 7)
@@ -112,5 +113,38 @@ class TestMetadata(TestCase):
 
         # using invalid QUrl
         test_value = QUrl()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             metadata.update('ISO19115_TEST', test_value)
+
+    def test_json_write(self):
+        metadata = self.generate_test_metadata()
+        with open(JSON_TEST_FILE) as f:
+            test_json = f.read()
+        # split the read file at the provenance because provenance has
+        # automatically generated timestamps
+        test_json = test_json.split('provenance')[0]
+
+        filename = unique_filename(suffix='.json', dir=TEMP_DIR)
+        metadata.write(filename)
+        with open(filename) as f:
+            written_json = f.read()
+        # split the read file at the provenance because provenance has
+        # automatically generated timestamps
+        written_json = written_json.split('provenance')[0]
+
+        self.assertEquals(written_json, test_json)
+
+    def generate_test_metadata(self):
+        metadata = Metadata('random_layer_id')
+        path = 'gmd:MD_Metadata/gmd:dateStamp/'
+        # using str
+        test_value = 'Random string'
+        metadata.set('ISO19115_STR', test_value, path, 'gco:CharacterString')
+        test_value = 1234
+        metadata.set('ISO19115_INT', test_value, path, 'gco:CharacterString')
+        test_value = 1234.5678
+        metadata.set('ISO19115_FLOAT', test_value, path, 'gco:CharacterString')
+        metadata.append_provenance_step('Title 1', 'Description of step 1')
+        metadata.append_provenance_step('Title 2', 'Description of step 2')
+        metadata.append_provenance_step('Title 3', 'Description of step 3')
+        return metadata
