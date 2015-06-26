@@ -58,7 +58,11 @@ from safe.utilities.gis import (
     viewport_geo_array,
     extent_to_array)
 from safe.utilities.utilities import get_error_message
-from safe.utilities.clipper import clip_layer, adjust_clip_extent
+from safe.utilities.clipper import (
+    clip_layer,
+    adjust_clip_extent,
+    qgis_align_rasters_available,
+    qgis_align_rasters)
 from safe.messaging import styles
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
@@ -776,10 +780,18 @@ class Analysis(object):
             adjusted_geo_extent = self.clip_parameters[1]
             cell_size = self.clip_parameters[2]
             exposure_layer = self.clip_parameters[3]
-            # geo_extent = self.clip_parameters[4]
+            geo_extent = self.clip_parameters[4]
             hazard_layer = self.clip_parameters[5]
         except:
             raise
+
+        # when working with two raster layers, it is best to use align
+        # rasters tool from QGIS if it is available
+        if qgis_align_rasters_available() and \
+                exposure_layer.type() == QgsMapLayer.RasterLayer and \
+                hazard_layer.type() == QgsMapLayer.RasterLayer:
+            return qgis_align_rasters(hazard_layer, exposure_layer, geo_extent)
+
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.

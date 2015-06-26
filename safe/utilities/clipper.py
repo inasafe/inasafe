@@ -35,12 +35,13 @@ from qgis.core import (
     QgsRasterLayer)
 from PyQt4.QtCore import QProcess
 
-from safe.common.utilities import temp_dir, which, verify
+from safe.common.utilities import temp_dir, which, verify, unique_filename
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.exceptions import (
     InvalidParameterError,
     NoFeaturesInExtentError,
     CallGDALError,
+    AlignRastersError,
     InvalidProjectionError,
     InvalidClipGeometryError)
 from safe.utilities.utilities import read_file_keywords
@@ -676,3 +677,107 @@ def adjust_clip_extent(clip_extent, cell_size, layer_extent):
         adjusted_xmin, adjusted_ymin, adjusted_xmax, adjusted_ymax]
 
     return adjusted_extent
+
+
+def qgis_align_rasters_available():
+    """
+    Determine whether QGIS is running in a version recent enough to contain
+    raster alignment tool (added in 2.12)
+
+    :return: bool
+    """
+    try:
+        from qgis.analysis import QgsAlignRaster
+        return True
+    except ImportError:
+        return False
+
+
+def qgis_align_rasters(hazard_layer, exposure_layer, geo_extent):
+    """
+    Align hazard and exposure raster layers so they fit perfectly and
+    so they can be used for raster algebra. The method uses QGIS
+    raster alignment tool to do the work (which in turn uses GDAL).
+
+    Alignment of layers means that the layers have the same CRS, cell size,
+    grid origin and size. That involves clipping and resampling of rasters.
+
+    From the two layers, the layer with finer resolution (smaller cell size)
+    will be used as the reference for the alignment (i.e. parameters will
+    be set to its CRS, cell size and grid offset).
+
+    Before calling this function make sure to first check whether
+    this functionality is available in QGIS as this requires a recent
+    QGIS version (2.12).
+
+    :param hazard_layer: Hazard layer to be aligned
+    :type exposure_layer: QgsRasterLayer
+
+    :param exposure_layer: Exposure layer to be aligned
+    :type exposure_layer: QgsRasterLayer
+
+    :param geo_extent: Extent in WGS 84 to which raster should be clipped
+    :type geo_extent: list
+
+    :return: clipped hazard and exposure layers
+    :rtype: QgsRasterLayer, QgsRasterLayer
+    """
+
+    hazard_output = unique_filename(suffix='.tif')
+    exposure_output = unique_filename(suffix='.tif')
+
+    exposure_keywords = read_file_keywords(exposure_layer.source())
+
+    # Setup the two raster layers for alignment
+    from qgis.analysis import QgsAlignRaster
+    align = QgsAlignRaster()
+    lst = [QgsAlignRaster.Item(hazard_layer.source(), hazard_output),
+           QgsAlignRaster.Item(exposure_layer.source(), exposure_output)]
+    # TODO: what keywords to consider for rescaling?
+    if exposure_keywords.get('exposure_unit') == 'count':
+        lst[1].rescaleValues = True
+    align.setRasters(lst)
+
+    # Find out which layer has finer grid and use it as the reference.
+    # This will setup destination CRS, cell size and grid origin
+    # TODO: need to respect 'allow_resampling' keyword?
+    if exposure_keywords.get('allow_resampling', 'true').lower() == 'true':
+        index = align.suggestedReferenceLayer()
+    else:
+        index = 1  # have to use exposure layer as the reference
+    if index < 0:
+        raise AlignRastersError("Unable to select reference layer")
+    if not align.setParametersFromRaster(lst[index].inputFilename):
+        raise AlignRastersError(align.errorMessage())
+
+    # Setup clip extent (may need to be transformed)
+    extent = QgsRectangle(
+        geo_extent[0], geo_extent[1],
+        geo_extent[2], geo_extent[3])
+    transform = QgsCoordinateTransform(
+        QgsCoordinateReferenceSystem("EPSG:4326"),
+        QgsCoordinateReferenceSystem(align.destinationCRS()))
+    extent = transform.transformBoundingBox(extent)
+    align.setClipExtent(extent)
+
+    # Everything configured - do the alignment now!
+    # For each raster, it will create output file and write resampled values
+    if not align.run():
+        raise AlignRastersError(align.errorMessage())
+
+    # avoid any possible further rescaling of exposure data by correctly
+    # setting original resolution to be the same as current resolution
+    extra_keywords = {
+        'resolution': (align.cellSize().width(), align.cellSize().height())
+    }
+
+    # Let's not forget to copy keywords
+    keyword_io = KeywordIO()
+    keyword_io.copy_keywords(hazard_layer, hazard_output)
+    keyword_io.copy_keywords(exposure_layer, exposure_output, extra_keywords)
+
+    # Load resulting layers
+    aligned_hazard_layer = QgsRasterLayer(hazard_output, hazard_layer.name())
+    aligned_exposure_layer = QgsRasterLayer(
+        exposure_output, exposure_layer.name())
+    return aligned_hazard_layer, aligned_exposure_layer
