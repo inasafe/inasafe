@@ -13,6 +13,7 @@ Contact : jannes@kartoza.com
 
     Note :
         cli: command line interface
+    .. versionadded:: 3.2
 """
 
 __author__ = 'Jannes Engelbrecht'
@@ -53,6 +54,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 class CommandLineArguments(object):
     """Instance objects class for shell arguments.
+        .. versionadded:: 3.2
     """
     def __init__(self, arguments_):
         LOGGER.debug('CommandLineArguments')
@@ -84,6 +86,7 @@ def download_exposure(command_line_arguments):
         Download layers from OSM within the download extent.
 
         This function might generate a popup.
+        .. versionadded:: 3.2
 
     :param command_line_arguments:  User inputs.
     :type command_line_arguments: CommandLineArguments
@@ -116,6 +119,8 @@ def download_exposure(command_line_arguments):
 def get_impact_function_list():
     """Returns all available impact function ids.
 
+    .. versionadded:: 3.2
+
     :returns: List of impact functions.
     :rtype: list
     """
@@ -128,6 +133,8 @@ def get_impact_function_list():
 def show_impact_function_names(impact_functions):
     """Prints a list of impact functions.
 
+    .. versionadded:: 3.2
+
     :param impact_functions: A list of impact function ids.
     :type: list of strings.
     """
@@ -138,6 +145,8 @@ def show_impact_function_names(impact_functions):
 # all paths are made to be absolute
 def join_if_relative(path_argument):
     """Make path absolute.
+
+    .. versionadded:: 3.2
 
     :param path_argument: Absolute or relative path to a file.
     :type path_argument: str
@@ -154,6 +163,8 @@ def join_if_relative(path_argument):
 
 def get_hazard(arguments):
     """Get hazard layer.
+
+    .. versionadded:: 3.2
 
     :param arguments: User inputs.
     :type arguments: CommandLineArguments
@@ -190,6 +201,8 @@ def get_hazard(arguments):
 def get_exposure(arguments):
     """Get exposure layer.
 
+    .. versionadded:: 3.2
+
     :param arguments: User inputs.
     :type arguments: CommandLineArguments
 
@@ -224,6 +237,8 @@ def get_exposure(arguments):
 
 def analysis_setup(command_line_arguments, hazard, exposure):
     """Sets up an analysis object.
+
+    .. versionadded:: 3.2
 
     :param command_line_arguments: User inputs.
     :type command_line_arguments: CommandLineArguments
@@ -279,6 +294,8 @@ def run_impact_function(command_line_arguments):
         The shapefile path is given by user and used by build_report
         function to read from.
 
+    .. versionadded:: 3.2
+
     :param command_line_arguments: User inputs.
     :type command_line_arguments: CommandLineArguments
     """
@@ -296,6 +313,8 @@ def build_report(cli_arguments):
 
         To be called after shapefile has been written into
         arguments.output_file.
+
+    .. versionadded:: 3.2
 
     :param cli_arguments: User inputs.
     :type cli_arguments: CommandLineArguments
@@ -329,6 +348,8 @@ def build_report(cli_arguments):
 
 def write_results(cli_arguments, impact_layer):
     """Write the impact_layer in shapefile format.
+
+    .. versionadded:: 3.2
 
     :param cli_arguments: User inputs.
     :type cli_arguments: CommandLineArguments
