@@ -173,6 +173,7 @@
                 <inasafe_keywords>
 <![CDATA[hazard_category: single_event
 title: Continuous Flood
+keyword_version: 1.0
 hazard: flood
 continuous_hazard_unit: metres
 source: Akbar Gumbira

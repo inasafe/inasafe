@@ -173,6 +173,7 @@
             <gmd:supplementalInformation>
                 <inasafe_keywords>
 <![CDATA[title: Roads
+keyword_version: 1.0
 source: OpenStreetMap - www.openstreetmap.org
 layer_geometry: line
 layer_purpose: exposure

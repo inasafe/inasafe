@@ -1,8 +1,9 @@
-date: 02-04-2015 03:23
 license: Open Data Commons Open Database License (ODbL)
 title: Potential IDP
+keyword_version: 1.0
 source: OpenStreetMap - www.openstreetmap.org
 layer_geometry: point
+date: 02-04-2015 03:23
 layer_purpose: idp
 idp_class_field: TYPE
 layer_mode: classified

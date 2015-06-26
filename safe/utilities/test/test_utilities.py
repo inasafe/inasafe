@@ -144,7 +144,8 @@ class UtilitiesTest(unittest.TestCase):
             'continuous_hazard_unit': 'metres',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
-            'title': 'Jakarta flood like 2007 with structural improvements'
+            'title': 'Jakarta flood like 2007 with structural improvements',
+            'keyword_version': 1.0
         }
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertDictEqual(keywords, expected_keywords, message)
@@ -157,7 +158,8 @@ class UtilitiesTest(unittest.TestCase):
             'purpose': 'dki',
             'layer_purpose': 'exposure',
             'layer_mode': 'classified',
-            'exposure': 'structure'
+            'exposure': 'structure',
+            'keyword_version': 1.0
         }
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertDictEqual(keywords, expected_keywords, message)
@@ -171,7 +173,8 @@ class UtilitiesTest(unittest.TestCase):
             'continuous_hazard_unit': 'metres',
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
-            'layer_mode': 'continuous'
+            'layer_mode': 'continuous',
+            'keyword_version': 1.0
         }
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)

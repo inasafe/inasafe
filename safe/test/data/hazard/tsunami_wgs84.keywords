@@ -1,5 +1,6 @@
 hazard_category: single_event
 title: Tsunami
+keyword_version: 1.0
 hazard: tsunami
 continuous_hazard_unit: metres
 layer_geometry: raster

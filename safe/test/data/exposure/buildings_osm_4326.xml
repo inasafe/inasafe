@@ -177,6 +177,7 @@ exposure: structure
 purpose: dki
 title: buildings_osm_4326
 layer_mode: classified
+keyword_version: 1.0
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

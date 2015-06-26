@@ -56,7 +56,8 @@ class KeywordIOTest(unittest.TestCase):
             'continuous_hazard_unit': 'metres',
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
-            'layer_mode': 'continuous'
+            'layer_mode': 'continuous',
+            'keyword_version': 1.0
         }
 
         # Vector Layer keywords
@@ -68,7 +69,8 @@ class KeywordIOTest(unittest.TestCase):
             'purpose': 'dki',
             'layer_purpose': 'exposure',
             'layer_mode': 'classified',
-            'exposure': 'structure'
+            'exposure': 'structure',
+            'keyword_version': 1.0
         }
         # Keyword less layer
         keywordless_path = test_data_path('other', 'keywordless_layer.shp')
@@ -189,7 +191,8 @@ class KeywordIOTest(unittest.TestCase):
             'test': 'TEST',
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
-            'layer_mode': 'continuous'
+            'layer_mode': 'continuous',
+            'keyword_version': 1.0
         }
         message = 'Got:\n%s\nExpected:\n%s' % (keywords, expected_keywords)
         self.assertDictEqual(keywords, expected_keywords, message)

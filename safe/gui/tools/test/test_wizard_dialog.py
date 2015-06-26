@@ -176,7 +176,8 @@ class WizardDialogTest(unittest.TestCase):
                 'flood_vector_hazard_classes',
             'value_map': {'wet': ['YES'], 'dry': ['NO']},
             'source': 'some source',
-            'title': 'some title'
+            'title': 'some title',
+            'keyword_version': 1.0
         }
 
         layer = clone_shp_layer(

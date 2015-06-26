@@ -1,5 +1,6 @@
 exposure_unit: count
 title: Population
+keyword_version: 1.0
 layer_geometry: raster
 layer_purpose: exposure
 layer_mode: continuous

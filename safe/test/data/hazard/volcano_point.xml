@@ -171,6 +171,7 @@
 <![CDATA[volcano_name_field: NAME
 hazard_category: multiple_event
 title: Volcano Point
+keyword_version: 1.0
 hazard: volcano
 source: smithsonian
 layer_geometry: point

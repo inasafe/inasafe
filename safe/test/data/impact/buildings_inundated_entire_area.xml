@@ -177,6 +177,7 @@ postprocessing_report: <table class="table table-condensed table-striped"><capti
 exposure_title: buildings
 title: Estimated buildings affected - Entire Area
 legend_title: Structure inundated status
+keyword_version: 1.0
 exposure_source: OpenStreetMap
 elapsed_time: 0
 legend_units: (inundated or not inundated)
