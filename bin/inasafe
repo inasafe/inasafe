@@ -36,9 +36,9 @@ from safe.impact_functions import register_impact_functions
 from safe.test.utilities import get_qgis_app
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.gis import qgis_version
+from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.report.impact_report import ImpactReport
-from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
+from safe.utilities.osm_downloader import download
 
 current_dir = os.path.abspath(
     os.path.realpath(os.environ['PWD']))
@@ -94,21 +94,23 @@ def download_exposure(command_line_arguments):
         float(command_line_arguments.extent[2]),
         float(command_line_arguments.extent[3])
         ]
-    dialog = OsmDownloaderDialog(PARENT, IFACE)
+
     # make a temporary directory for exposure download
     command_line_arguments.exposure = tempfile.mkdtemp() + '/exposure'
     print 'temp directory: ' + command_line_arguments.exposure
-    dialog.update_extent(extent)
-    if dialog.validate_extent():
+    if validate_geo_array(extent):
         print "Exposure download extent is valid"
+    else:
+        print "Exposure is invalid"
+        print str(extent)
 
-    dialog.download(
+    download(
         command_line_arguments.exposure_layers,
-        command_line_arguments.exposure)
+        command_line_arguments.exposure,
+        extent)
     if os.path.exists(command_line_arguments.exposure + '.shp'):
         print "download successful"
         command_line_arguments.exposure += '.shp'
-    dialog.close()
 
 
 def get_impact_function_list():
