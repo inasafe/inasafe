@@ -172,8 +172,8 @@
             <gmd:supplementalInformation>
                 <inasafe_keywords>
 <![CDATA[hazard_category: single_event
-title: Flood Polygon
 keyword_version: 1.0
+title: Flood Polygon
 hazard: flood
 field: FLOODPRONE
 value_map: {'dry': ['NO'], 'wet': ['YES']}

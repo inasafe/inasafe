@@ -1,6 +1,6 @@
 hazard_category: multiple_event
-title: Earthquake Polygon
 keyword_version: 1.0
+title: Earthquake Polygon
 hazard: earthquake
 field: h_zone
 value_map: {'high': ['High Hazard Zone'], 'medium': ['Medium Hazard Zone'], 'low': ['Low Hazard Zone']}

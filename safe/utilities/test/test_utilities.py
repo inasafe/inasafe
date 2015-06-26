@@ -153,13 +153,13 @@ class UtilitiesTest(unittest.TestCase):
         # Test reading keywords from vector layer
         keywords = read_file_keywords(vector_path)
         expected_keywords = {
+            'keyword_version': 1.0,
+            'structure_class_field': 'FLOODED',
             'title': 'buildings_osm_4326',
-            'datatype': 'osm',
-            'purpose': 'dki',
+            'layer_geometry': 'polygon',
             'layer_purpose': 'exposure',
             'layer_mode': 'classified',
-            'exposure': 'structure',
-            'keyword_version': 1.0
+            'exposure': 'structure'
         }
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertDictEqual(keywords, expected_keywords, message)

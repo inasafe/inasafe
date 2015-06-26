@@ -1,6 +1,6 @@
 hazard_category: single_event
-title: Earthquake
 keyword_version: 1.0
+title: Earthquake
 hazard: earthquake
 continuous_hazard_unit: mmi
 layer_geometry: raster
