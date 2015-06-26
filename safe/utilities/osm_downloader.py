@@ -41,6 +41,8 @@ LOGGER = logging.getLogger('InaSAFE')
 def download(feature_type, output_base_path, extent, progress_dialog=None):
     """Download shapefiles from Kartoza server.
 
+    .. versionadded:: 3.2
+
     :param feature_type: What kind of features should be downloaded.
         Currently 'buildings', 'building-points' or 'roads' are supported.
     :type feature_type: str
@@ -95,6 +97,8 @@ def download(feature_type, output_base_path, extent, progress_dialog=None):
 
 def fetch_zip(url, output_path, feature_type, progress_dialog=None):
     """Download zip containing shp file and write to output_path.
+
+    .. versionadded:: 3.2
 
     :param url: URL of the zip bundle.
     :type url: str
@@ -164,6 +168,8 @@ def extract_zip(zip_path, destination_base_path):
 
     If two files in the zip with the same extension, only one will be
     copied.
+
+    .. versionadded:: 3.2
 
     :param zip_path: The path of the .zip file
     :type zip_path: str

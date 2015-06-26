@@ -39,6 +39,8 @@ LOGGER = logging.getLogger('InaSAFE')
 class MockQNetworkReply(QObject):
     """A mock network reply for testing.
 
+    .. versionadded:: 3.2
+
     :param parent:
     :type parent:
     """
@@ -104,7 +106,10 @@ class MockQNetworkReply(QObject):
 
 # noinspection PyClassHasNoInit
 class FakeQNetworkAccessManager:
-    """Mock network manager for testing."""
+    """Mock network manager for testing.
+
+    .. versionadded:: 3.2
+    """
     # noinspection PyDocstring,PyPep8Naming,PyMethodMayBeStatic
     # pylint: disable=W0613
     def post(self, request_url, data=None):
@@ -173,7 +178,10 @@ def read_all(path):
 
 
 class OsmDownloaderTest(unittest.TestCase):
-    """Test the OSM Downloader."""
+    """Test the OSM Downloader.
+
+    .. versionadded:: 3.2
+    """
     # noinspection PyPep8Naming
     def setUp(self):
         """Runs before each test."""
@@ -181,7 +189,10 @@ class OsmDownloaderTest(unittest.TestCase):
         self.network_manager = FakeQNetworkAccessManager()
 
     def test_fetch_zip(self):
-        """Test fetch zip method."""
+        """Test fetch zip method.
+
+        .. versionadded:: 3.2
+        """
         feature = 'buildings'
         url = (
             'http://osm.linfiniti.com/buildings-shp?'
@@ -197,9 +208,11 @@ class OsmDownloaderTest(unittest.TestCase):
         os.remove(path)
 
     def test_extract_zip(self):
-        """Test extract_zip method which will only take care of one file for
-        each extensions. If many files has the same extension, only the last
-        one will be copied.
+        """Test extract_zip method.
+        This function will only take care of one file for each extensions.
+        If many files has the same extension, only the last one will be copied.
+
+        .. versionadded:: 3.2
         """
         base_path = tempfile.mkdtemp()
         base_file_path = os.path.join(base_path, 'test')
@@ -218,7 +231,10 @@ class OsmDownloaderTest(unittest.TestCase):
         shutil.rmtree(base_path)
 
     def test_load_shapefile(self):
-        """Test loading shape file to QGIS Main Window """
+        """Test loading shape file to QGIS Main Window.
+
+        .. versionadded:: 3.2
+        """
         zip_file_path = test_data_path(
             'control', 'files', 'test-importdlg-extractzip.zip')
         output_path = tempfile.mkdtemp()

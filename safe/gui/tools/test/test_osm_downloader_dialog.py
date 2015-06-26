@@ -39,6 +39,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class OsmDownloaderDialogTest(unittest.TestCase):
     """Test Osm Downloader Dialog widget
+    .. versionchanged:: 3.2
     """
     # noinspection PyPep8Naming
     def setUp(self):

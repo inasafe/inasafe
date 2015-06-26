@@ -95,7 +95,10 @@ class TestQGIS(unittest.TestCase):
         self.assertFalse(is_polygon_layer(layer), message)
 
     def test_validate_geo_array(self):
-        """Test validate geographic extent method."""
+        """Test validate geographic extent method.
+
+        .. versionadded:: 3.2
+        """
         # Normal case
         min_longitude = 20.389938354492188
         min_latitude = -34.10782492987083

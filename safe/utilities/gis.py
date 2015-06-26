@@ -145,6 +145,8 @@ def viewport_geo_array(map_canvas):
 def validate_geo_array(extent):
     """Validate a geographic extent.
 
+    .. versionadded:: 3.2
+
     :param extent: A list in the form [xmin, ymin, xmax, ymax] where all
         coordinates provided are in Geographic / EPSG:4326.
     :type extent: list
