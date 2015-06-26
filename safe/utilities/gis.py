@@ -142,6 +142,46 @@ def viewport_geo_array(map_canvas):
     return rectangle_geo_array(rectangle, map_canvas)
 
 
+def validate_geo_array(extent):
+    """Validate a geographic extent.
+
+    .. versionadded:: 3.2
+
+    :param extent: A list in the form [xmin, ymin, xmax, ymax] where all
+        coordinates provided are in Geographic / EPSG:4326.
+    :type extent: list
+
+    :return: True if the extent is valid, otherwise False
+    :rtype: bool
+    """
+    min_longitude = extent[0]
+    min_latitude = extent[1]
+    max_longitude = extent[2]
+    max_latitude = extent[3]
+
+    # min_latitude < max_latitude
+    if min_latitude >= max_latitude:
+        return False
+
+    # min_longitude < max_longitude
+    if min_longitude >= max_longitude:
+        return False
+
+    # -90 <= latitude <= 90
+    if min_latitude < -90 or min_latitude > 90:
+        return False
+    if max_latitude < -90 or max_latitude > 90:
+        return False
+
+    # -180 <= longitude <= 180
+    if min_longitude < -180 or min_longitude > 180:
+        return False
+    if max_longitude < -180 or max_longitude > 180:
+        return False
+
+    return True
+
+
 def is_point_layer(layer):
     """Check if a QGIS layer is vector and its geometries are points.
 

@@ -6,7 +6,10 @@ import unittest
 import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QVariant
 
-from safe.utilities.gis import layer_attribute_names, is_polygon_layer
+from safe.utilities.gis import (
+    layer_attribute_names,
+    is_polygon_layer,
+    validate_geo_array)
 from safe.test.utilities import (
     clone_shp_layer,
     clone_raster_layer,
@@ -91,6 +94,66 @@ class TestQGIS(unittest.TestCase):
         message = ('%s raster layer should not be polygonal' % layer)
         self.assertFalse(is_polygon_layer(layer), message)
 
+    def test_validate_geo_array(self):
+        """Test validate geographic extent method.
+
+        .. versionadded:: 3.2
+        """
+        # Normal case
+        min_longitude = 20.389938354492188
+        min_latitude = -34.10782492987083
+        max_longitude = 20.712661743164062
+        max_latitude = -34.008273470938335
+        extent = [min_longitude, min_latitude, max_longitude, max_latitude]
+        self.assertTrue(validate_geo_array(extent))
+
+        # min_latitude >= max_latitude
+        min_latitude = 34.10782492987083
+        max_latitude = -34.008273470938335
+        min_longitude = 20.389938354492188
+        max_longitude = 20.712661743164062
+        extent = [min_longitude, min_latitude, max_longitude, max_latitude]
+        self.assertFalse(validate_geo_array(extent))
+
+        # min_longitude >= max_longitude
+        min_latitude = -34.10782492987083
+        max_latitude = -34.008273470938335
+        min_longitude = 34.10782492987083
+        max_longitude = -34.008273470938335
+        extent = [min_longitude, min_latitude, max_longitude, max_latitude]
+        self.assertFalse(validate_geo_array(extent))
+
+        # min_latitude < -90 or > 90
+        min_latitude = -134.10782492987083
+        max_latitude = -34.008273470938335
+        min_longitude = 20.389938354492188
+        max_longitude = 20.712661743164062
+        extent = [min_longitude, min_latitude, max_longitude, max_latitude]
+        self.assertFalse(validate_geo_array(extent))
+
+        # max_latitude < -90 or > 90
+        min_latitude = -9.10782492987083
+        max_latitude = 91.10782492987083
+        min_longitude = 20.389938354492188
+        max_longitude = 20.712661743164062
+        extent = [min_longitude, min_latitude, max_longitude, max_latitude]
+        self.assertFalse(validate_geo_array(extent))
+
+        # min_longitude < -180 or > 180
+        min_latitude = -34.10782492987083
+        max_latitude = -34.008273470938335
+        min_longitude = -184.10782492987083
+        max_longitude = 20.712661743164062
+        extent = [min_longitude, min_latitude, max_longitude, max_latitude]
+        self.assertFalse(validate_geo_array(extent))
+
+        # max_longitude < -180 or > 180
+        min_latitude = -34.10782492987083
+        max_latitude = -34.008273470938335
+        min_longitude = 20.389938354492188
+        max_longitude = 180.712661743164062
+        extent = [min_longitude, min_latitude, max_longitude, max_latitude]
+        self.assertFalse(validate_geo_array(extent))
 
 if __name__ == '__main__':
     unittest.main()
