@@ -180,9 +180,9 @@ unit_question = QApplication.translate(
 allow_resampling_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> for this <b>%s data</b> raster layer. '
-    'For some exposure types you may want InaSAFE to not resample '
-    'the raster to the hazard layer resolution during analyses. Please '
-    'select the check box below if you want to set the <i>allow_resample</i> '
+    'For some exposure types you may want InaSAFE to not resample the raster '
+    'to the hazard layer resolution during analyses. Please select the '
+    'check box below if you want to set the <i>allow_resampling</i> '
     'keyword to <i>False</i>.')   # (subcategory, category, layer_mode)
 
 # Constants for subcategory-unit relations
@@ -1423,12 +1423,12 @@ class WizardDialog(QDialog, FORM_CLASS):
     # STEP_KW_RESAMPLE
     # ===========================
 
-    def selected_allowresample(self):
-        """Obtain the allow_resample state selected by user.
+    def selected_allowresampling(self):
+        """Obtain the allow_resampling state selected by user.
 
         .. note:: Returns none if not set or not relevant
 
-        :returns: Value of the allow_resample or None for not-set.
+        :returns: Value of the allow_resampling or None for not-set.
         :rtype: boolean or None
         """
         if not is_raster_layer(self.layer):
@@ -1453,7 +1453,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                                          category['name'], layer_mode['name']))
 
         # Set value based on existing keyword (if already assigned)
-        if self.get_existing_keyword('allow_resample') is False:
+        if self.get_existing_keyword('allow_resampling') is False:
             self.chkAllowResample.setChecked(True)
 
     # ===========================
@@ -4265,7 +4265,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 else:
                     new_step = step_kw_layermode
             else:
-                if self.selected_allowresample() is not None:
+                if self.selected_allowresampling() is not None:
                     new_step = step_kw_resample
                 else:
                     new_step = step_kw_unit
@@ -4283,7 +4283,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 else:
                     new_step = step_kw_layermode
             else:
-                if self.selected_allowresample() is not None:
+                if self.selected_allowresampling() is not None:
                     new_step = step_kw_resample
                 else:
                     new_step = step_kw_unit
@@ -4406,8 +4406,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 key = exposure_unit['key']
             keywords[key] = self.selected_unit()['key']
-        if self.selected_allowresample() is not None:
-            keywords['allow_resample'] = self.selected_allowresample()
+        if self.selected_allowresampling() is not None:
+            keywords['allow_resampling'] = self.selected_allowresampling()
         if self.lstFields.currentItem():
             field_keyword = self.field_keyword_for_the_layer()
             keywords[field_keyword] = self.lstFields.currentItem().text()

@@ -4,9 +4,9 @@
     <name>@default</name>
     <message>
         <location filename="utilities.py" line="324"/>
-        <source>Keyword retrieval failed for %s (%s) 
+        <source>Keyword retrieval failed for %s (%s)
  %s</source>
-        <translation>Keyword retrieval failed for %s (%s) 
+        <translation>Keyword retrieval failed for %s (%s)
  %s</translation>
     </message>
     <message>
@@ -4267,11 +4267,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="keyword_io.py" line="234"/>
-        <source>Failed to copy keywords file from : 
+        <source>Failed to copy keywords file from :
 %s
 to
 %s: %s</source>
-        <translation>Failed to copy keywords file from : 
+        <translation>Failed to copy keywords file from :
 %s
 to
 %s: %s</translation>
@@ -6101,7 +6101,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wizard_dialog.py" line="159"/>
-        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; for this &lt;b&gt;%s data&lt;/b&gt; raster layer. For some exposure types you may want InaSAFE to not resample the raster to the hazard layer resolution during analyses. Please select the check box below if you want to set the &lt;i&gt;allow_resample&lt;/i&gt; keyword to &lt;i&gt;False&lt;/i&gt;.</source>
+        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; for this &lt;b&gt;%s data&lt;/b&gt; raster layer. For some exposure types you may want InaSAFE to not resample the raster to the hazard layer resolution during analyses. Please select the check box below if you want to set the &lt;i&gt;allow_resampling&lt;/i&gt; keyword to &lt;i&gt;False&lt;/i&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
