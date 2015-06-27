@@ -4407,7 +4407,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 key = exposure_unit['key']
             keywords[key] = self.selected_unit()['key']
         if self.selected_allowresampling() is not None:
-            keywords['allow_resampling'] = self.selected_allowresampling()
+            keywords['allow_resampling'] = (
+                self.selected_allowresampling() and 'true' or 'false')
         if self.lstFields.currentItem():
             field_keyword = self.field_keyword_for_the_layer()
             keywords[field_keyword] = self.lstFields.currentItem().text()
