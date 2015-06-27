@@ -3,7 +3,7 @@
     <name>@default</name>
     <message>
         <location filename="utilities.py" line="324"/>
-        <source>Keyword retrieval failed for %s (%s)
+        <source>Keyword retrieval failed for %s (%s) 
  %s</source>
         <translation>Gagal mengambil katak kunci untuk %s (%s).
  %s</translation>
@@ -4309,7 +4309,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="keyword_io.py" line="234"/>
-        <source>Failed to copy keywords file from :
+        <source>Failed to copy keywords file from : 
 %s
 to
 %s: %s</source>
