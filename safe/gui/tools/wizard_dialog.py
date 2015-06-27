@@ -2508,6 +2508,9 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         icon_path = resources_path('img', 'wizard',
                                    'keyword-category-aggregation.svg')
+        # Temporarily hide aggregation icon until we have one suitable
+        # (as requested in a comment to PR #2060)
+        icon_path = None
         self.lblIconIFCWAggregationOrigin.setPixmap(QPixmap(icon_path))
         self.lblIconIFCWAggregationFromCanvas.setPixmap(QPixmap(icon_path))
         self.lblIconIFCWAggregationFromBrowser.setPixmap(QPixmap(icon_path))
