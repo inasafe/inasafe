@@ -171,16 +171,16 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[hazard_category: multiple_event
-raster_hazard_classification: generic_raster_hazard_classes
+<![CDATA[hazard: flood
+hazard_category: multiple_event
 keyword_version: 1.0
-title: Classified Flood
-hazard: flood
-source: Akbar Gumbira
-value_map: {'high': [3.0], 'medium': [2.0], 'low': [1.0]}
 layer_geometry: raster
-layer_purpose: hazard
 layer_mode: classified
+layer_purpose: hazard
+raster_hazard_classification: generic_raster_hazard_classes
+source: Akbar Gumbira
+title: Classified Flood
+value_map: {'high': [3.0], 'medium': [2.0], 'low': [1.0]}
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

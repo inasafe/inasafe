@@ -172,14 +172,14 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[keyword_version: 1.0
-title: Roads
-source: OpenStreetMap - www.openstreetmap.org
+<![CDATA[exposure: road
+keyword_version: 1.0
 layer_geometry: line
-layer_purpose: exposure
 layer_mode: classified
+layer_purpose: exposure
 road_class_field: TYPE
-exposure: road
+source: OpenStreetMap - www.openstreetmap.org
+title: Roads
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>
