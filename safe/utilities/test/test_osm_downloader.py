@@ -28,7 +28,7 @@ import os
 
 from PyQt4.QtCore import QObject, pyqtSignal
 
-from safe.utilities.osm_downloader import download, fetch_zip, extract_zip
+from safe.utilities.osm_downloader import fetch_zip, extract_zip
 from safe.test.utilities import test_data_path, get_qgis_app
 from safe.common.version import get_version
 
