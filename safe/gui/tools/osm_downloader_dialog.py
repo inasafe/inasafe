@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-import tempfile
 import logging
 
 # noinspection PyUnresolvedReferences

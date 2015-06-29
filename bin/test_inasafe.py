@@ -1,4 +1,4 @@
-
+# coding=utf-8
 __author__ = 'Jannes123'
 __project_name__ = 'inasafe'
 __filename__ = 'test_inasafe.py'
@@ -37,7 +37,8 @@ class TestInasafeCommandLine(unittest.TestCase):
             '--layers': None,
             '--list-functions': False,
             '--output-file': '/tmp/inasafe/flood_on_buildings.shp',
-            '--report-template': '../inasafe/resources/qgis-composer-templates/'
+            '--report-template': '../inasafe/resources/'
+                                 'qgis-composer-templates/'
                                  'inasafe-portrait-a4.qpt',
             '--version': False,
             'LAYER_NAME': []})

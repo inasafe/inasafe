@@ -26,12 +26,9 @@ import shutil
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-# noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog
 
 from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
 from safe.test.utilities import get_qgis_app
-from safe.common.version import get_version
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
@@ -163,6 +160,6 @@ class OsmDownloaderDialogTest(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ImportDialogTest, 'test')
+    suite = unittest.makeSuite(OsmDownloaderDialogTest, 'test')
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

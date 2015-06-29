@@ -6,6 +6,7 @@
     <gmd:language>
         <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng">eng
         </gmd:LanguageCode>
+        <gco:CharacterString>eng</gco:CharacterString>
     </gmd:language>
     <gmd:characterSet>
         <gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="MD_CharacterSetCode_utf8" codeSpace="ISOTC211/19115">
@@ -40,7 +41,7 @@
         </gmd:CI_ResponsibleParty>
     </gmd:contact>
     <gmd:dateStamp>
-        <gco:Date>2014-11-04</gco:Date>
+        <gco:Date>2015-06-29</gco:Date>
     </gmd:dateStamp>
     <gmd:metadataStandardName>
         <gco:CharacterString>ISO19115</gco:CharacterString>
@@ -50,6 +51,9 @@
     </gmd:metadataStandardVersion>
     <gmd:identificationInfo>
         <gmd:MD_DataIdentification>
+            <gmd:abstract>
+                <gco:CharacterString>InaSAFE analysis result</gco:CharacterString>
+            </gmd:abstract>
             <gmd:citation>
                 <gmd:CI_Citation>
                     <gmd:title>
@@ -59,7 +63,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2014-11-04</gco:Date>
+                                <gco:Date>2015-06-29</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication
@@ -70,7 +74,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2014-11-04</gco:Date>
+                                <gco:Date>2015-06-29</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision">revision
@@ -81,7 +85,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2014-11-04</gco:Date>
+                                <gco:Date>2015-06-29</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation
@@ -168,15 +172,18 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[hazard: volcano
-hazard_category: multiple_event
-keyword_version: 3.2
-layer_geometry: point
-layer_mode: classified
-layer_purpose: hazard
-source: smithsonian
-title: Volcano Point
-volcano_name_field: NAME
+<![CDATA[[osm]
+datatype: flood
+category: hazard
+subcategory: structure
+title: flood_osm_4326
+
+[dki]
+datatype: osm
+category: exposure
+title: buildings_osm_4326
+purpose: dki
+subcategory: structure
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>
@@ -227,7 +234,7 @@ volcano_name_field: NAME
                                     <gmd:date>
                                         <gmd:CI_Date>
                                             <gmd:date>
-                                                <gco:Date>2014-11-04</gco:Date>
+                                                <gco:Date>2015-06-29</gco:Date>
                                             </gmd:date>
                                             <gmd:dateType>
                                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">
@@ -250,6 +257,13 @@ volcano_name_field: NAME
                     </gmd:result>
                 </gmd:DQ_DomainConsistency>
             </gmd:report>
+            <gmd:lineage>
+                <gmd:LI_Lineage>
+                    <gmd:statement>
+                        <gco:CharacterString>$ISO19115_LINEAGE</gco:CharacterString>
+                    </gmd:statement>
+                </gmd:LI_Lineage>
+            </gmd:lineage>
         </gmd:DQ_DataQuality>
     </gmd:dataQualityInfo>
 </gmd:MD_Metadata>

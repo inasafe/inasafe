@@ -25,11 +25,10 @@ import tempfile
 from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
 from PyQt4.QtGui import QDialog
 
-from safe.common.version import get_version
 from safe.utilities.proxy import get_proxy
 from safe.utilities.i18n import tr
 from safe.utilities.file_downloader import FileDownloader
-from safe.common.exceptions import DownloadError
+from safe.common.exceptions import DownloadError, CanceledImportDialogError
 from safe.common.version import get_version
 
 URL_OSM_PREFIX = 'http://osm.linfiniti.com/'

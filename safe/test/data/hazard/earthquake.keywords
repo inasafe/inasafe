@@ -1,7 +1,8 @@
-hazard_category: single_event
-title: Earthquake
-hazard: earthquake
 continuous_hazard_unit: mmi
+hazard: earthquake
+hazard_category: single_event
+keyword_version: 3.2
 layer_geometry: raster
-layer_purpose: hazard
 layer_mode: continuous
+layer_purpose: hazard
+title: Earthquake
