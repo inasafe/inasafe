@@ -6,6 +6,7 @@ from safe.utilities.resources import resources_path
 from safe.inasafe_processing.routing.allocate_exits import AllocatExits
 from safe.inasafe_processing.geometry_tools.snap_points_project import \
     SnapPointsProject
+from safe.inasafe_processing.geometry_tools.snap_points import SnapPoints
 from safe.inasafe_processing.geometry_tools.split_poly_to_lines_points import \
     SplitPolygonsToLinesWithPoints
 
@@ -21,6 +22,7 @@ class InaSafeProvider(AlgorithmProvider):
             AllocatExits(),
             SnapPointsProject(),
             SplitPolygonsToLinesWithPoints(),
+            SnapPoints(),
         ]
 
         for alg in self.alglist:

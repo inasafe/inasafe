@@ -18,7 +18,7 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
-        self.name = 'SplitPolygonsToLinesWithPoints'
+        self.name = 'Split polygons to lines'
         self.group = 'Geometry tools'
 
         self.addParameter(ParameterVector(

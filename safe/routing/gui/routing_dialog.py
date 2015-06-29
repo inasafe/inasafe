@@ -220,6 +220,15 @@ class RoutingDialog(QDialog, FORM_CLASS):
         return command_line
 
     def accept(self):
+        """
+        Expected outputs:
+          - EXIT layer with costs
+          - Route from exit to IDP
+          - Flood edge with IDP (without cost)
+          - Roads inside a catchment area, isochrone, colors
+          - New roads layer with flood edges (inundated, not inundated)
+        """
+
         # Get forms input.
         roads_layer = self.get_roads_layer()
         flood_layer = self.get_hazard_layer()
