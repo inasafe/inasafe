@@ -174,7 +174,7 @@
 <![CDATA[field: KRB
 hazard: volcano
 hazard_category: multiple_event
-keyword_version: 1.0
+keyword_version: 3.2
 layer_geometry: polygon
 layer_mode: classified
 layer_purpose: hazard

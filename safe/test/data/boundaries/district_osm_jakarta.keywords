@@ -4,7 +4,7 @@ aggregation attribute: KAB_NAME
 elderly ratio attribute: Global default
 elderly ratio default: 0.08
 female ratio attribute: PEREMPUAN
-keyword_version: 1.0
+keyword_version: 3.2
 layer_mode: classified
 layer_purpose: aggregation
 title: Dístríct's of Jakarta

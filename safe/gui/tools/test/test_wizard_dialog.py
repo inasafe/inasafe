@@ -45,6 +45,7 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard_dialog
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.definitions import inasafe_keyword_version
 from safe.gui.tools.wizard_dialog import (
     WizardDialog,
     step_kw_source,
@@ -177,7 +178,7 @@ class WizardDialogTest(unittest.TestCase):
             'value_map': {'wet': ['YES'], 'dry': ['NO']},
             'source': 'some source',
             'title': 'some title',
-            'keyword_version': 1.0
+            'keyword_version': inasafe_keyword_version
         }
 
         layer = clone_shp_layer(

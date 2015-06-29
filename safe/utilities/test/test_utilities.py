@@ -5,6 +5,7 @@ import unittest
 import os
 from unittest import expectedFailure
 
+from safe.definitions import inasafe_keyword_version
 from safe.utilities.utilities import (
     get_error_message,
     humanise_seconds,
@@ -145,7 +146,7 @@ class UtilitiesTest(unittest.TestCase):
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
             'title': 'Jakarta flood like 2007 with structural improvements',
-            'keyword_version': 1.0
+            'keyword_version': inasafe_keyword_version
         }
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertDictEqual(keywords, expected_keywords, message)
@@ -153,7 +154,7 @@ class UtilitiesTest(unittest.TestCase):
         # Test reading keywords from vector layer
         keywords = read_file_keywords(vector_path)
         expected_keywords = {
-            'keyword_version': 1.0,
+            'keyword_version': inasafe_keyword_version,
             'structure_class_field': 'FLOODED',
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
@@ -174,7 +175,7 @@ class UtilitiesTest(unittest.TestCase):
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
-            'keyword_version': 1.0
+            'keyword_version': inasafe_keyword_version
         }
         message = 'Expected:\n%s\nGot:\n%s\n' % (expected_keywords, keywords)
         self.assertEqual(keywords, expected_keywords, message)

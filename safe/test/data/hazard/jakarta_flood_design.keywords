@@ -1,7 +1,7 @@
 continuous_hazard_unit: metres
 hazard: flood
 hazard_category: single_event
-keyword_version: 1.0
+keyword_version: 3.2
 layer_mode: continuous
 layer_purpose: hazard
 title: Jakarta flood like 2007 with structural improvements
