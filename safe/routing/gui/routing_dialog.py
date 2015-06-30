@@ -2,16 +2,24 @@
 
 import logging
 import shutil
+from random import randint
 from os.path import dirname, join, splitext
 
 from processing.core.Processing import Processing
 from processing.modeler import ModelerAlgorithm
 from processing import runalg
 from qgis.gui import QgsMapToolPan
-from qgis.core import QgsMapLayerRegistry
-from PyQt4.QtGui import QDialog
+from qgis.core import (
+    QgsMapLayerRegistry,
+    QgsVectorLayer,
+    QgsSymbolV2,
+    QgsRendererCategoryV2,
+    QgsCategorizedSymbolRendererV2,
+    QgsVectorGradientColorRampV2,
+    QgsGraduatedSymbolRendererV2)
+from PyQt4.QtGui import QDialog, QColor
 from PyQt4 import uic
-from PyQt4.QtCore import Qt
+from PyQt4.QtCore import Qt, QVariant
 
 from safe.common.exceptions import (
     KeywordNotFoundError,
@@ -219,6 +227,13 @@ class RoutingDialog(QDialog, FORM_CLASS):
         Processing.algs['model'][command_line] = model
         return command_line
 
+    @staticmethod
+    def random_color():
+        r = randint(0, 255)
+        g = randint(0, 255)
+        b = randint(0, 255)
+        return '#%02X%02X%02X' % (r, g, b)
+
     def accept(self):
         """
         Expected outputs:
@@ -250,20 +265,27 @@ class RoutingDialog(QDialog, FORM_CLASS):
         # Get outputs.
         file_name_exit = unique_filename(suffix='-exit.shp')
         file_name_network = unique_filename(suffix='-network.shp')
+        file_name_edge = unique_filename(suffix='-edges.shp')
+        file_name_idp = unique_filename(suffix='-idp.shp')
+        file_name_route = unique_filename(suffix='-routes.shp')
 
         # Run the model
         runalg(
             model,
             roads_layer.source(),
+            idp_layer.source(),
             flood_layer.source(),
             flood_field,
             wet_value,
             coefficient_road,
             coefficient_flood_edge,
+            file_name_edge,
+            file_name_idp,
+            file_name_route,
             file_name_exit,
             file_name_network)
 
-        # Styling
+        # Styling with a QML for the network layer
         network_qml = join(dirname(dirname(__file__)), 'styles', 'network.qml')
         base_name_network = splitext(file_name_network)[0]
         destination_network_qml = '%s.qml' % base_name_network
@@ -272,7 +294,76 @@ class RoutingDialog(QDialog, FORM_CLASS):
             destination_network_qml, '{{flood_edge}}', coefficient_flood_edge)
         self.replace_value(
             destination_network_qml, '{{dry}}', coefficient_road)
-
-        # Adding layers to the map canvas.
-        self.iface.addVectorLayer(file_name_exit, 'Exits', 'ogr')
         self.iface.addVectorLayer(file_name_network, 'Network', 'ogr')
+
+        # Get one color for each IDP
+        # value -> (color, label)
+        list_idp = {}
+        idp_layer = QgsVectorLayer(file_name_idp, 'IDP', 'ogr')
+        id_field_index = idp_layer.dataProvider().fieldNameIndex('id')
+        for feature in idp_layer.getFeatures():
+            id = feature.attributes()[id_field_index]
+            if id not in list_idp:
+                list_idp[id] = (self.random_color(), id)
+
+        # Styling the IDP layer
+        categories = []
+        for idp_id, (color, label) in list_idp.items():
+            symbol = QgsSymbolV2.defaultSymbol(idp_layer.geometryType())
+            symbol.setColor(QColor(color))
+            category = QgsRendererCategoryV2(str(idp_id), symbol, str(label))
+            categories.append(category)
+
+        expression = 'id'
+        renderer = QgsCategorizedSymbolRendererV2(expression, categories)
+        idp_layer.setRendererV2(renderer)
+        QgsMapLayerRegistry.instance().addMapLayer(idp_layer)
+
+        # Styling routes
+        routes_layer = QgsVectorLayer(file_name_route, 'Routes', 'ogr')
+        categories = []
+        for idp_id, (color, label) in list_idp.items():
+            symbol = QgsSymbolV2.defaultSymbol(routes_layer.geometryType())
+            symbol.setColor(QColor(color))
+            category = QgsRendererCategoryV2(str(idp_id), symbol, str(label))
+            categories.append(category)
+
+        expression = 'id_idp'
+        renderer = QgsCategorizedSymbolRendererV2(expression, categories)
+        routes_layer.setRendererV2(renderer)
+        QgsMapLayerRegistry.instance().addMapLayer(routes_layer)
+
+        # Styling edges
+        edges_layer = QgsVectorLayer(file_name_edge, 'Edges', 'ogr')
+        categories = []
+        for idp_id, (color, label) in list_idp.items():
+            symbol = QgsSymbolV2.defaultSymbol(edges_layer.geometryType())
+            symbol.setColor(QColor(color))
+            category = QgsRendererCategoryV2(str(idp_id), symbol, str(label))
+            categories.append(category)
+
+        expression = 'id_idp'
+        renderer = QgsCategorizedSymbolRendererV2(expression, categories)
+        edges_layer.setRendererV2(renderer)
+        QgsMapLayerRegistry.instance().addMapLayer(edges_layer)
+
+        # Styling exits
+        exits_layer = QgsVectorLayer(file_name_exit, 'Exits', 'ogr')
+        symbol = QgsSymbolV2.defaultSymbol(idp_layer.geometryType())
+        # noinspection PyCallByClass
+        color_ramp = QgsVectorGradientColorRampV2.create({
+            'color1': '0,255,0,255',
+            'color2': '255,0,0,255',
+            'stops': '0.5;255,255,0,255'})
+
+        # noinspection PyCallByClass
+        renderer = QgsGraduatedSymbolRendererV2.createRenderer(
+            exits_layer,
+            'cost',
+            5,
+            QgsGraduatedSymbolRendererV2.Jenks,
+            symbol,
+            color_ramp)
+
+        exits_layer.setRendererV2(renderer)
+        QgsMapLayerRegistry.instance().addMapLayer(exits_layer)

@@ -28,12 +28,39 @@
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.ModelerParameter"
             }, 
+            "VECTORLAYER_IDPLAYER": {
+                "values": {
+                    "pos": {
+                        "values": {
+                            "y": 60.0, 
+                            "x": 824.0
+                        }, 
+                        "class": "point"
+                    }, 
+                    "param": {
+                        "values": {
+                            "isAdvanced": false, 
+                            "name": "VECTORLAYER_IDPLAYER", 
+                            "shapetype": [
+                                0
+                            ], 
+                            "value": null, 
+                            "exported": null, 
+                            "hidden": false, 
+                            "optional": false, 
+                            "description": "IDP layer"
+                        }, 
+                        "class": "processing.core.parameters.ParameterVector"
+                    }
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.ModelerParameter"
+            }, 
             "STRING_FLOODVALUE": {
                 "values": {
                     "pos": {
                         "values": {
-                            "y": 110.12750000000003, 
-                            "x": 348.43499999999995
+                            "y": 124.12750000000003, 
+                            "x": 320.43499999999995
                         }, 
                         "class": "point"
                     }, 
@@ -57,8 +84,8 @@
                 "values": {
                     "pos": {
                         "values": {
-                            "y": 586.3025000000002, 
-                            "x": 483.58749999999986
+                            "y": 637.3025000000002, 
+                            "x": 479.58749999999986
                         }, 
                         "class": "point"
                     }, 
@@ -134,8 +161,8 @@
                 "values": {
                     "pos": {
                         "values": {
-                            "y": 38.0, 
-                            "x": 331.0
+                            "y": 42.0, 
+                            "x": 329.0
                         }, 
                         "class": "point"
                     }, 
@@ -157,8 +184,8 @@
             }
         }, 
         "helpContent": {}, 
-        "group": "InaSAFE",
-        "name": "Routable layer",
+        "group": "InaSAFE", 
+        "name": "Routable layer", 
         "algs": {
             "QGISDIFFERENCE_1": {
                 "values": {
@@ -167,8 +194,8 @@
                     "outputs": {}, 
                     "pos": {
                         "values": {
-                            "y": 461.8924999999999, 
-                            "x": 513.7650000000001
+                            "y": 482.8924999999999, 
+                            "x": 562.7650000000001
                         }, 
                         "class": "point"
                     }, 
@@ -183,7 +210,7 @@
                         }, 
                         "OVERLAY": {
                             "values": {
-                                "alg": "QGISDELETEHOLES_1",
+                                "alg": "QGISDELETEHOLES_1", 
                                 "output": "OUTPUT"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
@@ -191,7 +218,7 @@
                     }, 
                     "active": true, 
                     "consoleName": "qgis:difference", 
-                    "description": "Difference"
+                    "description": "Difference 1"
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }, 
@@ -202,8 +229,8 @@
                     "outputs": {}, 
                     "pos": {
                         "values": {
-                            "y": 535.0975000000001, 
-                            "x": 179.9975
+                            "y": 610.0975000000001, 
+                            "x": 191.9975
                         }, 
                         "class": "point"
                     }, 
@@ -212,7 +239,7 @@
                     "params": {
                         "INPUT": {
                             "values": {
-                                "alg": "QGISDELETEHOLES_1",
+                                "alg": "QGISDELETEHOLES_1", 
                                 "output": "OUTPUT"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
@@ -224,6 +251,105 @@
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }, 
+            "QGISLINEINTERSECTIONS_1": {
+                "values": {
+                    "name": "QGISLINEINTERSECTIONS_1", 
+                    "paramsFolded": true, 
+                    "outputs": {}, 
+                    "pos": {
+                        "values": {
+                            "y": 442.8631249999999, 
+                            "x": 964.98025
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": true, 
+                    "dependencies": [], 
+                    "params": {
+                        "FIELD_B": {
+                            "values": {
+                                "name": "TABLEFIELD_FLOODFIELD"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromInput"
+                        }, 
+                        "FIELD_A": {
+                            "values": {
+                                "name": "TABLEFIELD_FLOODFIELD"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromInput"
+                        }, 
+                        "INPUT_B": {
+                            "values": {
+                                "alg": "QGISCHECKVALIDITY_3", 
+                                "output": "VALID_OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "INPUT_A": {
+                            "values": {
+                                "alg": "QGISINTERSECTION_1", 
+                                "output": "OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }
+                    }, 
+                    "active": true, 
+                    "consoleName": "qgis:lineintersections", 
+                    "description": "Line intersections"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
+            "INASAFEALLOCATEEDGES_1": {
+                "values": {
+                    "name": "INASAFEALLOCATEEDGES_1", 
+                    "paramsFolded": true, 
+                    "outputs": {
+                        "OUTPUT": {
+                            "values": {
+                                "description": "edges", 
+                                "pos": {
+                                    "values": {
+                                        "y": 1005.9852785312501, 
+                                        "x": 1899.4346818749991
+                                    }, 
+                                    "class": "point"
+                                }
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ModelerOutput"
+                        }
+                    }, 
+                    "pos": {
+                        "values": {
+                            "y": 960.9852785312501, 
+                            "x": 1693.4346818749991
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": true, 
+                    "dependencies": [], 
+                    "params": {
+                        "FIELD": "id_idp", 
+                        "POINTS": {
+                            "values": {
+                                "alg": "INASAFEALLOCATEEXITS_1", 
+                                "output": "EXITS_LAYER"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "LINES": {
+                            "values": {
+                                "alg": "INASAFESPLITPOLYGONSTOLINES_1", 
+                                "output": "OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }
+                    }, 
+                    "active": true, 
+                    "consoleName": "inasafe:allocateedges", 
+                    "description": "Allocate edges"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
             "QGISSPLITLINESWITHLINES_1": {
                 "values": {
                     "name": "QGISSPLITLINESWITHLINES_1", 
@@ -231,8 +357,8 @@
                     "outputs": {}, 
                     "pos": {
                         "values": {
-                            "y": 748.6875000000001, 
-                            "x": 844.9400000000002
+                            "y": 737.6875, 
+                            "x": 828.94
                         }, 
                         "class": "point"
                     }, 
@@ -259,58 +385,6 @@
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }, 
-            "QGISLINEINTERSECTIONS_1": {
-                "values": {
-                    "name": "QGISLINEINTERSECTIONS_1",
-                    "paramsFolded": true, 
-                    "outputs": {
-                        "OUTPUT": {
-                            "values": {
-                                "description": "Exits", 
-                                "pos": {
-                                    "values": {
-                                        "y": 514.4075, 
-                                        "x": 1124.6100000000001
-                                    }, 
-                                    "class": "point"
-                                }
-                            }, 
-                            "class": "processing.modeler.ModelerAlgorithm.ModelerOutput"
-                        }
-                    }, 
-                    "pos": {
-                        "values": {
-                            "y": 459.22749999999996, 
-                            "x": 896.665
-                        }, 
-                        "class": "point"
-                    }, 
-                    "outputsFolded": true, 
-                    "dependencies": [], 
-                    "params": {
-                        "FIELD_B": null, 
-                        "FIELD_A": null, 
-                        "INPUT_B": {
-                            "values": {
-                                "alg": "QGISDIFFERENCE_1", 
-                                "output": "OUTPUT"
-                            }, 
-                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
-                        }, 
-                        "INPUT_A": {
-                            "values": {
-                                "alg": "QGISINTERSECTION_1", 
-                                "output": "OUTPUT"
-                            }, 
-                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
-                        }
-                    }, 
-                    "active": true, 
-                    "consoleName": "qgis:lineintersections",
-                    "description": "Line intersections"
-                }, 
-                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
-            }, 
             "QGISINTERSECTION_1": {
                 "values": {
                     "name": "QGISINTERSECTION_1", 
@@ -318,8 +392,8 @@
                     "outputs": {}, 
                     "pos": {
                         "values": {
-                            "y": 288.5625, 
-                            "x": 788.615
+                            "y": 256.5625, 
+                            "x": 799.615
                         }, 
                         "class": "point"
                     }, 
@@ -328,7 +402,7 @@
                     "params": {
                         "INPUT2": {
                             "values": {
-                                "alg": "QGISDELETEHOLES_1",
+                                "alg": "QGISDELETEHOLES_1", 
                                 "output": "OUTPUT"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
@@ -346,6 +420,132 @@
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }, 
+            "QGISCHECKVALIDITY_4": {
+                "values": {
+                    "name": "QGISCHECKVALIDITY_4", 
+                    "paramsFolded": true, 
+                    "outputs": {}, 
+                    "pos": {
+                        "values": {
+                            "y": 466.0, 
+                            "x": 1224.0
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": true, 
+                    "dependencies": [], 
+                    "params": {
+                        "INPUT_LAYER": {
+                            "values": {
+                                "alg": "QGISDIFFERENCE_2", 
+                                "output": "OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "METHOD": 0
+                    }, 
+                    "active": true, 
+                    "consoleName": "qgis:checkvalidity", 
+                    "description": "Check validity 2.2"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
+            "QGISCHECKVALIDITY_3": {
+                "values": {
+                    "name": "QGISCHECKVALIDITY_3", 
+                    "paramsFolded": true, 
+                    "outputs": {}, 
+                    "pos": {
+                        "values": {
+                            "y": 434.0, 
+                            "x": 740.0
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": true, 
+                    "dependencies": [], 
+                    "params": {
+                        "INPUT_LAYER": {
+                            "values": {
+                                "alg": "QGISDIFFERENCE_1", 
+                                "output": "OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "METHOD": 0
+                    }, 
+                    "active": true, 
+                    "consoleName": "qgis:checkvalidity", 
+                    "description": "Check validity 1.1"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
+            "QGISDIFFERENCE_2": {
+                "values": {
+                    "name": "QGISDIFFERENCE_2", 
+                    "paramsFolded": true, 
+                    "outputs": {}, 
+                    "pos": {
+                        "values": {
+                            "y": 320.6875, 
+                            "x": 1066.7874999999995
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": true, 
+                    "dependencies": [], 
+                    "params": {
+                        "INPUT": {
+                            "values": {
+                                "alg": "QGISFIELDCALCULATOR_3", 
+                                "output": "OUTPUT_LAYER"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "OVERLAY": {
+                            "values": {
+                                "alg": "QGISDELETEHOLES_1", 
+                                "output": "OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }
+                    }, 
+                    "active": true, 
+                    "consoleName": "qgis:difference", 
+                    "description": "Difference 2"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
+            "QGISCHECKVALIDITY_2": {
+                "values": {
+                    "name": "QGISCHECKVALIDITY_2", 
+                    "paramsFolded": true, 
+                    "outputs": {}, 
+                    "pos": {
+                        "values": {
+                            "y": 550.0, 
+                            "x": 729.0
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": true, 
+                    "dependencies": [], 
+                    "params": {
+                        "INPUT_LAYER": {
+                            "values": {
+                                "alg": "QGISDIFFERENCE_1", 
+                                "output": "OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "METHOD": 0
+                    }, 
+                    "active": true, 
+                    "consoleName": "qgis:checkvalidity", 
+                    "description": "Check validity 1.2"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
             "QGISFIELDCALCULATOR_1": {
                 "values": {
                     "name": "QGISFIELDCALCULATOR_1", 
@@ -353,8 +553,8 @@
                     "outputs": {}, 
                     "pos": {
                         "values": {
-                            "y": 721.7375, 
-                            "x": 466.6875
+                            "y": 735.7375, 
+                            "x": 465.6875
                         }, 
                         "class": "point"
                     }, 
@@ -393,8 +593,8 @@
                     "outputs": {}, 
                     "pos": {
                         "values": {
-                            "y": 580.8675000000002, 
-                            "x": 881.3274999999999
+                            "y": 619.8675000000003, 
+                            "x": 959.3274999999999
                         }, 
                         "class": "point"
                     }, 
@@ -405,8 +605,8 @@
                         "NEW_FIELD": true, 
                         "INPUT_LAYER": {
                             "values": {
-                                "alg": "QGISDIFFERENCE_1", 
-                                "output": "OUTPUT"
+                                "alg": "QGISCHECKVALIDITY_2", 
+                                "output": "VALID_OUTPUT"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
                         }, 
@@ -426,6 +626,35 @@
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }, 
+            "QGISDELETEHOLES_1": {
+                "values": {
+                    "name": "QGISDELETEHOLES_1", 
+                    "paramsFolded": true, 
+                    "outputs": {}, 
+                    "pos": {
+                        "values": {
+                            "y": 454.25250000000005, 
+                            "x": 185.82000000000005
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": true, 
+                    "dependencies": [], 
+                    "params": {
+                        "INPUT": {
+                            "values": {
+                                "alg": "QGISDISSOLVE_1", 
+                                "output": "OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }
+                    }, 
+                    "active": true, 
+                    "consoleName": "qgis:deleteholes", 
+                    "description": "Delete holes"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
             "QGISDISSOLVE_1": {
                 "values": {
                     "name": "QGISDISSOLVE_1", 
@@ -433,8 +662,8 @@
                     "outputs": {}, 
                     "pos": {
                         "values": {
-                            "y": 281.94500000000016, 
-                            "x": 198.10750000000004
+                            "y": 273.94500000000016, 
+                            "x": 202.10750000000007
                         }, 
                         "class": "point"
                     }, 
@@ -457,32 +686,212 @@
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }, 
-            "QGISDELETEHOLES_1": {
+            "INASAFEREMOVINGUNMATCHEDFEATURES_1": {
                 "values": {
-                    "name": "QGISDELETEHOLES_1",
+                    "name": "INASAFEREMOVINGUNMATCHEDFEATURES_1", 
                     "paramsFolded": true, 
-                    "outputs": {}, 
+                    "outputs": {
+                        "OUTPUT": {
+                            "values": {
+                                "description": "IDP", 
+                                "pos": {
+                                    "values": {
+                                        "y": 500.0, 
+                                        "x": 1834.0
+                                    }, 
+                                    "class": "point"
+                                }
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ModelerOutput"
+                        }
+                    }, 
                     "pos": {
                         "values": {
-                            "y": 408.25250000000005, 
-                            "x": 187.82000000000002
+                            "y": 462.0, 
+                            "x": 1643.0
                         }, 
                         "class": "point"
                     }, 
                     "outputsFolded": true, 
                     "dependencies": [], 
                     "params": {
-                        "INPUT": {
+                        "DIRTY_LAYER": {
                             "values": {
-                                "alg": "QGISDISSOLVE_1", 
+                                "alg": "QGISFIELDCALCULATOR_3", 
+                                "output": "OUTPUT_LAYER"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "FIELD_SOURCE_LAYER": "id_idp", 
+                        "LAYER_SOURCE": {
+                            "values": {
+                                "alg": "INASAFEALLOCATEEXITS_1", 
+                                "output": "ROUTE_LAYER"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "FIELD_DIRTY_LAYER": "id"
+                    }, 
+                    "active": true, 
+                    "consoleName": "inasafe:removingunmatchedfeatures", 
+                    "description": "Removing unmatched features "
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
+            "INASAFEALLOCATEEXITS_1": {
+                "values": {
+                    "name": "INASAFEALLOCATEEXITS_1", 
+                    "paramsFolded": true, 
+                    "outputs": {
+                        "ROUTE_LAYER": {
+                            "values": {
+                                "description": "Routes", 
+                                "pos": {
+                                    "values": {
+                                        "y": 665.3273875, 
+                                        "x": 1677.6495249999998
+                                    }, 
+                                    "class": "point"
+                                }
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ModelerOutput"
+                        }, 
+                        "EXITS_LAYER": {
+                            "values": {
+                                "description": "Cost", 
+                                "pos": {
+                                    "values": {
+                                        "y": 738.3273875, 
+                                        "x": 1678.6495249999998
+                                    }, 
+                                    "class": "point"
+                                }
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ModelerOutput"
+                        }
+                    }, 
+                    "pos": {
+                        "values": {
+                            "y": 596.3273875, 
+                            "x": 1387.6495249999998
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": false, 
+                    "dependencies": [], 
+                    "params": {
+                        "IDP_ID": "idp_id", 
+                        "EXITS": {
+                            "values": {
+                                "alg": "QGISLINEINTERSECTIONS_1", 
+                                "output": "OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "IDP": {
+                            "values": {
+                                "alg": "QGISCHECKVALIDITY_4", 
+                                "output": "VALID_OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "STRATEGY": 0, 
+                        "FIELD": "multiply", 
+                        "ROADS": {
+                            "values": {
+                                "alg": "QGISMERGEVECTORLAYERS_1", 
                                 "output": "OUTPUT"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
                         }
                     }, 
                     "active": true, 
-                    "consoleName": "qgis:deleteholes",
-                    "description": "Delete holes"
+                    "consoleName": "inasafe:allocateexits", 
+                    "description": "Allocate exits"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
+            "QGISMERGEVECTORLAYERS_1": {
+                "values": {
+                    "name": "QGISMERGEVECTORLAYERS_1", 
+                    "paramsFolded": true, 
+                    "outputs": {
+                        "OUTPUT": {
+                            "values": {
+                                "description": "Routable", 
+                                "pos": {
+                                    "values": {
+                                        "y": 748.56, 
+                                        "x": 1293.7874999999995
+                                    }, 
+                                    "class": "point"
+                                }
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ModelerOutput"
+                        }
+                    }, 
+                    "pos": {
+                        "values": {
+                            "y": 704.56, 
+                            "x": 1156.7874999999995
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": true, 
+                    "dependencies": [], 
+                    "params": {
+                        "LAYER2": {
+                            "values": {
+                                "alg": "QGISSPLITLINESWITHLINES_1", 
+                                "output": "OUTPUT"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "LAYER1": {
+                            "values": {
+                                "alg": "QGISFIELDCALCULATOR_2", 
+                                "output": "OUTPUT_LAYER"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }
+                    }, 
+                    "active": true, 
+                    "consoleName": "qgis:mergevectorlayers", 
+                    "description": "Merge vector layers"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
+            "QGISFIELDCALCULATOR_3": {
+                "values": {
+                    "name": "QGISFIELDCALCULATOR_3", 
+                    "paramsFolded": true, 
+                    "outputs": {}, 
+                    "outputsFolded": true, 
+                    "pos": {
+                        "values": {
+                            "y": 163.147375, 
+                            "x": 916.0888749999999
+                        }, 
+                        "class": "point"
+                    }, 
+                    "dependencies": [], 
+                    "params": {
+                        "FIELD_TYPE": 1, 
+                        "NEW_FIELD": true, 
+                        "INPUT_LAYER": {
+                            "values": {
+                                "name": "VECTORLAYER_IDPLAYER"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromInput"
+                        }, 
+                        "FIELD_PRECISION": 3.0, 
+                        "FIELD_LENGTH": 10.0, 
+                        "FORMULA": "$id", 
+                        "FIELD_NAME": "id"
+                    }, 
+                    "active": true, 
+                    "consoleName": "qgis:fieldcalculator", 
+                    "description": "Field calculator idp"
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }, 
@@ -493,8 +902,8 @@
                     "outputs": {}, 
                     "pos": {
                         "values": {
-                            "y": 183.07500000000005, 
-                            "x": 136.71750000000003
+                            "y": 187.07500000000005, 
+                            "x": 120.71750000000003
                         }, 
                         "class": "point"
                     }, 
@@ -527,53 +936,39 @@
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }, 
-            "QGISMERGEVECTORLAYERS_1": {
+            "INASAFESPLITPOLYGONSTOLINES_1": {
                 "values": {
-                    "name": "QGISMERGEVECTORLAYERS_1", 
+                    "name": "INASAFESPLITPOLYGONSTOLINES_1", 
                     "paramsFolded": true, 
-                    "outputs": {
-                        "OUTPUT": {
-                            "values": {
-                                "description": "Routable", 
-                                "pos": {
-                                    "values": {
-                                        "y": 754.56, 
-                                        "x": 1312.7874999999995
-                                    }, 
-                                    "class": "point"
-                                }
-                            }, 
-                            "class": "processing.modeler.ModelerAlgorithm.ModelerOutput"
-                        }
-                    }, 
-                    "outputsFolded": true, 
+                    "outputs": {}, 
                     "pos": {
                         "values": {
-                            "y": 697.56, 
-                            "x": 1140.7874999999997
+                            "y": 884.7992062500002, 
+                            "x": 1499.6587062499989
                         }, 
                         "class": "point"
                     }, 
+                    "outputsFolded": true, 
                     "dependencies": [], 
                     "params": {
-                        "LAYER2": {
+                        "POLYGONS_LAYER": {
                             "values": {
-                                "alg": "QGISSPLITLINESWITHLINES_1", 
+                                "alg": "QGISDELETEHOLES_1", 
                                 "output": "OUTPUT"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
                         }, 
-                        "LAYER1": {
+                        "POINTS_LAYER": {
                             "values": {
-                                "alg": "QGISFIELDCALCULATOR_2", 
-                                "output": "OUTPUT_LAYER"
+                                "alg": "INASAFEALLOCATEEXITS_1", 
+                                "output": "EXITS_LAYER"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
                         }
                     }, 
                     "active": true, 
-                    "consoleName": "qgis:mergevectorlayers", 
-                    "description": "Merge vector layers"
+                    "consoleName": "inasafe:splitpolygonstolines", 
+                    "description": "Split polygons to lines"
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.Algorithm"
             }
