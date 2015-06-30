@@ -22,25 +22,35 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
 
+from safe.impact_functions.core import evacuated_population_needs
+
 
 class PopulationExposureReportMixin(ReportMixin):
     """Building specific report.
-
-    .. versionadded:: 3.3
     """
 
     def __init__(self):
-        """Building specific report mixin.
+        """Population specific report mixin.
 
-        .. versionadded:: 3.2
+        .. versionadded:: 3.3
 
         ..Notes:
         Expect affected population as following:
 
+            _affected_population = OrderedDict([
+                (impact level, amount),
+            e.g.
+                (People in high hazard area, 1000),
+                (People in medium hazard area, 100),
+                (People in low hazard area, 5),
+            )]
+
         """
-        self.question = ''
-        self.buildings = {}
-        self.affected_buildings = {}
+        self._question = ''
+        self._unaffected_population = 0
+        self._affected_population = {}
+        self._other_population_counts = {}
+        self._category_ordering = []
 
     def generate_report(self):
         """Breakdown by building type.
@@ -65,44 +75,32 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The buildings breakdown report.
         :rtype: list
         """
-        schools_closed = self.schools_closed
-        hospitals_closed = self.hospitals_closed
+
         return [
             {
                 'content': tr('Action Checklist:'),
                 'header': True
             },
             {
-                'content': tr('Are the critical facilities still open?')
+                'content': tr('How will warnings be disseminated?')
+            },
+            {
+                'content': tr('How will we reach evacuated people?')
             },
             {
                 'content': tr(
-                    'Which structures have warning capacity '
-                    '(eg. sirens, speakers, etc.)?')},
-            {
-                'content': tr('Which buildings will be evacuation centres?')
-            },
-            {
-                'content': tr('Where will we locate the operations centre?')
+                    'Are there enough shelters and relief items available '
+                    'for %s people?' % self.total_affected_population)
             },
             {
                 'content': tr(
-                    'Where will we locate warehouse and/or distribution '
-                    'centres?')
+                    'If yes, where are they located and how will we '
+                    'distribute them?')
             },
             {
                 'content': tr(
-                    'Where will the students from the %s closed schools go to '
-                    'study?'),
-                'arguments': (format_int(schools_closed),),
-                'condition': schools_closed > 0
-            },
-            {
-                'content': tr(
-                    'Where will the patients from the %s closed hospitals go '
-                    'for treatment and how will we transport them?'),
-                'arguments': (format_int(hospitals_closed),),
-                'condition': hospitals_closed > 0
+                    'If no, where can we obtain additional relief items from '
+                    'and how will we transport them to here?')
             }
         ]
 
@@ -112,46 +110,14 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The impact summary.
         :rtype: list
         """
-        affect_types = self._impact_breakdown
-        impact_summary_report = [
-            {
-                'content': [tr('Hazard Category')] + affect_types,
-                'header': True
-            }]
-        for (category, building_breakdown) in self.affected_buildings.items():
-            total_affected = [0] * len(affect_types)
-            for affected_breakdown in building_breakdown.values():
-                for affect_type, number_affected in affected_breakdown.items():
-                    count = affect_types.index(affect_type)
-                    total_affected[count] += number_affected
-            total_affected_formatted = [
-                format_int(affected) for affected in total_affected]
+        impact_summary_report = []
+        for category in self.category_ordering:
+            population_in_category = self.lookup_category(category)
             impact_summary_report.append(
                 {
-                    'content': [tr(category)] + total_affected_formatted
-                })
-        if len(self._affected_categories) > 1:
-            impact_summary_report.append(
-                {
-                    'content': [
-                        tr(tr('Total Buildings Affected')),
-                        format_int(self.total_affected_buildings)],
+                    'content': [tr(category), population_in_category],
                     'header': True
                 })
-        impact_summary_report.append(
-            {
-                'content': [
-                    tr('Buildings Not Affected'),
-                    format_int(self.total_unaffected_buildings)],
-                'header': True
-            })
-        impact_summary_report.append(
-            {
-                'content': [
-                    tr('All Buildings'),
-                    format_int(self.total_buildings)],
-                'header': True
-            })
         return impact_summary_report
 
     def minimum_needs_breakdown(self):
@@ -160,157 +126,94 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The buildings breakdown report.
         :rtype: list
         """
-        buildings_breakdown_report = []
-        category_names = self.affected_buildings.keys()
-        table_headers = [tr('Building type')]
-        table_headers += [tr(category) for category in category_names]
-        table_headers += [tr('Total')]
-        buildings_breakdown_report.append(
-            {
-                'content': table_headers,
-                'header': True
-            })
-        # Let's sort alphabetically first
-        building_types = [building_type for building_type in self.buildings]
-        building_types.sort()
-        for building_type in building_types:
-            building_type_name = building_type.replace('_', ' ')
-            affected_by_usage = []
-            for category in category_names:
-                if building_type in self.affected_buildings[category]:
-                    affected_by_usage.append(
-                        self.affected_buildings[category][
-                            building_type].values()[0])
-                else:
-                    affected_by_usage.append(0)
-            building_detail = (
-                # building type
-                [building_type_name.capitalize()] +
-                # categories
-                [format_int(x) for x in affected_by_usage] +
-                # total
-                [format_int(sum(affected_by_usage))])
-            buildings_breakdown_report.append(
+        minimum_needs_breakdown_report = []
+        total_population_affected = self.total_affected_population
+        total_needs = evacuated_population_needs(
+            total_population_affected, self.minimum_needs)
+        for frequency, needs in total_needs.items():
+            minimum_needs_breakdown_report.append(
                 {
-                    'content': building_detail
+                    'content': [
+                        tr('Needs should be provided %s' % frequency),
+                        tr('Total')],
+                    'header': True
                 })
-
-        return buildings_breakdown_report
-
-    @property
-    def schools_closed(self):
-        """Get the number of schools
-
-        :returns: The buildings breakdown report.
-        :rtype: list
-
-        ..Notes:
-        Expect affected buildings to be given as following:
-            affected_buildings = OrderedDict([
-                (category, {building_type: amount}),
-            e.g.
-                (inundated, {residential: 1000, school: 0 ...}),
-                (wet, {residential: 12, school: 2 ...}),
-                (dry, {residential: 50, school: 50})
-            ])
-        """
-        return self._count_usage('school')
+            for resource in needs:
+                minimum_needs_breakdown_report.append(
+                    {
+                        'content': [
+                            tr(resource['table name']),
+                            tr(format_int(resource['amount']))]
+                    })
+        return minimum_needs_breakdown_report
 
     @property
-    def hospitals_closed(self):
-        """Get the number of schools
+    def category_ordering(self):
+        if not hasattr(self, '_category_ordering'):
+            self._category_ordering = []
+        return self._category_ordering
 
-        :returns: The buildings breakdown report.
-        :rtype: list
-
-        ..Notes:
-        Expect affected buildings to be given as following:
-            affected_buildings = OrderedDict([
-                (category, {building_type: amount}),
-            e.g.
-                (inundated, {residential: 1000, school: 0 ...}),
-                (wet, {residential: 12, school: 2 ...}),
-                (dry, {residential: 50, school: 50})
-            ])
-        """
-        return self._count_usage('hospital')
-
-    def _count_usage(self, usage):
-        count = 0
-        for category_breakdown in self.affected_buildings.values():
-            for current_usage in category_breakdown:
-                if current_usage.lower() == usage.lower():
-                    count += category_breakdown[current_usage].values()[0]
-        return count
+    @category_ordering.setter
+    def category_ordering(self, category_ordering):
+        self._category_ordering = category_ordering
 
     @property
-    def _impact_breakdown(self):
-        """Get the impact breakdown categories.
+    def other_population_counts(self):
+        if not hasattr(self, '_other_population_counts'):
+            self._other_population_counts = {}
+        return self._other_population_counts
 
-        For example, on Earthquake Building with nexis true, this will return:
-            [tr('Buildings Affected'),
-             tr('Buildings value ($M)'),
-             tr('Contents value ($M)')]
-        """
-        if len(self.affected_buildings.values()) == 0:
-            return []
-        if len(self.affected_buildings.values()[0].values()) == 0:
-            return []
-        return self.affected_buildings.values()[0].values()[0].keys()
+    @other_population_counts.setter
+    def other_population_counts(self):
+        if not hasattr(self, '_other_population_counts'):
+            self._other_population_counts = {}
+        return self._other_population_counts
 
     @property
-    def _affected_categories(self):
-        return self.affected_buildings.keys()
+    def affected_population(self):
+        if not hasattr(self, '_affected_population'):
+            self._affected_population = {}
+        return self._affected_population
+
+    @affected_population.setter
+    def affected_population(self, affected_population):
+        self._affected_population = affected_population
 
     @property
-    def total_affected_buildings(self):
-        """The total number of affected buildings
+    def question(self):
+        if not hasattr(self, '_question'):
+            self._question = ''
+        return self._question
 
-        :returns: The total number of affected buildings.
-        :rtype: int
-        """
-        total_affected = 0
-        for category in self._affected_categories:
-            category_breakdown = self.affected_buildings[category]
-            for building_breakdown in category_breakdown.values():
-                total_affected += building_breakdown.values()[0]
-        return total_affected
+    @question.setter
+    def question(self, question):
+        self._question = question
 
     @property
-    def total_unaffected_buildings(self):
-        """The total number of unaffected buildings.
+    def unaffected_population(self):
+        if not hasattr(self, '_unaffected_population'):
+            self._unaffected_population = 0
+        return self._unaffected_population
 
-        :returns: The total number of unaffected buildings.
-        :rtype: int
-        """
-        return self.total_buildings - self.total_affected_buildings
+    @unaffected_population.setter
+    def unaffected_population(self, unaffected_population):
+        self._unaffected_population = unaffected_population
 
     @property
-    def total_buildings(self):
-        """The total number of buildings.
+    def total_affected_population(self):
+        return sum(self.affected_population.values())
 
-        :returns: The total number of buildings.
-        :rtype: int
-        """
-        return sum(self.buildings.values())
-
-    def _consolidate_to_other(self):
-        """Consolidate the small building usage groups < 25 to other."""
-        cutoff = 25
-        other = tr('Other')
-        for (usage, value) in self.buildings.items():
-            if value >= cutoff:
-                continue
-            if other not in self.buildings.keys():
-                self.buildings[other] = 0
-                for category in self.affected_buildings.keys():
-                    other_dict = OrderedDict(
-                        [(key, 0) for key in self._impact_breakdown])
-                    self.affected_buildings[category][other] = other_dict
-            self.buildings[other] += value
-            del self.buildings[usage]
-            for category in self.affected_buildings.keys():
-                for key in self._impact_breakdown:
-                    old = self.affected_buildings[category][usage][key]
-                    self.affected_buildings[category][other][key] += old
-                del self.affected_buildings[category][usage]
+    def lookup_category(self, category):
+        if category in self.affected_population.keys():
+            return self.affected_population[category]
+        if category in self.other_population_counts.keys():
+            return self.other_population_counts[category]
+        if category in [
+                tr('Population Not Affected'),
+                tr('Unaffected Population')]:
+            return self.unaffected_population
+        if category in [
+                tr('Total Impacted'),
+                tr('People impacted'),
+                tr('Total Population Affected')]:
+            return self.total_affected_population
