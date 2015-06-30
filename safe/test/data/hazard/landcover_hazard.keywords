@@ -1,9 +1,10 @@
-hazard_category: single_event
-title: Godzilla
-hazard: generic
 field: Type
-value_map: {"high": ["Godzilla"]}
-vector_hazard_classification: generic_vector_hazard_classes
+hazard: generic
+hazard_category: multiple_event
+keyword_version: 3.2
 layer_geometry: polygon
-layer_purpose: hazard
 layer_mode: classified
+layer_purpose: hazard
+title: Godzilla
+value_map: {'high': ['Godzilla']}
+vector_hazard_classification: generic_vector_hazard_classes
