@@ -367,3 +367,5 @@ class RoutingDialog(QDialog, FORM_CLASS):
 
         exits_layer.setRendererV2(renderer)
         QgsMapLayerRegistry.instance().addMapLayer(exits_layer)
+
+        self.close()

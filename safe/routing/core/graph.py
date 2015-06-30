@@ -395,8 +395,9 @@ class Graph(object):
 
     def route_between(self, start, end, cost_strategy='distance'):
         geom = self.route_between_geom(start, end, cost_strategy)
-        return \
-            geom, self.distance_area.measure(geom), self.cost_between(start, end, cost_strategy)
+        distance = self.distance_area.measure(geom)
+        cost = self.cost_between(start, end, cost_strategy)
+        return geom, distance, cost
 
     def show_route_between(self, start, end, cost_strategy='distance'):
         route = self.route_between(start, end, cost_strategy)

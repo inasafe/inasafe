@@ -121,9 +121,9 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
                         l = len(polyline)
                         temp_geometries = []
                         temp_geometries.append(
-                            QgsGeometry.fromPolyline(polyline[:index+1]))
+                            QgsGeometry.fromPolyline(polyline[:index + 1]))
                         temp_geometries.append(
-                            QgsGeometry.fromPolyline(polyline[-(l-index):]))
+                            QgsGeometry.fromPolyline(polyline[-(l - index):]))
 
                         # Deleting the old geometry which has been splitted
                         i = new_geometries.index(closest_geom)

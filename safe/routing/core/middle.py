@@ -20,7 +20,7 @@ def azimuth(p1, p2):
     dx = p2[0] - p1[0]
     dy = p2[1] - p1[1]
     rads = atan2(dy, dx)
-    rads %= 2*pi
+    rads %= 2 * pi
     return rads
 
 
@@ -38,12 +38,12 @@ def split_middle(line):
     for i, dist in enumerate(distances):
         if iter_sum < half_distance < iter_sum + dist:
             point_1 = line[i]
-            point_2 = line[i+1]
+            point_2 = line[i + 1]
             d = half_distance - iter_sum
             middle = get_point(point_1, point_2, d)
-            line.insert(i+1, middle)
-            return line[0:i+2], line[i+1:]
+            line.insert(i + 1, middle)
+            return line[0:i + 2], line[i + 1:]
         elif half_distance == iter_sum + dist:
-            return line[0:i+2], line[i+1:]
+            return line[0:i + 2], line[i + 1:]
         else:
             iter_sum += dist
