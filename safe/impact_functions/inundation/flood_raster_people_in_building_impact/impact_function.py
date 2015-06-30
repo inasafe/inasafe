@@ -22,17 +22,18 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_osm_building_usage, verify
+from safe.common.utilities import verify
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.impact_reports.building_exposure_report_mixin import (
-    PopulationExposureReportMixin)
+# from safe.impact_reports.building_exposure_report_mixin import (
+#     PopulationExposureReportMixin)
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodRasterPeopleInBuildingFunction(
         ContinuousRHClassifiedVE,
-        PopulationExposureReportMixin):
+        # PopulationExposureReportMixin
+        ):
     # noinspection PyUnresolvedReferences
     """Inundation raster impact on building data."""
     _metadata = FloodRasterPeopleInBuildingMetadata()
@@ -60,14 +61,20 @@ class FloodRasterPeopleInBuildingFunction(
             },
             {
                 'content': tr(
-                    'People need evacuation if they occupy '
-                    'buildings which are inundated')
+                    'Buildings are said to be wet when flood levels '
+                    'are greater than 0 m but less than %.1f m') % threshold
             },
             {
                 'content': tr(
                     'Buildings are said to be dry when flood levels '
                     'are 0 m or less.')
-            }]
+            },
+            {
+                'content': tr(
+                    'People need evacuation if they occupy '
+                    'buildings which are inundated')
+            },
+        ]
 
     @property
     def _affected_categories(self):
@@ -105,13 +112,11 @@ class FloodRasterPeopleInBuildingFunction(
         features = interpolated_layer.get_data()
         total_features = len(interpolated_layer)
 
-        # Building breakdown
-        self.buildings = {}
-        # Impacted building breakdown
-        self.affected_buildings = OrderedDict([
-            (tr('Number Inundated'), {}),
-            (tr('Number of Wet Buildings'), {}),
-            (tr('Number of Dry Buildings'), {})
+        # Impacted on population by impact on building
+        self.affected_people = OrderedDict([
+            (tr('People in Indated Buildings'), 0),
+            (tr('People in Wet Buildings'), 0),
+            (tr('People in Dry Buildings'), 0)
         ])
         for i in range(total_features):
             # Get the interpolated depth
@@ -123,30 +128,14 @@ class FloodRasterPeopleInBuildingFunction(
             else:
                 inundated_status = 2  # wet
 
-            # Count affected buildings by usage type if available
-            usage = get_osm_building_usage(attribute_names, features[i])
-            if usage is None or usage == 0:
-                usage = 'unknown'
-
-            if usage not in self.buildings:
-                self.buildings[usage] = 0
-                for category in self.affected_buildings.keys():
-                    self.affected_buildings[category][usage] = OrderedDict([
-                        (tr('Buildings Affected'), 0)])
-
-            # Count all buildings by type
-            self.buildings[usage] += 1
             # Add calculated impact to existing attributes
             features[i][self.target_field] = inundated_status
             category = [
                 tr('Number of Dry Buildings'),
-                tr('Number of Wet Buildings'),
-                tr('Number Inundated')][inundated_status]
-            self.affected_buildings[category][usage][
-                tr('Buildings Affected')] += 1
+                tr('Number Inundated'),
+                tr('Number of Wet Buildings')][inundated_status]
+            self.affected_people[category] += features[i]['People_Dec'] or 0
 
-        # Lump small entries and 'unknown' into 'other' category
-        self._consolidate_to_other()
         # Generate simple impact report
         impact_table = impact_summary = self.generate_html_report()
 
