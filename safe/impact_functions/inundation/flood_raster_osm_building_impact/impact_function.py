@@ -22,10 +22,15 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_osm_building_usage, verify
+from safe.common.utilities import (
+    get_osm_building_usage,
+    verify,
+    get_attribute_value)
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+from safe.impact_functions.core import get_value_from_layer_keyword
+from safe.common.exceptions import KeywordNotFoundError
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -113,6 +118,13 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         features = interpolated_layer.get_data()
         total_features = len(interpolated_layer)
 
+        # but use the old get_osm_building_usage
+        try:
+            structure_class_field = get_value_from_layer_keyword(
+                'structure_class_field', self.exposure)
+        except KeywordNotFoundError:
+            structure_class_field = None
+
         # Building breakdown
         self.buildings = {}
         # Impacted building breakdown
@@ -132,7 +144,14 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
                 inundated_status = 2  # wet
 
             # Count affected buildings by usage type if available
-            usage = get_osm_building_usage(attribute_names, features[i])
+                if (structure_class_field in attribute_names and
+                        structure_class_field):
+                    usage = get_attribute_value(
+                        structure_class_field, features[i])
+                else:
+                    usage = get_osm_building_usage(
+                        attribute_names, features[i])
+
             if usage is None or usage == 0:
                 usage = 'unknown'
 
