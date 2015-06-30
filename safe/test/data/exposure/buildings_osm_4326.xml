@@ -171,12 +171,13 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[datatype: osm
+<![CDATA[title: buildings_osm_4326
+structure_class_field: FLOODED
+keyword_version: 3.2
+layer_geometry: polygon
 layer_purpose: exposure
-exposure: structure
-purpose: dki
-title: buildings_osm_4326
 layer_mode: classified
+exposure: structure
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>
