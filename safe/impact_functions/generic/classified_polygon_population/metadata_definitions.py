@@ -107,8 +107,6 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                 }
             },
             'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', hazard_zone_attribute_field()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

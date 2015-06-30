@@ -43,7 +43,6 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
         impact_function = ClassifiedPolygonHazardBuildingFunction.instance()
         impact_function.hazard = hazard_layer
         impact_function.exposure = exposure_layer
-        impact_function.parameters['hazard zone attribute'].value = 'h_zone'
         impact_function.run()
         impact_layer = impact_function.impact
 

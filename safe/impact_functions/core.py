@@ -30,6 +30,7 @@ from math import ceil
 import numpy
 from collections import OrderedDict
 
+from safe.common.exceptions import KeywordNotFoundError
 from safe.defaults import default_minimum_needs
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -143,3 +144,22 @@ def has_no_data(layer_data):
     :rtype: bool
     """
     return numpy.isnan(numpy.sum(layer_data))
+
+
+def get_value_from_layer_keyword(key, layer):
+    """Helper function to get key's value from layer keyword.
+
+    :param key: A string that represent a key.
+    :type key: str
+
+    :param layer: A Qgis
+    :type layer: QgisWrapper
+
+    :returns: A value of the key.
+    :rtype: str, dict, float, int
+    """
+    try:
+        value = layer.keywords[key]
+        return value
+    except KeyError as e:
+        raise KeywordNotFoundError(e)

@@ -100,9 +100,6 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 }
             },
-            'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', hazard_zone_attribute_field())
-            ])
+            'parameters': OrderedDict([])
         }
         return dict_meta

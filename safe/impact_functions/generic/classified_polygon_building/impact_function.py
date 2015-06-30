@@ -20,7 +20,7 @@ from safe.utilities.i18n import tr
 from safe.impact_functions.generic.classified_polygon_building\
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, KeywordNotFoundError
 from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage,
@@ -29,6 +29,7 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+from safe.impact_functions.core import get_value_from_layer_keyword
 
 
 class ClassifiedPolygonHazardBuildingFunction(
@@ -77,8 +78,9 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.validate()
         self.prepare()
 
-        # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
+        # Value from layer's keywords
+        hazard_zone_attribute = get_value_from_layer_keyword(
+            'field', self.hazard)
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard
