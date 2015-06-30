@@ -90,11 +90,18 @@ class InasafeGraph(Graph):
                 MultiplyProperty(coefficient_field_id), True)
 
     def allocate_exits(
-            self, idp_layer, exit_layer, cost_strategy='distance'):
+            self,
+            idp_layer,
+            idp_id_field,
+            exit_layer,
+            cost_strategy='distance'):
         """Assign an IDP to each exit.
 
         :param idp_layer: The IDP layer.
         :type idp_layer: QgsVectorLayer
+
+        :param idp_id_field: The field for the IDP id.
+        :type idp_id_field: int
 
         :param exit_layer: The exit layer.
         :type exit_layer: QgsVectorLayer
@@ -102,7 +109,7 @@ class InasafeGraph(Graph):
         :param cost_strategy: The cost strategy to use.
         :type cost_strategy: str
 
-        :return: Two vector layers : the exit layer and the route layer.
+        :return: Two vector layers : the new exit layer and the route layer.
         :rtype: list
         """
         srs = self.crs.toWkt()
@@ -136,10 +143,11 @@ class InasafeGraph(Graph):
                 if cost >= 0:
                     if cost < min_cost or min_cost <= 0:
                         min_cost = cost
-                        idp_id = idp.id()
+                        idp_id = idp.attributes()[idp_id_field]
 
             if min_cost > 0:
-                request = QgsFeatureRequest().setFilterFid(idp_id)
+                expression = '"id" = \'%s\'' % idp_id
+                request = QgsFeatureRequest().setFilterExpression(expression)
                 idp = idp_layer.getFeatures(request).next()
 
                 f = QgsFeature()

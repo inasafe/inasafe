@@ -21,9 +21,10 @@ class AllocateExits(GeoAlgorithm):
 
     ROADS = 'ROADS'
     STRATEGY = 'STRATEGY'
-    FIELD = 'FIELD'
+    COEFFICIENT_FIELD = 'FIELD'
     EXITS = 'EXITS'
     IDP = 'IDP'
+    IDP_ID = 'IDP_ID'
     OUTPUT_EXITS = 'EXITS_LAYER'
     OUTPUT_ROUTE = 'ROUTE_LAYER'
 
@@ -34,12 +35,13 @@ class AllocateExits(GeoAlgorithm):
     def defineCharacteristics(self):
         self.name = 'Allocate exits'
         self.group = 'Routing'
+
         self.addParameter(ParameterVector(
             self.ROADS, 'Roads', [ParameterVector.VECTOR_TYPE_LINE], False))
         self.addParameter(ParameterSelection(
             self.STRATEGY, 'Strategy', self.strategies))
         self.addParameter(ParameterTableField(
-            self.FIELD,
+            self.COEFFICIENT_FIELD,
             'Coefficient field',
             self.ROADS,
             ParameterTableField.DATA_TYPE_ANY,
@@ -54,6 +56,8 @@ class AllocateExits(GeoAlgorithm):
             'IDP',
             [ParameterVector.VECTOR_TYPE_POINT],
             False))
+        self.addParameter(ParameterTableField(
+            self.IDP_ID, self.tr('IDP ID'), self.IDP))
 
         self.addOutput(OutputVector(self.OUTPUT_EXITS, 'Exit with IDP'))
         self.addOutput(OutputVector(self.OUTPUT_ROUTE, 'Routes'))
@@ -69,14 +73,16 @@ class AllocateExits(GeoAlgorithm):
         else:
             cost_strategy = None
 
-        field = self.getParameterValue(self.FIELD)
-        field = roads_layer.fieldNameIndex(field)
+        coefficient_field = self.getParameterValue(self.COEFFICIENT_FIELD)
+        coefficient_field = roads_layer.fieldNameIndex(coefficient_field)
+        idp_id_field = self.getParameterValue(self.IDP_ID)
+        idp_id_field = roads_layer.fieldNameIndex(idp_id_field)
         exits_layer = self.getParameterValue(self.EXITS)
         exits_layer = getObjectFromUri(exits_layer)
         idp_layer = self.getParameterValue(self.IDP)
         idp_layer = getObjectFromUri(idp_layer)
 
-        if field < 0 and cost_strategy != 'distance':
+        if coefficient_field < 0 and cost_strategy != 'distance':
             raise GeoAlgorithmExecutionException('Invalid cost and field')
 
         output_exits = self.getOutputValue(self.OUTPUT_EXITS)
@@ -88,13 +94,15 @@ class AllocateExits(GeoAlgorithm):
         for f in exits_layer.getFeatures():
             tied_points.append(f.geometry().asPoint())
 
-        if field < 0:
+        if coefficient_field < 0:
             graph = InasafeGraph(roads_layer, tied_points)
         else:
             graph = InasafeGraph(
-                roads_layer, tied_points, coefficient_field_id=field)
+                roads_layer,
+                tied_points,
+                coefficient_field_id=coefficient_field)
         memory_exit_layer, memory_route_layer = graph.allocate_exits(
-            idp_layer, exits_layer, cost_strategy)
+            idp_layer, idp_id_field, exits_layer, cost_strategy)
 
         exit_layer = QgsVectorFileWriter(
             output_exits,
