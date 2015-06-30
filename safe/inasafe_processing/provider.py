@@ -10,6 +10,8 @@ from safe.inasafe_processing.geometry_tools.snap_points_project import \
 from safe.inasafe_processing.geometry_tools.snap_points import SnapPoints
 from safe.inasafe_processing.geometry_tools.split_poly_to_lines_points import \
     SplitPolygonsToLinesWithPoints
+from safe.inasafe_processing.data_management.remove_features import \
+    CleaningLayer
 
 
 class InaSafeProvider(AlgorithmProvider):
@@ -25,6 +27,7 @@ class InaSafeProvider(AlgorithmProvider):
             SnapPointsProject(),
             SplitPolygonsToLinesWithPoints(),
             SnapPoints(),
+            CleaningLayer(),
         ]
 
         for alg in self.alglist:
