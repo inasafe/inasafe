@@ -17,7 +17,7 @@ from processing.tools.dataobjects import getObjectFromUri
 from safe.routing.core.inasafe_graph import InasafeGraph
 
 
-class AllocatExits(GeoAlgorithm):
+class AllocateExits(GeoAlgorithm):
 
     ROADS = 'ROADS'
     STRATEGY = 'STRATEGY'
@@ -32,7 +32,7 @@ class AllocatExits(GeoAlgorithm):
         GeoAlgorithm.__init__(self)
 
     def defineCharacteristics(self):
-        self.name = "Allocating exits"
+        self.name = "Allocate exits"
         self.group = "Routing"
         self.addParameter(ParameterVector(
             self.ROADS, 'Roads', [ParameterVector.VECTOR_TYPE_LINE], False))

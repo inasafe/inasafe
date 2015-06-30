@@ -28,7 +28,7 @@ class SnapPoints(GeoAlgorithm):
 
     def defineCharacteristics(self):
         self.name = "Snap points to a layer (needs review)"
-        self.group = "Geometry tools"
+        self.group = "Other geometry tools"
 
         self.addParameter(ParameterVector(
             self.POINTS,

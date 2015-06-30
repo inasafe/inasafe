@@ -3,7 +3,8 @@ from processing.core.AlgorithmProvider import AlgorithmProvider
 from PyQt4.QtGui import QIcon
 
 from safe.utilities.resources import resources_path
-from safe.inasafe_processing.routing.allocate_exits import AllocatExits
+from safe.inasafe_processing.routing.allocate_exits import AllocateExits
+from safe.inasafe_processing.routing.allocate_edges import AllocateEdges
 from safe.inasafe_processing.geometry_tools.snap_points_project import \
     SnapPointsProject
 from safe.inasafe_processing.geometry_tools.snap_points import SnapPoints
@@ -19,7 +20,8 @@ class InaSafeProvider(AlgorithmProvider):
         self.activate = True
 
         self.alglist = [
-            AllocatExits(),
+            AllocateExits(),
+            AllocateEdges(),
             SnapPointsProject(),
             SplitPolygonsToLinesWithPoints(),
             SnapPoints(),
