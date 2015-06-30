@@ -26,6 +26,8 @@ from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
 from safe.impact_functions.generic.classified_polygon_building\
     .impact_function import ClassifiedPolygonHazardBuildingFunction
+from safe.impact_functions.generic.classified_polygon_landcover\
+    .impact_function import ClassifiedPolygonHazardLandCoverFunction
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import FloodRasterBuildingFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -70,6 +72,7 @@ def register_impact_functions():
     impact_function_registry.register(
         ClassifiedPolygonHazardPopulationFunction)
     impact_function_registry.register(ClassifiedPolygonHazardBuildingFunction)
+    impact_function_registry.register(ClassifiedPolygonHazardLandCoverFunction)
     # Earthquake
     impact_function_registry.register(EarthquakeBuildingFunction)
     impact_function_registry.register(ITBFatalityFunction)
