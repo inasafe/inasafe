@@ -20,8 +20,7 @@ from safe.definitions import (
     hazard_all,
     hazard_category_multiple_event,
     exposure_land_cover,
-    all_vector_hazard_classes,
-    hazard_category_single_event,
+    generic_vector_hazard_classes,
 )
 from safe.utilities.i18n import tr
 from safe_extras.parameters.string_parameter import StringParameter
@@ -84,12 +83,12 @@ class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'hazard_categories': [
-                        hazard_category_multiple_event,
-                        hazard_category_single_event
+                        hazard_category_multiple_event
                     ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
-                    'vector_hazard_classifications': all_vector_hazard_classes,
+                    'vector_hazard_classifications': [
+                        generic_vector_hazard_classes],
                     'raster_hazard_classifications': [],
                     'additional_keywords': []
                 },

@@ -79,7 +79,7 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'generic',
-            'hazard_category': 'single_event',
+            'hazard_category': 'multiple_event',
             'field': 'level',
             'vector_hazard_classification': 'generic_vector_hazard_classes',
         }

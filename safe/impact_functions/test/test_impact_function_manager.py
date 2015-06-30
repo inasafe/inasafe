@@ -275,7 +275,6 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected = [
             (layer_mode_continuous, layer_geometry_raster),
             # (layer_mode_classified, layer_geometry_raster),
-            (layer_mode_classified, layer_geometry_polygon), # land cover
         ]
 
         self.assertItemsEqual(hazard_constraints, expected)
