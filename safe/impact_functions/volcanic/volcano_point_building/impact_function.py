@@ -83,8 +83,7 @@ class VolcanoPointBuildingFunction(
 
         # Parameters
         radii = self.parameters['distances'].value
-        volcano_name_attribute = self.parameters[
-            'volcano name attribute'].value
+        volcano_name_attribute = self.hazard.keywords['volcano_name_field']
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Volcano hazard layer

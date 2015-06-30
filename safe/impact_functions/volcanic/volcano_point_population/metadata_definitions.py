@@ -19,7 +19,7 @@ from safe.defaults import (
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.impact_functions.volcanic.volcano_point_population\
-    .parameter_definitions import distance, volcano_name_attribute
+    .parameter_definitions import distance
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
@@ -104,8 +104,6 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 # The radii
                 ('distances', distance()),
-                # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', volcano_name_attribute()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

@@ -71,7 +71,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
 
         # Parameters
         radii = self.parameters['distances'].value
-        name_attribute = self.parameters['volcano name attribute'].value
+        name_attribute = self.hazard.keywords['volcano_name_field']
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard
