@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-import tempfile
 import logging
 
 # noinspection PyUnresolvedReferences
@@ -34,23 +33,22 @@ from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
-# noinspection PyPackageRequirements
-from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
 
 import json
 
 from safe.common.exceptions import (
     CanceledImportDialogError,
-    DownloadError,
     FileMissingError)
 from safe import messaging as m
-from safe.utilities.file_downloader import FileDownloader
-from safe.utilities.gis import viewport_geo_array, rectangle_geo_array
+from safe.utilities.osm_downloader import download
+from safe.utilities.gis import (
+    viewport_geo_array,
+    rectangle_geo_array,
+    validate_geo_array)
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class, resources_path)
 from safe.utilities.help import show_context_help
 from safe.messaging import styles
-from safe.utilities.proxy import get_proxy
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
     display_warning_message_bar)
@@ -81,8 +79,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('InaSAFE OpenStreetMap Downloader'))
 
         self.iface = iface
-        self.url_osm = 'http://osm.linfiniti.com/'
-        self.url_osm_suffix = '-shp'
 
         self.help_context = 'openstreetmap_downloader'
         # creating progress dialog for download
@@ -101,11 +97,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         validator = QRegExpValidator(expression, self.filename_prefix)
         self.filename_prefix.setValidator(validator)
 
-        # Set Proxy in webpage
-        proxy = get_proxy()
-        self.network_manager = QNetworkAccessManager(self)
-        if proxy is not None:
-            self.network_manager.setProxy(proxy)
         self.restore_state()
 
         # Setup the rectangle map tool
@@ -140,6 +131,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         current_country = self.country_comboBox.currentText()
         index = self.admin_level_comboBox.currentIndex()
         current_level = self.admin_level_comboBox.itemData(index)
+        content = None
         try:
             content = \
                 self.countries[current_country]['levels'][str(current_level)]
@@ -302,39 +294,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             extent = rectangle_geo_array(rectangle, self.iface.mapCanvas())
             self.update_extent(extent)
 
-    def validate_extent(self):
-        """Validate the bounding box before user click OK to download.
-
-        :return: True if the bounding box is valid, otherwise False
-        :rtype: bool
-        """
-        min_latitude = float(str(self.min_latitude.text()))
-        max_latitude = float(str(self.max_latitude.text()))
-        min_longitude = float(str(self.min_longitude.text()))
-        max_longitude = float(str(self.max_longitude.text()))
-
-        # min_latitude < max_latitude
-        if min_latitude >= max_latitude:
-            return False
-
-        # min_longitude < max_longitude
-        if min_longitude >= max_longitude:
-            return False
-
-        # -90 <= latitude <= 90
-        if min_latitude < -90 or min_latitude > 90:
-            return False
-        if max_latitude < -90 or max_latitude > 90:
-            return False
-
-        # -180 <= longitude <= 180
-        if min_longitude < -180 or min_longitude > 180:
-            return False
-        if max_longitude < -180 or max_longitude > 180:
-            return False
-
-        return True
-
     @pyqtSignature('')  # prevents actions being handled twice
     def on_directory_button_clicked(self):
         """Show a dialog to choose directory."""
@@ -377,8 +336,15 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         # Lock the groupbox
         self.groupBox.setDisabled(True)
 
+        # Get the extent
+        min_latitude = float(str(self.min_latitude.text()))
+        max_latitude = float(str(self.max_latitude.text()))
+        min_longitude = float(str(self.min_longitude.text()))
+        max_longitude = float(str(self.max_longitude.text()))
+        extent = [min_longitude, min_latitude, max_longitude, max_latitude]
+
         # Validate extent
-        valid_flag = self.validate_extent()
+        valid_flag = validate_geo_array(extent)
         if not valid_flag:
             message = self.tr(
                 'The bounding box is not valid. Please make sure it is '
@@ -389,6 +355,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.groupBox.setEnabled(True)
             return
 
+        # Validate features
         feature_types = self.get_checked_features()
         if len(feature_types) < 1:
             message = self.tr(
@@ -411,7 +378,12 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 output_base_file_path = self.get_output_base_path(
                     output_directory, output_prefix, feature_type, overwrite)
 
-                self.download(feature_type, output_base_file_path)
+                download(
+                    feature_type,
+                    output_base_file_path,
+                    extent,
+                    self.progress_dialog)
+
                 try:
                     self.load_shapefile(feature_type, output_base_file_path)
                 except FileMissingError as exception:
@@ -548,136 +520,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 raise CanceledImportDialogError()
         else:
             raise CanceledImportDialogError()
-
-    def download(self, feature_type, output_base_path):
-        """Download shapefiles from Kartoza server.
-
-        :param feature_type: What kind of features should be downloaded.
-            Currently 'buildings', 'building-points' or 'roads' are supported.
-        :type feature_type: str
-
-        :param output_base_path: The base path of the shape file.
-        :type output_base_path: str
-
-        :raises: ImportDialogError, CanceledImportDialogError
-        """
-
-        # preparing necessary data
-        min_longitude = str(self.min_longitude.text())
-        min_latitude = str(self.min_latitude.text())
-        max_longitude = str(self.max_longitude.text())
-        max_latitude = str(self.max_latitude.text())
-
-        box = (
-            '{min_longitude},{min_latitude},{max_longitude},'
-            '{max_latitude}').format(
-                min_longitude=min_longitude,
-                min_latitude=min_latitude,
-                max_longitude=max_longitude,
-                max_latitude=max_latitude
-            )
-
-        url = self.url_osm + feature_type + self.url_osm_suffix
-        url = '{url}?bbox={box}&qgis_version=2'.format(
-            url=url, box=box)
-
-        if 'LANG' in os.environ:
-            env_lang = os.environ['LANG']
-            url += '&lang=%s' % env_lang
-
-        path = tempfile.mktemp('.shp.zip')
-
-        # download and extract it
-        self.fetch_zip(url, path, feature_type)
-        self.extract_zip(path, output_base_path)
-
-        self.progress_dialog.done(QDialog.Accepted)
-
-    def fetch_zip(self, url, output_path, feature_type):
-        """Download zip containing shp file and write to output_path.
-
-        :param url: URL of the zip bundle.
-        :type url: str
-
-        :param output_path: Path of output file,
-        :type output_path: str
-
-        :param feature_type: What kind of features should be downloaded.
-            Currently 'buildings', 'building-points' or 'roads' are supported.
-        :type feature_type: str
-
-        :raises: ImportDialogError - when network error occurred
-        """
-        LOGGER.debug('Downloading file from URL: %s' % url)
-        LOGGER.debug('Downloading to: %s' % output_path)
-
-        self.progress_dialog.show()
-
-        # Infinite progress bar when the server is fetching data.
-        # The progress bar will be updated with the file size later.
-        self.progress_dialog.setMaximum(0)
-        self.progress_dialog.setMinimum(0)
-        self.progress_dialog.setValue(0)
-
-        # Get a pretty label from feature_type, but not translatable
-        label_feature_type = feature_type.replace('-', ' ')
-
-        label_text = self.tr('Fetching %s' % label_feature_type)
-        self.progress_dialog.setLabelText(label_text)
-
-        # Download Process
-        downloader = FileDownloader(
-            self.network_manager, url, output_path, self.progress_dialog)
-        try:
-            result = downloader.download()
-        except IOError as ex:
-            raise IOError(ex)
-
-        if result[0] is not True:
-            _, error_message = result
-
-            if result[0] == QNetworkReply.OperationCanceledError:
-                raise CanceledImportDialogError(error_message)
-            else:
-                raise DownloadError(error_message)
-
-    @staticmethod
-    def extract_zip(zip_path, destination_base_path):
-        """Extract different extensions to the destination base path.
-
-        Example : test.zip contains a.shp, a.dbf, a.prj
-        and destination_base_path = '/tmp/CT-buildings
-        Expected result :
-            - /tmp/CT-buildings.shp
-            - /tmp/CT-buildings.dbf
-            - /tmp/CT-buildings.prj
-
-        If two files in the zip with the same extension, only one will be
-        copied.
-
-        :param zip_path: The path of the .zip file
-        :type zip_path: str
-
-        :param destination_base_path: The destination base path where the shp
-            will be written to.
-        :type destination_base_path: str
-
-        :raises: IOError - when not able to open path or output_dir does not
-            exist.
-        """
-
-        import zipfile
-
-        handle = open(zip_path, 'rb')
-        zip_file = zipfile.ZipFile(handle)
-        for name in zip_file.namelist():
-            extension = os.path.splitext(name)[1]
-            output_final_path = u'%s%s' % (destination_base_path, extension)
-            output_file = open(output_final_path, 'wb')
-            output_file.write(zip_file.read(name))
-            output_file.close()
-
-        handle.close()
 
     def load_shapefile(self, feature_type, base_path):
         """Load downloaded shape file to QGIS Main Window.

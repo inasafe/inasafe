@@ -43,6 +43,8 @@ from safe.storage.metadata_utilities import (
     generate_iso_metadata,
     ISO_METADATA_KEYWORD_TAG)
 from safe.common.utilities import verify
+from safe.definitions import \
+    (inasafe_keyword_version, inasafe_keyword_version_key)
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -149,6 +151,7 @@ class KeywordIO(QObject):
 
         source = layer.source()
         try:
+            keywords[inasafe_keyword_version_key] = inasafe_keyword_version
             if flag:
                 write_keywords_to_file(source, keywords)
             else:
