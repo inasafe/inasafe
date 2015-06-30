@@ -32,8 +32,8 @@ class AllocateExits(GeoAlgorithm):
         GeoAlgorithm.__init__(self)
 
     def defineCharacteristics(self):
-        self.name = "Allocate exits"
-        self.group = "Routing"
+        self.name = 'Allocate exits'
+        self.group = 'Routing'
         self.addParameter(ParameterVector(
             self.ROADS, 'Roads', [ParameterVector.VECTOR_TYPE_LINE], False))
         self.addParameter(ParameterSelection(
@@ -88,7 +88,6 @@ class AllocateExits(GeoAlgorithm):
         for f in exits_layer.getFeatures():
             tied_points.append(f.geometry().asPoint())
 
-        print field
         if field < 0:
             graph = InasafeGraph(roads_layer, tied_points)
         else:

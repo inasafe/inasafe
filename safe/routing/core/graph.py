@@ -433,6 +433,14 @@ class Graph(object):
     def tarjan(self):
         class StrongCC(object):
 
+            def __init__(self):
+                self.graph = None
+                self.counter = None
+                self.count = None
+                self.low_link = None
+                self.stack = None
+                self.connected_components = None
+
             def strong_connect(self, head):
                 low_link, count, stack = self.low_link, self.count, self.stack
                 low_link[head] = count[head] = self.counter = self.counter + 1
@@ -503,6 +511,7 @@ class Graph(object):
             vertex = self.get_vertex(id_vertex)
 
             feature = QgsFeature()
+            # noinspection PyCallByClass
             geom = QgsGeometry.fromPoint(self.get_vertex_point(id_vertex))
             in_arcs_id = vertex.inArc()
             out_arcs_id = vertex.outArc()
@@ -536,6 +545,7 @@ class Graph(object):
         layer.updateFields()
 
         for arc_id in self.get_id_arcs():
+            # noinspection PyCallByClass
             geom = QgsGeometry.fromPolyline(self.get_arc_linestring(arc_id))
             arc = self.get_arc(arc_id)
             out_vertex_id = self.get_out_vertex_id(arc_id)

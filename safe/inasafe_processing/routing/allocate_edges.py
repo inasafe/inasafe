@@ -31,8 +31,8 @@ class AllocateEdges(GeoAlgorithm):
         GeoAlgorithm.__init__(self)
 
     def defineCharacteristics(self):
-        self.name = "Allocate edges"
-        self.group = "Routing"
+        self.name = 'Allocate edges'
+        self.group = 'Routing'
 
         self.addParameter(ParameterVector(
             self.LINES, 'Lines', [ParameterVector.VECTOR_TYPE_LINE], False))

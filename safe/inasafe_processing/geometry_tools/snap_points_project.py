@@ -17,8 +17,8 @@ class SnapPointsProject(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
-        self.name = "Snap points (project settings)"
-        self.group = "Other geometry tools"
+        self.name = 'Snap points (project settings)'
+        self.group = 'Other geometry tools'
 
         self.addParameter(ParameterVector(
             self.POINTS, 'Points', [ParameterVector.VECTOR_TYPE_POINT], False))
