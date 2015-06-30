@@ -172,13 +172,14 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[hazard_category: single_event
-title: Earthquake
+<![CDATA[continuous_hazard_unit: mmi
 hazard: earthquake
-continuous_hazard_unit: mmi
+hazard_category: single_event
+keyword_version: 3.2
 layer_geometry: raster
-layer_purpose: hazard
 layer_mode: continuous
+layer_purpose: hazard
+title: Earthquake
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

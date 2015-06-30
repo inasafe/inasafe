@@ -917,6 +917,7 @@ def load_standard_layers(dock=None):
     #
     # WARNING: Please keep test/data/project/load_standard_layers.qgs in sync
     file_list = [
+        test_data_path('idp', 'potential-idp.shp'),
         test_data_path('exposure', 'building-points.shp'),
         test_data_path('exposure', 'buildings.shp'),
         test_data_path('hazard', 'volcano_point.shp'),
@@ -933,10 +934,11 @@ def load_standard_layers(dock=None):
     ]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, dock=dock)
-    # FIXME (MB) -1 is until we add the aggregation category because of
+    # FIXME (MB) -2 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
+    # potiential-idp not being either hazard nor exposure layer
 
-    if hazard_layer_count + exposure_layer_count != len(file_list) - 1:
+    if hazard_layer_count + exposure_layer_count != len(file_list) - 2:
         message = (
             'Loading standard layers failed. Expecting layer the number of '
             'hazard_layer and exposure_layer is equals to %d but got %d' % (
