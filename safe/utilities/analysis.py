@@ -790,7 +790,15 @@ class Analysis(object):
         if qgis_align_rasters_available() and \
                 exposure_layer.type() == QgsMapLayer.RasterLayer and \
                 hazard_layer.type() == QgsMapLayer.RasterLayer:
-            return qgis_align_rasters(hazard_layer, exposure_layer, geo_extent)
+            # get exposure's keywords to decide how to perform the alignment
+            rescale_values = self.exposure_keyword.get(
+                'exposure_unit') == 'count'
+            allow_resampling = self.exposure_keyword.get(
+                'allow_resampling', 'true').lower() == 'true'
+            # do the resampling using QGIS
+            return qgis_align_rasters(
+                hazard_layer, exposure_layer, geo_extent,
+                rescale_values, allow_resampling)
 
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to

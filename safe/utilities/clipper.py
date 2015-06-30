@@ -693,7 +693,9 @@ def qgis_align_rasters_available():
         return False
 
 
-def qgis_align_rasters(hazard_layer, exposure_layer, geo_extent):
+def qgis_align_rasters(hazard_layer, exposure_layer, geo_extent,
+                       exposure_rescale_values=False,
+                       exposure_allow_resampling=True):
     """
     Align hazard and exposure raster layers so they fit perfectly and
     so they can be used for raster algebra. The method uses QGIS
@@ -719,6 +721,14 @@ def qgis_align_rasters(hazard_layer, exposure_layer, geo_extent):
     :param geo_extent: Extent in WGS 84 to which raster should be clipped
     :type geo_extent: list
 
+    :param exposure_rescale_values: Whether values of the exposure layer
+        need to be rescaled according to the change of the cell size
+    :type exposure_rescale_values: bool
+
+    :param exposure_allow_resampling: Whether it is okay to resample
+        exposure layer to a different CRS or cell size
+    :type exposure_allow_resampling: bool
+
     :return: clipped hazard and exposure layers
     :rtype: QgsRasterLayer, QgsRasterLayer
     """
@@ -726,22 +736,18 @@ def qgis_align_rasters(hazard_layer, exposure_layer, geo_extent):
     hazard_output = unique_filename(suffix='.tif')
     exposure_output = unique_filename(suffix='.tif')
 
-    exposure_keywords = read_file_keywords(exposure_layer.source())
-
     # Setup the two raster layers for alignment
     from qgis.analysis import QgsAlignRaster
     align = QgsAlignRaster()
     lst = [QgsAlignRaster.Item(hazard_layer.source(), hazard_output),
            QgsAlignRaster.Item(exposure_layer.source(), exposure_output)]
-    # TODO: what keywords to consider for rescaling?
-    if exposure_keywords.get('exposure_unit') == 'count':
+    if exposure_rescale_values:
         lst[1].rescaleValues = True
     align.setRasters(lst)
 
     # Find out which layer has finer grid and use it as the reference.
     # This will setup destination CRS, cell size and grid origin
-    # TODO: need to respect 'allow_resampling' keyword?
-    if exposure_keywords.get('allow_resampling', 'true').lower() == 'true':
+    if exposure_allow_resampling:
         index = align.suggestedReferenceLayer()
     else:
         index = 1  # have to use exposure layer as the reference
