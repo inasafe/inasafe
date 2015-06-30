@@ -34,6 +34,7 @@ from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters
+from safe.impact_functions.core import get_value_from_layer_keyword
 
 
 class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
@@ -71,7 +72,8 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
 
         # Parameters
         radii = self.parameters['distances'].value
-        name_attribute = self.hazard.keywords['volcano_name_field']
+        name_attribute = get_value_from_layer_keyword(
+            'volcano_name_field', self.hazard)
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard

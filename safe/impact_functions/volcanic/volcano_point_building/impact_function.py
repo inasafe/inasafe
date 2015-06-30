@@ -28,6 +28,7 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+from safe.impact_functions.core import get_value_from_layer_keyword
 
 
 class VolcanoPointBuildingFunction(
@@ -83,7 +84,8 @@ class VolcanoPointBuildingFunction(
 
         # Parameters
         radii = self.parameters['distances'].value
-        volcano_name_attribute = self.hazard.keywords['volcano_name_field']
+        volcano_name_attribute = get_value_from_layer_keyword(
+            'volcano_name_field', self.hazard)
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard  # Volcano hazard layer
