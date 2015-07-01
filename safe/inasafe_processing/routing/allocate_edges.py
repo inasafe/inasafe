@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid / DFAT -
+**New Metadata for SAFE.**
 
+Contact : etienne@kartoza.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+
+from PyQt4.QtGui import QIcon
 from qgis.core import (
     QGis,
     QgsFeature,
@@ -15,9 +27,11 @@ from processing.tools.dataobjects import getObjectFromUri
 from processing.tools.vector import spatialindex, features
 
 from safe.routing.core.middle import split_middle
+from safe.utilities.resources import resources_path
 
 
 class AllocateEdges(GeoAlgorithm):
+    """Allocate an IDP to each edges."""
 
     LINES = 'LINES'
     POINTS = 'POINTS'
@@ -42,6 +56,10 @@ class AllocateEdges(GeoAlgorithm):
             self.FIELD, self.tr('IDP ID'), self.POINTS))
 
         self.addOutput(OutputVector(self.OUTPUT, 'Edges'))
+
+    def getIcon(self):
+        icon = resources_path('img', 'icons', 'icon.svg')
+        return QIcon(icon)
 
     def processAlgorithm(self, progress):
         lines_layer = self.getParameterValue(self.LINES)

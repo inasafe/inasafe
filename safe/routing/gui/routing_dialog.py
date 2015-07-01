@@ -1,4 +1,15 @@
 # coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid / DFAT -
+**New Metadata for SAFE.**
+
+Contact : etienne@kartoza.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
 
 import logging
 import shutil
@@ -29,7 +40,6 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import add_ordered_combo_item
 from safe.common.utilities import temp_dir, unique_filename
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
 ui_file = join(dirname(__file__), 'routing_dialog_base.ui')
@@ -42,10 +52,10 @@ class RoutingDialog(QDialog, FORM_CLASS):
     def __init__(self, parent=None, iface=None):
         """Constructor for import dialog.
 
-        :param parent: Optional widget to use as parent
+        :param parent: Optional widget to use as parent.
         :type parent: QWidget
 
-        :param iface: An instance of QGisInterface
+        :param iface: An instance of QGisInterface.
         :type iface: QGisInterface
         """
         QDialog.__init__(self, parent)
@@ -58,6 +68,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
         self.populate_combo()
 
     def populate_combo(self):
+        """Add layers to combos according to keywords."""
         registry = QgsMapLayerRegistry.instance()
         layers = registry.mapLayers().values()
 
@@ -229,18 +240,23 @@ class RoutingDialog(QDialog, FORM_CLASS):
 
     @staticmethod
     def random_color():
+        """Get a random hexadecimal color.
+
+        :return: A random hexadecimal color.
+        :rtype: str
+        """
         r = randint(0, 255)
         g = randint(0, 255)
         b = randint(0, 255)
         return '#%02X%02X%02X' % (r, g, b)
 
     def accept(self):
-        """
+        """Launch the routing analysis and display it in QGIS.
         Expected outputs:
-          - EXIT layer with costs
+          - Exit layer with costs
           - Route from exit to IDP
-          - Flood edge with IDP (without cost)
-          - Roads inside a catchment area, isochrone, colors
+          - Flood edge with IDP
+          - New IDP layer
           - New roads layer with flood edges (inundated, not inundated)
         """
 
@@ -269,7 +285,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
         file_name_idp = unique_filename(suffix='-idp.shp')
         file_name_route = unique_filename(suffix='-routes.shp')
 
-        # Run the model
+        # Run the model.
         runalg(
             model,
             roads_layer.source(),
@@ -285,7 +301,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
             file_name_exit,
             file_name_network)
 
-        # Styling with a QML for the network layer
+        # Styling with a QML for the network layer.
         network_qml = join(dirname(dirname(__file__)), 'styles', 'network.qml')
         base_name_network = splitext(file_name_network)[0]
         destination_network_qml = '%s.qml' % base_name_network
@@ -306,7 +322,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
             if id not in list_idp:
                 list_idp[id] = (self.random_color(), id)
 
-        # Styling the IDP layer
+        # Styling the IDP layer.
         categories = []
         for idp_id, (color, label) in list_idp.items():
             symbol = QgsSymbolV2.defaultSymbol(idp_layer.geometryType())
@@ -319,7 +335,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
         idp_layer.setRendererV2(renderer)
         QgsMapLayerRegistry.instance().addMapLayer(idp_layer)
 
-        # Styling routes
+        # Styling routes.
         routes_layer = QgsVectorLayer(file_name_route, 'Routes', 'ogr')
         categories = []
         for idp_id, (color, label) in list_idp.items():
@@ -333,7 +349,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
         routes_layer.setRendererV2(renderer)
         QgsMapLayerRegistry.instance().addMapLayer(routes_layer)
 
-        # Styling edges
+        # Styling edges.
         edges_layer = QgsVectorLayer(file_name_edge, 'Edges', 'ogr')
         categories = []
         for idp_id, (color, label) in list_idp.items():
@@ -347,7 +363,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
         edges_layer.setRendererV2(renderer)
         QgsMapLayerRegistry.instance().addMapLayer(edges_layer)
 
-        # Styling exits
+        # Styling exits.
         exits_layer = QgsVectorLayer(file_name_exit, 'Exits', 'ogr')
         symbol = QgsSymbolV2.defaultSymbol(idp_layer.geometryType())
         # noinspection PyCallByClass

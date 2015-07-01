@@ -1,6 +1,18 @@
 # -*- coding: utf-8 -*-
-from processing.core.AlgorithmProvider import AlgorithmProvider
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid / DFAT -
+**New Metadata for SAFE.**
+
+Contact : etienne@kartoza.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+
 from PyQt4.QtGui import QIcon
+from processing.core.AlgorithmProvider import AlgorithmProvider
 
 from safe.utilities.resources import resources_path
 from safe.inasafe_processing.routing.allocate_exits import AllocateExits
@@ -15,6 +27,7 @@ from safe.inasafe_processing.data_management.remove_features import \
 
 
 class InaSafeProvider(AlgorithmProvider):
+    """InaSAFE provides some algorithms through Processing."""
 
     def __init__(self):
         AlgorithmProvider.__init__(self)

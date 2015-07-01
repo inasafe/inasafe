@@ -1,13 +1,28 @@
 # -*- coding: utf-8 -*-
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid / DFAT -
+**New Metadata for SAFE.**
 
+Contact : etienne@kartoza.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+
+from PyQt4.QtGui import QIcon
 from processing.core.GeoAlgorithm import GeoAlgorithm
 from processing.core.parameters import ParameterVector, ParameterTableField
 from processing.core.outputs import OutputVector
 from processing.tools.dataobjects import getObjectFromUri
 from processing.tools.vector import spatialindex, features
 
+from safe.utilities.resources import resources_path
+
 
 class CleaningLayer(GeoAlgorithm):
+    """Cleaning a layer by removing features which ID are not a column."""
 
     SOURCE_LAYER = 'LAYER_SOURCE'
     DIRTY_LAYER = 'DIRTY_LAYER'
@@ -41,6 +56,10 @@ class CleaningLayer(GeoAlgorithm):
             self.DIRTY_LAYER))
 
         self.addOutput(OutputVector(self.OUTPUT, 'Cleaned'))
+
+    def getIcon(self):
+        icon = resources_path('img', 'icons', 'icon.svg')
+        return QIcon(icon)
 
     def processAlgorithm(self, progress):
         source_layer = self.getParameterValue(self.SOURCE_LAYER)

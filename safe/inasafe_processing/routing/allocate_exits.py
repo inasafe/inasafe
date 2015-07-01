@@ -1,5 +1,17 @@
 # -*- coding: utf-8 -*-
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid / DFAT -
+**New Metadata for SAFE.**
 
+Contact : etienne@kartoza.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+
+from PyQt4.QtGui import QIcon
 from qgis.utils import iface
 from qgis.core import (
     QgsVectorFileWriter,
@@ -15,9 +27,11 @@ from processing.core.outputs import OutputVector
 from processing.tools.dataobjects import getObjectFromUri
 
 from safe.routing.core.inasafe_graph import InasafeGraph
+from safe.utilities.resources import resources_path
 
 
 class AllocateExits(GeoAlgorithm):
+    """Allocate an IDP to each exits."""
 
     ROADS = 'ROADS'
     STRATEGY = 'STRATEGY'
@@ -61,6 +75,10 @@ class AllocateExits(GeoAlgorithm):
 
         self.addOutput(OutputVector(self.OUTPUT_EXITS, 'Exit with IDP'))
         self.addOutput(OutputVector(self.OUTPUT_ROUTE, 'Routes'))
+
+    def getIcon(self):
+        icon = resources_path('img', 'icons', 'icon.svg')
+        return QIcon(icon)
 
     def processAlgorithm(self, progress):
         roads_layer = self.getParameterValue(self.ROADS)

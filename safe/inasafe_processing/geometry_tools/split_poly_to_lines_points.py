@@ -1,5 +1,16 @@
 # -*- coding: utf-8 -*-
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid / DFAT -
+**New Metadata for SAFE.**
 
+Contact : etienne@kartoza.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+from PyQt4.QtGui import QIcon
 from qgis.core import QGis, QgsFeature, QgsFeatureRequest, QgsGeometry
 
 from processing.core.GeoAlgorithm import GeoAlgorithm
@@ -10,8 +21,22 @@ from processing.core.outputs import OutputVector
 from processing.tools import dataobjects
 from processing.tools.vector import spatialindex, features
 
+from safe.utilities.resources import resources_path
+
 
 class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
+    """Split a polygon layer into lines with the closest point.
+    For instance this polygon and these two points:
+        *       *
+    |---------------\
+    |               \
+    |_______________\
+
+    will give these three lines:
+    |--][-------][--\
+    |               \
+    |_______________\
+    """
 
     POINTS_LAYER = 'POINTS_LAYER'
     POLYGONS_LAYER = 'POLYGONS_LAYER'
@@ -33,6 +58,10 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
             False))
 
         self.addOutput(OutputVector(self.OUTPUT, self.tr('Split')))
+
+    def getIcon(self):
+        icon = resources_path('img', 'icons', 'icon.svg')
+        return QIcon(icon)
 
     def processAlgorithm(self, progress):
         layer_poly = dataobjects.getObjectFromUri(
@@ -125,7 +154,7 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
                         temp_geometries.append(
                             QgsGeometry.fromPolyline(polyline[-(l - index):]))
 
-                        # Deleting the old geometry which has been splitted
+                        # Deleting the old geometry which has been split
                         i = new_geometries.index(closest_geom)
                         new_geometries.pop(i)
 
