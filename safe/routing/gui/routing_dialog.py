@@ -310,14 +310,15 @@ class RoutingDialog(QDialog, FORM_CLASS):
             destination_network_qml, '{{flood_edge}}', coefficient_flood_edge)
         self.replace_value(
             destination_network_qml, '{{dry}}', coefficient_road)
-        self.iface.addVectorLayer(file_name_network, 'Network', 'ogr')
+        network_layer = QgsVectorLayer(file_name_network, 'Network', 'ogr')
+        QgsMapLayerRegistry.instance().addMapLayer(network_layer)
 
         # Get one color for each IDP
         # value -> (color, label)
         list_idp = {}
-        idp_layer = QgsVectorLayer(file_name_idp, 'IDP', 'ogr')
-        id_field_index = idp_layer.dataProvider().fieldNameIndex('id')
-        for feature in idp_layer.getFeatures():
+        new_idp_layer = QgsVectorLayer(file_name_idp, 'IDP', 'ogr')
+        id_field_index = new_idp_layer.dataProvider().fieldNameIndex('id')
+        for feature in new_idp_layer.getFeatures():
             id = feature.attributes()[id_field_index]
             if id not in list_idp:
                 list_idp[id] = (self.random_color(), id)
@@ -325,15 +326,15 @@ class RoutingDialog(QDialog, FORM_CLASS):
         # Styling the IDP layer.
         categories = []
         for idp_id, (color, label) in list_idp.items():
-            symbol = QgsSymbolV2.defaultSymbol(idp_layer.geometryType())
+            symbol = QgsSymbolV2.defaultSymbol(new_idp_layer.geometryType())
             symbol.setColor(QColor(color))
             category = QgsRendererCategoryV2(str(idp_id), symbol, str(label))
             categories.append(category)
 
         expression = 'id'
         renderer = QgsCategorizedSymbolRendererV2(expression, categories)
-        idp_layer.setRendererV2(renderer)
-        QgsMapLayerRegistry.instance().addMapLayer(idp_layer)
+        new_idp_layer.setRendererV2(renderer)
+        QgsMapLayerRegistry.instance().addMapLayer(new_idp_layer)
 
         # Styling routes.
         routes_layer = QgsVectorLayer(file_name_route, 'Routes', 'ogr')
@@ -383,5 +384,48 @@ class RoutingDialog(QDialog, FORM_CLASS):
 
         exits_layer.setRendererV2(renderer)
         QgsMapLayerRegistry.instance().addMapLayer(exits_layer)
+
+        # Reading existing keywords about exposure, hazard and IDP.
+        idp_keywords = self.keyword_io.read_keywords(idp_layer)
+        flood_keywords = self.keyword_io.read_keywords(flood_layer)
+        roads_keywords = self.keyword_io.read_keywords(roads_layer)
+
+        # General keywords IDP
+        keywords = {}
+        try:
+            keywords['exposure_title'] = roads_keywords['title']
+        except IndexError:
+            pass
+        try:
+            keywords['hazard_title'] = flood_keywords['title']
+        except IndexError:
+            pass
+        try:
+            keywords['idp_title'] = idp_keywords['title']
+        except IndexError:
+            pass
+
+        keywords['exposure'] = 'road'
+        keywords['hazard'] = 'flood'
+
+        new_idp_keywords = dict(keywords)
+        new_idp_keywords['title'] = 'Routing analysis : IDP'
+        self.keyword_io.write_keywords(new_idp_layer, new_idp_keywords)
+
+        new_network_keywords = dict(keywords)
+        new_network_keywords['title'] = 'Routing analysis : Network'
+        self.keyword_io.write_keywords(network_layer, new_network_keywords)
+
+        new_edge_keywords = dict(keywords)
+        new_edge_keywords['title'] = 'Routing analysis : Edges'
+        self.keyword_io.write_keywords(edges_layer, new_edge_keywords)
+
+        new_route_keywords = dict(keywords)
+        new_route_keywords['title'] = 'Routing analysis : Routes'
+        self.keyword_io.write_keywords(routes_layer, new_route_keywords)
+
+        new_exit_keywords = dict(keywords)
+        new_exit_keywords['title'] = 'Routing analysis : Exits'
+        self.keyword_io.write_keywords(exits_layer, new_exit_keywords)
 
         self.close()
