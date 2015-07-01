@@ -29,11 +29,15 @@ from safe.common.utilities import (
     get_thousand_separator)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value
+from safe.impact_reports.population_exposure_report_mixin import \
+    PopulationExposureReportMixin
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
+class FloodEvacuationRasterHazardFunction(
+        ContinuousRHContinuousRE,
+        PopulationExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Risk plugin for flood population evacuation."""
     _metadata = FloodEvacuationRasterHazardMetadata()
@@ -137,7 +141,7 @@ class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
 
         return table_body, total_needs
 
-    def _tabulate_zero_impact(self, evacuated, question, table_body,
+    def _tabulate_zero_impact(self, evacuated, question,
                               thresholds):
         table_body = [
             question,
@@ -174,68 +178,66 @@ class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
 
         # Extract data as numeric arrays
         data = hazard_layer.get_data(nan=True)  # Depth
-        no_data_warning = False
+        no_data_warning = False  # TODO - Carry this through to impact report before
         if has_no_data(data):
             no_data_warning = True
 
         # Calculate impact as population exposed to depths > max threshold
         population = exposure_layer.get_data(nan=True, scaling=True)
+        total = int(numpy.nansum(population))
         if has_no_data(population):
             no_data_warning = True
 
-        # Calculate impact to intermediate thresholds
-        counts = []
         # merely initialize
         impact = None
+
         for i, lo in enumerate(thresholds):
             if i == len(thresholds) - 1:
                 # The last threshold
+                thresholds_name = tr(
+                    'People in >= %.1f m of water') % lo
+                self.category_ordering.append(thresholds_name)
+                self._evacuation_category = thresholds_name
                 impact = medium = numpy.where(data >= lo, population, 0)
             else:
                 # Intermediate thresholds
                 hi = thresholds[i + 1]
+                thresholds_name = tr(
+                    'People in %.1f m to %.1f m of water' % (lo, hi))
+                self.category_ordering.append(thresholds_name)
                 medium = numpy.where((data >= lo) * (data < hi), population, 0)
 
             # Count
             val = int(numpy.nansum(medium))
+            self.affected_population[thresholds_name] = val
 
-            counts.append(val)
+        self.total_population = total
+        self.unaffected_population = total - self.total_affected_population
 
         # Carry the no data values forward to the impact layer.
         impact = numpy.where(numpy.isnan(population), numpy.nan, impact)
         impact = numpy.where(numpy.isnan(data), numpy.nan, impact)
 
         # Count totals
-        evacuated, rounding_evacuated = population_rounding_full(counts[-1])
-        total = int(numpy.nansum(population))
-        # Don't show digits less than a 1000
+        evacuated = self.total_evacuated
+        # Do a population appropriate rounding
         total = population_rounding(total)
 
-        minimum_needs = [
+        self.minimum_needs = [
             parameter.serialize() for parameter in
             self.parameters['minimum needs']
         ]
 
-        # Generate impact report for the pdf map
-        # noinspection PyListCreation
-        table_body, total_needs = self._tabulate(
-            counts,
-            evacuated,
-            minimum_needs,
-            self.question,
-            rounding_evacuated,
-            thresholds,
-            total,
-            no_data_warning)
-
         # Result
-        impact_summary = Table(table_body).toNewlineFreeString()
+        impact_summary = self.generate_html_report()
         impact_table = impact_summary
+
+        total_needs = self.total_needs
 
         # check for zero impact
         if numpy.nanmax(impact) == 0 == numpy.nanmin(impact):
             table_body = self._tabulate_zero_impact(
-                evacuated, self.question, table_body, thresholds)
+                evacuated, self.question, thresholds)
             my_message = Table(table_body).toNewlineFreeString()
             raise ZeroImpactException(my_message)
 

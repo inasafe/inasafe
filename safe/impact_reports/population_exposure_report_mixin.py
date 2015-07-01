@@ -48,6 +48,8 @@ class PopulationExposureReportMixin(ReportMixin):
         """
         self._question = ''
         self._unaffected_population = 0
+        self._evacuation_category = None
+        self._evacuation_percentage = None
         self._affected_population = {}
         self._other_population_counts = {}
         self._category_ordering = []
@@ -127,9 +129,7 @@ class PopulationExposureReportMixin(ReportMixin):
         :rtype: list
         """
         minimum_needs_breakdown_report = []
-        total_population_affected = self.total_affected_population
-        total_needs = evacuated_population_needs(
-            total_population_affected, self.minimum_needs)
+        total_needs = self.total_needs
         for frequency, needs in total_needs.items():
             minimum_needs_breakdown_report.append(
                 {
@@ -217,3 +217,23 @@ class PopulationExposureReportMixin(ReportMixin):
                 tr('People impacted'),
                 tr('Total Population Affected')]:
             return self.total_affected_population
+
+    @property
+    def total_needs(self):
+        total_population_evacuated = self.total_evacuated
+        return evacuated_population_needs(
+            total_population_evacuated, self.minimum_needs)
+
+    @property
+    def total_evacuated(self):
+        if hasattr(self, '_evacuation_category') and self._evacuation_category:
+            evacuated_population = self.affected_population[
+                self._evacuation_category]
+        else:
+            evacuated_population = self.total_affected_population
+        if (
+                hasattr(self, '_evacuation_percentage') and
+                self._evacuation_percentage):
+            evacuated_population = (
+                evacuated_population * self._evacuation_percentage)
+        return evacuated_population
