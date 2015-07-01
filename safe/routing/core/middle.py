@@ -40,7 +40,7 @@ def sum_distances(line):
     :return: List of lengths
     :rtype: list
     """
-    segments_length = ()
+    segments_length = []
     for p1, p2 in zip(line[0:], line[1:]):
         segments_length.append(distance(p1, p2))
     return segments_length
