@@ -6,9 +6,7 @@ import logging
 import numpy
 
 from safe.impact_functions.core import (
-    population_rounding_full,
     population_rounding,
-    evacuated_population_needs,
     has_no_data)
 from safe.impact_functions.impact_function_manager \
     import ImpactFunctionManager
@@ -50,103 +48,60 @@ class FloodEvacuationRasterHazardFunction(
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
 
-    def _tabulate(
-            self,
-            counts,
-            evacuated,
-            minimum_needs,
-            question,
-            rounding_evacuated,
-            thresholds,
-            total,
-            no_data_warning):
-        """Create a tabulated output.
-        :param counts: The counts breakdown.
-        :param evacuated: The total.
-        :param minimum_needs: The minimum needs breakdown.
-        :param question: The impact question.
-        :param rounding_evacuated: The rounding that was applied.
-        :param thresholds: The thresholds that where used.
-        :param total: The impact total.
-        :param no_data_warning: Flag to warn about nodata in layer data.
-        :return:
-        """
+        # Initialize instance attributes for readability (pylint)
+        self.no_data_warning = None
+
+    def notes(self):
+        thresholds = self.parameters['thresholds'].value
+        notes = [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr('Total population: %s') % population_rounding(
+                    self.total_population)
+            },
+            {
+                'content': tr(
+                    '<sup>1</sup>People need evacuation if flood levels '
+                    'exceed %(eps).1f m') % {'eps': thresholds[-1]},
+            },
+            {
+                'content': tr('How will we reach evacuated people?')
+            },
+            {
+                'content': tr('How will we reach evacuated people?')
+            },
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(get_needs_provenance_value(self.parameters)),
+            },
+            {
+                'content': tr(
+                    'The layers contained `no data`. This missing data was '
+                    'carried through to the impact layer.'),
+                'condition': self.no_data_warning
+            },
+            {
+                'content': tr(
+                    '`No data` values in the impact layer were treated as 0 '
+                    'when counting the affected or total population.'),
+                'condition': self.no_data_warning
+            }
+        ]
+        return notes
+
+    def _tabulate_zero_impact(self):
+        thresholds = self.parameters['thresholds'].value
         table_body = [
-            question,
+            self.question,
             TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                      '%s*' % format_int(evacuated)],
-                     header=True),
-            TableRow(tr('* Number is rounded up to the nearest %s') % (
-                rounding_evacuated)),
-            TableRow(tr('Map shows the numbers of people needing evacuation')),
-            TableRow(tr(
-                'Table shows the weekly minimum needs for all evacuated people'
-            ))]
-        total_needs = evacuated_population_needs(
-            evacuated, minimum_needs)
-        for frequency, needs in total_needs.items():
-            table_body.append(TableRow(
-                [
-                    tr('Needs should be provided %s' % frequency),
-                    tr('Total')
-                ],
-                header=True))
-            for resource in needs:
-                table_body.append(TableRow([
-                    tr(resource['table name']),
-                    format_int(resource['amount'])]))
-        table_body.append(TableRow(tr('Action Checklist:'), header=True))
-        table_body.append(TableRow(tr('How will warnings be disseminated?')))
-        table_body.append(TableRow(tr('How will we reach stranded people?')))
-        table_body.append(TableRow(tr('Do we have enough relief items?')))
-        table_body.append(TableRow(tr('If yes, where are they located and how '
-                                      'will we distribute them?')))
-        table_body.append(TableRow(tr(
-            'If no, where can we obtain additional relief items from and how '
-            'will we transport them to here?')))
-        # Extend impact report for on-screen display
-        table_body.extend([
-            TableRow(tr('Notes'), header=True),
-            tr('Total population: %s') % format_int(total),
-            tr('People need evacuation if flood levels exceed %(eps).1f m') %
-            {'eps': thresholds[-1]},
-            tr(get_needs_provenance_value(self.parameters)),
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('All affected people are assumed to be evacuated.')])
-        if no_data_warning:
-            table_body.extend([
-                tr('The layers contained `no data`. This missing data was '
-                   'carried through to the impact layer.'),
-                tr('`No data` values in the impact layer were treated as 0 '
-                   'when counting the affected or total population.')
-            ])
-        if len(counts) > 1:
-            table_body.append(TableRow(tr('Detailed breakdown'), header=True))
-
-            for i, val in enumerate(counts):
-                if i == len(thresholds) - 1:
-                    # The last interval
-                    s = (tr('People in >= %(lo).1f m of water: %(val)s') % {
-                        'lo': thresholds[i],
-                        'val': format_int(val)})
-                else:
-                    s = tr(
-                        'People in %(lo).1f m to %(hi).1f m of water: '
-                        '%(val)s') % {
-                            'lo': thresholds[i],
-                            'hi': thresholds[i + 1],
-                            'val': format_int(val)}
-                table_body.append(TableRow(s))
-
-        return table_body, total_needs
-
-    def _tabulate_zero_impact(self, evacuated, question,
-                              thresholds):
-        table_body = [
-            question,
-            TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                      '%s' % format_int(evacuated)],
+                      '%s' % format_int(self.total_evacuated)],
                      header=True)]
         return table_body
 
@@ -178,15 +133,15 @@ class FloodEvacuationRasterHazardFunction(
 
         # Extract data as numeric arrays
         data = hazard_layer.get_data(nan=True)  # Depth
-        no_data_warning = False  # TODO - Carry this through to impact report before
+        self.no_data_warning = False
         if has_no_data(data):
-            no_data_warning = True
+            self.no_data_warning = True
 
         # Calculate impact as population exposed to depths > max threshold
         population = exposure_layer.get_data(nan=True, scaling=True)
         total = int(numpy.nansum(population))
         if has_no_data(population):
-            no_data_warning = True
+            self.no_data_warning = True
 
         # merely initialize
         impact = None
@@ -196,7 +151,7 @@ class FloodEvacuationRasterHazardFunction(
                 # The last threshold
                 thresholds_name = tr(
                     'People in >= %.1f m of water') % lo
-                self.category_ordering.append(thresholds_name)
+                self.impact_category_ordering.append(thresholds_name)
                 self._evacuation_category = thresholds_name
                 impact = medium = numpy.where(data >= lo, population, 0)
             else:
@@ -204,7 +159,7 @@ class FloodEvacuationRasterHazardFunction(
                 hi = thresholds[i + 1]
                 thresholds_name = tr(
                     'People in %.1f m to %.1f m of water' % (lo, hi))
-                self.category_ordering.append(thresholds_name)
+                self.impact_category_ordering.append(thresholds_name)
                 medium = numpy.where((data >= lo) * (data < hi), population, 0)
 
             # Count
@@ -220,8 +175,6 @@ class FloodEvacuationRasterHazardFunction(
 
         # Count totals
         evacuated = self.total_evacuated
-        # Do a population appropriate rounding
-        total = population_rounding(total)
 
         self.minimum_needs = [
             parameter.serialize() for parameter in
@@ -236,8 +189,7 @@ class FloodEvacuationRasterHazardFunction(
 
         # check for zero impact
         if numpy.nanmax(impact) == 0 == numpy.nanmin(impact):
-            table_body = self._tabulate_zero_impact(
-                evacuated, self.question, thresholds)
+            table_body = self._tabulate_zero_impact()
             my_message = Table(table_body).toNewlineFreeString()
             raise ZeroImpactException(my_message)
 

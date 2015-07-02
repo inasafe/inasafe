@@ -47,9 +47,11 @@ class PopulationExposureReportMixin(ReportMixin):
 
         """
         self._question = ''
-        self._unaffected_population = 0
+        self._total_population = None
+        self._unaffected_population = None
         self._evacuation_category = None
         self._evacuation_percentage = None
+        self._minimum_needs = []
         self._affected_population = {}
         self._other_population_counts = {}
         self._impact_category_ordering = []
@@ -115,7 +117,7 @@ class PopulationExposureReportMixin(ReportMixin):
         impact_summary_report = [(
             {
                 'content': [
-                    tr('Population needing evacuation'),
+                    tr('Population needing evacuation <sup>1</sup>'),
                     population_rounding(self.total_evacuated)],
                 'header': True
             })]
@@ -263,3 +265,23 @@ class PopulationExposureReportMixin(ReportMixin):
             evacuated_population = (
                 evacuated_population * self._evacuation_percentage)
         return evacuated_population
+
+    @property
+    def total_population(self):
+        if not hasattr(self, '_total_population'):
+            self._total_population = 0
+        return self._total_population
+
+    @total_population.setter
+    def total_population(self, total_population):
+        self._total_population = total_population
+
+    @property
+    def minimum_needs(self):
+        if not hasattr(self, '_minimum_needs'):
+            self._minimum_needs = 0
+        return self._minimum_needs
+
+    @minimum_needs.setter
+    def minimum_needs(self, minimum_needs):
+        self._minimum_needs = minimum_needs
