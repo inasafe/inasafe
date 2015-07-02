@@ -32,6 +32,7 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 from safe.impact_functions.core import get_value_from_layer_keyword
 
+
 class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
     """Impact Function for Classified Polygon on Population."""
 

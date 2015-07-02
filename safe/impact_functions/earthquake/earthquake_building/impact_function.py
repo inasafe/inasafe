@@ -44,6 +44,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         self.is_nexis = False
         self.statistics_type = 'class_count'
         self.statistics_classes = [0, 1, 2, 3]
+        self.structure_class_field = None
 
     def notes(self):
         """Return the notes section of the report.

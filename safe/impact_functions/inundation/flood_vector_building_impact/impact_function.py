@@ -50,7 +50,7 @@ class FloodPolygonBuildingFunction(
         # Variables for storing value from layer's keyword
         self.affected_field = None
         self.value_map = None
-        self.building_type_field = None
+        self.structure_class_field = None
         # The 'wet' variable
         self.wet = 'wet'
 
@@ -84,7 +84,7 @@ class FloodPolygonBuildingFunction(
             'field', self.hazard)
         self.value_map = get_value_from_layer_keyword(
             'value_map', self.hazard)
-        self.building_type_field = get_value_from_layer_keyword(
+        self.structure_class_field = get_value_from_layer_keyword(
             'structure_class_field', self.exposure)
 
         # Extract data
@@ -110,14 +110,15 @@ class FloodPolygonBuildingFunction(
         exposure_provider = exposure_layer.dataProvider()
         exposure_fields = exposure_provider.fields()
 
-        # Check building_type_field exists in exposure layer
+        # Check structure_class_field exists in exposure layer
         building_type_field_index = exposure_provider.fieldNameIndex(
-            self.building_type_field)
+            self.structure_class_field)
         if building_type_field_index == -1:
             message = tr(
                 'Field "%s" is not present in the attribute table of '
                 'the exposure layer. Please change the Building Type '
-                'Field parameter in the IF Option.') % self.building_type_field
+                'Field parameter in the IF Option.') % (
+                self.structure_class_field)
             raise GetDataError(message)
 
         # If target_field does not exist, add it:
@@ -214,7 +215,7 @@ class FloodPolygonBuildingFunction(
         ])
         buildings_data = building_layer.getFeatures()
         building_type_field_index = building_layer.fieldNameIndex(
-            self.building_type_field)
+            self.structure_class_field)
         for building in buildings_data:
             record = building.attributes()
             building_type = record[building_type_field_index]
