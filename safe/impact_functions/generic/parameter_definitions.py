@@ -85,12 +85,3 @@ def high_hazard_class():
     field.description = tr(
         'The value of hazard categorized as High Hazard class')
     return field
-
-
-def hazard_zone_attribute_field():
-    """Generator for the flooded target field parameter."""
-    field = StringParameter()
-    field.name = 'Hazard Zone Attribute'
-    field.is_required = True
-    field.value = 'KRB'  # default value
-    return field

@@ -17,8 +17,6 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.flood_vector_building_impact\
-    import parameter_definitions
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,

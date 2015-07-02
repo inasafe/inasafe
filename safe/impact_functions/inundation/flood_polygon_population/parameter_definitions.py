@@ -37,29 +37,3 @@ def evacuation_percentage():
         'The value in percentage of the population that '
         'represent the number of people needed to be evacuated.')
     return field
-
-
-def affected_field():
-    """Generate affected field parameter
-
-    :return: list of StringParameter
-    :rtype: list[StringParameter]
-    """
-    field = StringParameter()
-    field.name = 'Affected Field'
-    field.is_required = True
-    field.value = 'FLOODPRONE'  # default value
-    return field
-
-
-def affected_value():
-    """Generate affected value parameter
-
-    :return: list of String Parameter
-    :rtype: list[StringParameter]
-    """
-    field = StringParameter()
-    field.name = 'Affected Value'
-    field.is_required = True
-    field.value = 'YES'  # default value
-    return field

@@ -32,11 +32,3 @@ def distance():
     field.description = tr(
         'This list contains radii of volcano buffer in increasing order.')
     return field
-
-
-def volcano_name_attribute():
-    field = StringParameter()
-    field.name = 'Volcano Name Attribute'
-    field.is_required = True
-    field.value = 'NAME'
-    return field

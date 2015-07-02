@@ -21,8 +21,6 @@ from safe.definitions import (
     generic_vector_hazard_classes,
     structure_class_field
 )
-from safe.impact_functions.generic.parameter_definitions import \
-    hazard_zone_attribute_field
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr

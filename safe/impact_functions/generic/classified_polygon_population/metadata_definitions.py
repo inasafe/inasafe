@@ -27,8 +27,6 @@ from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
-from safe.impact_functions.generic.parameter_definitions import \
-    hazard_zone_attribute_field
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
