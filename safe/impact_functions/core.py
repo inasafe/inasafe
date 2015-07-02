@@ -163,3 +163,21 @@ def get_value_from_layer_keyword(key, layer):
         return value
     except KeyError as e:
         raise KeywordNotFoundError(e)
+
+
+def get_key_for_value(value, value_map):
+    """Obtain the key of a value from a value map.
+
+    :param value: The value mapped to a key in value_map.
+    :type value: int, str, float
+
+    :param value_map: A value mapping.
+    :type value_map: dict
+
+    :returns: A key for the value.
+    :rtype: str
+    """
+    for key, values in value_map.iteritems():
+        if value in values:
+            return key
+    return None
