@@ -14,7 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 import logging
-from numbers import Number
 import numpy
 
 from safe.utilities.i18n import tr

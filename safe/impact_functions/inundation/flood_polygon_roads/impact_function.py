@@ -21,7 +21,7 @@ from qgis.core import (
 
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
-from safe.impact_functions.inundation.\
+from safe.impact_functions.inundation. \
     flood_polygon_roads.metadata_definitions import \
     FloodPolygonRoadsMetadata
 from safe.utilities.i18n import tr
@@ -30,6 +30,7 @@ from safe.common.tables import Table, TableRow
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
+from safe.impact_functions.core import get_value_from_layer_keyword
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -42,6 +43,13 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
     def __init__(self):
         """Constructor."""
         super(FloodVectorRoadsExperimentalFunction, self).__init__()
+
+        # Variables for storing value from layer's keyword
+        self.affected_field = None
+        self.value_map = None
+        self.road_type_field = None
+        # The 'wet' variable
+        self.wet = 'wet'
 
     def _tabulate(self, flooded_len, question, road_len, roads_by_type):
         table_body = [
@@ -65,27 +73,31 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         self.validate()
         self.prepare()
 
-        # Get the parameters from IF options
-        road_type_field = self.parameters['road_type_field'].value
-        affected_field = self.parameters['affected_field'].value
-        affected_value = self.parameters['affected_value'].value
+        # Get parameters from layer's keywords
+        self.affected_field = get_value_from_layer_keyword(
+            'field', self.hazard)
+        self.value_map = get_value_from_layer_keyword(
+            'value_map', self.hazard)
+        self.road_type_field = get_value_from_layer_keyword(
+            'road_class_field', self.exposure)
 
         # Extract data
-        hazard_layer = self.hazard    # Flood
+        hazard_layer = self.hazard  # Flood
         exposure_layer = self.exposure  # Roads
 
         hazard_layer = hazard_layer.get_layer()
         hazard_provider = hazard_layer.dataProvider()
-        affected_field_index = hazard_provider.fieldNameIndex(affected_field)
+        affected_field_index = hazard_provider.fieldNameIndex(
+            self.affected_field)
         # see #818: should still work if there is no valid attribute
         if affected_field_index == -1:
             pass
             # message = tr('''Parameter "Affected Field"(='%s')
-            #     is not present in the attribute table of the hazard layer.
+            # is not present in the attribute table of the hazard layer.
             #     ''' % (affected_field, ))
             # raise GetDataError(message)
 
-        LOGGER.info('Affected field: %s' % affected_field)
+        LOGGER.info('Affected field: %s' % self.affected_field)
         LOGGER.info('Affected field index: %s' % affected_field_index)
 
         exposure_layer = exposure_layer.get_layer()
@@ -107,14 +119,8 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         request.setFilterRect(projected_extent)
 
         # Split line_layer by hazard and save as result:
-        #   1) Filter from hazard inundated features
+        # 1) Filter from hazard inundated features
         #   2) Mark roads as inundated (1) or not inundated (0)
-
-        if affected_field_index != -1:
-            affected_field_type = hazard_provider.fields()[
-                affected_field_index].typeName()
-            if affected_field_type in ['Real', 'Integer']:
-                affected_value = float(affected_value)
 
         #################################
         #           REMARK 1
@@ -132,7 +138,8 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         for feature in hazard_features:
             attributes = feature.attributes()
             if affected_field_index != -1:
-                if attributes[affected_field_index] != affected_value:
+                value = attributes[affected_field_index]
+                if value not in self.value_map[self.wet]:
                     continue
             if hazard_poly is None:
                 hazard_poly = QgsGeometry(feature.geometry())
@@ -153,8 +160,9 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         if hazard_poly is None:
             message = tr(
                 'There are no objects in the hazard layer with %s (Affected '
-                'Field) = %s (Affected Value). Please check the value or use '
-                'a different extent.' % (affected_field, affected_value))
+                'Field) in %s (Affected Value). Please check the value or use '
+                'a different extent.' % (
+                    self.affected_field, self.value_map[self.wet]))
             raise GetDataError(message)
 
         # Clip exposure by the extent
@@ -173,10 +181,10 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         transform = QgsCoordinateTransform(
             exposure_layer.crs(), destination_crs)
         road_len = flooded_len = 0  # Length of roads
-        roads_by_type = dict()      # Length of flooded roads by types
+        roads_by_type = dict()  # Length of flooded roads by types
 
         roads_data = line_layer.getFeatures()
-        road_type_field_index = line_layer.fieldNameIndex(road_type_field)
+        road_type_field_index = line_layer.fieldNameIndex(self.road_type_field)
         target_field_index = line_layer.fieldNameIndex(self.target_field)
 
         for road in roads_data:
