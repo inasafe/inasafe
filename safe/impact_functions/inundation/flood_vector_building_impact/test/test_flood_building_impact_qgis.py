@@ -62,9 +62,6 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
         function.hazard = hazard_layer
         function.exposure = exposure_layer
         function.requested_extent = rect_extent
-        function.parameters['building_type_field'].value = 'TYPE'
-        function.parameters['affected_field'].value = 'FLOODPRONE'
-        function.parameters['affected_value'].value = 'YES'
         function.run()
         impact = function.impact
 

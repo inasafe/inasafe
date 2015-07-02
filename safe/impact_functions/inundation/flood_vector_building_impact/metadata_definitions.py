@@ -89,18 +89,6 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # This field of the exposure layer contains
-                # information about building types
-                ('building_type_field',
-                 parameter_definitions.building_type_field()),
-                # This field of the  hazard layer contains information
-                # about inundated areas
-                ('affected_field',
-                 parameter_definitions.affected_field()),
-                # This value in 'affected_field' of the hazard layer
-                # marks the areas as inundated
-                ('affected_value',
-                 parameter_definitions.affected_value()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))
