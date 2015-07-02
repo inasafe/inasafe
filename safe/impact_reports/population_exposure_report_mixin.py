@@ -16,13 +16,13 @@ __date__ = '05/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from collections import OrderedDict
-
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
 
-from safe.impact_functions.core import evacuated_population_needs
+from safe.impact_functions.core import (
+    evacuated_population_needs,
+    population_rounding)
 
 
 class PopulationExposureReportMixin(ReportMixin):
@@ -52,7 +52,7 @@ class PopulationExposureReportMixin(ReportMixin):
         self._evacuation_percentage = None
         self._affected_population = {}
         self._other_population_counts = {}
-        self._category_ordering = []
+        self._impact_category_ordering = []
 
     def generate_report(self):
         """Breakdown by building type.
@@ -61,13 +61,13 @@ class PopulationExposureReportMixin(ReportMixin):
         :rtype: list
         """
         report = [{'content': self.question}]
-        report += [{'content': ''}]  # Blank line to separate report sections
+        report += [self.blank_line]  # Blank line to separate report sections
         report += self.impact_summary()
-        report += [{'content': ''}]  # Blank line to separate report sections
+        report += [self.blank_line]
         report += self.minimum_needs_breakdown()
-        report += [{'content': ''}]  # Blank line to separate report sections
+        report += [self.blank_line]
         report += self.action_checklist()
-        report += [{'content': ''}]  # Blank line to separate report sections
+        report += [self.blank_line]
         report += self.notes()
         return report
 
@@ -80,7 +80,7 @@ class PopulationExposureReportMixin(ReportMixin):
 
         return [
             {
-                'content': tr('Action Checklist:'),
+                'content': tr('Action checklist'),
                 'header': True
             },
             {
@@ -92,7 +92,7 @@ class PopulationExposureReportMixin(ReportMixin):
             {
                 'content': tr(
                     'Are there enough shelters and relief items available '
-                    'for %s people?' % self.total_affected_population)
+                    'for %s people?' % self.total_evacuated)
             },
             {
                 'content': tr(
@@ -112,14 +112,37 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The impact summary.
         :rtype: list
         """
-        impact_summary_report = []
-        for category in self.category_ordering:
-            population_in_category = self.lookup_category(category)
-            impact_summary_report.append(
-                {
-                    'content': [tr(category), population_in_category],
-                    'header': True
-                })
+        impact_summary_report = [(
+            {
+                'content': [
+                    tr('Population needing evacuation'),
+                    population_rounding(self.total_evacuated)],
+                'header': True
+            })]
+        if len(self.impact_category_ordering) > 1:
+            impact_summary_report.append(self.blank_line)
+            impact_summary_report.append({
+                'content': [
+                    tr('Total affected population'),
+                    population_rounding(self.total_affected_population)],
+                'header': True
+            })
+            for category in self.impact_category_ordering:
+                population_in_category = self.lookup_category(category)
+                population_in_category = population_rounding(
+                    population_in_category
+                )
+                impact_summary_report.append(
+                    {
+                        'content': [tr(category), population_in_category],
+                    })
+        impact_summary_report.append(self.blank_line)
+        impact_summary_report.append({
+            'content': [
+                tr('Unaffected population'),
+                population_rounding(self.unaffected_population)],
+            'header': True
+        })
         return impact_summary_report
 
     def minimum_needs_breakdown(self):
@@ -128,13 +151,16 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The buildings breakdown report.
         :rtype: list
         """
-        minimum_needs_breakdown_report = []
+        minimum_needs_breakdown_report = [{
+            'content': tr('Evacuated population minimum needs'),
+            'header': True
+        }]
         total_needs = self.total_needs
         for frequency, needs in total_needs.items():
             minimum_needs_breakdown_report.append(
                 {
                     'content': [
-                        tr('Needs should be provided %s' % frequency),
+                        tr('Needs that should be provided %s' % frequency),
                         tr('Total')],
                     'header': True
                 })
@@ -148,14 +174,14 @@ class PopulationExposureReportMixin(ReportMixin):
         return minimum_needs_breakdown_report
 
     @property
-    def category_ordering(self):
-        if not hasattr(self, '_category_ordering'):
-            self._category_ordering = []
-        return self._category_ordering
+    def impact_category_ordering(self):
+        if not hasattr(self, '_impact_category_ordering'):
+            self._impact_category_ordering = self.affected_population.keys()
+        return self._impact_category_ordering
 
-    @category_ordering.setter
-    def category_ordering(self, category_ordering):
-        self._category_ordering = category_ordering
+    @impact_category_ordering.setter
+    def impact_category_ordering(self, impact_category_ordering):
+        self._impact_category_ordering = impact_category_ordering
 
     @property
     def other_population_counts(self):
