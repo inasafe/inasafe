@@ -118,7 +118,7 @@ class PopulationExposureReportMixin(ReportMixin):
             {
                 'content': [
                     tr('Population needing evacuation <sup>1</sup>'),
-                    population_rounding(self.total_evacuated)],
+                    '%s' % population_rounding(self.total_evacuated)],
                 'header': True
             })]
         if len(self.impact_category_ordering) > 1:
@@ -126,23 +126,22 @@ class PopulationExposureReportMixin(ReportMixin):
             impact_summary_report.append({
                 'content': [
                     tr('Total affected population'),
-                    population_rounding(self.total_affected_population)],
+                    format_int(population_rounding(
+                        self.total_affected_population))],
                 'header': True
             })
             for category in self.impact_category_ordering:
                 population_in_category = self.lookup_category(category)
-                population_in_category = population_rounding(
+                population_in_category = format_int(population_rounding(
                     population_in_category
-                )
+                ))
                 impact_summary_report.append(
-                    {
-                        'content': [tr(category), population_in_category],
-                    })
+                    {'content': [tr(category), population_in_category]})
         impact_summary_report.append(self.blank_line)
         impact_summary_report.append({
             'content': [
                 tr('Unaffected population'),
-                population_rounding(self.unaffected_population)],
+                format_int(population_rounding(self.unaffected_population))],
             'header': True
         })
         return impact_summary_report
@@ -279,7 +278,7 @@ class PopulationExposureReportMixin(ReportMixin):
     @property
     def minimum_needs(self):
         if not hasattr(self, '_minimum_needs'):
-            self._minimum_needs = 0
+            self._minimum_needs = []
         return self._minimum_needs
 
     @minimum_needs.setter
