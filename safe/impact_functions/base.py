@@ -70,6 +70,12 @@ class ImpactFunction(object):
         self._exposure = None
         # Layer used for aggregating results by area / district
         self._aggregation = None
+        # Keyword for hazard layer
+        self._hazard_keyword = None
+        # Keyword for exposure layer
+        self._exposure_keyword = None
+        # Keyword for aggregation layer
+        self._aggregation_keyword = None
         # Layer produced by the impact function
         self._impact = None
         # The question of the impact function
@@ -259,6 +265,8 @@ class ImpactFunction(object):
                 self.target_field,
                 layer.dataProvider().fieldNameMap().keys()
             )
+        # Automatically set the hazard keyword from the hazard layer.
+        self.hazard_keyword = self.hazard.keywords
 
     @property
     def exposure(self):
@@ -292,6 +300,9 @@ class ImpactFunction(object):
                 layer.dataProvider().fieldNameMap().keys()
             )
 
+        # Automatically set the exposure from the hazard layer.
+        self.exposure_keyword = self.exposure.keywords
+
     @property
     def aggregation(self):
         """Property for the aggregation layer to be used for the analysis.
@@ -310,6 +321,63 @@ class ImpactFunction(object):
         """
         # add more robust checks here
         self._aggregation = layer
+
+        # Automatically set the exposure from the hazard layer.
+        self.aggregation_keyword = self.aggregation.keywords
+
+    @property
+    def hazard_keyword(self):
+        """Property for the hazard keyword to be used for the analysis.
+
+        :returns: A dictionary representing keyword.
+        :rtype: dict
+        """
+        return self._hazard_keyword
+
+    @hazard_keyword.setter
+    def hazard_keyword(self, keyword):
+        """Setter for the hazard keyword property.
+
+        :param keyword: A dictionary representing keyword.
+        :type keyword: dict
+        """
+        self._hazard_keyword = keyword
+
+    @property
+    def exposure_keyword(self):
+        """Property for the exposure keyword to be used for the analysis.
+
+        :returns: A dictionary representing keyword.
+        :rtype: dict
+        """
+        return self._exposure_keyword
+
+    @exposure_keyword.setter
+    def exposure_keyword(self, keyword):
+        """Setter for the exposure keyword property.
+
+        :param keyword: A dictionary representing keyword.
+        :type keyword: dict
+        """
+        self._exposure_keyword = keyword
+
+    @property
+    def aggregation_keyword(self):
+        """Property for the aggregation keyword to be used for the analysis.
+
+        :returns: A dictionary representing keyword.
+        :rtype: dict
+        """
+        return self._aggregation_keyword
+
+    @aggregation_keyword.setter
+    def aggregation_keyword(self, keyword):
+        """Setter for the aggregation keyword property.
+
+        :param keyword: A dictionary representing keyword.
+        :type keyword: dict
+        """
+        self._aggregation_keyword = keyword
 
     @property
     def parameters(self):
