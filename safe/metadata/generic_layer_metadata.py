@@ -22,8 +22,8 @@ from safe.metadata.base_metadata import BaseMetadata
 
 class GenericLayerMetadata(BaseMetadata):
 
-    def __init__(self, layer):
-        super(GenericLayerMetadata, self).__init__(layer)
+    def __init__(self, layer_uri):
+        super(GenericLayerMetadata, self).__init__(layer_uri)
 
         # public members
         self.report = None
@@ -35,6 +35,20 @@ class GenericLayerMetadata(BaseMetadata):
         metadata['report'] = self.report
 
         return json.dumps(metadata, indent=2, sort_keys=True)
+
+    @property
+    def xml(self):
+        # TODO (MB): implement this
+        xml = super(GenericLayerMetadata, self).xml
+        raise NotImplementedError('Still need to write this')
+
+    def read_from_json(self):
+        # TODO (MB): implement this
+        super(GenericLayerMetadata, self).read_from_json()
+
+    def read_from_xml(self):
+        # TODO (MB): implement this
+        super(GenericLayerMetadata, self).read_from_xml()
 
     def update_report(self):
         # TODO (MB) implement this by reading the kw and definitions.py

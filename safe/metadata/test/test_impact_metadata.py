@@ -32,15 +32,6 @@ from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
 
 class TestMetadata(TestCase):
     
-    def test_metadata(self):
-        metadata = ImpactLayerMetadata('random_layer_id')
-        path = 'gmd:MD_Metadata/gmd:dateStamp/'
-
-        # using unsupported xml types
-        test_value = 'Random string'
-        with self.assertRaises(KeyError):
-            metadata.set('ISO19115_TEST', test_value, path, 'gco:RandomString')
-
     def test_metadata_provenance(self):
         metadata = self.generate_test_metadata()
         self.assertEqual(metadata.provenance.count, 3)
@@ -53,17 +44,17 @@ class TestMetadata(TestCase):
         # using QDate
         test_value = QDate(2015, 6, 7)
         metadata.set('ISO19115_TEST', test_value, path, 'gco:Date')
-        self.assertEqual(metadata.get('ISO19115_TEST'), '2015-06-07')
+        self.assertEqual(metadata.get_xml('ISO19115_TEST'), '2015-06-07')
 
         # using datetime
         test_value = datetime(2015, 6, 7)
         metadata.update('ISO19115_TEST', test_value)
-        self.assertEqual(metadata.get('ISO19115_TEST'), '2015-06-07')
+        self.assertEqual(metadata.get_xml('ISO19115_TEST'), '2015-06-07')
 
         # using date
         test_value = date(2015, 6, 7)
         metadata.set('ISO19115_TEST', test_value, path, 'gco:Date')
-        self.assertEqual(metadata.get('ISO19115_TEST'), '2015-06-07')
+        self.assertEqual(metadata.get_xml('ISO19115_TEST'), '2015-06-07')
 
         # using str should fail
         test_value = '2015-06-07'
@@ -78,7 +69,7 @@ class TestMetadata(TestCase):
         test_value = QUrl('http://inasafe.org')
         metadata.set('ISO19115_TEST', test_value, path, 'gmd:URL')
         self.assertEqual(
-            metadata.get('ISO19115_TEST'), 'http://inasafe.org')
+            metadata.get_xml('ISO19115_TEST'), 'http://inasafe.org')
 
         # using str should fail
         test_value = 'http://inasafe.org'
@@ -99,17 +90,17 @@ class TestMetadata(TestCase):
         metadata.set(
             'ISO19115_TEST', test_value, path, 'gco:CharacterString')
         self.assertEqual(
-            metadata.get('ISO19115_TEST'), 'Random string')
+            metadata.get_xml('ISO19115_TEST'), 'Random string')
 
         # using int
         test_value = 1234
         metadata.update('ISO19115_TEST', test_value)
-        self.assertEqual(metadata.get('ISO19115_TEST'), '1234')
+        self.assertEqual(metadata.get_xml('ISO19115_TEST'), '1234')
 
         # using float
         test_value = 1234.5678
         metadata.update('ISO19115_TEST', test_value)
-        self.assertEqual(metadata.get('ISO19115_TEST'), '1234.5678')
+        self.assertEqual(metadata.get_xml('ISO19115_TEST'), '1234.5678')
 
         # using invalid QUrl
         test_value = QUrl()
@@ -125,7 +116,7 @@ class TestMetadata(TestCase):
         test_json = test_json.split('provenance')[0]
 
         filename = unique_filename(suffix='.json', dir=TEMP_DIR)
-        metadata.write(filename)
+        metadata.write_as(filename)
         with open(filename) as f:
             written_json = f.read()
         # split the read file at the provenance because provenance has

@@ -23,23 +23,14 @@ from safe.metadata.provenance.provenance import Provenance
 
 class ImpactLayerMetadata(BaseMetadata):
 
-    def __init__(self, layer):
-        super(ImpactLayerMetadata, self).__init__(layer)
+    def __init__(self, layer_uri):
+        super(ImpactLayerMetadata, self).__init__(layer_uri)
         # private members
         self._provenance = Provenance()
 
         # public members
         self.report = None
         self.summary_data = None
-
-    @property
-    # there is no setter. provenance can only grow. use append_provenance_step
-    def provenance(self):
-        return self._provenance
-
-    def append_provenance_step(self, name, description):
-        step_time = self._provenance.append_step(name, description)
-        self.last_update = step_time
 
     @property
     def json(self):
@@ -54,3 +45,25 @@ class ImpactLayerMetadata(BaseMetadata):
 
         return json.dumps(metadata, indent=2, sort_keys=True)
 
+    @property
+    def xml(self):
+        # TODO (MB): implement this
+        xml = super(ImpactLayerMetadata, self).xml
+        raise NotImplementedError('Still need to write this')
+
+    def read_from_json(self):
+        # TODO (MB): implement this
+        super(ImpactLayerMetadata, self).read_from_json()
+
+    def read_from_xml(self):
+        # TODO (MB): implement this
+        super(ImpactLayerMetadata, self).read_from_xml()
+
+    @property
+    # there is no setter. provenance can only grow. use append_provenance_step
+    def provenance(self):
+        return self._provenance
+
+    def append_provenance_step(self, name, description):
+        step_time = self._provenance.append_step(name, description)
+        self.last_update = step_time

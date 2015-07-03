@@ -28,13 +28,16 @@ from safe.common.utilities import unique_filename
 
 
 class TestMetadata(TestCase):
-    def test_json_write(self):
+    def test_read(self):
         metadata = self.generate_test_metadata()
+
+    def test_json_write(self):
         with open(JSON_GENERIC_TEST_FILE) as f:
             test_json = f.read()
 
+        metadata = self.generate_test_metadata()
         filename = unique_filename(suffix='.json', dir=TEMP_DIR)
-        metadata.write(filename)
+        metadata.write_as(filename)
         with open(filename) as f:
             written_json = f.read()
 

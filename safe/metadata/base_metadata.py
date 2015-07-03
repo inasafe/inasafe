@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # using this approach:
 # http://eli.thegreenplace.net/2009/02/06/getters-and-setters-in-python
 
+import abc
 from datetime import datetime
 import json
 import os
@@ -27,17 +28,49 @@ from safe.metadata.utils import TYPE_CONVERSIONS
 
 
 class BaseMetadata(object):
+    # define as Abstract base class
+    __metaclass__ = abc.ABCMeta
 
-    def __init__(self, layer):
+    def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         # private members
-        self._layer = layer
+        self._layer_uri = layer_uri
+        path = os.path.splitext(layer_uri)[0]
+        if xml_uri is None:
+            self._xml_uri = '%s.xml' % path
+        else:
+            self._xml_uri = xml_uri
+        if json_uri is None:
+            self._json_uri = '%s.json' % path
+        else:
+            self._json_uri = json_uri
+
+        self._properties = {}
+        self.read_from_ancillary_file()
         self._last_update = datetime.now()
-        self._xml_properties = {}
+
+    @abc.abstractproperty
+    def xml(self):
+        # TODO (MB): implement this
+        raise NotImplementedError('Still need to write this')
+
+    @abc.abstractproperty
+    def json(self):
+        return json.dumps(self.dict, indent=2, sort_keys=True)
+
+    @abc.abstractmethod
+    def read_from_json(self):
+        # TODO (MB): implement this
+        raise NotImplementedError('Still need to write this')
+
+    @abc.abstractmethod
+    def read_from_xml(self):
+        # TODO (MB): implement this
+        raise NotImplementedError('Still need to write this')
 
     @property
     # there is no setter because the layer should not change overtime
-    def layer(self):
-        return self._layer
+    def layer_uri(self):
+        return self._layer_uri
 
     @property
     def last_update(self):
@@ -53,13 +86,16 @@ class BaseMetadata(object):
     @property
     # there is no setter. use the appropriate setter for each property or set()
     def properties(self):
-        return self._xml_properties
+        return self._properties
 
-    def get(self, xml_property_name):
-        return self._xml_properties[xml_property_name].xml_value
+    def get(self, property_name):
+        return self._properties[property_name].value
 
-    def get_property(self, xml_property_name):
-        return self._xml_properties[xml_property_name]
+    def get_xml(self, property_name):
+        return self._properties[property_name].xml_value
+
+    def get_property(self, property_name):
+        return self._properties[property_name]
 
     def update(self, name, value):
         self.get_property(name).value = value
@@ -72,28 +108,26 @@ class BaseMetadata(object):
             raise KeyError('The xml type %s is not supported yet' % xml_type)
 
         metadata_property = property_class(name, value, xml_path, xml_type)
-        self._xml_properties[name] = metadata_property
+        self._properties[name] = metadata_property
         self.set_last_update_to_now()
 
     @property
-    def xml(self):
-        # TODO (MB): implement this
-        raise NotImplementedError('Still need to write this')
-
-    @property
-    def json(self):
-        return json.dumps(self.dict, indent=2, sort_keys=True)
-
-    @property
     def dict(self):
-        metadata = {'layer': self.layer}
+        metadata = {'layer_uri': self.layer_uri}
         properties = {}
         for name, property in self.properties.iteritems():
             properties[name] = property.dict
         metadata['properties'] = properties
         return metadata
 
-    def write(self, destination_path):
+    def save(self):
+        with open(self._json_uri, 'w') as f:
+            f.write(self.json)
+
+        with open(self._xml_uri, 'w') as f:
+            f.write(self.xml)
+
+    def write_as(self, destination_path):
         file_format = os.path.splitext(destination_path)[1]
         if file_format == '.json':
             metadata = self.json
@@ -105,10 +139,16 @@ class BaseMetadata(object):
         with open(destination_path, 'w') as f:
             f.write(metadata)
 
+    def read_from_ancillary_file(self):
+        if os.path.isfile(self._json_uri):
+            self.read_from_json()
+        elif os.path.isfile(self._xml_uri):
+            self.read_from_xml()
+
     # Standard XML properties
     @property
     def organisation(self):
-        return self.get('organisation')
+        return self.get_xml('organisation')
 
     @organisation.setter
     def organisation(self, value):
@@ -120,7 +160,7 @@ class BaseMetadata(object):
 
     @property
     def email(self):
-        return self.get('email')
+        return self.get_xml('email')
 
     @email.setter
     def email(self, value):
@@ -136,7 +176,7 @@ class BaseMetadata(object):
 
     @property
     def document_date(self):
-        return self.get('document_date')
+        return self.get_xml('document_date')
 
     @document_date.setter
     def document_date(self, value):
@@ -146,7 +186,7 @@ class BaseMetadata(object):
 
     @property
     def abstract(self):
-        return self.get('abstract')
+        return self.get_xml('abstract')
 
     @abstract.setter
     def abstract(self, value):
@@ -158,7 +198,7 @@ class BaseMetadata(object):
 
     @property
     def title(self):
-        return self.get('title')
+        return self.get_xml('title')
 
     @title.setter
     def title(self, value):
@@ -172,7 +212,7 @@ class BaseMetadata(object):
 
     @property
     def license(self):
-        return self.get('license')
+        return self.get_xml('license')
 
     @license.setter
     def license(self, value):
@@ -186,7 +226,7 @@ class BaseMetadata(object):
 
     @property
     def url(self):
-        return self.get('url')
+        return self.get_xml('url')
 
     @url.setter
     def url(self, value):
