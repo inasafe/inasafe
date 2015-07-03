@@ -20,17 +20,13 @@ from safe.impact_functions.bases.continuous_rh_continuous_re import \
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .metadata_definitions import ITBFatalityMetadata
 from safe.impact_functions.core import (
-    evacuated_population_needs,
-    population_rounding_full,
     population_rounding)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
-    format_int,
     humanize_class,
     create_classes,
     create_label,
     get_thousand_separator)
-from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError
 from safe.utilities.i18n import tr
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
@@ -213,11 +209,21 @@ class ITBFatalityFunction(
             },
             {
                 'content': tr(
-                    'Fatality model is from Institut Teknologi Bandung 2012.')
+                    'Fatality model is from Institut Teknologi Bandung 2012.'),
+                'condition': self.__class__ == ITBFatalityFunction
+            },
+            {
+                'content': tr(
+                    'Fatality model is from the '
+                    'Population Vulnerability Pager Model.'),
+                'condition': self.__class__ != ITBFatalityFunction
             },
             {
                 'content': tr(
                     'Map shows the estimation of displaced population')
+            },
+            {
+                'content': tr(get_needs_provenance_value(self.parameters))
             }
         ]
         return notes
