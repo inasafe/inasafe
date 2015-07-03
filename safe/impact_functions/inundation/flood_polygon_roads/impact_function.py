@@ -28,9 +28,8 @@ from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import get_utm_epsg
-from safe.common.exceptions import GetDataError
+from safe.common.exceptions import GetDataError, KeywordNotFoundError
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
-from safe.impact_functions.core import get_value_from_layer_keyword
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -47,7 +46,7 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         # Variables for storing value from layer's keyword
         self.affected_field = None
         self.value_map = None
-        self.road_type_field = None
+        self.road_class_field = None
         # The 'wet' variable
         self.wet = 'wet'
 
@@ -74,12 +73,12 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         self.prepare()
 
         # Get parameters from layer's keywords
-        self.affected_field = get_value_from_layer_keyword(
-            'field', self.hazard)
-        self.value_map = get_value_from_layer_keyword(
-            'value_map', self.hazard)
-        self.road_type_field = get_value_from_layer_keyword(
-            'road_class_field', self.exposure)
+        try:
+            self.affected_field = self.hazard_keyword['field']
+            self.value_map = self.hazard_keyword['value_map']
+            self.road_class_field = self.exposure_keyword['road_class_field']
+        except KeyError as e:
+            raise KeywordNotFoundError(e)
 
         # Extract data
         hazard_layer = self.hazard  # Flood
@@ -184,7 +183,8 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         roads_by_type = dict()  # Length of flooded roads by types
 
         roads_data = line_layer.getFeatures()
-        road_type_field_index = line_layer.fieldNameIndex(self.road_type_field)
+        road_type_field_index = line_layer.fieldNameIndex(
+            self.road_class_field)
         target_field_index = line_layer.fieldNameIndex(self.target_field)
 
         for road in roads_data:

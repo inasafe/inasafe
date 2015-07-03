@@ -19,7 +19,7 @@ from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.impact_functions.volcanic.volcano_polygon_building\
     .metadata_definitions import VolcanoPolygonBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, KeywordNotFoundError
 from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage)
@@ -27,7 +27,6 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.impact_functions.core import get_value_from_layer_keyword
 
 
 class VolcanoPolygonBuildingFunction(
@@ -39,6 +38,7 @@ class VolcanoPolygonBuildingFunction(
 
     def __init__(self):
         super(VolcanoPolygonBuildingFunction, self).__init__()
+        self.volcano_names = tr('Not specified in data')
 
     def notes(self):
         """Return the notes section of the report.
@@ -80,36 +80,33 @@ class VolcanoPolygonBuildingFunction(
         self.validate()
         self.prepare()
 
-        # Parameters
-        hazard_zone_attribute = get_value_from_layer_keyword(
-            'field', self.hazard)
-        name_attribute = get_value_from_layer_keyword(
-            'volcano_name_field', self.hazard)
-
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard  # Volcano hazard layer
-        exposure_layer = self.exposure  # Building exposure layer
+        # Get parameters from layer's keywords
+        try:
+            hazard_zone_attribute = self.hazard_keyword['field']
+            name_attribute = self.hazard_keyword['volcano_name_field']
+        except KeyError as e:
+            raise KeywordNotFoundError(e)
 
         # Input checks
-        if not hazard_layer.is_polygon_data:
+        if not self.hazard.is_polygon_data:
             message = (
                 'Input hazard must be a polygon. I got %s with '
                 'layer type %s' %
-                (hazard_layer.get_name(), hazard_layer.get_geometry_name()))
+                (self.hazard.get_name(), self.hazard.get_geometry_name()))
             raise Exception(message)
 
         # Check if hazard_zone_attribute exists in hazard_layer
-        if hazard_zone_attribute not in hazard_layer.get_attribute_names():
+        if hazard_zone_attribute not in self.hazard.get_attribute_names():
             message = (
                 'Hazard data %s did not contain expected attribute %s ' %
-                (hazard_layer.get_name(), hazard_zone_attribute))
+                (self.hazard.get_name(), hazard_zone_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)
 
         # Get names of volcanoes considered
-        if name_attribute in hazard_layer.get_attribute_names():
+        if name_attribute in self.hazard.get_attribute_names():
             volcano_name_list = set()
-            for row in hazard_layer.get_data():
+            for row in self.hazard.get_data():
                 # Run through all polygons and get unique names
                 volcano_name_list.add(row[name_attribute])
             self.volcano_names = ', '.join(volcano_name_list)
@@ -118,7 +115,7 @@ class VolcanoPolygonBuildingFunction(
 
         # Run interpolation function for polygon2raster
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name=None)
+            self.hazard, self.exposure)
 
         # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
@@ -126,7 +123,7 @@ class VolcanoPolygonBuildingFunction(
 
         # Hazard zone categories from hazard layer
         hazard_zone_categories = list(
-            set(hazard_layer.get_data(hazard_zone_attribute)))
+            set(self.hazard.get_data(hazard_zone_attribute)))
 
         self.buildings = {}
         self.affected_buildings = OrderedDict()

@@ -29,7 +29,6 @@ from safe.gis.qgis_raster_tools import clip_raster
 from safe.gis.qgis_vector_tools import (
     extent_to_geo_array,
     create_layer)
-from safe.impact_functions.core import get_value_from_layer_keyword
 
 
 def _raster_to_vector_cells(
@@ -319,8 +318,7 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
         self.prepare()
 
         target_field = self.target_field
-        road_type_field = get_value_from_layer_keyword(
-            'road_class_field', self.exposure)
+        road_class_field = self.exposure_keyword['road_class_field']
         threshold_min = self.parameters['min threshold'].value
         threshold_max = self.parameters['max threshold'].value
 
@@ -450,7 +448,7 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
         roads_by_type = dict()      # Length of flooded roads by types
 
         roads_data = line_layer.getFeatures()
-        road_type_field_index = line_layer.fieldNameIndex(road_type_field)
+        road_type_field_index = line_layer.fieldNameIndex(road_class_field)
         for road in roads_data:
             attributes = road.attributes()
             road_type = attributes[road_type_field_index]

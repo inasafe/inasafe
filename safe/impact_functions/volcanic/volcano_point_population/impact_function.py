@@ -31,10 +31,9 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import ZeroImpactException
+from safe.common.exceptions import ZeroImpactException, KeywordNotFoundError
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters
-from safe.impact_functions.core import get_value_from_layer_keyword
 
 
 class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
@@ -72,38 +71,38 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
 
         # Parameters
         radii = self.parameters['distances'].value
-        name_attribute = get_value_from_layer_keyword(
-            'volcano_name_field', self.hazard)
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard
-        exposure_layer = self.exposure
+        # Get parameters from layer's keywords
+        try:
+            volcano_name_attribute = self.hazard_keyword['volcano_name_field']
+        except KeyError as e:
+            raise KeywordNotFoundError(e)
 
         # Input checks
-        if not hazard_layer.is_point_data:
+        if not self.hazard.is_point_data:
             msg = (
                 'Input hazard must be a polygon or point layer. I got %s with '
-                'layer type %s' % (hazard_layer.get_name(),
-                                   hazard_layer.get_geometry_name()))
+                'layer type %s' % (
+                    self.hazard.get_name(), self.hazard.get_geometry_name()))
             raise Exception(msg)
 
-        data_table = hazard_layer.get_data()
+        data_table = self.hazard.get_data()
 
         # Use concentric circles
         category_title = 'Radius'
         category_header = tr('Distance [km]')
 
-        centers = hazard_layer.get_geometry()
+        centers = self.hazard.get_geometry()
         rad_m = [x * 1000 for x in radii]  # Convert to meters
         hazard_layer = buffer_points(
             centers, rad_m, category_title, data_table=data_table)
 
         # Get names of volcanoes considered
-        if name_attribute in hazard_layer.get_attribute_names():
+        if volcano_name_attribute in hazard_layer.get_attribute_names():
             volcano_name_list = []
             # Run through all polygons and get unique names
             for row in data_table:
-                volcano_name_list.append(row[name_attribute])
+                volcano_name_list.append(row[volcano_name_attribute])
 
             volcano_names = ''
             for radius in volcano_name_list:
@@ -116,7 +115,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
                 hazard_layer,
-                exposure_layer,
+                self.exposure,
                 attribute_name=self.target_field
             )
 
@@ -126,7 +125,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             affected_population[radius] = 0
 
         nan_warning = False
-        if has_no_data(exposure_layer.get_data(nan=True)):
+        if has_no_data(self.exposure.get_data(nan=True)):
             nan_warning = True
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
@@ -140,7 +139,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
 
         # Count totals
         total_population = population_rounding(
-            int(numpy.nansum(exposure_layer.get_data())))
+            int(numpy.nansum(self.exposure.get_data())))
 
         # Count cumulative for each zone
         total_affected_population = 0

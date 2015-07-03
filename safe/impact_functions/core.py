@@ -146,25 +146,6 @@ def has_no_data(layer_data):
     return numpy.isnan(numpy.sum(layer_data))
 
 
-def get_value_from_layer_keyword(key, layer):
-    """Helper function to get key's value from layer keyword.
-
-    :param key: A string that represent a key.
-    :type key: str
-
-    :param layer: A Qgis
-    :type layer: QgisWrapper
-
-    :returns: A value of the key.
-    :rtype: str, dict, float, int
-    """
-    try:
-        value = layer.keywords[key]
-        return value
-    except KeyError as e:
-        raise KeywordNotFoundError(e)
-
-
 def get_key_for_value(value, value_map):
     """Obtain the key of a value from a value map.
 

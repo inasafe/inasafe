@@ -28,9 +28,9 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.common.exceptions import (
+    InaSAFEError, ZeroImpactException, KeywordNotFoundError)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-from safe.impact_functions.core import get_value_from_layer_keyword
 
 
 class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
@@ -64,9 +64,11 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
         self.validate()
         self.prepare()
 
-        # Parameters
-        hazard_zone_attribute = get_value_from_layer_keyword(
-            'field', self.hazard)
+        # Value from layer's keywords
+        try:
+            hazard_zone_attribute = self.hazard_keyword['field']
+        except KeyError as e:
+            raise KeywordNotFoundError(e)
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard

@@ -29,7 +29,6 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.impact_functions.core import get_value_from_layer_keyword
 
 
 class ClassifiedPolygonHazardBuildingFunction(
@@ -79,8 +78,10 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.prepare()
 
         # Value from layer's keywords
-        hazard_zone_attribute = get_value_from_layer_keyword(
-            'field', self.hazard)
+        try:
+            hazard_zone_attribute = self.hazard_keyword['field']
+        except KeyError as e:
+            raise KeywordNotFoundError(e)
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard

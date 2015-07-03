@@ -36,9 +36,8 @@ from safe.common.utilities import (
     create_label)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
-from safe.common.exceptions import ZeroImpactException
-from safe.impact_functions.core import (
-    get_value_from_layer_keyword, get_key_for_value)
+from safe.common.exceptions import ZeroImpactException, KeywordNotFoundError
+from safe.impact_functions.core import get_key_for_value
 
 __author__ = 'Rizky Maulana Nugraha'
 
@@ -164,10 +163,11 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         self.prepare()
 
         # Get parameters from layer's keywords
-        self.affected_field = get_value_from_layer_keyword(
-            'field', self.hazard)
-        self.value_map = get_value_from_layer_keyword(
-            'value_map', self.hazard)
+        try:
+            self.affected_field = self.hazard_keyword['field']
+            self.value_map = self.hazard_keyword['value_map']
+        except KeyError as e:
+            raise KeywordNotFoundError(e)
 
         # Get the IF parameters
         evacuation_percentage = self.parameters['evacuation_percentage'].value
