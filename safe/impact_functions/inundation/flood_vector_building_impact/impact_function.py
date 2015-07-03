@@ -117,8 +117,8 @@ class FloodPolygonBuildingFunction(
             message = tr(
                 'Field "%s" is not present in the attribute table of '
                 'the exposure layer. Please change the Building Type '
-                'Field parameter in the IF Option.') % (
-                self.structure_class_field)
+                'Field parameter in the IF Option.'
+            ) % self.structure_class_field
             raise GetDataError(message)
 
         # If target_field does not exist, add it:

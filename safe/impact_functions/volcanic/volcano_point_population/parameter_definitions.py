@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.utilities.i18n import tr
 
-from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.input_list_parameter import InputListParameter
 
 

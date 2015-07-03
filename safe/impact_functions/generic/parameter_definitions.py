@@ -4,7 +4,6 @@ from safe.impact_functions.unit_definitions import parameter_unit_generic
 from safe.utilities.i18n import tr
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.group_parameter import GroupParameter
-from safe_extras.parameters.string_parameter import StringParameter
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '11/06/15'

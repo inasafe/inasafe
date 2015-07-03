@@ -79,9 +79,9 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
                 TableRow(
                     tr('* People are considered to be affected if they are '
                        'within the area where the value of the hazard field ('
-                       '"%s") is "%s"') % (
-                        self.affected_field,
-                        ', '.join(self.value_map[self.wet]))))
+                       '"%s") is "%s"') %
+                    (self.affected_field,
+                     ', '.join(self.value_map[self.wet]))))
         else:
             table_body.append(
                 TableRow(

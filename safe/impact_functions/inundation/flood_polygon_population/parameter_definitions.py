@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.impact_functions.unit_definitions import parameter_unit_percentage
 from safe.utilities.i18n import tr
 
-from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.float_parameter import FloatParameter
 
 

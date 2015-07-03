@@ -26,7 +26,6 @@ from safe.impact_functions.impact_function_manager \
 from safe.test.utilities import get_qgis_app, test_data_path
 from safe.impact_functions.inundation.flood_polygon_population\
     .impact_function import FloodEvacuationVectorHazardFunction
-from safe_extras.parameters.string_parameter import StringParameter
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 

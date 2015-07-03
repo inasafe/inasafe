@@ -30,7 +30,6 @@ from math import ceil
 import numpy
 from collections import OrderedDict
 
-from safe.common.exceptions import KeywordNotFoundError
 from safe.defaults import default_minimum_needs
 
 LOGGER = logging.getLogger('InaSAFE')
