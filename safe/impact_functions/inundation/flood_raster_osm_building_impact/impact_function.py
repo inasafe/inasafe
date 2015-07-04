@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'lucernae'
 
 import logging
@@ -29,7 +30,7 @@ from safe.common.utilities import (
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-
+from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -113,9 +114,9 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
 
         # but use the old get_osm_building_usage
         try:
-            structure_class_field = self.exposure_keyword[
-                'structure_class_field']
-        except KeyError:
+            structure_class_field = self.exposure_keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
             structure_class_field = None
 
         # Building breakdown

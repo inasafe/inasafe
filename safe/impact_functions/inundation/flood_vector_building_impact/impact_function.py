@@ -31,7 +31,7 @@ from safe.impact_functions.inundation.flood_vector_building_impact.\
     metadata_definitions import FloodPolygonBuildingFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
-from safe.common.exceptions import GetDataError, KeywordNotFoundError
+from safe.common.exceptions import GetDataError
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
@@ -79,16 +79,13 @@ class FloodPolygonBuildingFunction(
         self.prepare()
 
         # Get parameters from layer's keywords
-        try:
-            self.affected_field = self.hazard_keyword['field']
-            self.value_map = self.hazard_keyword['value_map']
-            self.structure_class_field = self.exposure_keyword[
-                'structure_class_field']
-        except KeyError as e:
-            raise KeywordNotFoundError(e)
+        self.affected_field = self.hazard_keyword('field')
+        self.value_map = self.hazard_keyword('value_map')
+        self.structure_class_field = self.exposure_keyword(
+            'structure_class_field')
 
         # Extract data
-        hazard_layer = self.hazard    # Flood
+        hazard_layer = self.hazard  # Flood
         exposure_layer = self.exposure  # Building
 
         # Prepare Hazard Layer

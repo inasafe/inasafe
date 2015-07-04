@@ -28,8 +28,7 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import (
-    InaSAFEError, ZeroImpactException, KeywordNotFoundError)
+from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 
@@ -65,10 +64,7 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
         self.prepare()
 
         # Value from layer's keywords
-        try:
-            hazard_zone_attribute = self.hazard_keyword['field']
-        except KeyError as e:
-            raise KeywordNotFoundError(e)
+        hazard_zone_attribute = self.hazard_keyword('field')
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard

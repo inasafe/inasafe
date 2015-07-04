@@ -28,7 +28,7 @@ from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import get_utm_epsg
-from safe.common.exceptions import GetDataError, KeywordNotFoundError
+from safe.common.exceptions import GetDataError
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -73,12 +73,9 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         self.prepare()
 
         # Get parameters from layer's keywords
-        try:
-            self.affected_field = self.hazard_keyword['field']
-            self.value_map = self.hazard_keyword['value_map']
-            self.road_class_field = self.exposure_keyword['road_class_field']
-        except KeyError as e:
-            raise KeywordNotFoundError(e)
+        self.affected_field = self.hazard_keyword('field')
+        self.value_map = self.hazard_keyword('value_map')
+        self.road_class_field = self.exposure_keyword('road_class_field')
 
         # Extract data
         hazard_layer = self.hazard  # Flood

@@ -28,7 +28,6 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.common.exceptions import KeywordNotFoundError
 
 
 class VolcanoPointBuildingFunction(
@@ -87,10 +86,7 @@ class VolcanoPointBuildingFunction(
         radii = self.parameters['distances'].value
 
         # Get parameters from layer's keywords
-        try:
-            volcano_name_attribute = self.hazard_keyword['volcano_name_field']
-        except KeyError as e:
-            raise KeywordNotFoundError(e)
+        volcano_name_attribute = self.hazard_keyword('volcano_name_field')
 
         # Input checks
         if not self.hazard.is_point_data:

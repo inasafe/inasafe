@@ -31,7 +31,7 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import ZeroImpactException, KeywordNotFoundError
+from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters
 
@@ -73,10 +73,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
         radii = self.parameters['distances'].value
 
         # Get parameters from layer's keywords
-        try:
-            volcano_name_attribute = self.hazard_keyword['volcano_name_field']
-        except KeyError as e:
-            raise KeywordNotFoundError(e)
+        volcano_name_attribute = self.hazard_keyword('volcano_name_field')
 
         # Input checks
         if not self.hazard.is_point_data:

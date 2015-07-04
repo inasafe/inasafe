@@ -19,7 +19,7 @@ from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.impact_functions.volcanic.volcano_polygon_building\
     .metadata_definitions import VolcanoPolygonBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError, KeywordNotFoundError
+from safe.common.exceptions import InaSAFEError
 from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage)
@@ -81,11 +81,8 @@ class VolcanoPolygonBuildingFunction(
         self.prepare()
 
         # Get parameters from layer's keywords
-        try:
-            hazard_zone_attribute = self.hazard_keyword['field']
-            name_attribute = self.hazard_keyword['volcano_name_field']
-        except KeyError as e:
-            raise KeywordNotFoundError(e)
+        hazard_zone_attribute = self.hazard_keyword('field')
+        name_attribute = self.hazard_keyword('volcano_name_field')
 
         # Input checks
         if not self.hazard.is_polygon_data:

@@ -30,8 +30,7 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import (
-    InaSAFEError, ZeroImpactException, KeywordNotFoundError)
+from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters
 
@@ -65,11 +64,8 @@ class VolcanoPolygonPopulationFunction(ClassifiedVHContinuousRE):
         self.prepare()
 
         # Parameters
-        try:
-            hazard_zone_attribute = self.hazard_keyword['field']
-            name_attribute = self.hazard_keyword['volcano_name_field']
-        except KeyError as e:
-            raise KeywordNotFoundError(e)
+        hazard_zone_attribute = self.hazard_keyword('field')
+        name_attribute = self.hazard_keyword('volcano_name_field')
 
         nan_warning = False
         if has_no_data(self.exposure.get_data(nan=True)):

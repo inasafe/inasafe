@@ -27,6 +27,7 @@ from safe.common.utilities import get_osm_building_usage, get_attribute_value
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -131,9 +132,9 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         # Try to get the value from keyword, if not exist, it will not fail,
         # but use the old get_osm_building_usage
         try:
-            structure_class_field = self.exposure_keyword[
-                'structure_class_field']
-        except KeyError:
+            structure_class_field = self.exposure_keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
             structure_class_field = None
         attributes = interpolate_result.get_data()
 
