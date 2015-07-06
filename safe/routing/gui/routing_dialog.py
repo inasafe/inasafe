@@ -28,7 +28,7 @@ from qgis.core import (
     QgsCategorizedSymbolRendererV2,
     QgsVectorGradientColorRampV2,
     QgsGraduatedSymbolRendererV2)
-from PyQt4.QtGui import QDialog, QColor
+from PyQt4.QtGui import QDialog, QColor, QDialogButtonBox
 from PyQt4 import uic
 from PyQt4.QtCore import Qt, QVariant
 
@@ -66,6 +66,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
         self.keyword_io = KeywordIO()
         self.iface = iface
         self.populate_combo()
+        self.set_ok_button_status()
 
     def populate_combo(self):
         """Add layers to combos according to keywords."""
@@ -142,6 +143,38 @@ class RoutingDialog(QDialog, FORM_CLASS):
 
             elif layer_purpose == 'idp':
                 add_ordered_combo_item(self.cbo_idp_layer, title, source)
+
+    def validate(self):
+        """Helper method to evaluate the current state of the dialog.
+
+        This function will determine if it is appropriate for the OK button to
+        be enabled or not.
+
+        .. note:: The enabled state of the OK button on the dialog will
+           NOT be updated (set True or False) depending on the outcome of
+           the UI readiness tests performed - **only** True or False
+           will be returned by the function.
+
+        :returns: Boolean reflecting the results of the validation tests.
+        :rtype: bool
+        """
+        if self.cbo_hazard_layer.count() < 1:
+            return False
+
+        if self.cbo_idp_layer.count() < 1:
+            return False
+
+        if self.cbo_roads_layer.count() < 1:
+            return False
+
+        return True
+
+    def set_ok_button_status(self):
+        """Helper function to set the ok button status based on form validity.
+        """
+        button = self.button_box.button(QDialogButtonBox.Ok)
+        flag = self.validate()
+        button.setEnabled(flag)
 
     def get_hazard_layer(self):
         """Get the QgsMapLayer currently selected in the hazard combo.
