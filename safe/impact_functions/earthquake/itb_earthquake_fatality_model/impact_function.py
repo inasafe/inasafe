@@ -24,6 +24,7 @@ from safe.impact_functions.core import (
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     humanize_class,
+    format_int,
     create_classes,
     create_label,
     get_thousand_separator)
@@ -185,7 +186,7 @@ class ITBFatalityFunction(
                 'header': True
             },
             {
-                'content': tr('Total population: %s') % (
+                'content': tr('Total population: %s') % format_int(
                     population_rounding(self.total_population))
             },
             {
