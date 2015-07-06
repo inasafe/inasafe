@@ -54,45 +54,45 @@ class FloodEvacuationRasterHazardFunction(
     def notes(self):
         thresholds = self.parameters['thresholds'].value
         notes = [
-                {
-                    'content': tr('Notes'),
-                    'header': True
-                },
-                {
-                    'content': tr('Total population: %s') % population_rounding(
-                        self.total_population)
-                },
-                {
-                    'content': tr(
-                        '<sup>1</sup>People need evacuation if flood levels '
-                        'exceed %(eps).1f m') % {'eps': thresholds[-1]},
-                },
-                {
-                    'content': tr('How will we reach evacuated people?')
-                },
-                {
-                    'content': tr('How will we reach evacuated people?')
-                },
-                {
-                    'content': tr(
-                        'All values are rounded up to the nearest integer in '
-                        'order to avoid representing human lives as fractions.'),
-                },
-                {
-                    'content': tr(get_needs_provenance_value(self.parameters)),
-                },
-                {
-                    'content': tr(
-                        'The layers contained `no data`. This missing data was '
-                        'carried through to the impact layer.'),
-                    'condition': self.no_data_warning
-                },
-                {
-                    'content': tr(
-                        '`No data` values in the impact layer were treated as 0 '
-                        'when counting the affected or total population.'),
-                    'condition': self.no_data_warning
-                }
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr('Total population: %s') % population_rounding(
+                    self.total_population)
+            },
+            {
+                'content': tr(
+                    '<sup>1</sup>People need evacuation if flood levels '
+                    'exceed %(eps).1f m') % {'eps': thresholds[-1]},
+            },
+            {
+                'content': tr('How will we reach evacuated people?')
+            },
+            {
+                'content': tr('How will we reach evacuated people?')
+            },
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(get_needs_provenance_value(self.parameters)),
+            },
+            {
+                'content': tr(
+                    'The layers contained `no data`. This missing data was '
+                    'carried through to the impact layer.'),
+                'condition': self.no_data_warning
+            },
+            {
+                'content': tr(
+                    '`No data` values in the impact layer were treated as 0 '
+                    'when counting the affected or total population.'),
+                'condition': self.no_data_warning
+            }
         ]
         return notes
 
