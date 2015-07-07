@@ -16,6 +16,8 @@ __date__ = '05/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from collections import OrderedDict
+
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
@@ -199,7 +201,7 @@ class PopulationExposureReportMixin(ReportMixin):
     @property
     def affected_population(self):
         if not hasattr(self, '_affected_population'):
-            self._affected_population = {}
+            self._affected_population = OrderedDict()
         return self._affected_population
 
     @affected_population.setter
