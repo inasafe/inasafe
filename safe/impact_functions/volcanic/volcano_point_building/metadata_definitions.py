@@ -26,7 +26,8 @@ from safe.definitions import (
     exposure_structure,
     layer_mode_classified,
     volcano_name_field,
-    structure_class_field
+    structure_class_field,
+    hazard_category_single_event
 )
 
 
@@ -83,7 +84,10 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_point],
-                    'hazard_categories': [hazard_category_multiple_event],
+                    'hazard_categories': [
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
+                    ],
                     'hazard_types': [hazard_volcano],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
