@@ -92,7 +92,14 @@ class FloodEvacuationRasterHazardFunction(
                     '`No data` values in the impact layer were treated as 0 '
                     'when counting the affected or total population.'),
                 'condition': self.no_data_warning
-            }
+            },
+            # {
+            #     'content': tr(
+            #         'Population rounding is applied to all population '
+            #         'values, which may cause discrepancies when adding '
+            #         'values.'
+            #     )
+            # }
         ]
         return notes
 

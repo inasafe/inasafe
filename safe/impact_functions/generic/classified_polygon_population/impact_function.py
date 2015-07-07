@@ -79,11 +79,11 @@ class ClassifiedPolygonHazardPopulationFunction(
             # {
             #     'content': tr(
             #         'Population rounding is applied to all population '
-            #         'values, which may cause descrepencies when adding '
+            #         'values, which may cause discrepancies when adding '
             #         'values.'
             #     )
             # }
-         ]
+        ]
         return notes
 
     def run(self):
