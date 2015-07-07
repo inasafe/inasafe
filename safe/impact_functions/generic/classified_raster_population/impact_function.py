@@ -20,7 +20,6 @@ import itertools
 from safe.impact_functions.bases.classified_rh_continuous_re import \
     ClassifiedRHContinuousRE
 from safe.impact_functions.core import (
-    evacuated_population_needs,
     population_rounding,
     has_no_data)
 from safe.storage.raster import Raster
