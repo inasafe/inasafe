@@ -146,7 +146,7 @@ class InasafeGraph(Graph):
             idp_id = -1
             min_cost = -1
             for idp in idp_layer.getFeatures():
-                cost = self.cost_between(
+                cost = self.cost(
                     one_exit.geometry().asPoint(),
                     idp.geometry().asPoint(),
                     cost_strategy)
@@ -167,7 +167,7 @@ class InasafeGraph(Graph):
                 f.setGeometry(one_exit.geometry())
                 dp.addFeatures([f])
 
-                geom_route = self.route_between_geom(
+                geom_route = self.route_geom(
                     idp.geometry().asPoint(),
                     one_exit.geometry().asPoint(),
                     cost_strategy)

@@ -29,8 +29,6 @@ from processing.core.Processing import Processing
 from processing import runalg
 
 from safe.inasafe_processing.provider import InaSafeProvider
-from safe.inasafe_processing.geometry_tools.split_poly_to_lines_points import \
-    SplitPolygonsToLinesWithPoints
 from safe.common.utilities import unique_filename
 
 

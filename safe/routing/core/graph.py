@@ -277,15 +277,19 @@ class Graph(object):
         return self.get_vertex(id_vertex).point()
 
     def get_vertices_neighbours_out(self, id_vertex):
+        """Return a list of vertices which are directly connected to a vertex.
+
+        :param id_vertex: The vertex id.
+        :type id_vertex: int
+
+        :return The list of vertices.
+        :rtype list.
+        """
         vertex = self.get_vertex(id_vertex)
         vertices = []
         for id_arc in vertex.outArc():
             vertices.append(self.get_in_vertex_id(id_arc))
         return vertices
-
-    def nb_arcs_out(self, id_vertex):
-        vertex = self.get_vertex(id_vertex)
-        return len(vertex.outArc())
 
     '''
     SEARCHING VERTEX
@@ -365,11 +369,16 @@ class Graph(object):
             dijkstra = QgsGraphAnalyzer.dijkstra(
                 self.graph, vertex_id, criterion)
 
+            # Clean the dataset be removing infinite value.
+            # tree = [-1 if x == float('inf') else x for x in dijkstra[0]]
+            # cost = [-1 if x == float('inf') else x for x in dijkstra[1]]
+            # dijkstra = (tree, cost)
+
             self.dijkstra_results[vertex_id][cost_strategy] = dijkstra
 
         return self.dijkstra_results[vertex_id][cost_strategy]
 
-    def cost_between(self, start, end, cost_strategy='distance'):
+    def cost(self, start, end, cost_strategy='distance'):
         """Compute cost between two points.
 
         :type start QgsPoint or int or QgsGraphVertex
@@ -386,8 +395,22 @@ class Graph(object):
             cost = -1
         return cost
 
-    def route_between_geom(self, start, end, cost_strategy='distance'):
-        cost = self.cost_between(start, end, cost_strategy)
+    def route_geom(self, start, end, cost_strategy='distance'):
+        """Get the route as a multilinestrings geometry between two positions.
+
+        :param start: The start.
+        :type start: QgsPoint or int or QgsGraphVertex.
+
+        :param end: The end.
+        :type end: QgsPoint or int or QgsGraphVertex.
+
+        :param cost_strategy: The cost strategy to use.
+        :type cost_strategy: str
+
+        :return The route as a multilinestrings geometry.
+        :rtype QgsGeometry
+        """
+        cost = self.cost(start, end, cost_strategy)
         if cost < 0:
             raise GeoAlgorithmExecutionException('Path not found')
 
@@ -404,35 +427,26 @@ class Graph(object):
 
         return QgsGeometry().fromMultiPolyline(multigeometry)
 
-    def route_between(self, start, end, cost_strategy='distance'):
-        geom = self.route_between_geom(start, end, cost_strategy)
+    def route(self, start, end, cost_strategy='distance'):
+        """Compute the route between two positions according to a strategy.
+
+        :param start: The start.
+        :type start: QgsPoint or int or QgsGraphVertex.
+
+        :param end: The end.
+        :type end: QgsPoint or int or QgsGraphVertex.
+
+        :param cost_strategy: The cost strategy to use.
+        :type cost_strategy: str
+
+        :return A list composed of the geometry, real length and cost.
+        :rtype list
+        """
+
+        geom = self.route_geom(start, end, cost_strategy)
         distance = self.distance_area.measure(geom)
-        cost = self.cost_between(start, end, cost_strategy)
+        cost = self.cost(start, end, cost_strategy)
         return geom, distance, cost
-
-    def show_route_between(self, start, end, cost_strategy='distance'):
-        route = self.route_between(start, end, cost_strategy)
-        geom = route[0]
-        length = route[1]
-        cost = route[2]
-
-        srs = self.crs.toWkt()
-        route_layer = QgsVectorLayer(
-            'LineString?crs=' + srs, 'Route %s' % cost, 'memory')
-        data_provider = route_layer.dataProvider()
-
-        data_provider.addAttributes([
-            QgsField('length', QVariant.Double),
-            QgsField('cost', QVariant.Double)
-        ])
-        route_layer.updateFields()
-
-        feature = QgsFeature()
-        feature.setGeometry(geom)
-        feature.setAttributes([length, cost])
-        data_provider.addFeatures([feature])
-        data_provider.updateExtents()
-        QgsMapLayerRegistry.instance().addMapLayers([route_layer])
 
     def isochrone(self, start, cost, cost_strategy='distance'):
         """Compute isochrone"""
@@ -443,7 +457,12 @@ class Graph(object):
     '''
 
     def tarjan(self):
-        class StrongCC(object):
+        """Compute strongly connected components according to Tarjan.
+
+        :return List of strongly connected components.
+        :rtype list
+        """
+        class StrongConnectedComponent(object):
 
             def __init__(self):
                 self.graph = None
@@ -486,25 +505,35 @@ class Graph(object):
 
                 return self.connected_components
 
-        strongly_connected_components = StrongCC()
+        strongly_connected_components = StrongConnectedComponent()
         return strongly_connected_components(self)
 
-    def dfs(self, vertex_id, visited=None):
+    def deep_first_search(self, vertex_id, visited=None):
+        """Compute Deep Fist Search (DFS) algorithm on the graph.
 
+        :param vertex_id: The vertex id.
+        :type vertex_id: int
+
+        :return A list of vertex id.
+        :rtype list
+        """
         if visited is None:
             visited = []
 
         visited.append(vertex_id)
         for next_vertex in self.get_vertices_neighbours_out(vertex_id):
             if next_vertex not in visited:
-                self.dfs(next_vertex, visited)
+                self.deep_first_search(next_vertex, visited)
         return visited
 
     '''
     DEBUG
     '''
-    def show_vertices(self):
-        """This function adds a new layer in the map canvas to debug vertices.
+    def debug_vertices(self):
+        """Helper to debug vertices in a graph.
+
+        :return: The debug layer.
+        :rtype: QgsVectorLayer
         """
         srs = self.crs.toWkt()
         layer = QgsVectorLayer(
@@ -536,11 +565,13 @@ class Graph(object):
             feature.setGeometry(geom)
             layer_dp.addFeatures([feature])
         layer.updateExtents()
+        return layer
 
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
+    def debug_arcs(self):
+        """Helper to debug arcs in a graph.
 
-    def show_arcs(self):
-        """This function adds a new layer in the map canvas to debug arcs.
+        :return: The debug layer.
+        :rtype: QgsVectorLayer
         """
         srs = self.crs.toWkt()
         layer = QgsVectorLayer(
@@ -576,4 +607,4 @@ class Graph(object):
             dp.addFeatures([feature])
 
         layer.updateExtents()
-        QgsMapLayerRegistry.instance().addMapLayers([layer])
+        return layer
