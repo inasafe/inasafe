@@ -39,12 +39,14 @@ class AllocateEdges(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def __init__(self):
+        """Constructor."""
         self.lines_layer = None
         self.points_layer = None
         self.idx_points = None
         GeoAlgorithm.__init__(self)
 
     def defineCharacteristics(self):
+        """Setting algorithm parameters."""
         self.name = 'Allocate edges'
         self.group = 'Routing'
 
@@ -58,10 +60,18 @@ class AllocateEdges(GeoAlgorithm):
         self.addOutput(OutputVector(self.OUTPUT, 'Edges'))
 
     def getIcon(self):
+        """Set the icon."""
         icon = resources_path('img', 'icons', 'icon.svg')
         return QIcon(icon)
 
     def processAlgorithm(self, progress):
+        """Core algorithm.
+
+        :param progress: The progress bar.
+        :type progress: QProgressBar
+
+        :raise GeoAlgorithmExecutionException
+        """
         lines_layer = self.getParameterValue(self.LINES)
         self.lines_layer = getObjectFromUri(lines_layer)
         points_layer = self.getParameterValue(self.POINTS)

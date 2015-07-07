@@ -30,6 +30,7 @@ class InaSafeProvider(AlgorithmProvider):
     """InaSAFE provides some algorithms through Processing."""
 
     def __init__(self):
+        """Constructor."""
         AlgorithmProvider.__init__(self)
 
         self.activate = True

@@ -45,10 +45,12 @@ class AllocateExits(GeoAlgorithm):
     OUTPUT_ROUTE = 'ROUTE_LAYER'
 
     def __init__(self):
+        """Constructor."""
         self.strategies = ['distance', 'flood']
         GeoAlgorithm.__init__(self)
 
     def defineCharacteristics(self):
+        """Setting algorithm parameters."""
         self.name = 'Allocate exits'
         self.group = 'Routing'
 
@@ -81,10 +83,18 @@ class AllocateExits(GeoAlgorithm):
         self.addOutput(OutputVector(self.OUTPUT_ROUTE, 'Routes'))
 
     def getIcon(self):
+        """Set the icon."""
         icon = resources_path('img', 'icons', 'icon.svg')
         return QIcon(icon)
 
     def processAlgorithm(self, progress):
+        """Core algorithm.
+
+        :param progress: The progress bar.
+        :type progress: QProgressBar
+
+        :raise GeoAlgorithmExecutionException
+        """
         roads_layer = self.getParameterValue(self.ROADS)
         roads_layer = getObjectFromUri(roads_layer)
         index_cost_strategy = self.getParameterValue(self.STRATEGY)

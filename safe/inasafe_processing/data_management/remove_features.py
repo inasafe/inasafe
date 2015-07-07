@@ -16,13 +16,13 @@ from processing.core.GeoAlgorithm import GeoAlgorithm
 from processing.core.parameters import ParameterVector, ParameterTableField
 from processing.core.outputs import OutputVector
 from processing.tools.dataobjects import getObjectFromUri
-from processing.tools.vector import spatialindex, features
+from processing.tools.vector import features
 
 from safe.utilities.resources import resources_path
 
 
 class CleaningLayer(GeoAlgorithm):
-    """Cleaning a layer by removing features which ID are not a column."""
+    """Cleaning a layer by removing features which ID are not in a column."""
 
     SOURCE_LAYER = 'LAYER_SOURCE'
     DIRTY_LAYER = 'DIRTY_LAYER'
@@ -32,6 +32,7 @@ class CleaningLayer(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
+        """Setting algorithm parameters."""
         self.name = 'Removing unmatched features '
         self.group = 'Data management'
 
@@ -58,10 +59,18 @@ class CleaningLayer(GeoAlgorithm):
         self.addOutput(OutputVector(self.OUTPUT, 'Cleaned'))
 
     def getIcon(self):
+        """Set the icon."""
         icon = resources_path('img', 'icons', 'icon.svg')
         return QIcon(icon)
 
     def processAlgorithm(self, progress):
+        """Core algorithm.
+
+        :param progress: The progress bar.
+        :type progress: QProgressBar
+
+        :raise GeoAlgorithmExecutionException
+        """
         source_layer = self.getParameterValue(self.SOURCE_LAYER)
         source_layer = getObjectFromUri(source_layer)
         field_source_layer = self.getParameterValue(self.FIELD_SOURCE_LAYER)

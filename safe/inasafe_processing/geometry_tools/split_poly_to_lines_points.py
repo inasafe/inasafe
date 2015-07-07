@@ -43,6 +43,7 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
+        """Setting algorithm parameters."""
         self.name = 'Split polygons to lines'
         self.group = 'Geometry tools'
 
@@ -60,10 +61,18 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
         self.addOutput(OutputVector(self.OUTPUT, self.tr('Split')))
 
     def getIcon(self):
+        """Set the icon."""
         icon = resources_path('img', 'icons', 'icon.svg')
         return QIcon(icon)
 
     def processAlgorithm(self, progress):
+        """Core algorithm.
+
+        :param progress: The progress bar.
+        :type progress: QProgressBar
+
+        :raise GeoAlgorithmExecutionException
+        """
         layer_poly = dataobjects.getObjectFromUri(
             self.getParameterValue(self.POLYGONS_LAYER))
 

@@ -24,20 +24,24 @@ from safe.routing.core.middle import (
 class TestMiddle(unittest.TestCase):
 
     def test_get_distance(self):
+        """Test the middle of a segment."""
         self.assertEqual(distance((0, 0), (4, 0)), 4)
         self.assertEqual(distance((1, 1), (0, 0)), sqrt(2))
         self.assertEqual(distance((4, 4), (1, 1)), sqrt(18))
 
     def test_get_distances(self):
+        """Test sum length."""
         l = ((0, 0), (4, 0), (4, 4), (0, 4))
         self.assertEquals(sum(sum_distances(l)), 12)
 
     def test_get_point(self):
+        """Test to get a point between two points with a distance."""
         self.assertEquals(get_point((0, 0), (4, 0), 2), (2, 0))
         self.assertEquals(get_point((0, 0), (4, 0), 1), (1, 0))
         # self.assertEquals(get_point((1, 1), (4, 4), 1.5), (2.5, 2.5))
 
     def test_split_middle(self):
+        """Test to split a linestrings in the middle."""
         r = ([(0, 0), (4, 0), (4, 4)], [(4, 4), (0, 4), (0, 0)])
         l = [(0, 0), (4, 0), (4, 4), (0, 4), (0, 0)]
         self.assertEquals(split_middle(l), r)

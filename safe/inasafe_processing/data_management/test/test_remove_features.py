@@ -24,9 +24,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 LOGGER = logging.getLogger('InaSAFE')
 
-from PyQt4.QtCore import QVariant
-from qgis.core import \
-    QgsVectorLayer, QgsField, QgsFeature, QgsGeometry, QgsPoint
+from qgis.core import QgsVectorLayer
 from processing.core.Processing import Processing
 from processing import runalg
 

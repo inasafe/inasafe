@@ -53,4 +53,3 @@ if __name__ == '__main__':
     suite = unittest.makeSuite(ProviderTest, 'test')
     runner = unittest.TextTestRunner()
     runner.run(suite)
-

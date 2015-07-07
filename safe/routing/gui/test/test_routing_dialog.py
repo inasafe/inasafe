@@ -69,6 +69,7 @@ class RoutingDialogTest(unittest.TestCase):
         self.assertFalse(self.dialog.validate())
 
     def test_replace_value(self):
+        """Test if we can replace a value in a file."""
         file_path = unique_filename(suffix='.txt')
         f = open(file_path, 'w')
         f.write('foobarfoo')
@@ -82,6 +83,7 @@ class RoutingDialogTest(unittest.TestCase):
         remove(file_path)
 
     def test_processing_model(self):
+        """Test against the processing model."""
         routable_model = join(dirname(
             dirname(dirname(__file__))), 'models', 'inasafe_network.model')
 

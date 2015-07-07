@@ -42,6 +42,7 @@ class SnapPoints(GeoAlgorithm):
     OUTPUT = 'OUTPUT'
 
     def defineCharacteristics(self):
+        """Setting algorithm parameters."""
         self.name = 'Snap points to a layer (needs review)'
         self.group = 'Other geometry tools'
 
@@ -88,10 +89,18 @@ class SnapPoints(GeoAlgorithm):
         self.addOutput(OutputVector(self.OUTPUT, 'Snapped'))
 
     def getIcon(self):
+        """Set the icon."""
         icon = resources_path('img', 'icons', 'icon.svg')
         return QIcon(icon)
 
     def processAlgorithm(self, progress):
+        """Core algorithm.
+
+        :param progress: The progress bar.
+        :type progress: QProgressBar
+
+        :raise GeoAlgorithmExecutionException
+        """
         points_layer = self.getParameterValue(self.POINTS)
         points_layer = getObjectFromUri(points_layer)
         destination_layer = self.getParameterValue(self.LAYER)

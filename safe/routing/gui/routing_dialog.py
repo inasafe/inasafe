@@ -19,7 +19,6 @@ from os.path import dirname, join, splitext
 from processing.core.Processing import Processing
 from processing.modeler import ModelerAlgorithm
 from processing import runalg
-from qgis.gui import QgsMapToolPan
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsVectorLayer,
@@ -30,7 +29,7 @@ from qgis.core import (
     QgsGraduatedSymbolRendererV2)
 from PyQt4.QtGui import QDialog, QColor, QDialogButtonBox
 from PyQt4 import uic
-from PyQt4.QtCore import Qt, QVariant
+from PyQt4.QtCore import Qt
 
 from safe.common.exceptions import (
     KeywordNotFoundError,

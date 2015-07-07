@@ -24,7 +24,6 @@ from qgis.core import (
     QgsGeometry,
     QgsFeature,
     QgsPoint,
-    QgsMapLayerRegistry,
     QgsField
 )
 
@@ -106,9 +105,9 @@ class Graph(object):
         self.distance_area = None
         self.build()
 
-    '''
+    """
     BUILDER
-    '''
+    """
     def build(self):
         """Build the graph."""
         self.builder = QgsGraphBuilder(
@@ -146,9 +145,9 @@ class Graph(object):
         else:
             return False
 
-    '''
+    """
     ITERATOR
-    '''
+    """
     def get_vertices(self):
         """Get a generator to loop over all vertices.
 
@@ -185,9 +184,9 @@ class Graph(object):
         nb_edges = self.graph.arcCount()
         return xrange(0, nb_edges)
 
-    '''
+    """
     ARC
-    '''
+    """
     def arc_count(self):
         """Get the number of arc.
 
@@ -245,9 +244,9 @@ class Graph(object):
         linestring = [point_start, point_end]
         return linestring
 
-    '''
+    """
     VERTEX
-    '''
+    """
     def vertex_count(self):
         """Get the number of vertices.
 
@@ -291,9 +290,9 @@ class Graph(object):
             vertices.append(self.get_in_vertex_id(id_arc))
         return vertices
 
-    '''
+    """
     SEARCHING VERTEX
-    '''
+    """
     def get_nearest_vertex_id(self, point):
         """Get the nearest vertex id.
 
@@ -342,9 +341,9 @@ class Graph(object):
 
         return closest_vertex
 
-    '''
+    """
     ROUTING
-    '''
+    """
     def dijkstra(self, start, cost_strategy='distance'):
         """Compute dijkstra from a start point.
 
@@ -452,10 +451,9 @@ class Graph(object):
         """Compute isochrone"""
         pass
 
-    '''
+    """
     ANALYSE
-    '''
-
+    """
     def tarjan(self):
         """Compute strongly connected components according to Tarjan.
 
@@ -526,9 +524,9 @@ class Graph(object):
                 self.deep_first_search(next_vertex, visited)
         return visited
 
-    '''
+    """
     DEBUG
-    '''
+    """
     def debug_vertices(self):
         """Helper to debug vertices in a graph.
 
