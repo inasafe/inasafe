@@ -181,6 +181,32 @@
                     }
                 }, 
                 "class": "processing.modeler.ModelerAlgorithm.ModelerParameter"
+            }, 
+            "NUMBER_TOLERANCE": {
+                "values": {
+                    "pos": {
+                        "values": {
+                            "y": 550.0, 
+                            "x": 1057.0
+                        }, 
+                        "class": "point"
+                    }, 
+                    "param": {
+                        "values": {
+                            "isAdvanced": false, 
+                            "name": "NUMBER_TOLERANCE", 
+                            "min": 0, 
+                            "default": 0, 
+                            "max": null, 
+                            "value": null, 
+                            "hidden": false, 
+                            "isInteger": true, 
+                            "description": "tolerance"
+                        }, 
+                        "class": "processing.core.parameters.ParameterNumber"
+                    }
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.ModelerParameter"
             }
         }, 
         "helpContent": {}, 
@@ -748,8 +774,8 @@
                                 "description": "Routes", 
                                 "pos": {
                                     "values": {
-                                        "y": 665.3273875, 
-                                        "x": 1677.6495249999998
+                                        "y": 641.3273875, 
+                                        "x": 1587.6495249999998
                                     }, 
                                     "class": "point"
                                 }
@@ -761,8 +787,8 @@
                                 "description": "Cost", 
                                 "pos": {
                                     "values": {
-                                        "y": 738.3273875, 
-                                        "x": 1678.6495249999998
+                                        "y": 671.3273875, 
+                                        "x": 1587.6495249999998
                                     }, 
                                     "class": "point"
                                 }
@@ -770,6 +796,7 @@
                             "class": "processing.modeler.ModelerAlgorithm.ModelerOutput"
                         }
                     }, 
+                    "outputsFolded": true, 
                     "pos": {
                         "values": {
                             "y": 596.3273875, 
@@ -777,7 +804,6 @@
                         }, 
                         "class": "point"
                     }, 
-                    "outputsFolded": false, 
                     "dependencies": [], 
                     "params": {
                         "IDP_ID": "idp_id", 
@@ -803,6 +829,12 @@
                                 "output": "OUTPUT"
                             }, 
                             "class": "processing.modeler.ModelerAlgorithm.ValueFromOutput"
+                        }, 
+                        "TOLERANCE": {
+                            "values": {
+                                "name": "NUMBER_TOLERANCE"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromInput"
                         }
                     }, 
                     "active": true, 
@@ -866,7 +898,6 @@
                     "name": "QGISFIELDCALCULATOR_3", 
                     "paramsFolded": true, 
                     "outputs": {}, 
-                    "outputsFolded": true, 
                     "pos": {
                         "values": {
                             "y": 163.147375, 
@@ -874,6 +905,7 @@
                         }, 
                         "class": "point"
                     }, 
+                    "outputsFolded": true, 
                     "dependencies": [], 
                     "params": {
                         "FIELD_TYPE": 1, 

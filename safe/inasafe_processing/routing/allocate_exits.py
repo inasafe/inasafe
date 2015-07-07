@@ -22,6 +22,7 @@ from processing.core.GeoAlgorithmExecutionException import \
 from processing.core.parameters import (
     ParameterVector,
     ParameterTableField,
+    ParameterNumber,
     ParameterSelection)
 from processing.core.outputs import OutputVector
 from processing.tools.dataobjects import getObjectFromUri
@@ -34,6 +35,7 @@ class AllocateExits(GeoAlgorithm):
     """Allocate an IDP to each exits."""
 
     ROADS = 'ROADS'
+    TOLERANCE = 'TOLERANCE'
     STRATEGY = 'STRATEGY'
     COEFFICIENT_FIELD = 'FIELD'
     EXITS = 'EXITS'
@@ -52,6 +54,8 @@ class AllocateExits(GeoAlgorithm):
 
         self.addParameter(ParameterVector(
             self.ROADS, 'Roads', [ParameterVector.VECTOR_TYPE_LINE], False))
+        self.addParameter(ParameterNumber(
+            self.TOLERANCE, 'Topology tolerance', 0, default=0.00000))
         self.addParameter(ParameterSelection(
             self.STRATEGY, 'Strategy', self.strategies))
         self.addParameter(ParameterTableField(
@@ -91,6 +95,7 @@ class AllocateExits(GeoAlgorithm):
         else:
             cost_strategy = None
 
+        topology_tolerance = self.getParameterValue(self.TOLERANCE)
         coefficient_field = self.getParameterValue(self.COEFFICIENT_FIELD)
         coefficient_field = roads_layer.fieldNameIndex(coefficient_field)
         idp_id_field = self.getParameterValue(self.IDP_ID)
@@ -118,6 +123,7 @@ class AllocateExits(GeoAlgorithm):
             graph = InasafeGraph(
                 roads_layer,
                 tied_points,
+                topology_tolerance=topology_tolerance,
                 coefficient_field_id=coefficient_field)
         memory_exit_layer, memory_route_layer = graph.allocate_exits(
             idp_layer, idp_id_field, exits_layer, cost_strategy)

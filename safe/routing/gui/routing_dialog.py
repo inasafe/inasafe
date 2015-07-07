@@ -298,6 +298,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
         flood_layer = self.get_hazard_layer()
         idp_layer = self.get_idp_layer()
 
+        topology_tolerance = self.spin_topology_tolerance.value()
         coefficient_flood_edge = self.spin_flood_edge.value()
         coefficient_road = self.spin_road.value()
 
@@ -328,6 +329,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
             wet_value,
             coefficient_road,
             coefficient_flood_edge,
+            topology_tolerance,
             file_name_edge,
             file_name_idp,
             file_name_route,
