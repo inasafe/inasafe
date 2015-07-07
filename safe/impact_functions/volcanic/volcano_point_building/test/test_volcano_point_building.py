@@ -62,21 +62,28 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """TestVolcanoPointBuildingFunction: Test filtering IF"""
         hazard_keywords = {
-            'title': 'merapi',
+            'volcano_name_field': 'NAME',
+            'hazard_category': 'multiple_event',
+            'keyword_version': 3.2,
+            'title': 'Volcano Point',
+            'hazard': 'volcano',
+            'source': 'smithsonian',
+            'layer_geometry': 'point',
             'layer_purpose': 'hazard',
             'layer_mode': 'classified',
-            'layer_geometry': 'point',
-            'hazard': 'volcano',
-            'hazard_category': 'multiple_event',
-            'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 
         exposure_keywords = {
+            'license': 'Open Data Commons Open Database License (ODbL)',
+            'keyword_version': 3.2,
+            'structure_class_field': 'TYPE',
+            'title': 'Buildings',
+            'layer_geometry': 'polygon',
+            'source': 'OpenStreetMap - www.openstreetmap.org',
+            'date': '26-03-2015 14:03',
             'layer_purpose': 'exposure',
             'layer_mode': 'classified',
-            'layer_geometry': 'polygon',
-            'exposure': 'structure'
-        }
+            'exposure': 'structure'}
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)
