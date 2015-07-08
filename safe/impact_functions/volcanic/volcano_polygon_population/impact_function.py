@@ -182,7 +182,7 @@ class VolcanoPolygonPopulationFunction(ClassifiedVHContinuousRE):
 
         table_body.extend([
             TableRow(tr(
-                'Map shows the number of people affected in each of volcano '
+                'Map shows the number of people affected in each volcano '
                 'hazard zone.'))])
 
         total_needs = evacuated_population_needs(
