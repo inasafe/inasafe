@@ -88,10 +88,14 @@ layer_mode_continuous = {
         'values representing a continuously varying phenomenon. '
         'For example flood depth is a continuous value from 0 to the maximum '
         'reported depth during a flood. '
+        'Raster exposure data such as population data are also continuous. '
+        'In this example the cell values represent the number of people in '
+        'cell.\n'
         'Raster data is considered to be continuous by default and you '
         'should explicitly indicate that it is classified if each cell in the '
         'raster represents a discrete class (e.g. low depth = 1, medium depth '
-        '= 2, high depth = 3).'),
+        '= 2, high depth = 3).'
+    ),
 }
 layer_mode_classified = {
     'key': 'classified',
@@ -99,16 +103,20 @@ layer_mode_classified = {
     'description': tr(
         '<b>Classified</b> data can be used for either hazard or exposure '
         'data and can be used for both raster and vector layer types where '
-        'the attribute values represent a classified or coded value. '
+        'the attribute values represent a classified or coded value. \n'
         'For example, classified values in a flood raster data set might '
         'represent discrete classes where a value of 1 might represent the '
         'low inundation class, a value of 2 might represent the medium '
         'inundation class and a value of 3 might represent the '
-        'high inundation class.'
-        'Classified values in a vector Volcano data set might represent '
-        'discrete clases where a value of I might represent low volcanic '
-        'hazard, a value of II might represent medium volcanic hazard and '
-        'a value of III  might represent a high volcanic hazard. '
+        'high inundation class.\n'
+        'Classified values in a vector (polygon) Volcano data set might '
+        'represent discrete classes where a value of I might represent low '
+        'volcanic hazard, a value of II might represent medium volcanic hazard '
+        'and a value of III  might represent a high volcanic hazard. \n'
+        'In a vector (point) Volcano data the name field in the data might be '
+        'used to classify the data. '
+        'Classified values in a vector exposure data set might include '
+        'building type or road type. '
     ),
 }
 
@@ -186,8 +194,8 @@ hazard_category_single_event = {
     'key': 'single_event',
     'name': tr('Single Event'),
     'description': tr(
-        'A <b>single hazard event</b> can be based on either a specific event '
-        'that has happened in the past, for example a flood like Jakarta '
+        '<b>Single event</b> hazard data can be based on either a specific  '
+        'event that has happened in the past, for example a flood like Jakarta '
         '2013, or a possible event such as the tsunami that results from an '
         'earthquake near Bima that might happen in the future.')
 }
@@ -196,9 +204,9 @@ hazard_category_multiple_event = {
     'key': 'multiple_event',
     'name': tr('Multiple Event'),
     'description': tr(
-        'A <b>multiple hazard event</b> data can be based on historical '
+        '<b>Multiple event</b> hazard data can be based on historical '
         'observations such as a hazard map of all observed volcanic '
-        ' deposits around a volcano. '
+        'deposits around a volcano. \n'
         'This type of hazard data shows those locations that might be '
         'impacted by a volcanic eruption in the future . Another example '
         'might be a probabilistic hazard model that shows the likelihood of a '
@@ -323,7 +331,7 @@ exposure_people_in_building = {
     'description': tr(
         'The <b>people in buildings</b> exposure data is an experimental '
         'data set that assigns the population of a specific administrative '
-        'area to the buildings with a residential function in that area.'
+        'area to the buildings with a residential function in that area.\n'
         'The process of assigning people to buildings assumes that all people '
         'and buildings in the area are mapped. There are no InaSAFE impact '
         'functions that use this exposure data yet.')
@@ -417,7 +425,7 @@ unit_metres = {
     'name': tr('Metres'),
     'description': tr(
         '<b>Metres</b> are a metric unit of measure. There are 100 '
-        'centimetres in 1 meter.'),
+        'centimetres in 1 metre.'),
 }
 
 unit_millimetres = {
@@ -461,7 +469,7 @@ generic_vector_hazard_classes = {
     'name': tr('Generic classes'),
     'description': tr(
         'This is a ternary description for an area. The area may have either '
-        '<b>low</b>, <b>medium</b>, or <b>high</b> impact from the '
+        '<b>low</b>, <b>medium</b>, or <b>high</b> classification for the '
         'hazard.'),
     'default_attribute': 'affected',
     'classes': [
@@ -698,15 +706,15 @@ density_exposure_unit = {
     'key': 'density',
     'name': tr('Density'),
     'description': tr(
-        'Density of people (or any other object) per cell.')
+        'Number of people (or any other object) in a specific area.')
 }
 
 exposure_unit = {
     'key': 'exposure_unit',
     'name': tr('Exposure Unit'),
     'description': tr(
-        'Exposure unit defines what is the unit for the exposure, for example '
-        'people can have count unit or density unit.'),
+        'Exposure unit defines the unit for the exposure, for example '
+        'people can either be measured as count or density (count per area.'),
     'types': [
         count_exposure_unit,
         density_exposure_unit
