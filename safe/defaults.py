@@ -181,8 +181,8 @@ def age_postprocessor():
     age.must_scroll = False
     age.help_text = tr('Age ratios breakdown.')
     age.description = tr(
-        'Check this option if you wish to calculate the age ratio breakdown on '
-        'the affected population. '
+        'Check this option if you wish to calculate the age ratio breakdown '
+        'for the affected population. '
     )
 
     unit_ratio = Unit()
