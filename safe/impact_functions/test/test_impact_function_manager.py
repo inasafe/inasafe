@@ -146,7 +146,10 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         hazard_categories = impact_function_manager.\
             hazard_categories_for_layer('point')
-        expected = [hazard_category_multiple_event]
+        expected = [
+            hazard_category_multiple_event,
+            hazard_category_single_event
+        ]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function_manager.\
@@ -179,7 +182,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         hazards = impact_function_manager.hazards_for_layer(
             'point', 'single_event')
-        expected = []
+        expected = [hazard_volcano]
         self.assertItemsEqual(hazards, expected)
 
     def test_exposures_for_layer(self):
