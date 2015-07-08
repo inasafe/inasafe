@@ -26,7 +26,8 @@ import tempfile
 import shutil
 import os
 
-from PyQt4.QtCore import QObject, pyqtSignal
+from PyQt4.QtCore import QObject, pyqtSignal, QVariant, QByteArray, QUrl
+from PyQt4.QtNetwork import QNetworkReply
 
 from safe.utilities.osm_downloader import fetch_zip, extract_zip
 from safe.test.utilities import test_data_path, get_qgis_app
