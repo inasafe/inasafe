@@ -172,13 +172,14 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[hazard_category: single_event
-title: Tsunami
+<![CDATA[continuous_hazard_unit: metres
 hazard: tsunami
-continuous_hazard_unit: metres
+hazard_category: single_event
+keyword_version: 3.2
 layer_geometry: raster
-layer_purpose: hazard
 layer_mode: continuous
+layer_purpose: hazard
+title: Tsunami
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

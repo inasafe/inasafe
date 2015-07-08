@@ -7,6 +7,7 @@ import shutil
 
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
+from safe.definitions import inasafe_keyword_version
 from safe.common.utilities import unique_filename
 from safe.utilities.utilities import read_file_keywords
 from safe.test.utilities import (
@@ -56,16 +57,18 @@ class KeywordIOTest(unittest.TestCase):
             'continuous_hazard_unit': 'metres',
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
-            'layer_mode': 'continuous'
+            'layer_mode': 'continuous',
+            'keyword_version': inasafe_keyword_version
         }
 
         # Vector Layer keywords
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
+            'keyword_version': inasafe_keyword_version,
+            'structure_class_field': 'FLOODED',
             'title': 'buildings_osm_4326',
-            'datatype': 'osm',
-            'purpose': 'dki',
+            'layer_geometry': 'polygon',
             'layer_purpose': 'exposure',
             'layer_mode': 'classified',
             'exposure': 'structure'
@@ -189,7 +192,8 @@ class KeywordIOTest(unittest.TestCase):
             'test': 'TEST',
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
-            'layer_mode': 'continuous'
+            'layer_mode': 'continuous',
+            'keyword_version': inasafe_keyword_version
         }
         message = 'Got:\n%s\nExpected:\n%s' % (keywords, expected_keywords)
         self.assertDictEqual(keywords, expected_keywords, message)

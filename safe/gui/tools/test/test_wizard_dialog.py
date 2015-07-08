@@ -45,6 +45,7 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard_dialog
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.definitions import inasafe_keyword_version
 from safe.gui.tools.wizard_dialog import (
     WizardDialog,
     step_kw_source,
@@ -176,7 +177,8 @@ class WizardDialogTest(unittest.TestCase):
                 'flood_vector_hazard_classes',
             'value_map': {'wet': ['YES'], 'dry': ['NO']},
             'source': 'some source',
-            'title': 'some title'
+            'title': 'some title',
+            'keyword_version': inasafe_keyword_version
         }
 
         layer = clone_shp_layer(
@@ -892,7 +894,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to hazard category
 
-        expected_hazard_categories = ['Multiple Event']
+        expected_hazard_categories = ['Multiple Event', 'Single Event']
         self.check_list(expected_hazard_categories, dialog.lstHazardCategories)
 
         self.check_current_text('Multiple Event', dialog.lstHazardCategories)
