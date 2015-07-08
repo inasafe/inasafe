@@ -105,6 +105,7 @@ class Graph(object):
         self.distance_area = None
         self.build()
 
+    # pylint: disable=pointless-string-statement
     """
     BUILDER
     """
@@ -145,6 +146,7 @@ class Graph(object):
         else:
             return False
 
+    # pylint: disable=pointless-string-statement
     """
     ITERATOR
     """
@@ -184,6 +186,7 @@ class Graph(object):
         nb_edges = self.graph.arcCount()
         return xrange(0, nb_edges)
 
+    # pylint: disable=pointless-string-statement
     """
     ARC
     """
@@ -244,6 +247,7 @@ class Graph(object):
         linestring = [point_start, point_end]
         return linestring
 
+    # pylint: disable=pointless-string-statement
     """
     VERTEX
     """
@@ -290,6 +294,7 @@ class Graph(object):
             vertices.append(self.get_in_vertex_id(id_arc))
         return vertices
 
+    # pylint: disable=pointless-string-statement
     """
     SEARCHING VERTEX
     """
@@ -341,6 +346,7 @@ class Graph(object):
 
         return closest_vertex
 
+    # pylint: disable=pointless-string-statement
     """
     ROUTING
     """
@@ -388,7 +394,7 @@ class Graph(object):
         """
         vertex_start_id = self.get_nearest_vertex_id(start)
         vertex_stop_id = self.get_nearest_vertex_id(end)
-        tree, cost = self.dijkstra(vertex_start_id, cost_strategy)
+        _, cost = self.dijkstra(vertex_start_id, cost_strategy)
         cost = cost[vertex_stop_id]
         if cost == float('inf'):
             cost = -1
@@ -451,6 +457,7 @@ class Graph(object):
         """Compute isochrone"""
         pass
 
+    # pylint: disable=pointless-string-statement
     """
     ANALYSE
     """
@@ -524,6 +531,7 @@ class Graph(object):
                 self.deep_first_search(next_vertex, visited)
         return visited
 
+    # pylint: disable=pointless-string-statement
     """
     DEBUG
     """

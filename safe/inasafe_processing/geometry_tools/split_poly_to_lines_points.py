@@ -65,6 +65,7 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
         icon = resources_path('img', 'icons', 'icon.svg')
         return QIcon(icon)
 
+    # pylint: disable=arguments-differ
     def processAlgorithm(self, progress):
         """Core algorithm.
 
@@ -125,7 +126,7 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
 
                 # Getting a list of QgsPoint which will cut this polygon.
                 list_point = [
-                    point for point, id in cutting.iteritems() if id == f.id()]
+                    pt for pt, pt_id in cutting.iteritems() if pt_id == f.id()]
 
                 new_geometries = []
                 for i, point in enumerate(list_point):

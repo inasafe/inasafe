@@ -12,7 +12,6 @@ Contact : etienne@kartoza.com
 """
 
 from PyQt4.QtGui import QIcon
-from qgis.utils import iface
 from qgis.core import (
     QgsVectorFileWriter,
     QGis)
@@ -87,6 +86,7 @@ class AllocateExits(GeoAlgorithm):
         icon = resources_path('img', 'icons', 'icon.svg')
         return QIcon(icon)
 
+    # pylint: disable=arguments-differ
     def processAlgorithm(self, progress):
         """Core algorithm.
 

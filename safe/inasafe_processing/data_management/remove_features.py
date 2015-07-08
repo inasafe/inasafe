@@ -63,6 +63,7 @@ class CleaningLayer(GeoAlgorithm):
         icon = resources_path('img', 'icons', 'icon.svg')
         return QIcon(icon)
 
+    # pylint: disable=arguments-differ
     def processAlgorithm(self, progress):
         """Core algorithm.
 

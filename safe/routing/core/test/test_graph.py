@@ -13,7 +13,7 @@ Contact : etienne@kartoza.com
 
 import unittest
 import logging
-from types import GeneratorType, IntType, XRangeType
+from types import GeneratorType, XRangeType
 
 from safe.test.utilities import test_data_path, get_qgis_app
 
@@ -24,13 +24,11 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 from qgis.core import QgsVectorLayer, QGis, QgsPoint, QgsGeometry
-from qgis.networkanalysis import QgsGraphVertex
 from processing.core.GeoAlgorithmExecutionException import \
     GeoAlgorithmExecutionException
 
 from safe.routing.core.graph import Graph
 from safe.routing.core.multiply_properter import MultiplyProperty
-from safe.test.utilities import compare_wkt
 
 
 class GraphTest(unittest.TestCase):
@@ -173,6 +171,6 @@ class GraphTest(unittest.TestCase):
         self.assertEqual(provider.featureCount(), 928)
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(SplitPolyToLinesTest, 'test')
+    suite = unittest.makeSuite(GraphTest, 'test')
     runner = unittest.TextTestRunner()
     runner.run(suite)

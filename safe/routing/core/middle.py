@@ -11,6 +11,7 @@ Contact : etienne@kartoza.com
      (at your option) any later version.
 """
 
+# pylint: disable=redefined-builtin
 from math import sqrt, pow, cos, sin, atan2, pi
 
 

@@ -13,7 +13,14 @@ Contact : etienne@kartoza.com
 
 from PyQt4.QtGui import QIcon
 from PyQt4.QtCore import QVariant
-from qgis.core import QGis, QgsFeature, QgsGeometry, QgsField, QgsSnappingUtils
+from qgis.core import (
+    QGis,
+    QgsFeature,
+    QgsGeometry,
+    QgsField,
+    QgsSnappingUtils,
+    QgsTolerance,
+    QgsSnapper)
 from processing.core.GeoAlgorithm import GeoAlgorithm
 from processing.core.GeoAlgorithmExecutionException import \
     GeoAlgorithmExecutionException
@@ -93,6 +100,7 @@ class SnapPoints(GeoAlgorithm):
         icon = resources_path('img', 'icons', 'icon.svg')
         return QIcon(icon)
 
+    # pylint: disable=arguments-differ
     def processAlgorithm(self, progress):
         """Core algorithm.
 

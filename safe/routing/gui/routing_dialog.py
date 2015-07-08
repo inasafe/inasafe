@@ -32,12 +32,11 @@ from PyQt4 import uic
 from PyQt4.QtCore import Qt
 
 from safe.common.exceptions import (
-    KeywordNotFoundError,
+    UnsupportedProviderError,
     NoKeywordsFoundError)
-from safe.utilities.qgis_utilities import display_information_message_box
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import add_ordered_combo_item
-from safe.common.utilities import temp_dir, unique_filename
+from safe.common.utilities import unique_filename
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -353,9 +352,9 @@ class RoutingDialog(QDialog, FORM_CLASS):
         new_idp_layer = QgsVectorLayer(file_name_idp, 'IDP', 'ogr')
         id_field_index = new_idp_layer.dataProvider().fieldNameIndex('id')
         for feature in new_idp_layer.getFeatures():
-            id = feature.attributes()[id_field_index]
-            if id not in list_idp:
-                list_idp[id] = (self.random_color(), id)
+            feature_id = feature.attributes()[id_field_index]
+            if feature_id not in list_idp:
+                list_idp[feature_id] = (self.random_color(), feature_id)
 
         # Styling the IDP layer.
         categories = []

@@ -14,7 +14,7 @@ Contact : etienne@kartoza.com
 import unittest
 import logging
 
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import get_qgis_app
 
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
