@@ -273,7 +273,7 @@ class VolcanoPolygonPopulationFunction(ClassifiedVHContinuousRE):
             style_type='rasterStyle')
 
         # For printing map purpose
-        map_title = tr('People affected by volcano hazard zones')
+        map_title = tr('People affected by Volcano Hazard Zones')
         legend_notes = tr('Thousand separator is represented by  %s' %
                           get_thousand_separator())
         legend_units = tr('(people per cell)')
