@@ -12,9 +12,7 @@ Contact : etienne@kartoza.com
 """
 
 from PyQt4.QtGui import QIcon
-from qgis.core import (
-    QgsVectorFileWriter,
-    QGis)
+from qgis.core import QGis
 from processing.core.GeoAlgorithm import GeoAlgorithm
 from processing.core.GeoAlgorithmExecutionException import \
     GeoAlgorithmExecutionException
@@ -118,9 +116,6 @@ class AllocateExits(GeoAlgorithm):
         if coefficient_field < 0 and cost_strategy != 'distance':
             raise GeoAlgorithmExecutionException('Invalid cost and field')
 
-        output_exits = self.getOutputValue(self.OUTPUT_EXITS)
-        output_routes = self.getOutputValue(self.OUTPUT_ROUTE)
-
         tied_points = []
         for f in idp_layer.getFeatures():
             tied_points.append(f.geometry().asPoint())
@@ -138,9 +133,7 @@ class AllocateExits(GeoAlgorithm):
         memory_exit_layer, memory_route_layer = graph.allocate_exits(
             idp_layer, idp_id_field, exits_layer, cost_strategy)
 
-        exit_layer = QgsVectorFileWriter(
-            output_exits,
-            None,
+        exit_layer = self.getOutputFromName(self.OUTPUT_EXITS).getVectorWriter(
             memory_exit_layer.dataProvider().fields(),
             QGis.WKBPoint,
             roads_layer.crs()
@@ -151,15 +144,18 @@ class AllocateExits(GeoAlgorithm):
 
         del exit_layer
 
-        route_layer = QgsVectorFileWriter(
-            output_routes,
-            None,
-            memory_route_layer.dataProvider().fields(),
-            QGis.WKBMultiLineString,
-            roads_layer.crs()
-        )
+        progress.setPercentage(50)
+
+        route_layer = self.getOutputFromName(
+            self.OUTPUT_ROUTE).getVectorWriter(
+                memory_route_layer.dataProvider().fields(),
+                QGis.WKBMultiLineString,
+                roads_layer.crs()
+            )
 
         for feature in memory_route_layer.getFeatures():
             route_layer.addFeature(feature)
 
         del route_layer
+
+        progress.setPercentage(100)

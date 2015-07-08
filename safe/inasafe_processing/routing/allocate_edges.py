@@ -89,7 +89,11 @@ class AllocateEdges(GeoAlgorithm):
 
         self.idx_points = spatialindex(self.points_layer)
 
-        for edge in features(self.lines_layer):
+        selection = features(self.lines_layer)
+        current = 0
+        total = 100.0 / float(len(selection))
+
+        for edge in selection:
             geometry = edge.geometry()
 
             # noinspection PyCallByClass
@@ -117,6 +121,9 @@ class AllocateEdges(GeoAlgorithm):
                     # noinspection PyCallByClass
                     f.setGeometry(QgsGeometry.fromPolyline(new_geom))
                     writer.addFeature(f)
+
+            current += 1
+            progress.setPercentage(int(current * total))
 
         del writer
 

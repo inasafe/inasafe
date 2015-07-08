@@ -156,7 +156,11 @@ class SnapPoints(GeoAlgorithm):
         snapper.setSnapToMapMode(QgsSnappingUtils.SnapAdvanced)
         snapper.setSnapOnIntersections(intersections)
 
-        for feature in vector.features(points_layer):
+        selection = vector.features(points_layer)
+        current = 0
+        total = 100.0 / float(len(selection))
+
+        for feature in selection:
             f = QgsFeature()
             attributes = feature.attributes()
             result = snapper.snapToMap(feature.geometry().asPoint())
@@ -171,4 +175,8 @@ class SnapPoints(GeoAlgorithm):
                     attributes.append('False')
             f.setAttributes(attributes)
             writer.addFeature(f)
+
+            current += 1
+            progress.setPercentage(int(current * total))
+
         del writer

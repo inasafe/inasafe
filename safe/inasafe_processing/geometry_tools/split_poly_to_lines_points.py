@@ -89,7 +89,11 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
 
         # cuttings : dict QgsPoint : id
         cutting = {}
-        for f in features(points_layer):
+        selection = features(points_layer)
+        current = 0
+        total = 50.0 / float(len(selection))
+
+        for f in selection:
             point = f.geometry().asPoint()
             results = polygons_spatial_index.nearestNeighbor(point, 5)
             minimum = None
@@ -103,7 +107,14 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
                     f_id = poly.id()
             cutting[point] = f_id
 
-        for f in features(layer_poly):
+            current += 1
+            progress.setPercentage(int(current * total))
+
+        selection = features(layer_poly)
+        current = 0
+        total = 50.0 / float(len(selection))
+
+        for f in selection:
             feature = QgsFeature()
             attributes = f.attributes()
             geometry = f.geometry()
@@ -176,5 +187,8 @@ class SplitPolygonsToLinesWithPoints(GeoAlgorithm):
                     feature.setGeometry(geom)
                     feature.setAttributes(attributes)
                     writer.addFeature(feature)
+
+            current += 1
+            progress.setPercentage(int(current * total) + 50)
 
         del writer

@@ -76,11 +76,16 @@ class SnapPointsProject(GeoAlgorithm):
 
         snapper = iface.mapCanvas().snappingUtils()
 
-        for feature in vector.features(points_layer):
+        selection = vector.features(points_layer)
+        current = 0
+        total = 100.0 / float(len(selection))
+
+        for feature in selection:
             f = QgsFeature()
             attributes = feature.attributes()
             result = snapper.snapToMap(feature.geometry().asPoint())
             if result.type() == 2:
+                # noinspection PyArgumentList
                 f.setGeometry(QgsGeometry.fromPoint(result.point()))
                 if add_attribute:
                     attributes.append('True')
@@ -90,4 +95,8 @@ class SnapPointsProject(GeoAlgorithm):
                     attributes.append('False')
             f.setAttributes(attributes)
             writer.addFeature(f)
+
+            current += 1
+            progress.setPercentage(int(current * total))
+
         del writer

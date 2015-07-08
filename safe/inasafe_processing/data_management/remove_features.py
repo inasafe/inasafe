@@ -92,7 +92,11 @@ class CleaningLayer(GeoAlgorithm):
         field_dirty_layer_id = dirty_layer.fieldNameIndex(field_dirty_layer)
 
         list_id = []
-        for f in features(source_layer):
+        selection = features(source_layer)
+        current = 0
+        total = 100.0 / float(len(selection))
+
+        for f in selection:
             feature_id = f.attributes()[field_source_layer_id]
             if feature_id not in list_id:
                 list_id.append(feature_id)
@@ -101,5 +105,8 @@ class CleaningLayer(GeoAlgorithm):
             feature_id = f.attributes()[field_dirty_layer_id]
             if feature_id in list_id:
                 writer.addFeature(f)
+
+            current += 1
+            progress.setPercentage(int(current * total))
 
         del writer
