@@ -145,8 +145,8 @@ def default_gender_postprocessor():
     gender.value = True
     gender.help_text = tr('Gender ratio breakdown.')
     gender.description = tr(
-        'Check this option if you wish to calculate the gender breakdown '
-        'on the affected population.'
+        'Check this option if you wish to calculate a breakdown by gender '
+        'for the affected population.'
     )
     return [gender]
 
@@ -181,7 +181,7 @@ def age_postprocessor():
     age.must_scroll = False
     age.help_text = tr('Age ratios breakdown.')
     age.description = tr(
-        'Check this option if you wish to calculate the age ratio breakdown '
+        'Check this option if you wish to calculate a breakdown by age group'
         'for the affected population. '
     )
 
@@ -206,6 +206,8 @@ def age_postprocessor():
         'out what the relevant threshold is in your region. InaSAFE does not '
         'impose a particular age ratio scheme - it will break down the '
         'population according to the thresholds you define for your locality.'
+        'In InaSAFE, people 0-14 years old are defined as "youth". The default '
+        'youth ratio is 0.263.'
     )
 
     adult_ratio = FloatParameter()
@@ -222,6 +224,8 @@ def age_postprocessor():
         'InaSAFE does not impose a particular age ratio scheme - it will '
         'break down the population according to the thresholds you define '
         'for your locality.'
+        'In InaSAFE, people 15-64 years old are defined as "adult". The '
+        'default adult ratio is 0.659.'
     )
 
     elderly_ratio = FloatParameter()
@@ -238,6 +242,8 @@ def age_postprocessor():
         'threshold is in your region. InaSAFE does not impose a particular '
         'age ratio scheme - it will break down the population according to '
         'the thresholds you define for your locality.'
+        'In InaSAFE, people 65 years old and over are defined as "elderly". '
+        'The default elderly ratio is 0.078.'
     )
 
     age.value = [youth_ratio, adult_ratio, elderly_ratio]
@@ -269,8 +275,8 @@ def aggregation_categorical_postprocessor():
         'Report breakdown by type/category.')
     aggregation_categorical.description = tr(
         'Enable the aggregation by categories. For example if you have '
-        'roads classified by type, you will get a breakdown by type of roads'
-        'per aggregation area.'
+        'roads classified by type, you will get a report broken down by type '
+        'of roads per aggregation area.'
     )
 
     return [aggregation_categorical]
@@ -288,7 +294,8 @@ def road_type_postprocessor():
     road_type.help_text = tr(
         'Road breakdown by type.')
     road_type.description = tr(
-        'Check this option to enable reporting break down by road type.'
+        'Check this option if you want to enable a road impact report broken '
+        'down by road type.'
     )
 
     return [road_type]
@@ -304,8 +311,8 @@ def building_type_postprocessor():
     building_type.name = tr('Building type')
     building_type.value = True
     building_type.description = tr(
-        'Check this option to enable the generation of a break down buildings '
-        'by type for each aggregation area.'
+        'Check this option if you want to enable a building impact report'
+        'broken down by buildings type for each aggregation area.'
     )
 
     return [building_type]
@@ -361,8 +368,8 @@ def default_minimum_needs():
     toilets.maximum_allowed_value = 0.05
     toilets.name = tr('Toilets')
     toilets.help_text = tr(
-        'Toilets are not provided on a regular bases - it is expected that '
-        'installed toilets will be usable on a continuous basis.'
+        'Toilets are not provided on a regular basis - it is expected that '
+        'installed toilets will continue to be usable.'
     )
 
     provenance = default_provenance()
