@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from realtime.push_shake import push_shake_event_to_rest
 
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
@@ -105,6 +106,9 @@ def process_event(working_dir=None, event_id=None, locale='en'):
         LOGGER.info('-------------------------------------------')
 
         shake_event.render_map(force_flag)
+        # push the shakemap to realtime server
+        push_shake_event_to_rest(shake_event)
+
 
 if __name__ == '__main__':
     LOGGER.info('-------------------------------------------')
