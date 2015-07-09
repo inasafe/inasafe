@@ -23,7 +23,6 @@ from safe.impact_functions.bases.continuous_rh_continuous_re import \
     ContinuousRHContinuousRE
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.core import (
-    evacuated_population_needs,
     population_rounding,
     has_no_data)
 from safe.storage.raster import Raster

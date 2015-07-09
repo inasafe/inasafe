@@ -123,7 +123,7 @@ class PopulationExposureReportMixin(ReportMixin):
                     '%s' % population_rounding(self.total_evacuated)],
                 'header': True
             })]
-        if len(self.impact_category_ordering) > 1:
+        if len(self.impact_category_ordering):
             impact_summary_report.append(self.blank_line)
             impact_summary_report.append({
                 'content': [
@@ -264,7 +264,7 @@ class PopulationExposureReportMixin(ReportMixin):
                 hasattr(self, '_evacuation_percentage') and
                 self._evacuation_percentage):
             evacuated_population = (
-                evacuated_population * self._evacuation_percentage)
+                evacuated_population * self._evacuation_percentage / 100)
         return evacuated_population
 
     @property
