@@ -113,8 +113,8 @@ layer_mode_classified = {
         'represent discrete classes where a value of I might represent low '
         'volcanic hazard, a value of II might represent medium volcanic hazard '
         'and a value of III  might represent a high volcanic hazard. \n'
-        'In a vector (point) Volcano data the name field in the data might be '
-        'used to classify the data. '
+        'In a vector (point) Volcano data the user specified buffer distances '
+        'will be used to classify the data. '
         'Classified values in a vector exposure data set might include '
         'building type or road type. '
     ),
@@ -139,7 +139,7 @@ layer_geometry_point = {
     'description': tr(
         'A layer composed of points which each represent a feature on the '
         'earth. Currently the only point data supported by InaSAFE are '
-        '<b>volcano hazard</b> layers.')
+        '<b>volcano hazard</b> layers and building points.')
 }
 
 layer_geometry_line = {
