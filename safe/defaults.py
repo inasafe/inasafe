@@ -275,8 +275,8 @@ def aggregation_categorical_postprocessor():
         'Report breakdown by type/category.')
     aggregation_categorical.description = tr(
         'Enable the aggregation by categories. For example if you have '
-        'roads classified by type, you will get a report broken down by type '
-        'of roads per aggregation area.'
+        'roads classified by type, you will get a report broken down by road '
+        'type for each aggregation area.'
     )
 
     return [aggregation_categorical]
@@ -312,7 +312,7 @@ def building_type_postprocessor():
     building_type.value = True
     building_type.description = tr(
         'Check this option if you want to enable a building impact report'
-        'broken down by buildings type for each aggregation area.'
+        'broken down by building type for each aggregation area.'
     )
 
     return [building_type]
