@@ -40,10 +40,6 @@ if 'INASAFE_REALTIME_DATETIME_FORMAT' in os.environ:
     INASAFE_REALTIME_DATETIME_FORMAT = \
         os.environ['INASAFE_REALTIME_DATETIME_FORMAT']
 
-INASAFE_REALTIME_REST_LOGIN_URL = \
-    'http://realtime-test:8000/realtime/api-auth/login/'
-INASAFE_REALTIME_REST_URL = 'http://realtime-test:8000/realtime/api/v1/'
-
 INASAFE_REALTIME_REST_URLPATTERN = {
     'login': INASAFE_REALTIME_REST_LOGIN_URL,
     'earthquake': INASAFE_REALTIME_REST_URL+'earthquake/',
