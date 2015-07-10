@@ -11,9 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from datetime import datetime, timedelta
-from realtime.push_shake import push_shake_event_to_rest
-from realtime.shake_data import ShakeData
 
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
@@ -30,6 +27,9 @@ from zipfile import BadZipfile
 from realtime.utilities import data_dir, is_event_id, realtime_logger_name
 from realtime.shake_event import ShakeEvent
 from realtime.exceptions import EmptyShakeDirectoryError
+from datetime import datetime, timedelta
+from realtime.push_shake import push_shake_event_to_rest
+from realtime.shake_data import ShakeData
 
 # Initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
