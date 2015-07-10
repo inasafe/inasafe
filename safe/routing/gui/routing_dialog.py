@@ -16,9 +16,9 @@ import shutil
 from random import randint
 from os.path import dirname, join, splitext
 
-from processing.core.Processing import Processing
+from processing.core import GeoAlgorithmExecutionException
 from processing.modeler import ModelerAlgorithm
-from processing import runalg
+from processing.gui.AlgorithmExecutor import runalg
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsVectorLayer,
@@ -27,7 +27,8 @@ from qgis.core import (
     QgsCategorizedSymbolRendererV2,
     QgsVectorGradientColorRampV2,
     QgsGraduatedSymbolRendererV2)
-from PyQt4.QtGui import QDialog, QColor, QDialogButtonBox
+from PyQt4.QtGui import \
+    QDialog, QColor, QDialogButtonBox, QApplication, QCursor
 from PyQt4 import uic
 from PyQt4.QtCore import Qt
 
@@ -35,8 +36,11 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     NoKeywordsFoundError)
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.qgis_utilities import \
+    display_critical_message_box, display_warning_message_box
 from safe.utilities.utilities import add_ordered_combo_item
 from safe.common.utilities import unique_filename
+from safe.routing.core.progress import Progress
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -259,15 +263,52 @@ class RoutingDialog(QDialog, FORM_CLASS):
         :param file_path: The file path for the model.
         :type file_path: str
 
-        :return The command line to use to call the model.
-        :rtype str
+        :return The GeoAlgorithm to use.
+        :rtype ModelerAlgorithm
         """
         model = ModelerAlgorithm.ModelerAlgorithm.fromFile(file_path)
-        model.provider = Processing.modeler
-        Processing.modeler.algs.append(model)
-        command_line = model.commandLineName()
-        Processing.algs['model'][command_line] = model
-        return command_line
+        return model.getCopy()
+
+    @staticmethod
+    def set_parameters(algorithm, parameters):
+        """Set parameters to an algorithm.
+
+        :param algorithm: The algorithm.
+        :type algorithm: GeoAlgorithm
+
+        :param parameters: The list of parameters.
+        :type parameters: list
+        """
+        i = 0
+        for param in algorithm.parameters:
+            if not param.hidden:
+                param.setValue(parameters[i])
+                i += 1
+
+        for output in algorithm.outputs:
+            if not output.hidden:
+                output.setValue(parameters[i])
+                i += 1
+
+    def check_algorithm(self, algorithm):
+        """Check parameters and layers of a algorithm.
+
+        :param algorithm: The processing algorithm.
+        :type algorithm: GeoAlgorithm
+
+        :return: Tuple if it's critical and a message.
+        :rtype: tuple
+        """
+        msg = algorithm._checkParameterValuesBeforeExecuting()
+        if msg:
+            return True, msg
+
+        if not algorithm.checkInputCRS():
+            msg = self.tr('Warning: Not all input layers use the same CRS.\n'
+                          'This can cause unexpected results.')
+            return False, msg
+        else:
+            return False, None
 
     @staticmethod
     def random_color():
@@ -317,9 +358,11 @@ class RoutingDialog(QDialog, FORM_CLASS):
         file_name_idp = unique_filename(suffix='-idp.shp')
         file_name_route = unique_filename(suffix='-routes.shp')
 
-        # Run the model.
-        runalg(
-            model,
+        # Set the custom progress.
+        progress = Progress(self.progress_bar, self.progress_text)
+
+        # Set parameters.
+        parameters = (
             roads_layer.source(),
             idp_layer.source(),
             flood_layer.source(),
@@ -333,6 +376,35 @@ class RoutingDialog(QDialog, FORM_CLASS):
             file_name_route,
             file_name_exit,
             file_name_network)
+        self.set_parameters(model, parameters)
+        critical, msg = self.check_algorithm(model)
+        if critical:
+            display_critical_message_box(
+                self, self.tr('Routing analysis'), msg)
+
+        if not critical and msg:
+            display_warning_message_box(self, self.tr('Routing analysis'), msg)
+
+        # Change the cursor.
+        cursor = QApplication.overrideCursor()
+        if cursor is None or cursor == 0:
+            # noinspection PyCallByClass
+            QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+        elif cursor.shape() != Qt.WaitCursor:
+            # noinspection PyCallByClass
+            QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+
+        try:
+            runalg(model, progress)
+        # pylint: disable=catching-non-exception
+        except GeoAlgorithmExecutionException as e:
+            LOGGER.error(e.msg)
+            display_critical_message_box(
+                self, self.tr('Routing analysis'), e.msg)
+            return
+        finally:
+            # Restore the cursor.
+            QApplication.restoreOverrideCursor()
 
         # Styling with a QML for the network layer.
         network_qml = join(dirname(dirname(__file__)), 'styles', 'network.qml')

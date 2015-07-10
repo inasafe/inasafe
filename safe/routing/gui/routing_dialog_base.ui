@@ -49,7 +49,7 @@
         <x>0</x>
         <y>0</y>
         <width>776</width>
-        <height>694</height>
+        <height>663</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -483,9 +483,16 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="progress_text">
+     <property name="text">
+      <string notr="true"/>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
-      <widget class="QProgressBar" name="progress">
+      <widget class="QProgressBar" name="progress_bar">
        <property name="value">
         <number>0</number>
        </property>
