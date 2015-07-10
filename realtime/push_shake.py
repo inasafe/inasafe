@@ -13,6 +13,9 @@ __date__ = '07/07/15'
 
 LOGGER = logging.getLogger(realtime_logger_name())
 
+import pydevd
+pydevd.settrace('localhost', port=43449, stdoutToServer=True, stderrToServer=True)
+
 
 # Get Realtime Rest URL from the os environment
 INASAFE_REALTIME_REST_URL = None
@@ -38,6 +41,10 @@ INASAFE_REALTIME_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
 if 'INASAFE_REALTIME_DATETIME_FORMAT' in os.environ:
     INASAFE_REALTIME_DATETIME_FORMAT = \
         os.environ['INASAFE_REALTIME_DATETIME_FORMAT']
+
+INASAFE_REALTIME_REST_LOGIN_URL = \
+    'http://realtime-test:8000/realtime/api-auth/login/'
+INASAFE_REALTIME_REST_URL = 'http://realtime-test:8000/realtime/api/v1/'
 
 INASAFE_REALTIME_REST_URLPATTERN = {
     'login': INASAFE_REALTIME_REST_LOGIN_URL,
@@ -118,7 +125,7 @@ def is_realtime_rest_configured():
             INASAFE_REALTIME_REST_PASSWORD)
 
 
-def push_shake_event_to_rest(shake_event):
+def push_shake_event_to_rest(shake_event, fail_silent=True):
     """
 
     :param shake_event: The shake event to push
@@ -178,8 +185,11 @@ def push_shake_event_to_rest(shake_event):
         error = RESTRequestFailedError(
             url=response.url,
             status_code=response.status_code,
-            data=event_dict)
-        raise error
+            data=json.dumps(earthquake_data))
+        if fail_silent:
+            logging.error(error.message)
+        else:
+            raise error
 
     # post the report
     # build report data
@@ -226,4 +236,8 @@ def push_shake_event_to_rest(shake_event):
             status_code=response.status_code,
             data=event_report_dict,
             files=event_report_files)
-        raise error
+
+        if fail_silent:
+            logging.error(error.message)
+        else:
+            raise error
