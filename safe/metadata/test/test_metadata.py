@@ -26,12 +26,14 @@ from unittest import TestCase
 
 
 class TestMetadata(TestCase):
-    def test_read(self):
+    def test_no_BaseMeta_instantiation(self):
+        """check that we can't instantiate abstract class BaseMetadata with
+        abstract methods"""
         with self.assertRaises(TypeError):
             BaseMetadata('random_layer_id')
 
     def test_metadata(self):
-
+        """Check we can't instantiate with unsupported xml types"""
         metadata = ImpactLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/'
 

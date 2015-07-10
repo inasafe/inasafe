@@ -1,9 +1,10 @@
 {
-  "layer": "random_layer_id", 
+  "layer_uri": "/home/marco/dev/QGIS/plugins/inasafe/inasafe-dev/safe/metadata/test/data/existing_impact.shp", 
   "properties": {
     "ISO19115_FLOAT": {
       "allowed_python_types": [
         "str", 
+        "unicode", 
         "int", 
         "float"
       ], 
@@ -16,6 +17,7 @@
     "ISO19115_INT": {
       "allowed_python_types": [
         "str", 
+        "unicode", 
         "int", 
         "float"
       ], 
@@ -28,15 +30,37 @@
     "ISO19115_STR": {
       "allowed_python_types": [
         "str", 
+        "unicode", 
         "int", 
         "float"
       ], 
       "name": "ISO19115_STR", 
-      "python_type": "str", 
+      "python_type": "unicode", 
       "value": "Random string", 
       "xml_path": "gmd:MD_Metadata/gmd:dateStamp/", 
       "xml_type": "gco:CharacterString"
     }
-  },
-  "report": "My super report"
+  }, 
+  "provenance": [
+    {
+      "description": "Description of step 1", 
+      "time": "2015-06-25T13:14:24.508974", 
+      "title": "Title 1"
+    }, 
+    {
+      "description": "Description of step 2", 
+      "time": "2015-06-25T13:14:24.508980", 
+      "title": "Title 2"
+    }, 
+    {
+      "description": "Description of step 3", 
+      "time": "2015-06-25T13:14:24.508984", 
+      "title": "Title 3"
+    }
+  ], 
+  "report": "My super report", 
+  "summary_data": {
+    "res1": 1234, 
+    "res2": 4321
+  }
 }

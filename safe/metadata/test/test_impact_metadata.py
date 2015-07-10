@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.exceptions import MetadataReadError
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -25,13 +26,17 @@ from unittest import TestCase
 
 from PyQt4.QtCore import QDate, QUrl
 
-from safe.metadata.test import JSON_TEST_FILE, TEMP_DIR
 from safe.common.utilities import unique_filename
+from safe.metadata.test import (
+    IMPACT_TEST_FILE_JSON, TEMP_DIR,
+    EXISTING_IMPACT_LAYER_TEST_FILE_JSON,
+    EXISTING_IMPACT_LAYER_TEST_FILE, INVALID_IMPACT_LAYER_JSON,
+    INCOMPLETE_IMPACT_LAYER_JSON)
 from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
 
 
 class TestMetadata(TestCase):
-    
+
     def test_metadata_provenance(self):
         metadata = self.generate_test_metadata()
         self.assertEqual(metadata.provenance.count, 3)
@@ -109,11 +114,11 @@ class TestMetadata(TestCase):
 
     def test_json_write(self):
         metadata = self.generate_test_metadata()
-        with open(JSON_TEST_FILE) as f:
-            test_json = f.read()
+        with open(IMPACT_TEST_FILE_JSON) as f:
+            expected_json = f.read()
         # split the read file at the provenance because provenance has
         # automatically generated timestamps
-        test_json = test_json.split('provenance')[0]
+        expected_json = expected_json.split('provenance')[0]
 
         filename = unique_filename(suffix='.json', dir=TEMP_DIR)
         metadata.write_as(filename)
@@ -123,7 +128,25 @@ class TestMetadata(TestCase):
         # automatically generated timestamps
         written_json = written_json.split('provenance')[0]
 
-        self.assertEquals(written_json, test_json)
+        self.assertEquals(expected_json, written_json)
+
+    def test_json_read(self):
+        metadata = ImpactLayerMetadata(EXISTING_IMPACT_LAYER_TEST_FILE)
+        with open(EXISTING_IMPACT_LAYER_TEST_FILE_JSON) as f:
+            expected_metadata = f.read()
+
+        self.assertEquals(expected_metadata, metadata.json)
+
+    def test_invalid_json_read(self):
+        with self.assertRaises(MetadataReadError):
+            ImpactLayerMetadata(
+                EXISTING_IMPACT_LAYER_TEST_FILE,
+                json_uri=INVALID_IMPACT_LAYER_JSON)
+
+    def test_incomplete_json_read(self):
+        metadata = ImpactLayerMetadata(
+            EXISTING_IMPACT_LAYER_TEST_FILE,
+            json_uri=INCOMPLETE_IMPACT_LAYER_JSON)
 
     def generate_test_metadata(self):
         metadata = ImpactLayerMetadata('random_layer_id')

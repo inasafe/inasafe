@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **metadata module.**
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**metadata module.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -20,6 +21,7 @@ from safe.common.exceptions import MetadataInvalidPathError
 
 
 class BaseProperty(object):
+
     def __init__(self, name, value, xml_path, xml_type, allowed_python_types):
 
         # private members
@@ -113,8 +115,9 @@ class BaseProperty(object):
     @staticmethod
     def _is_valid_xml_path(xml_path):
         # TODO (MB) implement meaningful check
-        if type(xml_path) is str:
+        if isinstance(xml_path, basestring):
             return True
         else:
             raise MetadataInvalidPathError(
-                'The xml path %s is invalid' % xml_path)
+                'The xml path %s is invalid (type: %s)' % (
+                    xml_path, type(xml_path)))

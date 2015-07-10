@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **metadata module.**
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**metadata module.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -22,7 +23,7 @@ from safe.metadata.property.base_property import BaseProperty
 
 class CharacterStringProperty(BaseProperty):
     # if you edit this you need to adapt accordingly xml_value and is_valid
-    _allowed_python_types = [str, int, float]
+    _allowed_python_types = [str, unicode, int, float]
 
     def __init__(self, name, value, xml_path, xml_type):
         super(CharacterStringProperty, self).__init__(

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **metadata module.**
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**metadata module.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -47,7 +48,7 @@ class Provenance(object):
     def get(self, index):
         return self._steps[index]
 
-    def append_step(self, name, description):
-        step = ProvenanceStep(name, description)
+    def append_step(self, title, description, timestamp=None):
+        step = ProvenanceStep(title, description, timestamp)
         self._steps.append(step)
         return step.time

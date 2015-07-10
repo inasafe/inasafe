@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.metadata.generic_layer_metadata import GenericLayerMetadata
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -23,17 +22,19 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from unittest import TestCase
 
-from safe.metadata.test import JSON_GENERIC_TEST_FILE, TEMP_DIR
 from safe.common.utilities import unique_filename
+from safe.metadata.generic_layer_metadata import GenericLayerMetadata
+from safe.metadata.test import (
+    GENERIC_TEST_FILE_JSON, TEMP_DIR,
+    EXISTING_GENERIC_LAYER_TEST_FILE,
+    EXISTING_GENERIC_LAYER_TEST_FILE_JSON)
 
 
 class TestMetadata(TestCase):
-    def test_read(self):
-        metadata = self.generate_test_metadata()
 
     def test_json_write(self):
-        with open(JSON_GENERIC_TEST_FILE) as f:
-            test_json = f.read()
+        with open(GENERIC_TEST_FILE_JSON) as f:
+            expected_json = f.read()
 
         metadata = self.generate_test_metadata()
         filename = unique_filename(suffix='.json', dir=TEMP_DIR)
@@ -41,7 +42,14 @@ class TestMetadata(TestCase):
         with open(filename) as f:
             written_json = f.read()
 
-        self.assertEquals(written_json, test_json)
+        self.assertEquals(expected_json, written_json)
+
+    def test_json_read(self):
+        metadata = GenericLayerMetadata(EXISTING_GENERIC_LAYER_TEST_FILE)
+        with open(EXISTING_GENERIC_LAYER_TEST_FILE_JSON) as f:
+            expected_metadata = f.read()
+
+        self.assertEquals(expected_metadata, metadata.json)
 
     def generate_test_metadata(self):
         metadata = GenericLayerMetadata('random_layer_id')

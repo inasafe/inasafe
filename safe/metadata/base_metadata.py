@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **metadata module.**
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**metadata module.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -9,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.common.exceptions import MetadataReadError
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -45,8 +47,19 @@ class BaseMetadata(object):
             self._json_uri = json_uri
 
         self._properties = {}
-        self.read_from_ancillary_file()
         self._last_update = datetime.now()
+
+        # check if metadata already exist on disk
+        self.read_from_ancillary_file()
+
+    @abc.abstractproperty
+    def dict(self):
+        metadata = {'layer_uri': self.layer_uri}
+        properties = {}
+        for name, prop in self._properties.iteritems():
+            properties[name] = prop.dict
+        metadata['properties'] = properties
+        return metadata
 
     @abc.abstractproperty
     def xml(self):
@@ -59,8 +72,24 @@ class BaseMetadata(object):
 
     @abc.abstractmethod
     def read_from_json(self):
-        # TODO (MB): implement this
-        raise NotImplementedError('Still need to write this')
+        metadata = {}
+        with open(self._json_uri) as metadata_file:
+            try:
+                metadata = json.load(metadata_file)
+            except ValueError:
+                message = 'the file %s does not appear to be valid JSON' % (
+                    self._json_uri)
+                raise MetadataReadError(message)
+            if 'properties' in metadata:
+                for name, prop in metadata['properties'].iteritems():
+                    try:
+                        self.set(prop['name'],
+                                 prop['value'],
+                                 prop['xml_path'],
+                                 prop['xml_type'])
+                    except KeyError:
+                        pass
+        return metadata
 
     @abc.abstractmethod
     def read_from_xml(self):
@@ -82,11 +111,6 @@ class BaseMetadata(object):
 
     def set_last_update_to_now(self):
         self._last_update = datetime.now()
-
-    @property
-    # there is no setter. use the appropriate setter for each property or set()
-    def properties(self):
-        return self._properties
 
     def get(self, property_name):
         return self._properties[property_name].value
@@ -110,15 +134,6 @@ class BaseMetadata(object):
         metadata_property = property_class(name, value, xml_path, xml_type)
         self._properties[name] = metadata_property
         self.set_last_update_to_now()
-
-    @property
-    def dict(self):
-        metadata = {'layer_uri': self.layer_uri}
-        properties = {}
-        for name, property in self.properties.iteritems():
-            properties[name] = property.dict
-        metadata['properties'] = properties
-        return metadata
 
     def save(self):
         with open(self._json_uri, 'w') as f:

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-InaSAFE Disaster risk assessment tool developed by AusAid - **metadata module.**
+InaSAFE Disaster risk assessment tool developed by AusAid -
+**metadata module.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -22,11 +23,16 @@ from datetime import datetime
 
 class ProvenanceStep(object):
 
-    def __init__(self, title, description):
+    def __init__(self, title, description, timestamp=None):
         # private members
         self._title = title
         self._description = description
-        self._time = datetime.now()
+        if timestamp is None:
+            self._time = datetime.now()
+        elif isinstance(timestamp, datetime):
+            self._time = timestamp
+        elif isinstance(timestamp, unicode):
+            self._time = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
 
     def __str__(self):
         return "%s: %s\n%s" % (self._time, self._title, self._description)
@@ -48,5 +54,5 @@ class ProvenanceStep(object):
         return {
             'title': self.title,
             'description': self.description,
-            'time': str(self.time),
+            'time': self.time.isoformat(),
         }
