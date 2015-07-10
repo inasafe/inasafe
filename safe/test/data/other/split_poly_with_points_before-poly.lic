@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Etienne Trimaille</author>
+  </metadata>
+
+  <datafile>
+    <filename>split_poly_with_points_before-poly.shp</filename>
+    <checksum>1567794882</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Etienne Trimaille</accountable>
+    <source>Etienne Trimaille</source>
+    <IP_owner>Etienne Trimaille</IP_owner>
+    <IP_info>This data was created by Etienne for the InaSAFE project.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>split_poly_with_points_before-poly.shx</filename>
+    <checksum>2302495100</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Etienne Trimaille</accountable>
+    <source>Etienne Trimaille</source>
+    <IP_owner>Etienne Trimaille</IP_owner>
+    <IP_info>This data was created by Etienne for the InaSAFE project.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>split_poly_with_points_before-poly.dbf</filename>
+    <checksum>2430780863</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Etienne Trimaille</accountable>
+    <source>Etienne Trimaille</source>
+    <IP_owner>Etienne Trimaille</IP_owner>
+    <IP_info>This data was created by Etienne for the InaSAFE project.</IP_info>
+  </datafile>
+
+</ga_license_file>
