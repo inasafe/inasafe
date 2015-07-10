@@ -26,7 +26,7 @@ export INASAFE_LOCALE=id
 export INASAFE_REALTIME_REST_URL=http://localhost:8000/realtime/api/v1/
 export INASAFE_REALTIME_REST_USER=test@realtime.inasafe.org
 export INASAFE_REALTIME_REST_PASSWORD=t3st4ccount
-export INASAFE_REALTIME_REST_LOGIN_URL=http://localhost:8000/realtime/api-auth/login
+export INASAFE_REALTIME_REST_LOGIN_URL=http://localhost:8000/realtime/api-auth/login/
 
 # The following line enables remote logging to sentry and may reveal
 # IP address / host name / file system paths (which could include your user

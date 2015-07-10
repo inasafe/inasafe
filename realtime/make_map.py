@@ -11,7 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from datetime import datetime, timedelta
 from realtime.push_shake import push_shake_event_to_rest
+from realtime.shake_data import ShakeData
 
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
@@ -67,34 +69,16 @@ def process_event(working_dir=None, event_id=None, locale='en'):
         # Extract the event
         # noinspection PyBroadException
         try:
-            if os.path.exists(population_path):
-                shake_event = ShakeEvent(
-                    working_dir=working_dir,
-                    event_id=event_id,
-                    locale=locale,
-                    force_flag=force_flag,
-                    population_raster_path=population_path)
-            else:
-                shake_event = ShakeEvent(
-                    working_dir=working_dir,
-                    event_id=event_id,
-                    locale=locale,
-                    force_flag=force_flag)
+            shake_events = create_shake_events(
+                event_id, force_flag, locale, population_path, working_dir)
         except (BadZipfile, URLError):
             # retry with force flag true
-            if os.path.exists(population_path):
-                shake_event = ShakeEvent(
-                    working_dir=working_dir,
-                    event_id=event_id,
-                    locale=locale,
-                    force_flag=True,
-                    population_raster_path=population_path)
-            else:
-                shake_event = ShakeEvent(
-                    working_dir=working_dir,
-                    event_id=event_id,
-                    locale=locale,
-                    force_flag=True)
+            shake_events = create_shake_events(
+                event_id=event_id,
+                force_flag=True,
+                locale=locale,
+                population_path=population_path,
+                working_dir=working_dir)
         except EmptyShakeDirectoryError as ex:
             LOGGER.info(ex)
             return
@@ -102,12 +86,75 @@ def process_event(working_dir=None, event_id=None, locale='en'):
             LOGGER.exception('An error occurred setting up the shake event.')
             return
 
-        LOGGER.info('Event Id: %s', shake_event)
+        LOGGER.info('Event Id: %s', shake_events)
         LOGGER.info('-------------------------------------------')
 
-        shake_event.render_map(force_flag)
-        # push the shakemap to realtime server
-        push_shake_event_to_rest(shake_event)
+        for shake_event in shake_events:
+            shake_event.render_map(force_flag)
+            # push the shakemap to realtime server
+            push_shake_event_to_rest(shake_event)
+
+
+def create_shake_events(
+        event_id=None,
+        population_path=None,
+        working_dir=None,
+        locale='en',
+        force_flag=False):
+    """
+
+    :param working_dir: The locale working dir where all the shakemaps are
+            located.
+    :type working_dir: str
+
+    :param event_id: (Optional) Id of the event. Will be used to
+        fetch the ShakeData for this event. The grid.xml file in the
+        unpacked event will be used to initialise the state of the a
+        ShakeGrid instance. If no event id is supplied, the most recent
+        event recorded on working dir will be used.
+    :type event_id: str
+
+    :param locale:(Optional) string for iso locale to use for outputs.
+        Defaults to en. Can also use 'id' or possibly more as translations
+        are added.
+    :type locale: str
+
+    :param force_flag: Whether to force retrieval of the dataset.
+    :type force_flag: bool
+
+    :return: Shake Events to process
+    :rtype: list[ShakeEvent]
+    """
+    shake_events = []
+
+    if not os.path.exists(population_path):
+        population_path = None
+
+    # cron job executed this script minutely, so it is possible in one
+    # minute that we have more than one shake_event. We can resolve this
+    # by only retrieveng the shake id for that particular minute.
+    now = datetime.now()
+    before = now - timedelta(minutes=1)
+    date_format = '%04d%02d%02d%02d%02d%02d'
+    before_int = int(
+        date_format %
+        (now.year, now.month, now.day, now.hour, now.minute, now.second))
+    # retrieve all the shake ids
+    shake_ids = ShakeData.get_list_event_ids_from_folder(working_dir)
+    shake_ids.sort()
+    shake_ids.reverse()
+    # sort descending
+    for shake_id in shake_ids:
+        if int(shake_id) > before_int:
+            shake_event = ShakeEvent(
+                working_dir=working_dir,
+                event_id=event_id,
+                locale=locale,
+                force_flag=force_flag,
+                population_raster_path=population_path)
+            shake_events.append(shake_event)
+
+    return shake_events
 
 
 if __name__ == '__main__':
