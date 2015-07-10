@@ -23,10 +23,9 @@ export PATH=${QGIS_PREFIX_PATH}/bin:$PATH
 
 export INASAFE_WORK_DIR=/home/realtime
 export INASAFE_LOCALE=id
-# this is environment configuration for InaSAFE Realtime.
-# Set up dnsmasq to redirect realtime-test domain to appropriate Realtime
-# API test server, and add a test user and password
-if [ -z "$INASAFE_REALTIME_REST_URL" ]
+# if the parameter is set in production mode, do not overwrite the variable
+# if it is not, we can put test variable here
+if [ -z "$INASAFE_REALTIME_REST_URL" ];
 then
 # allow overrides using native environment
     export INASAFE_REALTIME_REST_URL=http://realtime-test:8000/realtime/api/v1/
