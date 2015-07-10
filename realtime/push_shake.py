@@ -13,8 +13,6 @@ __date__ = '07/07/15'
 
 LOGGER = logging.getLogger(realtime_logger_name())
 
-import pydevd
-pydevd.settrace('localhost', port=43449, stdoutToServer=True, stderrToServer=True)
 
 
 # Get Realtime Rest URL from the os environment

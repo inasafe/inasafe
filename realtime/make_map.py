@@ -70,7 +70,11 @@ def process_event(working_dir=None, event_id=None, locale='en'):
         # noinspection PyBroadException
         try:
             shake_events = create_shake_events(
-                event_id, force_flag, locale, population_path, working_dir)
+                event_id=event_id,
+                force_flag=force_flag,
+                locale=locale,
+                population_path=population_path,
+                working_dir=working_dir)
         except (BadZipfile, URLError):
             # retry with force flag true
             shake_events = create_shake_events(
@@ -133,16 +137,17 @@ def create_shake_events(
     # cron job executed this script minutely, so it is possible in one
     # minute that we have more than one shake_event. We can resolve this
     # by only retrieveng the shake id for that particular minute.
-    now = datetime.now()
-    before = now - timedelta(minutes=1)
-    date_format = '%04d%02d%02d%02d%02d%02d'
-    before_int = int(
-        date_format %
-        (now.year, now.month, now.day, now.hour, now.minute, now.second))
+
     # retrieve all the shake ids
     shake_ids = ShakeData.get_list_event_ids_from_folder(working_dir)
     shake_ids.sort()
     shake_ids.reverse()
+    now = datetime.now()
+    date_format = '%Y%m%d%H%M%S'
+    if len(shake_ids) > 0:
+        now = datetime.strptime(shake_ids[0], date_format)
+    before = now - timedelta(minutes=1)
+    before_int = int(before.strftime(date_format))
     # sort descending
     for shake_id in shake_ids:
         if int(shake_id) > before_int:
