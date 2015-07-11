@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.common.exceptions import MetadataReadError
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -25,13 +24,61 @@ import abc
 from datetime import datetime
 import json
 import os
+from xml.etree import ElementTree
 
-from safe.metadata.utils import TYPE_CONVERSIONS
+from safe.common.exceptions import MetadataReadError
+from safe.metadata.utils import (METADATA_XML_TEMPLATE,
+                                 TYPE_CONVERSIONS,
+                                 XML_NS,
+                                 insert_xml_element)
+from safe.utilities.i18n import tr
 
 
 class BaseMetadata(object):
     # define as Abstract base class
     __metaclass__ = abc.ABCMeta
+
+    # paths in xml files for standard properties
+    _standard_properties = {
+        'organisation': (
+            'gmd:contact/'
+            'gmd:CI_ResponsibleParty/'
+            'gmd:organisationName'),
+        'email': (
+            'gmd:contact/'
+            'gmd:CI_ResponsibleParty/'
+            'gmd:contactInfo/'
+            'gmd:CI_Contact/'
+            'gmd:address/'
+            'gmd:CI_Address/'
+            'gmd:electronicMailAddress'),
+        'document_date': (
+            'gmd:dateStamp'),
+        'abstract': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:abstract'),
+        'title': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:citation/'
+            'gmd:CI_Citation/'
+            'gmd:title'),
+        'license': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:resourceConstraints/'
+            'gmd:MD_Constraints/'
+            'gmd:useLimitation'),
+        'url': (
+            'gmd:distributionInfo/'
+            'gmd:MD_Distribution/'
+            'gmd:transferOptions/'
+            'gmd:MD_DigitalTransferOptions/'
+            'gmd:onLine/'
+            'gmd:CI_OnlineResource/'
+            'gmd:linkage')
+    }
 
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         # private members
@@ -47,10 +94,13 @@ class BaseMetadata(object):
             self._json_uri = json_uri
 
         self._properties = {}
+
         self._last_update = datetime.now()
 
+        self._reading_ancillary_file = False
+
         # check if metadata already exist on disk
-        self.read_from_ancillary_file()
+        self.read_from_ancillary_file(xml_uri)
 
     @abc.abstractproperty
     def dict(self):
@@ -61,10 +111,31 @@ class BaseMetadata(object):
         metadata['properties'] = properties
         return metadata
 
-    @abc.abstractproperty
+    @property
     def xml(self):
-        # TODO (MB): implement this
-        raise NotImplementedError('Still need to write this')
+        tree = ElementTree.parse(METADATA_XML_TEMPLATE)
+        root = tree.getroot()
+
+        # get the standard properties
+        for name, path in self._standard_properties.iteritems():
+            elem = root.find(path, XML_NS)
+            if elem is None:
+                # create elem
+                elem = insert_xml_element(root, path)
+            elem.text = self.get_xml_value(name)
+
+        # TODO (MB) have a look if this is a good idea :)
+        # check if we have more properties
+        for name, path in self._properties.iteritems():
+            if name in self._standard_properties:
+                continue
+            elem = root.find(path, XML_NS)
+            if elem is None:
+                # create elem
+                elem = insert_xml_element(root, path)
+            elem.text = self.get_xml_value(name)
+
+        return ElementTree.tostring(root)
 
     @abc.abstractproperty
     def json(self):
@@ -73,12 +144,12 @@ class BaseMetadata(object):
     @abc.abstractmethod
     def read_from_json(self):
         metadata = {}
-        with open(self._json_uri) as metadata_file:
+        with open(self.json_uri) as metadata_file:
             try:
                 metadata = json.load(metadata_file)
             except ValueError:
-                message = 'the file %s does not appear to be valid JSON' % (
-                    self._json_uri)
+                message = tr('the file %s does not appear to be valid JSON')
+                message = message % self.json_uri
                 raise MetadataReadError(message)
             if 'properties' in metadata:
                 for name, prop in metadata['properties'].iteritems():
@@ -88,18 +159,45 @@ class BaseMetadata(object):
                                  prop['xml_path'],
                                  prop['xml_type'])
                     except KeyError:
+                        # we just skip if we don't have something, we want
+                        # to have as much as possible read from the JSON
                         pass
         return metadata
 
     @abc.abstractmethod
     def read_from_xml(self):
-        # TODO (MB): implement this
-        raise NotImplementedError('Still need to write this')
+        self._reading_ancillary_file = True
+        # this raises a IOError if the file doesn't exist
+        root = ElementTree.parse(self.xml_uri).getroot()
+        for name, path in self._standard_properties.iteritems():
+            value = self._read_property_from_xml(root, path)
+            if value is not None:
+                setattr(self, name, value)
+
+        self._reading_ancillary_file = False
+
+    @staticmethod
+    def _read_property_from_xml(root, path):
+        element = root.find(path, XML_NS)
+        try:
+            return element.text.strip(' \t\n\r')
+        except AttributeError:
+            return None
 
     @property
     # there is no setter because the layer should not change overtime
     def layer_uri(self):
         return self._layer_uri
+
+    @property
+    # there is no setter because the json should not change overtime
+    def json_uri(self):
+        return self._json_uri
+
+    @property
+    # there is no setter because the xml should not change overtime
+    def xml_uri(self):
+        return self._xml_uri
 
     @property
     def last_update(self):
@@ -115,8 +213,11 @@ class BaseMetadata(object):
     def get(self, property_name):
         return self._properties[property_name].value
 
-    def get_xml(self, property_name):
-        return self._properties[property_name].xml_value
+    def get_xml_value(self, property_name):
+        try:
+            return self._properties[property_name].xml_value
+        except KeyError:
+            return None
 
     def get_property(self, property_name):
         return self._properties[property_name]
@@ -131,15 +232,22 @@ class BaseMetadata(object):
         except KeyError:
             raise KeyError('The xml type %s is not supported yet' % xml_type)
 
-        metadata_property = property_class(name, value, xml_path, xml_type)
-        self._properties[name] = metadata_property
-        self.set_last_update_to_now()
+        try:
+            metadata_property = property_class(name, value, xml_path, xml_type)
+            self._properties[name] = metadata_property
+            self.set_last_update_to_now()
+            return True
+        except TypeError:
+            if self._reading_ancillary_file:
+                return False
+            else:
+                raise
 
     def save(self):
-        with open(self._json_uri, 'w') as f:
+        with open(self.json_uri, 'w') as f:
             f.write(self.json)
 
-        with open(self._xml_uri, 'w') as f:
+        with open(self.xml_uri, 'w') as f:
             f.write(self.xml)
 
     def write_as(self, destination_path):
@@ -147,110 +255,85 @@ class BaseMetadata(object):
         if file_format == '.json':
             metadata = self.json
         elif file_format == '.xml':
-            metadata = self.xml
+            metadata = '<?xml version="1.0" encoding="UTF-8"?>\n'
+            metadata += self.xml
         else:
             raise TypeError('The requested file type (%s) is not yet supported'
                             % file_format)
         with open(destination_path, 'w') as f:
             f.write(metadata)
 
-    def read_from_ancillary_file(self):
-        if os.path.isfile(self._json_uri):
-            self.read_from_json()
-        elif os.path.isfile(self._xml_uri):
+    def read_from_ancillary_file(self, custom_xml):
+        # we explicitly check if a custom XML was passed so we give it
+        # priority on the JSON. If no custom XML is passed, JSON has priority
+        if custom_xml and os.path.isfile(self.xml_uri):
             self.read_from_xml()
+        else:
+            if os.path.isfile(self.json_uri):
+                self.read_from_json()
+            elif os.path.isfile(self.xml_uri):
+                self.read_from_xml()
 
     # Standard XML properties
     @property
     def organisation(self):
-        return self.get_xml('organisation')
+        return self.get('organisation')
 
     @organisation.setter
     def organisation(self, value):
-        path = ('gmd:MD_Metadata/'
-                'gmd:contact/'
-                'gmd:CI_ResponsibleParty/'
-                'gmd:organisationName')
+        path = self._standard_properties['organisation']
         return self.set('organisation', value, path, 'gco:CharacterString')
 
     @property
     def email(self):
-        return self.get_xml('email')
+        return self.get('email')
 
     @email.setter
     def email(self, value):
-        path = ('gmd:MD_Metadata/'
-                'gmd:contact/'
-                'gmd:CI_ResponsibleParty/'
-                'gmd:contactInfo/'
-                'gmd:CI_Contact/'
-                'gmd:address/'
-                'gmd:CI_Address/'
-                'gmd:electronicMailAddress')
+        path = self._standard_properties['email']
         return self.set('email', value, path, 'gco:CharacterString')
 
     @property
     def document_date(self):
-        return self.get_xml('document_date')
+        return self.get('document_date')
 
     @document_date.setter
     def document_date(self, value):
-        path = ('gmd:MD_Metadata/'
-                'gmd:dateStamp')
+        path = self._standard_properties['document_date']
         return self.set('document_date', value, path, 'gco:Date')
 
     @property
     def abstract(self):
-        return self.get_xml('abstract')
+        return self.get('abstract')
 
     @abstract.setter
     def abstract(self, value):
-        path = ('gmd:MD_Metadata/'
-                'gmd:identificationInfo/'
-                'gmd:MD_DataIdentification/'
-                'gmd:abstract')
+        path = self._standard_properties['abstract']
         return self.set('abstract', value, path, 'gco:CharacterString')
 
     @property
     def title(self):
-        return self.get_xml('title')
+        return self.get('title')
 
     @title.setter
     def title(self, value):
-        path = ('gmd:MD_Metadata/'
-                'gmd:identificationInfo/'
-                'gmd:MD_DataIdentification/'
-                'gmd:citation/'
-                'gmd:CI_Citation/'
-                'gmd:title')
+        path = self._standard_properties['title']
         return self.set('title', value, path, 'gco:CharacterString')
 
     @property
     def license(self):
-        return self.get_xml('license')
+        return self.get('license')
 
     @license.setter
     def license(self, value):
-        path = ('gmd:MD_Metadata/'
-                'gmd:identificationInfo/'
-                'gmd:MD_DataIdentification/'
-                'gmd:resourceConstraints/'
-                'gmd:MD_Constraints/'
-                'gmd:useLimitation')
+        path = self._standard_properties['license']
         return self.set('license', value, path, 'gco:CharacterString')
 
     @property
     def url(self):
-        return self.get_xml('url')
+        return self.get('url')
 
     @url.setter
     def url(self, value):
-        path = ('gmd:MD_Metadata/'
-                'gmd:distributionInfo/'
-                'gmd:MD_Distribution/'
-                'gmd:transferOptions/'
-                'gmd:MD_DigitalTransferOptions/'
-                'gmd:onLine/'
-                'gmd:CI_OnlineResource/'
-                'gmd:linkage')
+        path = self._standard_properties['url']
         return self.set('url', value, path, 'gmd:URL')

@@ -23,7 +23,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from datetime import datetime
 from unittest import TestCase
 
-from safe.metadata.provenance.provenance_step import ProvenanceStep
+from safe.metadata.provenance import ProvenanceStep
 
 
 class TestProvenanceStep(TestCase):

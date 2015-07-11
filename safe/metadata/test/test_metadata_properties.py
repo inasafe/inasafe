@@ -13,10 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.metadata.property.character_string_property import \
-    CharacterStringProperty
-from safe.metadata.property.date_property import DateProperty
-from safe.metadata.property.url_property import UrlProperty
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -24,11 +20,15 @@ __date__ = '12/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from unittest import TestCase
+from unittest import TestCase, expectedFailure
 
 from PyQt4.QtCore import QDate, QUrl
 
 from safe.common.exceptions import MetadataInvalidPathError
+from safe.metadata.property import (
+    CharacterStringProperty,
+    DateProperty,
+    UrlProperty)
 
 
 class TestMetadataProperty(TestCase):
@@ -55,7 +55,7 @@ class TestMetadataProperty(TestCase):
         )
 
         with self.assertRaises(TypeError):
-            # list is not a valid datatype
+            # list is not a valid data type
             test_property.value = ['20150607']
 
     def test_value_url(self):
@@ -69,12 +69,11 @@ class TestMetadataProperty(TestCase):
         with self.assertRaises(TypeError):
             test_property.value = 20150607
 
-        with self.assertRaises(TypeError):
-            test_property.value = 'http://inasafe.org'
+        # this should work due to casting
+        test_property.value = 'http://inasafe.org'
 
     def test_xml_path(self):
         valid_path = ''
-        error_path = '\\test\\path'
         invalid_path = 2345
 
         test_property = UrlProperty(
@@ -95,9 +94,12 @@ class TestMetadataProperty(TestCase):
                 'gmd:URL'
             )
 
+    @expectedFailure
+    def test_xml_path_stronger(self):
+        # TODO (MB) remove expected failure when a better _is_valid_path is
+        # implemented
+        error_path = '\\test\\path'
         with self.assertRaises(MetadataInvalidPathError):
-            # TODO (MB) this test should fail (the expected exception is not
-            # risen) until a better _is_valid_path is implemented
             UrlProperty(
                 'test url',
                 QUrl('http://inasafe.org'),

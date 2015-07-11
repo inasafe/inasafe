@@ -17,15 +17,18 @@ __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.common.exceptions import MetadataInvalidPathError
+import abc
+from safe.common.exceptions import MetadataInvalidPathError, MetadataCastError
 
 
 class BaseProperty(object):
+    # define as Abstract base class
+    __metaclass__ = abc.ABCMeta
 
     def __init__(self, name, value, xml_path, xml_type, allowed_python_types):
 
         # private members
-        self._value = None
+        self._value = value
         self._xml_type = xml_type
         self._allowed_python_types = allowed_python_types
         self._python_type = None
@@ -36,10 +39,10 @@ class BaseProperty(object):
             self._xml_path = xml_path
 
         # check if the desired type is correct
-        self.is_allowed_type(value)
+        self.is_allowed_type(self._value)
 
         # check if value is valid
-        self.is_valid(value)
+        self.is_valid(self.value)
 
         # public properties
         self.name = name
@@ -63,21 +66,34 @@ class BaseProperty(object):
     def is_allowed_type(self, value):
         if type(value) in self.allowed_python_types:
             self._python_type = type(value)
+            self._value = value
             return True
+        elif type(value) in [str, unicode]:
+            try:
+                casted_value = self.cast_from_str(value)
+                self.is_allowed_type(casted_value)
+            except MetadataCastError as e:
+                error_message = (
+                    'We could not cast the string: "%s" to an allowed type '
+                    '(valid types: %s' % (value, self.allowed_python_types))
+                raise TypeError(error_message, e)
         else:
             error_message = (
                 'The value %s (type: %s) is not of the correct type (valid'
                 ' types: %s' % (value, type(value), self.allowed_python_types))
             raise TypeError(error_message)
 
+    @abc.abstractmethod
     def is_valid(self, value):
-        raise NotImplementedError(
-            'This method has to be implemented in a subclass')
+        return
 
-    @property
+    @abc.abstractmethod
+    def cast_from_str(self, value):
+        return
+
+    @abc.abstractproperty
     def xml_value(self):
-        raise NotImplementedError(
-            'This method has to be implemented in a subclass')
+        return
 
     @property
     def value(self):

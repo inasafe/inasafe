@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.metadata.utils import insert_xml_element
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -20,8 +21,10 @@ __date__ = '12/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.metadata.base_metadata import BaseMetadata
-from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
+
+from xml.etree import ElementTree
+from safe.metadata import BaseMetadata
+from safe.metadata import ImpactLayerMetadata
 from unittest import TestCase
 
 
@@ -41,3 +44,18 @@ class TestMetadata(TestCase):
         test_value = 'Random string'
         with self.assertRaises(KeyError):
             metadata.set('ISO19115_TEST', test_value, path, 'gco:RandomString')
+
+    def test_insert_xml_element(self):
+        """Check we can't insert custom nested elements"""
+        root = ElementTree.Element('root')
+        b = ElementTree.SubElement(root, 'b')
+        ElementTree.SubElement(b, 'c')
+
+        new_element_path = 'd/e/f'
+        expected_xml = '<root><b><c /></b><d><e><f>TESTtext</f></e></d></root>'
+
+        element = insert_xml_element(root, new_element_path)
+        element.text = 'TESTtext'
+        result_xml = ElementTree.tostring(root)
+
+        self.assertEquals(expected_xml, result_xml)

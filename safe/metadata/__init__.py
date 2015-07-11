@@ -16,3 +16,9 @@ __revision__ = '$Format:%H$'
 __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+
+# expose for nicer imports
+from safe.metadata.base_metadata import BaseMetadata
+from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
+from safe.metadata.generic_layer_metadata import GenericLayerMetadata

@@ -23,14 +23,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from unittest import TestCase
 
 from safe.common.utilities import unique_filename
-from safe.metadata.generic_layer_metadata import GenericLayerMetadata
+from safe.metadata import GenericLayerMetadata
 from safe.metadata.test import (
     GENERIC_TEST_FILE_JSON, TEMP_DIR,
-    EXISTING_GENERIC_LAYER_TEST_FILE,
-    EXISTING_GENERIC_LAYER_TEST_FILE_JSON)
+    EXISTING_GENERIC_FILE,
+    EXISTING_GENERIC_JSON)
 
 
-class TestMetadata(TestCase):
+class TestGenericMetadata(TestCase):
 
     def test_json_write(self):
         with open(GENERIC_TEST_FILE_JSON) as f:
@@ -45,13 +45,14 @@ class TestMetadata(TestCase):
         self.assertEquals(expected_json, written_json)
 
     def test_json_read(self):
-        metadata = GenericLayerMetadata(EXISTING_GENERIC_LAYER_TEST_FILE)
-        with open(EXISTING_GENERIC_LAYER_TEST_FILE_JSON) as f:
+        metadata = GenericLayerMetadata(EXISTING_GENERIC_FILE)
+        with open(EXISTING_GENERIC_JSON) as f:
             expected_metadata = f.read()
 
         self.assertEquals(expected_metadata, metadata.json)
 
     def generate_test_metadata(self):
+        # if you change this you need to update GENERIC_TEST_FILE_JSON
         metadata = GenericLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/'
         # using str

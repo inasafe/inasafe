@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-import json
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -18,11 +17,23 @@ __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.metadata.base_metadata import BaseMetadata
-from safe.metadata.provenance.provenance import Provenance
+import json
+from xml.etree import ElementTree
+
+from safe.metadata import BaseMetadata
+from safe.metadata.provenance import Provenance
 
 
 class ImpactLayerMetadata(BaseMetadata):
+
+    # remember to add an attribute or a setter property with the same name
+    _additional_xml_properties = {
+        'provenance': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe_report'),
+    }
 
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         # Initialise members
@@ -35,6 +46,9 @@ class ImpactLayerMetadata(BaseMetadata):
 
         # initialize base class
         super(ImpactLayerMetadata, self).__init__(layer_uri, xml_uri, json_uri)
+
+        # merge all _xml_properties
+        self._standard_properties.update(self._additional_xml_properties)
 
     @property
     def dict(self):
@@ -55,12 +69,6 @@ class ImpactLayerMetadata(BaseMetadata):
             provenance.append(step.json)
         metadata['provenance'] = provenance
         return json.dumps(metadata, indent=2, sort_keys=True)
-
-    @property
-    def xml(self):
-        # TODO (MB): implement this
-        xml = super(ImpactLayerMetadata, self).xml
-        raise NotImplementedError('Still need to write this')
 
     def read_from_json(self):
         metadata = super(ImpactLayerMetadata, self).read_from_json()

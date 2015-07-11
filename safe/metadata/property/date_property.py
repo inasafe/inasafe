@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.common.exceptions import MetadataCastError
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -20,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from datetime import datetime, date
 from PyQt4.QtCore import QDate, Qt
-from safe.metadata.property.base_property import BaseProperty
+from safe.metadata.property import BaseProperty
 
 
 class DateProperty(BaseProperty):
@@ -34,6 +35,12 @@ class DateProperty(BaseProperty):
     def is_valid(self, value):
         # the date types constructors already complain if a date is not valid.
         return True
+
+    def cast_from_str(self, value):
+        try:
+            return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+        except ValueError as e:
+            raise MetadataCastError(e)
 
     @property
     def xml_value(self):

@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from safe.metadata.provenance.provenance_step import ProvenanceStep
+from safe.metadata.provenance import ProvenanceStep
 
 
 class Provenance(object):

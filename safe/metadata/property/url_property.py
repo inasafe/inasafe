@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.common.exceptions import MetadataCastError
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -19,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 from PyQt4.QtCore import QUrl
-from safe.metadata.property.base_property import BaseProperty
+from safe.metadata.property import BaseProperty
 
 
 class UrlProperty(BaseProperty):
@@ -37,6 +38,14 @@ class UrlProperty(BaseProperty):
         else:
             error = '%s is not a valid formatted URL' % value.toString()
             raise ValueError(error)
+
+    def cast_from_str(self, value):
+        try:
+            value = QUrl(value)
+            self.is_valid(value)
+            return value
+        except (TypeError, ValueError) as e:
+            raise MetadataCastError(e)
 
     @property
     def xml_value(self):

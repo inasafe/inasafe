@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-from safe.metadata.property.base_property import BaseProperty
+from safe.metadata.property import BaseProperty
 
 
 class CharacterStringProperty(BaseProperty):
@@ -32,6 +32,10 @@ class CharacterStringProperty(BaseProperty):
     def is_valid(self, value):
         # any string sequence is valid.
         return True
+
+    def cast_from_str(self, value):
+        # return the original string
+        return value
 
     @property
     def xml_value(self):

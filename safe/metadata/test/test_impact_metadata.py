@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.exceptions import MetadataReadError
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -26,16 +25,18 @@ from unittest import TestCase
 
 from PyQt4.QtCore import QDate, QUrl
 
+from safe.common.exceptions import MetadataReadError
 from safe.common.utilities import unique_filename
+
+from safe.metadata import ImpactLayerMetadata
 from safe.metadata.test import (
     IMPACT_TEST_FILE_JSON, TEMP_DIR,
-    EXISTING_IMPACT_LAYER_TEST_FILE_JSON,
-    EXISTING_IMPACT_LAYER_TEST_FILE, INVALID_IMPACT_LAYER_JSON,
-    INCOMPLETE_IMPACT_LAYER_JSON)
-from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
+    EXISTING_IMPACT_JSON,
+    EXISTING_IMPACT_FILE, INVALID_IMPACT_JSON,
+    INCOMPLETE_IMPACT_JSON, EXISTING_IMPACT_XML)
 
 
-class TestMetadata(TestCase):
+class TestImpactMetadata(TestCase):
 
     def test_metadata_provenance(self):
         metadata = self.generate_test_metadata()
@@ -49,17 +50,17 @@ class TestMetadata(TestCase):
         # using QDate
         test_value = QDate(2015, 6, 7)
         metadata.set('ISO19115_TEST', test_value, path, 'gco:Date')
-        self.assertEqual(metadata.get_xml('ISO19115_TEST'), '2015-06-07')
+        self.assertEqual(metadata.get_xml_value('ISO19115_TEST'), '2015-06-07')
 
         # using datetime
         test_value = datetime(2015, 6, 7)
         metadata.update('ISO19115_TEST', test_value)
-        self.assertEqual(metadata.get_xml('ISO19115_TEST'), '2015-06-07')
+        self.assertEqual(metadata.get_xml_value('ISO19115_TEST'), '2015-06-07')
 
         # using date
         test_value = date(2015, 6, 7)
         metadata.set('ISO19115_TEST', test_value, path, 'gco:Date')
-        self.assertEqual(metadata.get_xml('ISO19115_TEST'), '2015-06-07')
+        self.assertEqual(metadata.get_xml_value('ISO19115_TEST'), '2015-06-07')
 
         # using str should fail
         test_value = '2015-06-07'
@@ -74,12 +75,11 @@ class TestMetadata(TestCase):
         test_value = QUrl('http://inasafe.org')
         metadata.set('ISO19115_TEST', test_value, path, 'gmd:URL')
         self.assertEqual(
-            metadata.get_xml('ISO19115_TEST'), 'http://inasafe.org')
+            metadata.get_xml_value('ISO19115_TEST'), 'http://inasafe.org')
 
-        # using str should fail
+        # using str should work as it is casted
         test_value = 'http://inasafe.org'
-        with self.assertRaises(TypeError):
-            metadata.update('ISO19115_TEST', test_value)
+        metadata.update('ISO19115_TEST', test_value)
 
         # using invalid QUrl (has a space)
         test_value = QUrl('http://inasafe.org ')
@@ -95,17 +95,17 @@ class TestMetadata(TestCase):
         metadata.set(
             'ISO19115_TEST', test_value, path, 'gco:CharacterString')
         self.assertEqual(
-            metadata.get_xml('ISO19115_TEST'), 'Random string')
+            metadata.get_xml_value('ISO19115_TEST'), 'Random string')
 
         # using int
         test_value = 1234
         metadata.update('ISO19115_TEST', test_value)
-        self.assertEqual(metadata.get_xml('ISO19115_TEST'), '1234')
+        self.assertEqual(metadata.get_xml_value('ISO19115_TEST'), '1234')
 
         # using float
         test_value = 1234.5678
         metadata.update('ISO19115_TEST', test_value)
-        self.assertEqual(metadata.get_xml('ISO19115_TEST'), '1234.5678')
+        self.assertEqual(metadata.get_xml_value('ISO19115_TEST'), '1234.5678')
 
         # using invalid QUrl
         test_value = QUrl()
@@ -131,8 +131,8 @@ class TestMetadata(TestCase):
         self.assertEquals(expected_json, written_json)
 
     def test_json_read(self):
-        metadata = ImpactLayerMetadata(EXISTING_IMPACT_LAYER_TEST_FILE)
-        with open(EXISTING_IMPACT_LAYER_TEST_FILE_JSON) as f:
+        metadata = ImpactLayerMetadata(EXISTING_IMPACT_FILE)
+        with open(EXISTING_IMPACT_JSON) as f:
             expected_metadata = f.read()
 
         self.assertEquals(expected_metadata, metadata.json)
@@ -140,15 +140,27 @@ class TestMetadata(TestCase):
     def test_invalid_json_read(self):
         with self.assertRaises(MetadataReadError):
             ImpactLayerMetadata(
-                EXISTING_IMPACT_LAYER_TEST_FILE,
-                json_uri=INVALID_IMPACT_LAYER_JSON)
+                EXISTING_IMPACT_FILE,
+                json_uri=INVALID_IMPACT_JSON)
 
     def test_incomplete_json_read(self):
+        ImpactLayerMetadata(
+            EXISTING_IMPACT_FILE,
+            json_uri=INCOMPLETE_IMPACT_JSON)
+
+    # TODO (MB) check this one
+    def test_xml_read(self):
         metadata = ImpactLayerMetadata(
-            EXISTING_IMPACT_LAYER_TEST_FILE,
-            json_uri=INCOMPLETE_IMPACT_LAYER_JSON)
+            EXISTING_IMPACT_FILE,
+            xml_uri=EXISTING_IMPACT_XML)
+        with open(EXISTING_IMPACT_XML) as f:
+            expected_metadata = f.read()
+        # metadata.write_as('/tmp/serger.xml')
+        self.assertEquals(expected_metadata.replace(" ", ""),
+                          metadata.xml.replace(" ", ""))
 
     def generate_test_metadata(self):
+        # if you change this you need to update IMPACT_TEST_FILE_JSON
         metadata = ImpactLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/'
         # using str

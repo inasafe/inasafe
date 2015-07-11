@@ -18,10 +18,20 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
-from safe.metadata.base_metadata import BaseMetadata
+from xml.etree import ElementTree
+from safe.metadata import BaseMetadata
 
 
 class GenericLayerMetadata(BaseMetadata):
+
+    # remember to add an attribute or a setter property with the same name
+    _additional_xml_properties = {
+        'report': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe_report'),
+    }
 
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         # Initialise members
@@ -32,6 +42,9 @@ class GenericLayerMetadata(BaseMetadata):
         super(GenericLayerMetadata, self).__init__(
             layer_uri, xml_uri, json_uri)
 
+        # merge all _xml_properties
+        self._standard_properties.update(self._additional_xml_properties)
+
     @property
     def dict(self):
         metadata = super(GenericLayerMetadata, self).dict
@@ -41,12 +54,6 @@ class GenericLayerMetadata(BaseMetadata):
     @property
     def json(self):
         return json.dumps(self.dict, indent=2, sort_keys=True)
-
-    @property
-    def xml(self):
-        # TODO (MB): implement this
-        xml = super(GenericLayerMetadata, self).xml
-        raise NotImplementedError('Still need to write this')
 
     def read_from_json(self):
         metadata = super(GenericLayerMetadata, self).read_from_json()

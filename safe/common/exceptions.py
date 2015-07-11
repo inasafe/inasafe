@@ -355,3 +355,8 @@ class MetadataReadError(InaSAFEError):
 class MetadataInvalidPathError(InaSAFEError):
     """When a path for a metadata xml is not correct"""
     suggestion = 'Check that the XML path of the property is correct'
+
+
+class MetadataCastError(InaSAFEError):
+    """When a path for a metadata xml is not correct"""
+    suggestion = 'Check that the XML value is of the correct type'

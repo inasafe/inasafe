@@ -10,9 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.metadata.property.character_string_property import \
-    CharacterStringProperty
-from safe.metadata.property.url_property import UrlProperty
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -20,7 +17,12 @@ __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.metadata.property.date_property import DateProperty
+import os
+from xml.etree import ElementTree
+from safe.metadata.property import (
+    CharacterStringProperty,
+    DateProperty,
+    UrlProperty)
 
 
 # XML to python types conversions
@@ -29,3 +31,51 @@ TYPE_CONVERSIONS = {
     'gco:Date': DateProperty,
     'gmd:URL': UrlProperty
 }
+
+# XML Namespaces
+XML_NS = {
+    'gmi': 'http://www.isotc211.org/2005/gmi',
+    'gco': 'http://www.isotc211.org/2005/gco',
+    'gmd': 'http://www.isotc211.org/2005/gmd',
+    'xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+}
+
+METADATA_XML_TEMPLATE = os.path.join(
+    os.path.dirname(__file__), 'iso_19115_template.xml')
+
+
+ElementTree.register_namespace('gmi', XML_NS['gmi'])
+ElementTree.register_namespace('gco', XML_NS['gco'])
+ElementTree.register_namespace('gmd', XML_NS['gmd'])
+ElementTree.register_namespace('xsi', XML_NS['xsi'])
+
+
+def insert_xml_element(root, path):
+        path = path.split('/')
+        parent = root
+        for tag in path:
+            element = root.find(tag, XML_NS)
+            if element is None:
+                element = ElementTree.SubElement(parent, tag)
+            parent = element
+        return element
+
+
+# MONKEYPATCH CDATA support into Element tree
+# inspired by http://stackoverflow.com/questions/174890/#answer-8915039
+def CDATA(text=None):
+    element = ElementTree.Element('![CDATA[')
+    element.text = text
+    return element
+ElementTree._original_serialize_xml = ElementTree._serialize_xml
+
+
+def _serialize_xml(write, elem, encoding, qnames, namespaces):
+    # print "MONKEYPATCHED CDATA support into Element tree called"
+    if elem.tag == '![CDATA[':
+        write("\n<%s%s]]>\n" % (elem.tag, elem.text))
+        return
+    return ElementTree._original_serialize_xml(
+        write, elem, encoding, qnames, namespaces)
+ElementTree._serialize_xml = ElementTree._serialize['xml'] = _serialize_xml
+# END MONKEYPATCH CDATA
