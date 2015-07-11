@@ -90,7 +90,7 @@ def process_event(working_dir=None, event_id=None, locale='en'):
             LOGGER.exception('An error occurred setting up the shake event.')
             return
 
-        LOGGER.info('Event Id: %s', shake_events)
+        LOGGER.info('Event Id: %s', [s.event_id for s in shake_events])
         LOGGER.info('-------------------------------------------')
 
         for shake_event in shake_events:

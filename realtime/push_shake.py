@@ -141,97 +141,106 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
         shake_event.event_id)
 
     # set headers and cookie
-    session = get_realtime_session()
-    cookies = session.get(earthquake_list_url,
-                          params={'format': 'api'}).cookies
-    session.headers['X-CSRFTOKEN'] = cookies.get('csrftoken')
-    session.headers['Content-Type'] = 'application/json'
+    # begin communicating with server
+    LOGGER.info('----------------------------------')
+    LOGGER.info('Push data to REST server: %s', INASAFE_REALTIME_REST_URL)
+    try:
+        session = get_realtime_session()
+        cookies = session.get(earthquake_list_url,
+                              params={'format': 'api'}).cookies
+        session.headers['X-CSRFTOKEN'] = cookies.get('csrftoken')
+        session.headers['Content-Type'] = 'application/json'
 
-    # build the data request:
-    earthquake_data = {
-        'shake_id': shake_event.event_id,
-        'magnitude': float(event_dict.get('mmi')),
-        'depth': float(event_dict.get('depth-value')),
-        'time': str(shake_event.shake_grid.time),
-        'location': {
-            'type': 'Point',
-            'coordinates': [
-                shake_event.shake_grid.longitude,
-                shake_event.shake_grid.latitude
-            ]
-        },
-        'location_description': event_dict.get('place-name')
-    }
-    # check does the shake event already exists?
-    response = session.get(earthquake_detail_url)
-    if response.status_code == requests.codes.ok:
-        # event exists, we should update using PUT Url
-        response = session.put(earthquake_detail_url,
-                               data=json.dumps(earthquake_data))
-    elif response.status_code == requests.codes.not_found:
-        # event does not exists, create using POST url
-        response = session.post(earthquake_list_url,
-                                data=json.dumps(earthquake_data))
+        # build the data request:
+        earthquake_data = {
+            'shake_id': shake_event.event_id,
+            'magnitude': float(event_dict.get('mmi')),
+            'depth': float(event_dict.get('depth-value')),
+            'time': str(shake_event.shake_grid.time),
+            'location': {
+                'type': 'Point',
+                'coordinates': [
+                    shake_event.shake_grid.longitude,
+                    shake_event.shake_grid.latitude
+                ]
+            },
+            'location_description': event_dict.get('place-name')
+        }
+        # check does the shake event already exists?
+        response = session.get(earthquake_detail_url)
+        if response.status_code == requests.codes.ok:
+            # event exists, we should update using PUT Url
+            response = session.put(earthquake_detail_url,
+                                   data=json.dumps(earthquake_data))
+        elif response.status_code == requests.codes.not_found:
+            # event does not exists, create using POST url
+            response = session.post(earthquake_list_url,
+                                    data=json.dumps(earthquake_data))
 
-    if not (response.status_code == requests.codes.ok or
-            response.status_code == requests.codes.created):
-        # raise exceptions
-        error = RESTRequestFailedError(
-            url=response.url,
-            status_code=response.status_code,
-            data=json.dumps(earthquake_data))
+        if not (response.status_code == requests.codes.ok or
+                response.status_code == requests.codes.created):
+            # raise exceptions
+            error = RESTRequestFailedError(
+                url=response.url,
+                status_code=response.status_code,
+                data=json.dumps(earthquake_data))
+            if fail_silent:
+                LOGGER.error(error.message)
+            else:
+                raise error
+
+        # post the report
+        # build report data
+        path_files = shake_event.generate_result_path_dict()
+        event_report_dict = {
+            'shake_id': shake_event.event_id,
+            'language': shake_event.locale
+        }
+        event_report_files = {
+            'report_pdf': open(path_files.get('pdf')),
+            'report_image': open(path_files.get('image')),
+            'report_thumbnail': open(path_files.get('thumbnail'))
+        }
+        # check report exists
+        earthquake_report_detail_url = generate_earthquake_report_detail_url(
+            shake_event.event_id, shake_event.locale)
+        earthquake_report_list_url = generate_earthquake_report_list_url()
+
+        # build headers and cookies
+        session = get_realtime_session()
+        response = session.get(earthquake_report_list_url,
+                               params={'format': 'api'})
+        cookies = response.cookies
+        csrftoken = cookies.get('csrftoken')
+        session.headers['X-CSRFToken'] = csrftoken
+        response = session.get(earthquake_report_detail_url)
+        if response.status_code == requests.codes.ok:
+            # event exists, we should update using PUT Url
+            response = session.put(
+                earthquake_report_detail_url,
+                data=event_report_dict,
+                files=event_report_files)
+        elif response.status_code == requests.codes.not_found:
+            # event doesn't exists, we should update using POST url
+            response = session.post(
+                earthquake_report_list_url,
+                data=event_report_dict,
+                files=event_report_files)
+
+        if not (response.status_code == requests.codes.ok or
+                response.status_code == requests.codes.created):
+            error = RESTRequestFailedError(
+                url=response.url,
+                status_code=response.status_code,
+                data=event_report_dict,
+                files=event_report_files)
+
+            if fail_silent:
+                LOGGER.error(error.message)
+            else:
+                raise error
+    except Exception as exc:
         if fail_silent:
-            logging.error(error.message)
+            LOGGER.error(exc.message)
         else:
-            raise error
-
-    # post the report
-    # build report data
-    path_files = shake_event.generate_result_path_dict()
-    event_report_dict = {
-        'shake_id': shake_event.event_id,
-        'language': shake_event.locale
-    }
-    event_report_files = {
-        'report_pdf': open(path_files.get('pdf')),
-        'report_image': open(path_files.get('image')),
-        'report_thumbnail': open(path_files.get('thumbnail'))
-    }
-    # check report exists
-    earthquake_report_detail_url = generate_earthquake_report_detail_url(
-        shake_event.event_id, shake_event.locale)
-    earthquake_report_list_url = generate_earthquake_report_list_url()
-
-    # build headers and cookies
-    session = get_realtime_session()
-    response = session.get(earthquake_report_list_url,
-                           params={'format': 'api'})
-    cookies = response.cookies
-    csrftoken = cookies.get('csrftoken')
-    session.headers['X-CSRFToken'] = csrftoken
-    response = session.get(earthquake_report_detail_url)
-    if response.status_code == requests.codes.ok:
-        # event exists, we should update using PUT Url
-        response = session.put(
-            earthquake_report_detail_url,
-            data=event_report_dict,
-            files=event_report_files)
-    elif response.status_code == requests.codes.not_found:
-        # event doesn't exists, we should update using POST url
-        response = session.post(
-            earthquake_report_list_url,
-            data=event_report_dict,
-            files=event_report_files)
-
-    if not (response.status_code == requests.codes.ok or
-            response.status_code == requests.codes.created):
-        error = RESTRequestFailedError(
-            url=response.url,
-            status_code=response.status_code,
-            data=event_report_dict,
-            files=event_report_files)
-
-        if fail_silent:
-            logging.error(error.message)
-        else:
-            raise error
+            raise exc
