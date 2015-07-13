@@ -191,9 +191,9 @@ class ITBFatalityFunction(
             },
             {
                 'content': tr(
-                    'People are considered to be displaced if '
+                    '<sup>1</sup>People are considered to be displaced if '
                     'they experience and survive a shake level'
-                    'of more than 5 on the MMI scale ')
+                    'of more than 5 on the MMI scale.')
             },
             {
                 'content': tr(
@@ -215,7 +215,7 @@ class ITBFatalityFunction(
             },
             {
                 'content': tr(
-                    'Map shows the estimation of displaced population')
+                    'Map shows the estimation of displaced population.')
             },
             {
                 'content': tr(get_needs_provenance_value(self.parameters))

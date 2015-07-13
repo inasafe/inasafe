@@ -65,7 +65,7 @@ class FloodEvacuationRasterHazardFunction(
             {
                 'content': tr(
                     '<sup>1</sup>People need evacuation if flood levels '
-                    'exceed %(eps).1f m') % {'eps': thresholds[-1]},
+                    'exceed %(eps).1f m.') % {'eps': thresholds[-1]},
             },
             {
                 'content': tr(get_needs_provenance_value(self.parameters)),
