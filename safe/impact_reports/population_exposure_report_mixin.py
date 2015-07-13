@@ -265,7 +265,7 @@ class PopulationExposureReportMixin(ReportMixin):
                 self._evacuation_percentage):
             evacuated_population = (
                 evacuated_population * self._evacuation_percentage / 100)
-        return evacuated_population
+        return int(evacuated_population)
 
     @property
     def total_population(self):
