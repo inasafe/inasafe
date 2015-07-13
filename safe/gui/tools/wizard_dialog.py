@@ -2076,15 +2076,24 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Source tab."""
         # Just set values based on existing keywords
         source = self.get_existing_keyword('source')
-        self.leSource.setText(source)
+        if source or source == 0:
+            self.leSource.setText(unicode(source))
+
         source_scale = self.get_existing_keyword('scale')
-        self.leSource_scale.setText(source_scale)
+        if source_scale or source_scale == 0:
+            self.leSource_scale.setText(unicode(source_scale))
+
         source_date = self.get_existing_keyword('date')
-        self.leSource_date.setText(source_date)
+        if source_date or source_date == 0:
+            self.leSource_date.setText(unicode(source_date))
+
         source_url = self.get_existing_keyword('url')
-        self.leSource_url.setText(source_url)
+        if source_url or source_url == 0:
+            self.leSource_url.setText(unicode(source_url))
+
         source_license = self.get_existing_keyword('license')
-        self.leSource_license.setText(source_license)
+        if source_license or source_license == 0:
+            self.leSource_license.setText(unicode(source_license))
 
     # ===========================
     # STEP_KW_TITLE
@@ -4421,20 +4430,21 @@ class WizardDialog(QDialog, FORM_CLASS):
         if value_map:
             keywords['value_map'] = json.dumps(value_map)
         extra_keywords = self.selected_extra_keywords()
+        from safe.utilities.unicode import get_unicode
         for key in extra_keywords:
             keywords[key] = extra_keywords[key]
         if self.leSource.text():
-            keywords['source'] = self.leSource.text()
+            keywords['source'] = get_unicode(self.leSource.text())
         if self.leSource_url.text():
-            keywords['url'] = self.leSource_url.text()
+            keywords['url'] = get_unicode(self.leSource_url.text())
         if self.leSource_scale.text():
-            keywords['scale'] = self.leSource_scale.text()
+            keywords['scale'] = get_unicode(self.leSource_scale.text())
         if self.leSource_date.text():
-            keywords['date'] = self.leSource_date.text()
+            keywords['date'] = get_unicode(self.leSource_date.text())
         if self.leSource_license.text():
-            keywords['license'] = self.leSource_license.text()
+            keywords['license'] = get_unicode(self.leSource_license.text())
         if self.leTitle.text():
-            keywords['title'] = self.leTitle.text()
+            keywords['title'] = get_unicode(self.leTitle.text())
 
         return keywords
 
