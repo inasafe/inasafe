@@ -49,6 +49,10 @@ class GroupParameter(CollectionParameter):
 
     @custom_validator.setter
     def custom_validator(self, value):
+        """
+        :param value: function object with one argument for the parameter
+        :type value: (list[Parameter]) -> None
+        """
         self._custom_validator = value
 
     def validate(self):

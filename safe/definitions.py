@@ -20,6 +20,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # Please group them and sort them alphabetical
 from safe.utilities.i18n import tr
 
+inasafe_keyword_version_key = 'keyword_version'
+inasafe_keyword_version = 3.2
+
 # constants
 small_number = 2 ** -53  # I think this is small enough
 
@@ -85,27 +88,35 @@ layer_mode_continuous = {
         'values representing a continuously varying phenomenon. '
         'For example flood depth is a continuous value from 0 to the maximum '
         'reported depth during a flood. '
+        'Raster exposure data such as population data are also continuous. '
+        'In this example the cell values represent the number of people in '
+        'cell.\n'
         'Raster data is considered to be continuous by default and you '
         'should explicitly indicate that it is classified if each cell in the '
         'raster represents a discrete class (e.g. low depth = 1, medium depth '
-        '= 2, high depth = 3).'),
+        '= 2, high depth = 3).'
+    ),
 }
 layer_mode_classified = {
     'key': 'classified',
     'name': tr('Classified'),
     'description': tr(
-        '<b>Classified</b> data can be used for either hazard or exposure data '
-        'and can be used for both raster and vector layer types where the '
-        'attribute values represent a classified or coded value. '
+        '<b>Classified</b> data can be used for either hazard or exposure '
+        'data and can be used for both raster and vector layer types where '
+        'the attribute values represent a classified or coded value. \n'
         'For example, classified values in a flood raster data set might '
         'represent discrete classes where a value of 1 might represent the '
         'low inundation class, a value of 2 might represent the medium '
         'inundation class and a value of 3 might represent the '
-        'high inundation class.'
-        'Classified values in a vector Volcano data set might represent '
-        'discrete clases where a value of I might represent low volcanic '
-        'hazard, a value of II might represent medium volcanic hazard and '
-        'a value of III  might represent a high volcanic hazard. '
+        'high inundation class.\n'
+        'Classified values in a vector (polygon) Volcano data set might '
+        'represent discrete classes where a value of I might represent low '
+        'volcanic hazard, a value of II might represent medium volcanic hazard '
+        'and a value of III  might represent a high volcanic hazard. \n'
+        'In a vector (point) Volcano data the user specified buffer distances '
+        'will be used to classify the data. '
+        'Classified values in a vector exposure data set might include '
+        'building type or road type. '
     ),
 }
 
@@ -128,7 +139,7 @@ layer_geometry_point = {
     'description': tr(
         'A layer composed of points which each represent a feature on the '
         'earth. Currently the only point data supported by InaSAFE are '
-        '<b>volcano hazard</b> layers.')
+        '<b>volcano hazard</b> layers and building points.')
 }
 
 layer_geometry_line = {
@@ -183,9 +194,9 @@ hazard_category_single_event = {
     'key': 'single_event',
     'name': tr('Single Event'),
     'description': tr(
-        'A <b>single hazard event/<b> can be based on either a specific event '
-        'that has happened in the past, for example a flood like Jakarta 2013, '
-        'or a possible event such as the tsunami that results from an '
+        '<b>Single event</b> hazard data can be based on either a specific  '
+        'event that has happened in the past, for example a flood like Jakarta '
+        '2013, or a possible event such as the tsunami that results from an '
         'earthquake near Bima that might happen in the future.')
 }
 
@@ -193,13 +204,13 @@ hazard_category_multiple_event = {
     'key': 'multiple_event',
     'name': tr('Multiple Event'),
     'description': tr(
-        'A <b>multiple hazard event/<b> data can be based on historical '
+        '<b>Multiple event</b> hazard data can be based on historical '
         'observations such as a hazard map of all observed volcanic '
-        ' deposits around a volcano. '
-        'This type of hazard data shows those locations that might be impacted '
-        'by a volcanic eruption in the future .'
-        'Another example might be a probabilistic hazard model that shows the '
-        'likelihood of a magnitude 7 earthquake happening in the next 50 yrs.')
+        'deposits around a volcano. \n'
+        'This type of hazard data shows those locations that might be '
+        'impacted by a volcanic eruption in the future . Another example '
+        'might be a probabilistic hazard model that shows the likelihood of a '
+        'magnitude 7 earthquake happening in the next 50 yrs.')
 }
 
 hazard_category = {
@@ -207,8 +218,8 @@ hazard_category = {
     'name': tr('Hazard Category'),
     'description': tr(
         'This describes the category of the hazard that is represented by the '
-        'layer. There are two possible values for this attribute, single event '
-        'and multiple event.'),
+        'layer. There are two possible values for this attribute, single '
+        'event and multiple event.'),
     'types': [
         hazard_category_single_event,
         hazard_category_multiple_event
@@ -220,7 +231,7 @@ hazard_generic = {
     'key': 'generic',
     'name': tr('Generic'),
     'description': tr(
-        'A <b>generic hazard/<b> can be used for any type of hazard where the  '
+        'A <b>generic hazard</b> can be used for any type of hazard where the '
         'data have been classified or generalised. For example: earthquake, '
         'flood, volcano, or tsunami.')
 }
@@ -309,7 +320,7 @@ exposure_land_cover = {
     'key': 'land_cover',
     'name': tr('Land Cover'),
     'description': tr(
-        'The <b>land cover/<b> exposure data describes features on '
+        'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
         ' hazard. This might include crops, forest and urban areas. ')
 }
@@ -318,9 +329,9 @@ exposure_people_in_building = {
     'key': 'people_in_building',
     'name': tr('People in Buildings'),
     'description': tr(
-        'The <b>people in buildings/<b> exposure data is an experimental '
+        'The <b>people in buildings</b> exposure data is an experimental '
         'data set that assigns the population of a specific administrative '
-        'area to the buildings with a residential function in that area.'
+        'area to the buildings with a residential function in that area.\n'
         'The process of assigning people to buildings assumes that all people '
         'and buildings in the area are mapped. There are no InaSAFE impact '
         'functions that use this exposure data yet.')
@@ -379,6 +390,8 @@ exposure = {
 unit_feet = {
     'key': 'feet',
     'name': tr('Feet'),
+    'plural_name': tr('feet'),
+    'abbreviation': tr('feet'),
     'description': tr(
         '<b>Feet</b> are an imperial unit of measure. There are 12 '
         'inches in 1 foot and 3 feet in 1 yard.'),
@@ -387,6 +400,8 @@ unit_feet = {
 unit_generic = {
     'key': 'generic',
     'name': tr('Generic'),
+    'plural_name': tr('generic'),
+    'abbreviation': tr('generic'),
     'description': tr(
         'A generic unit for value that does not have unit or we do not know '
         'about the unit. It also can be used for normalised values.'),
@@ -395,8 +410,10 @@ unit_generic = {
 unit_kilogram_per_meter_square = {
     'key': 'kilogram_per_meter_square',
     'name': tr('Kg/m2'),
+    'plural_name': tr('Kg/m2'),
+    'abbreviation': tr('Kg/m2'),
     'description': tr(
-        '<b>Kilograms per square metre/<b> is a metric unit of measure where '
+        '<b>Kilograms per square metre</b> is a metric unit of measure where '
         'the weight is specified according to area.  This unit is relevant '
         'for hazards such as volcanic ash.')
 }
@@ -404,6 +421,8 @@ unit_kilogram_per_meter_square = {
 unit_kilometres = {
     'key': 'kilometres',
     'name': tr('Kilometres'),
+    'plural_name': tr('kilometres'),
+    'abbreviation': tr('km'),
     'description': tr(
         '<b>Kilometres</b> are a metric unit of measure. There are 1000 '
         'metres in 1 kilometre (km).'),
@@ -412,14 +431,18 @@ unit_kilometres = {
 unit_metres = {
     'key': 'metres',
     'name': tr('Metres'),
+    'plural_name': tr('metres'),
+    'abbreviation': tr('m'),
     'description': tr(
         '<b>Metres</b> are a metric unit of measure. There are 100 '
-        'centimetres in 1 meter.'),
+        'centimetres in 1 metre.'),
 }
 
 unit_millimetres = {
     'key': 'millimetres',
     'name': tr('Millimetres'),
+    'plural_name': tr('millimetres'),
+    'abbreviation': tr('mm'),
     'description': tr(
         '<b>Millimetres</b> are a metric unit of measure. There are 1000 '
         'millimetres in 1 metre.'),
@@ -428,10 +451,22 @@ unit_millimetres = {
 unit_mmi = {
     'key': 'mmi',
     'name': tr('MMI'),
+    'plural_name': tr('MMI'),
+    'abbreviation': tr('MMI'),
     'description': tr(
         'The <b>Modified Mercalli Intensity (MMI)</b> scale describes '
         'the intensity of ground shaking from a earthquake based on the '
         'effects observed by people at the surface.'),
+}
+
+unit_percentage = {
+    'key': 'percentage',
+    'name': tr('Percentage'),
+    'plural_name': tr('percentages'),
+    'abbreviation': tr('%%'),
+    'description': tr(
+        'Percentage values ranges from 0 to 100. It represents a ratio of '
+        'hundred.'),
 }
 
 continuous_hazard_unit = {
@@ -458,10 +493,9 @@ generic_vector_hazard_classes = {
     'name': tr('Generic classes'),
     'description': tr(
         'This is a ternary description for an area. The area may have either '
-        '<b>low</b>, <b>medium</b>, or <b>high</b> impact from the '
+        '<b>low</b>, <b>medium</b>, or <b>high</b> classification for the '
         'hazard.'),
     'default_attribute': 'affected',
-    'default_class': 'high',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'high',
@@ -501,7 +535,6 @@ volcano_vector_hazard_classes = {
         '<b>low</b>, <b>medium</b>, or <b>high</b> classification for '
         'volcano hazard.'),
     'default_attribute': 'affected',
-    'default_class': 'high',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'high',
@@ -542,7 +575,6 @@ flood_vector_hazard_classes = {
         'by flood water). This unit does not describe how <b>wet</b> or '
         '<b>dry</b> an area is.'),
     'default_attribute': 'affected',
-    'default_class': 'wet',
     'classes': [
         {
             'key': 'wet',
@@ -589,7 +621,6 @@ flood_raster_hazard_classes = {
         '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
         'by flood water). This unit does not describe how <b>wet</b> or '
         '<b>dry</b> an area is.'),
-    'default_class': 'dry',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'wet',
@@ -616,7 +647,6 @@ generic_raster_hazard_classes = {
     'description': tr(
         'This is a ternary description for an area. The area is classified as '
         'either a <b>low</b>, <b>medium</b>, or <b>high</b> hazard class.'),
-    'default_class': 'high',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'high',
@@ -653,7 +683,6 @@ tsunami_raster_hazard_classes = {
         '<b>wet</b> (affected by tsunami) or <b>dry</b> (not affected '
         'by tsunami). This unit does not describe how <b>wet</b> or '
         '<b>dry</b> an area is.'),
-    'default_class': 'dry',  # unclassified value will go to this class
     'classes': [
         {
             'key': 'wet',
@@ -701,15 +730,15 @@ density_exposure_unit = {
     'key': 'density',
     'name': tr('Density'),
     'description': tr(
-        'Density of people (or any other object) per cell.')
+        'Number of people (or any other object) in a specific area.')
 }
 
 exposure_unit = {
     'key': 'exposure_unit',
     'name': tr('Exposure Unit'),
     'description': tr(
-        'Exposure unit defines what is the unit for the exposure, for example '
-        'people can have count unit or density unit.'),
+        'Exposure unit defines the unit for the exposure, for example '
+        'people can either be measured as count or density (count per area.'),
     'types': [
         count_exposure_unit,
         density_exposure_unit

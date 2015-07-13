@@ -6153,8 +6153,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wizard_dialog.py" line="159"/>
-        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; for this &lt;b&gt;%s data&lt;/b&gt; raster layer. For some exposure types you may want InaSAFE to not resample the raster to the hazard layer resolution during analyses. Please select the check box below if you want to set the &lt;i&gt;allow_resample&lt;/i&gt; keyword to &lt;i&gt;False&lt;/i&gt;.</source>
-        <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt;untuk lapisan raster &lt;b&gt;data %s&lt;/b&gt; ini. Untuk beberapa jenis keterpaparan, Anda mungkin tidak ingin InaSAFE untuk melakukan resampling lapisan raster ke resolusi lapisan ancaman selama melakukan analisis. Silahkan pilih check box di bawah ini jika Anda ingin mengeset &lt;i&gt;allow_resample&lt;/i&gt; menjadi &lt;i&gt;False&lt;/&gt;.</translation>
+        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; for this &lt;b&gt;%s data&lt;/b&gt; raster layer. For some exposure types you may want InaSAFE to not resample the raster to the hazard layer resolution during analyses. Please select the check box below if you want to set the &lt;i&gt;allow_resampling&lt;/i&gt; keyword to &lt;i&gt;False&lt;/i&gt;.</source>
+        <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt;untuk lapisan raster &lt;b&gt;data %s&lt;/b&gt; ini. Untuk beberapa jenis keterpaparan, Anda mungkin tidak ingin InaSAFE untuk melakukan resampling lapisan raster ke resolusi lapisan ancaman selama melakukan analisis. Silahkan pilih check box di bawah ini jika Anda ingin mengeset &lt;i&gt;allow_resampling&lt;/i&gt; menjadi &lt;i&gt;False&lt;/&gt;.</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="257"/>

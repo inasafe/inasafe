@@ -99,19 +99,19 @@ def _keywords_to_string(keywords, sublayer=None):
     result = get_unicode('')
     if sublayer is not None:
         result = '[%s]\n' % sublayer
-    for k, value in keywords.items():
+    # Sort so that less changes when run the test
+    for key in sorted(keywords.iterkeys()):
         # Create key
         msg = ('Key in keywords dictionary must be a string. '
-               'I got %s with type %s' % (k, str(type(k))[1:-1]))
-        verify(isinstance(k, basestring), msg)
+               'I got %s with type %s' % (key, str(type(key))[1:-1]))
+        verify(isinstance(key, basestring), msg)
 
-        key = k
         msg = ('Key in keywords dictionary must not contain the ":" '
                'character. I got "%s"' % key)
         verify(':' not in key, msg)
 
         # Store
-        result += '%s: %s\n' % (key, value)
+        result += '%s: %s\n' % (key, keywords[key])
     return result
 
 

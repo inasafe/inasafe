@@ -163,7 +163,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
                  blank_cell],
                 header=True),
             TableRow(
-                [tr('People needing evacuation'),
+                [tr('Number of people that might need evacuation'),
                  '%s' % format_int(
                      population_rounding(total_affected_population)),
                  blank_cell],
@@ -187,15 +187,15 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
 
         table_body.extend([
             TableRow(tr(
-                'Map shows the number of people affected in each of volcano '
-                'hazard polygons.'))])
+                'Map shows the number of people within the volcano impact '
+                'area.'))])
 
         total_needs = evacuated_population_needs(
             total_affected_population, minimum_needs)
         for frequency, needs in total_needs.items():
             table_body.append(TableRow(
                 [
-                    tr('Needs should be provided %s' % frequency),
+                    tr('Minimum needs to be provided %s' % frequency),
                     tr('Total')
                 ],
                 header=True))
@@ -208,10 +208,10 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
         # Extend impact report for on-screen display
         table_body.extend(
             [TableRow(tr('Notes'), header=True),
-             tr('Total population %s in the exposure layer') % format_int(
+             tr('Total population in the analysis area is %s') % format_int(
                  total_population),
-             tr('People need evacuation if they are within the '
-                'volcanic hazard zones.')])
+             tr('People are affected and need evacuation if they are within '
+                'the volcano impact area.')])
 
         if nan_warning:
             table_body.extend([
@@ -228,7 +228,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             table_body = [
                 self.question,
                 TableRow(
-                    [tr('People needing evacuation'),
+                    [tr('Number of people that might need evacuation'),
                      '%s' % format_int(total_affected_population),
                      blank_cell],
                     header=True)]
@@ -279,7 +279,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             style_type='rasterStyle')
 
         # For printing map purpose
-        map_title = tr('People affected by the buffered point volcano')
+        map_title = tr('People within the Volcano Impact Area')
         legend_notes = tr('Thousand separator is represented by  %s' %
                           get_thousand_separator())
         legend_units = tr('(people per cell)')
@@ -290,7 +290,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             data=covered_exposure_layer.get_data(),
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
-            name=tr('People affected by the buffered point volcano'),
+            name=tr('People within the volcano impact area'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
                       'target_field': self.target_field,

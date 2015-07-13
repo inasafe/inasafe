@@ -292,9 +292,7 @@
   <tabstop>show_confirmations</tabstop>
   <tabstop>web_view</tabstop>
  </tabstops>
- <resources>
-  <include location="../resources/resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>hazard_exposure_bookmark</sender>

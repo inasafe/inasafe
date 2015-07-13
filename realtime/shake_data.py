@@ -34,7 +34,6 @@ from realtime.exceptions import (
     CopyError,
     EmptyShakeDirectoryError)
 
-
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
@@ -107,13 +106,14 @@ class ShakeData(object):
             self.working_dir, self.event_id)
         return os.path.exists(event_path)
 
-    def get_list_event_ids(self):
+    @staticmethod
+    def get_list_event_ids_from_folder(working_dir):
         """Get all event id indicated by folder in working dir."""
-        if os.path.exists(self.working_dir):
-            directories = os.listdir(self.working_dir)
+        if os.path.exists(working_dir):
+            directories = os.listdir(working_dir)
         else:
             LOGGER.debug(
-                'Directory %s does not exist, return None' % self.working_dir)
+                'Directory %s does not exist, return None' % working_dir)
             return None
         # Filter the dirs to only contain valid event dirs
         valid_dirs = []
@@ -124,8 +124,11 @@ class ShakeData(object):
         if len(valid_dirs) == 0:
             raise EmptyShakeDirectoryError(
                 'The directory %s does not contain any shakemaps.' %
-                self.working_dir)
+                working_dir)
         return valid_dirs
+
+    def get_list_event_ids(self):
+        return ShakeData.get_list_event_ids_from_folder(self.working_dir)
 
     def get_latest_event_id(self):
         """Return latest event id."""
