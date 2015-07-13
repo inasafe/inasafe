@@ -94,6 +94,7 @@ from safe_extras.parameters.group_parameter import GroupParameter
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
+from safe.utilities.unicode import get_unicode
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -2077,23 +2078,23 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Just set values based on existing keywords
         source = self.get_existing_keyword('source')
         if source or source == 0:
-            self.leSource.setText(unicode(source))
+            self.leSource.setText(get_unicode(source))
 
         source_scale = self.get_existing_keyword('scale')
         if source_scale or source_scale == 0:
-            self.leSource_scale.setText(unicode(source_scale))
+            self.leSource_scale.setText(get_unicode(source_scale))
 
         source_date = self.get_existing_keyword('date')
         if source_date or source_date == 0:
-            self.leSource_date.setText(unicode(source_date))
+            self.leSource_date.setText(get_unicode(source_date))
 
         source_url = self.get_existing_keyword('url')
         if source_url or source_url == 0:
-            self.leSource_url.setText(unicode(source_url))
+            self.leSource_url.setText(get_unicode(source_url))
 
         source_license = self.get_existing_keyword('license')
         if source_license or source_license == 0:
-            self.leSource_license.setText(unicode(source_license))
+            self.leSource_license.setText(get_unicode(source_license))
 
     # ===========================
     # STEP_KW_TITLE
@@ -4430,7 +4431,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         if value_map:
             keywords['value_map'] = json.dumps(value_map)
         extra_keywords = self.selected_extra_keywords()
-        from safe.utilities.unicode import get_unicode
         for key in extra_keywords:
             keywords[key] = extra_keywords[key]
         if self.leSource.text():
