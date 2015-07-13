@@ -14,7 +14,6 @@ __date__ = '07/07/15'
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
-
 # Get Realtime Rest URL from the os environment
 INASAFE_REALTIME_REST_URL = None
 
@@ -42,11 +41,11 @@ if 'INASAFE_REALTIME_DATETIME_FORMAT' in os.environ:
 
 INASAFE_REALTIME_REST_URLPATTERN = {
     'login': INASAFE_REALTIME_REST_LOGIN_URL,
-    'earthquake': INASAFE_REALTIME_REST_URL+'earthquake/',
-    'earthquake-detail': INASAFE_REALTIME_REST_URL+'earthquake/<shake_id>',
-    'earthquake-report': INASAFE_REALTIME_REST_URL+'earthquake-report/',
+    'earthquake': INASAFE_REALTIME_REST_URL + 'earthquake/',
+    'earthquake-detail': INASAFE_REALTIME_REST_URL + 'earthquake/<shake_id>',
+    'earthquake-report': INASAFE_REALTIME_REST_URL + 'earthquake-report/',
     'earthquake-report-detail': (
-        INASAFE_REALTIME_REST_URL+'earthquake-report/<shake_id>/<locale>')
+        INASAFE_REALTIME_REST_URL + 'earthquake-report/<shake_id>/<locale>')
 }
 
 
