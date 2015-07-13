@@ -151,7 +151,7 @@ class ITBFatalityFunction(
                 'content': tr(
                     'Are there enough victim identification units available '
                     'for %s people?') % (
-                    population_rounding(total_fatalities)),
+                        population_rounding(total_fatalities)),
                 'condition': total_fatalities
             },
             {
