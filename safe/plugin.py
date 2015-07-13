@@ -312,6 +312,23 @@ class Plugin(object):
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
         self.add_action(self.action_import_dialog)
 
+    def _create_impact_people_in_buildings_action(self):
+        icon = resources_path('img', 'icons', 'people-in-buildings.svg')
+        self.people_in_buildings_dialog = QAction(
+            QIcon(icon),
+            self.tr('InaSAFE People in Buildings'),
+            self.iface.mainWindow())
+        self.people_in_buildings_dialog.setStatusTip(self.tr(
+            'InaSAFE OpenStreetMap Downloader'))
+        self.people_in_buildings_dialog.setWhatsThis(self.tr(
+            'InaSAFE OpenStreetMap Downloader'))
+        self.people_in_buildings_dialog.triggered.connect(
+            self.show_people_in_buildings)
+
+        self.add_action(
+            self.people_in_buildings_dialog,
+            add_to_toolbar=self.full_toolbar)
+
     def _create_impact_merge_action(self):
         """Create action for impact layer merge Dialog."""
         icon = resources_path('img', 'icons', 'show-impact-merge.svg')
@@ -426,6 +443,7 @@ class Plugin(object):
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
+        self._create_impact_people_in_buildings_action()
         # TODO: add menu separator - Analysis
         self._create_batch_runner_action()
         self._create_impact_merge_action()
@@ -556,6 +574,17 @@ class Plugin(object):
             parent=self.iface.mainWindow(),
             dock=self.dock_widget)
         dialog.exec_()  # modal
+
+    def show_people_in_buildings(self):
+        """Show the people in buildings dialog."""
+        # import here only so that it is AFTER i18n set up
+        from safe.gui.tools.people_in_buildings_dialog import (
+            PeopleInBuildingsDialog)
+
+        dialog = PeopleInBuildingsDialog(
+            self.iface,
+            self.dock_widget)
+        dialog.show()
 
     def show_impact_merge(self):
         """Show the impact layer merge dialog."""
