@@ -73,12 +73,6 @@ class ContinuousHazardPopulationFunction(
             },
             {
                 'content': tr(
-                    'All values are rounded up to the nearest '
-                    'integer in order to avoid representing human '
-                    'lives as fractions.')
-            },
-            {
-                'content': tr(
                     'Map shows the numbers of people in high, medium, '
                     'and low hazard class areas.')
             },
@@ -94,13 +88,18 @@ class ContinuousHazardPopulationFunction(
                     'when counting the affected or total population.'),
                 'condition': self.no_data_warning
             },
-            # {
-            #     'content': tr(
-            #         'Population rounding is applied to all population '
-            #         'values, which may cause discrepancies when adding '
-            #         'values.'
-            #     )
-            # }
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.'
+                )
+            }
         ]
         return notes
 

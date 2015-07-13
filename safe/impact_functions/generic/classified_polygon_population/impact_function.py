@@ -67,22 +67,20 @@ class ClassifiedPolygonHazardPopulationFunction(
             },
             {
                 'content': tr(
-                    'All values are rounded up to the nearest '
-                    'integer in order to avoid representing human '
-                    'lives as fractions.')
-            },
-            {
-                'content': tr(
                     'Map shows population count in high, medium, and low '
                     'hazard area.')
             },
-            # {
-            #     'content': tr(
-            #         'Population rounding is applied to all population '
-            #         'values, which may cause discrepancies when adding '
-            #         'values.'
-            #     )
-            # }
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.')
+            }
         ]
         return notes
 

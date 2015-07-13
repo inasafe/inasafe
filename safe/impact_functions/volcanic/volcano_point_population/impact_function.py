@@ -75,17 +75,6 @@ class VolcanoPointPopulationFunction(
                     'the volcanic hazard zones.'),
             },
             {
-                'content': tr('How will we reach evacuated people?')
-            },
-            {
-                'content': tr('How will we reach evacuated people?')
-            },
-            {
-                'content': tr(
-                    'All values are rounded up to the nearest integer in '
-                    'order to avoid representing human lives as fractions.'),
-            },
-            {
                 'content': tr(get_needs_provenance_value(self.parameters)),
             },
             {
@@ -100,13 +89,17 @@ class VolcanoPointPopulationFunction(
                     'when counting the affected or total population.'),
                 'condition': self.no_data_warning
             },
-            # {
-            #     'content': tr(
-            #         'Population rounding is applied to all population '
-            #         'values, which may cause discrepancies when adding '
-            #         'values.'
-            #     )
-            # }
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.')
+            }
         ]
         return notes
 

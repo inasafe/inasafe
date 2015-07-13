@@ -204,12 +204,6 @@ class ITBFatalityFunction(
             },
             {
                 'content': tr(
-                    'All values are rounded up to the nearest '
-                    'integer in order to avoid representing human '
-                    'lives as fractions.')
-            },
-            {
-                'content': tr(
                     'Fatality model is from Institut Teknologi Bandung 2012.'),
                 'condition': self.__class__ == ITBFatalityFunction
             },
@@ -225,6 +219,17 @@ class ITBFatalityFunction(
             },
             {
                 'content': tr(get_needs_provenance_value(self.parameters))
+            },
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.')
             }
         ]
         return notes

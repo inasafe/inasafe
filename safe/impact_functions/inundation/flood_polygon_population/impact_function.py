@@ -86,12 +86,6 @@ class FloodEvacuationVectorHazardFunction(
             },
             {
                 'content': tr(
-                    'All values are rounded up to the nearest '
-                    'integer in order to avoid representing human '
-                    'lives as fractions.')
-            },
-            {
-                'content': tr(
                     'The layers contained `no data`. This missing data was '
                     'carried through to the impact layer.'),
                 'condition': self.no_data_warning
@@ -105,13 +99,18 @@ class FloodEvacuationVectorHazardFunction(
             {
                 'content': get_needs_provenance_value(self.parameters)
             },
-            # {
-            #     'content': tr(
-            #         'Population rounding is applied to all population '
-            #         'values, which may cause discrepancies when adding '
-            #         'values.'
-            #     )
-            # }
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.'
+                )
+            }
         ]
         return notes
 
