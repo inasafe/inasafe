@@ -42,7 +42,7 @@ class QgisLegend():
             the canvas!
         :rtype: bool
         """
-        layers = self.canvas.layer()
+        layers = self.canvas.layers()
         if layer in layers:
             return True
         else:
