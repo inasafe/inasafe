@@ -81,8 +81,8 @@ class VolcanoPolygonBuildingFunction(
         self.prepare()
 
         # Get parameters from layer's keywords
-        hazard_zone_attribute = self.hazard_keyword('field')
-        name_attribute = self.hazard_keyword('volcano_name_field')
+        hazard_zone_attribute = self.hazard.keyword('field')
+        name_attribute = self.hazard.keyword('volcano_name_field')
 
         # Input checks
         if not self.hazard.layer.is_polygon_data:

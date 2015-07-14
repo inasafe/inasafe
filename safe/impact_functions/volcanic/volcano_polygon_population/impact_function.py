@@ -64,8 +64,8 @@ class VolcanoPolygonPopulationFunction(ClassifiedVHContinuousRE):
         self.prepare()
 
         # Parameters
-        hazard_zone_attribute = self.hazard_keyword('field')
-        name_attribute = self.hazard_keyword('volcano_name_field')
+        hazard_zone_attribute = self.hazard.keyword('field')
+        name_attribute = self.hazard.keyword('volcano_name_field')
 
         nan_warning = False
         if has_no_data(self.exposure.layer.get_data(nan=True)):

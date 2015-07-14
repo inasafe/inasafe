@@ -86,7 +86,7 @@ class VolcanoPointBuildingFunction(
         radii = self.parameters['distances'].value
 
         # Get parameters from layer's keywords
-        volcano_name_attribute = self.hazard_keyword('volcano_name_field')
+        volcano_name_attribute = self.hazard.keyword('volcano_name_field')
 
         # Input checks
         if not self.hazard.layer.is_point_data:
