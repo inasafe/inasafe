@@ -24,7 +24,8 @@ from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.common.exceptions import InvalidExtentError, FunctionParametersError
+from safe.common.exceptions import (
+    InvalidExtentError, FunctionParametersError, KeywordNotFoundError)
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
 from safe.utilities.qgis_layer_wrapper import QgisWrapper
@@ -70,6 +71,12 @@ class ImpactFunction(object):
         self._exposure = None
         # Layer used for aggregating results by area / district
         self._aggregation = None
+        # Keyword for hazard layer
+        self._hazard_keywords = None
+        # Keyword for exposure layer
+        self._exposure_keywords = None
+        # Keyword for aggregation layer
+        self._aggregation_keywords = None
         # Layer produced by the impact function
         self._impact = None
         # The question of the impact function
@@ -259,6 +266,8 @@ class ImpactFunction(object):
                 self.target_field,
                 layer.dataProvider().fieldNameMap().keys()
             )
+        # Automatically set the hazard keyword from the hazard layer.
+        self.hazard_keywords = self.hazard.keywords
 
     @property
     def exposure(self):
@@ -292,6 +301,9 @@ class ImpactFunction(object):
                 layer.dataProvider().fieldNameMap().keys()
             )
 
+        # Automatically set the exposure from the hazard layer.
+        self.exposure_keywords = self.exposure.keywords
+
     @property
     def aggregation(self):
         """Property for the aggregation layer to be used for the analysis.
@@ -310,6 +322,111 @@ class ImpactFunction(object):
         """
         # add more robust checks here
         self._aggregation = layer
+
+        # Automatically set the exposure from the hazard layer.
+        self.aggregation_keywords = self.aggregation.keywords
+
+    @property
+    def hazard_keywords(self):
+        """Property for the hazard keyword to be used for the analysis.
+
+        :returns: A dictionary representing keyword.
+        :rtype: dict
+        """
+        return self._hazard_keywords
+
+    @hazard_keywords.setter
+    def hazard_keywords(self, keywords):
+        """Setter for the hazard keywords property.
+
+        :param keywords: A dictionary representing keywords.
+        :type keywords: dict
+        """
+        self._hazard_keywords = keywords
+
+    @property
+    def exposure_keywords(self):
+        """Property for the exposure keyword to be used for the analysis.
+
+        :returns: A dictionary representing keyword.
+        :rtype: dict
+        """
+        return self._exposure_keywords
+
+    @exposure_keywords.setter
+    def exposure_keywords(self, keywords):
+        """Setter for the exposure keywords property.
+
+        :param keywords: A dictionary representing keywords.
+        :type keywords: dict
+        """
+        self._exposure_keywords = keywords
+
+    @property
+    def aggregation_keywords(self):
+        """Property for the aggregation keyword to be used for the analysis.
+
+        :returns: A dictionary representing keyword.
+        :rtype: dict
+        """
+        return self._aggregation_keywords
+
+    @aggregation_keywords.setter
+    def aggregation_keywords(self, keywords):
+        """Setter for the aggregation keywords property.
+
+        :param keywords: A dictionary representing keywords.
+        :type keywords: dict
+        """
+        self._aggregation_keywords = keywords
+
+    def hazard_keyword(self, key):
+        """Return value of key from hazard keywords.
+
+        It will raise KeywordNotFoundError if the key is not found.
+
+        :param key: The key of a keyword.
+        :type key: str
+
+        :returns: The value of the key in hazard keywords dictionary.
+        :rtype: str, dict, int, float
+        """
+        try:
+            return self._hazard_keywords[key]
+        except KeyError as e:
+            raise KeywordNotFoundError(e)
+
+    def exposure_keyword(self, key):
+        """Return value of key from exposure keywords.
+
+        It will raise KeywordNotFoundError if the key is not found.
+
+        :param key: The key of a keyword.
+        :type key: str
+
+        :returns: The value of the key in exposure keywords dictionary.
+        :rtype: str, dict, int, float
+        """
+        try:
+            return self._exposure_keywords[key]
+        except KeyError as e:
+            raise KeywordNotFoundError(e)
+
+    def aggregation_keyword(self, key):
+        """Return value of key from aggregation keywords.
+
+        It will raise KeywordNotFoundError if the key is not found.
+
+        :param key: The key of a keyword.
+        :type key: str
+
+        :returns: The value of the key in aggregation keywords dictionary.
+        :rtype: str, dict, int, float
+        """
+        try:
+            return self._aggregation_keywords[key]
+        except KeyError as e:
+            raise KeywordNotFoundError(e)
 
     @property
     def parameters(self):

@@ -64,38 +64,34 @@ class VolcanoPolygonPopulationFunction(ClassifiedVHContinuousRE):
         self.prepare()
 
         # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
-        name_attribute = self.parameters['volcano name attribute'].value
-
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard
-        exposure_layer = self.exposure
+        hazard_zone_attribute = self.hazard_keyword('field')
+        name_attribute = self.hazard_keyword('volcano_name_field')
 
         nan_warning = False
-        if has_no_data(exposure_layer.get_data(nan=True)):
+        if has_no_data(self.exposure.get_data(nan=True)):
             nan_warning = True
 
         # Input checks
-        if not hazard_layer.is_polygon_data:
+        if not self.hazard.is_polygon_data:
             msg = ('Input hazard must be a polygon layer. I got %s with '
-                   'layer type %s' % (hazard_layer.get_name(),
-                                      hazard_layer.get_geometry_name()))
+                   'layer type %s' % (self.hazard.get_name(),
+                                      self.hazard.get_geometry_name()))
             raise Exception(msg)
 
         # Check if hazard_zone_attribute exists in hazard_layer
-        if hazard_zone_attribute not in hazard_layer.get_attribute_names():
+        if hazard_zone_attribute not in self.hazard.get_attribute_names():
             msg = ('Hazard data %s did not contain expected attribute %s ' % (
-                hazard_layer.get_name(), hazard_zone_attribute))
+                self.hazard.get_name(), hazard_zone_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
-        features = hazard_layer.get_data()
+        features = self.hazard.get_data()
         category_header = tr('Volcano Hazard Zone')
         hazard_zone_categories = list(
-            set(hazard_layer.get_data(hazard_zone_attribute)))
+            set(self.hazard.get_data(hazard_zone_attribute)))
 
         # Get names of volcanoes considered
-        if name_attribute in hazard_layer.get_attribute_names():
+        if name_attribute in self.hazard.get_attribute_names():
             volcano_name_list = []
             # Run through all polygons and get unique names
             for row in features:
@@ -111,8 +107,8 @@ class VolcanoPolygonPopulationFunction(ClassifiedVHContinuousRE):
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
-                hazard_layer,
-                exposure_layer,
+                self.hazard,
+                self.exposure,
                 attribute_name=self.target_field)
 
         # Initialise total affected per category
@@ -132,7 +128,7 @@ class VolcanoPolygonPopulationFunction(ClassifiedVHContinuousRE):
 
         # Count totals
         total_population = population_rounding(
-            int(numpy.nansum(exposure_layer.get_data())))
+            int(numpy.nansum(self.exposure.get_data())))
 
         # Count number and cumulative for each zone
         total_affected_population = 0

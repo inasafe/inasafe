@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'lucernae'
 
 import logging
@@ -22,11 +23,14 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_osm_building_usage, verify
+from safe.common.utilities import (
+    get_osm_building_usage,
+    verify,
+    get_attribute_value)
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-
+from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -91,27 +95,29 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         self.validate()
         self.prepare()
 
-        threshold = self.parameters['threshold'].value
-        # Flood threshold [m]
+        threshold = self.parameters['threshold'].value  # Flood threshold [m]
 
         verify(isinstance(threshold, float),
                'Expected thresholds to be a float. Got %s' % str(threshold))
-
-        # Extract data
-        hazard_layer = self.hazard  # Depth
-        exposure_layer = self.exposure  # Building locations
 
         # Determine attribute name for hazard levels
         hazard_attribute = 'depth'
 
         # Interpolate hazard level to building locations
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name=hazard_attribute)
+            self.hazard, self.exposure, attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
         features = interpolated_layer.get_data()
         total_features = len(interpolated_layer)
+
+        # but use the old get_osm_building_usage
+        try:
+            structure_class_field = self.exposure_keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            structure_class_field = None
 
         # Building breakdown
         self.buildings = {}
@@ -132,7 +138,14 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
                 inundated_status = 2  # wet
 
             # Count affected buildings by usage type if available
-            usage = get_osm_building_usage(attribute_names, features[i])
+                if (structure_class_field in attribute_names and
+                        structure_class_field):
+                    usage = get_attribute_value(
+                        structure_class_field, features[i])
+                else:
+                    usage = get_osm_building_usage(
+                        attribute_names, features[i])
+
             if usage is None or usage == 0:
                 usage = 'unknown'
 

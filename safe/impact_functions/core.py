@@ -143,3 +143,21 @@ def has_no_data(layer_data):
     :rtype: bool
     """
     return numpy.isnan(numpy.sum(layer_data))
+
+
+def get_key_for_value(value, value_map):
+    """Obtain the key of a value from a value map.
+
+    :param value: The value mapped to a key in value_map.
+    :type value: int, str, float
+
+    :param value_map: A value mapping.
+    :type value_map: dict
+
+    :returns: A key for the value.
+    :rtype: str
+    """
+    for key, values in value_map.iteritems():
+        if value in values:
+            return key
+    return None

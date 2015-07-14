@@ -63,8 +63,8 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
         self.validate()
         self.prepare()
 
-        # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
+        # Value from layer's keywords
+        hazard_zone_attribute = self.hazard_keyword('field')
 
         # Identify hazard and exposure layers
         hazard_layer = self.hazard
