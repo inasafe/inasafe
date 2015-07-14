@@ -28,17 +28,14 @@ TEMP_DIR = temp_dir(sub_dir='test/metadata')
 TEST_DIR = os.path.dirname(__file__)
 
 EXISTING_IMPACT_FILE = os.path.join(TEST_DIR, 'data', 'existing_impact.shp')
+# this is a file generated from TestImpactMetadata.generate_test_metadata()
 EXISTING_IMPACT_JSON = os.path.join(TEST_DIR, 'data', 'existing_impact.json')
 EXISTING_IMPACT_XML = os.path.join(TEST_DIR, 'data', 'existing_impact.xml')
 
 EXISTING_GENERIC_FILE = os.path.join(TEST_DIR, 'data', 'existing_generic.shp')
+# this is a file generated from TestGenericMetadata.generate_test_metadata()
 EXISTING_GENERIC_JSON = os.path.join(TEST_DIR, 'data', 'existing_generic.json')
 EXISTING_GENERIC_XML = os.path.join(TEST_DIR, 'data', 'existing_generic.xml')
-
-# this is a file generated from TestImpactMetadata.generate_test_metadata()
-IMPACT_TEST_FILE_JSON = os.path.join(TEST_DIR, 'data', 'test_impact.json')
-# this is a file generated from TestGenericMetadata.generate_test_metadata()
-GENERIC_TEST_FILE_JSON = os.path.join(TEST_DIR, 'data', 'test_generic.json')
 
 INVALID_IMPACT_JSON = os.path.join(TEST_DIR, 'data', 'invalid_impact.json')
 INCOMPLETE_IMPACT_JSON = os.path.join(

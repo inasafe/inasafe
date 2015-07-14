@@ -38,7 +38,8 @@ class BaseMetadata(object):
     # define as Abstract base class
     __metaclass__ = abc.ABCMeta
 
-    # paths in xml files for standard properties
+    # paths in xml files for standard properties these are the ones we try
+    # to read from an xml file
     _standard_properties = {
         'organisation': (
             'gmd:contact/'
@@ -77,7 +78,12 @@ class BaseMetadata(object):
             'gmd:MD_DigitalTransferOptions/'
             'gmd:onLine/'
             'gmd:CI_OnlineResource/'
-            'gmd:linkage')
+            'gmd:linkage'),
+        'report': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe_report'),
     }
 
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
@@ -104,7 +110,7 @@ class BaseMetadata(object):
 
     @abc.abstractproperty
     def dict(self):
-        metadata = {'layer_uri': self.layer_uri}
+        metadata = {}
         properties = {}
         for name, prop in self._properties.iteritems():
             properties[name] = prop.dict
@@ -210,7 +216,7 @@ class BaseMetadata(object):
     def set_last_update_to_now(self):
         self._last_update = datetime.now()
 
-    def get(self, property_name):
+    def get_value(self, property_name):
         return self._properties[property_name].value
 
     def get_xml_value(self, property_name):
@@ -277,7 +283,7 @@ class BaseMetadata(object):
     # Standard XML properties
     @property
     def organisation(self):
-        return self.get('organisation')
+        return self.get_value('organisation')
 
     @organisation.setter
     def organisation(self, value):
@@ -286,7 +292,7 @@ class BaseMetadata(object):
 
     @property
     def email(self):
-        return self.get('email')
+        return self.get_value('email')
 
     @email.setter
     def email(self, value):
@@ -295,7 +301,7 @@ class BaseMetadata(object):
 
     @property
     def document_date(self):
-        return self.get('document_date')
+        return self.get_value('document_date')
 
     @document_date.setter
     def document_date(self, value):
@@ -304,7 +310,7 @@ class BaseMetadata(object):
 
     @property
     def abstract(self):
-        return self.get('abstract')
+        return self.get_value('abstract')
 
     @abstract.setter
     def abstract(self, value):
@@ -313,7 +319,7 @@ class BaseMetadata(object):
 
     @property
     def title(self):
-        return self.get('title')
+        return self.get_value('title')
 
     @title.setter
     def title(self, value):
@@ -322,7 +328,7 @@ class BaseMetadata(object):
 
     @property
     def license(self):
-        return self.get('license')
+        return self.get_value('license')
 
     @license.setter
     def license(self, value):
@@ -331,9 +337,18 @@ class BaseMetadata(object):
 
     @property
     def url(self):
-        return self.get('url')
+        return self.get_value('url')
 
     @url.setter
     def url(self, value):
         path = self._standard_properties['url']
         return self.set('url', value, path, 'gmd:URL')
+
+    @property
+    def report(self):
+        return self.get_value('report')
+
+    @report.setter
+    def report(self, value):
+        path = self._standard_properties['report']
+        return self.set('report', value, path, 'gco:CharacterString')

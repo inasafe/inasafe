@@ -26,6 +26,8 @@ class CharacterStringProperty(BaseProperty):
     _allowed_python_types = [str, unicode, int, float]
 
     def __init__(self, name, value, xml_path, xml_type):
+        if isinstance(value, str):
+            value = unicode(value)
         super(CharacterStringProperty, self).__init__(
             name, value, xml_path, xml_type, self._allowed_python_types)
 

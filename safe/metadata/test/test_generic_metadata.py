@@ -25,7 +25,7 @@ from unittest import TestCase
 from safe.common.utilities import unique_filename
 from safe.metadata import GenericLayerMetadata
 from safe.metadata.test import (
-    GENERIC_TEST_FILE_JSON, TEMP_DIR,
+    TEMP_DIR,
     EXISTING_GENERIC_FILE,
     EXISTING_GENERIC_JSON)
 
@@ -33,7 +33,7 @@ from safe.metadata.test import (
 class TestGenericMetadata(TestCase):
 
     def test_json_write(self):
-        with open(GENERIC_TEST_FILE_JSON) as f:
+        with open(EXISTING_GENERIC_JSON) as f:
             expected_json = f.read()
 
         metadata = self.generate_test_metadata()

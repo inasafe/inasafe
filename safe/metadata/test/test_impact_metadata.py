@@ -20,6 +20,10 @@ __date__ = '12/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# DO NOT REMOVE THIS
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=unused-import
+
 from datetime import datetime, date
 from unittest import TestCase
 
@@ -30,7 +34,7 @@ from safe.common.utilities import unique_filename
 
 from safe.metadata import ImpactLayerMetadata
 from safe.metadata.test import (
-    IMPACT_TEST_FILE_JSON, TEMP_DIR,
+    TEMP_DIR,
     EXISTING_IMPACT_JSON,
     EXISTING_IMPACT_FILE, INVALID_IMPACT_JSON,
     INCOMPLETE_IMPACT_JSON, EXISTING_IMPACT_XML)
@@ -114,7 +118,7 @@ class TestImpactMetadata(TestCase):
 
     def test_json_write(self):
         metadata = self.generate_test_metadata()
-        with open(IMPACT_TEST_FILE_JSON) as f:
+        with open(EXISTING_IMPACT_JSON) as f:
             expected_json = f.read()
         # split the read file at the provenance because provenance has
         # automatically generated timestamps

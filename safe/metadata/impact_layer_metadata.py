@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
-from xml.etree import ElementTree
 
 from safe.metadata import BaseMetadata
 from safe.metadata.provenance import Provenance
@@ -27,13 +26,14 @@ from safe.metadata.provenance import Provenance
 class ImpactLayerMetadata(BaseMetadata):
 
     # remember to add an attribute or a setter property with the same name
-    _additional_xml_properties = {
+    _standard_properties = {
         'provenance': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
-            'inasafe_report'),
+            'inasafe_report')
     }
+    _standard_properties.update(BaseMetadata._standard_properties)
 
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         # Initialise members
@@ -41,21 +41,16 @@ class ImpactLayerMetadata(BaseMetadata):
         self._provenance = Provenance()
 
         # public members
-        self.report = None
         self.summary_data = None
 
         # initialize base class
         super(ImpactLayerMetadata, self).__init__(layer_uri, xml_uri, json_uri)
-
-        # merge all _xml_properties
-        self._standard_properties.update(self._additional_xml_properties)
 
     @property
     def dict(self):
         metadata = super(ImpactLayerMetadata, self).dict
 
         metadata['provenance'] = self.provenance
-        metadata['report'] = self.report
         metadata['summary_data'] = self.summary_data
 
         return metadata
@@ -83,8 +78,6 @@ class ImpactLayerMetadata(BaseMetadata):
                 except KeyError:
                     # we want to get as much as we can without raising errors
                     pass
-        if 'report' in metadata:
-            self.report = metadata['report']
         if 'summary_data' in metadata:
             self.summary_data = metadata['summary_data']
 
