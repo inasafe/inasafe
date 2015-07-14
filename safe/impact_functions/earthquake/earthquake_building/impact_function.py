@@ -104,15 +104,11 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         class_2 = {'label': tr('Medium'), 'class': 2}
         class_3 = {'label': tr('High'), 'class': 3}
 
-        # Extract data
-        hazard_layer = self.hazard  # Earthquake
-        exposure_layer = self.exposure  # Building locations
-
         # Define attribute name for hazard levels.
         hazard_attribute = 'mmi'
 
         # Determine if exposure data have NEXIS attributes.
-        attribute_names = exposure_layer.get_attribute_names()
+        attribute_names = self.exposure.layer.get_attribute_names()
         if (
                 'FLOOR_AREA' in attribute_names and
                 'BUILDING_C' in attribute_names and
@@ -123,8 +119,8 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
 
         # Interpolate hazard level to building locations.
         interpolate_result = assign_hazard_values_to_exposure_data(
-            hazard_layer,
-            exposure_layer,
+            self.hazard.layer,
+            self.exposure.layer,
             attribute_name=hazard_attribute
         )
 
@@ -132,7 +128,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         # Try to get the value from keyword, if not exist, it will not fail,
         # but use the old get_osm_building_usage
         try:
-            structure_class_field = self.exposure_keyword(
+            structure_class_field = self.exposure.keyword(
                 'structure_class_field')
         except KeywordNotFoundError:
             structure_class_field = None
