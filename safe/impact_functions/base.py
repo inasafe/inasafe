@@ -244,9 +244,19 @@ class ImpactFunction(object):
         """Setter for hazard layer property.
 
         :param layer: Hazard layer to be used for the analysis.
-        :type layer: SafeLayer
+        :type layer: SafeLayer, Layer, QgsMapLayer
         """
-        self._hazard = layer
+        if isinstance(layer, SafeLayer):
+            self._hazard = layer
+        else:
+            if self.function_type() == 'old-style':
+                self._hazard = SafeLayer(convert_to_safe_layer(layer))
+            elif self.function_type() == 'qgis2.0':
+                # convert for new style impact function
+                self._hazard = SafeLayer(QgisWrapper(layer))
+            else:
+                message = tr('Error: Impact Function has unknown style.')
+                raise Exception(message)
 
         # Update the target field to a non-conflicting one
         if self._hazard.is_qgsvectorlayer():
@@ -271,7 +281,17 @@ class ImpactFunction(object):
         :param layer: exposure layer to be used for the analysis.
         :type layer: SafeLayer
         """
-        self._exposure = layer
+        if isinstance(layer, SafeLayer):
+            self._exposure = layer
+        else:
+            if self.function_type() == 'old-style':
+                self._exposure = SafeLayer(convert_to_safe_layer(layer))
+            elif self.function_type() == 'qgis2.0':
+                # convert for new style impact function
+                self._exposure = SafeLayer(QgisWrapper(layer))
+            else:
+                message = tr('Error: Impact Function has unknown style.')
+                raise Exception(message)
 
         # Update the target field to a non-conflicting one
         if self.exposure.is_qgsvectorlayer():

@@ -58,7 +58,7 @@ def check_data_integrity(layer_objects):
 
     for layer in layer_objects:
         # Check that critical keywords exist and are non empty
-        keywords = layer.get_keywords()
+        keywords = layer.keywords
         for keyword in REQUIRED_KEYWORDS:
             message = (
                 'Layer %s did not have required keyword "%s". %s' % (
@@ -78,8 +78,8 @@ def check_data_integrity(layer_objects):
             message = (
                 'Projections in input layer %s is not as expected:\n'
                 'projection: %s\n default: %s' % (
-                    layer, layer.projection, reference_projection))
-            verify(reference_projection == layer.projection, message)
+                    layer, layer.layer.projection, reference_projection))
+            verify(reference_projection == layer.layer.projection, message)
 
         # FIXME (Ariel): Make this configurable by the frontend choice?
         # Relax tolerance requirements to have GeoNode compatibility
@@ -88,17 +88,17 @@ def check_data_integrity(layer_objects):
 
         # Ensure that geo_transform and dimensions is consistent across
         # all *raster* layers
-        if layer.is_raster:
+        if layer.layer.is_raster:
             if geo_transform is None:
-                geo_transform = layer.get_geotransform()
+                geo_transform = layer.layer.get_geotransform()
             else:
                 message = (
                     'Geotransforms in input raster layers are different:\n'
-                    '%s\n%s' % (geo_transform, layer.get_geotransform()))
+                    '%s\n%s' % (geo_transform, layer.layer.get_geotransform()))
                 verify(
                     numpy.allclose(
                         geo_transform,
-                        layer.get_geotransform(),
+                        layer.layer.get_geotransform(),
                         rtol=tolerance),
                     message)
 
@@ -106,34 +106,34 @@ def check_data_integrity(layer_objects):
         # FIXME (Ole): Not good as nasty error is raised in cases where
         # there are no buildings in the hazard area. Need to be more graceful
         # See e.g. shakemap dated 20120227190230
-        if layer.is_vector:
+        if layer.layer.is_vector:
             message = (
                 'There are no vector data features. Perhaps zoom out or pan '
                 'to the study area and try again')
-            verify(len(layer) > 0, message)
+            verify(len(layer.layer) > 0, message)
 
     # Check that arrays are aligned.
     refname = None
     for layer in layer_objects:
-        if layer.is_raster:
+        if layer.layer.is_raster:
             if refname is None:
-                refname = layer.get_name()
-                layer_rows = layer.rows
-                layer_columns = layer.columns
+                refname = layer.name
+                layer_rows = layer.layer.rows
+                layer_columns = layer.layer.columns
 
             message = (
                 'Rasters are not aligned!\n'
                 'Raster %s has %i rows but raster %s has %i rows\n'
                 'Refer to issue #102' % (
-                    layer.get_name(), layer.rows, refname, layer_rows))
-            verify(layer.rows == layer_rows, message)
+                    layer.name, layer.layer.rows, refname, layer_rows))
+            verify(layer.layer.rows == layer_rows, message)
 
             message = (
                 'Rasters are not aligned!\n'
                 'Raster %s has %i columns but raster %s has %i columns\n'
                 'Refer to issue #102' % (
-                    layer.get_name(), layer.columns, refname, layer_columns))
-            verify(layer.columns == layer_columns, message)
+                    layer.name, layer.layer.columns, refname, layer_columns))
+            verify(layer.layer.columns == layer_columns, message)
 
 
 def calculate_impact(impact_function):
@@ -182,7 +182,7 @@ def calculate_impact(impact_function):
     # NOTE: We assume here that there is only one of each
     #       If there are more only the first one is used
     for layer in layers:
-        keywords = layer.get_keywords()
+        keywords = layer.keywords
         not_specified = tr('Not specified')
 
         layer_purpose = keywords.get('layer_purpose', not_specified)
