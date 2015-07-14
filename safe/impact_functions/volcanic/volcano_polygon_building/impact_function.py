@@ -85,25 +85,26 @@ class VolcanoPolygonBuildingFunction(
         name_attribute = self.hazard_keyword('volcano_name_field')
 
         # Input checks
-        if not self.hazard.is_polygon_data:
+        if not self.hazard.layer.is_polygon_data:
             message = (
                 'Input hazard must be a polygon. I got %s with '
                 'layer type %s' %
-                (self.hazard.get_name(), self.hazard.get_geometry_name()))
+                (self.hazard.name, self.hazard.layer.get_geometry_name()))
             raise Exception(message)
 
         # Check if hazard_zone_attribute exists in hazard_layer
-        if hazard_zone_attribute not in self.hazard.get_attribute_names():
+        if (hazard_zone_attribute not in
+                self.hazard.layer.get_attribute_names()):
             message = (
                 'Hazard data %s did not contain expected attribute %s ' %
-                (self.hazard.get_name(), hazard_zone_attribute))
+                (self.hazard.name, hazard_zone_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)
 
         # Get names of volcanoes considered
-        if name_attribute in self.hazard.get_attribute_names():
+        if name_attribute in self.hazard.layer.get_attribute_names():
             volcano_name_list = set()
-            for row in self.hazard.get_data():
+            for row in self.hazard.layer.get_data():
                 # Run through all polygons and get unique names
                 volcano_name_list.add(row[name_attribute])
             self.volcano_names = ', '.join(volcano_name_list)
@@ -112,7 +113,7 @@ class VolcanoPolygonBuildingFunction(
 
         # Run interpolation function for polygon2raster
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            self.hazard, self.exposure)
+            self.hazard.layer, self.exposure.layer)
 
         # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
@@ -120,7 +121,7 @@ class VolcanoPolygonBuildingFunction(
 
         # Hazard zone categories from hazard layer
         hazard_zone_categories = list(
-            set(self.hazard.get_data(hazard_zone_attribute)))
+            set(self.hazard.layer.get_data(hazard_zone_attribute)))
 
         self.buildings = {}
         self.affected_buildings = OrderedDict()

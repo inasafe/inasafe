@@ -89,16 +89,16 @@ class VolcanoPointBuildingFunction(
         volcano_name_attribute = self.hazard_keyword('volcano_name_field')
 
         # Input checks
-        if not self.hazard.is_point_data:
+        if not self.hazard.layer.is_point_data:
             message = (
                 'Input hazard must be a vector point layer. I got %s '
                 'with layer type %s' % (
-                    self.hazard.get_name(), self.hazard.get_geometry_name()))
+                    self.hazard.name, self.hazard.layer.get_geometry_name()))
             raise Exception(message)
 
         # Make hazard layer by buffering the point
-        centers = self.hazard.get_geometry()
-        features = self.hazard.get_data()
+        centers = self.hazard.layer.get_geometry()
+        features = self.hazard.layer.get_data()
         radii_meter = [x * 1000 for x in radii]  # Convert to meters
         hazard_layer = buffer_points(
             centers,
@@ -127,7 +127,7 @@ class VolcanoPointBuildingFunction(
 
         # Run interpolation function for polygon2polygon
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, self.exposure)
+            hazard_layer, self.exposure.layer)
 
         # Extract relevant interpolated layer data
         attribute_names = interpolated_layer.get_attribute_names()

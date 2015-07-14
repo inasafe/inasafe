@@ -21,6 +21,7 @@ from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestVolcanoPointBuildingFunction(unittest.TestCase):
@@ -40,8 +41,8 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         exposure_layer = read_layer(building_path)
 
         impact_function = VolcanoPointBuildingFunction.instance()
-        impact_function.hazard = hazard_layer
-        impact_function.exposure = exposure_layer
+        impact_function.hazard = SafeLayer(hazard_layer)
+        impact_function.exposure = SafeLayer(exposure_layer)
         impact_function.run()
         impact_layer = impact_function.impact
 

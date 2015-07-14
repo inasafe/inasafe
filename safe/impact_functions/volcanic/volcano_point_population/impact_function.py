@@ -76,20 +76,20 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
         volcano_name_attribute = self.hazard_keyword('volcano_name_field')
 
         # Input checks
-        if not self.hazard.is_point_data:
+        if not self.hazard.layer.is_point_data:
             msg = (
                 'Input hazard must be a polygon or point layer. I got %s with '
                 'layer type %s' % (
-                    self.hazard.get_name(), self.hazard.get_geometry_name()))
+                    self.hazard.name, self.hazard.layer.get_geometry_name()))
             raise Exception(msg)
 
-        data_table = self.hazard.get_data()
+        data_table = self.hazard.layer.get_data()
 
         # Use concentric circles
         category_title = 'Radius'
         category_header = tr('Distance [km]')
 
-        centers = self.hazard.get_geometry()
+        centers = self.hazard.layer.get_geometry()
         rad_m = [x * 1000 for x in radii]  # Convert to meters
         hazard_layer = buffer_points(
             centers, rad_m, category_title, data_table=data_table)
@@ -112,7 +112,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
                 hazard_layer,
-                self.exposure,
+                self.exposure.layer,
                 attribute_name=self.target_field
             )
 
@@ -122,7 +122,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             affected_population[radius] = 0
 
         nan_warning = False
-        if has_no_data(self.exposure.get_data(nan=True)):
+        if has_no_data(self.exposure.layer.get_data(nan=True)):
             nan_warning = True
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
@@ -136,7 +136,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
 
         # Count totals
         total_population = population_rounding(
-            int(numpy.nansum(self.exposure.get_data())))
+            int(numpy.nansum(self.exposure.layer.get_data())))
 
         # Count cumulative for each zone
         total_affected_population = 0
