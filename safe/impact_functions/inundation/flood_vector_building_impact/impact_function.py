@@ -79,18 +79,13 @@ class FloodPolygonBuildingFunction(
         self.prepare()
 
         # Get parameters from layer's keywords
-        self.affected_field = self.hazard_keyword('field')
-        self.value_map = self.hazard_keyword('value_map')
-        self.structure_class_field = self.exposure_keyword(
+        self.affected_field = self.hazard.keyword('field')
+        self.value_map = self.hazard.keyword('value_map')
+        self.structure_class_field = self.exposure.keyword(
             'structure_class_field')
 
-        # Extract data
-        hazard_layer = self.hazard  # Flood
-        exposure_layer = self.exposure  # Building
-
         # Prepare Hazard Layer
-        hazard_layer = hazard_layer.get_layer()
-        hazard_provider = hazard_layer.dataProvider()
+        hazard_provider = self.hazard.layer.dataProvider()
 
         # Check affected field exists in the hazard layer
         affected_field_index = hazard_provider.fieldNameIndex(
@@ -101,10 +96,8 @@ class FloodPolygonBuildingFunction(
                          'parameter in the IF Option.') % self.affected_field
             raise GetDataError(message)
 
-        # Prepare Exposure Layer
-        exposure_layer = exposure_layer.get_layer()
-        srs = exposure_layer.crs().toWkt()
-        exposure_provider = exposure_layer.dataProvider()
+        srs = self.exposure.layer.crs().toWkt()
+        exposure_provider = self.exposure.layer.dataProvider()
         exposure_fields = exposure_provider.fields()
 
         # Check structure_class_field exists in exposure layer
@@ -147,7 +140,7 @@ class FloodPolygonBuildingFunction(
         transform = QgsCoordinateTransform(
             QgsCoordinateReferenceSystem(
                 'EPSG:%i' % self._requested_extent_crs),
-            hazard_layer.crs()
+            self.hazard.layer.crs()
         )
         projected_extent = transform.transformBoundingBox(requested_extent)
         request = QgsFeatureRequest()
@@ -161,7 +154,7 @@ class FloodPolygonBuildingFunction(
         hazard_index = QgsSpatialIndex()
         hazard_geometries = {}  # key = feature id, value = geometry
         has_hazard_objects = False
-        for feature in hazard_layer.getFeatures(request):
+        for feature in self.hazard.layer.getFeatures(request):
             value = feature[affected_field_index]
             if value not in self.value_map[self.wet]:
                 continue
@@ -179,7 +172,7 @@ class FloodPolygonBuildingFunction(
             raise GetDataError(message)
 
         features = []
-        for feature in exposure_layer.getFeatures(request):
+        for feature in self.exposure.layer.getFeatures(request):
             building_geom = feature.geometry()
             affected = False
             # get tentative list of intersecting hazard features

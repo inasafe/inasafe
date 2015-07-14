@@ -105,7 +105,9 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
 
         # Interpolate hazard level to building locations
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            self.hazard, self.exposure, attribute_name=hazard_attribute)
+            self.hazard.layer,
+            self.exposure.layer,
+            attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
@@ -114,7 +116,7 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
 
         # but use the old get_osm_building_usage
         try:
-            structure_class_field = self.exposure_keyword(
+            structure_class_field = self.exposure.keyword(
                 'structure_class_field')
         except KeywordNotFoundError:
             structure_class_field = None

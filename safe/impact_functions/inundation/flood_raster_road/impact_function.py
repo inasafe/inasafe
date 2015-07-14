@@ -319,7 +319,7 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
 
         target_field = self.target_field
         # Get parameters from layer's keywords
-        road_class_field = self.exposure_keyword('road_class_field')
+        road_class_field = self.exposure.keyword('road_class_field')
         # Get parameters from IF parameter
         threshold_min = self.parameters['min threshold'].value
         threshold_max = self.parameters['max threshold'].value
@@ -330,12 +330,8 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
                 'threshold. Please check the values.')
             raise GetDataError(message)
 
-        # Extract data
-        hazard = self.hazard.get_layer()  # Flood
-        exposure = self.exposure.get_layer()  # Roads
-
         # reproject self.extent to the hazard projection
-        hazard_crs = hazard.crs()
+        hazard_crs = self.hazard.layer.crs()
         hazard_authid = hazard_crs.authid()
 
         if hazard_authid == 'EPSG:4326':
@@ -348,7 +344,7 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
 
         # Align raster extent and viewport
         # assuming they are both in the same projection
-        raster_extent = hazard.dataProvider().extent()
+        raster_extent = self.hazard.layer.dataProvider().extent()
         clip_xmin = raster_extent.xMinimum()
         # clip_xmax = raster_extent.xMaximum()
         clip_ymin = raster_extent.yMinimum()
@@ -365,30 +361,30 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
         #     clip_ymax = viewport_extent[3]
 
         height = ((viewport_extent[3] - viewport_extent[1]) /
-                  hazard.rasterUnitsPerPixelY())
+                  self.hazard.layer.rasterUnitsPerPixelY())
         height = int(height)
         width = ((viewport_extent[2] - viewport_extent[0]) /
-                 hazard.rasterUnitsPerPixelX())
+                 self.hazard.layer.rasterUnitsPerPixelX())
         width = int(width)
 
-        raster_extent = hazard.dataProvider().extent()
+        raster_extent = self.hazard.layer.dataProvider().extent()
         xmin = raster_extent.xMinimum()
         xmax = raster_extent.xMaximum()
         ymin = raster_extent.yMinimum()
         ymax = raster_extent.yMaximum()
 
-        x_delta = (xmax - xmin) / hazard.width()
+        x_delta = (xmax - xmin) / self.hazard.layer.width()
         x = xmin
-        for i in range(hazard.width()):
+        for i in range(self.hazard.layer.width()):
             if abs(x - clip_xmin) < x_delta:
                 # We have found the aligned raster boundary
                 break
             x += x_delta
             _ = i
 
-        y_delta = (ymax - ymin) / hazard.height()
+        y_delta = (ymax - ymin) / self.hazard.layer.height()
         y = ymin
-        for i in range(hazard.width()):
+        for i in range(self.hazard.layer.width()):
             if abs(y - clip_ymin) < y_delta:
                 # We have found the aligned raster boundary
                 break
@@ -397,17 +393,21 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
 
         # Clip hazard raster
         small_raster = clip_raster(
-            hazard, width, height, QgsRectangle(*clip_extent))
+            self.hazard.layer, width, height, QgsRectangle(*clip_extent))
 
         # Create vector features from the flood raster
         # For each raster cell there is one rectangular polygon
         # Data also get spatially indexed for faster operation
         index, flood_cells_map = _raster_to_vector_cells(
-            small_raster, threshold_min, threshold_max, exposure.crs())
+            small_raster,
+            threshold_min,
+            threshold_max,
+            self.exposure.layer.crs())
 
         # Filter geometry and data using the extent
         ct = QgsCoordinateTransform(
-            QgsCoordinateReferenceSystem("EPSG:4326"), exposure.crs())
+            QgsCoordinateReferenceSystem("EPSG:4326"),
+            self.exposure.layer.crs())
         extent = ct.transformBoundingBox(QgsRectangle(*self.requested_extent))
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
@@ -420,7 +420,7 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
             raise GetDataError(message)
 
         # create template for the output layer
-        line_layer_tmp = create_layer(exposure)
+        line_layer_tmp = create_layer(self.exposure.layer)
         new_field = QgsField(target_field, QVariant.Int)
         line_layer_tmp.dataProvider().addAttributes([new_field])
         line_layer_tmp.updateFields()
@@ -434,7 +434,7 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
         # Do the heavy work - for each road get flood polygon for that area and
         # do the intersection/difference to find out which parts are flooded
         _intersect_lines_with_vector_cells(
-            exposure,
+            self.exposure.layer,
             request,
             index,
             flood_cells_map,
@@ -447,7 +447,8 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
         # Generate simple impact report
         epsg = get_utm_epsg(self.requested_extent[0], self.requested_extent[1])
         output_crs = QgsCoordinateReferenceSystem(epsg)
-        transform = QgsCoordinateTransform(exposure.crs(), output_crs)
+        transform = QgsCoordinateTransform(
+            self.exposure.layer.crs(), output_crs)
         road_length = flooded_length = 0  # Length of roads
         roads_by_type = dict()      # Length of flooded roads by types
 

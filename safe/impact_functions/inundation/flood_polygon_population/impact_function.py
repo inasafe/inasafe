@@ -163,38 +163,34 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         self.prepare()
 
         # Get parameters from layer's keywords
-        self.affected_field = self.hazard_keyword('field')
-        self.value_map = self.hazard_keyword('value_map')
+        self.affected_field = self.hazard.keyword('field')
+        self.value_map = self.hazard.keyword('value_map')
 
         # Get the IF parameters
         evacuation_percentage = self.parameters['evacuation_percentage'].value
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard
-        exposure_layer = self.exposure
-
         # Check that hazard is polygon type
-        if not hazard_layer.is_polygon_data:
+        if not self.hazard.layer.is_polygon_data:
             message = (
                 'Input hazard must be a polygon layer. I got %s with layer '
                 'type %s' % (
-                    hazard_layer.get_name(),
-                    hazard_layer.get_geometry_name()))
+                    self.hazard.name,
+                    self.hazard.layer.get_geometry_name()))
             raise Exception(message)
 
         nan_warning = False
-        if has_no_data(exposure_layer.get_data(nan=True)):
+        if has_no_data(self.exposure.layer.get_data(nan=True)):
             nan_warning = True
 
         # Check that affected field exists in hazard layer
-        if self.affected_field in hazard_layer.get_attribute_names():
+        if self.affected_field in self.hazard.layer.get_attribute_names():
             self.use_affected_field = True
 
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure = \
             assign_hazard_values_to_exposure_data(
-                hazard_layer,
-                exposure_layer,
+                self.hazard.layer,
+                self.exposure.layer,
                 attribute_name=self.target_field)
 
         # Data for manipulating the covered_exposure layer
@@ -238,7 +234,7 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
             total_affected_population * evacuation_percentage / 100.0)
 
         total_population = int(
-            numpy.nansum(exposure_layer.get_data(scaling=False)))
+            numpy.nansum(self.exposure.layer.get_data(scaling=False)))
 
         minimum_needs = [
             parameter.serialize() for parameter in

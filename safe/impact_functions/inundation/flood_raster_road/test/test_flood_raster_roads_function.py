@@ -21,6 +21,7 @@ __copyright__ = 'lana.pcfre@gmail.com'
 import unittest
 
 from safe.test.utilities import get_qgis_app, test_data_path
+from safe.storage.safe_layer import SafeLayer
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 # from PyQt4.QtCore import QVariant must be put below it
@@ -68,8 +69,8 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.requested_extent = rect_extent
         function.run()
         impact = function.impact

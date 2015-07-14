@@ -27,6 +27,7 @@ from safe.test.utilities import (
     get_qgis_app,
     test_data_path,
     clone_shp_layer)
+from safe.storage.safe_layer import SafeLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -59,8 +60,8 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.requested_extent = rect_extent
         function.run()
         impact = function.impact
