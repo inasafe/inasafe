@@ -859,6 +859,8 @@ class TestDock(TestCase):
         """Convert a wkt into a nested array of float pairs."""
         expected_coords = []
         wkt = wkt.replace('LINESTRING(', '').replace(')', '')
+        # QGIS 2.10 replaced LINESTRING with LineString in WKT
+        wkt = wkt.replace('LineString(', '').replace(')', '')
         coords = wkt.split(',')
         for item in coords:
             item = item.strip()
