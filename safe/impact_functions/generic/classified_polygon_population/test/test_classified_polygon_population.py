@@ -24,6 +24,7 @@ from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 from safe.storage.safe_layer import SafeLayer
 
+
 class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
     """Test for Classified Polygon on Population Impact Function."""
 

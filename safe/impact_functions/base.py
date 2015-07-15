@@ -20,15 +20,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from socket import gethostname
 import getpass
 
-from qgis.core import QgsVectorLayer
-
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import (
-    InvalidExtentError, FunctionParametersError, KeywordNotFoundError)
+    InvalidExtentError, FunctionParametersError)
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
-from safe.utilities.qgis_layer_wrapper import QgisWrapper
 from safe.utilities.gis import convert_to_safe_layer
 from safe.storage.safe_layer import SafeLayer
 
@@ -253,7 +250,7 @@ class ImpactFunction(object):
                 self._hazard = SafeLayer(convert_to_safe_layer(layer))
             elif self.function_type() == 'qgis2.0':
                 # convert for new style impact function
-                self._hazard = SafeLayer(QgisWrapper(layer))
+                self._hazard = SafeLayer(layer)
             else:
                 message = tr('Error: Impact Function has unknown style.')
                 raise Exception(message)
@@ -288,7 +285,7 @@ class ImpactFunction(object):
                 self._exposure = SafeLayer(convert_to_safe_layer(layer))
             elif self.function_type() == 'qgis2.0':
                 # convert for new style impact function
-                self._exposure = SafeLayer(QgisWrapper(layer))
+                self._exposure = SafeLayer(layer)
             else:
                 message = tr('Error: Impact Function has unknown style.')
                 raise Exception(message)

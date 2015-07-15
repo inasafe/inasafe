@@ -79,7 +79,8 @@ class VolcanoPolygonPopulationFunction(ClassifiedVHContinuousRE):
             raise Exception(msg)
 
         # Check if hazard_zone_attribute exists in hazard_layer
-        if hazard_zone_attribute not in self.hazard.layer.get_attribute_names():
+        if (hazard_zone_attribute not in
+                self.hazard.layer.get_attribute_names()):
             msg = ('Hazard data %s did not contain expected attribute %s ' % (
                 self.hazard.layer.get_name(), hazard_zone_attribute))
             # noinspection PyExceptionInherit
