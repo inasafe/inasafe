@@ -1266,6 +1266,7 @@ class ShakeEvent(QObject):
         image_path, pdf_path, pickle_path, thumbnail_image_path = \
             self.generate_result_path()
 
+        short_circuit_flag = False
         if not force_flag:
             # Check if the images already exist and if so
             # short circuit.
@@ -1280,7 +1281,6 @@ class ShakeEvent(QObject):
                 LOGGER.info('%s (already exists)' % pdf_path)
                 LOGGER.info('%s (already exists)' % image_path)
                 LOGGER.info('%s (already exists)' % thumbnail_image_path)
-                return pdf_path
 
         # Make sure the map layers have all been removed before we
         # start otherwise in batch mode we will get overdraws.
@@ -1314,6 +1314,11 @@ class ShakeEvent(QObject):
             logging.info('Created: %s', cities_html_path)
         except:  # pylint: disable=W0702
             logging.exception('No nearby cities found!')
+
+        if short_circuit_flag:
+            # short circuit after we calculated nearby cities
+            # (used in realtime push)
+            return pdf_path
 
         _, impacts_html_path = self.calculate_impacts()
         logging.info('Created: %s', impacts_html_path)
