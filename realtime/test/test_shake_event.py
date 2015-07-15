@@ -539,7 +539,7 @@ class TestShakeEvent(unittest.TestCase):
     def test_login_to_realtime(self):
         # get logged in session
         session = get_realtime_session()
-        r = session.get(INASAFE_REALTIME_REST_URL+'?format=api')
+        r = session.get(INASAFE_REALTIME_REST_URL + '?format=api')
         # find text called Log out
         self.assertIn('Log out', r.text)
 

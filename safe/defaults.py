@@ -206,8 +206,8 @@ def age_postprocessor():
         'out what the relevant threshold is in your region. InaSAFE does not '
         'impose a particular age ratio scheme - it will break down the '
         'population according to the thresholds you define for your locality.'
-        'In InaSAFE, people 0-14 years old are defined as "youth". The default '
-        'youth ratio is 0.263.'
+        'In InaSAFE, people 0-14 years old are defined as "youth". The '
+        'default youth ratio is 0.263.'
     )
 
     adult_ratio = FloatParameter()
