@@ -732,20 +732,6 @@ def color_ramp(number_of_colour):
     return colors
 
 
-def get_attribute_value(attribute_name, feature):
-    """Obtain the value of an attribute of feature with attribute_names
-
-    :param attribute_name: The name of the attribute that we want to get its
-        value.
-    :type attribute_name: str
-
-    :param feature: A row of data representing an vector feature.
-    :type feature: dict
-    :return:
-    """
-    return feature.get(attribute_name, None)
-
-
 def get_osm_building_usage(attribute_names, feature):
     """Get the usage of a row of OSM building data.
 

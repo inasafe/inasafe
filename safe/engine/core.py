@@ -56,30 +56,33 @@ def check_data_integrity(layer_objects):
     reference_projection = Projection(DEFAULT_PROJECTION)
     geo_transform = None
 
-    for layer in layer_objects:
+    for safe_layer in layer_objects:
         # Check that critical keywords exist and are non empty
-        keywords = layer.keywords
+        keywords = safe_layer.keywords
         for keyword in REQUIRED_KEYWORDS:
             message = (
                 'Layer %s did not have required keyword "%s". %s' % (
-                    layer.name, keyword, instructions))
+                    safe_layer.name, keyword, instructions))
             verify(keyword in keywords, message)
 
             value = keywords[keyword]
             message = (
                 'No value found for keyword "%s" in layer %s. %s' % (
-                    keyword, layer.name, instructions))
+                    keyword, safe_layer.name, instructions))
             verify(value, message)
 
         # Ensure that projection is consistent across all layers
         if reference_projection is None:
-            reference_projection = layer.projection
+            reference_projection = safe_layer.projection
         else:
             message = (
                 'Projections in input layer %s is not as expected:\n'
                 'projection: %s\n default: %s' % (
-                    layer, layer.layer.projection, reference_projection))
-            verify(reference_projection == layer.layer.projection, message)
+                    safe_layer,
+                    safe_layer.layer.projection,
+                    reference_projection))
+            verify(
+                reference_projection == safe_layer.layer.projection, message)
 
         # FIXME (Ariel): Make this configurable by the frontend choice?
         # Relax tolerance requirements to have GeoNode compatibility
@@ -88,17 +91,18 @@ def check_data_integrity(layer_objects):
 
         # Ensure that geo_transform and dimensions is consistent across
         # all *raster* layers
-        if layer.layer.is_raster:
+        if safe_layer.layer.is_raster:
             if geo_transform is None:
-                geo_transform = layer.layer.get_geotransform()
+                geo_transform = safe_layer.layer.get_geotransform()
             else:
                 message = (
                     'Geotransforms in input raster layers are different:\n'
-                    '%s\n%s' % (geo_transform, layer.layer.get_geotransform()))
+                    '%s\n%s' % (
+                        geo_transform, safe_layer.layer.get_geotransform()))
                 verify(
                     numpy.allclose(
                         geo_transform,
-                        layer.layer.get_geotransform(),
+                        safe_layer.layer.get_geotransform(),
                         rtol=tolerance),
                     message)
 
@@ -106,34 +110,40 @@ def check_data_integrity(layer_objects):
         # FIXME (Ole): Not good as nasty error is raised in cases where
         # there are no buildings in the hazard area. Need to be more graceful
         # See e.g. shakemap dated 20120227190230
-        if layer.layer.is_vector:
+        if safe_layer.layer.is_vector:
             message = (
                 'There are no vector data features. Perhaps zoom out or pan '
                 'to the study area and try again')
-            verify(len(layer.layer) > 0, message)
+            verify(len(safe_layer.layer) > 0, message)
 
     # Check that arrays are aligned.
     refname = None
-    for layer in layer_objects:
-        if layer.layer.is_raster:
+    for safe_layer in layer_objects:
+        if safe_layer.layer.is_raster:
             if refname is None:
-                refname = layer.name
-                layer_rows = layer.layer.rows
-                layer_columns = layer.layer.columns
+                refname = safe_layer.name
+                layer_rows = safe_layer.layer.rows
+                layer_columns = safe_layer.layer.columns
 
             message = (
                 'Rasters are not aligned!\n'
                 'Raster %s has %i rows but raster %s has %i rows\n'
                 'Refer to issue #102' % (
-                    layer.name, layer.layer.rows, refname, layer_rows))
-            verify(layer.layer.rows == layer_rows, message)
+                    safe_layer.name,
+                    safe_layer.layer.rows,
+                    refname,
+                    layer_rows))
+            verify(safe_layer.layer.rows == layer_rows, message)
 
             message = (
                 'Rasters are not aligned!\n'
                 'Raster %s has %i columns but raster %s has %i columns\n'
                 'Refer to issue #102' % (
-                    layer.name, layer.layer.columns, refname, layer_columns))
-            verify(layer.layer.columns == layer_columns, message)
+                    safe_layer.name,
+                    safe_layer.layer.columns,
+                    refname,
+                    layer_columns))
+            verify(safe_layer.layer.columns == layer_columns, message)
 
 
 def calculate_impact(impact_function):
@@ -300,11 +310,11 @@ def buffer_points(centers, radii, hazard_zone_attribute, data_table=None):
         inner_rings = None
         for radius in radii:
             # Generate circle polygon
-            C = p.generate_circle(radius)
-            circles.append(Polygon(outer_ring=C, inner_rings=inner_rings))
+            circle = p.generate_circle(radius)
+            circles.append(Polygon(outer_ring=circle, inner_rings=inner_rings))
 
             # Store current circle and inner ring for next poly
-            inner_rings = [C]
+            inner_rings = [circle]
 
             # Carry attributes for center forward (deep copy)
             row = {}

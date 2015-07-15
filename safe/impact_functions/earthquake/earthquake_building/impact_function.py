@@ -23,7 +23,7 @@ from safe.impact_functions.earthquake.earthquake_building \
     .metadata_definitions import EarthquakeBuildingMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_osm_building_usage, get_attribute_value
+from safe.common.utilities import get_osm_building_usage
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
@@ -172,8 +172,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
 
             if (structure_class_field in attribute_names and
                     structure_class_field):
-                usage = get_attribute_value(
-                    structure_class_field, attributes[i])
+                usage = attributes[i].get(structure_class_field, None)
             else:
                 usage = get_osm_building_usage(
                     attribute_names, attributes[i])

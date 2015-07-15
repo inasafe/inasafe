@@ -20,11 +20,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from qgis.core import QgsVectorLayer, QgsMapLayer
 from safe.storage.layer import Layer
-from safe.common.exceptions import KeywordNotFoundError
+from safe.common.exceptions import KeywordNotFoundError, InvalidLayerError
 from safe.utilities.keyword_io import KeywordIO
 
 
-class SafeLayer:
+class SafeLayer(object):
     """Wrapper for QgsMapLayer and safe.storage.layer.
     """
 
@@ -36,14 +36,12 @@ class SafeLayer:
         :param name: A layer's name
         :type name: Basestring or None
         """
-        self._layer = layer
-        if isinstance(layer, Layer):
-            self._keywords = layer.keywords
-        elif isinstance(layer, QgsMapLayer):
-            keyword_io = KeywordIO()
-            self._keywords = keyword_io.read_keywords(layer)
-        else:
-            self._keywords = {}
+        # Merely initialization
+        self._layer = None
+        self._keywords = {}
+
+        self.layer = layer
+
         if name:
             self._name = name
         else:
@@ -67,7 +65,20 @@ class SafeLayer:
         :param layer: The actual layer.
         :type layer: QgsMapLayer, Layer
         """
-        self._layer = layer
+        if isinstance(layer, QgsMapLayer) or isinstance(layer, Layer):
+            self._layer = layer
+        else:
+            message = (
+                'SafeLayer only accept QgsMapLayer or '
+                'safe.storage.layer.Layer.')
+            raise InvalidLayerError(message)
+        if isinstance(layer, Layer):
+            self.keywords = layer.keywords
+        elif isinstance(layer, QgsMapLayer):
+            keyword_io = KeywordIO()
+            self.keywords = keyword_io.read_keywords(layer)
+        else:
+            self.keywords = {}
 
     @property
     def keywords(self):
