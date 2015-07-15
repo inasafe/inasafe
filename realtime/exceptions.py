@@ -103,3 +103,27 @@ class CopyError(Exception):
 class EmptyShakeDirectoryError(Exception):
     """Raised if the working directory does not contain any shakemaps."""
     pass
+
+
+class RESTRequestFailedError(Exception):
+    """Raised if a REST request is failed
+    """
+
+    def __init__(self, url=None, status_code=None, data=None, files=None):
+        """
+        :param url: the url of the request
+        :param data: the data sent to the url
+        """
+        self.url = url
+        self.status_code = status_code
+        self.data = data
+        self.files = files
+        self.message = 'The request %s has failed with status code: ' \
+                       '%d.\nData: %s\nFiles: %s' % \
+                       (self.url, self.status_code, self.data, self.files)
+
+    def __unicode__(self):
+        return self.message
+
+    def __str__(self):
+        return self.__unicode__()
