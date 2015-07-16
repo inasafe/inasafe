@@ -10,6 +10,7 @@ import numpy
 from safe.gis.interpolation2d import interpolate_raster
 from safe.common.utilities import verify
 from safe.utilities.i18n import tr
+from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.gis.numerics import ensure_numeric
 from safe.common.exceptions import InaSAFEError, BoundsError
 from safe.gis.polygon import (
@@ -502,6 +503,20 @@ def interpolate_polygon_points(source, target,
            isinstance(layer_name, basestring), msg)
 
     attribute_names = source.get_attribute_names()
+    target_attribute_names = target.get_attribute_names()
+
+    # Include polygon_id as attribute
+    attribute_names.append('polygon_id')
+    attribute_names.append(DEFAULT_ATTRIBUTE)
+
+    # Let's ensure that we don't shadow attribute names #2090.
+    # Also this ensures shp file character length compliance.
+    safe_attribute_name = {}
+    for name in attribute_names:
+        safe_name = get_non_conflicting_attribute_name(
+            name,
+            target_attribute_names)
+        safe_attribute_name[name] = safe_name
 
     # ----------------
     # Start algorithm
@@ -517,15 +532,12 @@ def interpolate_polygon_points(source, target,
     data = source.get_data()
     verify(len(geom) == len(data))
 
-    # Include polygon_id as attribute
-    attribute_names.append('polygon_id')
-    attribute_names.append(DEFAULT_ATTRIBUTE)
-
     # Augment point features with empty attributes from polygon
     for a in attributes:
         # Create all attributes that exist in source
         for key in attribute_names:
-            a[key] = None
+            safe_key = safe_attribute_name[key]
+            a[safe_key] = None
 
     # Traverse polygons and assign attributes to points that fall inside
     for i, polygon in enumerate(geom):
@@ -542,7 +554,8 @@ def interpolate_polygon_points(source, target,
         for k in indices:
             for key in poly_attr:
                 # Assign attributes from polygon to points
-                attributes[k][key] = poly_attr[key]
+                safe_key = safe_attribute_name[key]
+                attributes[k][safe_key] = poly_attr[key]
             attributes[k]['polygon_id'] = i  # Store id for associated polygon
 
     # Create new Vector instance and return
