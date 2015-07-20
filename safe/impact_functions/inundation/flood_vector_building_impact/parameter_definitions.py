@@ -21,7 +21,7 @@ def target_field():
     field.name = 'Target Field'
     field.is_required = True
     field.help_text = (
-        'This field of impact layer marks inundated roads by \'1\' value')
+        'This field of impact layer marks inundated buildings by \'1\' value')
     field.description = (
         'This field of impact layer marks inundated roads by \'1\' value. '
         'This is the longer description of this parameter.')
