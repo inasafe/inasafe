@@ -79,35 +79,22 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.validate()
         self.prepare()
 
-        # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
+        # Value from layer's keywords
+        hazard_zone_attribute = self.hazard.keyword('field')
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard.get_layer()
-        exposure_layer = self.exposure.get_layer()
-
-        # Input checks
-        # TODO[MD]: isn't this check enforced by metadata?
-        #if not hazard_layer.is_polygon_data:
-        #    message = (
-        #        'Input hazard must be a polygon. I got %s with '
-        #        'layer type %s' %
-        #        (hazard_layer.get_name(), hazard_layer.get_geometry_name()))
-        #    raise Exception(message)
-
-        hazard_zone_attribute_index = hazard_layer.fieldNameIndex(
+        hazard_zone_attribute_index = self.hazard.layer.fieldNameIndex(
             hazard_zone_attribute)
 
         # Check if hazard_zone_attribute exists in hazard_layer
         if hazard_zone_attribute_index < 0:
             message = (
                 'Hazard data %s does not contain expected attribute %s ' %
-                (hazard_layer.name(), hazard_zone_attribute))
+                (self.hazard.layer.name(), hazard_zone_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)
 
         # Hazard zone categories from hazard layer
-        self.hazard_zones = hazard_layer.uniqueValues(
+        self.hazard_zones = self.hazard.layer.uniqueValues(
             hazard_zone_attribute_index)
 
         self.buildings = {}
@@ -121,7 +108,7 @@ class ClassifiedPolygonHazardBuildingFunction(
 
         # Run interpolation function for polygon2polygon
         interpolated_layer = interpolate_polygon_polygon(
-            hazard_layer, exposure_layer, wgs84_extent)
+            self.hazard.layer, self.exposure.layer, wgs84_extent)
 
         new_field = QgsField(self.target_field, QVariant.String)
         interpolated_layer.dataProvider().addAttributes([new_field])

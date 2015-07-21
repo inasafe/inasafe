@@ -21,8 +21,6 @@ from safe.definitions import (
     generic_vector_hazard_classes,
     structure_class_field
 )
-from safe.impact_functions.generic.parameter_definitions import \
-    hazard_zone_attribute_field
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -100,9 +98,6 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 }
             },
-            'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', hazard_zone_attribute_field())
-            ])
+            'parameters': OrderedDict([])
         }
         return dict_meta

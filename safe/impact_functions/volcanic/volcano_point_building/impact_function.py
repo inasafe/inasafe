@@ -39,6 +39,7 @@ class VolcanoPointBuildingFunction(
 
     def __init__(self):
         super(VolcanoPointBuildingFunction, self).__init__()
+        self.volcano_names = tr('Not specified in data')
 
     def notes(self):
         """Return the notes section of the report.
@@ -83,24 +84,21 @@ class VolcanoPointBuildingFunction(
 
         # Parameters
         radii = self.parameters['distances'].value
-        volcano_name_attribute = self.parameters[
-            'volcano name attribute'].value
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard  # Volcano hazard layer
-        exposure_layer = self.exposure  # Building exposure layer
+        # Get parameters from layer's keywords
+        volcano_name_attribute = self.hazard.keyword('volcano_name_field')
 
         # Input checks
-        if not hazard_layer.is_point_data:
+        if not self.hazard.layer.is_point_data:
             message = (
                 'Input hazard must be a vector point layer. I got %s '
                 'with layer type %s' % (
-                    hazard_layer.get_name(), hazard_layer.get_geometry_name()))
+                    self.hazard.name, self.hazard.layer.get_geometry_name()))
             raise Exception(message)
 
         # Make hazard layer by buffering the point
-        centers = hazard_layer.get_geometry()
-        features = hazard_layer.get_data()
+        centers = self.hazard.layer.get_geometry()
+        features = self.hazard.layer.get_data()
         radii_meter = [x * 1000 for x in radii]  # Convert to meters
         hazard_layer = buffer_points(
             centers,
@@ -129,7 +127,7 @@ class VolcanoPointBuildingFunction(
 
         # Run interpolation function for polygon2polygon
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name=None)
+            hazard_layer, self.exposure.layer)
 
         # Extract relevant interpolated layer data
         attribute_names = interpolated_layer.get_attribute_names()

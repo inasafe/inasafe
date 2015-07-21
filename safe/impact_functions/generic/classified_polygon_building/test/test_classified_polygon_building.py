@@ -19,6 +19,9 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.generic.classified_polygon_building.impact_function\
     import ClassifiedPolygonHazardBuildingFunction
+from safe.test.utilities import test_data_path
+from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
 from safe.test.utilities import get_qgis_app, test_data_path
 from qgis.core import QgsVectorLayer
 
@@ -49,10 +52,9 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
             extent.xMaximum(), extent.yMinimum()]
 
         impact_function = ClassifiedPolygonHazardBuildingFunction.instance()
-        impact_function.hazard = hazard_layer
-        impact_function.exposure = exposure_layer
+        impact_function.hazard = SafeLayer(hazard_layer)
+        impact_function.exposure = SafeLayer(exposure_layer)
         impact_function.requested_extent = rect_extent
-        impact_function.parameters['hazard zone attribute'].value = 'h_zone'
         impact_function.run()
         impact_layer = impact_function.impact
 

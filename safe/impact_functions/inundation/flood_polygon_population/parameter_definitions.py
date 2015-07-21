@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.impact_functions.unit_definitions import parameter_unit_percentage
 from safe.utilities.i18n import tr
 
-from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.float_parameter import FloatParameter
 
 
@@ -36,30 +35,4 @@ def evacuation_percentage():
     field.description = tr(
         'The value in percentage of the population that '
         'represent the number of people needed to be evacuated.')
-    return field
-
-
-def affected_field():
-    """Generate affected field parameter
-
-    :return: list of StringParameter
-    :rtype: list[StringParameter]
-    """
-    field = StringParameter()
-    field.name = 'Affected Field'
-    field.is_required = True
-    field.value = 'FLOODPRONE'  # default value
-    return field
-
-
-def affected_value():
-    """Generate affected value parameter
-
-    :return: list of String Parameter
-    :rtype: list[StringParameter]
-    """
-    field = StringParameter()
-    field.name = 'Affected Value'
-    field.is_required = True
-    field.value = 'YES'  # default value
     return field

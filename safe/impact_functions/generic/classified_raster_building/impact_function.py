@@ -73,19 +73,15 @@ class ClassifiedRasterHazardBuildingFunction(
         medium_t = categorical_hazards[1].value
         high_t = categorical_hazards[2].value
 
-        # Extract data
-        hazard = self.hazard      # Classified Hazard
-        exposure = self.exposure  # Building locations
-
         # Determine attribute name for hazard levels
-        if hazard.is_raster:
+        if self.hazard.layer.is_raster:
             hazard_attribute = 'level'
         else:
             hazard_attribute = None
 
         interpolated_result = assign_hazard_values_to_exposure_data(
-            hazard,
-            exposure,
+            self.hazard.layer,
+            self.exposure.layer,
             attribute_name=hazard_attribute,
             mode='constant')
 
@@ -183,8 +179,8 @@ class ClassifiedRasterHazardBuildingFunction(
         # Create vector layer and return
         vector_layer = Vector(
             data=attributes,
-            projection=exposure.get_projection(),
-            geometry=exposure.get_geometry(),
+            projection=self.exposure.layer.get_projection(),
+            geometry=self.exposure.layer.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords={
                 'impact_summary': impact_summary,
