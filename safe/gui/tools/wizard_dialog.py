@@ -1414,10 +1414,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         if source_url or source_url == 0:
             self.leSource_url.setText(unicode(source_url))
 
-        source_license = self.get_existing_keyword('license')
-        if source_license or source_license == 0:
-            self.leSource_license.setText(unicode(source_license))
-
     # ===========================
     # STEP_KW_TITLE
     # ===========================
@@ -3559,6 +3555,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                     key_field = 'aggregation attribute'
                 keywords[key_field] = self.lstFields.currentItem().text()
 
+        value_map = self.selected_mapping()
+        if value_map:
+            keywords['value_map'] = json.dumps(value_map)
         if self.leSource.text():
             keywords['source'] = get_unicode(self.leSource.text())
         if self.leSource_url.text():
@@ -3567,8 +3566,6 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['scale'] = get_unicode(self.leSource_scale.text())
         if self.leSource_date.text():
             keywords['date'] = get_unicode(self.leSource_date.text())
-        if self.leSource_license.text():
-            keywords['license'] = get_unicode(self.leSource_license.text())
         if self.leTitle.text():
             keywords['title'] = get_unicode(self.leTitle.text())
 
