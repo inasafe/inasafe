@@ -25,7 +25,9 @@ status=final
 
 changelog=
         3.1.2
-        * Fixes issue parsing minimum needs - see # 2132
+        * Fix: Issue parsing minimum needs - see # 2132
+        * Fix: Error in Keywords creation wizard for flood raster layer (using meters as unit) #2111
+        * Fix: Error when open Set InaSAFE Analysis Area #2045
         3.1.1
         * Fixes issues with resizing of some dialogs e.g. minimum needs dialog
         3.1.0
