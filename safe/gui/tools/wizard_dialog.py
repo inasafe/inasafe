@@ -79,6 +79,8 @@ from safe.utilities.resources import get_ui_class, resources_path
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
 from safe_extras.parameters.generic_parameter import GenericParameter
+from safe.utilities.unicode import get_unicode
+
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -1397,13 +1399,20 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Source tab."""
         # Just set values based on existing keywords
         source = self.get_existing_keyword('source')
-        self.leSource.setText(source)
-        source_scale = self.get_existing_keyword('source_scale')
-        self.leSource_scale.setText(source_scale)
-        source_date = self.get_existing_keyword('source_date')
-        self.leSource_date.setText(source_date)
-        source_url = self.get_existing_keyword('source_url')
-        self.leSource_url.setText(source_url)
+        if source or source == 0:
+            self.leSource.setText(unicode(source))
+
+        source_scale = self.get_existing_keyword('scale')
+        if source_scale or source_scale == 0:
+            self.leSource_scale.setText(unicode(source_scale))
+
+        source_date = self.get_existing_keyword('date')
+        if source_date or source_date == 0:
+            self.leSource_date.setText(unicode(source_date))
+
+        source_url = self.get_existing_keyword('url')
+        if source_url or source_url == 0:
+            self.leSource_url.setText(unicode(source_url))
 
     # ===========================
     # STEP_KW_TITLE
@@ -3545,19 +3554,20 @@ class WizardDialog(QDialog, FORM_CLASS):
                 else:
                     key_field = 'aggregation attribute'
                 keywords[key_field] = self.lstFields.currentItem().text()
-        if self.leSource.text():
-            keywords['source'] = self.leSource.text()
-        if self.leSource_url.text():
-            keywords['source_url'] = self.leSource_url.text()
-        if self.leSource_scale.text():
-            keywords['source_scale'] = self.leSource_scale.text()
-        if self.leSource_date.text():
-            keywords['source_date'] = self.leSource_date.text()
-        if self.leTitle.text():
-            keywords['title'] = self.leTitle.text()
+
         value_map = self.selected_mapping()
         if value_map:
             keywords['value_map'] = json.dumps(value_map)
+        if self.leSource.text():
+            keywords['source'] = get_unicode(self.leSource.text())
+        if self.leSource_url.text():
+            keywords['url'] = get_unicode(self.leSource_url.text())
+        if self.leSource_scale.text():
+            keywords['scale'] = get_unicode(self.leSource_scale.text())
+        if self.leSource_date.text():
+            keywords['date'] = get_unicode(self.leSource_date.text())
+        if self.leTitle.text():
+            keywords['title'] = get_unicode(self.leTitle.text())
 
         return keywords
 
