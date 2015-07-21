@@ -655,9 +655,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>iso19115_license_le</tabstop>
   <tabstop>tabWidget</tabstop>
  </tabstops>
- <resources>
-  <include location="../resources/resources.qrc"/>
- </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
