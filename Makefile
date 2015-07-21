@@ -110,8 +110,10 @@ qgis2test: clean pep8 pylint dependency_test unwanted_strings run_data_audit tes
 
 quicktest: pep8 pylint dependency_test unwanted_strings run_data_audit test-translations test_suite_quick
 
+# you can pass an argument called PACKAGE to run only tests in that package
+# usage: make test_suite_quick PACKAGE=common
 test_suite_quick:
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe --with-id
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe/${PACKAGE} --with-id
 
 # Run pep8 style checking
 #http://pypi.python.org/pypi/pep8
