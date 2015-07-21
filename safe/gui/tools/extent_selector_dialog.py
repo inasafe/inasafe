@@ -25,6 +25,7 @@ __revision__ = '$Format:%H$'
 
 import logging
 import sqlite3
+from os.path import isfile
 
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
@@ -318,35 +319,44 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
         # Connect to the QGIS sqlite database and check if the table exists.
         db_file_path = QgsApplication.qgisUserDbFilePath()
-        db = sqlite3.connect(db_file_path)
-        cursor = db.cursor()
-        cursor.execute(
-            'SELECT COUNT(*) '
-            'FROM sqlite_master '
-            'WHERE type=\'table\' '
-            'AND name=\'tbl_bookmarks\';')
+        if not isfile(db_file_path):
+            # If the database does not exist.
+            return
 
-        number_of_rows = cursor.fetchone()[0]
-        if number_of_rows > 0:
+        try:
+            db = sqlite3.connect(db_file_path)
+            cursor = db.cursor()
             cursor.execute(
-                'SELECT * '
-                'FROM tbl_bookmarks;')
-            bookmarks = cursor.fetchall()
+                'SELECT COUNT(*) '
+                'FROM sqlite_master '
+                'WHERE type=\'table\' '
+                'AND name=\'tbl_bookmarks\';')
 
-            canvas_srid = self.canvas.mapRenderer().destinationCrs().srsid()
+            number_of_rows = cursor.fetchone()[0]
+            if number_of_rows > 0:
+                cursor.execute(
+                    'SELECT * '
+                    'FROM tbl_bookmarks;')
+                bookmarks = cursor.fetchall()
 
-            for bookmark in bookmarks:
-                name = bookmark[1]
-                srid = bookmark[7]
-                rectangle = QgsRectangle(
-                    bookmark[3], bookmark[4], bookmark[5], bookmark[6])
+                map_renderer = self.canvas.mapRenderer()
+                canvas_srid = map_renderer.destinationCrs().srsid()
 
-                if srid != canvas_srid:
-                    transform = QgsCoordinateTransform(
-                        srid, canvas_srid)
-                    rectangle = transform.transform(rectangle)
+                for bookmark in bookmarks:
+                    name = bookmark[1]
+                    srid = bookmark[7]
+                    rectangle = QgsRectangle(
+                        bookmark[3], bookmark[4], bookmark[5], bookmark[6])
 
-                if rectangle.isEmpty():
-                    pass
+                    if srid != canvas_srid:
+                        transform = QgsCoordinateTransform(
+                            srid, canvas_srid)
+                        rectangle = transform.transform(rectangle)
 
-                self.comboBox_bookmarks_list.addItem(name, rectangle)
+                    if rectangle.isEmpty():
+                        pass
+
+                    self.comboBox_bookmarks_list.addItem(name, rectangle)
+        except sqlite3.Error:
+            # If we have any SQL error with SQLite.
+            return
