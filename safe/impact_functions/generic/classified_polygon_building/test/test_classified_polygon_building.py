@@ -22,6 +22,10 @@ from safe.impact_functions.generic.classified_polygon_building.impact_function\
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 from safe.storage.safe_layer import SafeLayer
+from safe.test.utilities import get_qgis_app, test_data_path
+from qgis.core import QgsVectorLayer
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
@@ -38,12 +42,19 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
             'hazard', 'classified_generic_polygon.shp')
         building_path = test_data_path('exposure', 'buildings.shp')
 
-        hazard_layer = read_layer(generic_polygon_path)
-        exposure_layer = read_layer(building_path)
+        hazard_layer = QgsVectorLayer(generic_polygon_path, 'Hazard', 'ogr')
+        exposure_layer = QgsVectorLayer(building_path, 'Buildings', 'ogr')
+
+        # Let's set the extent to the hazard extent
+        extent = hazard_layer.extent()
+        rect_extent = [
+            extent.xMinimum(), extent.yMaximum(),
+            extent.xMaximum(), extent.yMinimum()]
 
         impact_function = ClassifiedPolygonHazardBuildingFunction.instance()
         impact_function.hazard = SafeLayer(hazard_layer)
         impact_function.exposure = SafeLayer(exposure_layer)
+        impact_function.requested_extent = rect_extent
         impact_function.run()
         impact_layer = impact_function.impact
 
@@ -62,7 +73,7 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
         # The result
         expected_high_count = 11
         expected_medium_count = 161
-        expected_low_count = 0
+        expected_low_count = 2
         message = 'Expecting %s for High Hazard Zone, but it returns %s' % (
             high_zone_count, expected_high_count)
         self.assertEqual(high_zone_count, expected_high_count, message)

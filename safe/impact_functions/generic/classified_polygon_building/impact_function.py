@@ -13,6 +13,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 from collections import OrderedDict
 
+from qgis.core import QgsField, QgsRectangle
+from PyQt4.QtCore import QVariant
+
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.storage.vector import Vector
@@ -25,10 +28,9 @@ from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage,
     color_ramp)
-from safe.engine.interpolation import (
-    assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+from safe.engine.interpolation_qgis import interpolate_polygon_polygon
 
 
 class ClassifiedPolygonHazardBuildingFunction(
@@ -80,46 +82,51 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Value from layer's keywords
         hazard_zone_attribute = self.hazard.keyword('field')
 
-        # Input checks
-        if not self.hazard.layer.is_polygon_data:
-            message = (
-                'Input hazard must be a polygon. I got %s with '
-                'layer type %s' %
-                (self.hazard.name, self.hazard.layer.get_geometry_name()))
-            raise Exception(message)
+        hazard_zone_attribute_index = self.hazard.layer.fieldNameIndex(
+            hazard_zone_attribute)
 
         # Check if hazard_zone_attribute exists in hazard_layer
-        if (hazard_zone_attribute not in
-                self.hazard.layer.get_attribute_names()):
+        if hazard_zone_attribute_index < 0:
             message = (
                 'Hazard data %s does not contain expected attribute %s ' %
-                (self.hazard.layer.get_name(), hazard_zone_attribute))
+                (self.hazard.layer.name(), hazard_zone_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)
 
         # Hazard zone categories from hazard layer
-        self.hazard_zones = list(
-            set(self.hazard.layer.get_data(hazard_zone_attribute)))
+        self.hazard_zones = self.hazard.layer.uniqueValues(
+            hazard_zone_attribute_index)
 
         self.buildings = {}
         self.affected_buildings = OrderedDict()
         for hazard_zone in self.hazard_zones:
             self.affected_buildings[hazard_zone] = {}
 
+        wgs84_extent = QgsRectangle(
+            self.requested_extent[0], self.requested_extent[1],
+            self.requested_extent[2], self.requested_extent[3])
+
         # Run interpolation function for polygon2polygon
-        interpolated_layer = assign_hazard_values_to_exposure_data(
-            self.hazard.layer, self.exposure.layer)
+        interpolated_layer = interpolate_polygon_polygon(
+            self.hazard.layer, self.exposure.layer, wgs84_extent)
+
+        new_field = QgsField(self.target_field, QVariant.String)
+        interpolated_layer.dataProvider().addAttributes([new_field])
+        interpolated_layer.updateFields()
+
+        attribute_names = [field.name() for field in
+                           interpolated_layer.pendingFields()]
+        target_field_index = interpolated_layer.fieldNameIndex(
+            self.target_field)
+        changed_values = {}
 
         # Extract relevant interpolated data
-        attribute_names = interpolated_layer.get_attribute_names()
-        features = interpolated_layer.get_data()
-
-        for i in range(len(features)):
-            hazard_value = features[i][hazard_zone_attribute]
+        for feature in interpolated_layer.getFeatures():
+            hazard_value = feature[hazard_zone_attribute]
             if not hazard_value:
                 hazard_value = self._not_affected_value
-            features[i][self.target_field] = hazard_value
-            usage = get_osm_building_usage(attribute_names, features[i])
+            changed_values[feature.id()] = {target_field_index: hazard_value}
+            usage = get_osm_building_usage(attribute_names, feature)
             if usage is None:
                 usage = tr('Unknown')
             if usage not in self.buildings:
@@ -131,6 +138,8 @@ class ClassifiedPolygonHazardBuildingFunction(
             if hazard_value in self.affected_buildings.keys():
                 self.affected_buildings[hazard_value][usage][
                     tr('Buildings Affected')] += 1
+
+        interpolated_layer.dataProvider().changeAttributeValues(changed_values)
 
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
@@ -169,9 +178,7 @@ class ClassifiedPolygonHazardBuildingFunction(
 
         # Create vector layer and return
         impact_layer = Vector(
-            data=features,
-            projection=interpolated_layer.get_projection(),
-            geometry=interpolated_layer.get_geometry(),
+            data=interpolated_layer,
             name=tr('Buildings affected by each hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,

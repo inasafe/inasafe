@@ -119,7 +119,10 @@ class ContinuousHazardPopulationFunction(ContinuousRHContinuousRE):
         return table_body, total_needs
 
     def run(self):
-        """Plugin for impact of population as derived by categorised hazard.
+        """Plugin for impact of population as derived by continuous hazard.
+
+        Hazard is reclassified into 3 classes based on the extrema provided
+        as impact function parameters.
 
         Counts number of people exposed to each category of the hazard
 
