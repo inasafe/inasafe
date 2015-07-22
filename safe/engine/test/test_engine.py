@@ -1894,25 +1894,26 @@ class TestEngine(unittest.TestCase):
             projection=layer.get_projection())
 
         exposure_layer = Vector(
-            data=layer_attributes[780:799],
-            geometry=layer_geometry[780:799],
+            data=layer_attributes[690:700],
+            geometry=layer_geometry[790:800],
             projection=layer.get_projection())
         exposure_centroid_layer = convert_polygons_to_centroids(exposure_layer)
+
+        hazard_attributes = hazard_layer.get_attribute_names()
+        exposure_attributes = exposure_layer.get_attribute_names()
 
         interpolated_layer = interpolate_polygon_points(
             hazard_layer,
             exposure_centroid_layer)
 
-        hazard_attributes = hazard_layer.get_attribute_names()
-        exposure_attributes = exposure_layer.get_attribute_names()
         interpolated_attributes = interpolated_layer.get_attribute_names()
         message = (
             "Since the layers are based on the same layer, "
             "the attributes should be the same.")
         self.assertListEqual(hazard_attributes, exposure_attributes, message)
-        message = "All attributes should be copied."
+        message = "All attributes should be copied. Plus 2 default attributes"
         self.assertEqual(
-            len(hazard_attributes) + len(exposure_attributes),
+            len(hazard_attributes) + len(exposure_attributes) + 2,
             len(interpolated_attributes),
             message)
 

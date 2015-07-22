@@ -512,10 +512,12 @@ def interpolate_polygon_points(source, target,
     # Let's ensure that we don't shadow attribute names #2090.
     # Also this ensures shp file character length compliance.
     safe_attribute_name = {}
+    used_names = [_ for _ in target_attribute_names]
     for name in attribute_names:
         safe_name = get_non_conflicting_attribute_name(
             name,
-            target_attribute_names)
+            used_names)
+        used_names.append(safe_name)
         safe_attribute_name[name] = safe_name
 
     # ----------------
