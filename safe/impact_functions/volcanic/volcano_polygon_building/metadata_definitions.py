@@ -12,9 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.utilities.i18n import tr
 from safe.definitions import (
     hazard_definition,
     hazard_volcano,
