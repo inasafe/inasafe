@@ -26,7 +26,7 @@ status=alpha
 
 changelog=
         3.2.0
-        *
+        bugfix - show building aggregation in volcano impact functions (#2103 #2014)
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
