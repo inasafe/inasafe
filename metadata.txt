@@ -26,7 +26,7 @@ status=alpha
 
 changelog=
         3.2.0
-        bugfix - show building aggregation in volcano impact functions (#2103 #2014)
+        bugfix - Prevent hazard attribute names from masking exposure names during interpolation (#2090)
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
