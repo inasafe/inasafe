@@ -476,15 +476,13 @@ class PostprocessorManager(QtCore.QObject):
                 if key == 'BuildingType' or key == 'RoadType':
                     # TODO: Fix this might be referenced before assignment
                     parameters['key_attribute'] = key_attribute
-
                 try:
                     value.setup(parameters)
                     value.process()
                     results = value.results()
                     value.clear()
-                    # LOGGER.debug(results)
-
-                    # this can raise a KeyError
+                    if key not in self.output:
+                        self.output[key] = []
                     self.output[key].append(
                         (zone_name, results))
 
@@ -494,11 +492,6 @@ class PostprocessorManager(QtCore.QObject):
                                   **styles.DETAILS_STYLE),
                         m.Paragraph(self.tr(str(e))))
                     self.error_message = message
-
-                except KeyError:
-                    self.output[key] = []
-                    # TODO: Fix this might be referenced before assignment
-                    self.output[key].append((zone_name, results))
             # increment the index
             polygon_index += 1
 
