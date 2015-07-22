@@ -26,6 +26,7 @@ status=final
 changelog=
         3.1.3
         * Fix: Show building aggregation in volcano impact functions (#2103 #2014)
+        * Fix: Prevent hazard attribute names from masking exposure names during interpolation (#2090)
         3.1.2
         * Fix: Issue parsing minimum needs - see # 2132
         * Fix: Error in Keywords creation wizard for flood raster layer (using meters as unit) #2111
@@ -84,9 +85,6 @@ changelog=
         * Overhauled impact function API to use more Object Orientated Design
         * Remove importing qgis in __init__ of safe's submodules.
         * Don't set the SIP API V2 manually anymore.
-        3.2.0
-        bugfix - Prevent hazard attribute names from masking exposure names during interpolation (#2090)
-        bugfix - show building aggregation in volcano impact functions (#2103 #2014)
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
