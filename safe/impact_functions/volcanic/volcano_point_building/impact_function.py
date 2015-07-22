@@ -124,8 +124,6 @@ class VolcanoPointBuildingFunction(
                 # Run through all polygons and get unique names
                 volcano_name_list.add(row[volcano_name_attribute])
             self.volcano_names = ', '.join(volcano_name_list)
-        else:
-            self.volcano_names = tr('Not specified in data')
 
         # Find the target field name that has no conflict with the attribute
         # names in the hazard layer

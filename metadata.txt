@@ -85,6 +85,7 @@ changelog=
         * Remove importing qgis in __init__ of safe's submodules.
         * Don't set the SIP API V2 manually anymore.
         3.2.0
+        bugfix - Prevent hazard attribute names from masking exposure names during interpolation (#2090)
         bugfix - show building aggregation in volcano impact functions (#2103 #2014)
 
 # tags are comma separated with spaces allowed
