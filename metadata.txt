@@ -25,6 +25,8 @@ status=final
 
 changelog=
         3.1.3
+        * Fix: Show building aggregation in volcanic ash impact function (#2105)
+        * Fix: Totals of affected buildings in aggregation regions now calculated correctly (#2144)
         * Fix: Show building aggregation in volcano impact functions (#2103 #2014)
         * Fix: Prevent hazard attribute names from masking exposure names during interpolation (#2090)
         3.1.2

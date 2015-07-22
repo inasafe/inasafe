@@ -76,6 +76,31 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             '2',
             message)
 
+    def test_total_affected_calculated_correctly(self):
+        """Test to see that the totalling of buildings is done correctly."""
+        # ratios_total < 1 should pass
+        params = {
+            'impact_total': 0,
+            'key_attribute': 'type',
+            u'Building type': True,
+            'target_field': 'safe_ag__4',
+            'impact_attrs': [
+                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
+                {'TYPE': 'Museum', 'safe_ag__4': 'Zone 2'},
+                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
+                {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
+            ]}
+        POSTPROCESSOR.setup(params)
+        POSTPROCESSOR.process()
+        results = POSTPROCESSOR.results()
+        message = (
+            'Expecting exactly 3 buildings have been affected. ',
+            'In Zone 1 and Zone 2.')
+        self.assertEqual(
+            results[u'Total Affected']['value'],
+            '3',
+            message)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestBuildingTypePostprocessor, 'test')
