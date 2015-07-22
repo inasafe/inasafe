@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
 from safe.definitions import (
     layer_mode_classified,
     layer_geometry_polygon,
@@ -98,6 +99,10 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 }
             },
-            'parameters': OrderedDict([])
+            'parameters': OrderedDict([
+                ('postprocessors', OrderedDict([(
+                    'BuildingType',
+                    building_type_postprocessor())]))
+            ])
         }
         return dict_meta
