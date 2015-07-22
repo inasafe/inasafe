@@ -14,9 +14,6 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.volcanic.volcano_polygon_building\
-    .parameter_definitions import (
-        hazard_zone_attribute, volcano_name_attribute)
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
@@ -109,10 +106,6 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', hazard_zone_attribute()),
-                # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', volcano_name_attribute()),
                 ('postprocessors', OrderedDict([(
                     'BuildingType',
                     building_type_postprocessor())]))

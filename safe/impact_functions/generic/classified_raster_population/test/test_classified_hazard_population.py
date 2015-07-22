@@ -23,6 +23,7 @@ from safe.storage.core import read_layer
 from safe.test.utilities import test_data_path
 from safe.impact_functions.generic.classified_raster_population\
     .impact_function import ClassifiedRasterHazardPopulationFunction
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestClassifiedHazardPopulationFunction(unittest.TestCase):
@@ -42,8 +43,8 @@ class TestClassifiedHazardPopulationFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact_layer = function.impact
 

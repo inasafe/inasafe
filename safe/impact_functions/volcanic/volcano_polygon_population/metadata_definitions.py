@@ -18,10 +18,6 @@ from safe.defaults import (
     minimum_needs_selector)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.volcanic.volcano_polygon_population.\
-    parameter_definitions import (
-        hazard_zone_attribute,
-        volcano_name_attribute)
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
@@ -106,10 +102,6 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', hazard_zone_attribute()),
-                # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', volcano_name_attribute()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

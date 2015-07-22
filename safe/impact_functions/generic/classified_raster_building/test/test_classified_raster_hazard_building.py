@@ -24,6 +24,7 @@ from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.storage.core import read_layer
 from safe.test.utilities import test_data_path
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestClassifiedHazardBuildingFunction(unittest.TestCase):
@@ -42,8 +43,8 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact_layer = function.impact
         impact_data = impact_layer.get_data()
