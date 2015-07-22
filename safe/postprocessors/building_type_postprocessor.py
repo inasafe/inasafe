@@ -167,7 +167,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                         if building_type in fields_values:
                             field_value = building[self.target_field]
                             if isinstance(field_value, basestring):
-                                if field_value != 'Not Affeted':
+                                if field_value != 'Not Affected':
                                     result += 1
                             else:
                                 result += building[self.target_field]
