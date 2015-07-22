@@ -38,6 +38,7 @@ class VolcanoPointBuildingFunction(
 
     def __init__(self):
         super(VolcanoPointBuildingFunction, self).__init__()
+        self.volcano_names = tr('Not specified in data')
 
     def notes(self):
         """Return the notes section of the report.
