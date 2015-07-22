@@ -169,7 +169,12 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                     for type_field in self.type_fields:
                         building_type = building[type_field]
                         if building_type in fields_values:
-                            result += building[self.target_field]
+                            field_value = building[self.target_field]
+                            if isinstance(field_value, basestring):
+                                if field_value != 'Not Affected':
+                                    result += 1
+                            else:
+                                result += building[self.target_field]
                             break
                         elif self._is_unknown_type(building_type):
                             self._update_known_types(building_type)

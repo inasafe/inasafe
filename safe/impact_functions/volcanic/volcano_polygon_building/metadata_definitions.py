@@ -11,6 +11,10 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
 from safe.definitions import (
     hazard_definition,
     hazard_volcano,
@@ -100,7 +104,10 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 # The attribute of hazard zone in hazard layer
                 ('hazard zone attribute', 'KRB'),
                 # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', 'NAME')
+                ('volcano name attribute', 'NAME'),
+                ('postprocessors', OrderedDict([(
+                    'BuildingType',
+                    building_type_postprocessor())]))
             ])
         }
         return dict_meta
