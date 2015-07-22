@@ -156,18 +156,14 @@ class ClassifiedRasterHazardPopulationFunction(ClassifiedRHContinuousRE):
                 'There is hazard class that has the same value with other '
                 'class. Please check the parameters.')
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard  # Classified Hazard
-        exposure_layer = self.exposure  # Population Raster
-
         # Extract data as numeric arrays
-        hazard_data = hazard_layer.get_data(nan=True)  # Class
+        hazard_data = self.hazard.layer.get_data(nan=True)  # Class
         no_data_warning = False
         if has_no_data(hazard_data):
             no_data_warning = True
 
         # Calculate impact as population exposed to each class
-        population = exposure_layer.get_data(scaling=True)
+        population = self.exposure.layer.get_data(scaling=True)
 
         # Get all population data that falls in each hazard class
         high_hazard_population = numpy.where(
@@ -280,8 +276,8 @@ class ClassifiedRasterHazardPopulationFunction(ClassifiedRHContinuousRE):
         # Create raster object and return
         raster_layer = Raster(
             data=affected_population,
-            projection=exposure_layer.get_projection(),
-            geotransform=exposure_layer.get_geotransform(),
+            projection=self.exposure.layer.get_projection(),
+            geotransform=self.exposure.layer.get_geotransform(),
             name=tr('Population which %s') % (
                 self.impact_function_manager
                 .get_function_title(self).lower()),

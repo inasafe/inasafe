@@ -27,7 +27,7 @@ from safe.common.utilities import get_osm_building_usage
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-
+from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -43,6 +43,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         self.is_nexis = False
         self.statistics_type = 'class_count'
         self.statistics_classes = [0, 1, 2, 3]
+        self.structure_class_field = None
 
     def notes(self):
         """Return the notes section of the report.
@@ -103,15 +104,11 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         class_2 = {'label': tr('Medium'), 'class': 2}
         class_3 = {'label': tr('High'), 'class': 3}
 
-        # Extract data
-        hazard_layer = self.hazard  # Depth
-        exposure_layer = self.exposure  # Building locations
-
         # Define attribute name for hazard levels.
         hazard_attribute = 'mmi'
 
         # Determine if exposure data have NEXIS attributes.
-        attribute_names = exposure_layer.get_attribute_names()
+        attribute_names = self.exposure.layer.get_attribute_names()
         if (
                 'FLOOR_AREA' in attribute_names and
                 'BUILDING_C' in attribute_names and
@@ -122,13 +119,19 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
 
         # Interpolate hazard level to building locations.
         interpolate_result = assign_hazard_values_to_exposure_data(
-            hazard_layer,
-            exposure_layer,
+            self.hazard.layer,
+            self.exposure.layer,
             attribute_name=hazard_attribute
         )
 
         # Extract relevant exposure data
-        # attribute_names = interpolate_result.get_attribute_names()
+        # Try to get the value from keyword, if not exist, it will not fail,
+        # but use the old get_osm_building_usage
+        try:
+            structure_class_field = self.exposure.keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            structure_class_field = None
         attributes = interpolate_result.get_data()
 
         interpolate_size = len(interpolate_result)
@@ -167,7 +170,13 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
                 building_value = building_value_density * area
                 contents_value = contents_value_density * area
 
-            usage = get_osm_building_usage(attribute_names, attributes[i])
+            if (structure_class_field in attribute_names and
+                    structure_class_field):
+                usage = attributes[i].get(structure_class_field, None)
+            else:
+                usage = get_osm_building_usage(
+                    attribute_names, attributes[i])
+
             if usage is None or usage == 0:
                 usage = 'unknown'
 

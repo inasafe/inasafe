@@ -18,7 +18,8 @@ then
   # check the repo out since it does not exist
   pushd .
   cd ..
-  git clone --depth 1 git://github.com/AIFDR/inasafe_data.git inasafe_data
+  # Set depth to 15 so that master branch still able to reach the right sha
+  git clone --depth 15 git://github.com/AIFDR/inasafe_data.git inasafe_data
   popd
 fi
 

@@ -22,6 +22,7 @@ from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 from safe.test.utilities import get_qgis_app, clip_layers
+from safe.storage.safe_layer import SafeLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -53,8 +54,8 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             str(clipped_exposure.source()))
 
         impact_function = ITBFatalityFunction.instance()
-        impact_function.hazard = eq_layer
-        impact_function.exposure = population_layer
+        impact_function.hazard = SafeLayer(eq_layer)
+        impact_function.exposure = SafeLayer(population_layer)
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question

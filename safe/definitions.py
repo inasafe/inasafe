@@ -111,8 +111,8 @@ layer_mode_classified = {
         'high inundation class.\n'
         'Classified values in a vector (polygon) Volcano data set might '
         'represent discrete classes where a value of I might represent low '
-        'volcanic hazard, a value of II might represent medium volcanic hazard '
-        'and a value of III  might represent a high volcanic hazard. \n'
+        'volcanic hazard, a value of II might represent medium volcanic '
+        'hazard and a value of III  might represent a high volcanic hazard. \n'
         'In a vector (point) Volcano data the user specified buffer distances '
         'will be used to classify the data. '
         'Classified values in a vector exposure data set might include '
@@ -195,9 +195,9 @@ hazard_category_single_event = {
     'name': tr('Single Event'),
     'description': tr(
         '<b>Single event</b> hazard data can be based on either a specific  '
-        'event that has happened in the past, for example a flood like Jakarta '
-        '2013, or a possible event such as the tsunami that results from an '
-        'earthquake near Bima that might happen in the future.')
+        'event that has happened in the past, for example a flood like '
+        'Jakarta 2013, or a possible event such as the tsunami that results '
+        'from an earthquake near Bima that might happen in the future.')
 }
 
 hazard_category_multiple_event = {
