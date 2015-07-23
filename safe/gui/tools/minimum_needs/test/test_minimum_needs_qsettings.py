@@ -185,22 +185,3 @@ class MinimumNeedsTest(unittest.TestCase):
             '}]}')
         profile.minimum_needs = json.loads(json_string)
         self.assertRaises(ValueOutOfBounds, profile.get_needs_parameters)
-
-    def test_resource_name_is_valid(self):
-        """Test that that if maximum is less than minimum causes error."""
-        profile = TestNeedsProfile()
-        json_string = (
-            '{"resources": [{'
-            '"Resource name": "Rice", '
-            '"Frequency": "weekly", '
-            '"Default": 10, '
-            '"Maximum allowed": 9.0, '
-            '"Minimum allowed": 2.0, '
-            '"Unit": "kg",'
-            '"Units": "kgs",'
-            '"Unit abbreviation": "kg",'
-            '"Resource description": "Rice as a staple food",'
-            '"Readable sentence": "Test sentance"'
-            '}]}')
-        profile.minimum_needs = json.loads(json_string)
-        self.assertRaises(ValueOutOfBounds, profile.get_needs_parameters)
