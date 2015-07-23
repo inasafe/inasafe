@@ -154,14 +154,24 @@ class TestImpactMetadata(TestCase):
 
     # TODO (MB) check this one
     def test_xml_read(self):
-        metadata = ImpactLayerMetadata(
+        generated_metadata = ImpactLayerMetadata(
+            EXISTING_IMPACT_FILE, xml_uri=EXISTING_IMPACT_XML)
+
+        for name, prop in generated_metadata.properties:
+            raise RuntimeError(prop)
+
+    def test_xml_to_json_to_xml(self):
+        generated_metadata = ImpactLayerMetadata(
             EXISTING_IMPACT_FILE,
             xml_uri=EXISTING_IMPACT_XML)
         with open(EXISTING_IMPACT_XML) as f:
             expected_metadata = f.read()
-        # metadata.write_as('/tmp/serger.xml')
-        self.assertEquals(expected_metadata.replace(" ", ""),
-                          metadata.xml.replace(" ", ""))
+
+        json_tmp_file = unique_filename(suffix='.json', dir=TEMP_DIR)
+        generated_metadata.write_as(json_tmp_file)
+        read_tmp_metadata = ImpactLayerMetadata(EXISTING_IMPACT_FILE,
+                                                json_uri=json_tmp_file)
+        self.assertEquals(expected_metadata, read_tmp_metadata.xml)
 
     def generate_test_metadata(self):
         # if you change this you need to update IMPACT_TEST_FILE_JSON

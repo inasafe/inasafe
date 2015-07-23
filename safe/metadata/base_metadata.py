@@ -86,6 +86,9 @@ class BaseMetadata(object):
             'inasafe_report'),
     }
 
+    def __eq__(self, other):
+        return self.dict == other.dict
+
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         # private members
         self._layer_uri = layer_uri
@@ -112,7 +115,7 @@ class BaseMetadata(object):
     def dict(self):
         metadata = {}
         properties = {}
-        for name, prop in self._properties.iteritems():
+        for name, prop in self.properties.iteritems():
             properties[name] = prop.dict
         metadata['properties'] = properties
         return metadata
@@ -132,7 +135,7 @@ class BaseMetadata(object):
 
         # TODO (MB) have a look if this is a good idea :)
         # check if we have more properties
-        for name, path in self._properties.iteritems():
+        for name, path in self.properties.iteritems():
             if name in self._standard_properties:
                 continue
             elem = root.find(path, XML_NS)
@@ -178,6 +181,7 @@ class BaseMetadata(object):
         for name, path in self._standard_properties.iteritems():
             value = self._read_property_from_xml(root, path)
             if value is not None:
+                # this calls the default setters
                 setattr(self, name, value)
 
         self._reading_ancillary_file = False
@@ -217,16 +221,20 @@ class BaseMetadata(object):
         self._last_update = datetime.now()
 
     def get_value(self, property_name):
-        return self._properties[property_name].value
+        return self.get_property(property_name).value
 
     def get_xml_value(self, property_name):
         try:
-            return self._properties[property_name].xml_value
+            return self.get_property(property_name).xml_value
         except KeyError:
             return None
 
     def get_property(self, property_name):
-        return self._properties[property_name]
+        return self.properties[property_name]
+
+    @property
+    def properties(self):
+        return self._properties
 
     def update(self, name, value):
         self.get_property(name).value = value
@@ -249,12 +257,13 @@ class BaseMetadata(object):
             else:
                 raise
 
-    def save(self):
-        with open(self.json_uri, 'w') as f:
-            f.write(self.json)
-
-        with open(self.xml_uri, 'w') as f:
-            f.write(self.xml)
+    def save(self, save_json=True, save_xml=True):
+        if save_json:
+            with open(self.json_uri, 'w') as f:
+                f.write(self.json)
+        if save_xml:
+            with open(self.xml_uri, 'w') as f:
+                f.write(self.xml)
 
     def write_as(self, destination_path):
         file_format = os.path.splitext(destination_path)[1]
@@ -288,7 +297,7 @@ class BaseMetadata(object):
     @organisation.setter
     def organisation(self, value):
         path = self._standard_properties['organisation']
-        return self.set('organisation', value, path, 'gco:CharacterString')
+        self.set('organisation', value, path, 'gco:CharacterString')
 
     @property
     def email(self):
@@ -297,7 +306,7 @@ class BaseMetadata(object):
     @email.setter
     def email(self, value):
         path = self._standard_properties['email']
-        return self.set('email', value, path, 'gco:CharacterString')
+        self.set('email', value, path, 'gco:CharacterString')
 
     @property
     def document_date(self):
@@ -306,7 +315,7 @@ class BaseMetadata(object):
     @document_date.setter
     def document_date(self, value):
         path = self._standard_properties['document_date']
-        return self.set('document_date', value, path, 'gco:Date')
+        self.set('document_date', value, path, 'gco:Date')
 
     @property
     def abstract(self):
@@ -315,7 +324,7 @@ class BaseMetadata(object):
     @abstract.setter
     def abstract(self, value):
         path = self._standard_properties['abstract']
-        return self.set('abstract', value, path, 'gco:CharacterString')
+        self.set('abstract', value, path, 'gco:CharacterString')
 
     @property
     def title(self):
@@ -324,7 +333,7 @@ class BaseMetadata(object):
     @title.setter
     def title(self, value):
         path = self._standard_properties['title']
-        return self.set('title', value, path, 'gco:CharacterString')
+        self.set('title', value, path, 'gco:CharacterString')
 
     @property
     def license(self):
@@ -333,7 +342,7 @@ class BaseMetadata(object):
     @license.setter
     def license(self, value):
         path = self._standard_properties['license']
-        return self.set('license', value, path, 'gco:CharacterString')
+        self.set('license', value, path, 'gco:CharacterString')
 
     @property
     def url(self):
@@ -342,7 +351,7 @@ class BaseMetadata(object):
     @url.setter
     def url(self, value):
         path = self._standard_properties['url']
-        return self.set('url', value, path, 'gmd:URL')
+        self.set('url', value, path, 'gmd:URL')
 
     @property
     def report(self):
@@ -351,4 +360,4 @@ class BaseMetadata(object):
     @report.setter
     def report(self, value):
         path = self._standard_properties['report']
-        return self.set('report', value, path, 'gco:CharacterString')
+        self.set('report', value, path, 'gco:CharacterString')

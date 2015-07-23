@@ -50,6 +50,8 @@ class TestGenericMetadata(TestCase):
             expected_metadata = f.read()
 
         self.assertEquals(expected_metadata, metadata.json)
+        metadata.report = 'ciao'
+        raise RuntimeError(metadata.report)
 
     def generate_test_metadata(self):
         # if you change this you need to update GENERIC_TEST_FILE_JSON

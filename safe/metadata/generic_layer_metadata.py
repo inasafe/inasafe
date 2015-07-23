@@ -30,22 +30,16 @@ class GenericLayerMetadata(BaseMetadata):
 
     @property
     def dict(self):
-        metadata = super(GenericLayerMetadata, self).dict
-        return metadata
+        return super(GenericLayerMetadata, self).dict
 
     @property
     def json(self):
         return json.dumps(self.dict, indent=2, sort_keys=True)
 
     def read_from_json(self):
-        metadata = super(GenericLayerMetadata, self).read_from_json()
-        try:
-            self.report = metadata['report']
-        except KeyError:
-            pass  # we want to get as much as we can without raising errors
+        super(GenericLayerMetadata, self).read_from_json()
 
     def read_from_xml(self):
-        # TODO (MB): implement this
         super(GenericLayerMetadata, self).read_from_xml()
 
     def update_report(self):
