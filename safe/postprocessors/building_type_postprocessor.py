@@ -169,8 +169,6 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         """
 
         title = tr(title)
-        if self.target_field is not None:
-            title = '%s %s' % (title, tr(self.target_field).lower())
 
         result = 0
         if self.type_fields is not None:
