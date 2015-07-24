@@ -241,13 +241,10 @@ class ITBFatalityFunction(
 
         displacement_rate = self.hardcoded_parameters['displacement_rate']
 
-        # Extract input layers
-        intensity = self.hazard
-        population = self.exposure
-
         # Extract data grids
-        hazard = intensity.get_data()   # Ground Shaking
-        exposure = population.get_data(scaling=True)  # Population Density
+        hazard = self.hazard.layer.get_data()   # Ground Shaking
+        # Population Density
+        exposure = self.exposure.layer.get_data(scaling=True)
 
         # Calculate people affected by each MMI level
         # FIXME (Ole): this range is 2-9. Should 10 be included?
@@ -359,8 +356,8 @@ class ITBFatalityFunction(
         # Create raster object and return
         raster = Raster(
             mask,
-            projection=population.get_projection(),
-            geotransform=population.get_geotransform(),
+            projection=self.exposure.layer.get_projection(),
+            geotransform=self.exposure.layer.get_geotransform(),
             keywords={
                 'impact_summary': impact_summary,
                 'total_population': self.total_population,

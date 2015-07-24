@@ -118,36 +118,36 @@ class VolcanoPolygonPopulationFunction(
         self.prepare()
 
         # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute'].value
-        name_attribute = self.parameters['volcano name attribute'].value
+        hazard_zone_attribute = self.hazard.keyword('field')
+        name_attribute = self.hazard.keyword('volcano_name_field')
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard
-        exposure_layer = self.exposure
-
-        if has_no_data(exposure_layer.get_data(nan=True)):
+        nan_warning = False
+        if has_no_data(self.exposure.layer.get_data(nan=True)):
+            nan_warning = True
             self.no_data_warning = True
 
         # Input checks
-        if not hazard_layer.is_polygon_data:
+        if not self.hazard.layer.is_polygon_data:
             msg = ('Input hazard must be a polygon layer. I got %s with '
-                   'layer type %s' % (hazard_layer.get_name(),
-                                      hazard_layer.get_geometry_name()))
+                   'layer type %s' % (self.hazard.layer.get_name(),
+                                      self.hazard.layer.get_geometry_name()))
             raise Exception(msg)
 
         # Check if hazard_zone_attribute exists in hazard_layer
-        if hazard_zone_attribute not in hazard_layer.get_attribute_names():
+        if (hazard_zone_attribute not in
+                self.hazard.layer.get_attribute_names()):
             msg = ('Hazard data %s did not contain expected attribute %s ' % (
-                hazard_layer.get_name(), hazard_zone_attribute))
+                self.hazard.layer.get_name(), hazard_zone_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
-        features = hazard_layer.get_data()
+        features = self.hazard.layer.get_data()
+        category_header = tr('Volcano Hazard Zone')
         hazard_zone_categories = list(
-            set(hazard_layer.get_data(hazard_zone_attribute)))
+            set(self.hazard.layer.get_data(hazard_zone_attribute)))
 
         # Get names of volcanoes considered
-        if name_attribute in hazard_layer.get_attribute_names():
+        if name_attribute in self.hazard.layer.get_attribute_names():
             volcano_name_list = []
             # Run through all polygons and get unique names
             for row in features:
@@ -161,8 +161,8 @@ class VolcanoPolygonPopulationFunction(
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
-                hazard_layer,
-                exposure_layer,
+                self.hazard.layer,
+                self.exposure.layer,
                 attribute_name=self.target_field)
 
         # Initialise total affected per category
@@ -181,7 +181,7 @@ class VolcanoPolygonPopulationFunction(
 
         # Count totals
         self.total_population = int(
-            numpy.nansum(exposure_layer.get_data()))
+            numpy.nansum(self.exposure.layer.get_data()))
         self.unaffected_population = (
             self.total_population - self.total_affected_population)
 

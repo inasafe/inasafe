@@ -21,6 +21,7 @@ from safe.impact_functions.earthquake.earthquake_building.impact_function \
     import EarthquakeBuildingFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestEarthquakeBuildingFunction(unittest.TestCase):
@@ -41,8 +42,8 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         building_layer = read_layer(building_path)
 
         impact_function = EarthquakeBuildingFunction.instance()
-        impact_function.hazard = eq_layer
-        impact_function.exposure = building_layer
+        impact_function.hazard = SafeLayer(eq_layer)
+        impact_function.exposure = SafeLayer(building_layer)
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question

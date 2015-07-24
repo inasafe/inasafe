@@ -111,8 +111,8 @@ layer_mode_classified = {
         'high inundation class.\n'
         'Classified values in a vector (polygon) Volcano data set might '
         'represent discrete classes where a value of I might represent low '
-        'volcanic hazard, a value of II might represent medium volcanic hazard '
-        'and a value of III  might represent a high volcanic hazard. \n'
+        'volcanic hazard, a value of II might represent medium volcanic '
+        'hazard and a value of III  might represent a high volcanic hazard. \n'
         'In a vector (point) Volcano data the user specified buffer distances '
         'will be used to classify the data. '
         'Classified values in a vector exposure data set might include '
@@ -195,9 +195,9 @@ hazard_category_single_event = {
     'name': tr('Single Event'),
     'description': tr(
         '<b>Single event</b> hazard data can be based on either a specific  '
-        'event that has happened in the past, for example a flood like Jakarta '
-        '2013, or a possible event such as the tsunami that results from an '
-        'earthquake near Bima that might happen in the future.')
+        'event that has happened in the past, for example a flood like '
+        'Jakarta 2013, or a possible event such as the tsunami that results '
+        'from an earthquake near Bima that might happen in the future.')
 }
 
 hazard_category_multiple_event = {
@@ -390,6 +390,8 @@ exposure = {
 unit_feet = {
     'key': 'feet',
     'name': tr('Feet'),
+    'plural_name': tr('feet'),
+    'abbreviation': tr('feet'),
     'description': tr(
         '<b>Feet</b> are an imperial unit of measure. There are 12 '
         'inches in 1 foot and 3 feet in 1 yard.'),
@@ -398,6 +400,8 @@ unit_feet = {
 unit_generic = {
     'key': 'generic',
     'name': tr('Generic'),
+    'plural_name': tr('generic'),
+    'abbreviation': tr('generic'),
     'description': tr(
         'A generic unit for value that does not have unit or we do not know '
         'about the unit. It also can be used for normalised values.'),
@@ -406,6 +410,8 @@ unit_generic = {
 unit_kilogram_per_meter_square = {
     'key': 'kilogram_per_meter_square',
     'name': tr('Kg/m2'),
+    'plural_name': tr('Kg/m2'),
+    'abbreviation': tr('Kg/m2'),
     'description': tr(
         '<b>Kilograms per square metre</b> is a metric unit of measure where '
         'the weight is specified according to area.  This unit is relevant '
@@ -415,6 +421,8 @@ unit_kilogram_per_meter_square = {
 unit_kilometres = {
     'key': 'kilometres',
     'name': tr('Kilometres'),
+    'plural_name': tr('kilometres'),
+    'abbreviation': tr('km'),
     'description': tr(
         '<b>Kilometres</b> are a metric unit of measure. There are 1000 '
         'metres in 1 kilometre (km).'),
@@ -423,6 +431,8 @@ unit_kilometres = {
 unit_metres = {
     'key': 'metres',
     'name': tr('Metres'),
+    'plural_name': tr('metres'),
+    'abbreviation': tr('m'),
     'description': tr(
         '<b>Metres</b> are a metric unit of measure. There are 100 '
         'centimetres in 1 metre.'),
@@ -431,6 +441,8 @@ unit_metres = {
 unit_millimetres = {
     'key': 'millimetres',
     'name': tr('Millimetres'),
+    'plural_name': tr('millimetres'),
+    'abbreviation': tr('mm'),
     'description': tr(
         '<b>Millimetres</b> are a metric unit of measure. There are 1000 '
         'millimetres in 1 metre.'),
@@ -439,10 +451,22 @@ unit_millimetres = {
 unit_mmi = {
     'key': 'mmi',
     'name': tr('MMI'),
+    'plural_name': tr('MMI'),
+    'abbreviation': tr('MMI'),
     'description': tr(
         'The <b>Modified Mercalli Intensity (MMI)</b> scale describes '
         'the intensity of ground shaking from a earthquake based on the '
         'effects observed by people at the surface.'),
+}
+
+unit_percentage = {
+    'key': 'percentage',
+    'name': tr('Percentage'),
+    'plural_name': tr('percentages'),
+    'abbreviation': tr('%%'),
+    'description': tr(
+        'Percentage values ranges from 0 to 100. It represents a ratio of '
+        'hundred.'),
 }
 
 continuous_hazard_unit = {

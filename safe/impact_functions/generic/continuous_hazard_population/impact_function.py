@@ -104,7 +104,10 @@ class ContinuousHazardPopulationFunction(
         return notes
 
     def run(self):
-        """Plugin for impact of population as derived by categorised hazard.
+        """Plugin for impact of population as derived by continuous hazard.
+
+        Hazard is reclassified into 3 classes based on the extrema provided
+        as impact function parameters.
 
         Counts number of people exposed to each category of the hazard
 
@@ -135,17 +138,13 @@ class ContinuousHazardPopulationFunction(
         medium_t = thresholds[1]
         high_t = thresholds[2]
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard    # Categorised Hazard
-        exposure_layer = self.exposure  # Population Raster
-
         # Extract data as numeric arrays
-        hazard_data = hazard_layer.get_data(nan=True)  # Category
+        hazard_data = self.hazard.layer.get_data(nan=True)  # Category
         if has_no_data(hazard_data):
             self.no_data_warning = True
 
         # Calculate impact as population exposed to each category
-        exposure_data = exposure_layer.get_data(nan=True, scaling=True)
+        exposure_data = self.exposure.layer.get_data(nan=True, scaling=True)
         if has_no_data(exposure_data):
             self.no_data_warning = True
 
@@ -237,8 +236,8 @@ class ContinuousHazardPopulationFunction(
         # Create raster object and return
         raster_layer = Raster(
             data=impacted_exposure,
-            projection=hazard_layer.get_projection(),
-            geotransform=hazard_layer.get_geotransform(),
+            projection=self.hazard.layer.get_projection(),
+            geotransform=self.hazard.layer.get_geotransform(),
             name=tr('Population might %s') % (
                 self.impact_function_manager.
                 get_function_title(self).lower()),

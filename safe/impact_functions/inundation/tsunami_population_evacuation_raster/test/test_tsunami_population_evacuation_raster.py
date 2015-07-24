@@ -16,6 +16,7 @@ from safe.impact_functions.inundation\
     TsunamiEvacuationFunction
 from safe.test.utilities import test_data_path, get_qgis_app, clip_layers
 from safe.common.utilities import OrderedDict
+from safe.storage.safe_layer import SafeLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -43,8 +44,8 @@ class TestTsunamiEvacuationRaster(unittest.TestCase):
 
         # Let's set the extent to the hazard extent
         function.parameters['thresholds'].value = [0.7, 0.8, 0.9]
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact = function.impact
 
