@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
 from safe.definitions import (
     hazard_definition,
     hazard_volcano,
@@ -99,7 +100,9 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
                 # The list of radii in km for volcano point hazard
                 ('distances [km]', [3, 5, 10]),
                 # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', 'NAME')
+                ('volcano name attribute', 'NAME'),
+                ('postprocessors', OrderedDict([
+                    ('BuildingType', building_type_postprocessor())]))
             ])
         }
         return dict_meta

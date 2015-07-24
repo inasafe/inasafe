@@ -131,20 +131,30 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.valid_type_fields = None
 
     def _calculate_total(self):
-        """Indicator that shows total population.
+        """Indicator that shows total affected buildings.
 
-        This indicator reports the total population.
+        This indicator reports the total affected buildings in this region.
         """
 
-        name = tr('Total')
-        if self.target_field is not None:
-            name = '%s %s' % (name, tr(self.target_field).lower())
-
-        result = self.impact_total
-        try:
-            result = int(round(result))
-        except ValueError:
-            result = self.NO_DATA_TEXT
+        name = tr('Total Affected')
+        result = 0
+        if self.type_fields is not None:
+            try:
+                for building in self.impact_attrs:
+                    field_value = building[self.target_field]
+                    if isinstance(field_value, basestring):
+                        if field_value != 'Not Affected':
+                            result += 1
+                    else:
+                        result += field_value
+                result = int(round(result))
+            except (ValueError, KeyError):
+                result = self.NO_DATA_TEXT
+        else:
+            if self.no_features:
+                result = 0
+            else:
+                result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
     def _calculate_type(self, title, fields_values):
@@ -159,8 +169,6 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         """
 
         title = tr(title)
-        if self.target_field is not None:
-            title = '%s %s' % (title, tr(self.target_field).lower())
 
         result = 0
         if self.type_fields is not None:
@@ -169,7 +177,12 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                     for type_field in self.type_fields:
                         building_type = building[type_field]
                         if building_type in fields_values:
-                            result += building[self.target_field]
+                            field_value = building[self.target_field]
+                            if isinstance(field_value, basestring):
+                                if field_value != 'Not Affected':
+                                    result += 1
+                            else:
+                                result += field_value
                             break
                         elif self._is_unknown_type(building_type):
                             self._update_known_types(building_type)

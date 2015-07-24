@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
 from safe.definitions import (
     hazard_definition,
     hazard_all,
@@ -92,7 +93,10 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
             },
             'parameters': OrderedDict([
                 # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', 'KRB')
+                ('hazard zone attribute', 'KRB'),
+                ('postprocessors', OrderedDict([(
+                    'BuildingType',
+                    building_type_postprocessor())]))
             ])
         }
         return dict_meta
