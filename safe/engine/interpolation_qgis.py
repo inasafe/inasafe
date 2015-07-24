@@ -105,7 +105,7 @@ def interpolate_polygon_polygon(source, target, wgs84_extent):
                 for i in xrange(target_field_count):
                     f_result[i] = f[i]
                 for i in xrange(source_field_count):
-                    f_result[i+target_field_count] = \
+                    f_result[i + target_field_count] = \
                         source_attributes[source_id][i]
                 f_result['polygon_id'] = source_id
                 result_features.append(f_result)

@@ -115,7 +115,6 @@ class TsunamiEvacuationFunction(
 
         # Extract data as numeric arrays
         data = self.hazard.layer.get_data(nan=True)  # Depth
-        no_data_warning = False
         if has_no_data(data):
             self.no_data_warning = True
 

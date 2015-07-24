@@ -135,8 +135,6 @@ class FloodEvacuationVectorHazardFunction(
         self.value_map = self.hazard.keyword('value_map')
 
         # Get the IF parameters
-        affected_field = self.parameters['affected_field'].value
-        affected_value = self.parameters['affected_value'].value
         self._evacuation_percentage = (
             self.parameters['evacuation_percentage'].value)
 
@@ -150,8 +148,6 @@ class FloodEvacuationVectorHazardFunction(
             raise Exception(message)
 
         if has_no_data(self.exposure.layer.get_data(nan=True)):
-            nan_warning = True
-        if has_no_data(exposure_layer.get_data(nan=True)):
             self.no_data_warning = True
 
         # Check that affected field exists in hazard layer

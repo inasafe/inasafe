@@ -128,7 +128,7 @@ class FloodEvacuationRasterHazardFunction(
             'Expected thresholds to be a list. Got %s' % str(thresholds))
 
         # Extract data as numeric arrays
-        
+
         data = self.hazard.layer.get_data(nan=True)  # Depth
         if has_no_data(data):
             self.no_data_warning = True

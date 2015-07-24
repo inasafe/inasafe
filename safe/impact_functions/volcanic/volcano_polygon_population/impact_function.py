@@ -121,9 +121,7 @@ class VolcanoPolygonPopulationFunction(
         hazard_zone_attribute = self.hazard.keyword('field')
         name_attribute = self.hazard.keyword('volcano_name_field')
 
-        nan_warning = False
         if has_no_data(self.exposure.layer.get_data(nan=True)):
-            nan_warning = True
             self.no_data_warning = True
 
         # Input checks
@@ -142,7 +140,6 @@ class VolcanoPolygonPopulationFunction(
             raise InaSAFEError(msg)
 
         features = self.hazard.layer.get_data()
-        category_header = tr('Volcano Hazard Zone')
         hazard_zone_categories = list(
             set(self.hazard.layer.get_data(hazard_zone_attribute)))
 
