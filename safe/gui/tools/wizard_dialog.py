@@ -130,7 +130,7 @@ category_question_aggregation = QApplication.translate(
 # Constants for hazard_categories
 hazard_category_question = QApplication.translate(
     'WizardDialog',
-    'What <b>hazard scenario</b> does this layer represent? '
+    'What type of <b>hazard scenario</b> does this layer represent? '
     'Is it a single event or a zone of multiple hazards?')
 
 # Constants for hazards
@@ -181,7 +181,7 @@ unit_question = QApplication.translate(
 allow_resampling_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> for this <b>%s data</b> raster layer. '
-    'For some exposure types you may want InaSAFE to not resample the raster '
+    'For some exposure types you may not want InaSAFE to resample the raster '
     'to the hazard layer resolution during analyses. Please select the '
     'check box below if you want to set the <i>allow_resampling</i> '
     'keyword to <i>False</i>.')   # (subcategory, category, layer_mode)

@@ -749,20 +749,20 @@ exposure_unit = {
 structure_class_field = {
     'key': 'structure_class_field',
     'name': tr('Structure class field'),
-    'description': tr('Field where the structure type is defined.')
+    'description': tr('Attribute where the structure type is defined.')
 }
 
 road_class_field = {
     'key': 'road_class_field',
     'name': tr('Road class field'),
-    'description': tr('Field where the road type is defined.')
+    'description': tr('Attribute where the road type is defined.')
 }
 
 # Additional keywords
 # Hazard related
 volcano_name_field = {
     'key': 'volcano_name_field',
-    'name': tr('Volcano name field'),
+    'name': tr('Volcano name attribute'),
     'type': 'field',
-    'description': tr('Field where the volcano name is located.')
+    'description': tr('Attribute where the volcano name is located.')
 }
