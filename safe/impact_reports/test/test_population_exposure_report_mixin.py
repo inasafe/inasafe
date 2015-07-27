@@ -18,11 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-
-
-import safe.impact_functions.core
-
-
+import safe.impact_functions.core  # pylint: disable=unused-import
 from safe.impact_reports.population_exposure_report_mixin import (
     PopulationExposureReportMixin)
 
@@ -158,6 +154,12 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
             total_affected_population,
             300,
             message)
+        message = 'Other population is empty.'
+        self.assertDictEqual(
+            other_population_counts,
+            {},
+            message
+        )
         expected_affected_population = {
             'High': 100,
             'Medium': 100,
