@@ -114,14 +114,6 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # This field of the  hazard layer contains information
-                # about inundated areas
-                ('affected_field',
-                 parameter_definitions.affected_field()),
-                # This value in 'affected_field' of the hazard layer
-                # marks the areas as inundated
-                ('affected_value',
-                 parameter_definitions.affected_value()),
                 # Percent of affected needing evacuation
                 ('evacuation_percentage',
                  parameter_definitions.evacuation_percentage()),

@@ -95,10 +95,6 @@ class FloodRasterRoadsMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # This field of the exposure layer contains
-                # information about road types
-                ('road_type_field',
-                 parameter_definitions.road_type_field()),
                 ('min threshold',
                  parameter_definitions.min_threshold()),
                 ('max threshold',
