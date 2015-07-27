@@ -150,10 +150,7 @@ class VolcanoPolygonPopulationFunction(
             for row in features:
                 volcano_name_list.append(row[name_attribute])
 
-            volcano_names = ''
-            for hazard_zone in volcano_name_list:
-                volcano_names += '%s, ' % hazard_zone
-            self.volcano_names = volcano_names[:-2]  # Strip trailing ', '
+            self.volcano_names = ', '.join(set(volcano_name_list))
 
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
