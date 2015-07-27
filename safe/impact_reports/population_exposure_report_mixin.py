@@ -49,10 +49,10 @@ class PopulationExposureReportMixin(ReportMixin):
 
         """
         self._question = ''
-        self._total_population = None
-        self._unaffected_population = None
-        self._evacuation_category = None
-        self._evacuation_percentage = None
+        self._total_population = 0
+        self._unaffected_population = 0
+        self._evacuation_category = 0
+        self._evacuation_percentage = 0
         self._minimum_needs = []
         self._affected_population = {}
         self._other_population_counts = {}
@@ -178,7 +178,9 @@ class PopulationExposureReportMixin(ReportMixin):
 
     @property
     def impact_category_ordering(self):
-        if not hasattr(self, '_impact_category_ordering'):
+        if (
+                not hasattr(self, '_impact_category_ordering') or
+                not self._impact_category_ordering):
             self._impact_category_ordering = self.affected_population.keys()
         return self._impact_category_ordering
 
@@ -193,10 +195,10 @@ class PopulationExposureReportMixin(ReportMixin):
         return self._other_population_counts
 
     @other_population_counts.setter
-    def other_population_counts(self):
+    def other_population_counts(self, other_counts):
         if not hasattr(self, '_other_population_counts'):
             self._other_population_counts = {}
-        return self._other_population_counts
+        self._other_population_counts = other_counts
 
     @property
     def affected_population(self):
