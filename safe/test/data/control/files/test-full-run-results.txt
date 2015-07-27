@@ -1,4 +1,3 @@
-100*
 Rice [kg] 280
 Drinking Water [l] 1,750
 Clean Water [l] 6,700
