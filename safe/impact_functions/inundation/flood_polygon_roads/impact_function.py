@@ -75,7 +75,8 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         # Get parameters from layer's keywords
         self.affected_field = self.hazard.keyword('field')
         self.value_map = self.hazard.keyword('value_map')
-        self.road_class_field = self.exposure.keyword('road_class_field')
+        self.exposure_class_attribute = self.exposure.keyword(
+            'road_class_field')
 
         hazard_provider = self.hazard.layer.dataProvider()
         affected_field_index = hazard_provider.fieldNameIndex(
@@ -174,7 +175,7 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
 
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(
-            self.road_class_field)
+            self.exposure_class_attribute)
         target_field_index = line_layer.fieldNameIndex(self.target_field)
 
         for road in roads_data:

@@ -49,7 +49,6 @@ class FloodPolygonBuildingFunction(
         # Variables for storing value from layer's keyword
         self.affected_field = None
         self.value_map = None
-        self.structure_class_field = None
         # The 'wet' variable
         self.wet = 'wet'
 
@@ -81,7 +80,7 @@ class FloodPolygonBuildingFunction(
         # Get parameters from layer's keywords
         self.affected_field = self.hazard.keyword('field')
         self.value_map = self.hazard.keyword('value_map')
-        self.structure_class_field = self.exposure.keyword(
+        self.exposure_class_attribute = self.exposure.keyword(
             'structure_class_field')
 
         # Prepare Hazard Layer
@@ -100,15 +99,15 @@ class FloodPolygonBuildingFunction(
         exposure_provider = self.exposure.layer.dataProvider()
         exposure_fields = exposure_provider.fields()
 
-        # Check structure_class_field exists in exposure layer
+        # Check self.exposure_class_attribute exists in exposure layer
         building_type_field_index = exposure_provider.fieldNameIndex(
-            self.structure_class_field)
+            self.exposure_class_attribute)
         if building_type_field_index == -1:
             message = tr(
                 'Field "%s" is not present in the attribute table of '
                 'the exposure layer. Please change the Building Type '
                 'Field parameter in the IF Option.'
-            ) % self.structure_class_field
+            ) % self.exposure_class_attribute
             raise GetDataError(message)
 
         # If target_field does not exist, add it:
@@ -205,7 +204,7 @@ class FloodPolygonBuildingFunction(
         ])
         buildings_data = building_layer.getFeatures()
         building_type_field_index = building_layer.fieldNameIndex(
-            self.structure_class_field)
+            self.exposure_class_attribute)
         for building in buildings_data:
             record = building.attributes()
             building_type = record[building_type_field_index]

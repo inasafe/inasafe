@@ -81,14 +81,13 @@ class ClassifiedPolygonHazardBuildingFunction(
 
         # Value from layer's keywords
         hazard_zone_attribute = self.hazard.keyword('field')
-        # Extract relevant exposure data
         # Try to get the value from keyword, if not exist, it will not fail,
         # but use the old get_osm_building_usage
         try:
-            structure_class_field = self.exposure.keyword(
+            self.exposure_class_attribute = self.exposure.keyword(
                 'structure_class_field')
         except KeywordNotFoundError:
-            structure_class_field = None
+            self.exposure_class_attribute = None
 
         hazard_zone_attribute_index = self.hazard.layer.fieldNameIndex(
             hazard_zone_attribute)
@@ -135,9 +134,9 @@ class ClassifiedPolygonHazardBuildingFunction(
                 hazard_value = self._not_affected_value
             changed_values[feature.id()] = {target_field_index: hazard_value}
 
-            if (structure_class_field and
-                    structure_class_field in attribute_names):
-                usage = feature[structure_class_field]
+            if (self.exposure_class_attribute and
+                    self.exposure_class_attribute in attribute_names):
+                usage = feature[self.exposure_class_attribute]
             else:
                 usage = get_osm_building_usage(attribute_names, feature)
 

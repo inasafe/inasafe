@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from qgis.core import QgsVectorLayer, QgsMapLayer
 from safe.storage.layer import Layer
+from safe.storage.vector import Vector
 from safe.common.exceptions import KeywordNotFoundError, InvalidLayerError
 from safe.utilities.keyword_io import KeywordIO
 
@@ -137,3 +138,17 @@ class SafeLayer(object):
         :rtype: bool
         """
         return isinstance(self.layer, QgsVectorLayer)
+
+    def qgis_vector_layer(self):
+        """Get QgsVectorLayer if the layer param is a vector storage layer (
+        old-style).
+
+        :returns: A map layer.
+        :rtype: QgsMapLayer, Layer, None
+        """
+        if isinstance(self.layer, Vector):
+            return self.layer.as_qgis_native()
+        elif isinstance(self.layer, QgsVectorLayer):
+            return self.layer
+        else:
+            return None
