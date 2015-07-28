@@ -1,7 +1,6 @@
 # coding=utf-8
 from safe.common.exceptions import NoAttributeInLayerError
-from safe.impact_functions.bases.utilities import get_qgis_vector_layer, \
-    check_attribute_exist
+from safe.impact_functions.bases.utilities import check_attribute_exist
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '07/05/15'
@@ -28,7 +27,7 @@ class ClassifiedVectorHazardMixin(object):
 
     @hazard_class_attribute.setter
     def hazard_class_attribute(self, value):
-        hazard_layer = get_qgis_vector_layer(self._hazard_layer)
+        hazard_layer = self._hazard_layer.qgis_vector_layer()
         if hazard_layer and check_attribute_exist(hazard_layer, value):
             self._hazard_class_attribute = value
         else:

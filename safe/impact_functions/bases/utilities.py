@@ -24,23 +24,6 @@ def check_attribute_exist(layer, attribute):
     return attribute_index != -1
 
 
-def get_qgis_vector_layer(layer):
-    """Get QgsVectorLayer if the layer param is a vector storage layer (
-    old-style).
-
-    :param layer: The layer to normalize
-    :type layer: QgsMapLayer, Vector
-    :return: QgsMapLayer returned
-    :rtype: QgsVectorLayer
-    """
-    if isinstance(layer, Vector):
-        return layer.as_qgis_native()
-    elif isinstance(layer, QgsVectorLayer):
-        return layer
-    else:
-        return None
-
-
 def check_layer_constraint(metadata, hazard_layer_mode,
                            hazard_layer_geometries, exposure_layer_mode,
                            exposure_layer_geometries):

@@ -1,7 +1,6 @@
 # coding=utf-8
 from safe.common.exceptions import NoAttributeInLayerError
-from safe.impact_functions.bases.utilities import get_qgis_vector_layer, \
-    check_attribute_exist
+from safe.impact_functions.bases.utilities import check_attribute_exist
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '08/05/15'
