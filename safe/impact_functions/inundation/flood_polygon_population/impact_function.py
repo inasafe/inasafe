@@ -56,7 +56,6 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         # Use affected field flag (if False, all polygon will be considered as
         # affected)
         self.use_affected_field = False
-        self.value_map = None
         # The 'wet' variable
         self.wet = 'wet'
 
@@ -79,7 +78,7 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
                        'within the area where the value of the hazard field ('
                        '"%s") is "%s"') %
                     (self.hazard_class_attribute,
-                     ', '.join(self.value_map[self.wet]))))
+                     ', '.join(self.hazard_class_mapping[self.wet]))))
         else:
             table_body.append(
                 TableRow(
@@ -162,7 +161,7 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
 
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
-        self.value_map = self.hazard.keyword('value_map')
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
 
         # Get the IF parameters
         evacuation_percentage = self.parameters['evacuation_percentage'].value
@@ -209,7 +208,7 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
                 row_affected_value = attr[self.hazard_class_attribute]
                 if row_affected_value is not None:
                     affected = get_key_for_value(
-                        row_affected_value, self.value_map)
+                        row_affected_value, self.hazard_class_mapping)
             else:
                 # assume that every polygon is affected (see #816)
                 affected = self.wet

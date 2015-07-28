@@ -46,8 +46,6 @@ class FloodPolygonBuildingFunction(
 
     def __init__(self):
         super(FloodPolygonBuildingFunction, self).__init__()
-        # Variables for storing value from layer's keyword
-        self.value_map = None
         # The 'wet' variable
         self.wet = 'wet'
 
@@ -67,7 +65,7 @@ class FloodPolygonBuildingFunction(
                     'Buildings are said to be inundated when in a region with '
                     'field "%s" in "%s" .') % (
                         self.hazard_class_attribute,
-                        ', '.join(self.value_map[self.wet]))
+                        ', '.join(self.hazard_class_mapping[self.wet]))
             }
         ]
 
@@ -78,7 +76,7 @@ class FloodPolygonBuildingFunction(
 
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
-        self.value_map = self.hazard.keyword('value_map')
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
         self.exposure_class_attribute = self.exposure.keyword(
             'structure_class_field')
 
@@ -155,7 +153,7 @@ class FloodPolygonBuildingFunction(
         has_hazard_objects = False
         for feature in self.hazard.layer.getFeatures(request):
             value = feature[affected_field_index]
-            if value not in self.value_map[self.wet]:
+            if value not in self.hazard_class_mapping[self.wet]:
                 continue
             hazard_index.insertFeature(feature)
             hazard_geometries[feature.id()] = QgsGeometry(feature.geometry())
@@ -167,7 +165,7 @@ class FloodPolygonBuildingFunction(
                 'value in %s. Please check your data or use another '
                 'attribute.') % (
                     self.hazard_class_attribute,
-                    ', '.join(self.value_map[self.wet]))
+                    ', '.join(self.hazard_class_mapping[self.wet]))
             raise GetDataError(message)
 
         features = []
