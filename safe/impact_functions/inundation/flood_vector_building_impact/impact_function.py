@@ -47,7 +47,6 @@ class FloodPolygonBuildingFunction(
     def __init__(self):
         super(FloodPolygonBuildingFunction, self).__init__()
         # Variables for storing value from layer's keyword
-        self.affected_field = None
         self.value_map = None
         # The 'wet' variable
         self.wet = 'wet'
@@ -67,7 +66,7 @@ class FloodPolygonBuildingFunction(
                 'content': tr(
                     'Buildings are said to be inundated when in a region with '
                     'field "%s" in "%s" .') % (
-                        self.affected_field,
+                        self.hazard_class_attribute,
                         ', '.join(self.value_map[self.wet]))
             }
         ]
@@ -78,7 +77,7 @@ class FloodPolygonBuildingFunction(
         self.prepare()
 
         # Get parameters from layer's keywords
-        self.affected_field = self.hazard.keyword('field')
+        self.hazard_class_attribute = self.hazard.keyword('field')
         self.value_map = self.hazard.keyword('value_map')
         self.exposure_class_attribute = self.exposure.keyword(
             'structure_class_field')
@@ -88,11 +87,12 @@ class FloodPolygonBuildingFunction(
 
         # Check affected field exists in the hazard layer
         affected_field_index = hazard_provider.fieldNameIndex(
-            self.affected_field)
+            self.hazard_class_attribute)
         if affected_field_index == -1:
-            message = tr('Field "%s" is not present in the attribute table of '
-                         'the hazard layer. Please change the Affected Field '
-                         'parameter in the IF Option.') % self.affected_field
+            message = tr(
+                'Field "%s" is not present in the attribute table of the '
+                'hazard layer. Please change the Affected Field parameter in '
+                'the IF Option.') % self.hazard_class_attribute
             raise GetDataError(message)
 
         srs = self.exposure.layer.crs().toWkt()
@@ -166,7 +166,7 @@ class FloodPolygonBuildingFunction(
                 'There are no objects in the hazard layer with %s '
                 'value in %s. Please check your data or use another '
                 'attribute.') % (
-                    self.affected_field,
+                    self.hazard_class_attribute,
                     ', '.join(self.value_map[self.wet]))
             raise GetDataError(message)
 

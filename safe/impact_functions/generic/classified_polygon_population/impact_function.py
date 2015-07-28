@@ -64,7 +64,7 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
         self.prepare()
 
         # Value from layer's keywords
-        hazard_zone_attribute = self.hazard.keyword('field')
+        self.hazard_class_attribute = self.hazard.keyword('field')
 
         # Input checks
         msg = ('Input hazard must be a polygon layer. I got %s with '
@@ -74,17 +74,17 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
             raise Exception(msg)
 
         # Check if hazard_zone_attribute exists in hazard_layer
-        if (hazard_zone_attribute not in
+        if (self.hazard_class_attribute not in
                 self.hazard.layer.get_attribute_names()):
             msg = ('Hazard data %s does not contain expected hazard '
                    'zone attribute "%s". Please change it in the option. ' %
-                   (self.hazard.name, hazard_zone_attribute))
+                   (self.hazard.name, self.hazard_class_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
         # Get unique hazard zones from the layer attribute
         self.hazard_zones = list(
-            set(self.hazard.layer.get_data(hazard_zone_attribute)))
+            set(self.hazard.layer.get_data(self.hazard_class_attribute)))
 
         # Interpolated layer represents grid cell that lies in the polygon
         interpolated_layer, covered_exposure_layer = \
@@ -106,7 +106,7 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this hazard zone
-                hazard_zone = row[hazard_zone_attribute]
+                hazard_zone = row[self.hazard_class_attribute]
                 affected_population[hazard_zone] += population
 
         # Count total population from exposure layer

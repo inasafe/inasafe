@@ -56,8 +56,6 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         # Use affected field flag (if False, all polygon will be considered as
         # affected)
         self.use_affected_field = False
-        # Variables for storing value from layer's keyword
-        self.affected_field = None
         self.value_map = None
         # The 'wet' variable
         self.wet = 'wet'
@@ -80,7 +78,7 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
                     tr('* People are considered to be affected if they are '
                        'within the area where the value of the hazard field ('
                        '"%s") is "%s"') %
-                    (self.affected_field,
+                    (self.hazard_class_attribute,
                      ', '.join(self.value_map[self.wet]))))
         else:
             table_body.append(
@@ -163,7 +161,7 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         self.prepare()
 
         # Get parameters from layer's keywords
-        self.affected_field = self.hazard.keyword('field')
+        self.hazard_class_attribute = self.hazard.keyword('field')
         self.value_map = self.hazard.keyword('value_map')
 
         # Get the IF parameters
@@ -183,7 +181,8 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
             nan_warning = True
 
         # Check that affected field exists in hazard layer
-        if self.affected_field in self.hazard.layer.get_attribute_names():
+        if (self.hazard_class_attribute in
+                self.hazard.layer.get_attribute_names()):
             self.use_affected_field = True
 
         # Run interpolation function for polygon2raster
@@ -207,7 +206,7 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         for attr in interpolated_layer.get_data():
             affected = False
             if self.use_affected_field:
-                row_affected_value = attr[self.affected_field]
+                row_affected_value = attr[self.hazard_class_attribute]
                 if row_affected_value is not None:
                     affected = get_key_for_value(
                         row_affected_value, self.value_map)
