@@ -28,6 +28,7 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+from safe.common.exceptions import KeywordNotFoundError
 
 
 class VolcanoPointBuildingFunction(
@@ -87,6 +88,13 @@ class VolcanoPointBuildingFunction(
 
         # Get parameters from layer's keywords
         volcano_name_attribute = self.hazard.keyword('volcano_name_field')
+        # Try to get the value from keyword, if not exist, it will not fail,
+        # but use the old get_osm_building_usage
+        try:
+            structure_class_field = self.exposure.keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            structure_class_field = None
 
         # Input checks
         if not self.hazard.layer.is_point_data:
@@ -144,7 +152,12 @@ class VolcanoPointBuildingFunction(
             features[i][target_field] = hazard_value
 
             # Count affected buildings by usage type if available
-            usage = get_osm_building_usage(attribute_names, features[i])
+            if (structure_class_field and
+                    structure_class_field in attribute_names):
+                usage = features[i][structure_class_field]
+            else:
+                usage = get_osm_building_usage(attribute_names, features[i])
+
             if usage is [None, 'NULL', 'null', 'Null', 0]:
                 usage = tr('Unknown')
 

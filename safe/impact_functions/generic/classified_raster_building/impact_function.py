@@ -28,6 +28,7 @@ from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+from safe.common.exceptions import KeywordNotFoundError
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -67,6 +68,15 @@ class ClassifiedRasterHazardBuildingFunction(
         self.validate()
         self.prepare()
 
+        # Value from layer's keywords
+        # Try to get the value from keyword, if not exist, it will not fail,
+        # but use the old get_osm_building_usage
+        try:
+            structure_class_field = self.exposure.keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            structure_class_field = None
+
         # The 3 classes
         categorical_hazards = self.parameters['Categorical hazards'].value
         low_t = categorical_hazards[0].value
@@ -98,7 +108,13 @@ class ClassifiedRasterHazardBuildingFunction(
             (tr('Low Hazard Class'), {})
         ])
         for i in range(buildings_total):
-            usage = get_osm_building_usage(attribute_names, attributes[i])
+
+            if (structure_class_field and
+                    structure_class_field in attribute_names):
+                usage = attributes[i][structure_class_field]
+            else:
+                usage = get_osm_building_usage(attribute_names, attributes[i])
+
             if usage is None or usage == 0:
                 usage = 'unknown'
 
