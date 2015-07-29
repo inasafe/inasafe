@@ -32,16 +32,16 @@ class TestBaseClassesMixin(unittest.TestCase):
         exposure_layer = read_layer(building_path)
 
         classified_vh = ClassifiedVectorHazardMixin()
-        classified_vh.set_up_hazard_layer(SafeLayer(hazard_layer))
+        classified_vh.hazard = SafeLayer(hazard_layer)
 
         continuous_vh = ContinuousVectorHazardMixin()
-        continuous_vh.set_up_hazard_layer(SafeLayer(hazard_layer))
+        continuous_vh.hazard = SafeLayer(hazard_layer)
 
         classified_ve = ClassifiedVectorExposureMixin()
-        classified_ve.set_up_exposure_layer(SafeLayer(exposure_layer))
+        classified_ve.exposure = SafeLayer(exposure_layer)
 
         continuous_ve = ContinuousVectorExposureMixin()
-        continuous_ve.set_up_exposure_layer(SafeLayer(exposure_layer))
+        continuous_ve.exposure = SafeLayer(exposure_layer)
 
         with self.assertRaises(NoAttributeInLayerError):
             # test wrong attribute

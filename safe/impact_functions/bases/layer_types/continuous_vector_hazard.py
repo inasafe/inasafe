@@ -11,15 +11,6 @@ class ContinuousVectorHazardMixin(object):
     def __init__(self):
         self._hazard_value_attribute = None
         self._hazard_threshold = None
-        self._hazard_layer = None
-
-    def set_up_hazard_layer(self, hazard):
-        """Set up the hazard value.
-
-        :param hazard: QgsVectorLayer or Vector data types
-        :type hazard: QgsVectorLayer, Vector
-        """
-        self._hazard_layer = hazard
 
     @property
     def hazard_value_attribute(self):
@@ -27,7 +18,8 @@ class ContinuousVectorHazardMixin(object):
 
     @hazard_value_attribute.setter
     def hazard_value_attribute(self, value):
-        hazard_layer = self._hazard_layer.qgis_vector_layer()
+        # self.hazard is from IF base class.
+        hazard_layer = self.hazard.qgis_vector_layer()
         if hazard_layer and check_attribute_exist(hazard_layer, value):
             self._hazard_value_attribute = value
         else:

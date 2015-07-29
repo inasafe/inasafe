@@ -11,15 +11,6 @@ class ClassifiedVectorExposureMixin(object):
     def __init__(self):
         self._exposure_class_attribute = None
         self._exposure_unique_values = None
-        self._exposure_layer = None
-
-    def set_up_exposure_layer(self, exposure):
-        """Set up the hazard value.
-
-        :param exposure: QgsVectorLayer or Vector data types
-        :type exposure: QgsVectorLayer, Vector
-        """
-        self._exposure_layer = exposure
 
     @property
     def exposure_class_attribute(self):
@@ -27,7 +18,8 @@ class ClassifiedVectorExposureMixin(object):
 
     @exposure_class_attribute.setter
     def exposure_class_attribute(self, value):
-        exposure_layer = self._exposure_layer.qgis_vector_layer()
+        # self.exposure is from base IF.
+        exposure_layer = self.exposure.qgis_vector_layer()
         if (exposure_layer and
                 check_attribute_exist(exposure_layer, value)):
             self._exposure_class_attribute = value
