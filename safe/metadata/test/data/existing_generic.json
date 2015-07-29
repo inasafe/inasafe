@@ -136,7 +136,7 @@
       "name": "title", 
       "python_type": "NoneType", 
       "value": null, 
-      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:ci  tation/gmd:CI_Citation/gmd:title/gco:CharacterString",
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:citation/gmd:CI_Citation/gmd:title/gco:CharacterString", 
       "xml_type": "gco:CharacterString"
     }, 
     "url": {

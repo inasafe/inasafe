@@ -30,7 +30,7 @@ from safe.common.exceptions import MetadataReadError
 from safe.metadata.utils import (METADATA_XML_TEMPLATE,
                                  TYPE_CONVERSIONS,
                                  XML_NS,
-                                 insert_xml_element)
+                                 insert_xml_element, reading_ancillary_files)
 from safe.utilities.i18n import tr
 
 
@@ -131,7 +131,7 @@ class BaseMetadata(object):
         metadata['properties'] = properties
         return metadata
 
-    @property
+    @abc.abstractproperty
     def xml(self):
         tree = ElementTree.parse(METADATA_XML_TEMPLATE)
         root = tree.getroot()
@@ -144,7 +144,7 @@ class BaseMetadata(object):
                 elem = insert_xml_element(root, path)
             elem.text = self.get_xml_value(name)
 
-        return ElementTree.tostring(root)
+        return root
 
     @abc.abstractproperty
     def json(self):
@@ -172,16 +172,16 @@ class BaseMetadata(object):
 
     @abc.abstractmethod
     def read_from_xml(self):
-        self._reading_ancillary_file = True
-        # this raises a IOError if the file doesn't exist
-        root = ElementTree.parse(self.xml_uri).getroot()
-        for name, path in self._standard_properties.iteritems():
-            value = self._read_property_from_xml(root, path)
-            if value is not None:
-                # this calls the default setters
-                setattr(self, name, value)
+        with reading_ancillary_files(self):
+            # this raises a IOError if the file doesn't exist
+            root = ElementTree.parse(self.xml_uri).getroot()
+            for name, path in self._standard_properties.iteritems():
+                value = self._read_property_from_xml(root, path)
+                if value is not None:
+                    # this calls the default setters
+                    setattr(self, name, value)
 
-        self._reading_ancillary_file = False
+        return root
 
     @staticmethod
     def _read_property_from_xml(root, path):

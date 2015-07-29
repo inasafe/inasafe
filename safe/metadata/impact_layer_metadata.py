@@ -18,23 +18,23 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
+from xml.etree import ElementTree
 
 from safe.metadata import BaseMetadata
 from safe.metadata.provenance import Provenance
+from safe.metadata.utils import reading_ancillary_files, XML_NS
 
 
 class ImpactLayerMetadata(BaseMetadata):
 
     # remember to add an attribute or a setter property with the same name
-    _standard_properties = {
+    _special_properties = {
         'provenance': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
-            'inasafe_provenance/'
-            'gco:CharacterString')
+            'inasafe_provenance')
     }
-    _standard_properties.update(BaseMetadata._standard_properties)
 
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         # Initialise members
@@ -60,10 +60,7 @@ class ImpactLayerMetadata(BaseMetadata):
     def json(self):
         metadata = self.dict
 
-        provenance = []
-        for step in self.provenance:
-            provenance.append(step.json)
-        metadata['provenance'] = provenance
+        metadata['provenance'] = self.provenance.json
         return json.dumps(metadata, indent=2, sort_keys=True)
 
     def read_from_json(self):
@@ -82,9 +79,36 @@ class ImpactLayerMetadata(BaseMetadata):
         if 'summary_data' in metadata:
             self.summary_data = metadata['summary_data']
 
+    @property
+    def xml(self):
+        root = super(ImpactLayerMetadata, self).xml
+        provenance_path = self._special_properties['provenance']
+        provenance_element = root.find(provenance_path, XML_NS)
+        if provenance_element is not None:
+            provenance_parent = provenance_element.getparent()
+            provenance_parent.remove(provenance_element)
+        else:
+            provenance_parent = '/'.join(provenance_path.split('/')[:-1])
+            provenance_parent = root.find(provenance_parent, XML_NS)
+
+        provenance_element = ElementTree.fromstring(self.provenance.xml)
+        provenance_parent.append(provenance_element)
+        return ElementTree.tostring(root)
+
     def read_from_xml(self):
-        # TODO (MB): implement this
-        super(ImpactLayerMetadata, self).read_from_xml()
+        with reading_ancillary_files(self):
+            root = super(ImpactLayerMetadata, self).read_from_xml()
+            self._read_provenance_from_xml(root)
+
+    def _read_provenance_from_xml(self, root):
+        path = self._special_properties['provenance']
+        provenance = root.find(path, XML_NS)
+        for step in provenance.iter('provenance_step'):
+            title = step.find('title').text
+            description = step.find('description').text
+            timestamp = step.get('timestamp')
+
+            self.append_provenance_step(title, description, timestamp)
 
     @property
     # there is no setter. provenance can only grow. use append_provenance_step

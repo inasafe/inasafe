@@ -34,6 +34,21 @@ class Provenance(object):
         return iter(self._steps)
 
     @property
+    def json(self):
+        json = []
+        for step in self.steps:
+            json.append(step.json)
+        return json
+
+    @property
+    def xml(self):
+        xml = '<inasafe_provenance>'
+        for step in self.steps:
+            xml += step.xml
+        xml += '</inasafe_provenance>'
+        return xml
+
+    @property
     def steps(self):
         return self._steps
 

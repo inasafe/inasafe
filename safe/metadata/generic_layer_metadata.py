@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import json
+from xml.etree import ElementTree
 from safe.metadata import BaseMetadata
 
 
@@ -35,6 +36,11 @@ class GenericLayerMetadata(BaseMetadata):
     @property
     def json(self):
         return json.dumps(self.dict, indent=2, sort_keys=True)
+
+    @property
+    def xml(self):
+        root = super(GenericLayerMetadata, self).xml
+        return ElementTree.tostring(root)
 
     def read_from_json(self):
         super(GenericLayerMetadata, self).read_from_json()

@@ -119,17 +119,11 @@ class TestImpactMetadata(TestCase):
         metadata = self.generate_test_metadata()
         with open(EXISTING_IMPACT_JSON) as f:
             expected_json = f.read()
-        # split the read file at the provenance because provenance has
-        # automatically generated timestamps
-        expected_json = expected_json.split('provenance')[0]
 
         filename = unique_filename(suffix='.json', dir=TEMP_DIR)
         metadata.write_as(filename)
         with open(filename) as f:
             written_json = f.read()
-        # split the read file at the provenance because provenance has
-        # automatically generated timestamps
-        written_json = written_json.split('provenance')[0]
 
         self.assertEquals(expected_json, written_json)
 
@@ -187,8 +181,11 @@ class TestImpactMetadata(TestCase):
         metadata.report = 'My super report'
         metadata.summary_data = {'res1': 1234, 'res2': 4321}
 
-        metadata.append_provenance_step('Title 1', 'Description of step 1')
-        metadata.append_provenance_step('Title 2', 'Description of step 2')
-        metadata.append_provenance_step('Title 3', 'Description of step 3')
+        metadata.append_provenance_step(
+            'Title 1', 'Description of step 1', '2015-06-25T13:14:24.508974')
+        metadata.append_provenance_step(
+            'Title 2', 'Description of step 2', '2015-06-25T13:14:24.508980')
+        metadata.append_provenance_step(
+            'Title 3', 'Description of step 3', '2015-06-25T13:14:24.508984')
 
         return metadata

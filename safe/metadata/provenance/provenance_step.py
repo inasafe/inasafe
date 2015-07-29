@@ -31,8 +31,11 @@ class ProvenanceStep(object):
             self._time = datetime.now()
         elif isinstance(timestamp, datetime):
             self._time = timestamp
-        elif isinstance(timestamp, unicode):
+        elif isinstance(timestamp, basestring):
             self._time = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
+        else:
+            raise RuntimeError('The timestamp %s has an invalid type (%s)',
+                               timestamp, type(timestamp))
 
     def __str__(self):
         return "%s: %s\n%s" % (self._time, self._title, self._description)
@@ -56,3 +59,12 @@ class ProvenanceStep(object):
             'description': self.description,
             'time': self.time.isoformat(),
         }
+
+    @property
+    def xml(self):
+        xml = (
+            '<provenance_step timestamp="%s">'
+            '<title>%s</title>'
+            '<description>%s</description>'
+            '</provenance_step>')
+        return xml % (self.time.isoformat(), self.title, self.description)
