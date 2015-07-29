@@ -94,6 +94,26 @@ class BaseMetadata(object):
             'gco:CharacterString'),
     }
 
+    def __getattr__(self, name):
+        """
+        Dynamically generate getter for each _standard_properties
+        """
+        if name in self._standard_properties:
+            value = self.get_value(name)
+        else:
+            value = super(BaseMetadata, self).__getattr__(name)
+        return value
+
+    def __setattr__(self, name, value):
+        """
+        Dynamically generate setter for each _standard_properties
+        """
+        if name in self._standard_properties:
+            path = self._standard_properties[name]
+            self.set(name, value, path)
+        else:
+            super(BaseMetadata, self).__setattr__(name, value)
+
     def __eq__(self, other):
         return self.dict == other.dict
 
@@ -286,76 +306,3 @@ class BaseMetadata(object):
                 self.read_from_json()
             elif os.path.isfile(self.xml_uri):
                 self.read_from_xml()
-
-    # Standard XML properties
-    @property
-    def organisation(self):
-        return self.get_value('organisation')
-
-    @organisation.setter
-    def organisation(self, value):
-        path = self._standard_properties['organisation']
-        self.set('organisation', value, path)
-
-    @property
-    def email(self):
-        return self.get_value('email')
-
-    @email.setter
-    def email(self, value):
-        path = self._standard_properties['email']
-        self.set('email', value, path)
-
-    @property
-    def document_date(self):
-        return self.get_value('document_date')
-
-    @document_date.setter
-    def document_date(self, value):
-        path = self._standard_properties['document_date']
-        self.set('document_date', value, path)
-
-    @property
-    def abstract(self):
-        return self.get_value('abstract')
-
-    @abstract.setter
-    def abstract(self, value):
-        path = self._standard_properties['abstract']
-        self.set('abstract', value, path)
-
-    @property
-    def title(self):
-        return self.get_value('title')
-
-    @title.setter
-    def title(self, value):
-        path = self._standard_properties['title']
-        self.set('title', value, path)
-
-    @property
-    def license(self):
-        return self.get_value('license')
-
-    @license.setter
-    def license(self, value):
-        path = self._standard_properties['license']
-        self.set('license', value, path)
-
-    @property
-    def url(self):
-        return self.get_value('url')
-
-    @url.setter
-    def url(self, value):
-        path = self._standard_properties['url']
-        self.set('url', value, path)
-
-    @property
-    def report(self):
-        return self.get_value('report')
-
-    @report.setter
-    def report(self, value):
-        path = self._standard_properties['report']
-        self.set('report', value, path)

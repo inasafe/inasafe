@@ -94,3 +94,9 @@ def reading_ancillary_files(metadata):
     metadata._reading_ancillary_file = True
     yield metadata
     metadata._reading_ancillary_file = False
+
+
+def merge_dictionaries(base_dict, extra_dict):
+    new_dict = base_dict.copy()
+    new_dict.update(extra_dict)
+    return new_dict

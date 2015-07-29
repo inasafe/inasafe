@@ -26,6 +26,22 @@ from safe.metadata.utils import reading_ancillary_files, XML_NS
 
 
 class ImpactLayerMetadata(BaseMetadata):
+    """
+    if you need to add a standard XML property that only applies to this
+    subclass, do it this way. @property and @propname.setter will be
+    generated automatically
+
+    _standard_properties = {
+        'TESTprop': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'gco:CharacterString')
+    }
+    from safe.metadata.utils import merge_dictionaries
+    _standard_properties = merge_dictionaries(
+        BaseMetadata._standard_properties, _standard_properties)
+    """
 
     # remember to add an attribute or a setter property with the same name
     _special_properties = {
