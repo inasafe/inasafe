@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from types import NoneType
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -23,7 +24,7 @@ from safe.metadata.property import BaseProperty
 
 class CharacterStringProperty(BaseProperty):
     # if you edit this you need to adapt accordingly xml_value and is_valid
-    _allowed_python_types = [str, unicode, int, float]
+    _allowed_python_types = [str, unicode, int, float, NoneType]
 
     def __init__(self, name, value, xml_path, xml_type):
         if isinstance(value, str):
@@ -41,7 +42,9 @@ class CharacterStringProperty(BaseProperty):
 
     @property
     def xml_value(self):
-        if self.python_type in self.allowed_python_types:
+        if self.python_type is NoneType:
+            return ''
+        elif self.python_type in self.allowed_python_types:
             return str(self.value)
         else:
             raise RuntimeError('self._allowed_python_types and self.xml_value'

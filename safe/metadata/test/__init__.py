@@ -40,3 +40,5 @@ EXISTING_GENERIC_XML = os.path.join(TEST_DIR, 'data', 'existing_generic.xml')
 INVALID_IMPACT_JSON = os.path.join(TEST_DIR, 'data', 'invalid_impact.json')
 INCOMPLETE_IMPACT_JSON = os.path.join(
     TEST_DIR, 'data', 'incomplete_impact.json')
+
+TEST_XML_BASEPATH = 'gmd:identificationInfo/gmd:MD_DataIdentification/'

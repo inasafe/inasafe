@@ -38,12 +38,12 @@ class TestMetadata(TestCase):
     def test_metadata(self):
         """Check we can't instantiate with unsupported xml types"""
         metadata = ImpactLayerMetadata('random_layer_id')
-        path = 'gmd:MD_Metadata/gmd:dateStamp/'
+        path = 'gmd:MD_Metadata/gmd:dateStamp/gco:RandomString'
 
         # using unsupported xml types
         test_value = 'Random string'
         with self.assertRaises(KeyError):
-            metadata.set('ISO19115_TEST', test_value, path, 'gco:RandomString')
+            metadata.set('ISO19115_TEST', test_value, path)
 
     def test_insert_xml_element(self):
         """Check we can't insert custom nested elements"""

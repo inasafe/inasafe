@@ -44,7 +44,8 @@ class BaseMetadata(object):
         'organisation': (
             'gmd:contact/'
             'gmd:CI_ResponsibleParty/'
-            'gmd:organisationName'),
+            'gmd:organisationName/'
+            'gco:CharacterString'),
         'email': (
             'gmd:contact/'
             'gmd:CI_ResponsibleParty/'
@@ -52,25 +53,30 @@ class BaseMetadata(object):
             'gmd:CI_Contact/'
             'gmd:address/'
             'gmd:CI_Address/'
-            'gmd:electronicMailAddress'),
+            'gmd:electronicMailAddress/'
+            'gco:CharacterString'),
         'document_date': (
-            'gmd:dateStamp'),
+            'gmd:dateStamp/'
+            'gco:Date'),
         'abstract': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
-            'gmd:abstract'),
+            'gmd:abstract/'
+            'gco:CharacterString'),
         'title': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:citation/'
             'gmd:CI_Citation/'
-            'gmd:title'),
+            'gmd:title/'
+            'gco:CharacterString'),
         'license': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:resourceConstraints/'
             'gmd:MD_Constraints/'
-            'gmd:useLimitation'),
+            'gmd:useLimitation/'
+            'gco:CharacterString'),
         'url': (
             'gmd:distributionInfo/'
             'gmd:MD_Distribution/'
@@ -78,12 +84,14 @@ class BaseMetadata(object):
             'gmd:MD_DigitalTransferOptions/'
             'gmd:onLine/'
             'gmd:CI_OnlineResource/'
-            'gmd:linkage'),
+            'gmd:linkage/'
+            'gmd:URL'),
         'report': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
-            'inasafe_report'),
+            'inasafe_report/'
+            'gco:CharacterString'),
     }
 
     def __eq__(self, other):
@@ -102,11 +110,14 @@ class BaseMetadata(object):
         else:
             self._json_uri = json_uri
 
+        self._reading_ancillary_file = False
         self._properties = {}
 
-        self._last_update = datetime.now()
+        # initialise the properties
+        for name, path in self._standard_properties.iteritems():
+            self.set(name, None, path)
 
-        self._reading_ancillary_file = False
+        self._last_update = datetime.now()
 
         # check if metadata already exist on disk
         self.read_from_ancillary_file(xml_uri)
@@ -125,19 +136,8 @@ class BaseMetadata(object):
         tree = ElementTree.parse(METADATA_XML_TEMPLATE)
         root = tree.getroot()
 
-        # get the standard properties
-        for name, path in self._standard_properties.iteritems():
-            elem = root.find(path, XML_NS)
-            if elem is None:
-                # create elem
-                elem = insert_xml_element(root, path)
-            elem.text = self.get_xml_value(name)
-
-        # TODO (MB) have a look if this is a good idea :)
-        # check if we have more properties
-        for name, path in self.properties.iteritems():
-            if name in self._standard_properties:
-                continue
+        for name, prop in self.properties.iteritems():
+            path = prop.xml_path
             elem = root.find(path, XML_NS)
             if elem is None:
                 # create elem
@@ -163,10 +163,7 @@ class BaseMetadata(object):
             if 'properties' in metadata:
                 for name, prop in metadata['properties'].iteritems():
                     try:
-                        self.set(prop['name'],
-                                 prop['value'],
-                                 prop['xml_path'],
-                                 prop['xml_type'])
+                        self.set(prop['name'], prop['value'], prop['xml_path'])
                     except KeyError:
                         # we just skip if we don't have something, we want
                         # to have as much as possible read from the JSON
@@ -239,7 +236,8 @@ class BaseMetadata(object):
     def update(self, name, value):
         self.get_property(name).value = value
 
-    def set(self, name, value, xml_path, xml_type):
+    def set(self, name, value, xml_path):
+        xml_type = xml_path.split('/')[-1]
         # check if the desired type is supported
         try:
             property_class = TYPE_CONVERSIONS[xml_type]
@@ -297,7 +295,7 @@ class BaseMetadata(object):
     @organisation.setter
     def organisation(self, value):
         path = self._standard_properties['organisation']
-        self.set('organisation', value, path, 'gco:CharacterString')
+        self.set('organisation', value, path)
 
     @property
     def email(self):
@@ -306,7 +304,7 @@ class BaseMetadata(object):
     @email.setter
     def email(self, value):
         path = self._standard_properties['email']
-        self.set('email', value, path, 'gco:CharacterString')
+        self.set('email', value, path)
 
     @property
     def document_date(self):
@@ -315,7 +313,7 @@ class BaseMetadata(object):
     @document_date.setter
     def document_date(self, value):
         path = self._standard_properties['document_date']
-        self.set('document_date', value, path, 'gco:Date')
+        self.set('document_date', value, path)
 
     @property
     def abstract(self):
@@ -324,7 +322,7 @@ class BaseMetadata(object):
     @abstract.setter
     def abstract(self, value):
         path = self._standard_properties['abstract']
-        self.set('abstract', value, path, 'gco:CharacterString')
+        self.set('abstract', value, path)
 
     @property
     def title(self):
@@ -333,7 +331,7 @@ class BaseMetadata(object):
     @title.setter
     def title(self, value):
         path = self._standard_properties['title']
-        self.set('title', value, path, 'gco:CharacterString')
+        self.set('title', value, path)
 
     @property
     def license(self):
@@ -342,7 +340,7 @@ class BaseMetadata(object):
     @license.setter
     def license(self, value):
         path = self._standard_properties['license']
-        self.set('license', value, path, 'gco:CharacterString')
+        self.set('license', value, path)
 
     @property
     def url(self):
@@ -351,7 +349,7 @@ class BaseMetadata(object):
     @url.setter
     def url(self, value):
         path = self._standard_properties['url']
-        self.set('url', value, path, 'gmd:URL')
+        self.set('url', value, path)
 
     @property
     def report(self):
@@ -360,4 +358,4 @@ class BaseMetadata(object):
     @report.setter
     def report(self, value):
         path = self._standard_properties['report']
-        self.set('report', value, path, 'gco:CharacterString')
+        self.set('report', value, path)

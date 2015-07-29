@@ -5,12 +5,13 @@
         "str", 
         "unicode", 
         "int", 
-        "float"
+        "float", 
+        "NoneType"
       ], 
       "name": "ISO19115_FLOAT", 
       "python_type": "float", 
       "value": 1234.5678, 
-      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/", 
+      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/gco:CharacterString", 
       "xml_type": "gco:CharacterString"
     }, 
     "ISO19115_INT": {
@@ -18,12 +19,13 @@
         "str", 
         "unicode", 
         "int", 
-        "float"
+        "float", 
+        "NoneType"
       ], 
       "name": "ISO19115_INT", 
       "python_type": "int", 
       "value": 1234, 
-      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/", 
+      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/gco:CharacterString", 
       "xml_type": "gco:CharacterString"
     }, 
     "ISO19115_STR": {
@@ -31,12 +33,82 @@
         "str", 
         "unicode", 
         "int", 
-        "float"
+        "float", 
+        "NoneType"
       ], 
       "name": "ISO19115_STR", 
       "python_type": "unicode", 
       "value": "Random string", 
-      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/", 
+      "xml_path": "gmd:MD_Metadata/gmd:dateStamp/gco:CharacterString", 
+      "xml_type": "gco:CharacterString"
+    }, 
+    "abstract": {
+      "allowed_python_types": [
+        "str", 
+        "unicode", 
+        "int", 
+        "float", 
+        "NoneType"
+      ], 
+      "name": "abstract", 
+      "python_type": "NoneType", 
+      "value": null, 
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract/gco:CharacterString", 
+      "xml_type": "gco:CharacterString"
+    }, 
+    "document_date": {
+      "allowed_python_types": [
+        "QDate", 
+        "datetime", 
+        "date", 
+        "NoneType"
+      ], 
+      "name": "document_date", 
+      "python_type": "NoneType", 
+      "value": null, 
+      "xml_path": "gmd:dateStamp/gco:Date", 
+      "xml_type": "gco:Date"
+    }, 
+    "email": {
+      "allowed_python_types": [
+        "str", 
+        "unicode", 
+        "int", 
+        "float", 
+        "NoneType"
+      ], 
+      "name": "email", 
+      "python_type": "NoneType", 
+      "value": null, 
+      "xml_path": "gmd:contact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString", 
+      "xml_type": "gco:CharacterString"
+    }, 
+    "license": {
+      "allowed_python_types": [
+        "str", 
+        "unicode", 
+        "int", 
+        "float", 
+        "NoneType"
+      ], 
+      "name": "license", 
+      "python_type": "NoneType", 
+      "value": null, 
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString", 
+      "xml_type": "gco:CharacterString"
+    }, 
+    "organisation": {
+      "allowed_python_types": [
+        "str", 
+        "unicode", 
+        "int", 
+        "float", 
+        "NoneType"
+      ], 
+      "name": "organisation", 
+      "python_type": "NoneType", 
+      "value": null, 
+      "xml_path": "gmd:contact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString", 
       "xml_type": "gco:CharacterString"
     }, 
     "report": {
@@ -44,13 +116,39 @@
         "str", 
         "unicode", 
         "int", 
-        "float"
+        "float", 
+        "NoneType"
       ], 
       "name": "report", 
       "python_type": "unicode", 
       "value": "My super report", 
-      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe_report", 
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe_report/gco:CharacterString", 
       "xml_type": "gco:CharacterString"
+    }, 
+    "title": {
+      "allowed_python_types": [
+        "str", 
+        "unicode", 
+        "int", 
+        "float", 
+        "NoneType"
+      ], 
+      "name": "title", 
+      "python_type": "NoneType", 
+      "value": null, 
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:ci  tation/gmd:CI_Citation/gmd:title/gco:CharacterString",
+      "xml_type": "gco:CharacterString"
+    }, 
+    "url": {
+      "allowed_python_types": [
+        "QUrl", 
+        "NoneType"
+      ], 
+      "name": "url", 
+      "python_type": "NoneType", 
+      "value": null, 
+      "xml_path": "gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL", 
+      "xml_type": "gmd:URL"
     }
   }
 }

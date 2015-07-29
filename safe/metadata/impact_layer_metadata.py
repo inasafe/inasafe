@@ -31,7 +31,8 @@ class ImpactLayerMetadata(BaseMetadata):
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
-            'inasafe_report')
+            'inasafe_provenance/'
+            'gco:CharacterString')
     }
     _standard_properties.update(BaseMetadata._standard_properties)
 

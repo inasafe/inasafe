@@ -1,5 +1,4 @@
-<gmd:MD_Metadata xmlns:gco="http://www.isotc211.org/2005/gco"
-                  xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd">
+<gmd:MD_Metadata xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd">
     <gmd:fileIdentifier>
         <gco:CharacterString>None</gco:CharacterString>
     </gmd:fileIdentifier>
@@ -19,13 +18,15 @@
     </gmd:hierarchyLevel>
     <gmd:contact>
         <gmd:CI_ResponsibleParty>
-            <gmd:organisationName><gco:CharacterString />
+            <gmd:organisationName>
+                <gco:CharacterString />
             </gmd:organisationName>
             <gmd:contactInfo>
                 <gmd:CI_Contact>
                     <gmd:address>
                         <gmd:CI_Address>
-                            <gmd:electronicMailAddress><gco:CharacterString />
+                            <gmd:electronicMailAddress>
+                                <gco:CharacterString />
                             </gmd:electronicMailAddress>
                         </gmd:CI_Address>
                     </gmd:address>
@@ -37,7 +38,8 @@
             </gmd:role>
         </gmd:CI_ResponsibleParty>
     </gmd:contact>
-    <gmd:dateStamp><gco:Date />
+    <gmd:dateStamp>
+        <gco:Date />
     </gmd:dateStamp>
     <gmd:metadataStandardName>
         <gco:CharacterString>ISO19115</gco:CharacterString>
@@ -47,11 +49,13 @@
     </gmd:metadataStandardVersion>
     <gmd:identificationInfo>
         <gmd:MD_DataIdentification>
-            <gmd:abstract><gco:CharacterString />
+            <gmd:abstract>
+                <gco:CharacterString />
             </gmd:abstract>
             <gmd:citation>
                 <gmd:CI_Citation>
-                    <gmd:title><gco:CharacterString />
+                    <gmd:title>
+                        <gco:CharacterString />
                     </gmd:title>
                     <gmd:date>
                         <gmd:CI_Date>
@@ -144,7 +148,8 @@
             </gmd:descriptiveKeywords>
             <gmd:resourceConstraints>
                 <gmd:MD_Constraints>
-                    <gmd:useLimitation><gco:CharacterString />GPLv2
+                    <gmd:useLimitation>
+                        <gco:CharacterString>GPLv2</gco:CharacterString>
                     </gmd:useLimitation>
                 </gmd:MD_Constraints>
             </gmd:resourceConstraints>
@@ -162,9 +167,9 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords />
-            </gmd:supplementalInformation>
+            <inasafe_provenance><gco:CharacterString /></inasafe_provenance><inasafe_report><gco:CharacterString /></inasafe_report></gmd:supplementalInformation>
         </gmd:MD_DataIdentification>
-    <gmd:MD_DataIdentification><gmd:supplementalInformation><inasafe_report /></gmd:supplementalInformation></gmd:MD_DataIdentification><gmd:MD_DataIdentification><gmd:supplementalInformation><inasafe_report /></gmd:supplementalInformation></gmd:MD_DataIdentification></gmd:identificationInfo>
+    </gmd:identificationInfo>
     <gmd:distributionInfo>
         <gmd:MD_Distribution>
             <gmd:distributionFormat>
@@ -181,7 +186,8 @@
                 <gmd:MD_DigitalTransferOptions>
                     <gmd:onLine>
                         <gmd:CI_OnlineResource>
-                            <gmd:linkage><gmd:URL />
+                            <gmd:linkage>
+                                <gmd:URL />
                             </gmd:linkage>
                         </gmd:CI_OnlineResource>
                     </gmd:onLine>

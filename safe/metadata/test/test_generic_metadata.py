@@ -50,19 +50,17 @@ class TestGenericMetadata(TestCase):
             expected_metadata = f.read()
 
         self.assertEquals(expected_metadata, metadata.json)
-        metadata.report = 'ciao'
-        raise RuntimeError(metadata.report)
 
     def generate_test_metadata(self):
         # if you change this you need to update GENERIC_TEST_FILE_JSON
         metadata = GenericLayerMetadata('random_layer_id')
-        path = 'gmd:MD_Metadata/gmd:dateStamp/'
+        path = 'gmd:MD_Metadata/gmd:dateStamp/gco:CharacterString'
         # using str
         test_value = 'Random string'
-        metadata.set('ISO19115_STR', test_value, path, 'gco:CharacterString')
+        metadata.set('ISO19115_STR', test_value, path)
         test_value = 1234
-        metadata.set('ISO19115_INT', test_value, path, 'gco:CharacterString')
+        metadata.set('ISO19115_INT', test_value, path)
         test_value = 1234.5678
-        metadata.set('ISO19115_FLOAT', test_value, path, 'gco:CharacterString')
+        metadata.set('ISO19115_FLOAT', test_value, path)
         metadata.report = 'My super report'
         return metadata

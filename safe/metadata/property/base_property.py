@@ -49,7 +49,7 @@ class BaseProperty(object):
         self.value = value
 
     def __str__(self):
-        return "%s: %s\n%s" % (self.name, self.value, self.xml_path)
+        return "%s: %s\n(%s)" % (self.name, self.value, self.xml_path)
 
     @property
     def dict(self):

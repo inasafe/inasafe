@@ -50,12 +50,16 @@ ElementTree.register_namespace('gmd', XML_NS['gmd'])
 ElementTree.register_namespace('xsi', XML_NS['xsi'])
 
 
-def insert_xml_element(root, path):
-        path = path.split('/')
+def insert_xml_element(root, path_arr):
+        path_arr = path_arr.split('/')
         parent = root
-        for tag in path:
-            element = root.find(tag, XML_NS)
+        # iterate all parents of the missing element
+        for level in range(len(path_arr)):
+            path = '/'.join(path_arr[0:level+1])
+            tag = path_arr[level]
+            element = root.find(path, XML_NS)
             if element is None:
+                # if a parent is missing insert it at the right place
                 element = ElementTree.SubElement(parent, tag)
             parent = element
         return element

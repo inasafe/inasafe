@@ -37,7 +37,7 @@ from safe.metadata.test import (
     TEMP_DIR,
     EXISTING_IMPACT_JSON,
     EXISTING_IMPACT_FILE, INVALID_IMPACT_JSON,
-    INCOMPLETE_IMPACT_JSON, EXISTING_IMPACT_XML)
+    INCOMPLETE_IMPACT_JSON, EXISTING_IMPACT_XML, TEST_XML_BASEPATH)
 
 
 class TestImpactMetadata(TestCase):
@@ -49,11 +49,11 @@ class TestImpactMetadata(TestCase):
 
     def test_metadata_date(self):
         metadata = ImpactLayerMetadata('random_layer_id')
-        path = '+'
+        path = TEST_XML_BASEPATH + 'gco:Date'
 
         # using QDate
         test_value = QDate(2015, 6, 7)
-        metadata.set('ISO19115_TEST', test_value, path, 'gco:Date')
+        metadata.set('ISO19115_TEST', test_value, path)
         self.assertEqual(metadata.get_xml_value('ISO19115_TEST'), '2015-06-07')
 
         # using datetime
@@ -63,7 +63,7 @@ class TestImpactMetadata(TestCase):
 
         # using date
         test_value = date(2015, 6, 7)
-        metadata.set('ISO19115_TEST', test_value, path, 'gco:Date')
+        metadata.set('ISO19115_TEST', test_value, path)
         self.assertEqual(metadata.get_xml_value('ISO19115_TEST'), '2015-06-07')
 
         # using str should fail
@@ -73,11 +73,11 @@ class TestImpactMetadata(TestCase):
 
     def test_metadata_url(self):
         metadata = ImpactLayerMetadata('random_layer_id')
-        path = 'gmd:MD_Metadata/gmd:dateStamp/'
+        path = TEST_XML_BASEPATH + 'gmd:URL'
 
         # using QUrl
         test_value = QUrl('http://inasafe.org')
-        metadata.set('ISO19115_TEST', test_value, path, 'gmd:URL')
+        metadata.set('ISO19115_TEST', test_value, path)
         self.assertEqual(
             metadata.get_xml_value('ISO19115_TEST'), 'http://inasafe.org')
 
@@ -88,16 +88,15 @@ class TestImpactMetadata(TestCase):
         # using invalid QUrl (has a space)
         test_value = QUrl('http://inasafe.org ')
         with self.assertRaises(ValueError):
-            metadata.set('ISO19115_TEST', test_value, path, 'gmd:URL')
+            metadata.set('ISO19115_TEST', test_value, path)
 
     def test_metadata_str(self):
         metadata = ImpactLayerMetadata('random_layer_id')
-        path = 'gmd:MD_Metadata/gmd:dateStamp/'
+        path = TEST_XML_BASEPATH + 'gco:CharacterString'
 
         # using str
         test_value = 'Random string'
-        metadata.set(
-            'ISO19115_TEST', test_value, path, 'gco:CharacterString')
+        metadata.set('ISO19115_TEST', test_value, path)
         self.assertEqual(
             metadata.get_xml_value('ISO19115_TEST'), 'Random string')
 
@@ -152,13 +151,12 @@ class TestImpactMetadata(TestCase):
             EXISTING_IMPACT_FILE,
             json_uri=INCOMPLETE_IMPACT_JSON)
 
-    # TODO (MB) check this one
     def test_xml_read(self):
         generated_metadata = ImpactLayerMetadata(
             EXISTING_IMPACT_FILE, xml_uri=EXISTING_IMPACT_XML)
 
-        for name, prop in generated_metadata.properties:
-            raise RuntimeError(prop)
+        # TODO (MB) add more checks
+        self.assertEquals(generated_metadata.get_xml_value('license'), 'GPLv2')
 
     def test_xml_to_json_to_xml(self):
         generated_metadata = ImpactLayerMetadata(
@@ -177,13 +175,14 @@ class TestImpactMetadata(TestCase):
         # if you change this you need to update IMPACT_TEST_FILE_JSON
         metadata = ImpactLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/'
+        path = TEST_XML_BASEPATH + 'gco:CharacterString'
         # using str
         test_value = 'Random string'
-        metadata.set('ISO19115_STR', test_value, path, 'gco:CharacterString')
+        metadata.set('ISO19115_STR', test_value, path)
         test_value = 1234
-        metadata.set('ISO19115_INT', test_value, path, 'gco:CharacterString')
+        metadata.set('ISO19115_INT', test_value, path)
         test_value = 1234.5678
-        metadata.set('ISO19115_FLOAT', test_value, path, 'gco:CharacterString')
+        metadata.set('ISO19115_FLOAT', test_value, path)
 
         metadata.report = 'My super report'
         metadata.summary_data = {'res1': 1234, 'res2': 4321}
