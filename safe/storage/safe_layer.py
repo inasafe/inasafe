@@ -117,6 +117,7 @@ class SafeLayer(object):
     @property
     def name(self):
         """Property for the actual layer.
+
         :returns: A layer's name.
         :rtype: basestring
         """
@@ -140,11 +141,10 @@ class SafeLayer(object):
         return isinstance(self.layer, QgsVectorLayer)
 
     def qgis_vector_layer(self):
-        """Get QgsVectorLayer if the layer param is a vector storage layer (
-        old-style).
+        """Get QgsVectorLayer representation of self.layer.
 
-        :returns: A map layer.
-        :rtype: QgsMapLayer, Layer, None
+        :returns: A QgsVectorLayer if it's vector.
+        :rtype: QgsVectorLayer, None
         """
         if isinstance(self.layer, Vector):
             return self.layer.as_qgis_native()
