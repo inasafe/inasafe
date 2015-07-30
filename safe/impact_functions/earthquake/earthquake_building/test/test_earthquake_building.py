@@ -21,6 +21,7 @@ from safe.impact_functions.earthquake.earthquake_building.impact_function \
     import EarthquakeBuildingFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestEarthquakeBuildingFunction(unittest.TestCase):
@@ -34,20 +35,19 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
     def test_run(self):
         """TestEarthquakeBuildingFunction: Test running the IF."""
         eq_path = test_data_path('hazard', 'earthquake.tif')
-        building_path = test_data_path(
-            'exposure', 'buildings.shp')
+        building_path = test_data_path('exposure', 'buildings.shp')
 
         eq_layer = read_layer(eq_path)
         building_layer = read_layer(building_path)
 
         impact_function = EarthquakeBuildingFunction.instance()
-        impact_function.hazard = eq_layer
-        impact_function.exposure = building_layer
+        impact_function.hazard = SafeLayer(eq_layer)
+        impact_function.exposure = SafeLayer(building_layer)
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of earthquake how many '
-                             'buildings might be affected')
+        expected_question = (
+            'In the event of earthquake how many buildings might be affected')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)

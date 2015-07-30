@@ -111,8 +111,8 @@ layer_mode_classified = {
         'high inundation class.\n'
         'Classified values in a vector (polygon) Volcano data set might '
         'represent discrete classes where a value of I might represent low '
-        'volcanic hazard, a value of II might represent medium volcanic hazard '
-        'and a value of III  might represent a high volcanic hazard. \n'
+        'volcanic hazard, a value of II might represent medium volcanic '
+        'hazard and a value of III  might represent a high volcanic hazard. \n'
         'In a vector (point) Volcano data the user specified buffer distances '
         'will be used to classify the data. '
         'Classified values in a vector exposure data set might include '
@@ -195,9 +195,9 @@ hazard_category_single_event = {
     'name': tr('Single Event'),
     'description': tr(
         '<b>Single event</b> hazard data can be based on either a specific  '
-        'event that has happened in the past, for example a flood like Jakarta '
-        '2013, or a possible event such as the tsunami that results from an '
-        'earthquake near Bima that might happen in the future.')
+        'event that has happened in the past, for example a flood like '
+        'Jakarta 2013, or a possible event such as the tsunami that results '
+        'from an earthquake near Bima that might happen in the future.')
 }
 
 hazard_category_multiple_event = {
@@ -749,20 +749,20 @@ exposure_unit = {
 structure_class_field = {
     'key': 'structure_class_field',
     'name': tr('Structure class field'),
-    'description': tr('Field where the structure type is defined.')
+    'description': tr('Attribute where the structure type is defined.')
 }
 
 road_class_field = {
     'key': 'road_class_field',
     'name': tr('Road class field'),
-    'description': tr('Field where the road type is defined.')
+    'description': tr('Attribute where the road type is defined.')
 }
 
 # Additional keywords
 # Hazard related
 volcano_name_field = {
     'key': 'volcano_name_field',
-    'name': tr('Volcano name field'),
+    'name': tr('Volcano name attribute'),
     'type': 'field',
-    'description': tr('Field where the volcano name is located.')
+    'description': tr('Attribute where the volcano name is located.')
 }

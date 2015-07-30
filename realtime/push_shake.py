@@ -6,13 +6,11 @@ import requests
 
 from realtime.utilities import realtime_logger_name
 from realtime.exceptions import RESTRequestFailedError
-from realtime.shake_event import ShakeEvent
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '07/07/15'
 
 LOGGER = logging.getLogger(realtime_logger_name())
-
 
 
 # Get Realtime Rest URL from the os environment
@@ -42,11 +40,11 @@ if 'INASAFE_REALTIME_DATETIME_FORMAT' in os.environ:
 
 INASAFE_REALTIME_REST_URLPATTERN = {
     'login': INASAFE_REALTIME_REST_LOGIN_URL,
-    'earthquake': INASAFE_REALTIME_REST_URL+'earthquake/',
-    'earthquake-detail': INASAFE_REALTIME_REST_URL+'earthquake/<shake_id>',
-    'earthquake-report': INASAFE_REALTIME_REST_URL+'earthquake-report/',
+    'earthquake': INASAFE_REALTIME_REST_URL + 'earthquake/',
+    'earthquake-detail': INASAFE_REALTIME_REST_URL + 'earthquake/<shake_id>',
+    'earthquake-report': INASAFE_REALTIME_REST_URL + 'earthquake-report/',
     'earthquake-report-detail': (
-        INASAFE_REALTIME_REST_URL+'earthquake-report/<shake_id>/<locale>')
+        INASAFE_REALTIME_REST_URL + 'earthquake-report/<shake_id>/<locale>')
 }
 
 
@@ -86,8 +84,8 @@ def generate_earthquake_report_detail_url(shake_id, locale):
     """
     return INASAFE_REALTIME_REST_URLPATTERN[
         'earthquake-report-detail'].replace(
-        '<shake_id>', shake_id).replace(
-        '<locale>', locale)
+            '<shake_id>', shake_id).replace(
+                '<locale>', locale)
 
 
 def get_realtime_session():

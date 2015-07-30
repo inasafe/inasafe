@@ -14,7 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 import logging
-from numbers import Number
 import numpy
 
 from safe.utilities.i18n import tr
@@ -37,8 +36,8 @@ from safe.common.utilities import (
     create_label)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
-from safe.utilities.unicode import get_unicode
 from safe.common.exceptions import ZeroImpactException
+from safe.impact_functions.core import get_key_for_value
 
 __author__ = 'Rizky Maulana Nugraha'
 
@@ -57,6 +56,8 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         # Use affected field flag (if False, all polygon will be considered as
         # affected)
         self.use_affected_field = False
+        # The 'wet' variable
+        self.wet = 'wet'
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
@@ -76,8 +77,8 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
                     tr('* People are considered to be affected if they are '
                        'within the area where the value of the hazard field ('
                        '"%s") is "%s"') %
-                    (self.parameters['affected_field'].value,
-                     self.parameters['affected_value'].value)))
+                    (self.hazard_class_attribute,
+                     ', '.join(self.hazard_class_mapping[self.wet]))))
         else:
             table_body.append(
                 TableRow(
@@ -158,37 +159,36 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         self.validate()
         self.prepare()
 
+        # Get parameters from layer's keywords
+        self.hazard_class_attribute = self.hazard.keyword('field')
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
+
         # Get the IF parameters
-        affected_field = self.parameters['affected_field'].value
-        affected_value = self.parameters['affected_value'].value
         evacuation_percentage = self.parameters['evacuation_percentage'].value
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard
-        exposure_layer = self.exposure
-
         # Check that hazard is polygon type
-        if not hazard_layer.is_polygon_data:
+        if not self.hazard.layer.is_polygon_data:
             message = (
                 'Input hazard must be a polygon layer. I got %s with layer '
                 'type %s' % (
-                    hazard_layer.get_name(),
-                    hazard_layer.get_geometry_name()))
+                    self.hazard.name,
+                    self.hazard.layer.get_geometry_name()))
             raise Exception(message)
 
         nan_warning = False
-        if has_no_data(exposure_layer.get_data(nan=True)):
+        if has_no_data(self.exposure.layer.get_data(nan=True)):
             nan_warning = True
 
         # Check that affected field exists in hazard layer
-        if affected_field in hazard_layer.get_attribute_names():
+        if (self.hazard_class_attribute in
+                self.hazard.layer.get_attribute_names()):
             self.use_affected_field = True
 
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure = \
             assign_hazard_values_to_exposure_data(
-                hazard_layer,
-                exposure_layer,
+                self.hazard.layer,
+                self.exposure.layer,
                 attribute_name=self.target_field)
 
         # Data for manipulating the covered_exposure layer
@@ -205,21 +205,15 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         for attr in interpolated_layer.get_data():
             affected = False
             if self.use_affected_field:
-                row_affected_value = attr[affected_field]
+                row_affected_value = attr[self.hazard_class_attribute]
                 if row_affected_value is not None:
-                    if isinstance(row_affected_value, Number):
-                        type_func = type(row_affected_value)
-                        affected = row_affected_value == type_func(
-                            affected_value)
-                    else:
-                        affected =\
-                            get_unicode(affected_value).lower() == \
-                            get_unicode(row_affected_value).lower()
+                    affected = get_key_for_value(
+                        row_affected_value, self.hazard_class_mapping)
             else:
                 # assume that every polygon is affected (see #816)
-                affected = True
+                affected = self.wet
 
-            if affected:
+            if affected == self.wet:
                 # Get population at this location
                 population = attr[self.target_field]
                 if not numpy.isnan(population):
@@ -238,7 +232,7 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
             total_affected_population * evacuation_percentage / 100.0)
 
         total_population = int(
-            numpy.nansum(exposure_layer.get_data(scaling=False)))
+            numpy.nansum(self.exposure.layer.get_data(scaling=False)))
 
         minimum_needs = [
             parameter.serialize() for parameter in
