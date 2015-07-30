@@ -709,6 +709,8 @@ class Analysis(object):
             self.clip_parameters = self.get_clip_parameters()
             buffered_geoextent = self.clip_parameters[1]
             cell_size = self.clip_parameters[2]
+        except InsufficientOverlapError as e:
+            raise e
         except (RuntimeError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
             context = self.tr(
@@ -716,8 +718,6 @@ class Analysis(object):
                 'analysis extents.'
             )
             self.analysis_error(e, context)
-            raise e
-        except InsufficientOverlapError as e:
             raise e
 
         if not self.force_memory:
