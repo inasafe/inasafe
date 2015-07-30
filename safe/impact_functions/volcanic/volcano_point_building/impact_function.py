@@ -91,10 +91,10 @@ class VolcanoPointBuildingFunction(
         # Try to get the value from keyword, if not exist, it will not fail,
         # but use the old get_osm_building_usage
         try:
-            structure_class_field = self.exposure.keyword(
+            self.exposure_class_attribute = self.exposure.keyword(
                 'structure_class_field')
         except KeywordNotFoundError:
-            structure_class_field = None
+            self.exposure_class_attribute = None
 
         # Input checks
         if not self.hazard.layer.is_point_data:
@@ -152,9 +152,9 @@ class VolcanoPointBuildingFunction(
             features[i][target_field] = hazard_value
 
             # Count affected buildings by usage type if available
-            if (structure_class_field and
-                    structure_class_field in attribute_names):
-                usage = features[i][structure_class_field]
+            if (self.exposure_class_attribute and
+                    self.exposure_class_attribute in attribute_names):
+                usage = features[i][self.exposure_class_attribute]
             else:
                 usage = get_osm_building_usage(attribute_names, features[i])
 

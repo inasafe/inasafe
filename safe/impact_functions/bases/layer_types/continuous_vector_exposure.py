@@ -2,8 +2,7 @@
 import sys
 
 from safe.common.exceptions import NoAttributeInLayerError
-from safe.impact_functions.bases.utilities import get_qgis_vector_layer, \
-    check_attribute_exist
+from safe.impact_functions.bases.utilities import check_attribute_exist
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '08/05/15'
@@ -15,15 +14,6 @@ class ContinuousVectorExposureMixin(object):
         self._exposure_value_attribute = None
         self._exposure_min_value = None
         self._exposure_max_value = None
-        self._exposure_layer = None
-
-    def set_up_exposure_layer(self, exposure):
-        """Set up the hazard value.
-
-        :param exposure: QgsVectorLayer or Vector data types
-        :type exposure: QgsVectorLayer, Vector
-        """
-        self._exposure_layer = exposure
 
     @property
     def exposure_value_attribute(self):
@@ -31,7 +21,8 @@ class ContinuousVectorExposureMixin(object):
 
     @exposure_value_attribute.setter
     def exposure_value_attribute(self, value):
-        exposure_layer = get_qgis_vector_layer(self._exposure_layer)
+        # self.exposure is from IF base class.
+        exposure_layer = self.exposure.qgis_vector_layer()
         if (exposure_layer and
                 check_attribute_exist(exposure_layer, value)):
             self._exposure_value_attribute = value
