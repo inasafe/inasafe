@@ -79,21 +79,23 @@ class ImpactLayerMetadata(BaseMetadata):
         metadata['provenance'] = self.provenance.json
         return json.dumps(metadata, indent=2, sort_keys=True)
 
-    def read_from_json(self):
-        metadata = super(ImpactLayerMetadata, self).read_from_json()
-        if 'provenance' in metadata:
-            for provenance_step in metadata['provenance']:
-                try:
-                    self.append_provenance_step(
-                        provenance_step['title'],
-                        provenance_step['description'],
-                        provenance_step['time'],
-                    )
-                except KeyError:
-                    # we want to get as much as we can without raising errors
-                    pass
-        if 'summary_data' in metadata:
-            self.summary_data = metadata['summary_data']
+    def read_json(self):
+        with reading_ancillary_files(self):
+            metadata = super(ImpactLayerMetadata, self).read_json()
+            if 'provenance' in metadata:
+                for provenance_step in metadata['provenance']:
+                    try:
+                        self.append_provenance_step(
+                            provenance_step['title'],
+                            provenance_step['description'],
+                            provenance_step['time'],
+                        )
+                    except KeyError:
+                        # we want to get as much as we can without raising
+                        # errors
+                        pass
+            if 'summary_data' in metadata:
+                self.summary_data = metadata['summary_data']
 
     @property
     def xml(self):
@@ -111,10 +113,11 @@ class ImpactLayerMetadata(BaseMetadata):
         provenance_parent.append(provenance_element)
         return ElementTree.tostring(root)
 
-    def read_from_xml(self):
+    def read_xml(self):
         with reading_ancillary_files(self):
-            root = super(ImpactLayerMetadata, self).read_from_xml()
-            self._read_provenance_from_xml(root)
+            root = super(ImpactLayerMetadata, self).read_xml()
+            if root is not None:
+                self._read_provenance_from_xml(root)
 
     def _read_provenance_from_xml(self, root):
         path = self._special_properties['provenance']

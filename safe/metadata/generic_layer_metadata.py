@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import json
 from xml.etree import ElementTree
 from safe.metadata import BaseMetadata
+from safe.metadata.utils import reading_ancillary_files
 
 
 class GenericLayerMetadata(BaseMetadata):
@@ -42,11 +43,13 @@ class GenericLayerMetadata(BaseMetadata):
         root = super(GenericLayerMetadata, self).xml
         return ElementTree.tostring(root)
 
-    def read_from_json(self):
-        super(GenericLayerMetadata, self).read_from_json()
+    def read_json(self):
+        with reading_ancillary_files(self):
+            super(GenericLayerMetadata, self).read_json()
 
-    def read_from_xml(self):
-        super(GenericLayerMetadata, self).read_from_xml()
+    def read_xml(self):
+        with reading_ancillary_files(self):
+            super(GenericLayerMetadata, self).read_xml()
 
     def update_report(self):
         # TODO (MB) implement this by reading the kw and definitions.py

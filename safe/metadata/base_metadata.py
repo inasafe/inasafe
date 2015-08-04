@@ -30,7 +30,7 @@ from safe.common.exceptions import MetadataReadError
 from safe.metadata.utils import (METADATA_XML_TEMPLATE,
                                  TYPE_CONVERSIONS,
                                  XML_NS,
-                                 insert_xml_element, reading_ancillary_files)
+                                 insert_xml_element)
 from safe.utilities.i18n import tr
 
 
@@ -120,17 +120,27 @@ class BaseMetadata(object):
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         # private members
         self._layer_uri = layer_uri
+        self._layer_is_file_based = os.path.isfile(layer_uri)
+
         path = os.path.splitext(layer_uri)[0]
+
         if xml_uri is None:
-            self._xml_uri = '%s.xml' % path
+            if self.layer_is_file_based:
+                self._xml_uri = '%s.xml' % path
+            else:
+                self._xml_uri = None
         else:
             self._xml_uri = xml_uri
+
         if json_uri is None:
-            self._json_uri = '%s.json' % path
+            if self.layer_is_file_based:
+                self._json_uri = '%s.json' % path
+            else:
+                self._json_uri = None
         else:
             self._json_uri = json_uri
 
-        self._reading_ancillary_file = False
+        self._reading_ancillary_files = False
         self._properties = {}
 
         # initialise the properties
@@ -171,36 +181,69 @@ class BaseMetadata(object):
         return json.dumps(self.dict, indent=2, sort_keys=True)
 
     @abc.abstractmethod
-    def read_from_json(self):
-        metadata = {}
+    def read_json(self):
+        if self.json_uri is None:
+            metadata = self._read_json_db()
+        else:
+            metadata = self._read_json_file()
+        if 'properties' in metadata:
+            for name, prop in metadata['properties'].iteritems():
+                try:
+                    self.set(prop['name'], prop['value'], prop['xml_path'])
+                except KeyError:
+                    # we just skip if we don't have something, we want
+                    # to have as much as possible read from the JSON
+                    pass
+        return metadata
+
+    def _read_json_file(self):
         with open(self.json_uri) as metadata_file:
             try:
                 metadata = json.load(metadata_file)
+                return metadata
             except ValueError:
                 message = tr('the file %s does not appear to be valid JSON')
                 message = message % self.json_uri
                 raise MetadataReadError(message)
-            if 'properties' in metadata:
-                for name, prop in metadata['properties'].iteritems():
-                    try:
-                        self.set(prop['name'], prop['value'], prop['xml_path'])
-                    except KeyError:
-                        # we just skip if we don't have something, we want
-                        # to have as much as possible read from the JSON
-                        pass
-        return metadata
+
+    def _read_json_db(self):
+        metadata_str = None  # TODO (MB) implement
+        if metadata_str is None:
+            return {}
+        try:
+            metadata = json.loads(metadata_str)
+            return metadata
+        except ValueError:
+            message = tr('the file DB entry for %s does not appear to be '
+                         'valid JSON')
+            message = message % self.layer_uri
+            raise MetadataReadError(message)
 
     @abc.abstractmethod
-    def read_from_xml(self):
-        with reading_ancillary_files(self):
-            # this raises a IOError if the file doesn't exist
-            root = ElementTree.parse(self.xml_uri).getroot()
+    def read_xml(self):
+        if self.xml_uri is None:
+            root = self._read_xml_db()
+        else:
+            root = self._read_xml_file()
+        if root is not None:
             for name, path in self._standard_properties.iteritems():
                 value = self._read_property_from_xml(root, path)
                 if value is not None:
                     # this calls the default setters
                     setattr(self, name, value)
 
+        return root
+
+    def _read_xml_file(self):
+        # this raises a IOError if the file doesn't exist
+        root = ElementTree.parse(self.xml_uri).getroot()
+        return root
+
+    def _read_xml_db(self):
+        metadata_str = None  # TODO (MB) implement
+        if metadata_str is None:
+            return None
+        root = ElementTree.fromstring(metadata_str)
         return root
 
     @staticmethod
@@ -268,41 +311,60 @@ class BaseMetadata(object):
             metadata_property = property_class(name, value, xml_path, xml_type)
             self._properties[name] = metadata_property
             self.set_last_update_to_now()
-            return True
         except TypeError:
-            if self._reading_ancillary_file:
-                return False
+            if self._reading_ancillary_files:
+                # we are parsing files so we want to accept as much as
+                # possible without raising exceptions
+                pass
             else:
                 raise
 
     def save(self, save_json=True, save_xml=True):
-        if save_json:
-            with open(self.json_uri, 'w') as f:
-                f.write(self.json)
-        if save_xml:
-            with open(self.xml_uri, 'w') as f:
-                f.write(self.xml)
+        if self.layer_is_file_based:
+            if save_json:
+                self.write_as(self.json_uri)
+            if save_xml:
+                self.write_as(self.xml_uri)
+        else:
+            if save_json:
+                self.write_to_db('json')
+            if save_xml:
+                self.write_to_db('xml')
 
     def write_as(self, destination_path):
-        file_format = os.path.splitext(destination_path)[1]
-        if file_format == '.json':
+        file_format = os.path.splitext(destination_path)[1][1:]
+        metadata = self.get_writable_metadata(file_format)
+
+        with open(destination_path, 'w') as f:
+            f.write(metadata)
+
+        return metadata
+
+    def write_to_db(self, file_format):
+        metadata = self.get_writable_metadata(file_format)
+        # TODO (MB) implement this
+        return metadata
+
+    def get_writable_metadata(self, file_format):
+        if file_format == 'json':
             metadata = self.json
-        elif file_format == '.xml':
+        elif file_format == 'xml':
             metadata = '<?xml version="1.0" encoding="UTF-8"?>\n'
             metadata += self.xml
         else:
             raise TypeError('The requested file type (%s) is not yet supported'
                             % file_format)
-        with open(destination_path, 'w') as f:
-            f.write(metadata)
+        return metadata
 
     def read_from_ancillary_file(self, custom_xml):
         # we explicitly check if a custom XML was passed so we give it
         # priority on the JSON. If no custom XML is passed, JSON has priority
         if custom_xml and os.path.isfile(self.xml_uri):
-            self.read_from_xml()
+            self.read_xml()
         else:
-            if os.path.isfile(self.json_uri):
-                self.read_from_json()
-            elif os.path.isfile(self.xml_uri):
-                self.read_from_xml()
+            if not self.read_json():
+                self.read_xml()
+
+    @property
+    def layer_is_file_based(self):
+        return self._layer_is_file_based
