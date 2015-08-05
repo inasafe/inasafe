@@ -105,7 +105,7 @@ class ImpactLayerMetadata(BaseMetadata):
         """
         metadata = self.dict
 
-        metadata['provenance'] = self.provenance.json
+        metadata['provenance'] = self.provenance.dict
         return json.dumps(metadata, indent=2, sort_keys=True)
 
     def read_json(self):

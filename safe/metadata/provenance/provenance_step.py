@@ -26,7 +26,7 @@ class ProvenanceStep(object):
     Class to store a provenance step.
 
     Each step can be instantiated passing a time or it will automatically
-    generate a timestamp. Each step can represent itself as xml or json
+    generate a timestamp. Each step can represent itself as xml or dict
 
     .. versionadded:: 3.2
 
@@ -90,11 +90,11 @@ class ProvenanceStep(object):
         return self._time
 
     @property
-    def json(self):
+    def dict(self):
         """
-        the json representation.
+        the dict representation.
 
-        :return: the json
+        :return: the dict
         :rtype: dict
         """
 

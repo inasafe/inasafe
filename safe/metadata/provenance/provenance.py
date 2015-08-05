@@ -40,18 +40,21 @@ class Provenance(object):
         return iter(self._steps)
 
     @property
-    def json(self):
+    def dict(self):
         """
-        the json representation.
+        the python object for rendering json.
 
-        :return: the json
+        It is called dict to be
+        coherent with the other modules but it actually returns a list
+
+        :return: the python object for rendering json
         :rtype: list
         """
 
-        json = []
+        json_list = []
         for step in self.steps:
-            json.append(step.json)
-        return json
+            json_list.append(step.dict)
+        return json_list
 
     @property
     def xml(self):
