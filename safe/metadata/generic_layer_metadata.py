@@ -17,7 +17,6 @@ __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import json
 from xml.etree import ElementTree
 from safe.metadata import BaseMetadata
 from safe.metadata.utils import reading_ancillary_files

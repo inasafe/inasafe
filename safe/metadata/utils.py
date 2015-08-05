@@ -74,36 +74,6 @@ def insert_xml_element(root, element_path):
         parent = element
     return element
 
-# MONKEYPATCH CDATA support into Element tree
-def CDATA(text=None):
-    """
-    MONKEYPATCH CDATA support into Element tree.
-
-    inspired by http://stackoverflow.com/questions/174890/#answer-8915039
-    :param text: content of the element
-    :return: cdata element
-    :rtype: ElementTree.Element
-    """
-    element = ElementTree.Element('![CDATA[')
-    element.text = text
-    return element
-ElementTree._original_serialize_xml = ElementTree._serialize_xml
-
-
-def _serialize_xml(write, elem, encoding, qnames, namespaces):
-    """
-    serialize MONKEYPATCHED CDATA
-    """
-
-    if elem.tag == '![CDATA[':
-        write("\n<%s%s]]>\n" % (elem.tag, elem.text))
-        return
-    return ElementTree._original_serialize_xml(
-        write, elem, encoding, qnames, namespaces)
-
-ElementTree._serialize_xml = ElementTree._serialize['xml'] = _serialize_xml
-# END MONKEYPATCH CDATA
-
 
 @contextmanager
 def reading_ancillary_files(metadata):
