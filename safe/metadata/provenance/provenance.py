@@ -22,6 +22,12 @@ from safe.metadata.provenance import ProvenanceStep
 
 
 class Provenance(object):
+    """
+    Class to store a list of provenance steps.
+
+    .. versionadded:: 3.2
+
+    """
 
     def __init__(self):
         # private members
@@ -35,6 +41,13 @@ class Provenance(object):
 
     @property
     def json(self):
+        """
+        the json representation.
+
+        :return: the json
+        :rtype: list
+        """
+
         json = []
         for step in self.steps:
             json.append(step.json)
@@ -42,6 +55,13 @@ class Provenance(object):
 
     @property
     def xml(self):
+        """
+        the xml string representation.
+
+        :return: the xml string
+        :rtype: str
+        """
+
         xml = '<inasafe_provenance>'
         for step in self.steps:
             xml += step.xml
@@ -50,20 +70,57 @@ class Provenance(object):
 
     @property
     def steps(self):
+        """
+        the steps list.
+
+        :return: the steps list
+        :rtype: list
+        """
+
         return self._steps
 
     @property
     def count(self):
+        """
+        the size of the list.
+
+        :return: the size
+        :rtype: int
+        """
         return len(self._steps)
 
     @property
     def last(self):
+        """
+        the last step of the list.
+
+        :return: the last step
+        :rtype: ProvenanceStep
+        """
         return self._steps[-1]
 
     def get(self, index):
+        """
+        the step at index position of the list.
+
+        :return: the step at index
+        :rtype: ProvenanceStep
+        """
         return self._steps[index]
 
     def append_step(self, title, description, timestamp=None):
+        """
+        Append a new provenance step.
+
+        :param title: the title of the ProvenanceStep
+        :type title: str
+        :param description: the description of the ProvenanceStep
+        :type description: str
+        :param timestamp: the time of the ProvenanceStep
+        :type timestamp: datetime
+        :return: the time of the ProvenanceStep
+        :rtype: datetime
+        """
         step = ProvenanceStep(title, description, timestamp)
         self._steps.append(step)
         return step.time

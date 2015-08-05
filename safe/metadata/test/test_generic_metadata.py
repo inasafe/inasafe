@@ -39,7 +39,7 @@ class TestGenericMetadata(TestCase):
 
         metadata = self.generate_test_metadata()
         filename = unique_filename(suffix='.json', dir=TEMP_DIR)
-        metadata.write_as(filename)
+        metadata.write_to_file(filename)
         with open(filename) as f:
             written_json = f.read()
 

@@ -22,6 +22,15 @@ from safe.common.exceptions import MetadataInvalidPathError, MetadataCastError
 
 
 class BaseProperty(object):
+    """
+    Abstract Metadata Property class, this has to be subclassed.
+
+    This class represents the base for all properties. A property is a
+    container with name, value, xml_path, xml_type and allowed_python_types.
+
+    .. versionadded:: 3.2
+    """
+
     # define as Abstract base class
     __metaclass__ = abc.ABCMeta
 

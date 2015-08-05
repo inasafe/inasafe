@@ -31,11 +31,28 @@ from safe.metadata.metadata_db_io import MetadataDbIO
 from safe.metadata.utils import (METADATA_XML_TEMPLATE,
                                  TYPE_CONVERSIONS,
                                  XML_NS,
-                                 insert_xml_element)
+                                 insert_xml_element,
+                                 read_property_from_xml,
+                                 reading_ancillary_files)
 from safe.utilities.i18n import tr
 
 
 class BaseMetadata(object):
+    """
+    Abstract Metadata class, this has to be subclassed.
+
+    if you need to add a standard XML property add it to _standard_properties
+    @property and @propname.setter will be generated automatically
+    Standard properties are the ones that we try to read from an xml file
+    when instantiating a new metadata object.
+    Reading from json metadata files is easier because we have an ordered
+    structure.
+
+    The class will try to read all she can without throwing errors because
+    the more we can read from malformed input the better.
+
+    .. versionadded:: 3.2
+    """
     # define as Abstract base class
     __metaclass__ = abc.ABCMeta
 
@@ -97,7 +114,7 @@ class BaseMetadata(object):
 
     def __getattr__(self, name):
         """
-        Dynamically generate getter for each _standard_properties
+        Dynamically generate getter for each _standard_properties.
         """
         if name in self._standard_properties:
             value = self.get_value(name)
@@ -107,7 +124,7 @@ class BaseMetadata(object):
 
     def __setattr__(self, name, value):
         """
-        Dynamically generate setter for each _standard_properties
+        Dynamically generate setter for each _standard_properties.
         """
         if name in self._standard_properties:
             path = self._standard_properties[name]
@@ -119,6 +136,16 @@ class BaseMetadata(object):
         return self.dict == other.dict
 
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
+        """
+        Constructor.
+
+        :param layer_uri: uri of the layer for which the metadata ae
+        :type layer_uri: str
+        :param xml_uri: uri of an xml file to use
+        :type xml_uri: str
+        :param json_uri: uri of a json file to use
+        :type json_uri: str
+        """
         # private members
         self._layer_uri = layer_uri
         # TODO (MB): maybe use MetadataDbIO.are_metadata_file_based instead
@@ -166,6 +193,12 @@ class BaseMetadata(object):
 
     @abc.abstractproperty
     def dict(self):
+        """
+        dictionary representation of the metadata.
+
+        :return: dictionary representation of the metadata
+        :rtype: dict
+        """
         metadata = {}
         properties = {}
         for name, prop in self.properties.iteritems():
@@ -175,6 +208,12 @@ class BaseMetadata(object):
 
     @abc.abstractproperty
     def xml(self):
+        """
+        xml representation of the metadata.
+
+        :return: xml representation of the metadata
+        :rtype: ElementTree.Element
+        """
         tree = ElementTree.parse(METADATA_XML_TEMPLATE)
         root = tree.getroot()
 
@@ -190,26 +229,46 @@ class BaseMetadata(object):
 
     @abc.abstractproperty
     def json(self):
+        """
+        json representation of the metadata.
+
+        :return: json representation of the metadata
+        :rtype: str
+        """
         return json.dumps(self.dict, indent=2, sort_keys=True)
 
     @abc.abstractmethod
     def read_json(self):
+        """
+        read metadata from json and set all the found properties.
 
-        if self.json_uri is None:
-            metadata = self._read_json_db()
-        else:
-            metadata = self._read_json_file()
-        if 'properties' in metadata:
-            for name, prop in metadata['properties'].iteritems():
-                try:
-                    self.set(prop['name'], prop['value'], prop['xml_path'])
-                except KeyError:
-                    # we just skip if we don't have something, we want
-                    # to have as much as possible read from the JSON
-                    pass
+        when overriding remember to wrap your calls in reading_ancillary_files
+
+        :return: the read metadata
+        :rtype: dict
+        """
+        with reading_ancillary_files(self):
+            if self.json_uri is None:
+                metadata = self._read_json_db()
+            else:
+                metadata = self._read_json_file()
+            if 'properties' in metadata:
+                for name, prop in metadata['properties'].iteritems():
+                    try:
+                        self.set(prop['name'], prop['value'], prop['xml_path'])
+                    except KeyError:
+                        # we just skip if we don't have something, we want
+                        # to have as much as possible read from the JSON
+                        pass
         return metadata
 
     def _read_json_file(self):
+        """
+        read metadata from a json file.
+
+        :return: the parsed json dict
+        :rtype: dict
+        """
         with open(self.json_uri) as metadata_file:
             try:
                 metadata = json.load(metadata_file)
@@ -220,6 +279,12 @@ class BaseMetadata(object):
                 raise MetadataReadError(message)
 
     def _read_json_db(self):
+        """
+        read metadata from a json string stored in a DB.
+
+        :return: the parsed json dict
+        :rtype: dict
+        """
         try:
             metadata_str = self.db_io.read_metadata_from_uri(
                 self.layer_uri, 'json')
@@ -231,18 +296,24 @@ class BaseMetadata(object):
         except ValueError:
             message = tr('the file DB entry for %s does not appear to be '
                          'valid JSON')
-            message = message % self.layer_uri
+            message %= self.layer_uri
             raise MetadataReadError(message)
 
     @abc.abstractmethod
     def read_xml(self):
+        """
+        read metadata from xml and set all the found properties.
+
+        :return: the root element of the xml
+        :rtype: ElementTree.Element
+        """
         if self.xml_uri is None:
             root = self._read_xml_db()
         else:
             root = self._read_xml_file()
         if root is not None:
             for name, path in self._standard_properties.iteritems():
-                value = self._read_property_from_xml(root, path)
+                value = read_property_from_xml(root, path)
                 if value is not None:
                     # this calls the default setters
                     setattr(self, name, value)
@@ -250,12 +321,24 @@ class BaseMetadata(object):
         return root
 
     def _read_xml_file(self):
+        """
+        read metadata from an xml file.
+
+        :return: the root element of the xml
+        :rtype: ElementTree.Element
+        """
         # this raises a IOError if the file doesn't exist
         root = ElementTree.parse(self.xml_uri)
         root.getroot()
         return root
 
     def _read_xml_db(self):
+        """
+        read metadata from an xml string stored in a DB.
+
+        :return: the root element of the xml
+        :rtype: ElementTree.Element
+        """
         try:
             metadata_str = self.db_io.read_metadata_from_uri(
                 self.layer_uri, 'xml')
@@ -264,60 +347,141 @@ class BaseMetadata(object):
         root = ElementTree.fromstring(metadata_str)
         return root
 
-    @staticmethod
-    def _read_property_from_xml(root, path):
-        element = root.find(path, XML_NS)
-        try:
-            return element.text.strip(' \t\n\r')
-        except AttributeError:
-            return None
-
     @property
     # there is no setter because the layer should not change overtime
     def layer_uri(self):
+        """
+        the layer URI.
+
+        :return: the layer URI
+        :rtype: str
+        """
         return self._layer_uri
 
     @property
     # there is no setter because the json should not change overtime
     def json_uri(self):
+        """
+        the json file URI if it is None than the json is coming from a DB.
+
+        :return: the json URI
+        :rtype: str, None
+        """
         return self._json_uri
 
     @property
     # there is no setter because the xml should not change overtime
     def xml_uri(self):
+        """
+        the xml file URI if it is None than the xml is coming from a DB.
+
+        :return: the xml URI
+        :rtype: str, None
+        """
         return self._xml_uri
 
     @property
     def last_update(self):
+        """
+        time of the last update of the metadata in memory.
+
+        :return: time of the last update
+        :rtype: datetime
+        """
         return self._last_update
 
     @last_update.setter
     def last_update(self, time):
+        """
+        set time of the last update of the metadata in memory.
+
+        :param time: the update time
+        :type time: datetime
+        """
         self._last_update = time
 
     def set_last_update_to_now(self):
+        """
+        set time of the last update of the metadata in memory to now.
+        """
         self._last_update = datetime.now()
 
-    def get_value(self, property_name):
-        return self.get_property(property_name).value
+    def get_value(self, name):
+        """
+        get the typed value of a property.
 
-    def get_xml_value(self, property_name):
+        The type is the original python type used when the value was set
+
+        :param name: the name of the property
+        :type name: str
+        :return: the value of the property
+        """
+        return self.get_property(name).value
+
+    def get_xml_value(self, name):
+        """
+        get the xml value of a property.
+
+        :param name: the name of the property
+        :type name: str
+        :return: the value of the property
+        :rtype: str
+        """
         try:
-            return self.get_property(property_name).xml_value
+            return self.get_property(name).xml_value
         except KeyError:
             return None
 
-    def get_property(self, property_name):
-        return self.properties[property_name]
+    def get_property(self, name):
+        """
+        get a property.
+
+        :param name: the name of the property
+        :type name: str
+        :return: the property
+        :rtype: BaseProperty
+        """
+        return self.properties[name]
 
     @property
     def properties(self):
+        """
+        get all properties.
+
+        :return: the properties
+        :rtype: dict
+        """
         return self._properties
 
     def update(self, name, value):
+        """
+        update a property value.
+
+        The accepted type depends on the property type
+
+        :param name: the name of the property
+        :type name: str
+        :param value: the new value
+        """
         self.get_property(name).value = value
 
     def set(self, name, value, xml_path):
+        """
+        Create a new metadata property.
+
+        The accepted type depends on the property type which is determined
+        by the xml_path
+
+        :param name: the name of the property
+        :type name: str
+        :param value: the value of the property
+        :type value:
+        :param xml_path: the xml path where the property should be stored.
+        This is split on / and the last element is used to determine the
+        property type
+        :type xml_path: str
+        """
+
         xml_type = xml_path.split('/')[-1]
         # check if the desired type is supported
         try:
@@ -338,15 +502,32 @@ class BaseMetadata(object):
                 raise
 
     def save(self, save_json=True, save_xml=True):
+        """
+        Saves the metadata json and/or xml to a file or DB.
+
+        :param save_json: flag to save json
+        :type save_json: bool
+        :param save_xml: flag to save xml
+        :type save_xml: bool
+        """
         if self.layer_is_file_based:
             if save_json:
-                self.write_as(self.json_uri)
+                self.write_to_file(self.json_uri)
             if save_xml:
-                self.write_as(self.xml_uri)
+                self.write_to_file(self.xml_uri)
         else:
             self.write_to_db(save_json, save_xml)
 
-    def write_as(self, destination_path):
+    def write_to_file(self, destination_path):
+        """
+        Writes the metadata json or xml to a file.
+
+        :param destination_path: the file path the file format is inferred
+        from the destination_path extension.
+        :type destination_path: str
+        :return: the written metadata
+        :rtype: str
+        """
         file_format = os.path.splitext(destination_path)[1][1:]
         metadata = self.get_writable_metadata(file_format)
 
@@ -356,6 +537,18 @@ class BaseMetadata(object):
         return metadata
 
     def write_to_db(self, save_json=True, save_xml=True):
+        """
+        Stores the metadata json and/or xml in a DB.
+
+        The returned tuple can contain None.
+
+        :param save_json: flag to save json
+        :type save_json: bool
+        :param save_xml: flag to save xml
+        :type save_xml: bool
+        :return: the stored metadata
+        :rtype: (str, str)
+        """
         metadata_json = None
         metadata_xml = None
         if save_json:
@@ -367,6 +560,14 @@ class BaseMetadata(object):
         return metadata_json, metadata_xml
 
     def get_writable_metadata(self, file_format):
+        """
+        Convert the metadata to a writable form.
+
+        :param file_format: the needed format can be json or xml
+        :type file_format: str
+        :return: the dupled metadata
+        :rtype: str
+        """
         if file_format == 'json':
             metadata = self.json
         elif file_format == 'xml':
@@ -377,9 +578,18 @@ class BaseMetadata(object):
                             % file_format)
         return metadata
 
-    def read_from_ancillary_file(self, custom_xml):
-        # we explicitly check if a custom XML was passed so we give it
-        # priority on the JSON. If no custom XML is passed, JSON has priority
+    def read_from_ancillary_file(self, custom_xml=None):
+        """
+        try to read xml and json from existing files or db.
+
+        This is used when instantiating a new metadata object. We explicitly
+        check if a custom XML was passed so we give it priority on the JSON.
+        If no custom XML is passed, JSON has priority
+
+        :param custom_xml: the path to a custom xml file
+        :type custom_xml: str
+        """
+
         if custom_xml and os.path.isfile(self.xml_uri):
             self.read_xml()
         else:
@@ -388,4 +598,10 @@ class BaseMetadata(object):
 
     @property
     def layer_is_file_based(self):
+        """
+        flag if the layer is file based.
+
+        :return: flag if the layer is file based
+        :rtype: bool
+        """
         return self._layer_is_file_based

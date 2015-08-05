@@ -27,6 +27,8 @@ from safe.metadata.utils import reading_ancillary_files, XML_NS
 
 class ImpactLayerMetadata(BaseMetadata):
     """
+    Metadata class for impact layers
+
     if you need to add a standard XML property that only applies to this
     subclass, do it this way. @property and @propname.setter will be
     generated automatically
@@ -41,9 +43,13 @@ class ImpactLayerMetadata(BaseMetadata):
     from safe.metadata.utils import merge_dictionaries
     _standard_properties = merge_dictionaries(
         BaseMetadata._standard_properties, _standard_properties)
+
+    .. versionadded:: 3.2
     """
 
     # remember to add an attribute or a setter property with the same name
+    # these are properties that need special getters and setters thus are
+    # not put in the standard_properties
     _special_properties = {
         'provenance': (
             'gmd:identificationInfo/'
@@ -53,6 +59,17 @@ class ImpactLayerMetadata(BaseMetadata):
     }
 
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
+        """
+        Constructor
+
+        :param layer_uri: uri of the layer for which the metadata ae
+        :type layer_uri: str
+        :param xml_uri: uri of an xml file to use
+        :type xml_uri: str
+        :param json_uri: uri of a json file to use
+        :type json_uri: str
+        """
+
         # Initialise members
         # private members
         self._provenance = Provenance()
@@ -65,6 +82,12 @@ class ImpactLayerMetadata(BaseMetadata):
 
     @property
     def dict(self):
+        """
+        calls the overridden method and adds provenance and summary data
+
+        :return: dictionary representation of the metadata
+        :rtype: dict
+        """
         metadata = super(ImpactLayerMetadata, self).dict
 
         metadata['provenance'] = self.provenance
@@ -74,12 +97,24 @@ class ImpactLayerMetadata(BaseMetadata):
 
     @property
     def json(self):
+        """
+        json representation of the metadata
+
+        :return: json representation of the metadata
+        :rtype: str
+        """
         metadata = self.dict
 
         metadata['provenance'] = self.provenance.json
         return json.dumps(metadata, indent=2, sort_keys=True)
 
     def read_json(self):
+        """
+        read metadata from json and set all the found properties.
+
+        :return: the read metadata
+        :rtype: dict
+        """
         with reading_ancillary_files(self):
             metadata = super(ImpactLayerMetadata, self).read_json()
             if 'provenance' in metadata:
@@ -101,6 +136,13 @@ class ImpactLayerMetadata(BaseMetadata):
 
     @property
     def xml(self):
+        """
+        xml representation of the metadata.
+
+        :return: xml representation of the metadata
+        :rtype: ElementTree.Element
+        """
+
         root = super(ImpactLayerMetadata, self).xml
         provenance_path = self._special_properties['provenance']
         provenance_element = root.find(provenance_path, XML_NS)
@@ -116,6 +158,13 @@ class ImpactLayerMetadata(BaseMetadata):
         return ElementTree.tostring(root)
 
     def read_xml(self):
+        """
+        read metadata from xml and set all the found properties.
+
+        :return: the root element of the xml
+        :rtype: ElementTree.Element
+        """
+
         with reading_ancillary_files(self):
             root = super(ImpactLayerMetadata, self).read_xml()
             if root is not None:
@@ -123,6 +172,12 @@ class ImpactLayerMetadata(BaseMetadata):
         return root
 
     def _read_provenance_from_xml(self, root):
+        """
+        read metadata provenance from xml.
+
+        :param root: container in which we search
+        :type root: ElementTree.Element
+        """
         path = self._special_properties['provenance']
         provenance = root.find(path, XML_NS)
         for step in provenance.iter('provenance_step'):
@@ -133,11 +188,29 @@ class ImpactLayerMetadata(BaseMetadata):
             self.append_provenance_step(title, description, timestamp)
 
     @property
-    # there is no setter. provenance can only grow. use append_provenance_step
     def provenance(self):
+        """
+        Get the provenance elements of the metadata
+
+        there is no setter as provenance can only grow. use
+        append_provenance_step to add steps
+
+        :return: The provenance element
+        :rtype: Provenance
+        """
         return self._provenance
 
     def append_provenance_step(self, title, description, timestamp=None):
+        """
+        Add a step to the provenance of the metadata
+
+        :param title: the title of the step
+        :type title: str
+        :param description: the content of the step
+        :type description: str
+        :param timestamp: the time of the step
+        :type timestamp: datetime
+        """
         step_time = self._provenance.append_step(title, description, timestamp)
         if step_time > self.last_update:
             self.last_update = step_time

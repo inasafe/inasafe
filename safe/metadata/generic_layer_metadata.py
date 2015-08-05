@@ -24,36 +24,101 @@ from safe.metadata.utils import reading_ancillary_files
 
 
 class GenericLayerMetadata(BaseMetadata):
+    """
+    Metadata class for generic layers such as hazard, exposure and aggregation
+
+    if you need to add a standard XML property that only applies to this
+    subclass, do it this way. @property and @propname.setter will be
+    generated automatically
+
+    _standard_properties = {
+        'TESTprop': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'gco:CharacterString')
+    }
+    from safe.metadata.utils import merge_dictionaries
+    _standard_properties = merge_dictionaries(
+        BaseMetadata._standard_properties, _standard_properties)
+
+    .. versionadded:: 3.2
+    """
+
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
+        """
+        Constructor
+
+        :param layer_uri: uri of the layer for which the metadata ae
+        :type layer_uri: str
+        :param xml_uri: uri of an xml file to use
+        :type xml_uri: str
+        :param json_uri: uri of a json file to use
+        :type json_uri: str
+        """
         # initialize base class
         super(GenericLayerMetadata, self).__init__(
             layer_uri, xml_uri, json_uri)
 
     @property
     def dict(self):
+        """
+        calls the overridden method
+
+        :return: dictionary representation of the metadata
+        :rtype: dict
+        """
         return super(GenericLayerMetadata, self).dict
 
     @property
     def json(self):
-        return json.dumps(self.dict, indent=2, sort_keys=True)
+        """
+        calls the overridden method
+
+        :return: json representation of the metadata
+        :rtype: str
+        """
+        return super(GenericLayerMetadata, self).json
 
     @property
     def xml(self):
+        """
+        calls the overridden method
+
+        :return: xml representation of the metadata
+        :rtype: str
+        """
         root = super(GenericLayerMetadata, self).xml
         return ElementTree.tostring(root)
 
     def read_json(self):
+        """
+        calls the overridden method
+
+        :return: the read metadata
+        :rtype: dict
+        """
         with reading_ancillary_files(self):
             metadata = super(GenericLayerMetadata, self).read_json()
 
         return metadata
 
     def read_xml(self):
+        """
+        calls the overridden method
+
+        :return: the read metadata
+        :rtype: ElementTree.Element
+        """
         with reading_ancillary_files(self):
             root = super(GenericLayerMetadata, self).read_xml()
 
         return root
 
     def update_report(self):
+        """
+        update the report.
+        """
         # TODO (MB): implement this by reading the kw and definitions.py
         self.report = self.report
+        raise NotImplementedError()

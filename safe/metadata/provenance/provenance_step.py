@@ -22,6 +22,15 @@ from datetime import datetime
 
 
 class ProvenanceStep(object):
+    """
+    Class to store a provenance step.
+
+    Each step can be instantiated passing a time or it will automatically
+    generate a timestamp. Each step can represent itself as xml or json
+
+    .. versionadded:: 3.2
+
+    """
 
     def __init__(self, title, description, timestamp=None):
         # private members
@@ -38,22 +47,57 @@ class ProvenanceStep(object):
                                timestamp, type(timestamp))
 
     def __str__(self):
+        """
+        the string representation.
+
+        :return: the string representation
+        :rtype: str
+        """
+
         return "%s: %s\n%s" % (self._time, self._title, self._description)
 
     @property
     def title(self):
+        """
+        the title.
+
+        :return: the title
+        :rtype: str
+        """
+
         return self._title
 
     @property
     def description(self):
+        """
+        the description.
+
+        :return: the description
+        :rtype: str
+        """
+
         return self._description
 
     @property
     def time(self):
+        """
+        the time.
+
+        :return: the time
+        :rtype: datetime
+        """
+
         return self._time
 
     @property
     def json(self):
+        """
+        the json representation.
+
+        :return: the json
+        :rtype: dict
+        """
+
         return {
             'title': self.title,
             'description': self.description,
@@ -62,6 +106,13 @@ class ProvenanceStep(object):
 
     @property
     def xml(self):
+        """
+        the xml string representation.
+
+        :return: the xml
+        :rtype: str
+        """
+
         xml = (
             '<provenance_step timestamp="%s">'
             '<title>%s</title>'
