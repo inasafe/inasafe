@@ -490,7 +490,7 @@ class BaseMetadata(object):
             raise KeyError('The xml type %s is not supported yet' % xml_type)
 
         try:
-            metadata_property = property_class(name, value, xml_path, xml_type)
+            metadata_property = property_class(name, value, xml_path)
             self._properties[name] = metadata_property
             self.set_last_update_to_now()
         except TypeError:

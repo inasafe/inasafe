@@ -37,7 +37,6 @@ class TestMetadataProperty(TestCase):
         test_property = DateProperty(
             'test name',
             QDate.currentDate(),
-            '',
             'gco:Date'
         )
 
@@ -50,7 +49,6 @@ class TestMetadataProperty(TestCase):
         test_property = CharacterStringProperty(
             'test string',
             'random string',
-            '',
             'gco:CharacterString'
         )
 
@@ -62,7 +60,6 @@ class TestMetadataProperty(TestCase):
         test_property = UrlProperty(
             'test url',
             QUrl('http://inasafe.org'),
-            '',
             'gmd:URL'
         )
 
@@ -73,14 +70,13 @@ class TestMetadataProperty(TestCase):
         test_property.value = 'http://inasafe.org'
 
     def test_xml_path(self):
-        valid_path = ''
+        valid_path = 'gmd:URL'
         invalid_path = 2345
 
         test_property = UrlProperty(
             'test url',
             QUrl('http://inasafe.org'),
-            valid_path,
-            'gmd:URL'
+            valid_path
         )
         # xml_path should be read-only
         with self.assertRaises(AttributeError):
@@ -90,8 +86,7 @@ class TestMetadataProperty(TestCase):
             UrlProperty(
                 'test url',
                 QUrl('http://inasafe.org'),
-                invalid_path,
-                'gmd:URL'
+                invalid_path
             )
 
     @expectedFailure
@@ -103,21 +98,15 @@ class TestMetadataProperty(TestCase):
             UrlProperty(
                 'test url',
                 QUrl('http://inasafe.org'),
-                error_path,
-                'gmd:URL'
+                error_path
             )
 
-    def test_xml_type(self):
+    def test_python_type(self):
         test_property = UrlProperty(
             'test url',
             QUrl('http://inasafe.org'),
-            '',
             'gmd:URL'
         )
-
-        # type should be read-only
-        with self.assertRaises(AttributeError):
-            test_property.xml_type = 'random string'
 
         # type should be read-only
         with self.assertRaises(AttributeError):

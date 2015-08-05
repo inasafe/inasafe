@@ -26,7 +26,7 @@ class BaseProperty(object):
     Abstract Metadata Property class, this has to be subclassed.
 
     This class represents the base for all properties. A property is a
-    container with name, value, xml_path, xml_type and allowed_python_types.
+    container with name, value, xml_path and allowed_python_types.
 
     .. versionadded:: 3.2
     """
@@ -34,11 +34,10 @@ class BaseProperty(object):
     # define as Abstract base class
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, name, value, xml_path, xml_type, allowed_python_types):
+    def __init__(self, name, value, xml_path, allowed_python_types):
 
         # private members
         self._value = value
-        self._xml_type = xml_type
         self._allowed_python_types = allowed_python_types
         self._python_type = None
         self._xml_path = None
@@ -65,7 +64,6 @@ class BaseProperty(object):
         return {
             'name': self.name,
             'value': self.value,
-            'xml_type': self.xml_type,
             'xml_path': self._xml_path,
             'python_type': self.python_type.__name__,
             'allowed_python_types': [t.__name__ for t in
@@ -112,12 +110,6 @@ class BaseProperty(object):
     def value(self, value):
         if self.is_allowed_type(value):
             self._value = value
-
-    @property
-    # there is no setter because the type of a MetadataProperty should not
-    # change overtime
-    def xml_type(self):
-        return self._xml_type
 
     @property
     # there is no setter because the type of a MetadataProperty should not

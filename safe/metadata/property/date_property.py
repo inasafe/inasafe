@@ -31,9 +31,9 @@ class DateProperty(BaseProperty):
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [QDate, datetime, date, NoneType]
 
-    def __init__(self, name, value, xml_path, xml_type):
+    def __init__(self, name, value, xml_path):
         super(DateProperty, self).__init__(
-            name, value, xml_path, xml_type, self._allowed_python_types)
+            name, value, xml_path, self._allowed_python_types)
 
     def is_valid(self, value):
         # the date types constructors already complain if a date is not valid.

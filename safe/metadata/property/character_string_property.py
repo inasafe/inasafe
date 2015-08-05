@@ -26,11 +26,11 @@ class CharacterStringProperty(BaseProperty):
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [str, unicode, int, float, NoneType]
 
-    def __init__(self, name, value, xml_path, xml_type):
+    def __init__(self, name, value, xml_path):
         if isinstance(value, str):
             value = unicode(value)
         super(CharacterStringProperty, self).__init__(
-            name, value, xml_path, xml_type, self._allowed_python_types)
+            name, value, xml_path, self._allowed_python_types)
 
     def is_valid(self, value):
         # any string sequence is valid.
