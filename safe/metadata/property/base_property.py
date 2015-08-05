@@ -28,6 +28,14 @@ class BaseProperty(object):
     This class represents the base for all properties. A property is a
     container with name, value, xml_path and allowed_python_types.
 
+    properties are instantiated by checking the xml_type in the
+    xml_path in BaseMetadata.
+
+    Each property allows certain python data types and has to have an
+    is_valid method to check if the passed value is ok.
+
+    cast_from_str and xml_value need also to be implemented in the subclasses
+
     .. versionadded:: 3.2
     """
 
