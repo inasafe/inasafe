@@ -130,7 +130,7 @@ class BaseProperty(object):
 
     @staticmethod
     def _is_valid_xml_path(xml_path):
-        # TODO (MB) implement meaningful check
+        # TODO (MB): maybe implement stronger check
         if isinstance(xml_path, basestring):
             return True
         else:

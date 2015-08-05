@@ -35,7 +35,7 @@ class UrlProperty(BaseProperty):
             name, value, xml_path, xml_type, self._allowed_python_types)
 
     def is_valid(self, value):
-        # TODO (this check could be a bit stronger)
+        # TODO (MB): this check could be a bit stronger
         if value is None or value.isValid():
             return True
         else:

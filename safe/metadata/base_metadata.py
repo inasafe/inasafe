@@ -26,7 +26,8 @@ import json
 import os
 from xml.etree import ElementTree
 
-from safe.common.exceptions import MetadataReadError
+from safe.common.exceptions import MetadataReadError, HashNotFoundError
+from safe.metadata.metadata_db_io import MetadataDbIO
 from safe.metadata.utils import (METADATA_XML_TEMPLATE,
                                  TYPE_CONVERSIONS,
                                  XML_NS,
@@ -120,7 +121,10 @@ class BaseMetadata(object):
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         # private members
         self._layer_uri = layer_uri
+        # TODO (MB): maybe use MetadataDbIO.are_metadata_file_based instead
         self._layer_is_file_based = os.path.isfile(layer_uri)
+
+        instantiate_metadata_db = False
 
         path = os.path.splitext(layer_uri)[0]
 
@@ -128,7 +132,9 @@ class BaseMetadata(object):
             if self.layer_is_file_based:
                 self._xml_uri = '%s.xml' % path
             else:
+                # xml should be stored in cacheDB
                 self._xml_uri = None
+                instantiate_metadata_db = True
         else:
             self._xml_uri = xml_uri
 
@@ -136,9 +142,15 @@ class BaseMetadata(object):
             if self.layer_is_file_based:
                 self._json_uri = '%s.json' % path
             else:
+                # json should be stored in cacheDB
                 self._json_uri = None
+                instantiate_metadata_db = True
+
         else:
             self._json_uri = json_uri
+
+        if instantiate_metadata_db:
+            self.db_io = MetadataDbIO()
 
         self._reading_ancillary_files = False
         self._properties = {}
@@ -182,6 +194,7 @@ class BaseMetadata(object):
 
     @abc.abstractmethod
     def read_json(self):
+
         if self.json_uri is None:
             metadata = self._read_json_db()
         else:
@@ -207,8 +220,10 @@ class BaseMetadata(object):
                 raise MetadataReadError(message)
 
     def _read_json_db(self):
-        metadata_str = None  # TODO (MB) implement
-        if metadata_str is None:
+        try:
+            metadata_str = self.db_io.read_metadata_from_uri(
+                self.layer_uri, 'json')
+        except HashNotFoundError:
             return {}
         try:
             metadata = json.loads(metadata_str)
@@ -236,12 +251,15 @@ class BaseMetadata(object):
 
     def _read_xml_file(self):
         # this raises a IOError if the file doesn't exist
-        root = ElementTree.parse(self.xml_uri).getroot()
+        root = ElementTree.parse(self.xml_uri)
+        root.getroot()
         return root
 
     def _read_xml_db(self):
-        metadata_str = None  # TODO (MB) implement
-        if metadata_str is None:
+        try:
+            metadata_str = self.db_io.read_metadata_from_uri(
+                self.layer_uri, 'xml')
+        except HashNotFoundError:
             return None
         root = ElementTree.fromstring(metadata_str)
         return root
@@ -326,10 +344,7 @@ class BaseMetadata(object):
             if save_xml:
                 self.write_as(self.xml_uri)
         else:
-            if save_json:
-                self.write_to_db('json')
-            if save_xml:
-                self.write_to_db('xml')
+            self.write_to_db(save_json, save_xml)
 
     def write_as(self, destination_path):
         file_format = os.path.splitext(destination_path)[1][1:]
@@ -340,10 +355,16 @@ class BaseMetadata(object):
 
         return metadata
 
-    def write_to_db(self, file_format):
-        metadata = self.get_writable_metadata(file_format)
-        # TODO (MB) implement this
-        return metadata
+    def write_to_db(self, save_json=True, save_xml=True):
+        metadata_json = None
+        metadata_xml = None
+        if save_json:
+            metadata_json = self.get_writable_metadata('json')
+        if save_xml:
+            metadata_xml = self.get_writable_metadata('xml')
+        self.db_io.write_metadata_for_uri(
+            self.layer_uri, metadata_json, metadata_xml)
+        return metadata_json, metadata_xml
 
     def get_writable_metadata(self, file_format):
         if file_format == 'json':

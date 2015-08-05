@@ -24,7 +24,6 @@ from safe.metadata.utils import reading_ancillary_files
 
 
 class GenericLayerMetadata(BaseMetadata):
-
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         # initialize base class
         super(GenericLayerMetadata, self).__init__(
@@ -45,12 +44,16 @@ class GenericLayerMetadata(BaseMetadata):
 
     def read_json(self):
         with reading_ancillary_files(self):
-            super(GenericLayerMetadata, self).read_json()
+            metadata = super(GenericLayerMetadata, self).read_json()
+
+        return metadata
 
     def read_xml(self):
         with reading_ancillary_files(self):
-            super(GenericLayerMetadata, self).read_xml()
+            root = super(GenericLayerMetadata, self).read_xml()
+
+        return root
 
     def update_report(self):
-        # TODO (MB) implement this by reading the kw and definitions.py
+        # TODO (MB): implement this by reading the kw and definitions.py
         self.report = self.report

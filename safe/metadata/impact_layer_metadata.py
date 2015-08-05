@@ -97,6 +97,8 @@ class ImpactLayerMetadata(BaseMetadata):
             if 'summary_data' in metadata:
                 self.summary_data = metadata['summary_data']
 
+        return metadata
+
     @property
     def xml(self):
         root = super(ImpactLayerMetadata, self).xml
@@ -118,6 +120,7 @@ class ImpactLayerMetadata(BaseMetadata):
             root = super(ImpactLayerMetadata, self).read_xml()
             if root is not None:
                 self._read_provenance_from_xml(root)
+        return root
 
     def _read_provenance_from_xml(self, root):
         path = self._special_properties['provenance']

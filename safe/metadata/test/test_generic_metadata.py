@@ -20,6 +20,7 @@ __date__ = '12/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import uuid
 from unittest import TestCase
 
 from safe.common.utilities import unique_filename
@@ -51,9 +52,41 @@ class TestGenericMetadata(TestCase):
 
         self.assertEquals(expected_metadata, metadata.json)
 
-    def generate_test_metadata(self):
+    def test_db_based_metadata(self):
+        layer_uri = 'test_db_layer-%s' % uuid.uuid4()
+        metadata = self.generate_test_metadata(layer_uri)
+        expected_json = metadata.json
+        expected_xml = metadata.xml
+
+        try:
+            # save to DB
+            metadata.save()
+            # reread from DB
+            metadata.read_json()
+            metadata.read_xml()
+
+            self.assertEquals(expected_json, metadata.json)
+            self.assertEquals(expected_xml, metadata.xml)
+
+            metadata.abstract = 'lalala'
+            metadata.title = 'new test title'
+            metadata.save()
+
+            # reread from DB
+            metadata = self.generate_test_metadata(layer_uri)
+            self.assertNotEqual(expected_json, metadata.json)
+            self.assertNotEqual(expected_xml, metadata.xml)
+
+            self.assertEquals(metadata.abstract, 'lalala')
+            self.assertEquals(metadata.title, 'new test title')
+        finally:
+            metadata.db_io.delete_metadata_for_uri(layer_uri)
+
+    def generate_test_metadata(self, layer=None):
         # if you change this you need to update GENERIC_TEST_FILE_JSON
-        metadata = GenericLayerMetadata('random_layer_id')
+        if layer is None:
+            layer = 'random_layer_id'
+        metadata = GenericLayerMetadata(layer)
         path = 'gmd:MD_Metadata/gmd:dateStamp/gco:CharacterString'
         # using str
         test_value = 'Random string'

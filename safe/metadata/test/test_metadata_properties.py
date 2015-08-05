@@ -96,7 +96,7 @@ class TestMetadataProperty(TestCase):
 
     @expectedFailure
     def test_xml_path_stronger(self):
-        # TODO (MB) remove expected failure when a better _is_valid_path is
+        # TODO (MB): remove expected failure when a better _is_valid_path is
         # implemented
         error_path = '\\test\\path'
         with self.assertRaises(MetadataInvalidPathError):
