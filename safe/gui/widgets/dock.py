@@ -189,7 +189,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.connect_layer_listener()
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
-        self.set_ok_button_status()
+        self.set_run_button_status()
 
         self.read_settings()  # get_project_layers called by this
 
@@ -741,7 +741,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         del index
         self.get_functions()
         self.toggle_aggregation_combo()
-        self.set_ok_button_status()
+        self.set_run_button_status()
         self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
@@ -758,7 +758,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         del index
         self.get_functions()
         self.toggle_aggregation_combo()
-        self.set_ok_button_status()
+        self.set_run_button_status()
         self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
@@ -786,7 +786,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.set_function_options_status()
 
         self.toggle_aggregation_combo()
-        self.set_ok_button_status()
+        self.set_run_button_status()
 
     def toggle_aggregation_combo(self):
         """Toggle the aggregation combo enabled status.
@@ -806,8 +806,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.cboAggregation.setCurrentIndex(0)
             self.cboAggregation.setEnabled(False)
 
-    def set_ok_button_status(self):
-        """Helper function to set the ok button status based on form validity.
+    def set_run_button_status(self):
+        """Helper function to set the run button status based on form validity.
         """
         button = self.pbnRunStop
         flag, message = self.validate()
@@ -1238,7 +1238,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.keyword_io.write_keywords(
             self.analysis.aggregator.layer, old_keywords)
         self.hide_busy()
-        self.set_ok_button_status()
+        self.set_run_button_status()
 
     def show_busy(self):
         """Hide the question group box and enable the busy cursor."""
@@ -1950,6 +1950,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         settings = QSettings()
         self.extent.hide_next_analysis_extent()
+        # check if we actually have correct hazard, exposure and IF
+        # if we dont we exite immediately to avoid cluttering up the display
+        # with unneeded status messages...
+        flag, _ = self.validate()
+        if not flag:
+            return
+
+        # IF could potentially run - lets see if the extents will work well...
         valid, extents = self.validate_extents()
         if valid:
             self.extent.show_next_analysis_extent(extents)
