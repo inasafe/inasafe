@@ -22,6 +22,7 @@ import logging
 
 from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
 from PyQt4 import QtGui
+from PyQt4.QtTest import QTest
 from PyQt4.QtCore import Qt, QPoint
 
 from safe.test.utilities import get_qgis_app

@@ -171,16 +171,9 @@ class TestDock(TestCase):
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
         DOCK.define_user_analysis_extent(rectangle, crs)
 
-        # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
-
-        # Check for an error containing InsufficientOverlapError
-        expected_string = 'InsufficientOverlapError'
-        message = 'Result not as expected %s not in: %s' % (
-            expected_string, result)
-        # This is the expected impact number
-        self.assertIn(expected_string, result, message)
+        # Check that run button is disabled because extents do not overlap
+        message = 'Run button was not disabled'
+        self.assertFalse(button.isEnabled(), message)
 
     # disabled this test until further coding
     def xtest_print_map(self):
