@@ -325,6 +325,15 @@ exposure_land_cover = {
         ' hazard. This might include crops, forest and urban areas. ')
 }
 
+exposure_area = {
+    'key': 'area',
+    'name': tr('Area'),
+    'description': tr(
+        'The <b>area</b> exposure data describes features on '
+        'the surface of the earth that might be exposed to a particular '
+        ' hazard. This currently include urban areas. ')
+}
+
 exposure_people_in_building = {
     'key': 'people_in_building',
     'name': tr('People in Buildings'),
@@ -368,7 +377,8 @@ exposure_all = [
     exposure_people_in_building,
     exposure_population,
     exposure_road,
-    exposure_structure
+    exposure_structure,
+    exposure_area
 ]
 
 exposure = {
@@ -382,7 +392,8 @@ exposure = {
         exposure_people_in_building,
         exposure_population,
         exposure_road,
-        exposure_structure
+        exposure_structure,
+        exposure_area
     ]
 }
 
