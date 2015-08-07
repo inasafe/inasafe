@@ -85,13 +85,15 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'generic',
-            'hazard_category': 'multiple_event',
+            'hazard_category': 'single_event',
             'field': 'level',
             'vector_hazard_classification': 'generic_vector_hazard_classes',
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)
+        function_title = ImpactFunctionManager.get_function_title(
+                        impact_functions[0])
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)

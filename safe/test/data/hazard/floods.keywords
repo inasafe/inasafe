@@ -1,12 +1,11 @@
 field: FLOODPRONE
 hazard: flood
-hazard_category: single_event
+hazard_category: multiple_event
 keyword_version: 3.2
 layer_geometry: polygon
 layer_mode: classified
 layer_purpose: hazard
 source: NBS
-title: floods
+title: Flood
 url: http://nbs.go.tz
-value_map: {'dry': ['NO'], 'wet': ['YES']}
-vector_hazard_classification: flood_vector_hazard_classes
+vector_hazard_classification: generic_vector_hazard_classes

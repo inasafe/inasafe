@@ -172,14 +172,15 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[exposure: land_cover
-field: id
+<![CDATA[exposure: area
+field: type
 keyword_version: 3.2
 layer_geometry: polygon
 layer_mode: classified
 layer_purpose: exposure
-source: nbs
-title: land
+source: NBS
+title: Areas
+url: http://nbs.go.tz
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

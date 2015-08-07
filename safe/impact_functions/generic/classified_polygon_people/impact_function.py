@@ -103,7 +103,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE):
         impact_fields.append(QgsField(self.target_field, QVariant.Int))
         writer = QgsVectorFileWriter(
             filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
-        print filename
 
         # iterate over all exposure polygons and calculate the impact
         all_areas = {}
