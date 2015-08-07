@@ -388,6 +388,7 @@ class Plugin(object):
         # Import dock here as it needs to be imported AFTER i18n is set up
         from safe.gui.widgets.dock import Dock
         self.dock_widget = Dock(self.iface)
+        self.dock_widget.setObjectName('InaSAFE-Dock')
         self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock_widget)
         legend_tab = self.iface.mainWindow().findChild(QApplication, 'Legend')
         if legend_tab:
@@ -533,6 +534,9 @@ class Plugin(object):
             self.dock_widget.extent.clear_user_analysis_extent)
         widget.extent_defined.connect(
             self.dock_widget.define_user_analysis_extent)
+        # This ensures that run button state is updated on dialog close
+        widget.extent_selector_closed.connect(
+            self.dock_widget.show_next_analysis_extent)
         # Needs to be non modal to support hide -> interact with map -> show
         widget.show()  # non modal
 

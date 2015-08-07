@@ -678,7 +678,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.cboFunction.currentIndex() == -1:
             message = self.not_ready_message()
             return False, message
-
         # Now check if extents are ok for #1811
         else:
             message = self.ready_message()
@@ -1877,6 +1876,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         function_id = '' if item_data is None else str(item_data)
         return function_id
 
+    @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
     def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
 
@@ -1951,10 +1951,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         settings = QSettings()
         self.extent.hide_next_analysis_extent()
         # check if we actually have correct hazard, exposure and IF
-        # if we dont we exite immediately to avoid cluttering up the display
+        # if we don't we exit immediately to avoid cluttering up the display
         # with unneeded status messages...
         flag, _ = self.validate()
         if not flag:
+            self.pbnRunStop.setEnabled(False)
             return
 
         # IF could potentially run - lets see if the extents will work well...

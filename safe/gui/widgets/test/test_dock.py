@@ -163,14 +163,14 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
+        settings = QtCore.QSettings()
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposureView')
         # Zoom to an area where there is no overlap with layers
-        rectangle = QgsRectangle(
-            106.635434302702, -6.101567666986,
-            106.635434302817, -6.101567666888)
+        rectangle = QgsRectangle(106.849, -6.153, 106.866, -6.134)
         CANVAS.setExtent(rectangle)
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
         DOCK.define_user_analysis_extent(rectangle, crs)
-
+        DOCK.show_next_analysis_extent()
         # Check that run button is disabled because extents do not overlap
         message = 'Run button was not disabled'
         self.assertFalse(button.isEnabled(), message)
