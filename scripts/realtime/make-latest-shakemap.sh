@@ -2,7 +2,7 @@
 
 # We should call this from inasafe root:
 # e.g. scripts/realtime/make-latest-shakemap.sh /home/realtime/shakemaps
-source run-env-realtime.sh
+echo "Execute this script after sourcing with correct env."
 
 if [ -n "$1" ];
 then

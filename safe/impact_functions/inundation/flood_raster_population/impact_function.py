@@ -160,10 +160,6 @@ class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
         self.validate()
         self.prepare()
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard  # Flood inundation
-        exposure_layer = self.exposure
-
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
         thresholds = self.parameters['thresholds'].value
@@ -173,13 +169,13 @@ class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
             'Expected thresholds to be a list. Got %s' % str(thresholds))
 
         # Extract data as numeric arrays
-        data = hazard_layer.get_data(nan=True)  # Depth
+        data = self.hazard.layer.get_data(nan=True)  # Depth
         no_data_warning = False
         if has_no_data(data):
             no_data_warning = True
 
         # Calculate impact as population exposed to depths > max threshold
-        population = exposure_layer.get_data(nan=True, scaling=True)
+        population = self.exposure.layer.get_data(nan=True, scaling=True)
         if has_no_data(population):
             no_data_warning = True
 
@@ -283,8 +279,8 @@ class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
         # Create raster object and return
         raster = Raster(
             impact,
-            projection=hazard_layer.get_projection(),
-            geotransform=hazard_layer.get_geotransform(),
+            projection=self.hazard.layer.get_projection(),
+            geotransform=self.hazard.layer.get_geotransform(),
             name=tr('Population which %s') % (
                 self.impact_function_manager
                 .get_function_title(self).lower()),

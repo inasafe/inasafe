@@ -10,6 +10,7 @@ branches:
   only:
     - master
     - develop
+    - experimental
 
 -before_install:
   - sudo apt-get -qq -y update

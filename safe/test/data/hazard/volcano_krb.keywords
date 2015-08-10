@@ -1,10 +1,11 @@
-volcano_name_field: volcano
-hazard_category: multiple_event
-title: Volcano KRB
-hazard: volcano
 field: KRB
+hazard: volcano
+hazard_category: multiple_event
+keyword_version: 3.2
+layer_geometry: polygon
+layer_mode: classified
+layer_purpose: hazard
+title: Volcano KRB
 value_map: {'high': ['Kawasan Rawan Bencana III'], 'medium': ['Kawasan Rawan Bencana II'], 'low': ['Kawasan Rawan Bencana I']}
 vector_hazard_classification: volcano_vector_hazard_classes
-layer_geometry: polygon
-layer_purpose: hazard
-layer_mode: classified
+volcano_name_field: volcano

@@ -1,6 +1,8 @@
 [buildings_osm_4326]
-datatype: osm
-category: exposure
-subcategory: structure
-purpose: dki
 title: buildings_osm_4326
+structure_class_field: FLOODED
+keyword_version: 3.2
+layer_geometry: polygon
+layer_purpose: exposure
+layer_mode: classified
+exposure: structure

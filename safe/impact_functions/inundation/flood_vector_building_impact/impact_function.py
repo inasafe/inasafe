@@ -46,6 +46,8 @@ class FloodPolygonBuildingFunction(
 
     def __init__(self):
         super(FloodPolygonBuildingFunction, self).__init__()
+        # The 'wet' variable
+        self.wet = 'wet'
 
     def notes(self):
         """Return the notes section of the report.
@@ -53,8 +55,6 @@ class FloodPolygonBuildingFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        affected_field = self.parameters['affected_field'].value
-        affected_value = self.parameters['affected_value'].value
         return [
             {
                 'content': tr('Notes'),
@@ -63,8 +63,9 @@ class FloodPolygonBuildingFunction(
             {
                 'content': tr(
                     'Buildings are said to be inundated when in a region with '
-                    'field "%s" = "%s" .') % (
-                        affected_field, affected_value)
+                    'field "%s" in "%s" .') % (
+                        self.hazard_class_attribute,
+                        ', '.join(self.hazard_class_mapping[self.wet]))
             }
         ]
 
@@ -73,41 +74,38 @@ class FloodPolygonBuildingFunction(
         self.validate()
         self.prepare()
 
-        # Get the IF parameters
-        building_type_field = self.parameters['building_type_field'].value
-        affected_field = self.parameters['affected_field'].value
-        affected_value = self.parameters['affected_value'].value
-
-        # Extract data
-        hazard_layer = self.hazard    # Flood
-        exposure_layer = self.exposure  # Roads
+        # Get parameters from layer's keywords
+        self.hazard_class_attribute = self.hazard.keyword('field')
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
+        self.exposure_class_attribute = self.exposure.keyword(
+            'structure_class_field')
 
         # Prepare Hazard Layer
-        hazard_layer = hazard_layer.get_layer()
-        hazard_provider = hazard_layer.dataProvider()
+        hazard_provider = self.hazard.layer.dataProvider()
 
         # Check affected field exists in the hazard layer
-        affected_field_index = hazard_provider.fieldNameIndex(affected_field)
+        affected_field_index = hazard_provider.fieldNameIndex(
+            self.hazard_class_attribute)
         if affected_field_index == -1:
-            message = tr('Field "%s" is not present in the attribute table of '
-                         'the hazard layer. Please change the Affected Field '
-                         'parameter in the IF Option.') % affected_field
+            message = tr(
+                'Field "%s" is not present in the attribute table of the '
+                'hazard layer. Please change the Affected Field parameter in '
+                'the IF Option.') % self.hazard_class_attribute
             raise GetDataError(message)
 
-        # Prepare Exposure Layer
-        exposure_layer = exposure_layer.get_layer()
-        srs = exposure_layer.crs().toWkt()
-        exposure_provider = exposure_layer.dataProvider()
+        srs = self.exposure.layer.crs().toWkt()
+        exposure_provider = self.exposure.layer.dataProvider()
         exposure_fields = exposure_provider.fields()
 
-        # Check building_type_field exists in exposure layer
+        # Check self.exposure_class_attribute exists in exposure layer
         building_type_field_index = exposure_provider.fieldNameIndex(
-            building_type_field)
+            self.exposure_class_attribute)
         if building_type_field_index == -1:
             message = tr(
                 'Field "%s" is not present in the attribute table of '
                 'the exposure layer. Please change the Building Type '
-                'Field parameter in the IF Option.') % building_type_field
+                'Field parameter in the IF Option.'
+            ) % self.exposure_class_attribute
             raise GetDataError(message)
 
         # If target_field does not exist, add it:
@@ -139,7 +137,7 @@ class FloodPolygonBuildingFunction(
         transform = QgsCoordinateTransform(
             QgsCoordinateReferenceSystem(
                 'EPSG:%i' % self._requested_extent_crs),
-            hazard_layer.crs()
+            self.hazard.layer.crs()
         )
         projected_extent = transform.transformBoundingBox(requested_extent)
         request = QgsFeatureRequest()
@@ -149,17 +147,13 @@ class FloodPolygonBuildingFunction(
         #   1) Filter from H inundated features
         #   2) Mark buildings as inundated (1) or not inundated (0)
 
-        affected_field_type = hazard_provider.fields()[
-            affected_field_index].typeName()
-        if affected_field_type in ['Real', 'Integer']:
-            affected_value = float(affected_value)
-
         # make spatial index of affected polygons
         hazard_index = QgsSpatialIndex()
         hazard_geometries = {}  # key = feature id, value = geometry
         has_hazard_objects = False
-        for feature in hazard_layer.getFeatures(request):
-            if feature[affected_field_index] != affected_value:
+        for feature in self.hazard.layer.getFeatures(request):
+            value = feature[affected_field_index]
+            if value not in self.hazard_class_mapping[self.wet]:
                 continue
             hazard_index.insertFeature(feature)
             hazard_geometries[feature.id()] = QgsGeometry(feature.geometry())
@@ -168,14 +162,14 @@ class FloodPolygonBuildingFunction(
         if not has_hazard_objects:
             message = tr(
                 'There are no objects in the hazard layer with %s '
-                'value=%s. Please check your data or use another '
+                'value in %s. Please check your data or use another '
                 'attribute.') % (
-                    affected_field,
-                    affected_value)
+                    self.hazard_class_attribute,
+                    ', '.join(self.hazard_class_mapping[self.wet]))
             raise GetDataError(message)
 
         features = []
-        for feature in exposure_layer.getFeatures(request):
+        for feature in self.exposure.layer.getFeatures(request):
             building_geom = feature.geometry()
             affected = False
             # get tentative list of intersecting hazard features
@@ -208,7 +202,7 @@ class FloodPolygonBuildingFunction(
         ])
         buildings_data = building_layer.getFeatures()
         building_type_field_index = building_layer.fieldNameIndex(
-            building_type_field)
+            self.exposure_class_attribute)
         for building in buildings_data:
             record = building.attributes()
             building_type = record[building_type_field_index]

@@ -46,10 +46,8 @@ class ContinuousVHContinuousVE(
     # pylint: disable=W0221
     def hazard(self, value):
         ImpactFunction.hazard.fset(self, value)
-        self.set_up_hazard_layer(value)
 
     @ImpactFunction.exposure.setter
     # pylint: disable=W0221
     def exposure(self, value):
         ImpactFunction.exposure.fset(self, value)
-        self.set_up_exposure_layer(value)

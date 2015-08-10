@@ -1,8 +1,9 @@
-hazard_category: single_event
-title: Continuous Flood
-hazard: flood
 continuous_hazard_unit: metres
-source: Akbar Gumbira
+hazard: flood
+hazard_category: single_event
+keyword_version: 3.2
 layer_geometry: raster
-layer_purpose: hazard
 layer_mode: continuous
+layer_purpose: hazard
+source: Akbar Gumbira
+title: Continuous Flood

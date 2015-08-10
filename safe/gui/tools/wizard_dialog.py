@@ -94,6 +94,7 @@ from safe_extras.parameters.group_parameter import GroupParameter
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.impact_statistics.function_options_dialog import (
     FunctionOptionsDialog)
+from safe.utilities.unicode import get_unicode
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -129,7 +130,7 @@ category_question_aggregation = QApplication.translate(
 # Constants for hazard_categories
 hazard_category_question = QApplication.translate(
     'WizardDialog',
-    'What <b>hazard scenario</b> does this layer represent? '
+    'What type of <b>hazard scenario</b> does this layer represent? '
     'Is it a single event or a zone of multiple hazards?')
 
 # Constants for hazards
@@ -180,9 +181,9 @@ unit_question = QApplication.translate(
 allow_resampling_question = QApplication.translate(
     'WizardDialog',
     'You have selected <b>%s %s</b> for this <b>%s data</b> raster layer. '
-    'For some exposure types you may want InaSAFE to not resample '
-    'the raster to the hazard layer resolution during analyses. Please '
-    'select the check box below if you want to set the <i>allow_resample</i> '
+    'For some exposure types you may not want InaSAFE to resample the raster '
+    'to the hazard layer resolution during analyses. Please select the '
+    'check box below if you want to set the <i>allow_resampling</i> '
     'keyword to <i>False</i>.')   # (subcategory, category, layer_mode)
 
 # Constants for subcategory-unit relations
@@ -594,9 +595,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.if_params = None
         self.analysis_handler = None
 
+        # Constants
+        self.keyword_creation_wizard_name = 'InaSAFE Keywords Creation Wizard'
+        self.ifcw_name = 'InaSAFE Impact Function Centric Wizard'
+
     def set_mode_label_to_keywords_creation(self):
         """Set the mode label to the Keywords Creation/Update mode
         """
+        self.setWindowTitle(self.keyword_creation_wizard_name)
         if self.get_existing_keyword('layer_purpose'):
             mode_name = (self.tr(
                 'Keywords update wizard for layer <b>%s</b>'
@@ -610,6 +616,7 @@ class WizardDialog(QDialog, FORM_CLASS):
     def set_mode_label_to_ifcw(self):
         """Set the mode label to the IFCW
         """
+        self.setWindowTitle(self.ifcw_name)
         self.lblSubtitle.setText(self.tr('Guided impact assessment wizard'))
 
     def set_keywords_creation_mode(self, layer=None):
@@ -1209,16 +1216,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         laymod = self.selected_layermode()['key']
         if category == layer_purpose_hazard:
             hazcat = self.selected_hazard_category()['key']
-            units_for_layer = self.impact_function_manager\
-                .continuous_hazards_units_for_layer(subcat,
-                                                    laygeo,
-                                                    laymod,
-                                                    hazcat)
+            units_for_layer = self.impact_function_manager.\
+                continuous_hazards_units_for_layer(
+                    subcat, laygeo, laymod, hazcat)
         else:
             units_for_layer = self.impact_function_manager\
-                .exposure_units_for_layer(subcat,
-                                          laygeo,
-                                          laymod)
+                .exposure_units_for_layer(
+                    subcat, laygeo, laymod)
         for unit_for_layer in units_for_layer:
             # if (self.get_layer_geometry_id() == 'raster' and
             #         'constraint' in unit_for_layer and
@@ -1423,12 +1427,12 @@ class WizardDialog(QDialog, FORM_CLASS):
     # STEP_KW_RESAMPLE
     # ===========================
 
-    def selected_allowresample(self):
-        """Obtain the allow_resample state selected by user.
+    def selected_allowresampling(self):
+        """Obtain the allow_resampling state selected by user.
 
         .. note:: Returns none if not set or not relevant
 
-        :returns: Value of the allow_resample or None for not-set.
+        :returns: Value of the allow_resampling or None for not-set.
         :rtype: boolean or None
         """
         if not is_raster_layer(self.layer):
@@ -1449,11 +1453,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         subcategory = self.selected_subcategory()
         layer_mode = self.selected_layermode()
         self.lblSelectAllowResample.setText(
-            allow_resampling_question % (subcategory['name'],
-                                         category['name'], layer_mode['name']))
+            allow_resampling_question % (
+                subcategory['name'], category['name'], layer_mode['name']))
 
         # Set value based on existing keyword (if already assigned)
-        if self.get_existing_keyword('allow_resample') is False:
+        if self.get_existing_keyword('allow_resampling') is False:
             self.chkAllowResample.setChecked(True)
 
     # ===========================
@@ -1505,8 +1509,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         default_classes = classification['classes']
         if is_raster_layer(self.layer):
             self.lblClassify.setText(classify_raster_question % (
-                subcategory['name'], category['name'],
-                classification['name']))
+                subcategory['name'], category['name'], classification['name']))
             ds = gdal.Open(self.layer.source(), GA_ReadOnly)
             unique_values = numpy.unique(numpy.array(
                 ds.GetRasterBand(1).ReadAsArray()))
@@ -1527,8 +1530,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         for default_class in default_classes:
             assigned_values[default_class['name']] = list()
         for unique_value in unique_values:
-            if unique_value is None or isinstance(unique_value,
-                                                  QPyNullVariant):
+            if unique_value is None or isinstance(
+                    unique_value, QPyNullVariant):
                 # Don't classify features with NULL value
                 continue
             value_as_string = unicode(unique_value)
@@ -1575,8 +1578,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             except ValueError:
                 return
         for unique_value in unique_values:
-            if unique_value is None or isinstance(unique_value,
-                                                  QPyNullVariant):
+            if unique_value is None or isinstance(
+                    unique_value, QPyNullVariant):
                 # Don't classify features with NULL value
                 continue
             # check in value map
@@ -1787,7 +1790,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type widget: QComboBox
 
         :param field_name: Name of the field to take the values from
-        :type widget: str
+        :type field_name: str
         """
         fields = self.layer.dataProvider().fields()
         field_index = fields.indexFromName(field_name)
@@ -2076,15 +2079,24 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Source tab."""
         # Just set values based on existing keywords
         source = self.get_existing_keyword('source')
-        self.leSource.setText(source)
+        if source or source == 0:
+            self.leSource.setText(get_unicode(source))
+
         source_scale = self.get_existing_keyword('scale')
-        self.leSource_scale.setText(source_scale)
+        if source_scale or source_scale == 0:
+            self.leSource_scale.setText(get_unicode(source_scale))
+
         source_date = self.get_existing_keyword('date')
-        self.leSource_date.setText(source_date)
+        if source_date or source_date == 0:
+            self.leSource_date.setText(get_unicode(source_date))
+
         source_url = self.get_existing_keyword('url')
-        self.leSource_url.setText(source_url)
+        if source_url or source_url == 0:
+            self.leSource_url.setText(get_unicode(source_url))
+
         source_license = self.get_existing_keyword('license')
-        self.leSource_license.setText(source_license)
+        if source_license or source_license == 0:
+            self.leSource_license.setText(get_unicode(source_license))
 
     # ===========================
     # STEP_KW_TITLE
@@ -2186,8 +2198,8 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the category selection changes.
         """
         self.pbnNext.click()
-    # pylint: enable=W0613
 
+    # pylint: enable=W0613
     # noinspection PyPep8Naming
     def on_rbHazSingle_toggled(self):
         """Reload the functions table
@@ -2265,9 +2277,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 item.setData(RoleFunctions, functions)
                 item.setData(RoleHazard, h)
                 item.setData(RoleExposure, e)
-                self.tblFunctions1.setItem(exposures.index(e),
-                                           hazards.index(h),
-                                           item)
+                self.tblFunctions1.setItem(
+                    exposures.index(e), hazards.index(h), item)
         self.pbnNext.setEnabled(False)
 
     def set_widgets_step_fc_function_1(self):
@@ -2308,9 +2319,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not functions:
             self.lblAvailableFunctions2.clear()
         else:
-            txt = "Available functions: " + ", ".join(
+            text = "Available functions: " + ", ".join(
                 [f['name'] for f in functions])
-            self.lblAvailableFunctions2.setText(txt)
+            self.lblAvailableFunctions2.setText(text)
         self.pbnNext.setEnabled(True)
 
         # Put a dot to the selected cell - note there is no way
@@ -2395,8 +2406,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 hc = hazard_layer_geometries[col]
                 ec = exposure_layer_geometries[row]
                 functions = self.impact_function_manager\
-                    .functions_for_constraint(h['key'], e['key'],
-                                              hc['key'], ec['key'])
+                    .functions_for_constraint(
+                        h['key'], e['key'], hc['key'], ec['key'])
                 item = QtGui.QTableWidgetItem()
                 if len(functions):
                     bgcolor = QtGui.QColor(120, 255, 120)
@@ -2508,6 +2519,9 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         icon_path = resources_path('img', 'wizard',
                                    'keyword-category-aggregation.svg')
+        # Temporarily hide aggregation icon until we have one suitable
+        # (as requested in a comment to PR #2060)
+        icon_path = None
         self.lblIconIFCWAggregationOrigin.setPixmap(QPixmap(icon_path))
         self.lblIconIFCWAggregationFromCanvas.setPixmap(QPixmap(icon_path))
         self.lblIconIFCWAggregationFromBrowser.setPixmap(QPixmap(icon_path))
@@ -2545,7 +2559,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type layer_purpose: string
 
         :param keywords: The layer keywords
-        :type keywords: KeywordIO | None
+        :type keywords: None, dict
 
         :returns: True if layer is appropriate for the selected role
         :rtype: boolean
@@ -2719,7 +2733,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.rbHazLayerFromCanvas.setText(QApplication.translate(
                 'WizardDialog',
                 'I would like to use a hazard layer already loaded in QGIS\n'
-                '(launches the hazard data registration wizard if needed)'))
+                '(launches the %s for hazard if needed)'
+            ) % self.keyword_creation_wizard_name)
             self.rbHazLayerFromCanvas.setEnabled(True)
             self.rbHazLayerFromCanvas.click()
         else:
@@ -2831,9 +2846,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 geom_type = 'line'
 
             # hide password in the layer source
-            source = re.sub(r'password=\'.*\'',
-                            r'password=*****',
-                            layer.source())
+            source = re.sub(
+                r'password=\'.*\'', r'password=*****', layer.source())
 
             label_text = """<html>
                 This layer has no valid keywords assigned, so we don't know
@@ -3109,9 +3123,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 geom_type = 'line'
 
             # hide password in the layer source
-            source = re.sub(r'password=\'.*\'',
-                            r'password=*****',
-                            layer.source())
+            source = re.sub(
+                r'password=\'.*\'', r'password=*****', layer.source())
 
             desc = """
                 This layer has no valid keywords assigned<br/><br/>
@@ -3170,7 +3183,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 'WizardDialog',
                 'I would like to use an exposure layer already loaded in QGIS'
                 '\n'
-                '(launches the hazard data registration wizard if needed)'))
+                '(launches the %s for exposure if needed)'
+            ) % self.keyword_creation_wizard_name)
             self.rbExpLayerFromCanvas.setEnabled(True)
             self.rbExpLayerFromCanvas.click()
         else:
@@ -3297,9 +3311,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         extent_a = layer_a.extent()
         extent_b = layer_b.extent()
         if layer_a.crs() != layer_b.crs():
-            coordTransform = QgsCoordinateTransform(layer_a.crs(),
-                                                    layer_b.crs())
-            extent_b = (coordTransform.transform(
+            coord_transform = QgsCoordinateTransform(
+                layer_a.crs(), layer_b.crs())
+            extent_b = (coord_transform.transform(
                 extent_b, QgsCoordinateTransform.ReverseTransform))
         return extent_a.intersects(extent_b)
 
@@ -3349,9 +3363,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.lstCanvasAggLayers.count():
             self.rbAggLayerFromCanvas.setText(QApplication.translate(
                 'WizardDialog',
-                'I would like to use an aggregation layer already loaded '
-                'in QGIS\n'
-                '(launches the hazard data registration wizard if needed)'))
+                'I would like to use a hazard layer already loaded in QGIS\n'
+                '(launches the %s for aggregation if needed)'
+            ) % self.keyword_creation_wizard_name)
             self.rbAggLayerFromCanvas.setEnabled(True)
             self.rbAggLayerFromCanvas.click()
         else:
@@ -3718,9 +3732,10 @@ class WizardDialog(QDialog, FORM_CLASS):
             return my_string
 
         for p in params:
-            html += ('<tr>'
-                     '  <td><b>%s</b></td><td></td><td>%s</td>'
-                     '</tr>' % (humanize(p[0]), p[1]))
+            html += (
+                '<tr>'
+                '  <td><b>%s</b></td><td></td><td>%s</td>'
+                '</tr>' % (humanize(p[0]), p[1]))
         html += '</table>'
 
         self.lblSummary.setText(html)
@@ -4262,7 +4277,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 else:
                     new_step = step_kw_layermode
             else:
-                if self.selected_allowresample() is not None:
+                if self.selected_allowresampling() is not None:
                     new_step = step_kw_resample
                 else:
                     new_step = step_kw_unit
@@ -4280,7 +4295,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 else:
                     new_step = step_kw_layermode
             else:
-                if self.selected_allowresample() is not None:
+                if self.selected_allowresampling() is not None:
                     new_step = step_kw_resample
                 else:
                     new_step = step_kw_unit
@@ -4403,8 +4418,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 key = exposure_unit['key']
             keywords[key] = self.selected_unit()['key']
-        if self.selected_allowresample() is not None:
-            keywords['allow_resample'] = self.selected_allowresample()
+        if self.selected_allowresampling() is not None:
+            keywords['allow_resampling'] = (
+                self.selected_allowresampling() and 'true' or 'false')
         if self.lstFields.currentItem():
             field_keyword = self.field_keyword_for_the_layer()
             keywords[field_keyword] = self.lstFields.currentItem().text()
@@ -4420,17 +4436,17 @@ class WizardDialog(QDialog, FORM_CLASS):
         for key in extra_keywords:
             keywords[key] = extra_keywords[key]
         if self.leSource.text():
-            keywords['source'] = self.leSource.text()
+            keywords['source'] = get_unicode(self.leSource.text())
         if self.leSource_url.text():
-            keywords['url'] = self.leSource_url.text()
+            keywords['url'] = get_unicode(self.leSource_url.text())
         if self.leSource_scale.text():
-            keywords['scale'] = self.leSource_scale.text()
+            keywords['scale'] = get_unicode(self.leSource_scale.text())
         if self.leSource_date.text():
-            keywords['date'] = self.leSource_date.text()
+            keywords['date'] = get_unicode(self.leSource_date.text())
         if self.leSource_license.text():
-            keywords['license'] = self.leSource_license.text()
+            keywords['license'] = get_unicode(self.leSource_license.text())
         if self.leTitle.text():
-            keywords['title'] = self.leTitle.text()
+            keywords['title'] = get_unicode(self.leTitle.text())
 
         return keywords
 

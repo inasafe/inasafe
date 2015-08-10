@@ -1,6 +1,7 @@
-exposure_unit: count
-title: Population
-layer_geometry: raster
-layer_purpose: exposure
-layer_mode: continuous
 exposure: population
+exposure_unit: count
+keyword_version: 3.2
+layer_geometry: raster
+layer_mode: continuous
+layer_purpose: exposure
+title: Population

@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
+from safe.storage.safe_layer import SafeLayer
 
 __author__ = 'lucernae'
 __filename__ = 'test_classified_hazard_building'
@@ -46,8 +47,8 @@ class TestContinuousHazardPopulationFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact = function.impact
 

@@ -11,22 +11,22 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.impact_functions.volcanic.volcano_point_building\
-    .parameter_definitions import (
-        distance, volcano_name_attribute)
+    .parameter_definitions import distance
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_geometry_point,
     layer_geometry_polygon,
     hazard_volcano,
-    volcano_vector_hazard_classes,
     hazard_category_multiple_event,
     exposure_structure,
     layer_mode_classified,
     volcano_name_field,
-    structure_class_field
+    structure_class_field,
+    hazard_category_single_event
 )
 
 
@@ -83,11 +83,13 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_point],
-                    'hazard_categories': [hazard_category_multiple_event],
+                    'hazard_categories': [
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
+                    ],
                     'hazard_types': [hazard_volcano],
                     'continuous_hazard_units': [],
-                    'vector_hazard_classifications': [
-                        volcano_vector_hazard_classes],
+                    'vector_hazard_classifications': [],
                     'raster_hazard_classifications': [],
                     'additional_keywords': [volcano_name_field]
                 },
@@ -105,8 +107,8 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 # The list of radii in km for volcano point hazard
                 ('distances', distance()),
-                # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', volcano_name_attribute())
+                ('postprocessors', OrderedDict([
+                    ('BuildingType', building_type_postprocessor())]))
             ])
         }
         return dict_meta
