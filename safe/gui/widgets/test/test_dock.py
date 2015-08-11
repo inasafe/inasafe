@@ -164,7 +164,8 @@ class TestDock(TestCase):
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
         settings = QtCore.QSettings()
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposureView')
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposureView')
         # Zoom to an area where there is no overlap with layers
         rectangle = QgsRectangle(106.849, -6.153, 106.866, -6.134)
         CANVAS.setExtent(rectangle)
@@ -207,8 +208,7 @@ class TestDock(TestCase):
             raise Exception('Exception is not expected, %s' % e)
 
     def test_result_styling(self):
-        """Test that ouputs from a model are correctly styled (colours and
-        opacity. """
+        """Test that colours and opacity from a model are correctly styled."""
 
         # Push OK with the left mouse button
 
@@ -327,6 +327,9 @@ class TestDock(TestCase):
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         print 'Using QGIS: %s' % qgis_version()
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposureView')
         self.tearDown()
         button = DOCK.pbnRunStop
         # First part of scenario should have enabled run
