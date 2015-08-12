@@ -391,6 +391,7 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
                     attributes,
                     building_use_column)
                 if not residential_proportion:
+                    building_lookup[building] = 0
                     continue
                 effective_area = area * levels * residential_proportion
                 total_effective_area += effective_area
