@@ -368,7 +368,15 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
         for feature in buildings_layer.getFeatures():
             writer.addFeature(feature)
         del writer
-        pib_layer = self.iface.addVectorLayer(filename, "PIB", "ogr")
+        name = buildings_layer.name()
+        if '(people in buildings)' not in name:
+            name = '%s (people in buildings)' % name
+        keywords = KeywordIO().read_keywords(buildings_layer)
+        keywords['population_rounded'] = People_Rounded
+        keywords['population_exact'] = People_Calculated
+
+        pib_layer = self.iface.addVectorLayer(filename, name, "ogr")
+        KeywordIO().write_keywords(pib_layer, keywords)
         return pib_layer
 
     def estimate_people_in_buildings(self):
