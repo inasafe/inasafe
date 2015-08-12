@@ -412,23 +412,20 @@ class Plugin(object):
         self._create_dock()
         # And all the menu actions
         # Configuration Group
+        self._create_dock_toggle_action()
         self._create_options_dialog_action()
         self._create_minimum_needs_options_action()
         self._create_analysis_extent_action()
-        self._create_dock_toggle_action()
         self._create_rubber_bands_action()
         self._add_spacer_to_menu()
-        # TODO: add menu separator - Wizards
         self._create_keywords_wizard_action()
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
-        # TODO: add menu separator - Data
         self._create_osm_downloader_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
         self._add_spacer_to_menu()
-        # TODO: add menu separator - Analysis
         self._create_batch_runner_action()
         self._create_impact_merge_action()
         self._create_save_scenario_action()
