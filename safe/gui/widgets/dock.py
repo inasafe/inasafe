@@ -2020,9 +2020,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 message = m.Message()
                 message.add(LOGO_ELEMENT)
                 message.add(m.Heading(self.tr(
-                    'Insufficient overlap', **WARNING_STYLE)))
+                    'Insufficient overlap'), **WARNING_STYLE))
                 message.add(self.no_overlap_message())
-                self.show_static_message(message())
+                self.show_static_message(message)
 
     def validate_extents(self):
         """Check if the current extents are valid.
