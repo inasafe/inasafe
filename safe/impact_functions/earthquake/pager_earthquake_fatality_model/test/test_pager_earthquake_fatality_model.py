@@ -36,6 +36,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
 
     def test_run(self):
         """TestPagerEarthquakeFatalityFunction: Test running the IF."""
+        # FIXME: test requires more realistic hazard and population data - Hyeuk
         eq_path = test_data_path('hazard', 'earthquake.tif')
         population_path = test_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
@@ -67,7 +68,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
 
         expected_result = {
             'total_population': 200,
-            'total_fatalities': 10, # should be zero FIXME
+            'total_fatalities': 0, # should be zero FIXME
             'total_displaced': 200
         }
         for key_ in expected_result.keys():
@@ -120,10 +121,12 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
                     expected_result[key_][item],
                     result[item], places=4, msg=message)
 
+        #expected_result = [
+        #    8.0, 42.0, 42.0, 8.0, 0.0, 0.0, 0.0] # corresponds to 10
         expected_result = [
-            8.0, 42.0, 42.0, 8.0, 0.0, 0.0, 0.0]
+            100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0] # corresponds to <= 1
         result = impact_function.compute_probability(
-            impact_layer.get_keywords('total_fatalities'))
+            impact_layer.get_keywords('total_fatalities_raw'))
         message = 'Expecting %s, but it returns %s' % (
             expected_result, result)
         self.assertEqual(expected_result, result, message)

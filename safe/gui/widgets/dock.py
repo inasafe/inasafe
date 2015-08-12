@@ -52,7 +52,10 @@ from safe.utilities.resources import (
     resources_path,
     resource_url,
     get_ui_class)
-from safe.utilities.qgis_utilities import display_critical_message_bar
+from safe.utilities.qgis_utilities import (
+    display_critical_message_bar,
+    display_warning_message_bar,
+    display_information_message_bar)
 from safe.defaults import (
     limitations,
     default_organisation_logo_path)
@@ -151,6 +154,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.extent = Extent(self.iface)
         self.composer = None
         self.composition = None
+        self.map_canvas = None
 
         # Flag used to prevent recursion and allow bulk loads of layers to
         # trigger a single event only
@@ -164,8 +168,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.set_layer_from_title_flag = None
         self.zoom_to_impact_flag = None
         self.hide_exposure_flag = None
-        self.clip_to_viewport = None
         self.clip_hard = None
+        self.map_canvas = None
         self.show_intermediate_layers = None
         self.developer_mode = None
         self.organisation_logo_path = None
@@ -185,7 +189,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.connect_layer_listener()
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
-        self.set_ok_button_status()
+        self.set_run_button_status()
 
         self.read_settings()  # get_project_layers called by this
 
@@ -385,10 +389,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'inasafe/setHideExposureFlag', False, type=bool)
         self.hide_exposure_flag = flag
 
-        # whether to clip hazard and exposure layers to the view port
-        self.clip_to_viewport = settings.value(
-            'inasafe/clip_to_viewport', True, type=bool)
-
         # whether to 'hard clip' layers (e.g. cut buildings in half if they
         # lie partially in the AOI
         self.clip_hard = settings.value(
@@ -480,6 +480,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'inasafe/north_arrow_path', default_north_arrow_path())
 
         if invalid_path_flag:
+            # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE %s' % get_version()),
                 self.tr(
@@ -492,6 +493,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # RM: this is a fix for nonexistent organization logo or zero height
         if logo_not_exist:
+            # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE %s' % get_version()),
                 self.tr(
@@ -501,8 +503,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.organisation_logo_path
                 ), QtGui.QMessageBox.Ok)
         if invalid_logo_size:
+            # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE %s' % get_version()),
+                self,
+                self.tr('InaSAFE %s' % get_version()),
                 self.tr(
                     'The file for organization logo has zero height. Please '
                     'provide valid file for organization logo.'
@@ -596,12 +600,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         :returns Message: A localised message indicating we are ready to run.
         """
-        # What does this todo mean? TS
-        # TODO refactor impact_functions so it is accessible and user here
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         notes = m.Paragraph(
-            self.tr('You can now proceed to run your model by clicking the'),
+            self.tr('You can now proceed to run your analysis by clicking '
+                    'the'),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
@@ -612,7 +615,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. note:: Assumes a valid hazard and exposure layer are loaded.
 
-        :returns Message: A localised message indicating we are not ready.
+        :returns: A localised message indicating we are not ready.
+        :rtype: Message
         """
         # myHazardFilename = self.getHazardLayer().source()
         # noinspection PyTypeChecker
@@ -643,6 +647,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             hazard_heading,
             hazard_keywords)
         return message
+
+    def no_overlap_message(self):
+        """Helper which returns a message indicating no valid overlap."""
+        return self.tr(
+            'Currently there are no overlapping extents between '
+            'the hazard layer, the exposure layer and the user '
+            'defined analysis area. Try zooming to the analysis '
+            'area, clearing the analysis area or defining a new '
+            'one using the analysis area definition tool.')
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog.
@@ -675,6 +688,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.cboFunction.currentIndex() == -1:
             message = self.not_ready_message()
             return False, message
+        # Now check if extents are ok for #1811
         else:
             message = self.ready_message()
             return True, message
@@ -690,7 +704,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type layer: QgsMapLayer
 
         :param destination: The new filename of the layer.
-        :type str
+        :type destination: str
 
         """
 
@@ -702,6 +716,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         destination_keywords = "%s.keywords" % destination_basename
         destination_xml = "%s.xml" % destination_basename
 
+        # noinspection PyBroadException,PyBroadException
         try:
             # Keywords
             if os.path.isfile(source_keywords):
@@ -735,7 +750,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         del index
         self.get_functions()
         self.toggle_aggregation_combo()
-        self.set_ok_button_status()
+        self.set_run_button_status()
         self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
@@ -752,7 +767,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         del index
         self.get_functions()
         self.toggle_aggregation_combo()
-        self.set_ok_button_status()
+        self.set_run_button_status()
         self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
@@ -780,7 +795,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.set_function_options_status()
 
         self.toggle_aggregation_combo()
-        self.set_ok_button_status()
+        self.set_run_button_status()
 
     def toggle_aggregation_combo(self):
         """Toggle the aggregation combo enabled status.
@@ -800,8 +815,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.cboAggregation.setCurrentIndex(0)
             self.cboAggregation.setEnabled(False)
 
-    def set_ok_button_status(self):
-        """Helper function to set the ok button status based on form validity.
+    def set_run_button_status(self):
+        """Helper function to set the run button status based on form validity.
         """
         button = self.pbnRunStop
         flag, message = self.validate()
@@ -1023,6 +1038,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         hazard_keywords = self.keyword_io.read_keywords(hazard_layer)
         # We need to add the layer type to the returned keywords
         if hazard_layer.type() == QgsMapLayer.VectorLayer:
+            # noinspection PyTypeChecker
             hazard_keywords['layer_geometry'] = vector_geometry_string(
                 hazard_layer)
         elif hazard_layer.type() == QgsMapLayer.RasterLayer:
@@ -1032,6 +1048,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
         # We need to add the layer type to the returned keywords
         if exposure_layer.type() == QgsMapLayer.VectorLayer:
+            # noinspection PyTypeChecker
             exposure_keywords['layer_geometry'] = vector_geometry_string(
                 exposure_layer)
         elif exposure_layer.type() == QgsMapLayer.RasterLayer:
@@ -1189,6 +1206,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'aggregation. Please launch keyword wizard to assign keywords '
                 'in this layer.'
             )
+            # noinspection PyCallByClass
             QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
             context = self.tr(
                 'A problem was encountered because the aggregation layer '
@@ -1229,7 +1247,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.keyword_io.write_keywords(
             self.analysis.aggregator.layer, old_keywords)
         self.hide_busy()
-        self.set_ok_button_status()
+        self.set_run_button_status()
 
     def show_busy(self):
         """Hide the question group box and enable the busy cursor."""
@@ -1262,6 +1280,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def prepare_analysis(self):
         """Create analysis as a representation of current situation of dock."""
         analysis = Analysis()
+        analysis.map_canvas = self.iface.mapCanvas()
+
         # Layers
         analysis.hazard_layer = self.get_hazard_layer()
         analysis.exposure_layer = self.get_exposure_layer()
@@ -1290,7 +1310,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             analysis.show_intermediate_layers = self.show_intermediate_layers
             analysis.run_in_thread_flag = self.run_in_thread_flag
             analysis.map_canvas = self.iface.mapCanvas()
-            analysis.clip_to_viewport = self.clip_to_viewport
             analysis.user_extent = self.extent.user_extent
             analysis.user_extent_crs = self.extent.user_extent_crs
 
@@ -1327,6 +1346,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # message.add(m.Heading(self.tr('View processing log as HTML'),
             # **INFO_STYLE))
             # message.add(m.Link('file://%s' % self.wvResults.log_path))
+            # noinspection PyTypeChecker
             self.show_static_message(message)
             self.wvResults.impact_path = impact_path
 
@@ -1480,6 +1500,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             report.add(keywords['postprocessing_report'])
         report.add(impact_attribution(keywords))
         self.pbnPrint.setEnabled(True)
+        # noinspection PyTypeChecker
         self.show_static_message(report)
         # also hide the question and show the show question button
         self.pbnShowQuestion.setVisible(True)
@@ -1517,6 +1538,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         report.add(keywords_list)
         self.pbnPrint.setEnabled(False)
+        # noinspection PyTypeChecker
         self.show_static_message(report)
 
     def show_no_keywords_message(self):
@@ -1543,6 +1565,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 ' icon in the toolbar.'))
         report.add(context)
         self.pbnPrint.setEnabled(False)
+        # noinspection PyTypeChecker
         self.show_static_message(report)
 
     @pyqtSlot('QgsMapLayer')
@@ -1641,8 +1664,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 break
 
     def print_map(self):
-        """Open impact report dialog that used to tune report when print map
-            button pressed."""
+        """Open impact report dialog used to tune report when printing."""
         # Check if selected layer is valid
         impact_layer = self.iface.activeLayer()
         if impact_layer is None:
@@ -1657,6 +1679,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Open Impact Report Dialog
         print_dialog = ImpactReportDialog(self.iface)
         if not print_dialog.exec_() == QtGui.QDialog.Accepted:
+            # noinspection PyTypeChecker
             self.show_dynamic_message(
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
@@ -1696,6 +1719,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         create_pdf_flag = print_dialog.create_pdf
 
         # Instantiate and prepare Report
+        # noinspection PyTypeChecker
         self.show_dynamic_message(
             m.Message(
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
@@ -1777,6 +1801,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         output_path = str(output_path)
 
         if output_path is None or output_path == '':
+            # noinspection PyTypeChecker
             self.show_dynamic_message(
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
@@ -1808,6 +1833,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(map_pdf_path))
 
+            # noinspection PyTypeChecker
             self.show_dynamic_message(status)
         except TemplateLoadingError, e:
             self.show_error_message(get_error_message(e))
@@ -1860,6 +1886,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         function_id = '' if item_data is None else str(item_data)
         return function_id
 
+    @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
     def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
 
@@ -1883,11 +1910,42 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 3.1
 
-        :returns: True if there is a layer highlighted in the legend.
+        :returns: True if there is a layer hightlighted in the legend.
         :rtype: bool
         """
         layer = self.iface.activeLayer()
         return layer is not None
+
+    def _layer_count(self):
+        """Return the count of layers in the legend.
+
+        .. versionadded: 3.1
+
+        :returns: Number of layers in the legend, regardless of their
+            visibility status.
+        :rtype: int
+        """
+
+        legend = self.iface.legendInterface()
+        layers = legend.layers()
+        count = len(layers)
+        return count
+
+    def _visible_layers_count(self):
+        """Calculate the number of visible layers in the legend.
+
+        .. versionadded: 3.1
+
+        :returns: Count of layers that are actually visible.
+        :rtype: int
+        """
+        legend = self.iface.legendInterface()
+        layers = legend.layers()
+        visible_count = 0
+        for layer in layers:
+            if legend.isLayerVisible(layer):
+                visible_count += 1
+        return visible_count
 
     def show_next_analysis_extent(self):
         """Update the rubber band showing where the next analysis extent is.
@@ -1900,27 +1958,86 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 2.1.0
         """
+        settings = QSettings()
         self.extent.hide_next_analysis_extent()
+        # check if we actually have correct hazard, exposure and IF
+        # if we don't we exit immediately to avoid cluttering up the display
+        # with unneeded status messages...
+        flag, _ = self.validate()
+        if not flag:
+            self.pbnRunStop.setEnabled(False)
+            return
+
+        # IF could potentially run - lets see if the extents will work well...
+        valid, extents = self.validate_extents()
+        if valid:
+            self.extent.show_next_analysis_extent(extents)
+            show_confirmations = settings.value(
+                'inasafe/show_extent_confirmations',
+                True,
+                type=bool)
+
+            if show_confirmations:
+                message = self.tr(
+                    'The hazard layer, exposure layer and your '
+                    'defined analysis area extents all overlap. Press the '
+                    'run button below to continue with the analysis.')
+
+                display_information_message_bar(
+                    self.tr('InaSAFE'),
+                    self.tr('Analysis environment ready'),
+                    message,
+                    self.tr('More info ...'),
+                    2)
+            self.pbnRunStop.setEnabled(True)
+        else:
+            # For issue #618, #1811
+            if self.show_only_visible_layers_flag:
+                layer_count = self._visible_layers_count()
+            else:
+                layer_count = self._layer_count()
+
+            if layer_count == 0:
+                self.show_static_message(self.getting_started_message())
+            else:
+                show_warnings = settings.value(
+                    'inasafe/show_extent_warnings',
+                    True,
+                    type=bool)
+                if show_warnings:
+                    message = self.no_overlap_message()
+                    display_warning_message_bar(
+                        self.tr('InaSAFE'),
+                        self.tr('No overlapping extents'),
+                        message)
+            self.pbnRunStop.setEnabled(False)
+            # For #2077 somewhat kludgy hack to prevent positive
+            # message when we cant actually run
+            message = self.tr(
+                'You can now proceed to run your analysis by clicking the')
+            current_text = self.wvResults.page_to_text()
+            if message in current_text:
+                self.show_static_message(self.no_overlap_message())
+
+    def validate_extents(self):
+        """Check if the current extents are valid.
+
+        Look at the intersection between Hazard, exposure and user analysis area
+        and see if they represent a valid, usable area for analysis.
+
+        .. versionadded:: 3.1
+
+        :returns: A two-tuple. The first element will be True if extents are
+            usable, otherwise False. It will also return False if an invalid
+            condition exists e.g. no hazard layer etc. The second element will
+            be a rectangle for the analysis extent (if valid) or None.
+        :rtype: (bool, QgisRectangle)
+        """
+
         try:
             # Temporary only, for checking the user extent
             analysis = self.prepare_analysis()
-
-            analysis.clip_parameters = analysis.get_clip_parameters()
-            next_analysis_extent = analysis.clip_parameters[1]
-
-            self.extent.show_next_analysis_extent(next_analysis_extent)
-            self.pbnRunStop.setEnabled(True)
+            clip_parameters = analysis.get_clip_parameters()
+            return True, clip_parameters[1]
         except (AttributeError, InsufficientOverlapError):
-            # For issue #618
-            legend = self.iface.legendInterface()
-            # This logic for #1811
-            layers = legend.layers()
-            visible_count = len(layers)
-            if self.show_only_visible_layers_flag:
-                visible_count = 0
-                for layer in layers:
-                    if legend.isLayerVisible(layer):
-                        visible_count += 1
-            if visible_count == 0:
-                self.show_static_message(self.getting_started_message())
-            self.pbnRunStop.setEnabled(False)
+            return False, None
