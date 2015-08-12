@@ -2017,7 +2017,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'You can now proceed to run your analysis by clicking the')
             current_text = self.wvResults.page_to_text()
             if message in current_text:
-                self.show_static_message(self.no_overlap_message())
+                message = m.Message()
+                message.add(LOGO_ELEMENT)
+                message.add(m.Heading(self.tr(
+                    'Insufficient overlap', **WARNING_STYLE))
+                message.add(message.add(notes))
+                self.show_static_message(message())
 
     def validate_extents(self):
         """Check if the current extents are valid.
