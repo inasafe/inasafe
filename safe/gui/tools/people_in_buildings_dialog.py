@@ -21,10 +21,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QVariant  # , QPyNullVariant
-from qgis.core import QgsField
-from qgis.core import QgsGeometry
-from qgis.core import QgsVectorLayer
-from qgis.core import QgsMapLayerRegistry
+from qgis.core import (
+    QGis,
+    QgsField,
+    QgsGeometry,
+    QgsVectorLayer,
+    QgsMapLayerRegistry,
+    QgsVectorFileWriter)
 
 from safe.utilities.resources import get_ui_class
 from safe.utilities.keyword_io import KeywordIO
@@ -354,6 +357,20 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
             return False
         return True
 
+    def write_new_layer(self, filename, buildings_layer):
+        impact_fields = buildings_layer.dataProvider().fields()
+        writer = QgsVectorFileWriter(
+            filename,
+            "utf-8",
+            impact_fields,
+            QGis.WKBPolygon,
+            buildings_layer.crs())
+        for feature in buildings_layer.getFeatures():
+            writer.addFeature(feature)
+        del writer
+        pib_layer = self.iface.addVectorLayer(filename, "PIB", "ogr")
+        return pib_layer
+
     def estimate_people_in_buildings(self):
         """Estimate the number of people in each building based on the census.
 
@@ -395,10 +412,9 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
             return
 
         if new_layer:
-            buildings_layer = self.iface.addVectorLayer(
-                buildings_layer.source(),
+            buildings_layer = self.write_new_layer(
                 new_layer_name,
-                buildings_layer.providerType())
+                buildings_layer)
 
         self.add_population_attribute(buildings_layer)
         field_names_population = self._get_field_names(population_layer)
