@@ -1966,17 +1966,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'inasafe/show_extent_confirmations',
                 True,
                 type=bool)
+
             if show_confirmations:
+                message = self.tr(
+                    'The hazard layer, exposure layer and your '
+                    'defined analysis area extents all overlap. Press the '
+                    'run button below to continue with the analysis.')
+
                 display_information_message_bar(
                     self.tr('InaSAFE'),
                     self.tr('Analysis environment ready'),
-                    self.tr(
-                        'The hazard layer, exposure layer and your '
-                        'defined analysis area extents all overlap. Press the '
-                        'run button below to continue with the analysis.'),
+                    message,
                     self.tr('More info ...'),
-                    2
-                )
+                    2)
             self.pbnRunStop.setEnabled(True)
         else:
             # For issue #618, #1811
@@ -1992,18 +1994,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'inasafe/show_extent_warnings',
                     True,
                     type=bool)
-                if not show_warnings:
-                    return
-                display_warning_message_bar(
-                    self.tr('InaSAFE'),
-                    self.tr('No overlapping extents'),
-                    self.tr(
+                if show_warnings:
+                    message = self.tr(
                         'Currently there are no overlapping extents between '
                         'the hazard layer, the exposure layer and the user '
                         'defined analysis area. Try zooming to the analysis '
                         'area, clearing the analysis area or defining a new '
                         'one using the analysis area definition tool.')
-                )
+                    display_warning_message_bar(
+                        self.tr('InaSAFE'),
+                        self.tr('No overlapping extents'),
+                        message
+                    )
             self.pbnRunStop.setEnabled(False)
             # self.show_static_message(self.no_overlap_message())
 

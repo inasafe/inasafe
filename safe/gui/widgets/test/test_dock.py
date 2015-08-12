@@ -91,6 +91,13 @@ class TestDock(TestCase):
         DOCK.show_intermediate_layers = False
         DOCK.user_extent = None
         DOCK.user_extent_crs = None
+        # For these tests we will generally use explicit overlap
+        # between hazard, exposure and view, so make that default
+        # see also safe/test/utilities.py where this is globally
+        # set to HazardExposure
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposureView')
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -99,6 +106,13 @@ class TestDock(TestCase):
         DOCK.cboExposure.clear()
         # DOCK.cboAggregation.clear() #dont do this because the cboAggregation
         # need to be able to react to the status changes of the other combos
+
+        # Make sure we reinstate globale default analysis extents mode of
+        # hazard, exposure see also safe/test/utilities.py where this is
+        # globally set to HazardExposure
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposure')
 
     def test_defaults(self):
         """Test the GUI in its default state"""
@@ -152,7 +166,7 @@ class TestDock(TestCase):
 
         message = 'Run button was not enabled'
         self.assertTrue(button.isEnabled(), message)
-
+        set_jakarta_extent(DOCK)
         result, message = setup_scenario(
             DOCK,
             hazard='Continuous Flood',
@@ -163,9 +177,6 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        settings = QtCore.QSettings()
-        settings.setValue(
-            'inasafe/analysis_extents_mode', 'HazardExposureView')
         # Zoom to an area where there is no overlap with layers
         rectangle = QgsRectangle(106.849, -6.153, 106.866, -6.134)
         CANVAS.setExtent(rectangle)
@@ -327,9 +338,6 @@ class TestDock(TestCase):
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         print 'Using QGIS: %s' % qgis_version()
-        settings = QtCore.QSettings()
-        settings.setValue(
-            'inasafe/analysis_extents_mode', 'HazardExposureView')
         self.tearDown()
         button = DOCK.pbnRunStop
         # First part of scenario should have enabled run
