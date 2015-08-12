@@ -2013,14 +2013,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.pbnRunStop.setEnabled(False)
             # For #2077 somewhat kludgy hack to prevent positive
             # message when we cant actually run
-            message = self.tr(
+            match = self.tr(
                 'You can now proceed to run your analysis by clicking the')
             current_text = self.wvResults.page_to_text()
-            if message in current_text:
+            if match in current_text:
                 message = m.Message()
                 message.add(LOGO_ELEMENT)
                 message.add(m.Heading(self.tr(
-                    'Insufficient overlap', **WARNING_STYLE))
+                    'Insufficient overlap', **WARNING_STYLE)))
                 message.add(self.no_overlap_message())
                 self.show_static_message(message())
 
