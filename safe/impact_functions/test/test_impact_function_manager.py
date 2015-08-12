@@ -45,10 +45,13 @@ from safe.definitions import (
     exposure_structure,
     exposure_road,
     exposure_population,
+    exposure_land_cover,
     count_exposure_unit,
     density_exposure_unit,
     layer_mode_continuous,
+    layer_mode_classified,
     layer_geometry_raster,
+    layer_geometry_polygon,
     structure_class_field,
     unit_metres,
     unit_generic,
@@ -190,7 +193,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         exposures = impact_function_manager.exposures_for_layer(
             'polygon')
-        expected = [exposure_structure]
+        expected = [exposure_structure, exposure_land_cover]
         self.assertItemsEqual(exposures, expected)
 
         exposures = impact_function_manager.exposures_for_layer(
@@ -237,7 +240,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.available_exposures()
         expected_result = [
-            exposure_structure, exposure_road, exposure_population]
+            exposure_structure, exposure_road, exposure_population,
+            exposure_land_cover]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -274,7 +278,6 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected = [
             (layer_mode_continuous, layer_geometry_raster),
             # (layer_mode_classified, layer_geometry_raster),
-            # (layer_mode_classified, layer_geometry_polygon),
         ]
 
         self.assertItemsEqual(hazard_constraints, expected)

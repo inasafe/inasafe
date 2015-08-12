@@ -247,6 +247,9 @@ class CallGDALError(InaSAFEError):
     not empty"""
     pass
 
+class AlignRastersError(Exception):
+    """Raised if alignment of hazard and exposure rasters failed"""
+    pass
 
 class ImportDialogError(InaSAFEError):
     """Raised if import process failed."""
