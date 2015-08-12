@@ -2004,8 +2004,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     display_warning_message_bar(
                         self.tr('InaSAFE'),
                         self.tr('No overlapping extents'),
-                        message
-                    )
+                        message)
             self.pbnRunStop.setEnabled(False)
             # self.show_static_message(self.no_overlap_message())
 

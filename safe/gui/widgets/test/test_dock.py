@@ -97,7 +97,8 @@ class TestDock(TestCase):
         # set to HazardExposure
         settings = QtCore.QSettings()
         settings.setValue(
-            'inasafe/analysis_extents_mode', 'HazardExposureView')
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -338,6 +339,9 @@ class TestDock(TestCase):
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         print 'Using QGIS: %s' % qgis_version()
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposure')
         self.tearDown()
         button = DOCK.pbnRunStop
         # First part of scenario should have enabled run
@@ -574,7 +578,9 @@ class TestDock(TestCase):
     def test_full_run_pyzstats(self):
         """Aggregation results correct using our own python zonal stats code.
         """
-
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposure')
         result, message = setup_scenario(
             DOCK,
             hazard='Continuous Flood',
@@ -827,7 +833,9 @@ class TestDock(TestCase):
 
     def test_cbo_aggregation_toggle(self):
         """Aggregation Combobox toggles on and off as expected."""
-
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposure')
         # With aggregation layer
         result, message = setup_scenario(
             DOCK,
@@ -978,6 +986,9 @@ class TestDock(TestCase):
 
     def test_issue1191(self):
         """Test setting a layer's title in the kw directly from qgis api"""
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposure')
         DOCK.set_layer_from_title_flag = True
         set_canvas_crs(GEOCRS, True)
         set_yogya_extent(DOCK)
