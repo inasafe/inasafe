@@ -27,6 +27,8 @@ from qgis.core import QgsVectorLayer
 from qgis.core import QgsMapLayerRegistry
 
 from safe.utilities.resources import get_ui_class
+from safe.utilities.keyword_io import KeywordIO
+from safe.common.exceptions import NoKeywordsFoundError
 
 FORM_CLASS = get_ui_class('people_in_buildings_base.ui')
 
@@ -73,11 +75,42 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
     def load_layers_into_combo_box(self):
         """Load the layer options and column options into the combobox.
         """
-        layer_names = self._get_layer_names()
-        self._update_combobox(self.buildingLayerComboBox, layer_names)
-        self._update_combobox(self.censusLayerComboBox, layer_names)
+        building_layer_names = self._get_building_layers()
+        census_layer_names = self._get_census_layers()
+
+        self._update_combobox(self.buildingLayerComboBox, building_layer_names)
+        self._update_combobox(self.censusLayerComboBox, census_layer_names)
         self.building_layer_changed(self.buildingLayerComboBox.currentText())
         self.cencus_layer_changed(self.censusLayerComboBox.currentText())
+
+    def _get_building_layers(self):
+        layers = self._get_layers()
+        building_layers = []
+        for layer in layers:
+            try:
+                keywords = KeywordIO().read_keywords(layer)
+            except NoKeywordsFoundError:
+                continue
+            exposure_type = keywords.get('exposure')
+            if exposure_type == 'structure':
+                building_layers.append(layer)
+        layer_names = [l.name() for l in building_layers]
+        return layer_names
+
+    def _get_census_layers(self):
+        layers = self._get_layers()
+        census_layers = []
+        for layer in layers:
+            try:
+                keywords = KeywordIO().read_keywords(layer)
+            except NoKeywordsFoundError:
+                census_layers.append(layer)
+                continue
+            exposure_type = keywords.get('exposure')
+            if exposure_type in ['population', 'census']:
+                census_layers.append(layer)
+        layer_names = [l.name() for l in census_layers]
+        return layer_names
 
     def _select_layer_by_name(self, layer_name):
         """Get a layer by its name.
@@ -139,7 +172,13 @@ class PeopleInBuildingsDialog(QtGui.QDialog, FORM_CLASS):
             return
         field_names = self._get_field_names(layer)
         self._update_combobox(self.usageColumnComboBox, field_names)
+        if 'TYPE' in field_names:
+            self.usageColumnComboBox.setCurrentIndex(
+                field_names.index('TYPE'))
         self._update_combobox(self.levelsColumnComboBox, field_names)
+        if 'LEVELS' in field_names:
+            self.levelsColumnComboBox.setCurrentIndex(
+                field_names.index('LEVELS'))
 
     def cencus_layer_changed(self, layer_name):
         """Hander for change of population layer selection event.
