@@ -344,9 +344,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         settings = QSettings()
 
-        show_logo_flag = bool(settings.value(
+        flag = bool(settings.value(
             'inasafe/showRubberBands', False, type=bool))
-        self.extent.show_rubber_bands = show_logo_flag
+        self.extent.show_rubber_bands = flag
         try:
             extent = settings.value('inasafe/analysis_extent', '', type=str)
             crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
@@ -369,25 +369,25 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.draw_rubber_bands()
 
-        show_logo_flag = settings.value(
+        flag = settings.value(
             'inasafe/useThreadingFlag', False, type=bool)
-        self.run_in_thread_flag = show_logo_flag
+        self.run_in_thread_flag = flag
 
-        show_logo_flag = settings.value(
+        flag = settings.value(
             'inasafe/visibleLayersOnlyFlag', True, type=bool)
-        self.show_only_visible_layers_flag = show_logo_flag
+        self.show_only_visible_layers_flag = flag
 
-        show_logo_flag = settings.value(
+        flag = settings.value(
             'inasafe/set_layer_from_title_flag', True, type=bool)
-        self.set_layer_from_title_flag = show_logo_flag
+        self.set_layer_from_title_flag = flag
 
-        show_logo_flag = settings.value(
+        flag = settings.value(
             'inasafe/setZoomToImpactFlag', True, type=bool)
-        self.zoom_to_impact_flag = show_logo_flag
+        self.zoom_to_impact_flag = flag
         # whether exposure layer should be hidden after model completes
-        show_logo_flag = settings.value(
+        flag = settings.value(
             'inasafe/setHideExposureFlag', False, type=bool)
-        self.hide_exposure_flag = show_logo_flag
+        self.hide_exposure_flag = flag
 
         # whether to 'hard clip' layers (e.g. cut buildings in half if they
         # lie partially in the AOI
@@ -419,7 +419,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 default_organisation_logo_path())
 
         # Changed default to False for new users in 3.2 - see #2171
-        show_logo_flag = bool(settings.value(
+        show_logos_flag = bool(settings.value(
             'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
 
         # Flag to check valid organization logo
@@ -462,7 +462,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 else:
                     invalid_logo_size = True
 
-        if (self.organisation_logo_path and show_logo_flag and
+        if (self.organisation_logo_path and show_logos_flag and
                 not invalid_logo_size and not logo_not_exist):
             self._show_organisation_logo()
         else:
