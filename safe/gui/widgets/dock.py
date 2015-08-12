@@ -648,6 +648,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             hazard_keywords)
         return message
 
+    def no_overlap_message(self):
+        """Helper which returns a message indicating no valid overlap."""
+        return self.tr(
+            'Currently there are no overlapping extents between '
+            'the hazard layer, the exposure layer and the user '
+            'defined analysis area. Try zooming to the analysis '
+            'area, clearing the analysis area or defining a new '
+            'one using the analysis area definition tool.')
+
     def validate(self):
         """Helper method to evaluate the current state of the dialog.
 
@@ -1996,12 +2005,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     True,
                     type=bool)
                 if show_warnings:
-                    message = self.tr(
-                        'Currently there are no overlapping extents between '
-                        'the hazard layer, the exposure layer and the user '
-                        'defined analysis area. Try zooming to the analysis '
-                        'area, clearing the analysis area or defining a new '
-                        'one using the analysis area definition tool.')
+                    message = self.no_overlap_message()
                     display_warning_message_bar(
                         self.tr('InaSAFE'),
                         self.tr('No overlapping extents'),
@@ -2011,7 +2015,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # message when we cant actually run
             message = self.tr(
                 'You can now proceed to run your analysis by clicking the')
-            current_text = DOCK.wvResults.page_to_text()
+            current_text = self.wvResults.page_to_text()
             if message in current_text:
                 self.show_static_message(self.no_overlap_message())
 
