@@ -32,10 +32,11 @@ class ProvenanceStep(object):
 
     """
 
-    def __init__(self, title, description, timestamp=None):
+    def __init__(self, title, description, timestamp=None, data=None):
         # private members
         self._title = title
         self._description = description
+        self._data = data
         if timestamp is None:
             self._time = datetime.now()
         elif isinstance(timestamp, datetime):
@@ -54,7 +55,8 @@ class ProvenanceStep(object):
         :rtype: str
         """
 
-        return "%s: %s\n%s" % (self._time, self._title, self._description)
+        return "%s: %s\n%s" % (
+            self.time, self.title, self.description, self.data)
 
     @property
     def title(self):
@@ -89,6 +91,20 @@ class ProvenanceStep(object):
 
         return self._time
 
+    def data(self, key=None):
+        """
+        additional data stored in the step.
+
+        :param key: The name of a key stored in the data
+        :type key: str
+        :return: the stored data
+        :rtype: dict
+        """
+        if key is None:
+            return self._data
+        else:
+            return self._data[key]
+
     @property
     def dict(self):
         """
@@ -102,6 +118,7 @@ class ProvenanceStep(object):
             'title': self.title,
             'description': self.description,
             'time': self.time.isoformat(),
+            'data': self.data()
         }
 
     @property
@@ -113,9 +130,25 @@ class ProvenanceStep(object):
         :rtype: str
         """
 
+        return self._get_xml()
+
+    def _get_xml(self, close_tag=True):
+        """
+        generate the xml string representation.
+
+        :param close_tag: should the '</provenance_step>' tag be added or not.
+        :type close_tag: bool
+
+        :return: the xml
+        :rtype: str
+        """
+
         xml = (
-            '<provenance_step timestamp="%s">'
-            '<title>%s</title>'
-            '<description>%s</description>'
-            '</provenance_step>')
+            '<provenance_step timestamp="%s">\n'
+            '<title>%s</title>\n'
+            '<description>%s</description>\n'
+            )
+        if close_tag:
+            xml += '</provenance_step>\n'
+
         return xml % (self.time.isoformat(), self.title, self.description)

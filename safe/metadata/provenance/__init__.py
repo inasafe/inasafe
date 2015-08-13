@@ -19,4 +19,5 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # expose for nicer imports
 from safe.metadata.provenance.provenance_step import ProvenanceStep
+from safe.metadata.provenance.if_provenance_step import IFProvenanceStep
 from safe.metadata.provenance.provenance import Provenance

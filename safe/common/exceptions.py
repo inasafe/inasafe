@@ -360,3 +360,7 @@ class MetadataInvalidPathError(InaSAFEError):
 class MetadataCastError(InaSAFEError):
     """When a path for a metadata xml is not correct"""
     suggestion = 'Check that the XML value is of the correct type'
+
+class InvalidProvenanceDataError(InaSAFEError):
+    """When a path for a metadata xml is not correct"""
+    suggestion = 'Check that the IF produced all the required data'

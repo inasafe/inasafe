@@ -65,10 +65,10 @@ class Provenance(object):
         :rtype: str
         """
 
-        xml = '<inasafe_provenance>'
+        xml = '<inasafe_provenance>\n'
         for step in self.steps:
             xml += step.xml
-        xml += '</inasafe_provenance>'
+        xml += '</inasafe_provenance>\n'
         return xml
 
     @property

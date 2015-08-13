@@ -429,10 +429,8 @@ class BaseMetadata(object):
         :return: the value of the property
         :rtype: str
         """
-        try:
-            return self.get_property(name).xml_value
-        except KeyError:
-            return None
+
+        return self.get_property(name).xml_value
 
     def get_property(self, name):
         """

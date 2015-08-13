@@ -167,7 +167,20 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords />
-            <inasafe_report><gco:CharacterString /></inasafe_report><inasafe_provenance><provenance_step timestamp="2015-06-25T13:07:13.100000"><title>Test provenance title</title><description>Test provenance description</description></provenance_step><provenance_step timestamp="2015-06-25T13:07:15.100000"><title>Test provenance title 2</title><description>Test provenance description 2</description></provenance_step><provenance_step timestamp="2015-06-25T13:07:17.100000"><title>Test provenance title 3</title><description>Test provenance description 3</description></provenance_step></inasafe_provenance></gmd:supplementalInformation>
+            <inasafe_report><gco:CharacterString /></inasafe_report><inasafe_provenance>
+<provenance_step timestamp="2015-06-25T13:07:13.100000">
+<title>Test provenance title</title>
+<description>Test provenance description</description>
+</provenance_step>
+<provenance_step timestamp="2015-06-25T13:07:15.100000">
+<title>Test provenance title 2</title>
+<description>Test provenance description 2</description>
+</provenance_step>
+<provenance_step timestamp="2015-06-25T13:07:17.100000">
+<title>Test provenance title 3</title>
+<description>Test provenance description 3</description>
+</provenance_step>
+</inasafe_provenance></gmd:supplementalInformation>
         </gmd:MD_DataIdentification>
     </gmd:identificationInfo>
     <gmd:distributionInfo>
