@@ -84,7 +84,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             5: 0,
             6: 0,
             7: 0,
-            8: 0.17778, # FIXME It should be rounded to zero!! 
+            8: 0.17778, # FIXME It should be rounded to zero!!
             9: 0,
             10: 0
         }

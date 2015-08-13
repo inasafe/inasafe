@@ -84,7 +84,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             5: 0,
             6: 0,
             7: 0,
-            8: 0.083498, # should be rounded to zero!! not 10.
+            8: 0.083498, # FIXME should be rounded to zero!! not 10.
             9: 0,
             10: 0
         }
@@ -106,7 +106,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             5: 0,
             6: 0,
             7: 0,
-            8: 199.91650,
+            8: 199.91650, #FIXME should be 200.0
             9: 0,
             10: 0
         }

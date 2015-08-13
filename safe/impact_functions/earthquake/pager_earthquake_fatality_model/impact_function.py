@@ -31,11 +31,14 @@ from safe.impact_functions.earthquake\
 class PAGFatalityFunction(ITBFatalityFunction):
     # noinspection PyUnresolvedReferences
     """USGS Pager fatality estimation model.
+
     Fatality rate(MMI) = cum. standard normal dist(1/BETA * ln(MMI/THETA)).
+
     Reference:
     Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a).
     Estimating casualties for large worldwide earthquakes using an empirical
     approach. U.S. Geological Survey Open-File Report 2009-1136.
+
     v1.0:
         Theta: 14.05, Beta: 0.17, Zeta 2.15
         Jaiswal, K, and Wald, D (2010)
@@ -68,11 +71,15 @@ class PAGFatalityFunction(ITBFatalityFunction):
 
     # noinspection PyPep8Naming
     def cdf_normal(self, x):
-        """cumulative distribution function (CDF) of
-        the standard normal distribution
+        """Cumulative distribution function of standard normal distribution.
+
+        Logic based on http://en.wikipedia.org/wiki/Normal_distribution
+
         :param x
+        :type x: float
+
         :returns: phi of (x)
-        (http://en.wikipedia.org/wiki/Normal_distribution)
+        :rtype: float
         """
         return (1.0 + math.erf(x / math.sqrt(2.0))) / 2.0
 
@@ -80,21 +87,34 @@ class PAGFatalityFunction(ITBFatalityFunction):
         """Pager method to compute fatality rate.
 
         :param mmi: MMI
+        :type mmi: float
 
-        :returns: Fatality rate
+        :returns: Fatality rate calculated as:
             lognorm.cdf(mmi, shape=Beta, scale=Theta)
+        :rtype: float
         """
-        THETA = self.hardcoded_parameters['Theta']
-        BETA = self.hardcoded_parameters['Beta']
-        x = math.log(mmi / THETA) / BETA
+        theta = self.hardcoded_parameters['Theta']
+        beta = self.hardcoded_parameters['Beta']
+        x = math.log(mmi / theta) / beta
         return self.cdf_normal(x)
 
-    def roundtosum(self, l, r):
+    @staticmethod
+    def round_to_sum(l, r):
         """
+        Round a list of numbers while maintaining the sum.
+
         http://stackoverflow.com/questions/15769948/
         round-a-python-list-of-numbers-and-maintain-the-sum
-        l: array
-        r: decimal place
+
+        :param l: array
+        :type l: list(float)
+
+        :param r: decimal place
+        :type r: int
+
+        :returns: A list of rounded numbers whose sum is equal to the
+            sum of the list of input numbers.
+        :rtype: list
         """
         q = 10**(-r)
         d = int((round(sum(l), r) - sum([round(x, r) for x in l])) * (10**r))
@@ -113,24 +133,27 @@ class PAGFatalityFunction(ITBFatalityFunction):
                 1, d) if i in c else round(x, r) for (i, x) in enumerate(l)]
 
     def compute_probability(self, total_fatalities):
-        """Pager method to compute probaility of fatality in
-        each magnitude bin: (0,1), (1,10), (10,10^2), (10^2,10^3),
-        (10^3, 10^4), (10^4, 10^5), (10^5, 10^6+)
+        """Pager method compute probaility of fatality in each magnitude bin.
 
-        :param total_fatalities
+        (0,1), (1,10), (10,10^2), (10^2,10^3), (10^3, 10^4),
+        (10^4, 10^5), (10^5, 10^6+)
 
-        :returns: probability of fatality magnitude bin
+        :param total_fatalities: List of total fatalities in each MMI class.
+        :type total_fatalities: int, float
+
+        :returns: Probability of fatality magnitude bin from
             lognorm.cdf(bin, shape=Zeta, scale=total_fatalities)
+        :rtype: list(float)
         """
-        ZETA = self.hardcoded_parameters['Zeta']
+        zeta = self.hardcoded_parameters['Zeta']
         magnitude_bin = self.hardcoded_parameters['magnitude_bin']
         cprob = numpy.ones_like(magnitude_bin, dtype=float)
 
         if total_fatalities > 1:
             for (i, mbin) in enumerate(magnitude_bin):
-                x = math.log(mbin / total_fatalities) / ZETA
+                x = math.log(mbin / total_fatalities) / zeta
                 cprob[i] = self.cdf_normal(x)
 
         cprob = numpy.append(cprob, 1.0) # 1000+
         prob = numpy.hstack((cprob[0], numpy.diff(cprob)))*100.0 # percentage
-        return self.roundtosum(prob, 0) # rounding to decimal
+        return self.round_to_sum(prob, 0) # rounding to decimal

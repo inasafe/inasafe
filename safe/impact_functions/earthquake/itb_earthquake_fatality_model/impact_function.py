@@ -31,7 +31,6 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
-from safe.common.exceptions import InaSAFEError
 from safe.utilities.i18n import tr
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
@@ -113,11 +112,14 @@ class ITBFatalityFunction(ContinuousRHContinuousRE):
         self.hardcoded_parameters = OrderedDict([
             ('x', 0.62275231), ('y', 8.03314466),  # Model coefficients
             # Rates of people displaced for each MMI level
-            ('mmi_range', range(2, 11)), # from MMI 2 to 10
+            # should be consistent with defined mmi range below. - Hyeuk
             ('displacement_rate', {
                 2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0, 6: 1.0,
                 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
             }),
+            # it should be range(2,11) if mmi 10 is included. Otherwise we
+            # should remove mmi 10 in the displacement_rate as well - Hyeuk
+            ('mmi_range', range(2, 11)),
             ('step', 0.5),
             ('calculate_displaced_people', True)
         ])
@@ -173,14 +175,7 @@ class ITBFatalityFunction(ContinuousRHContinuousRE):
             fatalities = self.fatality_rate(mmi) * exposed
 
             # Calculate expected number of displaced people per level
-            try:
-                displacements = displacement_rate[mmi] * (
-                    exposed-fatalities)
-            except KeyError, e:
-                msg = 'mmi = %i, mmi_matches = %s, Error msg: %s' % (
-                    mmi, str(mmi_matches), str(e))
-                # noinspection PyExceptionInherit
-                raise InaSAFEError(msg)
+            displacements = displacement_rate[mmi] * (exposed-fatalities)
 
             # Adjust displaced people to disregard fatalities.
             # Set to zero if there are more fatalities than displaced.
