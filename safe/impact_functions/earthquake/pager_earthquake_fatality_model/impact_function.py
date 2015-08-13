@@ -58,9 +58,10 @@ class PAGFatalityFunction(ITBFatalityFunction):
             ('Beta', 0.151),
             ('Zeta', 1.641), # Model coefficients
             # Rates of people displaced for each MMI level
+            # FIXME: should be independent from fatality model - Hyeuk
             ('displacement_rate', {
                 2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0, 6: 1.0,
-                7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0}), # Seems not model specific
+                7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0}),
             ('mmi_range', range(2, 11)),
             ('step', 0.5),
             # Threshold below which layer should be transparent
@@ -75,7 +76,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
 
         Logic based on http://en.wikipedia.org/wiki/Normal_distribution
 
-        :param x
+        :param x: random variable x
         :type x: float
 
         :returns: phi of (x)
