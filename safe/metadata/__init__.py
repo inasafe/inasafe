@@ -20,5 +20,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # expose for nicer imports
 from safe.metadata.base_metadata import BaseMetadata
-from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
 from safe.metadata.generic_layer_metadata import GenericLayerMetadata
+from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
+from safe.metadata.exposure_layer_metadata import ExposureLayerMetadata
+from safe.metadata.hazard_layer_metadata import HazardLayerMetadata
+from safe.metadata.aggregation_layer_metadata import AggregationLayerMetadata

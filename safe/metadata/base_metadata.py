@@ -53,6 +53,7 @@ class BaseMetadata(object):
 
     .. versionadded:: 3.2
     """
+
     # define as Abstract base class
     __metaclass__ = abc.ABCMeta
 
@@ -135,6 +136,7 @@ class BaseMetadata(object):
     def __eq__(self, other):
         return self.dict == other.dict
 
+    @abc.abstractmethod
     def __init__(self, layer_uri, xml_uri=None, json_uri=None):
         """
         Constructor.

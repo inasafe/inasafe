@@ -24,11 +24,13 @@ from safe.metadata.utils import reading_ancillary_files
 
 class GenericLayerMetadata(BaseMetadata):
     """
-    Metadata class for generic layers such as hazard, exposure and aggregation
+    Base class for generic layers such as hazard, exposure and aggregation.
 
-    if you need to add a standard XML property that only applies to this
-    subclass, do it this way. @property and @propname.setter will be
-    generated automatically
+    This class can be subclassed so you can create only a minimal
+    concrete class that implements only _standard_properties to add specific
+    properties. You can also add a standard XML property that applies to all
+    subclasses here. In both cases do it as explained below. @property and
+    @propname.setter will be generated automatically
 
     _standard_properties = {
         'TESTprop': (
@@ -39,6 +41,7 @@ class GenericLayerMetadata(BaseMetadata):
     }
     from safe.metadata.utils import merge_dictionaries
     _standard_properties = merge_dictionaries(
+        # change BaseMetadata to GenericLayerMetadata in subclasses
         BaseMetadata._standard_properties, _standard_properties)
 
     .. versionadded:: 3.2
