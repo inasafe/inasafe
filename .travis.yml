@@ -23,6 +23,7 @@ install:
   - pip install --upgrade pip
   - pip install --upgrade pep8
   - pip install --upgrade pylint
+  - pip install scrutinizer-ocular
   - echo "Checking out test data at" `date`
   - make testdata
 
@@ -32,11 +33,14 @@ before_script:
   - export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`
   - echo "PYTHONPATH:" $PYTHONPATH
   - export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
+  - dpkg -s qgis | grep 'Version'
+
 
 script:
   - make pep8
   - make pylint
   - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -A 'not slow' -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe
+  - ocular --data-file ".coverage" --config-file ".coveragerc"
 
 notifications:
   irc:
