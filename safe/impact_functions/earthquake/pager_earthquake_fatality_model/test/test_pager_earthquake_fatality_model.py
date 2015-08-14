@@ -76,7 +76,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
                 expected_result[key_], result)
             self.assertEqual(expected_result[key_], result, message)
 
-        expected_result = dict
+        expected_result = dict()
         expected_result['fatalities_per_mmi'] = {
             2: 0,
             3: 0,
