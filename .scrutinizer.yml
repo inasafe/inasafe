@@ -95,9 +95,6 @@ tools:
     pylint:
         python_version: '2'
         config_file: pylintrc
-    external_code_coverage:
-        timeout: 300   # How long should we wait for code coverage (in seconds).
-        runs: 1        # In how many runs have you split your tests?
 filter:
     excluded_paths:
         - '*/test/*'
