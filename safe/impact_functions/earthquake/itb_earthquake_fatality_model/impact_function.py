@@ -204,10 +204,9 @@ class ITBFatalityFunction(ContinuousRHContinuousRE):
         total_fatalities = population_rounding(total_fatalities_raw)
         # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
         # will be rounded down to 0 - Tim
-        # This seems redudant to the assumption in the fatality model:
-        # (zero fatality if MMI < 4) - Hyeuk
-        #if total_fatalities < 50:
-        #    total_fatalities = 0
+        # Needs to revisit but keep it alive for the time being - Hyeuk, Jono
+        if total_fatalities < 50:
+            total_fatalities = 0
 
         # Compute number of people displaced due to building collapse
         total_displaced = population_rounding(total_displaced_raw)
