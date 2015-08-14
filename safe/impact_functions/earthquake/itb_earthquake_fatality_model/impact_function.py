@@ -343,6 +343,7 @@ class ITBFatalityFunction(ContinuousRHContinuousRE):
                 'total_population': total_population,
                 'exposed_per_mmi': number_of_exposed,
                 'total_fatalities': total_fatalities,
+                'total_fatalities_raw': total_fatalities_raw,
                 'fatalities_per_mmi': number_of_fatalities,
                 'total_displaced': total_displaced,
                 'displaced_per_mmi': number_of_displaced,
