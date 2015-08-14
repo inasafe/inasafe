@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 from contextlib import contextmanager
+from xml.dom.minidom import parseString
 from xml.etree import ElementTree
 from safe.metadata.property import (
     CharacterStringProperty,
@@ -127,3 +128,20 @@ def read_property_from_xml(root, path):
         return element.text.strip(' \t\n\r')
     except AttributeError:
         return None
+
+def prettify_xml(xml_str):
+    """
+    returns prettified XML without blank lines
+
+    based on http://stackoverflow.com/questions/14479656/
+    :param xml_str: the XML to be prettified
+    :type xml_str: str
+    :return: the prettified XML
+    :rtype: str
+    """
+    parsed_xml = parseString(xml_str)
+    pretty_xml = '\n'.join(
+        [line for line in parsed_xml.toprettyxml(
+            indent=' '*2,
+            encoding='UTF-8').split('\n') if line.strip()])
+    return pretty_xml

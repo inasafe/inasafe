@@ -19,7 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from xml.etree import ElementTree
 from safe.metadata import BaseMetadata
-from safe.metadata.utils import reading_ancillary_files
+from safe.metadata.utils import reading_ancillary_files, prettify_xml
 
 
 class GenericLayerMetadata(BaseMetadata):
@@ -91,7 +91,7 @@ class GenericLayerMetadata(BaseMetadata):
         :rtype: str
         """
         root = super(GenericLayerMetadata, self).xml
-        return ElementTree.tostring(root)
+        return prettify_xml(ElementTree.tostring(root))
 
     def read_json(self):
         """

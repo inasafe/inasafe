@@ -22,7 +22,7 @@ from xml.etree import ElementTree
 
 from safe.metadata import BaseMetadata
 from safe.metadata.provenance import Provenance
-from safe.metadata.utils import reading_ancillary_files, XML_NS
+from safe.metadata.utils import reading_ancillary_files, XML_NS, prettify_xml
 
 
 class ImpactLayerMetadata(BaseMetadata):
@@ -160,7 +160,7 @@ class ImpactLayerMetadata(BaseMetadata):
         # generate the provenance xml element
         provenance_element = ElementTree.fromstring(self.provenance.xml)
         provenance_parent.append(provenance_element)
-        return ElementTree.tostring(root)
+        return prettify_xml(ElementTree.tostring(root))
 
     def read_xml(self):
         """

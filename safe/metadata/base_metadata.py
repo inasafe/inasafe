@@ -387,10 +387,10 @@ class BaseMetadata(object):
         try:
             metadata_str = self.db_io.read_metadata_from_uri(
                 self.layer_uri, 'xml')
+            root = ElementTree.fromstring(metadata_str)
+            return root
         except HashNotFoundError:
             return None
-        root = ElementTree.fromstring(metadata_str)
-        return root
 
     @property
     # there is no setter because the layer should not change overtime
@@ -614,8 +614,7 @@ class BaseMetadata(object):
         if file_format == 'json':
             metadata = self.json
         elif file_format == 'xml':
-            metadata = '<?xml version="1.0" encoding="UTF-8"?>\n'
-            metadata += self.xml
+            metadata = self.xml
         else:
             raise TypeError('The requested file type (%s) is not yet supported'
                             % file_format)
