@@ -67,7 +67,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
 
         expected_result = {
             'total_population': 200,
-            'total_fatalities': 10, # should be zero FIXME
+            'total_fatalities': 0,
             'total_displaced': 200
         }
         for key_ in expected_result.keys():
@@ -76,7 +76,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
                 expected_result[key_], result)
             self.assertEqual(expected_result[key_], result, message)
 
-        expected_result = {}
+        expected_result = dict()
         expected_result['fatalities_per_mmi'] = {
             2: 0,
             3: 0,
@@ -84,7 +84,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             5: 0,
             6: 0,
             7: 0,
-            8: 0.083498, # FIXME should be rounded to zero!! not 10.
+            8: 0.083498,  # FIXME should be rounded to zero!! not 10.
             9: 0,
             10: 0
         }
@@ -106,7 +106,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             5: 0,
             6: 0,
             7: 0,
-            8: 199.91650, #FIXME should be 200.0
+            8: 199.91650,  # FIXME should be 200.0
             9: 0,
             10: 0
         }
