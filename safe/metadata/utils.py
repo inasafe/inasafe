@@ -86,9 +86,9 @@ def reading_ancillary_files(metadata):
     :param metadata: the metadata object
     :type metadata: BaseMetadata
     """
-    metadata._reading_ancillary_file = True
+    metadata.reading_ancillary_files = True
     yield metadata
-    metadata._reading_ancillary_file = False
+    metadata.reading_ancillary_files = False
 
 
 def merge_dictionaries(base_dict, extra_dict):

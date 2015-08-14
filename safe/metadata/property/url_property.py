@@ -37,7 +37,8 @@ class UrlProperty(BaseProperty):
         super(UrlProperty, self).__init__(
             name, value, xml_path, self._allowed_python_types)
 
-    def is_valid(self, value):
+    @staticmethod
+    def is_valid(value):
         # TODO (MB): this check could be a bit stronger
         if value is None or value.isValid():
             return True

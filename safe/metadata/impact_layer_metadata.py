@@ -146,13 +146,18 @@ class ImpactLayerMetadata(BaseMetadata):
         root = super(ImpactLayerMetadata, self).xml
         provenance_path = self._special_properties['provenance']
         provenance_element = root.find(provenance_path, XML_NS)
+
+        # find the provenance parent tag
         if provenance_element is not None:
+            # there is already a provenance tag so we remove it
             provenance_parent = provenance_element.getparent()
             provenance_parent.remove(provenance_element)
         else:
+            # find the parent using the provenance path minus one level
             provenance_parent = '/'.join(provenance_path.split('/')[:-1])
             provenance_parent = root.find(provenance_parent, XML_NS)
 
+        # generate the provenance xml element
         provenance_element = ElementTree.fromstring(self.provenance.xml)
         provenance_parent.append(provenance_element)
         return ElementTree.tostring(root)

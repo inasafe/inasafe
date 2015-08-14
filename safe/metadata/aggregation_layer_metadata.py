@@ -33,46 +33,64 @@ class AggregationLayerMetadata(GenericLayerMetadata):
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'aggregation_attribute/'
             'gco:CharacterString'),
         'adult_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'adult_ratio_attribute/'
             'gco:CharacterString'),
         'adult_ratio_default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'adult_ratio_default/'
             'gco:CharacterString'),
         'elderly_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'elderly_ratio_attribute/'
             'gco:CharacterString'),
         'elderly_ratio_default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'elderly_ratio_default/'
             'gco:CharacterString'),
         'female_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'female_ratio_attribute/'
             'gco:CharacterString'),
         'female_ratio_default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'female_ratio_default/'
             'gco:CharacterString'),
         'youth_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'youth_ratio_attribute/'
             'gco:CharacterString'),
         'youth_ratio_default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'youth_ratio_default/'
             'gco:CharacterString')
     }
     _standard_properties = merge_dictionaries(

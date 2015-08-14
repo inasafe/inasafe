@@ -35,7 +35,8 @@ class CharacterStringProperty(BaseProperty):
         super(CharacterStringProperty, self).__init__(
             name, value, xml_path, self._allowed_python_types)
 
-    def is_valid(self, value):
+    @staticmethod
+    def is_valid(value):
         # any string sequence is valid.
         return True
 

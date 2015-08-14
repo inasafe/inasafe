@@ -33,26 +33,36 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'hazard/'
             'gco:CharacterString'),
         'hazard_category': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'hazard_category/'
             'gco:CharacterString'),
         'continuous_hazard_unit': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'continuous_hazard_unit/'
             'gco:CharacterString'),
         'vector_hazard_classification': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'vector_hazard_classification/'
             'gco:CharacterString'),
         'raster_hazard_classification': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
+            'inasafe/'
+            'raster_hazard_classification/'
             'gco:CharacterString')
     }
     _standard_properties = merge_dictionaries(

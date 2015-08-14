@@ -109,8 +109,51 @@ class BaseMetadata(object):
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
-            'inasafe_report/'
+            'inasafe/'
+            'report/'
             'gco:CharacterString'),
+        'layer_purpose': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'layer_purpose/'
+            'gco:CharacterString'),
+        'layer_mode': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'layer_mode/'
+            'gco:CharacterString'),
+        'layer_geometry': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'layer_geometry/'
+            'gco:CharacterString'),
+        'keyword_version': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'keyword_version/'
+            'gco:CharacterString'),
+        'scale': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'scale/'
+            'gco:CharacterString'),
+        'source': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'source/'
+            'gco:CharacterString')
     }
 
     def __getattr__(self, name):
@@ -181,7 +224,7 @@ class BaseMetadata(object):
         if instantiate_metadata_db:
             self.db_io = MetadataDbIO()
 
-        self._reading_ancillary_files = False
+        self.reading_ancillary_files = False
         self._properties = {}
 
         # initialise the properties
@@ -494,7 +537,7 @@ class BaseMetadata(object):
             self._properties[name] = metadata_property
             self.set_last_update_to_now()
         except TypeError:
-            if self._reading_ancillary_files:
+            if self.reading_ancillary_files:
                 # we are parsing files so we want to accept as much as
                 # possible without raising exceptions
                 pass
