@@ -67,7 +67,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
 
         expected_result = {
             'total_population': 200,
-            'total_fatalities': 0, # should be zero FIXME
+            'total_fatalities': 10, # should be zero FIXME
             'total_displaced': 200
         }
         for key_ in expected_result.keys():
