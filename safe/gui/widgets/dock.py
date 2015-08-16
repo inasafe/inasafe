@@ -603,7 +603,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         notes = m.Paragraph(
-            self.tr('You can now proceed to run your model by clicking the'),
+            self.tr('You can now proceed to run your analysis by clicking '
+                    'the'),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
@@ -2006,7 +2007,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         self.tr('No overlapping extents'),
                         message)
             self.pbnRunStop.setEnabled(False)
-            # self.show_static_message(self.no_overlap_message())
+            # For #2077 somewhat kludgy hack to prevent positive
+            # message when we cant actually run
+            message = self.tr(
+                'You can now proceed to run your analysis by clicking the')
+            current_text = DOCK.wvResults.page_to_text()
+            if message in current_text:
+                self.show_static_message(self.no_overlap_message())
 
     def validate_extents(self):
         """Check if the current extents are valid.
