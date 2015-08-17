@@ -65,7 +65,9 @@ class FloodPolygonBuildingFunction(
                     'Buildings are said to be inundated when in a region with '
                     'field "%s" in "%s" .') % (
                         self.hazard_class_attribute,
-                        ', '.join(self.hazard_class_mapping[self.wet]))
+                        ', '.join([
+                            str(_) for _ in self.hazard_class_mapping[self.wet]
+                        ]))
             }
         ]
 
