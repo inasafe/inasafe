@@ -1142,7 +1142,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure', 'Land Cover']
+        expected_subcategories = ['Structure', 'Land Cover','Area']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # Choosing structure

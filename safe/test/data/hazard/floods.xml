@@ -174,7 +174,7 @@
                 <inasafe_keywords>
 <![CDATA[field: FLOODPRONE
 hazard: flood
-hazard_category: multiple_event
+hazard_category: single_event
 keyword_version: 3.2
 layer_geometry: polygon
 layer_mode: classified
@@ -182,7 +182,8 @@ layer_purpose: hazard
 source: NBS
 title: Flood
 url: http://nbs.go.tz
-vector_hazard_classification: generic_vector_hazard_classes
+value_map: {"dry": ["NO"], "wet": ["YES"]}
+vector_hazard_classification: flood_vector_hazard_classes
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

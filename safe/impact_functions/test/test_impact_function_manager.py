@@ -46,6 +46,7 @@ from safe.definitions import (
     exposure_road,
     exposure_population,
     exposure_land_cover,
+    exposure_area,
     count_exposure_unit,
     density_exposure_unit,
     layer_mode_continuous,
@@ -193,7 +194,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         exposures = impact_function_manager.exposures_for_layer(
             'polygon')
-        expected = [exposure_structure, exposure_land_cover]
+        expected = [exposure_structure, exposure_land_cover,exposure_area]
         self.assertItemsEqual(exposures, expected)
 
         exposures = impact_function_manager.exposures_for_layer(
@@ -241,7 +242,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.available_exposures()
         expected_result = [
             exposure_structure, exposure_road, exposure_population,
-            exposure_land_cover]
+            exposure_land_cover,exposure_area]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
