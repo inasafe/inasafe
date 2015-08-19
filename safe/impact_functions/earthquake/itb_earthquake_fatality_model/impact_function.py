@@ -175,11 +175,11 @@ class ITBFatalityFunction(ContinuousRHContinuousRE):
             fatalities = self.fatality_rate(mmi) * exposed
 
             # Calculate expected number of displaced people per level
-            displacements = displacement_rate[mmi] * (exposed-fatalities)
+            displacements = displacement_rate[mmi] * (exposed - fatalities)
 
             # Adjust displaced people to disregard fatalities.
             # Set to zero if there are more fatalities than displaced.
-            #displacements = numpy.where(
+            # displacements = numpy.where(
             #    displacements > fatalities, displacements - fatalities, 0)
 
             # Sum up numbers for map
