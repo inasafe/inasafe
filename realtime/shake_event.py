@@ -24,10 +24,10 @@ import cPickle as pickle
 import math
 import logging
 from datetime import datetime
-from tzlocal import get_localzone
 import numpy
 # noinspection PyPackageRequirements
-import pytz  # sudo apt-get install python-tz
+from tzlocal import get_localzone
+# declared in REQUIREMENTS.txt in docker-realtime-orchestration repo
 
 from qgis.core import (
     QgsPoint,
