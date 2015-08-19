@@ -597,7 +597,7 @@ class Vector(Layer):
         # FIXME (DK): this branch isn't covered by test
         if not QGIS_IS_AVAILABLE:
             msg = ('Tried to convert layer to QgsVectorLayer instance, '
-                   'but QGIS is not avialable.')
+                   'but QGIS is not available.')
             raise TypeError(msg)
 
         # FIXME (DK): ? move code from safe_to_qgis_layer to this method
