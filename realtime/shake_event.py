@@ -24,6 +24,7 @@ import cPickle as pickle
 import math
 import logging
 from datetime import datetime
+from tzlocal import get_localzone
 import numpy
 # noinspection PyPackageRequirements
 import pytz  # sudo apt-get install python-tz
@@ -1690,22 +1691,16 @@ class ShakeEvent(QObject):
 
         .. note:: Code based on Ole's original impact_map work.
         """
-        # Work out interval since earthquake (assume both are GMT)
-        year = self.shake_grid.year
-        month = self.shake_grid.month
-        day = self.shake_grid.day
-        hour = self.shake_grid.hour
-        minute = self.shake_grid.minute
-        second = self.shake_grid.second
+        # Work out interval since earthquake
 
-        eq_date = datetime(year, month, day, hour, minute, second)
+        # get eq time (already with timezone)
+        eq_date = self.shake_grid.time
 
-        # Hack - remove when ticket:10 has been resolved
-        tz = pytz.timezone('Asia/Jakarta')  # Or 'Etc/GMT+7'
-        now = datetime.utcnow()
-        now_jakarta = now.replace(tzinfo=pytz.utc).astimezone(tz)
-        eq_jakarta = eq_date.replace(tzinfo=tz).astimezone(tz)
-        time_delta = now_jakarta - eq_jakarta
+        # get current local time
+        now = datetime.now()
+        local_tz = get_localzone()
+        now = now.replace(tzinfo=local_tz)
+        time_delta = now - eq_date
 
         # Work out string to report time elapsed after quake
         if time_delta.days == 0:
