@@ -11,18 +11,19 @@ import unittest
 import os
 import logging
 
-from qgis.core import (
-    QgsMapLayerRegistry,
-    QgsRectangle)
+LOGGER = logging.getLogger('InaSAFE')
 
 from safe.common.utilities import temp_dir, unique_filename
 from safe.utilities.resources import resources_path
 from safe.test.utilities import load_layer, get_qgis_app, test_data_path
-from safe.utilities.gis import qgis_version
 from safe.report.impact_report import ImpactReport
+from safe.utilities.gis import qgis_version
+
+from qgis.core import (
+    QgsMapLayerRegistry,
+    QgsRectangle)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-LOGGER = logging.getLogger('InaSAFE')
 
 
 class ImpactReportTest(unittest.TestCase):
@@ -86,7 +87,7 @@ class ImpactReportTest(unittest.TestCase):
         impact_layer_path = test_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
-        # noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences,PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(layer)
         # noinspection PyCallingNonCallable
         rect = QgsRectangle(106.8194, -6.2108, 106.8201, -6.1964)
@@ -148,7 +149,7 @@ class ImpactReportTest(unittest.TestCase):
         impact_layer_path = test_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
-        # noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences,PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(layer)
         # noinspection PyCallingNonCallable
         rect = QgsRectangle(106.8194, -6.2108, 106.8201, -6.1964)
@@ -193,7 +194,7 @@ class ImpactReportTest(unittest.TestCase):
         impact_layer_path = test_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
-        # noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences,PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(layer)
         # noinspection PyCallingNonCallable
         rect = QgsRectangle(106.8194, -6.2108, 106.8201, -6.1964)
@@ -219,7 +220,10 @@ class ImpactReportTest(unittest.TestCase):
         out_size = os.stat(out_path).st_size
         self.assertTrue(out_size > 0, message)
 
+    # This a dirty hack to exclude from Travis test.
+    test_print_impact_table.slow = True
+
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ImpactReport, 'test')
+    suite = unittest.makeSuite(ImpactReport)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
