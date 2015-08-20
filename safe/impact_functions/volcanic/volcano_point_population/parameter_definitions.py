@@ -12,7 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.utilities.i18n import tr
 
-from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.input_list_parameter import InputListParameter
 
 
@@ -31,12 +30,4 @@ def distance():
     field.help_text = tr('The list of radii for volcano buffer.')
     field.description = tr(
         'This list contains radii of volcano buffer in increasing order.')
-    return field
-
-
-def volcano_name_attribute():
-    field = StringParameter()
-    field.name = 'Volcano Name Attribute'
-    field.is_required = True
-    field.value = 'NAME'
     return field

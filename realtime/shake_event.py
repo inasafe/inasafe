@@ -26,7 +26,8 @@ import logging
 from datetime import datetime
 import numpy
 # noinspection PyPackageRequirements
-import pytz  # sudo apt-get install python-tz
+from tzlocal import get_localzone
+# declared in REQUIREMENTS.txt in docker-realtime-orchestration repo
 
 from qgis.core import (
     QgsPoint,
@@ -1263,23 +1264,10 @@ class ShakeEvent(QObject):
 
         :raise Propagates any exceptions.
         """
-        pdf_path = os.path.join(
-            shakemap_extract_dir(),
-            self.event_id,
-            '%s-%s.pdf' % (self.event_id, self.locale))
-        image_path = os.path.join(
-            shakemap_extract_dir(),
-            self.event_id,
-            '%s-%s.png' % (self.event_id, self.locale))
-        thumbnail_image_path = os.path.join(
-            shakemap_extract_dir(),
-            self.event_id,
-            '%s-thumb-%s.png' % (self.event_id, self.locale))
-        pickle_path = os.path.join(
-            shakemap_extract_dir(),
-            self.event_id,
-            '%s-metadata-%s.pickle' % (self.event_id, self.locale))
+        image_path, pdf_path, pickle_path, thumbnail_image_path = \
+            self.generate_result_path()
 
+        short_circuit_flag = False
         if not force_flag:
             # Check if the images already exist and if so
             # short circuit.
@@ -1294,7 +1282,6 @@ class ShakeEvent(QObject):
                 LOGGER.info('%s (already exists)' % pdf_path)
                 LOGGER.info('%s (already exists)' % image_path)
                 LOGGER.info('%s (already exists)' % thumbnail_image_path)
-                return pdf_path
 
         # Make sure the map layers have all been removed before we
         # start otherwise in batch mode we will get overdraws.
@@ -1328,6 +1315,11 @@ class ShakeEvent(QObject):
             logging.info('Created: %s', cities_html_path)
         except:  # pylint: disable=W0702
             logging.exception('No nearby cities found!')
+
+        if short_circuit_flag:
+            # short circuit after we calculated nearby cities
+            # (used in realtime push)
+            return pdf_path
 
         _, impacts_html_path = self.calculate_impacts()
         logging.info('Created: %s', impacts_html_path)
@@ -1488,6 +1480,42 @@ class ShakeEvent(QObject):
             self.event_id,
             'project.qgs')
         project.write(QFileInfo(project_path))
+
+    def generate_result_path(self):
+        """Generate path file for the result
+
+        :return: (image_path, pdf_path, pickle_path, thumbnail_image_path)
+        """
+        pdf_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-%s.pdf' % (self.event_id, self.locale))
+        image_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-%s.png' % (self.event_id, self.locale))
+        thumbnail_image_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-thumb-%s.png' % (self.event_id, self.locale))
+        pickle_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-metadata-%s.pickle' % (self.event_id, self.locale))
+        return image_path, pdf_path, pickle_path, thumbnail_image_path
+
+    def generate_result_path_dict(self):
+        """Generate result path as dict.
+
+        :return: keys: 'pdf', 'image', 'pickle', 'thumbnail'
+        """
+        paths = self.generate_result_path()
+        return {
+            'pdf': paths[1],
+            'image': paths[0],
+            'pickle': paths[2],
+            'thumbnail': paths[3]
+        }
 
     # noinspection PyMethodMayBeStatic
     def bearing_to_cardinal(self, bearing):
@@ -1663,22 +1691,16 @@ class ShakeEvent(QObject):
 
         .. note:: Code based on Ole's original impact_map work.
         """
-        # Work out interval since earthquake (assume both are GMT)
-        year = self.shake_grid.year
-        month = self.shake_grid.month
-        day = self.shake_grid.day
-        hour = self.shake_grid.hour
-        minute = self.shake_grid.minute
-        second = self.shake_grid.second
+        # Work out interval since earthquake
 
-        eq_date = datetime(year, month, day, hour, minute, second)
+        # get eq time (already with timezone)
+        eq_date = self.shake_grid.time
 
-        # Hack - remove when ticket:10 has been resolved
-        tz = pytz.timezone('Asia/Jakarta')  # Or 'Etc/GMT+7'
-        now = datetime.utcnow()
-        now_jakarta = now.replace(tzinfo=pytz.utc).astimezone(tz)
-        eq_jakarta = eq_date.replace(tzinfo=tz).astimezone(tz)
-        time_delta = now_jakarta - eq_jakarta
+        # get current local time
+        now = datetime.now()
+        local_tz = get_localzone()
+        now = now.replace(tzinfo=local_tz)
+        time_delta = now - eq_date
 
         # Work out string to report time elapsed after quake
         if time_delta.days == 0:
@@ -1733,7 +1755,7 @@ class ShakeEvent(QObject):
         """
         return self.tr('Version: %s' % get_version())
 
-    def __str__(self):
+    def __unicode__(self):
         """The unicode representation for an event object's state.
 
         :return: A string describing the ShakeGridConverter instance
@@ -1813,6 +1835,9 @@ class ShakeEvent(QObject):
             'search_boxes: %(search_boxes)s\n'
             % event_dict)
         return event_string
+
+    def __str__(self):
+        return self.__unicode__()
 
     def setup_i18n(self):
         """Setup internationalisation for the reports.

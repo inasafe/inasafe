@@ -26,6 +26,7 @@ from safe.impact_functions.inundation.flood_raster_population.impact_function\
     import FloodEvacuationRasterHazardFunction
 from safe.test.utilities import get_qgis_app, test_data_path
 from safe.common.utilities import OrderedDict
+from safe.storage.safe_layer import SafeLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -48,8 +49,8 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
         exposure_layer = read_layer(exposure_path)
 
         function.parameters['thresholds'].value = [0.5, 0.7, 1.0]
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact = function.impact
 

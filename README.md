@@ -1,7 +1,11 @@
 InaSAFE
 =======
 
+[![Join the chat at https://gitter.im/AIFDR/inasafe](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/AIFDR/inasafe?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=develop)](https://travis-ci.org/AIFDR/inasafe)
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AIFDR/inasafe/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/AIFDR/inasafe/?branch=develop)
 
 InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and

@@ -221,7 +221,7 @@ class BuildingExposureReportMixin(ReportMixin):
                 # categories
                 [format_int(x) for x in affected_by_usage] +
                 # total
-                [format_int(sum(affected_by_usage))])
+                [format_int(self.buildings[building_type])])
             buildings_breakdown_report.append(
                 {
                     'content': building_detail

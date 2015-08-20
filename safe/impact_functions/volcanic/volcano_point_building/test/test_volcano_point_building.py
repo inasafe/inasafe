@@ -19,8 +19,11 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestVolcanoPointBuildingFunction(unittest.TestCase):
@@ -40,14 +43,15 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         exposure_layer = read_layer(building_path)
 
         impact_function = VolcanoPointBuildingFunction.instance()
-        impact_function.hazard = hazard_layer
-        impact_function.exposure = exposure_layer
+        impact_function.hazard = SafeLayer(hazard_layer)
+        impact_function.exposure = SafeLayer(exposure_layer)
         impact_function.run()
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In the event of volcano point how many '
-                             'buildings might be affected')
+        expected_question = (
+            'In the event of volcano point how many buildings might be '
+            'affected')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
@@ -62,21 +66,28 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """TestVolcanoPointBuildingFunction: Test filtering IF"""
         hazard_keywords = {
-            'title': 'merapi',
+            'volcano_name_field': 'NAME',
+            'hazard_category': 'multiple_event',
+            'keyword_version': 3.2,
+            'title': 'Volcano Point',
+            'hazard': 'volcano',
+            'source': 'smithsonian',
+            'layer_geometry': 'point',
             'layer_purpose': 'hazard',
             'layer_mode': 'classified',
-            'layer_geometry': 'point',
-            'hazard': 'volcano',
-            'hazard_category': 'multiple_event',
-            'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 
         exposure_keywords = {
+            'license': 'Open Data Commons Open Database License (ODbL)',
+            'keyword_version': 3.2,
+            'structure_class_field': 'TYPE',
+            'title': 'Buildings',
+            'layer_geometry': 'polygon',
+            'source': 'OpenStreetMap - www.openstreetmap.org',
+            'date': '26-03-2015 14:03',
             'layer_purpose': 'exposure',
             'layer_mode': 'classified',
-            'layer_geometry': 'polygon',
-            'exposure': 'structure'
-        }
+            'exposure': 'structure'}
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)

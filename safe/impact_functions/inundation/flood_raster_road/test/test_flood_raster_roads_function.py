@@ -17,7 +17,16 @@ __filename__ = 'test_flood_raster_road'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
+
 import unittest
+
+from safe.test.utilities import get_qgis_app, test_data_path
+from safe.storage.safe_layer import SafeLayer
+# In our tests, we need to have this line below before importing any other
+# safe_qgis.__init__ to load all the configurations that we make for testing
+# from PyQt4.QtCore import QVariant must be put below it
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsFeatureRequest,
@@ -27,6 +36,7 @@ from qgis.core import (
     QgsVectorLayer
 )
 
+# noinspection PyProtectedMember
 from safe.impact_functions.inundation.flood_raster_road.impact_function \
     import (
         FloodRasterRoadsFunction,
@@ -34,9 +44,6 @@ from safe.impact_functions.inundation.flood_raster_road.impact_function \
         _intersect_lines_with_vector_cells)
 from safe.gis.qgis_vector_tools import create_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.test.utilities import get_qgis_app, test_data_path
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestFloodRasterRoadsFunction(unittest.TestCase):
@@ -62,8 +69,8 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.requested_extent = rect_extent
         function.run()
         impact = function.impact

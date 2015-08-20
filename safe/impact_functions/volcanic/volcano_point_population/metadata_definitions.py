@@ -19,19 +19,19 @@ from safe.defaults import (
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.impact_functions.volcanic.volcano_point_population\
-    .parameter_definitions import distance, volcano_name_attribute
+    .parameter_definitions import distance
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
     layer_geometry_point,
     hazard_volcano,
-    volcano_vector_hazard_classes,
     hazard_category_multiple_event,
     exposure_population,
     layer_geometry_raster,
     count_exposure_unit,
     layer_mode_continuous,
-    volcano_name_field
+    volcano_name_field,
+    hazard_category_single_event
 )
 
 
@@ -84,11 +84,13 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_point],
-                    'hazard_categories': [hazard_category_multiple_event],
+                    'hazard_categories': [
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
+                    ],
                     'hazard_types': [hazard_volcano],
                     'continuous_hazard_units': [],
-                    'vector_hazard_classifications': [
-                        volcano_vector_hazard_classes],
+                    'vector_hazard_classifications': [],
                     'raster_hazard_classifications': [],
                     'additional_keywords': [volcano_name_field]
                 },
@@ -104,8 +106,6 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
             'parameters': OrderedDict([
                 # The radii
                 ('distances', distance()),
-                # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', volcano_name_attribute()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

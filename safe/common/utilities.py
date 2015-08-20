@@ -18,6 +18,8 @@ import colorsys
 from collections import OrderedDict
 # pylint: enable=unused-import
 
+from PyQt4.QtCore import QPyNullVariant
+
 from safe.common.exceptions import VerificationError
 from safe.utilities.i18n import locale
 
@@ -747,12 +749,16 @@ def get_osm_building_usage(attribute_names, feature):
     attribute_names_lower = [
         attribute_name.lower() for attribute_name in attribute_names]
 
+    # if the feature is from QGIS layer, NULL values are represented
+    # by QPyNullVariant instead of None, so we handle that explicitly
+
     usage = None
     # Prioritize 'type' attribute
     if 'type' in attribute_names_lower:
         attribute_index = attribute_names_lower.index('type')
         field_name = attribute_names[attribute_index]
-        usage = feature[field_name]
+        if not isinstance(feature[field_name], QPyNullVariant):
+            usage = feature[field_name]
 
     # Get the usage from other attribute names
     building_type_attributes = ['amenity', 'building_t', 'office', 'tourism',
@@ -762,13 +768,15 @@ def get_osm_building_usage(attribute_names, feature):
             attribute_index = attribute_names_lower.index(
                 type_attribute)
             field_name = attribute_names[attribute_index]
-            usage = feature[field_name]
+            if not isinstance(feature[field_name], QPyNullVariant):
+                usage = feature[field_name]
 
     # The last one is to get it from 'building' attribute
     if 'building' in attribute_names_lower and usage is None:
         attribute_index = attribute_names_lower.index('building')
         field_name = attribute_names[attribute_index]
-        usage = feature[field_name]
+        if not isinstance(feature[field_name], QPyNullVariant):
+            usage = feature[field_name]
 
         if usage is not None and usage.lower() == 'yes':
             usage = 'building'

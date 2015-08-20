@@ -71,37 +71,35 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
 
         # Parameters
         radii = self.parameters['distances'].value
-        name_attribute = self.parameters['volcano name attribute'].value
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard
-        exposure_layer = self.exposure
+        # Get parameters from layer's keywords
+        volcano_name_attribute = self.hazard.keyword('volcano_name_field')
 
         # Input checks
-        if not hazard_layer.is_point_data:
+        if not self.hazard.layer.is_point_data:
             msg = (
                 'Input hazard must be a polygon or point layer. I got %s with '
-                'layer type %s' % (hazard_layer.get_name(),
-                                   hazard_layer.get_geometry_name()))
+                'layer type %s' % (
+                    self.hazard.name, self.hazard.layer.get_geometry_name()))
             raise Exception(msg)
 
-        data_table = hazard_layer.get_data()
+        data_table = self.hazard.layer.get_data()
 
         # Use concentric circles
         category_title = 'Radius'
         category_header = tr('Distance [km]')
 
-        centers = hazard_layer.get_geometry()
+        centers = self.hazard.layer.get_geometry()
         rad_m = [x * 1000 for x in radii]  # Convert to meters
         hazard_layer = buffer_points(
             centers, rad_m, category_title, data_table=data_table)
 
         # Get names of volcanoes considered
-        if name_attribute in hazard_layer.get_attribute_names():
+        if volcano_name_attribute in hazard_layer.get_attribute_names():
             volcano_name_list = []
             # Run through all polygons and get unique names
             for row in data_table:
-                volcano_name_list.append(row[name_attribute])
+                volcano_name_list.append(row[volcano_name_attribute])
 
             volcano_names = ''
             for radius in volcano_name_list:
@@ -114,7 +112,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
                 hazard_layer,
-                exposure_layer,
+                self.exposure.layer,
                 attribute_name=self.target_field
             )
 
@@ -124,7 +122,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             affected_population[radius] = 0
 
         nan_warning = False
-        if has_no_data(exposure_layer.get_data(nan=True)):
+        if has_no_data(self.exposure.layer.get_data(nan=True)):
             nan_warning = True
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
@@ -138,7 +136,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
 
         # Count totals
         total_population = population_rounding(
-            int(numpy.nansum(exposure_layer.get_data())))
+            int(numpy.nansum(self.exposure.layer.get_data())))
 
         # Count cumulative for each zone
         total_affected_population = 0
@@ -163,7 +161,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
                  blank_cell],
                 header=True),
             TableRow(
-                [tr('People needing evacuation'),
+                [tr('Number of people that might need evacuation'),
                  '%s' % format_int(
                      population_rounding(total_affected_population)),
                  blank_cell],
@@ -187,15 +185,15 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
 
         table_body.extend([
             TableRow(tr(
-                'Map shows the number of people affected in each of volcano '
-                'hazard polygons.'))])
+                'Map shows the number of people within the volcano impact '
+                'area.'))])
 
         total_needs = evacuated_population_needs(
             total_affected_population, minimum_needs)
         for frequency, needs in total_needs.items():
             table_body.append(TableRow(
                 [
-                    tr('Needs should be provided %s' % frequency),
+                    tr('Minimum needs to be provided %s' % frequency),
                     tr('Total')
                 ],
                 header=True))
@@ -208,10 +206,10 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
         # Extend impact report for on-screen display
         table_body.extend(
             [TableRow(tr('Notes'), header=True),
-             tr('Total population %s in the exposure layer') % format_int(
+             tr('Total population in the analysis area is %s') % format_int(
                  total_population),
-             tr('People need evacuation if they are within the '
-                'volcanic hazard zones.')])
+             tr('People are affected and need evacuation if they are within '
+                'the volcano impact area.')])
 
         if nan_warning:
             table_body.extend([
@@ -228,7 +226,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             table_body = [
                 self.question,
                 TableRow(
-                    [tr('People needing evacuation'),
+                    [tr('Number of people that might need evacuation'),
                      '%s' % format_int(total_affected_population),
                      blank_cell],
                     header=True)]
@@ -279,7 +277,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             style_type='rasterStyle')
 
         # For printing map purpose
-        map_title = tr('People affected by the buffered point volcano')
+        map_title = tr('People within the Volcano Impact Area')
         legend_notes = tr('Thousand separator is represented by  %s' %
                           get_thousand_separator())
         legend_units = tr('(people per cell)')
@@ -290,7 +288,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             data=covered_exposure_layer.get_data(),
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
-            name=tr('People affected by the buffered point volcano'),
+            name=tr('People within the volcano impact area'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
                       'target_field': self.target_field,

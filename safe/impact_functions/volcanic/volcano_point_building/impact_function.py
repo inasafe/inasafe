@@ -28,6 +28,7 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+from safe.common.exceptions import KeywordNotFoundError
 
 
 class VolcanoPointBuildingFunction(
@@ -39,6 +40,7 @@ class VolcanoPointBuildingFunction(
 
     def __init__(self):
         super(VolcanoPointBuildingFunction, self).__init__()
+        self.volcano_names = tr('Not specified in data')
 
     def notes(self):
         """Return the notes section of the report.
@@ -83,24 +85,28 @@ class VolcanoPointBuildingFunction(
 
         # Parameters
         radii = self.parameters['distances'].value
-        volcano_name_attribute = self.parameters[
-            'volcano name attribute'].value
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard  # Volcano hazard layer
-        exposure_layer = self.exposure  # Building exposure layer
+        # Get parameters from layer's keywords
+        volcano_name_attribute = self.hazard.keyword('volcano_name_field')
+        # Try to get the value from keyword, if not exist, it will not fail,
+        # but use the old get_osm_building_usage
+        try:
+            self.exposure_class_attribute = self.exposure.keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            self.exposure_class_attribute = None
 
         # Input checks
-        if not hazard_layer.is_point_data:
+        if not self.hazard.layer.is_point_data:
             message = (
                 'Input hazard must be a vector point layer. I got %s '
                 'with layer type %s' % (
-                    hazard_layer.get_name(), hazard_layer.get_geometry_name()))
+                    self.hazard.name, self.hazard.layer.get_geometry_name()))
             raise Exception(message)
 
         # Make hazard layer by buffering the point
-        centers = hazard_layer.get_geometry()
-        features = hazard_layer.get_data()
+        centers = self.hazard.layer.get_geometry()
+        features = self.hazard.layer.get_data()
         radii_meter = [x * 1000 for x in radii]  # Convert to meters
         hazard_layer = buffer_points(
             centers,
@@ -118,8 +124,6 @@ class VolcanoPointBuildingFunction(
                 # Run through all polygons and get unique names
                 volcano_name_list.add(row[volcano_name_attribute])
             self.volcano_names = ', '.join(volcano_name_list)
-        else:
-            self.volcano_names = tr('Not specified in data')
 
         # Find the target field name that has no conflict with the attribute
         # names in the hazard layer
@@ -129,7 +133,7 @@ class VolcanoPointBuildingFunction(
 
         # Run interpolation function for polygon2polygon
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name=None)
+            hazard_layer, self.exposure.layer)
 
         # Extract relevant interpolated layer data
         attribute_names = interpolated_layer.get_attribute_names()
@@ -148,7 +152,12 @@ class VolcanoPointBuildingFunction(
             features[i][target_field] = hazard_value
 
             # Count affected buildings by usage type if available
-            usage = get_osm_building_usage(attribute_names, features[i])
+            if (self.exposure_class_attribute and
+                    self.exposure_class_attribute in attribute_names):
+                usage = features[i][self.exposure_class_attribute]
+            else:
+                usage = get_osm_building_usage(attribute_names, features[i])
+
             if usage is [None, 'NULL', 'null', 'Null', 0]:
                 usage = tr('Unknown')
 

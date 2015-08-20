@@ -38,7 +38,16 @@
      <property name="spacing">
       <number>0</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -62,7 +71,7 @@
         <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="pg1Category">
         <property name="styleSheet">
@@ -2172,7 +2181,7 @@
           <widget class="QRadioButton" name="rbHazLayerFromCanvas">
            <property name="text">
             <string>I would like to use a hazard layer already loaded in QGIS
-(launches the hazard data registration wizard if needed)</string>
+(launches the InaSAFE Keywords Creation Wizard for hazard if needed)</string>
            </property>
           </widget>
          </item>
@@ -2225,7 +2234,7 @@
           <widget class="QRadioButton" name="rbHazLayerFromBrowser">
            <property name="text">
             <string>I would like to pick a hazard layer from disk
-(launches the hazard data registration wizard if needed)</string>
+(launches the InaSAFE Keywords Creation Wizard for hazard if needed)</string>
            </property>
           </widget>
          </item>
@@ -2601,7 +2610,7 @@
           <widget class="QRadioButton" name="rbExpLayerFromBrowser">
            <property name="text">
             <string>I would like to pick an exposure layer from disk
-(launches the exposure data registration wizard if needed)</string>
+(launches the InaSAFE Keywords Creation Wizard for exposure if needed)</string>
            </property>
           </widget>
          </item>
@@ -2622,7 +2631,7 @@
           <widget class="QRadioButton" name="rbExpLayerFromCanvas">
            <property name="text">
             <string>I would like to use an exposure layer already loaded in QGIS
-(launches the exposure data registration wizard if needed)</string>
+(launches the InaSAFE Keywords Creation Wizard for exposure if needed)</string>
            </property>
           </widget>
          </item>
@@ -3169,7 +3178,7 @@ Please step back and select another layer.</string>
           <widget class="QRadioButton" name="rbAggLayerFromBrowser">
            <property name="text">
             <string>I would like to pick an aggregation layer from disk
-(launches the aggregation data registration wizard if needed)</string>
+(launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</string>
            </property>
           </widget>
          </item>
@@ -3177,7 +3186,7 @@ Please step back and select another layer.</string>
           <widget class="QRadioButton" name="rbAggLayerFromCanvas">
            <property name="text">
             <string>I would like to use an aggregation layer already loaded in QGIS
-(launches the aggregation data registration wizard if needed)</string>
+(launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</string>
            </property>
           </widget>
          </item>
@@ -3808,8 +3817,8 @@ Please step back and select another layer.</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>95</width>
-              <height>65</height>
+              <width>1005</width>
+              <height>445</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_32">
