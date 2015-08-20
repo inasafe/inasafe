@@ -11,7 +11,7 @@ build:
             - sudo apt-get install -y software-properties-common
             - sudo add-apt-repository http://qgis.org/debian-ltr  # for QGIS LTR
             - sudo apt-get update
-            - sudo apt-get install -y git qgis python-qgis xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
+            - sudo apt-get install -y --force-yes git qgis python-qgis xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
 
 tools:
     pylint:
