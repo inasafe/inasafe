@@ -73,12 +73,13 @@ LOGGER = logging.getLogger('InaSAFE')
 class TestDock(TestCase):
     """Test the InaSAFE GUI."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.dock = Dock(IFACE)
+
     def setUp(self):
         """Fixture run before all tests"""
         register_impact_functions()
-
-        self.dock = Dock(IFACE)
-
 
         self.dock.show_only_visible_layers_flag = True
         load_standard_layers(self.dock)
