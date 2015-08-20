@@ -418,8 +418,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'inasafe/organisation_logo_path',
                 default_organisation_logo_path())
 
-        flag = bool(settings.value(
-            'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
+        # Changed default to False for new users in 3.2 - see #2171
+        show_logos_flag = bool(settings.value(
+            'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
 
         # Flag to check valid organization logo
         invalid_logo_size = False
@@ -461,7 +462,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 else:
                     invalid_logo_size = True
 
-        if (self.organisation_logo_path and flag and
+        if (self.organisation_logo_path and show_logos_flag and
                 not invalid_logo_size and not logo_not_exist):
             self._show_organisation_logo()
         else:
