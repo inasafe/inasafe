@@ -12,6 +12,10 @@ before_commands:
     - sudo add-apt-repository http://qgis.org/debian-ltr  # for QGIS LTR
     - sudo apt-get update
     - sudo apt-get install -y --force-yes git qgis python-qgis xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
+    - export QGIS_PREFIX_PATH=/usr
+    - export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python/:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:`pwd`
+    - echo "PYTHONPATH:" $PYTHONPATH
+    - export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 
 tools:
     pylint:
