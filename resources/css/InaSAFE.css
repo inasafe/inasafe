@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('../fonts/Ubuntu-regular.ttf');
+}
+body {
+  font-family: 'Ubuntu';
+}
 th {text-align: left;}
 table {font-size: 12px ;!important;}
 th.button-cell{
