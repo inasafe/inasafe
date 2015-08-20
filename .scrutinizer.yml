@@ -98,3 +98,7 @@ tools:
 filter:
     excluded_paths:
         - '*/test/*'
+        - 'safe_extras/*'
+        - 'extras/*'
+        - 'resources/*'
+        - 'scripts/*'
