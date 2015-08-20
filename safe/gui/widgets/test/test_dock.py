@@ -100,7 +100,8 @@ class TestDock(TestCase):
         QgsMapLayerRegistry.instance().removeAllMapLayers()
         self.dock.cboHazard.clear()
         self.dock.cboExposure.clear()
-        # self.dock.cboAggregation.clear() #dont do this because the cboAggregation
+        # self.dock.cboAggregation.clear()
+        # do not do this because the cboAggregation
         # need to be able to react to the status changes of the other combos
 
     def test_defaults(self):
@@ -142,7 +143,8 @@ class TestDock(TestCase):
         populate_dock(self.dock)
         flag = self.dock.validate()
         message = (
-            'Validation expected to pass on a populated self.dock with selections.')
+            'Validation expected to pass on a populated self.dock with '
+            'selections.')
         self.assertTrue(flag, message)
 
     def test_insufficient_overlap(self):
@@ -366,7 +368,8 @@ class TestDock(TestCase):
         _, _ = load_layers(file_list, clear_flag)
         # set exposure to : Population Count (5kmx5km)
         # by moving one down
-        self.dock.cboExposure.setCurrentIndex(self.dock.cboExposure.currentIndex() + 1)
+        self.dock.cboExposure.setCurrentIndex(
+            self.dock.cboExposure.currentIndex() + 1)
         actual_dict = get_ui_state(self.dock)
         expected_dict = {
             'Run Button Enabled': False,
@@ -386,7 +389,8 @@ class TestDock(TestCase):
 
         # Now select again a valid layer and the run button
         # should be enabled
-        self.dock.cboExposure.setCurrentIndex(self.dock.cboExposure.currentIndex() - 1)
+        self.dock.cboExposure.setCurrentIndex(
+            self.dock.cboExposure.currentIndex() - 1)
         message = (
             'Run button was not enabled when exposure set to \n%s' %
             self.dock.cboExposure.currentText())
@@ -495,14 +499,16 @@ class TestDock(TestCase):
         """
         # default selected layer is the third layer exposure
         # so, decrease the index by one to change it
-        self.dock.cboExposure.setCurrentIndex(self.dock.cboExposure.currentIndex() - 1)
+        self.dock.cboExposure.setCurrentIndex(
+            self.dock.cboExposure.currentIndex() - 1)
         self.dock.save_state()
         expected_dict = get_ui_state(self.dock)
         # myState = self.dock.state
         # Now reset and restore and check that it gets the old state
         # Html is not considered in restore test since the ready
         # message overwrites it in dock implementation
-        self.dock.cboExposure.setCurrentIndex(self.dock.cboExposure.currentIndex() - 1)
+        self.dock.cboExposure.setCurrentIndex(
+            self.dock.cboExposure.currentIndex() - 1)
         self.dock.restore_state()
         result_dict = get_ui_state(self.dock)
         message = 'Got unexpected state: %s\nExpected: %s\n%s' % (
