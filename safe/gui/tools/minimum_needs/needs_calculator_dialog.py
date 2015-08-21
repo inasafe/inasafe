@@ -74,7 +74,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         )
         tips = m.BulletedList()
         tips.add(self.tr(
-            'Load a polygon layer in QGIS. Typically the layer will '
+            'Load a point or polygon layer in QGIS. Typically the layer will '
             'represent administrative districts where people have gone to an '
             'evacuation center.'))
         tips.add(self.tr(
