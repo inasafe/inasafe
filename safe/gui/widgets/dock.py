@@ -40,7 +40,8 @@ from safe.utilities.help import show_context_help
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
-    add_ordered_combo_item)
+    add_ordered_combo_item,
+    compare_version)
 from safe.defaults import (
     disclaimer,
     default_north_arrow_path)
@@ -136,6 +137,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.setupUi(self)
         self.pbnShowQuestion.setVisible(False)
         self.enable_messaging()
+        self.inasafe_version = get_version()
 
         self.set_dock_title()
 
@@ -195,8 +197,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
-        version = get_version()
-        self.setWindowTitle(self.tr('InaSAFE %s' % version))
+        self.setWindowTitle(self.tr('InaSAFE %s' % self.inasafe_version))
 
     def enable_signal_receiver(self):
         """Setup dispatcher for all available signal from Analysis."""
@@ -483,7 +484,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if invalid_path_flag:
             # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE %s' % get_version()),
+                self, self.tr('InaSAFE %s' % self.inasafe_version),
                 self.tr(
                     'Due to backwards incompatibility with InaSAFE 2.0.0, the '
                     'paths to your preferred organisation logo and north '
@@ -496,7 +497,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if logo_not_exist:
             # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE %s' % get_version()),
+                self, self.tr('InaSAFE %s' % self.inasafe_version),
                 self.tr(
                     'The file for organization logo in %s doesn\'t exists. '
                     'Please check in Plugins -> InaSAFE -> Options that your '
@@ -507,7 +508,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
                 self,
-                self.tr('InaSAFE %s' % get_version()),
+                self.tr('InaSAFE %s' % self.inasafe_version),
                 self.tr(
                     'The file for organization logo has zero height. Please '
                     'provide valid file for organization logo.'
@@ -990,6 +991,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             try:
                 layer_purpose = self.keyword_io.read_keywords(
                     layer, 'layer_purpose')
+                keyword_version = str(self.keyword_io.read_keywords(
+                    layer, 'keyword_version'))
+                if compare_version(keyword_version, self.inasafe_version) != 0:
+                    continue
             except:  # pylint: disable=W0702
                 # continue ignoring this layer
                 continue
@@ -1554,10 +1559,48 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'Layer keywords missing:'), **WARNING_STYLE))
         context = m.Paragraph(
             self.tr(
-                'No keywords have been defined for this layer yet. If '
-                'you wish to use it as an impact or hazard layer in a '
-                'scenario, please use the keyword editor. You can open '
-                'the keyword editor by clicking on the '),
+                'No keywords have been defined for this layer yet. If you '
+                'wish to use it as an exposure, hazard, or aggregation layer '
+                'in an analysis, please use the keyword wizard to update the '
+                'keywords. You can open the wizard by clicking on the '),
+            m.Image(
+                'file:///%s/img/icons/'
+                'show-keyword-wizard.svg' % resources_path(),
+                **SMALL_ICON_STYLE),
+            self.tr(
+                ' icon in the toolbar.'))
+        report.add(context)
+        self.pbnPrint.setEnabled(False)
+        # noinspection PyTypeChecker
+        self.show_static_message(report)
+
+    def show_keyword_version_message(
+            self, keyword_version, inasafe_version):
+        """Show a message indicating that the keywords version is mismatch
+
+        .. versionadded: 3.2
+
+        :param keyword_version: The version of the layer's keywords
+        :type keyword_version: str
+
+        :param inasafe_version: The version of the InaSAFE
+        :type inasafe_version: str
+
+        .. note:: The print button will be disabled if this method is called.
+        """
+        LOGGER.debug('Showing Mismatch Version Message')
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(self.tr(
+            'Layer Keyword\'s Version Mismatch:'), **WARNING_STYLE))
+        context = m.Paragraph(
+            self.tr(
+                'Your layer\'s keyword\'s version (%s) does not match with '
+                'your InaSAFE version (%s). If you wish to use it as an '
+                'exposure, hazard, or aggregation layer in an analysis, '
+                'please use the keyword wizard to update the keywords. You '
+                'can open the wizard by clicking on the ' % (
+                    keyword_version, inasafe_version)),
             m.Image(
                 'file:///%s/img/icons/'
                 'show-keyword-wizard.svg' % resources_path(),
@@ -1597,7 +1640,23 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.show_impact_keywords(keywords)
                 self.wvResults.impact_path = layer.source()
             else:
-                self.show_generic_keywords(keywords)
+                if 'keyword_version' not in keywords.keys():
+                    self.show_keyword_version_message(
+                        'No Version', self.inasafe_version)
+                else:
+                    keyword_version = str(keywords['keyword_version'])
+                    compare_result = compare_version(
+                        keyword_version, self.inasafe_version)
+                    if compare_result == 0:
+                        self.show_generic_keywords(keywords)
+                    elif compare_result > 0:
+                        # Layer has older version
+                        self.show_keyword_version_message(
+                            keyword_version, self.inasafe_version)
+                    elif compare_result < 0:
+                        # Layer has newer version
+                        self.show_keyword_version_message(
+                            keyword_version, self.inasafe_version)
 
         except (KeywordNotFoundError,
                 HashNotFoundError,
@@ -2028,8 +2087,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def validate_extents(self):
         """Check if the current extents are valid.
 
-        Look at the intersection between Hazard, exposure and user analysis area
-        and see if they represent a valid, usable area for analysis.
+        Look at the intersection between Hazard, exposure and user analysis
+        area and see if they represent a valid, usable area for analysis.
 
         .. versionadded:: 3.1
 

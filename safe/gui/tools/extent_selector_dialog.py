@@ -133,7 +133,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
         # Populate the bookmarks list and connect the combobox
         self._populate_bookmarks_list()
-        self.comboBox_bookmarks_list.currentIndexChanged.connect(
+        self.bookmarks_list.currentIndexChanged.connect(
             self.bookmarks_index_changed)
 
         # Reinstate the last used radio button
@@ -344,10 +344,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     def bookmarks_index_changed(self):
         """Update the UI when the bookmarks combobox has changed.
         """
-        index = self.comboBox_bookmarks_list.currentIndex()
+        index = self.bookmarks_list.currentIndex()
         if index >= 0:
             self.tool.reset()
-            rectangle = self.comboBox_bookmarks_list.itemData(index)
+            rectangle = self.bookmarks_list.itemData(index)
             self.tool.set_rectangle(rectangle)
             self.canvas.setExtent(rectangle)
             self.ok_button.setEnabled(True)
@@ -389,6 +389,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     def _populate_bookmarks_list(self):
         """Read the sqlite database and populate the bookmarks list.
 
+        If no bookmarks are found, the bookmarks radio button will be disabled
+        and the label will be shown indicating that the user should add
+        bookmarks in QGIS first.
+
         Every bookmark are reprojected to mapcanvas crs.
         """
         # Connect to the QGIS sqlite database and check if the table exists.
@@ -425,4 +429,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
                 if rectangle.isEmpty():
                     pass
 
-                self.comboBox_bookmarks_list.addItem(name, rectangle)
+                self.bookmarks_list.addItem(name, rectangle)
+        if self.bookmarks_list.currentIndex() >= 0:
+            self.create_bookmarks_label.hide()
+        else:
+            self.create_bookmarks_label.show()
+            self.hazard_exposure_bookmark.setDisabled(True)
+            self.bookmarks_list.hide()
