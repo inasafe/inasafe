@@ -418,8 +418,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'inasafe/organisation_logo_path',
                 default_organisation_logo_path())
 
-        flag = bool(settings.value(
-            'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
+        # Changed default to False for new users in 3.2 - see #2171
+        show_logos_flag = bool(settings.value(
+            'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
 
         # Flag to check valid organization logo
         invalid_logo_size = False
@@ -461,7 +462,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 else:
                     invalid_logo_size = True
 
-        if (self.organisation_logo_path and flag and
+        if (self.organisation_logo_path and show_logos_flag and
                 not invalid_logo_size and not logo_not_exist):
             self._show_organisation_logo()
         else:
@@ -2013,11 +2014,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.pbnRunStop.setEnabled(False)
             # For #2077 somewhat kludgy hack to prevent positive
             # message when we cant actually run
-            message = self.tr(
+            match = self.tr(
                 'You can now proceed to run your analysis by clicking the')
             current_text = self.wvResults.page_to_text()
-            if message in current_text:
-                self.show_static_message(self.no_overlap_message())
+            if match in current_text:
+                message = m.Message()
+                message.add(LOGO_ELEMENT)
+                message.add(m.Heading(self.tr(
+                    'Insufficient overlap'), **WARNING_STYLE))
+                message.add(self.no_overlap_message())
+                self.show_static_message(message)
 
     def validate_extents(self):
         """Check if the current extents are valid.
