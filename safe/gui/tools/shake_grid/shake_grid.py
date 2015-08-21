@@ -250,10 +250,10 @@ class ShakeGrid(object):
             # Get the date - it's going to look something like this:
             # 2012-08-07T01:55:12WIB
             time_stamp = event_element.attributes['event_timestamp'].nodeValue
-            self.extract_date_time(time_stamp)
             # Note the timezone here is inconsistent with YZ from grid.xml
             # use the latter
-            self.time_zone = time_stamp[-3:]
+            self.time_zone = time_stamp[19:]
+            self.extract_date_time(time_stamp)
 
             specification_element = document.getElementsByTagName(
                 'grid_specification')
