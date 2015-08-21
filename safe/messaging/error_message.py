@@ -192,7 +192,7 @@ class ErrorMessage(MessageElement):
             message.add(items)
 
         message.add(Heading(tr(
-            'Diagnostics (click for details)'), **TRACEBACK_STYLE))
+            'Diagnostics'), **TRACEBACK_STYLE))
         message.add(self.tracebacks)
         return message
 
