@@ -31,7 +31,7 @@ import sqlite3
 from qgis.core import QGis  # force sip2 api
 
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignal
+from PyQt4.QtCore import pyqtSignal, QSettings
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
@@ -133,8 +133,40 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
         # Populate the bookmarks list and connect the combobox
         self._populate_bookmarks_list()
-        self.comboBox_bookmarks_list.currentIndexChanged.connect(
+        self.bookmarks_list.currentIndexChanged.connect(
             self.bookmarks_index_changed)
+
+        # Reinstate the last used radio button
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        if mode == 'HazardExposureView':
+            self.hazard_exposure_view_extent.setChecked(True)
+        elif mode == 'HazardExposure':
+            self.hazard_exposure_only.setChecked(True)
+        elif mode == 'HazardExposureBookmark':
+            self.hazard_exposure_bookmark.setChecked(True)
+        elif mode == 'HazardExposureBoundingBox':
+            self.hazard_exposure_user_extent.setChecked(True)
+
+        show_warnings = settings.value(
+            'inasafe/show_extent_warnings',
+            True,
+            type=bool)
+        if show_warnings:
+            self.show_warnings.setChecked(True)
+        else:
+            self.show_warnings.setChecked(False)
+
+        show_confirmations = settings.value(
+            'inasafe/show_extent_confirmations',
+            True,
+            type=bool)
+        if show_confirmations:
+            self.show_confirmations.setChecked(True)
+        else:
+            self.show_confirmations.setChecked(False)
 
     def show_help(self):
         """Load the help text for the dialog."""
@@ -196,6 +228,8 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         """
         self.tool.reset()
         self._populate_coordinates()
+        # Revert to using hazard, exposure and view as basis for analysis
+        self.hazard_exposure_view_extent.setChecked(True)
 
     def reject(self):
         """User rejected the rectangle.
@@ -210,6 +244,22 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     def accept(self):
         """User accepted the rectangle.
         """
+        mode = None
+        if self.hazard_exposure_view_extent.isChecked():
+            mode = 'HazardExposureView'
+        elif self.hazard_exposure_only.isChecked():
+            mode = 'HazardExposure'
+        elif self.hazard_exposure_bookmark.isChecked():
+            mode = 'HazardExposureBookmark'
+        elif self.hazard_exposure_user_extent.isChecked():
+            mode = 'HazardExposureBoundingBox'
+
+        LOGGER.info(
+            'Setting analysis extent mode to %s' % mode
+        )
+        settings = QSettings()
+        settings.setValue('inasafe/analysis_extents_mode', mode)
+
         self.canvas.unsetMapTool(self.tool)
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
@@ -226,6 +276,14 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             LOGGER.info(
                 'Extent selector setting user extents to nothing')
             self.clear_extent.emit()
+
+        # State handlers for showing warning message bars
+        settings.setValue(
+            'inasafe/show_extent_warnings',
+            self.show_warnings.isChecked())
+        settings.setValue(
+            'inasafe/show_extent_confirmations',
+            self.show_confirmations.isChecked())
 
         self.tool.reset()
         self.extent_selector_closed.emit()
@@ -286,37 +344,59 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     def bookmarks_index_changed(self):
         """Update the UI when the bookmarks combobox has changed.
         """
-        index = self.comboBox_bookmarks_list.currentIndex()
+        index = self.bookmarks_list.currentIndex()
         if index >= 0:
             self.tool.reset()
-            rectangle = self.comboBox_bookmarks_list.itemData(index)
+            rectangle = self.bookmarks_list.itemData(index)
             self.tool.set_rectangle(rectangle)
             self.canvas.setExtent(rectangle)
             self.ok_button.setEnabled(True)
         else:
             self.ok_button.setDisabled(True)
 
-    def on_checkBox_use_bookmark_toggled(self, use_bookmark):
-        """Update the UI when the user toggles the bookmarks checkbox.
+    def on_hazard_exposure_view_extent_toggled(self, enabled):
+        """Handler for hazard/exposure/view radiobutton toggle.
 
-        :param use_bookmark: The status of the checkbox.
-        :type use_bookmark: bool
+        :param enabled: The status of the radiobutton.
+        :type enabled: bool
         """
-        if use_bookmark:
+        if enabled:
+            self.tool.reset()
+            self._populate_coordinates()
+
+    def on_hazard_exposure_only_toggled(self, enabled):
+        """Handler for hazard/exposure radiobutton toggle.
+
+        :param enabled: The status of the radiobutton.
+        :type enabled: bool
+        """
+        if enabled:
+            self.tool.reset()
+            self._populate_coordinates()
+
+    def on_hazard_exposure_bookmark_toggled(self, enabled):
+        """Update the UI when the user toggles the bookmarks radiobutton.
+
+        :param enabled: The status of the radiobutton.
+        :type enabled: bool
+        """
+        if enabled:
             self.bookmarks_index_changed()
-            self.groupBox_coordinates.setDisabled(True)
         else:
-            self.groupBox_coordinates.setEnabled(True)
             self.ok_button.setEnabled(True)
         self._populate_coordinates()
 
     def _populate_bookmarks_list(self):
         """Read the sqlite database and populate the bookmarks list.
 
+        If no bookmarks are found, the bookmarks radio button will be disabled
+        and the label will be shown indicating that the user should add
+        bookmarks in QGIS first.
+
         Every bookmark are reprojected to mapcanvas crs.
         """
-
         # Connect to the QGIS sqlite database and check if the table exists.
+        # noinspection PyArgumentList
         db_file_path = QgsApplication.qgisUserDbFilePath()
         db = sqlite3.connect(db_file_path)
         cursor = db.cursor()
@@ -349,4 +429,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
                 if rectangle.isEmpty():
                     pass
 
-                self.comboBox_bookmarks_list.addItem(name, rectangle)
+                self.bookmarks_list.addItem(name, rectangle)
+        if self.bookmarks_list.currentIndex() >= 0:
+            self.create_bookmarks_label.hide()
+        else:
+            self.create_bookmarks_label.show()
+            self.hazard_exposure_bookmark.setDisabled(True)
+            self.bookmarks_list.hide()

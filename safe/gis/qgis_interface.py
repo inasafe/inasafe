@@ -29,8 +29,13 @@ __copyright__ = (
 import logging
 
 from qgis.core import QgsMapLayerRegistry, QGis, QgsMapLayer
-from qgis.gui import QgsMapCanvasLayer  # pylint: disable=no-name-in-module
+# pylint: disable=no-name-in-module
+from qgis.gui import (
+    QgsMapCanvasLayer,
+    QgsMessageBar)
 from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
+from safe.gis.qgis_legend_interface import QgisLegend
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -50,6 +55,8 @@ class QgisInterface(QObject):
         """
         QObject.__init__(self)
         self.canvas = canvas
+        self.legend = QgisLegend(canvas)
+        self.message_bar = QgsMessageBar(None)
         # Set up slots so we can mimic the behaviour of QGIS when layers
         # are added.
         LOGGER.debug('Initialising canvas...')
@@ -73,11 +80,15 @@ class QgisInterface(QObject):
         # Since QGIS > 2.0, the module is moved from QGisLayers to dataobjects
         # pylint: disable=F0401, E0611
         if QGis.QGIS_VERSION_INT > 20001:
+            # noinspection PyUnresolvedReferences
             from processing.tools import dataobjects
         else:
+            # noinspection PyUnresolvedReferences
             from processing.core import QGisLayers as dataobjects
 
+        # noinspection PyUnresolvedReferences
         import processing
+        # noinspection PyUnresolvedReferences
         from processing.core.Processing import Processing
         # pylint: enable=F0401, E0611
         processing.classFactory(self)
@@ -292,10 +303,20 @@ class QgisInterface(QObject):
     def legendInterface(self):
         """Get the legend.
 
-        TODO: Implement this when it is needed one day...
-
         See also discussion at:
 
         https://github.com/AIFDR/inasafe/pull/924/
+
+        Implementation added for version 3.2.
         """
-        return self.canvas
+        return self.legend
+
+    def messageBar(self):
+        """Get the message bar.
+
+        .. versionadded:: 3.2
+
+        :returns: A QGIS message bar instance
+        :rtype: QgsMessageBar
+        """
+        return self.message_bar
