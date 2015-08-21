@@ -66,7 +66,8 @@ class FloodPolygonBuildingFunction(
                     'field "%s" in "%s" .') % (
                         self.hazard_class_attribute,
                         ', '.join([
-                            str(_) for _ in self.hazard_class_mapping[self.wet]
+                            unicode(hazard_class) for
+                            hazard_class in self.hazard_class_mapping[self.wet]
                         ]))
             }
         ]
