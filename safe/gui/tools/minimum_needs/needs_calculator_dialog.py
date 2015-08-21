@@ -133,7 +133,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
                         self.tr(
                             'Please change the value of %1 in attribute '
                             '%s to integer format') % (
-                            population, population_name)
+                            population, population_name))
                     raise ValueError
 
             # Calculate estimated needs based on BNPB Perka 7/2008
@@ -171,8 +171,14 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             if is_polygon_layer(layer) or is_point_layer(layer):
                 found_flag = True
                 add_ordered_combo_item(self.cboPolygonLayers, name, source)
+        # Now disable the run button if no suitable layers were found
+        # see #2206
+        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
         if found_flag:
             self.cboPolygonLayers.setCurrentIndex(0)
+            ok_button.setEnabled(True)
+        else:
+            ok_button.setEnabled(False)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
