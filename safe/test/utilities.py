@@ -112,6 +112,12 @@ def get_qgis_app():
         settings = QSettings()
         settings.setValue('locale/overrideFlag', True)
         settings.setValue('locale/userLocale', 'en_US')
+        # We disabled message bars for now for extent selector as
+        # we don't have a main window to show them in TS - version 3.2
+        settings.setValue('inasafe/show_extent_confirmations', False)
+        settings.setValue('inasafe/show_extent_warnings', False)
+        settings.setValue('inasafe/showRubberBands', True)
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
 
     global PARENT  # pylint: disable=W0603
     if PARENT is None:

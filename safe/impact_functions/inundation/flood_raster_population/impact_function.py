@@ -127,6 +127,7 @@ class FloodEvacuationRasterHazardFunction(ContinuousRHContinuousRE):
                         'lo': thresholds[i],
                         'val': format_int(val)})
                 else:
+                    # all other classes show lower/upper range
                     s = tr(
                         'People in %(lo).1f m to %(hi).1f m of water: '
                         '%(val)s') % {

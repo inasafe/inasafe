@@ -35,8 +35,7 @@ from PyQt4.QtCore import (
 from PyQt4.QtGui import QAction, QIcon, QApplication, QWidget
 
 from safe.common.version import release_status
-from safe.common.exceptions import (
-    TranslationLoadError,)
+from safe.common.exceptions import TranslationLoadError
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
 from safe.impact_functions import register_impact_functions
@@ -185,7 +184,7 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-keyword-wizard.svg')
         self.action_keywords_wizard = QAction(
             QIcon(icon),
-            self.tr('InaSAFE Keywords Creation Wizard'),
+            self.tr('Keywords Creation Wizard'),
             self.iface.mainWindow())
         self.action_keywords_wizard.setStatusTip(self.tr(
             'Open InaSAFE keywords creation wizard'))
@@ -201,7 +200,7 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-wizard.svg')
         self.action_function_centric_wizard = QAction(
             QIcon(icon),
-            self.tr('InaSAFE Impact Function Centric Wizard'),
+            self.tr('Impact Function Centric Wizard'),
             self.iface.mainWindow())
         self.action_function_centric_wizard.setStatusTip(self.tr(
             'Open InaSAFE impact function centric wizard'))
@@ -217,7 +216,7 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'configure-inasafe.svg')
         self.action_options = QAction(
             QIcon(icon),
-            self.tr('InaSAFE Options'), self.iface.mainWindow())
+            self.tr('Options'), self.iface.mainWindow())
         self.action_options.setStatusTip(self.tr(
             'Open InaSAFE options dialog'))
         self.action_options.setWhatsThis(self.tr(
@@ -230,7 +229,7 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-minimum-needs.svg')
         self.action_minimum_needs = QAction(
             QIcon(icon),
-            self.tr('InaSAFE Minimum Needs Tool'), self.iface.mainWindow())
+            self.tr('Minimum Needs Tool'), self.iface.mainWindow())
         self.action_minimum_needs.setStatusTip(self.tr(
             'Open InaSAFE minimum needs tool'))
         self.action_minimum_needs.setWhatsThis(self.tr(
@@ -244,7 +243,7 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-global-minimum-needs.svg')
         self.action_global_minimum_needs = QAction(
             QIcon(icon),
-            self.tr('InaSAFE Global Minimum Needs Configuration'),
+            self.tr('Global Minimum Needs Configuration'),
             self.iface.mainWindow())
         self.action_global_minimum_needs.setStatusTip(self.tr(
             'Open InaSAFE global minimum needs configuration'))
@@ -260,7 +259,7 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-converter-tool.svg')
         self.action_shake_converter = QAction(
             QIcon(icon),
-            self.tr('InaSAFE XML Shakemap Converter'), self.iface.mainWindow())
+            self.tr('Shakemap converter'), self.iface.mainWindow())
         self.action_shake_converter.setStatusTip(self.tr(
             'Open InaSAFE Converter'))
         self.action_shake_converter.setWhatsThis(self.tr(
@@ -275,11 +274,11 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-batch-runner.svg')
         self.action_batch_runner = QAction(
             QIcon(icon),
-            self.tr('InaSAFE Batch Runner'), self.iface.mainWindow())
+            self.tr('Batch Runner'), self.iface.mainWindow())
         self.action_batch_runner.setStatusTip(self.tr(
-            'Open InaSAFE Batch Runner'))
+            'Open Batch Runner'))
         self.action_batch_runner.setWhatsThis(self.tr(
-            'Open InaSAFE Batch Runner'))
+            'Open Batch Runner'))
         self.action_batch_runner.triggered.connect(self.show_batch_runner)
         self.add_action(
             self.action_batch_runner, add_to_toolbar=self.full_toolbar)
@@ -303,12 +302,12 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-osm-download.svg')
         self.action_import_dialog = QAction(
             QIcon(icon),
-            self.tr('InaSAFE OpenStreetMap Downloader'),
+            self.tr('OpenStreetMap Downloader'),
             self.iface.mainWindow())
         self.action_import_dialog.setStatusTip(self.tr(
-            'InaSAFE OpenStreetMap Downloader'))
+            'OpenStreetMap Downloader'))
         self.action_import_dialog.setWhatsThis(self.tr(
-            'InaSAFE OpenStreetMap Downloader'))
+            'OpenStreetMap Downloader'))
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
         self.add_action(self.action_import_dialog)
 
@@ -317,12 +316,12 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-impact-merge.svg')
         self.action_impact_merge_dlg = QAction(
             QIcon(icon),
-            self.tr('InaSAFE Impact Layer Merge'),
+            self.tr('Impact Layer Merger'),
             self.iface.mainWindow())
         self.action_impact_merge_dlg.setStatusTip(self.tr(
-            'InaSAFE Impact Layer Merge'))
+            'Impact Layer Merger'))
         self.action_impact_merge_dlg.setWhatsThis(self.tr(
-            'InaSAFE Impact Layer Merge'))
+            'Impact Layer Merger'))
         self.action_impact_merge_dlg.triggered.connect(self.show_impact_merge)
         self.add_action(
             self.action_impact_merge_dlg, add_to_toolbar=self.full_toolbar)
@@ -352,7 +351,7 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'set-extents-tool.svg')
         self.action_extent_selector = QAction(
             QIcon(icon),
-            self.tr('Set InaSAFE Analysis Area'),
+            self.tr('Set Analysis Area'),
             self.iface.mainWindow())
         self.action_extent_selector.setStatusTip(self.tr(
             'Set the analysis area for InaSAFE'))
@@ -372,12 +371,12 @@ class Plugin(object):
             icon = resources_path('img', 'icons', 'add-test-layers.svg')
             self.action_add_layers = QAction(
                 QIcon(icon),
-                self.tr('Add Some Test Layers'),
+                self.tr('Add Test Layers'),
                 self.iface.mainWindow())
             self.action_add_layers.setStatusTip(self.tr(
-                'Add some test layers'))
+                'Add test layers'))
             self.action_add_layers.setWhatsThis(self.tr(
-                'Add some test layers'))
+                'Add test layers'))
             self.action_add_layers.triggered.connect(
                 self.add_test_layers)
 
@@ -388,6 +387,7 @@ class Plugin(object):
         # Import dock here as it needs to be imported AFTER i18n is set up
         from safe.gui.widgets.dock import Dock
         self.dock_widget = Dock(self.iface)
+        self.dock_widget.setObjectName('InaSAFE-Dock')
         self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dock_widget)
         legend_tab = self.iface.mainWindow().findChild(QApplication, 'Legend')
         if legend_tab:
@@ -407,26 +407,25 @@ class Plugin(object):
         """
         self.toolbar = self.iface.addToolBar('InaSAFE')
         self.toolbar.setObjectName('InaSAFEToolBar')
-
         self.dock_widget = None
         # Now create the actual dock
         self._create_dock()
         # And all the menu actions
         # Configuration Group
+        self._create_dock_toggle_action()
         self._create_options_dialog_action()
         self._create_minimum_needs_options_action()
         self._create_analysis_extent_action()
-        self._create_dock_toggle_action()
         self._create_rubber_bands_action()
-        # TODO: add menu separator - Wizards
+        self._add_spacer_to_menu()
         self._create_keywords_wizard_action()
         self._create_analysis_wizard_action()
-        # TODO: add menu separator - Data
+        self._add_spacer_to_menu()
         self._create_osm_downloader_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
-        # TODO: add menu separator - Analysis
+        self._add_spacer_to_menu()
         self._create_batch_runner_action()
         self._create_impact_merge_action()
         self._create_save_scenario_action()
@@ -438,6 +437,12 @@ class Plugin(object):
         # Also deal with the fact that on start of QGIS dock may already be
         # hidden.
         self.action_dock.setChecked(self.dock_widget.isVisible())
+
+    def _add_spacer_to_menu(self):
+        """Create a spacer to the menu to separate action groups."""
+        separator = QAction(self.iface.mainWindow())
+        separator.setSeparator(True)
+        self.iface.addPluginToMenu(self.tr('InaSAFE'), separator)
 
     def clear_modules(self):
         """Unload inasafe functions and try to return QGIS to before InaSAFE.
@@ -533,6 +538,9 @@ class Plugin(object):
             self.dock_widget.extent.clear_user_analysis_extent)
         widget.extent_defined.connect(
             self.dock_widget.define_user_analysis_extent)
+        # This ensures that run button state is updated on dialog close
+        widget.extent_selector_closed.connect(
+            self.dock_widget.show_next_analysis_extent)
         # Needs to be non modal to support hide -> interact with map -> show
         widget.show()  # non modal
 

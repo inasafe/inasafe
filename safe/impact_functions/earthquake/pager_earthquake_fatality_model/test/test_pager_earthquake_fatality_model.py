@@ -36,14 +36,15 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
 
     def test_run(self):
         """TestPagerEarthquakeFatalityFunction: Test running the IF."""
+        # FIXME(Hyeuk): test requires more realistic hazard and population data
         eq_path = test_data_path('hazard', 'earthquake.tif')
         population_path = test_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         # For EQ on Pops we need to clip the hazard and exposure first to the
         #  same dimension
-        clipped_hazard, clipped_exposure = clip_layers(eq_path,
-                                                       population_path)
+        clipped_hazard, clipped_exposure = clip_layers(
+            eq_path, population_path)
 
         # noinspection PyUnresolvedReferences
         eq_layer = read_layer(
@@ -58,16 +59,16 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of earthquake how many '
-                             'population might die or be displaced according '
-                             'pager model')
+        expected_question = (
+            'In the event of earthquake how many population might die or '
+            'be displaced according pager model')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
 
         expected_result = {
             'total_population': 200,
-            'total_fatalities': 10, # should be zero FIXME
+            'total_fatalities': 0,  # should be zero FIXME
             'total_displaced': 200
         }
         for key_ in expected_result.keys():
@@ -84,7 +85,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             5: 0,
             6: 0,
             7: 0,
-            8: 0.083498, # FIXME should be rounded to zero!! not 10.
+            8: 0.083498,  # FIXME should be rounded to zero!! not 10.
             9: 0,
             10: 0
         }
@@ -106,7 +107,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             5: 0,
             6: 0,
             7: 0,
-            8: 199.91650, #FIXME should be 200.0
+            8: 199.91650,  # FIXME should be 200.0
             9: 0,
             10: 0
         }
@@ -120,10 +121,12 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
                     expected_result[key_][item],
                     result[item], places=4, msg=message)
 
+        # expected_result = [
+        #    8.0, 42.0, 42.0, 8.0, 0.0, 0.0, 0.0] # corresponds to 10
         expected_result = [
-            8.0, 42.0, 42.0, 8.0, 0.0, 0.0, 0.0]
+            100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # corresponds to <= 1
         result = impact_function.compute_probability(
-            impact_layer.get_keywords('total_fatalities'))
+            impact_layer.get_keywords('total_fatalities_raw'))
         message = 'Expecting %s, but it returns %s' % (
             expected_result, result)
         self.assertEqual(expected_result, result, message)
