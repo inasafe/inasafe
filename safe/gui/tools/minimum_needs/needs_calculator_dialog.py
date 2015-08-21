@@ -193,10 +193,24 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             index, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        fields = layer.dataProvider().fieldNameMap().keys()
+        fields = layer.pendingFields()
         self.cboFields.clear()
+        has_fields = False
         for field in fields:
-            add_ordered_combo_item(self.cboFields, field, field)
+            LOGGER.info(field.typeName())
+            #TODO exclude dates too? TS
+            if field.typeName() != 'String':
+                has_fields = True
+                add_ordered_combo_item(
+                    self.cboFields, field.name(), field.name())
+
+        # Now disable the run button if no suitable fields were found
+        # see #2206
+        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
+        if not has_fields:
+            ok_button.setEnabled(False)
+        else:
+            ok_button.setEnabled(True)
 
     def accept(self):
         """Process the layer and field and generate a new layer.
