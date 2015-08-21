@@ -1638,7 +1638,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.wvResults.impact_path = layer.source()
             else:
                 if 'keyword_version' not in keywords.keys():
-                    pass  # show not valid layer
                     self.show_keyword_version_message(
                         'No Version', self.inasafe_version)
                 else:
@@ -2085,8 +2084,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def validate_extents(self):
         """Check if the current extents are valid.
 
-        Look at the intersection between Hazard, exposure and user analysis area
-        and see if they represent a valid, usable area for analysis.
+        Look at the intersection between Hazard, exposure and user analysis
+        area and see if they represent a valid, usable area for analysis.
 
         .. versionadded:: 3.1
 
