@@ -15,7 +15,7 @@ from geometry import Polygon
 from safe.gis.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.exceptions import (
-    BoundingBoxError, InaSAFEError, ReadMetadataError)
+    BoundingBoxError, InaSAFEError, MetadataReadError)
 from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_string, get_unicode
 from safe.storage.metadata_utilities import (
@@ -267,7 +267,7 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     try:
         # read the xml metadata first
         metadata = read_iso_metadata(keyword_filename)
-    except (IOError, ReadMetadataError):
+    except (IOError, MetadataReadError):
         # error reading xml metadata or file not exist
         if keywords_file:
             # if there is a keyword file generate an xml file also
