@@ -47,4 +47,3 @@ class QgisLegend():
             return True
         else:
             return False
-
