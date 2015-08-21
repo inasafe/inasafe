@@ -115,6 +115,12 @@ quicktest: pep8 pylint dependency_test unwanted_strings run_data_audit test-tran
 test_suite_quick:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe/${PACKAGE} --with-id
 
+# Similar with test_suite_quick, but for all tests.
+# you can pass an argument called PACKAGE to run only tests in that package
+# usage: make test_suite_all PACKAGE=common
+test_suite_all:
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v safe/${PACKAGE} --with-id
+
 # Run pep8 style checking
 #http://pypi.python.org/pypi/pep8
 pep8:

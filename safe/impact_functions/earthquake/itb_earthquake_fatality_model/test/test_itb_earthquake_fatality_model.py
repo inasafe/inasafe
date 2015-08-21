@@ -37,7 +37,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
 
     def test_run(self):
         """TestITEarthquakeFatalityFunction: Test running the IF."""
-        # FIXME: test requires more realistic hazard and population data - Hyeuk
+        # FIXME(Hyeuk): test requires more realistic hazard and population data
         eq_path = test_data_path('hazard', 'earthquake.tif')
         population_path = test_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
@@ -68,7 +68,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
 
         expected_result = {
             'total_population': 200,
-            'total_fatalities': 0, # should be zero FIXME
+            'total_fatalities': 0,  # should be zero FIXME
             'total_displaced': 200
         }
         for key_ in expected_result.keys():

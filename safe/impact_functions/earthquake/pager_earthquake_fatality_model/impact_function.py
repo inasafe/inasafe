@@ -28,6 +28,7 @@ from safe.impact_functions.earthquake\
     .pager_earthquake_fatality_model.metadata_definitions import \
     PAGFatalityMetadata
 
+
 class PAGFatalityFunction(ITBFatalityFunction):
     # noinspection PyUnresolvedReferences
     """USGS Pager fatality estimation model.
@@ -56,7 +57,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
         self.hardcoded_parameters = OrderedDict([
             ('Theta', 13.249),
             ('Beta', 0.151),
-            ('Zeta', 1.641), # Model coefficients
+            ('Zeta', 1.641),  # Model coefficients
             # Rates of people displaced for each MMI level
             # FIXME: should be independent from fatality model - Hyeuk
             ('displacement_rate', {
@@ -123,13 +124,13 @@ class PAGFatalityFunction(ITBFatalityFunction):
             return [round(x, r) for x in l]
         elif d in [-1, 1]:
             c, _ = max(enumerate(l), key=lambda x: math.copysign(
-                1, d) * math.fmod(x[1] - 0.5*q, q))
+                1, d) * math.fmod(x[1] - 0.5 * q, q))
             return [round(x, r) + q * math.copysign(1, d) if i == c else round(
                 x, r) for (i, x) in enumerate(l)]
         else:
             c = [i for i, _ in heapq.nlargest(abs(d), enumerate(
                 l), key=lambda x: math.copysign(1, d) * math.fmod(
-                    x[1]-0.5*q, q))]
+                    x[1] - 0.5 * q, q))]
             return [round(x, r) + q * math.copysign(
                 1, d) if i in c else round(x, r) for (i, x) in enumerate(l)]
 
@@ -155,6 +156,7 @@ class PAGFatalityFunction(ITBFatalityFunction):
                 x = math.log(mbin / total_fatalities) / zeta
                 cprob[i] = self.cdf_normal(x)
 
-        cprob = numpy.append(cprob, 1.0) # 1000+
-        prob = numpy.hstack((cprob[0], numpy.diff(cprob)))*100.0 # percentage
-        return self.round_to_sum(prob, 0) # rounding to decimal
+        cprob = numpy.append(cprob, 1.0)  # 1000+
+        # percentage
+        prob = numpy.hstack((cprob[0], numpy.diff(cprob))) * 100.0
+        return self.round_to_sum(prob, 0)  # rounding to decimal
