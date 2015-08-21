@@ -24,6 +24,7 @@ import logging
 import webbrowser
 import unicodedata
 import codecs
+import re
 
 # noinspection PyPackageRequirements
 
@@ -373,3 +374,31 @@ def replace_accentuated_characters(message):
 
     message = unicodedata.normalize('NFKD', message).encode('ASCII', 'ignore')
     return message.decode('utf-8')
+
+
+def compare_version(version1, version2):
+    """Compare between InaSAFE's version.
+
+    Adapted from http://stackoverflow.com/a/1714190/1198772
+
+    :param version1: String representation of version 1
+    :type version1: str
+    :param version2: String representation of version 1
+    :type version2: str
+
+    :returns: -1, 0, 1 if less, same, and more respectively.
+    :rtype: int
+    """
+    def normalize(v):
+        """
+        :param v: Version string
+        :type v: str
+
+        :returns: List of integer
+        :rtype: list
+        """
+        # Removing '.dev-ABCDEF' thing.
+        if '.dev' in v:
+            v = v.split('.dev')[0]
+        return [int(x) for x in re.sub(r'(\.0+)*$', '', v).split(".")]
+    return cmp(normalize(version1), normalize(version2))

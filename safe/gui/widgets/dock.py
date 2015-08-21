@@ -40,7 +40,8 @@ from safe.utilities.help import show_context_help
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
-    add_ordered_combo_item)
+    add_ordered_combo_item,
+    compare_version)
 from safe.defaults import (
     disclaimer,
     default_north_arrow_path)
@@ -1556,8 +1557,43 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.tr(
                 'No keywords have been defined for this layer yet. If '
                 'you wish to use it as an impact or hazard layer in a '
-                'scenario, please use the keyword editor. You can open '
-                'the keyword editor by clicking on the '),
+                'scenario, please use the keyword wizard. You can open '
+                'the keyword wizard by clicking on the '),
+            m.Image(
+                'file:///%s/img/icons/'
+                'show-keyword-wizard.svg' % resources_path(),
+                **SMALL_ICON_STYLE),
+            self.tr(
+                ' icon in the toolbar.'))
+        report.add(context)
+        self.pbnPrint.setEnabled(False)
+        # noinspection PyTypeChecker
+        self.show_static_message(report)
+
+    def show_keyword_version_message(
+            self, keyword_version, inasafe_version):
+        """Show a message indicating that the keywords version is mismatch
+
+        :param keyword_version: The version of the layer's keywords
+        :type keyword_version: str
+
+        :param inasafe_version: The version of the InaSAFE
+        :type inasafe_version: str
+
+        .. note:: The print button will be disabled if this method is called.
+        """
+        LOGGER.debug('Showing Mismatch Version Message')
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(self.tr(
+            'Layer keywords mismatch:'), **WARNING_STYLE))
+        context = m.Paragraph(
+            self.tr(
+                'Your layer\'s keyword\'s version (%s) is not match with your '
+                'InaSAFE version (%s). If you wish to use it as exposure, '
+                'hazard, or aggregation layer in a scenario, please use the '
+                'keyword wizard. You can open the keyword wizard by clicking '
+                'on the ' % (keyword_version, inasafe_version)),
             m.Image(
                 'file:///%s/img/icons/'
                 'show-keyword-wizard.svg' % resources_path(),
@@ -1592,12 +1628,30 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Now try to read the keywords and show them in the dock
         try:
             keywords = self.keyword_io.read_keywords(layer)
+            inasafe_version = get_version()
 
             if 'impact_summary' in keywords:
                 self.show_impact_keywords(keywords)
                 self.wvResults.impact_path = layer.source()
             else:
-                self.show_generic_keywords(keywords)
+                if 'keyword_version' not in keywords.keys():
+                    pass  # show not valid layer
+                    self.show_keyword_version_message(
+                        'No Version', inasafe_version)
+                else:
+                    keyword_version = str(keywords['keyword_version'])
+                    compare_result = compare_version(
+                        keyword_version, inasafe_version)
+                    if compare_result == 0:
+                        self.show_generic_keywords(keywords)
+                    elif compare_result > 0:
+                        # Layer has older version
+                        self.show_keyword_version_message(
+                            keyword_version, inasafe_version)
+                    elif compare_result < 0:
+                        # Layer has newer version
+                        self.show_keyword_version_message(
+                            keyword_version, inasafe_version)
 
         except (KeywordNotFoundError,
                 HashNotFoundError,
