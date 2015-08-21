@@ -45,6 +45,7 @@ th.button-cell{
   border-color: #bd362f #bd362f #802420;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   padding-left: 4px;
+  line-height: 1.5;
 }
 .problem {
   color: #fff;
@@ -57,6 +58,7 @@ th.button-cell{
   border-color: #f89406 #f89406 #ad6704;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   padding-left: 4px;
+  line-height: 1.5;
 }
 .info, caption {
   color: #fff;
@@ -69,6 +71,7 @@ th.button-cell{
   border-color: #0055cc #0055cc #003580;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   padding-left: 4px;
+  line-height: 1.5;
 }
 
 .suggestion {
@@ -82,6 +85,7 @@ th.button-cell{
   border-color: #10a142 #0a6228 #0a6228;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   padding-left: 4px;
+  line-height: 1.5;
 }
 
 .inverse {
@@ -95,6 +99,7 @@ th.button-cell{
   border-color: rgba(0, 14, 40, 0.66) #2f2f2f #000000;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   padding-left: 4px;
+  line-height: 1.5;
 }
 
 .hidden {
