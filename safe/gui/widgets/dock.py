@@ -1560,9 +1560,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         context = m.Paragraph(
             self.tr(
                 'No keywords have been defined for this layer yet. If you '
-                'wish to use it as exposure, hazard, or aggregation layer in '
-                'a scenario, please use the keyword wizard. You can open '
-                'the keyword wizard by clicking on the '),
+                'wish to use it as an exposure, hazard, or aggregation layer '
+                'in an analysis, please use the keyword wizard to update the '
+                'keywords. You can open the wizard by clicking on the '),
             m.Image(
                 'file:///%s/img/icons/'
                 'show-keyword-wizard.svg' % resources_path(),
@@ -1577,6 +1577,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def show_keyword_version_message(
             self, keyword_version, inasafe_version):
         """Show a message indicating that the keywords version is mismatch
+
+        .. versionadded: 3.2
 
         :param keyword_version: The version of the layer's keywords
         :type keyword_version: str
@@ -1593,11 +1595,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'Layer Keyword\'s Version Mismatch:'), **WARNING_STYLE))
         context = m.Paragraph(
             self.tr(
-                'Your layer\'s keyword\'s version (%s) is not match with your '
-                'InaSAFE version (%s). If you wish to use it as exposure, '
-                'hazard, or aggregation layer in a scenario, please use the '
-                'keyword wizard. You can open the keyword wizard by clicking '
-                'on the ' % (keyword_version, inasafe_version)),
+                'Your layer\'s keyword\'s version (%s) does not match with '
+                'your InaSAFE version (%s). If you wish to use it as an '
+                'exposure, hazard, or aggregation layer in an analysis, '
+                'please use the keyword wizard to update the keywords. You '
+                'can open the wizard by clicking on the ' % (
+                    keyword_version, inasafe_version)),
             m.Image(
                 'file:///%s/img/icons/'
                 'show-keyword-wizard.svg' % resources_path(),

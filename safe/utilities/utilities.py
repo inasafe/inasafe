@@ -377,7 +377,9 @@ def replace_accentuated_characters(message):
 
 
 def compare_version(version1, version2):
-    """Compare between InaSAFE's version.
+    """Compare between InaSAFE version.
+
+    .. versionadded: 3.2
 
     Adapted from http://stackoverflow.com/a/1714190/1198772
 
