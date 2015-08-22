@@ -92,6 +92,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
         self.stacked_widget.setCurrentIndex(1)
+        # Disable boundaries group box until boundary checkbox is ticked
+        self.boundary_group.setEnabled(False)
 
         # set up the validator for the file name prefix
         expression = QRegExp('^[A-Za-z0-9-_]*$')
@@ -141,8 +143,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         except KeyError:
             content = self.tr('undefined')
         finally:
-            text = '<span style=" font-size:12pt; font-style:italic;">' \
-                   'level %s is : %s</span>' % (current_level, content)
+            text = self.tr('which represents %s in') % (content)
             self.boundary_helper.setText(text)
 
     def populate_countries(self):
@@ -295,7 +296,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         .. note:: Delegates to update_extent()
         """
 
-        self.groupBox.setTitle(self.tr('Bounding box from the map canvas'))
+        self.bounding_box_group.setTitle(self.tr('Bounding box from the map canvas'))
         # Get the extent as [xmin, ymin, xmax, ymax]
         extent = viewport_geo_array(self.iface.mapCanvas())
         self.update_extent(extent)
@@ -312,7 +313,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         rectangle = self.rectangle_map_tool.rectangle()
         if rectangle:
-            self.groupBox.setTitle(self.tr('Bounding box from rectangle'))
+            self.bounding_box_group.setTitle(self.tr('Bounding box from rectangle'))
             extent = rectangle_geo_array(rectangle, self.iface.mapCanvas())
             self.update_extent(extent)
 
@@ -338,15 +339,15 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         :rtype list
         """
         feature_types = []
-        if self.roads_checkBox.isChecked():
+        if self.roads_flag.isChecked():
             feature_types.append('roads')
-        if self.buildings_checkBox.isChecked():
+        if self.buildings_flag.isChecked():
             feature_types.append('buildings')
-        if self.building_points_checkBox.isChecked():
+        if self.building_points_flag.isChecked():
             feature_types.append('building-points')
-        if self.potential_idp_checkBox.isChecked():
+        if self.potential_idp_flag.isChecked():
             feature_types.append('potential-idp')
-        if self.boundary_checkBox.isChecked():
+        if self.boundary_flag.isChecked():
             level = self.admin_level_comboBox.currentIndex() + 1
             feature_types.append('boundary-%s' % level)
         return feature_types
@@ -355,8 +356,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Do osm download and display it in QGIS."""
         error_dialog_title = self.tr('InaSAFE OpenStreetMap Downloader Error')
 
-        # Lock the groupbox
-        self.groupBox.setDisabled(True)
+        # Lock the bounding_box_group
+        self.bounding_box_group.setDisabled(True)
 
         # Get the extent
         y_minimum = self.y_minimum.value()
@@ -373,8 +374,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 'valid or check your projection!')
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             display_warning_message_box(self, error_dialog_title, message)
-            # Unlock the groupbox
-            self.groupBox.setEnabled(True)
+            # Unlock the bounding_box_group
+            self.bounding_box_group.setEnabled(True)
             return
 
         # Validate features
@@ -385,8 +386,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 'Please make sure you have checked one feature.')
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             display_warning_message_box(self, error_dialog_title, message)
-            # Unlock the groupbox
-            self.groupBox.setEnabled(True)
+            # Unlock the bounding_box_group
+            self.bounding_box_group.setEnabled(True)
             return
 
         try:
@@ -396,7 +397,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
                 output_directory = self.output_directory.text()
                 output_prefix = self.filename_prefix.text()
-                overwrite = self.overwrite_checkBox.isChecked()
+                overwrite = self.overwrite_flag.isChecked()
                 output_base_file_path = self.get_output_base_path(
                     output_directory, output_prefix, feature_type, overwrite)
 
@@ -428,8 +429,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.progress_dialog.cancel()
 
         finally:
-            # Unlock the groupbox
-            self.groupBox.setEnabled(True)
+            # Unlock the bounding_box_group
+            self.bounding_box_group.setEnabled(True)
 
     def get_output_base_path(
             self,
