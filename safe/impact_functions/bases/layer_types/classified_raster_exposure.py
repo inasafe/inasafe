@@ -6,12 +6,4 @@ __date__ = '28/05/15'
 class ClassifiedRasterExposureMixin(object):
 
     def __init__(self):
-        self._exposure_layer = None
-
-    def set_up_exposure_layer(self, exposure):
-        """Set up the hazard value.
-
-        :param exposure: QgsRasterLayer or Raster data types
-        :type exposure: QgsRasterLayer, Raster
-        """
-        self._exposure_layer = exposure
+        pass

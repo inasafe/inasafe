@@ -6,7 +6,6 @@ import requests
 
 from realtime.utilities import realtime_logger_name
 from realtime.exceptions import RESTRequestFailedError
-from realtime.shake_event import ShakeEvent
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '07/07/15'
@@ -85,8 +84,8 @@ def generate_earthquake_report_detail_url(shake_id, locale):
     """
     return INASAFE_REALTIME_REST_URLPATTERN[
         'earthquake-report-detail'].replace(
-        '<shake_id>', shake_id).replace(
-        '<locale>', locale)
+            '<shake_id>', shake_id).replace(
+                '<locale>', locale)
 
 
 def get_realtime_session():

@@ -43,10 +43,6 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         """Constructor."""
         super(FloodVectorRoadsExperimentalFunction, self).__init__()
 
-        # Variables for storing value from layer's keyword
-        self.affected_field = None
-        self.value_map = None
-        self.road_class_field = None
         # The 'wet' variable
         self.wet = 'wet'
 
@@ -73,13 +69,14 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         self.prepare()
 
         # Get parameters from layer's keywords
-        self.affected_field = self.hazard.keyword('field')
-        self.value_map = self.hazard.keyword('value_map')
-        self.road_class_field = self.exposure.keyword('road_class_field')
+        self.hazard_class_attribute = self.hazard.keyword('field')
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
+        self.exposure_class_attribute = self.exposure.keyword(
+            'road_class_field')
 
         hazard_provider = self.hazard.layer.dataProvider()
         affected_field_index = hazard_provider.fieldNameIndex(
-            self.affected_field)
+            self.hazard_class_attribute)
         # see #818: should still work if there is no valid attribute
         if affected_field_index == -1:
             pass
@@ -88,7 +85,7 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
             #     ''' % (affected_field, ))
             # raise GetDataError(message)
 
-        LOGGER.info('Affected field: %s' % self.affected_field)
+        LOGGER.info('Affected field: %s' % self.hazard_class_attribute)
         LOGGER.info('Affected field index: %s' % affected_field_index)
 
         # Filter geometry and data using the extent
@@ -128,7 +125,7 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
             attributes = feature.attributes()
             if affected_field_index != -1:
                 value = attributes[affected_field_index]
-                if value not in self.value_map[self.wet]:
+                if value not in self.hazard_class_mapping[self.wet]:
                     continue
             if hazard_poly is None:
                 hazard_poly = QgsGeometry(feature.geometry())
@@ -151,7 +148,8 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
                 'There are no objects in the hazard layer with %s (Affected '
                 'Field) in %s (Affected Value). Please check the value or use '
                 'a different extent.' % (
-                    self.affected_field, self.value_map[self.wet]))
+                    self.hazard_class_attribute,
+                    self.hazard_class_mapping[self.wet]))
             raise GetDataError(message)
 
         # Clip exposure by the extent
@@ -174,7 +172,7 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
 
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(
-            self.road_class_field)
+            self.exposure_class_attribute)
         target_field_index = line_layer.fieldNameIndex(self.target_field)
 
         for road in roads_data:

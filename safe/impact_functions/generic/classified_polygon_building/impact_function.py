@@ -23,7 +23,7 @@ from safe.utilities.i18n import tr
 from safe.impact_functions.generic.classified_polygon_building\
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, KeywordNotFoundError
 from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage,
@@ -80,16 +80,23 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.prepare()
 
         # Value from layer's keywords
-        hazard_zone_attribute = self.hazard.keyword('field')
+        self.hazard_class_attribute = self.hazard.keyword('field')
+        # Try to get the value from keyword, if not exist, it will not fail,
+        # but use the old get_osm_building_usage
+        try:
+            self.exposure_class_attribute = self.exposure.keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            self.exposure_class_attribute = None
 
         hazard_zone_attribute_index = self.hazard.layer.fieldNameIndex(
-            hazard_zone_attribute)
+            self.hazard_class_attribute)
 
         # Check if hazard_zone_attribute exists in hazard_layer
         if hazard_zone_attribute_index < 0:
             message = (
                 'Hazard data %s does not contain expected attribute %s ' %
-                (self.hazard.layer.name(), hazard_zone_attribute))
+                (self.hazard.layer.name(), self.hazard_class_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)
 
@@ -114,19 +121,25 @@ class ClassifiedPolygonHazardBuildingFunction(
         interpolated_layer.dataProvider().addAttributes([new_field])
         interpolated_layer.updateFields()
 
-        attribute_names = [field.name() for field in
-                           interpolated_layer.pendingFields()]
+        attribute_names = [
+            field.name() for field in interpolated_layer.pendingFields()]
         target_field_index = interpolated_layer.fieldNameIndex(
             self.target_field)
         changed_values = {}
 
         # Extract relevant interpolated data
         for feature in interpolated_layer.getFeatures():
-            hazard_value = feature[hazard_zone_attribute]
+            hazard_value = feature[self.hazard_class_attribute]
             if not hazard_value:
                 hazard_value = self._not_affected_value
             changed_values[feature.id()] = {target_field_index: hazard_value}
-            usage = get_osm_building_usage(attribute_names, feature)
+
+            if (self.exposure_class_attribute and
+                    self.exposure_class_attribute in attribute_names):
+                usage = feature[self.exposure_class_attribute]
+            else:
+                usage = get_osm_building_usage(attribute_names, feature)
+
             if usage is None:
                 usage = tr('Unknown')
             if usage not in self.buildings:

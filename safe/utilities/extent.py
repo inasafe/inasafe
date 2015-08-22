@@ -88,23 +88,24 @@ class Extent(object):
         :returns: Rubber band that should be set to the extent.
         :rtype: QgsRubberBand
         """
-        rubberband = QgsRubberBand(
+        # noinspection PyArgumentList
+        rubber_band = QgsRubberBand(
             self.iface.mapCanvas(), geometryType=QGis.Line)
-        rubberband.setColor(colour)
-        rubberband.setWidth(width)
+        rubber_band.setColor(colour)
+        rubber_band.setWidth(width)
         update_display_flag = False
         point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        rubberband.addPoint(point, update_display_flag)
+        rubber_band.addPoint(point, update_display_flag)
         point = QgsPoint(extent.xMaximum(), extent.yMinimum())
-        rubberband.addPoint(point, update_display_flag)
+        rubber_band.addPoint(point, update_display_flag)
         point = QgsPoint(extent.xMaximum(), extent.yMaximum())
-        rubberband.addPoint(point, update_display_flag)
+        rubber_band.addPoint(point, update_display_flag)
         point = QgsPoint(extent.xMinimum(), extent.yMaximum())
-        rubberband.addPoint(point, update_display_flag)
+        rubber_band.addPoint(point, update_display_flag)
         point = QgsPoint(extent.xMinimum(), extent.yMinimum())
         update_display_flag = True
-        rubberband.addPoint(point, update_display_flag)
-        return rubberband
+        rubber_band.addPoint(point, update_display_flag)
+        return rubber_band
 
     @staticmethod
     def validate_rectangle(extent):

@@ -19,7 +19,7 @@ from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.impact_functions.volcanic.volcano_polygon_building\
     .metadata_definitions import VolcanoPolygonBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, KeywordNotFoundError
 from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage)
@@ -81,8 +81,15 @@ class VolcanoPolygonBuildingFunction(
         self.prepare()
 
         # Get parameters from layer's keywords
-        hazard_zone_attribute = self.hazard.keyword('field')
+        self.hazard_class_attribute = self.hazard.keyword('field')
         name_attribute = self.hazard.keyword('volcano_name_field')
+        # Try to get the value from keyword, if not exist, it will not fail,
+        # but use the old get_osm_building_usage
+        try:
+            self.exposure_class_attribute = self.exposure.keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            self.exposure_class_attribute = None
 
         # Input checks
         if not self.hazard.layer.is_polygon_data:
@@ -93,11 +100,11 @@ class VolcanoPolygonBuildingFunction(
             raise Exception(message)
 
         # Check if hazard_zone_attribute exists in hazard_layer
-        if (hazard_zone_attribute not in
+        if (self.hazard_class_attribute not in
                 self.hazard.layer.get_attribute_names()):
             message = (
                 'Hazard data %s did not contain expected attribute %s ' %
-                (self.hazard.name, hazard_zone_attribute))
+                (self.hazard.name, self.hazard_class_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)
 
@@ -121,7 +128,7 @@ class VolcanoPolygonBuildingFunction(
 
         # Hazard zone categories from hazard layer
         hazard_zone_categories = list(
-            set(self.hazard.layer.get_data(hazard_zone_attribute)))
+            set(self.hazard.layer.get_data(self.hazard_class_attribute)))
 
         self.buildings = {}
         self.affected_buildings = OrderedDict()
@@ -129,11 +136,15 @@ class VolcanoPolygonBuildingFunction(
             self.affected_buildings[hazard_category] = {}
 
         for i in range(len(features)):
-            hazard_value = features[i][hazard_zone_attribute]
+            hazard_value = features[i][self.hazard_class_attribute]
             if not hazard_value:
                 hazard_value = self._not_affected_value
             features[i][self.target_field] = hazard_value
-            usage = get_osm_building_usage(attribute_names, features[i])
+            if (self.exposure_class_attribute and
+                    self.exposure_class_attribute in attribute_names):
+                usage = features[i][self.exposure_class_attribute]
+            else:
+                usage = get_osm_building_usage(attribute_names, features[i])
             if usage in [None, 'NULL', 'null', 'Null', 0]:
                 usage = tr('Unknown')
             if usage not in self.buildings:

@@ -5,6 +5,8 @@ InaSAFE
 
 [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=develop)](https://travis-ci.org/AIFDR/inasafe)
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AIFDR/inasafe/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/AIFDR/inasafe/?branch=develop)
+
 InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
 response activities. InaSAFE is a plugin for [QGIS](http://qgis.org).

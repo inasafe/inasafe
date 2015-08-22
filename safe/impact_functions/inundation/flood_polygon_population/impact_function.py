@@ -19,7 +19,9 @@ import numpy
 from safe.utilities.i18n import tr
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.core import (
+    population_rounding_full,
     population_rounding,
+    evacuated_population_needs,
     has_no_data)
 from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
@@ -58,9 +60,6 @@ class FloodEvacuationVectorHazardFunction(
         # Use affected field flag (if False, all polygon will be considered as
         # affected)
         self.use_affected_field = False
-        # Variables for storing value from layer's keyword
-        self.affected_field = None
-        self.value_map = None
         # The 'wet' variable
         self.wet = 'wet'
 
@@ -131,8 +130,8 @@ class FloodEvacuationVectorHazardFunction(
         self.prepare()
 
         # Get parameters from layer's keywords
-        self.affected_field = self.hazard.keyword('field')
-        self.value_map = self.hazard.keyword('value_map')
+        self.hazard_class_attribute = self.hazard.keyword('field')
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
 
         # Get the IF parameters
         self._evacuation_percentage = (
@@ -151,7 +150,8 @@ class FloodEvacuationVectorHazardFunction(
             self.no_data_warning = True
 
         # Check that affected field exists in hazard layer
-        if self.affected_field in self.hazard.layer.get_attribute_names():
+        if (self.hazard_class_attribute in
+                self.hazard.layer.get_attribute_names()):
             self.use_affected_field = True
 
         # Run interpolation function for polygon2raster
@@ -175,10 +175,10 @@ class FloodEvacuationVectorHazardFunction(
         for attr in interpolated_layer.get_data():
             affected = False
             if self.use_affected_field:
-                row_affected_value = attr[self.affected_field]
+                row_affected_value = attr[self.hazard_class_attribute]
                 if row_affected_value is not None:
                     affected = get_key_for_value(
-                        row_affected_value, self.value_map)
+                        row_affected_value, self.hazard_class_mapping)
             else:
                 # assume that every polygon is affected (see #816)
                 affected = self.wet

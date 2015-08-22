@@ -19,9 +19,11 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 from safe.storage.core import read_layer
 from safe.storage.safe_layer import SafeLayer
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestVolcanoPointBuildingFunction(unittest.TestCase):
@@ -47,8 +49,9 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In the event of volcano point how many '
-                             'buildings might be affected')
+        expected_question = (
+            'In the event of volcano point how many buildings might be '
+            'affected')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)

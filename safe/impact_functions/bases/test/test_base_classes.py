@@ -12,6 +12,7 @@ from safe.impact_functions.bases.layer_types.continuous_vector_hazard \
     import ContinuousVectorHazardMixin
 from safe.storage.core import read_layer
 from safe.test.utilities import test_data_path, get_qgis_app
+from safe.storage.safe_layer import SafeLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -31,16 +32,16 @@ class TestBaseClassesMixin(unittest.TestCase):
         exposure_layer = read_layer(building_path)
 
         classified_vh = ClassifiedVectorHazardMixin()
-        classified_vh.set_up_hazard_layer(hazard_layer)
+        classified_vh.hazard = SafeLayer(hazard_layer)
 
         continuous_vh = ContinuousVectorHazardMixin()
-        continuous_vh.set_up_hazard_layer(hazard_layer)
+        continuous_vh.hazard = SafeLayer(hazard_layer)
 
         classified_ve = ClassifiedVectorExposureMixin()
-        classified_ve.set_up_exposure_layer(exposure_layer)
+        classified_ve.exposure = SafeLayer(exposure_layer)
 
         continuous_ve = ContinuousVectorExposureMixin()
-        continuous_ve.set_up_exposure_layer(exposure_layer)
+        continuous_ve.exposure = SafeLayer(exposure_layer)
 
         with self.assertRaises(NoAttributeInLayerError):
             # test wrong attribute
