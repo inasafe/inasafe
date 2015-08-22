@@ -29,7 +29,7 @@ from qgis.gui import QgsMapToolPan
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp
+from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
@@ -87,10 +87,11 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         title = self.tr('InaSAFE OpenStreetMap Downloader')
         self.progress_dialog.setWindowTitle(title)
         # Set up context help
-        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
-
-        self.show_info()
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.stacked_widget.setCurrentIndex(1)
 
         # set up the validator for the file name prefix
         expression = QRegExp('^[A-Za-z0-9-_]*$')
@@ -165,9 +166,34 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         self.update_helper_political_level()
 
-    def show_info(self):
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
+
+        ..versionadded: 3.2
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded:: 3.2
+        """
+        self.stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
+        self.stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 
@@ -239,10 +265,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """ Store current state of GUI to configuration file """
         settings = QSettings()
         settings.setValue('directory', self.output_directory.text())
-
-    def show_help(self):
-        """Load the help text for the dialog."""
-        show_context_help(self.help_context)
 
     def update_extent(self, extent):
         """Update extent value in GUI based from an extent.
