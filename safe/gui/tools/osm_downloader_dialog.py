@@ -105,7 +105,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             RectangleMapTool(self.canvas)
         self.rectangle_map_tool.rectangle_created.connect(
             self.update_extent_from_rectangle)
-        self.button_extent_rectangle.clicked.connect(
+        self.capture_button.clicked.connect(
             self.drag_rectangle_on_map_canvas)
 
         # Setup pan tool
@@ -251,10 +251,10 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             coordinates provided are in Geographic / EPSG:4326.
         :type extent: list
         """
-        self.min_longitude.setText(str(extent[0]))
-        self.min_latitude.setText(str(extent[1]))
-        self.max_longitude.setText(str(extent[2]))
-        self.max_latitude.setText(str(extent[3]))
+        self.x_minimum.setValue(extent[0])
+        self.y_minimum.setValue(extent[1])
+        self.x_maximum.setValue(extent[2])
+        self.y_maximum.setValue(extent[3])
 
         # Updating the country if possible.
         rectangle = QgsRectangle(extent[0], extent[1], extent[2], extent[3])
@@ -337,11 +337,11 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.groupBox.setDisabled(True)
 
         # Get the extent
-        min_latitude = float(str(self.min_latitude.text()))
-        max_latitude = float(str(self.max_latitude.text()))
-        min_longitude = float(str(self.min_longitude.text()))
-        max_longitude = float(str(self.max_longitude.text()))
-        extent = [min_longitude, min_latitude, max_longitude, max_latitude]
+        y_minimum = self.y_minimum.value()
+        y_maximum = self.y_maximum.value()
+        x_minimum = self.x_minimum.value()
+        x_maximum = self.x_maximum.value()
+        extent = [x_minimum, y_minimum, x_maximum, y_maximum]
 
         # Validate extent
         valid_flag = validate_geo_array(extent)
