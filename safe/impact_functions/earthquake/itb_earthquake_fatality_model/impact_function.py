@@ -363,7 +363,7 @@ class ITBFatalityFunction(
                 'total_fatalities': population_rounding(self.total_fatalities),
                 'total_fatalities_raw': self.total_fatalities,
                 'fatalities_per_mmi': number_of_fatalities,
-                'total_displaced': total_displaced,
+                'total_displaced': population_rounding(total_displaced),
                 'displaced_per_mmi': number_of_displaced,
                 'impact_table': impact_table,
                 'map_title': map_title,
