@@ -42,3 +42,6 @@ INCOMPLETE_IMPACT_JSON = os.path.join(
     TEST_DIR, 'data', 'incomplete_impact.json')
 
 TEST_XML_BASEPATH = 'gmd:identificationInfo/gmd:MD_DataIdentification/'
+
+EXISTING_NO_METADATA = os.path.join(
+    TEST_DIR, 'data', 'existing_no_metadata.shp')
