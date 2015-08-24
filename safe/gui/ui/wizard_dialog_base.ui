@@ -33,7 +33,150 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout_13">
+   <property name="leftMargin">
+    <number>8</number>
+   </property>
+   <property name="topMargin">
+    <number>8</number>
+   </property>
+   <property name="rightMargin">
+    <number>8</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item row="2" column="0">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="pbnCancel">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbnBack">
+       <property name="text">
+        <string>Back</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbnNext">
+       <property name="text">
+        <string>Next</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout_12">
+     <item row="0" column="2">
+      <widget class="QLabel" name="lblStep">
+       <property name="styleSheet">
+        <string notr="true">font: 14pt;</string>
+       </property>
+       <property name="text">
+        <string>[placeholder]</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="lblMainTitle">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 14pt;</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt;Ina&lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;SAFE&lt;/span&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt; step by step&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="lblSubtitle">
+       <property name="text">
+        <string> Data-centric assessment...</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+       </property>
+       <property name="indent">
+        <number>-1</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" rowspan="2">
+      <widget class="QLabel" name="lblMainIcon">
+       <property name="maximumSize">
+        <size>
+         <width>40</width>
+         <height>60</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>../../../icon.svg</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <property name="spacing">
       <number>0</number>
@@ -71,7 +214,7 @@
         <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
        </property>
        <property name="currentIndex">
-        <number>4</number>
+        <number>13</number>
        </property>
        <widget class="QWidget" name="pg1Category">
         <property name="styleSheet">
@@ -1622,8 +1765,8 @@
         </layout>
        </widget>
        <widget class="QWidget" name="pgF01Constraints1">
-        <layout class="QVBoxLayout" name="verticalLayout_19">
-         <item>
+        <layout class="QGridLayout" name="gridLayout_10">
+         <item row="0" column="0" colspan="6">
           <widget class="QLabel" name="lblSelectFunction1">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1651,147 +1794,132 @@
            </property>
           </widget>
          </item>
-         <item>
-          <spacer name="verticalSpacer_8">
+         <item row="1" column="0" colspan="2">
+          <spacer name="horizontalSpacer_3">
            <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
+            <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>20</width>
-             <height>15</height>
+             <width>348</width>
+             <height>20</height>
             </size>
            </property>
           </spacer>
          </item>
-         <item>
-          <layout class="QGridLayout" name="gridLayout_10">
-           <item row="4" column="1">
-            <widget class="QLabel" name="lblAvailableFunctions1">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>40</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Available functions:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <item>
-              <spacer name="horizontalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="rbHazSingle">
-               <property name="text">
-                <string>Single Event</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QRadioButton" name="rbHazMulti">
-               <property name="text">
-                <string>Multiple Event</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QTableWidget" name="tblFunctions1">
-             <property name="editTriggers">
-              <set>QAbstractItemView::NoEditTriggers</set>
-             </property>
-             <property name="tabKeyNavigation">
-              <bool>false</bool>
-             </property>
-             <property name="showDropIndicator" stdset="0">
-              <bool>false</bool>
-             </property>
-             <property name="dragDropOverwriteMode">
-              <bool>false</bool>
-             </property>
-             <property name="selectionMode">
-              <enum>QAbstractItemView::SingleSelection</enum>
-             </property>
-             <row>
-              <property name="text">
-               <string>People</string>
-              </property>
-             </row>
-             <row>
-              <property name="text">
-               <string>Construction</string>
-              </property>
-             </row>
-             <column>
-              <property name="text">
-               <string>Flood</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Tsunami</string>
-              </property>
-             </column>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>&lt;b&gt;Hazard&lt;/b&gt;</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
+         <item row="1" column="2">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>&lt;b&gt;Hazard&lt;/b&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="3">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>379</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="4">
+          <widget class="QRadioButton" name="rbHazSingle">
+           <property name="text">
+            <string>Single Event</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="5">
+          <widget class="QRadioButton" name="rbHazMulti">
+           <property name="text">
+            <string>Multiple Event</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1" colspan="5">
+          <widget class="QTableWidget" name="tblFunctions1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="tabKeyNavigation">
+            <bool>false</bool>
+           </property>
+           <property name="showDropIndicator" stdset="0">
+            <bool>false</bool>
+           </property>
+           <property name="dragDropOverwriteMode">
+            <bool>false</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <row>
+            <property name="text">
+             <string>People</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>Construction</string>
+            </property>
+           </row>
+           <column>
+            <property name="text">
+             <string>Flood</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Tsunami</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item row="3" column="1" colspan="5">
+          <widget class="QLabel" name="lblAvailableFunctions1">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Available functions:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -3098,7 +3226,7 @@ Please step back and select another layer.</string>
        </widget>
        <widget class="QWidget" name="pgF17AggLayerOrigin">
         <layout class="QGridLayout" name="gridLayout_25">
-         <item row="0" column="0" colspan="4">
+         <item row="0" column="0" colspan="3">
           <widget class="QLabel" name="lblSelectAggLayerOriginType">
            <property name="styleSheet">
             <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
@@ -3114,36 +3242,7 @@ Please step back and select another layer.</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="3" rowspan="2">
-          <spacer name="horizontalSpacer_21">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="1" rowspan="2">
-          <spacer name="horizontalSpacer_20">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="2" rowspan="2">
+         <item row="1" column="1" rowspan="2">
           <widget class="QLabel" name="lblIconIFCWAggregationOrigin">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -3174,7 +3273,7 @@ Please step back and select another layer.</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item row="2" column="0">
           <widget class="QRadioButton" name="rbAggLayerFromBrowser">
            <property name="text">
             <string>I would like to pick an aggregation layer from disk
@@ -3182,7 +3281,7 @@ Please step back and select another layer.</string>
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item row="1" column="0">
           <widget class="QRadioButton" name="rbAggLayerFromCanvas">
            <property name="text">
             <string>I would like to use an aggregation layer already loaded in QGIS
@@ -3190,30 +3289,14 @@ Please step back and select another layer.</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <spacer name="verticalSpacer_24">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="5" column="0">
+         <item row="3" column="0">
           <widget class="QRadioButton" name="rbAggLayerNoAggregation">
            <property name="text">
             <string>No thanks, I am happy to aggregate results for the entire analysis window</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
+         <item row="4" column="0">
           <spacer name="verticalSpacer_3">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -3222,22 +3305,6 @@ Please step back and select another layer.</string>
             <size>
              <width>20</width>
              <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="4" column="0">
-          <spacer name="verticalSpacer_38">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>10</width>
-             <height>16</height>
             </size>
            </property>
           </spacer>
@@ -3817,8 +3884,8 @@ Please step back and select another layer.</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>1005</width>
-              <height>445</height>
+              <width>1017</width>
+              <height>462</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_32">
@@ -3873,7 +3940,7 @@ Please step back and select another layer.</string>
          <item>
           <widget class="MessageViewer" name="wvResults" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -3927,153 +3994,6 @@ Please step back and select another layer.</string>
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="3" column="0">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="pbnCancel">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pbnBack">
-       <property name="text">
-        <string>Back</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pbnNext">
-       <property name="text">
-        <string>Next</string>
-       </property>
-       <property name="autoDefault">
-        <bool>false</bool>
-       </property>
-       <property name="default">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout_12">
-     <item row="0" column="2">
-      <widget class="QLabel" name="lblStep">
-       <property name="styleSheet">
-        <string notr="true">font: 14pt;</string>
-       </property>
-       <property name="text">
-        <string>[placeholder]</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="lblMainTitle">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">font: 14pt;</string>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt;Ina&lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;SAFE&lt;/span&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt; step by step&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="lblSubtitle">
-       <property name="text">
-        <string> Data-centric assessment...</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-       </property>
-       <property name="indent">
-        <number>-1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" rowspan="2">
-      <widget class="QLabel" name="lblMainIcon">
-       <property name="maximumSize">
-        <size>
-         <width>40</width>
-         <height>60</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap>../../../icon.svg</pixmap>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
-    <spacer name="verticalSpacer_11">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>
