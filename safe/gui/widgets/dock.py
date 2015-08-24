@@ -1658,12 +1658,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         self.show_keyword_version_message(
                             keyword_version, self.inasafe_version)
 
+        # TODO: maybe we need to split these apart more to give mode
+        # TODO: granular error messages TS
         except (KeywordNotFoundError,
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
                 AttributeError):
-            self.show_no_keywords_message()
+            # Added this check in 3.2 for #1861
+            active_layer = self.iface.activeLayer()
+            if active_layer is None:
+                self.show_static_message(self.getting_started_message())
+            else:
+                self.show_no_keywords_message()
             # Append the error message.
             # error_message = get_error_message(e)
             # self.show_error_message(error_message)

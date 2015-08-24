@@ -103,7 +103,7 @@ class TestShakeEvent(unittest.TestCase):
             'day: 5\n'
             'month: 11\n'
             'year: 2013\n'
-            'time: 2013-11-05 06:08:09\n'
+            'time: 2013-11-05 06:08:09+07:07\n'
             'time_zone: WIB\n'
             'x_minimum: 139.37\n'
             'x_maximum: 141.87\n'
@@ -243,7 +243,7 @@ class TestShakeEvent(unittest.TestCase):
 
         expected_fatalities = {2: 0.0,
                                3: 0.0,
-                               4: 0.000036387775168847936,
+                               4: 3.6387775168847936e-05,
                                5: 0.0,
                                6: 0.0,
                                7: 0.0,
@@ -382,7 +382,7 @@ class TestShakeEvent(unittest.TestCase):
             'map-name': u'Estimated Earthquake Impact',
             'date': '5-11-2013',
             'bearing-degrees': '0.00\xb0',
-            'formatted-date-time': '05-Nov-13 06:08:09 ',
+            'formatted-date-time': '05-Nov-13 06:08:09 LMT',
             'distance': '0.00',
             'direction-relation': u'of',
             'software-tag': software_tag,

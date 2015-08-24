@@ -31,7 +31,7 @@ import sqlite3
 from qgis.core import QGis  # force sip2 api
 
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignal, QSettings
+from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature, QSettings
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
@@ -45,7 +45,7 @@ from qgis.core import (
 
 from safe import messaging as m
 from safe.utilities.resources import html_header, html_footer, get_ui_class
-from safe.utilities.help import show_context_help
+
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
 
@@ -85,7 +85,6 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.parent = parent
         self.canvas = iface.mapCanvas()
         self.previous_map_tool = None
-        self.show_info()
         # Prepare the map tool
         self.tool = RectangleMapTool(self.canvas)
         self.previous_map_tool = self.canvas.mapTool()
@@ -123,9 +122,11 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
         self.ok_button.clicked.connect(self.accept)
         # Set up context help
-        self.help_context = 'user_extents'
-        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.stacked_widget.setCurrentIndex(1)
         # Reset / Clear button
         clear_button = self.button_box.button(QtGui.QDialogButtonBox.Reset)
         clear_button.setText(self.tr('Clear'))
@@ -168,13 +169,34 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         else:
             self.show_confirmations.setChecked(False)
 
-    def show_help(self):
-        """Load the help text for the dialog."""
-        show_context_help(self.help_context)
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
 
-    def show_info(self):
+        ..versionadded: 3.2
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded:: 3.2
+        """
+        self.stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
+        self.stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 
