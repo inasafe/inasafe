@@ -29,7 +29,7 @@ from qgis.gui import QgsMapToolPan
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp
+from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
@@ -87,10 +87,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         title = self.tr('InaSAFE OpenStreetMap Downloader')
         self.progress_dialog.setWindowTitle(title)
         # Set up context help
-        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
-
-        self.show_info()
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.stacked_widget.setCurrentIndex(1)
+        # Disable boundaries group box until boundary checkbox is ticked
+        self.boundary_group.setEnabled(False)
 
         # set up the validator for the file name prefix
         expression = QRegExp('^[A-Za-z0-9-_]*$')
@@ -105,7 +108,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             RectangleMapTool(self.canvas)
         self.rectangle_map_tool.rectangle_created.connect(
             self.update_extent_from_rectangle)
-        self.button_extent_rectangle.clicked.connect(
+        self.capture_button.clicked.connect(
             self.drag_rectangle_on_map_canvas)
 
         # Setup pan tool
@@ -140,8 +143,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         except KeyError:
             content = self.tr('undefined')
         finally:
-            text = '<span style=" font-size:12pt; font-style:italic;">' \
-                   'level %s is : %s</span>' % (current_level, content)
+            text = self.tr('which represents %s in') % (content)
             self.boundary_helper.setText(text)
 
     def populate_countries(self):
@@ -165,9 +167,34 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         self.update_helper_political_level()
 
-    def show_info(self):
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
+
+        ..versionadded: 3.2
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded:: 3.2
+        """
+        self.stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
+        self.stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 
@@ -240,10 +267,6 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         settings = QSettings()
         settings.setValue('directory', self.output_directory.text())
 
-    def show_help(self):
-        """Load the help text for the dialog."""
-        show_context_help(self.help_context)
-
     def update_extent(self, extent):
         """Update extent value in GUI based from an extent.
 
@@ -251,10 +274,10 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             coordinates provided are in Geographic / EPSG:4326.
         :type extent: list
         """
-        self.min_longitude.setText(str(extent[0]))
-        self.min_latitude.setText(str(extent[1]))
-        self.max_longitude.setText(str(extent[2]))
-        self.max_latitude.setText(str(extent[3]))
+        self.x_minimum.setValue(extent[0])
+        self.y_minimum.setValue(extent[1])
+        self.x_maximum.setValue(extent[2])
+        self.y_maximum.setValue(extent[3])
 
         # Updating the country if possible.
         rectangle = QgsRectangle(extent[0], extent[1], extent[2], extent[3])
@@ -273,7 +296,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         .. note:: Delegates to update_extent()
         """
 
-        self.groupBox.setTitle(self.tr('Bounding box from the map canvas'))
+        self.bounding_box_group.setTitle(self.tr('Bounding box from the map canvas'))
         # Get the extent as [xmin, ymin, xmax, ymax]
         extent = viewport_geo_array(self.iface.mapCanvas())
         self.update_extent(extent)
@@ -290,7 +313,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         rectangle = self.rectangle_map_tool.rectangle()
         if rectangle:
-            self.groupBox.setTitle(self.tr('Bounding box from rectangle'))
+            self.bounding_box_group.setTitle(self.tr('Bounding box from rectangle'))
             extent = rectangle_geo_array(rectangle, self.iface.mapCanvas())
             self.update_extent(extent)
 
@@ -316,15 +339,15 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         :rtype list
         """
         feature_types = []
-        if self.roads_checkBox.isChecked():
+        if self.roads_flag.isChecked():
             feature_types.append('roads')
-        if self.buildings_checkBox.isChecked():
+        if self.buildings_flag.isChecked():
             feature_types.append('buildings')
-        if self.building_points_checkBox.isChecked():
+        if self.building_points_flag.isChecked():
             feature_types.append('building-points')
-        if self.potential_idp_checkBox.isChecked():
+        if self.potential_idp_flag.isChecked():
             feature_types.append('potential-idp')
-        if self.boundary_checkBox.isChecked():
+        if self.boundary_flag.isChecked():
             level = self.admin_level_comboBox.currentIndex() + 1
             feature_types.append('boundary-%s' % level)
         return feature_types
@@ -333,15 +356,15 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         """Do osm download and display it in QGIS."""
         error_dialog_title = self.tr('InaSAFE OpenStreetMap Downloader Error')
 
-        # Lock the groupbox
-        self.groupBox.setDisabled(True)
+        # Lock the bounding_box_group
+        self.bounding_box_group.setDisabled(True)
 
         # Get the extent
-        min_latitude = float(str(self.min_latitude.text()))
-        max_latitude = float(str(self.max_latitude.text()))
-        min_longitude = float(str(self.min_longitude.text()))
-        max_longitude = float(str(self.max_longitude.text()))
-        extent = [min_longitude, min_latitude, max_longitude, max_latitude]
+        y_minimum = self.y_minimum.value()
+        y_maximum = self.y_maximum.value()
+        x_minimum = self.x_minimum.value()
+        x_maximum = self.x_maximum.value()
+        extent = [x_minimum, y_minimum, x_maximum, y_maximum]
 
         # Validate extent
         valid_flag = validate_geo_array(extent)
@@ -351,8 +374,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 'valid or check your projection!')
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             display_warning_message_box(self, error_dialog_title, message)
-            # Unlock the groupbox
-            self.groupBox.setEnabled(True)
+            # Unlock the bounding_box_group
+            self.bounding_box_group.setEnabled(True)
             return
 
         # Validate features
@@ -363,8 +386,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 'Please make sure you have checked one feature.')
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             display_warning_message_box(self, error_dialog_title, message)
-            # Unlock the groupbox
-            self.groupBox.setEnabled(True)
+            # Unlock the bounding_box_group
+            self.bounding_box_group.setEnabled(True)
             return
 
         try:
@@ -374,7 +397,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
                 output_directory = self.output_directory.text()
                 output_prefix = self.filename_prefix.text()
-                overwrite = self.overwrite_checkBox.isChecked()
+                overwrite = self.overwrite_flag.isChecked()
                 output_base_file_path = self.get_output_base_path(
                     output_directory, output_prefix, feature_type, overwrite)
 
@@ -406,8 +429,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             self.progress_dialog.cancel()
 
         finally:
-            # Unlock the groupbox
-            self.groupBox.setEnabled(True)
+            # Unlock the bounding_box_group
+            self.bounding_box_group.setEnabled(True)
 
     def get_output_base_path(
             self,

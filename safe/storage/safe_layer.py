@@ -47,7 +47,8 @@ class SafeLayer(object):
             self._name = name
         else:
             try:
-                self._name = self.keyword('title')
+                # RM: convert title to string. Makes sure it is str
+                self._name = unicode(self.keyword('title'))
             except KeywordNotFoundError:
                 self._name = ''
 
