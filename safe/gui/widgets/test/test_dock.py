@@ -270,6 +270,7 @@ class TestDock(TestCase):
 
     def test_issue47(self):
         """Issue47: Hazard & exposure data are in different proj to viewport.
+
         See https://github.com/AIFDR/inasafe/issues/47"""
 
         result, message = setup_scenario(
