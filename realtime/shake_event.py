@@ -170,8 +170,10 @@ class ShakeEvent(QObject):
             self.event_id = self.data.event_id
 
         # Convert grid.xml (we'll give the title with event_id)
+        # RM: convert event_id to str too. This avoid the layer name is
+        # falsely read as int
         self.shake_grid = ShakeGrid(
-            self.event_id, get_grid_source(), self.grid_file_path())
+            str(self.event_id), get_grid_source(), self.grid_file_path())
 
         self.population_raster_path = population_raster_path
         self.geonames_sqlite_path = geonames_sqlite_path

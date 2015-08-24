@@ -36,7 +36,7 @@ FORM_CLASS = get_ui_class('needs_calculator_dialog_base.ui')
 
 
 class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
-    """Dialog implementation class for the InaSAFE minimum needs dialog.
+    """Dialog implementation class for the InaSAFE minimum needs calculator.
     """
 
     def __init__(self, parent=None):
@@ -48,7 +48,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowTitle(self.tr(
-            'InaSAFE %s Minimum Needs Tool' % get_version()))
+            'InaSAFE %s Minimum Needs Calculator' % get_version()))
         self.polygon_layers_to_combo()
         self.show_info()
         help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -74,7 +74,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         )
         tips = m.BulletedList()
         tips.add(self.tr(
-            'Load a polygon layer in QGIS. Typically the layer will '
+            'Load a point or polygon layer in QGIS. Typically the layer will '
             'represent administrative districts where people have gone to an '
             'evacuation center.'))
         tips.add(self.tr(
@@ -132,8 +132,8 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
                         self.tr('Format error'),
                         self.tr(
                             'Please change the value of %1 in attribute '
-                            '%1 to integer format').arg(population).arg(
-                                population_name))
+                            '%s to integer format') % (
+                            population, population_name))
                     raise ValueError
 
             # Calculate estimated needs based on BNPB Perka 7/2008
@@ -171,8 +171,14 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             if is_polygon_layer(layer) or is_point_layer(layer):
                 found_flag = True
                 add_ordered_combo_item(self.cboPolygonLayers, name, source)
+        # Now disable the run button if no suitable layers were found
+        # see #2206
+        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
         if found_flag:
             self.cboPolygonLayers.setCurrentIndex(0)
+            ok_button.setEnabled(True)
+        else:
+            ok_button.setEnabled(False)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -187,10 +193,24 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             index, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        fields = layer.dataProvider().fieldNameMap().keys()
+        fields = layer.pendingFields()
         self.cboFields.clear()
+        has_fields = False
         for field in fields:
-            add_ordered_combo_item(self.cboFields, field, field)
+            LOGGER.info(field.typeName())
+            #TODO exclude dates too? TS
+            if field.typeName() != 'String':
+                has_fields = True
+                add_ordered_combo_item(
+                    self.cboFields, field.name(), field.name())
+
+        # Now disable the run button if no suitable fields were found
+        # see #2206
+        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
+        if not has_fields:
+            ok_button.setEnabled(False)
+        else:
+            ok_button.setEnabled(True)
 
     def accept(self):
         """Process the layer and field and generate a new layer.

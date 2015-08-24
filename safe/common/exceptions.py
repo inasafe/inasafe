@@ -26,12 +26,6 @@ class InaSAFEError(RuntimeError):
     suggestion = 'An unspecified error occurred.'
 
 
-class ReadMetadataError(InaSAFEError):
-    """When a metadata xml is not correctly formatted can't be read"""
-    suggestion = (
-        'Check that the file is correct')
-
-
 class ReadLayerError(InaSAFEError):
     """When a layer can't be read"""
     suggestion = (
@@ -350,3 +344,23 @@ class MetadataLayerConstraintError(InaSAFEError):
     It means the layer constraint specified in the metadata is not supported
     by the base class
     """
+
+
+class MetadataReadError(InaSAFEError):
+    """When a metadata xml is not correctly formatted can't be read"""
+    suggestion = (
+        'Check that the file is correct')
+
+
+class MetadataInvalidPathError(InaSAFEError):
+    """When a path for a metadata xml is not correct"""
+    suggestion = 'Check that the XML path of the property is correct'
+
+
+class MetadataCastError(InaSAFEError):
+    """When a path for a metadata xml is not correct"""
+    suggestion = 'Check that the XML value is of the correct type'
+
+class InvalidProvenanceDataError(InaSAFEError):
+    """When a path for a metadata xml is not correct"""
+    suggestion = 'Check that the IF produced all the required data'
