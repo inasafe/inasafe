@@ -54,6 +54,11 @@ class ClassifiedPolygonHazardPopulationFunction(
                          'might be impacted.')
 
     def notes(self):
+        """Return the notes section of the report.
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
         notes = [
             {'content': tr('Notes'), 'header': True},
             {

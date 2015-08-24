@@ -27,7 +27,7 @@ from safe.impact_reports.population_exposure_report_mixin import (
 class PopulationExposureReportMixinTest(unittest.TestCase):
     """Test the ReportMixin.
 
-    .. versionadded:: 3.3
+    .. versionadded:: 3.2
     """
 
     # noinspection PyPep8Naming
