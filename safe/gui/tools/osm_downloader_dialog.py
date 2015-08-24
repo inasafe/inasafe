@@ -47,7 +47,6 @@ from safe.utilities.gis import (
     validate_geo_array)
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class, resources_path)
-from safe.utilities.help import show_context_help
 from safe.messaging import styles
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
