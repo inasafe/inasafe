@@ -32,6 +32,7 @@ from safe_extras.parameters.parameter_exceptions import (
     InvalidMaximumError,
     ValueOutOfBounds)
 
+
 class TestNeedsProfile(NeedsProfile):
     """Since we don't want to change the actual minimum needs settings in
     QSettings, we are using a mock profile.
