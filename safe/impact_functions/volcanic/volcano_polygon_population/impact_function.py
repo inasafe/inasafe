@@ -51,6 +51,11 @@ class VolcanoPolygonPopulationFunction(
         self.volcano_names = tr('Not specified in data')
 
     def notes(self):
+        """Overwrite the notes section with this impact function's notes.
+
+        :returns: The notes for this impact function's report.
+        :rtype: list
+        """
         notes = [
             {
                 'content': tr('Notes'),
