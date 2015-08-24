@@ -400,7 +400,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
             os.path.join(
                 self.impact_merge_dialog.out_dir,
                 '*.pdf'))
-        expected_reports_number = 2
+        expected_reports_number = 3
         self.assertEqual(len(report_list), expected_reports_number)
 
     def test_generate_report_dictionary_from_dom(self):
@@ -567,7 +567,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
             os.path.join(
                 self.impact_merge_dialog.out_dir,
                 '*.pdf'))
-        expected_reports_number = 2
+        expected_reports_number = 3
         self.assertEqual(len(report_list), expected_reports_number)
 
     def test_load_template(self):
