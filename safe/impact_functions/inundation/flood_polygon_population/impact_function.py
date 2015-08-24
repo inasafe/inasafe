@@ -19,9 +19,7 @@ import numpy
 from safe.utilities.i18n import tr
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.core import (
-    population_rounding_full,
     population_rounding,
-    evacuated_population_needs,
     has_no_data)
 from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
@@ -201,8 +199,8 @@ class FloodEvacuationVectorHazardFunction(
         if self.use_affected_field:
             affected_population = tr(
                 'People within hazard field ("%s") of value "%s"') % (
-                    self.affected_field,
-                    ','.join(self.value_map[self.wet]))
+                    self.hazard_class_attribute,
+                    ','.join(self.hazard_class_mapping[self.wet]))
         else:
             affected_population = tr('People within any hazard polygon.')
 

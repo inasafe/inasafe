@@ -110,7 +110,7 @@ class ClassifiedPolygonHazardPopulationFunction(
         if not self.hazard.layer.is_polygon_data:
             raise Exception(msg)
 
-        # Check if hazard_zone_attribute exists in hazard_layer
+        # Check if hazard_class_attribute exists in hazard_layer
         if (self.hazard_class_attribute not in
                 self.hazard.layer.get_attribute_names()):
             msg = ('Hazard data %s does not contain expected hazard '
@@ -142,7 +142,7 @@ class ClassifiedPolygonHazardPopulationFunction(
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this hazard zone
-                hazard_zone = row[self.hazard_zone_attribute]
+                hazard_zone = row[self.hazard_class_attribute]
                 self.affected_population[hazard_zone] += population
 
         # Count total population from exposure layer

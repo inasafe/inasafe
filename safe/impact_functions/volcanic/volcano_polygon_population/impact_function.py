@@ -131,7 +131,7 @@ class VolcanoPolygonPopulationFunction(
                                       self.hazard.layer.get_geometry_name()))
             raise Exception(msg)
 
-        # Check if hazard_zone_attribute exists in hazard_layer
+        # Check if hazard_class_attribute exists in hazard_layer
         if (self.hazard_class_attribute not in
                 self.hazard.layer.get_attribute_names()):
             msg = ('Hazard data %s did not contain expected attribute %s ' % (
@@ -170,7 +170,7 @@ class VolcanoPolygonPopulationFunction(
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this category
-                category = row[self.hazard_zone_attribute]
+                category = row[self.hazard_class_attribute]
                 self.affected_population[category] += population
 
         # Count totals

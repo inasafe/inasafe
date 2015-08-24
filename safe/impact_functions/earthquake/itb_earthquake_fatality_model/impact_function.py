@@ -28,7 +28,6 @@ from safe.common.utilities import (
     create_classes,
     create_label,
     get_thousand_separator)
-from safe.common.exceptions import InaSAFEError
 from safe.utilities.i18n import tr
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
@@ -143,6 +142,11 @@ class ITBFatalityFunction(
         return numpy.power(10.0, x * mmi - y)
 
     def action_checklist(self):
+        """Action checklist for the itb earthquake fatality report.
+
+        :returns: The action checklist
+        :rtype: list
+        """
         total_fatalities = self.total_fatalities
         total_displaced = self.total_evacuated
         checklist = [
@@ -291,31 +295,22 @@ class ITBFatalityFunction(
             number_of_fatalities[mmi] = fatalities
 
         # Total statistics
-        total_population_raw = numpy.nansum(number_of_exposed.values())
-        total_fatalities_raw = numpy.nansum(number_of_fatalities.values())
-        total_displaced_raw = numpy.nansum(number_of_displaced.values())
+        self.total_population = numpy.nansum(number_of_exposed.values())
+        self.total_fatalities = numpy.nansum(number_of_fatalities.values())
+        total_displaced = numpy.nansum(number_of_displaced.values())
 
-        self.total_population, rounding = population_rounding_full(
-            total_population_raw)
-
-        # Compute number of fatalities
-        total_fatalities = population_rounding(total_fatalities_raw)
         # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
         # will be rounded down to 0 - Tim
         # Needs to revisit but keep it alive for the time being - Hyeuk, Jono
-        if total_fatalities < 50:
-            total_fatalities = 0
-
-        # Compute number of people displaced due to building collapse
-        total_displaced = population_rounding(total_displaced_raw)
+        if self.total_fatalities < 50:
+            self.total_fatalities = 0
 
         affected_population = self.affected_population
-        self.total_fatalities = total_fatalities
-        affected_population[tr('Number of fatalities')] = total_fatalities
+        affected_population[tr('Number of fatalities')] = self.total_fatalities
         affected_population[
             tr('Number of people displaced')] = total_displaced
         self.unaffected_population = (
-            self.total_population - total_displaced - total_fatalities)
+            self.total_population - total_displaced - self.total_fatalities)
         self._evacuation_category = tr('Number of people displaced')
 
         self.minimum_needs = [
@@ -365,8 +360,8 @@ class ITBFatalityFunction(
                 'impact_summary': impact_summary,
                 'exposed_per_mmi': number_of_exposed,
                 'total_population': self.total_population,
-                'total_fatalities': total_fatalities,
-                'total_fatalities_raw': total_fatalities_raw,
+                'total_fatalities': population_rounding(self.total_fatalities),
+                'total_fatalities_raw': self.total_fatalities,
                 'fatalities_per_mmi': number_of_fatalities,
                 'total_displaced': total_displaced,
                 'displaced_per_mmi': number_of_displaced,
