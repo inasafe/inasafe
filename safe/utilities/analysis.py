@@ -79,9 +79,7 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = m.Image(
-    resource_url(styles.logo_element()),
-    'InaSAFE Logo')
+LOGO_ELEMENT = m.Brand()
 
 LOGGER = logging.getLogger('InaSAFE')
 

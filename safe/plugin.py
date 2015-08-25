@@ -72,7 +72,7 @@ class Plugin(object):
         self.action_batch_runner = None
         self.action_shake_converter = None
         self.action_minimum_needs = None
-        self.action_global_minimum_needs = None
+        self.action_minimum_needs_config = None
         self.action_impact_merge_dlg = None
         self.key_action = None
         self.action_options = None
@@ -229,11 +229,11 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-minimum-needs.svg')
         self.action_minimum_needs = QAction(
             QIcon(icon),
-            self.tr('Minimum Needs Tool'), self.iface.mainWindow())
+            self.tr('Minimum Needs Calculator'), self.iface.mainWindow())
         self.action_minimum_needs.setStatusTip(self.tr(
-            'Open InaSAFE minimum needs tool'))
+            'Open InaSAFE minimum needs calculator'))
         self.action_minimum_needs.setWhatsThis(self.tr(
-            'Open InaSAFE minimum needs tool'))
+            'Open InaSAFE minimum needs calculator'))
         self.action_minimum_needs.triggered.connect(self.show_minimum_needs)
         self.add_action(
             self.action_minimum_needs, add_to_toolbar=self.full_toolbar)
@@ -241,25 +241,25 @@ class Plugin(object):
     def _create_minimum_needs_options_action(self):
         """Create action for global minimum needs dialog."""
         icon = resources_path('img', 'icons', 'show-global-minimum-needs.svg')
-        self.action_global_minimum_needs = QAction(
+        self.action_minimum_needs_config = QAction(
             QIcon(icon),
-            self.tr('Global Minimum Needs Configuration'),
+            self.tr('Minimum Needs Configuration'),
             self.iface.mainWindow())
-        self.action_global_minimum_needs.setStatusTip(self.tr(
-            'Open InaSAFE global minimum needs configuration'))
-        self.action_global_minimum_needs.setWhatsThis(self.tr(
-            'Open InaSAFE global minimum needs configuration'))
-        self.action_global_minimum_needs.triggered.connect(
-            self.show_global_minimum_needs_configuration)
+        self.action_minimum_needs_config.setStatusTip(self.tr(
+            'Open InaSAFE minimum needs configuration'))
+        self.action_minimum_needs_config.setWhatsThis(self.tr(
+            'Open InaSAFE minimum needs configuration'))
+        self.action_minimum_needs_config.triggered.connect(
+            self.show_minimum_needs_configuration)
         self.add_action(
-            self.action_global_minimum_needs, add_to_toolbar=self.full_toolbar)
+            self.action_minimum_needs_config, add_to_toolbar=self.full_toolbar)
 
     def _create_shakemap_converter_action(self):
         """Create action for converter dialog."""
         icon = resources_path('img', 'icons', 'show-converter-tool.svg')
         self.action_shake_converter = QAction(
             QIcon(icon),
-            self.tr('Shakemap converter'), self.iface.mainWindow())
+            self.tr('Shakemap Converter'), self.iface.mainWindow())
         self.action_shake_converter.setStatusTip(self.tr(
             'Open InaSAFE Converter'))
         self.action_shake_converter.setWhatsThis(self.tr(
@@ -554,7 +554,7 @@ class Plugin(object):
         dialog = NeedsCalculatorDialog(self.iface.mainWindow())
         dialog.exec_()
 
-    def show_global_minimum_needs_configuration(self):
+    def show_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.minimum_needs.needs_manager_dialog import (

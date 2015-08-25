@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Ubuntu';
+  src: url('../fonts/Ubuntu-Regular.ttf');
+}
+body {
+  font-family: 'Ubuntu';
+}
 th {text-align: left;}
 table {font-size: 12px ;!important;}
 th.button-cell{
@@ -27,67 +34,43 @@ th.button-cell{
   *margin-left: .3em;
   width: 92%;
 }
+.branding {
+	background: #2F3338;
+	padding: 2px 20px;
+	margin: 0 -15px;
+}
+h5 {
+	margin-top: 0;
+	margin-right: -15px;
+	margin-left: -15px;
+	padding-left: 20px;
+}
 .warning {
   color: #fff;
-  background-color: #da4f49;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ee5f5b), to(#bd362f));
-  background-image: -webkit-linear-gradient(top, #ee5f5b, #bd362f);
-  background-image: -o-linear-gradient(top, #ee5f5b, #bd362f);
-  background-image: linear-gradient(top, #ee5f5b, #bd362f);
-  background-repeat: repeat-x;
-  border-color: #bd362f #bd362f #802420;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  padding-left: 4px;
+  background-color: #f15a2b;
+  line-height: 2;
 }
 .problem {
   color: #fff;
   background-color: #faa732;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fbb450), to(#f89406));
-  background-image: -webkit-linear-gradient(top, #fbb450, #f89406);
-  background-image: -o-linear-gradient(top, #fbb450, #f89406);
-  background-image: linear-gradient(top, #fbb450, #f89406);
-  background-repeat: repeat-x;
-  border-color: #f89406 #f89406 #ad6704;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  padding-left: 4px;
+  line-height: 2;
 }
 .info, caption {
   color: #fff;
-  background-color: #0074cc;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0055cc));
-  background-image: -webkit-linear-gradient(top, #0088cc, #0055cc);
-  background-image: -o-linear-gradient(top, #0088cc, #0055cc);
-  background-image: linear-gradient(top, #0088cc, #0055cc);
-  background-repeat: repeat-x;
-  border-color: #0055cc #0055cc #003580;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  padding-left: 4px;
+  background-color: #3DB2DD;
+  line-height: 2;
 }
 
 .suggestion {
   color: #fff;
-  background-color: #10a142;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#10a142), to(#0a6228));
-  background-image: -webkit-linear-gradient(top, #10a142, #0a6228);
-  background-image: -o-linear-gradient(top, #10a142, #0a6228);
-  background-image: linear-gradient(top, #10a142, #0a6228);
-  background-repeat: repeat-x;
-  border-color: #10a142 #0a6228 #0a6228;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  padding-left: 4px;
+  background-color: #50CF5C;
+  line-height: 2;
 }
 
 .inverse {
   color: #fff;
   background-color: #000;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#2f2f2f), to(#000000));
-  background-image: -webkit-linear-gradient(top, #2f2f2f, #000000);
-  background-image: -o-linear-gradient(top, #2f2f2f, #000000);
-  background-image: linear-gradient(top, #2f2f2f, #000000);
-  background-repeat: repeat-x;
-  border-color: rgba(0, 14, 40, 0.66) #2f2f2f #000000;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  padding-left: 4px;
+  line-height: 2;
 }
 
 .hidden {
