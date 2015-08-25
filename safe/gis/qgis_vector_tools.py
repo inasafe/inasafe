@@ -121,8 +121,8 @@ def create_layer(vector):
     """
     crs = vector.crs().toWkt()
     if vector.geometryType() == 0:
-        msg = "Points cant' be split"
-        raise WrongDataTypeException(msg)
+        # We can create layer from Point. Do not need to split it.
+        uri = 'Point?crs=' + crs
     elif vector.geometryType() == 1:
         uri = 'LineString?crs=' + crs
     elif vector.geometryType() == 2:
