@@ -51,7 +51,6 @@ from safe.utilities.gis import (
     vector_geometry_string)
 from safe.utilities.resources import (
     resources_path,
-    resource_url,
     get_ui_class)
 from safe.utilities.qgis_utilities import (
     display_critical_message_bar,
@@ -103,12 +102,10 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
+LOGO_ELEMENT = m.Brand()
+
 FORM_CLASS = get_ui_class('dock_base.ui')
 
-LOGO_ELEMENT = m.Image(
-    resource_url(
-        resources_path('img', 'logos', 'inasafe-logo.png')),
-    'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
 
