@@ -17,7 +17,6 @@ from safe.impact_functions.bases.classified_vh_continuous_re import \
 from safe.impact_functions.volcanic.volcano_point_population\
     .metadata_definitions import VolcanoPointPopulationFunctionMetadata
 from safe.impact_functions.core import (
-    evacuated_population_needs,
     population_rounding,
     has_no_data)
 from safe.engine.core import buffer_points
@@ -30,13 +29,15 @@ from safe.common.utilities import (
     create_classes,
     create_label,
     get_thousand_separator)
-from safe.common.tables import Table, TableRow
-from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
-    filter_needs_parameters
+    filter_needs_parameters, get_needs_provenance_value
+from safe.impact_reports.population_exposure_report_mixin import \
+    PopulationExposureReportMixin
 
 
-class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
+class VolcanoPointPopulationFunction(
+        ClassifiedVHContinuousRE,
+        PopulationExposureReportMixin):
     """Impact Function for Volcano Point on Population."""
 
     _metadata = VolcanoPointPopulationFunctionMetadata()
@@ -50,6 +51,62 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
         self.question = (
             'In the event of a volcano point how many people might be impacted'
         )
+        self.no_data_warning = False
+        self.volcano_names = tr('Not specified in data')
+
+    def notes(self):
+        """Return the notes section of the report.
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        notes = [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr('Total population: %s') % format_int(
+                    population_rounding(self.total_population))
+            },
+            {
+                'content': tr('Volcanoes considered: %s'),
+                'header': True,
+                'arguments': self.volcano_names
+            },
+            {
+                'content': tr(
+                    '<sup>1</sup>People need evacuation if they are within '
+                    'the volcanic hazard zones.'),
+            },
+            {
+                'content': tr(get_needs_provenance_value(self.parameters)),
+            },
+            {
+                'content': tr(
+                    'The layers contained `no data`. This missing data was '
+                    'carried through to the impact layer.'),
+                'condition': self.no_data_warning
+            },
+            {
+                'content': tr(
+                    '`No data` values in the impact layer were treated as 0 '
+                    'when counting the affected or total population.'),
+                'condition': self.no_data_warning
+            },
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.')
+            }
+        ]
+        return notes
 
     def run(self):
         """Run volcano point population evacuation Impact Function.
@@ -87,7 +144,6 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
 
         # Use concentric circles
         category_title = 'Radius'
-        category_header = tr('Distance [km]')
 
         centers = self.hazard.layer.get_geometry()
         rad_m = [x * 1000 for x in radii]  # Convert to meters
@@ -104,9 +160,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             volcano_names = ''
             for radius in volcano_name_list:
                 volcano_names += '%s, ' % radius
-            volcano_names = volcano_names[:-2]  # Strip trailing ', '
-        else:
-            volcano_names = tr('Not specified in data')
+            self.volcano_names = volcano_names[:-2]  # Strip trailing ', '
 
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
@@ -117,13 +171,12 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             )
 
         # Initialise affected population per categories
-        affected_population = {}
         for radius in rad_m:
-            affected_population[radius] = 0
+            category = 'Distance %s km ' % format_int(radius)
+            self.affected_population[category] = 0
 
-        nan_warning = False
         if has_no_data(self.exposure.layer.get_data(nan=True)):
-            nan_warning = True
+            self.no_data_warning = True
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
             # Get population at this location
@@ -131,107 +184,20 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this category
-                category = row[category_title]
-                affected_population[category] += population
+                category = 'Distance %s km ' % format_int(
+                    row[category_title])
+                self.affected_population[category] += population
 
         # Count totals
-        total_population = population_rounding(
+        self.total_population = population_rounding(
             int(numpy.nansum(self.exposure.layer.get_data())))
 
-        # Count cumulative for each zone
-        total_affected_population = 0
-        cumulative_affected_population = {}
-        for radius in rad_m:
-            population = int(affected_population.get(radius, 0))
-            total_affected_population += population
-            cumulative_affected_population[radius] = total_affected_population
-
-        minimum_needs = [
+        self.minimum_needs = [
             parameter.serialize() for parameter in
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        # Generate impact report for the pdf map
-        blank_cell = ''
-        table_body = [
-            self.question,
-            TableRow(
-                [tr('Volcanoes considered'),
-                 '%s' % volcano_names,
-                 blank_cell],
-                header=True),
-            TableRow(
-                [tr('Number of people that might need evacuation'),
-                 '%s' % format_int(
-                     population_rounding(total_affected_population)),
-                 blank_cell],
-                header=True),
-            TableRow(
-                [category_header,
-                 tr('Total'),
-                 tr('Cumulative')],
-                header=True)]
-
-        for radius in rad_m:
-            table_body.append(
-                TableRow(
-                    [radius,
-                     format_int(
-                         population_rounding(
-                             affected_population[radius])),
-                     format_int(
-                         population_rounding(
-                             cumulative_affected_population[radius]))]))
-
-        table_body.extend([
-            TableRow(tr(
-                'Map shows the number of people within the volcano impact '
-                'area.'))])
-
-        total_needs = evacuated_population_needs(
-            total_affected_population, minimum_needs)
-        for frequency, needs in total_needs.items():
-            table_body.append(TableRow(
-                [
-                    tr('Minimum needs to be provided %s' % frequency),
-                    tr('Total')
-                ],
-                header=True))
-            for resource in needs:
-                table_body.append(TableRow([
-                    tr(resource['table name']),
-                    format_int(resource['amount'])]))
-        impact_table = Table(table_body).toNewlineFreeString()
-
-        # Extend impact report for on-screen display
-        table_body.extend(
-            [TableRow(tr('Notes'), header=True),
-             tr('Total population in the analysis area is %s') % format_int(
-                 total_population),
-             tr('People are affected and need evacuation if they are within '
-                'the volcano impact area.')])
-
-        if nan_warning:
-            table_body.extend([
-                tr('The population layer contained `no data`. This missing '
-                   'data was carried through to the impact layer.'),
-                tr('`No data` values in the impact layer were treated as 0 '
-                   'when counting the affected or total population.')
-            ])
-
-        impact_summary = Table(table_body).toNewlineFreeString()
-
-        # check for zero impact
-        if total_affected_population == 0:
-            table_body = [
-                self.question,
-                TableRow(
-                    [tr('Number of people that might need evacuation'),
-                     '%s' % format_int(total_affected_population),
-                     blank_cell],
-                    header=True)]
-            message = Table(table_body).toNewlineFreeString()
-            raise ZeroImpactException(message)
+        impact_table = impact_summary = self.generate_html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -277,7 +243,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             style_type='rasterStyle')
 
         # For printing map purpose
-        map_title = tr('People within the Volcano Impact Area')
+        map_title = tr('People affected by the buffered point volcano')
         legend_notes = tr('Thousand separator is represented by  %s' %
                           get_thousand_separator())
         legend_units = tr('(people per cell)')
@@ -288,7 +254,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
             data=covered_exposure_layer.get_data(),
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
-            name=tr('People within the volcano impact area'),
+            name=tr('People affected by the buffered point volcano'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
                       'target_field': self.target_field,
@@ -296,7 +262,7 @@ class VolcanoPointPopulationFunction(ClassifiedVHContinuousRE):
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,
                       'legend_title': legend_title,
-                      'total_needs': total_needs},
+                      'total_needs': self.total_needs},
             style_info=style_info)
 
         self._impact = impact_layer
