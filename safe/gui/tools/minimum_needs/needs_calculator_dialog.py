@@ -198,7 +198,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         has_fields = False
         for field in fields:
             LOGGER.info(field.typeName())
-            #TODO exclude dates too? TS
+            # TODO exclude dates too? TS
             if field.typeName() != 'String':
                 has_fields = True
                 add_ordered_combo_item(

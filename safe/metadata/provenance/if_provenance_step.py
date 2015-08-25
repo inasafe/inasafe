@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from safe.common.exceptions import InvalidProvenanceDataError
 from safe.metadata.provenance.provenance_step import ProvenanceStep
 
+
 class IFProvenanceStep(ProvenanceStep):
     """
     Class to store a provenance step from an impact function.
@@ -49,7 +50,8 @@ class IFProvenanceStep(ProvenanceStep):
         'exposure_pixel_size',
         'hazard_pixel_size',
         'impact_pixel_size',
-        'analysis_extent','parameter'
+        'analysis_extent',
+        'parameter'
     ]
 
     def __init__(self, title, description, data, timestamp=None):
