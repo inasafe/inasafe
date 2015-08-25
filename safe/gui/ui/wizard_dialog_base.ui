@@ -45,13 +45,16 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
+   <property name="verticalSpacing">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QGroupBox" name="title_group">
      <property name="autoFillBackground">
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background: #2f3338;</string>
+      <string notr="true">background: #2f3338; padding: 5px;</string>
      </property>
      <property name="title">
       <string/>
@@ -70,6 +73,9 @@
        <number>0</number>
       </property>
       <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="verticalSpacing">
        <number>0</number>
       </property>
       <item row="0" column="0">
@@ -95,8 +101,16 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+            <weight>50</weight>
+            <italic>false</italic>
+            <bold>false</bold>
+           </font>
+          </property>
           <property name="styleSheet">
-           <string notr="true">font: 14pt; color: #fff;</string>
+           <string notr="true">font: 18pt; color: #fff;</string>
           </property>
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt;Ina&lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;SAFE&lt;/span&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt; step by step&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -146,7 +160,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="3" column="0">
     <widget class="QScrollArea" name="scrollArea_2">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -3890,7 +3904,7 @@ Please step back and select another layer.</string>
      </widget>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="5" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <property name="leftMargin">
       <number>0</number>
@@ -3946,10 +3960,29 @@ Please step back and select another layer.</string>
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item row="4" column="0">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QFrame" name="frame">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: #2f87a6; border: none;</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
     </widget>
    </item>
