@@ -53,6 +53,9 @@ from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
 # pylint: disable=unused-import
+# TODO: to get rid of the following import,
+# TODO: we need to get rid of all those evals...TS
+from safe import definitions
 # pylint: enable=unused-import
 from safe.definitions import (
     global_default_attribute,
