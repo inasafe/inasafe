@@ -29,10 +29,16 @@ from safe.common.utilities import (
     get_thousand_separator)
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import (
+    add_needs_parameters,
+    filter_needs_parameters)
+from safe.impact_reports.population_exposure_report_mixin import \
+    PopulationExposureReportMixin
 
 
-class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
+class ClassifiedPolygonHazardPopulationFunction(
+        ClassifiedVHContinuousRE,
+        PopulationExposureReportMixin):
     """Impact Function for Classified Polygon on Population."""
 
     _metadata = ClassifiedPolygonHazardPopulationFunctionMetadata()
@@ -46,6 +52,42 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
         # Set the question of the IF (as the hazard data is not an event)
         self.question = ('In each of the hazard zones how many people '
                          'might be impacted.')
+
+    def notes(self):
+        """Return the notes section of the report.
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        notes = [
+            {'content': tr('Notes'), 'header': True},
+            {
+                'content': tr('Total population: %s') % format_int(
+                    population_rounding(self.total_population))
+            },
+            {
+                'content': tr(
+                    '<sup>1</sup>People need evacuation if they are in a '
+                    'hazard zone.')
+            },
+            {
+                'content': tr(
+                    'Map shows population count in high, medium, and low '
+                    'hazard area.')
+            },
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.')
+            }
+        ]
+        return notes
 
     def run(self):
         """Run classified population evacuation Impact Function.
@@ -73,7 +115,7 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
         if not self.hazard.layer.is_polygon_data:
             raise Exception(msg)
 
-        # Check if hazard_zone_attribute exists in hazard_layer
+        # Check if hazard_class_attribute exists in hazard_layer
         if (self.hazard_class_attribute not in
                 self.hazard.layer.get_attribute_names()):
             msg = ('Hazard data %s does not contain expected hazard '
@@ -95,9 +137,8 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
             )
 
         # Initialise total population affected by each hazard zone
-        affected_population = {}
         for hazard_zone in self.hazard_zones:
-            affected_population[hazard_zone] = 0
+            self.affected_population[hazard_zone] = 0
 
         # Count total affected population per hazard zone
         for row in interpolated_layer.get_data():
@@ -107,16 +148,21 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
                 population = float(population)
                 # Update population count for this hazard zone
                 hazard_zone = row[self.hazard_class_attribute]
-                affected_population[hazard_zone] += population
+                self.affected_population[hazard_zone] += population
 
         # Count total population from exposure layer
-        total_population = population_rounding(
-            int(numpy.nansum(self.exposure.layer.get_data())))
+        self.total_population = int(
+            numpy.nansum(self.exposure.layer.get_data()))
 
         # Count total affected population
-        total_affected_population = reduce(
-            lambda x, y: x + y,
-            [population for population in affected_population.values()])
+        total_affected_population = self.total_affected_population
+        self.unaffected_population = (
+            self.total_population - total_affected_population)
+
+        self.minimum_needs = [
+            parameter.serialize() for parameter in
+            filter_needs_parameters(self.parameters['minimum needs'])
+        ]
 
         # check for zero impact
         if total_affected_population == 0:
@@ -129,45 +175,7 @@ class ClassifiedPolygonHazardPopulationFunction(ClassifiedVHContinuousRE):
             message = Table(table_body).toNewlineFreeString()
             raise ZeroImpactException(message)
 
-        # Generate impact report for the pdf map
-        blank_cell = ''
-        table_body = [
-            self.question,
-            TableRow(
-                [
-                    tr('People impacted'),
-                    '%s' % format_int(
-                        population_rounding(total_affected_population)),
-                    blank_cell],
-                header=True)]
-
-        for hazard_zone in self.hazard_zones:
-            table_body.append(
-                TableRow(
-                    [
-                        hazard_zone,
-                        format_int(
-                            population_rounding(
-                                affected_population[hazard_zone]))
-                    ]))
-
-        table_body.extend([
-            TableRow(tr(
-                'Map shows the number of people impacted in each of the '
-                'hazard zones.'))])
-
-        impact_table = Table(table_body).toNewlineFreeString()
-
-        # Extend impact report for on-screen display
-        table_body.extend(
-            [TableRow(tr('Notes'), header=True),
-             tr('Total population: %s in the exposure layer') % format_int(
-                 total_population),
-             tr('"nodata" values in the exposure layer are treated as 0 '
-                'when counting the affected or total population')]
-        )
-
-        impact_summary = Table(table_body).toNewlineFreeString()
+        impact_table = impact_summary = self.generate_html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',

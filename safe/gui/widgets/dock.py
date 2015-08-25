@@ -737,6 +737,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             display_critical_message_bar(
                 title=self.tr('Error while saving'),
                 message=self.tr("Something went wrong."))
+        finally:
+            self.disable_busy_cursor()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -1219,6 +1221,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'does not have proper keywords for aggregation layer.'
             )
             self.analysis_error(e, context)
+            self.disable_busy_cursor()
             return
         except InsufficientMemoryWarning:
             # noinspection PyCallByClass,PyTypeChecker

@@ -19,15 +19,13 @@ import numpy
 from safe.utilities.i18n import tr
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.core import (
-    population_rounding_full,
     population_rounding,
-    evacuated_population_needs,
     has_no_data)
 from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
 from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
-from safe.common.tables import Table, TableRow, TableCell
+from safe.common.tables import Table, TableRow
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -38,13 +36,17 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
 from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.core import get_key_for_value
+from safe.impact_reports.population_exposure_report_mixin import \
+    PopulationExposureReportMixin
 
 __author__ = 'Rizky Maulana Nugraha'
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
+class FloodEvacuationVectorHazardFunction(
+        ClassifiedVHContinuousRE,
+        PopulationExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Impact function for vector flood evacuation."""
     _metadata = FloodEvacuationVectorHazardMetadata()
@@ -61,91 +63,62 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
+        self.no_data_warning = False
 
-    def _tabulate(self, affected_population, evacuated, minimum_needs,
-                  question, rounding, rounding_evacuated):
-        # People Affected
-        table_body = [
-            question,
-            TableRow(
-                [tr('People affected'), '%s*' % (
-                    format_int(int(affected_population)))],
-                header=True)]
-        if self.use_affected_field:
-            table_body.append(
-                TableRow(
-                    tr('* People are considered to be affected if they are '
-                       'within the area where the value of the hazard field ('
-                       '"%s") is "%s"') %
-                    (self.hazard_class_attribute,
-                     ', '.join(self.hazard_class_mapping[self.wet]))))
-        else:
-            table_body.append(
-                TableRow(
-                    tr('* People are considered to be affected if they are '
-                       'within any polygons.')))
-        table_body.append(
-            TableRow([TableCell(
-                tr('* Number is rounded up to the nearest %s') % rounding,
-                col_span=2)]))
+    def notes(self):
+        """Return the notes section of the report.
 
-        # People Needing Evacuation
-        table_body.append(
-            TableRow([tr('People needing evacuation'), '%s*' % (
-                format_int(int(evacuated)))], header=True))
-        table_body.append(TableRow(
-            [TableCell(
-                tr('* Number is rounded up to the nearest %s') %
-                rounding_evacuated, col_span=2)]))
-        table_body.append(
-            TableRow(
-                [tr('Evacuation threshold'), '%s%%' % format_int(
-                    self.parameters['evacuation_percentage'].value)],
-                header=True))
-        table_body.append(
-            TableRow(tr('Table below shows the weekly minimum needs for all '
-                        'evacuated people')))
-
-        total_needs = evacuated_population_needs(evacuated, minimum_needs)
-        for frequency, needs in total_needs.items():
-            table_body.append(TableRow(
-                [
-                    tr('Needs should be provided %s' % frequency),
-                    tr('Total')
-                ],
-                header=True))
-            for resource in needs:
-                table_body.append(TableRow([
-                    tr(resource['table name']),
-                    format_int(resource['amount'])]))
-        return table_body, total_needs
-
-    def _tabulate_action_checklist(self, table_body, total, nan_warning):
-        # Action Checklist
-        table_body.append(TableRow(tr('Action Checklist:'), header=True))
-        table_body.append(TableRow(tr('How will warnings be disseminated?')))
-        table_body.append(TableRow(tr('How will we reach stranded people?')))
-        table_body.append(TableRow(tr('Do we have enough relief items?')))
-        table_body.append(TableRow(
-            'If yes, where are they located and how will we distribute '
-            'them?'))
-        table_body.append(TableRow(
-            'If no, where can we obtain additional relief items from and '
-            'how will we transport them to here?'))
-
-        # Notes
-        table_body.append(TableRow(tr('Notes'), header=True))
-        table_body.append(
-            TableRow(tr('Total population: %s') % format_int(total)))
-        table_body.append(TableRow(get_needs_provenance_value(
-            self.parameters)))
-        if nan_warning:
-            table_body.extend([
-                tr('The population layer contained `no data`. This missing '
-                   'data was carried through to the impact layer.'),
-                tr('`No data` values in the impact layer were treated as 0 '
-                   'when counting the affected or total population.')
-            ])
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        notes = [
+            {'content': tr('Notes'), 'header': True},
+            {
+                'content': tr('Total population: %s') % format_int(
+                    population_rounding(self.total_population))
+            },
+            {
+                'content': tr(
+                    '<sup>1</sup>The evacuation threshold used to determine '
+                    'population needing evacuation is %s%%.'),
+                'arguments': format_int(
+                    self.parameters['evacuation_percentage'].value)
+            },
+            {
+                'content': tr(
+                    ''
+                    'are within any polygons.'),
+                'condition': not self.use_affected_field
+            },
+            {
+                'content': tr(
+                    'The layers contained `no data`. This missing data was '
+                    'carried through to the impact layer.'),
+                'condition': self.no_data_warning
+            },
+            {
+                'content': tr(
+                    '`No data` values in the impact layer were treated as 0 '
+                    'when counting the affected or total population.'),
+                'condition': self.no_data_warning
+            },
+            {
+                'content': get_needs_provenance_value(self.parameters)
+            },
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.'
+                )
+            }
+        ]
+        return notes
 
     def run(self):
         """Risk plugin for flood population evacuation.
@@ -164,7 +137,8 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
         self.hazard_class_mapping = self.hazard.keyword('value_map')
 
         # Get the IF parameters
-        evacuation_percentage = self.parameters['evacuation_percentage'].value
+        self._evacuation_percentage = (
+            self.parameters['evacuation_percentage'].value)
 
         # Check that hazard is polygon type
         if not self.hazard.layer.is_polygon_data:
@@ -175,9 +149,8 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
                     self.hazard.layer.get_geometry_name()))
             raise Exception(message)
 
-        nan_warning = False
         if has_no_data(self.exposure.layer.get_data(nan=True)):
-            nan_warning = True
+            self.no_data_warning = True
 
         # Check that affected field exists in hazard layer
         if (self.hazard_class_attribute in
@@ -228,39 +201,26 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
                 new_covered_exposure_data[index[1]][index[0]] = 0
 
         # Estimate number of people in need of evacuation
-        evacuated = (
-            total_affected_population * evacuation_percentage / 100.0)
+        if self.use_affected_field:
+            affected_population = tr(
+                'People within hazard field ("%s") of value "%s"') % (
+                    self.hazard_class_attribute,
+                    ','.join(self.hazard_class_mapping[self.wet]))
+        else:
+            affected_population = tr('People within any hazard polygon.')
 
-        total_population = int(
+        self.affected_population[affected_population] = (
+            total_affected_population)
+
+        self.total_population = int(
             numpy.nansum(self.exposure.layer.get_data(scaling=False)))
 
-        minimum_needs = [
+        self.minimum_needs = [
             parameter.serialize() for parameter in
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        # Rounding
-        total_affected_population, rounding = population_rounding_full(
-            total_affected_population)
-        total_population = population_rounding(total_population)
-        evacuated, rounding_evacuated = population_rounding_full(evacuated)
-
-        # Generate impact report for the pdf map
-        table_body, total_needs = self._tabulate(
-            total_affected_population,
-            evacuated,
-            minimum_needs,
-            self.question,
-            rounding,
-            rounding_evacuated)
-
-        impact_table = Table(table_body).toNewlineFreeString()
-
-        self._tabulate_action_checklist(
-            table_body,
-            total_population,
-            nan_warning)
-        impact_summary = Table(table_body).toNewlineFreeString()
+        impact_table = impact_summary = self.generate_html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -338,8 +298,8 @@ class FloodEvacuationVectorHazardFunction(ClassifiedVHContinuousRE):
                 'legend_units': legend_units,
                 'legend_title': legend_title,
                 'affected_population': total_affected_population,
-                'total_population': total_population,
-                'total_needs': total_needs},
+                'total_population': self.total_population,
+                'total_needs': self.total_needs},
             style_info=style_info)
         self._impact = impact_layer
         return impact_layer

@@ -20,20 +20,19 @@ from safe.impact_functions.bases.continuous_rh_continuous_re import \
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .metadata_definitions import ITBFatalityMetadata
 from safe.impact_functions.core import (
-    evacuated_population_needs,
-    population_rounding_full,
     population_rounding)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
-    format_int,
     humanize_class,
+    format_int,
     create_classes,
     create_label,
     get_thousand_separator)
-from safe.common.tables import Table, TableRow
 from safe.utilities.i18n import tr
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
+from safe.impact_reports.population_exposure_report_mixin import \
+    PopulationExposureReportMixin
 
 __author__ = 'lucernae'
 __date__ = '24/03/15'
@@ -41,7 +40,9 @@ __date__ = '24/03/15'
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class ITBFatalityFunction(ContinuousRHContinuousRE):
+class ITBFatalityFunction(
+        ContinuousRHContinuousRE,
+        PopulationExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Indonesian Earthquake Fatality Model.
 
@@ -123,6 +124,7 @@ class ITBFatalityFunction(ContinuousRHContinuousRE):
             ('step', 0.5),
             ('calculate_displaced_people', True)
         ])
+        self.total_fatalities = None
 
     def fatality_rate(self, mmi):
         """ITB method to compute fatality rate.
@@ -138,6 +140,106 @@ class ITBFatalityFunction(ContinuousRHContinuousRE):
         y = self.hardcoded_parameters['y']
         # noinspection PyUnresolvedReferences
         return numpy.power(10.0, x * mmi - y)
+
+    def action_checklist(self):
+        """Action checklist for the itb earthquake fatality report.
+
+        :returns: The action checklist
+        :rtype: list
+        """
+        total_fatalities = self.total_fatalities
+        total_displaced = self.total_evacuated
+        checklist = [
+            {
+                'content': tr('Action checklist'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Are there enough victim identification units available '
+                    'for %s people?') % (
+                        population_rounding(total_fatalities)),
+                'condition': total_fatalities
+            },
+            {
+                'content': tr(
+                    'Are there enough shelters and relief items available for '
+                    '%s people?') % (population_rounding(total_displaced)),
+                'condition': total_displaced
+
+            },
+            {
+                'content': tr(
+                    'If yes, where are they located and how will we '
+                    'distribute them?'),
+                'condition': total_displaced
+
+            },
+            {
+                'content': tr(
+                    'If no, where can we obtain additional relief items '
+                    'from and how will we transport them?'),
+                'condition': total_displaced
+
+            },
+
+        ]
+        return checklist
+
+    def notes(self):
+        notes = [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr('Total population: %s') % format_int(
+                    population_rounding(self.total_population))
+            },
+            {
+                'content': tr(
+                    '<sup>1</sup>People are considered to be displaced if '
+                    'they experience and survive a shake level'
+                    'of more than 5 on the MMI scale.')
+            },
+            {
+                'content': tr(
+                    'The fatality calculation assumes that '
+                    'no fatalities occur for shake levels below 4 '
+                    'and fatality counts of less than 50 are '
+                    'disregarded.')
+            },
+            {
+                'content': tr(
+                    'Fatality model is from Institut Teknologi Bandung 2012.'),
+                'condition': self.__class__ == ITBFatalityFunction
+            },
+            {
+                'content': tr(
+                    'Fatality model is from the '
+                    'Population Vulnerability Pager Model.'),
+                'condition': self.__class__ != ITBFatalityFunction
+            },
+            {
+                'content': tr(
+                    'Map shows the estimation of displaced population.')
+            },
+            {
+                'content': tr(get_needs_provenance_value(self.parameters))
+            },
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.')
+            }
+        ]
+        return notes
 
     def run(self):
         """Indonesian Earthquake Fatality Model."""
@@ -193,116 +295,32 @@ class ITBFatalityFunction(ContinuousRHContinuousRE):
             number_of_fatalities[mmi] = fatalities
 
         # Total statistics
-        total_population_raw = numpy.nansum(number_of_exposed.values())
-        total_fatalities_raw = numpy.nansum(number_of_fatalities.values())
-        total_displaced_raw = numpy.nansum(number_of_displaced.values())
+        self.total_population = numpy.nansum(number_of_exposed.values())
+        self.total_fatalities = numpy.nansum(number_of_fatalities.values())
+        total_displaced = numpy.nansum(number_of_displaced.values())
 
-        total_population, rounding = population_rounding_full(
-            total_population_raw)
-
-        # Compute number of fatalities
-        total_fatalities = population_rounding(total_fatalities_raw)
         # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
         # will be rounded down to 0 - Tim
         # Needs to revisit but keep it alive for the time being - Hyeuk, Jono
-        if total_fatalities < 50:
-            total_fatalities = 0
+        if self.total_fatalities < 50:
+            self.total_fatalities = 0
 
-        # Compute number of people displaced due to building collapse
-        total_displaced = population_rounding(total_displaced_raw)
+        affected_population = self.affected_population
+        affected_population[tr('Number of fatalities')] = self.total_fatalities
+        affected_population[
+            tr('Number of people displaced')] = total_displaced
+        self.unaffected_population = (
+            self.total_population - total_displaced - self.total_fatalities)
+        self._evacuation_category = tr('Number of people displaced')
 
-        # Generate impact report
-        table_body = [self.question]
-
-        # Add total fatality estimate
-        s = format_int(total_fatalities)
-        table_body.append(TableRow([tr('Number of fatalities'), s],
-                                   header=True))
-
-        if self.hardcoded_parameters['calculate_displaced_people']:
-            # Add total estimate of people displaced
-            s = format_int(total_displaced)
-            table_body.append(TableRow([tr('Number of people displaced'), s],
-                                       header=True))
-        else:
-            total_displaced = 0
-
-        # Add estimate of total population in area
-        s = format_int(int(total_population))
-        table_body.append(TableRow([tr('Total number of people'), s],
-                                   header=True))
-
-        minimum_needs = [
+        self.minimum_needs = [
             parameter.serialize() for parameter in
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
-
-        # Generate impact report for the pdf map
-        table_body = [
-            self.question, TableRow(
-                [tr('Fatalities'), '%s' % format_int(total_fatalities)],
-                header=True),
-            TableRow(
-                [tr('People displaced'), '%s' % format_int(total_displaced)],
-                header=True),
-            TableRow(tr('Map shows the estimation of displaced population'))]
-
-        total_needs = evacuated_population_needs(
-            total_displaced, minimum_needs)
-        for frequency, needs in total_needs.items():
-            table_body.append(TableRow(
-                [
-                    tr('Needs should be provided %s' % frequency),
-                    tr('Total')
-                ],
-                header=True))
-            for resource in needs:
-                table_body.append(TableRow([
-                    tr(resource['table name']),
-                    format_int(resource['amount'])]))
-        table_body.append(TableRow(tr('Provenance'), header=True))
-        table_body.append(TableRow(get_needs_provenance_value(
-            self.parameters)))
-
-        table_body.append(TableRow(tr('Action Checklist:'), header=True))
-
-        if total_fatalities > 0:
-            table_body.append(tr('Are there enough victim identification '
-                                 'units available for %s people?') %
-                              format_int(total_fatalities))
-        if total_displaced > 0:
-            table_body.append(tr('Are there enough shelters and relief items '
-                                 'available for %s people?')
-                              % format_int(total_displaced))
-            table_body.append(TableRow(tr('If yes, where are they located and '
-                                          'how will we distribute them?')))
-            table_body.append(TableRow(tr('If no, where can we obtain '
-                                          'additional relief items from and '
-                                          'how will we transport them?')))
-
-        # Extend impact report for on-screen display
-        table_body.extend([TableRow(tr('Notes'), header=True),
-                           tr('Total population: %s') % format_int(
-                               total_population),
-                           tr('People are considered to be displaced if '
-                              'they experience and survive a shake level'
-                              'of more than 5 on the MMI scale '),
-                           tr('The fatality calculation assumes that '
-                              'no fatalities occur for shake levels below 4 '
-                              'and fatality counts of less than 50 are '
-                              'disregarded.'),
-                           tr('All values are rounded up to the nearest '
-                              'integer in order to avoid representing human '
-                              'lives as fractions.')])
-
-        table_body.append(TableRow(tr('Notes'), header=True))
-        table_body.append(
-            tr('Fatality model is from Institut Teknologi Bandung 2012.'))
-        table_body.append(
-            tr('Population numbers rounded up to the nearest %s.') % rounding)
+        total_needs = self.total_needs
 
         # Result
-        impact_summary = Table(table_body).toNewlineFreeString()
+        impact_summary = self.generate_html_report()
         impact_table = impact_summary
 
         # Create style
@@ -340,12 +358,12 @@ class ITBFatalityFunction(ContinuousRHContinuousRE):
             geotransform=self.exposure.layer.get_geotransform(),
             keywords={
                 'impact_summary': impact_summary,
-                'total_population': total_population,
                 'exposed_per_mmi': number_of_exposed,
-                'total_fatalities': total_fatalities,
-                'total_fatalities_raw': total_fatalities_raw,
+                'total_population': self.total_population,
+                'total_fatalities': population_rounding(self.total_fatalities),
+                'total_fatalities_raw': self.total_fatalities,
                 'fatalities_per_mmi': number_of_fatalities,
-                'total_displaced': total_displaced,
+                'total_displaced': population_rounding(total_displaced),
                 'displaced_per_mmi': number_of_displaced,
                 'impact_table': impact_table,
                 'map_title': map_title,
