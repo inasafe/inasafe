@@ -161,7 +161,7 @@ class ImpactReportTest(unittest.TestCase):
         report = ImpactReport(IFACE, template, layer)
 
         # Set custom logo
-        custom_logo_path = resources_path('img', 'logos', 'logo-flower.png')
+        custom_logo_path = resources_path('img', 'logos', 'supporters.png')
         report.organisation_logo = custom_logo_path
 
         out_path = unique_filename(
