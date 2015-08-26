@@ -224,6 +224,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         )
 
         message = m.Message()
+        message.add(m.Brand())
         message.add(heading)
         message.add(body)
         string += message.to_html()
