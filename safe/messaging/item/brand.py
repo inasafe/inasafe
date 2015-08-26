@@ -22,6 +22,7 @@ from safe.utilities.resources import (
     resources_path,
     resource_url)
 
+
 class Brand(Text):
     """A class to model the inasafe brand.
 
