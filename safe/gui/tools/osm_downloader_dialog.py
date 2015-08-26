@@ -244,6 +244,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 ' (click for more info).')
         ))
         message = m.Message()
+        message.add(m.Brand())
         message.add(heading)
         message.add(body)
         message.add(tips)
