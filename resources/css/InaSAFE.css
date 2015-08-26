@@ -1,9 +1,5 @@
-@font-face {
-  font-family: 'Ubuntu';
-  src: url('../fonts/Ubuntu-Regular.ttf');
-}
 body {
-  font-family: 'Ubuntu';
+  font-family: 'Ubuntu', Fallback, sans-serif;
 }
 th {text-align: left;}
 table {font-size: 12px ;!important;}
