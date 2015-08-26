@@ -160,7 +160,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         # Restore Show Organisation Logo in Dock Flag
         flag = bool(settings.value(
-            'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
+            'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
         self.organisation_on_dock_checkbox.setChecked(flag)
 
         # Restore North Arrow Image Path
