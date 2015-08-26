@@ -405,8 +405,8 @@ def disclaimer():
     :rtype: str
     """
     text = tr(
-        'InaSAFE has been jointly developed by Indonesian '
-        'Government-BNPB, Australian Government-AIFDR and the World '
+        'InaSAFE has been jointly developed by the Indonesian '
+        'Government-BNPB, the Australian Government and the World '
         'Bank-GFDRR. These agencies and the individual software '
         'developers of InaSAFE take no responsibility for the '
         'correctness of outputs from InaSAFE or decisions derived as '
