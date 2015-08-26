@@ -3698,7 +3698,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Run analysis after switching to the new step
         if new_step == step_fc_analysis:
-            #self.update_MessageViewer_size()
+            # self.update_MessageViewer_size()
             self.setup_and_run_analysis()
 
         if new_step == step_kw_category and self.parent_step:
