@@ -181,7 +181,8 @@ class FloodVectorRoadsExperimentalFunction(
 
             self.road_lengths[road_type] += length
             if attributes[target_field_index] == 1:
-                self.affected_road_lengths[flooded_keyword][road_type] += length
+                self.affected_road_lengths[
+                    flooded_keyword][road_type] += length
 
         impact_summary = self.generate_html_report()
 

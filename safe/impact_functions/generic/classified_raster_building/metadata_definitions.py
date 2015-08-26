@@ -24,6 +24,7 @@ from safe.definitions import (
     layer_geometry_point,
     layer_geometry_raster,
     hazard_all,
+    hazard_category_single_event,
     hazard_category_multiple_event,
     exposure_structure,
     generic_raster_hazard_classes,
@@ -99,6 +100,7 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_raster],
                     'hazard_categories': [
+                        hazard_category_single_event,
                         hazard_category_multiple_event
                     ],
                     'hazard_types': hazard_all,
