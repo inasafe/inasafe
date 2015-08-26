@@ -295,7 +295,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         .. note:: Delegates to update_extent()
         """
 
-        self.bounding_box_group.setTitle(self.tr('Bounding box from the map canvas'))
+        self.bounding_box_group.setTitle(
+            self.tr('Bounding box from the map canvas'))
         # Get the extent as [xmin, ymin, xmax, ymax]
         extent = viewport_geo_array(self.iface.mapCanvas())
         self.update_extent(extent)
@@ -312,7 +313,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         rectangle = self.rectangle_map_tool.rectangle()
         if rectangle:
-            self.bounding_box_group.setTitle(self.tr('Bounding box from rectangle'))
+            self.bounding_box_group.setTitle(
+                self.tr('Bounding box from rectangle'))
             extent = rectangle_geo_array(rectangle, self.iface.mapCanvas())
             self.update_extent(extent)
 

@@ -5,8 +5,6 @@ import numpy
 from safe.impact_functions.bases.continuous_rh_continuous_re import \
     ContinuousRHContinuousRE
 from safe.impact_functions.core import (
-    evacuated_population_needs,
-    population_rounding_full,
     population_rounding,
     has_no_data
 )
@@ -27,11 +25,15 @@ from safe.common.utilities import (
 from safe.common.tables import Table, TableRow
 from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
-    filter_needs_parameters
+    filter_needs_parameters, get_needs_provenance_value
+from safe.impact_reports.population_exposure_report_mixin import \
+    PopulationExposureReportMixin
 
 
 # noinspection PyClassHasNoInit
-class TsunamiEvacuationFunction(ContinuousRHContinuousRE):
+class TsunamiEvacuationFunction(
+        ContinuousRHContinuousRE,
+        PopulationExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Impact function for tsunami evacuation."""
     _metadata = TsunamiEvacuationMetadata()
@@ -42,68 +44,52 @@ class TsunamiEvacuationFunction(ContinuousRHContinuousRE):
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
+        self.no_data_warning = False
 
-    def _tabulate(self, counts, evacuated, minimum_needs, question, rounding,
-                  thresholds, total, no_data_warning):
-        # noinspection PyListCreation
-        table_body = [
-            question,
-            TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                      '%s*' % format_int(evacuated)],
-                     header=True),
-            TableRow(
-                tr('* Number is rounded up to the nearest %s') % rounding),
-            TableRow(tr('Map shows the numbers of people needing evacuation'))]
-        total_needs = evacuated_population_needs(
-            evacuated, minimum_needs)
-        for frequency, needs in total_needs.items():
-            table_body.append(TableRow(
-                [
-                    tr('Needs should be provided %s' % frequency),
-                    tr('Total')
-                ],
-                header=True))
-            for resource in needs:
-                table_body.append(TableRow([
-                    tr(resource['table name']),
-                    format_int(resource['amount'])]))
-        table_body.append(TableRow(tr('Action Checklist:'), header=True))
-        table_body.append(TableRow(tr('How will warnings be disseminated?')))
-        table_body.append(TableRow(tr('How will we reach stranded people?')))
-        table_body.append(TableRow(tr('Do we have enough relief items?')))
-        table_body.append(TableRow(tr('If yes, where are they located and how '
-                                      'will we distribute them?')))
-        table_body.append(TableRow(tr(
-            'If no, where can we obtain additional relief items from and how '
-            'will we transport them to here?')))
-        # Extend impact report for on-screen display
-        table_body.extend([
-            TableRow(tr('Notes'), header=True),
-            tr('Total population: %s') % format_int(total),
-            tr('People need evacuation if tsunami levels exceed %(eps).1f m') %
-            {'eps': thresholds[-1]},
-            tr('Minimum needs are defined in BNPB regulation 7/2008'),
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.')])
-        if len(counts) > 1:
-            table_body.append(TableRow(tr('Detailed breakdown'), header=True))
-
-            for i, val in enumerate(counts[:-1]):
-                s = (tr('People in %(lo).1f m to %(hi).1f m of water: '
-                        '%(val)s')
-                     % {'lo': thresholds[i],
-                        'hi': thresholds[i + 1],
-                        'val': format_int(val[0])})
-                table_body.append(TableRow(s))
-        if no_data_warning:
-            table_body.extend([
-                tr('The layers contained `no data`. This missing data was '
-                   'carried through to the impact layer.'),
-                tr('`No data` values in the impact layer were treated as 0 '
-                   'when counting the affected or total population.')
-            ])
-
-        return table_body, total_needs
+    def notes(self):
+        thresholds = self.parameters['thresholds'].value
+        notes = [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr('Total population: %s') % format_int(
+                    population_rounding(self.total_population))
+            },
+            {
+                'content': tr(
+                    '<sup>1</sup>People need evacuation if flood levels '
+                    'exceed %(eps).1f m.') % {'eps': thresholds[-1]},
+            },
+            {
+                'content': tr(get_needs_provenance_value(self.parameters)),
+            },
+            {
+                'content': tr(
+                    'The layers contained `no data`. This missing data was '
+                    'carried through to the impact layer.'),
+                'condition': self.no_data_warning
+            },
+            {
+                'content': tr(
+                    '`No data` values in the impact layer were treated as 0 '
+                    'when counting the affected or total population.'),
+                'condition': self.no_data_warning
+            },
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.')
+            }
+        ]
+        return notes
 
     def run(self):
         """Risk plugin for tsunami population evacuation.
@@ -129,71 +115,57 @@ class TsunamiEvacuationFunction(ContinuousRHContinuousRE):
 
         # Extract data as numeric arrays
         data = self.hazard.layer.get_data(nan=True)  # Depth
-        no_data_warning = False
         if has_no_data(data):
-            no_data_warning = True
+            self.no_data_warning = True
 
         # Calculate impact as population exposed to depths > max threshold
         population = self.exposure.layer.get_data(nan=True, scaling=True)
         if has_no_data(population):
-            no_data_warning = True
+            self.no_data_warning = True
 
-        # Calculate impact to intermediate thresholds
-        counts = []
         # merely initialize
         impact = None
         for i, lo in enumerate(thresholds):
             if i == len(thresholds) - 1:
                 # The last threshold
+                thresholds_name = tr(
+                    'People in >= %.1f m of water') % lo
                 impact = medium = numpy.where(data >= lo, population, 0)
+                self.impact_category_ordering.append(thresholds_name)
+                self._evacuation_category = thresholds_name
             else:
                 # Intermediate thresholds
                 hi = thresholds[i + 1]
+                thresholds_name = tr(
+                    'People in %.1f m to %.1f m of water' % (lo, hi))
                 medium = numpy.where((data >= lo) * (data < hi), population, 0)
 
             # Count
             val = int(numpy.nansum(medium))
-
-            # Sensible rounding
-            val, rounding = population_rounding_full(val)
-            counts.append([val, rounding])
+            self.affected_population[thresholds_name] = val
 
         # Carry the no data values forward to the impact layer.
         impact = numpy.where(numpy.isnan(population), numpy.nan, impact)
         impact = numpy.where(numpy.isnan(data), numpy.nan, impact)
 
         # Count totals
-        evacuated, rounding = counts[-1]
-        total = int(numpy.nansum(population))
-        # Don't show digits less than a 1000
-        total = population_rounding(total)
+        self.total_population = int(numpy.nansum(population))
+        self.unaffected_population = (
+            self.total_population - self.total_affected_population)
 
-        minimum_needs = [
+        self.minimum_needs = [
             parameter.serialize() for parameter in
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        # Generate impact report for the pdf map
-        table_body, total_needs = self._tabulate(
-            counts,
-            evacuated,
-            minimum_needs,
-            self.question,
-            rounding,
-            thresholds,
-            total,
-            no_data_warning)
-
-        # Result
-        impact_summary = Table(table_body).toNewlineFreeString()
-        impact_table = impact_summary
+        impact_table = impact_summary = self.generate_html_report()
 
         # check for zero impact
         if numpy.nanmax(impact) == 0 == numpy.nanmin(impact):
             table_body = [
                 self.question,
                 TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                          '%s' % format_int(evacuated)],
+                          '%s' % format_int(0)],
                          header=True)]
             my_message = Table(table_body).toNewlineFreeString()
             raise ZeroImpactException(my_message)
@@ -253,8 +225,8 @@ class TsunamiEvacuationFunction(ContinuousRHContinuousRE):
                 'legend_notes': legend_notes,
                 'legend_units': legend_units,
                 'legend_title': legend_title,
-                'evacuated': evacuated,
-                'total_needs': total_needs},
+                'evacuated': self.total_evacuated,
+                'total_needs': self.total_needs},
             style_info=style_info)
         self._impact = raster
         return raster

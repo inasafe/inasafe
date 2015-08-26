@@ -24,9 +24,13 @@ import unittest
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QSettings
+import json
 
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.common.minimum_needs import MinimumNeeds
+from safe_extras.parameters.parameter_exceptions import (
+    InvalidMaximumError,
+    ValueOutOfBounds)
 
 
 class TestNeedsProfile(NeedsProfile):
@@ -128,3 +132,61 @@ class MinimumNeedsTest(unittest.TestCase):
             minimum_needs2.root_directory,
             minimum_needs2._root_directory
         )
+
+    def test_issue_2132(self):
+        """Test that floats are cast to strings for precision handler."""
+        profile = TestNeedsProfile()
+        json_string = (
+            '{"resources": [{'
+            '"Resource name": "Rice", '
+            '"Frequency": "weekly", '
+            '"Default": 2.8, '
+            '"Maximum allowed": 5.0, '
+            '"Minimum allowed": 1.0, '
+            '"Unit": "kg",'
+            '"Units": "kgs",'
+            '"Unit abbreviation": "kg",'
+            '"Resource description": "Rice as a staple food",'
+            '"Readable sentence": "Test sentence"'
+            '}],'
+            '"provenance": "Test provenance"}')
+        profile.minimum_needs = json.loads(json_string)
+        profile.get_needs_parameters()
+
+    def test_maximum_greater_than_minimum(self):
+        """Test that that if maximum is less than minimum causes error."""
+        profile = TestNeedsProfile()
+        json_string = (
+            '{"resources": [{'
+            '"Resource name": "Rice", '
+            '"Frequency": "weekly", '
+            '"Default": 2.8, '
+            '"Maximum allowed": 6.0, '
+            '"Minimum allowed": 7.0, '
+            '"Unit": "kg",'
+            '"Units": "kgs",'
+            '"Unit abbreviation": "kg",'
+            '"Resource description": "Rice as a staple food",'
+            '"Readable sentence": "Test sentance"'
+            '}]}')
+        profile.minimum_needs = json.loads(json_string)
+        self.assertRaises(InvalidMaximumError, profile.get_needs_parameters)
+
+    def test_default_is_valid(self):
+        """Test that that if maximum is less than minimum causes error."""
+        profile = TestNeedsProfile()
+        json_string = (
+            '{"resources": [{'
+            '"Resource name": "Rice", '
+            '"Frequency": "weekly", '
+            '"Default": 10, '
+            '"Maximum allowed": 9.0, '
+            '"Minimum allowed": 2.0, '
+            '"Unit": "kg",'
+            '"Units": "kgs",'
+            '"Unit abbreviation": "kg",'
+            '"Resource description": "Rice as a staple food",'
+            '"Readable sentence": "Test sentance"'
+            '}]}')
+        profile.minimum_needs = json.loads(json_string)
+        self.assertRaises(ValueOutOfBounds, profile.get_needs_parameters)

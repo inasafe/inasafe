@@ -129,6 +129,7 @@ def read_property_from_xml(root, path):
     except AttributeError:
         return None
 
+
 def prettify_xml(xml_str):
     """
     returns prettified XML without blank lines
@@ -142,6 +143,6 @@ def prettify_xml(xml_str):
     parsed_xml = parseString(xml_str)
     pretty_xml = '\n'.join(
         [line for line in parsed_xml.toprettyxml(
-            indent=' '*2,
+            indent=' ' * 2,
             encoding='UTF-8').split('\n') if line.strip()])
     return pretty_xml
