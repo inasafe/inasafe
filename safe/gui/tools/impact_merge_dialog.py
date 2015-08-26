@@ -138,11 +138,14 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             'aggregation_attribute': None
         }
 
+        # Available aggregation layer
+        self.available_aggregation = []
+
         # The summary report, contains report for each aggregation area
-        self.summary_report = {}
+        self.summary_report = OrderedDict()
 
         # The html reports and its file path
-        self.html_reports = {}
+        self.html_reports = OrderedDict()
 
         # A boolean flag whether to merge entire area or aggregated
         self.entire_area_mode = False
@@ -348,6 +351,8 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         self.first_layer.clear()
         self.second_layer.clear()
         self.aggregation_layer.clear()
+        # empty list
+        self.available_aggregation[:] = []
 
         for layer in layers:
             try:
@@ -360,6 +365,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
                 except (NoKeywordsFoundError, KeywordNotFoundError):
                     # Skip if there are no keywords at all
                     continue
+                self.available_aggregation.append(layer)
                 add_ordered_combo_item(
                     self.aggregation_layer,
                     layer.name(),
@@ -430,8 +436,12 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
                     self.tr('Template file does not exist.'))
 
         # Flag whether to merge entire area or based on aggregation unit
-        if self.aggregation['layer'] is None:
-            self.entire_area_mode = True
+        # Rizky: Fix nasty bug where the dialog stuck in entire_area_mode
+        # the mode should be rechecked based on selected aggregation layer
+        self.entire_area_mode = True
+        if (self.aggregation_layer.currentIndex() > 0 and
+                not self.aggregation['layer'] is None):
+            self.entire_area_mode = False
 
     def require_directory(self):
         """Ensure directory path entered in dialog exist.
@@ -546,6 +556,28 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
                         'Keyword aggregation attribute not found for '
                         'aggregation layer.'))
 
+    def normalize_dict_keys(self, input_dict):
+        """Normalizing to force keys to ascii.
+
+        Possible bugs: This function can't handle if we had two or more keys
+        with the same normalized form. It will collide. The next keys will
+        override previous keys.
+
+        Example, if somehow we had two keys 'District a' and 'District b',
+        and after forced to become ascii, it both became 'District '
+        (because a and b in unicode), we had a collision.
+
+        :param input_dict: input dictionary with unicode keys
+        :type input_dict: dict
+        :return: normalized dict
+        :rtype: dict
+        """
+        output = OrderedDict()
+        for k, val in input_dict.iteritems():
+            normalized_k = k.encode('ascii', 'ignore')
+            output[normalized_k] = val
+        return output
+
     def merge(self):
         """Merge the postprocessing_report from each impact."""
         # Ensure there is always only a single root element or minidom moans
@@ -569,6 +601,88 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             first_impact_tables)
         second_report_dict = self.generate_report_dictionary_from_dom(
             second_impact_tables)
+
+        # Rizky: Consistency checks with aggregation
+        # Make sure the aggregation layer both presents in both layers
+
+        # We shouldn't have problems with Entire Area mode. It just means
+        # the impact layer and summary is merged into single report.
+        # We can have 3 cases:
+        # 1. If both of them were not aggregated, we can just merge the map
+        #    only
+        # 2. If both of them were aggregated, we can just merge the map, and
+        #    merge postprocessor report using 'Total aggregation in areas' key
+        # 3. If only one of them were aggregated, we can just merge the map,
+        #    and uses postprocessor report from the one who has.
+        if self.entire_area_mode:
+            # We won't be bothered with the map, it will be merged anyway in
+            # all 3 cases. We should bother with the postprocessor report.
+            # If one of them has the report, it means it will contain more
+            # than one report keys. We can just swap the first report if they
+            # have one key, and the second have more than one
+            if (len(first_report_dict.keys()) == 1 and
+                    len(second_report_dict.keys()) > 1):
+                swap_var = first_report_dict
+                first_report_dict = second_report_dict
+                second_report_dict = swap_var
+        # This condition will covers aggregated mode
+        # For this case, we should make sure both layers are aggregated with
+        # the same aggregation layer of the chosen aggregation layer
+        else:
+            # check that both layers must have aggregated postprocessor.
+            # aggregated postprocessor means the report_dict must have minimum
+            # 2 keys
+            if not (len(first_report_dict.keys()) > 1 and
+                    len(second_report_dict.keys()) > 1):
+                raise InvalidLayerError(self.tr(
+                    'Please choose impact layers with aggregated '
+                    'postprocessor if you want to use aggregation layer.'))
+
+            # collect all report keys (will contain aggregation areas in the
+            # report)
+            report_keys = first_report_dict.keys()
+            # Discard the last keys. It will always contains total area, not
+            # aggregated area
+            if len(report_keys) > 0:
+                del report_keys[-1]
+
+            sec_report = second_report_dict.keys()
+            if len(sec_report) > 0:
+                del sec_report[-1]
+
+            for k in sec_report:
+                if k not in report_keys:
+                    report_keys.append(k)
+
+            # collect all aggregation areas in aggregation layer
+            layer = self.aggregation['layer']
+            aggregation_attr = self.aggregation['aggregation_attribute']
+            aggregation_attr_index = layer.fieldNameIndex(aggregation_attr)
+            aggregation_keys = []
+            for f in layer.getFeatures():
+                area = f[aggregation_attr_index]
+                if area not in aggregation_keys:
+                    aggregation_keys.append(area)
+
+            # normalized aggregation_keys. hacky fix for unicode issues
+            # #2233 #2229
+            report_keys = [
+                k.encode('ascii', 'ignore') for k in report_keys]
+            aggregation_keys = [
+                k.encode('ascii', 'ignore') for k in aggregation_keys]
+
+            is_subset = True
+            for k in report_keys:
+                if k not in aggregation_keys:
+                    is_subset = False
+
+            if not is_subset:
+                # This means report keys contains area keys that is not in
+                # aggregation layer. Which means possibly it is using the
+                # wrong aggregation layer.
+                raise InvalidLayerError(
+                    self.tr('First and Second layer does not use chosen '
+                            'Aggregation layer'))
 
         # Generate report summary for all aggregation unit
         self.generate_report_summary(first_report_dict, second_report_dict)
@@ -908,7 +1022,10 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             composer_map.setGridIntervalY(y_interval)
 
             # Self.html_reports must have only 1 key value pair
-            area_title = list(self.html_reports.keys())[0]
+            # Rizky: If layer components were aggregated, html_reports will
+            # have several key value pairs. So we get the last value because
+            # it is for the total/entire area
+            area_title = list(self.html_reports.keys())[-1]
 
             # Set Report Summary
             summary_report = composition.getComposerItemById('summary-report')
@@ -968,11 +1085,20 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
 
                 # Only print the area that has the report
                 area_title = current_filename.lower()
-                if area_title in self.summary_report:
+                # Rizky: fix bug when area_title and summary_report keys
+                # won't match because of unicode issues when aggregation layer
+                # is copied. It's a hacky fix
+                normalized_area_title = area_title.encode('ascii', 'ignore')
+                normalized_summary_report = self.normalize_dict_keys(
+                    self.summary_report)
+                normalized_html_report = self.normalize_dict_keys(
+                    self.html_reports)
+                if normalized_area_title in normalized_summary_report:
                     # Set Report Summary
                     summary_report = composition.getComposerItemById(
                         'summary-report')
-                    summary_report.setText(self.summary_report[area_title])
+                    summary_report.setText(
+                        normalized_summary_report[normalized_area_title])
 
                     # Set Aggregation Area Label
                     area_label = composition.getComposerItemById(
@@ -980,7 +1106,8 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
                     area_label.setText(area_title.title())
 
                     # Set merged-report-table
-                    html_report_path = self.html_reports[area_title]
+                    html_report_path = normalized_html_report[
+                        normalized_area_title]
                     # noinspection PyArgumentList
                     html_frame_url = QUrl.fromLocalFile(html_report_path)
                     html_report_frame.setUrl(html_frame_url)
