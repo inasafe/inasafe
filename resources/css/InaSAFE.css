@@ -1,16 +1,5 @@
-@font-face {
-  font-family: 'Ubuntu';
-    src: url('../fonts/Ubuntu-Regular.ttf');
-}
-@font-face {
-  font-family: 'UbuntuBold';
-    src: url('../fonts/Ubuntu-Bold.ttf');
-}
 body {
-  font-family: 'Ubuntu', Fallback, sans-serif;
-}
-b, strong {
-  font-family: 'UbuntuBold', Fallback, sans-serif;
+  font-family: 'InaSAFE', Fallback, sans-serif;
 }
 th {text-align: left;}
 table {font-size: 12px ;!important;}
