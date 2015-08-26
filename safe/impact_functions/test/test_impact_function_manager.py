@@ -175,8 +175,9 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         hazards = impact_function_manager.hazards_for_layer(
             'polygon', 'single_event')
-        print [x['key'] for x in hazards]
-        expected = [hazard_flood]
+        expected = [hazard_flood, hazard_tsunami, hazard_earthquake,
+                    hazard_volcano, hazard_volcanic_ash, hazard_generic]
+        #expected = [hazard_flood]
         self.assertItemsEqual(hazards, expected)
 
         hazards = impact_function_manager.hazards_for_layer('polygon')
@@ -276,11 +277,14 @@ class TestImpactFunctionManager(unittest.TestCase):
         ifm = ImpactFunctionManager()
         hazard_constraints = ifm.available_hazard_constraints(
             'earthquake', 'single_event')
+        print [x for x in hazard_constraints]
         expected = [
-            (layer_mode_continuous, layer_geometry_raster),
+            (layer_mode_continuous, layer_geometry_raster
+             ),
+            (layer_mode_classified, layer_geometry_polygon),
             # (layer_mode_classified, layer_geometry_raster),
         ]
-
+        print expected
         self.assertItemsEqual(hazard_constraints, expected)
 
     def test_available_exposure_constraints(self):
