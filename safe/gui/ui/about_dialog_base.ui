@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>683</width>
-    <height>492</height>
+    <height>551</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item row="0" column="0" colspan="3">
     <widget class="QTabWidget" name="tab_widget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="about_tab">
       <attribute name="title">
@@ -172,7 +172,7 @@ p, li { white-space: pre-wrap; }
     <widget class="QLabel" name="supporters_label">
      <property name="maximumSize">
       <size>
-       <width>600</width>
+       <width>421</width>
        <height>100</height>
       </size>
      </property>
