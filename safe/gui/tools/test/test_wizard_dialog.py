@@ -163,7 +163,7 @@ class WizardDialogTest(unittest.TestCase):
                            'RW', 'FLOODPRONE']
         expected_chosen_field = 'FLOODPRONE'
 
-        expected_classification_count = 1
+        expected_classification_count = 2
         expected_classification = 'Flood classes'
 
         expected_keywords = {
@@ -986,7 +986,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of subcategories options
-        expected_layermodes = ['Continuous']
+        expected_layermodes = ['Continuous', 'Classified']
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
@@ -1045,11 +1045,11 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of subcategories options
-        expected_layermodes = ['Continuous']
+        expected_layermodes = ['Continuous', 'Classified']
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_layermode_index = 0
+        expected_layermode_index = 1
         layermode_index = dialog.lstLayerModes.currentRow()
         message = ('Expected %s, but I got %s' %
                    (expected_layermode_index, layermode_index))
@@ -1209,7 +1209,7 @@ class WizardDialogTest(unittest.TestCase):
 
         self.check_current_step(step_kw_classification, dialog)
 
-        expected_values = ['Flood classes']
+        expected_values = ['Flood classes', 'Generic classes']
         self.check_list(expected_values, dialog.lstClassifications)
         self.select_from_list_widget('Flood classes',
                                      dialog.lstClassifications)
