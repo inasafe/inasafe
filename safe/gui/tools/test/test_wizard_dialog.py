@@ -163,7 +163,7 @@ class WizardDialogTest(unittest.TestCase):
                            'RW', 'FLOODPRONE']
         expected_chosen_field = 'FLOODPRONE'
 
-        expected_classification_count = 1
+        expected_classification_count = 2
         expected_classification = 'Flood classes'
 
         expected_keywords = {
@@ -1208,7 +1208,7 @@ class WizardDialogTest(unittest.TestCase):
 
         self.check_current_step(step_kw_classification, dialog)
 
-        expected_values = ['Flood classes']
+        expected_values = ['Flood classes','Generic classes']
         self.check_list(expected_values, dialog.lstClassifications)
         self.select_from_list_widget('Flood classes',
                                      dialog.lstClassifications)
@@ -1394,7 +1394,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_test_layer_count = 2
 
         expected_hazards_count = 5
-        expected_exposures_count = 4
+        expected_exposures_count = 5
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 2
         expected_functions_count = 2
