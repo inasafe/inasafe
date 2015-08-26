@@ -51,7 +51,7 @@ class Brand(Text):
         """Render as html.
         """
         uri = resource_url(
-            resources_path('img', 'logos', 'inasafe-logo.png'))
+            resources_path('img', 'logos', 'inasafe-logo-white.png'))
         snippet = (
             '<div class="branding">'
             '<img src="%s" title="%s" alt="%s" %s/></div>') % (

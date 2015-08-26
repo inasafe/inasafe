@@ -24,6 +24,7 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
+from qgis.core import QgsRectangle
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QLocale,
@@ -523,6 +524,8 @@ class Plugin(object):
         """Add standard test layers."""
         from safe.test.utilities import load_standard_layers
         load_standard_layers()
+        rect = QgsRectangle(106.806, -6.195, 106.837, -6.167)
+        self.iface.mapCanvas().setExtent(rect)
 
     def show_extent_selector(self):
         """Show the extent selector widget for defining analysis extents."""
