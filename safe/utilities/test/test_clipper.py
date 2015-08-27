@@ -10,7 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.defaults import get_defaults
 from safe.utilities.gis import qgis_version
+from safe.utilities.keyword_io import KeywordIO
 
 __author__ = 'tim@kartoza.com'
 __date__ = '20/01/2011'
@@ -665,6 +667,40 @@ class ClipperTest(unittest.TestCase):
         message = 'The adjusted extent should be %s, instead it gives %s' % (
             expected_adjusted_extent, adjusted_extent)
         self.assertEqual(adjusted_extent, expected_adjusted_extent, message)
+
+    def test_clip_vector_with_unicode(self):
+        """Test clipping vector layer with unicode attribute in feature.
+
+        This issue is described at Github #2262 and #2233
+        """
+        layer_path = test_data_path('boundaries', 'district_osm_jakarta.shp')
+        vector_layer = QgsVectorLayer(layer_path, 'District Jakarta', 'ogr')
+        keyword_io = KeywordIO()
+        aggregation_keyword = get_defaults()['AGGR_ATTR_KEY']
+        aggregation_attribute = keyword_io.read_keywords(
+            vector_layer, keyword=aggregation_keyword)
+        source_extent = vector_layer.extent()
+        extent = [source_extent.xMinimum(), source_extent.yMinimum(),
+                  source_extent.xMaximum(), source_extent.yMaximum()]
+        clipped_layer = clip_layer(
+            layer=vector_layer,
+            extent=extent,
+            explode_flag=True,
+            explode_attribute=aggregation_attribute)
+
+        # cross check vector layer attribute in clipped layer
+        field_index = vector_layer.fieldNameIndex(aggregation_attribute)
+        vector_values = []
+        for f in vector_layer.getFeatures():
+            vector_values.append(f[field_index])
+
+        clipped_values = []
+        field_index = clipped_layer.fieldNameIndex(aggregation_attribute)
+        for f in clipped_layer.getFeatures():
+            clipped_values.append(f[field_index])
+
+        for val in clipped_values:
+            self.assertIn(val, vector_values)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ClipperTest, 'test')
