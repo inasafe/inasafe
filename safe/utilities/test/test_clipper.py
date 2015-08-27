@@ -673,6 +673,7 @@ class ClipperTest(unittest.TestCase):
 
         This issue is described at Github #2262 and #2233
         """
+        # this layer contains unicode values in the
         layer_path = test_data_path('boundaries', 'district_osm_jakarta.shp')
         vector_layer = QgsVectorLayer(layer_path, 'District Jakarta', 'ogr')
         keyword_io = KeywordIO()
@@ -692,12 +693,12 @@ class ClipperTest(unittest.TestCase):
         field_index = vector_layer.fieldNameIndex(aggregation_attribute)
         vector_values = []
         for f in vector_layer.getFeatures():
-            vector_values.append(f[field_index])
+            vector_values.append(f.attributes())
 
         clipped_values = []
         field_index = clipped_layer.fieldNameIndex(aggregation_attribute)
         for f in clipped_layer.getFeatures():
-            clipped_values.append(f[field_index])
+            clipped_values.append(f.attributes())
 
         for val in clipped_values:
             self.assertIn(val, vector_values)
