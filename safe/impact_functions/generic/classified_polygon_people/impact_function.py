@@ -186,8 +186,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE):
         impact_layer = QgsVectorLayer(filename, "Impacted Areas", "ogr")
 
         # Generate the report of affected areas
-        total_affected_area = round(sum(imp_areas.values()), 1)
-        total_area = round(sum(all_areas.values()), 1)
+        total_affected_area = round(sum(all_affected_areas.values()), 1)
+        total_area = round(sum(all_areas_ids.values()), 1)
+        total_population = sum(all_areas_population.values())
         table_body = [
             self.question,
             TableRow(
@@ -204,16 +205,17 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE):
                  total_affected_area,
                  "%.0f%%" % ((total_affected_area / total_area) \
                                  if total_area != 0 else 0 * 100),
-                 total_area]),
+                 total_area,tr('No affected people'),tr('%affected people'),
+                 total_population]),
             TableRow(tr('Breakdown by Area'), header=True)]
 
         # Assigning percentages to the affected areas
         for t, v in all_areas_ids.iteritems():
 
             affected = all_affected_areas[t] if t in all_affected_areas else 0.
-            totalArea = v
+            single_total_area = v
 
-            affected_area_ratio = (affected / totalArea) if v != 0 else 0
+            affected_area_ratio = (affected / single_total_area) if v != 0 else 0
 
             percent_affected = affected_area_ratio * 100
             number_people_affected = affected_area_ratio * all_areas_population[t]
@@ -225,7 +227,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE):
 
             table_body.append(
                 TableRow([t, affected, "%.0f%%" % percent_affected,
-                          totalArea,number_people_affected,percent_people_affected,
+                          single_total_area,number_people_affected,percent_people_affected,
                           all_areas_population[t]])
             )
         impact_summary = Table(table_body).toNewlineFreeString()
