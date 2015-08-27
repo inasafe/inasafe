@@ -205,7 +205,10 @@ class FloodEvacuationVectorHazardFunction(
             affected_population = tr(
                 'People within hazard field ("%s") of value "%s"') % (
                     self.hazard_class_attribute,
-                    ','.join(self.hazard_class_mapping[self.wet]))
+                    ','.join([
+                        unicode(hazard_class) for
+                        hazard_class in self.hazard_class_mapping[self.wet]
+                    ]))
         else:
             affected_population = tr('People within any hazard polygon.')
 
