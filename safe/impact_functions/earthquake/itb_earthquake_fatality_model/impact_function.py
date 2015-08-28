@@ -285,7 +285,8 @@ class ITBFatalityFunction(
             #    displacements > fatalities, displacements - fatalities, 0)
 
             # Sum up numbers for map
-            mask += displacements   # Displaced
+            # We need to use matrices here and not just numbers #2235
+            mask += mmi_matches * (1 - self.fatality_rate(mmi))   # Displaced
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table

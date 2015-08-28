@@ -123,6 +123,27 @@ from safe.gui.tools.wizard_strings import (
     select_explayer_from_browser_question,
     create_postGIS_connection_first)
 
+# TODO(Ismail): We need a better way to import all of these string
+# pylint: disable=unused-import
+from safe.gui.tools.wizard_strings import (
+    earthquake_mmi_question,
+    exposure_question,
+    flood_feet_depth_question,
+    flood_metres_depth_question,
+    flood_wetdry_question,
+    hazard_question,
+    population_density_question,
+    population_number_question,
+    road_road_type_question,
+    structure_building_type_question,
+    tephra_kgm2_question,
+    tsunami_feet_depth_question,
+    tsunami_metres_depth_question,
+    tsunami_wetdry_question,
+    volcano_volcano_categorical_question
+)
+# pylint: enable=unused-import
+
 LOGGER = logging.getLogger('InaSAFE')
 
 FORM_CLASS = get_ui_class('wizard_dialog_base.ui')
