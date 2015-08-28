@@ -3143,17 +3143,16 @@ class WizardDialog(QDialog, FORM_CLASS):
             'aggregation', self.lstCanvasAggLayers)
         if self.lstCanvasAggLayers.count():
             self.rbAggLayerFromCanvas.setText(tr(
-
-                'I would like to use a hazard layer already loaded in QGIS\n'
+                'I would like to use an aggregation layer already loaded in '
+                'QGIS\n'
                 '(launches the %s for aggregation if needed)'
             ) % self.keyword_creation_wizard_name)
             self.rbAggLayerFromCanvas.setEnabled(True)
             self.rbAggLayerFromCanvas.click()
         else:
             self.rbAggLayerFromCanvas.setText(tr(
-
-                'I would like to use an aggregation layer already loaded '
-                'in QGIS\n'
+                'I would like to use an aggregation layer already loaded in '
+                'QGIS\n'
                 '(no suitable layers found)'))
             self.rbAggLayerFromCanvas.setEnabled(False)
             self.rbAggLayerFromBrowser.click()
