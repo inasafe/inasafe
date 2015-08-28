@@ -19,23 +19,24 @@ __author__ = 'timlinux'
 
 category_question = tr(
     'By following the simple steps in this wizard, you can assign '
-    'keywords to your layer: <b>%s</b>. First you need to define '
-    'the purpose of your layer.')  # (layer name)
+    'keywords to your layer: <b>%s</b>. First you need to define the purpose '
+    'of your layer. Is it a <b>hazard</b>, <b>exposure</b>, or '
+    '<b>aggregation</b> layer? ')  # (layer name)
 category_question_hazard = tr(
     'You have selected a layer that needs to have keywords assigned or '
     'updated. In the next steps you can assign keywords to that layer. '
-    'First you need to confirm the layer represents a hazard.')
+    'First you need to confirm the layer is a <b>hazard</b> layer.')
 category_question_exposure = tr(
     'You have selected a layer that needs to have keywords assigned or '
     'updated. In the next steps you can assign keywords to that layer. '
-    'First you need to confirm the layer represents an exposure.')
+    'First you need to confirm the layer is an <b>exposure</b>.')
 category_question_aggregation = tr(
     'You have selected a layer that needs to have keywords assigned or '
     'updated. In the next steps you can assign keywords to that layer. '
-    'First you need to confirm the layer is an aggregation layer.')
+    'First you need to confirm the layer is an <b>aggregation,/b> layer.')
 hazard_category_question = tr(
     'What type of <b>hazard scenario</b> does this layer represent? '
-    'Is it a single event or a zone of multiple hazards?')
+    'Does it represent a <b>single event</b> or <b>multiple events</b>?')
 hazard_question = tr(
     'What kind of <b>hazard</b> does this '
     'layer represent? The choice you make here will determine '
@@ -53,12 +54,12 @@ exposure_question = tr(
 layermode_raster_question = tr(
     'You have selected <b>%s %s</b> '
     'for this raster layer. We need to know whether each cell '
-    'in this raster represents a continuous '
-    'value or a classified code.')  # (subcategory, category)
+    'in this raster represents <b>continuous</b> data'
+    'or if the data have been <b>classified</b>.')  # (subcategory, category)
 layermode_vector_question = tr(
     'You have selected <b>%s %s</b> for this layer. '
-    'We need to know whether attribute data of this vector '
-    'represents a continuous value or a classified code.'
+    'We need to confirm that attribute values in this vector layer'
+    'have been <b>classified</> and are represented by a code.'
 )  # (subcategory, category)
 unit_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> '
@@ -109,23 +110,23 @@ field_question_subcategory_classified = tr(
     'that represents the classes.')  # (category, subcategory)
 field_question_aggregation = tr(
     'You have selected an aggregation layer, and it is a vector '
-    'layer. Please select the attribute in this layer that represents '
+    'layer. Please select the attribute in this layer that has the '
     'names of the aggregation areas.')
 classification_question = tr(
     'You have selected <b>%s %s</b> for this classified data. '
-    'Please select type of classification you want to use. '
+    'Please select the type of classification you want to use. '
 )  # (subcategory, category)
 classify_vector_question = tr(
     'You have selected <b>%s %s</b> classified by <b>%s</b>, '
     'and the data column is <b>%s</b>. Below on the left you '
-    'can see all unclassified unique values found in that column. Please '
-    'drag them to the right panel in order to classify them to appropriate '
+    'can see all the unique values found in that column. Please '
+    'drag them to the right panel and place them in the appropriate '
     'categories.')  # (subcategory, category, classification, field)
 classify_raster_question = tr(
     'You have selected <b>%s %s</b> classified by <b>%s</b>, '
     'and the layer is a raster layer. Below on the left you '
-    'can see all unclassified unique values found in the raster. Please '
-    'drag them to the right panel in order to classify them to appropriate '
+    'can see all unique values found in the raster. Please '
+    'drag them to the right panel and place them in the appropriate '
     'categories.')  # (subcategory, category, classification)
 select_function_constraints2_question = tr(
     'You selected <b>%s</b> Hazard and <b>%s</b> Exposure. Now, please '
