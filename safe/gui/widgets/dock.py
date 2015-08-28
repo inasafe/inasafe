@@ -1528,7 +1528,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'exposure',
             'hazard',
             'layer_geometry',
-            'layer_mode'] # everything else in arbitrary order
+            'layer_mode']  # everything else in arbitrary order
         report = m.Message()
         report.add(LOGO_ELEMENT)
         report.add(m.Heading(self.tr(
@@ -1539,7 +1539,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         table = m.Table(style_class='table table-condensed table-striped')
         # First render out the preferred order keywords
         for keyword in preferred_order:
-            if keywords.has_key(keyword):
+            if keyword in keywords:
                 value = keywords[keyword]
                 row = self._keyword_to_row(keyword, value)
                 keywords.pop(keyword)
