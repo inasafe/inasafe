@@ -1,6 +1,22 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid **String for Wizard Dialog.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+.. todo:: Check raster is single band
+
+"""
+
 from safe.utilities.i18n import tr
 
 __author__ = 'timlinux'
+
 category_question = tr(
     'By following the simple steps in this wizard, you can assign '
     'keywords to your layer: <b>%s</b>. First you need to define '
