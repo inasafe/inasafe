@@ -406,10 +406,10 @@ def disclaimer():
     """
     text = tr(
         'InaSAFE has been jointly developed by the Indonesian Government-BNPB, '
-        'the Australian Government and the World Bank-GFDRR. These agencies and '
-        'the individual software developers of InaSAFE take no responsibility '
-        'for the correctness of outputs from InaSAFE or decisions derived as a '
-        'consequence.')
+        'the Australian Government, the World Bank-GFDRR and independent '
+        'contributors. These agencies and the individual software developers '
+        'of InaSAFE take no responsibility for the correctness of outputs from '
+        'InaSAFE or decisions derived as a consequence.')
     return text
 
 
