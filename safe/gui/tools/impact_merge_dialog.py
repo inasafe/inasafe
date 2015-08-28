@@ -556,28 +556,6 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
                         'Keyword aggregation attribute not found for '
                         'aggregation layer.'))
 
-    def normalize_dict_keys(self, input_dict):
-        """Normalizing to force keys to ascii.
-
-        Possible bugs: This function can't handle if we had two or more keys
-        with the same normalized form. It will collide. The next keys will
-        override previous keys.
-
-        Example, if somehow we had two keys 'District a' and 'District b',
-        and after forced to become ascii, it both became 'District '
-        (because a and b in unicode), we had a collision.
-
-        :param input_dict: input dictionary with unicode keys
-        :type input_dict: dict
-        :return: normalized dict
-        :rtype: dict
-        """
-        output = OrderedDict()
-        for k, val in input_dict.iteritems():
-            normalized_k = k.encode('ascii', 'ignore')
-            output[normalized_k] = val
-        return output
-
     def merge(self):
         """Merge the postprocessing_report from each impact."""
         # Ensure there is always only a single root element or minidom moans
@@ -663,13 +641,6 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
                 area = f[aggregation_attr_index]
                 if area not in aggregation_keys:
                     aggregation_keys.append(area)
-
-            # normalized aggregation_keys. hacky fix for unicode issues
-            # #2233 #2229
-            report_keys = [
-                k.encode('ascii', 'ignore') for k in report_keys]
-            aggregation_keys = [
-                k.encode('ascii', 'ignore') for k in aggregation_keys]
 
             is_subset = True
             for k in report_keys:
@@ -1085,20 +1056,11 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
 
                 # Only print the area that has the report
                 area_title = current_filename.lower()
-                # Rizky: fix bug when area_title and summary_report keys
-                # won't match because of unicode issues when aggregation layer
-                # is copied. It's a hacky fix
-                normalized_area_title = area_title.encode('ascii', 'ignore')
-                normalized_summary_report = self.normalize_dict_keys(
-                    self.summary_report)
-                normalized_html_report = self.normalize_dict_keys(
-                    self.html_reports)
-                if normalized_area_title in normalized_summary_report:
+                if area_title in self.summary_report:
                     # Set Report Summary
                     summary_report = composition.getComposerItemById(
                         'summary-report')
-                    summary_report.setText(
-                        normalized_summary_report[normalized_area_title])
+                    summary_report.setText(self.summary_report[area_title])
 
                     # Set Aggregation Area Label
                     area_label = composition.getComposerItemById(
@@ -1106,8 +1068,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
                     area_label.setText(area_title.title())
 
                     # Set merged-report-table
-                    html_report_path = normalized_html_report[
-                        normalized_area_title]
+                    html_report_path = self.html_reports[area_title]
                     # noinspection PyArgumentList
                     html_frame_url = QUrl.fromLocalFile(html_report_path)
                     html_report_frame.setUrl(html_frame_url)
