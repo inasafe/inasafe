@@ -97,18 +97,12 @@ class Row(MessageElement):
     def to_text(self):
         """Render a Text MessageElement as plain text
 
-        Args:
-            None
-
-        Returns:
-            Str the plain text representation of the Text MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: The plain text representation of the row.
+        :rtype: basestring
         """
         row = '---\n'
         for cell in self.cells:
-            row += cell
+            row += cell.to_text()
         row += '---'
 
         return row
