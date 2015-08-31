@@ -26,6 +26,7 @@ from safe.impact_functions.bases.classified_vh_classified_ve import \
 from safe.impact_functions.inundation. \
     flood_polygon_roads.metadata_definitions import \
     FloodPolygonRoadsMetadata
+from safe.common.exceptions import ZeroImpactException
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
@@ -37,7 +38,7 @@ from safe.impact_reports.road_exposure_report_mixin import\
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodVectorRoadsExperimentalFunction(
+class FloodPolygonRoadsFunction(
         ClassifiedVHClassifiedVE,
         RoadExposureReportMixin):
     # noinspection PyUnresolvedReferences
@@ -46,7 +47,7 @@ class FloodVectorRoadsExperimentalFunction(
 
     def __init__(self):
         """Constructor."""
-        super(FloodVectorRoadsExperimentalFunction, self).__init__()
+        super(FloodPolygonRoadsFunction, self).__init__()
 
         # The 'wet' variable
         self.wet = 'wet'
@@ -198,6 +199,10 @@ class FloodVectorRoadsExperimentalFunction(
             style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it
+        if line_layer.featureCount() == 0:
+            # Raising an exception seems poor semantics here....
+            raise ZeroImpactException(
+                tr('No roads are flooded in this scenario.'))
         line_layer = Vector(
             data=line_layer,
             name=tr('Flooded roads'),

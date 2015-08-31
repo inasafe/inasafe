@@ -675,10 +675,10 @@ class Vector(Layer):
         if ds is None:
             msg = 'Creation of output file %s failed' % filename
             raise WriteLayerError(msg)
-
-        lyr = ds.CreateLayer(get_string(layer_name),
-                             self.projection.spatial_reference,
-                             self.geometry_type)
+        lyr = ds.CreateLayer(
+            get_string(layer_name),
+            self.projection.spatial_reference,
+            self.geometry_type)
         if lyr is None:
             msg = 'Could not create layer %s' % layer_name
             raise WriteLayerError(msg)
