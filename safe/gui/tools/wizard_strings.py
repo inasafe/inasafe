@@ -54,20 +54,18 @@ exposure_question = tr(
 layermode_raster_question = tr(
     'You have selected <b>%s %s</b> for this raster layer. '
     '<p>We need to know whether each cell '
-    'in this raster represents <b>continuous</b> data '
-    'or if the data have been <b>classified</b>.</p>'
-)  # (subcategory, category)
+    'in this raster represents <b>continuous</b> data or if the data have '
+    'been <b>classified</b>.</p>')  # (subcategory, category)
 layermode_vector_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
-    '<p>We need to confirm that attribute values in this vector layer '
-    'have been <b>classified</b> and are represented by a code.</p>'
-)  # (subcategory, category)
+    '<p>We need to confirm that attribute values in this vector layer have '
+    'been <b>classified</b> and are represented by a '
+    'code.</p>')  # (subcategory, category)
 unit_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer type. '
-    '<p>We need to know what units the continuous '
-    'data are in. For example in a raster layer, each cell might '
-    'represent depth in metres or depth in feet.</p>'
-)  # (subcategory, category)
+    '<p>We need to know what units the continuous data are in. For example in '
+    'a raster layer, each cell might represent depth in metres or depth in '
+    'feet.</p>')  # (subcategory, category)
 allow_resampling_question = tr(
     'You have selected <b>%s %s</b> for this <b>%s data</b> raster layer. '
     '<p>For some exposure types you may not want InaSAFE to resample the '
