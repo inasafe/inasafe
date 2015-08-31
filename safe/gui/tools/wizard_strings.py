@@ -57,9 +57,9 @@ layermode_raster_question = tr(
     'in this raster represents <b>continuous</b> data'
     'or if the data have been <b>classified</b>.')  # (subcategory, category)
 layermode_vector_question = tr(
-    'You have selected <b>%s %s</b> for this layer. '
-    'We need to confirm that attribute values in this vector layer'
-    'have been <b>classified</> and are represented by a code.'
+    'You have selected <b>%s</b> for this <b>%s</b> layer. '
+    'We need to confirm that attribute values in this vector layer '
+    'have been <b>classified</b> and are represented by a code.'
 )  # (subcategory, category)
 unit_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> '
