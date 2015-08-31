@@ -41,7 +41,7 @@
         </gmd:CI_ResponsibleParty>
     </gmd:contact>
     <gmd:dateStamp>
-        <gco:Date>2015-08-06</gco:Date>
+        <gco:Date>2015-08-28</gco:Date>
     </gmd:dateStamp>
     <gmd:metadataStandardName>
         <gco:CharacterString>ISO19115</gco:CharacterString>
@@ -63,7 +63,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2015-08-06</gco:Date>
+                                <gco:Date>2015-08-28</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication
@@ -74,7 +74,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2015-08-06</gco:Date>
+                                <gco:Date>2015-08-28</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision">revision
@@ -85,7 +85,7 @@
                     <gmd:date>
                         <gmd:CI_Date>
                             <gmd:date>
-                                <gco:Date>2015-08-06</gco:Date>
+                                <gco:Date>2015-08-28</gco:Date>
                             </gmd:date>
                             <gmd:dateType>
                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation
@@ -172,17 +172,15 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[field: FLOODPRONE
-hazard: generic
-hazard_category: single_event
+<![CDATA[exposure: area
+field: type
 keyword_version: 3.2
 layer_geometry: polygon
 layer_mode: classified
-layer_purpose: hazard
-source: NBS
-title: floods
-url: http://nbs.go.tz
-vector_hazard_classification: generic_vector_hazard_classes
+layer_purpose: exposure
+source: Wikipedia
+title: census
+url: https://en.wikipedia.org
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>
@@ -233,7 +231,7 @@ vector_hazard_classification: generic_vector_hazard_classes
                                     <gmd:date>
                                         <gmd:CI_Date>
                                             <gmd:date>
-                                                <gco:Date>2015-08-06</gco:Date>
+                                                <gco:Date>2015-08-28</gco:Date>
                                             </gmd:date>
                                             <gmd:dateType>
                                                 <gmd:CI_DateTypeCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">

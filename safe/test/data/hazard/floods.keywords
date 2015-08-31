@@ -6,6 +6,6 @@ layer_geometry: polygon
 layer_mode: classified
 layer_purpose: hazard
 source: NBS
-title: Flood
+title: floods
 url: http://nbs.go.tz
 vector_hazard_classification: generic_vector_hazard_classes
