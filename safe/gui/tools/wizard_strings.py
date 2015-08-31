@@ -58,7 +58,7 @@ layermode_raster_question = tr(
     'or if the data have been <b>classified</b>.</p>'
 )  # (subcategory, category)
 layermode_vector_question = tr(
-    'You have selected <b>%s</b> for this <b>%s</b> layer. '
+    'You have selected <b>%s</b> for this <b>%s %s</b> layer. '
     '<p>We need to confirm that attribute values in this vector layer '
     'have been <b>classified</b> and are represented by a code.</p>'
 )  # (subcategory, category)
@@ -70,8 +70,8 @@ unit_question = tr(
 )  # (subcategory, category)
 allow_resampling_question = tr(
     'You have selected <b>%s %s</b> for this <b>%s data</b> raster layer. '
-    '<p>For some exposure types you may not want InaSAFE to resample the raster '
-    'to the hazard layer resolution during analyses. Please select the '
+    '<p>For some exposure types you may not want InaSAFE to resample the '
+    'raster to the hazard layer resolution during analyses. Please select the '
     'check box below if you want to set the <i>allow_resampling</i> '
     'keyword to <i>False</i>.</p>')  # (subcategory, category, layer_mode)
 flood_metres_depth_question = tr(
