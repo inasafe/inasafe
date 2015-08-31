@@ -46,9 +46,10 @@ hazard_question = tr(
     'as <b>flood impact on population</b>.')
 exposure_question = tr(
     'What kind of <b>exposure</b> does this '
-    'layer represent? Is it a <b>population</b>, <b>structure </b>, or '
-    '<b>road</b> layer? The choice you make here will determine '
-    'which impact functions this exposure layer can be used with. '
+    'layer represent? Is it a <b>population</b>, <b>structure</b>, or '
+    '<b>road</b> layer? '
+    '<p>The choice you make here will determine '
+    'which impact functions this exposure layer can be used with.</p> '
     'For example, if you choose <b>population</b> you will be '
     'able to use this exposure layer with impact functions such '
     'as <b>flood impact on population</b>.')
