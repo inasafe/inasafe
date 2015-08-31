@@ -994,6 +994,10 @@ class Analysis(object):
             check_list.add(self.tr(
                 'Check that your impact function thresholds do not '
                 'exclude all features unintentionally.'))
+            # See #2288 and 2293
+            check_list.add(self.tr(
+                'Check that your dataset coordinate reference system is '
+                'compatible with InaSAFE\'s current requirements.'))
             report.add(check_list)
             # noinspection PyTypeChecker
             self.send_static_message(report)
