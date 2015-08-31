@@ -58,7 +58,7 @@ layermode_raster_question = tr(
     'or if the data have been <b>classified</b>.</p>'
 )  # (subcategory, category)
 layermode_vector_question = tr(
-    'You have selected <b>%s</b> for this <b>%s %s</b> layer. '
+    'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values in this vector layer '
     'have been <b>classified</b> and are represented by a code.</p>'
 )  # (subcategory, category)
