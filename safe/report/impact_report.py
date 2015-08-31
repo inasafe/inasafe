@@ -110,7 +110,7 @@ class ImpactReport(object):
         :param template: Path to composer template
         :type template: str
         """
-        if isinstance(template, str) and os.path.exists(template):
+        if isinstance(template, basestring) and os.path.exists(template):
             self._template = template
         else:
             self._template = resources_path(
@@ -183,7 +183,7 @@ class ImpactReport(object):
         :param north_arrow_path: Path to the north arrow image.
         :type north_arrow_path: str
         """
-        if isinstance(north_arrow_path, str) and os.path.exists(
+        if isinstance(north_arrow_path, basestring) and os.path.exists(
                 north_arrow_path):
             self._north_arrow = north_arrow_path
         else:
@@ -201,7 +201,7 @@ class ImpactReport(object):
         :param logo: Path to the safe logo image.
         :type logo: str
         """
-        if isinstance(logo, str) and os.path.exists(logo):
+        if isinstance(logo, basestring) and os.path.exists(logo):
             self._safe_logo = logo
         else:
             self._safe_logo = default_organisation_logo_path()
@@ -218,7 +218,7 @@ class ImpactReport(object):
         :param logo: Path to the organisation logo image.
         :type logo: str
         """
-        if isinstance(logo, str) and os.path.exists(logo):
+        if isinstance(logo, basestring) and os.path.exists(logo):
             self._organisation_logo = logo
         else:
             self._organisation_logo = default_organisation_logo_path()
@@ -235,7 +235,7 @@ class ImpactReport(object):
         :param text: Disclaimer text
         :type text: str
         """
-        if not isinstance(text, str):
+        if not isinstance(text, basestring):
             self._disclaimer = disclaimer()
         else:
             self._disclaimer = text
