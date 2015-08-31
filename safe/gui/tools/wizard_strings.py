@@ -40,24 +40,21 @@ hazard_category_question = tr(
 hazard_question = tr(
     'What kind of <b>hazard</b> does this layer represent? '
     '<p>The choice you make here will determine which impact functions this '
-    'hazard layer can be used with. '
-    'For example, if you choose <b>flood</b> you will be '
-    'able to use this hazard layer with impact functions such '
+    'hazard layer can be used with. For example, if you choose <b>flood</b> '
+    'you will be able to use this hazard layer with impact functions such '
     'as <b>flood impact on population</b>.</p>')
 exposure_question = tr(
-    'What kind of <b>exposure</b> does this '
-    'layer represent? Is it a <b>population</b>, <b>structure</b>, or '
-    '<b>road</b> layer? '
+    'What kind of <b>exposure</b> does this layer represent? '
+    'Is it a <b>population</b>, <b>structure</b>, or <b>road</b> layer? '
     '<p>The choice you make here will determine '
-    'which impact functions this exposure layer can be used with. '
-    'For example, if you choose <b>population</b> you will be '
-    'able to use this exposure layer with impact functions such '
-    'as <b>flood impact on population</b>.</p>')
+    'which impact functions this exposure layer can be used with. For example, '
+    'if you choose <b>population</b> you will be able to use this exposure '
+    'layer with impact functions such as <b>flood impact on '
+    'population</b>.</p>')
 layermode_raster_question = tr(
-    'You have selected <b>%s %s</b> '
-    'for this raster layer. '
+    'You have selected <b>%s %s</b> for this raster layer. '
     '<p>We need to know whether each cell '
-    'in this raster represents <b>continuous</b> data'
+    'in this raster represents <b>continuous</b> data '
     'or if the data have been <b>classified</b>.</p>'
 )  # (subcategory, category)
 layermode_vector_question = tr(
