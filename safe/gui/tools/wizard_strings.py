@@ -38,15 +38,16 @@ hazard_category_question = tr(
     'What type of <b>hazard scenario</b> does this layer represent? '
     'Does it represent a <b>single event</b> or <b>multiple events</b>?')
 hazard_question = tr(
-    'What kind of <b>hazard</b> does this '
-    'layer represent? The choice you make here will determine '
-    'which impact functions this hazard layer can be used with. '
+    'What kind of <b>hazard</b> does this layer represent? '
+    'The choice you make here will determine which impact functions this '
+    'hazard layer can be used with. '
     'For example, if you choose <b>flood</b> you will be '
     'able to use this hazard layer with impact functions such '
     'as <b>flood impact on population</b>.')
 exposure_question = tr(
     'What kind of <b>exposure</b> does this '
-    'layer represent? The choice you make here will determine '
+    'layer represent? Is it a <b>population</b>, <b>structure </b>, or '
+    '<b>road</b> layer? The choice you make here will determine '
     'which impact functions this exposure layer can be used with. '
     'For example, if you choose <b>population</b> you will be '
     'able to use this exposure layer with impact functions such '
@@ -117,19 +118,20 @@ classification_question = tr(
 )  # (subcategory, category)
 classify_vector_question = tr(
     'You have selected <b>%s %s</b> classified by <b>%s</b>, '
-    'and the data column is <b>%s</b>. Below on the left you '
-    'can see all the unique values found in that column. Please '
-    'drag them to the right panel and place them in the appropriate '
-    'categories.')  # (subcategory, category, classification, field)
+    'and the attribute is <b>%s</b>. '
+    'Please drag unique values from the list on the left '
+    'into the panel on the right and place them in the appropriate categories.'
+)      # (subcategory, category, classification, field)
 classify_raster_question = tr(
     'You have selected <b>%s %s</b> classified by <b>%s</b>, '
-    'for the raster layer. Please drag unique values from the list on the left '
+    'for the raster layer. '
+    'Please drag unique values from the list on the left '
     'into the panel on the right and place them in the appropriate categories.'
 )  # (subcategory, category, classification)
 select_function_constraints2_question = tr(
-    'You selected <b>%s</b> hazard and <b>%s</b> exposure. Now, please '
-    'select the <b>geometry types</b> for the hazard and exposure layers '
-    'you want to use. Click on the cell in the table below that matches '
+    'You selected <b>%s</b> hazard and <b>%s</b> exposure. Now, select the '
+    '<b>geometry types</b> for the hazard and exposure layers you want to use. '
+    'Click on the cell in the table below that matches '
     'the geometry type for each.')  # (hazard, exposure)
 select_function_question = tr(
     '<p>You selected <b>%s %s</b> hazard and <b>%s %s</b> exposure. Below '
