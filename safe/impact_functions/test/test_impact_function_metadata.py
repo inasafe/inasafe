@@ -47,7 +47,7 @@ from safe.impact_functions.generic.continuous_hazard_population \
 from safe.impact_functions.inundation.flood_polygon_population\
     .impact_function import FloodEvacuationVectorHazardFunction
 from safe.impact_functions.inundation.flood_polygon_roads.impact_function \
-    import FloodVectorRoadsExperimentalFunction
+    import FloodPolygonRoadsFunction
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import FloodRasterBuildingFunction
 from safe.impact_functions.inundation.flood_raster_population.impact_function\
@@ -112,7 +112,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             ContinuousHazardPopulationFunction(),
             # Inundation
             FloodEvacuationVectorHazardFunction(),
-            FloodVectorRoadsExperimentalFunction(),
+            FloodPolygonRoadsFunction(),
             FloodRasterBuildingFunction(),
             FloodEvacuationRasterHazardFunction(),
             FloodRasterRoadsFunction(),

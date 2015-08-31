@@ -50,14 +50,8 @@ class Cell(MessageElement):
     def to_html(self):
         """Render a Cell MessageElement as html
 
-        Args:
-            None
-
-        Returns:
-            Str the html representation of the Cell MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: The html representation of the Cell MessageElement
+        :rtype: basestring
         """
         return '<td%s>%s</td>\n' % (
             self.html_attributes(), self.text.to_html())
@@ -65,13 +59,8 @@ class Cell(MessageElement):
     def to_text(self):
         """Render a Cell MessageElement as plain text
 
-        Args:
-            None
+        :returns: The plain text representation of the Cell MessageElement.
+        :rtype: basestring
 
-        Returns:
-            Str the plain text representation of the Cell MessageElement
-
-        Raises:
-            Errors are propagated
         """
         return '%s' % self.text
