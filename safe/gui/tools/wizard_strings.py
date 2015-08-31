@@ -36,45 +36,47 @@ category_question_aggregation = tr(
     'First you need to confirm the layer is an <b>aggregation,/b> layer.')
 hazard_category_question = tr(
     'What type of <b>hazard scenario</b> does this layer represent? '
-    'Does it represent a <b>single event</b> or <b>multiple events</b>?')
+    '<p>Does it represent a <b>single event</b> or <b>multiple events</b>?</p>')
 hazard_question = tr(
     'What kind of <b>hazard</b> does this layer represent? '
-    'The choice you make here will determine which impact functions this '
+    '<p>The choice you make here will determine which impact functions this '
     'hazard layer can be used with. '
     'For example, if you choose <b>flood</b> you will be '
     'able to use this hazard layer with impact functions such '
-    'as <b>flood impact on population</b>.')
+    'as <b>flood impact on population</b>.</p>')
 exposure_question = tr(
     'What kind of <b>exposure</b> does this '
     'layer represent? Is it a <b>population</b>, <b>structure</b>, or '
     '<b>road</b> layer? '
     '<p>The choice you make here will determine '
-    'which impact functions this exposure layer can be used with.</p> '
+    'which impact functions this exposure layer can be used with. '
     'For example, if you choose <b>population</b> you will be '
     'able to use this exposure layer with impact functions such '
-    'as <b>flood impact on population</b>.')
+    'as <b>flood impact on population</b>.</p>')
 layermode_raster_question = tr(
     'You have selected <b>%s %s</b> '
-    'for this raster layer. We need to know whether each cell '
+    'for this raster layer. '
+    '<p>We need to know whether each cell '
     'in this raster represents <b>continuous</b> data'
-    'or if the data have been <b>classified</b>.')  # (subcategory, category)
+    'or if the data have been <b>classified</b>.</p>'
+)  # (subcategory, category)
 layermode_vector_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
-    'We need to confirm that attribute values in this vector layer '
-    'have been <b>classified</b> and are represented by a code.'
+    '<p>We need to confirm that attribute values in this vector layer '
+    'have been <b>classified</b> and are represented by a code.</p>'
 )  # (subcategory, category)
 unit_question = tr(
-    'You have selected <b>%s</b> for this <b>%s</b> '
-    'layer type. We need to know what units the continuous '
+    'You have selected <b>%s</b> for this <b>%s</b> layer type. '
+    '<p>We need to know what units the continuous '
     'data are in. For example in a raster layer, each cell might '
-    'represent depth in metres or depth in feet.'
+    'represent depth in metres or depth in feet.</p>'
 )  # (subcategory, category)
 allow_resampling_question = tr(
     'You have selected <b>%s %s</b> for this <b>%s data</b> raster layer. '
-    'For some exposure types you may not want InaSAFE to resample the raster '
+    '<p>For some exposure types you may not want InaSAFE to resample the raster '
     'to the hazard layer resolution during analyses. Please select the '
     'check box below if you want to set the <i>allow_resampling</i> '
-    'keyword to <i>False</i>.')  # (subcategory, category, layer_mode)
+    'keyword to <i>False</i>.</p>')  # (subcategory, category, layer_mode)
 flood_metres_depth_question = tr(
     'flood depth in meters')
 flood_feet_depth_question = tr(
@@ -110,9 +112,8 @@ field_question_subcategory_classified = tr(
     'Please select the attribute in this layer that represents the classes.'
 )  # (category, subcategory)
 field_question_aggregation = tr(
-    'You have selected an aggregation layer, and it is a vector '
-    'layer. Please select the attribute in this layer that has the '
-    'names of the aggregation areas.')
+    'You have selected a vector aggregation layer. Please select the attribute '
+    'in this layer that has the names of the aggregation areas.')
 classification_question = tr(
     'You have selected <b>%s %s</b> for this classified data. '
     'Please select the type of classification you want to use. '
@@ -135,7 +136,7 @@ select_function_constraints2_question = tr(
     'Click on the cell in the table below that matches '
     'the geometry type for each.')  # (hazard, exposure)
 select_function_question = tr(
-    '<p>You selected <b>%s %s</b> hazard and <b>%s %s</b> exposure. Below '
+    '<p>You have selected <b>%s %s</b> hazard and <b>%s %s</b> exposure. Below '
     'you can see a list of available <b>impact functions</b> matching the '
     'selected hazard, exposure and their geometries. Please choose which '
     'impact function you would like to use from the list below.</p> '
@@ -157,12 +158,12 @@ select_hazard_origin_question = tr(
 select_hazlayer_from_canvas_question = tr(
     '<p>You selected <b>%s %s</b> as hazard input to <b>%s</b> function.</p> '
     '<p>These are suitable layers currently loaded in QGIS. Please choose '
-    'one hazard layer that you would like to use for your assessment.</p>'
+    'the hazard layer that you would like to use for your assessment.</p>'
 )  # (hazard_geom, hazard, imfunc)
 select_hazlayer_from_browser_question = tr(
     '<p>You selected <b>%s %s</b> as hazard input to <b>%s</b> '
     'function.</p> '
-    '<p>Please choose one hazard layer that you would like to use '
+    '<p>Please choose the hazard layer that you would like to use '
     'for your assessment.</p>')  # (exposure_geom, exposure, imfunc)
 select_exposure_origin_question = tr(
     '<p>You selected <b>%s %s</b> as exposure input to <b>%s</b> '
@@ -176,12 +177,12 @@ select_explayer_from_canvas_question = tr(
     '<p>You selected <b>%s %s</b> as exposure input to <b>%s</b> '
     'function.</p>'
     '<p>These are suitable layers currently loaded in QGIS. Please choose '
-    'one exposure layer that you would like to use for your '
+    'the exposure layer that you would like to use for your '
     'assessment.</p>')  # (exposure_geom, exposure, imfunc)
 select_explayer_from_browser_question = tr(
     '<p>You selected <b>%s %s</b> as exposure input to <b>%s</b> '
     'function.</p> '
-    '<p>Please choose one exposure layer that you would like to use '
+    '<p>Please choose the exposure layer that you would like to use '
     'for your assessment.</p>')  # (exposure_geom, exposure, imfunc)
 create_postGIS_connection_first = tr(
     '<html>In order to use PostGIS layers, please close the wizard, '
