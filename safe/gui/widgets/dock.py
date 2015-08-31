@@ -1276,7 +1276,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param exception: An exception that was raised
         :type exception: Exception
         """
-        QtGui.qApp.restoreOverrideCursor()
         self.hide_busy()
         LOGGER.exception(message)
         message = get_error_message(exception, context=message)
@@ -1481,7 +1480,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     @staticmethod
     def disable_busy_cursor():
         """Disable the hourglass cursor and listen for layer changes."""
-        QtGui.qApp.restoreOverrideCursor()
+        while QtGui.qApp.overrideCursor() is not None and \
+                QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
+            QtGui.qApp.restoreOverrideCursor()
 
     def show_impact_keywords(self, keywords):
         """Show the keywords for an impact layer.
