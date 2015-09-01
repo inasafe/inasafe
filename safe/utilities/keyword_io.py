@@ -46,6 +46,11 @@ from safe.common.utilities import verify
 from safe.definitions import \
     (inasafe_keyword_version, inasafe_keyword_version_key)
 
+from safe.metadata.hazard_layer_metadata import HazardLayerMetadata
+from safe.metadata.exposure_layer_metadata import ExposureLayerMetadata
+from safe.metadata.aggregation_layer_metadata import AggregationLayerMetadata
+from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
+from safe.metadata.generic_layer_metadata import GenericLayerMetadata
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -113,7 +118,8 @@ class KeywordIO(QObject):
 
         try:
             if flag:
-                keywords = read_file_keywords(source, keyword)
+                # keywords = read_file_keywords(source, keyword)
+                keywords = read_new_keywords(source, keyword)
             else:
                 uri = self.normalize_uri(layer)
                 keywords = self.read_keyword_from_uri(uri, keyword)
@@ -153,7 +159,8 @@ class KeywordIO(QObject):
         try:
             keywords[inasafe_keyword_version_key] = inasafe_keyword_version
             if flag:
-                write_keywords_to_file(source, keywords)
+                # write_keywords_to_file(source, keywords)
+                write_to_new_keyword(source, keywords)
             else:
                 uri = self.normalize_uri(layer)
                 self.write_keywords_for_uri(uri, keywords)
@@ -232,7 +239,8 @@ class KeywordIO(QObject):
         try:
             for key in extra_keywords:
                 keywords[key] = extra_keywords[key]
-            write_keywords_to_file(new_destination, keywords)
+            # write_keywords_to_file(new_destination, keywords)
+            write_to_new_keyword(new_destination, keywords)
         except Exception, e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
@@ -670,3 +678,83 @@ class KeywordIO(QObject):
             statistics_classes = {}
 
         return statistics_type, statistics_classes
+
+
+def write_to_new_keyword(source, keywords):
+    """
+
+    :param source:
+    :param keywords:
+    :return:
+    """
+    layer_purpose = keywords['layer_purpose']
+    if layer_purpose == 'hazard':
+        metadata = HazardLayerMetadata(source)
+
+        metadata.layer_purpose = 'hazard'
+
+        metadata.hazard_category = keywords.get('hazard_category')
+        metadata.hazard = keywords.get('hazard')
+        metadata.continuous_hazard_unit = keywords.get(
+            'continuous_hazard_unit')
+        metadata.vector_hazard_classification = keywords.get(
+            'vector_hazard_classification')
+        metadata.raster_hazard_classification = keywords.get(
+            'raster_hazard_classification')
+    elif layer_purpose == 'exposure':
+        metadata = ExposureLayerMetadata(source)
+
+        metadata.layer_purpose = 'exposure'
+
+        metadata.exposure = keywords.get('exposure')
+        metadata.exposure_unit = keywords.get('exposure_unit')
+    elif layer_purpose == 'aggregation':
+        metadata = AggregationLayerMetadata(source)
+
+        metadata.layer_purpose = 'aggregation'
+
+        metadata.exposure = keywords.get('exposure')
+        metadata.exposure_unit = keywords.get('exposure_unit')
+    elif layer_purpose == 'impact':
+        # Will be added later.
+        metadata = ImpactLayerMetadata(source)
+        metadata.layer_purpose = 'impact'
+    else:
+        raise Exception
+
+    # Common properties
+    metadata.title = keywords.get('title')
+    metadata.license = keywords.get('license')
+    metadata.scale = keywords.get('scale')
+    metadata.source = keywords.get('source')
+    metadata.url = keywords.get('url')
+
+    metadata.layer_mode = keywords.get('layer_mode')
+    metadata.layer_geometry = keywords.get('layer_geometry')
+    metadata.keyword_version = keywords.get('keyword_version')
+
+
+def read_new_keywords(layer_path, keyword=None):
+    """
+
+    :param layer_path:
+    :param keyword:
+    :return:
+    """
+    xml_file_path = layer_path.split('.')[0] + '.xml'
+    metadata = GenericLayerMetadata(layer_path)
+    layer_purpose = metadata.get_property('layer_purpose')
+    if layer_purpose == 'hazard':
+        metadata = HazardLayerMetadata(xml_file_path)
+    elif layer_purpose == 'exposure':
+        metadata = ExposureLayerMetadata(xml_file_path)
+    elif layer_purpose == 'aggregation':
+        metadata = AggregationLayerMetadata(xml_file_path)
+    elif layer_purpose == 'impact':
+        metadata = ImpactLayerMetadata(xml_file_path)
+    else:
+        return {}
+
+    if keyword:
+        return metadata.dict[keyword]
+    return metadata.dict
