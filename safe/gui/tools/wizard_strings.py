@@ -107,8 +107,8 @@ field_question_subcategory_classified = tr(
     'Please select the attribute in this layer that represents the classes.'
 )  # (category, subcategory)
 field_question_aggregation = tr(
-    'You have selected a vector aggregation layer. Please select the attribute '
-    'in this layer that has the names of the aggregation areas.')
+    'You have selected a vector <b>aggregation</b> layer. Please select the '
+    'attribute in this layer that has the names of the aggregation areas.')
 classification_question = tr(
     'You have selected <b>%s %s</b> for this classified data. '
     'Please select the type of classification you want to use. '
