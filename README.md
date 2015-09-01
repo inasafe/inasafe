@@ -1,6 +1,8 @@
 InaSAFE
 =======
 
+[![InaSAFE Screenshot](http://blogtest.inasafe.org/wp-content/uploads/2015/02/about-screenshot14.png)](http://inasafe.org)
+
 InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
 response activities. InaSAFE is a plugin for [QGIS](http://qgis.org).
@@ -132,5 +134,13 @@ parties or a failure of the program to operate with any other programs),
 even if such holder or other party has been advised of the possibility of
 such damages.
 
+Thank you
+=========
 
+We use [![PyCharm](https://www.jetbrains.com/pycharm/docs/logo_pycharm.png)]
+(https://www.jetbrains.com/pycharm) for our python development work 
+
+JetBrains kindly sponsor the licenses for InaSAFE under their 'free for 
+open source projects' programme. Please support them by buying a professional 
+license if you are able to!
 
