@@ -921,7 +921,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             layermode_raster_question
             if is_raster_layer(self.layer)
             else layermode_vector_question)
-        self.lblSelectLayerMode .setText(
+        self.lblSelectLayerMode.setText(
             layer_mode_question % (subcategory['name'], category['name']))
         self.lblDescribeLayerMode.setText('')
         self.lstLayerModes.clear()
@@ -1172,7 +1172,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 subcategory_unit_relation)
         else:
             question_text = field_question_subcategory_classified % (
-                category['name'],
                 subcategory['name'])
         self.lblSelectField.setText(question_text)
         self.lstFields.clear()
