@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from cmath import isnan
 
 __author__ = 'lucernae'
 __date__ = '24/03/15'
@@ -27,7 +28,8 @@ from safe.common.utilities import get_osm_building_usage
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.common.exceptions import KeywordNotFoundError
+from safe.common.exceptions import KeywordNotFoundError, ZeroImpactException
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -144,6 +146,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
             (tr('Medium'), {}),
             (tr('Low'), {})
         ])
+        removed = []
         for i in range(interpolate_size):
             # Classify building according to shake level
             # and calculate dollar losses
@@ -208,6 +211,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
                 category = tr('High')
             else:
                 # Not reported for less than level t0
+                removed.append(i)
                 continue
             attributes[i][self.target_field] = cls
             self.affected_buildings[
@@ -218,6 +222,15 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
                 self.affected_buildings[category][usage][
                     tr('Contents value ($M)')] += contents_value / 1000000.0
 
+        # remove uncategorized element
+        removed.reverse()
+        geometry = interpolate_result.get_geometry()
+        for i in range(0, len(removed)):
+            del attributes[removed[i]]
+            del geometry[removed[i]]
+
+        if len(attributes) < 1:
+            raise ZeroImpactException()
         # Consolidate the small building usage groups < 25 to other
         self._consolidate_to_other()
 
@@ -245,7 +258,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         result_layer = Vector(
             data=attributes,
             projection=interpolate_result.get_projection(),
-            geometry=interpolate_result.get_geometry(),
+            geometry=geometry,
             name=tr('Estimated buildings affected'),
             keywords={
                 'impact_summary': impact_summary,

@@ -424,7 +424,7 @@ class FloodRasterRoadsFunction(
             (flooded_keyword, {})])
         self.road_lengths = OrderedDict()
 
-        if line_layer.featureCount() == 0:
+        if line_layer.featureCount() < 1:
             raise ZeroImpactException()
 
         roads_data = line_layer.getFeatures()
