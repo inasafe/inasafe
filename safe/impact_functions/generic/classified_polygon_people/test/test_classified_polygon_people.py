@@ -36,7 +36,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         function = ClassifiedPolygonHazardPolygonPeopleFunction.instance()
 
         hazard_path = test_data_path('hazard', 'floods.shp')
-        exposure_path = test_data_path('exposure', 'land.shp')
+        exposure_path = test_data_path('exposure', 'census.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
         # noinspection PyCallingNonCallable
@@ -60,15 +60,16 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         # self.assertEqual(impact.dataProvider().featureCount(), 3)
         features = {}
         for f in impact.getFeatures():
-            features[f['id']] = f.geometry().area() * 1e8
+            area = f.geometry().area() * 1e8
+            features[f['id']] = round(area, 1)
         expected_features = {
-            1: 0.,
-            2: 0.,
-            3: 0.,
-            4: 0.
+            1: 19.1,
+            2: 0.6,
+            3: 19.2,
+            4: 4.1,
 
         }
-        self.assertNotEqual(features, expected_features)
+        self.assertEqual(features, expected_features)
 
     def test_keywords(self):
 
