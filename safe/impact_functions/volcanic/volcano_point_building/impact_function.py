@@ -41,6 +41,7 @@ class VolcanoPointBuildingFunction(
     def __init__(self):
         super(VolcanoPointBuildingFunction, self).__init__()
         self.volcano_names = tr('Not specified in data')
+        self._affected_categories_volcano = []
 
     def notes(self):
         """Return the notes section of the report.
@@ -69,6 +70,15 @@ class VolcanoPointBuildingFunction(
                 'header': True
             }
         ]
+
+    @property
+    def _affected_categories(self):
+        """Overwriting the affected categories, since 'unaffected' are counted.
+
+        :returns: The categories that equal effected.
+        :rtype: list
+        """
+        return self._affected_categories_volcano
 
     def run(self):
         """Counts number of building exposed to each volcano hazard zones.
@@ -115,6 +125,7 @@ class VolcanoPointBuildingFunction(
             data_table=features)
         # Category names for the impact zone
         category_names = radii_meter
+        self._affected_categories_volcano = radii_meter[:]
         category_names.append(self._not_affected_value)
 
         # Get names of volcanoes considered
