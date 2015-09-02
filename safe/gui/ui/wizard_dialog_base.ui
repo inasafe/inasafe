@@ -1653,7 +1653,7 @@
            </sizepolicy>
           </property>
           <layout class="QGridLayout" name="gridLayout_10">
-           <item row="0" column="0" colspan="6">
+           <item row="0" column="0" colspan="4">
             <widget class="QLabel" name="lblSelectFunction1">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1681,19 +1681,6 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0" colspan="2">
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>289</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
            <item row="1" column="2">
             <widget class="QLabel" name="label">
              <property name="text">
@@ -1701,33 +1688,6 @@
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="3">
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>350</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="4">
-            <widget class="QRadioButton" name="rbHazSingle">
-             <property name="text">
-              <string>Single Event</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="5">
-            <widget class="QRadioButton" name="rbHazMulti">
-             <property name="text">
-              <string>Multiple Event</string>
              </property>
             </widget>
            </item>
@@ -1750,7 +1710,7 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1" colspan="5">
+           <item row="2" column="1" colspan="3">
             <widget class="QTableWidget" name="tblFunctions1">
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -1795,7 +1755,7 @@
              </column>
             </widget>
            </item>
-           <item row="3" column="1" colspan="5">
+           <item row="3" column="1" colspan="3">
             <widget class="QLabel" name="lblAvailableFunctions1">
              <property name="sizePolicy">
               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -3758,8 +3718,8 @@ Please step back and select another layer.</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>102</width>
-                <height>70</height>
+                <width>95</width>
+                <height>65</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_32">
