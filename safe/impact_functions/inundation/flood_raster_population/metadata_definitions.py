@@ -92,8 +92,8 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                 'An exposure raster layer where each cell represent '
                 'population count.'),
             'output': tr(
-                'Raster layer contains people affected and the minimum '
-                'needs based on the people affected.'),
+                'Raster layer contains population affected and the minimum '
+                'needs based on number of the population affected.'),
             'actions': tr(
                 'Provide details about how many people would likely need '
                 'to be evacuated, where they are located and what '

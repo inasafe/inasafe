@@ -82,6 +82,7 @@ class Plugin(object):
         self.action_extent_selector = None
         self.translator = None
         self.toolbar = None
+        self.wizard = None
         self.actions = []  # list of all QActions we create for InaSAFE
         self.action_dock = None
         self.action_toggle_rubberbands = None
@@ -490,6 +491,8 @@ class Plugin(object):
         any graphical user interface elements that should appear in QGIS.
         """
         # Remove the plugin menu item and icon
+        if self.wizard:
+            self.wizard.deleteLater()
         for myAction in self.actions:
             self.iface.removePluginMenu(self.tr('InaSAFE'), myAction)
             self.iface.removeToolBarIcon(myAction)
@@ -594,29 +597,38 @@ class Plugin(object):
 
         if self.iface.activeLayer() is None:
             return
-        dialog = WizardDialog(
-            self.iface.mainWindow(),
-            self.iface,
-            self.dock_widget)
-        dialog.set_keywords_creation_mode()
-        dialog.exec_()  # modal
+
+        # Don't break an existing wizard session if accidentally clicked
+        if self.wizard and self.wizard.isVisible():
+            return
+
+        # Prevent spawning multiple copies since the IFCW is non modal
+        if not self.wizard:
+            self.wizard = WizardDialog(
+                self.iface.mainWindow(),
+                self.iface,
+                self.dock_widget)
+        self.wizard.set_keywords_creation_mode()
+        self.wizard.exec_()  # modal
 
     def show_function_centric_wizard(self):
         """Show the keywords creation wizard."""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.wizard_dialog import WizardDialog
-        # Prevent spawning multiple copies since it is non model
-        wizards = self.iface.findChildren(QWidget, "WizardDialogBase")
-        LOGGER.info('Wizards count: %i' % len(wizards))
-        if len(wizards) > 0:
-            dialog = wizards[0]
-        else:
-            dialog = WizardDialog(
+
+        # Don't break an existing wizard session if accidentally clicked
+        if self.wizard and self.wizard.isVisible():
+            return
+
+        # Prevent spawning multiple copies since it is non modal
+        if not self.wizard:
+            self.wizard = WizardDialog(
                 self.iface.mainWindow(),
                 self.iface,
                 self.dock_widget)
-        dialog.set_function_centric_mode()
-        dialog.show()  # non-modal in order to hide for selecting user extent
+        self.wizard.set_function_centric_mode()
+        self.wizard.show()  # non-modal in order to hide for selecting user extent
+
 
     def show_shakemap_importer(self):
         """Show the converter dialog."""

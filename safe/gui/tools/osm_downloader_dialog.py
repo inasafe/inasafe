@@ -384,7 +384,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         feature_types = self.get_checked_features()
         if len(feature_types) < 1:
             message = self.tr(
-                'No feature selected.'
+                'No feature selected. '
                 'Please make sure you have checked one feature.')
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             display_warning_message_box(self, error_dialog_title, message)

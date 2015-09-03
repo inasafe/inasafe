@@ -66,7 +66,6 @@ from safe.definitions import (
     layer_purpose_exposure,
     layer_purpose_aggregation,
     hazard_category_single_event,
-    hazard_category_multiple_event,
     layer_geometry_point,
     layer_geometry_line,
     layer_geometry_polygon,
@@ -398,7 +397,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set the mode label to the IFCW
         """
         self.setWindowTitle(self.ifcw_name)
-        self.lblSubtitle.setText(self.tr('Guided impact assessment wizard'))
+        self.lblSubtitle.setText(self.tr(
+            'Use this wizard to run a guided impact assessment'))
 
     def set_keywords_creation_mode(self, layer=None):
         """Set the Wizard to the Keywords Creation mode
@@ -1980,34 +1980,13 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the category selection changes.
         """
         self.pbnNext.click()
-
     # pylint: enable=W0613
-    # noinspection PyPep8Naming
-    def on_rbHazSingle_toggled(self):
-        """Reload the functions table
-
-        .. note:: This is an automatic Qt slot
-           executed when the radiobutton is activated.
-        """
-        if self.rbHazSingle.isChecked():
-            self.populate_function_table_1()
-
-    # noinspection PyPep8Naming
-    def on_rbHazMulti_toggled(self):
-        """Reload the functions table
-
-        .. note:: This is an automatic Qt slot
-           executed when the radiobutton is activated.
-        """
-        if self.rbHazMulti.isChecked():
-            self.populate_function_table_1()
 
     def populate_function_table_1(self):
         """Populate the tblFunctions1 table with available functions."""
-        if self.rbHazSingle.isChecked():
-            hazard_category = hazard_category_single_event
-        else:
-            hazard_category = hazard_category_multiple_event
+        # The hazard category radio buttons are now removed -
+        # make this parameter of IFM.available_hazards() optional
+        hazard_category = hazard_category_single_event
         hazards = self.impact_function_manager\
             .available_hazards(hazard_category['key'])
         # Remove 'generic' from hazards
@@ -2071,7 +2050,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.tblFunctions1.verticalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
 
-        self.rbHazSingle.setChecked(True)
+        self.populate_function_table_1()
 
     # ===========================
     # STEP_FC_FUNCTION_2
@@ -2383,15 +2362,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         if (layer_purpose in keywords and
                 keywords[layer_purpose] != subcategory):
             return False
-
-        # Reject if hazard category doesn't match
-        if ('hazard_category' in keywords and
-                layer_purpose == layer_purpose_hazard['key']):
-            hazard_category = (hazard_category_single_event['key']
-                               if self.rbHazSingle.isChecked()
-                               else hazard_category_multiple_event['key'])
-            if keywords['hazard_category'] != hazard_category:
-                return False
 
         # Compare layer keywords with the chosen function's constraints
 
@@ -3803,14 +3773,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         if step == step_fc_hazlayer_from_canvas:
             return bool(self.selected_canvas_hazlayer())
         if step == step_fc_hazlayer_from_browser:
-            return bool(len(self.lblDescribeBrowserHazLayer.text()) > 32)
+            return self.get_layer_description_from_browser('hazard')[0]
         if step == step_fc_explayer_origin:
             return (bool(self.rbExpLayerFromCanvas.isChecked() or
                          self.rbExpLayerFromBrowser.isChecked()))
         if step == step_fc_explayer_from_canvas:
             return bool(self.selected_canvas_explayer())
         if step == step_fc_explayer_from_browser:
-            return bool(len(self.lblDescribeBrowserExpLayer.text()) > 32)
+            return self.get_layer_description_from_browser('exposure')[0]
         if step == step_fc_disjoint_layers:
             # Never go further if layers disjoint
             return False
@@ -3821,7 +3791,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if step == step_fc_agglayer_from_canvas:
             return bool(self.selected_canvas_agglayer())
         if step == step_fc_agglayer_from_browser:
-            return bool(len(self.lblDescribeBrowserAggLayer.text()) > 32)
+            return self.get_layer_description_from_browser('aggregation')[0]
         if step == step_fc_agglayer_disjoint:
             # Never go further if layers disjoint
             return False
