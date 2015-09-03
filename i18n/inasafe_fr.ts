@@ -1374,11 +1374,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="97"/>
-        <source>Raster layer contains population affected and the minimum needs based on the population affected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="metadata_definitions.py" line="104"/>
         <source>The default threshold of 0.7 meter was selected based on consensus, not hard evidence.</source>
         <translation type="unfinished"></translation>
@@ -1452,11 +1447,6 @@
         <location filename="metadata_definitions.py" line="91"/>
         <source>A hazard raster layer where each cell represents flood depth (in meters).</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="94"/>
-        <source>Raster layer contains people affected and the minimum needs based on the people affected.</source>
-        <translation>La couche raster contient les personnes affectées et les besoins minimaux basés sur le nombre de personnes affectées. </translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="102"/>
@@ -3721,6 +3711,11 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="impact_function.py" line="243"/>
         <source>No buildings were impacted by this flood.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="97"/>
+        <source>Raster layer contains population affected and the minimum needs based on number of the population affected.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

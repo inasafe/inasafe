@@ -1375,11 +1375,6 @@
         <translation>Sebuah layer raster ancaman dimana setiap sel merepresentasikan kedalaman tsunami (dalam meter).</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="97"/>
-        <source>Raster layer contains population affected and the minimum needs based on the population affected.</source>
-        <translation>Layer data raster berisi jumlah penduduk yang terkena dampak dan kebutuhan minimum penduduk berdasarkan pada jumlah penduduk yang terkena dampak.</translation>
-    </message>
-    <message>
         <location filename="metadata_definitions.py" line="104"/>
         <source>The default threshold of 0.7 meter was selected based on consensus, not hard evidence.</source>
         <translation>Ambang batas default 0.7 meter dipilih berdasarkan konsensus, bukan dari bukti yang kuat.</translation>
@@ -1453,11 +1448,6 @@
         <location filename="metadata_definitions.py" line="91"/>
         <source>A hazard raster layer where each cell represents flood depth (in meters).</source>
         <translation>Sebuah layer data ancaman bencana berjenis raster dimana setiap sel merepresentasikan kedalaman banjir (dalam meter).</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="94"/>
-        <source>Raster layer contains people affected and the minimum needs based on the people affected.</source>
-        <translation>Layer raster berisi penduduk terdampak dan kebutuhan minimum berdasarkan pada penduduk terdampak.</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="102"/>
@@ -3742,6 +3732,11 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
         <location filename="impact_function.py" line="243"/>
         <source>No buildings were impacted by this flood.</source>
         <translation>Tidak ada bangunan yang terdampak pada skenario ini.</translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="97"/>
+        <source>Raster layer contains population affected and the minimum needs based on number of the population affected.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
