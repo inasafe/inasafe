@@ -233,13 +233,17 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
     def filterAcceptsRow(self, source_row, source_parent):
         """The filter method
 
-        .. note:: This filter hides top-level items of unsupported branches.
+        .. note:: This filter hides top-level items of unsupported branches
+                  and also leaf items containing xml files.
 
            Enabled root items: QgsDirectoryItem, QgsFavouritesItem,
            QgsPGRootItem.
 
            Disabled root items: QgsMssqlRootItem, QgsSLRootItem,
            QgsOWSRootItem, QgsWCSRootItem, QgsWFSRootItem, QgsWMSRootItem.
+
+           Disabled leaf items: QgsLayerItem and QgsOgrLayerItem with path
+           ending with '.xml'
 
         :param source_row: Parent widget of the model
         :type source_row: int
@@ -252,6 +256,7 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
         """
         source_index = self.sourceModel().index(source_row, 0, source_parent)
         item = self.sourceModel().dataItem(source_index)
+
         if item.metaObject().className() in [
                 'QgsMssqlRootItem',
                 'QgsSLRootItem',
@@ -260,6 +265,13 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
                 'QgsWFSRootItem',
                 'QgsWMSRootItem']:
             return False
+
+        if (item.metaObject().className() in [
+                'QgsLayerItem',
+                'QgsOgrLayerItem']
+                and item.path().endswith('.xml')):
+            return False
+
         return True
 
 
@@ -386,11 +398,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.get_existing_keyword('layer_purpose'):
             mode_name = (self.tr(
                 'Keywords update wizard for layer <b>%s</b>'
-                ) % self.layer.name())
+            ) % self.layer.name())
         else:
             mode_name = (self.tr(
                 'Keywords creation wizard for layer <b>%s</b>'
-                ) % self.layer.name())
+            ) % self.layer.name())
         self.lblSubtitle.setText(mode_name)
 
     def set_mode_label_to_ifcw(self):
@@ -3407,7 +3419,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                         unicode(pp),
                         format_postprocessor(self.if_params[p][pp]))
                     for pp in self.if_params[p]
-                    ]
+                ]
                 if subparams:
                     subparams = ''.join(subparams)
                     subparams = '<table border="0">%s</table>' % subparams
