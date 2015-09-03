@@ -2313,31 +2313,31 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2516"/>
+        <location filename="wizard_dialog.py" line="2485"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the %s for hazard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2523"/>
+        <location filename="wizard_dialog.py" line="2492"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2973"/>
+        <location filename="wizard_dialog.py" line="2942"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the %s for exposure if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2982"/>
+        <location filename="wizard_dialog.py" line="2951"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3163"/>
+        <location filename="wizard_dialog.py" line="3132"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"></translation>
@@ -3579,7 +3579,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3155"/>
+        <location filename="wizard_dialog.py" line="3124"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the %s for aggregation if needed)</source>
         <translation type="unfinished"></translation>
@@ -5353,11 +5353,6 @@ to
 <context>
     <name>NeedsCalculatorDialogBase</name>
     <message>
-        <location filename="needs_calculator_dialog_base.ui" line="14"/>
-        <source>Minumum Needs Calculator</source>
-        <translation type="unfinished">Minumum Needs Calculator</translation>
-    </message>
-    <message>
         <location filename="needs_calculator_dialog_base.ui" line="31"/>
         <source>Affected people Layer</source>
         <translation type="unfinished">Affected people Layer</translation>
@@ -5371,6 +5366,11 @@ to
         <location filename="needs_calculator_dialog_base.ui" line="21"/>
         <source>about:blank</source>
         <translation type="unfinished">about:blank</translation>
+    </message>
+    <message>
+        <location filename="needs_calculator_dialog_base.ui" line="14"/>
+        <source>Minimum Needs Calculator</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5858,7 +5858,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="387"/>
-        <source>No feature selected.Please make sure you have checked one feature.</source>
+        <source>No feature selected. Please make sure you have checked one feature.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -6566,154 +6566,154 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WizardDialog</name>
     <message>
-        <location filename="wizard_dialog.py" line="1139"/>
+        <location filename="wizard_dialog.py" line="1138"/>
         <source>Field type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1140"/>
+        <location filename="wizard_dialog.py" line="1139"/>
         <source>Unique values: %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3720"/>
+        <location filename="wizard_dialog.py" line="3689"/>
         <source>Finish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3763"/>
+        <location filename="wizard_dialog.py" line="3732"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4259"/>
+        <location filename="wizard_dialog.py" line="4228"/>
         <source>InaSAFE</source>
         <translation type="unfinished">InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4259"/>
+        <location filename="wizard_dialog.py" line="4228"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished">An error was encountered when saving the keywords:
 %s</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1793"/>
+        <location filename="wizard_dialog.py" line="1792"/>
         <source>Use default</source>
         <translation type="unfinished">Use default</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4281"/>
+        <location filename="wizard_dialog.py" line="4250"/>
         <source>Title of the layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4282"/>
+        <location filename="wizard_dialog.py" line="4251"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4285"/>
+        <location filename="wizard_dialog.py" line="4254"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4287"/>
+        <location filename="wizard_dialog.py" line="4256"/>
         <source>What is the scale of this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4288"/>
+        <location filename="wizard_dialog.py" line="4257"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3623"/>
+        <location filename="wizard_dialog.py" line="3592"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3481"/>
+        <location filename="wizard_dialog.py" line="3450"/>
         <source>no aggregation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3722"/>
+        <location filename="wizard_dialog.py" line="3691"/>
         <source>Run</source>
         <translation type="unfinished">Run</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3483"/>
+        <location filename="wizard_dialog.py" line="3452"/>
         <source>Please ensure the following information is correct and press Run.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3488"/>
+        <location filename="wizard_dialog.py" line="3457"/>
         <source>impact function</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3488"/>
+        <location filename="wizard_dialog.py" line="3457"/>
         <source>hazard layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3488"/>
+        <location filename="wizard_dialog.py" line="3457"/>
         <source>exposure layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3488"/>
+        <location filename="wizard_dialog.py" line="3457"/>
         <source>aggregation layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3367"/>
+        <location filename="wizard_dialog.py" line="3336"/>
         <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="388"/>
+        <location filename="wizard_dialog.py" line="387"/>
         <source>Keywords update wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="392"/>
+        <location filename="wizard_dialog.py" line="391"/>
         <source>Keywords creation wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="401"/>
+        <location filename="wizard_dialog.py" line="400"/>
         <source>Guided impact assessment wizard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2878"/>
+        <location filename="wizard_dialog.py" line="2847"/>
         <source>Hazard</source>
         <translation type="unfinished">Hazard</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2882"/>
+        <location filename="wizard_dialog.py" line="2851"/>
         <source>Exposure</source>
         <translation type="unfinished">Exposure</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2890"/>
+        <location filename="wizard_dialog.py" line="2859"/>
         <source>classified data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2892"/>
+        <location filename="wizard_dialog.py" line="2861"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3415"/>
+        <location filename="wizard_dialog.py" line="3384"/>
         <source>Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3415"/>
+        <location filename="wizard_dialog.py" line="3384"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6726,12 +6726,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2173"/>
+        <location filename="wizard_dialog_base.ui" line="2133"/>
         <source>[placeholder]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2884"/>
+        <location filename="wizard_dialog_base.ui" line="2844"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6781,17 +6781,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Title</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3888"/>
+        <location filename="wizard_dialog_base.ui" line="3848"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3911"/>
+        <location filename="wizard_dialog_base.ui" line="3871"/>
         <source>Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3921"/>
+        <location filename="wizard_dialog_base.ui" line="3881"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6846,118 +6846,118 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3728"/>
+        <location filename="wizard_dialog_base.ui" line="3688"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3070"/>
+        <location filename="wizard_dialog_base.ui" line="3030"/>
         <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3153"/>
+        <location filename="wizard_dialog_base.ui" line="3113"/>
         <source>No thanks, I am happy to aggregate results for the entire analysis window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3186"/>
+        <location filename="wizard_dialog_base.ui" line="3146"/>
         <source>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;aggregation&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3336"/>
+        <location filename="wizard_dialog_base.ui" line="3296"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;aggregation&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3548"/>
+        <location filename="wizard_dialog_base.ui" line="3508"/>
         <source>Please specify extent of your analysis. By clicking &quot;define it now&quot; you can invoke the extent selection tool.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3772"/>
+        <location filename="wizard_dialog_base.ui" line="3732"/>
         <source>Here goes the summary...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3804"/>
+        <location filename="wizard_dialog_base.ui" line="3764"/>
         <source>Running analysis...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3842"/>
+        <location filename="wizard_dialog_base.ui" line="3802"/>
         <source>about:blank</source>
         <translation type="unfinished">about:blank</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3852"/>
+        <location filename="wizard_dialog_base.ui" line="3812"/>
         <source>Open in web browser</source>
         <translation type="unfinished">Open in web browser</translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3859"/>
+        <location filename="wizard_dialog_base.ui" line="3819"/>
         <source>Generate PDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3866"/>
+        <location filename="wizard_dialog_base.ui" line="3826"/>
         <source>Open in composer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1866"/>
+        <location filename="wizard_dialog_base.ui" line="1826"/>
         <source>&lt;b&gt;Hazard&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1876"/>
+        <location filename="wizard_dialog_base.ui" line="1836"/>
         <source>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1778"/>
+        <location filename="wizard_dialog_base.ui" line="1738"/>
         <source>People</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1783"/>
+        <location filename="wizard_dialog_base.ui" line="1743"/>
         <source>Construction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1788"/>
+        <location filename="wizard_dialog_base.ui" line="1748"/>
         <source>Flood</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1793"/>
+        <location filename="wizard_dialog_base.ui" line="1753"/>
         <source>Tsunami</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1978"/>
+        <location filename="wizard_dialog_base.ui" line="1938"/>
         <source>Available functions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1937"/>
+        <location filename="wizard_dialog_base.ui" line="1897"/>
         <source>Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1945"/>
+        <location filename="wizard_dialog_base.ui" line="1905"/>
         <source>Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1953"/>
+        <location filename="wizard_dialog_base.ui" line="1913"/>
         <source>Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1961"/>
+        <location filename="wizard_dialog_base.ui" line="1921"/>
         <source>Raster</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6979,17 +6979,17 @@ Please step back and select another layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3093"/>
+        <location filename="wizard_dialog_base.ui" line="3053"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Would you like to &lt;span style=&quot; font-weight:600;&quot;&gt;aggregate&lt;/span&gt; the results of your analysis by sub-regions? Aggregation will break down the analysis results for each area in the specified aggregation layer. Aggregation is optional. Please select from an option below in order to indicate how you would like to go about aggregating the results.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3631"/>
+        <location filename="wizard_dialog_base.ui" line="3591"/>
         <source>Use the extent of the analysis layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3618"/>
+        <location filename="wizard_dialog_base.ui" line="3578"/>
         <source>Use the current extent of the map display</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6999,29 +6999,29 @@ Please step back and select another layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3522"/>
+        <location filename="wizard_dialog_base.ui" line="3482"/>
         <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3561"/>
+        <location filename="wizard_dialog_base.ui" line="3521"/>
         <source>Use the extent defined by selecting an area on the map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3706"/>
+        <location filename="wizard_dialog_base.ui" line="3666"/>
         <source>The selected extent doesn&apos;t intersect input layers.
 Please step back and select another layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3586"/>
+        <location filename="wizard_dialog_base.ui" line="3546"/>
         <source>Your existing selection will be used if one has already been made</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3605"/>
+        <location filename="wizard_dialog_base.ui" line="3565"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Alternatively, &lt;a href=&quot;define_user_extent&quot;&gt; &lt;span style=&quot; text-decoration: underline; color:#e85290;&quot;&gt;define the analysis extent now...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7076,52 +7076,42 @@ Please step back and select another layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1723"/>
-        <source>Single Event</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="1730"/>
-        <source>Multiple Event</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="3398"/>
+        <location filename="wizard_dialog_base.ui" line="3358"/>
         <source>icon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2211"/>
+        <location filename="wizard_dialog_base.ui" line="2171"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the InaSAFE Keywords Creation Wizard for hazard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2248"/>
+        <location filename="wizard_dialog_base.ui" line="2208"/>
         <source>I would like to pick a hazard layer from disk
 (launches the InaSAFE Keywords Creation Wizard for hazard if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2632"/>
+        <location filename="wizard_dialog_base.ui" line="2592"/>
         <source>I would like to pick an exposure layer from disk
 (launches the InaSAFE Keywords Creation Wizard for exposure if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2682"/>
+        <location filename="wizard_dialog_base.ui" line="2642"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the InaSAFE Keywords Creation Wizard for exposure if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3137"/>
+        <location filename="wizard_dialog_base.ui" line="3097"/>
         <source>I would like to pick an aggregation layer from disk
 (launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3145"/>
+        <location filename="wizard_dialog_base.ui" line="3105"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</source>
         <translation type="unfinished"></translation>
