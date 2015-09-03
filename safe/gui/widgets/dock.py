@@ -93,7 +93,6 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
-from safe.utilities.unicode import get_string
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -1523,67 +1522,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type keywords: dict
         """
         LOGGER.debug('Showing Generic Keywords')
-        preferred_order = [
-            'title',
-            'layer_purpose',
-            'exposure',
-            'hazard',
-            'layer_geometry',
-            'layer_mode']  # everything else in arbitrary order
-        report = m.Message()
-        report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr(
-            'Layer keywords:'), **INFO_STYLE))
-        report.add(m.Text(self.tr(
-            'The following keywords are defined for the active layer:')))
         self.pbnPrint.setEnabled(False)
-        table = m.Table(style_class='table table-condensed table-striped')
-        # First render out the preferred order keywords
-        for keyword in preferred_order:
-            if keyword in keywords:
-                value = keywords[keyword]
-                row = self._keyword_to_row(keyword, value)
-                keywords.pop(keyword)
-                table.add(row)
-
-        # now render out any remaining keywords in arbitrary order
-        for keyword in keywords:
-            value = keywords[keyword]
-            row = self._keyword_to_row(keyword, value)
-            table.add(row)
-
-        report.add(table)
-        self.pbnPrint.setEnabled(False)
+        message = self.keyword_io.to_message(keywords)
         # noinspection PyTypeChecker
-        self.show_static_message(report)
-
-    def _keyword_to_row(self, keyword, value):
-        """Helper to make a message row from a keyword.
-
-        Use this when contructing a table from keywords to display as
-        part of a message object.
-
-        :param keyword: The keyword to be rendered.
-        :type keyword: str
-
-        :param value: Value of the keyword to be rendered.
-        :type value: basestring
-
-        :returns: A row to be added to a messaging table.
-        :rtype: safe.messaging.items.row.Row
-        """
-        row = m.Row()
-        # Translate titles explicitly if possible
-
-        if keyword == 'title':
-            value = self.tr(value)
-            # Add this keyword to report
-        value = get_string(value)
-        key = m.ImportantText(
-            self.tr(keyword.capitalize().replace('_', ' ')))
-        row.add(m.Cell(key))
-        row.add(m.Cell(value))
-        return row
+        self.show_static_message(message)
 
     def show_no_keywords_message(self):
         """Show a message indicating that no keywords are defined.
@@ -1702,7 +1644,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
-                AttributeError):
+                AttributeError), e:
+            LOGGER.info(e.message)
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
             if active_layer is None:

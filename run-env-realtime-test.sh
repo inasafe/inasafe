@@ -29,6 +29,7 @@ if [ -z "$INASAFE_REALTIME_REST_URL" ];
 then
 # allow overrides using native environment
     export INASAFE_REALTIME_REST_URL=http://realtime-test:8000/realtime/api/v1/
+    export INASAFE_REALTIME_SHAKEMAP_HOOK_URL="$INASAFE_REALTIME_REST_URL"indicator/notify_shakemap_push
     export INASAFE_REALTIME_REST_USER=test@realtime.inasafe.org
     export INASAFE_REALTIME_REST_PASSWORD=t3st4ccount
     export INASAFE_REALTIME_REST_LOGIN_URL=http://realtime-test:8000/realtime/api-auth/login/

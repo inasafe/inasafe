@@ -54,7 +54,9 @@ class ProvenanceStep(object):
         :return: the string representation
         :rtype: str
         """
-
+        # RMN:
+        # FIXME: Mismatched arguments. Should we delete the extra tags?
+        # pylint: disable=too-many-format-args
         return "%s: %s\n%s" % (
             self.time, self.title, self.description, self.data)
 
