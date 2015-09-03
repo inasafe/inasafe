@@ -1409,7 +1409,7 @@ class WizardDialogTest(unittest.TestCase):
         # expected_summary_key = 'minimum needs'
         # expected_summary_value_fragment = 'rice'
 
-        expected_report_size = 4361  # as saved on Ubuntu
+        expected_report_size = 4055  # as saved on Ubuntu
         # TS : changed tolerance from 120 to 160 because above change
         # causes fail on fedora
         # AG: updated the tolerance from 160 to 190
