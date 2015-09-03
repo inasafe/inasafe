@@ -3773,14 +3773,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         if step == step_fc_hazlayer_from_canvas:
             return bool(self.selected_canvas_hazlayer())
         if step == step_fc_hazlayer_from_browser:
-            return bool(len(self.lblDescribeBrowserHazLayer.text()) > 32)
+            return self.get_layer_description_from_browser('hazard')[0]
         if step == step_fc_explayer_origin:
             return (bool(self.rbExpLayerFromCanvas.isChecked() or
                          self.rbExpLayerFromBrowser.isChecked()))
         if step == step_fc_explayer_from_canvas:
             return bool(self.selected_canvas_explayer())
         if step == step_fc_explayer_from_browser:
-            return bool(len(self.lblDescribeBrowserExpLayer.text()) > 32)
+            return self.get_layer_description_from_browser('exposure')[0]
         if step == step_fc_disjoint_layers:
             # Never go further if layers disjoint
             return False
@@ -3791,7 +3791,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if step == step_fc_agglayer_from_canvas:
             return bool(self.selected_canvas_agglayer())
         if step == step_fc_agglayer_from_browser:
-            return bool(len(self.lblDescribeBrowserAggLayer.text()) > 32)
+            return self.get_layer_description_from_browser('aggregation')[0]
         if step == step_fc_agglayer_disjoint:
             # Never go further if layers disjoint
             return False
