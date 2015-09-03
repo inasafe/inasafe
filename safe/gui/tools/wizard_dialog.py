@@ -1965,7 +1965,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not functions:
             self.lblAvailableFunctions1.clear()
         else:
-            txt = "Available functions: " + ", ".join(
+            txt = self.tr('Available functions:') + ' ' + ', '.join(
                 [f['name'] for f in functions])
             self.lblAvailableFunctions1.setText(txt)
 
@@ -2092,7 +2092,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not functions:
             self.lblAvailableFunctions2.clear()
         else:
-            text = "Available functions: " + ", ".join(
+            text = self.tr('Available functions:') + ' ' + ', '.join(
                 [f['name'] for f in functions])
             self.lblAvailableFunctions2.setText(text)
         self.pbnNext.setEnabled(True)
@@ -2230,11 +2230,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Set description label
         description = '<table border="0">'
         if "name" in imfunc.keys():
-            description += '<tr><td><b>Function</b>: </td><td>%s</td></tr>' % (
-                imfunc['name'])
+            description += '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                self.tr('Function'), imfunc['name'])
         if "overview" in imfunc.keys():
-            description += '<tr><td><b>Overview</b>: </td><td>%s</td></tr>' % (
-                imfunc['overview'])
+            description += '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                self.tr('Overview'), imfunc['overview'])
         description += '</table>'
         self.lblDescribeFunction.setText(description)
 
@@ -2810,7 +2810,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer = QgsRasterLayer(path, '', 'gdal')
 
         if not layer or not layer.isValid():
-            return False, "Not a valid layer"
+            return False, self.tr('Not a valid layer.')
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
@@ -2829,7 +2829,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer.setLayerName(keywords.get('title'))
 
         if not self.is_layer_compatible(layer, category, keywords):
-            return False, "This layer's keywords or type are not suitable."
+            return False, self.tr('This layer\'s keywords or type' +
+                ' are not suitable.')
 
         # set the current layer (e.g. for the keyword creation sub-thread
         #                          or for adding the layer to mapCanvas)
@@ -2865,17 +2866,17 @@ class WizardDialog(QDialog, FORM_CLASS):
 
             desc = """
                 <table border=0>
-                <tr><td><b>Title</b>: </td><td>%s</td></tr>
-                <tr><td><b>Purpose</b>: </td><td>%s</td></tr>
+                <tr><td><b>%s</b>: </td><td>%s</td></tr>
+                <tr><td><b>%s</b>: </td><td>%s</td></tr>
                 %s
                 %s
-                <tr><td><b>Source</b>: </td><td>%s</td></tr>
+                <tr><td><b>%s</b>: </td><td>%s</td></tr>
                 </table>
-            """ % (keywords.get('title'),
-                   keywords.get('layer_purpose'),
+            """ % (self.tr('Title'), keywords.get('title'),
+                   self.tr('Purpose'), keywords.get('layer_purpose'),
                    subcategory,
                    unit,
-                   keywords.get('source'))
+                   self.tr('Source'), keywords.get('source'))
         else:
             if is_point_layer(layer):
                 geom_type = 'point'
@@ -2889,12 +2890,16 @@ class WizardDialog(QDialog, FORM_CLASS):
                 r'password=\'.*\'', r'password=*****', layer.source())
 
             desc = """
-                This layer has no valid keywords assigned<br/><br/>
-                <b>SOURCE</b>: %s<br/>
-                <b>TYPE</b>: %s<br/><br/>
-                In the next step you will be able to register this layer.
-            """ % (source, is_raster_layer(layer) and 'raster' or
-                   'vector (%s)' % geom_type)
+                %s<br/><br/>
+                <b>%s</b>: %s<br/>
+                <b>%s</b>: %s<br/><br/>
+                %s
+            """ % (self.tr('This layer has no valid keywords assigned'),
+                   self.tr('SOURCE'), source,
+                   self.tr('TYPE'), is_raster_layer(layer) and 'raster' or
+                   'vector (%s)' % geom_type,
+                   self.tr('In the next step you will be able' +
+                   ' to register this layer.'))
 
         return True, desc
 
@@ -3553,7 +3558,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnReportWeb.hide()
         self.pbnReportPDF.hide()
         self.pbnReportComposer.hide()
-        self.lblAnalysisStatus.setText('Running analysis...')
+        self.lblAnalysisStatus.setText(self.tr('Running analysis...'))
 
     # ===========================
     # STEPS NAVIGATION
