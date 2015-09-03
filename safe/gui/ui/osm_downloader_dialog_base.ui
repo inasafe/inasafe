@@ -6,17 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
+<<<<<<< HEAD
     <width>605</width>
     <height>729</height>
+=======
+    <width>627</width>
+    <height>440</height>
+>>>>>>> upstream/develop
    </rect>
   </property>
   <property name="windowTitle">
    <string>OSM Downloader</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <property name="spacing">
-    <number>10</number>
+  <layout class="QGridLayout" name="gridLayout_5">
+   <property name="leftMargin">
+    <number>12</number>
    </property>
+   <property name="topMargin">
+    <number>12</number>
+   </property>
+   <property name="rightMargin">
+    <number>12</number>
+   </property>
+   <property name="bottomMargin">
+    <number>12</number>
+   </property>
+<<<<<<< HEAD
    <item row="15" column="0">
     <widget class="QScrollArea" name="scrollArea">
      <property name="frameShape">
@@ -40,28 +55,91 @@
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QWebView" name="web_view" native="true">
+=======
+   <item row="0" column="0">
+    <widget class="QStackedWidget" name="stacked_widget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="page">
+      <layout class="QGridLayout" name="gridLayout_8">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QWebView" name="web_view">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+>>>>>>> upstream/develop
          <property name="minimumSize">
           <size>
            <width>0</width>
            <height>100</height>
           </size>
          </property>
+<<<<<<< HEAD
          <property name="url" stdset="0">
+=======
+         <property name="url">
+>>>>>>> upstream/develop
           <url>
            <string>about:blank</string>
           </url>
          </property>
         </widget>
        </item>
+<<<<<<< HEAD
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Feature type</string>
+=======
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="feature_types_group">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Feature types</string>
+>>>>>>> upstream/develop
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
          <property name="flat">
+<<<<<<< HEAD
           <bool>true</bool>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -73,6 +151,13 @@
           </property>
           <item>
            <widget class="QCheckBox" name="roads_checkBox">
+=======
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="roads_flag">
+>>>>>>> upstream/develop
             <property name="text">
              <string>Roads</string>
             </property>
@@ -81,16 +166,24 @@
             </property>
            </widget>
           </item>
+<<<<<<< HEAD
           <item>
            <widget class="QCheckBox" name="buildings_checkBox">
             <property name="text">
              <string>Buildings (polygon)</string>
+=======
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="buildings_flag">
+            <property name="text">
+             <string>Building polygons</string>
+>>>>>>> upstream/develop
             </property>
             <property name="checked">
              <bool>true</bool>
             </property>
            </widget>
           </item>
+<<<<<<< HEAD
           <item>
            <widget class="QCheckBox" name="building_points_checkBox">
             <property name="text">
@@ -103,25 +196,162 @@
           </item>
           <item>
            <widget class="QCheckBox" name="potential_idp_checkBox">
+=======
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="building_points_flag">
+            <property name="text">
+             <string>Building points</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="potential_idp_flag">
+>>>>>>> upstream/develop
             <property name="text">
              <string extracomment="Internally displaced person">Potential internally displaced person camps</string>
             </property>
             <property name="checked">
+<<<<<<< HEAD
              <bool>true</bool>
+            </property>
+=======
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="boundary_flag">
+            <property name="text">
+             <string>Political boundaries</string>
             </property>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_3">
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="boundary_group">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="title">
-          <string/>
+          <string>Political boundary options</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
          <property name="flat">
           <bool>false</bool>
          </property>
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="1" column="0">
+           <widget class="QComboBox" name="admin_level_comboBox">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QComboBox" name="country_comboBox">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="boundary_helper">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>which means undefined in</string>
+            </property>
+            <property name="buddy">
+             <cstring>country_comboBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="extract_as">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Extract boundaries as OSM</string>
+            </property>
+            <property name="buddy">
+             <cstring>admin_level_comboBox</cstring>
+            </property>
+>>>>>>> upstream/develop
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+<<<<<<< HEAD
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string/>
+=======
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="bounding_box_group">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="title">
+          <string>Bounding box</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+>>>>>>> upstream/develop
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+<<<<<<< HEAD
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -186,6 +416,141 @@
               </property>
               <property name="text">
                <string>is : undefined</string>
+=======
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_4">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetDefaultConstraint</enum>
+            </property>
+            <property name="leftMargin">
+             <number>1</number>
+            </property>
+            <property name="topMargin">
+             <number>1</number>
+            </property>
+            <property name="rightMargin">
+             <number>1</number>
+            </property>
+            <property name="bottomMargin">
+             <number>1</number>
+            </property>
+            <property name="spacing">
+             <number>1</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QDoubleSpinBox" name="y_maximum">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="prefix">
+               <string>North: </string>
+              </property>
+              <property name="decimals">
+               <number>7</number>
+              </property>
+              <property name="minimum">
+               <double>-999999999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>999999999.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QDoubleSpinBox" name="x_maximum">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="prefix">
+               <string>West: </string>
+              </property>
+              <property name="decimals">
+               <number>7</number>
+              </property>
+              <property name="minimum">
+               <double>-999999999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>999999999.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="capture_button">
+              <property name="text">
+               <string>Drag on map</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QDoubleSpinBox" name="x_minimum">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="prefix">
+               <string>East: </string>
+              </property>
+              <property name="decimals">
+               <number>7</number>
+              </property>
+              <property name="minimum">
+               <double>-999999999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>999999999.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="y_minimum">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="prefix">
+               <string>South: </string>
+              </property>
+              <property name="decimals">
+               <number>7</number>
+              </property>
+              <property name="minimum">
+               <double>-999999999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>999999999.000000000000000</double>
+>>>>>>> upstream/develop
               </property>
              </widget>
             </item>
@@ -194,6 +559,7 @@
          </layout>
         </widget>
        </item>
+<<<<<<< HEAD
        <item>
         <widget class="QLabel" name="output_directory_label">
          <property name="text">
@@ -250,10 +616,17 @@
         <widget class="QGroupBox" name="groupBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+=======
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="output_group">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+>>>>>>> upstream/develop
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+<<<<<<< HEAD
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
          </property>
@@ -262,11 +635,16 @@
          </property>
          <property name="title">
           <string>Bounding box</string>
+=======
+         <property name="title">
+          <string>Output to</string>
+>>>>>>> upstream/develop
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
          <property name="flat">
+<<<<<<< HEAD
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout">
@@ -332,6 +710,68 @@
            <widget class="QPushButton" name="button_extent_rectangle">
             <property name="text">
              <string>Select on map</string>
+=======
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="output_directory_label">
+            <property name="text">
+             <string>Output directory</string>
+            </property>
+            <property name="buddy">
+             <cstring>output_directory</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="output_directory">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QToolButton" name="directory_button">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="filename_prefix_label">
+            <property name="text">
+             <string>File name prefix</string>
+            </property>
+            <property name="buddy">
+             <cstring>filename_prefix</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="filename_prefix">
+            <property name="inputMask">
+             <string extracomment="Only A-Z a-z 0-9 and -_ chars allowed"/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QCheckBox" name="overwrite_flag">
+            <property name="styleSheet">
+             <string notr="true">padding-bottom: 10px;</string>
+            </property>
+            <property name="text">
+             <string>Overwrite existing files</string>
+>>>>>>> upstream/develop
             </property>
            </widget>
           </item>
@@ -342,7 +782,11 @@
      </widget>
     </widget>
    </item>
+<<<<<<< HEAD
    <item row="16" column="0">
+=======
+   <item row="1" column="0">
+>>>>>>> upstream/develop
     <widget class="QDialogButtonBox" name="button_box">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -361,6 +805,25 @@
    <header>QtWebKitWidgets/QWebView</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>roads_flag</tabstop>
+  <tabstop>buildings_flag</tabstop>
+  <tabstop>building_points_flag</tabstop>
+  <tabstop>potential_idp_flag</tabstop>
+  <tabstop>boundary_flag</tabstop>
+  <tabstop>admin_level_comboBox</tabstop>
+  <tabstop>country_comboBox</tabstop>
+  <tabstop>x_maximum</tabstop>
+  <tabstop>x_minimum</tabstop>
+  <tabstop>y_maximum</tabstop>
+  <tabstop>y_minimum</tabstop>
+  <tabstop>capture_button</tabstop>
+  <tabstop>output_directory</tabstop>
+  <tabstop>directory_button</tabstop>
+  <tabstop>filename_prefix</tabstop>
+  <tabstop>overwrite_flag</tabstop>
+  <tabstop>web_view</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -371,7 +834,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>248</x>
-     <y>254</y>
+     <y>424</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -387,7 +850,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>316</x>
-     <y>260</y>
+     <y>424</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -396,66 +859,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>boundary_checkBox</sender>
+   <sender>boundary_flag</sender>
    <signal>toggled(bool)</signal>
-   <receiver>label_help_1</receiver>
+   <receiver>boundary_group</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>157</x>
-     <y>277</y>
+     <x>147</x>
+     <y>136</y>
     </hint>
     <hint type="destinationlabel">
-     <x>380</x>
-     <y>313</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>boundary_checkBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>boundary_helper</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>157</x>
-     <y>277</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>546</x>
-     <y>313</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>boundary_checkBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>country_comboBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>157</x>
-     <y>277</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>440</x>
-     <y>313</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>boundary_checkBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>admin_level_comboBox</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>157</x>
-     <y>277</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>453</x>
-     <y>277</y>
+     <x>409</x>
+     <y>16</y>
     </hint>
    </hints>
   </connection>

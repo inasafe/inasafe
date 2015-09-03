@@ -17,14 +17,13 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.flood_vector_building_impact\
-    import parameter_definitions
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
     layer_geometry_polygon,
     hazard_flood,
     hazard_category_single_event,
+    hazard_category_multiple_event,
     exposure_structure,
     flood_vector_hazard_classes,
     structure_class_field
@@ -71,7 +70,10 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
-                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_categories': [
+                        hazard_category_single_event,
+                        hazard_category_multiple_event
+                    ],
                     'hazard_types': [hazard_flood],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
@@ -89,18 +91,6 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # This field of the exposure layer contains
-                # information about building types
-                ('building_type_field',
-                 parameter_definitions.building_type_field()),
-                # This field of the  hazard layer contains information
-                # about inundated areas
-                ('affected_field',
-                 parameter_definitions.affected_field()),
-                # This value in 'affected_field' of the hazard layer
-                # marks the areas as inundated
-                ('affected_value',
-                 parameter_definitions.affected_value()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))

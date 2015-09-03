@@ -26,7 +26,7 @@ from safe.impact_functions.impact_function_manager \
 from safe.test.utilities import get_qgis_app, test_data_path
 from safe.impact_functions.inundation.flood_polygon_population\
     .impact_function import FloodEvacuationVectorHazardFunction
-from safe_extras.parameters.string_parameter import StringParameter
+from safe.storage.safe_layer import SafeLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -48,20 +48,8 @@ class TestFloodEvacuationVectorHazardFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
-
-        field1 = StringParameter()
-        field1.name = 'Affected Field'
-        field1.is_required = True
-        field1.value = 'FLOODPRONE'
-        function.parameters['affected_field'] = field1
-
-        field2 = StringParameter()
-        field2.name = 'Affected Value'
-        field2.is_required = True
-        field2.value = 'YES'
-        function.parameters['affected_value'] = field2
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
 
         function.run()
         impact = function.impact

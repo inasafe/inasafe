@@ -30,6 +30,7 @@ from safe.definitions import (
     layer_geometry_polygon,
     layer_geometry_raster,
     hazard_flood,
+    hazard_category_multiple_event,
     hazard_category_single_event,
     flood_vector_hazard_classes,
     count_exposure_unit,
@@ -96,7 +97,10 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
-                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_categories': [
+                        hazard_category_single_event,
+                        hazard_category_multiple_event
+                    ],
                     'hazard_types': [hazard_flood],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
@@ -114,14 +118,6 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # This field of the  hazard layer contains information
-                # about inundated areas
-                ('affected_field',
-                 parameter_definitions.affected_field()),
-                # This value in 'affected_field' of the hazard layer
-                # marks the areas as inundated
-                ('affected_value',
-                 parameter_definitions.affected_value()),
                 # Percent of affected needing evacuation
                 ('evacuation_percentage',
                  parameter_definitions.evacuation_percentage()),

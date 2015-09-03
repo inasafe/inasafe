@@ -14,8 +14,6 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.flood_polygon_roads import \
-    parameter_definitions
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
@@ -23,6 +21,7 @@ from safe.definitions import (
     layer_geometry_line,
     hazard_flood,
     hazard_category_single_event,
+    hazard_category_multiple_event,
     flood_vector_hazard_classes,
     exposure_road,
     road_class_field
@@ -69,7 +68,10 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
-                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_categories': [
+                        hazard_category_single_event,
+                        hazard_category_multiple_event
+                    ],
                     'hazard_types': [hazard_flood],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
@@ -87,18 +89,6 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # This field of the exposure layer contains
-                # information about road types
-                ('road_type_field',
-                 parameter_definitions.road_type_field()),
-                # This field of the  hazard layer contains information
-                # about inundated areas
-                ('affected_field',
-                 parameter_definitions.affected_field()),
-                # This value in 'affected_field' of the hazard layer
-                # marks the areas as inundated
-                ('affected_value',
-                 parameter_definitions.affected_value()),
                 ('postprocessors', OrderedDict([
                     ('RoadType', road_type_postprocessor())
                 ]))

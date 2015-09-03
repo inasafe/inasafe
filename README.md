@@ -1,7 +1,7 @@
 InaSAFE
 =======
 
-[![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=develop)](https://travis-ci.org/AIFDR/inasafe)
+[![InaSAFE Screenshot](http://blogtest.inasafe.org/wp-content/uploads/2015/02/about-screenshot14.png)](http://inasafe.org)
 
 InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
@@ -16,17 +16,22 @@ functions for impact modelling.
 
 
 Story queue on Waffle:
-[![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.svg?label=ready&title=Ready)](http://waffle.io/AIFDR/inasafe) 
-[![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/AIFDR/inasafe)
+
+* [![Stories in Ready](https://badge.waffle.io/AIFDR/inasafe.svg?label=ready&title=Ready)](http://waffle.io/AIFDR/inasafe) 
+* [![Stories in In Progress](https://badge.waffle.io/AIFDR/inasafe.svg?label=in%20progress&title=In%20Progress)](http://waffle.io/AIFDR/inasafe)
+
 [![Throughput Graph](https://graphs.waffle.io/aifdr/inasafe/throughput.svg)](https://waffle.io/aifdr/inasafe/metrics)
 
-Current build status master: [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=master)](https://travis-ci.org/AIFDR/inasafe)
-Current build status develop: [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=develop)](https://travis-ci.org/AIFDR/inasafe)
+* Current test status master: [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=master)](https://travis-ci.org/AIFDR/inasafe) and
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AIFDR/inasafe/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AIFDR/inasafe/?branch=master)
+
+* Current test status develop: [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=develop)](https://travis-ci.org/AIFDR/inasafe) and 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AIFDR/inasafe/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/AIFDR/inasafe/?branch=develop)
 
 
-PyPi Downloads for the 'safe' library:
-[![Downloads](https://pypip.in/d/python-safe/badge.png)](https://crate.io/packages/python-safe)
-[![Downloads](https://pypip.in/v/python-safe/badge.png)](https://crate.io/packages/python-safe)
+PyPi Downloads for the 'safe' library (currently pip package is unmaintained):
+
+* [![Downloads](https://pypip.in/d/python-safe/badge.png)](https://crate.io/packages/python-safe)
 
 
 
@@ -46,25 +51,50 @@ The plugin will now be added to your plugins menu.
 
 **Note:** You may need to restart QGIS if upgrading from a prior version.
 
+Participation
+=============
+
+We work under the philosophy that stakeholders should have access to the
+development and source code, and be able to participate in every level of the 
+project - we invite comments, suggestions and contributions.  See
+[our milestones list](https://github.com/AIFDR/inasafe/issues/milestones) and
+[our open issues list](https://github.com/AIFDR/inasafe/issues?page=1&state=open)
+for known bugs and outstanding tasks. You can also chat live with our developers
+and community members using the link below.
+
+[![Join the chat at https://gitter.im/AIFDR/inasafe](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/AIFDR/inasafe?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 System Requirements
 -------------------
 
  - A standard PC with at least 4GB of RAM running Windows, Linux or Mac OS X
  - The QGIS Open Source Geographic Information System (http://www.qgis.org).
-   InaSAFE requires QGIS version 2.0 or newer.
+   Although InaSAFE will probably run on any version of QGIS version above 2.0
+   or newer, our supported version is the latest Long Term Release version
+   of QGIS.
 
-Limitations
-===========
+History
+=======
 
-InaSAFE is a new project. The current code development started in
-earnest in January 2012 and there is still much to be done.  However,
-we work under the philosophy that stakeholders should have access to the
-development and source code from the very beginning and invite
-comments, suggestions and contributions.  See
-[our milestones list](https://github.com/AIFDR/inasafe/issues/milestones) and
-[our open issues list](https://github.com/AIFDR/inasafe/issues?page=1&state=open)
-for known bugs and outstanding tasks.
+* InaSAFE development as a QGIS plugin started in January 2012.
+* In October 2012, version 1.0 of InaSAFE was launched at the [5th Asian ministerial conference on disaster risk reduction (AMCDRR)](
+  http://www.unisdr.org/we/inform/events/23540) where it was demonstrated to 
+  the then president of Indonesia, Susilo Bambang Yudhoyono who praised the project.
+* On 30 Jan 2013, InaSAFE was awarded the prestigious [Black Duck Open Source.
+  Rookie of the Year Award] (https://www.blackducksoftware.com/news/releases/black-duck-announces-2012-open-source-rookies-year-winners).
+* Version 2.0 of InaSAFE was released in January, 2014.
+* Version 3.0 was released in March 2015 which added support
+  for using the QGIS API within impact functions.
+
+Disclaimer
+==========
+
+InaSAFE has been jointly developed by the Indonesian Government-BNPB, the
+Australian Government, the World Bank-GFDRR and independent contributors.
+These agencies and the individual software developers of InaSAFE take no
+responsibility for the correctness of outputs from InaSAFE or decisions 
+derived as a consequence.
 
 
 License
@@ -104,5 +134,13 @@ parties or a failure of the program to operate with any other programs),
 even if such holder or other party has been advised of the possibility of
 such damages.
 
+Thank you
+=========
 
+We use [![PyCharm](https://www.jetbrains.com/pycharm/docs/logo_pycharm.png)]
+(https://www.jetbrains.com/pycharm) for our python development work 
+
+JetBrains kindly sponsor the licenses for InaSAFE under their 'free for 
+open source projects' programme. Please support them by buying a professional 
+license if you are able to!
 

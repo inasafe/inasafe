@@ -16,6 +16,7 @@ from safe.impact_functions.inundation\
     TsunamiEvacuationFunction
 from safe.test.utilities import test_data_path, get_qgis_app, clip_layers
 from safe.common.utilities import OrderedDict
+from safe.storage.safe_layer import SafeLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -43,8 +44,8 @@ class TestTsunamiEvacuationRaster(unittest.TestCase):
 
         # Let's set the extent to the hazard extent
         function.parameters['thresholds'].value = [0.7, 0.8, 0.9]
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact = function.impact
 
@@ -64,12 +65,12 @@ class TestTsunamiEvacuationRaster(unittest.TestCase):
 
         # #FIXME: This doesn't make sense due to clipping above. Update
         # clip_layers
-        expected_evacuated = 1200
+        expected_evacuated = 1198
         self.assertEqual(evacuated, expected_evacuated)
-        self.assertEqual(total_needs_weekly['Rice [kg]'], 3360)
+        self.assertEqual(total_needs_weekly['Rice [kg]'], 3355)
         self.assertEqual(total_needs_weekly['Family Kits'], 240)
-        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 21000)
-        self.assertEqual(total_needs_weekly['Clean Water [l]'], 80400)
+        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 20965)
+        self.assertEqual(total_needs_weekly['Clean Water [l]'], 80266)
         self.assertEqual(total_needs_single['Toilets'], 60)
 
     def test_filter(self):
