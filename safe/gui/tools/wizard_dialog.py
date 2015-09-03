@@ -397,7 +397,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set the mode label to the IFCW
         """
         self.setWindowTitle(self.ifcw_name)
-        self.lblSubtitle.setText(self.tr('Guided impact assessment wizard'))
+        self.lblSubtitle.setText(self.tr(
+            'Use this wizard to run a guided impact assessment'))
 
     def set_keywords_creation_mode(self, layer=None):
         """Set the Wizard to the Keywords Creation mode
