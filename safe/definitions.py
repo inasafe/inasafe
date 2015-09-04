@@ -214,9 +214,9 @@ hazard_category_multiple_event = {
 
 hazard_category = {
     'key': 'hazard_category',
-    'name': tr('Hazard Category'),
+    'name': tr('Scenario'),
     'description': tr(
-        'This describes the category of the hazard that is represented by the '
+        'This describes the type of hazard scenario that is represented by the '
         'layer. There are two possible values for this attribute, single '
         'event and multiple event.'),
     'types': [
@@ -587,9 +587,9 @@ flood_vector_hazard_classes = {
 
 vector_hazard_classification = {
     'key': 'vector_hazard_classification',
-    'name': tr('Vector Hazard Classification'),
+    'name': tr('Classification'),
     'description': tr(
-        'Vector Hazard Classification is a way to classify a value in one of '
+        'Hazard classification is a way to group the values in one of '
         'the attributes or fields in a vector layer.'),
     'types': [
         generic_vector_hazard_classes,
@@ -759,7 +759,8 @@ volcano_name_field = {
 
 value_map = {
     'key': 'value_map',
-    'name': tr('Vector classes'),
+    'name': tr('Attribute values'),
     'description': tr(
-        'Vector classes are used to group features with similar meanings. ')
+        'Attribute values identify features with similar meanings. For example'
+        'building attributes may include schools and hospitals. ')
 }
