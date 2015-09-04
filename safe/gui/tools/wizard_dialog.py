@@ -2775,9 +2775,9 @@ class WizardDialog(QDialog, FORM_CLASS):
                 'Your layer\'s keyword\'s version (%s) does not match with '
                 'your InaSAFE version (%s). If you wish to use it as an '
                 'exposure, hazard, or aggregation layer in an analysis, '
-                'please update the keywords. Press Next in order to continue '
-                'with keywords assignment.' % (keyword_version or 'No Version',
-                                               get_version()))
+                'please update the keywords. Click Next if you want to assign '
+                'key words now.' % (keyword_version or 'No Version',
+                                    get_version()))
         else:
             # The layer is keywordless
             if is_point_layer(layer):
