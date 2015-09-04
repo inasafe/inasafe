@@ -697,7 +697,6 @@ class KeywordIO(QObject):
             from definitions.py, otherwise None if no match was found.
         :rtype: dict, None
         """
-
         for item in dir(safe.definitions):
             if not item.startswith("__"):
                 var = getattr(safe.definitions, item)
