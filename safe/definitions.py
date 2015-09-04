@@ -296,23 +296,17 @@ hazard_all = [
     hazard_generic
 ]
 
-hazard = {
-    'key': 'hazard',
-    'name': tr('Hazard'),
+# Renamed key from hazard to hazards in 3.2 because key was not unique TS
+hazards = {
+    'key': 'hazards',
+    'name': tr('Hazards'),
     'description': tr(
         '<b>Hazards</b> (also called disasters) are what we call the data '
         'layers that describe the extent and magnitude of natural events '
         '(such as earthquakes, tsunamis and volcanic eruptions) that could '
         'potentially cause an event or series of events that threaten and '
         'disrupt the lives and livelihoods of people.'),
-    'types': [
-        hazard_flood,
-        hazard_tsunami,
-        hazard_earthquake,
-        hazard_volcano,
-        hazard_volcanic_ash,
-        hazard_generic
-    ]
+    'types': hazard_all
 }
 
 # Exposure
@@ -371,19 +365,14 @@ exposure_all = [
     exposure_structure
 ]
 
-exposure = {
-    'key': 'exposure',
-    'name': tr('Exposure'),
+# Renamed key from exposure to exposures in 3.2 because key was not unique TS
+exposures = {
+    'key': 'exposures',
+    'name': tr('Exposures'),
     'description': tr(
         '<b>Exposure</b> data represents things that are at risk when faced '
         'with a potential hazard. '),
-    'types': [
-        exposure_land_cover,
-        exposure_people_in_building,
-        exposure_population,
-        exposure_road,
-        exposure_structure
-    ]
+    'types': exposure_all
 }
 
 # Continuous Hazard Unit
@@ -765,4 +754,13 @@ volcano_name_field = {
     'name': tr('Volcano name attribute'),
     'type': 'field',
     'description': tr('Attribute where the volcano name is located.')
+}
+
+# General terminology and descriptive terms
+
+value_map = {
+    'key': 'value_map',
+    'name': tr('Vector classes'),
+    'description': tr(
+        'Vector classes are used to group features with similar meanings. ')
 }

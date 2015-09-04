@@ -247,6 +247,26 @@ class KeywordIOTest(unittest.TestCase):
             copied_keywords, expected_keywords, out_path)
         self.assertDictEqual(copied_keywords, expected_keywords, message)
 
+    def test_definition(self):
+        """Test we can get definitions for keywords.
+
+        .. versionadded:: 3.2
+
+        """
+        keyword = 'hazards'
+        definition = self.keyword_io.definition(keyword)
+        self.assertTrue(definition.has_key('description'))
+
+    def test_to_message(self):
+        """Test we can convert keywords to a message object.
+
+        .. versionadded:: 3.2
+
+        """
+        keywords = self.keyword_io.read_keywords(self.vector_layer)
+        message = self.keyword_io.to_message(keywords).to_text()
+        self.assertIn('Exposure*structure------', message)
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordIOTest)
     runner = unittest.TextTestRunner(verbosity=2)
