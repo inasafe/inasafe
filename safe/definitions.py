@@ -459,9 +459,10 @@ unit_percentage = {
 
 continuous_hazard_unit = {
     'key': 'continuous_hazard_unit',
-    'name': tr('Continuous Hazard Unit'),
+    'name': tr('Units'),
     'description': tr(
-        'Continuous hazard unit is the unit used for continuous layer mode.'),
+        'Hazard units are used for continuous data. Examples of hazard units '
+        'include metres and feet. '),
     'types': [
         unit_feet,
         unit_generic,
@@ -587,9 +588,9 @@ flood_vector_hazard_classes = {
 
 vector_hazard_classification = {
     'key': 'vector_hazard_classification',
-    'name': tr('Classification'),
+    'name': tr('Classes'),
     'description': tr(
-        'Hazard classification is a way to group the values in one of '
+        'Hazard classes are a way to group the values in one of '
         'the attributes or fields in a vector layer.'),
     'types': [
         generic_vector_hazard_classes,
@@ -647,7 +648,7 @@ generic_raster_hazard_classes = {
         {
             'key': 'medium',
             'name': tr('medium'),
-            'description': tr('The medium hazard classification.'),
+            'description': tr('The middle hazard classification.'),
             'numeric_default_min': 2,
             'numeric_default_max': 2,
             'optional': False
@@ -693,9 +694,9 @@ tsunami_raster_hazard_classes = {
 
 raster_hazard_classification = {
     'key': 'raster_hazard_classification',
-    'name': tr('Hazard classes'),
+    'name': tr('Classes'),
     'description': tr(
-        'Hazard class are a way to classify the cell values '
+        'Hazard classes are a way to classify the cell values '
         'in a raster layer.'),
     'types': [
         flood_raster_hazard_classes,
@@ -736,13 +737,13 @@ exposure_unit = {
 # Exposure class field
 structure_class_field = {
     'key': 'structure_class_field',
-    'name': tr('Field'),
+    'name': tr('Attribute field'),
     'description': tr('Attribute where the structure type is defined.')
 }
 
 road_class_field = {
     'key': 'road_class_field',
-    'name': tr('Field'),
+    'name': tr('Attribute field'),
     'description': tr('Attribute where the road type is defined.')
 }
 
