@@ -11,6 +11,8 @@ Contact : kolesov.dm@gmail.com
      (at your option) any later version.
 
 """
+from safe.common.exceptions import ZeroImpactException
+
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'
 __filename__ = 'test_flood_raster_road'
@@ -159,3 +161,25 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
             if attributes[3] == 1:
                 flooded += 1
         self.assertEqual(flooded, 25)
+
+    def test_zero_intersection(self):
+        hazard_path = test_data_path(
+            'hazard',
+            'continuous_flood_20_20.asc')
+        exposure_path = test_data_path(
+            'exposure',
+            'roads.shp')
+
+        # noinspection PyCallingNonCallable
+        hazard_layer = QgsRasterLayer(hazard_path, 'Flood')
+        # noinspection PyCallingNonCallable
+        exposure_layer = QgsVectorLayer(exposure_path, 'Roads', 'ogr')
+
+        # Let's set the extent to the hazard extent
+        function = FloodRasterRoadsFunction.instance()
+        rect_extent = [106.831991, -6.170044, 106.834868, -6.167793]
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
+        function.requested_extent = rect_extent
+        with self.assertRaises(ZeroImpactException):
+            function.run()

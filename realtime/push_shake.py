@@ -2,7 +2,9 @@
 import json
 import logging
 import os
+import pytz
 import requests
+import re
 
 from realtime.utilities import realtime_logger_name
 from realtime.exceptions import RESTRequestFailedError
@@ -19,6 +21,11 @@ INASAFE_REALTIME_REST_URL = None
 if 'INASAFE_REALTIME_REST_URL' in os.environ:
     INASAFE_REALTIME_REST_URL = os.environ['INASAFE_REALTIME_REST_URL']
 
+INASAFE_REALTIME_SHAKEMAP_HOOK_URL = None
+if 'INASAFE_REALTIME_SHAKEMAP_HOOK_URL' in os.environ:
+    INASAFE_REALTIME_SHAKEMAP_HOOK_URL = os.environ[
+        'INASAFE_REALTIME_SHAKEMAP_HOOK_URL']
+
 INASAFE_REALTIME_REST_USER = None
 if 'INASAFE_REALTIME_REST_USER' in os.environ:
     INASAFE_REALTIME_REST_USER = os.environ['INASAFE_REALTIME_REST_USER']
@@ -33,7 +40,7 @@ if 'INASAFE_REALTIME_REST_LOGIN_URL' in os.environ:
     INASAFE_REALTIME_REST_LOGIN_URL = \
         os.environ['INASAFE_REALTIME_REST_LOGIN_URL']
 
-INASAFE_REALTIME_DATETIME_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
+INASAFE_REALTIME_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 if 'INASAFE_REALTIME_DATETIME_FORMAT' in os.environ:
     INASAFE_REALTIME_DATETIME_FORMAT = \
         os.environ['INASAFE_REALTIME_DATETIME_FORMAT']
@@ -117,8 +124,33 @@ def is_realtime_rest_configured():
             INASAFE_REALTIME_REST_PASSWORD)
 
 
-def push_shake_event_to_rest(shake_event, fail_silent=True):
+def notify_realtime_rest(timestamp):
+    """Notify realtime rest that someone is logged in to realtime.
+
+    This can indicate someone is pushing raw shakemap files
+
+    :param timestamp: python datetime object indicating shakemap timestamp
+    :type timestamp: datetime.datetime
     """
+    session = get_realtime_session()
+    timestamp_utc = timestamp.astimezone(tz=pytz.utc)
+    data = {
+        'timestamp': timestamp_utc.strftime(INASAFE_REALTIME_DATETIME_FORMAT)
+    }
+    cookies = session.get(INASAFE_REALTIME_REST_LOGIN_URL).cookies
+    session.headers['X-CSRFTOKEN'] = cookies.get('csrftoken')
+    response = session.post(
+        INASAFE_REALTIME_SHAKEMAP_HOOK_URL, data=data)
+    # We will not handle post error, since we don't need it.
+    # It just simply fails
+    if response.status_code != requests.codes.ok:
+        LOGGER.info(
+            'Notify Shakemap Push Failed : Error code %s',
+            response.status_code)
+
+
+def push_shake_event_to_rest(shake_event, fail_silent=True):
+    """Pushing shake event Grid.xml description files to REST server.
 
     :param shake_event: The shake event to push
     :type shake_event: ShakeEvent
@@ -238,7 +270,7 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
             else:
                 raise error
     except Exception as exc:
-        if fail_silent:
+        if not fail_silent:
             LOGGER.error(exc.message)
         else:
             raise exc

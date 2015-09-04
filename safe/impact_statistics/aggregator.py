@@ -760,6 +760,7 @@ class Aggregator(QtCore.QObject):
             # minIndex = provider.fieldNameIndex(self._minFieldName())
             # maxIndex = provider.fieldNameIndex(self._maxFieldName())
 
+            update_map = {}
             for myFeature in provider.getFeatures():
                 feature_id = myFeature.id()
                 if feature_id not in zonal_statistics:
@@ -777,7 +778,9 @@ class Aggregator(QtCore.QObject):
                         count_index: statistics['count'],
                         mean_index: statistics['mean']
                     }
-                provider.changeAttributeValues({feature_id: attributes})
+                update_map[feature_id] = attributes
+
+            provider.changeAttributeValues(update_map)
 
     def _aggregate_polygon_impact(self, safe_impact_layer):
         """Aggregation of polygons in polygons
