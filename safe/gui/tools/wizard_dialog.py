@@ -62,6 +62,8 @@ from safe.definitions import (
     do_not_use_attribute,
     continuous_hazard_unit,
     exposure_unit,
+    raster_hazard_classification,
+    vector_hazard_classification,
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation,
@@ -233,13 +235,17 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
     def filterAcceptsRow(self, source_row, source_parent):
         """The filter method
 
-        .. note:: This filter hides top-level items of unsupported branches.
+        .. note:: This filter hides top-level items of unsupported branches
+                  and also leaf items containing xml files.
 
            Enabled root items: QgsDirectoryItem, QgsFavouritesItem,
            QgsPGRootItem.
 
            Disabled root items: QgsMssqlRootItem, QgsSLRootItem,
            QgsOWSRootItem, QgsWCSRootItem, QgsWFSRootItem, QgsWMSRootItem.
+
+           Disabled leaf items: QgsLayerItem and QgsOgrLayerItem with path
+           ending with '.xml'
 
         :param source_row: Parent widget of the model
         :type source_row: int
@@ -252,6 +258,7 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
         """
         source_index = self.sourceModel().index(source_row, 0, source_parent)
         item = self.sourceModel().dataItem(source_index)
+
         if item.metaObject().className() in [
                 'QgsMssqlRootItem',
                 'QgsSLRootItem',
@@ -260,6 +267,13 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
                 'QgsWFSRootItem',
                 'QgsWMSRootItem']:
             return False
+
+        if (item.metaObject().className() in [
+                'QgsLayerItem',
+                'QgsOgrLayerItem']
+                and item.path().endswith('.xml')):
+            return False
+
         return True
 
 
@@ -386,11 +400,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.get_existing_keyword('layer_purpose'):
             mode_name = (self.tr(
                 'Keywords update wizard for layer <b>%s</b>'
-                ) % self.layer.name())
+            ) % self.layer.name())
         else:
             mode_name = (self.tr(
                 'Keywords creation wizard for layer <b>%s</b>'
-                ) % self.layer.name())
+            ) % self.layer.name())
         self.lblSubtitle.setText(mode_name)
 
     def set_mode_label_to_ifcw(self):
@@ -1953,7 +1967,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not functions:
             self.lblAvailableFunctions1.clear()
         else:
-            txt = "Available functions: " + ", ".join(
+            txt = self.tr('Available functions:') + ' ' + ', '.join(
                 [f['name'] for f in functions])
             self.lblAvailableFunctions1.setText(txt)
 
@@ -2080,7 +2094,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not functions:
             self.lblAvailableFunctions2.clear()
         else:
-            text = "Available functions: " + ", ".join(
+            text = self.tr('Available functions:') + ' ' + ', '.join(
                 [f['name'] for f in functions])
             self.lblAvailableFunctions2.setText(text)
         self.pbnNext.setEnabled(True)
@@ -2218,11 +2232,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Set description label
         description = '<table border="0">'
         if "name" in imfunc.keys():
-            description += '<tr><td><b>Function</b>: </td><td>%s</td></tr>' % (
-                imfunc['name'])
+            description += '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                self.tr('Function'), imfunc['name'])
         if "overview" in imfunc.keys():
-            description += '<tr><td><b>Overview</b>: </td><td>%s</td></tr>' % (
-                imfunc['overview'])
+            description += '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                self.tr('Overview'), imfunc['overview'])
         description += '</table>'
         self.lblDescribeFunction.setText(description)
 
@@ -2735,6 +2749,226 @@ class WizardDialog(QDialog, FORM_CLASS):
         uri.setDataSource(schema, table, geom_col)
         return uri
 
+    def layer_description_html(self, layer, keywords=None):
+        """Form a html description of a given layer based on the layer
+           parameters and keywords if provided
+
+        :param layer: The layer to get the description
+        :type layer: QgsMapLayer
+
+        :param keywords: The layer keywords
+        :type keywords: None, dict
+
+        :returns: The html description in tabular format,
+            ready to use in a label or tool tip.
+        :rtype: str
+        """
+
+        if keywords:
+            purpose = keywords.get('layer_purpose')
+            if purpose == layer_purpose_hazard['key']:
+                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                    self.tr('Hazard'), keywords.get(purpose))
+                unit = keywords.get('continuous_hazard_unit')
+            elif purpose == layer_purpose_exposure['key']:
+                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                    self.tr('Exposure'), keywords.get(purpose))
+                unit = keywords.get('exposure_unit')
+            else:
+                subcategory = ''
+                unit = None
+            if keywords.get('layer_mode') == layer_mode_classified['key']:
+                unit = self.tr('classified data')
+            if unit:
+                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
+                    self.tr('Unit'), unit)
+
+            desc = """
+                <table border="0" width="100%%">
+                <tr><td><b>%s</b>: </td><td>%s</td></tr>
+                <tr><td><b>%s</b>: </td><td>%s</td></tr>
+                %s
+                %s
+                <tr><td><b>%s</b>: </td><td>%s</td></tr>
+                </table>
+            """ % (self.tr('Title'), keywords.get('title'),
+                   self.tr('Purpose'), keywords.get('layer_purpose'),
+                   subcategory,
+                   unit,
+                   self.tr('Source'), keywords.get('source'))
+        else:
+            if is_point_layer(layer):
+                geom_type = 'point'
+            elif is_polygon_layer(layer):
+                geom_type = 'polygon'
+            else:
+                geom_type = 'line'
+
+            # hide password in the layer source
+            source = re.sub(
+                r'password=\'.*\'', r'password=*****', layer.source())
+
+            desc = """
+                %s<br/><br/>
+                <b>%s</b>: %s<br/>
+                <b>%s</b>: %s<br/><br/>
+                %s
+            """ % (self.tr('This layer has no valid keywords assigned'),
+                   self.tr('SOURCE'), source,
+                   self.tr('TYPE'), is_raster_layer(layer) and 'raster' or
+                   'vector (%s)' % geom_type,
+                   self.tr('In the next step you will be able' +
+                           ' to register this layer.'))
+        return desc
+
+    def unsuitable_layer_description_html(self, layer, layer_purpose,
+                                          keywords=None):
+        """Form a html description of a given non-matching layer based on
+           the currently selected impact function requirements vs layer\'s
+           parameters and keywords if provided, as
+
+        :param layer: The layer to be validated
+        :type layer: QgsVectorLayer | QgsRasterLayer
+
+        :param layer_purpose: The layer_purpose the layer is validated for
+        :type layer_purpose: string
+
+        :param keywords: The layer keywords
+        :type keywords: None, dict
+
+        :returns: The html description in tabular format,
+            ready to use in a label or tool tip.
+        :rtype: str
+        """
+
+        def emphasize(str1, str2):
+            ''' Compare two strings and emphasize both if differ '''
+            if str1 != str2:
+                str1 = '<i>%s</i>' % str1
+                str2 = '<i>%s</i>' % str2
+            return (str1, str2)
+
+        # Get allowed subcategory and layer_geometry from IF constraints
+        h, e, hc, ec = self.selected_impact_function_constraints()
+        imfunc = self.selected_function()
+        lay_req = imfunc['layer_requirements'][layer_purpose]
+
+        if layer_purpose == 'hazard':
+            layer_purpose_key_name = layer_purpose_hazard['name']
+            req_subcategory = h['key']
+            req_geometry = hc['key']
+        elif layer_purpose == 'exposure':
+            layer_purpose_key_name = layer_purpose_exposure['name']
+            req_subcategory = e['key']
+            req_geometry = ec['key']
+        else:
+            layer_purpose_key_name = layer_purpose_aggregation['name']
+            req_subcategory = ''
+            # For aggregation layers, only accept polygons
+            req_geometry = 'polygon'
+        req_layer_mode = lay_req['layer_mode']['key']
+
+        lay_geometry = self.get_layer_geometry_id(layer)
+        lay_purpose = '&nbsp;&nbsp;-'
+        lay_subcategory = '&nbsp;&nbsp;-'
+        lay_layer_mode = '&nbsp;&nbsp;-'
+
+        if keywords:
+            if 'layer_purpose' in keywords:
+                lay_purpose = keywords['layer_purpose']
+            if layer_purpose in keywords:
+                lay_subcategory = keywords[layer_purpose]
+            if 'layer_mode' in keywords:
+                lay_layer_mode = keywords['layer_mode']
+
+        lay_geometry, req_geometry = emphasize(lay_geometry, req_geometry)
+        lay_purpose, layer_purpose = emphasize(lay_purpose, layer_purpose)
+        lay_subcategory, req_subcategory = emphasize(lay_subcategory,
+                                                     req_subcategory)
+        lay_layer_mode, req_layer_mode = emphasize(lay_layer_mode,
+                                                   req_layer_mode)
+
+        # Classification
+        classification_row = ''
+        if (lay_req['layer_mode'] == layer_mode_classified and
+                layer_purpose == 'hazard'):
+            # Determine the keyword key for the classification
+            classification_obj = (raster_hazard_classification
+                                  if is_raster_layer(layer)
+                                  else vector_hazard_classification)
+            classification_key = classification_obj['key']
+            classification_key_name = classification_obj['name']
+            classification_keys = classification_key + 's'
+
+            if classification_keys in lay_req:
+                allowed_classifications = [
+                    c['key'] for c in lay_req[classification_keys]]
+                req_classifications = ', '.join(allowed_classifications)
+
+                lay_classification = '&nbsp;&nbsp;-'
+                if classification_key in keywords:
+                    lay_classification = keywords[classification_key]
+
+                if lay_classification not in allowed_classifications:
+                    # We already know we want to empasize them and the test
+                    # inside the function will always pass.
+                    lay_classification, req_classifications = emphasize(
+                        lay_classification, req_classifications)
+                classification_row = (('<tr><td><b>%s</b></td>' +
+                                       '<td>%s</td><td>%s</td></tr>')
+                                      % (classification_key_name,
+                                         lay_classification,
+                                         req_classifications))
+
+        # Unit
+        units_row = ''
+        if lay_req['layer_mode'] == layer_mode_continuous:
+            # Determine the keyword key for the unit
+            unit_obj = (continuous_hazard_unit
+                        if layer_purpose == layer_purpose_hazard['key']
+                        else exposure_unit)
+            unit_key = unit_obj['key']
+            unit_key_name = unit_obj['name']
+            unit_keys = unit_key + 's'
+
+            if unit_keys in lay_req:
+                allowed_units = [c['key'] for c in lay_req[unit_keys]]
+                req_units = ', '.join(allowed_units)
+
+                lay_unit = '&nbsp;&nbsp;-'
+                if unit_key in keywords:
+                    lay_unit = keywords[unit_key]
+
+                if lay_unit not in allowed_units:
+                    # We already know we want to empasize them and the test
+                    # inside the function will always pass.
+                    lay_unit, req_units = emphasize(lay_unit, req_units)
+                units_row = (('<tr><td><b>%s</b></td>' +
+                              '<td>%s</td><td>%s</td></tr>')
+                             % (unit_key_name, lay_unit, req_units))
+
+        html = '''
+            <table border="0" width="100%%" cellpadding="2">
+                <tr><td width="33%%"></td>
+                    <td width="33%%"><b>%s</b></td>
+                    <td width="33%%"><b>%s</b></td>
+                </tr>
+                <tr><td><b>%s</b></td><td>%s</td><td>%s</td></tr>
+                <tr><td><b>%s</b></td><td>%s</td><td>%s</td></tr>
+                <tr><td><b>%s</b></td><td>%s</td><td>%s</td></tr>
+                <tr><td><b>%s</b></td><td>%s</td><td>%s</td></tr>
+                %s
+                %s
+            </table>
+        ''' % (self.tr('Layer'), self.tr('Required'),
+               self.tr('Geometry'), lay_geometry, req_geometry,
+               self.tr('Purpose'), lay_purpose, layer_purpose,
+               layer_purpose_key_name, lay_subcategory, req_subcategory,
+               self.tr('Layer mode'), lay_layer_mode, req_layer_mode,
+               classification_row,
+               units_row)
+        return html
+
     def get_layer_description_from_browser(self, category):
         """Obtain the description of the browser layer selected by user.
 
@@ -2798,7 +3032,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer = QgsRasterLayer(path, '', 'gdal')
 
         if not layer or not layer.isValid():
-            return False, "Not a valid layer"
+            return False, self.tr('Not a valid layer.')
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
@@ -2817,7 +3051,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer.setLayerName(keywords.get('title'))
 
         if not self.is_layer_compatible(layer, category, keywords):
-            return False, "This layer's keywords or type are not suitable."
+            label_text = '%s<br/>%s' % (self.tr('This layer\'s keywords ' +
+                                                'or type are not suitable:'),
+                                        self.unsuitable_layer_description_html(
+                                            layer, category, keywords))
+            return False, label_text
 
         # set the current layer (e.g. for the keyword creation sub-thread
         #                          or for adding the layer to mapCanvas)
@@ -2832,57 +3070,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         self.is_selected_layer_keywordless = not bool(keywords)
 
-        if keywords:
-            purpose = keywords.get('layer_purpose')
-            if purpose == layer_purpose_hazard['key']:
-                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
-                    self.tr('Hazard'), keywords.get(purpose))
-                unit = keywords.get('continuous_hazard_unit')
-            elif purpose == layer_purpose_exposure['key']:
-                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
-                    self.tr('Exposure'), keywords.get(purpose))
-                unit = keywords.get('exposure_unit')
-            else:
-                subcategory = ''
-                unit = None
-            if keywords.get('layer_mode') == layer_mode_classified['key']:
-                unit = self.tr('classified data')
-            if unit:
-                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
-                    self.tr('Unit'), unit)
-
-            desc = """
-                <table border=0>
-                <tr><td><b>Title</b>: </td><td>%s</td></tr>
-                <tr><td><b>Purpose</b>: </td><td>%s</td></tr>
-                %s
-                %s
-                <tr><td><b>Source</b>: </td><td>%s</td></tr>
-                </table>
-            """ % (keywords.get('title'),
-                   keywords.get('layer_purpose'),
-                   subcategory,
-                   unit,
-                   keywords.get('source'))
-        else:
-            if is_point_layer(layer):
-                geom_type = 'point'
-            elif is_polygon_layer(layer):
-                geom_type = 'polygon'
-            else:
-                geom_type = 'line'
-
-            # hide password in the layer source
-            source = re.sub(
-                r'password=\'.*\'', r'password=*****', layer.source())
-
-            desc = """
-                This layer has no valid keywords assigned<br/><br/>
-                <b>SOURCE</b>: %s<br/>
-                <b>TYPE</b>: %s<br/><br/>
-                In the next step you will be able to register this layer.
-            """ % (source, is_raster_layer(layer) and 'raster' or
-                   'vector (%s)' % geom_type)
+        desc = self.layer_description_html(layer, keywords)
 
         return True, desc
 
@@ -2892,6 +3080,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         (is_compatible, desc) = self.get_layer_description_from_browser(
             'hazard')
         self.lblDescribeBrowserHazLayer.setText(desc)
+        self.lblDescribeBrowserHazLayer.setEnabled(is_compatible)
         self.pbnNext.setEnabled(is_compatible)
 
     def set_widgets_step_fc_hazlayer_from_browser(self):
@@ -3407,7 +3596,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                         unicode(pp),
                         format_postprocessor(self.if_params[p][pp]))
                     for pp in self.if_params[p]
-                    ]
+                ]
                 if subparams:
                     subparams = ''.join(subparams)
                     subparams = '<table border="0">%s</table>' % subparams
@@ -3541,7 +3730,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnReportWeb.hide()
         self.pbnReportPDF.hide()
         self.pbnReportComposer.hide()
-        self.lblAnalysisStatus.setText('Running analysis...')
+        self.lblAnalysisStatus.setText(self.tr('Running analysis...'))
 
     # ===========================
     # STEPS NAVIGATION
