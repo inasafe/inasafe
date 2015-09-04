@@ -270,9 +270,8 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
             return False
 
         if (item.metaObject().className() in [
-                'QgsLayerItem',
-                'QgsOgrLayerItem']
-                and item.path().endswith('.xml')):
+                'QgsLayerItem', 'QgsOgrLayerItem'] and
+                item.path().endswith('.xml')):
             return False
 
         return True
@@ -3740,8 +3739,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Enable the Back button unless it's not the first step
         self.pbnBack.setEnabled(
-            step not in [step_kw_category, step_fc_function_1]
-            or self.parent_step is not None)
+            step not in [step_kw_category, step_fc_function_1] or
+            self.parent_step is not None)
 
         # Set Next button label
         if (step in [step_kw_title, step_fc_analysis] and
