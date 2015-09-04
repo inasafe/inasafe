@@ -133,8 +133,9 @@ def notify_realtime_rest(timestamp):
     :type timestamp: datetime.datetime
     """
     session = get_realtime_session()
+    timestamp_utc = timestamp.astimezone(tz=pytz.utc)
     data = {
-        'timestamp': timestamp.astimezone(tz=pytz.utc).strftime(INASAFE_REALTIME_DATETIME_FORMAT)
+        'timestamp': timestamp_utc.strftime(INASAFE_REALTIME_DATETIME_FORMAT)
     }
     cookies = session.get(INASAFE_REALTIME_REST_LOGIN_URL).cookies
     session.headers['X-CSRFTOKEN'] = cookies.get('csrftoken')

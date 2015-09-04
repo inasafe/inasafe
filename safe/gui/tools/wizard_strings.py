@@ -36,7 +36,8 @@ category_question_aggregation = tr(
     'First you need to confirm the layer is an <b>aggregation,/b> layer.')
 hazard_category_question = tr(
     'What type of <b>hazard scenario</b> does this layer represent? '
-    '<p>Does it represent a <b>single event</b> or <b>multiple events</b>?</p>')
+    '<p>Does it represent a <b>single event</b> or <b>multiple events</b>?'
+    '</p>')
 hazard_question = tr(
     'What kind of <b>hazard</b> does this layer represent? '
     '<p>The choice you make here will determine which impact functions this '
@@ -47,9 +48,9 @@ exposure_question = tr(
     'What kind of <b>exposure</b> does this layer represent? '
     'Is it a <b>population</b>, <b>structure</b>, or <b>road</b> layer? '
     '<p>The choice you make here will determine '
-    'which impact functions this exposure layer can be used with. For example, '
-    'if you choose <b>population</b> you will be able to use this exposure '
-    'layer with impact functions such as <b>flood impact on '
+    'which impact functions this exposure layer can be used with. '
+    'For example, if you choose <b>population</b> you will be able to use '
+    'this exposure layer with impact functions such as <b>flood impact on '
     'population</b>.</p>')
 layermode_raster_question = tr(
     'You have selected <b>%s %s</b> for this raster layer. '
@@ -127,13 +128,13 @@ classify_raster_question = tr(
 )  # (subcategory, category, classification)
 select_function_constraints2_question = tr(
     'You selected <b>%s</b> hazard and <b>%s</b> exposure. Now, select the '
-    '<b>geometry types</b> for the hazard and exposure layers you want to use. '
-    'Click on the cell in the table below that matches '
+    '<b>geometry types</b> for the hazard and exposure layers you want to '
+    'use. Click on the cell in the table below that matches '
     'the geometry type for each.')  # (hazard, exposure)
 select_function_question = tr(
-    '<p>You have selected <b>%s %s</b> hazard and <b>%s %s</b> exposure. Below '
-    'you can see a list of available <b>impact functions</b> matching the '
-    'selected hazard, exposure and their geometries. Please choose which '
+    '<p>You have selected <b>%s %s</b> hazard and <b>%s %s</b> exposure. '
+    'Below you can see a list of available <b>impact functions</b> matching '
+    'the selected hazard, exposure and their geometries. Please choose which '
     'impact function you would like to use from the list below.</p> '
     '<p>Please note some functions may require either continuous or '
     'classified input data. A <b>continuous</b> raster is one where cell '
