@@ -13,8 +13,8 @@ destination = '/tmp'
 for dirpath, dirnames, filenames in walk(source):
     for filename in filenames:
         if filename == 'grid.xml':
-            id = path.basename(path.split(dirpath)[-2])
-            print 'found grid for %s' % id
+            shake_id = path.basename(path.split(dirpath)[-2])
+            print 'found grid for %s' % shake_id
             copyfile(
                 path.join(dirpath, filename),
-                path.join(destination, '%s.xml' % id))
+                path.join(destination, '%s.xml' % shake_id))

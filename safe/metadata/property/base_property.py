@@ -79,10 +79,12 @@ class BaseProperty(object):
         }
 
     def is_allowed_type(self, value):
+        # pylint: disable=unidiomatic-typecheck
         if type(value) in self.allowed_python_types:
             self._python_type = type(value)
             self._value = value
             return True
+        # pylint: disable=unidiomatic-typecheck
         elif type(value) in [str, unicode]:
             try:
                 casted_value = self.cast_from_str(value)

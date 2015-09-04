@@ -38,8 +38,8 @@ class DateProperty(BaseProperty):
         super(DateProperty, self).__init__(
             name, value, xml_path, self._allowed_python_types)
 
-    @staticmethod
-    def is_valid(value):
+    @classmethod
+    def is_valid(cls, value):
         # the date types constructors already complain if a date is not valid.
         return True
 
