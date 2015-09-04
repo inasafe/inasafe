@@ -67,7 +67,7 @@ layer_purpose_aggregation = {
 
 layer_purpose = {
     'key': 'layer_purpose',
-    'name': tr('Layer Purpose'),
+    'name': tr('Purpose'),
     'description': tr(
         'The purpose of the layer can be hazard layer, exposure layer, or '
         'aggregation layer'),
@@ -122,10 +122,10 @@ layer_mode_classified = {
 
 layer_mode = {
     'key': 'layer_mode',
-    'name': tr('Layer Mode'),
+    'name': tr('Data type'),
     'description': tr(
-        'The mode of the layer describes the type of data value in the layer. '
-        'It can be continuous or classified'),
+        'The data type describes the values in the layer. '
+        'Values can be continuous or classified'),
     'types': [
         layer_mode_continuous,
         layer_mode_classified
@@ -176,11 +176,10 @@ layer_geometry_raster = {
 
 layer_geometry = {
     'key': 'layer_geometry',
-    'name': tr('Layer Geometry'),
+    'name': tr('Geometry'),
     'description': tr(
-        'This describes the format and type of the layer. There '
-        'are four possible values : raster, point, line, and polygon. The '
-        'last three values are implicitly included in the vector format.'),
+        'Layer geometry can be either raster or vector. There '
+        'are three possible vector geometries: point, line, and polygon. '),
     'types': [
         layer_geometry_raster,
         layer_geometry_point,
@@ -694,9 +693,9 @@ tsunami_raster_hazard_classes = {
 
 raster_hazard_classification = {
     'key': 'raster_hazard_classification',
-    'name': tr('Raster Hazard Classification'),
+    'name': tr('Hazard classes'),
     'description': tr(
-        'Raster Hazard Classification is a way to classify the cell values '
+        'Hazard class are a way to classify the cell values '
         'in a raster layer.'),
     'types': [
         flood_raster_hazard_classes,
@@ -724,7 +723,7 @@ density_exposure_unit = {
 
 exposure_unit = {
     'key': 'exposure_unit',
-    'name': tr('Exposure Unit'),
+    'name': tr('Units'),
     'description': tr(
         'Exposure unit defines the unit for the exposure, for example '
         'people can either be measured as count or density (count per area.'),
@@ -737,13 +736,13 @@ exposure_unit = {
 # Exposure class field
 structure_class_field = {
     'key': 'structure_class_field',
-    'name': tr('Structure class field'),
+    'name': tr('Field'),
     'description': tr('Attribute where the structure type is defined.')
 }
 
 road_class_field = {
     'key': 'road_class_field',
-    'name': tr('Road class field'),
+    'name': tr('Field'),
     'description': tr('Attribute where the road type is defined.')
 }
 
@@ -751,7 +750,7 @@ road_class_field = {
 # Hazard related
 volcano_name_field = {
     'key': 'volcano_name_field',
-    'name': tr('Volcano name attribute'),
+    'name': tr('Name field'),
     'type': 'field',
     'description': tr('Attribute where the volcano name is located.')
 }
