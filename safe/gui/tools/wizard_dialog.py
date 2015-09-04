@@ -82,7 +82,7 @@ from safe.utilities.gis import (
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.utilities import get_error_message
+from safe.utilities.utilities import get_error_message, compare_version
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -92,6 +92,7 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     InaSAFEError)
 from safe.common.resource_parameter import ResourceParameter
+from safe.common.version import get_version
 from safe_extras.parameters.group_parameter import GroupParameter
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.impact_statistics.function_options_dialog import (
@@ -958,6 +959,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             indx = -1
         self.lstLayerModes.setCurrentRow(indx)
+
+        self.auto_select_one_item(self.lstLayerModes)
 
     # ===========================
     # STEP_KW_UNIT
@@ -2362,8 +2365,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         if layer_geometry != self.get_layer_geometry_id(layer):
             return False
 
-        # If no keywords, there's nothing more we can check
-        if not keywords:
+        # If no keywords, there's nothing more we can check.
+        # The same if the keywords version doesn't match
+        if not keywords or 'keyword_version' not in keywords:
+            return True
+        keyword_version = str(keywords['keyword_version'])
+        if compare_version(keyword_version, get_version()) != 0:
             return True
 
         # Compare layer keywords with explicitly set constraints
@@ -2539,19 +2546,18 @@ class WizardDialog(QDialog, FORM_CLASS):
     # STEP_FC_HAZLAYER_FROM_CANVAS
     # ===========================
 
-    def get_layer_description_from_canvas(self, layer):
+    def get_layer_description_from_canvas(self, layer, purpose):
         """Obtain the description of a canvas layer selected by user.
 
         :param layer: The QGIS layer.
         :type layer: QgsMapLayer
 
+        :param category: The category of the layer to get the description.
+        :type category: string
+
         :returns: description of the selected layer.
         :rtype: string
         """
-
-        # set the current layer (e.g. for the keyword creation sub-thread
-        self.layer = layer
-
         if not layer:
             return ""
 
@@ -2567,66 +2573,25 @@ class WizardDialog(QDialog, FORM_CLASS):
                 UnsupportedProviderError):
             keywords = None
 
-        self.is_selected_layer_keywordless = not bool(keywords)
-
-        if keywords:
-            purpose = keywords.get('layer_purpose')
-            if purpose == layer_purpose_hazard['key']:
-                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
-                    self.tr('Hazard'), keywords.get(purpose))
-                unit = keywords.get('continuous_hazard_unit')
-            elif purpose == layer_purpose_exposure['key']:
-                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
-                    self.tr('Exposure'), keywords.get(purpose))
-                unit = keywords.get('exposure_unit')
-            else:
-                subcategory = ''
-                unit = None
-            if keywords.get('layer_mode') == layer_mode_classified['key']:
-                unit = self.tr('classified data')
-            if unit:
-                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
-                    self.tr('Unit'), unit)
-
-            label_text = """
-                <table border=0>
-                <tr><td><b>Title</b>: </td><td>%s</td></tr>
-                <tr><td><b>Purpose</b>: </td><td>%s</td></tr>
-                %s
-                %s
-                <tr><td><b>Source</b>: </td><td>%s</td></tr>
-                </table>
-            """ % (keywords.get('title'),
-                   keywords.get('layer_purpose'),
-                   subcategory,
-                   unit,
-                   keywords.get('source'))
+        # set the current layer (e.g. for the keyword creation sub-thread)
+        self.layer = layer
+        if purpose == 'hazard':
+            self.hazard_layer = layer
+        elif purpose == 'exposure':
+            self.exposure_layer = layer
         else:
-            if is_point_layer(layer):
-                geom_type = 'point'
-            elif is_polygon_layer(layer):
-                geom_type = 'polygon'
-            else:
-                geom_type = 'line'
+            self.aggregation_layer = layer
 
-            # hide password in the layer source
-            source = re.sub(
-                r'password=\'.*\'', r'password=*****', layer.source())
+        # Check if the layer is keywordless
+        if keywords and 'keyword_version' in keywords:
+            kw_ver = str(keywords['keyword_version'])
+            self.is_selected_layer_keywordless = bool(
+                compare_version(kw_ver, get_version()) != 0)
+        else:
+            self.is_selected_layer_keywordless = True
 
-            label_text = """<html>
-                This layer has no valid keywords assigned, so we don't know
-                if it's suitable for this purpose, however, it may be, as it
-                has proper geometry type.
-                <br/><br/>
-                <b>SOURCE</b>: %s<br/>
-                <b>TYPE</b>: %s<br/><br/>
-                If you want to use this layer, in the next step
-                you will be able to assign proper keywords to it.
-                </html>
-            """ % (source, is_raster_layer(layer) and
-                   'raster' or 'vector (%s)' % geom_type)
-
-        return label_text
+        desc = self.layer_description_html(layer, keywords)
+        return desc
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -2639,7 +2604,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
 
         self.hazard_layer = self.selected_canvas_hazlayer()
-        lblText = self.get_layer_description_from_canvas(self.hazard_layer)
+        lblText = self.get_layer_description_from_canvas(self.hazard_layer,
+                                                         'hazard')
         self.lblDescribeCanvasHazLayer.setText(lblText)
         self.pbnNext.setEnabled(True)
 
@@ -2764,7 +2730,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: str
         """
 
-        if keywords:
+        if keywords and 'keyword_version' in keywords:
+            keyword_version = str(keywords['keyword_version'])
+        else:
+            keyword_version = None
+
+        if (keywords and keyword_version and
+                compare_version(keyword_version, get_version()) == 0):
+            # The layer has valid keywords
             purpose = keywords.get('layer_purpose')
             if purpose == layer_purpose_hazard['key']:
                 subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
@@ -2796,7 +2769,17 @@ class WizardDialog(QDialog, FORM_CLASS):
                    subcategory,
                    unit,
                    self.tr('Source'), keywords.get('source'))
+        elif keywords:
+            # The layer has keywords, but the version is wrong
+            desc = self.tr(
+                'Your layer\'s keyword\'s version (%s) does not match with '
+                'your InaSAFE version (%s). If you wish to use it as an '
+                'exposure, hazard, or aggregation layer in an analysis, '
+                'please update the keywords. Press Next in order to continue '
+                'with keywords assignment.' % (keyword_version or 'No Version',
+                                               get_version()))
         else:
+            # The layer is keywordless
             if is_point_layer(layer):
                 geom_type = 'point'
             elif is_polygon_layer(layer):
@@ -3060,7 +3043,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         # set the current layer (e.g. for the keyword creation sub-thread
         #                          or for adding the layer to mapCanvas)
         self.layer = layer
-
         if category == 'hazard':
             self.hazard_layer = layer
         elif category == 'exposure':
@@ -3068,10 +3050,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             self.aggregation_layer = layer
 
-        self.is_selected_layer_keywordless = not bool(keywords)
+        # Check if the layer is keywordless
+        if keywords and 'keyword_version' in keywords:
+            kw_ver = str(keywords['keyword_version'])
+            self.is_selected_layer_keywordless = bool(
+                compare_version(kw_ver, get_version()) != 0)
+        else:
+            self.is_selected_layer_keywordless = True
 
         desc = self.layer_description_html(layer, keywords)
-
         return True, desc
 
     # noinspection PyPep8Naming
@@ -3175,7 +3162,8 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the category selection changes.
         """
         self.exposure_layer = self.selected_canvas_explayer()
-        lblText = self.get_layer_description_from_canvas(self.exposure_layer)
+        lblText = self.get_layer_description_from_canvas(self.exposure_layer,
+                                                         'exposure')
         self.lblDescribeCanvasExpLayer.setText(lblText)
         self.pbnNext.setEnabled(True)
 
@@ -3330,7 +3318,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         self.aggregation_layer = self.selected_canvas_agglayer()
         lblText = self.get_layer_description_from_canvas(
-            self.aggregation_layer)
+            self.aggregation_layer, 'aggregation')
         self.lblDescribeCanvasAggLayer.setText(lblText)
         self.pbnNext.setEnabled(True)
 
@@ -3737,17 +3725,50 @@ class WizardDialog(QDialog, FORM_CLASS):
     # ===========================
 
     def go_to_step(self, step):
-        """Set the stacked widget to the given step.
+        """Set the stacked widget to the given step, set up the buttons,
+           and run all operations that should start immediately after
+           entering the new step.
 
         :param step: The step number to be moved to.
         :type step: int
         """
         self.stackedWidget.setCurrentIndex(step - 1)
         self.lblStep.clear()
-        self.pbnBack.setEnabled(True)
-        if (step in [step_kw_category, step_fc_function_1] and self.parent_step
-                is None):
-            self.pbnBack.setEnabled(False)
+
+        # Disable the Next button unless new data already entered
+        self.pbnNext.setEnabled(self.is_ready_to_next_step(step))
+
+        # Enable the Back button unless it's not the first step
+        self.pbnBack.setEnabled(
+            step not in [step_kw_category, step_fc_function_1]
+            or self.parent_step is not None)
+
+        # Set Next button label
+        if (step in [step_kw_title, step_fc_analysis] and
+                self.parent_step is None):
+            self.pbnNext.setText(self.tr('Finish'))
+        elif step == step_fc_summary:
+            self.pbnNext.setText(self.tr('Run'))
+        else:
+            self.pbnNext.setText(self.tr('Next'))
+
+        # Run analysis after switching to the new step
+        if step == step_fc_analysis:
+            # self.update_MessageViewer_size()
+            self.setup_and_run_analysis()
+
+        # Set lblSelectCategory label if entering the kw mode
+        # from the ifcw mode
+        if step == step_kw_category and self.parent_step:
+            if self.parent_step in [step_fc_hazlayer_from_canvas,
+                                    step_fc_hazlayer_from_browser]:
+                text_label = category_question_hazard
+            elif self.parent_step in [step_fc_explayer_from_canvas,
+                                      step_fc_explayer_from_browser]:
+                text_label = category_question_exposure
+            else:
+                text_label = category_question_aggregation
+            self.lblSelectCategory.setText(text_label)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -3861,34 +3882,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             # unknown step
             pass
 
-        # Set Next button label
-        if (new_step in [step_kw_title, step_fc_analysis] and
-                self.parent_step is None):
-            self.pbnNext.setText(self.tr('Finish'))
-        elif new_step == step_fc_summary:
-            self.pbnNext.setText(self.tr('Run'))
-        else:
-            self.pbnNext.setText(self.tr('Next'))
-
-        # Disable the Next button unless new data already entered
-        self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
         self.go_to_step(new_step)
-
-        # Run analysis after switching to the new step
-        if new_step == step_fc_analysis:
-            # self.update_MessageViewer_size()
-            self.setup_and_run_analysis()
-
-        if new_step == step_kw_category and self.parent_step:
-            if self.parent_step in [step_fc_hazlayer_from_canvas,
-                                    step_fc_hazlayer_from_browser]:
-                text_label = category_question_hazard
-            elif self.parent_step in [step_fc_explayer_from_canvas,
-                                      step_fc_explayer_from_browser]:
-                text_label = category_question_exposure
-            else:
-                text_label = category_question_aggregation
-            self.lblSelectCategory.setText(text_label)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
