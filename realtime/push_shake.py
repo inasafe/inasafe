@@ -2,6 +2,7 @@
 import json
 import logging
 import os
+import pytz
 import requests
 import re
 
@@ -21,7 +22,6 @@ if 'INASAFE_REALTIME_REST_URL' in os.environ:
     INASAFE_REALTIME_REST_URL = os.environ['INASAFE_REALTIME_REST_URL']
 
 INASAFE_REALTIME_SHAKEMAP_HOOK_URL = None
-
 if 'INASAFE_REALTIME_SHAKEMAP_HOOK_URL' in os.environ:
     INASAFE_REALTIME_SHAKEMAP_HOOK_URL = os.environ[
         'INASAFE_REALTIME_SHAKEMAP_HOOK_URL']
@@ -40,7 +40,7 @@ if 'INASAFE_REALTIME_REST_LOGIN_URL' in os.environ:
     INASAFE_REALTIME_REST_LOGIN_URL = \
         os.environ['INASAFE_REALTIME_REST_LOGIN_URL']
 
-INASAFE_REALTIME_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S %Z'
+INASAFE_REALTIME_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 if 'INASAFE_REALTIME_DATETIME_FORMAT' in os.environ:
     INASAFE_REALTIME_DATETIME_FORMAT = \
         os.environ['INASAFE_REALTIME_DATETIME_FORMAT']
@@ -134,11 +134,18 @@ def notify_realtime_rest(timestamp):
     """
     session = get_realtime_session()
     data = {
-        'timestamp': timestamp.strftime(INASAFE_REALTIME_DATETIME_FORMAT)
+        'timestamp': timestamp.astimezone(tz=pytz.utc).strftime(INASAFE_REALTIME_DATETIME_FORMAT)
     }
-    session.post(INASAFE_REALTIME_SHAKEMAP_HOOK_URL, data=json.dumps(data))
+    cookies = session.get(INASAFE_REALTIME_REST_LOGIN_URL).cookies
+    session.headers['X-CSRFTOKEN'] = cookies.get('csrftoken')
+    response = session.post(
+        INASAFE_REALTIME_SHAKEMAP_HOOK_URL, data=data)
     # We will not handle post error, since we don't need it.
     # It just simply fails
+    if response.status_code != requests.codes.ok:
+        LOGGER.info(
+            'Notify Shakemap Push Failed : Error code %s',
+            response.status_code)
 
 
 def push_shake_event_to_rest(shake_event, fail_silent=True):
