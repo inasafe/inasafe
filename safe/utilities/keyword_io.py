@@ -32,6 +32,9 @@ from PyQt4.QtCore import QObject, QSettings
 from safe.utilities.utilities import (
     read_file_keywords,
     write_keywords_to_file)
+from safe import messaging as m
+from safe.messaging import styles
+from safe.utilities.unicode import get_string
 from safe.common.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
@@ -43,8 +46,9 @@ from safe.storage.metadata_utilities import (
     generate_iso_metadata,
     ISO_METADATA_KEYWORD_TAG)
 from safe.common.utilities import verify
-from safe.definitions import \
-    (inasafe_keyword_version, inasafe_keyword_version_key)
+import safe.definitions
+from safe.definitions import (
+    inasafe_keyword_version, inasafe_keyword_version_key)
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -670,3 +674,111 @@ class KeywordIO(QObject):
             statistics_classes = {}
 
         return statistics_type, statistics_classes
+
+    @staticmethod
+    def definition(keyword):
+        """Given a keyword, try to get a definition dict for it.
+
+        .. versionadded:: 3.2
+
+        Definition dicts are defined in keywords.py. We try to return
+        one if present, otherwise we return none. Using this method you
+        can present rich metadata to the user e.g.
+
+        keyword = 'layer_purpose'
+        kio = safe.utilities.keyword_io.Keyword_IO()
+        definition = kio.definition(keyword)
+        print definition
+
+        :param keyword: A keyword key.
+        :type keyword: str
+
+        :returns: A dictionary containing the matched key definition
+            from definitions.py, otherwise None if no match was found.
+        :rtype: dict, None
+        """
+
+        for item in dir(safe.definitions):
+            if not item.startswith("__"):
+                var = getattr(safe.definitions, item)
+                if isinstance(var, dict):
+                    if var.has_key('key'):
+                        if var['key'] == keyword:
+                            return var
+        return None
+
+    def to_message(self, keywords):
+        """Format keywords as amessage object.
+
+        .. versionadded:: 3.2
+
+        The message object can then be rendered to html, plain text etc.
+
+        :returns: A safe message object containing a table.
+        :rtype: safe.messaging.message
+        """
+        logo_element = m.Brand()
+        preferred_order = [
+            'title',
+            'layer_purpose',
+            'exposure',
+            'hazard',
+            'layer_geometry',
+            'layer_mode']  # everything else in arbitrary order
+        report = m.Message()
+        report.add(logo_element)
+        report.add(m.Heading(self.tr(
+            'Layer keywords:'), **styles.INFO_STYLE))
+        report.add(m.Text(self.tr(
+            'The following keywords are defined for the active layer:')))
+        table = m.Table(style_class='table table-condensed table-striped')
+        # First render out the preferred order keywords
+        for keyword in preferred_order:
+            if keyword in keywords:
+                value = keywords[keyword]
+                row = self._keyword_to_row(keyword, value)
+                keywords.pop(keyword)
+                table.add(row)
+
+        # now render out any remaining keywords in arbitrary order
+        for keyword in keywords:
+            value = keywords[keyword]
+            row = self._keyword_to_row(keyword, value)
+            table.add(row)
+        report.add(table)
+        return report
+
+    def _keyword_to_row(self, keyword, value):
+        """Helper to make a message row from a keyword.
+
+        .. versionadded:: 3.2
+
+        Use this when constructing a table from keywords to display as
+        part of a message object.
+
+        :param keyword: The keyword to be rendered.
+        :type keyword: str
+
+        :param value: Value of the keyword to be rendered.
+        :type value: basestring
+
+        :returns: A row to be added to a messaging table.
+        :rtype: safe.messaging.items.row.Row
+        """
+        row = m.Row()
+        # Translate titles explicitly if possible
+        if keyword == 'title':
+            value = self.tr(value)
+        # we want to show the user the concept name rather than its key
+        # if possible. TS
+        definition = self.definition(keyword)
+        if definition is None:
+            definition = self.tr(keyword.capitalize().replace('_', ' '))
+        else:
+            definition = definition['name']
+        # Add this keyword to report
+        value = get_string(value)
+        key = m.ImportantText(definition)
+        row.add(m.Cell(key))
+        row.add(m.Cell(value))
+        return row
