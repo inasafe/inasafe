@@ -191,7 +191,7 @@ layer_geometry = {
 # Hazard Category
 hazard_category_single_event = {
     'key': 'single_event',
-    'name': tr('Single Event'),
+    'name': tr('Single event'),
     'description': tr(
         '<b>Single event</b> hazard data can be based on either a specific  '
         'event that has happened in the past, for example a flood like '
@@ -201,7 +201,7 @@ hazard_category_single_event = {
 
 hazard_category_multiple_event = {
     'key': 'multiple_event',
-    'name': tr('Multiple Event'),
+    'name': tr('Multiple event'),
     'description': tr(
         '<b>Multiple event</b> hazard data can be based on historical '
         'observations such as a hazard map of all observed volcanic '
@@ -258,7 +258,7 @@ hazard_flood = {
 
 hazard_volcanic_ash = {
     'key': 'volcanic_ash',
-    'name': tr('Volcanic Ash'),
+    'name': tr('Volcanic ash'),
     'description': tr(
         '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
         'and volcanic glass, created during volcanic eruptions, less than '
@@ -311,7 +311,7 @@ hazards = {
 # Exposure
 exposure_land_cover = {
     'key': 'land_cover',
-    'name': tr('Land Cover'),
+    'name': tr('Land cover'),
     'description': tr(
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
@@ -320,7 +320,7 @@ exposure_land_cover = {
 
 exposure_people_in_building = {
     'key': 'people_in_building',
-    'name': tr('People in Buildings'),
+    'name': tr('People in buildings'),
     'description': tr(
         'The <b>people in buildings</b> exposure data is an experimental '
         'data set that assigns the population of a specific administrative '
@@ -367,7 +367,7 @@ exposure_all = [
 # Renamed key from exposure to exposures in 3.2 because key was not unique TS
 exposures = {
     'key': 'exposures',
-    'name': tr('Exposures'),
+    'name': tr('Exposure'),
     'description': tr(
         '<b>Exposure</b> data represents things that are at risk when faced '
         'with a potential hazard. '),
@@ -397,9 +397,9 @@ unit_generic = {
 
 unit_kilogram_per_meter_square = {
     'key': 'kilogram_per_meter_square',
-    'name': tr('Kg/m2'),
-    'plural_name': tr('Kg/m2'),
-    'abbreviation': tr('Kg/m2'),
+    'name': tr('kg/m2'),
+    'plural_name': tr('kg/m2'),
+    'abbreviation': tr('kg/m2'),
     'description': tr(
         '<b>Kilograms per square metre</b> is a metric unit of measure where '
         'the weight is specified according to area.  This unit is relevant '
