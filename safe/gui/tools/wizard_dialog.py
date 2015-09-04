@@ -2818,7 +2818,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                    self.tr('TYPE'), is_raster_layer(layer) and 'raster' or
                    'vector (%s)' % geom_type,
                    self.tr('In the next step you will be able' +
-                           ' to register this layer.'))
+                           ' to assign keywords to this layer.'))
         return desc
 
     def unsuitable_layer_description_html(self, layer, layer_purpose,

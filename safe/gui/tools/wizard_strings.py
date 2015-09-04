@@ -33,7 +33,7 @@ category_question_exposure = tr(
 category_question_aggregation = tr(
     'You have selected a layer that needs to have keywords assigned or '
     'updated. In the next steps you can assign keywords to that layer. '
-    'First you need to confirm the layer is an <b>aggregation,/b> layer.')
+    'First you need to confirm the layer is an <b>aggregation</b> layer.')
 hazard_category_question = tr(
     'What type of <b>hazard scenario</b> does this layer represent? '
     '<p>Does it represent a <b>single event</b> or <b>multiple events</b>?</p>')
