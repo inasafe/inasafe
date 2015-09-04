@@ -3725,17 +3725,50 @@ class WizardDialog(QDialog, FORM_CLASS):
     # ===========================
 
     def go_to_step(self, step):
-        """Set the stacked widget to the given step.
+        """Set the stacked widget to the given step, set up the buttons,
+           and run all operations that should start immediately after
+           entering the new step.
 
         :param step: The step number to be moved to.
         :type step: int
         """
         self.stackedWidget.setCurrentIndex(step - 1)
         self.lblStep.clear()
-        self.pbnBack.setEnabled(True)
-        if (step in [step_kw_category, step_fc_function_1] and self.parent_step
-                is None):
-            self.pbnBack.setEnabled(False)
+
+        # Disable the Next button unless new data already entered
+        self.pbnNext.setEnabled(self.is_ready_to_next_step(step))
+
+        # Enable the Back button unless it's not the first step
+        self.pbnBack.setEnabled(
+            step not in [step_kw_category, step_fc_function_1]
+            or self.parent_step is not None)
+
+        # Set Next button label
+        if (step in [step_kw_title, step_fc_analysis] and
+                self.parent_step is None):
+            self.pbnNext.setText(self.tr('Finish'))
+        elif step == step_fc_summary:
+            self.pbnNext.setText(self.tr('Run'))
+        else:
+            self.pbnNext.setText(self.tr('Next'))
+
+        # Run analysis after switching to the new step
+        if step == step_fc_analysis:
+            # self.update_MessageViewer_size()
+            self.setup_and_run_analysis()
+
+        # Set lblSelectCategory label if entering the kw mode
+        # from the ifcw mode
+        if step == step_kw_category and self.parent_step:
+            if self.parent_step in [step_fc_hazlayer_from_canvas,
+                                    step_fc_hazlayer_from_browser]:
+                text_label = category_question_hazard
+            elif self.parent_step in [step_fc_explayer_from_canvas,
+                                      step_fc_explayer_from_browser]:
+                text_label = category_question_exposure
+            else:
+                text_label = category_question_aggregation
+            self.lblSelectCategory.setText(text_label)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -3849,34 +3882,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             # unknown step
             pass
 
-        # Set Next button label
-        if (new_step in [step_kw_title, step_fc_analysis] and
-                self.parent_step is None):
-            self.pbnNext.setText(self.tr('Finish'))
-        elif new_step == step_fc_summary:
-            self.pbnNext.setText(self.tr('Run'))
-        else:
-            self.pbnNext.setText(self.tr('Next'))
-
-        # Disable the Next button unless new data already entered
-        self.pbnNext.setEnabled(self.is_ready_to_next_step(new_step))
         self.go_to_step(new_step)
-
-        # Run analysis after switching to the new step
-        if new_step == step_fc_analysis:
-            # self.update_MessageViewer_size()
-            self.setup_and_run_analysis()
-
-        if new_step == step_kw_category and self.parent_step:
-            if self.parent_step in [step_fc_hazlayer_from_canvas,
-                                    step_fc_hazlayer_from_browser]:
-                text_label = category_question_hazard
-            elif self.parent_step in [step_fc_explayer_from_canvas,
-                                      step_fc_explayer_from_browser]:
-                text_label = category_question_exposure
-            else:
-                text_label = category_question_aggregation
-            self.lblSelectCategory.setText(text_label)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
