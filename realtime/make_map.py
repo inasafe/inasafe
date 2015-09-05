@@ -142,15 +142,12 @@ def create_shake_events(
     shake_ids = ShakeData.get_list_event_ids_from_folder(working_dir)
     shake_ids.sort()
     shake_ids.reverse()
-    now = datetime.now()
-    date_format = '%Y%m%d%H%M%S'
-    if len(shake_ids) > 0:
-        now = datetime.strptime(shake_ids[0], date_format)
-    before = now - timedelta(minutes=1)
-    before_int = int(before.strftime(date_format))
+    if not shake_ids:
+        return []
+    last_int = int(shake_ids[0])
     # sort descending
     for shake_id in shake_ids:
-        if int(shake_id) > before_int:
+        if last_int - int(shake_id) < 100:
             shake_event = ShakeEvent(
                 working_dir=working_dir,
                 event_id=event_id,
@@ -158,6 +155,8 @@ def create_shake_events(
                 force_flag=force_flag,
                 population_raster_path=population_path)
             shake_events.append(shake_event)
+        else:
+            break
 
     return shake_events
 
@@ -202,4 +201,4 @@ if __name__ == '__main__':
         try:
             process_event(working_dir=working_directory, locale=locale_option)
         except:  # pylint: disable=W0702
-            LOGGER.exception('Process event failed')
+            LOGGER.info('Process event failed')
