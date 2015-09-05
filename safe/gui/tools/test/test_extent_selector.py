@@ -111,6 +111,7 @@ class ExtentSelectorTest(unittest.TestCase):
 
         """
         # Imported here because it is not available in OSX QGIS bundle
+        # pylint: disable=redefined-outer-name
         from PyQt4.QtTest import QTest
 
         # Click the capture button

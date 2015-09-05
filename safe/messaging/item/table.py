@@ -90,3 +90,19 @@ class Table(MessageElement):
         for row in self.rows:
             table += row.to_text()
         return table
+
+    def to_markdown(self):
+        """Render a Table queue as markdown
+
+        :returns: Markdown representation of the Text Table.
+        :rtype: str
+        """
+        raise NotImplementedError('Please Implement this method')
+
+    def to_json(self):
+        """Render a Table queue as JSON
+
+        :returns: Json representation of the Text Table.
+        :rtype: str
+        """
+        raise NotImplementedError('Please Implement this method')

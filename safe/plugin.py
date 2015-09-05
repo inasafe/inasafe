@@ -33,7 +33,7 @@ from PyQt4.QtCore import (
     Qt,
     QSettings)
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QAction, QIcon, QApplication, QWidget
+from PyQt4.QtGui import QAction, QIcon, QApplication
 
 from safe.common.version import release_status
 from safe.common.exceptions import TranslationLoadError

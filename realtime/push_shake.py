@@ -269,6 +269,7 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
                 LOGGER.error(error.message)
             else:
                 raise error
+    # pylint: disable=broad-except
     except Exception as exc:
         if not fail_silent:
             LOGGER.error(exc.message)
