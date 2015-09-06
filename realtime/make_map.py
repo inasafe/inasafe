@@ -144,19 +144,30 @@ def create_shake_events(
     shake_ids.reverse()
     if not shake_ids:
         return []
-    last_int = int(shake_ids[0])
-    # sort descending
-    for shake_id in shake_ids:
-        if last_int - int(shake_id) < 100:
-            shake_event = ShakeEvent(
+
+    if event_id:
+        shake_events.append(
+            ShakeEvent(
                 working_dir=working_dir,
                 event_id=event_id,
                 locale=locale,
                 force_flag=force_flag,
                 population_raster_path=population_path)
-            shake_events.append(shake_event)
-        else:
-            break
+        )
+    else:
+        last_int = int(shake_ids[0])
+        # sort descending
+        for shake_id in shake_ids:
+            if last_int - int(shake_id) < 100:
+                shake_event = ShakeEvent(
+                    working_dir=working_dir,
+                    event_id=shake_id,
+                    locale=locale,
+                    force_flag=force_flag,
+                    population_raster_path=population_path)
+                shake_events.append(shake_event)
+            else:
+                break
 
     return shake_events
 
