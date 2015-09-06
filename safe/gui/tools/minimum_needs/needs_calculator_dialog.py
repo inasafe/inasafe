@@ -133,7 +133,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
                         self.tr(
                             'Please change the value of %1 in attribute '
                             '%s to integer format') % (
-                            population, population_name))
+                                population, population_name))
                     raise ValueError
 
             # Calculate estimated needs based on BNPB Perka 7/2008

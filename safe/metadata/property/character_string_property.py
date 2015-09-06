@@ -11,15 +11,13 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 from types import NoneType
+from safe.metadata.property import BaseProperty
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
-
-from safe.metadata.property import BaseProperty
 
 
 class CharacterStringProperty(BaseProperty):
@@ -35,8 +33,8 @@ class CharacterStringProperty(BaseProperty):
         super(CharacterStringProperty, self).__init__(
             name, value, xml_path, self._allowed_python_types)
 
-    @staticmethod
-    def is_valid(value):
+    @classmethod
+    def is_valid(cls, value):
         # any string sequence is valid.
         return True
 

@@ -140,8 +140,8 @@ class WizardDialogTest(unittest.TestCase):
         chosen_category = 'hazard'
 
         expected_hazard_category_count = 2
-        expected_hazard_categories = ['Single Event', 'Multiple Event']
-        chosen_hazard_category = 'Single Event'
+        expected_hazard_categories = ['Single event', 'Multiple event']
+        chosen_hazard_category = 'Single event'
 
         expected_subcategory_count = 6
         # expected_subcategories = ['flood', 'tsunami']
@@ -430,7 +430,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 3 - select hazard category
-        self.check_current_text('Single Event', dialog.lstHazardCategories)
+        self.check_current_text('Single event', dialog.lstHazardCategories)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -518,8 +518,9 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select multiple_event
-        self.select_from_list_widget('Multiple Event',
-                                     dialog.lstHazardCategories)
+        self.select_from_list_widget(
+            'Multiple event',
+            dialog.lstHazardCategories)
         dialog.pbnNext.click()
 
         # select volcano classified mode
@@ -597,7 +598,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 3 - select hazard category
-        self.check_current_text('Multiple Event', dialog.lstHazardCategories)
+        self.check_current_text('Multiple event', dialog.lstHazardCategories)
 
         # Click Next
         dialog.pbnNext.click()
@@ -795,7 +796,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # choose hazard
         dialog.pbnNext.click()  # choose volcano
-        dialog.pbnNext.click()  # choose multiple event
+        dialog.pbnNext.click()  # choose Multiple event
         dialog.lstUnits.setCurrentRow(1)
         self.check_current_text('Classified', dialog.lstLayerModes)
         dialog.pbnNext.click()  # choose classified
@@ -834,7 +835,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose hazard
-        dialog.pbnNext.click()  # choose multiple event
+        dialog.pbnNext.click()  # choose Multiple event
         dialog.pbnNext.click()  # choose volcano
         dialog.lstLayerModes.setCurrentRow(0)  # choose none
         dialog.pbnNext.click()  # choose none
@@ -894,10 +895,10 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to hazard category
 
-        expected_hazard_categories = ['Multiple Event', 'Single Event']
+        expected_hazard_categories = ['Multiple event', 'Single event']
         self.check_list(expected_hazard_categories, dialog.lstHazardCategories)
 
-        self.check_current_text('Multiple Event', dialog.lstHazardCategories)
+        self.check_current_text('Multiple event', dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # go to layer mode
 
@@ -957,7 +958,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_subcategories = [
             u'Earthquake',
             u'Flood',
-            u'Volcanic Ash',
+            u'Volcanic ash',
             u'Tsunami',
             u'Volcano',
             u'Generic']
@@ -977,7 +978,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to hazard category
 
         self.check_current_step(step_kw_hazard_category, dialog)
-        self.select_from_list_widget('Single Event',
+        self.select_from_list_widget('Single event',
                                      dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # Go to layer mode
@@ -1035,8 +1036,8 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # Go to hazard category
 
-        # choosing single event
-        self.select_from_list_widget('Single Event',
+        # choosing Single event
+        self.select_from_list_widget('Single event',
                                      dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # Go to layer mode
@@ -1189,7 +1190,7 @@ class WizardDialogTest(unittest.TestCase):
             'Tsunami',
             'Earthquake',
             'Volcano',
-            'Volcanic Ash',
+            'Volcanic ash',
             'Generic']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
@@ -1197,8 +1198,8 @@ class WizardDialogTest(unittest.TestCase):
         self.select_from_list_widget('Flood', dialog.lstSubcategories)
         dialog.pbnNext.click()  # go to hazard category
 
-        # choosing single event scenario
-        self.select_from_list_widget('Single Event',
+        # choosing Single event scenario
+        self.select_from_list_widget('Single event',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()  # Go to mode
 
@@ -1293,7 +1294,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to hazard category
 
         self.check_current_step(step_kw_hazard_category, dialog)
-        self.select_from_list_widget('Multiple Event',
+        self.select_from_list_widget('Multiple event',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()  # go to mode
 
