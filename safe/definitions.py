@@ -216,8 +216,8 @@ hazard_category = {
     'key': 'hazard_category',
     'name': tr('Scenario'),
     'description': tr(
-        'This describes the type of hazard scenario that is represented by the '
-        'layer. There are two possible values for this attribute, single '
+        'This describes the type of hazard scenario that is represented by '
+        'the layer. There are two possible values for this attribute, single '
         'event and multiple event.'),
     'types': [
         hazard_category_single_event,

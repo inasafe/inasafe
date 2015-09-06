@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from cmath import isnan
-
 __author__ = 'lucernae'
 __date__ = '24/03/15'
 
