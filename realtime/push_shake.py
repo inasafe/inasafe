@@ -4,7 +4,6 @@ import logging
 import os
 import pytz
 import requests
-import re
 
 from realtime.utilities import realtime_logger_name
 from realtime.exceptions import RESTRequestFailedError

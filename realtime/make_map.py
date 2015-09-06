@@ -27,7 +27,6 @@ from zipfile import BadZipfile
 from realtime.utilities import data_dir, is_event_id, realtime_logger_name
 from realtime.shake_event import ShakeEvent
 from realtime.exceptions import EmptyShakeDirectoryError
-from datetime import datetime, timedelta
 from realtime.push_shake import push_shake_event_to_rest
 from realtime.shake_data import ShakeData
 
