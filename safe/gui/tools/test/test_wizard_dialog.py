@@ -58,9 +58,20 @@ from safe.gui.tools.wizard_dialog import (
     step_kw_unit,
     step_kw_extrakeywords,
     step_kw_aggregation,
-    step_kw_field)
+    step_kw_field,
+    step_fc_function_2,
+    step_fc_function_3,
+    step_fc_hazlayer_origin,
+    step_fc_hazlayer_from_canvas,
+    step_fc_explayer_origin,
+    step_fc_explayer_from_canvas,
+    step_fc_agglayer_origin,
+    step_fc_extent,
+    step_fc_params)
 from safe.utilities.keyword_io import KeywordIO
+from safe.gui.widgets.dock import Dock
 
+DOCK = Dock(IFACE)
 
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
@@ -1418,6 +1429,7 @@ class WizardDialogTest(unittest.TestCase):
         # Initialize dialog
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
+        dialog.dock = DOCK
         dialog.set_function_centric_mode()
 
         # Load test layers
@@ -1470,6 +1482,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step_fc_function_2: test number of functions for raster flood
         # and polygon structure
+        self.check_current_step(step_fc_function_2, dialog)
         dialog.tblFunctions2.setCurrentCell(3, 0)
 
         count = len(dialog.selected_functions_2())
@@ -1484,6 +1497,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step_fc_function_3: test number of available functions
+        self.check_current_step(step_fc_function_3, dialog)
         count = dialog.lstFunctions.count()
         message = ('Invalid functions count on the list! There should be %d '
                    'while there were: %d') % (expected_functions_count, count)
@@ -1496,7 +1510,7 @@ class WizardDialogTest(unittest.TestCase):
         message = 'Expected flood impact function not found: %s' % chosen_if
         self.assertTrue(chosen_if in flood_ifs, message)
 
-        # step_fc_function: select FloodRasterBuildingImpactFunction and
+        # step_fc_function_3: select FloodRasterBuildingImpactFunction and
         # press ok
         chosen_if_row = flood_ifs.index(chosen_if)
         dialog.lstFunctions.setCurrentRow(chosen_if_row)
@@ -1520,9 +1534,11 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.rbHazLayerFromCanvas.isChecked(), message)
 
         # step_fc_hazlayer_origin: press ok
+        self.check_current_step(step_fc_hazlayer_origin, dialog)
         dialog.pbnNext.click()
 
         # step_fc_hazlayer_from_canvas: press ok
+        self.check_current_step(step_fc_hazlayer_from_canvas, dialog)
         dialog.pbnNext.click()
 
         # step_fc_explayer_from_canvas: test the lstCanvasExpLayers state
@@ -1543,9 +1559,11 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.rbExpLayerFromCanvas.isChecked(), message)
 
         # step_fc_explayer_origin: press ok
+        self.check_current_step(step_fc_explayer_origin, dialog)
         dialog.pbnNext.click()
 
         # step_fc_explayer_from_canvas: press ok
+        self.check_current_step(step_fc_explayer_from_canvas, dialog)
         dialog.pbnNext.click()
 
         # step_fc_explayer_from_canvas: test the lstCanvasAggLayers state
@@ -1567,14 +1585,17 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.rbAggLayerFromBrowser.isChecked(), message)
 
         # step_fc_agglayer_origin: switch to no aggregation and press ok
+        self.check_current_step(step_fc_agglayer_origin, dialog)
         dialog.rbAggLayerNoAggregation.click()
         dialog.pbnNext.click()
 
         # step_fc_extent: switch to layer's extent and press ok
-        dialog.rbExtentLayer.click()
+        self.check_current_step(step_fc_extent, dialog)
+        dialog.extent_dialog.hazard_exposure_only.click()
         dialog.pbnNext.click()
 
         # step_fc_params: press ok (already covered by the relevant test)
+        self.check_current_step(step_fc_params, dialog)
         dialog.pbnNext.click()
 
         # step_fc_summary: test minimum needs text
