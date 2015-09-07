@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="id">
+<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -1126,52 +1125,52 @@
         <translation>Bangunan yang terdampak</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="221"/>
+        <location filename="impact_function.py" line="219"/>
         <source>Buildings value ($M)</source>
         <translation>Nilai bangunan ($M)</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="223"/>
+        <location filename="impact_function.py" line="221"/>
         <source>Contents value ($M)</source>
         <translation>Rincian harga ($M)</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="67"/>
+        <location filename="impact_function.py" line="65"/>
         <source>High hazard is defined as shake levels greater than %i on the MMI scale.</source>
         <translation>Ancaman tinggi didefinisikan sebagai getaran tanah lebih dari %i pada skala MMI.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="74"/>
+        <location filename="impact_function.py" line="72"/>
         <source>Medium hazard is defined as shake levels between %i and %i on the MMI scale.</source>
         <translation>Ancaman menengah didefinisikan sebagai getaran tanah antara %i dan %i pada skala MMI.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="79"/>
+        <location filename="impact_function.py" line="77"/>
         <source>Low hazard is defined as shake levels between %i and %i on the MMI scale.</source>
         <translation>Ancaman rendah didefinisikan sebagai getaran tanah antara %i dan %i pada skala MMI.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="82"/>
+        <location filename="impact_function.py" line="80"/>
         <source>Values are in units of 1 million Australian Dollars</source>
         <translation>Nilai dalam satuan 1 juta Dolar Australia</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="251"/>
+        <location filename="impact_function.py" line="249"/>
         <source>Building affected by earthquake</source>
         <translation>Bangunan yang terkena dampak oleh gempa bumi</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="252"/>
+        <location filename="impact_function.py" line="250"/>
         <source>The level of the impact is according to the threshold the user input.</source>
         <translation>Tingkat keterdampakan berdasarkan dari ambang batas masukan (input) pengguna.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="254"/>
+        <location filename="impact_function.py" line="252"/>
         <source>(mmi)</source>
         <translation>(mmi)</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="255"/>
+        <location filename="impact_function.py" line="253"/>
         <source>Impact level</source>
         <translation>Tingkat dampak</translation>
     </message>
@@ -1521,62 +1520,62 @@
         <translation>(tergenang, basah, atau kering)</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="337"/>
+        <location filename="definitions.py" line="336"/>
         <source>The &lt;b&gt;population&lt;/b&gt; describes the people that might be exposed to a particular hazard.</source>
         <translation>&lt;b&gt;Penduduk&lt;/b&gt; mendeskripsikan orang yang mungkin akan terdampak suatu anaman. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="345"/>
+        <location filename="definitions.py" line="344"/>
         <source>A &lt;b&gt;road&lt;/b&gt; is a defined route used by a vehicle or people to travel between two or more points.</source>
         <translation>&lt;b&gt;Jalan&lt;/b&gt; didefinisikan sebagai jalur yang digunakan oleh kendaraan atau orang untuk pergi dari satu titik ke satu titik lainnya atau lebih. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="353"/>
+        <location filename="definitions.py" line="352"/>
         <source>A &lt;b&gt;structure&lt;/b&gt; can be any relatively permanent man made feature such as a building (an enclosed structure with walls and a roof) or a telecommunications facility or a bridge.</source>
         <translation>&lt;b&gt;Struktur&lt;/b&gt; dapat berupa apapun yang berhubungan dengan buatan manusia yang sifatnya permanen misalnya sebuah bangunan (sebuah struktur tertutup dengan dinding dan atap) atau sebuah fasilitas komunikasi atau sebuah jembatan. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="393"/>
+        <location filename="definitions.py" line="392"/>
         <source>generic</source>
         <translation>umum</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="242"/>
+        <location filename="definitions.py" line="241"/>
         <source>An &lt;b&gt;earthquake&lt;/b&gt; describes the sudden violent shaking of the ground that occurs as a result of volcanic activity or movement in the earth&apos;s crust.</source>
         <translation>&lt;b&gt;Gempa bumi&lt;/b&gt; mendeskripsikan suatu kejadian dimana permukaan tanah bergetar kuat secara tiba-tiba berdasarkan aktivitas gunung berapi atau pergerakan lempeng bumi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="251"/>
+        <location filename="definitions.py" line="250"/>
         <source>A &lt;b&gt;flood&lt;/b&gt; describes the inundation of land that is normally dry by a large amount of water. For example: A &lt;b&gt;flood&lt;/b&gt; can occur after heavy rainfall, when a river overflows its banks or when a dam breaks. The effect of a &lt;b&gt;flood&lt;/b&gt; is for land that is normally dry to become wet.</source>
         <translation>&lt;b&gt;Banjir&lt;/b&gt; mendeskripsikan terjadinya genangan pada suatu lahan kering oleh air dalam jumlah besar. Sebagai contoh: Suatu &lt;b&gt;banjir&lt;/b&gt; dapat terjadi setelah hujan turun secara deras, ketika sebuah sungai meluap dari bataran atau ketika bendungan rusak. Efek dari &lt;b&gt;flood&lt;/b&gt; adalah lahan yang normalnya kering menjadi basah. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="272"/>
+        <location filename="definitions.py" line="271"/>
         <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an under water earthquake or volcano.A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
         <translation>&lt;b&gt;Tsunami&lt;/b&gt; mendeskripsikan sebuah atau beberapa seri gelombang laut yang besar, atau gelombang yang biasanya disebabkan oleh gempa bumi bawah laut atau gunung berapi. &lt;b&gt;Tsunami&lt;/b&gt; di laut mungkin tidak dapat terdeteksi tetapi gelombang &lt;b&gt;tsunami&lt;/b&gt;  yang menghantam daratan dapat menyebabkan kerusakan yang besar dan banjir. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="283"/>
+        <location filename="definitions.py" line="282"/>
         <source>A &lt;b&gt;volcano&lt;/b&gt; describes a mountain which has a vent through which rock fragments, ash, lava, steam and gases can be ejected from below the earth&apos;s surface. The type of material ejected depends on the type of &lt;b&gt;volcano&lt;/b&gt;.</source>
         <translation>&lt;b&gt;Gunung berapi&lt;/b&gt; mendeskripsikan sebuah gunung yang memiliki sebuah ventilasi dimana fragmen-fragmen batuan, debu, lava, uap dan gas dari bawah permukaan bumi dapat dikeluarkan dari ventilasi tersebut. Tipe material yang dikeluarkan tergantung dari tipe  &lt;b&gt;gunung berapi&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="383"/>
+        <location filename="definitions.py" line="382"/>
         <source>feet</source>
         <translation>kaki</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="423"/>
+        <location filename="definitions.py" line="422"/>
         <source>metres</source>
         <translation>meter</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="444"/>
+        <location filename="definitions.py" line="443"/>
         <source>MMI</source>
         <translation>MMI</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="445"/>
+        <location filename="definitions.py" line="444"/>
         <source>The &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; scale describes the intensity of ground shaking from a earthquake based on the effects observed by people at the surface.</source>
         <translation>Skala &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; mendeskripsikan intensitas getaran tanah dari sebuah kejadian gempa bumi berdasarkan efek yang diamati oleh orang-orang di permukaan. </translation>
     </message>
@@ -1676,7 +1675,7 @@
         <translation>Penduduk yang terdampak oleh setiap kelas</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="263"/>
+        <location filename="definitions.py" line="262"/>
         <source>&lt;b&gt;Volcanic ash&lt;/b&gt; describes fragments of pulverized rock, minerals and volcanic glass, created during volcanic eruptions, less than 2 mm (0.079 inches) in diameter</source>
         <translation>&lt;b&gt;Abu vulkanik&lt;/b&gt; mendeskripsikan pecahan dari batuan bubuk, mineral, dan kaca vulkanik, yang dibuat selama letusan gunung berapi, dan memiliki diameter kurang dari 2 mm (0.0079) inchi</translation>
     </message>
@@ -2311,35 +2310,35 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>yang menunjukan Distrika (distrik) di</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2506"/>
+        <location filename="wizard_dialog.py" line="2507"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the %s for hazard if needed)</source>
         <translation>Saya ingin menggunakan lapisan ancaman yang telah dimuat di QGIS
 (munculkan %s untuk ancaman jika diperlukan)</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2513"/>
+        <location filename="wizard_dialog.py" line="2514"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation>Saya ingin menggunakan lapisan ancaman yang telah dimuat di QGIS
 (tidak ditemukan lapisan yang sesuai)</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3120"/>
+        <location filename="wizard_dialog.py" line="3121"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the %s for exposure if needed)</source>
         <translation>Saya ingin menggunakan lapisan keterpaparan yang telah dimuat di QGIS
 (munculkan %s untuk keterpaparan jika diperlukan)</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3129"/>
+        <location filename="wizard_dialog.py" line="3130"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation>Saya ingin menggunakan lapisan keterpaparan yang telah dimuat di QGIS
 (tidak ditemuakn lapisan yang sesuai)</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3311"/>
+        <location filename="wizard_dialog.py" line="3312"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation>Saya ingin menggunakan lapisan agregasi yang telah dimuat di QGIS
@@ -2396,7 +2395,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Sebuah &lt;b&gt;satuan&lt;/b&gt; adalah satuan ukuran standar tertentu yang digunakan untuk menghitung jatah perorangan. Sebagai contoh, saat perencanaan jatah air maka satuannya menjadi liter.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="397"/>
+        <location filename="definitions.py" line="727"/>
         <source>Units</source>
         <translation>Satuan</translation>
     </message>
@@ -2691,7 +2690,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Sebuah layer &lt;b&gt;ancaman&lt;/b&gt; menggambarkan sesuatu yang akan berdampak pada penduduk, infrastruktur atau selimut lahan  di sebuah area. Sebagai contoh; banjir, gempa bumi, tsunami, dan gunung berapi merupakan contoh dari ancaman.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="52"/>
+        <location filename="definitions.py" line="370"/>
         <source>Exposure</source>
         <translation>Keterpaparan</translation>
     </message>
@@ -2704,11 +2703,6 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <location filename="definitions.py" line="61"/>
         <source>An &lt;b&gt;aggregation&lt;/b&gt; layer represents regions that can be used to summarise impact analysis results. For example, we might summarise the affected people after a flood according to administration boundaries.</source>
         <translation>Sebuah lapisan &lt;b&gt;agregasi&lt;/b&gt; merepresentasikan wilayah-wilyah yang dapat Anda gunakan untuk membuat ringkasan hasil analisis. Sebagai contoh, kita bisa membuat ringkasan penduduk terdampak setelah banjir berdasarkan batas-batas kabupaten.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="70"/>
-        <source>Layer Purpose</source>
-        <translation>Maksud Lapisan</translation>
     </message>
     <message>
         <location filename="definitions.py" line="71"/>
@@ -2741,16 +2735,6 @@ In a vector (point) Volcano data the user specified buffer distances will be use
 Sebagai contoh, nilai yang terklasifikasi dalam himpunan data raster banjir dapat mewakili kelas diskrit dimana nilai 1 dapat mewakili kelas dengan kerendaman rendah, nilai 2 dapat mewakili kelas dengan kerendaman sedang dan nilai 3 mewakili kelas dengan tingkat kerendaman tinggi.
 Nilai yang terklasifikasi dalam himpunan data gunung api vektor (poligon) dapat mewakili kelas diskrit dimana nilai I mewakili ancaman gunung api tingkat rendah, nilai II mewakili ancaman gunung api tingkat menengah dan nilai III mewakili ancaman gunung api tingkat tinggi.
 Dalam  data gunung api vektor (titik), pengguna menentukan jarak sangga yang akan digunakan untuk mengklasifikasikan data. Nilai yang terklasifikasi dalam himpunan data paparan vektor dapat berisi tipe bangunan atau tipe jalan.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="125"/>
-        <source>Layer Mode</source>
-        <translation>Mode lapisan</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="126"/>
-        <source>The mode of the layer describes the type of data value in the layer. It can be continuous or classified</source>
-        <translation>Mode dari lapisan menjelaskan tipe dari nilai data dalam lapisan. Mode ini dapat berupa kontinyu ataupun terklasifikasi</translation>
     </message>
     <message>
         <location filename="definitions.py" line="138"/>
@@ -2788,228 +2772,173 @@ Dalam  data gunung api vektor (titik), pengguna menentukan jarak sangga yang aka
         <translation>Lapisan data raster mengandung matriks sel-sel yang diatur menjadi baris dan kolom. Nilai dalam sel mewakili informasi seperti nilai kedalaman banjir atau kelas ancaman.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="179"/>
-        <source>Layer Geometry</source>
-        <translation>Geometri Lapisan</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="180"/>
-        <source>This describes the format and type of the layer. There are four possible values : raster, point, line, and polygon. The last three values are implicitly included in the vector format.</source>
-        <translation>Ini menggambarkan format dan tipe lapisan. Ada empat nilai yang mungkin : raster, titik, garis, dan poligon. Ketiga nilai terakhir secara implisit dimasukkan sebagai format vektor.</translation>
-    </message>
-    <message>
         <location filename="definitions.py" line="195"/>
-        <source>Single Event</source>
-        <translation>Kejadian Tunggal</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="196"/>
         <source>&lt;b&gt;Single event&lt;/b&gt; hazard data can be based on either a specific  event that has happened in the past, for example a flood like Jakarta 2013, or a possible event such as the tsunami that results from an earthquake near Bima that might happen in the future.</source>
         <translation>Data ancaman &lt;b&gt;Peristiwa tunggal&lt;/b&gt; dapat berdasarkan peristiwa spesifik yang telah terjadi di masa lampau, sebagai contoh banjir seperti Jakarta 2013, atau peristiwa lain yang mungkin seperti tsunami yang diakibatkan oleh gempa bumi di sekitar Bima yang mungkin dapat terjadi lagi di masa yang akan datang.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="205"/>
-        <source>Multiple Event</source>
-        <translation>Kejadian Majemuk</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="206"/>
         <source>&lt;b&gt;Multiple event&lt;/b&gt; hazard data can be based on historical observations such as a hazard map of all observed volcanic deposits around a volcano. 
 This type of hazard data shows those locations that might be impacted by a volcanic eruption in the future . Another example might be a probabilistic hazard model that shows the likelihood of a magnitude 7 earthquake happening in the next 50 yrs.</source>
         <translation>Data ancaman &lt;b&gt;peristiwa berlipat&lt;/b&gt; dapat berdasarkan pengamatan historis seperti peta ancaman dari semua simpanan vulkanik yang diamati di sekitar gunung berapi.
 Tipe data ancaman ini menunjukkan lokasi-lokasi yang mungkin terdampak oleh letusan gunung berapi di masa yang akan datang. Contoh lainnya mungkin berupa model ancaman probabilistik yang menunjukkan kecenderungan gempa bumi bermagnitudo 7 terjadi dalam jangka waktu 50 tahun ke depan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="219"/>
-        <source>This describes the category of the hazard that is represented by the layer. There are two possible values for this attribute, single event and multiple event.</source>
-        <translation>Ini menggambarkan kategori ancaman yang diwakili oleh lapisan. Ada dua nilai yang mungkin untuk atribut ini, peristiwa tunggal dan peristiwa berlipat.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="391"/>
+        <location filename="definitions.py" line="390"/>
         <source>Generic</source>
         <translation>Umum</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="233"/>
+        <location filename="definitions.py" line="232"/>
         <source>A &lt;b&gt;generic hazard&lt;/b&gt; can be used for any type of hazard where the data have been classified or generalised. For example: earthquake, flood, volcano, or tsunami.</source>
         <translation>&lt;b&gt;Ancaman umum&lt;/b&gt; dapat digunakan untuk segala tipe ancaman dimana data telah diklasifikasikan atau diperumum. Sebagai contoh: gempa bumi, banjir, gunung berapi, atau tsunami.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="241"/>
+        <location filename="definitions.py" line="240"/>
         <source>Earthquake</source>
         <translation>Gempa Bumi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="250"/>
+        <location filename="definitions.py" line="249"/>
         <source>Flood</source>
         <translation>Banjir</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="262"/>
-        <source>Volcanic Ash</source>
-        <translation>Abu Vulkanik</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="271"/>
+        <location filename="definitions.py" line="270"/>
         <source>Tsunami</source>
         <translation>Tsunami</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="282"/>
+        <location filename="definitions.py" line="281"/>
         <source>Volcano</source>
         <translation>Gunung Berapi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="303"/>
+        <location filename="definitions.py" line="302"/>
         <source>&lt;b&gt;Hazards&lt;/b&gt; (also called disasters) are what we call the data layers that describe the extent and magnitude of natural events (such as earthquakes, tsunamis and volcanic eruptions) that could potentially cause an event or series of events that threaten and disrupt the lives and livelihoods of people.</source>
         <translation>&lt;b&gt;Ancaman&lt;/b&gt; (atau bisa juga disebut bencana) adalah lapisan data yang menggambarkan luasan dan magnitudo peristiwa alam (seperti gempa bumi, tsunami dan letusan gunung api) yang dapat mengakibatkan peristiwa atau serangkaian peristiwa yang mengancam dan merusak kehidupan orang banyak.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="315"/>
-        <source>Land Cover</source>
-        <translation>Selimut Lahan</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="316"/>
         <source>The &lt;b&gt;land cover&lt;/b&gt; exposure data describes features on the surface of the earth that might be exposed to a particular  hazard. This might include crops, forest and urban areas. </source>
         <translation>Paparan &lt;b&gt;selimut lahan&lt;/b&gt; menjelaskan fitur yang ada pada permukaan bumi yang mungkin terpapar ancaman tertentu. Hal ini mencakup ladang, hutan dan wilayah berpenghuni.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="324"/>
-        <source>People in Buildings</source>
-        <translation>Penduduk di Bangunan</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="325"/>
         <source>The &lt;b&gt;people in buildings&lt;/b&gt; exposure data is an experimental data set that assigns the population of a specific administrative area to the buildings with a residential function in that area.
 The process of assigning people to buildings assumes that all people and buildings in the area are mapped. There are no InaSAFE impact functions that use this exposure data yet.</source>
         <translation>Data paparan &lt;b&gt;orang di bangunan&lt;/b&gt; adalah himpunan data eksperimen yang mencantumkan populasi wilayah administratif tertentu pada bangunan yang dapat dihuni dalam suatu wilayah.
 Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua orang dan bangunan di wilayah tersebut telah dipetakan. Tidak ada fungsi dampak InaSAFE yang bisa menggunakan data paparan ini untuk saat ini.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="344"/>
+        <location filename="definitions.py" line="343"/>
         <source>Road</source>
         <translation>Jalan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="352"/>
+        <location filename="definitions.py" line="351"/>
         <source>Structure</source>
         <translation>Bangunan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="372"/>
+        <location filename="definitions.py" line="371"/>
         <source>&lt;b&gt;Exposure&lt;/b&gt; data represents things that are at risk when faced with a potential hazard. </source>
         <translation>Data &lt;b&gt;paparan&lt;/b&gt; mewakili hal-hal yang berresiko terpengaruh oleh ancaman.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="381"/>
+        <location filename="definitions.py" line="380"/>
         <source>Feet</source>
         <translation>Kaki</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="384"/>
+        <location filename="definitions.py" line="383"/>
         <source>&lt;b&gt;Feet&lt;/b&gt; are an imperial unit of measure. There are 12 inches in 1 foot and 3 feet in 1 yard.</source>
         <translation>&lt;b&gt;Kaki&lt;/b&gt; adalah satuan besaran imperial. Ada 12 inchi dalam 1 kaki dan 3 kaki dalam 1 yard.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="394"/>
+        <location filename="definitions.py" line="393"/>
         <source>A generic unit for value that does not have unit or we do not know about the unit. It also can be used for normalised values.</source>
         <translation>Satuan umum untuk nilai yang tidak memiliki satuan atau belum diketahui satuannya. Bisa juga digunakan untuk nilai yang ternormalisasi.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="403"/>
-        <source>Kg/m2</source>
-        <translation>Kg/m2</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="404"/>
         <source>&lt;b&gt;Kilograms per square metre&lt;/b&gt; is a metric unit of measure where the weight is specified according to area.  This unit is relevant for hazards such as volcanic ash.</source>
         <translation>&lt;b&gt;Kilograms per meter kuadrat&lt;/b&gt; adalah satuan besaran metrik dimana beban diperuntukkan menurut wilayahnya. Satuan ini bersangkutan dengan ancaman seperti abu vulkanik.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="412"/>
+        <location filename="definitions.py" line="411"/>
         <source>Kilometres</source>
         <translation>Kilometer</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="413"/>
+        <location filename="definitions.py" line="412"/>
         <source>kilometres</source>
         <translation>kilometer</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="414"/>
+        <location filename="definitions.py" line="413"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="415"/>
+        <location filename="definitions.py" line="414"/>
         <source>&lt;b&gt;Kilometres&lt;/b&gt; are a metric unit of measure. There are 1000 metres in 1 kilometre (km).</source>
         <translation>&lt;b&gt;Kilometer&lt;/b&gt; merupakan satuan besaran metrik. Ada 1000 meter dalam 1 kilometer (km).</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="422"/>
+        <location filename="definitions.py" line="421"/>
         <source>Metres</source>
         <translation>Meter</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="424"/>
+        <location filename="definitions.py" line="423"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="425"/>
+        <location filename="definitions.py" line="424"/>
         <source>&lt;b&gt;Metres&lt;/b&gt; are a metric unit of measure. There are 100 centimetres in 1 metre.</source>
         <translation>&lt;b&gt;Meter&lt;/b&gt; merupakan sebuah unit besaran metrik. Ada 100 sentimeter dalam 1 meter.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="432"/>
+        <location filename="definitions.py" line="431"/>
         <source>Millimetres</source>
         <translation>Milimeter</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="433"/>
+        <location filename="definitions.py" line="432"/>
         <source>millimetres</source>
         <translation>milimeter</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="434"/>
+        <location filename="definitions.py" line="433"/>
         <source>mm</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="435"/>
+        <location filename="definitions.py" line="434"/>
         <source>&lt;b&gt;Millimetres&lt;/b&gt; are a metric unit of measure. There are 1000 millimetres in 1 metre.</source>
         <translation>&lt;b&gt;Milimeter&lt;/b&gt; adalah satuan besaran metrik. Ada 1000 milimeter dalam 1 meter.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="453"/>
+        <location filename="definitions.py" line="452"/>
         <source>Percentage</source>
         <translation>Persentase</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="454"/>
+        <location filename="definitions.py" line="453"/>
         <source>percentages</source>
         <translation>persentase</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="455"/>
+        <location filename="definitions.py" line="454"/>
         <source>%%</source>
         <translation>%%</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="456"/>
+        <location filename="definitions.py" line="455"/>
         <source>Percentage values ranges from 0 to 100. It represents a ratio of hundred.</source>
         <translation>Nilai persentase berkisar antara 0 dan 100. Nilai ini mewakili nisbah dari 100.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="463"/>
-        <source>Continuous Hazard Unit</source>
-        <translation>Satuan Ancaman Kontinyu</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="464"/>
-        <source>Continuous hazard unit is the unit used for continuous layer mode.</source>
-        <translation>Satuan ancaman kontinyu adalah satuan yang digunakan untuk mode lapisan kontinyu.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="635"/>
@@ -3092,16 +3021,6 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
         <translation>kering</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="591"/>
-        <source>Vector Hazard Classification</source>
-        <translation>Klasifikasi Ancaman Vektor</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="592"/>
-        <source>Vector Hazard Classification is a way to classify a value in one of the attributes or fields in a vector layer.</source>
-        <translation>Klasifikasi Ancaman Vektor merupakan cara untuk mengklasifikasikan nilai untuk salah satu atribut atau kolom dalam lapisan vektor.</translation>
-    </message>
-    <message>
         <location filename="definitions.py" line="636"/>
         <source>This is a ternary description for an area. The area is classified as either a &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt; hazard class.</source>
         <translation>Ini merupakan deskripsi ternari untuk wilayah. Suatu wilayah diklasifikasikan sebagai kelas ancaman &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;menengah&lt;/b&gt;, atau &lt;b&gt;tinggi&lt;/b&gt;.</translation>
@@ -3110,11 +3029,6 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
         <location filename="definitions.py" line="643"/>
         <source>The highest hazard classification.</source>
         <translation>Pengklasifikasian ancaman tertinggi.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="651"/>
-        <source>The medium hazard classification.</source>
-        <translation>Pengklasifikasian ancaman menengah.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="659"/>
@@ -3130,16 +3044,6 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
         <location filename="definitions.py" line="670"/>
         <source>This is a binary description for an area. The area is either &lt;b&gt;wet&lt;/b&gt; (affected by tsunami) or &lt;b&gt;dry&lt;/b&gt; (not affected by tsunami). This unit does not describe how &lt;b&gt;wet&lt;/b&gt; or &lt;b&gt;dry&lt;/b&gt; an area is.</source>
         <translation>Ini adalah deskripsi biner untuk wilayah. Wilayah bisa berupa &lt;b&gt;basah&lt;/b&gt; (terdampak oleh tsunami) atau &lt;b&gt;kering&lt;/b&gt; (tidak terdampak oleh tsunami). Satuan ini tidak mendeskripsikan seberapa &lt;b&gt;basah&lt;/b&gt; atau &lt;b&gt;kering&lt;/b&gt; wilayah tersebut.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="697"/>
-        <source>Raster Hazard Classification</source>
-        <translation>Klasifikasi Ancaman Raster</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="698"/>
-        <source>Raster Hazard Classification is a way to classify the cell values in a raster layer.</source>
-        <translation>Klasifikasi Ancaman Raster merupakan cara untuk mengklasifikasikan nilai sel dalam lapisan raster.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="713"/>
@@ -3162,19 +3066,9 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
         <translation>Jumlah orang (atau objek lain) dalam wilayah tertentu.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="727"/>
-        <source>Exposure Unit</source>
-        <translation>Satuan Paparan</translation>
-    </message>
-    <message>
         <location filename="definitions.py" line="728"/>
         <source>Exposure unit defines the unit for the exposure, for example people can either be measured as count or density (count per area.</source>
         <translation>Satuan paparan menentukan satuan dari paparannya, sebagai contoh, orang dapat diukur sebagai jumlah ataupun (kepadatan per wilayah).</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="740"/>
-        <source>Structure class field</source>
-        <translation>Kolom kelas struktur</translation>
     </message>
     <message>
         <location filename="definitions.py" line="741"/>
@@ -3182,19 +3076,9 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
         <translation>Atribut tempat tipe struktur didefinisikan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="746"/>
-        <source>Road class field</source>
-        <translation>Kolom kelas jalan </translation>
-    </message>
-    <message>
         <location filename="definitions.py" line="747"/>
         <source>Attribute where the road type is defined.</source>
         <translation>Atribut tempat tipe jalan didefinisikan.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="754"/>
-        <source>Volcano name attribute</source>
-        <translation>Atribut nama gunung api</translation>
     </message>
     <message>
         <location filename="definitions.py" line="756"/>
@@ -3587,7 +3471,7 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
         <translation>Diagnosa</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3303"/>
+        <location filename="wizard_dialog.py" line="3304"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the %s for aggregation if needed)</source>
         <translation>Saya ingin menggunakan lapisan agregasi yang telah dimuat di QGIS
@@ -3740,24 +3624,119 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
         <translation>Anda telah memilih lapisan yang memerlukan pemberian atau pembaharuan kata kunci. Di langkah selanjutnya Anda dapat memberikan kata kunci untuk lapisan tersebut. Sebelumnya Anda perlu menetapkan bahwa lapisan ini adalah lapisan agregasi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="302"/>
+        <location filename="definitions.py" line="301"/>
         <source>Hazards</source>
         <translation>Ancaman</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="371"/>
-        <source>Exposures</source>
-        <translation>Keterpaparan</translation>
+        <location filename="definitions.py" line="70"/>
+        <source>Purpose</source>
+        <translation type="unfinished">Tujuan</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="125"/>
+        <source>Data type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="126"/>
+        <source>The data type describes the values in the layer. Values can be continuous or classified</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="179"/>
+        <source>Geometry</source>
+        <translation type="unfinished">Geometri</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="180"/>
+        <source>Layer geometry can be either raster or vector. There are three possible vector geometries: point, line, and polygon. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="194"/>
+        <source>Single event</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="204"/>
+        <source>Multiple event</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="217"/>
+        <source>Scenario</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="218"/>
+        <source>This describes the type of hazard scenario that is represented by the layer. There are two possible values for this attribute, single event and multiple event.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="261"/>
+        <source>Volcanic ash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="314"/>
+        <source>Land cover</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="323"/>
+        <source>People in buildings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="402"/>
+        <source>kg/m2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="463"/>
+        <source>Hazard units are used for continuous data. Examples of hazard units include metres and feet. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="697"/>
+        <source>Classes</source>
+        <translation type="unfinished">Kelas-kelas</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="592"/>
+        <source>Hazard classes are a way to group the values in one of the attributes or fields in a vector layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="651"/>
+        <source>The middle hazard classification.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="698"/>
+        <source>Hazard classes are a way to classify the cell values in a raster layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="746"/>
+        <source>Attribute field</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="754"/>
+        <source>Name field</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="definitions.py" line="763"/>
-        <source>Vector classes</source>
-        <translation>Kelas-kelas vektor</translation>
+        <source>Attribute values</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="definitions.py" line="764"/>
-        <source>Vector classes are used to group features with similar meanings. </source>
-        <translation>Kelas-kelas vektor digunakan untuk mengelompokan fitur yang mempunyai kemiripan arti.</translation>
+        <source>Attribute values identify features with similar meanings. For examplebuilding attributes may include schools and hospitals. </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3769,7 +3748,7 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
     </message>
     <message>
         <location filename="about_dialog.py" line="76"/>
-        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
+        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
         <translation>Tombol Edit oleh Hugo GarduÃ±o dari The Noun Project</translation>
     </message>
     <message>
@@ -3889,7 +3868,7 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
-    <message utf8="true">
+    <message encoding="UTF-8">
         <location filename="about_dialog_base.ui" line="125"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -4483,7 +4462,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="test_aggregator.py" line="101"/>
-        <source>DístrÜt&apos;s of Jakarta</source>
+        <source>D&#xed;str&#xdc;t&apos;s of Jakarta</source>
         <translation>DístrÜt&apos;s Jakarta</translation>
     </message>
 </context>
@@ -5321,12 +5300,12 @@ ke
         <translation>Path basis data kata kunci: %s</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="729"/>
+        <location filename="keyword_io.py" line="728"/>
         <source>Layer keywords:</source>
         <translation>Kata kunci lapisan:</translation>
     </message>
     <message>
-        <location filename="keyword_io.py" line="731"/>
+        <location filename="keyword_io.py" line="730"/>
         <source>The following keywords are defined for the active layer:</source>
         <translation>Kata kunci berikut ini dipunyai oleh layer yang aktif:</translation>
     </message>
@@ -6637,244 +6616,244 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WizardDialog</name>
     <message>
-        <location filename="wizard_dialog.py" line="1155"/>
+        <location filename="wizard_dialog.py" line="1156"/>
         <source>Field type</source>
         <translation>Tipe field</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1156"/>
+        <location filename="wizard_dialog.py" line="1157"/>
         <source>Unique values: %s</source>
         <translation>Nilai unik: %s</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3762"/>
+        <location filename="wizard_dialog.py" line="3763"/>
         <source>Finish</source>
         <translation>Selesai</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3917"/>
+        <location filename="wizard_dialog.py" line="3918"/>
         <source>Next</source>
         <translation>Lanjut</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4413"/>
+        <location filename="wizard_dialog.py" line="4414"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4413"/>
+        <location filename="wizard_dialog.py" line="4414"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation>Terjadi kesalahan saat penyimpanan kata kunci (keyword):
 %s</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1809"/>
+        <location filename="wizard_dialog.py" line="1810"/>
         <source>Use default</source>
         <translation>Pergunakan default</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4435"/>
+        <location filename="wizard_dialog.py" line="4436"/>
         <source>Title of the layer.</source>
         <translation>Judul layer.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4436"/>
+        <location filename="wizard_dialog.py" line="4437"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation>Silahkan catat siapa yang memiliki layer ini, misalnya OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4439"/>
+        <location filename="wizard_dialog.py" line="4440"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation>Kapan data ini dikumpulkan atau didownload, misalnya 1-Mei-2014</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4441"/>
+        <location filename="wizard_dialog.py" line="4442"/>
         <source>What is the scale of this layer?</source>
         <translation>Apa skala dari layer ini?</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4442"/>
+        <location filename="wizard_dialog.py" line="4443"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
         <translation>Apakah pemilik layer memiliki situs sendiri misalnya www.openstreetmap.org</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3804"/>
+        <location filename="wizard_dialog.py" line="3805"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation>Jumlah dari rasio umur default adalah %s dan lebih dari 1. Silahkan atur rasio umur default sehingga mereka tidak lebih dari 1.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3629"/>
+        <location filename="wizard_dialog.py" line="3630"/>
         <source>no aggregation</source>
         <translation>tanpa agregasi</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3764"/>
+        <location filename="wizard_dialog.py" line="3765"/>
         <source>Run</source>
         <translation>Hitung</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3631"/>
+        <location filename="wizard_dialog.py" line="3632"/>
         <source>Please ensure the following information is correct and press Run.</source>
         <translation>Pastikan informasi berikut benar dan tekan Jalan.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3636"/>
+        <location filename="wizard_dialog.py" line="3637"/>
         <source>impact function</source>
         <translation>fungsi dampak</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3636"/>
+        <location filename="wizard_dialog.py" line="3637"/>
         <source>hazard layer</source>
         <translation>layer ancaman</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3636"/>
+        <location filename="wizard_dialog.py" line="3637"/>
         <source>exposure layer</source>
         <translation>layer keterpaparan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3636"/>
+        <location filename="wizard_dialog.py" line="3637"/>
         <source>aggregation layer</source>
         <translation>layer agregasi</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3515"/>
+        <location filename="wizard_dialog.py" line="3516"/>
         <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
         <translation>Silahkan set parameter fungsi dampak.&lt;br/&gt;Parameter untuk fungsi dampak &quot;%s&quot; yang dapat dimodifikasi adalah:</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="401"/>
+        <location filename="wizard_dialog.py" line="402"/>
         <source>Keywords update wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation>Wizard pembaharuan keyword untuk layer &lt;b&gt;%s&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="405"/>
+        <location filename="wizard_dialog.py" line="406"/>
         <source>Keywords creation wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation>Wizard pembuat keyword untuk layer &lt;b&gt;%s&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2746"/>
+        <location filename="wizard_dialog.py" line="2747"/>
         <source>Hazard</source>
         <translation>Ancaman</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2750"/>
+        <location filename="wizard_dialog.py" line="2751"/>
         <source>Exposure</source>
         <translation>Keterpaparan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2758"/>
+        <location filename="wizard_dialog.py" line="2759"/>
         <source>classified data</source>
         <translation>data terklasifikasi</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2760"/>
+        <location filename="wizard_dialog.py" line="2761"/>
         <source>Unit</source>
         <translation>Satuan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3563"/>
+        <location filename="wizard_dialog.py" line="3564"/>
         <source>Enabled</source>
         <translation>Aktif</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3563"/>
+        <location filename="wizard_dialog.py" line="3564"/>
         <source>Disabled</source>
         <translation>Tidak aktif</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="414"/>
+        <location filename="wizard_dialog.py" line="415"/>
         <source>Use this wizard to run a guided impact assessment</source>
         <translation>Pergunakan wizard ini untuk menjalankan perhitungan dampak terpandu</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2100"/>
+        <location filename="wizard_dialog.py" line="2101"/>
         <source>Available functions:</source>
         <translation>Fungsi yang tersedia:</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2238"/>
+        <location filename="wizard_dialog.py" line="2239"/>
         <source>Function</source>
         <translation>Fungsi</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2241"/>
+        <location filename="wizard_dialog.py" line="2242"/>
         <source>Overview</source>
         <translation>Ikhtisar</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2771"/>
+        <location filename="wizard_dialog.py" line="2772"/>
         <source>Title</source>
         <translation>Judul</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2953"/>
+        <location filename="wizard_dialog.py" line="2954"/>
         <source>Purpose</source>
         <translation>Tujuan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2771"/>
+        <location filename="wizard_dialog.py" line="2772"/>
         <source>Source</source>
         <translation>Sumber</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2778"/>
+        <location filename="wizard_dialog.py" line="2779"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign key words now.</source>
         <translation>Versi kata kunci lapisan Anda (%s) tidak cocok dengan versi InaSAFE Anda (%s). Jika Anda ingin menggunakannya sebagai lapisan keterpaparan, ancaman, atau agregasi di analisis, silahkan perbarui kata kuncinya. Klik Lanjut untuk memberikan kata kunci sekarang.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2803"/>
+        <location filename="wizard_dialog.py" line="2804"/>
         <source>This layer has no valid keywords assigned</source>
         <translation>Lapisan ini tidak memiliki kata kunci yang valid</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2803"/>
+        <location filename="wizard_dialog.py" line="2804"/>
         <source>SOURCE</source>
         <translation>SUMBER</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2803"/>
+        <location filename="wizard_dialog.py" line="2804"/>
         <source>TYPE</source>
         <translation>TIPE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2803"/>
+        <location filename="wizard_dialog.py" line="2804"/>
         <source>In the next step you will be able to assign keywords to this layer.</source>
         <translation>Di langkah selanjutnya Anda akan bisa memberikan kata kunci untuk lapisan ini.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2953"/>
+        <location filename="wizard_dialog.py" line="2954"/>
         <source>Layer</source>
         <translation>Lapisan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2953"/>
+        <location filename="wizard_dialog.py" line="2954"/>
         <source>Required</source>
         <translation>Diperlukan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2953"/>
+        <location filename="wizard_dialog.py" line="2954"/>
         <source>Geometry</source>
         <translation>Geometri</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2953"/>
+        <location filename="wizard_dialog.py" line="2954"/>
         <source>Layer mode</source>
         <translation>Mode lapisan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3030"/>
+        <location filename="wizard_dialog.py" line="3031"/>
         <source>Not a valid layer.</source>
         <translation>Tidak ada lapisan yang valid.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3049"/>
+        <location filename="wizard_dialog.py" line="3050"/>
         <source>This layer&apos;s keywords or type are not suitable:</source>
         <translation>Kata kunci  atau tipe lapisan ini tidak sesuai:</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3734"/>
+        <location filename="wizard_dialog.py" line="3735"/>
         <source>Running analysis...</source>
         <translation>Menjalankan analisis...</translation>
     </message>
