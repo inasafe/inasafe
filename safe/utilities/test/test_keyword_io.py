@@ -255,7 +255,7 @@ class KeywordIOTest(unittest.TestCase):
         """
         keyword = 'hazards'
         definition = self.keyword_io.definition(keyword)
-        self.assertTrue('description' in definition.keys())
+        self.assertTrue('description' in definition)
 
     def test_to_message(self):
         """Test we can convert keywords to a message object.

@@ -270,7 +270,8 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
             return False
 
         if (item.metaObject().className() in [
-                'QgsLayerItem', 'QgsOgrLayerItem'] and
+                'QgsLayerItem',
+                'QgsOgrLayerItem'] and
                 item.path().endswith('.xml')):
             return False
 

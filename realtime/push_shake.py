@@ -4,7 +4,6 @@ import logging
 import os
 import pytz
 import requests
-import re
 
 from realtime.utilities import realtime_logger_name
 from realtime.exceptions import RESTRequestFailedError
@@ -266,11 +265,12 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
                 files=event_report_files)
 
             if fail_silent:
-                LOGGER.error(error.message)
+                LOGGER.info(error.message)
             else:
                 raise error
+    # pylint: disable=broad-except
     except Exception as exc:
         if not fail_silent:
-            LOGGER.error(exc.message)
+            LOGGER.info(exc.message)
         else:
             raise exc

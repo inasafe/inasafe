@@ -33,6 +33,8 @@ class TestMetadata(TestCase):
         """check that we can't instantiate abstract class BaseMetadata with
         abstract methods"""
         with self.assertRaises(TypeError):
+            # intended instantiation test... So pylint should ignore this.
+            # pylint: disable=abstract-class-instantiated
             BaseMetadata('random_layer_id')
 
     def test_metadata(self):

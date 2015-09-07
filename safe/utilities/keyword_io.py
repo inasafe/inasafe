@@ -701,9 +701,8 @@ class KeywordIO(QObject):
             if not item.startswith("__"):
                 var = getattr(safe.definitions, item)
                 if isinstance(var, dict):
-                    if 'key' in var.keys():
-                        if var['key'] == keyword:
-                            return var
+                    if var.get('key') == keyword:
+                        return var
         return None
 
     def to_message(self, keywords):
