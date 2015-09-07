@@ -69,6 +69,9 @@ from safe.gui.tools.wizard_dialog import (
     step_fc_extent,
     step_fc_params)
 from safe.utilities.keyword_io import KeywordIO
+from safe.gui.widgets.dock import Dock
+
+DOCK = Dock(IFACE)
 
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
@@ -1426,6 +1429,7 @@ class WizardDialogTest(unittest.TestCase):
         # Initialize dialog
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
+        dialog.dock = DOCK
         dialog.set_function_centric_mode()
 
         # Load test layers
