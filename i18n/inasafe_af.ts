@@ -1123,52 +1123,52 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="221"/>
+        <location filename="impact_function.py" line="219"/>
         <source>Buildings value ($M)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="223"/>
+        <location filename="impact_function.py" line="221"/>
         <source>Contents value ($M)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="67"/>
+        <location filename="impact_function.py" line="65"/>
         <source>High hazard is defined as shake levels greater than %i on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="74"/>
+        <location filename="impact_function.py" line="72"/>
         <source>Medium hazard is defined as shake levels between %i and %i on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="79"/>
+        <location filename="impact_function.py" line="77"/>
         <source>Low hazard is defined as shake levels between %i and %i on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="82"/>
+        <location filename="impact_function.py" line="80"/>
         <source>Values are in units of 1 million Australian Dollars</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="251"/>
+        <location filename="impact_function.py" line="249"/>
         <source>Building affected by earthquake</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="252"/>
+        <location filename="impact_function.py" line="250"/>
         <source>The level of the impact is according to the threshold the user input.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="254"/>
+        <location filename="impact_function.py" line="252"/>
         <source>(mmi)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="255"/>
+        <location filename="impact_function.py" line="253"/>
         <source>Impact level</source>
         <translation type="unfinished"/>
     </message>
@@ -1518,62 +1518,62 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="337"/>
+        <location filename="definitions.py" line="336"/>
         <source>The &lt;b&gt;population&lt;/b&gt; describes the people that might be exposed to a particular hazard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="345"/>
+        <location filename="definitions.py" line="344"/>
         <source>A &lt;b&gt;road&lt;/b&gt; is a defined route used by a vehicle or people to travel between two or more points.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="353"/>
+        <location filename="definitions.py" line="352"/>
         <source>A &lt;b&gt;structure&lt;/b&gt; can be any relatively permanent man made feature such as a building (an enclosed structure with walls and a roof) or a telecommunications facility or a bridge.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="393"/>
+        <location filename="definitions.py" line="392"/>
         <source>generic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="242"/>
+        <location filename="definitions.py" line="241"/>
         <source>An &lt;b&gt;earthquake&lt;/b&gt; describes the sudden violent shaking of the ground that occurs as a result of volcanic activity or movement in the earth&apos;s crust.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="251"/>
+        <location filename="definitions.py" line="250"/>
         <source>A &lt;b&gt;flood&lt;/b&gt; describes the inundation of land that is normally dry by a large amount of water. For example: A &lt;b&gt;flood&lt;/b&gt; can occur after heavy rainfall, when a river overflows its banks or when a dam breaks. The effect of a &lt;b&gt;flood&lt;/b&gt; is for land that is normally dry to become wet.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="272"/>
+        <location filename="definitions.py" line="271"/>
         <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an under water earthquake or volcano.A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="283"/>
+        <location filename="definitions.py" line="282"/>
         <source>A &lt;b&gt;volcano&lt;/b&gt; describes a mountain which has a vent through which rock fragments, ash, lava, steam and gases can be ejected from below the earth&apos;s surface. The type of material ejected depends on the type of &lt;b&gt;volcano&lt;/b&gt;.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="383"/>
+        <location filename="definitions.py" line="382"/>
         <source>feet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="423"/>
+        <location filename="definitions.py" line="422"/>
         <source>metres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="444"/>
+        <location filename="definitions.py" line="443"/>
         <source>MMI</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="445"/>
+        <location filename="definitions.py" line="444"/>
         <source>The &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; scale describes the intensity of ground shaking from a earthquake based on the effects observed by people at the surface.</source>
         <translation type="unfinished"/>
     </message>
@@ -1673,7 +1673,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="263"/>
+        <location filename="definitions.py" line="262"/>
         <source>&lt;b&gt;Volcanic ash&lt;/b&gt; describes fragments of pulverized rock, minerals and volcanic glass, created during volcanic eruptions, less than 2 mm (0.079 inches) in diameter</source>
         <translation type="unfinished"/>
     </message>
@@ -2301,31 +2301,31 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2506"/>
+        <location filename="wizard_dialog.py" line="2507"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the %s for hazard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2513"/>
+        <location filename="wizard_dialog.py" line="2514"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3120"/>
+        <location filename="wizard_dialog.py" line="3121"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the %s for exposure if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3129"/>
+        <location filename="wizard_dialog.py" line="3130"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3311"/>
+        <location filename="wizard_dialog.py" line="3312"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
@@ -2381,7 +2381,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="397"/>
+        <location filename="definitions.py" line="727"/>
         <source>Units</source>
         <translation type="unfinished"/>
     </message>
@@ -2676,7 +2676,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="52"/>
+        <location filename="definitions.py" line="370"/>
         <source>Exposure</source>
         <translation type="unfinished"/>
     </message>
@@ -2688,11 +2688,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="definitions.py" line="61"/>
         <source>An &lt;b&gt;aggregation&lt;/b&gt; layer represents regions that can be used to summarise impact analysis results. For example, we might summarise the affected people after a flood according to administration boundaries.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="70"/>
-        <source>Layer Purpose</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2722,16 +2717,6 @@ Raster data is considered to be continuous by default and you should explicitly 
 For example, classified values in a flood raster data set might represent discrete classes where a value of 1 might represent the low inundation class, a value of 2 might represent the medium inundation class and a value of 3 might represent the high inundation class.
 Classified values in a vector (polygon) Volcano data set might represent discrete classes where a value of I might represent low volcanic hazard, a value of II might represent medium volcanic hazard and a value of III  might represent a high volcanic hazard. 
 In a vector (point) Volcano data the user specified buffer distances will be used to classify the data. Classified values in a vector exposure data set might include building type or road type. </source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="125"/>
-        <source>Layer Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="126"/>
-        <source>The mode of the layer describes the type of data value in the layer. It can be continuous or classified</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2770,225 +2755,170 @@ In a vector (point) Volcano data the user specified buffer distances will be use
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="179"/>
-        <source>Layer Geometry</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="180"/>
-        <source>This describes the format and type of the layer. There are four possible values : raster, point, line, and polygon. The last three values are implicitly included in the vector format.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions.py" line="195"/>
-        <source>Single Event</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="196"/>
         <source>&lt;b&gt;Single event&lt;/b&gt; hazard data can be based on either a specific  event that has happened in the past, for example a flood like Jakarta 2013, or a possible event such as the tsunami that results from an earthquake near Bima that might happen in the future.</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="definitions.py" line="205"/>
-        <source>Multiple Event</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="206"/>
         <source>&lt;b&gt;Multiple event&lt;/b&gt; hazard data can be based on historical observations such as a hazard map of all observed volcanic deposits around a volcano. 
 This type of hazard data shows those locations that might be impacted by a volcanic eruption in the future . Another example might be a probabilistic hazard model that shows the likelihood of a magnitude 7 earthquake happening in the next 50 yrs.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="219"/>
-        <source>This describes the category of the hazard that is represented by the layer. There are two possible values for this attribute, single event and multiple event.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="391"/>
+        <location filename="definitions.py" line="390"/>
         <source>Generic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="233"/>
+        <location filename="definitions.py" line="232"/>
         <source>A &lt;b&gt;generic hazard&lt;/b&gt; can be used for any type of hazard where the data have been classified or generalised. For example: earthquake, flood, volcano, or tsunami.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="241"/>
+        <location filename="definitions.py" line="240"/>
         <source>Earthquake</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="250"/>
+        <location filename="definitions.py" line="249"/>
         <source>Flood</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="262"/>
-        <source>Volcanic Ash</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="271"/>
+        <location filename="definitions.py" line="270"/>
         <source>Tsunami</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="282"/>
+        <location filename="definitions.py" line="281"/>
         <source>Volcano</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="303"/>
+        <location filename="definitions.py" line="302"/>
         <source>&lt;b&gt;Hazards&lt;/b&gt; (also called disasters) are what we call the data layers that describe the extent and magnitude of natural events (such as earthquakes, tsunamis and volcanic eruptions) that could potentially cause an event or series of events that threaten and disrupt the lives and livelihoods of people.</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="definitions.py" line="315"/>
-        <source>Land Cover</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="316"/>
         <source>The &lt;b&gt;land cover&lt;/b&gt; exposure data describes features on the surface of the earth that might be exposed to a particular  hazard. This might include crops, forest and urban areas. </source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="definitions.py" line="324"/>
-        <source>People in Buildings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="325"/>
         <source>The &lt;b&gt;people in buildings&lt;/b&gt; exposure data is an experimental data set that assigns the population of a specific administrative area to the buildings with a residential function in that area.
 The process of assigning people to buildings assumes that all people and buildings in the area are mapped. There are no InaSAFE impact functions that use this exposure data yet.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="344"/>
+        <location filename="definitions.py" line="343"/>
         <source>Road</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="352"/>
+        <location filename="definitions.py" line="351"/>
         <source>Structure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="372"/>
+        <location filename="definitions.py" line="371"/>
         <source>&lt;b&gt;Exposure&lt;/b&gt; data represents things that are at risk when faced with a potential hazard. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="381"/>
+        <location filename="definitions.py" line="380"/>
         <source>Feet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="384"/>
+        <location filename="definitions.py" line="383"/>
         <source>&lt;b&gt;Feet&lt;/b&gt; are an imperial unit of measure. There are 12 inches in 1 foot and 3 feet in 1 yard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="394"/>
+        <location filename="definitions.py" line="393"/>
         <source>A generic unit for value that does not have unit or we do not know about the unit. It also can be used for normalised values.</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="definitions.py" line="403"/>
-        <source>Kg/m2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="404"/>
         <source>&lt;b&gt;Kilograms per square metre&lt;/b&gt; is a metric unit of measure where the weight is specified according to area.  This unit is relevant for hazards such as volcanic ash.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="412"/>
+        <location filename="definitions.py" line="411"/>
         <source>Kilometres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="413"/>
+        <location filename="definitions.py" line="412"/>
         <source>kilometres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="414"/>
+        <location filename="definitions.py" line="413"/>
         <source>km</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="415"/>
+        <location filename="definitions.py" line="414"/>
         <source>&lt;b&gt;Kilometres&lt;/b&gt; are a metric unit of measure. There are 1000 metres in 1 kilometre (km).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="422"/>
+        <location filename="definitions.py" line="421"/>
         <source>Metres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="424"/>
+        <location filename="definitions.py" line="423"/>
         <source>m</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="425"/>
+        <location filename="definitions.py" line="424"/>
         <source>&lt;b&gt;Metres&lt;/b&gt; are a metric unit of measure. There are 100 centimetres in 1 metre.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="432"/>
+        <location filename="definitions.py" line="431"/>
         <source>Millimetres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="433"/>
+        <location filename="definitions.py" line="432"/>
         <source>millimetres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="434"/>
+        <location filename="definitions.py" line="433"/>
         <source>mm</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="435"/>
+        <location filename="definitions.py" line="434"/>
         <source>&lt;b&gt;Millimetres&lt;/b&gt; are a metric unit of measure. There are 1000 millimetres in 1 metre.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="453"/>
+        <location filename="definitions.py" line="452"/>
         <source>Percentage</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="454"/>
+        <location filename="definitions.py" line="453"/>
         <source>percentages</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="455"/>
+        <location filename="definitions.py" line="454"/>
         <source>%%</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="456"/>
+        <location filename="definitions.py" line="455"/>
         <source>Percentage values ranges from 0 to 100. It represents a ratio of hundred.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="463"/>
-        <source>Continuous Hazard Unit</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="464"/>
-        <source>Continuous hazard unit is the unit used for continuous layer mode.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3072,16 +3002,6 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="591"/>
-        <source>Vector Hazard Classification</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="592"/>
-        <source>Vector Hazard Classification is a way to classify a value in one of the attributes or fields in a vector layer.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions.py" line="636"/>
         <source>This is a ternary description for an area. The area is classified as either a &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt; hazard class.</source>
         <translation type="unfinished"/>
@@ -3089,11 +3009,6 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="643"/>
         <source>The highest hazard classification.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="651"/>
-        <source>The medium hazard classification.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3109,16 +3024,6 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="670"/>
         <source>This is a binary description for an area. The area is either &lt;b&gt;wet&lt;/b&gt; (affected by tsunami) or &lt;b&gt;dry&lt;/b&gt; (not affected by tsunami). This unit does not describe how &lt;b&gt;wet&lt;/b&gt; or &lt;b&gt;dry&lt;/b&gt; an area is.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="697"/>
-        <source>Raster Hazard Classification</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="698"/>
-        <source>Raster Hazard Classification is a way to classify the cell values in a raster layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3142,18 +3047,8 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="727"/>
-        <source>Exposure Unit</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions.py" line="728"/>
         <source>Exposure unit defines the unit for the exposure, for example people can either be measured as count or density (count per area.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="740"/>
-        <source>Structure class field</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3162,18 +3057,8 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="746"/>
-        <source>Road class field</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions.py" line="747"/>
         <source>Attribute where the road type is defined.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="754"/>
-        <source>Volcano name attribute</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3567,7 +3452,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3303"/>
+        <location filename="wizard_dialog.py" line="3304"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the %s for aggregation if needed)</source>
         <translation type="unfinished"/>
@@ -3718,23 +3603,118 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="302"/>
+        <location filename="definitions.py" line="301"/>
         <source>Hazards</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="371"/>
-        <source>Exposures</source>
+        <location filename="definitions.py" line="70"/>
+        <source>Purpose</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="125"/>
+        <source>Data type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="126"/>
+        <source>The data type describes the values in the layer. Values can be continuous or classified</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="179"/>
+        <source>Geometry</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="180"/>
+        <source>Layer geometry can be either raster or vector. There are three possible vector geometries: point, line, and polygon. </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="194"/>
+        <source>Single event</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="204"/>
+        <source>Multiple event</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="217"/>
+        <source>Scenario</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="218"/>
+        <source>This describes the type of hazard scenario that is represented by the layer. There are two possible values for this attribute, single event and multiple event.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="261"/>
+        <source>Volcanic ash</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="314"/>
+        <source>Land cover</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="323"/>
+        <source>People in buildings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="402"/>
+        <source>kg/m2</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="463"/>
+        <source>Hazard units are used for continuous data. Examples of hazard units include metres and feet. </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="697"/>
+        <source>Classes</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="592"/>
+        <source>Hazard classes are a way to group the values in one of the attributes or fields in a vector layer.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="651"/>
+        <source>The middle hazard classification.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="698"/>
+        <source>Hazard classes are a way to classify the cell values in a raster layer.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="746"/>
+        <source>Attribute field</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="754"/>
+        <source>Name field</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="definitions.py" line="763"/>
-        <source>Vector classes</source>
+        <source>Attribute values</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="definitions.py" line="764"/>
-        <source>Vector classes are used to group features with similar meanings. </source>
+        <source>Attribute values identify features with similar meanings. For examplebuilding attributes may include schools and hospitals. </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -5262,12 +5242,12 @@ to
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="keyword_io.py" line="729"/>
+        <location filename="keyword_io.py" line="728"/>
         <source>Layer keywords:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="keyword_io.py" line="731"/>
+        <location filename="keyword_io.py" line="730"/>
         <source>The following keywords are defined for the active layer:</source>
         <translation type="unfinished"/>
     </message>
@@ -6574,243 +6554,243 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WizardDialog</name>
     <message>
-        <location filename="wizard_dialog.py" line="1155"/>
+        <location filename="wizard_dialog.py" line="1156"/>
         <source>Field type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1156"/>
+        <location filename="wizard_dialog.py" line="1157"/>
         <source>Unique values: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3762"/>
+        <location filename="wizard_dialog.py" line="3763"/>
         <source>Finish</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3917"/>
+        <location filename="wizard_dialog.py" line="3918"/>
         <source>Next</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4413"/>
+        <location filename="wizard_dialog.py" line="4414"/>
         <source>InaSAFE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4413"/>
+        <location filename="wizard_dialog.py" line="4414"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1809"/>
+        <location filename="wizard_dialog.py" line="1810"/>
         <source>Use default</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4435"/>
+        <location filename="wizard_dialog.py" line="4436"/>
         <source>Title of the layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4436"/>
+        <location filename="wizard_dialog.py" line="4437"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4439"/>
+        <location filename="wizard_dialog.py" line="4440"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4441"/>
+        <location filename="wizard_dialog.py" line="4442"/>
         <source>What is the scale of this layer?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4442"/>
+        <location filename="wizard_dialog.py" line="4443"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3804"/>
+        <location filename="wizard_dialog.py" line="3805"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3629"/>
+        <location filename="wizard_dialog.py" line="3630"/>
         <source>no aggregation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3764"/>
+        <location filename="wizard_dialog.py" line="3765"/>
         <source>Run</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3631"/>
+        <location filename="wizard_dialog.py" line="3632"/>
         <source>Please ensure the following information is correct and press Run.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3636"/>
+        <location filename="wizard_dialog.py" line="3637"/>
         <source>impact function</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3636"/>
+        <location filename="wizard_dialog.py" line="3637"/>
         <source>hazard layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3636"/>
+        <location filename="wizard_dialog.py" line="3637"/>
         <source>exposure layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3636"/>
+        <location filename="wizard_dialog.py" line="3637"/>
         <source>aggregation layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3515"/>
+        <location filename="wizard_dialog.py" line="3516"/>
         <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="401"/>
+        <location filename="wizard_dialog.py" line="402"/>
         <source>Keywords update wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="405"/>
+        <location filename="wizard_dialog.py" line="406"/>
         <source>Keywords creation wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2746"/>
+        <location filename="wizard_dialog.py" line="2747"/>
         <source>Hazard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2750"/>
+        <location filename="wizard_dialog.py" line="2751"/>
         <source>Exposure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2758"/>
+        <location filename="wizard_dialog.py" line="2759"/>
         <source>classified data</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2760"/>
+        <location filename="wizard_dialog.py" line="2761"/>
         <source>Unit</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3563"/>
+        <location filename="wizard_dialog.py" line="3564"/>
         <source>Enabled</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3563"/>
+        <location filename="wizard_dialog.py" line="3564"/>
         <source>Disabled</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="414"/>
+        <location filename="wizard_dialog.py" line="415"/>
         <source>Use this wizard to run a guided impact assessment</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2100"/>
+        <location filename="wizard_dialog.py" line="2101"/>
         <source>Available functions:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2238"/>
+        <location filename="wizard_dialog.py" line="2239"/>
         <source>Function</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2241"/>
+        <location filename="wizard_dialog.py" line="2242"/>
         <source>Overview</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2771"/>
+        <location filename="wizard_dialog.py" line="2772"/>
         <source>Title</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2953"/>
+        <location filename="wizard_dialog.py" line="2954"/>
         <source>Purpose</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2771"/>
+        <location filename="wizard_dialog.py" line="2772"/>
         <source>Source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2778"/>
+        <location filename="wizard_dialog.py" line="2779"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign key words now.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2803"/>
+        <location filename="wizard_dialog.py" line="2804"/>
         <source>This layer has no valid keywords assigned</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2803"/>
+        <location filename="wizard_dialog.py" line="2804"/>
         <source>SOURCE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2803"/>
+        <location filename="wizard_dialog.py" line="2804"/>
         <source>TYPE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2803"/>
+        <location filename="wizard_dialog.py" line="2804"/>
         <source>In the next step you will be able to assign keywords to this layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2953"/>
+        <location filename="wizard_dialog.py" line="2954"/>
         <source>Layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2953"/>
+        <location filename="wizard_dialog.py" line="2954"/>
         <source>Required</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2953"/>
+        <location filename="wizard_dialog.py" line="2954"/>
         <source>Geometry</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2953"/>
+        <location filename="wizard_dialog.py" line="2954"/>
         <source>Layer mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3030"/>
+        <location filename="wizard_dialog.py" line="3031"/>
         <source>Not a valid layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3049"/>
+        <location filename="wizard_dialog.py" line="3050"/>
         <source>This layer&apos;s keywords or type are not suitable:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3734"/>
+        <location filename="wizard_dialog.py" line="3735"/>
         <source>Running analysis...</source>
         <translation type="unfinished"/>
     </message>

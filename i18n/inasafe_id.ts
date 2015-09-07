@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" sourcelanguage="" version="2.0">
 <context>
     <name>@default</name>
     <message>
@@ -1827,12 +1826,12 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="impact_function.py" line="93"/>
         <source>Field &quot;%s&quot; is not present in the attribute table of the hazard layer. Please change the Affected Field parameter in the IF Option.</source>
-        <translation>Kolom &quot;%s&quot; tidak ditemukan dalam tabel atribut lapisan ancaman. Mohon ganti parameter Kolom Terdampak di Pilihan Fungsi Dampak.</translation>
+        <translation>Kolom &quot;%s&quot; tidak ditemukan dalam tabel atribut lapisan ancaman. Mohon ganti parameter Kolom Terdampak di Pilihan Fungsi Dampak</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="107"/>
         <source>Field &quot;%s&quot; is not present in the attribute table of the exposure layer. Please change the Building Type Field parameter in the IF Option.</source>
-        <translation>Kolom &quot;%s&quot; tidak ditemukan di tabel atribut lapisan keterpaparan. Mohon ganti parameter &quot;Kolom Tipe Bangunan&quot; di Pilihan Fungsi Dampak.</translation>
+        <translation>Kolom &quot;%s&quot; tidak ditemukan di tabel atribut lapisan keterpaparan. Mohon ganti parameter &quot;Kolom Tipe Bangunan&quot; di Pilihan Fungsi Dampak</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="254"/>
@@ -1842,7 +1841,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="metadata_definitions.py" line="66"/>
         <source>A point vector layer.</source>
-        <translation>Lapisan vektor titik.</translation>
+        <translation>Lapisan vektor titik</translation>
     </message>
     <message>
         <location filename="population_exposure_report_mixin.py" line="319"/>
@@ -1862,7 +1861,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="defaults.py" line="164"/>
         <source>Check this option if you wish to calculate minimum needs for the affected population. Minimum needs will be calculated according to the defaults defined in the minimum needs configuration tool.</source>
-        <translation>Aktifkan pilihan ini apabila Anda ingin menghitung kebutuhan minimum dari populasi yang terdampak. Kebutuhan minimum akan dihitung berdasarkan nilai dasar yang didefinisikan di kakas penyusun kebutuhan minimum.</translation>
+        <translation>Aktifkan pilihan ini apabila Anda ingin menghitung kebutuhan minimum dari populasi yang terdampak. Kebutuhan minimum akan dihitung berdasarkan nilai dasar yang didefinisikan di kakas penyusun kebutuhan minimum</translation>
     </message>
     <message>
         <location filename="defaults.py" line="272"/>
@@ -1937,7 +1936,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="metadata_definitions.py" line="83"/>
         <source>An exposure raster layer where each cell represents a population count.</source>
-        <translation>Lapisan raster keterpaparan dengan tiap kotak mewakili jumlah populasi.</translation>
+        <translation>Lapisan raster keterpaparan dengan tiap kotak mewakili jumlah populasi</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="86"/>
@@ -2452,7 +2451,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="needs_manager_dialog.py" line="445"/>
         <source>The &lt;b&gt;maximum&lt;/b&gt; is the maximum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be more than 50l. This is enforced when tweaking a minimum needs set before an impact evaluation.</source>
-        <translation>&lt;b&gt;Maximum&lt;/b&gt; adalah kuantitas batas maximum yang diperbolehkan dari suatu sumber daya perorangan. Sebagai contoh, Anda dapat menetapkan jatah air per orang per hari tidak boleh lebih dari 50l. Hal ini diwajibkan saat menetapkan kebutuhan minimum sebelum evaluasi dampak.</translation>
+        <translation>&lt;b&gt;Maximum&lt;/b&gt; adalah kuantitas batas maximum yang diperbolehkan dari suatu sumber daya perorangan. Sebagai contoh, Anda dapat menetapkan jatah air per orang per hari tidak boleh lebih dari 50l. Hal ini diwajibkan saat menetapkan kebutuhan minimum sebelum evaluasi dampak</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="454"/>
@@ -2577,7 +2576,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="defaults.py" line="146"/>
         <source>Gender ratio breakdown.</source>
-        <translation>RIncian perbandingan jenis kelamin.</translation>
+        <translation>RIncian perbandingan jenis kelamin</translation>
     </message>
     <message>
         <location filename="defaults.py" line="147"/>
@@ -2587,12 +2586,12 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="defaults.py" line="163"/>
         <source>Minimum needs breakdown.</source>
-        <translation>Perincian kebutuhan minimum.</translation>
+        <translation>Perincian kebutuhan minimum</translation>
     </message>
     <message>
         <location filename="defaults.py" line="182"/>
         <source>Age ratios breakdown.</source>
-        <translation>Perincian perbandingan usia.</translation>
+        <translation>Perincian perbandingan usia</translation>
     </message>
     <message>
         <location filename="defaults.py" line="183"/>
@@ -2617,7 +2616,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="defaults.py" line="201"/>
         <source>Youth ratio value.</source>
-        <translation>Nilai perbandingan anak muda.</translation>
+        <translation>Nilai perbandingan anak muda</translation>
     </message>
     <message>
         <location filename="defaults.py" line="202"/>
@@ -2637,7 +2636,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="defaults.py" line="236"/>
         <source>Elderly ratio value.</source>
-        <translation>Nilai nisbah orang tua.</translation>
+        <translation>Nilai nisbah orang tua</translation>
     </message>
     <message>
         <location filename="defaults.py" line="237"/>
@@ -2667,7 +2666,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="defaults.py" line="296"/>
         <source>Check this option if you want to enable a road impact report broken down by road type.</source>
-        <translation>Aktifkan pilihan ini untuk perincian laporan berdasarkan tipe jalan.</translation>
+        <translation>Aktifkan pilihan ini untuk perincian laporan berdasarkan tipe jalan</translation>
     </message>
     <message>
         <location filename="defaults.py" line="313"/>
@@ -2958,7 +2957,7 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
     <message>
         <location filename="definitions.py" line="492"/>
         <source>The location that has highest impact.</source>
-        <translation>Lokasi dengan dampak tertinggi.</translation>
+        <translation>Lokasi dengan dampak tertinggi</translation>
     </message>
     <message>
         <location filename="definitions.py" line="650"/>
@@ -2968,7 +2967,7 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
     <message>
         <location filename="definitions.py" line="501"/>
         <source>The location that has medium impact.</source>
-        <translation>Lokasi dengan dampak menengah.</translation>
+        <translation>Lokasi dengan dampak menengah</translation>
     </message>
     <message>
         <location filename="definitions.py" line="658"/>
@@ -2978,7 +2977,7 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
     <message>
         <location filename="definitions.py" line="510"/>
         <source>The location that has lowest impact.</source>
-        <translation>Lokasi dengan dampak terendah.</translation>
+        <translation>Lokasi dengan dampak terendah</translation>
     </message>
     <message>
         <location filename="definitions.py" line="521"/>
@@ -3098,7 +3097,7 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
     <message>
         <location filename="impact_function.py" line="69"/>
         <source>Volcanoes considered: %s</source>
-        <translation>Nama gunung api yang dipilih: %s</translation>
+        <translation>Nama gunung api yang dipilih: %s.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="74"/>
@@ -3128,7 +3127,7 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
     <message>
         <location filename="population_exposure_report_mixin.py" line="88"/>
         <source>Action checklist</source>
-        <translation>Daftar tindakan</translation>
+        <translation>Daftar tindakan:</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="200"/>
@@ -3348,7 +3347,7 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
     <message>
         <location filename="impact_function.py" line="61"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if flood levels exceed %(eps).1f m.</source>
-        <translation>&lt;sup&gt;1&lt;/sup&gt;Penduduk yang perlu dievakuasi bila terjadi banjir dengan ketinggian lebih dari %(eps).1f m.</translation>
+        <translation>&lt;sup&gt;1&lt;/sup&gt;Penduduk yang perlu dievakuasi bila terjadi banjir dengan ketinggian lebih dari %(eps).1f m</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="131"/>
@@ -3631,112 +3630,112 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
     <message>
         <location filename="definitions.py" line="70"/>
         <source>Purpose</source>
-        <translation type="unfinished">Tujuan</translation>
+        <translation>Tujuan</translation>
     </message>
     <message>
         <location filename="definitions.py" line="125"/>
         <source>Data type</source>
-        <translation type="unfinished"></translation>
+        <translation>Jenis Data</translation>
     </message>
     <message>
         <location filename="definitions.py" line="126"/>
         <source>The data type describes the values in the layer. Values can be continuous or classified</source>
-        <translation type="unfinished"></translation>
+        <translation>Jenis data yang mendeskripsikan nilai di lapisan. NIlai dapat berupa kontinyu atau terklasifikasi</translation>
     </message>
     <message>
         <location filename="definitions.py" line="179"/>
         <source>Geometry</source>
-        <translation type="unfinished">Geometri</translation>
+        <translation>Geometri</translation>
     </message>
     <message>
         <location filename="definitions.py" line="180"/>
         <source>Layer geometry can be either raster or vector. There are three possible vector geometries: point, line, and polygon. </source>
-        <translation type="unfinished"></translation>
+        <translation>Geometri lapisan bisa berupa raster atau vektor. Ada tiga kemungkinan geometri vektor: titik, garis, dan poligon.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="194"/>
         <source>Single event</source>
-        <translation type="unfinished"></translation>
+        <translation>Kejadian tunggal</translation>
     </message>
     <message>
         <location filename="definitions.py" line="204"/>
         <source>Multiple event</source>
-        <translation type="unfinished"></translation>
+        <translation>Kejadian majemuk</translation>
     </message>
     <message>
         <location filename="definitions.py" line="217"/>
         <source>Scenario</source>
-        <translation type="unfinished"></translation>
+        <translation>Skenario</translation>
     </message>
     <message>
         <location filename="definitions.py" line="218"/>
         <source>This describes the type of hazard scenario that is represented by the layer. There are two possible values for this attribute, single event and multiple event.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ini mendeskripsikan jenis dari skenario ancaman yang direpresentasikan oleh lapisan. Ada dua kemungkinan nilai untuk atribut ini, kejadian tunggal dan kejadian majemuk.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="261"/>
         <source>Volcanic ash</source>
-        <translation type="unfinished"></translation>
+        <translation>Abu vulkanik</translation>
     </message>
     <message>
         <location filename="definitions.py" line="314"/>
         <source>Land cover</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutupan lahan</translation>
     </message>
     <message>
         <location filename="definitions.py" line="323"/>
         <source>People in buildings</source>
-        <translation type="unfinished"></translation>
+        <translation>Penduduk di dalam bangunan</translation>
     </message>
     <message>
         <location filename="definitions.py" line="402"/>
         <source>kg/m2</source>
-        <translation type="unfinished"></translation>
+        <translation>kg/m2</translation>
     </message>
     <message>
         <location filename="definitions.py" line="463"/>
         <source>Hazard units are used for continuous data. Examples of hazard units include metres and feet. </source>
-        <translation type="unfinished"></translation>
+        <translation>Satuan ancama digunakan untuk data kontinyu. Contoh satuan ancaman meliputi meter dan kaki.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="697"/>
         <source>Classes</source>
-        <translation type="unfinished">Kelas-kelas</translation>
+        <translation>Kelas-kelas</translation>
     </message>
     <message>
         <location filename="definitions.py" line="592"/>
         <source>Hazard classes are a way to group the values in one of the attributes or fields in a vector layer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelas ancaman adalah suatu cara untuk mengelompokan nilai-nilai di salah satu atribut atau field di lapisan vektor.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="651"/>
         <source>The middle hazard classification.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klasifikasi ancaman menengah</translation>
     </message>
     <message>
         <location filename="definitions.py" line="698"/>
         <source>Hazard classes are a way to classify the cell values in a raster layer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelas-kelas ancaman adalah sebuah cara untuk mengklasifikasikan nilai sel dari lapisan raster.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="746"/>
         <source>Attribute field</source>
-        <translation type="unfinished"></translation>
+        <translation>Field atribute</translation>
     </message>
     <message>
         <location filename="definitions.py" line="754"/>
         <source>Name field</source>
-        <translation type="unfinished"></translation>
+        <translation>Field nama</translation>
     </message>
     <message>
         <location filename="definitions.py" line="763"/>
         <source>Attribute values</source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai atribute</translation>
     </message>
     <message>
         <location filename="definitions.py" line="764"/>
         <source>Attribute values identify features with similar meanings. For examplebuilding attributes may include schools and hospitals. </source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai atribute mengidentifikasikan fitur dengan makna yang sama. Sebagai contoh, atribut bangunan mungkin termasuk sekolah dan rumah sakit.</translation>
     </message>
 </context>
 <context>
@@ -3748,7 +3747,7 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
     </message>
     <message>
         <location filename="about_dialog.py" line="76"/>
-        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
+        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
         <translation>Tombol Edit oleh Hugo GarduÃ±o dari The Noun Project</translation>
     </message>
     <message>
@@ -3809,8 +3808,8 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif'; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -3824,12 +3823,12 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -3847,7 +3846,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -3860,7 +3859,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -3873,7 +3872,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.bnpb.go.id/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Indonesia’s National Disaster Management Agency (BNPB)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://dfat.gov.au/geo/indonesia/development-assistance/Pages/disaster-risk-management-in-indonesia.aspx&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australian Government – Disaster Risk Management in Indonesia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -4242,7 +4241,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="analysis.py" line="1016"/>
         <source>An exception occurred when running the impact analysis.</source>
-        <translation>Terjadi pengecualian ketika menjalankan analisis dampak.</translation>
+        <translation>Terjadi pengecualian ketika menjalankan analisis dampak</translation>
     </message>
     <message>
         <location filename="analysis.py" line="998"/>
@@ -4462,7 +4461,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="test_aggregator.py" line="101"/>
-        <source>D&#xed;str&#xdc;t&apos;s of Jakarta</source>
+        <source>DístrÜt&apos;s of Jakarta</source>
         <translation>DístrÜt&apos;s Jakarta</translation>
     </message>
 </context>
@@ -5765,7 +5764,7 @@ ke
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.Helvetica Neue DeskInterface&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.Helvetica Neue DeskInterface'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6992,7 +6991,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3030"/>
-        <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
+        <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation>Lapisan ancaman dan keterpaparan tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -7143,7 +7142,7 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3482"/>
-        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
+        <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation>Lapisan agregasi dan ancaman tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -7155,7 +7154,7 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3666"/>
-        <source>The selected extent doesn&apos;t intersect input layers.
+        <source>The selected extent doesn't intersect input layers.
 Please step back and select another layer.</source>
         <translation>Luasan yang dipilih tidak berpotongan dengan lapisan-lapisan masukan.
 Silahkan mundur ke langkah sebelumnya dan pilih lapisan lainnya.</translation>
