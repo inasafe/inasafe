@@ -90,6 +90,7 @@ from safe.common.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
     UnsupportedProviderError,
+    InsufficientOverlapError,
     InaSAFEError)
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.version import get_version
@@ -340,9 +341,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.tvBrowserAggregation.setModel(proxy_model)
 
         self.parameter_dialog = None
+        self.extent_dialog = None
 
         self.keyword_io = KeywordIO()
         self.twParams = None
+        self.swExtent = None
 
         self.is_selected_layer_keywordless = False
         self.parent_step = None
@@ -373,8 +376,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.tvBrowserAggregation.selectionModel().selectionChanged.connect(
             self.tvBrowserAggregation_selection_changed)
         self.treeClasses.itemChanged.connect(self.update_dragged_item_flags)
-        self.lblDefineExtentNow.linkActivated.connect(
-            self.lblDefineExtentNow_clicked)
         self.pbnCancel.released.connect(self.reject)
 
         # string constants
@@ -3414,33 +3415,58 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         self.pbnNext.setEnabled(True)
 
-    def extent_selector_closed(self):
-        """Slot called when the users clears the analysis extents."""
+    def start_capture_coordinates(self):
+        """Enter the coordinate capture mode"""
+        self.hide()
+
+    def stop_capture_coordinates(self):
+        """Exit the coordinate capture mode"""
+        self.extent_dialog._populate_coordinates()
+        self.extent_dialog.canvas.setMapTool(self.extent_dialog.previous_map_tool)
         self.show()
 
-    # noinspection PyPep8Naming
-    def lblDefineExtentNow_clicked(self):
-        """Show the extent selector widget for defining analysis extents."""
+    def set_widgets_step_fc_extent(self):
+        """Set widgets on the Extent tab"""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
-        widget = ExtentSelectorDialog(
+        self.extent_dialog = ExtentSelectorDialog(
             self.iface,
             self.iface.mainWindow(),
             extent=self.dock.extent.user_extent,
             crs=self.dock.extent.user_extent_crs)
-        widget.clear_extent.connect(
+        self.extent_dialog.tool.rectangle_created.disconnect(
+            self.extent_dialog.stop_capture)
+        self.extent_dialog.clear_extent.connect(
             self.dock.extent.clear_user_analysis_extent)
-        widget.extent_defined.connect(self.dock.define_user_analysis_extent)
-        widget.extent_selector_closed.connect(self.extent_selector_closed)
-        self.hide()
-        # Needs to be non modal to support hide -> interact with map -> show
-        widget.show()
-        # Also select the radio button
-        self.rbExtentUser.click()
+        self.extent_dialog.extent_defined.connect(
+            self.dock.define_user_analysis_extent)
+        self.extent_dialog.capture_button.clicked.connect(
+            self.start_capture_coordinates)
+        self.extent_dialog.tool.rectangle_created.connect(
+            self.stop_capture_coordinates)
 
-    def set_widgets_step_fc_extent(self):
-        """Set widgets on the Extent tab"""
-        pass
+        self.extent_dialog.label.setText(self.tr('Please specify extent'
+            ' of your analysis:'))
+
+        if self.swExtent:
+            self.swExtent.hide()
+
+        self.swExtent = self.extent_dialog.stacked_widget
+        self.layoutAnalysisExtent.addWidget(self.swExtent)
+
+    def write_extent(self):
+        """ After the extent selection,
+            save the extent and disconnect signals
+        """
+        self.extent_dialog.accept()
+        self.extent_dialog.clear_extent.disconnect(
+            self.dock.extent.clear_user_analysis_extent)
+        self.extent_dialog.extent_defined.disconnect(
+            self.dock.define_user_analysis_extent)
+        self.extent_dialog.capture_button.clicked.disconnect(
+            self.start_capture_coordinates)
+        self.extent_dialog.tool.rectangle_created.disconnect(
+            self.stop_capture_coordinates)
 
     # ===========================
     # STEP_FC_EXTENT_DISJOINT
@@ -3452,31 +3478,16 @@ class WizardDialog(QDialog, FORM_CLASS):
         :returns: true if extent intersects both layers, false if is disjoint
         :rtype: boolean
         """
-        if self.rbExtentUser.isChecked():
-            # Get user extent
-            extent = self.dock.extent.user_extent
-            extent_crs = self.dock.extent.user_extent_crs
-        elif self.rbExtentScreen.isChecked():
-            # Get screen extent
-            extent = self.iface.mapCanvas().extent()
-            extent_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
-        else:
-            # The layer extent is chosen, no need to validate
-            return True
+        self.analysis_handler = AnalysisHandler(self)
+        self.analysis_handler.init_analysis()
+        try:
+            self.analysis_handler.analysis.setup_analysis()
+        except InsufficientOverlapError as e:
+            self.analysis_handler = None
+            return False
 
-        haz_extent = self.hazard_layer.extent()
-        exp_extent = self.exposure_layer.extent()
-
-        if self.iface.mapCanvas().hasCrsTransformEnabled():
-            coord_transform = QgsCoordinateTransform(
-                extent_crs, self.hazard_layer.crs())
-            haz_extent = (coord_transform.transform(
-                haz_extent, QgsCoordinateTransform.ReverseTransform))
-            coord_transform = QgsCoordinateTransform(
-                extent_crs, self.exposure_layer.crs())
-            exp_extent = (coord_transform.transform(
-                exp_extent, QgsCoordinateTransform.ReverseTransform))
-        return extent.intersects(haz_extent) and extent.intersects(exp_extent)
+        self.analysis_handler = None
+        return True
 
     def set_widgets_step_fc_extent_disjoint(self):
         """Set widgets on the Extent Disjoint tab"""
@@ -3806,6 +3817,10 @@ class WizardDialog(QDialog, FORM_CLASS):
                     self.layer.name()):
                 QgsMapLayerRegistry.instance().addMapLayers([self.layer])
 
+        # After the extent selection, save the extent and disconnect signals
+        if current_step == step_fc_extent:
+            self.write_extent()
+
         # Determine the new step to be switched
         new_step = self.compute_next_step(current_step)
 
@@ -3900,6 +3915,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.tblFunctions1.setFocus()
         if new_step == step_fc_function_2:
             self.tblFunctions2.setFocus()
+        # Re-connect disconnected signals when coming back to the Extent step
+        if new_step == step_fc_extent:
+            self.set_widgets_step_fc_extent()
         # Set Next button label
         self.pbnNext.setText(self.tr('Next'))
         self.pbnNext.setEnabled(True)
@@ -3979,9 +3997,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             # Never go further if layers disjoint
             return False
         if step == step_fc_extent:
-            return (bool(self.rbExtentUser.isChecked() or
-                         self.rbExtentLayer.isChecked() or
-                         self.rbExtentScreen.isChecked()))
+            return True
         if step == step_fc_params:
             return True
         if step == step_fc_summary:
