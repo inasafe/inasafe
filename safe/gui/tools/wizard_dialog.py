@@ -317,7 +317,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.set_tool_tip()
         # Set icons
         self.lblMainIcon.setPixmap(
-            QPixmap(resources_path('img', 'icons', 'icon.svg')))
+            QPixmap(resources_path('img', 'icons', 'icon-white.svg')))
         self.lblIconDisjoint_1.setPixmap(
             QPixmap(resources_path('img', 'wizard', 'icon-stop.svg')))
         self.lblIconDisjoint_2.setPixmap(
