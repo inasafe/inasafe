@@ -126,7 +126,7 @@ class TestITBBayesianEarthquakeFatalityFunction(unittest.TestCase):
         self.assertEqual(expected_result, result, message)
 
     def test_filter(self):
-        """TestPagerEarthquakeFatalityFunction: Test filtering IF"""
+        """TestITBBayesianEarthquakeFatalityFunction: Test filtering IF"""
         hazard_keywords = {
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
