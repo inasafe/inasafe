@@ -216,7 +216,8 @@ class PostprocessorManager(QtCore.QObject):
                         self.aggregator.get_default_keyword(
                             'NO_DATA'))))
             message.add(m.EmphasizedText(self.tr(
-                'Columns containing exclusively 0 and "%s" have been removed.' %
+                'Columns containing exclusively 0 and "%s" '
+                'have been removed.' %
                 self.aggregator.get_default_keyword('NO_DATA'))))
 
         return message
@@ -517,18 +518,18 @@ class PostprocessorManager(QtCore.QObject):
         .. note:: This is intended to be a temporary solution to the excessive
         amount of data in some of the postprocessors.
         """
-        for (postprocessor_type, output) in self.output.items():
+        for (_postprocessor_type, output) in self.output.items():
             keys = output[0][1].keys()
             for key in keys:
                 total_for_type = 0
-                for area, breakdown in output:
+                for _area, breakdown in output:
                     try:
                         total_for_type += int(breakdown[key]['value'])
                     except ValueError:
                         # no need to increment for a no data value
                         pass
                 if total_for_type == 0:
-                    for area, breakdown in output:
+                    for _area, breakdown in output:
                         breakdown.pop(key)
 
     def get_output(self, aoi_mode):

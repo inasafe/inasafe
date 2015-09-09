@@ -3422,7 +3422,8 @@ class WizardDialog(QDialog, FORM_CLASS):
     def stop_capture_coordinates(self):
         """Exit the coordinate capture mode"""
         self.extent_dialog._populate_coordinates()
-        self.extent_dialog.canvas.setMapTool(self.extent_dialog.previous_map_tool)
+        self.extent_dialog.canvas.setMapTool(
+            self.extent_dialog.previous_map_tool)
         self.show()
 
     def set_widgets_step_fc_extent(self):
@@ -3445,8 +3446,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.extent_dialog.tool.rectangle_created.connect(
             self.stop_capture_coordinates)
 
-        self.extent_dialog.label.setText(self.tr('Please specify extent'
-            ' of your analysis:'))
+        self.extent_dialog.label.setText(self.tr(
+            'Please specify extent of your analysis:'))
 
         if self.swExtent:
             self.swExtent.hide()
@@ -3482,7 +3483,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.analysis_handler.init_analysis()
         try:
             self.analysis_handler.analysis.setup_analysis()
-        except InsufficientOverlapError as e:
+        except InsufficientOverlapError:
             self.analysis_handler = None
             return False
 
