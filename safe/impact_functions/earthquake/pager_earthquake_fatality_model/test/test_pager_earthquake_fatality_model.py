@@ -9,7 +9,7 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
      (at your option) any later version.
 
 """
-__author__ = 'akbargumbira@gmail.com'
+__author__ = 'akbargumbira@gmail.com, dynaryu@gmail.com'
 __date__ = '11/12/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -33,6 +33,48 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
         registry = ImpactFunctionManager().registry
         registry.clear()
         registry.register(PAGFatalityFunction)
+
+    def test_compute_fatality_rate(self):
+        impact_function = PAGFatalityFunction.instance()
+        expected_result = {2: 0,
+                           3: 0,
+                           4: 1.110e-15,
+                           5: 5.463e-11,
+                           6: 7.767e-8,
+                           7: 1.193e-5,
+                           8: 4.174e-4,
+                           9: 5.219e-3,
+                           10: 3.121e-2}
+        result = impact_function.compute_fatality_rate()
+        for item in expected_result.keys():
+            message = 'Expecting %s, but it returns %s' % (
+                expected_result[item], result[item])
+            self.assertAlmostEqual(expected_result[item],
+                                   result[item], places=4, msg=message)
+
+    def test_round_to_sum(self):
+        impact_function = PAGFatalityFunction.instance()
+        result = impact_function.round_to_sum([
+            10.26, 10.5, 29.8, 39.5, 9.94])
+        expected_result = [10.0, 10.0, 30.0, 40.0, 10.0]
+        message = 'Expecting %s, but it returns %s' % (
+            expected_result, result)
+        self.assertEqual(expected_result, result, msg=message)
+
+        result = impact_function.round_to_sum([
+            45.844, 43.02, 10.59, 0.54, 0.0055, 5.e-4])
+        expected_result = [46.0, 43.0, 11.0, 0.0, 0.0, 0.0]
+        message = 'Expecting %s, but it returns %s' % (
+            expected_result, result)
+        self.assertEqual(expected_result, result, msg=message)
+
+    def test_compute_probability(self):
+        impact_function = PAGFatalityFunction.instance()
+        result = impact_function.compute_probability(50.0)
+        expected_result = [17.0, 50.0, 30.0, 3.0, 0.0, 0.0]
+        message = 'Expecting %s, but it returns %s' % (
+            expected_result, result)
+        self.assertEqual(expected_result, result, msg=message)
 
     def test_run(self):
         """TestPagerEarthquakeFatalityFunction: Test running the IF."""
@@ -85,7 +127,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             5: 0,
             6: 0,
             7: 0,
-            8: 0.083498,  # FIXME should be rounded to zero!! not 10.
+            8: 0.083498,
             9: 0,
             10: 0
         }
@@ -107,7 +149,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             5: 0,
             6: 0,
             7: 0,
-            8: 199.91650,  # FIXME should be 200.0
+            8: 199.91650,
             9: 0,
             10: 0
         }
@@ -121,12 +163,9 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
                     expected_result[key_][item],
                     result[item], places=4, msg=message)
 
-        # expected_result = [
-        #    8.0, 42.0, 42.0, 8.0, 0.0, 0.0, 0.0] # corresponds to 10
         expected_result = [
-            100.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # corresponds to <= 1
-        result = impact_function.compute_probability(
-            impact_layer.get_keywords('total_fatalities_raw'))
+            100.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        result = impact_layer.get_keywords('prob_fatality_mag')
         message = 'Expecting %s, but it returns %s' % (
             expected_result, result)
         self.assertEqual(expected_result, result, message)
