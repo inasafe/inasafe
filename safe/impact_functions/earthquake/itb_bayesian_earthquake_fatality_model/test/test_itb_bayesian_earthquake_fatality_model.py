@@ -43,7 +43,7 @@ class TestITBBayesianEarthquakeFatalityFunction(unittest.TestCase):
         numpy.testing.assert_allclose(expected_result, result, rtol=1.0e-3)
 
     def test_run(self):
-        """TestPagerEarthquakeFatalityFunction: Test running the IF."""
+        """TestITBBayesianEarthquakeFatalityFunction: Test running the IF."""
         # FIXME(Hyeuk): test requires more realistic hazard and population data
         eq_path = test_data_path('hazard', 'earthquake.tif')
         population_path = test_data_path(

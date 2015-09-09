@@ -40,7 +40,7 @@ class ITBBayesianFatalityFunction(ITBFatalityFunction):
 
     An Empirical Fatality Model for Indonesia Based on a Bayesian Approach
     by W. Sengara, M. Suarjana, M.A. Yulman, H. Ghasemi, and H. Ryu
-    submitted for Journal of the Geological Society 
+    submitted for Journal of the Geological Society
 
     """
     _metadata = ITBBayesianFatalityMetadata()
@@ -49,7 +49,7 @@ class ITBBayesianFatalityFunction(ITBFatalityFunction):
         super(ITBBayesianFatalityFunction, self).__init__()
         self.hardcoded_parameters = OrderedDict([
             ('fatality_rate_file',
-             "worden_berngamma_log_fat_rate_inasafe_10.npy"),
+             "worden_berngamma_log_fat_rate_inasafe_10.csv"),
             # Rates of people displaced for each MMI level
             # FIXME: should be independent from fatality model - Hyeuk
             ('displacement_rate', {
@@ -72,8 +72,9 @@ class ITBBayesianFatalityFunction(ITBFatalityFunction):
         mmi_range = self.hardcoded_parameters['mmi_range']
         path_ = inspect.getfile(ITBBayesianFatalityMetadata)
         path_ = '/'.join(path_.split('/')[:-1])
-        fatality_ = numpy.load(os.path.join(
-            path_, self.hardcoded_parameters['fatality_rate_file']))
+        file_ = os.path.join(
+            path_, self.hardcoded_parameters['fatality_rate_file'])
+        fatality_ = numpy.loadtxt(file_, dtype=float, delimiter=',')
         nsims = len(fatality_)
         fatality_rate = {}
         for mmi in mmi_range[:2]: # mmi < 4
