@@ -216,7 +216,8 @@ class PostprocessorManager(QtCore.QObject):
                         self.aggregator.get_default_keyword(
                             'NO_DATA'))))
             message.add(m.EmphasizedText(self.tr(
-                'Columns containing exclusively 0 and "%s" have been removed.' %
+                'Columns containing exclusively 0 and "%s" '
+                'have been removed.' %
                 self.aggregator.get_default_keyword('NO_DATA'))))
 
         return message

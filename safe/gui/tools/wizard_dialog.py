@@ -3422,7 +3422,8 @@ class WizardDialog(QDialog, FORM_CLASS):
     def stop_capture_coordinates(self):
         """Exit the coordinate capture mode"""
         self.extent_dialog._populate_coordinates()
-        self.extent_dialog.canvas.setMapTool(self.extent_dialog.previous_map_tool)
+        self.extent_dialog.canvas.setMapTool(
+            self.extent_dialog.previous_map_tool)
         self.show()
 
     def set_widgets_step_fc_extent(self):

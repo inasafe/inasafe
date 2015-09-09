@@ -73,6 +73,7 @@ from safe.gui.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
 
+
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
     """Test the InaSAFE wizard GUI"""
