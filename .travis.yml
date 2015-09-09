@@ -16,6 +16,7 @@ addons:
   apt:
     packages:
       - git
+      - python-software-properties
 
 before_install:
   - sudo apt-get -qq -y update
@@ -30,7 +31,6 @@ install:
   - pip install nosexcover
   - pip install nose
   - pip install beautifulsoup
-  - pip install software-properties
   - pip install --upgrade pip
   - pip install --upgrade pep8
   - pip install --upgrade pylint
