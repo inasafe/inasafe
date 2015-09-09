@@ -22,7 +22,7 @@ from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_polygon_roads\
-    .impact_function import FloodVectorRoadsExperimentalFunction
+    .impact_function import FloodPolygonRoadsFunction
 from safe.test.utilities import (
     get_qgis_app,
     test_data_path)
@@ -37,10 +37,10 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(FloodVectorRoadsExperimentalFunction)
+        registry.register(FloodPolygonRoadsFunction)
 
     def test_run(self):
-        function = FloodVectorRoadsExperimentalFunction.instance()
+        function = FloodPolygonRoadsFunction.instance()
 
         hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
         exposure_path = test_data_path('exposure', 'roads.shp')
@@ -94,7 +94,7 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
 
         retrieved_if = impact_functions[0].metadata().as_dict()['id']
         expected = ImpactFunctionManager().get_function_id(
-            FloodVectorRoadsExperimentalFunction)
+            FloodPolygonRoadsFunction)
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)

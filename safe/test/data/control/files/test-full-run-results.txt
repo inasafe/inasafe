@@ -1,4 +1,3 @@
-100*
 Rice [kg] 280
 Drinking Water [l] 1,750
 Clean Water [l] 6,700
@@ -8,7 +7,6 @@ Total population: 200
 People need evacuation if flood levels exceed 1.0 m
 The minimum needs are based on Perka 7/2008.
 All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.
-All affected people are assumed to be evacuated.
 Hazard details
 Continuous Flood - sourced from Akbar Gumbira
 Exposure details

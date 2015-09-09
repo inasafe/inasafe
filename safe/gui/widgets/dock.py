@@ -40,7 +40,8 @@ from safe.utilities.help import show_context_help
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
-    add_ordered_combo_item)
+    add_ordered_combo_item,
+    compare_version)
 from safe.defaults import (
     disclaimer,
     default_north_arrow_path)
@@ -50,7 +51,6 @@ from safe.utilities.gis import (
     vector_geometry_string)
 from safe.utilities.resources import (
     resources_path,
-    resource_url,
     get_ui_class)
 from safe.utilities.qgis_utilities import (
     display_critical_message_bar,
@@ -93,7 +93,6 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
-from safe.utilities.unicode import get_string
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -102,12 +101,10 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
+LOGO_ELEMENT = m.Brand()
+
 FORM_CLASS = get_ui_class('dock_base.ui')
 
-LOGO_ELEMENT = m.Image(
-    resource_url(
-        resources_path('img', 'logos', 'inasafe-logo.png')),
-    'InaSAFE Logo')
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -136,6 +133,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.setupUi(self)
         self.pbnShowQuestion.setVisible(False)
         self.enable_messaging()
+        self.inasafe_version = get_version()
 
         self.set_dock_title()
 
@@ -195,8 +193,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
-        version = get_version()
-        self.setWindowTitle(self.tr('InaSAFE %s' % version))
+        self.setWindowTitle(self.tr('InaSAFE %s' % self.inasafe_version))
 
     def enable_signal_receiver(self):
         """Setup dispatcher for all available signal from Analysis."""
@@ -483,7 +480,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if invalid_path_flag:
             # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE %s' % get_version()),
+                self, self.tr('InaSAFE %s' % self.inasafe_version),
                 self.tr(
                     'Due to backwards incompatibility with InaSAFE 2.0.0, the '
                     'paths to your preferred organisation logo and north '
@@ -496,7 +493,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if logo_not_exist:
             # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE %s' % get_version()),
+                self, self.tr('InaSAFE %s' % self.inasafe_version),
                 self.tr(
                     'The file for organization logo in %s doesn\'t exists. '
                     'Please check in Plugins -> InaSAFE -> Options that your '
@@ -507,7 +504,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # noinspection PyCallByClass
             QtGui.QMessageBox.warning(
                 self,
-                self.tr('InaSAFE %s' % get_version()),
+                self.tr('InaSAFE %s' % self.inasafe_version),
                 self.tr(
                     'The file for organization logo has zero height. Please '
                     'provide valid file for organization logo.'
@@ -736,6 +733,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             display_critical_message_bar(
                 title=self.tr('Error while saving'),
                 message=self.tr("Something went wrong."))
+        finally:
+            self.disable_busy_cursor()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -990,6 +989,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             try:
                 layer_purpose = self.keyword_io.read_keywords(
                     layer, 'layer_purpose')
+                keyword_version = str(self.keyword_io.read_keywords(
+                    layer, 'keyword_version'))
+                if compare_version(keyword_version, self.inasafe_version) != 0:
+                    continue
             except:  # pylint: disable=W0702
                 # continue ignoring this layer
                 continue
@@ -1214,6 +1217,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'does not have proper keywords for aggregation layer.'
             )
             self.analysis_error(e, context)
+            self.disable_busy_cursor()
             return
         except InsufficientMemoryWarning:
             # noinspection PyCallByClass,PyTypeChecker
@@ -1271,7 +1275,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param exception: An exception that was raised
         :type exception: Exception
         """
-        QtGui.qApp.restoreOverrideCursor()
         self.hide_busy()
         LOGGER.exception(message)
         message = get_error_message(exception, context=message)
@@ -1476,7 +1479,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     @staticmethod
     def disable_busy_cursor():
         """Disable the hourglass cursor and listen for layer changes."""
-        QtGui.qApp.restoreOverrideCursor()
+        while QtGui.qApp.overrideCursor() is not None and \
+                QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
+            QtGui.qApp.restoreOverrideCursor()
 
     def show_impact_keywords(self, keywords):
         """Show the keywords for an impact layer.
@@ -1517,30 +1522,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type keywords: dict
         """
         LOGGER.debug('Showing Generic Keywords')
-        report = m.Message()
-        report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr(
-            'Layer keywords:'), **INFO_STYLE))
-        report.add(m.Text(self.tr(
-            'The following keywords are defined for the active layer:')))
         self.pbnPrint.setEnabled(False)
-        keywords_list = m.BulletedList()
-        for keyword in keywords:
-            value = keywords[keyword]
-
-            # Translate titles explicitly if possible
-            if keyword == 'title':
-                value = self.tr(value)
-                # Add this keyword to report
-            value = get_string(value)
-            key = m.ImportantText(
-                self.tr(keyword.capitalize()))
-            keywords_list.add(m.Text(key, value))
-
-        report.add(keywords_list)
-        self.pbnPrint.setEnabled(False)
+        message = self.keyword_io.to_message(keywords)
         # noinspection PyTypeChecker
-        self.show_static_message(report)
+        self.show_static_message(message)
 
     def show_no_keywords_message(self):
         """Show a message indicating that no keywords are defined.
@@ -1554,10 +1539,48 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'Layer keywords missing:'), **WARNING_STYLE))
         context = m.Paragraph(
             self.tr(
-                'No keywords have been defined for this layer yet. If '
-                'you wish to use it as an impact or hazard layer in a '
-                'scenario, please use the keyword editor. You can open '
-                'the keyword editor by clicking on the '),
+                'No keywords have been defined for this layer yet. If you '
+                'wish to use it as an exposure, hazard, or aggregation layer '
+                'in an analysis, please use the keyword wizard to update the '
+                'keywords. You can open the wizard by clicking on the '),
+            m.Image(
+                'file:///%s/img/icons/'
+                'show-keyword-wizard.svg' % resources_path(),
+                **SMALL_ICON_STYLE),
+            self.tr(
+                ' icon in the toolbar.'))
+        report.add(context)
+        self.pbnPrint.setEnabled(False)
+        # noinspection PyTypeChecker
+        self.show_static_message(report)
+
+    def show_keyword_version_message(
+            self, keyword_version, inasafe_version):
+        """Show a message indicating that the keywords version is mismatch
+
+        .. versionadded: 3.2
+
+        :param keyword_version: The version of the layer's keywords
+        :type keyword_version: str
+
+        :param inasafe_version: The version of the InaSAFE
+        :type inasafe_version: str
+
+        .. note:: The print button will be disabled if this method is called.
+        """
+        LOGGER.debug('Showing Mismatch Version Message')
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(self.tr(
+            'Layer Keyword\'s Version Mismatch:'), **WARNING_STYLE))
+        context = m.Paragraph(
+            self.tr(
+                'Your layer\'s keyword\'s version (%s) does not match with '
+                'your InaSAFE version (%s). If you wish to use it as an '
+                'exposure, hazard, or aggregation layer in an analysis, '
+                'please use the keyword wizard to update the keywords. You '
+                'can open the wizard by clicking on the ' % (
+                    keyword_version, inasafe_version)),
             m.Image(
                 'file:///%s/img/icons/'
                 'show-keyword-wizard.svg' % resources_path(),
@@ -1597,14 +1620,38 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.show_impact_keywords(keywords)
                 self.wvResults.impact_path = layer.source()
             else:
-                self.show_generic_keywords(keywords)
+                if 'keyword_version' not in keywords.keys():
+                    self.show_keyword_version_message(
+                        'No Version', self.inasafe_version)
+                else:
+                    keyword_version = str(keywords['keyword_version'])
+                    compare_result = compare_version(
+                        keyword_version, self.inasafe_version)
+                    if compare_result == 0:
+                        self.show_generic_keywords(keywords)
+                    elif compare_result > 0:
+                        # Layer has older version
+                        self.show_keyword_version_message(
+                            keyword_version, self.inasafe_version)
+                    elif compare_result < 0:
+                        # Layer has newer version
+                        self.show_keyword_version_message(
+                            keyword_version, self.inasafe_version)
 
+        # TODO: maybe we need to split these apart more to give mode
+        # TODO: granular error messages TS
         except (KeywordNotFoundError,
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
-                AttributeError):
-            self.show_no_keywords_message()
+                AttributeError), e:
+            LOGGER.info(e.message)
+            # Added this check in 3.2 for #1861
+            active_layer = self.iface.activeLayer()
+            if active_layer is None:
+                self.show_static_message(self.getting_started_message())
+            else:
+                self.show_no_keywords_message()
             # Append the error message.
             # error_message = get_error_message(e)
             # self.show_error_message(error_message)
@@ -2028,8 +2075,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def validate_extents(self):
         """Check if the current extents are valid.
 
-        Look at the intersection between Hazard, exposure and user analysis area
-        and see if they represent a valid, usable area for analysis.
+        Look at the intersection between Hazard, exposure and user analysis
+        area and see if they represent a valid, usable area for analysis.
 
         .. versionadded:: 3.1
 

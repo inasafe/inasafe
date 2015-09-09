@@ -67,7 +67,7 @@ layer_purpose_aggregation = {
 
 layer_purpose = {
     'key': 'layer_purpose',
-    'name': tr('Layer Purpose'),
+    'name': tr('Purpose'),
     'description': tr(
         'The purpose of the layer can be hazard layer, exposure layer, or '
         'aggregation layer'),
@@ -122,10 +122,10 @@ layer_mode_classified = {
 
 layer_mode = {
     'key': 'layer_mode',
-    'name': tr('Layer Mode'),
+    'name': tr('Data type'),
     'description': tr(
-        'The mode of the layer describes the type of data value in the layer. '
-        'It can be continuous or classified'),
+        'The data type describes the values in the layer. '
+        'Values can be continuous or classified'),
     'types': [
         layer_mode_continuous,
         layer_mode_classified
@@ -176,11 +176,10 @@ layer_geometry_raster = {
 
 layer_geometry = {
     'key': 'layer_geometry',
-    'name': tr('Layer Geometry'),
+    'name': tr('Geometry'),
     'description': tr(
-        'This describes the format and type of the layer. There '
-        'are four possible values : raster, point, line, and polygon. The '
-        'last three values are implicitly included in the vector format.'),
+        'Layer geometry can be either raster or vector. There '
+        'are three possible vector geometries: point, line, and polygon. '),
     'types': [
         layer_geometry_raster,
         layer_geometry_point,
@@ -192,7 +191,7 @@ layer_geometry = {
 # Hazard Category
 hazard_category_single_event = {
     'key': 'single_event',
-    'name': tr('Single Event'),
+    'name': tr('Single event'),
     'description': tr(
         '<b>Single event</b> hazard data can be based on either a specific  '
         'event that has happened in the past, for example a flood like '
@@ -202,7 +201,7 @@ hazard_category_single_event = {
 
 hazard_category_multiple_event = {
     'key': 'multiple_event',
-    'name': tr('Multiple Event'),
+    'name': tr('Multiple event'),
     'description': tr(
         '<b>Multiple event</b> hazard data can be based on historical '
         'observations such as a hazard map of all observed volcanic '
@@ -215,10 +214,10 @@ hazard_category_multiple_event = {
 
 hazard_category = {
     'key': 'hazard_category',
-    'name': tr('Hazard Category'),
+    'name': tr('Scenario'),
     'description': tr(
-        'This describes the category of the hazard that is represented by the '
-        'layer. There are two possible values for this attribute, single '
+        'This describes the type of hazard scenario that is represented by '
+        'the layer. There are two possible values for this attribute, single '
         'event and multiple event.'),
     'types': [
         hazard_category_single_event,
@@ -259,7 +258,7 @@ hazard_flood = {
 
 hazard_volcanic_ash = {
     'key': 'volcanic_ash',
-    'name': tr('Volcanic Ash'),
+    'name': tr('Volcanic ash'),
     'description': tr(
         '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
         'and volcanic glass, created during volcanic eruptions, less than '
@@ -296,29 +295,23 @@ hazard_all = [
     hazard_generic
 ]
 
-hazard = {
-    'key': 'hazard',
-    'name': tr('Hazard'),
+# Renamed key from hazard to hazards in 3.2 because key was not unique TS
+hazards = {
+    'key': 'hazards',
+    'name': tr('Hazards'),
     'description': tr(
         '<b>Hazards</b> (also called disasters) are what we call the data '
         'layers that describe the extent and magnitude of natural events '
         '(such as earthquakes, tsunamis and volcanic eruptions) that could '
         'potentially cause an event or series of events that threaten and '
         'disrupt the lives and livelihoods of people.'),
-    'types': [
-        hazard_flood,
-        hazard_tsunami,
-        hazard_earthquake,
-        hazard_volcano,
-        hazard_volcanic_ash,
-        hazard_generic
-    ]
+    'types': hazard_all
 }
 
 # Exposure
 exposure_land_cover = {
     'key': 'land_cover',
-    'name': tr('Land Cover'),
+    'name': tr('Land cover'),
     'description': tr(
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
@@ -327,7 +320,7 @@ exposure_land_cover = {
 
 exposure_people_in_building = {
     'key': 'people_in_building',
-    'name': tr('People in Buildings'),
+    'name': tr('People in buildings'),
     'description': tr(
         'The <b>people in buildings</b> exposure data is an experimental '
         'data set that assigns the population of a specific administrative '
@@ -371,19 +364,14 @@ exposure_all = [
     exposure_structure
 ]
 
-exposure = {
-    'key': 'exposure',
+# Renamed key from exposure to exposures in 3.2 because key was not unique TS
+exposures = {
+    'key': 'exposures',
     'name': tr('Exposure'),
     'description': tr(
         '<b>Exposure</b> data represents things that are at risk when faced '
         'with a potential hazard. '),
-    'types': [
-        exposure_land_cover,
-        exposure_people_in_building,
-        exposure_population,
-        exposure_road,
-        exposure_structure
-    ]
+    'types': exposure_all
 }
 
 # Continuous Hazard Unit
@@ -409,9 +397,9 @@ unit_generic = {
 
 unit_kilogram_per_meter_square = {
     'key': 'kilogram_per_meter_square',
-    'name': tr('Kg/m2'),
-    'plural_name': tr('Kg/m2'),
-    'abbreviation': tr('Kg/m2'),
+    'name': tr('kg/m2'),
+    'plural_name': tr('kg/m2'),
+    'abbreviation': tr('kg/m2'),
     'description': tr(
         '<b>Kilograms per square metre</b> is a metric unit of measure where '
         'the weight is specified according to area.  This unit is relevant '
@@ -471,9 +459,10 @@ unit_percentage = {
 
 continuous_hazard_unit = {
     'key': 'continuous_hazard_unit',
-    'name': tr('Continuous Hazard Unit'),
+    'name': tr('Units'),
     'description': tr(
-        'Continuous hazard unit is the unit used for continuous layer mode.'),
+        'Hazard units are used for continuous data. Examples of hazard units '
+        'include metres and feet. '),
     'types': [
         unit_feet,
         unit_generic,
@@ -599,9 +588,9 @@ flood_vector_hazard_classes = {
 
 vector_hazard_classification = {
     'key': 'vector_hazard_classification',
-    'name': tr('Vector Hazard Classification'),
+    'name': tr('Classes'),
     'description': tr(
-        'Vector Hazard Classification is a way to classify a value in one of '
+        'Hazard classes are a way to group the values in one of '
         'the attributes or fields in a vector layer.'),
     'types': [
         generic_vector_hazard_classes,
@@ -659,7 +648,7 @@ generic_raster_hazard_classes = {
         {
             'key': 'medium',
             'name': tr('medium'),
-            'description': tr('The medium hazard classification.'),
+            'description': tr('The middle hazard classification.'),
             'numeric_default_min': 2,
             'numeric_default_max': 2,
             'optional': False
@@ -705,9 +694,9 @@ tsunami_raster_hazard_classes = {
 
 raster_hazard_classification = {
     'key': 'raster_hazard_classification',
-    'name': tr('Raster Hazard Classification'),
+    'name': tr('Classes'),
     'description': tr(
-        'Raster Hazard Classification is a way to classify the cell values '
+        'Hazard classes are a way to classify the cell values '
         'in a raster layer.'),
     'types': [
         flood_raster_hazard_classes,
@@ -735,7 +724,7 @@ density_exposure_unit = {
 
 exposure_unit = {
     'key': 'exposure_unit',
-    'name': tr('Exposure Unit'),
+    'name': tr('Units'),
     'description': tr(
         'Exposure unit defines the unit for the exposure, for example '
         'people can either be measured as count or density (count per area.'),
@@ -748,13 +737,13 @@ exposure_unit = {
 # Exposure class field
 structure_class_field = {
     'key': 'structure_class_field',
-    'name': tr('Structure class field'),
+    'name': tr('Attribute field'),
     'description': tr('Attribute where the structure type is defined.')
 }
 
 road_class_field = {
     'key': 'road_class_field',
-    'name': tr('Road class field'),
+    'name': tr('Attribute field'),
     'description': tr('Attribute where the road type is defined.')
 }
 
@@ -762,7 +751,17 @@ road_class_field = {
 # Hazard related
 volcano_name_field = {
     'key': 'volcano_name_field',
-    'name': tr('Volcano name attribute'),
+    'name': tr('Name field'),
     'type': 'field',
     'description': tr('Attribute where the volcano name is located.')
+}
+
+# General terminology and descriptive terms
+
+value_map = {
+    'key': 'value_map',
+    'name': tr('Attribute values'),
+    'description': tr(
+        'Attribute values identify features with similar meanings. For example'
+        'building attributes may include schools and hospitals. ')
 }

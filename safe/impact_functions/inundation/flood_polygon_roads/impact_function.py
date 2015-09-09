@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import logging
+from collections import OrderedDict
+
 from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
@@ -24,44 +26,31 @@ from safe.impact_functions.bases.classified_vh_classified_ve import \
 from safe.impact_functions.inundation. \
     flood_polygon_roads.metadata_definitions import \
     FloodPolygonRoadsMetadata
+from safe.common.exceptions import ZeroImpactException
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
-from safe.common.tables import Table, TableRow
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
+from safe.impact_reports.road_exposure_report_mixin import\
+    RoadExposureReportMixin
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
+class FloodPolygonRoadsFunction(
+        ClassifiedVHClassifiedVE,
+        RoadExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Simple experimental impact function for inundation."""
     _metadata = FloodPolygonRoadsMetadata()
 
     def __init__(self):
         """Constructor."""
-        super(FloodVectorRoadsExperimentalFunction, self).__init__()
+        super(FloodPolygonRoadsFunction, self).__init__()
 
         # The 'wet' variable
         self.wet = 'wet'
-
-    def _tabulate(self, flooded_len, question, road_len, roads_by_type):
-        table_body = [
-            question,
-            TableRow(
-                [tr('Road Type'),
-                 tr('Temporarily closed (m)'),
-                 tr('Total (m)')],
-                header=True),
-            TableRow([tr('All'), int(flooded_len), int(road_len)]),
-            TableRow(tr('Breakdown by road type'), header=True)]
-        for road_type, value in roads_by_type.iteritems():
-            table_body.append(
-                TableRow([
-                    road_type, int(value['flooded']), int(value['total'])])
-            )
-        return table_body
 
     def run(self):
         """Experimental impact function for flood polygons on roads."""
@@ -167,13 +156,16 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
         destination_crs = QgsCoordinateReferenceSystem(epsg)
         transform = QgsCoordinateTransform(
             self.exposure.layer.crs(), destination_crs)
-        road_len = flooded_len = 0  # Length of roads
-        roads_by_type = dict()  # Length of flooded roads by types
 
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(
             self.exposure_class_attribute)
         target_field_index = line_layer.fieldNameIndex(self.target_field)
+        flooded_keyword = tr('Temporarily closed (m)')
+        self.affected_road_categories = [flooded_keyword]
+        self.affected_road_lengths = OrderedDict([
+            (flooded_keyword, {})])
+        self.road_lengths = OrderedDict()
 
         for road in roads_data:
             attributes = road.attributes()
@@ -183,20 +175,18 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
-            road_len += length
 
-            if road_type not in roads_by_type:
-                roads_by_type[road_type] = {'flooded': 0, 'total': 0}
-            roads_by_type[road_type]['total'] += length
+            if road_type not in self.road_lengths:
+                self.affected_road_lengths[flooded_keyword][road_type] = 0
+                self.road_lengths[road_type] = 0
 
+            self.road_lengths[road_type] += length
             if attributes[target_field_index] == 1:
-                flooded_len += length
-                roads_by_type[road_type]['flooded'] += length
+                self.affected_road_lengths[
+                    flooded_keyword][road_type] += length
 
-        table_body = self._tabulate(
-            flooded_len, self.question, road_len, roads_by_type)
+        impact_summary = self.generate_html_report()
 
-        impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('Roads inundated')
 
         style_classes = [dict(label=tr('Not Inundated'), value=0,
@@ -209,6 +199,10 @@ class FloodVectorRoadsExperimentalFunction(ClassifiedVHClassifiedVE):
             style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it
+        if line_layer.featureCount() == 0:
+            # Raising an exception seems poor semantics here....
+            raise ZeroImpactException(
+                tr('No roads are flooded in this scenario.'))
         line_layer = Vector(
             data=line_layer,
             name=tr('Flooded roads'),

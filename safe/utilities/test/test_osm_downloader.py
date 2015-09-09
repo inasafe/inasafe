@@ -149,7 +149,7 @@ class FakeQNetworkAccessManager:
             reply._url = 'http://hot-export.geofabrik.de/jobs/1990'
         elif url == 'http://hot-export.geofabrik.de/jobs/1990':
             reply.content = read_all('test-importdlg-job.html')
-        elif url == ('http://osm.linfiniti.com/buildings-shp?'
+        elif url == ('http://osm.inasafe.org/buildings-shp?'
                      'bbox=20.389938354492188,-34.10782492987083'
                      ',20.712661743164062,'
                      '-34.008273470938335&qgis_version=2'
@@ -196,7 +196,7 @@ class OsmDownloaderTest(unittest.TestCase):
         """
         feature = 'buildings'
         url = (
-            'http://osm.linfiniti.com/buildings-shp?'
+            'http://osm.inasafe.org/buildings-shp?'
             'bbox=20.389938354492188,-34.10782492987083'
             ',20.712661743164062,-34.008273470938335')
         path = tempfile.mktemp('shapefiles')

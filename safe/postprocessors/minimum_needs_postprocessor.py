@@ -55,7 +55,7 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
                 function_params = params['function_params']
                 if 'evacuation_percentage' in function_params.keys():
                     evacuation_percentage = function_params[
-                        'evacuation_percentage']
+                        'evacuation_percentage'].value
                     evacuation_percentage /= 100.0  # make it decimal
 
             self.impact_total = int(round(params['impact_total'] *

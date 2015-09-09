@@ -137,12 +137,12 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
                 inundated_status = 2  # wet
 
             # Count affected buildings by usage type if available
-                if (structure_class_field in attribute_names and
-                        structure_class_field):
-                    usage = features[i].get(structure_class_field, None)
-                else:
-                    usage = get_osm_building_usage(
-                        attribute_names, features[i])
+            if (structure_class_field in attribute_names and
+                    structure_class_field):
+                usage = features[i].get(structure_class_field, None)
+            else:
+                usage = get_osm_building_usage(
+                    attribute_names, features[i])
 
             if usage is None or usage == 0:
                 usage = 'unknown'
@@ -159,8 +159,8 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
             features[i][self.target_field] = inundated_status
             category = [
                 tr('Number of Dry Buildings'),
-                tr('Number of Wet Buildings'),
-                tr('Number Inundated')][inundated_status]
+                tr('Number Inundated'),
+                tr('Number of Wet Buildings')][inundated_status]
             self.affected_buildings[category][usage][
                 tr('Buildings Affected')] += 1
 

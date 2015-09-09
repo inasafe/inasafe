@@ -12,12 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'ismail@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '10/20/14'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 # noinspection PyPackageRequirements
 import numpy
 import logging
@@ -70,8 +64,14 @@ from safe.common.signals import (
     ANALYSIS_DONE_SIGNAL)
 from safe_extras.pydispatch import dispatcher
 from safe.common.exceptions import BoundingBoxError, NoValidLayerError
-from safe.utilities.resources import resource_url
 from safe.engine.core import calculate_impact
+
+
+__author__ = 'ismail@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '10/20/14'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -79,9 +79,7 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = m.Image(
-    resource_url(styles.logo_element()),
-    'InaSAFE Logo')
+LOGO_ELEMENT = m.Brand()
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -996,6 +994,10 @@ class Analysis(object):
             check_list.add(self.tr(
                 'Check that your impact function thresholds do not '
                 'exclude all features unintentionally.'))
+            # See #2288 and 2293
+            check_list.add(self.tr(
+                'Check that your dataset coordinate reference system is '
+                'compatible with InaSAFE\'s current requirements.'))
             report.add(check_list)
             # noinspection PyTypeChecker
             self.send_static_message(report)

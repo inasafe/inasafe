@@ -24,6 +24,7 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
+from qgis.core import QgsRectangle
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QLocale,
@@ -32,7 +33,7 @@ from PyQt4.QtCore import (
     Qt,
     QSettings)
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QAction, QIcon, QApplication, QWidget
+from PyQt4.QtGui import QAction, QIcon, QApplication
 
 from safe.common.version import release_status
 from safe.common.exceptions import TranslationLoadError
@@ -72,7 +73,7 @@ class Plugin(object):
         self.action_batch_runner = None
         self.action_shake_converter = None
         self.action_minimum_needs = None
-        self.action_global_minimum_needs = None
+        self.action_minimum_needs_config = None
         self.action_impact_merge_dlg = None
         self.key_action = None
         self.action_options = None
@@ -81,6 +82,7 @@ class Plugin(object):
         self.action_extent_selector = None
         self.translator = None
         self.toolbar = None
+        self.wizard = None
         self.actions = []  # list of all QActions we create for InaSAFE
         self.action_dock = None
         self.action_toggle_rubberbands = None
@@ -229,11 +231,11 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'show-minimum-needs.svg')
         self.action_minimum_needs = QAction(
             QIcon(icon),
-            self.tr('Minimum Needs Tool'), self.iface.mainWindow())
+            self.tr('Minimum Needs Calculator'), self.iface.mainWindow())
         self.action_minimum_needs.setStatusTip(self.tr(
-            'Open InaSAFE minimum needs tool'))
+            'Open InaSAFE minimum needs calculator'))
         self.action_minimum_needs.setWhatsThis(self.tr(
-            'Open InaSAFE minimum needs tool'))
+            'Open InaSAFE minimum needs calculator'))
         self.action_minimum_needs.triggered.connect(self.show_minimum_needs)
         self.add_action(
             self.action_minimum_needs, add_to_toolbar=self.full_toolbar)
@@ -241,25 +243,25 @@ class Plugin(object):
     def _create_minimum_needs_options_action(self):
         """Create action for global minimum needs dialog."""
         icon = resources_path('img', 'icons', 'show-global-minimum-needs.svg')
-        self.action_global_minimum_needs = QAction(
+        self.action_minimum_needs_config = QAction(
             QIcon(icon),
-            self.tr('Global Minimum Needs Configuration'),
+            self.tr('Minimum Needs Configuration'),
             self.iface.mainWindow())
-        self.action_global_minimum_needs.setStatusTip(self.tr(
-            'Open InaSAFE global minimum needs configuration'))
-        self.action_global_minimum_needs.setWhatsThis(self.tr(
-            'Open InaSAFE global minimum needs configuration'))
-        self.action_global_minimum_needs.triggered.connect(
-            self.show_global_minimum_needs_configuration)
+        self.action_minimum_needs_config.setStatusTip(self.tr(
+            'Open InaSAFE minimum needs configuration'))
+        self.action_minimum_needs_config.setWhatsThis(self.tr(
+            'Open InaSAFE minimum needs configuration'))
+        self.action_minimum_needs_config.triggered.connect(
+            self.show_minimum_needs_configuration)
         self.add_action(
-            self.action_global_minimum_needs, add_to_toolbar=self.full_toolbar)
+            self.action_minimum_needs_config, add_to_toolbar=self.full_toolbar)
 
     def _create_shakemap_converter_action(self):
         """Create action for converter dialog."""
         icon = resources_path('img', 'icons', 'show-converter-tool.svg')
         self.action_shake_converter = QAction(
             QIcon(icon),
-            self.tr('Shakemap converter'), self.iface.mainWindow())
+            self.tr('Shakemap Converter'), self.iface.mainWindow())
         self.action_shake_converter.setStatusTip(self.tr(
             'Open InaSAFE Converter'))
         self.action_shake_converter.setWhatsThis(self.tr(
@@ -489,6 +491,8 @@ class Plugin(object):
         any graphical user interface elements that should appear in QGIS.
         """
         # Remove the plugin menu item and icon
+        if self.wizard:
+            self.wizard.deleteLater()
         for myAction in self.actions:
             self.iface.removePluginMenu(self.tr('InaSAFE'), myAction)
             self.iface.removeToolBarIcon(myAction)
@@ -523,6 +527,8 @@ class Plugin(object):
         """Add standard test layers."""
         from safe.test.utilities import load_standard_layers
         load_standard_layers()
+        rect = QgsRectangle(106.806, -6.195, 106.837, -6.167)
+        self.iface.mapCanvas().setExtent(rect)
 
     def show_extent_selector(self):
         """Show the extent selector widget for defining analysis extents."""
@@ -554,7 +560,7 @@ class Plugin(object):
         dialog = NeedsCalculatorDialog(self.iface.mainWindow())
         dialog.exec_()
 
-    def show_global_minimum_needs_configuration(self):
+    def show_minimum_needs_configuration(self):
         """Show the minimum needs dialog."""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.minimum_needs.needs_manager_dialog import (
@@ -591,29 +597,38 @@ class Plugin(object):
 
         if self.iface.activeLayer() is None:
             return
-        dialog = WizardDialog(
-            self.iface.mainWindow(),
-            self.iface,
-            self.dock_widget)
-        dialog.set_keywords_creation_mode()
-        dialog.exec_()  # modal
+
+        # Don't break an existing wizard session if accidentally clicked
+        if self.wizard and self.wizard.isVisible():
+            return
+
+        # Prevent spawning multiple copies since the IFCW is non modal
+        if not self.wizard:
+            self.wizard = WizardDialog(
+                self.iface.mainWindow(),
+                self.iface,
+                self.dock_widget)
+        self.wizard.set_keywords_creation_mode()
+        self.wizard.exec_()  # modal
 
     def show_function_centric_wizard(self):
         """Show the keywords creation wizard."""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.wizard_dialog import WizardDialog
-        # Prevent spawning multiple copies since it is non model
-        wizards = self.iface.findChildren(QWidget, "WizardDialogBase")
-        LOGGER.info('Wizards count: %i' % len(wizards))
-        if len(wizards) > 0:
-            dialog = wizards[0]
-        else:
-            dialog = WizardDialog(
+
+        # Don't break an existing wizard session if accidentally clicked
+        if self.wizard and self.wizard.isVisible():
+            return
+
+        # Prevent spawning multiple copies since it is non modal
+        if not self.wizard:
+            self.wizard = WizardDialog(
                 self.iface.mainWindow(),
                 self.iface,
                 self.dock_widget)
-        dialog.set_function_centric_mode()
-        dialog.show()  # non-modal in order to hide for selecting user extent
+        self.wizard.set_function_centric_mode()
+        # non-modal in order to hide for selecting user extent
+        self.wizard.show()
 
     def show_shakemap_importer(self):
         """Show the converter dialog."""

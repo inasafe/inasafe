@@ -31,7 +31,7 @@ from safe.impact_functions.inundation.flood_vector_building_impact.\
     metadata_definitions import FloodPolygonBuildingFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
-from safe.common.exceptions import GetDataError
+from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
@@ -65,7 +65,10 @@ class FloodPolygonBuildingFunction(
                     'Buildings are said to be inundated when in a region with '
                     'field "%s" in "%s" .') % (
                         self.hazard_class_attribute,
-                        ', '.join(self.hazard_class_mapping[self.wet]))
+                        ', '.join([
+                            unicode(hazard_class) for
+                            hazard_class in self.hazard_class_mapping[self.wet]
+                        ]))
             }
         ]
 
@@ -236,6 +239,9 @@ class FloodPolygonBuildingFunction(
             style_type='categorizedSymbol')
 
         # Convert QgsVectorLayer to inasafe layer and return it.
+        if building_layer.featureCount() < 1:
+            raise ZeroImpactException(tr(
+                'No buildings were impacted by this flood.'))
         building_layer = Vector(
             data=building_layer,
             name=tr('Flooded buildings'),

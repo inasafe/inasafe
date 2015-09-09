@@ -23,7 +23,6 @@ from safe.impact_functions.bases.continuous_rh_continuous_re import \
     ContinuousRHContinuousRE
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.core import (
-    evacuated_population_needs,
     population_rounding,
     has_no_data)
 from safe.storage.raster import Raster
@@ -35,6 +34,8 @@ from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters
+from safe.impact_reports.population_exposure_report_mixin import \
+    PopulationExposureReportMixin
 
 __author__ = 'lucernae'
 __date__ = '24/03/15'
@@ -43,7 +44,9 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-class ContinuousHazardPopulationFunction(ContinuousRHContinuousRE):
+class ContinuousHazardPopulationFunction(
+        ContinuousRHContinuousRE,
+        PopulationExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by continuous hazard."""
     _metadata = ContinuousHazardPopulationMetadata()
@@ -54,69 +57,56 @@ class ContinuousHazardPopulationFunction(ContinuousRHContinuousRE):
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
+        self.no_data_warning = False
 
-    def _tabulate(
-            self,
-            high,
-            low,
-            medium,
-            question,
-            total_impact):
-        # Generate impact report for the pdf map
-        table_body = [
-            question,
-            TableRow([tr('People impacted '),
-                      '%s' % format_int(total_impact)],
-                     header=True),
-            TableRow([tr('People in high hazard area '),
-                      '%s' % format_int(high)],
-                     header=True),
-            TableRow([tr('People in medium hazard area '),
-                      '%s' % format_int(medium)],
-                     header=True),
-            TableRow([tr('People in low hazard area'),
-                      '%s' % format_int(low)],
-                     header=True)]
-        return table_body
+    def notes(self):
+        """Return the notes section of the report.
 
-    def _tabulate_notes(
-            self,
-            minimum_needs,
-            table_body,
-            total,
-            total_impact,
-            no_data_warning):
-        # Extend impact report for on-screen display
-        table_body.extend([
-            TableRow(tr('Notes'), header=True),
-            tr('Map shows population count in high, medium, and low hazard '
-               'area.'),
-            tr('Total population: %s') % format_int(total),
-            TableRow(tr(
-                'Table below shows the minimum needs for all '
-                'affected people'))])
-        if no_data_warning:
-            table_body.extend([
-                tr('The layers contained `no data`. This missing data was '
-                   'carried through to the impact layer.'),
-                tr('`No data` values in the impact layer were treated as 0 '
-                   'when counting the affected or total population.')
-            ])
-
-        total_needs = evacuated_population_needs(
-            total_impact, minimum_needs)
-        for frequency, needs in total_needs.items():
-            table_body.append(TableRow(
-                [
-                    tr('Needs should be provided %s' % frequency),
-                    tr('Total')
-                ],
-                header=True))
-            for resource in needs:
-                table_body.append(TableRow([
-                    tr(resource['table name']),
-                    format_int(resource['amount'])]))
-        return table_body, total_needs
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        notes = [
+            {'content': tr('Notes'), 'header': True},
+            {
+                'content': tr('Total population: %s') % format_int(
+                    population_rounding(self.total_population))
+            },
+            {
+                'content': tr(
+                    '<sup>1</sup>People need evacuation if they are in a '
+                    'hazard zone.')
+            },
+            {
+                'content': tr(
+                    'Map shows the numbers of people in high, medium, '
+                    'and low hazard class areas.')
+            },
+            {
+                'content': tr(
+                    'The layers contained `no data`. This missing data was '
+                    'carried through to the impact layer.'),
+                'condition': self.no_data_warning
+            },
+            {
+                'content': tr(
+                    '`No data` values in the impact layer were treated as 0 '
+                    'when counting the affected or total population.'),
+                'condition': self.no_data_warning
+            },
+            {
+                'content': tr(
+                    'All values are rounded up to the nearest integer in '
+                    'order to avoid representing human lives as fractions.'),
+            },
+            {
+                'content': tr(
+                    'Population rounding is applied to all population '
+                    'values, which may cause discrepancies when adding '
+                    'values.'
+                )
+            }
+        ]
+        return notes
 
     def run(self):
         """Plugin for impact of population as derived by continuous hazard.
@@ -155,14 +145,13 @@ class ContinuousHazardPopulationFunction(ContinuousRHContinuousRE):
 
         # Extract data as numeric arrays
         hazard_data = self.hazard.layer.get_data(nan=True)  # Category
-        no_data_warning = False
         if has_no_data(hazard_data):
-            no_data_warning = True
+            self.no_data_warning = True
 
         # Calculate impact as population exposed to each category
         exposure_data = self.exposure.layer.get_data(nan=True, scaling=True)
         if has_no_data(exposure_data):
-            no_data_warning = True
+            self.no_data_warning = True
 
         # Make 3 data for each zone. Get the value of the exposure if the
         # exposure is in the hazard zone, else just assign 0
@@ -176,43 +165,38 @@ class ContinuousHazardPopulationFunction(ContinuousRHContinuousRE):
         impacted_exposure = low_exposure + medium_exposure + high_exposure
 
         # Count totals
-        total = int(numpy.nansum(exposure_data))
-        low_total = int(numpy.nansum(low_exposure))
-        medium_total = int(numpy.nansum(medium_exposure))
-        high_total = int(numpy.nansum(high_exposure))
-        total_impact = high_total + medium_total + low_total
+        self.total_population = int(numpy.nansum(exposure_data))
+        self.affected_population[
+            tr('Population in high hazard areas')] = int(
+                numpy.nansum(high_exposure))
+        self.affected_population[
+            tr('Population in medium hazard areas')] = int(
+                numpy.nansum(medium_exposure))
+        self.affected_population[
+            tr('Population in low hazard areas')] = int(
+                numpy.nansum(low_exposure))
+        self.unaffected_population = (
+            self.total_population - self.total_affected_population)
 
         # Check for zero impact
-        if total_impact == 0:
+        if self.total_affected_population == 0:
             table_body = [
                 self.question,
                 TableRow(
                     [tr('People impacted'),
-                     '%s' % format_int(total_impact)], header=True)]
+                     '%s' % format_int(0)], header=True)]
             message = Table(table_body).toNewlineFreeString()
             raise ZeroImpactException(message)
 
         # Don't show digits less than a 1000
-        total = population_rounding(total)
-        total_impact = population_rounding(total_impact)
-        low_total = population_rounding(low_total)
-        medium_total = population_rounding(medium_total)
-        high_total = population_rounding(high_total)
-
-        minimum_needs = [
+        self.minimum_needs = [
             parameter.serialize() for parameter in
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
+        total_needs = self.total_needs
 
-        table_body = self._tabulate(
-            high_total, low_total, medium_total, self.question, total_impact)
+        impact_table = impact_summary = self.generate_html_report()
 
-        impact_table = Table(table_body).toNewlineFreeString()
-
-        table_body, total_needs = self._tabulate_notes(
-            minimum_needs, table_body, total, total_impact, no_data_warning)
-
-        impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('People in each hazard areas (low, medium, high)')
 
         # Style for impact layer

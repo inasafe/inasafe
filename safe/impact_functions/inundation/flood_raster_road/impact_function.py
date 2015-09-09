@@ -1,5 +1,7 @@
 # coding=utf-8
 """Impact of flood on roads."""
+from collections import OrderedDict
+
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
@@ -16,7 +18,7 @@ from qgis.core import (
 )
 from PyQt4.QtCore import QVariant
 
-from safe.common.tables import Table, TableRow
+from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.impact_functions.inundation.flood_raster_road\
@@ -29,6 +31,8 @@ from safe.gis.qgis_raster_tools import clip_raster
 from safe.gis.qgis_vector_tools import (
     extent_to_geo_array,
     create_layer)
+from safe.impact_reports.road_exposure_report_mixin import\
+    RoadExposureReportMixin
 
 
 def _raster_to_vector_cells(
@@ -262,7 +266,9 @@ def _intersect_lines_with_vector_cells(
     output_layer.dataProvider().addFeatures(features)
 
 
-class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
+class FloodRasterRoadsFunction(
+        ContinuousRHClassifiedVE,
+        RoadExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Simple impact function for inundation for road."""
     _metadata = FloodRasterRoadsMetadata()
@@ -270,43 +276,6 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
     def __init__(self):
         """Constructor."""
         super(FloodRasterRoadsFunction, self).__init__()
-
-    def _tabulate(self, flooded_length, question, road_length, roads_by_type):
-        """Helper to generate table for impact summary.
-
-        :param flooded_length: Total length of flooded roads
-        :type flooded_length: float
-
-        :param question: Question asked by the user.
-        :type question: str
-
-        :param road_length: Total length of roads.
-        :type road_length: float
-
-        :param roads_by_type: Length of flooded roads by types.
-            Road types are keys, values are {'flooded': X, 'total': Y}
-        :type roads_by_type: dict
-
-        :returns: List of table rows
-        :rtype: list
-        """
-        table_body = [
-            question,
-            TableRow(
-                [tr('Road Type'),
-                 tr('Flooded in the threshold (m)'),
-                 tr('Total (m)')],
-                header=True),
-            TableRow(
-                [tr('All'),
-                 int(flooded_length),
-                 int(road_length)]),
-            TableRow(tr('Breakdown by road type'), header=True)]
-        for t, v in roads_by_type.iteritems():
-            table_body.append(
-                TableRow([t, int(v['flooded']), int(v['total'])])
-            )
-        return table_body
 
     def run(self):
         """Run the impact function.
@@ -449,8 +418,14 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
         output_crs = QgsCoordinateReferenceSystem(epsg)
         transform = QgsCoordinateTransform(
             self.exposure.layer.crs(), output_crs)
-        road_length = flooded_length = 0  # Length of roads
-        roads_by_type = dict()      # Length of flooded roads by types
+        flooded_keyword = tr('Flooded in the threshold (m)')
+        self.affected_road_categories = [flooded_keyword]
+        self.affected_road_lengths = OrderedDict([
+            (flooded_keyword, {})])
+        self.road_lengths = OrderedDict()
+
+        if line_layer.featureCount() < 1:
+            raise ZeroImpactException()
 
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(road_class_field)
@@ -462,20 +437,18 @@ class FloodRasterRoadsFunction(ContinuousRHClassifiedVE):
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
-            road_length += length
 
-            if road_type not in roads_by_type:
-                roads_by_type[road_type] = {'flooded': 0, 'total': 0}
-            roads_by_type[road_type]['total'] += length
+            if road_type not in self.road_lengths:
+                self.affected_road_lengths[flooded_keyword][road_type] = 0
+                self.road_lengths[road_type] = 0
 
+            self.road_lengths[road_type] += length
             if attributes[target_field_index] == 1:
-                flooded_length += length
-                roads_by_type[road_type]['flooded'] += length
+                self.affected_road_lengths[
+                    flooded_keyword][road_type] += length
 
-        table_body = self._tabulate(
-            flooded_length, self.question, road_length, roads_by_type)
+        impact_summary = self.generate_html_report()
 
-        impact_summary = Table(table_body).toNewlineFreeString()
         map_title = tr('Roads inundated')
 
         style_classes = [
