@@ -194,9 +194,9 @@ class ParameterContainer(QWidget, object):
                 color = color_odd
             i += 1
             parameter_widget.setAutoFillBackground(True)
-            palette = parameter_widget.palette()
-            palette.setColor(parameter_widget.backgroundRole(), color)
-            parameter_widget.setPalette(palette)
+            #palette = parameter_widget.palette()
+            #palette.setColor(parameter_widget.backgroundRole(), color)
+            #parameter_widget.setPalette(palette)
             self.vertical_layout.addWidget(parameter_widget)
 
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)

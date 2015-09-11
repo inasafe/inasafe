@@ -24,6 +24,7 @@ class GroupParameterWidget(GenericParameterWidget):
         """
         super(GroupParameterWidget, self).__init__(parameter, parent)
 
+        # Get the parameter label and use its value as the checkbox text
         label_item = self._input_layout.itemAt(0)
         label_widget = label_item.widget()
         text = label_widget.text()
@@ -37,6 +38,7 @@ class GroupParameterWidget(GenericParameterWidget):
 
         if not self._parameter.is_required:
             self._input_layout.insertWidget(0, self._enable_check_box)
+            # now we don't need the parameter label anymore so chuck it
             self._input_layout.removeItem(label_item)
             # Make the sub group appear indented
             self._group_layout.setContentsMargins(20, 0, 0, 0)
