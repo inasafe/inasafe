@@ -29,7 +29,8 @@ from qgis.core import (
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QGis)
+    QGis,
+    QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -1336,6 +1337,22 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # Load impact layer into QGIS
             qgis_impact_layer = read_impact_layer(engine_impact_layer)
+            # QGIS 2.4 and better only
+            # Added in InaSAFE 3.2 - insert the impact layer
+            # above the exposure layer - see #2322
+            if QGis.QGIS_VERSION_INT >= 20400:
+                root = QgsProject.instance().layerTreeRoot()
+                id = iface.activeLayer().id()
+                index = 0
+                current_index = 0
+                nodes = root.children()
+                if isinstance(child, QgsLayerTreeLayer):
+                    if id == child.layerId():
+                        index = current_index
+                current_index += 1
+
+                root.insertLayer(current_index, qgis_impact_layer)
+
             self.layer_changed(qgis_impact_layer)
             report = self.show_results(
                 qgis_impact_layer, engine_impact_layer)
