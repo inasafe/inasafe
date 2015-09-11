@@ -55,10 +55,10 @@ class Brand(Text):
         snippet = (
             '<div class="branding">'
             '<img src="%s" title="%s" alt="%s" %s/></div>') % (
-            uri,
-            'InaSAFE',
-            'InaSAFE',
-            self.html_attributes())
+                uri,
+                'InaSAFE',
+                'InaSAFE',
+                self.html_attributes())
         return snippet
 
     def to_text(self):

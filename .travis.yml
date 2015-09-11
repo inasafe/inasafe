@@ -12,16 +12,25 @@ branches:
     - develop
     - experimental
 
+addons:
+  apt:
+    packages:
+      - git
+      - python-software-properties
+
 before_install:
   - sudo apt-get -qq -y update
 
 install:
-  - sudo apt-get install -y python-software-properties
 #  - sudo apt-get install -y software-properties-common
 #  - sudo add-apt-repository http://qgis.org/debian-ltr  # for QGIS LTR
   - sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable  # for QGIS
   - sudo apt-get update
-  - sudo apt-get install -y --force-yes git qgis python-qgis xvfb python-nose python-coverage pyflakes python-nosexcover python-scientific python-beautifulsoup
+  - sudo apt-get install -y --force-yes qgis python-qgis pyflakes python-scientific
+  - pip install coverage
+  - pip install nosexcover
+  - pip install nose
+  - pip install beautifulsoup
   - pip install --upgrade pip
   - pip install --upgrade pep8
   - pip install --upgrade pylint

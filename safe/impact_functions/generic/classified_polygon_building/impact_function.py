@@ -23,7 +23,8 @@ from safe.utilities.i18n import tr
 from safe.impact_functions.generic.classified_polygon_building\
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError, KeywordNotFoundError
+from safe.common.exceptions import InaSAFEError, KeywordNotFoundError, \
+    ZeroImpactException
 from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage,
@@ -126,6 +127,9 @@ class ClassifiedPolygonHazardBuildingFunction(
         target_field_index = interpolated_layer.fieldNameIndex(
             self.target_field)
         changed_values = {}
+
+        if interpolated_layer.featureCount() < 1:
+            raise ZeroImpactException()
 
         # Extract relevant interpolated data
         for feature in interpolated_layer.getFeatures():

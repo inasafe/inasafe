@@ -381,10 +381,7 @@ class AnalysisHandler(QObject):
         self.analysis.map_canvas = self.iface.mapCanvas()
 
         # Extent
-        if self.parent.rbExtentUser.isChecked():
-            self.analysis.user_extent = self.extent.user_extent
-        else:
-            self.analysis.user_extent = None
+        self.analysis.user_extent = self.extent.user_extent
         self.analysis.user_extent_crs = self.extent.user_extent_crs
 
     # noinspection PyUnresolvedReferences

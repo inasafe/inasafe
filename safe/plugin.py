@@ -33,7 +33,7 @@ from PyQt4.QtCore import (
     Qt,
     QSettings)
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QAction, QIcon, QApplication, QWidget
+from PyQt4.QtGui import QAction, QIcon, QApplication
 
 from safe.common.version import release_status
 from safe.common.exceptions import TranslationLoadError
@@ -627,8 +627,8 @@ class Plugin(object):
                 self.iface,
                 self.dock_widget)
         self.wizard.set_function_centric_mode()
-        self.wizard.show()  # non-modal in order to hide for selecting user extent
-
+        # non-modal in order to hide for selecting user extent
+        self.wizard.show()
 
     def show_shakemap_importer(self):
         """Show the converter dialog."""

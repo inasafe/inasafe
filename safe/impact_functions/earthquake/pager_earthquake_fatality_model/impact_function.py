@@ -118,8 +118,9 @@ class PAGFatalityFunction(ITBFatalityFunction):
             sum of the list of input numbers.
         :rtype: list
         """
-        q = 10**(-r)
-        d = int((round(sum(l), r) - sum([round(x, r) for x in l])) * (10**r))
+        q = 10 ** (-r)
+        d = (round(sum(l), r) - sum([round(x, r) for x in l])) * (10 ** r)
+        d = int(d)
         if d == 0:
             return [round(x, r) for x in l]
         elif d in [-1, 1]:
