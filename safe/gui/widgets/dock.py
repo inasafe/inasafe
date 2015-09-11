@@ -30,7 +30,8 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QGis,
-    QgsProject)
+    QgsProject,
+    QgsLayerTreeLayer)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -1340,17 +1341,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # QGIS 2.4 and better only
             # Added in InaSAFE 3.2 - insert the impact layer
             # above the exposure layer - see #2322
-            if QGis.QGIS_VERSION_INT >= 20400:
+             QGis.QGIS_VERSION_INT >= 20400:if
                 root = QgsProject.instance().layerTreeRoot()
-                id = iface.activeLayer().id()
+                id = self.iface.activeLayer().id()
                 index = 0
                 current_index = 0
                 nodes = root.children()
-                if isinstance(child, QgsLayerTreeLayer):
-                    if id == child.layerId():
-                        index = current_index
-                current_index += 1
-
+                for node in nodes:
+                    if isinstance(node, QgsLayerTreeLayer):
+                        if id == node.layerId():
+                            index = current_index
+                    current_index += 1
+                LOGGER.info('Inserting layer at position %s' % current_index)
                 root.insertLayer(current_index, qgis_impact_layer)
 
             self.layer_changed(qgis_impact_layer)
