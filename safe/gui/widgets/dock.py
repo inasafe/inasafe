@@ -1321,6 +1321,71 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         return analysis
 
+    def add_above_layer(
+            self,
+            existing_layer,
+            new_layer):
+        """Add a layer (typically impact layer) above the exposure layer.
+
+        .. versionadded:: 3.2
+
+        .. note:: This method works in QGIS 2.4 and better only. In
+            earlier versions it will just add the layer to the top of the
+            layer stack.
+
+        .. seealso:: issue #2322
+
+        :param existing_layer: The layer which the new layer
+            should be added above.
+        :type new_layer: QgsMapLayer
+
+        :param new_layer: The new layer being added. An assumption is made
+            that the newly added layer is not already loaded in the legend
+            or the map registry.
+        :type impact_layer: QgsMapLayer
+
+        """
+        index = self.layer_legend_index(existing_layer)
+        LOGGER.info('Inserting layer %s at position %s' % (
+            new_layer.source(), index))
+        # False flag prevents layer being added to legend
+        registry = QgsMapLayerRegistry.instance()
+        registry.addMapLayer(existing_layer, False)
+        root = QgsProject.instance().layerTreeRoot()
+        root.insertLayer(index, new_layer)
+
+    def layer_legend_index(self, layer):
+        """Find out where in the legend layer stack a layer is.
+
+        .. note:: This function requires QGIS 2.4 or greater to work. In older
+            versions it will simply return 0.
+
+        .. version_added:: 3.2
+
+        :param layer: A map layer currently loaded in the legend.
+        :type layer: QgsMapLayer
+
+        :returns: An integer representing the z-order of the given layer in
+            the legend tree. If the layer cannot be found, or the QGIS version
+            is < 2.4 it will return 0.
+        :rtype: int
+        """
+        if QGis.QGIS_VERSION_INT < 20400:
+            return 0
+
+        root = QgsProject.instance().layerTreeRoot()
+        id = layer.id()
+        current_index = 0
+        nodes = root.children()
+        for node in nodes:
+            # check if the node is a layer as opposed to a group
+            if isinstance(node, QgsLayerTreeLayer):
+                if id == node.layerId():
+                    return current_index
+            current_index += 1
+        return current_index
+
+
     def completed(self):
         """Slot activated when the process is done.
         """
@@ -1338,22 +1403,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # Load impact layer into QGIS
             qgis_impact_layer = read_impact_layer(engine_impact_layer)
-            # QGIS 2.4 and better only
-            # Added in InaSAFE 3.2 - insert the impact layer
-            # above the exposure layer - see #2322
-             QGis.QGIS_VERSION_INT >= 20400:if
-                root = QgsProject.instance().layerTreeRoot()
-                id = self.iface.activeLayer().id()
-                index = 0
-                current_index = 0
-                nodes = root.children()
-                for node in nodes:
-                    if isinstance(node, QgsLayerTreeLayer):
-                        if id == node.layerId():
-                            index = current_index
-                    current_index += 1
-                LOGGER.info('Inserting layer at position %s' % current_index)
-                root.insertLayer(current_index, qgis_impact_layer)
+            self.add_above_layer(
+                self.get_exposure_layer(),
+                qgis_impact_layer)
 
             self.layer_changed(qgis_impact_layer)
             report = self.show_results(
@@ -1440,12 +1492,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             raise ReadLayerError(message)
 
         # Add layers to QGIS
-        layers_to_add = []
+        # Insert the aggregation output above the input
+        # aggregation layer
         if self.show_intermediate_layers:
-            layers_to_add.append(self.analysis.aggregator.layer)
-        layers_to_add.append(qgis_impact_layer)
+            self.add_above_layer(
+                self.get_aggregation_layer(),
+                self.analysis.aggregator.layer)
+        # Insert the impact above the exposure
+        self.add_above_layer(
+            self.get_exposure_layer(),
+            qgis_impact_layer)
+
         active_function = self.active_impact_function
-        QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
         self.active_impact_function = active_function
         self.impact_function_parameters = \
             self.active_impact_function.parameters

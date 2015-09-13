@@ -324,6 +324,18 @@ class TestDock(TestCase):
         # print 'After count %s' % after_count
         self.assertTrue(before_count == after_count - 1, message)
 
+    def layer_legend_index(self):
+        """Test we can get the legend index for a layer."""
+        result, message = setup_scenario(
+            self.dock,
+            hazard='Continuous Flood',
+            exposure='Population',
+            function='Need evacuation',
+            function_id='FloodEvacuationRasterHazardFunction')
+        layer = self.dock.get_exposure_layer()
+        index = self.dock.layer_legend_index(layer)
+        self.assertTrue(index == 1)
+
     def test_load_layers(self):
         """Layers can be loaded and list widget was updated appropriately
         """

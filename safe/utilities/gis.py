@@ -405,7 +405,7 @@ def read_impact_layer(impact_layer):
         return qgis_layer
     else:
         # noinspection PyUnresolvedReferences
-        message = tr
+        message = tr(
             'Loaded impact layer "%s" is not valid') % file_name
         raise Exception(message)
 
