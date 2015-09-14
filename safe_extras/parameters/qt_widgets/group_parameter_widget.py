@@ -6,8 +6,7 @@ __filename__ = 'list_parameter_widget'
 __date__ = '02/04/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from PyQt4.QtGui import (
-    QVBoxLayout, QCheckBox)
+from PyQt4.QtGui import QVBoxLayout, QCheckBox
 
 from qt_widgets.generic_parameter_widget import GenericParameterWidget
 
@@ -25,21 +24,30 @@ class GroupParameterWidget(GenericParameterWidget):
         """
         super(GroupParameterWidget, self).__init__(parameter, parent)
 
-        self._enable_check_box = QCheckBox()
+        # Get the parameter label and use its value as the checkbox text
+        label_item = self._input_layout.itemAt(0)
+        label_widget = label_item.widget()
+        text = label_widget.text()
+        self._enable_check_box = QCheckBox(text)
         # Tooltips
         self.setToolTip('Tick here to enable ' + self._parameter.name)
-
-        if not self._parameter.is_required:
-            self._inner_input_layout.addWidget(self._enable_check_box)
-        else:
-            self._parameter.enable_parameter = True
 
         # add all widget in the group
         self._group_layout = QVBoxLayout()
         self._group_layout.setSpacing(0)
 
+        if not self._parameter.is_required:
+            self._input_layout.insertWidget(0, self._enable_check_box)
+            # now we don't need the parameter label anymore so chuck it
+            self._input_layout.removeItem(label_item)
+            # Make the sub group appear indented
+            self._group_layout.setContentsMargins(20, 0, 0, 0)
+        else:
+            self._parameter.enable_parameter = True
+
         self._main_layout.addLayout(self._group_layout)
 
+        # Why are we doing imports here? TS
         from qt_widgets.parameter_container import ParameterContainer
 
         self.param_container = ParameterContainer(
