@@ -187,10 +187,11 @@ class ClassifiedRasterHazardBuildingFunction(
                           style_type='categorizedSymbol')
 
         impact_table = impact_summary = self.generate_html_report()
+
         # For printing map purpose
         map_title = tr('Buildings affected')
-        legend_units = tr('(Low, Medium, High)')
         legend_title = tr('Structure inundated status')
+        legend_units = tr('(Low, Medium, High)')
 
         # Create vector layer and return
         vector_layer = Vector(

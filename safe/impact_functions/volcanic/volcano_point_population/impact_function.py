@@ -250,7 +250,6 @@ class VolcanoPointPopulationFunction(
             'Thousand separator is represented by  %s' %
             get_thousand_separator())
 
-
         # Create vector layer and return
         impact_layer = Raster(
             data=covered_exposure_layer.get_data(),
