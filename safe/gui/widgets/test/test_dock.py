@@ -31,7 +31,8 @@ from qgis.core import (
     QgsVectorLayer,
     QgsMapLayerRegistry,
     QgsRectangle,
-    QgsCoordinateReferenceSystem)
+    QgsCoordinateReferenceSystem,
+    QgsProject)
 from PyQt4 import QtCore
 
 from safe.impact_functions import register_impact_functions
@@ -324,9 +325,10 @@ class TestDock(TestCase):
         # print 'After count %s' % after_count
         self.assertTrue(before_count == after_count - 1, message)
 
-    def layer_legend_index(self):
+    def test_layer_legend_index(self):
         """Test we can get the legend index for a layer."""
-        result, message = setup_scenario(
+
+        setup_scenario(
             self.dock,
             hazard='Continuous Flood',
             exposure='Population',
@@ -334,7 +336,26 @@ class TestDock(TestCase):
             function_id='FloodEvacuationRasterHazardFunction')
         layer = self.dock.get_exposure_layer()
         index = self.dock.layer_legend_index(layer)
-        self.assertTrue(index == 1)
+        self.assertTrue(index == 8)
+
+    def test_add_above_layer(self):
+        """Test we can add one layer above another - see #2322"""
+
+        setup_scenario(
+            self.dock,
+            hazard='Continuous Flood',
+            exposure='Population',
+            function='Need evacuation',
+            function_id='FloodEvacuationRasterHazardFunction')
+        layer_path = join(TESTDATA, 'polygon_0.shp')
+        new_layer = QgsVectorLayer(layer_path, 'foo', 'ogr')
+        exposure_layer = self.dock.get_exposure_layer()
+        self.dock.add_above_layer(new_layer, exposure_layer)
+        root = QgsProject.instance().layerTreeRoot()
+        id_list = root.findLayerIds()
+        new_layer_position = id_list.index(new_layer.id())
+        existing_layer_position = id_list.index(exposure_layer.id())
+        self.assertTrue(new_layer_position, existing_layer_position)
 
     def test_load_layers(self):
         """Layers can be loaded and list widget was updated appropriately
@@ -690,10 +711,10 @@ class TestDock(TestCase):
             self.assertIn(line, result)
 
     def test_layer_changed(self):
-        """Test the metadata is updated as the user highlights different
-        QGIS layers. For inasafe outputs, the table of results should be shown
-        See also
-        https://github.com/AIFDR/inasafe/issues/58
+        """Test the metadata is updated as the user highlights layers.
+
+        For inasafe outputs, the table of results should be shown
+        See also https://github.com/AIFDR/inasafe/issues/58
         """
         layer_path = os.path.join(TESTDATA, 'issue58.tif')
         layer, layer_type = load_layer(layer_path)
