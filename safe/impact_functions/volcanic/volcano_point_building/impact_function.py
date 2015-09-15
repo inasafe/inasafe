@@ -219,10 +219,10 @@ class VolcanoPointBuildingFunction(
 
         # For printing map purpose
         map_title = tr('Buildings affected by volcanic buffered point')
+        legend_title = tr('Building count')
+        legend_units = tr('(building)')
         legend_notes = tr('Thousand separator is represented by %s' %
                           get_thousand_separator())
-        legend_units = tr('(building)')
-        legend_title = tr('Building count')
 
         # Create vector layer and return
         impact_layer = Vector(

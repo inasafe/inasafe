@@ -222,10 +222,10 @@ class ClassifiedPolygonHazardPopulationFunction(
 
         # For printing map purpose
         map_title = tr('People impacted by each hazard zone')
+        legend_title = tr('Population')
+        legend_units = tr('(people per cell)')
         legend_notes = tr('Thousand separator is represented by  %s' %
                           get_thousand_separator())
-        legend_units = tr('(people per cell)')
-        legend_title = tr('Population')
 
         # Create vector layer and return
         impact_layer = Raster(

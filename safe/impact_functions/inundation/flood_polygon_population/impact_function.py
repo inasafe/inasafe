@@ -31,7 +31,8 @@ from safe.common.utilities import (
     format_int,
     create_classes,
     humanize_class,
-    create_label)
+    create_label,
+    get_thousand_separator)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
 from safe.common.exceptions import ZeroImpactException
@@ -282,9 +283,11 @@ class FloodEvacuationVectorHazardFunction(
 
         # For printing map purpose
         map_title = tr('People affected by flood prone areas')
-        legend_notes = tr('Thousand separator is represented by \'.\'')
-        legend_units = tr('(people per polygon)')
         legend_title = tr('Population Count')
+        legend_units = tr('(people per polygon)')
+        legend_notes = tr(
+            'Thousand separator is represented by %s' %
+            get_thousand_separator())
 
         # Create vector layer and return
         impact_layer = Raster(
