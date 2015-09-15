@@ -523,11 +523,15 @@ class PostprocessorManager(QtCore.QObject):
             for key in keys:
                 total_for_type = 0
                 for _area, breakdown in output:
+                    value = breakdown[key]['value']
                     try:
-                        total_for_type += int(breakdown[key]['value'])
+                        total_for_type += int(value.replace(',', ''))
                     except ValueError:
                         # no need to increment for a no data value
-                        pass
+                        no_data_value = self.aggregator.get_default_keyword(
+                            'NO_DATA')
+                        if value != no_data_value:
+                            total_for_type += 1
                 if total_for_type == 0:
                     for _area, breakdown in output:
                         breakdown.pop(key)
