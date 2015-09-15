@@ -21,6 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import logging
+from datetime import datetime
 
 # noinspection PyPackageRequirements
 from qgis.core import (
@@ -1325,7 +1326,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self,
             existing_layer,
             new_layer):
-        """Add a layer (typically impact layer) above the exposure layer.
+        """Add a layer (e.g. impact layer) above another layer in the legend.
 
         .. versionadded:: 3.2
 
@@ -1342,19 +1343,26 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param new_layer: The new layer being added. An assumption is made
             that the newly added layer is not already loaded in the legend
             or the map registry.
-        :type impact_layer: QgsMapLayer
+        :type new_layer: QgsMapLayer
 
         """
+        registry = QgsMapLayerRegistry.instance()
+
+        if QGis.QGIS_VERSION_INT < 20400:
+            # True flag adds layer directly to legend
+            registry.addMapLayer(existing_layer, True)
+            return
+
+        # False flag prevents layer being added to legend
+        registry.addMapLayer(new_layer, False)
         index = self.layer_legend_index(existing_layer)
         LOGGER.info('Inserting layer %s at position %s' % (
             new_layer.source(), index))
-        # False flag prevents layer being added to legend
-        registry = QgsMapLayerRegistry.instance()
-        registry.addMapLayer(existing_layer, False)
         root = QgsProject.instance().layerTreeRoot()
         root.insertLayer(index, new_layer)
 
-    def layer_legend_index(self, layer):
+    @staticmethod
+    def layer_legend_index(layer):
         """Find out where in the legend layer stack a layer is.
 
         .. note:: This function requires QGIS 2.4 or greater to work. In older
@@ -1374,17 +1382,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return 0
 
         root = QgsProject.instance().layerTreeRoot()
-        id = layer.id()
+        layer_id = layer.id()
         current_index = 0
         nodes = root.children()
         for node in nodes:
             # check if the node is a layer as opposed to a group
             if isinstance(node, QgsLayerTreeLayer):
-                if id == node.layerId():
+                if layer_id == node.layerId():
                     return current_index
             current_index += 1
         return current_index
-
 
     def completed(self):
         """Slot activated when the process is done.
@@ -1394,53 +1401,35 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Try to run completion code
         try:
-            from datetime import datetime
-
             LOGGER.debug(datetime.now())
-            LOGGER.debug('get engine impact layer')
             LOGGER.debug(self.analysis is None)
-            engine_impact_layer = self.analysis.impact_layer
-
-            # Load impact layer into QGIS
-            qgis_impact_layer = read_impact_layer(engine_impact_layer)
-            self.add_above_layer(
-                self.get_exposure_layer(),
-                qgis_impact_layer)
-
-            self.layer_changed(qgis_impact_layer)
-            report = self.show_results(
-                qgis_impact_layer, engine_impact_layer)
+            report = self.show_results()
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
             self.analysis_error(e, self.tr('Error loading impact layer.'))
         else:
             # On success, display generated report
-            impact_path = qgis_impact_layer.source()
+            # impact_path = qgis_impact_layer.source()
             message = m.Message(report)
-            # message.add(m.Heading(self.tr('View processing log as HTML'),
-            # **INFO_STYLE))
-            # message.add(m.Link('file://%s' % self.wvResults.log_path))
-            # noinspection PyTypeChecker
             self.show_static_message(message)
-            self.wvResults.impact_path = impact_path
+            # self.wvResults.impact_path = impact_path
 
         self.save_state()
         self.hide_busy()
         self.analysis_done.emit(True)
 
-    def show_results(self, qgis_impact_layer, engine_impact_layer):
+    def show_results(self):
         """Helper function for slot activated when the process is done.
 
-        :param qgis_impact_layer: A QGIS layer representing the impact.
-        :type qgis_impact_layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
-
-        :param engine_impact_layer: A safe_layer representing the impact.
-        :type engine_impact_layer: ReadLayer
+        .. versionchanged:: 3.2 - removed parameters.
 
         :returns: Provides a report for writing to the dock.
         :rtype: str
         """
+        safe_impact_layer = self.analysis.impact_layer
+        qgis_impact_layer = read_impact_layer(safe_impact_layer)
+        # self.layer_changed(qgis_impact_layer)
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
 
         # write postprocessing report to keyword
@@ -1459,11 +1448,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             qgis_impact_layer, 'impact_summary'))
 
         # Get requested style for impact layer of either kind
-        style = engine_impact_layer.get_style_info()
-        style_type = engine_impact_layer.get_style_type()
+        style = safe_impact_layer.get_style_info()
+        style_type = safe_impact_layer.get_style_type()
 
         # Determine styling for QGIS layer
-        if engine_impact_layer.is_vector:
+        if safe_impact_layer.is_vector:
             LOGGER.debug('myEngineImpactLayer.is_vector')
             if not style:
                 # Set default style if possible
@@ -1475,12 +1464,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 LOGGER.debug('use graduated')
                 set_vector_graduated_style(qgis_impact_layer, style)
 
-        elif engine_impact_layer.is_raster:
+        elif safe_impact_layer.is_raster:
             LOGGER.debug('myEngineImpactLayer.is_raster')
             if not style:
                 qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
-                # qgis_impact_layer.setColorShadingAlgorithm(
-                # QgsRasterLayer.PseudoColorShader)
             else:
                 setRasterStyle(qgis_impact_layer, style)
 
@@ -1491,13 +1478,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
-        # Add layers to QGIS
-        # Insert the aggregation output above the input
-        # aggregation layer
+        # Insert the aggregation output above the input aggregation layer
         if self.show_intermediate_layers:
             self.add_above_layer(
                 self.get_aggregation_layer(),
                 self.analysis.aggregator.layer)
+
         # Insert the impact above the exposure
         self.add_above_layer(
             self.get_exposure_layer(),
