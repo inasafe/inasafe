@@ -449,7 +449,9 @@ class FloodRasterRoadsFunction(
 
         impact_summary = self.generate_html_report()
 
+        # For printing map purpose
         map_title = tr('Roads inundated')
+        legend_title = tr('Road inundated status')
 
         style_classes = [
             dict(
@@ -470,6 +472,7 @@ class FloodRasterRoadsFunction(
             keywords={
                 'impact_summary': impact_summary,
                 'map_title': map_title,
+                'legend_title': legend_title,
                 'target_field': target_field},
             style_info=style_info)
         self._impact = line_layer
