@@ -246,10 +246,11 @@ class VolcanoPolygonPopulationFunction(
 
         # For printing map purpose
         map_title = tr('People affected by Volcano Hazard Zones')
-        legend_notes = tr('Thousand separator is represented by  %s' %
-                          get_thousand_separator())
-        legend_units = tr('(people per cell)')
         legend_title = tr('Population')
+        legend_units = tr('(people per cell)')
+        legend_notes = tr(
+            'Thousand separator is represented by  %s' %
+            get_thousand_separator())
 
         # Create vector layer and return
         impact_layer = Raster(

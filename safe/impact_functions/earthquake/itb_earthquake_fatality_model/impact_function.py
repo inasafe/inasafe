@@ -347,10 +347,10 @@ class ITBFatalityFunction(
 
         # For printing map purpose
         map_title = tr('Earthquake impact to population')
+        legend_title = tr('Population Count')
+        legend_units = tr('(people per cell)')
         legend_notes = tr('Thousand separator is represented by %s' %
                           get_thousand_separator())
-        legend_units = tr('(people per cell)')
-        legend_title = tr('Population Count')
 
         # Create raster object and return
         raster = Raster(
