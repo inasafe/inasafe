@@ -407,7 +407,7 @@ apidocs:
 	@echo ""Generating API doc for InaSAFE
 	@echo "---------------------------------------------------------------"
 	@echo "Generate RST files for apidoc"
-	@sphinx-apidoc -f -e -o docs/source/apidocs safe realtime
+	@sphinx-apidoc -f -e -o docs/apidocs safe realtime
 	@echo "rst files for apidocs has been created."
 	@echo "Building html apidocs."
-	@cd docs/source && $(MAKE) html
+	@cd docs && $(MAKE) html
