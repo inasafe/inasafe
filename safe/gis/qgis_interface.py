@@ -126,6 +126,7 @@ class QgisInterface(QObject):
         self.layer_tree_root = QgsProject.instance().layerTreeRoot()
         self.bridge = QgsLayerTreeMapCanvasBridge(
             self.layer_tree_root, self.canvas)
+        self.bridge.setCanvasLayers()
 
     def __getattr__(self, *args, **kwargs):
         # It's for processing module

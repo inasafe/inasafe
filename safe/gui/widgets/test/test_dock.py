@@ -326,7 +326,11 @@ class TestDock(TestCase):
         self.assertTrue(before_count == after_count - 1, message)
 
     def test_layer_legend_index(self):
-        """Test we can get the legend index for a layer."""
+        """Test we can get the legend index for a layer.
+
+        .. versionadded:: 3.2
+
+        """
 
         setup_scenario(
             self.dock,
@@ -339,7 +343,10 @@ class TestDock(TestCase):
         self.assertTrue(index == 8)
 
     def test_add_above_layer(self):
-        """Test we can add one layer above another - see #2322"""
+        """Test we can add one layer above another - see #2322
+
+        .. versionadded:: 3.2
+        """
 
         setup_scenario(
             self.dock,
@@ -350,9 +357,10 @@ class TestDock(TestCase):
         layer_path = join(TESTDATA, 'polygon_0.shp')
         new_layer = QgsVectorLayer(layer_path, 'foo', 'ogr')
         exposure_layer = self.dock.get_exposure_layer()
-        self.dock.add_above_layer(new_layer, exposure_layer)
+        self.dock.add_above_layer(exposure_layer, new_layer)
         root = QgsProject.instance().layerTreeRoot()
         id_list = root.findLayerIds()
+        self.assertIn(new_layer.id(), id_list)
         new_layer_position = id_list.index(new_layer.id())
         existing_layer_position = id_list.index(exposure_layer.id())
         self.assertTrue(new_layer_position, existing_layer_position)
