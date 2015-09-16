@@ -1343,6 +1343,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type new_layer: QgsMapLayer
 
         """
+        if existing_layer is None or new_layer is None:
+            return
+
         registry = QgsMapLayerRegistry.instance()
 
         if QGis.QGIS_VERSION_INT < 20400:
