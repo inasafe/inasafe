@@ -410,4 +410,4 @@ apidocs:
 	@sphinx-apidoc -f -e -o docs/source/apidocs safe realtime
 	@echo "rst files for apidocs has been created."
 	@echo "Building html apidocs."
-	@cd docs && $(MAKE) html
+	@cd docs/source && $(MAKE) html
