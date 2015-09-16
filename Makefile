@@ -409,5 +409,5 @@ apidocs:
 	@echo "Generate RST files for apidoc"
 	@sphinx-apidoc -f -e -o docs/apidocs safe realtime
 	@echo "rst files for apidocs has been created."
-	@echo "Go to docs directory to run make command for building the apidocs."
-	@echo "It can be html, text, latex, epub, json, or other formats."
+	@echo "Building html apidocs."
+	@cd docs && $(MAKE) html
