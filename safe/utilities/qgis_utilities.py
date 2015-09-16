@@ -195,11 +195,6 @@ def display_critical_message_bar(
     """
     Display a critical message bar.
 
-    :param iface: The QGIS IFace instance. Note that we cannot
-        use qgis.utils.iface since it is not available in our
-        test environment.
-    :type iface: QgisInterface
-
     :param title: The title of the message bar.
     :type title: str
 

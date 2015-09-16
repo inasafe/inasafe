@@ -40,7 +40,6 @@ class SafeLayer(object):
         # Merely initialization
         self._layer = None
         self._keywords = {}
-
         self.layer = layer
 
         if name:
