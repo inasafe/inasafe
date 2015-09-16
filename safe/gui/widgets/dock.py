@@ -1335,7 +1335,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         :param existing_layer: The layer which the new layer
             should be added above.
-        :type new_layer: QgsMapLayer
+        :type existing_layer: QgsMapLayer
 
         :param new_layer: The new layer being added. An assumption is made
             that the newly added layer is not already loaded in the legend
