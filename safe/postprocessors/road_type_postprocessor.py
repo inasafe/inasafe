@@ -36,23 +36,7 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
         """
 
         BuildingTypePostprocessor.__init__(self)
-        # Note: Do we need these explicityl defined? With new osm-reporter
-        # changes you already get a nicely named list in the 'type' field
-        self.fields_values = OrderedDict([
-            ('Motorway / highway', ['Motorway or highway']),
-            ('Motorway link', ['Motorway link']),
-            ('Primary road', ['Primary road']),
-            ('Primary link', ['Primary link']),
-            ('Tertiary', ['Tertiary']),
-            ('Tertiary link', ['Tertiary link']),
-            ('Secondary', ['Secondary']),
-            ('Secondary link', ['Secondary link']),
-            ('Road, residential, living street, etc.', [
-                'Road, residential, living street, etc.']),
-            ('Track', ['Track']),
-            ('Cycleway, footpath, etc.', ['Cycleway, footpath, etc.']),
-            ('Other', [])
-        ])
+
         self.known_types = []
         self._update_known_types()
 

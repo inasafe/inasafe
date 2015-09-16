@@ -56,7 +56,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
         # ratios_total < 1 should pass
         params = {
             'impact_total': 0,
-            'key_attribute': 'type',
+            'key_attribute': 'TYPE',
             u'Building type': True,
             'target_field': 'safe_ag__4',
             'impact_attrs': [
@@ -70,11 +70,10 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
         results = POSTPROCESSOR.results()
         message = (
             'Expecting exactly 2 Government buildings to be affected. ',
-            'Using string values in affected fields.')
-        self.assertEqual(
-            results[u'Government']['value'],
-            '2',
-            message)
+            'Using string values in affected fields.\n %s' % results)
+        self.assertTrue(u'Government' in results)
+        value = results[u'Government']['value']
+        self.assertEqual(value, 2, message)
 
     def test_total_affected_calculated_correctly(self):
         """Test to see that the totalling of buildings is done correctly."""

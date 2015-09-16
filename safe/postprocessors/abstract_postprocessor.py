@@ -25,12 +25,12 @@ class AbstractPostprocessor(object):
     """
     Abstract postprocessor class, do not instantiate directly.
     but instantiate the PostprocessorFactory class which will take care of
-    setting up many prostprocessors. Alternatively you can as well instantiate
+    setting up many prostprocessors. Alternatively you can instantiate
     directly a sub class of AbstractPostprocessor.
 
     Each subclass has to overload the process method and call its parent
     like this: AbstractPostprocessor.process(self)
-    if a postprocessor needs parmeters, then it should override the setup and
+    if a postprocessor needs parameters, then it should override the setup and
     clear methods as well and call respectively
     AbstractPostprocessor.setup(self) and AbstractPostprocessor.clear(self).
 
@@ -42,6 +42,8 @@ class AbstractPostprocessor(object):
 
     def __init__(self):
         """
+        Constructor.
+
         Constructor for abstract postprocessor class, do not instantiate
         directly. It takes care of defining self._results
         Needs to be called from the concrete implementation with
@@ -52,30 +54,18 @@ class AbstractPostprocessor(object):
     def description(self):
         """
         Describe briefly what the post processor does.
-
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
-            Errors are propagated
         """
         raise NotImplementedError('Please don\'t use this class directly')
 
     def setup(self, params):
         """
+        Setup the post processor.
+
         Abstract method to be called from the concrete implementation
         with AbstractPostprocessor.setup(self, None) it takes care of results
-        being initialized
+        being initialized.
 
-        Args:
-            params: dict of parameters to pass to the post processor
-        Returns:
-            None
-        Raises:
-            None
+        :param params:
         """
         del params
         if self._results is not None:
@@ -84,70 +74,43 @@ class AbstractPostprocessor(object):
 
     def process(self):
         """
+        Virtual method to be re-implemented by each post-processor.
+
         Abstract method to be called from the concrete implementation
         with AbstractPostprocessor.process(self) it takes care of results
-        being initialized
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        being initialized.
         """
         if self._results is None:
             self._raise_error('setup needs to be called before process')
 
     def clear(self):
         """
+        Clear the existing results.
+
         Abstract method to be called from the concrete implementation
         with AbstractPostprocessor.process(self) it takes care of results
-        being cleared
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        being cleared.
         """
         self._results = None
 
     def results(self):
-        """Returns the postprocessors results
+        """Accessor for the postprocessors results.
 
-        Args:
-            None
-        Returns:
-            Odict of results
-        Raises:
-            None
+        :returns: Results
+        :rtype: dict
         """
         return self._results
 
     def _raise_error(self, message=None):
-        """internal method to be used by the postprocessors to raise an error
+        """Internal method to be used by the postprocessors to raise an error.
 
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            PostProcessorError
         """
         if message is None:
             message = 'Postprocessor error'
         raise PostProcessorError(message)
 
     def _log_message(self, message):
-        """internal method to be used by the postprocessors to log a message
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
+        """Internal method to be used by the postprocessors to log a message.
         """
         LOGGER.debug(message)
 
@@ -157,14 +120,9 @@ class AbstractPostprocessor(object):
         internal method to be used by the postprocessors to add an indicator
         results to the postprocessors result
 
-        Args:
-            * name: str the name of the indicator
-            * result the value calculated by the indicator
-            * metadata Dict of metadata
-        Returns:
-            None
-        Raises:
-            None
+        :param name: The name of the indicator.
+        :param result: The value calculated by the indicator.
+        :param metadata: Dict of metadata.
         """
 
         if metadata is None:
@@ -176,5 +134,4 @@ class AbstractPostprocessor(object):
             except ValueError as e:
                 LOGGER.debug(e)
                 result = result
-        self._results[name] = {'value': result,
-                               'metadata': metadata}
+        self._results[name] = {'value': result, 'metadata': metadata}

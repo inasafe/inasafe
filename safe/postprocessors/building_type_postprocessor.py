@@ -27,37 +27,15 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
 
     def __init__(self):
         """
-        Constructor for postprocessor class,
-        It takes care of defining self.impact_total
+        Constructor for postprocessor class.
         """
         AbstractPostprocessor.__init__(self)
-        self.impact_total = None
         self.impact_attrs = None
         self.target_field = None
-        self.no_features = None
-        self.type_fields = None
-        self.valid_type_fields = None
-        self.fields_values = OrderedDict([
-            ('Medical', ['Clinic/Doctor', 'Hospital']),
-            ('Schools', ['School', 'University/College', ]),
-            ('Places of worship', ['Place of Worship - Unitarian',
-                                   'Place of Worship - Islam',
-                                   'Place of Worship - Buddhist',
-                                   'Place of Worship']),
-            ('Residential', ['Residential']),
-            ('Government', ['Government']),
-            ('Public Building', ['Public Building']),
-            ('Fire Station', ['Fire Station']),
-            ('Police Station', ['Police Station']),
-            ('Supermarket', ['Supermarket']),
-            ('Commercial', ['Commercial']),
-            ('Industrial', ['Industrial']),
-            ('Utility', ['Utility']),
-            ('Sports Facility', ['Sports Facility']),
-            ('Other', [])])
-
-        self.known_types = []
-        self._update_known_types()
+        self.no_features = True
+        self.type_field = None
+        self.class_scores = {}  # number of each class affected
+        self.class_totals = {}  # number of each class regardless if affected
 
     def description(self):
         """Describe briefly what the post processor does.
@@ -68,39 +46,25 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         return tr('Calculates building types related statistics.')
 
     def setup(self, params):
-        """concrete implementation it takes care of the needed parameters being
-         initialized
+        """Initialiser for parameters.
 
         :param params: dict of parameters to pass to the post processor
         """
         AbstractPostprocessor.setup(self, None)
-        if (self.impact_total is not None or
-                self.impact_attrs is not None or
+        if (self.impact_attrs is not None or
                 self.target_field is not None or
-                self.valid_type_fields is not None or
-                self.type_fields is not None):
+                self.type_field is not None):
             self._raise_error('clear needs to be called before setup')
 
-        self.impact_total = params['impact_total']
         self.impact_attrs = params['impact_attrs']
         self.target_field = params['target_field']
-        self.valid_type_fields = params['key_attribute']
+        self.type_field = params['key_attribute']
 
-        # find which attribute field has to be used
-        self.type_fields = []
-        try:
-            for key in self.impact_attrs[0].iterkeys():
-                if key.lower() in self.valid_type_fields:
-                    self.type_fields.append(key)
-        except IndexError:
-            pass
+        if len(self.type_field) == 0:
+            self.type_field = None
 
-        if len(self.type_fields) == 0:
-            self.type_fields = None
-
-        self.no_features = False
         # there are no features in this postprocessing polygon
-        if self.impact_attrs == []:
+        if len(self.impact_attrs):
             self.no_features = True
 
     def process(self):
@@ -108,131 +72,51 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.process(self)
 
-        if (self.impact_total is None or
-                self.impact_attrs is None or
-                self.target_field is None):
-            self._log_message('%s not all params have been correctly '
-                              'initialized, setup needs to be called before '
-                              'process. Skipping this postprocessor'
-                              % self.__class__.__name__)
-        else:
-            self._calculate_total()
-            for title, field_values in self.fields_values.iteritems():
-                self._calculate_type(title, field_values)
+        if self.impact_attrs is None or self.target_field is None:
+            self._log_message(
+                '%s not all params have been correctly initialized, '
+                'setup needs to be called before process. Skipping this '
+                'postprocessor' % self.__class__.__name__)
+            return
+
+        affected = 0
+        total = 0
+        for building in self.impact_attrs:
+            total += 1
+            building_type = building[self.type_field]
+            if building_type not in self.class_scores:
+                # Create an empty key for it since it does not exist
+                self.class_scores[building_type] = 0
+            if building_type not in self.class_totals:
+                # Create an empty key for it since it does not exist
+                self.class_totals[building_type] = 0
+
+            self.class_totals[building_type] += 1
+            field_value = building[self.target_field]
+            if isinstance(field_value, basestring):
+                # This needs to be softcoded to the keywords list of poss vals
+                if field_value != 'Not Affected':
+                    self.class_scores[building_type] += 1
+                    affected += 1
+            else:
+                if field_value:
+                    # See issue #2258. Since we are only working with
+                    # one building at a time we should only add 1.
+                    self.class_scores[building_type] += 1
+                    affected += 1
+        self._append_result(tr('Total Affected'), self.class_scores)
+        self._append_result(tr('Total Counted'), self.class_totals)
+        print self.results()
 
     def clear(self):
-        """concrete implementation that ensures needed parameters are cleared.
+        """
+        Concrete implementation that ensures needed parameters are cleared.
         """
         AbstractPostprocessor.clear(self)
-        self.impact_total = None
         self.impact_attrs = None
         self.target_field = None
-        self.type_fields = None
-        self.valid_type_fields = None
+        self.type_field = None
+        self.class_scores = None
+        self.no_features = True
 
-    def _calculate_total(self):
-        """Indicator that shows total affected buildings.
 
-        This indicator reports the total affected buildings in this region.
-        """
-
-        name = tr('Total Affected')
-        result = 0
-        if self.type_fields is not None:
-            try:
-                for building in self.impact_attrs:
-                    field_value = building[self.target_field]
-                    if isinstance(field_value, basestring):
-                        if field_value != 'Not Affected':
-                            result += 1
-                    else:
-                        if field_value:
-                            # See issue #2258. Since we are only working with
-                            # one building at a time we should only add 1.
-                            result += 1
-                result = int(round(result))
-            except (ValueError, KeyError):
-                result = self.NO_DATA_TEXT
-        else:
-            if self.no_features:
-                result = 0
-            else:
-                result = self.NO_DATA_TEXT
-        self._append_result(name, result)
-
-    def _calculate_type(self, title, fields_values):
-        """Indicator that shows total population.
-
-        this indicator reports the building by type. the logic is:
-        - look for the fields that occurs with a name included in
-        self.valid_type_fields
-        - look in those fields for any of the values of self.fields_values
-        - if a record has one of the valid fields with one of the valid
-        fields_values then it is considered affected
-        """
-
-        title = tr(title)
-
-        result = 0
-        if self.type_fields is not None:
-            try:
-                for building in self.impact_attrs:
-                    for type_field in self.type_fields:
-                        building_type = building[type_field]
-                        if building_type in fields_values:
-                            field_value = building[self.target_field]
-                            if isinstance(field_value, basestring):
-                                if field_value != 'Not Affected':
-                                    result += 1
-                            else:
-                                if field_value:
-                                    # See issue #2258. Since we are only
-                                    # working with one building at a time we
-                                    # should only add 1.
-                                    result += 1
-                            break
-                        elif self._is_unknown_type(building_type):
-                            self._update_known_types(building_type)
-
-                result = int(round(result))
-            except (ValueError, KeyError):
-                result = self.NO_DATA_TEXT
-        else:
-            if self.no_features:
-                result = 0
-            else:
-                result = self.NO_DATA_TEXT
-        self._append_result(title, result)
-
-    def _is_unknown_type(self, building_type):
-        """check if the given type is in any of the known_types dictionary
-
-        :param building_type: the name of the type
-        :type building_type: str
-
-        :returns: Flag indicating if the building_type is unknown
-        :rtype: boolean
-        """
-
-        is_unknown = building_type not in self.known_types
-        return is_unknown
-
-    def _update_known_types(self, building_type=None):
-        """
-        Adds a building_type (if passed) and updates the known_types list
-
-        this is called each time a new unknown type is found and is needed so
-        that self._is_unknown_type (which is called many times) to perform
-        only a simple 'in' check
-
-        :param building_type: the name of the type to add to the known types
-        :type building_type: str
-        """
-        if type is not None:
-            self.fields_values['Other'].append(building_type)
-
-        # flatten self.fields_values.values()
-        # using http://stackoverflow.com/questions/5286541/#5286614
-        self.known_types = list(itertools.chain.from_iterable(
-            itertools.repeat(x, 1) if isinstance(x, str) else x for x in
-            self.fields_values.values()))
