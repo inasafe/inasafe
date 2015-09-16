@@ -406,8 +406,11 @@ apidocs:
 	@echo "---------------------------------------------------------------"
 	@echo ""Generating API doc for InaSAFE
 	@echo "---------------------------------------------------------------"
-	@echo "Generate RST files for apidoc"
+	@echo "Please make sure you have cloned inasafe-doc repository"
+	@echo "Generating RST files for apidoc..."
 	@sphinx-apidoc -f -e -o docs/apidocs safe realtime
-	@echo "rst files for apidocs has been created."
-	@echo "Building html apidocs."
+	@echo "RST files for apidocs has been created."
+	@echo "Building HTML API docs..."
 	@cd docs && $(MAKE) html
+	@echo "HTML API docs has been builded."
+	@echo "You can look it under docs/_build directory.."
