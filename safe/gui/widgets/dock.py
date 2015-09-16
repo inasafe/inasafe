@@ -1322,10 +1322,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         return analysis
 
-    def add_above_layer(
-            self,
-            existing_layer,
-            new_layer):
+    def add_above_layer(self, existing_layer, new_layer):
         """Add a layer (e.g. impact layer) above another layer in the legend.
 
         .. versionadded:: 3.2
