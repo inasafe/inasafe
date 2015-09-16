@@ -400,3 +400,14 @@ jenkins-realtime-test:
 	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
 	nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime || :
+
+apidocs:
+	@echo
+	@echo "---------------------------------------------------------------"
+	@echo ""Generating API doc for InaSAFE
+	@echo "---------------------------------------------------------------"
+	@echo "Generate RST files for apidoc"
+	@sphinx-apidoc -f -e -o docs safe realtime
+	@echo "rst files for apidocs has been created."
+	@echo "Go to docs directory to run make command for building the apidocs."
+	@echo "It can be html, text, latex, epub, json, or other formats."
