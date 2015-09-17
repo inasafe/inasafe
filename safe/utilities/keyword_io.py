@@ -717,7 +717,6 @@ class KeywordIO(QObject):
         """
         logo_element = m.Brand()
         # This order was determined in issue #2313
-        # Date, License
         preferred_order = [
             'title',
             'layer_purpose',
