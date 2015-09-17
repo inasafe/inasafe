@@ -197,91 +197,7 @@ class VolcanoPointPopulationFunction(
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-<<<<<<< HEAD
-        # Generate impact report for the pdf map
-        blank_cell = ''
-        table_body = [
-            self.question,
-            TableRow(
-                [tr('Volcanoes considered'),
-                 '%s' % volcano_names,
-                 blank_cell],
-                header=True),
-            TableRow(
-                [tr('Number of people that might need evacuation'),
-                 '%s' % format_int(
-                     population_rounding(total_affected_population)),
-                 blank_cell],
-                header=True),
-            TableRow(
-                [category_header,
-                 tr('Total'),
-                 tr('Cumulative')],
-                header=True)]
-
-        for radius in rad_m:
-            table_body.append(
-                TableRow(
-                    [radius,
-                     format_int(
-                         population_rounding(
-                             affected_population[radius])),
-                     format_int(
-                         population_rounding(
-                             cumulative_affected_population[radius]))]))
-
-        table_body.extend([
-            TableRow(tr(
-                'Map shows the number of people within the volcano impact '
-                'area.'))])
-
-        total_needs = evacuated_population_needs(
-            total_affected_population, minimum_needs)
-        for frequency, needs in total_needs.items():
-            table_body.append(TableRow(
-                [
-                    tr('Minimum needs to be provided %s' % frequency),
-                    tr('Total')
-                ],
-                header=True))
-            for resource in needs:
-                table_body.append(TableRow([
-                    tr(resource['table name']),
-                    format_int(resource['amount'])]))
-        impact_table = Table(table_body).toNewlineFreeString()
-
-        # Extend impact report for on-screen display
-        table_body.extend(
-            [TableRow(tr('Notes'), header=True),
-             tr('Total population in the analysis area is %s') % format_int(
-                 total_population),
-             tr('People are affected and need evacuation if they are within '
-                'the volcano impact area.')])
-
-        if nan_warning:
-            table_body.extend([
-                tr('The population layer contained `no data`. This missing '
-                   'data was carried through to the impact layer.'),
-                tr('`No data` values in the impact layer were treated as 0 '
-                   'when counting the affected or total population.')
-            ])
-
-        impact_summary = Table(table_body).toNewlineFreeString()
-
-        # check for zero impact
-        if total_affected_population == 0:
-            table_body = [
-                self.question,
-                TableRow(
-                    [tr('Number of people that might need evacuation'),
-                     '%s' % format_int(total_affected_population),
-                     blank_cell],
-                    header=True)]
-            message = Table(table_body).toNewlineFreeString()
-            raise ZeroImpactException(message)
-=======
         impact_table = impact_summary = self.generate_html_report()
->>>>>>> upstream/develop
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -327,11 +243,12 @@ class VolcanoPointPopulationFunction(
             style_type='rasterStyle')
 
         # For printing map purpose
-        map_title = tr('People within the Volcano Impact Area')
-        legend_notes = tr('Thousand separator is represented by  %s' %
-                          get_thousand_separator())
-        legend_units = tr('(people per cell)')
+        map_title = tr('People affected by the buffered point volcano')
         legend_title = tr('Population')
+        legend_units = tr('(people per cell)')
+        legend_notes = tr(
+            'Thousand separator is represented by  %s' %
+            get_thousand_separator())
 
         # Create vector layer and return
         impact_layer = Raster(

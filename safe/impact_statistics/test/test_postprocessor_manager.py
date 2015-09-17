@@ -149,7 +149,10 @@ class PostprocessorManagerTest(unittest.TestCase):
                 tokens = tokens[1:]
                 total = 0
                 for token in tokens:
-                    total += float(token.replace(',', ''))
+                    try:
+                        total += float(token.replace(',', ''))
+                    except ValueError:
+                        total += float(token[0])
 
                 assert total != 0, message
 

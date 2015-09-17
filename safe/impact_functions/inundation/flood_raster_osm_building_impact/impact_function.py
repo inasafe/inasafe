@@ -169,9 +169,10 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         # Generate simple impact report
         impact_table = impact_summary = self.generate_html_report()
 
-        # Prepare impact layer
+        # For printing map purpose
         map_title = tr('Buildings inundated')
         legend_title = tr('Structure inundated status')
+        legend_units = tr('(inundated, wet, or dry)')
 
         style_classes = [
             dict(
@@ -195,13 +196,11 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
                 transparency=0,
                 size=1
             )]
-        legend_units = tr('(inundated, wet, or dry)')
 
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        # Create vector layer and return
         vector_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
@@ -212,10 +211,11 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
                 'impact_table': impact_table,
                 'target_field': self.target_field,
                 'map_title': map_title,
-                'legend_units': legend_units,
                 'legend_title': legend_title,
+                'legend_units': legend_units,
                 'buildings_total': total_features,
                 'buildings_affected': self.total_affected_buildings},
             style_info=style_info)
+        # Create vector layer and return
         self._impact = vector_layer
         return vector_layer

@@ -28,13 +28,14 @@ __copyright__ = (
 
 import logging
 
-from qgis.core import QgsMapLayerRegistry, QGis, QgsMapLayer
+from qgis.core import QgsMapLayerRegistry, QGis, QgsMapLayer, QgsProject
 # pylint: disable=no-name-in-module
 from qgis.gui import (
     QgsMapCanvasLayer,
     QgsMessageBar)
 from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
 from safe.gis.qgis_legend_interface import QgisLegend
+from qgis.gui import QgsLayerTreeMapCanvasBridge
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -120,6 +121,12 @@ class QgisInterface(QObject):
         # Note. the placement here (after the getAlgorithm monkey patch above)
         # is significant, so don't move it!
         dataobjects.iface = self
+
+        # set up a layer tree bridge so that new added layers appear in legend
+        self.layer_tree_root = QgsProject.instance().layerTreeRoot()
+        self.bridge = QgsLayerTreeMapCanvasBridge(
+            self.layer_tree_root, self.canvas)
+        self.bridge.setCanvasLayers()
 
     def __getattr__(self, *args, **kwargs):
         # It's for processing module

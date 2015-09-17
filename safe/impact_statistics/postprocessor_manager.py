@@ -81,7 +81,10 @@ class PostprocessorManager(QtCore.QObject):
 
         post_processor = self.output[self.current_output_postprocessor]
         # get the key position of the value field
-        key = post_processor[0][1].keys()[0]
+        try:
+            key = post_processor[0][1].keys()[0]
+        except IndexError:
+            return -1
         # get the value
         # data[1] is the orderedDict
         # data[1][myFirstKey] is the 1st indicator in the orderedDict
@@ -156,6 +159,15 @@ class PostprocessorManager(QtCore.QObject):
                     'Detailed %s report (affected people)') % (
                         tr(get_postprocessor_human_name(processor)).lower())
 
+            empty_table = not sorted_results[0][1]
+            if empty_table:
+                # Due to an error? The table is empty.
+                message.add(table)
+                message.add(m.EmphasizedText(self.tr(
+                    'Could not compute the %s report.' %
+                    tr(get_postprocessor_human_name(processor)).lower())))
+                continue
+
             header = m.Row()
             header.add(str(self.attribute_title).capitalize())
             for calculation_name in sorted_results[0][1]:
@@ -203,6 +215,10 @@ class PostprocessorManager(QtCore.QObject):
                     'values.') % (
                         self.aggregator.get_default_keyword(
                             'NO_DATA'))))
+            message.add(m.EmphasizedText(self.tr(
+                'Columns containing exclusively 0 and "%s" '
+                'have been removed.' %
+                self.aggregator.get_default_keyword('NO_DATA'))))
 
         return message
 
@@ -494,6 +510,31 @@ class PostprocessorManager(QtCore.QObject):
                     self.error_message = message
             # increment the index
             polygon_index += 1
+        self.remove_empty_columns()
+
+    def remove_empty_columns(self):
+        """Removes empty columns from output, to reduce table width.
+
+        .. note:: This is intended to be a temporary solution to the excessive
+        amount of data in some of the postprocessors.
+        """
+        for (_postprocessor_type, output) in self.output.items():
+            keys = output[0][1].keys()
+            for key in keys:
+                total_for_type = 0
+                for _area, breakdown in output:
+                    value = breakdown[key]['value']
+                    try:
+                        total_for_type += int(value.replace(',', ''))
+                    except ValueError:
+                        # no need to increment for a no data value
+                        no_data_value = self.aggregator.get_default_keyword(
+                            'NO_DATA')
+                        if value != no_data_value:
+                            total_for_type += 1
+                if total_for_type == 0:
+                    for _area, breakdown in output:
+                        breakdown.pop(key)
 
     def get_output(self, aoi_mode):
         """Returns the results of the post processing as a table.

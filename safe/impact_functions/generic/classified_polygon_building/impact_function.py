@@ -23,7 +23,8 @@ from safe.utilities.i18n import tr
 from safe.impact_functions.generic.classified_polygon_building\
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError, KeywordNotFoundError
+from safe.common.exceptions import InaSAFEError, KeywordNotFoundError, \
+    ZeroImpactException
 from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage,
@@ -127,6 +128,9 @@ class ClassifiedPolygonHazardBuildingFunction(
             self.target_field)
         changed_values = {}
 
+        if interpolated_layer.featureCount() < 1:
+            raise ZeroImpactException()
+
         # Extract relevant interpolated data
         for feature in interpolated_layer.getFeatures():
             hazard_value = feature[self.hazard_class_attribute]
@@ -184,10 +188,10 @@ class ClassifiedPolygonHazardBuildingFunction(
 
         # For printing map purpose
         map_title = tr('Buildings affected by each hazard zone')
+        legend_title = tr('Building count')
+        legend_units = tr('(building)')
         legend_notes = tr('Thousand separator is represented by %s' %
                           get_thousand_separator())
-        legend_units = tr('(building)')
-        legend_title = tr('Building count')
 
         # Create vector layer and return
         impact_layer = Vector(

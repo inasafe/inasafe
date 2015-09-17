@@ -27,7 +27,7 @@ from safe.impact_functions.core import (
     has_no_data)
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
-from safe.common.utilities import format_int
+from safe.common.utilities import format_int, get_thousand_separator
 from safe.common.tables import Table, TableRow
 from safe.common.utilities import create_classes, create_label, humanize_class
 from safe.common.exceptions import (
@@ -197,8 +197,6 @@ class ContinuousHazardPopulationFunction(
 
         impact_table = impact_summary = self.generate_html_report()
 
-        map_title = tr('People in each hazard areas (low, medium, high)')
-
         # Style for impact layer
         colours = [
             '#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -238,6 +236,14 @@ class ContinuousHazardPopulationFunction(
             style_classes=style_classes,
             style_type='rasterStyle')
 
+        # For printing map purpose
+        map_title = tr('People in each hazard areas (low, medium, high)')
+        legend_title = tr('Number of People')
+        legend_units = tr('(people per cell)')
+        legend_notes = tr(
+            'Thousand separator is represented by %s' %
+            get_thousand_separator())
+
         # Create raster object and return
         raster_layer = Raster(
             data=impacted_exposure,
@@ -250,6 +256,9 @@ class ContinuousHazardPopulationFunction(
                 'impact_summary': impact_summary,
                 'impact_table': impact_table,
                 'map_title': map_title,
+                'legend_notes': legend_notes,
+                'legend_units': legend_units,
+                'legend_title': legend_title,
                 'total_needs': total_needs},
             style_info=style_info)
         self._impact = raster_layer

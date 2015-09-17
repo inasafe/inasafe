@@ -103,11 +103,7 @@ class TestShakeEvent(unittest.TestCase):
             'day: 5\n'
             'month: 11\n'
             'year: 2013\n'
-<<<<<<< HEAD
-            'time: 2013-11-05 06:08:09\n'
-=======
             'time: 2013-11-05 06:08:09+07:07\n'
->>>>>>> upstream/develop
             'time_zone: WIB\n'
             'x_minimum: 139.37\n'
             'x_maximum: 141.87\n'

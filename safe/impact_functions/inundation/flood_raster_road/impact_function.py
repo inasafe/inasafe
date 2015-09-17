@@ -18,6 +18,7 @@ from qgis.core import (
 )
 from PyQt4.QtCore import QVariant
 
+from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.impact_functions.inundation.flood_raster_road\
@@ -423,6 +424,9 @@ class FloodRasterRoadsFunction(
             (flooded_keyword, {})])
         self.road_lengths = OrderedDict()
 
+        if line_layer.featureCount() < 1:
+            raise ZeroImpactException()
+
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(road_class_field)
         for road in roads_data:
@@ -445,7 +449,9 @@ class FloodRasterRoadsFunction(
 
         impact_summary = self.generate_html_report()
 
+        # For printing map purpose
         map_title = tr('Roads inundated')
+        legend_title = tr('Road inundated status')
 
         style_classes = [
             dict(
@@ -466,6 +472,7 @@ class FloodRasterRoadsFunction(
             keywords={
                 'impact_summary': impact_summary,
                 'map_title': map_title,
+                'legend_title': legend_title,
                 'target_field': target_field},
             style_info=style_info)
         self._impact = line_layer

@@ -228,12 +228,14 @@ class FloodEvacuationRasterHazardFunction(
             style_type='rasterStyle')
 
         # For printing map purpose
+
+        # For printing map purpose
         map_title = tr('People in need of evacuation')
+        legend_title = tr('Population Count')
+        legend_units = tr('(people per cell)')
         legend_notes = tr(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
-        legend_units = tr('(people per cell)')
-        legend_title = tr('Population Count')
 
         # Create raster object and return
         raster = Raster(

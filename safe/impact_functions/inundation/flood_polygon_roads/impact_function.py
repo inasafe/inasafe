@@ -187,7 +187,9 @@ class FloodPolygonRoadsFunction(
 
         impact_summary = self.generate_html_report()
 
+        # For printing map purpose
         map_title = tr('Roads inundated')
+        legend_title = tr('Road inundated status')
 
         style_classes = [dict(label=tr('Not Inundated'), value=0,
                               colour='#1EFC7C', transparency=0, size=0.5),
@@ -209,6 +211,7 @@ class FloodPolygonRoadsFunction(
             keywords={
                 'impact_summary': impact_summary,
                 'map_title': map_title,
+                'legend_title': legend_title,
                 'target_field': self.target_field},
             style_info=style_info)
 

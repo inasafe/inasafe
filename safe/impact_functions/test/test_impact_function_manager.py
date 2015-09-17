@@ -46,16 +46,10 @@ from safe.definitions import (
     exposure_road,
     exposure_population,
     exposure_land_cover,
-    exposure_area,
     count_exposure_unit,
     density_exposure_unit,
-    layer_mode_classified,
     layer_mode_continuous,
-<<<<<<< HEAD
     layer_mode_classified,
-=======
-    layer_geometry_polygon,
->>>>>>> upstream/develop
     layer_geometry_raster,
     layer_geometry_polygon,
     structure_class_field,
@@ -180,11 +174,6 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         hazards = impact_function_manager.hazards_for_layer(
             'polygon', 'single_event')
-<<<<<<< HEAD
-        expected = [hazard_flood, hazard_tsunami, hazard_earthquake,
-                    hazard_volcano, hazard_volcanic_ash, hazard_generic]
-        #expected = [hazard_flood]
-=======
         print [x['key'] for x in hazards]
         expected = [
             hazard_flood,
@@ -194,7 +183,6 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_volcanic_ash,
             hazard_generic
         ]
->>>>>>> upstream/develop
         self.assertItemsEqual(hazards, expected)
 
         hazards = impact_function_manager.hazards_for_layer('polygon')
@@ -212,7 +200,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         exposures = impact_function_manager.exposures_for_layer(
             'polygon')
-        expected = [exposure_structure, exposure_land_cover,exposure_area]
+        expected = [exposure_structure, exposure_land_cover]
         self.assertItemsEqual(exposures, expected)
 
         exposures = impact_function_manager.exposures_for_layer(
@@ -260,7 +248,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         result = impact_function_manager.available_exposures()
         expected_result = [
             exposure_structure, exposure_road, exposure_population,
-            exposure_land_cover,exposure_area]
+            exposure_land_cover]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -294,23 +282,13 @@ class TestImpactFunctionManager(unittest.TestCase):
         ifm = ImpactFunctionManager()
         hazard_constraints = ifm.available_hazard_constraints(
             'earthquake', 'single_event')
-        print [x for x in hazard_constraints]
         expected = [
-<<<<<<< HEAD
-            (layer_mode_continuous, layer_geometry_raster
-             ),
-            (layer_mode_classified, layer_geometry_polygon),
-            # (layer_mode_classified, layer_geometry_raster),
-        ]
-        print expected
-=======
             (layer_mode_continuous, layer_geometry_raster),
             (layer_mode_classified, layer_geometry_raster),
             (layer_mode_classified, layer_geometry_polygon),
         ]
 
         print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
->>>>>>> upstream/develop
         self.assertItemsEqual(hazard_constraints, expected)
 
     def test_available_exposure_constraints(self):
