@@ -70,8 +70,8 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         self.prepare()
 
         # Identify hazard and exposure layers
-        hazard = self.hazard.get_layer()
-        exposure = self.exposure.get_layer()
+        hazard = self.hazard.layer
+        exposure = self.exposure.layer
 
         type_attr = self.parameters['land_cover_type_field'].value
 
