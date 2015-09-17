@@ -1597,8 +1597,9 @@ class ShakeEvent(QObject):
             ' into account the population and cities affected by different '
             'levels of ground shaking. The estimate is based on ground '
             'shaking data from BMKG, population count data derived by '
-            'AIFDR from worldpop.org.uk, place information from geonames.org '
-            'and software developed by BNPB. Limitations in the estimates of '
+            'Australian Government from worldpop.org.uk, place information '
+            'from geonames.org and software developed by BNPB. '
+            'Limitations in the estimates of '
             'ground shaking, population and place names datasets may '
             'result in significant misrepresentation of the on-the-ground '
             'situation in the figures shown here. Consequently decisions '
@@ -1611,8 +1612,8 @@ class ShakeEvent(QObject):
             'This report was created using InaSAFE version %s. Visit '
             'http://inasafe.org for more information.') % get_version()
         credits_text = self.tr(
-            'Supported by the Australia-Indonesia Facility for Disaster '
-            'Reduction, Geoscience Australia and the World Bank-GFDRR.')
+            'Supported by the Australian Government, Geoscience Australia '
+            'and the World Bank-GFDRR.')
         # Format the lat lon from decimal degrees to dms
         point = QgsPoint(
             self.shake_grid.longitude,
