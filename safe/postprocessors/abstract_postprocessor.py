@@ -52,15 +52,6 @@ class AbstractPostprocessor(object):
     def description(self):
         """
         Describe briefly what the post processor does.
-
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
-            Errors are propagated
         """
         raise NotImplementedError('Please don\'t use this class directly')
 
@@ -72,10 +63,7 @@ class AbstractPostprocessor(object):
 
         Args:
             params: dict of parameters to pass to the post processor
-        Returns:
-            None
-        Raises:
-            None
+
         """
         del params
         if self._results is not None:
@@ -87,13 +75,6 @@ class AbstractPostprocessor(object):
         Abstract method to be called from the concrete implementation
         with AbstractPostprocessor.process(self) it takes care of results
         being initialized
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
         """
         if self._results is None:
             self._raise_error('setup needs to be called before process')

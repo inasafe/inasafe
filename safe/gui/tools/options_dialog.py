@@ -115,10 +115,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.cbxHideExposure.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/clip_to_viewport', True, type=bool))
-        self.cbxClipToViewport.setChecked(flag)
-
-        flag = bool(settings.value(
             'inasafe/clip_hard', False, type=bool))
         self.cbxClipHard.setChecked(flag)
 
@@ -164,7 +160,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         # Restore Show Organisation Logo in Dock Flag
         flag = bool(settings.value(
-            'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
+            'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
         self.organisation_on_dock_checkbox.setChecked(flag)
 
         # Restore North Arrow Image Path
@@ -231,9 +227,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         settings.setValue(
             'inasafe/setHideExposureFlag',
             self.cbxHideExposure.isChecked())
-        settings.setValue(
-            'inasafe/clip_to_viewport',
-            self.cbxClipToViewport.isChecked())
         settings.setValue(
             'inasafe/clip_hard',
             self.cbxClipHard.isChecked())
@@ -305,6 +298,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.dock.read_settings()
         self.close()
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolKeywordCachePath_clicked(self):
         """Auto-connect slot activated when cache file tool button is clicked.
@@ -317,6 +311,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(file_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolUserDirectoryPath_clicked(self):
         """Auto-connect slot activated when user directory tool button is
@@ -330,6 +325,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             QtGui.QFileDialog.ShowDirsOnly)
         self.leUserDirectoryPath.setText(dir_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolNorthArrowPath_clicked(self):
         """Auto-connect slot activated when north arrow tool button is clicked.
@@ -343,6 +339,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         if file_name != '':
             self.leNorthArrowPath.setText(file_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolOrganisationLogoPath_clicked(self):
         """Auto-connect slot activated when logo file tool button is clicked.
@@ -356,6 +353,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         if file_name != '':
             self.leOrganisationLogoPath.setText(file_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolReportTemplatePath_clicked(self):
         """Auto-connect slot activated when report file tool button is clicked.

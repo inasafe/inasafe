@@ -58,8 +58,20 @@ from safe.gui.tools.wizard_dialog import (
     step_kw_unit,
     step_kw_extrakeywords,
     step_kw_aggregation,
-    step_kw_field)
+    step_kw_field,
+    step_fc_function_2,
+    step_fc_function_3,
+    step_fc_hazlayer_origin,
+    step_fc_hazlayer_from_canvas,
+    step_fc_explayer_origin,
+    step_fc_explayer_from_canvas,
+    step_fc_agglayer_origin,
+    step_fc_extent,
+    step_fc_params)
 from safe.utilities.keyword_io import KeywordIO
+from safe.gui.widgets.dock import Dock
+
+DOCK = Dock(IFACE)
 
 
 # noinspection PyTypeChecker
@@ -140,8 +152,8 @@ class WizardDialogTest(unittest.TestCase):
         chosen_category = 'hazard'
 
         expected_hazard_category_count = 2
-        expected_hazard_categories = ['Single Event', 'Multiple Event']
-        chosen_hazard_category = 'Single Event'
+        expected_hazard_categories = ['Single event', 'Multiple event']
+        chosen_hazard_category = 'Single event'
 
         expected_subcategory_count = 6
         # expected_subcategories = ['flood', 'tsunami']
@@ -163,7 +175,7 @@ class WizardDialogTest(unittest.TestCase):
                            'RW', 'FLOODPRONE']
         expected_chosen_field = 'FLOODPRONE'
 
-        expected_classification_count = 1
+        expected_classification_count = 2
         expected_classification = 'Flood classes'
 
         expected_keywords = {
@@ -430,7 +442,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 3 - select hazard category
-        self.check_current_text('Single Event', dialog.lstHazardCategories)
+        self.check_current_text('Single event', dialog.lstHazardCategories)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -518,8 +530,9 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select multiple_event
-        self.select_from_list_widget('Multiple Event',
-                                     dialog.lstHazardCategories)
+        self.select_from_list_widget(
+            'Multiple event',
+            dialog.lstHazardCategories)
         dialog.pbnNext.click()
 
         # select volcano classified mode
@@ -597,7 +610,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 3 - select hazard category
-        self.check_current_text('Multiple Event', dialog.lstHazardCategories)
+        self.check_current_text('Multiple event', dialog.lstHazardCategories)
 
         # Click Next
         dialog.pbnNext.click()
@@ -795,7 +808,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # choose hazard
         dialog.pbnNext.click()  # choose volcano
-        dialog.pbnNext.click()  # choose multiple event
+        dialog.pbnNext.click()  # choose Multiple event
         dialog.lstUnits.setCurrentRow(1)
         self.check_current_text('Classified', dialog.lstLayerModes)
         dialog.pbnNext.click()  # choose classified
@@ -834,7 +847,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         dialog.pbnNext.click()  # choose hazard
-        dialog.pbnNext.click()  # choose multiple event
+        dialog.pbnNext.click()  # choose Multiple event
         dialog.pbnNext.click()  # choose volcano
         dialog.lstLayerModes.setCurrentRow(0)  # choose none
         dialog.pbnNext.click()  # choose none
@@ -894,10 +907,10 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to hazard category
 
-        expected_hazard_categories = ['Multiple Event', 'Single Event']
+        expected_hazard_categories = ['Multiple event', 'Single event']
         self.check_list(expected_hazard_categories, dialog.lstHazardCategories)
 
-        self.check_current_text('Multiple Event', dialog.lstHazardCategories)
+        self.check_current_text('Multiple event', dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # go to layer mode
 
@@ -957,7 +970,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_subcategories = [
             u'Earthquake',
             u'Flood',
-            u'Volcanic Ash',
+            u'Volcanic ash',
             u'Tsunami',
             u'Volcano',
             u'Generic']
@@ -977,7 +990,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to hazard category
 
         self.check_current_step(step_kw_hazard_category, dialog)
-        self.select_from_list_widget('Single Event',
+        self.select_from_list_widget('Single event',
                                      dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # Go to layer mode
@@ -986,7 +999,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of subcategories options
-        expected_layermodes = ['Continuous']
+        expected_layermodes = ['Continuous', 'Classified']
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
@@ -1035,8 +1048,8 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # Go to hazard category
 
-        # choosing single event
-        self.select_from_list_widget('Single Event',
+        # choosing Single event
+        self.select_from_list_widget('Single event',
                                      dialog.lstHazardCategories)
 
         dialog.pbnNext.click()  # Go to layer mode
@@ -1045,11 +1058,11 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_layermode, dialog)
 
         # check the values of subcategories options
-        expected_layermodes = ['Continuous']
+        expected_layermodes = ['Continuous', 'Classified']
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_layermode_index = 0
+        expected_layermode_index = 1
         layermode_index = dialog.lstLayerModes.currentRow()
         message = ('Expected %s, but I got %s' %
                    (expected_layermode_index, layermode_index))
@@ -1188,7 +1201,7 @@ class WizardDialogTest(unittest.TestCase):
             'Tsunami',
             'Earthquake',
             'Volcano',
-            'Volcanic Ash',
+            'Volcanic ash',
             'Generic']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
@@ -1196,8 +1209,8 @@ class WizardDialogTest(unittest.TestCase):
         self.select_from_list_widget('Flood', dialog.lstSubcategories)
         dialog.pbnNext.click()  # go to hazard category
 
-        # choosing single event scenario
-        self.select_from_list_widget('Single Event',
+        # choosing Single event scenario
+        self.select_from_list_widget('Single event',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()  # Go to mode
 
@@ -1208,7 +1221,7 @@ class WizardDialogTest(unittest.TestCase):
 
         self.check_current_step(step_kw_classification, dialog)
 
-        expected_values = ['Flood classes']
+        expected_values = ['Flood classes', 'Generic classes']
         self.check_list(expected_values, dialog.lstClassifications)
         self.select_from_list_widget('Flood classes',
                                      dialog.lstClassifications)
@@ -1292,7 +1305,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to hazard category
 
         self.check_current_step(step_kw_hazard_category, dialog)
-        self.select_from_list_widget('Multiple Event',
+        self.select_from_list_widget('Multiple event',
                                      dialog.lstHazardCategories)
         dialog.pbnNext.click()  # go to mode
 
@@ -1407,7 +1420,7 @@ class WizardDialogTest(unittest.TestCase):
         # expected_summary_key = 'minimum needs'
         # expected_summary_value_fragment = 'rice'
 
-        expected_report_size = 4361  # as saved on Ubuntu
+        expected_report_size = 4055  # as saved on Ubuntu
         # TS : changed tolerance from 120 to 160 because above change
         # causes fail on fedora
         # AG: updated the tolerance from 160 to 190
@@ -1417,6 +1430,7 @@ class WizardDialogTest(unittest.TestCase):
         # Initialize dialog
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
+        dialog.dock = DOCK
         dialog.set_function_centric_mode()
 
         # Load test layers
@@ -1469,6 +1483,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step_fc_function_2: test number of functions for raster flood
         # and polygon structure
+        self.check_current_step(step_fc_function_2, dialog)
         dialog.tblFunctions2.setCurrentCell(3, 0)
 
         count = len(dialog.selected_functions_2())
@@ -1483,6 +1498,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step_fc_function_3: test number of available functions
+        self.check_current_step(step_fc_function_3, dialog)
         count = dialog.lstFunctions.count()
         message = ('Invalid functions count on the list! There should be %d '
                    'while there were: %d') % (expected_functions_count, count)
@@ -1495,7 +1511,7 @@ class WizardDialogTest(unittest.TestCase):
         message = 'Expected flood impact function not found: %s' % chosen_if
         self.assertTrue(chosen_if in flood_ifs, message)
 
-        # step_fc_function: select FloodRasterBuildingImpactFunction and
+        # step_fc_function_3: select FloodRasterBuildingImpactFunction and
         # press ok
         chosen_if_row = flood_ifs.index(chosen_if)
         dialog.lstFunctions.setCurrentRow(chosen_if_row)
@@ -1519,9 +1535,11 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.rbHazLayerFromCanvas.isChecked(), message)
 
         # step_fc_hazlayer_origin: press ok
+        self.check_current_step(step_fc_hazlayer_origin, dialog)
         dialog.pbnNext.click()
 
         # step_fc_hazlayer_from_canvas: press ok
+        self.check_current_step(step_fc_hazlayer_from_canvas, dialog)
         dialog.pbnNext.click()
 
         # step_fc_explayer_from_canvas: test the lstCanvasExpLayers state
@@ -1542,9 +1560,11 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.rbExpLayerFromCanvas.isChecked(), message)
 
         # step_fc_explayer_origin: press ok
+        self.check_current_step(step_fc_explayer_origin, dialog)
         dialog.pbnNext.click()
 
         # step_fc_explayer_from_canvas: press ok
+        self.check_current_step(step_fc_explayer_from_canvas, dialog)
         dialog.pbnNext.click()
 
         # step_fc_explayer_from_canvas: test the lstCanvasAggLayers state
@@ -1566,14 +1586,17 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.rbAggLayerFromBrowser.isChecked(), message)
 
         # step_fc_agglayer_origin: switch to no aggregation and press ok
+        self.check_current_step(step_fc_agglayer_origin, dialog)
         dialog.rbAggLayerNoAggregation.click()
         dialog.pbnNext.click()
 
         # step_fc_extent: switch to layer's extent and press ok
-        dialog.rbExtentLayer.click()
+        self.check_current_step(step_fc_extent, dialog)
+        dialog.extent_dialog.hazard_exposure_only.click()
         dialog.pbnNext.click()
 
         # step_fc_params: press ok (already covered by the relevant test)
+        self.check_current_step(step_fc_params, dialog)
         dialog.pbnNext.click()
 
         # step_fc_summary: test minimum needs text

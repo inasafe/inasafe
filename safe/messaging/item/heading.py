@@ -32,21 +32,20 @@ class Heading(MessageElement):
         Strings can be passed and are automatically converted in to
         item.Text()
 
-        Args:
-            Text text, text to add to the message
-            int level, the heading level in html 1-6 in plain text 1-...
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
-
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
 
         http://stackoverflow.com/questions/13124961/
         how-to-pass-arguments-efficiently-kwargs-in-python
+
+
+        :param text: Text to add to the message as a heading.
+        :type text: basestring
+
+        :param level: The heading level in html 1-6 in plain text 1-...
+        :type level: int
+
+        :returns: None
         """
         super(Heading, self).__init__(**kwargs)
 
@@ -66,14 +65,8 @@ class Heading(MessageElement):
     def to_html(self):
         """Render a Heading MessageElement as html
 
-        Args:
-            None
-
-        Returns:
-            Str the html representation of the Heading MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: The html representation of the Heading MessageElement.
+        :rtype: str
         """
         if self.text is None:
             return
@@ -91,14 +84,7 @@ class Heading(MessageElement):
     def to_text(self):
         """Render a Heading MessageElement as plain text
 
-        Args:
-            None
-
-        Returns:
-            Str the plain text representation of the Heading MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: The plain text representation of the Heading MessageElement.
         """
         if self.text is None:
             return

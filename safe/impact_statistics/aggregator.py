@@ -90,7 +90,7 @@ LOGGER = logging.getLogger('InaSAFE')
 # If inasafe is running as qgis plugin,
 # it can import processing (from QGIS / sextante),
 # pylint: disable=F0401
-import processing
+from processing.core.Processing import Processing
 # pylint: enable=F0401
 
 
@@ -139,7 +139,9 @@ class Aggregator(QtCore.QObject):
         # aggregation polygons (one list for one polygon)
         self.impact_layer_attributes = []
 
-        self.processing = processing
+        # Notes(Ismail): Need to initialize Processing in QGIS 2.8.x
+        self.processing = Processing
+        self.processing.initialize()
 
         # If this flag is not True, no aggregation or postprocessing will run
         # this is set as True by validateKeywords()
@@ -758,6 +760,7 @@ class Aggregator(QtCore.QObject):
             # minIndex = provider.fieldNameIndex(self._minFieldName())
             # maxIndex = provider.fieldNameIndex(self._maxFieldName())
 
+            update_map = {}
             for myFeature in provider.getFeatures():
                 feature_id = myFeature.id()
                 if feature_id not in zonal_statistics:
@@ -775,7 +778,9 @@ class Aggregator(QtCore.QObject):
                         count_index: statistics['count'],
                         mean_index: statistics['mean']
                     }
-                provider.changeAttributeValues({feature_id: attributes})
+                update_map[feature_id] = attributes
+
+            provider.changeAttributeValues(update_map)
 
     def _aggregate_polygon_impact(self, safe_impact_layer):
         """Aggregation of polygons in polygons
@@ -952,9 +957,8 @@ class Aggregator(QtCore.QObject):
 
             splits_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
-            res = self.processing.runalg('qgis:intersection',
-                                         impact_layer, self.layer,
-                                         splits_filename)
+            res = self.run_processing_algorithm(
+                'qgis:intersection', impact_layer, self.layer, splits_filename)
             impact_layer_splits = QgsVectorLayer(
                 res['OUTPUT'], 'split aggregation', 'ogr')
 
@@ -969,7 +973,7 @@ class Aggregator(QtCore.QObject):
             tmp_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
             epsg = "EPSG:" + str(get_utm_epsg(self.extent[0], self.extent[1]))
-            res = processing.runalg(
+            res = self.run_processing_algorithm(
                 'qgis:reprojectlayer',
                 impact_layer_splits,
                 epsg,
@@ -980,7 +984,7 @@ class Aggregator(QtCore.QObject):
                 'ogr')
             tmp_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
-            res = self.processing.runalg(
+            res = self.run_processing_algorithm(
                 'qgis:exportaddgeometrycolumns',
                 projected_layer,
                 # 2, # Ellipsoidal
@@ -1691,3 +1695,18 @@ class Aggregator(QtCore.QObject):
             self.error_message = message
             return False
         return True
+
+    def run_processing_algorithm(self, algorithm_name, *args):
+        """Adapt from processing.runalg with our own Processing.
+
+        :param algorithm_name: The name of the algorithm.
+        :type algorithm_name: str
+        :param args: list of arguments
+        :type args: list
+
+        :returns: The ouput of the algorithm.
+        :rtype: dict
+        """
+        algorithm = self.processing.runAlgorithm(algorithm_name, None, *args)
+        if algorithm is not None:
+            return algorithm.getOutputValuesAsDictionary()

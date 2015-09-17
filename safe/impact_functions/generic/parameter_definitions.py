@@ -4,7 +4,6 @@ from safe.impact_functions.unit_definitions import parameter_unit_generic
 from safe.utilities.i18n import tr
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.group_parameter import GroupParameter
-from safe_extras.parameters.string_parameter import StringParameter
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '11/06/15'
@@ -84,13 +83,4 @@ def high_hazard_class():
     field.help_text = tr('High Hazard class value.')
     field.description = tr(
         'The value of hazard categorized as High Hazard class')
-    return field
-
-
-def hazard_zone_attribute_field():
-    """Generator for the flooded target field parameter."""
-    field = StringParameter()
-    field.name = 'Hazard Zone Attribute'
-    field.is_required = True
-    field.value = 'KRB'  # default value
     return field

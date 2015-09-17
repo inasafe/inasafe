@@ -265,7 +265,10 @@ class NeedsProfile(MinimumNeeds):
         prov_parameter.name = tr('Provenance')
         prov_parameter.description = tr('The provenance of minimum needs')
         prov_parameter.help_text = tr('The provenance of minimum needs')
-        prov_parameter.value = self.provenance
+        try:
+            prov_parameter.value = self.provenance
+        except TypeError:
+            prov_parameter.value = ''
         parameters.append(prov_parameter)
 
         return parameters

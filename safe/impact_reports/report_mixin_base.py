@@ -110,3 +110,7 @@ class ReportMixin(object):
 
         html_tabulated_report = Table(tabulated_report).toNewlineFreeString()
         return html_tabulated_report
+
+    @property
+    def blank_line(self):
+        return {'content': ''}

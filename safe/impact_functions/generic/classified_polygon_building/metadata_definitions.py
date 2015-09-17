@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
 from safe.definitions import (
     layer_mode_classified,
     layer_geometry_polygon,
@@ -19,10 +20,9 @@ from safe.definitions import (
     hazard_category_multiple_event,
     exposure_structure,
     generic_vector_hazard_classes,
+    hazard_category_single_event,
     structure_class_field
 )
-from safe.impact_functions.generic.parameter_definitions import \
-    hazard_zone_attribute_field
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -53,7 +53,7 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
             'name': tr('Classified polygon hazard on buildings'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
-            'function_type': 'old-style',
+            'function_type': 'qgis2.0',
             'author': 'Akbar Gumbira (akbargumbira@gmail.com)',
             'date_implemented': '17/04/2015',
             'overview': tr(
@@ -79,7 +79,8 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'hazard_categories': [
-                        hazard_category_multiple_event
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
                     ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
@@ -101,8 +102,9 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', hazard_zone_attribute_field())
+                ('postprocessors', OrderedDict([(
+                    'BuildingType',
+                    building_type_postprocessor())]))
             ])
         }
         return dict_meta

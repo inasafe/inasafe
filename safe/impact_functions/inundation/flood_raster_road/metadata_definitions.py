@@ -30,6 +30,7 @@ from safe.definitions import (
     layer_geometry_line,
     hazard_flood,
     hazard_category_single_event,
+    hazard_category_multiple_event,
     exposure_road,
     unit_metres,
     unit_feet,
@@ -78,7 +79,10 @@ class FloodRasterRoadsMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_categories': [
+                        hazard_category_single_event,
+                        hazard_category_multiple_event
+                    ],
                     'hazard_types': [hazard_flood, hazard_tsunami],
                     'continuous_hazard_units': [unit_feet, unit_metres],
                     'vector_hazard_classifications': [],
@@ -95,10 +99,6 @@ class FloodRasterRoadsMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # This field of the exposure layer contains
-                # information about road types
-                ('road_type_field',
-                 parameter_definitions.road_type_field()),
                 ('min threshold',
                  parameter_definitions.min_threshold()),
                 ('max threshold',

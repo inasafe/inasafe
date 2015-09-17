@@ -27,7 +27,6 @@ from zipfile import BadZipfile
 from realtime.utilities import data_dir, is_event_id, realtime_logger_name
 from realtime.shake_event import ShakeEvent
 from realtime.exceptions import EmptyShakeDirectoryError
-from datetime import datetime, timedelta
 from realtime.push_shake import push_shake_event_to_rest
 from realtime.shake_data import ShakeData
 
@@ -142,22 +141,32 @@ def create_shake_events(
     shake_ids = ShakeData.get_list_event_ids_from_folder(working_dir)
     shake_ids.sort()
     shake_ids.reverse()
-    now = datetime.now()
-    date_format = '%Y%m%d%H%M%S'
-    if len(shake_ids) > 0:
-        now = datetime.strptime(shake_ids[0], date_format)
-    before = now - timedelta(minutes=1)
-    before_int = int(before.strftime(date_format))
-    # sort descending
-    for shake_id in shake_ids:
-        if int(shake_id) > before_int:
-            shake_event = ShakeEvent(
+    if not shake_ids:
+        return []
+
+    if event_id:
+        shake_events.append(
+            ShakeEvent(
                 working_dir=working_dir,
                 event_id=event_id,
                 locale=locale,
                 force_flag=force_flag,
                 population_raster_path=population_path)
-            shake_events.append(shake_event)
+        )
+    else:
+        last_int = int(shake_ids[0])
+        # sort descending
+        for shake_id in shake_ids:
+            if last_int - int(shake_id) < 100:
+                shake_event = ShakeEvent(
+                    working_dir=working_dir,
+                    event_id=shake_id,
+                    locale=locale,
+                    force_flag=force_flag,
+                    population_raster_path=population_path)
+                shake_events.append(shake_event)
+            else:
+                break
 
     return shake_events
 
@@ -202,4 +211,4 @@ if __name__ == '__main__':
         try:
             process_event(working_dir=working_directory, locale=locale_option)
         except:  # pylint: disable=W0702
-            LOGGER.exception('Process event failed')
+            LOGGER.info('Process event failed')

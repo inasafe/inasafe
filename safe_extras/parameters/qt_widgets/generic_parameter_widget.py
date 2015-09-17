@@ -70,10 +70,15 @@ class GenericParameterWidget(QWidget, object):
 
         # spacing
         self._main_layout.setSpacing(0)
+        self._main_layout.setContentsMargins(0, 0, 0, 0)
         self._input_layout.setSpacing(0)
+        self._input_layout.setContentsMargins(0, 0, 0, 0)
         self._help_layout.setSpacing(0)
+        self._help_layout.setContentsMargins(0, 0, 0, 0)
         self._inner_input_layout.setSpacing(7)
+        self._inner_input_layout.setContentsMargins(0, 0, 0, 0)
         self._inner_help_layout.setSpacing(0)
+        self._inner_help_layout.setContentsMargins(0, 0, 0, 0)
 
         # Put elements into layouts
         self._input_layout.addWidget(self._label)

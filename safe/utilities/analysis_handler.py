@@ -98,6 +98,7 @@ class AnalysisHandler(QObject):
         self.impact_function_manager = ImpactFunctionManager()
         self.extent = Extent(self.iface)
         self.analysis = None
+        self.composer = None
 
         # Values for settings these get set in read_settings.
         self.run_in_thread_flag = None
@@ -136,13 +137,13 @@ class AnalysisHandler(QObject):
             self.show_dynamic_message,
             signal=DYNAMIC_MESSAGE_SIGNAL)
 
-        # noinspection PyArgumentEqualDefault
+        # noinspection PyArgumentEqualDefault,PyUnresolvedReferences
         dispatcher.connect(
             self.parent.wvResults.static_message_event,
             signal=STATIC_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
-        # noinspection PyArgumentEqualDefault
+        # noinspection PyArgumentEqualDefault,PyUnresolvedReferences
         dispatcher.connect(
             self.parent.wvResults.error_message_event,
             signal=ERROR_MESSAGE_SIGNAL,
@@ -202,7 +203,9 @@ class AnalysisHandler(QObject):
 
         """
         # TODO Hardcoded step - may overflow, if number of messages increase
+        # noinspection PyUnresolvedReferences
         self.parent.pbProgress.setValue(self.parent.pbProgress.value() + 15)
+        # noinspection PyUnresolvedReferences
         self.parent.wvResults.dynamic_message_event(sender, message)
 
     def show_error_message(self, error_message):
@@ -273,17 +276,18 @@ class AnalysisHandler(QObject):
             'inasafe/show_intermediate_layers', False, type=bool)
 
         # whether to show or not dev only options
+        # noinspection PyAttributeOutsideInit
         self.developer_mode = settings.value(
             'inasafe/developer_mode', False, type=bool)
 
         # whether to show or not a custom Logo
+        # noinspection PyAttributeOutsideInit
         self.organisation_logo_path = settings.value(
             'inasafe/organisation_logo_path',
             default_organisation_logo_path(),
             type=str)
-        flag = bool(settings.value(
-            'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
 
+    # noinspection PyUnresolvedReferences
     def show_busy(self):
         """Lock buttons and enable the busy cursor."""
         self.parent.pbnNext.setEnabled(False)
@@ -293,6 +297,7 @@ class AnalysisHandler(QObject):
         self.parent.repaint()
         QtGui.qApp.processEvents()
 
+    # noinspection PyUnresolvedReferences
     def hide_busy(self):
         """Unlock buttons A helper function to indicate processing is done."""
         self.parent.pbnNext.setEnabled(True)
@@ -340,6 +345,7 @@ class AnalysisHandler(QObject):
 
         self.disable_signal_receiver()
 
+    # noinspection PyUnresolvedReferences
     def init_analysis(self):
         """Setup analysis to make it ready to work.
 
@@ -375,13 +381,10 @@ class AnalysisHandler(QObject):
         self.analysis.map_canvas = self.iface.mapCanvas()
 
         # Extent
-        if self.parent.rbExtentUser.isChecked():
-            self.analysis.user_extent = self.extent.user_extent
-        else:
-            self.analysis.user_extent = None
+        self.analysis.user_extent = self.extent.user_extent
         self.analysis.user_extent_crs = self.extent.user_extent_crs
-        self.analysis.clip_to_viewport = self.parent.rbExtentScreen.isChecked()
 
+    # noinspection PyUnresolvedReferences
     def completed(self):
         """Slot activated when the process is done.
 
@@ -412,6 +415,7 @@ class AnalysisHandler(QObject):
             # message.add(m.Heading(self.tr('View processing log as HTML'),
             #                      **INFO_STYLE))
             # message.add(m.Link('file://%s' % self.parent.wvResults.log_path))
+            # noinspection PyTypeChecker
             self.show_static_message(message)
             self.parent.wvResults.impact_path = impact_path
 
@@ -492,6 +496,7 @@ class AnalysisHandler(QObject):
         if self.show_intermediate_layers:
             layers_to_add.append(self.analysis.aggregator.layer)
         layers_to_add.append(qgis_impact_layer)
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
         # make sure it is active in the legend - needed since QGIS 2.4
         self.iface.setActiveLayer(qgis_impact_layer)
@@ -510,18 +515,22 @@ class AnalysisHandler(QObject):
         # Return text to display in report panel
         return report
 
-    def print_map(self, mode="pdf"):
-        """Open impact report dialog that used to tune report when print map
-            button pressed."""
+    def print_map(self, mode='pdf'):
+        """Open impact report dialog that used define report options.
+
+        :param mode: Mode for report - defaults to PDF.
+        :type mode:
+        """
         # Check if selected layer is valid
         impact_layer = self.iface.activeLayer()
         if impact_layer is None:
-            # noinspection PyCallByClass,PyTypeChecker
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QMessageBox.warning(
                 self.parent,
                 self.tr('InaSAFE'),
-                self.tr('Please select a valid impact layer before '
-                        'trying to print.'))
+                self.tr(
+                    'Please select a valid impact layer before trying to '
+                    'print.'))
             return
 
         # Open Impact Report Dialog
@@ -531,12 +540,14 @@ class AnalysisHandler(QObject):
             print_dialog.button_ok,
             QtGui.QDialogButtonBox.ActionRole)
 
+        # noinspection PyUnresolvedReferences
         print_dialog.button_ok.clicked.connect(print_dialog.accept)
 
         print_dialog.button_save_pdf.hide()
         print_dialog.button_open_composer.hide()
 
         if not print_dialog.exec_() == QtGui.QDialog.Accepted:
+            # noinspection PyTypeChecker
             self.show_dynamic_message(
                 self,
                 m.Message(
@@ -565,7 +576,7 @@ class AnalysisHandler(QObject):
         else:
             template_path = print_dialog.template_path.text()
             if not os.path.exists(template_path):
-                # noinspection PyCallByClass,PyTypeChecker
+                # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
                 QtGui.QMessageBox.warning(
                     self.parent,
                     self.tr('InaSAFE'),
@@ -573,12 +584,8 @@ class AnalysisHandler(QObject):
                             'The template you choose does not exist.'))
                 return
 
-        # Open in PDF or Open in Composer Flag (not used, the button is hidden
-        #  by this class. The wizard has two its own buttons for Open In PDF
-        # and Open In Composer buttons. Use variable 'mode' from param instead)
-        create_pdf_flag = print_dialog.create_pdf
-
         # Instantiate and prepare Report
+        # noinspection PyTypeChecker
         self.show_dynamic_message(
             self,
             m.Message(
@@ -610,7 +617,7 @@ class AnalysisHandler(QObject):
                          'impact-map', 'impact-legend']
         impact_report.component_ids = component_ids
         if template_warning_verbose and \
-                        len(impact_report.missing_elements) != 0:
+                len(impact_report.missing_elements) != 0:
             title = self.tr('Template is missing some elements')
             question = self.tr(
                 'The composer template you are printing to is missing '
@@ -662,6 +669,7 @@ class AnalysisHandler(QObject):
         output_path = str(output_path)
 
         if output_path is None or output_path == '':
+            # noinspection PyTypeChecker
             self.show_dynamic_message(
                 self,
                 m.Message(
@@ -687,13 +695,14 @@ class AnalysisHandler(QObject):
                 m.Paragraph(self.tr('and')),
                 m.Paragraph(wrapped_table_path))
 
-            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(table_pdf_path))
-            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(map_pdf_path))
 
+            # noinspection PyTypeChecker
             self.show_dynamic_message(self, status)
         except TemplateLoadingError, e:
             self.show_error_message(get_error_message(e))

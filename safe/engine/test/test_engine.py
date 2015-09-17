@@ -11,6 +11,7 @@ from safe.engine.core import calculate_impact
 from safe.engine.interpolation import (
     interpolate_polygon_raster,
     interpolate_raster_vector_points,
+    interpolate_polygon_points,
     assign_hazard_values_to_exposure_data,
     tag_polygons_by_grid)
 from safe.impact_functions import register_impact_functions
@@ -19,7 +20,7 @@ from safe.storage.core import (
     read_layer,
     write_vector_data,
     write_raster_data)
-from safe.storage.vector import Vector
+from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.gis.polygon import (
     separate_points_by_polygon,
@@ -1875,6 +1876,47 @@ class TestEngine(unittest.TestCase):
         r = normal_cdf(numpy.log(10))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
+
+    def test_conflicting_attribute_names(self):
+        """Test that hazard layer attribute names do not mask exposure layer.
+
+        This is based on observations in issues # 2090.
+        """
+        vector_file = ('%s/building_Maumere.shp' % TESTDATA)
+        layer = read_layer(vector_file)
+        layer_attributes = layer.get_data()
+        layer_geometry = layer.get_geometry()
+
+        # Cut down to make test quick
+        hazard_layer = Vector(
+            data=layer_attributes[790:800],
+            geometry=layer_geometry[790:800],
+            projection=layer.get_projection())
+
+        exposure_layer = Vector(
+            data=layer_attributes[690:700],
+            geometry=layer_geometry[790:800],
+            projection=layer.get_projection())
+        exposure_centroid_layer = convert_polygons_to_centroids(exposure_layer)
+
+        hazard_attributes = hazard_layer.get_attribute_names()
+        exposure_attributes = exposure_layer.get_attribute_names()
+
+        interpolated_layer = interpolate_polygon_points(
+            hazard_layer,
+            exposure_centroid_layer)
+
+        interpolated_attributes = interpolated_layer.get_attribute_names()
+        message = (
+            "Since the layers are based on the same layer, "
+            "the attributes should be the same.")
+        self.assertListEqual(hazard_attributes, exposure_attributes, message)
+        message = "All attributes should be copied. Plus 2 default attributes"
+        self.assertEqual(
+            len(hazard_attributes) + len(exposure_attributes) + 2,
+            len(interpolated_attributes),
+            message)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestEngine, 'test')
