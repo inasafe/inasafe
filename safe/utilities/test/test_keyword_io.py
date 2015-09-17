@@ -267,6 +267,29 @@ class KeywordIOTest(unittest.TestCase):
         message = self.keyword_io.to_message(keywords).to_text()
         self.assertIn('Exposure*structure------', message)
 
+    def test_dict_to_row(self):
+        """Test the dict to row helper works.
+
+        .. versionadded:: 3.2
+        """
+        keyword_value = (
+            "{'high': ['Kawasan Rawan Bencana III'], "
+            "'medium': ['Kawasan Rawan Bencana II'], "
+            "'low': ['Kawasan Rawan Bencana I']}")
+        table = self.keyword_io._dict_to_row(keyword_value)
+        self.assertIn(
+            '\n---\n*high* - Kawasan Rawan Bencana III\n*medium*',
+            table.to_text())
+        # should also work passing a dict
+        keyword_value = {
+            'high': ['Kawasan Rawan Bencana III'],
+            'medium': ['Kawasan Rawan Bencana II'],
+            'low': ['Kawasan Rawan Bencana I']}
+        table = self.keyword_io._dict_to_row(keyword_value)
+        self.assertIn(
+            '\n---\n*high* - Kawasan Rawan Bencana III\n*medium*',
+            table.to_text())
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordIOTest)
     runner = unittest.TextTestRunner(verbosity=2)
