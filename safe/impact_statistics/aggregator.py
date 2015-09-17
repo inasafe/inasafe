@@ -1125,7 +1125,7 @@ class Aggregator(QtCore.QObject):
             m.Heading(
                 self.tr('Preparing aggregation layer'),
                 **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail)
+            m.Paragraph(detail))
         # noinspection PyTypeChecker
         self._send_message(message)
 
