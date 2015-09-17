@@ -22,6 +22,7 @@ from safe.impact_functions.volcanic.volcano_polygon_population\
     .impact_function import VolcanoPolygonPopulationFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
@@ -44,8 +45,8 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
         impact_function = VolcanoPolygonPopulationFunction.instance()
 
         # 2. Run merapi krb
-        impact_function.hazard = merapi_krb_layer
-        impact_function.exposure = population_layer
+        impact_function.hazard = SafeLayer(merapi_krb_layer)
+        impact_function.exposure = SafeLayer(population_layer)
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question

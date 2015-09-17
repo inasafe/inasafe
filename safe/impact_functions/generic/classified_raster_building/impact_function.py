@@ -28,6 +28,7 @@ from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+from safe.common.exceptions import KeywordNotFoundError
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -67,25 +68,30 @@ class ClassifiedRasterHazardBuildingFunction(
         self.validate()
         self.prepare()
 
+        # Value from layer's keywords
+        # Try to get the value from keyword, if not exist, it will not fail,
+        # but use the old get_osm_building_usage
+        try:
+            structure_class_field = self.exposure.keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            structure_class_field = None
+
         # The 3 classes
         categorical_hazards = self.parameters['Categorical hazards'].value
         low_t = categorical_hazards[0].value
         medium_t = categorical_hazards[1].value
         high_t = categorical_hazards[2].value
 
-        # Extract data
-        hazard = self.hazard      # Classified Hazard
-        exposure = self.exposure  # Building locations
-
         # Determine attribute name for hazard levels
-        if hazard.is_raster:
+        if self.hazard.layer.is_raster:
             hazard_attribute = 'level'
         else:
             hazard_attribute = None
 
         interpolated_result = assign_hazard_values_to_exposure_data(
-            hazard,
-            exposure,
+            self.hazard.layer,
+            self.exposure.layer,
             attribute_name=hazard_attribute,
             mode='constant')
 
@@ -102,7 +108,13 @@ class ClassifiedRasterHazardBuildingFunction(
             (tr('Low Hazard Class'), {})
         ])
         for i in range(buildings_total):
-            usage = get_osm_building_usage(attribute_names, attributes[i])
+
+            if (structure_class_field and
+                    structure_class_field in attribute_names):
+                usage = attributes[i][structure_class_field]
+            else:
+                usage = get_osm_building_usage(attribute_names, attributes[i])
+
             if usage is None or usage == 0:
                 usage = 'unknown'
 
@@ -175,16 +187,17 @@ class ClassifiedRasterHazardBuildingFunction(
                           style_type='categorizedSymbol')
 
         impact_table = impact_summary = self.generate_html_report()
+
         # For printing map purpose
         map_title = tr('Buildings affected')
-        legend_units = tr('(Low, Medium, High)')
         legend_title = tr('Structure inundated status')
+        legend_units = tr('(Low, Medium, High)')
 
         # Create vector layer and return
         vector_layer = Vector(
             data=attributes,
-            projection=exposure.get_projection(),
-            geometry=exposure.get_geometry(),
+            projection=self.exposure.layer.get_projection(),
+            geometry=self.exposure.layer.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords={
                 'impact_summary': impact_summary,

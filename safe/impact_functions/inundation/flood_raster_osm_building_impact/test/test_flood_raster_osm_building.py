@@ -23,6 +23,7 @@ from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     FloodRasterBuildingFunction
 from safe.storage.core import read_layer
 from safe.test.utilities import get_qgis_app, test_data_path
+from safe.storage.safe_layer import SafeLayer
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -44,8 +45,8 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        impact_function.hazard = hazard_layer
-        impact_function.exposure = exposure_layer
+        impact_function.hazard = SafeLayer(hazard_layer)
+        impact_function.exposure = SafeLayer(exposure_layer)
         impact_function.run()
         impact_layer = impact_function.impact
 

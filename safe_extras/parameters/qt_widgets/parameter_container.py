@@ -141,8 +141,8 @@ class ParameterContainer(QWidget, object):
         # Label for description
         self.description_label.setText(self.description_text)
 
-        self.group_frame.setLineWidth(1)
-        self.group_frame.setFrameStyle(QFrame.Panel)
+        self.group_frame.setLineWidth(0)
+        self.group_frame.setFrameStyle(QFrame.NoFrame)
         vlayout = QVBoxLayout()
         vlayout.setContentsMargins(0, 0, 0, 0)
         vlayout.setSpacing(0)
@@ -194,9 +194,9 @@ class ParameterContainer(QWidget, object):
                 color = color_odd
             i += 1
             parameter_widget.setAutoFillBackground(True)
-            palette = parameter_widget.palette()
-            palette.setColor(parameter_widget.backgroundRole(), color)
-            parameter_widget.setPalette(palette)
+            #palette = parameter_widget.palette()
+            #palette.setColor(parameter_widget.backgroundRole(), color)
+            #parameter_widget.setPalette(palette)
             self.vertical_layout.addWidget(parameter_widget)
 
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)

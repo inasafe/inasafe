@@ -13,6 +13,8 @@ name=InaSAFE-Dev
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
+about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and World Bank - GFDRR
+
 version=3.2.0
 # alpha, beta, rc or final
 status=alpha
@@ -24,7 +26,10 @@ status=alpha
 
 changelog=
         3.2.0
-        *
+        bugfix - Prevent hazard attribute names from masking exposure names during interpolation (#2090)
+        bugfix - show building aggregation in volcano impact functions (#2103 #2014)
+        bugfix - show building aggregation in volcanic ash impact function (#2105)
+        bugfix - totals of affected buildings in aggregation regions now calculated correctly (#2144)
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
@@ -32,7 +37,7 @@ tags=contingency planning, impact assessments, disaster scenarios, natural hazar
 homepage=http://www.inasafe.org/
 tracker=https://github.com/AIFDR/inasafe/issues
 repository=https://github.com/AIFDR/inasafe
-icon=icon.png
+icon=resources/img/icons/icon.png
 # experimental flag
 experimental=False
 

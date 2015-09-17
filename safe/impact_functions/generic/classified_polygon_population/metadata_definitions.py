@@ -17,6 +17,7 @@ from safe.definitions import (
     layer_geometry_polygon,
     layer_geometry_raster,
     hazard_all,
+    hazard_category_single_event,
     hazard_category_multiple_event,
     exposure_population,
     generic_vector_hazard_classes,
@@ -27,8 +28,6 @@ from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
-from safe.impact_functions.generic.parameter_definitions import \
-    hazard_zone_attribute_field
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -87,6 +86,7 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'hazard_categories': [
+                        hazard_category_single_event,
                         hazard_category_multiple_event
                     ],
                     'hazard_types': hazard_all,
@@ -107,8 +107,6 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                 }
             },
             'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', hazard_zone_attribute_field()),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),

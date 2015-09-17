@@ -74,7 +74,10 @@ class AboutDialog(QtGui.QDialog, FORM_CLASS):
         attributes_list.append(self.tr(
             'Edit by Hugo Garduño from The Noun Project'))
         attributes_list.append(self.tr(
-            'Add designed by Michael Zenaty from the Noun Project'))
+            '"Add icon" designed by Michael Zenaty from the Noun Project'))
         attributes_list.append(self.tr(
-            'Remove designed by Dalpat Prajapati from the Noun Project'))
+            '"Remove icon" designed by Dalpat Prajapati from the Noun '
+            'Project'))
+        attributes_list.append(self.tr(
+            'Humanitarian icons source: OCHA'))
         return attributes_list

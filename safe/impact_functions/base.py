@@ -20,15 +20,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from socket import gethostname
 import getpass
 
-from qgis.core import QgsVectorLayer
-
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.common.exceptions import InvalidExtentError, FunctionParametersError
+from safe.common.exceptions import (
+    InvalidExtentError, FunctionParametersError)
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
-from safe.utilities.qgis_layer_wrapper import QgisWrapper
 from safe.utilities.gis import convert_to_safe_layer
+from safe.storage.safe_layer import SafeLayer
 
 
 class ImpactFunction(object):
@@ -233,7 +232,7 @@ class ImpactFunction(object):
         """Property for the hazard layer to be used for the analysis.
 
         :returns: A map layer.
-        :rtype: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        :rtype: SafeLayer
         """
         return self._hazard
 
@@ -242,22 +241,25 @@ class ImpactFunction(object):
         """Setter for hazard layer property.
 
         :param layer: Hazard layer to be used for the analysis.
-        :type layer: QgsVectorLayer, QgsRasterLayer, Vector, Raster
+        :type layer: SafeLayer, Layer, QgsMapLayer
         """
-        if self.function_type() == 'old-style':
-            self._hazard = convert_to_safe_layer(layer)
-        elif self.function_type() == 'qgis2.0':
-            # convert for new style impact function
-            self._hazard = QgisWrapper(layer)
+        if isinstance(layer, SafeLayer):
+            self._hazard = layer
         else:
-            message = tr('Error: Impact Function has unknown style.')
-            raise Exception(message)
+            if self.function_type() == 'old-style':
+                self._hazard = SafeLayer(convert_to_safe_layer(layer))
+            elif self.function_type() == 'qgis2.0':
+                # convert for new style impact function
+                self._hazard = SafeLayer(layer)
+            else:
+                message = tr('Error: Impact Function has unknown style.')
+                raise Exception(message)
 
         # Update the target field to a non-conflicting one
-        if isinstance(layer, QgsVectorLayer):
+        if self._hazard.is_qgsvectorlayer():
             self._target_field = get_non_conflicting_attribute_name(
                 self.target_field,
-                layer.dataProvider().fieldNameMap().keys()
+                self._hazard.layer.dataProvider().fieldNameMap().keys()
             )
 
     @property
@@ -265,7 +267,7 @@ class ImpactFunction(object):
         """Property for the exposure layer to be used for the analysis.
 
         :returns: A map layer.
-        :rtype: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
+        :rtype: SafeLayer
         """
         return self._exposure
 
@@ -274,22 +276,25 @@ class ImpactFunction(object):
         """Setter for exposure layer property.
 
         :param layer: exposure layer to be used for the analysis.
-        :type layer: QgsVectorLayer, QgsRasterLayer, Vector, Raster
+        :type layer: SafeLayer
         """
-        if self.function_type() == 'old-style':
-            self._exposure = convert_to_safe_layer(layer)
-        elif self.function_type() == 'qgis2.0':
-            # convert for new style impact function
-            self._exposure = QgisWrapper(layer)
+        if isinstance(layer, SafeLayer):
+            self._exposure = layer
         else:
-            message = tr('Error: Impact Function has unknown style.')
-            raise Exception(message)
+            if self.function_type() == 'old-style':
+                self._exposure = SafeLayer(convert_to_safe_layer(layer))
+            elif self.function_type() == 'qgis2.0':
+                # convert for new style impact function
+                self._exposure = SafeLayer(layer)
+            else:
+                message = tr('Error: Impact Function has unknown style.')
+                raise Exception(message)
 
         # Update the target field to a non-conflicting one
-        if isinstance(layer, QgsVectorLayer):
+        if self.exposure.is_qgsvectorlayer():
             self._target_field = get_non_conflicting_attribute_name(
                 self.target_field,
-                layer.dataProvider().fieldNameMap().keys()
+                self.exposure.layer.dataProvider().fieldNameMap().keys()
             )
 
     @property
@@ -297,7 +302,7 @@ class ImpactFunction(object):
         """Property for the aggregation layer to be used for the analysis.
 
         :returns: A map layer.
-        :rtype: QgsMapLayer, QgsVectorLayer
+        :rtype: SafeLayer
         """
         return self._aggregation
 
@@ -306,7 +311,7 @@ class ImpactFunction(object):
         """Setter for aggregation layer property.
 
         :param layer: Aggregation layer to be used for the analysis.
-        :type layer: QgsMapLayer, QgsVectorLayer
+        :type layer: SafeLayer
         """
         # add more robust checks here
         self._aggregation = layer
@@ -425,8 +430,8 @@ class ImpactFunction(object):
             function_title = self.metadata().as_dict()['title']
             return (tr('In the event of %(hazard)s how many '
                        '%(exposure)s might %(impact)s')
-                    % {'hazard': self.hazard.get_name().lower(),
-                       'exposure': self.exposure.get_name().lower(),
+                    % {'hazard': self.hazard.name.lower(),
+                       'exposure': self.exposure.name.lower(),
                        'impact': function_title.lower()})
         else:
             return self._question

@@ -33,6 +33,7 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_category_single_event,
+    hazard_category_multiple_event,
     unit_metres,
     unit_feet,
     count_exposure_unit,
@@ -94,8 +95,8 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                 'An exposure raster layer where each cell represent '
                 'population count.'),
             'output': tr(
-                'Raster layer contains population affected and the '
-                'minimum needs based on the population affected.'),
+                'Raster layer contains population affected and the minimum '
+                'needs based on number of the population affected.'),
             'actions': tr(
                 'Provide details about how many people would likely need '
                 'to be evacuated, where they are located and what '
@@ -108,7 +109,10 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_raster],
-                    'hazard_categories': [hazard_category_single_event],
+                    'hazard_categories': [
+                        hazard_category_single_event,
+                        hazard_category_multiple_event
+                    ],
                     'hazard_types': [hazard_tsunami],
                     'continuous_hazard_units': [unit_feet, unit_metres],
                     'vector_hazard_classifications': [],

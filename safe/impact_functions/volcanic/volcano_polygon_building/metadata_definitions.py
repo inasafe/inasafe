@@ -11,11 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.volcanic.volcano_polygon_building\
-    .parameter_definitions import (
-        hazard_zone_attribute, volcano_name_attribute)
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
@@ -24,6 +22,7 @@ from safe.definitions import (
     hazard_volcano,
     volcano_vector_hazard_classes,
     hazard_category_multiple_event,
+    hazard_category_single_event,
     exposure_structure,
     volcano_name_field,
     structure_class_field
@@ -86,7 +85,10 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'hazard': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
-                    'hazard_categories': [hazard_category_multiple_event],
+                    'hazard_categories': [
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
+                    ],
                     'hazard_types': [hazard_volcano],
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
@@ -108,10 +110,9 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 }
             },
             'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', hazard_zone_attribute()),
-                # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', volcano_name_attribute())
+                ('postprocessors', OrderedDict([(
+                    'BuildingType',
+                    building_type_postprocessor())]))
             ])
         }
         return dict_meta
