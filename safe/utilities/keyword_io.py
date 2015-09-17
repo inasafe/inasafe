@@ -716,13 +716,24 @@ class KeywordIO(QObject):
         :rtype: safe.messaging.message
         """
         logo_element = m.Brand()
+        # This order was determined in issue #2313
+        # Date, License
         preferred_order = [
             'title',
             'layer_purpose',
             'exposure',
             'hazard',
+            'hazard_category',
             'layer_geometry',
-            'layer_mode']  # everything else in arbitrary order
+            'layer_mode',
+            'exposure_unit',
+            'continuous_hazard_unit',
+            'source',
+            'url',
+            'scale',
+            'license',
+            'date'
+        ]  # everything else in arbitrary order
         report = m.Message()
         report.add(logo_element)
         report.add(m.Heading(self.tr(
