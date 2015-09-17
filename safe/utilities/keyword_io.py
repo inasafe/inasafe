@@ -169,7 +169,7 @@ class KeywordIO(QObject):
         """Update keywords for a datasource.
 
         :param layer: A QGIS QgsMapLayer instance.
-        :type layer: QgsMapLayer
+        :type layer: qgis.core.QgsMapLayer
 
         :param keywords: A dict containing all the keywords to be updated
               for the layer.
