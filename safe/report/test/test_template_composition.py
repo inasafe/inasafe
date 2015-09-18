@@ -29,7 +29,7 @@ LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 INASAFE_TEMPLATE_PATH = resources_path(
-    'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+    'qgis-composer-templates', 'blue-portrait-a4.qpt')
 
 
 class TemplateCompositionTest(unittest.TestCase):
@@ -57,7 +57,7 @@ class TemplateCompositionTest(unittest.TestCase):
         """Test if we can get missing elements correctly."""
         # Copy the inasafe template to temp dir
         template_path = os.path.join(
-            temp_dir('test'), 'inasafe-portrait-a4.qpt')
+            temp_dir('test'), 'blue-portrait-a4.qpt')
         shutil.copy2(INASAFE_TEMPLATE_PATH, template_path)
 
         template_composition = TemplateComposition(template_path=template_path)
@@ -89,7 +89,7 @@ class TemplateCompositionTest(unittest.TestCase):
         """Test we can load template correctly."""
         # Copy the inasafe template to temp dir
         template_path = os.path.join(
-            temp_dir('test'), 'inasafe-portrait-a4.qpt')
+            temp_dir('test'), 'blue-portrait-a4.qpt')
         shutil.copy2(INASAFE_TEMPLATE_PATH, template_path)
 
         template_composition = TemplateComposition(
