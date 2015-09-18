@@ -1,6 +1,6 @@
-<Composer title="Composer 1" visible="1">
- <Composition gridVisible="0" printResolution="300" paperWidth="210" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="5" snapGridOffsetY="0" alignmentSnap="0" snapping="0" snapTolerancePixels="10" numPages="1" paperHeight="297" smartGuides="1" printAsRaster="1" generateWorldFile="0">
-  <symbol alpha="1" clip_to_extent="1" type="fill" name="">
+<Composer title="blue portrait a4" visible="1">
+ <Composition gridVisible="0" printResolution="300" paperWidth="210" snapGridOffsetX="0" guidesVisible="1" snapGridResolution="10" snapGridOffsetY="0" alignmentSnap="1" snapping="0" snapTolerancePixels="1" numPages="1" paperHeight="297" smartGuides="1" printAsRaster="0" generateWorldFile="0">
+  <symbol alpha="1" type="fill" name="">
    <layer pass="0" class="SimpleFill" locked="0">
     <prop k="border_width_map_unit_scale" v="0,0"/>
     <prop k="color" v="255,255,255,255"/>
@@ -13,94 +13,177 @@
     <prop k="outline_width" v="0.26"/>
     <prop k="outline_width_unit" v="MM"/>
     <prop k="style" v="solid"/>
-    <effect enabled="0" type="effectStack">
-     <effect type="dropShadow">
-      <prop k="blend_mode" v="13"/>
-      <prop k="blur_level" v="10"/>
-      <prop k="color" v="0,0,0,255"/>
-      <prop k="draw_mode" v="2"/>
-      <prop k="enabled" v="0"/>
-      <prop k="offset_angle" v="135"/>
-      <prop k="offset_distance" v="2"/>
-      <prop k="offset_unit" v="MM"/>
-      <prop k="offset_unit_scale" v="0,0"/>
-      <prop k="transparency" v="0"/>
-     </effect>
-     <effect type="outerGlow">
-      <prop k="blend_mode" v="0"/>
-      <prop k="blur_level" v="3"/>
-      <prop k="color_type" v="0"/>
-      <prop k="draw_mode" v="2"/>
-      <prop k="enabled" v="0"/>
-      <prop k="single_color" v="255,255,255,255"/>
-      <prop k="spread" v="2"/>
-      <prop k="spread_unit" v="MM"/>
-      <prop k="spread_unit_scale" v="0,0"/>
-      <prop k="transparency" v="0.5"/>
-     </effect>
-     <effect type="drawSource">
-      <prop k="blend_mode" v="0"/>
-      <prop k="draw_mode" v="2"/>
-      <prop k="enabled" v="1"/>
-      <prop k="transparency" v="0"/>
-     </effect>
-     <effect type="innerShadow">
-      <prop k="blend_mode" v="13"/>
-      <prop k="blur_level" v="10"/>
-      <prop k="color" v="0,0,0,255"/>
-      <prop k="draw_mode" v="2"/>
-      <prop k="enabled" v="0"/>
-      <prop k="offset_angle" v="135"/>
-      <prop k="offset_distance" v="2"/>
-      <prop k="offset_unit" v="MM"/>
-      <prop k="offset_unit_scale" v="0,0"/>
-      <prop k="transparency" v="0"/>
-     </effect>
-     <effect type="innerGlow">
-      <prop k="blend_mode" v="0"/>
-      <prop k="blur_level" v="3"/>
-      <prop k="color_type" v="0"/>
-      <prop k="draw_mode" v="2"/>
-      <prop k="enabled" v="0"/>
-      <prop k="single_color" v="255,255,255,255"/>
-      <prop k="spread" v="2"/>
-      <prop k="spread_unit" v="MM"/>
-      <prop k="spread_unit_scale" v="0,0"/>
-      <prop k="transparency" v="0.5"/>
-     </effect>
-    </effect>
    </layer>
   </symbol>
-  <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="29.8171" file="." pictureHeight="30" mapId="-1" anchorPoint="0">
-   <ComposerItem pagey="29.8635" page="1" id="north-arrow" lastValidViewScaleFactor="1.57383" positionMode="0" positionLock="false" x="167.744" y="29.8635" visibility="1" zValue="9" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="30" outlineWidth="0.3" excludeFromExports="0" uuid="{18cd3d9f-c461-4a23-a4ea-9520da7f595c}" height="30" itemRotation="0" frame="false" pagex="167.744">
+  <ComposerLabel valign="32" marginX="1" marginY="1" labelText="InaSAFE [inasafe-version]" htmlState="0" halign="1">
+   <LabelFont description="Arial,8,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="254.775" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="136.796" y="254.775" visibility="1" zValue="25" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="63.3219" outlineWidth="0.3" excludeFromExports="0" uuid="{d82ce2e6-545b-4c09-92ae-33edbd612983}" height="7" itemRotation="0" frame="false" pagex="136.796">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLabel valign="32" marginX="1" marginY="1" labelText="[version-title]" htmlState="0" halign="2">
+   <LabelFont description="Arial,8,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="254.775" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="109.994" y="254.775" visibility="1" zValue="24" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="22.4896" outlineWidth="0.3" excludeFromExports="0" uuid="{8152d6f7-c70a-425e-9ac8-c1b023f03de4}" height="7" itemRotation="0" frame="false" pagex="109.994">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLegend symbolWidth="7" title="" boxSpace="2" splitLayer="0" equalColumnWidth="0" map="0" titleAlignment="1" symbolHeight="4" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="2" wmsLegendWidth="50" columnCount="1">
+   <styles>
+    <style marginBottom="2" name="title" font="Cantarell,16,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="2" name="group" font="Cantarell,10,-1,5,75,0,0,0,0,0"/>
+    <style marginTop="2" name="subgroup" font="Cantarell,12,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="2" name="symbol" font="Cantarell,11,-1,5,50,0,0,0,0,0"/>
+    <style marginTop="2" marginLeft="2" name="symbolLabel" font="Cantarell,10,-1,5,50,0,0,0,0,0"/>
+   </styles>
+   <layer-tree-group expanded="1" checked="Qt::Checked" name="">
+    <customproperties/>
+   </layer-tree-group>
+   <ComposerItem pagey="231.533" page="1" id="impact-legend" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="10.3544" y="231.533" visibility="1" zValue="23" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="4" outlineWidth="0.3" excludeFromExports="0" uuid="{c31aa3a2-4a47-46ae-973c-d442e927da9f}" height="6" itemRotation="0" frame="false" pagex="10.3544">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLegend>
+  <ComposerLabel valign="32" marginX="1" marginY="1" labelText="[caution-text]" htmlState="0" halign="1">
+   <LabelFont description="Arial,8,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="236.261" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="136.652" y="236.261" visibility="1" zValue="22" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="63.3217" outlineWidth="0.3" excludeFromExports="0" uuid="{1a8d31e0-fe06-4500-ac7c-3d06bbbae2a5}" height="18.6417" itemRotation="0" frame="false" pagex="136.652">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[disclaimer-title]" htmlState="0" halign="1">
+   <LabelFont description="Arial,10,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="255" blue="255" green="255"/>
+   <ComposerItem pagey="263.252" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="110.371" y="263.252" visibility="1" zValue="21" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="89.603" outlineWidth="0.3" excludeFromExports="0" uuid="{08dc9c66-779d-45e8-8241-0e2717d4f3b0}" height="5.813" itemRotation="0" frame="false" pagex="110.371">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[legend-title]" htmlState="0" halign="1">
+   <LabelFont description="Arial,10,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="255" blue="255" green="255"/>
+   <ComposerItem pagey="222.156" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="10.354" y="222.156" visibility="1" zValue="20" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="89.603" outlineWidth="0.3" excludeFromExports="0" uuid="{1f686c12-82c8-4041-8f9a-49f853fa6f8a}" height="5.813" itemRotation="0" frame="false" pagex="10.354">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLabel valign="32" marginX="1" marginY="1" labelText="[caution-title]" htmlState="0" halign="2">
+   <LabelFont description="Arial,8,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="236.261" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="109.994" y="236.261" visibility="1" zValue="18" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="22.3456" outlineWidth="0.3" excludeFromExports="0" uuid="{af59efde-12aa-44e9-8b24-2b3a956c48e1}" height="5.6445" itemRotation="0" frame="false" pagex="109.994">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLabel valign="32" marginX="1" marginY="1" labelText="[date] : [time]" htmlState="0" halign="1">
+   <LabelFont description="Arial,8,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="228.853" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="136.652" y="228.853" visibility="1" zValue="17" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="63.3219" outlineWidth="0.3" excludeFromExports="0" uuid="{fd92a2e7-2651-4d1f-9a71-df6b89fe3689}" height="7" itemRotation="0" frame="false" pagex="136.652">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[information-title]" htmlState="0" halign="1">
+   <LabelFont description="Arial,10,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="255" blue="255" green="255"/>
+   <ComposerItem pagey="222.156" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="110.371" y="222.156" visibility="1" zValue="16" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="89.603" outlineWidth="0.3" excludeFromExports="0" uuid="{52dd035f-e63d-4ab4-a4c2-32a7a5eb4cfa}" height="5.81274" itemRotation="0" frame="false" pagex="110.371">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerArrow arrowHeadFillColor="0,0,0,255" arrowHeadOutlineColor="0,0,0,255" startMarkerFile="" boundsBehaviourVersion="24" arrowHeadWidth="4" endMarkerFile="" outlineWidth="1" markerMode="1">
+   <lineStyle>
+    <symbol alpha="1" type="line" name="">
+     <layer pass="0" class="SimpleLine" locked="0">
+      <prop k="capstyle" v="square"/>
+      <prop k="customdash" v="5;2"/>
+      <prop k="customdash_map_unit_scale" v="0,0"/>
+      <prop k="customdash_unit" v="MM"/>
+      <prop k="draw_inside_polygon" v="0"/>
+      <prop k="joinstyle" v="bevel"/>
+      <prop k="line_color" v="0,0,0,255"/>
+      <prop k="line_style" v="solid"/>
+      <prop k="line_width" v="0.2"/>
+      <prop k="line_width_unit" v="MM"/>
+      <prop k="offset" v="0"/>
+      <prop k="offset_map_unit_scale" v="0,0"/>
+      <prop k="offset_unit" v="MM"/>
+      <prop k="use_custom_dash" v="0"/>
+      <prop k="width_map_unit_scale" v="0,0"/>
+     </layer>
+    </symbol>
+   </lineStyle>
+   <StartPoint x="134.067" y="229.5"/>
+   <StopPoint x="134.067" y="260.529"/>
+   <ComposerItem pagey="228.793" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="133.36" y="228.793" visibility="1" zValue="15" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="1.41421" outlineWidth="0.3" excludeFromExports="0" uuid="{f68f97eb-d5dd-46a6-b452-cfa99cfa99ba}" height="32.4432" itemRotation="0" frame="false" pagex="133.36">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerArrow>
+  <ComposerLabel valign="32" marginX="1" marginY="1" labelText="[time-title]" htmlState="0" halign="2">
+   <LabelFont description="Arial,8,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="228.853" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="109.85" y="228.853" visibility="1" zValue="14" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="22.4896" outlineWidth="0.3" excludeFromExports="0" uuid="{51c6b40a-47e3-4303-92c1-81ed159b092e}" height="7" itemRotation="0" frame="false" pagex="109.85">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[disclaimer]" htmlState="0" halign="4">
+   <LabelFont description="Arial,8,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="0" blue="0" green="0"/>
+   <ComposerItem pagey="269.154" page="1" id="disclaimer-text" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="109.884" y="269.154" visibility="1" zValue="13" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="90.0897" outlineWidth="0.3" excludeFromExports="0" uuid="{9fba6ff5-13e8-4ba5-90dd-b12f286a343f}" height="24.3985" itemRotation="0" frame="false" pagex="109.884">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerLabel>
+  <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="14.5756" file="." pictureHeight="14.665" mapId="-1" anchorPoint="0">
+   <ComposerItem pagey="200.844" page="1" id="north-arrow" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.3544" y="200.844" visibility="1" zValue="12" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="14.5756" outlineWidth="0.3" excludeFromExports="0" uuid="{189a3672-ab1a-4fca-8f04-c211a4dabd93}" height="16.249" itemRotation="0" frame="false" pagex="9.3544">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <dataDefinedSource expr="" field="" active="false" useExpr="true"/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="17.9925" file="." pictureHeight="18.1029" mapId="-1" anchorPoint="0">
-   <ComposerItem pagey="275.126" page="1" id="organisation-logo" lastValidViewScaleFactor="1.87248" positionMode="0" positionLock="false" x="162.026" y="275.126" visibility="1" zValue="8" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="41.4422" outlineWidth="0.3" excludeFromExports="0" uuid="{184d0bea-d92f-40bf-89a0-f9973515adca}" height="18.1029" itemRotation="0" frame="false" pagex="162.026">
+  <ComposerShape shapeType="0" cornerRadius="0">
+   <symbol alpha="1" type="fill" name="">
+    <layer pass="0" class="SimpleFill" locked="0">
+     <prop k="border_width_map_unit_scale" v="0,0"/>
+     <prop k="color" v="255,255,255,168"/>
+     <prop k="joinstyle" v="miter"/>
+     <prop k="offset" v="0,0"/>
+     <prop k="offset_map_unit_scale" v="0,0"/>
+     <prop k="offset_unit" v="MM"/>
+     <prop k="outline_color" v="0,0,0,255"/>
+     <prop k="outline_style" v="no"/>
+     <prop k="outline_width" v="0.3"/>
+     <prop k="outline_width_unit" v="MM"/>
+     <prop k="style" v="solid"/>
+    </layer>
+   </symbol>
+   <ComposerItem pagey="197.714" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="7.79846" y="197.714" visibility="1" zValue="11" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="17.4318" outlineWidth="0.3" excludeFromExports="0" uuid="{6e523a20-6249-42f7-b379-76fe59b4a276}" height="18.3493" itemRotation="0" frame="false" pagex="7.79846">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerShape>
+  <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="19.265" file="." pictureHeight="19.3832" mapId="-1" anchorPoint="7">
+   <ComposerItem pagey="196.824" page="1" id="organisation-logo" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="157.266" y="196.824" visibility="1" zValue="10" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="42.8522" outlineWidth="0.3" excludeFromExports="0" uuid="{07434523-a8ab-4aa0-8821-f4ac42269680}" height="19.3832" itemRotation="0" frame="false" pagex="157.266">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <dataDefinedSource expr="" field="" active="false" useExpr="true"/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="14.9133" file="/data/samples/inasafe/InaSAFEPackages/Jakarta" pictureHeight="15.0048" mapId="-1" anchorPoint="0">
-   <ComposerItem pagey="4.99524" page="1" id="safe-logo" lastValidViewScaleFactor="5.25503" positionMode="0" positionLock="false" x="4.99524" y="4.99524" visibility="1" zValue="6" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="34.8062" outlineWidth="0" excludeFromExports="0" uuid="{51dcb2af-f956-43f7-9398-bb4e71eabbe9}" height="15.0048" itemRotation="0" frame="false" pagex="4.99524">
-    <FrameColor alpha="255" red="0" blue="0" green="0"/>
-    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-    <dataDefinedSource expr="" field="" active="false" useExpr="true"/>
-   </ComposerItem>
-  </ComposerPicture>
-  <ComposerMap mapRotation="0" keepLayerSet="false" id="0" previewMode="Render" drawCanvasItems="true">
-   <Extent ymin="-6.19298000000000037" xmin="106.79600000000000648" ymax="-6.15798000000000378" xmax="106.83100000000000307"/>
+  <ComposerMap mapRotation="0" keepLayerSet="false" id="0" previewMode="Rectangle" drawCanvasItems="true">
+   <Extent ymin="-0.97168809999999661" xmin="100.34314159999827609" ymax="-0.92260120000000478" xmax="100.39222849999826792"/>
    <LayerSet/>
    <Grid/>
-   <ComposerMapGrid rightAnnotationDirection="0" gridFramePenColor="0,0,0,255" show="1" bottomAnnotationPosition="1" annotationPrecision="2" showAnnotation="1" topFrameDivisions="0" uuid="{3da5ad87-7f36-485f-86be-9a73b5a7145c}" leftAnnotationDirection="0" topAnnotationPosition="1" rightAnnotationDisplay="0" offsetX="0" offsetY="0" rightFrameDivisions="0" gridStyle="1" annotationFontColor="0,0,0,255" intervalX="0" gridFrameSideFlags="15" intervalY="0" bottomAnnotationDirection="0" leftAnnotationDisplay="0" leftFrameDivisions="0" frameFillColor1="255,255,255,255" frameFillColor2="0,0,0,255" crossLength="3" gridFramePenThickness="0.5" bottomAnnotationDisplay="0" unit="0" topAnnotationDisplay="0" leftAnnotationPosition="1" blendMode="0" gridFrameStyle="0" rightAnnotationPosition="1" gridFrameWidth="2" name="Grid 1" annotationFormat="0" bottomFrameDivisions="0" topAnnotationDirection="0" frameAnnotationDistance="1">
+   <ComposerMapGrid rightAnnotationDirection="1" gridFramePenColor="0,0,0,255" show="1" bottomAnnotationPosition="1" annotationFont="Arial,8,-1,5,50,0,0,0,0,0" annotationPrecision="3" showAnnotation="1" topFrameDivisions="0" uuid="{249699d1-7c0a-4a86-a1cf-d1cf2d88458f}" leftAnnotationDirection="1" topAnnotationPosition="1" rightAnnotationDisplay="0" offsetX="0" offsetY="0" rightFrameDivisions="0" gridStyle="1" annotationFontColor="0,0,0,255" intervalX="0.00981737999999837" gridFrameSideFlags="15" intervalY="0.0098173799999989" bottomAnnotationDirection="0" leftAnnotationDisplay="0" leftFrameDivisions="0" frameFillColor1="255,255,255,255" frameFillColor2="0,0,0,255" crossLength="3" gridFramePenThickness="0.5" bottomAnnotationDisplay="0" unit="0" topAnnotationDisplay="0" leftAnnotationPosition="1" blendMode="0" gridFrameStyle="0" rightAnnotationPosition="1" gridFrameWidth="2" name="Grid 1" annotationFormat="0" bottomFrameDivisions="0" topAnnotationDirection="0" frameAnnotationDistance="1">
     <lineStyle>
-     <symbol alpha="1" clip_to_extent="1" type="line" name="">
+     <symbol alpha="1" type="line" name="">
       <layer pass="0" class="SimpleLine" locked="0">
-       <prop k="capstyle" v="flat"/>
+       <prop k="capstyle" v="square"/>
        <prop k="customdash" v="5;2"/>
        <prop k="customdash_map_unit_scale" v="0,0"/>
        <prop k="customdash_unit" v="MM"/>
@@ -108,74 +191,18 @@
        <prop k="joinstyle" v="bevel"/>
        <prop k="line_color" v="0,0,0,255"/>
        <prop k="line_style" v="solid"/>
-       <prop k="line_width" v="0.3"/>
+       <prop k="line_width" v="0"/>
        <prop k="line_width_unit" v="MM"/>
        <prop k="offset" v="0"/>
        <prop k="offset_map_unit_scale" v="0,0"/>
        <prop k="offset_unit" v="MM"/>
        <prop k="use_custom_dash" v="0"/>
        <prop k="width_map_unit_scale" v="0,0"/>
-       <effect enabled="0" type="effectStack">
-        <effect type="dropShadow">
-         <prop k="blend_mode" v="13"/>
-         <prop k="blur_level" v="10"/>
-         <prop k="color" v="0,0,0,255"/>
-         <prop k="draw_mode" v="2"/>
-         <prop k="enabled" v="0"/>
-         <prop k="offset_angle" v="135"/>
-         <prop k="offset_distance" v="2"/>
-         <prop k="offset_unit" v="MM"/>
-         <prop k="offset_unit_scale" v="0,0"/>
-         <prop k="transparency" v="0"/>
-        </effect>
-        <effect type="outerGlow">
-         <prop k="blend_mode" v="0"/>
-         <prop k="blur_level" v="3"/>
-         <prop k="color_type" v="0"/>
-         <prop k="draw_mode" v="2"/>
-         <prop k="enabled" v="0"/>
-         <prop k="single_color" v="255,255,255,255"/>
-         <prop k="spread" v="2"/>
-         <prop k="spread_unit" v="MM"/>
-         <prop k="spread_unit_scale" v="0,0"/>
-         <prop k="transparency" v="0.5"/>
-        </effect>
-        <effect type="drawSource">
-         <prop k="blend_mode" v="0"/>
-         <prop k="draw_mode" v="2"/>
-         <prop k="enabled" v="1"/>
-         <prop k="transparency" v="0"/>
-        </effect>
-        <effect type="innerShadow">
-         <prop k="blend_mode" v="13"/>
-         <prop k="blur_level" v="10"/>
-         <prop k="color" v="0,0,0,255"/>
-         <prop k="draw_mode" v="2"/>
-         <prop k="enabled" v="0"/>
-         <prop k="offset_angle" v="135"/>
-         <prop k="offset_distance" v="2"/>
-         <prop k="offset_unit" v="MM"/>
-         <prop k="offset_unit_scale" v="0,0"/>
-         <prop k="transparency" v="0"/>
-        </effect>
-        <effect type="innerGlow">
-         <prop k="blend_mode" v="0"/>
-         <prop k="blur_level" v="3"/>
-         <prop k="color_type" v="0"/>
-         <prop k="draw_mode" v="2"/>
-         <prop k="enabled" v="0"/>
-         <prop k="single_color" v="255,255,255,255"/>
-         <prop k="spread" v="2"/>
-         <prop k="spread_unit" v="MM"/>
-         <prop k="spread_unit_scale" v="0,0"/>
-         <prop k="transparency" v="0.5"/>
-        </effect>
-       </effect>
       </layer>
      </symbol>
     </lineStyle>
     <markerStyle>
-     <symbol alpha="1" clip_to_extent="1" type="marker" name="">
+     <symbol alpha="1" type="marker" name="">
       <layer pass="0" class="SimpleMarker" locked="0">
        <prop k="angle" v="0"/>
        <prop k="color" v="0,0,0,255"/>
@@ -189,200 +216,140 @@
        <prop k="outline_width" v="0"/>
        <prop k="outline_width_map_unit_scale" v="0,0"/>
        <prop k="outline_width_unit" v="MM"/>
-       <prop k="scale_method" v="diameter"/>
+       <prop k="scale_method" v="area"/>
        <prop k="size" v="2"/>
        <prop k="size_map_unit_scale" v="0,0"/>
        <prop k="size_unit" v="MM"/>
        <prop k="vertical_anchor_point" v="1"/>
-       <effect enabled="0" type="effectStack">
-        <effect type="dropShadow">
-         <prop k="blend_mode" v="13"/>
-         <prop k="blur_level" v="10"/>
-         <prop k="color" v="0,0,0,255"/>
-         <prop k="draw_mode" v="2"/>
-         <prop k="enabled" v="0"/>
-         <prop k="offset_angle" v="135"/>
-         <prop k="offset_distance" v="2"/>
-         <prop k="offset_unit" v="MM"/>
-         <prop k="offset_unit_scale" v="0,0"/>
-         <prop k="transparency" v="0"/>
-        </effect>
-        <effect type="outerGlow">
-         <prop k="blend_mode" v="0"/>
-         <prop k="blur_level" v="3"/>
-         <prop k="color_type" v="0"/>
-         <prop k="draw_mode" v="2"/>
-         <prop k="enabled" v="0"/>
-         <prop k="single_color" v="255,255,255,255"/>
-         <prop k="spread" v="2"/>
-         <prop k="spread_unit" v="MM"/>
-         <prop k="spread_unit_scale" v="0,0"/>
-         <prop k="transparency" v="0.5"/>
-        </effect>
-        <effect type="drawSource">
-         <prop k="blend_mode" v="0"/>
-         <prop k="draw_mode" v="2"/>
-         <prop k="enabled" v="1"/>
-         <prop k="transparency" v="0"/>
-        </effect>
-        <effect type="innerShadow">
-         <prop k="blend_mode" v="13"/>
-         <prop k="blur_level" v="10"/>
-         <prop k="color" v="0,0,0,255"/>
-         <prop k="draw_mode" v="2"/>
-         <prop k="enabled" v="0"/>
-         <prop k="offset_angle" v="135"/>
-         <prop k="offset_distance" v="2"/>
-         <prop k="offset_unit" v="MM"/>
-         <prop k="offset_unit_scale" v="0,0"/>
-         <prop k="transparency" v="0"/>
-        </effect>
-        <effect type="innerGlow">
-         <prop k="blend_mode" v="0"/>
-         <prop k="blur_level" v="3"/>
-         <prop k="color_type" v="0"/>
-         <prop k="draw_mode" v="2"/>
-         <prop k="enabled" v="0"/>
-         <prop k="single_color" v="255,255,255,255"/>
-         <prop k="spread" v="2"/>
-         <prop k="spread_unit" v="MM"/>
-         <prop k="spread_unit_scale" v="0,0"/>
-         <prop k="transparency" v="0.5"/>
-        </effect>
-       </effect>
       </layer>
      </symbol>
     </markerStyle>
-    <annotationFontProperties description="Droid Sans,6,-1,5,50,0,0,0,0,0" style=""/>
    </ComposerMapGrid>
-   <ComposerMapOverview frameMap="-1" centered="0" inverted="0" uuid="{e3e4b55d-e581-4c0e-a493-def0aa1f48a5}" name="Overview 1" show="1" blendMode="0">
-    <symbol alpha="0.3" clip_to_extent="1" type="fill" name="">
-     <layer pass="0" class="SimpleFill" locked="0">
-      <prop k="border_width_map_unit_scale" v="0,0"/>
-      <prop k="color" v="255,0,0,255"/>
-      <prop k="joinstyle" v="bevel"/>
-      <prop k="offset" v="0,0"/>
-      <prop k="offset_map_unit_scale" v="0,0"/>
-      <prop k="offset_unit" v="MM"/>
-      <prop k="outline_color" v="0,0,0,255"/>
-      <prop k="outline_style" v="no"/>
-      <prop k="outline_width" v="0.26"/>
-      <prop k="outline_width_unit" v="MM"/>
-      <prop k="style" v="solid"/>
-      <effect enabled="0" type="effectStack">
-       <effect type="dropShadow">
-        <prop k="blend_mode" v="13"/>
-        <prop k="blur_level" v="10"/>
-        <prop k="color" v="0,0,0,255"/>
-        <prop k="draw_mode" v="2"/>
-        <prop k="enabled" v="0"/>
-        <prop k="offset_angle" v="135"/>
-        <prop k="offset_distance" v="2"/>
-        <prop k="offset_unit" v="MM"/>
-        <prop k="offset_unit_scale" v="0,0"/>
-        <prop k="transparency" v="0"/>
-       </effect>
-       <effect type="outerGlow">
-        <prop k="blend_mode" v="0"/>
-        <prop k="blur_level" v="3"/>
-        <prop k="color_type" v="0"/>
-        <prop k="draw_mode" v="2"/>
-        <prop k="enabled" v="0"/>
-        <prop k="single_color" v="255,255,255,255"/>
-        <prop k="spread" v="2"/>
-        <prop k="spread_unit" v="MM"/>
-        <prop k="spread_unit_scale" v="0,0"/>
-        <prop k="transparency" v="0.5"/>
-       </effect>
-       <effect type="drawSource">
-        <prop k="blend_mode" v="0"/>
-        <prop k="draw_mode" v="2"/>
-        <prop k="enabled" v="1"/>
-        <prop k="transparency" v="0"/>
-       </effect>
-       <effect type="innerShadow">
-        <prop k="blend_mode" v="13"/>
-        <prop k="blur_level" v="10"/>
-        <prop k="color" v="0,0,0,255"/>
-        <prop k="draw_mode" v="2"/>
-        <prop k="enabled" v="0"/>
-        <prop k="offset_angle" v="135"/>
-        <prop k="offset_distance" v="2"/>
-        <prop k="offset_unit" v="MM"/>
-        <prop k="offset_unit_scale" v="0,0"/>
-        <prop k="transparency" v="0"/>
-       </effect>
-       <effect type="innerGlow">
-        <prop k="blend_mode" v="0"/>
-        <prop k="blur_level" v="3"/>
-        <prop k="color_type" v="0"/>
-        <prop k="draw_mode" v="2"/>
-        <prop k="enabled" v="0"/>
-        <prop k="single_color" v="255,255,255,255"/>
-        <prop k="spread" v="2"/>
-        <prop k="spread_unit" v="MM"/>
-        <prop k="spread_unit_scale" v="0,0"/>
-        <prop k="transparency" v="0.5"/>
-       </effect>
-      </effect>
-     </layer>
-    </symbol>
-   </ComposerMapOverview>
    <AtlasMap scalingMode="2" atlasDriven="0" margin="0.10000000000000001"/>
-   <ComposerItem pagey="27" page="1" id="impact-map" lastValidViewScaleFactor="2.63354" positionMode="0" positionLock="false" x="10" y="27" visibility="1" zValue="5" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="190" outlineWidth="0" excludeFromExports="0" uuid="{0cbbc103-0d3a-4d42-b7e3-185233fd3e96}" height="190" itemRotation="0" frame="true" pagex="10">
+   <ComposerItem pagey="22.2575" page="1" id="impact-map" lastValidViewScaleFactor="2.16002" positionMode="0" positionLock="false" x="7.38841" y="22.2575" visibility="1" zValue="9" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="195.445" outlineWidth="0.3" excludeFromExports="0" uuid="{7e8e9a2b-f7bf-4c72-9505-099f164b8ae1}" height="195.445" itemRotation="0" frame="true" pagex="7.38841">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
   </ComposerMap>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[impact-title]" htmlState="0" halign="2">
-   <LabelFont description="Droid Sans,20,-1,5,75,0,0,0,0,0" style=""/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="5.14867" page="1" id="impact-title" lastValidViewScaleFactor="3.56376" positionMode="0" positionLock="false" x="45.4919" y="5.14867" visibility="1" zValue="4" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="154.126" outlineWidth="0" excludeFromExports="0" uuid="{1dc292e7-ef3c-4d42-8d34-4c83c867409b}" height="16.7351" itemRotation="0" frame="false" pagex="45.4919">
+  <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="18.6189" file="." pictureHeight="18.7332" mapId="-1" anchorPoint="4">
+   <ComposerItem pagey="1.86272" page="1" id="white-inasafe-logo" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="6.738" y="1.86272" visibility="1" zValue="8" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="35.2212" outlineWidth="0.3" excludeFromExports="0" uuid="{a488f825-4220-461a-a2db-552f4c6a9248}" height="18.7332" itemRotation="0" frame="false" pagex="6.738">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+    <dataDefinedSource expr="" field="" active="false" useExpr="true"/>
+   </ComposerItem>
+  </ComposerPicture>
+  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[impact-title]" htmlState="0" halign="1">
+   <LabelFont description="Arial,18,-1,5,75,0,0,0,0,0"/>
+   <FontColor red="255" blue="255" green="255"/>
+   <ComposerItem pagey="4.36064" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="45.9982" y="4.36064" visibility="1" zValue="7" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="157.11" outlineWidth="0.3" excludeFromExports="0" uuid="{7f828889-7390-46f3-9c49-1666e22e500e}" height="14.2136" itemRotation="0" frame="false" pagex="45.9982">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="252" blue="64" green="176"/>
    </ComposerItem>
   </ComposerLabel>
-  <ComposerLabel valign="128" marginX="1" marginY="1" labelText="&lt;div style=&quot;font-size: 8pt;&quot;>&#xa;&lt;strong>&#xa;&lt;i>[disclaimer]&lt;/i>&#xa;&lt;/div>" htmlState="2" halign="1">
-   <LabelFont description="Droid Sans,10,-1,5,50,2,0,0,0,0" style=""/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="275.126" page="1" id="" lastValidViewScaleFactor="1.57383" positionMode="0" positionLock="false" x="3.61558" y="275.126" visibility="1" zValue="3" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="150.15" outlineWidth="0" excludeFromExports="0" uuid="{ab76f0ba-d9d9-4e28-a27e-e557ca1cbf27}" height="18.8747" itemRotation="0" frame="false" pagex="3.61558">
+  <ComposerShape shapeType="1" cornerRadius="0">
+   <symbol alpha="1" type="fill" name="">
+    <layer pass="0" class="SimpleFill" locked="0">
+     <prop k="border_width_map_unit_scale" v="0,0"/>
+     <prop k="color" v="61,178,221,255"/>
+     <prop k="joinstyle" v="miter"/>
+     <prop k="offset" v="0,0"/>
+     <prop k="offset_map_unit_scale" v="0,0"/>
+     <prop k="offset_unit" v="MM"/>
+     <prop k="outline_color" v="0,0,0,255"/>
+     <prop k="outline_style" v="no"/>
+     <prop k="outline_width" v="0.26"/>
+     <prop k="outline_width_unit" v="MM"/>
+     <prop k="style" v="solid"/>
+    </layer>
+   </symbol>
+   <ComposerItem pagey="4.677" page="1" id="map-title-bg" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="42.4952" y="4.677" visibility="1" zValue="6" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="168.265" outlineWidth="0.3" excludeFromExports="0" uuid="{be0a05c6-6476-42a2-9d00-961a7c5fc7be}" height="14" itemRotation="0" frame="false" pagex="42.4952">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
-  </ComposerLabel>
-  <ComposerLabel valign="32" marginX="1" marginY="1" labelText="&lt;div style=&quot;font-size: 8pt;&quot;>&#xa;&lt;strong>Time stamp:&lt;/strong> &lt;br/>[date] [time]&lt;br/>&lt;/br/>&#xa;&lt;strong>Note:&lt;/strong> This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.&lt;br/>&lt;br/>&#xa;&lt;i>Assessment carried out using InaSAFE release [safe-version] (QGIS plugin version).&lt;/i>&#xa;&lt;/div>" htmlState="2" halign="1">
-   <LabelFont description="Droid Sans,6,-1,5,50,2,0,0,0,0" style=""/>
-   <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="227" page="1" id="" lastValidViewScaleFactor="3.77953" positionMode="0" positionLock="false" x="161.369" y="227" visibility="1" zValue="2" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="38.4393" outlineWidth="0" excludeFromExports="0" uuid="{cba14a95-df00-4ef9-9ba0-c729f894aa07}" height="60.7037" itemRotation="0" frame="false" pagex="161.369">
+  </ComposerShape>
+  <ComposerShape shapeType="1" cornerRadius="0">
+   <symbol alpha="1" type="fill" name="">
+    <layer pass="0" class="SimpleFill" locked="0">
+     <prop k="border_width_map_unit_scale" v="0,0"/>
+     <prop k="color" v="61,178,221,255"/>
+     <prop k="joinstyle" v="miter"/>
+     <prop k="offset" v="0,0"/>
+     <prop k="offset_map_unit_scale" v="0,0"/>
+     <prop k="offset_unit" v="MM"/>
+     <prop k="outline_color" v="0,0,0,255"/>
+     <prop k="outline_style" v="no"/>
+     <prop k="outline_width" v="0.26"/>
+     <prop k="outline_width_unit" v="MM"/>
+     <prop k="style" v="solid"/>
+    </layer>
+   </symbol>
+   <ComposerItem pagey="222.156" page="1" id="legend-heading-bg" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="0" y="222.156" visibility="1" zValue="5" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="100.978" outlineWidth="0.3" excludeFromExports="0" uuid="{d32db356-401c-483f-b3a8-a422ee7831eb}" height="5.813" itemRotation="0" frame="false" pagex="0">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
-  </ComposerLabel>
-  <ComposerLegend symbolWidth="5" title="" boxSpace="2" splitLayer="1" equalColumnWidth="0" map="0" titleAlignment="1" symbolHeight="3" wmsLegendHeight="25" wrapChar="" fontColor="#000000" columnSpace="1" wmsLegendWidth="50" columnCount="2">
-   <styles>
-    <style marginBottom="1" name="title">
-     <styleFont description="Droid Sans,9,-1,5,50,0,0,0,0,0" style=""/>
-    </style>
-    <style marginTop="1" name="group">
-     <styleFont description="Droid Sans,8,-1,5,50,0,0,0,0,0" style=""/>
-    </style>
-    <style marginTop="2" name="subgroup">
-     <styleFont description="Droid Sans,8,-1,5,50,0,0,0,0,0" style=""/>
-    </style>
-    <style marginTop="2" name="symbol">
-     <styleFont description="Droid Sans,10,-1,5,50,0,0,0,0,0" style=""/>
-    </style>
-    <style marginTop="2" marginLeft="2" name="symbolLabel">
-     <styleFont description="Droid Sans,7,-1,5,50,0,0,0,0,0" style=""/>
-    </style>
-   </styles>
-   <layer-tree-group expanded="1" checked="Qt::Checked" name="">
-    <customproperties/>
-   </layer-tree-group>
-   <ComposerItem pagey="227" page="1" id="impact-legend" lastValidViewScaleFactor="3.77953" positionMode="0" positionLock="false" x="5" y="227" visibility="1" zValue="1" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="4" outlineWidth="0" excludeFromExports="0" uuid="{c1d1e3e2-392d-488a-b057-5d5fb67dcb1a}" height="5" itemRotation="0" frame="false" pagex="5">
+  </ComposerShape>
+  <ComposerShape shapeType="1" cornerRadius="0">
+   <symbol alpha="1" type="fill" name="">
+    <layer pass="0" class="SimpleFill" locked="0">
+     <prop k="border_width_map_unit_scale" v="0,0"/>
+     <prop k="color" v="61,178,221,255"/>
+     <prop k="joinstyle" v="miter"/>
+     <prop k="offset" v="0,0"/>
+     <prop k="offset_map_unit_scale" v="0,0"/>
+     <prop k="offset_unit" v="MM"/>
+     <prop k="outline_color" v="0,0,0,255"/>
+     <prop k="outline_style" v="no"/>
+     <prop k="outline_width" v="0.26"/>
+     <prop k="outline_width_unit" v="MM"/>
+     <prop k="style" v="solid"/>
+    </layer>
+   </symbol>
+   <ComposerItem pagey="222.156" page="1" id="info-heading-bg" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="109.858" y="222.156" visibility="1" zValue="4" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="100.129" outlineWidth="0.3" excludeFromExports="0" uuid="{a56ff944-8224-418f-ab59-5aeb969d98da}" height="5.813" itemRotation="0" frame="false" pagex="109.858">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
    </ComposerItem>
-  </ComposerLegend>
+  </ComposerShape>
+  <ComposerShape shapeType="1" cornerRadius="0">
+   <symbol alpha="1" type="fill" name="">
+    <layer pass="0" class="SimpleFill" locked="0">
+     <prop k="border_width_map_unit_scale" v="0,0"/>
+     <prop k="color" v="61,178,221,255"/>
+     <prop k="joinstyle" v="miter"/>
+     <prop k="offset" v="0,0"/>
+     <prop k="offset_map_unit_scale" v="0,0"/>
+     <prop k="offset_unit" v="MM"/>
+     <prop k="outline_color" v="0,0,0,255"/>
+     <prop k="outline_style" v="no"/>
+     <prop k="outline_width" v="0.26"/>
+     <prop k="outline_width_unit" v="MM"/>
+     <prop k="style" v="solid"/>
+    </layer>
+   </symbol>
+   <ComposerItem pagey="263.062" page="1" id="disclaimer-heading-bg" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="109.858" y="263.062" visibility="1" zValue="3" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="100.129" outlineWidth="0.3" excludeFromExports="0" uuid="{35735d01-715d-4374-ae68-87404e0f5ec9}" height="5.813" itemRotation="0" frame="false" pagex="109.858">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerShape>
+  <ComposerShape shapeType="1" cornerRadius="0">
+   <symbol alpha="1" type="fill" name="">
+    <layer pass="0" class="SimpleFill" locked="0">
+     <prop k="border_width_map_unit_scale" v="0,0"/>
+     <prop k="color" v="47,51,56,255"/>
+     <prop k="joinstyle" v="miter"/>
+     <prop k="offset" v="0,0"/>
+     <prop k="offset_map_unit_scale" v="0,0"/>
+     <prop k="offset_unit" v="MM"/>
+     <prop k="outline_color" v="47,51,56,255"/>
+     <prop k="outline_style" v="no"/>
+     <prop k="outline_width" v="0.26"/>
+     <prop k="outline_width_unit" v="MM"/>
+     <prop k="style" v="solid"/>
+    </layer>
+   </symbol>
+   <ComposerItem pagey="4.677" page="1" id="map-title-bg" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="0" y="4.677" visibility="1" zValue="1" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="42.4952" outlineWidth="0.3" excludeFromExports="0" uuid="{70af0882-5467-4fc7-8d5d-db87f3de5147}" height="14" itemRotation="0" frame="false" pagex="0">
+    <FrameColor alpha="255" red="0" blue="0" green="0"/>
+    <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+   </ComposerItem>
+  </ComposerShape>
  </Composition>
 </Composer>
