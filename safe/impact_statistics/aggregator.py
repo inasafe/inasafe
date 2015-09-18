@@ -40,6 +40,7 @@ from qgis.core import (
 from qgis.analysis import QgsZonalStatistics
 # pylint: enable=no-name-in-module
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import QSettings
 
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.utilities import (
@@ -175,10 +176,17 @@ class Aggregator(QtCore.QObject):
 
     @property
     def extent(self):
+        """Accessor for extent property."""
         return self._extent
 
     @extent.setter
     def extent(self, value):
+        """Mutator for extent property.
+
+        :param value: New extent value.
+        :type value: QgsRectangle
+
+        """
         self._extent = value
         # update layer extent to match impact layer if in aoi_mode
         if self.aoi_mode:
@@ -229,6 +237,7 @@ class Aggregator(QtCore.QObject):
 
         :param layer: Layer you want to get the keywords for.
         :type layer: QgsMapLayer
+
         :returns:   KeywordIO.get_statistics object
         :rtype:     KeywordIO.get_statistics
 
@@ -248,6 +257,7 @@ class Aggregator(QtCore.QObject):
         :param out_filename: Output filename that the keywords should be
             written to.
         :type out_filename: str
+
         :raises:  All exceptions are propagated.
         """
         try:
@@ -263,6 +273,7 @@ class Aggregator(QtCore.QObject):
 
         :param keywords: Dict of keywords to write.
         :type keywords: dict
+
         :raises:  All exceptions are propagated.
         """
         try:
@@ -1086,13 +1097,35 @@ class Aggregator(QtCore.QObject):
 
         :raises: InvalidLayerError, UnsupportedProviderError, KeywordDbError
         """
+        # Find out what clipping behaviour we have - see #2210
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        detail = None
+        if mode == 'HazardExposureView':
+            detail = self.tr(
+                'Clipping the aggregation layer to match the '
+                'intersection of the hazard and exposure layer and the '
+                'current view extents.')
+        elif mode == 'HazardExposure':
+            detail = self.tr(
+                'clipping the aggregation layer to match the '
+                'intersection of the hazard and exposure layer extents.')
+        elif mode == 'HazardExposureBookmark':
+            detail = self.tr(
+                'Clipping the aggregation layer to match the '
+                'bookmarked extents.')
+        elif mode == 'HazardExposureBoundingBox':
+            detail = self.tr(
+                'Clipping the aggregation layer to match the '
+                'intersection of your preferred analysis area.')
+
         message = m.Message(
             m.Heading(
                 self.tr('Preparing aggregation layer'),
                 **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(self.tr(
-                'We are clipping the aggregation layer to match the '
-                'intersection of the hazard and exposure layer extents.')))
+            m.Paragraph(detail))
         # noinspection PyTypeChecker
         self._send_message(message)
 
