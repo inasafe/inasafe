@@ -1925,8 +1925,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # Make sure the file paths can wrap nicely:
             wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-            wrapped_table_path = table_pdf_path.replace(os.sep,
-                                                        '<wbr>' + os.sep)
+            wrapped_table_path = table_pdf_path.replace(
+                os.sep, '<wbr>' + os.sep)
             status = m.Message(
                 m.Heading(self.tr('Map Creator'), **INFO_STYLE),
                 m.Paragraph(self.tr(

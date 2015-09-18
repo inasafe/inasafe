@@ -571,7 +571,7 @@ class ImpactReport(object):
         # shown on screen (see FloodOsmBuilding)
         # Unless the impact_summary is None, we will use impact_table as the
         # alternative
-        html = LOGO_ELEMENT.to_html()
+        html = m.Brand().to_html()
         html += m.Heading(tr('Analysis Results'), **INFO_STYLE).to_html()
         if summary_table is None:
             html += full_table
