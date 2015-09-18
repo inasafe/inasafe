@@ -412,9 +412,19 @@ def disclaimer():
         'outputs from InaSAFE or decisions derived as a consequence.')
     return text
 
+def inasafe_logo_path():
+    """Get the path to the InaSAFE SVG logo.
 
-def default_organisation_logo_path():
-    """Get a default organisation logo path.
+    .. versionadded:: 3.2
+    """
+    path = resources_path('img', 'logos', 'inasafe-logo-url.svg')
+    return path
+
+def supporters_logo_path():
+    """Get the supporters logo path.
+
+    .. versionchanged:: Changed in 3.2 from default_organisation_path to
+        supporters_logo_path.
 
     :return: Default organisation logo path.
     :rtype: str

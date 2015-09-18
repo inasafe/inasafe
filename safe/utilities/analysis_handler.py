@@ -40,7 +40,7 @@ from safe.utilities.resources import (
     resources_path,
     resource_url)
 from safe.defaults import (
-    default_organisation_logo_path)
+    supporters_logo_path)
 from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -284,7 +284,7 @@ class AnalysisHandler(QObject):
         # noinspection PyAttributeOutsideInit
         self.organisation_logo_path = settings.value(
             'inasafe/organisation_logo_path',
-            default_organisation_logo_path(),
+            supporters_logo_path(),
             type=str)
 
     # noinspection PyUnresolvedReferences

@@ -61,7 +61,7 @@ from safe.utilities.qgis_utilities import (
     display_information_message_bar)
 from safe.defaults import (
     limitations,
-    default_organisation_logo_path)
+    supporters_logo_path)
 from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -405,7 +405,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # whether to show or not a custom Logo
         self.organisation_logo_path = settings.value(
             'inasafe/organisation_logo_path',
-            default_organisation_logo_path(),
+            supporters_logo_path(),
             type=str)
         # This is a fix for 3.0.0 change where we no longer provide Qt4
         # Qt4 resource bundles, so if the path points into a resource
@@ -416,7 +416,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             invalid_path_flag = True
             settings.setValue(
                 'inasafe/organisation_logo_path',
-                default_organisation_logo_path())
+                supporters_logo_path())
 
         # Changed default to False for new users in 3.2 - see #2171
         show_logos_flag = bool(settings.value(
@@ -515,7 +515,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if logo_not_exist or invalid_logo_size:
             settings.setValue(
                 'inasafe/organisation_logo_path',
-                default_organisation_logo_path())
+                supporters_logo_path())
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
