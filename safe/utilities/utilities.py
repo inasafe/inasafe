@@ -36,6 +36,7 @@ from safe.common.exceptions import (
     KeywordNotFoundError)
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
+from safe.defaults import disclaimer
 from safe import messaging as m
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
@@ -197,9 +198,8 @@ def impact_attribution(keywords, inasafe_flag=False):
         # noinspection PyUnresolvedReferences
         inasafe_phrase = tr(
             'This report was created using InaSAFE version %s. Visit '
-            'http://inasafe.org to get your free copy of this software!'
-            'InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR & the '
-            'World Bank') % (get_version())
+            'http://inasafe.org to get your free copy of this software! %s'
+            ) % (get_version(), disclaimer())
 
         report.add(m.Paragraph(m.Text(inasafe_phrase)))
     return report
