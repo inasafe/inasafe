@@ -758,10 +758,29 @@ volcano_name_field = {
 
 # General terminology and descriptive terms
 
+field = {
+    'key': 'field',
+    'name': tr('Attribute field'),
+    'description': tr(
+        'The attribute field identifies a field in the attribute table used '
+        'to identify the function of a feature e.g.  a road type, '
+        'building type, hazard zone etc.')
+}
+
+field_value = {
+    'key': 'field_value',
+    'name': tr('Attribute value'),
+    'description': tr(
+        'The attribute value identifies features with similar meanings. For '
+        'example building attributes may include schools and hospitals. ')
+}
+
 value_map = {
     'key': 'value_map',
-    'name': tr('Attribute values'),
+    'name': tr('Attribute value map'),
     'description': tr(
-        'Attribute values identify features with similar meanings. For example'
-        'building attributes may include schools and hospitals. ')
+        'Attribute value maps are used to group related attribute '
+        'values. For example flooded polygons with attribute values of "yes" '
+        ', "YES", "1" and "Flooded" might all be grouped together as '
+        '"FLOODPRONE".')
 }

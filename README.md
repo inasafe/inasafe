@@ -77,6 +77,8 @@ System Requirements
 History
 =======
 
+* In March 2011, Risk In A Box (the predecessor to InaSAFE) was built as a web 
+  application running as a GeoNode Plugin.
 * InaSAFE development as a QGIS plugin started in January 2012.
 * In October 2012, version 1.0 of InaSAFE was launched at the [5th Asian ministerial conference on disaster risk reduction (AMCDRR)](
   http://www.unisdr.org/we/inform/events/23540) where it was demonstrated to 
