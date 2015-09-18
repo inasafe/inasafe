@@ -70,67 +70,67 @@
         <translation>&lt;p&gt;Error while executing the following shell command:&lt;/p&gt;&lt;pre&gt;%s&lt;/pre&gt;&lt;p&gt;Error message: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="74"/>
+        <location filename="utilities.py" line="75"/>
         <source>No details provided</source>
         <translation>No details provided</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="120"/>
+        <location filename="utilities.py" line="121"/>
         <source>%i seconds</source>
         <translation>%i seconds</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="122"/>
+        <location filename="utilities.py" line="123"/>
         <source>a minute</source>
         <translation>a minute</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="126"/>
+        <location filename="utilities.py" line="127"/>
         <source>over an hour</source>
         <translation>over an hour</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="128"/>
+        <location filename="utilities.py" line="129"/>
         <source>%i hours and %i minutes</source>
         <translation>%i hours and %i minutes</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="131"/>
+        <location filename="utilities.py" line="132"/>
         <source>%i days, %i hours and %i minutes</source>
         <translation>%i days, %i hours and %i minutes</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="152"/>
+        <location filename="utilities.py" line="153"/>
         <source>sourced from</source>
         <translation>sourced from</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="153"/>
+        <location filename="utilities.py" line="154"/>
         <source>Hazard details</source>
         <translation>Hazard details</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="156"/>
+        <location filename="utilities.py" line="157"/>
         <source>Exposure details</source>
         <translation>Exposure details</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="164"/>
+        <location filename="utilities.py" line="165"/>
         <source>Hazard layer</source>
         <translation>Hazard layer</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="180"/>
+        <location filename="utilities.py" line="181"/>
         <source>an unknown source</source>
         <translation>an unknown source</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="175"/>
+        <location filename="utilities.py" line="176"/>
         <source>Exposure layer</source>
         <translation>Exposure layer</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="196"/>
+        <location filename="utilities.py" line="197"/>
         <source>Software notes</source>
         <translation>Software notes</translation>
     </message>
@@ -205,7 +205,7 @@
         <translation>Try zooming in to a smaller area or using a raster layer with a coarser resolution to speed up execution and reduce memory requirements. You could also try adding more RAM to your computer.</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="124"/>
+        <location filename="utilities.py" line="125"/>
         <source>%s minutes</source>
         <translation>%s minutes</translation>
     </message>
@@ -230,11 +230,6 @@
         <translation>Memory used / available: %d/%d</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="202"/>
-        <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software!InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR &amp; the World Bank</source>
-        <translation>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software!InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR &amp; the World Bank</translation>
-    </message>
-    <message>
         <location filename="utilities.py" line="1198"/>
         <source>Input layer must be a InaSAFE spatial object. I got %s</source>
         <translation>Input layer must be a InaSAFE spatial object. I got %s</translation>
@@ -255,22 +250,22 @@
         <translation>Feature %d has no geometry or geometry is invalid</translation>
     </message>
     <message>
-        <location filename="defaults.py" line="443"/>
+        <location filename="defaults.py" line="453"/>
         <source>InaSAFE is not a hazard modelling tool.</source>
         <translation type="unfinished">InaSAFE is not a hazard modelling tool.</translation>
     </message>
     <message>
-        <location filename="defaults.py" line="444"/>
+        <location filename="defaults.py" line="454"/>
         <source>Polygon area analysis (such as land use) is not yet supported.</source>
         <translation type="unfinished">Polygon area analysis (such as land use) is not yet supported.</translation>
     </message>
     <message>
-        <location filename="defaults.py" line="449"/>
+        <location filename="defaults.py" line="459"/>
         <source>Population by administration boundary is not yet supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="defaults.py" line="451"/>
+        <location filename="defaults.py" line="461"/>
         <source>InaSAFE is a Free and Open Source Software (FOSS) project, published under the GPL V3 license. As such you may freely download, share and (if you like) modify the software.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -280,7 +275,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="defaults.py" line="446"/>
+        <location filename="defaults.py" line="456"/>
         <source>Population count data (raster) must be provided in WGS84 geographic coordinates.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1620,7 +1615,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="534"/>
+        <location filename="impact_report.py" line="569"/>
         <source>Analysis Results</source>
         <translation type="unfinished">Analysis Results</translation>
     </message>
@@ -3732,6 +3727,61 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="abstract_list.py" line="78"/>
         <source>Null (PyQt4.QtCore.QPyNullVariant) found from the data.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="utilities.py" line="202"/>
+        <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software! %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="351"/>
+        <source>Version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="353"/>
+        <source>Disclaimer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="354"/>
+        <source>Date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="355"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="356"/>
+        <source>Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="357"/>
+        <source>This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="361"/>
+        <source>Assessment carried out using InaSAFE release %s.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="363"/>
+        <source>Legend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="364"/>
+        <source>Analysis information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="365"/>
+        <source>Report produced by</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
