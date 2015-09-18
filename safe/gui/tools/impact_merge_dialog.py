@@ -70,7 +70,7 @@ from safe.utilities.utilities import (
     add_ordered_combo_item)
 from safe.utilities.help import show_context_help
 from safe.utilities.keyword_io import KeywordIO
-from safe.defaults import disclaimer, inasafe_logo_path, supporters_logo_path
+from safe.defaults import disclaimer, white_inasafe_logo_path, supporters_logo_path
 from safe.utilities.unicode import get_string
 
 INFO_STYLE = styles.INFO_STYLE
@@ -101,7 +101,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             'qgis-composer-templates', 'merged_report.qpt')
 
         # Safe Logo Path
-        self.safe_logo_path = inasafe_logo_path()
+        self.safe_logo_path = white_inasafe_logo_path()
 
         # Organisation Logo Path - defaults to supporters logo, will be
         # updated to user defined organisation logo path in read_settings in

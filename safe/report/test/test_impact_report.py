@@ -115,26 +115,29 @@ class ImpactReportTest(unittest.TestCase):
         # Check the components in composition are default components
         if qgis_version() < 20500:
             safe_logo = report.composition.getComposerItemById(
-                'safe-logo').pictureFile()
+                'inasafe-logo').pictureFile()
             north_arrow = report.composition.getComposerItemById(
                 'north-arrow').pictureFile()
             org_logo = report.composition.getComposerItemById(
                 'organisation-logo').pictureFile()
         else:
             safe_logo = report.composition.getComposerItemById(
-                'safe-logo').picturePath()
+                'inasafe-logo').picturePath()
             north_arrow = report.composition.getComposerItemById(
                 'north-arrow').picturePath()
             org_logo = report.composition.getComposerItemById(
                 'organisation-logo').picturePath()
 
         expected_safe_logo = resources_path(
-            'img', 'logos', 'inasafe-logo-url.svg')
+            'img', 'logos', 'inasafe-logo-url-white.svg')
         expected_north_arrow = resources_path(
             'img', 'north_arrows', 'simple_north_arrow.png')
         expected_org_logo = resources_path('img', 'logos', 'supporters.png')
 
-        message = 'The safe logo path is not the default one'
+        message = (
+            'The safe logo path is not the default one: %s isn\'t %s') % (
+            expected_safe_logo, safe_logo
+        )
         self.assertEqual(expected_safe_logo, safe_logo, message)
 
         message = 'The north arrow path is not the default one'
