@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Etienne Trimaille</author>
+  </metadata>
+
+  <datafile>
+    <filename>join_layer_2.shp</filename>
+    <checksum>2920990912</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Etienne Trimaille</accountable>
+    <source>Etienne Trimaille</source>
+    <IP_owner>Etienne Trimaille</IP_owner>
+    <IP_info>This data was created by Etienne for the InaSAFE project.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>join_layer_2.shx</filename>
+    <checksum>164981262</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Etienne Trimaille</accountable>
+    <source>Etienne Trimaille</source>
+    <IP_owner>Etienne Trimaille</IP_owner>
+    <IP_info>This data was created by Etienne for the InaSAFE project.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>join_layer_2.dbf</filename>
+    <checksum>16354875</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Etienne Trimaille</accountable>
+    <source>Etienne Trimaille</source>
+    <IP_owner>Etienne Trimaille</IP_owner>
+    <IP_info>This data was created by Etienne for the InaSAFE project.</IP_info>
+  </datafile>
+
+</ga_license_file>
