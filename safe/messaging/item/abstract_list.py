@@ -17,6 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 from PyQt4.QtCore import QPyNullVariant
+from safe.utilities.i18n import tr
 
 from message_element import MessageElement
 from exceptions import InvalidMessageItemError
@@ -75,7 +76,7 @@ class AbstractList(MessageElement):
             self.items.append(item)
         elif isinstance(item, QPyNullVariant):
             self.items.append(PlainText(
-                'Null (PyQt4.QtCore.QPyNullVariant) found from the data.'))
+                tr('Null (PyQt4.QtCore.QPyNullVariant) found from the data.')))
         else:
             raise InvalidMessageItemError(item, item.__class__)
 
