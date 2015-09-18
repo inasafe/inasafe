@@ -181,7 +181,9 @@ class PostprocessorManager(QtCore.QObject):
             null_index = 0  # counting how many null value in the data
             for zone_name, calc in sorted_results:
                 if isinstance(zone_name, QPyNullVariant):
-                    zone_name = 'unnamed_area_%s' % null_index
+                    # I have made sure that the zone_name won't be Null in
+                    # run method. But just in case there is something wrong.
+                    zone_name = 'Unnamed Area %s' % null_index
                     null_index += 1
                 row = m.Row(zone_name)
 
@@ -424,6 +426,8 @@ class PostprocessorManager(QtCore.QObject):
                 zone_name = str(feature.id())
             else:
                 zone_name = feature[name_filed_index]
+            if isinstance(zone_name, QPyNullVariant):
+                zone_name = 'Unnamed Area %s' % str(feature.id())
 
             # create dictionary of attributes to pass to postprocessor
             general_params = {
