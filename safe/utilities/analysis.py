@@ -669,7 +669,7 @@ class Analysis(object):
                     self.aggregation_layer, self.aggregation_keyword)
                 # noinspection PyTypeChecker
                 text.add(m.Text(
-                    self.tr('and bullet_list the results'),
+                    self.tr('and bullet list the results'),
                     m.ImportantText(self.tr('aggregated by')),
                     m.EmphasizedText(aggregation_name)))
             except AttributeError:
