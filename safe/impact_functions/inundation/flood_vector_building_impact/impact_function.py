@@ -63,7 +63,7 @@ class FloodPolygonBuildingFunction(
             {
                 'content': tr(
                     'Buildings are said to be inundated when in a region with '
-                    'field "%s" in "%s" .') % (
+                    'field "%s" in "%s".') % (
                         self.hazard_class_attribute,
                         ', '.join([
                             unicode(hazard_class) for
