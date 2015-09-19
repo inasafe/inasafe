@@ -806,9 +806,8 @@ class KeywordIO(QObject):
         # In these KEYWORD cases we show the DESCRIPTION for
         # the VALUE definition
         elif keyword in [
-            'vector_hazard_classification',
-            'raster_hazard_classification'
-        ]:
+                'vector_hazard_classification',
+                'raster_hazard_classification']:
             # get the definition for this class from definitions.py
             value = self.definition(value)
             value = value['description']
@@ -820,13 +819,12 @@ class KeywordIO(QObject):
             value = value['description']
         # In these VALUE cases we show the NAME for the VALUE definition
         elif value in [
-            'multiple_event',
-            'single_event',
-            'point',
-            'line',
-            'polygon'
-            'field'
-        ]:
+                'multiple_event',
+                'single_event',
+                'point',
+                'line',
+                'polygon'
+                'field']:
             # get the name for this class from definitions.py
             value = self.definition(value)
             value = value['name']

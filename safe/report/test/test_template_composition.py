@@ -62,8 +62,12 @@ class TemplateCompositionTest(unittest.TestCase):
 
         template_composition = TemplateComposition(template_path=template_path)
         # No missing elements here
-        component_ids = ['white-inasafe-logo', 'north-arrow', 'organisation-logo',
-                         'impact-map', 'impact-legend']
+        component_ids = [
+            'white-inasafe-logo',
+            'north-arrow',
+            'organisation-logo',
+            'impact-map',
+            'impact-legend']
         template_composition.component_ids = component_ids
         message = 'There should be no missing elements, but it gets: %s' % (
             template_composition.missing_elements)
@@ -72,9 +76,12 @@ class TemplateCompositionTest(unittest.TestCase):
             template_composition.missing_elements, expected_result, message)
 
         # There are missing elements
-        component_ids = ['white-inasafe-logo', 'north-arrow', 'organisation-logo',
-                         'impact-map', 'impact-legend',
-                         'i-added-element-id-here-nooo']
+        component_ids = [
+            'white-inasafe-logo',
+            'north-arrow',
+            'organisation-logo',
+            'impact-map', 'impact-legend',
+            'i-added-element-id-here-nooo']
         template_composition.component_ids = component_ids
         message = 'There should be no missing elements, but it gets: %s' % (
             template_composition.missing_elements)
@@ -99,8 +106,12 @@ class TemplateCompositionTest(unittest.TestCase):
 
         # Check the element of the composition
         # In that template, there should be these components:
-        component_ids = ['white-inasafe-logo', 'north-arrow', 'organisation-logo',
-                         'impact-map', 'impact-legend']
+        component_ids = [
+            'white-inasafe-logo',
+            'north-arrow',
+            'organisation-logo',
+            'impact-map',
+            'impact-legend']
         for component_id in component_ids:
             component = template_composition.composition.getComposerItemById(
                 component_id)

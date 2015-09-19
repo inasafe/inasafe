@@ -70,7 +70,8 @@ from safe.utilities.utilities import (
     add_ordered_combo_item)
 from safe.utilities.help import show_context_help
 from safe.utilities.keyword_io import KeywordIO
-from safe.defaults import disclaimer, white_inasafe_logo_path, supporters_logo_path
+from safe.defaults import (
+    disclaimer, white_inasafe_logo_path, supporters_logo_path)
 from safe.utilities.unicode import get_string
 
 INFO_STYLE = styles.INFO_STYLE
