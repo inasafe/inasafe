@@ -135,8 +135,8 @@ class ImpactReportTest(unittest.TestCase):
         expected_org_logo = resources_path('img', 'logos', 'supporters.png')
 
         message = (
-            'The safe logo path is not the default one: %s isn\'t %s') % (
-            expected_safe_logo, safe_logo)
+            'The safe logo path is not the default one: %s isn\'t %s' %
+            (expected_safe_logo, safe_logo))
         self.assertEqual(expected_safe_logo, safe_logo, message)
 
         message = 'The north arrow path is not the default one'
