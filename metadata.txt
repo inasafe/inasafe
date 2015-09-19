@@ -17,7 +17,7 @@ about=Developed for the Indonesian Government - BNPB, Australian Government - AI
 
 version=3.2.0
 # alpha, beta, rc or final
-status=alpha
+status=final
 
 
 # end of mandatory metadata
