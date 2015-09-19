@@ -136,8 +136,7 @@ class ImpactReportTest(unittest.TestCase):
 
         message = (
             'The safe logo path is not the default one: %s isn\'t %s') % (
-            expected_safe_logo, safe_logo
-        )
+            expected_safe_logo, safe_logo)
         self.assertEqual(expected_safe_logo, safe_logo, message)
 
         message = 'The north arrow path is not the default one'

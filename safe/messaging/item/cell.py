@@ -18,7 +18,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from message_element import MessageElement
 from text import Text
-from bulleted_list import BulletedList
 
 # FIXME (MB) remove when all to_* methods are implemented
 # pylint: disable=W0223
@@ -42,6 +41,7 @@ class Cell(MessageElement):
         super(Cell, self).__init__(**kwargs)
 
         # Special case for when we want to put a nested table in a cell
+        # We dont use isinstance because of recursive imports with table
         class_name = args[0].__class__.__name__
         if class_name in ['BulletedList', 'Table']:
             self.content = args[0]
