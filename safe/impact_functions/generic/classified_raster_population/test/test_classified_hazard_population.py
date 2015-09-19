@@ -15,7 +15,6 @@ __author__ = 'lucernae'
 __filename__ = 'test_classified_hazard_building'
 __date__ = '24/03/15'
 
-
 import unittest
 
 from safe.impact_functions.impact_function_manager\
@@ -24,6 +23,7 @@ from safe.storage.core import read_layer
 from safe.test.utilities import test_data_path
 from safe.impact_functions.generic.classified_raster_population\
     .impact_function import ClassifiedRasterHazardPopulationFunction
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestClassifiedHazardPopulationFunction(unittest.TestCase):
@@ -43,8 +43,8 @@ class TestClassifiedHazardPopulationFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact_layer = function.impact
 
@@ -59,16 +59,20 @@ class TestClassifiedHazardPopulationFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'classes',
-            'layer_type': 'raster',
-            'data_type': 'classified'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'raster',
+            'hazard': 'flood',
+            'hazard_category': 'multiple_event',
+            'raster_hazard_classification': 'generic_raster_hazard_classes'
         }
 
         exposure_keywords = {
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

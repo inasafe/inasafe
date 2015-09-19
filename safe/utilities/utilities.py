@@ -24,6 +24,7 @@ import logging
 import webbrowser
 import unicodedata
 import codecs
+import re
 
 # noinspection PyPackageRequirements
 
@@ -35,6 +36,7 @@ from safe.common.exceptions import (
     KeywordNotFoundError)
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
+from safe.defaults import disclaimer
 from safe import messaging as m
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
@@ -196,9 +198,8 @@ def impact_attribution(keywords, inasafe_flag=False):
         # noinspection PyUnresolvedReferences
         inasafe_phrase = tr(
             'This report was created using InaSAFE version %s. Visit '
-            'http://inasafe.org to get your free copy of this software!'
-            'InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR & the '
-            'World Bank') % (get_version())
+            'http://inasafe.org to get your free copy of this software! %s'
+            ) % (get_version(), disclaimer())
 
         report.add(m.Paragraph(m.Text(inasafe_phrase)))
     return report
@@ -365,7 +366,7 @@ def replace_accentuated_characters(message):
     """Normalize unicode data in Python to remove umlauts, accents etc.
 
     :param message: The string where to delete accentuated characters.
-    :type message: str
+    :type message: str, unicode
 
     :return: A string without umlauts, accents etc.
     :rtype: str
@@ -373,3 +374,33 @@ def replace_accentuated_characters(message):
 
     message = unicodedata.normalize('NFKD', message).encode('ASCII', 'ignore')
     return message.decode('utf-8')
+
+
+def compare_version(version1, version2):
+    """Compare between InaSAFE version.
+
+    .. versionadded: 3.2
+
+    Adapted from http://stackoverflow.com/a/1714190/1198772
+
+    :param version1: String representation of version 1
+    :type version1: str
+    :param version2: String representation of version 1
+    :type version2: str
+
+    :returns: -1, 0, 1 if less, same, and more respectively.
+    :rtype: int
+    """
+    def normalize(v):
+        """
+        :param v: Version string
+        :type v: str
+
+        :returns: List of integer
+        :rtype: list
+        """
+        # Removing '.dev-ABCDEF' thing.
+        if '.dev' in v:
+            v = v.split('.dev')[0]
+        return [int(x) for x in re.sub(r'(\.0+)*$', '', v).split(".")]
+    return cmp(normalize(version1), normalize(version2))

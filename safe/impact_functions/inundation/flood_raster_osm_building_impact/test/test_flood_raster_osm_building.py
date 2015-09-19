@@ -23,6 +23,7 @@ from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     FloodRasterBuildingFunction
 from safe.storage.core import read_layer
 from safe.test.utilities import get_qgis_app, test_data_path
+from safe.storage.safe_layer import SafeLayer
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -44,8 +45,8 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        impact_function.hazard = hazard_layer
-        impact_function.exposure = exposure_layer
+        impact_function.hazard = SafeLayer(hazard_layer)
+        impact_function.exposure = SafeLayer(exposure_layer)
         impact_function.run()
         impact_layer = impact_function.impact
 
@@ -66,7 +67,7 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
             3: 0
         }
         for feature in impact_data:
-            inundated_status = feature['INUNDATED']
+            inundated_status = feature[impact_function.target_field]
             result[inundated_status] += 1
 
         message = 'Expecting %s, but it returns %s' % (expected_result, result)
@@ -74,17 +75,19 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
 
     def test_filter(self):
         hazard_keywords = {
-            'subcategory': 'tsunami',
-            'unit': 'metres_depth',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'hazard': 'flood',
+            'hazard_category': 'single_event',
+            'continuous_hazard_unit': 'metres'
         }
 
         exposure_keywords = {
-            'subcategory': 'structure',
-            'unit': 'building_type',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

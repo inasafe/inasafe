@@ -40,6 +40,7 @@ from qgis.core import (
 from qgis.analysis import QgsZonalStatistics
 # pylint: enable=no-name-in-module
 from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import QSettings
 
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.utilities import (
@@ -90,7 +91,7 @@ LOGGER = logging.getLogger('InaSAFE')
 # If inasafe is running as qgis plugin,
 # it can import processing (from QGIS / sextante),
 # pylint: disable=F0401
-import processing
+from processing.core.Processing import Processing
 # pylint: enable=F0401
 
 
@@ -139,7 +140,9 @@ class Aggregator(QtCore.QObject):
         # aggregation polygons (one list for one polygon)
         self.impact_layer_attributes = []
 
-        self.processing = processing
+        # Notes(Ismail): Need to initialize Processing in QGIS 2.8.x
+        self.processing = Processing
+        self.processing.initialize()
 
         # If this flag is not True, no aggregation or postprocessing will run
         # this is set as True by validateKeywords()
@@ -173,10 +176,17 @@ class Aggregator(QtCore.QObject):
 
     @property
     def extent(self):
+        """Accessor for extent property."""
         return self._extent
 
     @extent.setter
     def extent(self, value):
+        """Mutator for extent property.
+
+        :param value: New extent value.
+        :type value: QgsRectangle
+
+        """
         self._extent = value
         # update layer extent to match impact layer if in aoi_mode
         if self.aoi_mode:
@@ -227,6 +237,7 @@ class Aggregator(QtCore.QObject):
 
         :param layer: Layer you want to get the keywords for.
         :type layer: QgsMapLayer
+
         :returns:   KeywordIO.get_statistics object
         :rtype:     KeywordIO.get_statistics
 
@@ -246,6 +257,7 @@ class Aggregator(QtCore.QObject):
         :param out_filename: Output filename that the keywords should be
             written to.
         :type out_filename: str
+
         :raises:  All exceptions are propagated.
         """
         try:
@@ -261,6 +273,7 @@ class Aggregator(QtCore.QObject):
 
         :param keywords: Dict of keywords to write.
         :type keywords: dict
+
         :raises:  All exceptions are propagated.
         """
         try:
@@ -333,7 +346,7 @@ class Aggregator(QtCore.QObject):
             self._send_message(message)
 
             # keywords are already complete
-            category = keywords['category']
+            layer_purpose = keywords['layer_purpose']
             aggregation_attribute = self.get_default_keyword('AGGR_ATTR_KEY')
             female_ratio = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
             female_ratio_key = self.get_default_keyword('FEMALE_RATIO_KEY')
@@ -344,28 +357,37 @@ class Aggregator(QtCore.QObject):
             elderly_ratio = self.get_default_keyword('ELDERLY_RATIO_ATTR_KEY')
             elderly_ratio_key = self.get_default_keyword('ELDERLY_RATIO_KEY')
 
-            if (
-                    aggregation_attribute in keywords and
-                    (
-                        'category' in keywords and
-                        category == 'postprocessing') and
-                    (female_ratio in keywords and (
-                        female_ratio != global_default_attribute['name'] or
-                        female_ratio_key in keywords)) and
-                    (youth_ratio in keywords and (
-                        youth_ratio != global_default_attribute['name'] or
-                        youth_ratio_key in keywords)) and
-                    (adult_ratio in keywords and (
-                        adult_ratio != global_default_attribute['name'] or
-                        adult_ratio_key in keywords)) and
-                    (elderly_ratio in keywords and (
-                        elderly_ratio != global_default_attribute['name'] or
-                        elderly_ratio_key in keywords))):
+            aggregation_in_keywords = aggregation_attribute in keywords
+            layer_purpose_in_keywords = (
+                'layer_purpose' in keywords and
+                layer_purpose == 'aggregation')
+            female_ratio_in_keywords = (
+                female_ratio in keywords and (
+                    female_ratio != global_default_attribute['name'] or
+                    female_ratio_key in keywords))
+            youth_ratio_in_keywords = (
+                youth_ratio in keywords and (
+                    youth_ratio != global_default_attribute['name'] or
+                    youth_ratio_key in keywords))
+            adult_ratio_in_keywords = (
+                adult_ratio in keywords and (
+                    adult_ratio != global_default_attribute['name'] or
+                    adult_ratio_key in keywords))
+            elderly_ratio_in_keywords = (
+                elderly_ratio in keywords and (
+                    elderly_ratio != global_default_attribute['name'] or
+                    elderly_ratio_key in keywords))
+            if (aggregation_in_keywords and
+                    layer_purpose_in_keywords and
+                    female_ratio_in_keywords and
+                    youth_ratio_in_keywords and
+                    adult_ratio_in_keywords and
+                    elderly_ratio_in_keywords):
                 self.is_valid = True
             # some keywords are needed
             else:
                 # set the default values by writing to the keywords
-                keywords['category'] = 'postprocessing'
+                keywords['layer_purpose'] = 'aggregation'
 
                 # noinspection PyTypeChecker
                 my_attributes, _ = layer_attribute_names(
@@ -469,11 +491,11 @@ class Aggregator(QtCore.QObject):
                     self.hazard_layer)
 
             if is_polygon_layer(self.exposure_layer):
-                # Find out the subcategory for this layer
-                subcategory = self.read_keywords(
-                    self.exposure_layer, 'subcategory')
+                # Find out the exposure for this layer
+                exposure = self.read_keywords(
+                    self.exposure_layer, 'exposure')
                 # We don't want to chop up buildings!
-                if subcategory != 'structure':
+                if exposure != 'structure':
                     self.exposure_layer = self._prepare_polygon_layer(
                         self.exposure_layer)
 
@@ -749,6 +771,7 @@ class Aggregator(QtCore.QObject):
             # minIndex = provider.fieldNameIndex(self._minFieldName())
             # maxIndex = provider.fieldNameIndex(self._maxFieldName())
 
+            update_map = {}
             for myFeature in provider.getFeatures():
                 feature_id = myFeature.id()
                 if feature_id not in zonal_statistics:
@@ -766,7 +789,9 @@ class Aggregator(QtCore.QObject):
                         count_index: statistics['count'],
                         mean_index: statistics['mean']
                     }
-                provider.changeAttributeValues({feature_id: attributes})
+                update_map[feature_id] = attributes
+
+            provider.changeAttributeValues(update_map)
 
     def _aggregate_polygon_impact(self, safe_impact_layer):
         """Aggregation of polygons in polygons
@@ -943,9 +968,8 @@ class Aggregator(QtCore.QObject):
 
             splits_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
-            res = self.processing.runalg('qgis:intersection',
-                                         impact_layer, self.layer,
-                                         splits_filename)
+            res = self.run_processing_algorithm(
+                'qgis:intersection', impact_layer, self.layer, splits_filename)
             impact_layer_splits = QgsVectorLayer(
                 res['OUTPUT'], 'split aggregation', 'ogr')
 
@@ -960,7 +984,7 @@ class Aggregator(QtCore.QObject):
             tmp_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
             epsg = "EPSG:" + str(get_utm_epsg(self.extent[0], self.extent[1]))
-            res = processing.runalg(
+            res = self.run_processing_algorithm(
                 'qgis:reprojectlayer',
                 impact_layer_splits,
                 epsg,
@@ -971,7 +995,7 @@ class Aggregator(QtCore.QObject):
                 'ogr')
             tmp_filename = unique_filename(
                 suffix='.shp', dir=output_directory)
-            res = self.processing.runalg(
+            res = self.run_processing_algorithm(
                 'qgis:exportaddgeometrycolumns',
                 projected_layer,
                 # 2, # Ellipsoidal
@@ -1073,13 +1097,35 @@ class Aggregator(QtCore.QObject):
 
         :raises: InvalidLayerError, UnsupportedProviderError, KeywordDbError
         """
+        # Find out what clipping behaviour we have - see #2210
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        detail = None
+        if mode == 'HazardExposureView':
+            detail = self.tr(
+                'Clipping the aggregation layer to match the '
+                'intersection of the hazard and exposure layer and the '
+                'current view extents.')
+        elif mode == 'HazardExposure':
+            detail = self.tr(
+                'clipping the aggregation layer to match the '
+                'intersection of the hazard and exposure layer extents.')
+        elif mode == 'HazardExposureBookmark':
+            detail = self.tr(
+                'Clipping the aggregation layer to match the '
+                'bookmarked extents.')
+        elif mode == 'HazardExposureBoundingBox':
+            detail = self.tr(
+                'Clipping the aggregation layer to match the '
+                'intersection of your preferred analysis area.')
+
         message = m.Message(
             m.Heading(
                 self.tr('Preparing aggregation layer'),
                 **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(self.tr(
-                'We are clipping the aggregation layer to match the '
-                'intersection of the hazard and exposure layer extents.')))
+            m.Paragraph(detail))
         # noinspection PyTypeChecker
         self._send_message(message)
 
@@ -1682,3 +1728,18 @@ class Aggregator(QtCore.QObject):
             self.error_message = message
             return False
         return True
+
+    def run_processing_algorithm(self, algorithm_name, *args):
+        """Adapt from processing.runalg with our own Processing.
+
+        :param algorithm_name: The name of the algorithm.
+        :type algorithm_name: str
+        :param args: list of arguments
+        :type args: list
+
+        :returns: The ouput of the algorithm.
+        :rtype: dict
+        """
+        algorithm = self.processing.runAlgorithm(algorithm_name, None, *args)
+        if algorithm is not None:
+            return algorithm.getOutputValuesAsDictionary()

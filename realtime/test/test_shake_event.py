@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import shutil
+import requests
 import unittest
 import logging
 import difflib
@@ -34,6 +35,10 @@ from realtime.utilities import (
     realtime_logger_name)
 from realtime.shake_event import ShakeEvent
 from realtime.utilities import base_data_dir
+from realtime.push_shake import INASAFE_REALTIME_REST_URL, \
+    push_shake_event_to_rest, \
+    generate_earthquake_detail_url, get_realtime_session, \
+    is_realtime_rest_configured, INASAFE_REALTIME_DATETIME_FORMAT
 
 # The logger is initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
@@ -98,7 +103,7 @@ class TestShakeEvent(unittest.TestCase):
             'day: 5\n'
             'month: 11\n'
             'year: 2013\n'
-            'time: None\n'
+            'time: 2013-11-05 06:08:09+07:07\n'
             'time_zone: WIB\n'
             'x_minimum: 139.37\n'
             'x_maximum: 141.87\n'
@@ -238,7 +243,7 @@ class TestShakeEvent(unittest.TestCase):
 
         expected_fatalities = {2: 0.0,
                                3: 0.0,
-                               4: 0.000036387775168847936,
+                               4: 3.6387775168847936e-05,
                                5: 0.0,
                                6: 0.0,
                                7: 0.0,
@@ -377,7 +382,7 @@ class TestShakeEvent(unittest.TestCase):
             'map-name': u'Estimated Earthquake Impact',
             'date': '5-11-2013',
             'bearing-degrees': '0.00\xb0',
-            'formatted-date-time': '05-Nov-13 06:08:09 ',
+            'formatted-date-time': '05-Nov-13 06:08:09 LMT',
             'distance': '0.00',
             'direction-relation': u'of',
             'software-tag': software_tag,
@@ -530,6 +535,53 @@ class TestShakeEvent(unittest.TestCase):
         shaking = shake_event.mmi_shaking(5)
         expected_shaking = 'Sedang'
         self.assertEqual(expected_shaking, shaking)
+
+    def test_login_to_realtime(self):
+        # get logged in session
+        session = get_realtime_session()
+        r = session.get(INASAFE_REALTIME_REST_URL + '?format=api')
+        # find text called Log out
+        self.assertIn('Log out', r.text)
+
+    def test_push_to_realtime(self):
+        # only do the test if realtime test server is configured
+        if is_realtime_rest_configured():
+
+            working_dir = shakemap_extract_dir()
+            shake_event = ShakeEvent(
+                working_dir=working_dir,
+                event_id=SHAKE_ID,
+                locale='en',
+                data_is_local_flag=True)
+            # generate report
+            shake_event.render_map()
+            # push to realtime django
+            push_shake_event_to_rest(shake_event)
+            # check shake event exists
+            session = get_realtime_session()
+            earthquake_url = generate_earthquake_detail_url(SHAKE_ID)
+            response = session.get(earthquake_url)
+            self.assertEqual(response.status_code, requests.codes.ok)
+
+            event_dict = shake_event.event_dict()
+            earthquake_data = {
+                'shake_id': shake_event.event_id,
+                'magnitude': float(event_dict.get('mmi')),
+                'depth': float(event_dict.get('depth-value')),
+                'time': shake_event.shake_grid.time.strftime(
+                    INASAFE_REALTIME_DATETIME_FORMAT),
+                'location': {
+                    'type': 'Point',
+                    'coordinates': [
+                        shake_event.shake_grid.longitude,
+                        shake_event.shake_grid.latitude
+                    ]
+                },
+                'location_description': event_dict.get('place-name')
+            }
+
+            for key, value in earthquake_data.iteritems():
+                self.assertEqual(response.json()[key], value)
 
 
 class DictDiffer(object):

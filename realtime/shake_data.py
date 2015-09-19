@@ -21,6 +21,8 @@ import os
 import shutil
 from datetime import datetime
 import logging
+import filecmp
+
 
 from realtime.utilities import is_event_id
 from realtime.utilities import (
@@ -33,7 +35,6 @@ from realtime.exceptions import (
     EventValidationError,
     CopyError,
     EmptyShakeDirectoryError)
-
 
 LOGGER = logging.getLogger(realtime_logger_name())
 
@@ -107,13 +108,14 @@ class ShakeData(object):
             self.working_dir, self.event_id)
         return os.path.exists(event_path)
 
-    def get_list_event_ids(self):
+    @staticmethod
+    def get_list_event_ids_from_folder(working_dir):
         """Get all event id indicated by folder in working dir."""
-        if os.path.exists(self.working_dir):
-            directories = os.listdir(self.working_dir)
+        if os.path.exists(working_dir):
+            directories = os.listdir(working_dir)
         else:
             LOGGER.debug(
-                'Directory %s does not exist, return None' % self.working_dir)
+                'Directory %s does not exist, return None' % working_dir)
             return None
         # Filter the dirs to only contain valid event dirs
         valid_dirs = []
@@ -124,8 +126,11 @@ class ShakeData(object):
         if len(valid_dirs) == 0:
             raise EmptyShakeDirectoryError(
                 'The directory %s does not contain any shakemaps.' %
-                self.working_dir)
+                working_dir)
         return valid_dirs
+
+    def get_list_event_ids(self):
+        return ShakeData.get_list_event_ids_from_folder(self.working_dir)
 
     def get_latest_event_id(self):
         """Return latest event id."""
@@ -175,17 +180,21 @@ class ShakeData(object):
             /tmp/inasafe/realtime/shakemaps-extracted/20131105060809/grid.xml
         """
         final_grid_xml_file = os.path.join(self.extract_dir(), 'grid.xml')
+
+        # move grid.xml from working dir to the extracted dir
+        local_path = os.path.join(self.working_dir, self.event_id)
+        source_grid_xml = os.path.join(local_path, 'output', 'grid.xml')
+
         if not os.path.exists(self.extract_dir()):
             make_directory(self.extract_dir())
 
         if force_flag or self.force_flag:
             self.remove_extracted_files()
         elif os.path.exists(final_grid_xml_file):
-            return final_grid_xml_file
+            if filecmp.cmp(final_grid_xml_file, source_grid_xml):
+                return final_grid_xml_file
+            # if it is not identical, copy again
 
-        # move grid.xml from working dir to the extracted dir
-        local_path = os.path.join(self.working_dir, self.event_id)
-        source_grid_xml = os.path.join(local_path, 'output', 'grid.xml')
         if not os.path.exists(source_grid_xml):
             raise FileNotFoundError(
                 'The output does not contain %s file.' %

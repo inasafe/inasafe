@@ -10,59 +10,31 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.impact_functions.unit_definitions import parameter_unit_metres
+
 __author__ = 'lucernae'
 
-from safe_extras.parameters.boolean_parameter import BooleanParameter
-from safe_extras.parameters.string_parameter import StringParameter
+from safe_extras.parameters.float_parameter import FloatParameter
+from safe.utilities.i18n import tr
 
 
-def target_field():
-    """Generator for the flooded target field parameter."""
-    field = StringParameter()
-    field.name = 'Target Field'
+def threshold():
+    """Generator for the default threshold parameter.
+
+    :return: List of FloatParameter
+    :rtype: list[FloatParameter]
+    """
+    field = FloatParameter()
+    field.name = tr('Thresholds [m]')
     field.is_required = True
-    field.help_text = (
-        'This field of impact layer marks inundated roads by \'1\' value')
-    field.description = (
-        'This field of impact layer marks inundated roads by \'1\' value. '
-        'This is the longer description of this parameter.')
-    field.value = 'INUNDATED'  # default value
-    return field
-
-
-def affected_field():
-    """"Generator for selection of affected field parameter."""
-    field = StringParameter()
-    field.name = 'Affected Field'
-    field.is_required = True
-    field.help_text = (
-        'This field of the  hazard layer contains information about inundated '
-        'areas')
-    field.description = (
-        'This field of the  hazard layer contains information about inundated '
-        'areas. This is the longer description of this parameter.')
-    field.value = 'affected'  # default value
-    return field
-
-
-def affected_value():
-    """Generator for parameter stating what values constitute 'affected'."""
-    field = StringParameter()
-    field.name = 'Affected Value'
-    field.is_required = True
-    field.help_text = (
-        'This value in \'affected_field\' of the hazard layer marks the areas '
-        'as inundated')
-    field.description = (
-        'This value in \'affected_field\' of the hazard layer marks the areas '
-        'as inundated. This is the longer description of this parameter.')
-    field.value = '1'  # default value
-    return field
-
-
-def building_type_field():
-    field = BooleanParameter()
-    field.name = 'Building Type Field'
-    field.is_required = True
-    field.value = True
+    field.precision = 2
+    field.value = 1.0  # default value
+    unit_metres = parameter_unit_metres()
+    field.unit = unit_metres
+    field.allowed_units = [unit_metres]
+    field.help_text = tr(
+        'Threshold value to categorize inundated area.')
+    field.description = tr(
+        'Hazard value above the threshold in meter will be considered '
+        'inundated.')
     return field

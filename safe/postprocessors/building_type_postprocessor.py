@@ -146,7 +146,10 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                         if field_value != 'Not Affected':
                             result += 1
                     else:
-                        result += field_value
+                        if field_value:
+                            # See issue #2258. Since we are only working with
+                            # one building at a time we should only add 1.
+                            result += 1
                 result = int(round(result))
             except (ValueError, KeyError):
                 result = self.NO_DATA_TEXT
@@ -182,7 +185,11 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                                 if field_value != 'Not Affected':
                                     result += 1
                             else:
-                                result += field_value
+                                if field_value:
+                                    # See issue #2258. Since we are only
+                                    # working with one building at a time we
+                                    # should only add 1.
+                                    result += 1
                             break
                         elif self._is_unknown_type(building_type):
                             self._update_known_types(building_type)

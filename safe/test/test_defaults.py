@@ -13,7 +13,9 @@ from PyQt4.QtCore import QFile
 from safe.defaults import (
     disclaimer,
     get_defaults,
-    default_organisation_logo_path,
+    black_inasafe_logo_path,
+    white_inasafe_logo_path,
+    supporters_logo_path,
     default_north_arrow_path)
 
 
@@ -71,16 +73,30 @@ class TestDefaults(unittest.TestCase):
         actual = disclaimer()
         self.assertTrue(len(actual) > 0)
 
-    def test_default_organisation_logo_path(self):
-        """Verify the call to default organisation logo path works.
+    def test_white_inasafe_logo_path(self):
+        """Verify the call to default InaSAFE logo path works.
         """
         # Check if it exists
-        org_logo_path = QFile(default_organisation_logo_path())
-        self.assertTrue(QFile.exists(org_logo_path))
+        logo_path = QFile(white_inasafe_logo_path())
+        self.assertTrue(QFile.exists(logo_path))
+
+    def test_black_inasafe_logo_path(self):
+        """Verify the call to default InaSAFE logo path works.
+        """
+        # Check if it exists
+        logo_path = QFile(black_inasafe_logo_path())
+        self.assertTrue(QFile.exists(logo_path))
+
+    def test_supporters_logo_path(self):
+        """Verify the call to default supporters logo path works.
+        """
+        # Check if it exists
+        logo_path = QFile(supporters_logo_path())
+        self.assertTrue(QFile.exists(logo_path))
 
     def test_default_north_arrow_path(self):
         """Verify the call to default north arrow path works.
         """
         # Check if it exists
-        north_arrow_path = QFile(default_north_arrow_path())
-        self.assertTrue(QFile.exists(north_arrow_path))
+        path = QFile(default_north_arrow_path())
+        self.assertTrue(QFile.exists(path))

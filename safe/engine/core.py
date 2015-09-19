@@ -6,35 +6,37 @@ Provides the function calculate_impact()
 
 import numpy
 from datetime import datetime
-from socket import gethostname
-import getpass
+import logging
+
 from PyQt4.QtCore import QSettings
 
+from safe.common.exceptions import RadiiException
+from safe.gis.geodesy import Point
+from safe.storage.geometry import Polygon
 from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
-from safe.impact_functions.core import extract_layers
 from safe.common.utilities import unique_filename, verify
+from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import replace_accentuated_characters
-from safe.engine.utilities import REQUIRED_KEYWORDS
 
 
-# The LOGGER is intialised in utilities.py by init
-import logging
+# The LOGGER is initialised in utilities.py by init
 LOGGER = logging.getLogger('InaSAFE')
+
+# Mandatory keywords that must be present in layers
+REQUIRED_KEYWORDS = ['layer_purpose', 'layer_mode']
+REQUIRED_HAZARD_KEYWORDS = ['hazard', 'hazard_category']
+REQUIRED_EXPOSURE_KEYWORDS = ['exposure']
 
 
 def check_data_integrity(layer_objects):
     """Check list of layer objects
 
-    Input
-        layer_objects: List of InaSAFE layer instances
+    :param layer_objects: List of InaSAFE layer instances
+    :type layer_objects: list
 
-    Output
-        Nothing
-
-    Raises
-        Exceptions for a range of errors
+    :raises: Exceptions for a range of errors
 
     This function checks that
     * Layers have correct keywords
@@ -42,115 +44,113 @@ def check_data_integrity(layer_objects):
     """
 
     # Link to documentation
-    manpage = ('http://risiko_dev.readthedocs.org/en/latest/usage/'
-               'plugins/development.html')
-    instructions = ('Please add keywords as <keyword>:<value> pairs '
-                    ' in the .keywords file. For more information '
-                    'please read the sections on impact functions '
-                    'and keywords in the manual: %s' % manpage)
+    inasafe_url = 'http://inasafe.org/en/developer-docs/'
+    instructions = (
+        'Please add keywords as <keyword>:<value> pairs  in the .xml '
+        'file. For more information please read the sections on impact '
+        'functions and keywords in the InaSAFE website: %s' % inasafe_url)
 
-    # Set default values for projection and geotransform.
+    # Set default values for projection and geo_transform.
     # Enforce DEFAULT (WGS84).
     # Choosing 'None' will use value of first layer.
     reference_projection = Projection(DEFAULT_PROJECTION)
-    geotransform = None
+    geo_transform = None
 
-    for layer in layer_objects:
-
+    for safe_layer in layer_objects:
         # Check that critical keywords exist and are non empty
-        keywords = layer.get_keywords()
-        for kw in REQUIRED_KEYWORDS:
-            msg = ('Layer %s did not have required keyword "%s". '
-                   '%s' % (layer.name, kw, instructions))
-            verify(kw in keywords, msg)
+        keywords = safe_layer.keywords
+        for keyword in REQUIRED_KEYWORDS:
+            message = (
+                'Layer %s did not have required keyword "%s". %s' % (
+                    safe_layer.name, keyword, instructions))
+            verify(keyword in keywords, message)
 
-            val = keywords[kw]
-            msg = ('No value found for keyword "%s" in layer %s. '
-                   '%s' % (kw, layer.name, instructions))
-            verify(val, msg)
+            value = keywords[keyword]
+            message = (
+                'No value found for keyword "%s" in layer %s. %s' % (
+                    keyword, safe_layer.name, instructions))
+            verify(value, message)
 
         # Ensure that projection is consistent across all layers
         if reference_projection is None:
-            reference_projection = layer.projection
+            reference_projection = safe_layer.projection
         else:
-            msg = ('Projections in input layer %s is not as expected:\n'
-                   'projection: %s\n'
-                   'default:    %s'
-                   '' % (layer, layer.projection, reference_projection))
-            verify(reference_projection == layer.projection, msg)
+            message = (
+                'Projections in input layer %s is not as expected:\n'
+                'projection: %s\n default: %s' % (
+                    safe_layer,
+                    safe_layer.layer.projection,
+                    reference_projection))
+            verify(
+                reference_projection == safe_layer.layer.projection, message)
 
         # FIXME (Ariel): Make this configurable by the frontend choice?
         # Relax tolerance requirements to have GeoNode compatibility
         # tolerance = 10e-12
         tolerance = 10e-7
 
-        # Ensure that geotransform and dimensions is consistent across
+        # Ensure that geo_transform and dimensions is consistent across
         # all *raster* layers
-        if layer.is_raster:
-            if geotransform is None:
-                geotransform = layer.get_geotransform()
+        if safe_layer.layer.is_raster:
+            if geo_transform is None:
+                geo_transform = safe_layer.layer.get_geotransform()
             else:
-                msg = ('Geotransforms in input raster layers are different:\n'
-                       '%s\n%s' % (geotransform, layer.get_geotransform()))
-                verify(numpy.allclose(geotransform,
-                                      layer.get_geotransform(),
-                                      rtol=tolerance), msg)
+                message = (
+                    'Geotransforms in input raster layers are different:\n'
+                    '%s\n%s' % (
+                        geo_transform, safe_layer.layer.get_geotransform()))
+                verify(
+                    numpy.allclose(
+                        geo_transform,
+                        safe_layer.layer.get_geotransform(),
+                        rtol=tolerance),
+                    message)
 
         # In case of vector layers, we just check that they are non-empty
         # FIXME (Ole): Not good as nasty error is raised in cases where
         # there are no buildings in the hazard area. Need to be more graceful
         # See e.g. shakemap dated 20120227190230
-        if layer.is_vector:
-            msg = ('There are no vector data features. '
-                   'Perhaps zoom out or pan to the study area '
-                   'and try again')
-            verify(len(layer) > 0, msg)
+        if safe_layer.layer.is_vector:
+            message = (
+                'There are no vector data features. Perhaps zoom out or pan '
+                'to the study area and try again')
+            verify(len(safe_layer.layer) > 0, message)
 
     # Check that arrays are aligned.
-
     refname = None
-    for layer in layer_objects:
-        if layer.is_raster:
-
+    for safe_layer in layer_objects:
+        if safe_layer.layer.is_raster:
             if refname is None:
-                refname = layer.get_name()
-                M = layer.rows
-                N = layer.columns
+                refname = safe_layer.name
+                layer_rows = safe_layer.layer.rows
+                layer_columns = safe_layer.layer.columns
 
-            msg = ('Rasters are not aligned!\n'
-                   'Raster %s has %i rows but raster %s has %i rows\n'
-                   'Refer to issue #102' % (layer.get_name(),
-                                            layer.rows,
-                                            refname, M))
-            verify(layer.rows == M, msg)
+            message = (
+                'Rasters are not aligned!\n'
+                'Raster %s has %i rows but raster %s has %i rows\n'
+                'Refer to issue #102' % (
+                    safe_layer.name,
+                    safe_layer.layer.rows,
+                    refname,
+                    layer_rows))
+            verify(safe_layer.layer.rows == layer_rows, message)
 
-            msg = ('Rasters are not aligned!\n'
-                   'Raster %s has %i columns but raster %s has %i columns\n'
-                   'Refer to issue #102' % (layer.get_name(),
-                                            layer.columns,
-                                            refname, N))
-            verify(layer.columns == N, msg)
+            message = (
+                'Rasters are not aligned!\n'
+                'Raster %s has %i columns but raster %s has %i columns\n'
+                'Refer to issue #102' % (
+                    safe_layer.name,
+                    safe_layer.layer.columns,
+                    refname,
+                    layer_columns))
+            verify(safe_layer.layer.columns == layer_columns, message)
 
 
-def calculate_impact(layers,
-                     impact_function,
-                     extent=None,
-                     check_integrity=True):
+def calculate_impact(impact_function):
     """Calculate impact levels as a function of list of input layers
-
-    :param layers: List of Raster and Vector layer objects to be used for
-        analysis.
-    :type layers: list
 
     :param impact_function: An instance of impact function.
     :type impact_function: safe.impact_function.base.ImpactFunction
-
-    :param extent: List of [xmin, ymin, xmax, ymax] the coordinates of the
-        bounding box.
-    :type extent: list
-
-    :param check_integrity: If true, perform checking of input data integrity
-    :type check_integrity: bool
 
     Output
         filename of resulting impact layer (GML). Comment is embedded as
@@ -164,24 +164,16 @@ def calculate_impact(layers,
         1. All layers are in WGS84 geographic coordinates
         2. Layers are equipped with metadata such as names and categories
     """
-
-    LOGGER.debug(
-        'calculate_impact called with:\nLayers: %s\nFunction:%s' % (
-            layers, impact_function))
-
+    layers = [impact_function.hazard, impact_function.exposure]
     # Input checks
-    if check_integrity:
+    if impact_function.requires_clipping:
         check_data_integrity(layers)
-
-    # Set extent if it is provided
-    if extent is not None:
-        impact_function.requested_extent = extent
 
     # Start time
     start_time = datetime.now()
 
-    # Pass input layers to plugin
-    F = impact_function.run(layers)
+    # Run IF
+    result_layer = impact_function.run()
 
     # End time
     end_time = datetime.now()
@@ -196,58 +188,48 @@ def calculate_impact(layers,
     # Need to change : to _ because : is forbidden in keywords
     time_stamp = end_time.isoformat('_')
 
-    # Get user
-    user = getpass.getuser().replace(' ', '_')
-
-    # Get host
-    host_name = gethostname()
-
     # Get input layer sources
     # NOTE: We assume here that there is only one of each
     #       If there are more only the first one is used
-    for cat in ['hazard', 'exposure']:
-        L = extract_layers(layers, 'category', cat)
-        keywords = L[0].get_keywords()
+    for layer in layers:
+        keywords = layer.keywords
         not_specified = tr('Not specified')
-        if 'title' in keywords:
-            title = keywords['title']
+
+        layer_purpose = keywords.get('layer_purpose', not_specified)
+        title = keywords.get('title', not_specified)
+        source = keywords.get('source', not_specified)
+
+        if layer_purpose == 'hazard':
+            category = keywords['hazard']
+        elif layer_purpose == 'exposure':
+            category = keywords['exposure']
         else:
-            title = not_specified
+            category = not_specified
 
-        if 'source' in keywords:
-            source = keywords['source']
-        else:
-            source = not_specified
+        result_layer.keywords['%s_title' % layer_purpose] = title
+        result_layer.keywords['%s_source' % layer_purpose] = source
+        result_layer.keywords['%s' % layer_purpose] = category
 
-        if 'subcategory' in keywords:
-            subcategory = keywords['subcategory']
-        else:
-            subcategory = not_specified
-
-        F.keywords['%s_title' % cat] = title
-        F.keywords['%s_source' % cat] = source
-        F.keywords['%s_subcategory' % cat] = subcategory
-
-    F.keywords['elapsed_time'] = elapsed_time_sec
-    F.keywords['time_stamp'] = time_stamp[:19]  # remove decimal part
-    F.keywords['host_name'] = host_name
-    F.keywords['user'] = user
+    result_layer.keywords['elapsed_time'] = elapsed_time_sec
+    result_layer.keywords['time_stamp'] = time_stamp[:19]  # remove decimal
+    result_layer.keywords['host_name'] = impact_function.host_name
+    result_layer.keywords['user'] = impact_function.user
 
     msg = 'Impact function %s returned None' % str(impact_function)
-    verify(F is not None, msg)
+    verify(result_layer is not None, msg)
 
     # Set the filename : issue #1648
     # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS.EXT
     # FloodOnBuildings_12March2015_10h22.04.shp
-    exp = F.keywords['exposure_subcategory'].title()
-    haz = F.keywords['hazard_subcategory'].title()
+    exp = result_layer.keywords['exposure'].title()
+    haz = result_layer.keywords['hazard'].title()
     date = end_time.strftime('%d%B%Y').decode('utf8')
     time = end_time.strftime('%Hh%M.%S').decode('utf8')
     prefix = u'%sOn%s_%s_%s-' % (haz, exp, date, time)
     prefix = replace_accentuated_characters(prefix)
 
     # Write result and return filename
-    if F.is_raster:
+    if result_layer.is_raster:
         extension = '.tif'
         # use default style for raster
     else:
@@ -268,11 +250,11 @@ def calculate_impact(layers,
         output_filename = unique_filename(
             prefix=prefix, suffix=extension)
 
-    F.filename = output_filename
-    F.write_to_file(output_filename)
+    result_layer.filename = output_filename
+    result_layer.write_to_file(output_filename)
 
     # Establish default name (layer1 X layer1 x impact_function)
-    if not F.get_name():
+    if not result_layer.get_name():
         default_name = ''
         for layer in layers:
             default_name += layer.name + ' X '
@@ -283,64 +265,71 @@ def calculate_impact(layers,
             # Strip trailing 'X'
             default_name = default_name[:-2]
 
-        F.set_name(default_name)
-
-    # FIXME (Ole): If we need to save style as defined by the impact_function
-    # this is the place
+        result_layer.set_name(default_name)
 
     # Return layer object
-    return F
-# FIXME (Ole): This needs to be rewritten as it
-# directly depends on ows metadata. See issue #54
-# def get_linked_layers(main_layers):
-#     """Get list of layers that are required by main layers
-
-#     Input
-#        main_layers: List of layers of the form (server, layer_name,
-#                                                 bbox, metadata)
-#     Output
-#        new_layers: New layers flagged by the linked keywords in main layers
+    return result_layer
 
 
-#     Algorithm will recursively pull layers from new layers if their
-#     keyword linked exists and points to available layers.
-#     """
+def buffer_points(centers, radii, hazard_zone_attribute, data_table=None):
+    """Buffer points for each center with defined radii.
 
-#     # FIXME: I don't think the naming is very robust.
-#     # Main layer names and workspaces come from the app, while
-#     # we just use the basename from the keywords for the linked layers.
-#     # Not sure if the basename will always work as layer name.
+    If the data_table is defined, then the data will also be copied to the
+    result. This function is used for making buffer of volcano point hazard.
 
-#     new_layers = []
-#     for server, name, bbox, metadata in main_layers:
+    :param centers: All center of each point (longitude, latitude)
+    :type centers: list
 
-#         workspace, layername = name.split(':')
+    :param radii: Desired approximate radii in meters (must be
+        monotonically ascending). Can be either one number or list of numbers
+    :type radii: int, list
 
-#         keywords = metadata['keywords']
-#         if 'linked' in keywords:
-#             basename, _ = os.path.splitext(keywords['linked'])
+    :param hazard_zone_attribute: The name of the attributes representing
+        hazard zone.
+    :type hazard_zone_attribute: str
 
-#             # FIXME (Ole): Geoserver converts names to lowercase @#!!
-#             basename = basename.lower()
+    :param data_table: Data for each center (optional)
+    :type data_table: list
 
-#             new_layer = '%s:%s' % (workspace, basename)
-#             if new_layer == name:
-#                 msg = 'Layer %s linked to itself' % name
-#                 raise Exception(msg)
+    :return: Vector polygon layer representing circle in WGS84
+    :rtype: Vector
+    """
+    if not isinstance(radii, list):
+        radii = [radii]
 
-#             try:
-#                 new_metadata = get_metadata(server, new_layer)
-#             except Exception, e:
-#                 msg = ('Linked layer %s could not be found: %s'
-#                        % (basename, str(e)))
-#                 LOGGER.info(msg)
-#                 # raise Exception(msg)
-#             else:
-#                 new_layers.append((server, new_layer, bbox, new_metadata))
+    # Check that radii are monotonically increasing
+    monotonically_increasing_flag = all(
+        x < y for x, y in zip(radii, radii[1:]))
+    if not monotonically_increasing_flag:
+        raise RadiiException(RadiiException.suggestion)
 
-#     # Recursively search for linked layers required by the newly added layers
-#     if len(new_layers) > 0:
-#         new_layers += get_linked_layers(new_layers)
+    circles = []
+    new_data_table = []
+    for i, center in enumerate(centers):
+        p = Point(longitude=center[0], latitude=center[1])
+        inner_rings = None
+        for radius in radii:
+            # Generate circle polygon
+            circle = p.generate_circle(radius)
+            circles.append(Polygon(outer_ring=circle, inner_rings=inner_rings))
 
-#     # Return list of new layers
-#     return new_layers
+            # Store current circle and inner ring for next poly
+            inner_rings = [circle]
+
+            # Carry attributes for center forward (deep copy)
+            row = {}
+            if data_table is not None:
+                for key in data_table[i]:
+                    row[key] = data_table[i][key]
+
+            # Add radius to this ring
+            row[hazard_zone_attribute] = radius
+
+            new_data_table.append(row)
+
+    circular_polygon = Vector(
+        geometry=circles,  # List with circular polygons
+        data=new_data_table,  # Associated attributes
+        geometry_type='polygon')
+
+    return circular_polygon
