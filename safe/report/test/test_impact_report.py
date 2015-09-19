@@ -122,7 +122,7 @@ class ImpactReportTest(unittest.TestCase):
                 'organisation-logo').pictureFile()
         else:
             safe_logo = report.composition.getComposerItemById(
-                'inasafe-logo').picturePath()
+                'white-inasafe-logo').picturePath()
             north_arrow = report.composition.getComposerItemById(
                 'north-arrow').picturePath()
             org_logo = report.composition.getComposerItemById(
