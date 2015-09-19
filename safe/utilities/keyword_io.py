@@ -227,7 +227,7 @@ class KeywordIO(QObject):
         if extra_keywords is None:
             extra_keywords = {}
         message = self.tr(
-            'Expected extraKeywords to be a dictionary. Got '
+            'Expected extra keywords to be a dictionary. Got '
             '%s' % str(type(extra_keywords))[1:-1])
         verify(isinstance(extra_keywords, dict), message)
         # compute the output keywords file name
