@@ -1221,11 +1221,8 @@ class WizardDialogTest(unittest.TestCase):
 
         self.check_current_step(step_kw_classification, dialog)
 
-<<<<<<< HEAD
-        expected_values = ['Flood classes','Generic classes']
-=======
         expected_values = ['Flood classes', 'Generic classes']
->>>>>>> upstream/develop
+
         self.check_list(expected_values, dialog.lstClassifications)
         self.select_from_list_widget('Flood classes',
                                      dialog.lstClassifications)
