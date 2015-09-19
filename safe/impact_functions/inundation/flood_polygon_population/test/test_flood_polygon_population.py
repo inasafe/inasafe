@@ -26,6 +26,7 @@ from safe.impact_functions.impact_function_manager \
 from safe.test.utilities import get_qgis_app, test_data_path
 from safe.impact_functions.inundation.flood_polygon_population\
     .impact_function import FloodEvacuationVectorHazardFunction
+from safe.storage.safe_layer import SafeLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -47,10 +48,9 @@ class TestFloodEvacuationVectorHazardFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
-        function.parameters['affected_field'] = 'FLOODPRONE'
-        function.parameters['affected_value'] = 'YES'
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
+
         function.run()
         impact = function.impact
 
@@ -65,16 +65,20 @@ class TestFloodEvacuationVectorHazardFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'wetdry',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'flood',
+            'hazard_category': 'single_event',
+            'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

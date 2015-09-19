@@ -32,6 +32,7 @@ from safe_extras.parameters.parameter_exceptions import (
     InvalidMaximumError,
     ValueOutOfBounds)
 
+
 class TestNeedsProfile(NeedsProfile):
     """Since we don't want to change the actual minimum needs settings in
     QSettings, we are using a mock profile.
@@ -146,8 +147,9 @@ class MinimumNeedsTest(unittest.TestCase):
             '"Units": "kgs",'
             '"Unit abbreviation": "kg",'
             '"Resource description": "Rice as a staple food",'
-            '"Readable sentence": "Test sentance"'
-            '}]}')
+            '"Readable sentence": "Test sentence"'
+            '}],'
+            '"provenance": "Test provenance"}')
         profile.minimum_needs = json.loads(json_string)
         profile.get_needs_parameters()
 

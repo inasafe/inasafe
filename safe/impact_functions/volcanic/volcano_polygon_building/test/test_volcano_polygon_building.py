@@ -19,8 +19,11 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
     import VolcanoPolygonBuildingFunction
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
@@ -40,8 +43,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         exposure_layer = read_layer(building_path)
 
         impact_function = VolcanoPolygonBuildingFunction.instance()
-        impact_function.hazard = hazard_layer
-        impact_function.exposure = exposure_layer
+        impact_function.hazard = SafeLayer(hazard_layer)
+        impact_function.exposure = SafeLayer(exposure_layer)
         impact_function.run()
         impact_layer = impact_function.impact
 
@@ -53,7 +56,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         self.assertEqual(expected_question, impact_function.question, message)
 
         # The buildings should all be categorised into 5000 zone
-        zone_sum = impact_layer.get_data(attribute='zone')
+        zone_sum = impact_layer.get_data(
+            attribute=impact_function.target_field)
         krb3_zone_count = zone_sum.count('Kawasan Rawan Bencana III')
         krb2_zone_count = zone_sum.count('Kawasan Rawan Bencana II')
         # The result (counted by hand)
@@ -70,17 +74,19 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         """TestVolcanoPolygonBuildingFunction: Test filtering IF"""
         hazard_keywords = {
             'title': 'merapi',
-            'category': 'hazard',
-            'subcategory': 'volcano',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'volcano',
+            'hazard_category': 'multiple_event',
+            'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'structure',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

@@ -11,18 +11,19 @@ import unittest
 import os
 import logging
 
-from qgis.core import (
-    QgsMapLayerRegistry,
-    QgsRectangle)
+LOGGER = logging.getLogger('InaSAFE')
 
 from safe.common.utilities import temp_dir, unique_filename
 from safe.utilities.resources import resources_path
 from safe.test.utilities import load_layer, get_qgis_app, test_data_path
-from safe.utilities.gis import qgis_version
 from safe.report.impact_report import ImpactReport
+from safe.utilities.gis import qgis_version
+
+from qgis.core import (
+    QgsMapLayerRegistry,
+    QgsRectangle)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-LOGGER = logging.getLogger('InaSAFE')
 
 
 class ImpactReportTest(unittest.TestCase):
@@ -41,7 +42,7 @@ class ImpactReportTest(unittest.TestCase):
         layer, _ = load_layer(impact_layer_path)
 
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'blue-portrait-a4.qpt')
         report = ImpactReport(IFACE, template, layer)
         title = report.map_title
         expected_title = 'People affected by flood prone areas'
@@ -54,7 +55,7 @@ class ImpactReportTest(unittest.TestCase):
         layer_path = test_data_path('hazard', 'tsunami_wgs84.tif')
         layer, _ = load_layer(layer_path)
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'blue-portrait-a4.qpt')
         report = ImpactReport(IFACE, template, layer)
         title = report.map_title
         expected_title = None
@@ -68,7 +69,7 @@ class ImpactReportTest(unittest.TestCase):
         layer, _ = load_layer(impact_layer_path)
 
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'blue-portrait-a4.qpt')
         report = ImpactReport(IFACE, template, layer)
         # There are missing elements in the template
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
@@ -86,7 +87,7 @@ class ImpactReportTest(unittest.TestCase):
         impact_layer_path = test_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
-        # noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences,PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(layer)
         # noinspection PyCallingNonCallable
         rect = QgsRectangle(106.8194, -6.2108, 106.8201, -6.1964)
@@ -94,7 +95,7 @@ class ImpactReportTest(unittest.TestCase):
         CANVAS.refresh()
 
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'blue-portrait-a4.qpt')
         report = ImpactReport(IFACE, template, layer)
         out_path = unique_filename(
             prefix='map_default_template_test',
@@ -114,26 +115,28 @@ class ImpactReportTest(unittest.TestCase):
         # Check the components in composition are default components
         if qgis_version() < 20500:
             safe_logo = report.composition.getComposerItemById(
-                'safe-logo').pictureFile()
+                'inasafe-logo').pictureFile()
             north_arrow = report.composition.getComposerItemById(
                 'north-arrow').pictureFile()
             org_logo = report.composition.getComposerItemById(
                 'organisation-logo').pictureFile()
         else:
             safe_logo = report.composition.getComposerItemById(
-                'safe-logo').picturePath()
+                'white-inasafe-logo').picturePath()
             north_arrow = report.composition.getComposerItemById(
                 'north-arrow').picturePath()
             org_logo = report.composition.getComposerItemById(
                 'organisation-logo').picturePath()
 
         expected_safe_logo = resources_path(
-            'img', 'logos', 'inasafe-logo-url.svg')
+            'img', 'logos', 'inasafe-logo-url-white.svg')
         expected_north_arrow = resources_path(
             'img', 'north_arrows', 'simple_north_arrow.png')
         expected_org_logo = resources_path('img', 'logos', 'supporters.png')
 
-        message = 'The safe logo path is not the default one'
+        message = (
+            'The safe logo path is not the default one: %s isn\'t %s') % (
+            expected_safe_logo, safe_logo)
         self.assertEqual(expected_safe_logo, safe_logo, message)
 
         message = 'The north arrow path is not the default one'
@@ -148,7 +151,7 @@ class ImpactReportTest(unittest.TestCase):
         impact_layer_path = test_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
-        # noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences,PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(layer)
         # noinspection PyCallingNonCallable
         rect = QgsRectangle(106.8194, -6.2108, 106.8201, -6.1964)
@@ -156,11 +159,11 @@ class ImpactReportTest(unittest.TestCase):
         CANVAS.refresh()
 
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'blue-portrait-a4.qpt')
         report = ImpactReport(IFACE, template, layer)
 
         # Set custom logo
-        custom_logo_path = resources_path('img', 'logos', 'logo-flower.png')
+        custom_logo_path = resources_path('img', 'logos', 'supporters.png')
         report.organisation_logo = custom_logo_path
 
         out_path = unique_filename(
@@ -188,12 +191,12 @@ class ImpactReportTest(unittest.TestCase):
         message = 'The custom logo path is not set correctly'
         self.assertEqual(custom_logo_path, custom_img_path, message)
 
-    def test_print_impact_table(self):
+    def Xtest_print_impact_table(self):
         """Test print impact table to pdf."""
         impact_layer_path = test_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
-        # noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences,PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(layer)
         # noinspection PyCallingNonCallable
         rect = QgsRectangle(106.8194, -6.2108, 106.8201, -6.1964)
@@ -201,7 +204,7 @@ class ImpactReportTest(unittest.TestCase):
         CANVAS.refresh()
 
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'blue-portrait-a4.qpt')
         report = ImpactReport(IFACE, template, layer)
         report.template = template  # just to cover set template
         out_path = unique_filename(
@@ -219,7 +222,10 @@ class ImpactReportTest(unittest.TestCase):
         out_size = os.stat(out_path).st_size
         self.assertTrue(out_size > 0, message)
 
+    # This a dirty hack to exclude from Travis test.
+    Xtest_print_impact_table.slow = True
+
 if __name__ == '__main__':
-    suite = unittest.makeSuite(ImpactReport, 'test')
+    suite = unittest.makeSuite(ImpactReport)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)

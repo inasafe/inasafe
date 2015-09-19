@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **Cell.**
 
@@ -28,14 +29,8 @@ class Cell(MessageElement):
     def __init__(self, *args, **kwargs):
         """Creates a cell object
 
-        Args:
-            text can be Text object or string
+        :param: Text can be Text object or string
 
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
 
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
@@ -45,33 +40,44 @@ class Cell(MessageElement):
         """
         super(Cell, self).__init__(**kwargs)
 
-        self.text = Text(*args)
+        # Special case for when we want to put a nested table in a cell
+        # We dont use isinstance because of recursive imports with table
+        class_name = args[0].__class__.__name__
+        if class_name in ['BulletedList', 'Table']:
+            self.content = args[0]
+        else:
+            self.content = Text(*args)
 
     def to_html(self):
         """Render a Cell MessageElement as html
 
-        Args:
-            None
-
-        Returns:
-            Str the html representation of the Cell MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: The html representation of the Cell MessageElement
+        :rtype: basestring
         """
         return '<td%s>%s</td>\n' % (
-            self.html_attributes(), self.text.to_html())
+            self.html_attributes(), self.content.to_html())
 
     def to_text(self):
         """Render a Cell MessageElement as plain text
 
-        Args:
-            None
+        :returns: The plain text representation of the Cell MessageElement.
+        :rtype: basestring
 
-        Returns:
-            Str the plain text representation of the Cell MessageElement
-
-        Raises:
-            Errors are propagated
         """
-        return '%s' % self.text
+        return '%s' % self.content
+
+    def to_markdown(self):
+        """Render a MessageElement queue as markdown
+
+        :returns: Markdown representation of the Text MessageElement.
+        :rtype: str
+        """
+        raise NotImplementedError('Please Implement this method')
+
+    def to_json(self):
+        """Render a MessageElement queue as JSON
+
+        :returns: Json representation of the Text MessageElement.
+        :rtype: str
+        """
+        raise NotImplementedError('Please Implement this method')

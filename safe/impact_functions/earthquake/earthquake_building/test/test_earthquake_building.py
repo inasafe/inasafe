@@ -21,6 +21,7 @@ from safe.impact_functions.earthquake.earthquake_building.impact_function \
     import EarthquakeBuildingFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestEarthquakeBuildingFunction(unittest.TestCase):
@@ -34,20 +35,19 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
     def test_run(self):
         """TestEarthquakeBuildingFunction: Test running the IF."""
         eq_path = test_data_path('hazard', 'earthquake.tif')
-        building_path = test_data_path(
-            'exposure', 'buildings.shp')
+        building_path = test_data_path('exposure', 'buildings.shp')
 
         eq_layer = read_layer(eq_path)
         building_layer = read_layer(building_path)
 
         impact_function = EarthquakeBuildingFunction.instance()
-        impact_function.hazard = eq_layer
-        impact_function.exposure = building_layer
+        impact_function.hazard = SafeLayer(eq_layer)
+        impact_function.exposure = SafeLayer(building_layer)
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of earthquake how many '
-                             'buildings might be affected')
+        expected_question = (
+            'In the event of earthquake how many buildings might be affected')
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
@@ -66,7 +66,7 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         impact_features = impact_layer.get_data()
         for i in range(len(impact_features)):
             impact_feature = impact_features[i]
-            level = impact_feature.get('Shake_cls')
+            level = impact_feature.get(impact_function.target_field)
             result[level] += 1
 
         message = 'Expecting %s, but it returns %s' % (impact, result)
@@ -75,19 +75,21 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """TestEarthquakeBuildingFunction: Test filtering IF"""
         hazard_keywords = {
-            'category': 'hazard',
-            'subcategory': 'earthquake',
-            'layer_type': 'raster',
-            'data_type': 'continuous',
-            'unit': 'mmi'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'hazard': 'earthquake',
+            'hazard_category': 'single_event',
+            'continuous_hazard_unit': 'mmi'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'structure',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'point',
+            'exposure': 'structure'
         }
+
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \

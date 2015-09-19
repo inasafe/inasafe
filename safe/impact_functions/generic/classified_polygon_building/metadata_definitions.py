@@ -13,15 +13,16 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.definitions import (
-    hazard_definition,
+    layer_mode_classified,
+    layer_geometry_polygon,
+    layer_geometry_point,
     hazard_all,
-    unit_classified,
-    layer_vector_point,
-    layer_vector_polygon,
-    exposure_definition,
+    hazard_category_multiple_event,
     exposure_structure,
-    unit_building_type_type,
-    unit_building_generic)
+    generic_vector_hazard_classes,
+    hazard_category_single_event,
+    structure_class_field
+)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -52,7 +53,7 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
             'name': tr('Classified polygon hazard on buildings'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
-            'function_type': 'old-style',
+            'function_type': 'qgis2.0',
             'author': 'Akbar Gumbira (akbargumbira@gmail.com)',
             'date_implemented': '17/04/2015',
             'overview': tr(
@@ -73,27 +74,34 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'each hazard zone.'),
             'limitations': [],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': hazard_all,
-                    'units': [unit_classified],
-                    'layer_constraints': [layer_vector_polygon]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_polygon],
+                    'hazard_categories': [
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
+                    ],
+                    'hazard_types': hazard_all,
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': [
+                        generic_vector_hazard_classes],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [
-                        unit_building_type_type,
-                        unit_building_generic],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [
+                        layer_geometry_point,
+                        layer_geometry_polygon
+                    ],
+                    'exposure_types': [exposure_structure],
+                    'exposure_units': [],
+                    'exposure_class_fields': [structure_class_field],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', 'KRB'),
                 ('postprocessors', OrderedDict([(
                     'BuildingType',
                     building_type_postprocessor())]))

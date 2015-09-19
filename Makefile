@@ -110,8 +110,16 @@ qgis2test: clean pep8 pylint dependency_test unwanted_strings run_data_audit tes
 
 quicktest: pep8 pylint dependency_test unwanted_strings run_data_audit test-translations test_suite_quick
 
+# you can pass an argument called PACKAGE to run only tests in that package
+# usage: make test_suite_quick PACKAGE=common
 test_suite_quick:
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe --with-id
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe/${PACKAGE} --with-id
+
+# Similar with test_suite_quick, but for all tests.
+# you can pass an argument called PACKAGE to run only tests in that package
+# usage: make test_suite_all PACKAGE=common
+test_suite_all:
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v safe/${PACKAGE} --with-id
 
 # Run pep8 style checking
 #http://pypi.python.org/pypi/pep8
@@ -173,7 +181,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh 031389d381dc774d25fdb3fa47e5920a384cd53f 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh f29505f728ff31dcefa58c048138ea298bb9f332 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
@@ -392,3 +400,17 @@ jenkins-realtime-test:
 	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
 	nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime || :
+
+apidocs:
+	@echo
+	@echo "---------------------------------------------------------------"
+	@echo ""Generating API doc for InaSAFE
+	@echo "---------------------------------------------------------------"
+	@echo "Please make sure you have cloned inasafe-doc repository"
+	@echo "Generating RST files for apidoc..."
+	@sphinx-apidoc -f -e -o docs/apidocs safe realtime
+	@echo "RST files for apidocs has been created."
+	@echo "Building HTML API docs..."
+	@cd docs && $(MAKE) html
+	@echo "HTML API docs has been builded."
+	@echo "You can look it under docs/_build directory.."

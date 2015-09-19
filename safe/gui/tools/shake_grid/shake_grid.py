@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 Initially this was adapted from shake_event.py and now realtime uses this.
 """
+
 __author__ = 'ismail@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '11/02/2013'
@@ -21,9 +22,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import sys
 import shutil
-from xml.dom import minidom
-from subprocess import call, CalledProcessError
 import logging
+import codecs
+from xml.dom import minidom
+from datetime import datetime
+from pytz import timezone
+from subprocess import call, CalledProcessError
 
 from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
@@ -161,6 +165,24 @@ class ShakeGrid(object):
         self.minute = int(time_tokens[1])
         self.second = int(time_tokens[2])
 
+        # right now only handles Indonesian Timezones
+        tz_dict = {
+            'WIB': timezone('Asia/Jakarta'),
+            'WITA': timezone('Asia/Makassar'),
+            'WIT': timezone('Asia/Jayapura')
+        }
+        tzinfo = tz_dict.get(self.time_zone)
+        self.time = datetime(
+            self.year,
+            self.month,
+            self.day,
+            self.hour,
+            self.minute,
+            self.second,
+            # For now realtime always uses Indonesia Time
+            tzinfo=tzinfo
+        )
+
     def parse_grid_xml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
 
@@ -228,10 +250,10 @@ class ShakeGrid(object):
             # Get the date - it's going to look something like this:
             # 2012-08-07T01:55:12WIB
             time_stamp = event_element.attributes['event_timestamp'].nodeValue
-            self.extract_date_time(time_stamp)
             # Note the timezone here is inconsistent with YZ from grid.xml
             # use the latter
-            self.time_zone = time_stamp[-3:]
+            self.time_zone = time_stamp[19:]
+            self.extract_date_time(time_stamp)
 
             specification_element = document.getElementsByTagName(
                 'grid_specification')
@@ -382,9 +404,9 @@ class ShakeGrid(object):
             '                      x="lon" y="lat" z="mmi"/>'
             '  </OGRVRTLayer>'
             '</OGRVRTDataSource>' % csv_path)
-        vrt_file = file(vrt_path, 'w')
-        vrt_file.write(vrt_string)
-        vrt_file.close()
+
+        with codecs.open(vrt_path, 'w', encoding='utf-8') as f:
+            f.write(vrt_string)
 
         return vrt_path
 

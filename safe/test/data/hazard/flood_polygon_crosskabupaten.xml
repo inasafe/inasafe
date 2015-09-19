@@ -172,12 +172,15 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[category: hazard
-subcategory: flood
+<![CDATA[field: FLOODPRONE
+hazard: flood
+hazard_category: single_event
+keyword_version: 3.2
+layer_mode: classified
+layer_purpose: hazard
 title: Flood Polygon Cross Kabupaten
-field: FLOODPRONE
 value_map: {'dry': ['NO'], 'wet': ['YES']}
-unit: wetdry
+vector_hazard_classification: flood_vector_hazard_classes
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

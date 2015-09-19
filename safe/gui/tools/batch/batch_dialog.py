@@ -496,7 +496,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # Usually after analysis is done, the impact layer
                 # become the active layer. <--- WRONG
                 # noinspection PyUnresolvedReferences
-                impact_layer = self.dock.analysis.get_impact_layer()
+                impact_layer = self.dock.analysis.impact_layer
 
                 # Load impact layer into QGIS
                 qgis_layer = read_impact_layer(impact_layer)
@@ -583,7 +583,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         """
         # FIXME: check if impact_layer is the real impact layer...
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'blue-portrait-a4.qpt')
         impact_report = ImpactReport(self.iface, template, impact_layer)
 
         LOGGER.debug('Create Report: %s' % title)

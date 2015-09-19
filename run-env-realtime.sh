@@ -23,6 +23,17 @@ export PATH=${QGIS_PREFIX_PATH}/bin:$PATH
 
 export INASAFE_WORK_DIR=/home/realtime
 export INASAFE_LOCALE=id
+# if the parameter is set in production mode, do not overwrite the variable
+# if it is not, we can put test variable here
+if [ -z "$INASAFE_REALTIME_REST_URL" ];
+then
+# allow overrides using native environment
+    export INASAFE_REALTIME_REST_URL=http://realtime-test:8000/realtime/api/v1/
+    export INASAFE_REALTIME_SHAKEMAP_HOOK_URL="$INASAFE_REALTIME_REST_URL"indicator/notify_shakemap_push
+    export INASAFE_REALTIME_REST_USER=test@realtime.inasafe.org
+    export INASAFE_REALTIME_REST_PASSWORD=t3st4ccount
+    export INASAFE_REALTIME_REST_LOGIN_URL=http://realtime-test:8000/realtime/api-auth/login/
+fi
 
 # The following line enables remote logging to sentry and may reveal
 # IP address / host name / file system paths (which could include your user

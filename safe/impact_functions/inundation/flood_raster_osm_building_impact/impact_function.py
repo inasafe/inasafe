@@ -10,27 +10,29 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'lucernae'
 
 import logging
 from collections import OrderedDict
 
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.inundation\
     .flood_raster_osm_building_impact.metadata_definitions import \
     FloodRasterBuildingMetadata
+from safe.impact_functions.bases.continuous_rh_classified_ve import \
+    ContinuousRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.common.utilities import get_osm_building_usage, verify
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-
-
+from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
+class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
+                                  BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Inundation raster impact on building data."""
     _metadata = FloodRasterBuildingMetadata()
@@ -38,7 +40,6 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
     def __init__(self):
         """Constructor (calls ctor of base class)."""
         super(FloodRasterBuildingFunction, self).__init__()
-        self.target_field = 'INUNDATED'
 
     def notes(self):
         """Return the notes section of the report.
@@ -46,7 +47,7 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        threshold = self.parameters['threshold [m]']
+        threshold = self.parameters['threshold'].value
         return [
             {
                 'content': tr('Notes'),
@@ -86,37 +87,36 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         """
         return [tr('Number Inundated'), tr('Number of Wet Buildings')]
 
-    def run(self, layers=None):
-        """Flood impact to buildings (e.g. from Open Street Map).
-
-         :param layers: List of layers expected to contain.
-                * hazard_layer: Hazard raster layer of flood
-                * exposure_layer: Vector layer of structure data on
-                the same grid as hazard_layer
-        """
+    def run(self):
+        """Flood impact to buildings (e.g. from Open Street Map)."""
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
-        threshold = self.parameters['threshold [m]']  # Flood threshold [m]
+        threshold = self.parameters['threshold'].value  # Flood threshold [m]
 
         verify(isinstance(threshold, float),
                'Expected thresholds to be a float. Got %s' % str(threshold))
-
-        # Extract data
-        hazard_layer = self.hazard  # Depth
-        exposure_layer = self.exposure  # Building locations
 
         # Determine attribute name for hazard levels
         hazard_attribute = 'depth'
 
         # Interpolate hazard level to building locations
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name=hazard_attribute)
+            self.hazard.layer,
+            self.exposure.layer,
+            attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
         features = interpolated_layer.get_data()
         total_features = len(interpolated_layer)
+
+        # but use the old get_osm_building_usage
+        try:
+            structure_class_field = self.exposure.keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            structure_class_field = None
 
         # Building breakdown
         self.buildings = {}
@@ -137,7 +137,13 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 inundated_status = 2  # wet
 
             # Count affected buildings by usage type if available
-            usage = get_osm_building_usage(attribute_names, features[i])
+            if (structure_class_field in attribute_names and
+                    structure_class_field):
+                usage = features[i].get(structure_class_field, None)
+            else:
+                usage = get_osm_building_usage(
+                    attribute_names, features[i])
+
             if usage is None or usage == 0:
                 usage = 'unknown'
 
@@ -153,8 +159,8 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
             features[i][self.target_field] = inundated_status
             category = [
                 tr('Number of Dry Buildings'),
-                tr('Number of Wet Buildings'),
-                tr('Number Inundated')][inundated_status]
+                tr('Number Inundated'),
+                tr('Number of Wet Buildings')][inundated_status]
             self.affected_buildings[category][usage][
                 tr('Buildings Affected')] += 1
 
@@ -163,9 +169,10 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
         # Generate simple impact report
         impact_table = impact_summary = self.generate_html_report()
 
-        # Prepare impact layer
+        # For printing map purpose
         map_title = tr('Buildings inundated')
         legend_title = tr('Structure inundated status')
+        legend_units = tr('(inundated, wet, or dry)')
 
         style_classes = [
             dict(
@@ -189,13 +196,11 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 transparency=0,
                 size=1
             )]
-        legend_units = tr('(inundated, wet, or dry)')
 
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        # Create vector layer and return
         vector_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
@@ -206,10 +211,11 @@ class FloodRasterBuildingFunction(ImpactFunction, BuildingExposureReportMixin):
                 'impact_table': impact_table,
                 'target_field': self.target_field,
                 'map_title': map_title,
-                'legend_units': legend_units,
                 'legend_title': legend_title,
+                'legend_units': legend_units,
                 'buildings_total': total_features,
                 'buildings_affected': self.total_affected_buildings},
             style_info=style_info)
+        # Create vector layer and return
         self._impact = vector_layer
         return vector_layer

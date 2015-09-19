@@ -26,6 +26,7 @@ from safe.impact_functions.inundation.flood_raster_population.impact_function\
     import FloodEvacuationRasterHazardFunction
 from safe.test.utilities import get_qgis_app, test_data_path
 from safe.common.utilities import OrderedDict
+from safe.storage.safe_layer import SafeLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -47,8 +48,9 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.parameters['thresholds'].value = [0.5, 0.7, 1.0]
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact = function.impact
 
@@ -77,16 +79,20 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'metres_depth',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'hazard': 'flood',
+            'hazard_category': 'single_event',
+            'continuous_hazard_unit': 'metres'
         }
 
         exposure_keywords = {
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

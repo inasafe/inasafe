@@ -171,11 +171,13 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[category: exposure
-subcategory: population
-data_type: continuous
+<![CDATA[exposure: population
+exposure_unit: count
+keyword_version: 3.2
+layer_geometry: raster
+layer_mode: continuous
+layer_purpose: exposure
 title: Population
-unit: people_per_pixel
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>
