@@ -13,7 +13,7 @@ name=InaSAFE-Dev
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
-about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and World Bank - GFDRR
+about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
 version=3.2.0
 # alpha, beta, rc or final
@@ -53,5 +53,5 @@ experimental=False
 deprecated=False
 
 # Author contact information
-author=Indonesian Government - BNPB, Australian Government - AIFDR and World Bank - GFDRR
+author=Indonesian Government - BNPB, Australian Government and World Bank - GFDRR
 email=info@inasafe.org
