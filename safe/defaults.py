@@ -412,13 +412,24 @@ def disclaimer():
         'outputs from InaSAFE or decisions derived as a consequence.')
     return text
 
-def inasafe_logo_path():
-    """Get the path to the InaSAFE SVG logo.
+
+def black_inasafe_logo_path():
+    """Get the path to the Black InaSAFE SVG logo.
 
     .. versionadded:: 3.2
     """
     path = resources_path('img', 'logos', 'inasafe-logo-url.svg')
     return path
+
+
+def white_inasafe_logo_path():
+    """Get the path to the White InaSAFE SVG logo.
+
+    .. versionadded:: 3.2
+    """
+    path = resources_path('img', 'logos', 'inasafe-logo-url-white.svg')
+    return path
+
 
 def supporters_logo_path():
     """Get the supporters logo path.

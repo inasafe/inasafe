@@ -51,7 +51,8 @@ from safe.utilities.utilities import impact_attribution, html_to_file
 from safe.utilities.resources import html_footer, html_header, resource_url
 from safe.utilities.i18n import tr
 from safe.defaults import (
-    inasafe_logo_path,
+    white_inasafe_logo_path,
+    black_inasafe_logo_path,
     supporters_logo_path,
     default_north_arrow_path)
 from safe.report.template_composition import TemplateComposition
@@ -81,7 +82,8 @@ class ImpactReport(object):
         self._layer = layer
         self._extent = self._iface.mapCanvas().extent()
         self._page_dpi = 300.0
-        self._inasafe_logo = inasafe_logo_path()
+        self._black_inasafe_logo = black_inasafe_logo_path()
+        self._white_inasafe_logo = white_inasafe_logo_path()
         # User can change this path in preferences
         self._organisation_logo = supporters_logo_path()
         self._supporters_logo = supporters_logo_path()
@@ -116,7 +118,7 @@ class ImpactReport(object):
             self._template = template
         else:
             self._template = resources_path(
-                'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+                'qgis-composer-templates', 'blue-portrait-a4.qpt')
 
         # Also recreate template composition
         self._template_composition = TemplateComposition(
@@ -197,7 +199,7 @@ class ImpactReport(object):
 
         .. versionchanged:: 3.2 - this property is now read only.
         """
-        return self._inasafe_logo
+        return self._black_inasafe_logo
 
     @property
     def organisation_logo(self):
@@ -371,11 +373,16 @@ class ImpactReport(object):
 
     def draw_composition(self):
         """Draw all the components in the composition."""
-        # This is deprecated - use inasafe-logo rather
-        safe_logo = self.composition.getComposerItemById('safe-logo')
-        # Replaces safe logo in 3.2
-        inasafe_logo = self.composition.getComposerItemById('inasafe-logo')
-        north_arrow = self.composition.getComposerItemById('north-arrow')
+        # This is deprecated - use inasafe-logo-<colour> rather
+        safe_logo = self.composition.getComposerItemById(
+            'safe-logo')
+        # Next two options replace safe logo in 3.2
+        black_inasafe_logo = self.composition.getComposerItemById(
+            'black-inasafe-logo')
+        white_inasafe_logo = self.composition.getComposerItemById(
+            'white-inasafe-logo')
+        north_arrow = self.composition.getComposerItemById(
+            'north-arrow')
         organisation_logo = self.composition.getComposerItemById(
             'organisation-logo')
         supporters_logo = self.composition.getComposerItemById(
@@ -383,10 +390,12 @@ class ImpactReport(object):
 
         if qgis_version() < 20600:
             if safe_logo is not None:
-                # its deprecated so just use inasafe_logo
+                # its deprecated so just use black_inasafe_logo
                 safe_logo.setPictureFile(self.inasafe_logo)
-            if inasafe_logo is not None:
-                inasafe_logo.setPictureFile(self.inasafe_logo)
+            if black_inasafe_logo is not None:
+                black_inasafe_logo.setPictureFile(self._black_inasafe_logo)
+            if white_inasafe_logo is not None:
+                white_inasafe_logo.setPictureFile(self._white_inasafe_logo)
             if north_arrow is not None:
                 north_arrow.setPictureFile(self.north_arrow)
             if organisation_logo is not None:
@@ -395,10 +404,12 @@ class ImpactReport(object):
                 supporters_logo.setPictureFile(self.supporters_logo)
         else:
             if safe_logo is not None:
-                # its deprecated so just use inasafe_logo
+                # its deprecated so just use black_inasafe_logo
                 safe_logo.setPicturePath(self.inasafe_logo)
-            if inasafe_logo is not None:
-                inasafe_logo.setPicturePath(self.inasafe_logo)
+            if black_inasafe_logo is not None:
+                black_inasafe_logo.setPicturePath(self._black_inasafe_logo)
+            if white_inasafe_logo is not None:
+                white_inasafe_logo.setPicturePath(self._white_inasafe_logo)
             if north_arrow is not None:
                 north_arrow.setPicturePath(self.north_arrow)
             if organisation_logo is not None:
@@ -560,7 +571,7 @@ class ImpactReport(object):
         # shown on screen (see FloodOsmBuilding)
         # Unless the impact_summary is None, we will use impact_table as the
         # alternative
-        html = LOGO_ELEMENT.to_html()
+        html = m.Brand().to_html()
         html += m.Heading(tr('Analysis Results'), **INFO_STYLE).to_html()
         if summary_table is None:
             html += full_table

@@ -1,12 +1,125 @@
 Changelog for version 3.2.0
 ================================
 
-185a1e4 (HEAD, origin/3.2-release-prep, 3.2-release-prep) Fix for #2260 - inasafe package is too big
-26634c9 (upstream/develop, develop) Merge pull request #2337 from lucernae/fix_pylint
+40c5ad2 (HEAD, upstream/develop, develop, 3.2-release-prep) Merge pull request #2394 from lucernae/translation
+5d9cabb translation
+cfbeaff Merge pull request #2391 from ismailsunni/develop
+b597c15 Merge pull request #2386 from timlinux/inasafe-2265
+0b14adb Merge branch 'develop' of git://github.com/AIFDR/inasafe into develop
+635e327 All is translated.
+2570d94 Update strings.
+2f18f08 Update translation from transifex
+513e334 New string to be translated.
+4e941fb Composer template update for A3 Landscape - see #2265
+00ecadf Commit missing template changes for #2265 fixes
+1bcaa23 Merge pull request #2387 from ismailsunni/develop
+e61cf6c Merge branch 'develop' of git://github.com/AIFDR/inasafe into develop
+3d7d1b8 Merge pull request #2383 from ismailsunni/develop
+6c598a0 fix for #2265 - improve map layout and fix inconsistencies
+7b13a75 Fix typo.
+8983f5c Put new string inside tr().
+39b5474 PEP8.
+3a1fd6a Rename Null name field in aggregation layer to Unnamed Area [feature.id()]
+ccf512d Add handlers for Null in messaging item and abstract_list
+b513b65 Rename Null value for attribute's value in aggregation layer.
+2b0da22 (origin/develop, origin/HEAD) Merge pull request #2377 from timlinux/inasafe-2313
+fff2e8c Merge pull request #2379 from ismailsunni/apidocs_2
+06e9529 Merge pull request #2378 from timlinux/2210
+2e85e93 (origin/2210, 2210) Fix syntax error in aggregator.py
+e037939 (origin/inasafe-2313, inasafe-2313) Fix failing test in #2313 branch
+34145a7 Further enhancements for #2313 - improve keyword display. Added if branches for cases when we want to show values from definitions.py rather than keyword literal.
+d6bd562 Further improvements to keywords display in dock. See #2313
+8357391 Merge pull request #2375 from lucernae/realtime
+dd17599 fix #2210 - Use context based feedback during analysis to properly reflect what clipping behaviour is in place.
+4ba88f2 Merge pull request #2374 from timlinux/3.2-release-prep
+e96dcea fix #2342: change report message
+f3d2c8d Removed stray comment in keywords_io
+ea18d12 fix #2313 - Use sensible ordering for keywords in dock.
+eca7688 (inasafe-1212) Merge pull request #2371 from lucernae/realtime
+ae22d3d (origin/3.2-release-prep) Updated metadata for release
+f6e4f9e Fix potential bug with realtime extract process:
+b9758be Merge branch 'develop' of git://github.com/AIFDR/inasafe into apidocs_2
+33ad557 More explanation for make target.
+82d5254 Fix favicon path.
+a457496 Update directory again.
+476d781 Update conf.py and make target
+5937bbc Move to proper directory
+c4129d3 Merge pull request #2368 from timlinux/inasafe-2367
+c4d1a6e Update make target for apidocs
+f2d18db (origin/inasafe-2367, inasafe-2367) fix #2367 - regression caused by #2322
+c25bbca (inasafe-2357) Merge pull request #2364 from timlinux/inasafe-2322
+6a6ead5 Update directory for better separating.
+0b26209 Generated file from sphinx-quickstart
+b0d05a1 (origin/inasafe-2322, inasafe-2322) Fix docstring in add above layer method
+240e33e Use single line for method signature in add_above_layer as per @ismailsunni's PR review for #2364
+10ce427 Fixed failing test for add_above_layer method in dock
+b64b590 Remove old api-docs
+d58ef29 Add make target for apidocs
+1e1eccb In progress added tests for add_above_layer for #2322 - still failing though
+35a7846 fix #2322 - ensure impact and intermediate layers are added directly above exposure and aggregation layers respectively. I also made various other tweaks and optimisations to the related code paths in dock.
+cdfcacc Merge pull request #2363 from ismailsunni/develop
+63c8f41 Set legend title for generic and volcanic IFs
+cef2158 Set legend title for road IF.
+a135c14 Set legend title for population IF.
+b7d9247 Set legend title for flood building.
+e8c733f Merge pull request #2360 from cchristelis/bugfix/2318
+f594d63 Merge branch 'develop' of github.com:AIFDR/inasafe into bugfix/2318
+2a98cd6 Fixing removal of large numbers in postprocessors.
+687878a In progress implementation for #2322 - layer inserts but not showing in legend.
+8b3a63c Merge pull request #2358 from Samweli/develop
+1abf7fa Fix syntax errors for #2322
+8afe885 Merge remote-tracking branch 'upstream/develop' into inasafe-2322
+d6d0243 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+ce3f94b translated correctly the TZ minimum needs profile
+e9c502d In progress fix for #2322
+7740c52 Merge pull request #2356 from timlinux/parameters
+81d2d9c (origin/parameters) Second part of fix #2355 - make checkboxes to the left of checkbox labels
+4da2685 Part one of #2355 fix - make checkable group boxes formatting better and remove excess widget padding.
+b3188dc Merge pull request #2352 from tomchadwin/develop
+2be5e4f Travus: Move python-software-properties install from pip to addons
+bc3107f Travis: Install python-software-properties via pip
+d1f0be7 Travis: Avoid sudo for git install
+fbd9562 Merge pull request #2351 from timlinux/pep8
+4f23b5e Travis: Install packages via pip
+ce5e333 (origin/pep8) Fix pylint
+6c2672c Fix pep8 errors
+7d889134 Merge pull request #2348 from borysiasty/develop
+b225fef [Wizard] Fix main icon
+c4a8929 Merge pull request #2345 from cchristelis/bugfix/2318
+c529521 Merge pull request #2346 from borysiasty/develop
+e7a67c6 Merge branch 'develop' of github.com:borysiasty/inasafe into develop
+955e522 [IFCW] Fix the test
+98932ef [IFCW] Try to fix the test
+babe4b3 [IFCW] Embed the Extent Selector dialog in the wizard window.
+14068ed Merge pull request #2344 from timlinux/osm-url
+3cdfba0 [IFCW] Try to fix the test
+bddf894 [IFCW] Embed the Extent Selector dialog in the wizard window.
+0b46e81 (origin/osm-url) fix #2343 - Use InaSAFE uri for osm downloader
+916a23c Merge pull request #2336 from ismailsunni/develop
+1dce5a8 Compile translation.
+bf6159f New translation.
+f2a220a Translation file updates
+4a31cd9 Add proper punctuations.
+075c20f Fix merged conflict.
+c67b271 Merge pull request #2341 from lucernae/indicator
+cdc7311 fix pep8 & pylint
+c040624 Merge branch 'develop' of github.com:AIFDR/inasafe into indicator
+236f393 fix #2340: correct bug to clearly get the relevant shake id
+b1d4812 Merge pull request #2339 from timlinux/3.2-release-prep
+f7c31ad Updated changelog for release
+185a1e4 Fix for #2260 - inasafe package is too big
+26634c9 Merge pull request #2337 from lucernae/fix_pylint
 d11b1f7 Merge pull request #2338 from timlinux/develop
-d231495 (origin/develop, origin/HEAD) Fixes for broken wizard tests in PR #2333 in  Charlottes branch
+0b6c86f fix timezone issues and bug in getting the last shake map
+d231495 Fixes for broken wizard tests in PR #2333 in  Charlottes branch
 8b33087 Merge remote-tracking branch 'upstream/develop' into develop
 0c92063 fix_pylint: with some tentative modificatin
+fae4fa1 (ismail/develop, inasafe-2336) Compile translation.
+645b449 Add Spanish in translation.
+da8f076 Translation file updates. All strings are translated.
+38f50bb Translation file updates
+395b4e6 Pull translation.
+5642ae8 PEP8
 75a6d5e Merge pull request #2330 from lucernae/indicator
 945ccc3 [Wizard] String update
 ebfaee4 Merge branch 'develop' of github.com:AIFDR/inasafe into indicator
@@ -20,7 +133,7 @@ ebfaee4 Merge branch 'develop' of github.com:AIFDR/inasafe into indicator
 a899285 Merge pull request #2295 from lucernae/fix_zero_impact_exception
 1c8ecc8 Merge pull request #2331 from timlinux/inasafe-2253
 2c3dc2c update user facing names in definitions.py - take 2
-d012926 fix #2253 0 remove scalebar from map template
+d012926 (origin/inasafe-2253) fix #2253 0 remove scalebar from map template
 009bf1b Merge pull request #2328 from timlinux/inasafe-2313
 fe7c355 Merge pull request #2324 from cchristelis/bugfix/2318
 c6b29ed Merge pull request #2315 from timlinux/develop
@@ -29,7 +142,10 @@ bdc682e Merge pull request #2326 from Charlotte-Morgan/develop
 a6f4354 Implementation for #2313 - let the keywords table keys be shown from definitions list rather. Also refactored the keywords table generation into keywords.io so that it can be re-used elsewhere...
 eb9034a fix bug in notify shakemap push
 ab6034d tweak wizard_dialogue.py replace "register" with "assign keywords"
+88a0d18 Fixing tests
 7ff29f6 add Realtime indicator features
+eb46929 Merge branch 'develop' of github.com:AIFDR/inasafe into bugfix/2318
+0c6a1be Hiding empty/'no data' columns
 fae9eb3 [IFCW] Better explanation why a chosen layer has unsuitable keywords/type
 7f87744 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_zero_impact_exception
 d93a3a6 Fix untranslatable strings
@@ -63,13 +179,13 @@ d27152c Merge pull request #2297 from Charlotte-Morgan/develop
 2f9b30a Merge pull request #2303 from ismailsunni/fix_2301
 8c3865c (ismail/fix_2301) Fix #2301
 9911625 Merge pull request #5 from timlinux/charlotte-develop
-1b637c1 Fix for unused argument error in wizard
+1b637c1 (origin/charlotte-develop) Fix for unused argument error in wizard
 54617e9 Merge pull request #2298 from timlinux/pycharm-in-readme
 82448e5 fix #2288 to gracefully handle cases where zero impact occurs for flood polygons on buildings.
 0b533ff fix #2221 - ensure override cursor is restored after an error occurs.
 120b605 Give polygon flood on roads IF a better name. Handle zero impact better in latter IF. In progress fixes for #2288
 83f31a8 Fix #2286 - Keyword wizard fails on to_text call
-e368524 Updated README to include thank you to pycharm
+e368524 (origin/pycharm-in-readme) Updated README to include thank you to pycharm
 51d4e0a tweak wizard_strings.py
 0cd7c62 tweak wizard_strings.py
 58d59f6 tweak wizard_strings.py
@@ -77,9 +193,9 @@ e368524 Updated README to include thank you to pycharm
 1dc7142 Merge branch 'develop' of github.com:AIFDR/inasafe into fix_zero_impact_exception
 845dd52 fix #2220: raise ZeroImpactException when no roads intersected
 4ce19d9 Merge pull request #2294 from timlinux/inasafe-2288
-c4cf2e3 fix #2288 to gracefully handle cases where zero impact occurs for flood polygons on buildings.
+c4cf2e3 (origin/inasafe-2288) fix #2288 to gracefully handle cases where zero impact occurs for flood polygons on buildings.
 40086c6 fix #2221 - ensure override cursor is restored after an error occurs.
-e429958 (origin/inasafe-2288, inasafe-2288) Merge remote-tracking branch 'upstream/develop' into inasafe-2288
+e429958 (inasafe-2288) Merge remote-tracking branch 'upstream/develop' into inasafe-2288
 365b67c Merge pull request #2287 from timlinux/inasafe-2286
 c7f0e41 Give polygon flood on roads IF a better name. Handle zero impact better in latter IF. In progress fixes for #2288
 894e706 tweak wizard_strings.py
@@ -111,7 +227,7 @@ a8ceaf0 PEP8
 29b9ca4 Merge pull request #2269 from timlinux/inasafe-2267
 bcc8784 Merge branch 'develop' of github.com:AIFDR/inasafe into bugfix/2228
 ce95020 Bugfix #2228: Population on vector flood fails to run.
-a031efd fix #2267 - too much padding at top of dock
+a031efd (origin/inasafe-2267) fix #2267 - too much padding at top of dock
 996b689 Merge pull request #2264 from cchristelis/bugfix/2258
 ea11479 address issue #2262
 11f4873 address issue #2262
@@ -120,19 +236,19 @@ bf2253c Bugfix 2258: Buildings should only be added once to total.
 37c162a bugfix for issues #2229 and #2233.
 b64240f Merge pull request #2255 from timlinux/inasafe-2242
 443e9a7 Merge pull request #2254 from timlinux/inasafe-2241
-d9083bd fix #2242 - squashed skippy in about box
+d9083bd (origin/inasafe-2242) fix #2242 - squashed skippy in about box
 f71212e Merge pull request #2251 from ismailsunni/set_all_hazard_categories
 5adb360 Merge pull request #2252 from cchristelis/bugfix/2240
 1db65e5 Fix icon size issue in dock for inasafe logo.
-e2ddf0e Merge pull request #2246 from timlinux/inasafe-2244
+e2ddf0e (origin/inasafe-2221) Merge pull request #2246 from timlinux/inasafe-2244
 7d46d93 Merge pull request #2248 from timlinux/inasafe-2245
 51fa3ee Added missing icons in #2241 fix
 b7df222 fix #2241 and added both blank and white variants of InaSAFE logo. Fixed logo and padding in wizard too.
 4087606 Merge pull request #2250 from timlinux/develop
-0640f4e Fixed corrupted about dialog
+0640f4e (origin/inasafe-2244) Fixed corrupted about dialog
 144ffea Merge pull request #2249 from cchristelis/bugfix/2222
-ce36a53 One more tweak for #2245
-111bbd0 (origin/inasafe-2245, inasafe-2245) fix #2245 - lets just use a sans serif font for now - font-face is not working well in dock under osx and windows. Also the fonts are quite large and I prefer not to bloat out the package size of the plugin installer if possible.
+ce36a53 (origin/inasafe-2245) One more tweak for #2245
+111bbd0 (inasafe-2245) fix #2245 - lets just use a sans serif font for now - font-face is not working well in dock under osx and windows. Also the fonts are quite large and I prefer not to bloat out the package size of the plugin installer if possible.
 7223736 (ismail/set_all_hazard_categories) PEP8.
 976fa61 Set organisation logo in dock to false by default (boomerang issue)
 52dcb99 Merge branch 'develop' of git://github.com/AIFDR/inasafe into set_all_hazard_categories
@@ -143,7 +259,7 @@ ce36a53 One more tweak for #2245
 d54abbf Fix #2153
 ec39191 Set all IF to multiple and single hazard.
 daea29a fix #2245 UI: new look is missing bold
-ba46882 (origin/inasafe-2244) Resolved merge conflicts with Charlottes disclaimer text
+ba46882 Resolved merge conflicts with Charlottes disclaimer text
 7cccdf9 Merge pull request #2243 from Charlotte-Morgan/develop
 84e1b6c Merge pull request #2234 from ismailsunni/fix_2153_flood_on_road
 16744f8 Added more padding around dialogs
@@ -188,7 +304,7 @@ afef20c Updated roads raster flood impact function to work with report mixin.
 3a10b0b Roads report mixin.
 75ac27e (origin/templates, templates) Added new templates from Iwan - see #1314
 14ed0cf (css) Resolved merge conflicts while applying Maria beautiful styling updates
-4c39324 (origin/inasafe-2221, inasafe-2221) Try to restore override cursor - see #2221
+4c39324 (inasafe-2221) Try to restore override cursor - see #2221
 831b712 In progress sizing tweaks for wizard - see #2207
 0985a1c Change test for smaller screen size on travis.
 8cd6bc4 Merge branch 'develop' of github.com:AIFDR/inasafe into feature/report_mixin
@@ -671,7 +787,7 @@ ac11d89 Merge branch 'develop' of github.com:AIFDR/inasafe into develop_if_optio
 dc6950b Update message error for easier debugging.
 79faf7d Merge pull request #2023 from Charlotte-Morgan/1975
 a3c9d50 Merge pull request #2027 from timlinux/pep8
-e98fd38 (origin/pep8, pep8) PEP8 fix for api builder
+e98fd38 (pep8) PEP8 fix for api builder
 ac989c2 unittest refactor
 7b466c7 Wohoo. Remove impact calculator thread class.
 6c3357c (rizky/develop_if_options_revisions, develop_if_options_revisions) Merge branch 'develop' of github.com:AIFDR/inasafe into develop_if_options_revisions
@@ -1081,6 +1197,7 @@ e2ddc65 Apply new metadata keywords to generic IFs.
 405a8b5 Write all new metadata keyword.
 e187ad4 (origin/api-docs) Added api docs scripts from docs repo
 34c3208 Merge remote-tracking branch 'aifdr/develop' into develop
+
 
 Changelog for version 3.1.0
 ================================
