@@ -20,6 +20,6 @@ git push upstream :refs/tags/version-${UNDER_VERSION}
 #git tag -s version-${UNDER_VERSION} -m "Version ${VERSION}"
 # Less preferred - unsigned version
 git tag version-${UNDER_VERSION} -m "Version ${VERSION}"
-git push --tags origin version-${UNDER_VERSION}
+git push --tags upstream version-${UNDER_VERSION}
 
-scripts/release ${VERSION}
+scripts/release.sh ${VERSION}
