@@ -46,8 +46,8 @@ from safe.common.utilities import temp_dir
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class)
 from safe.messaging import styles
-from safe import messaging as m
 from safe.utilities.resources import resources_path
+from safe.gui.tools.help.batch_help import batch_help
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -707,15 +707,8 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         string = header
 
-        heading = m.Heading(self.tr('Batch Runner'), **INFO_STYLE)
-        body = self.tr(
-            ''
-        )
+        message = batch_help()
 
-        message = m.Message()
-        message.add(m.Brand())
-        message.add(heading)
-        message.add(body)
         string += message.to_html()
         string += footer
 
