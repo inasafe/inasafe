@@ -1155,7 +1155,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure', 'Land Cover','Area']
+        expected_subcategories = [u'Structure', u'Land Cover', u'Area']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # Choosing structure
@@ -1412,7 +1412,9 @@ class WizardDialogTest(unittest.TestCase):
         # expected_exposures_count = 4
         expected_flood_structure_functions_count = 2
         #expected_flood_structure_functions_count = 4
-        expected_raster_polygon_functions_count = 2
+        expected_raster_polygon_functions_count = 0
+        #expected_raster_polygon_functions_count = 2
+
         expected_functions_count = 2
         chosen_if = 'FloodRasterBuildingFunction'
 
