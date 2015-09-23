@@ -121,7 +121,8 @@ class PopulationExposureReportMixin(ReportMixin):
             {
                 'content': [
                     tr('Population needing evacuation <sup>1</sup>'),
-                    '%s' % population_rounding(self.total_evacuated)],
+                    '%s' % format_int(
+                        population_rounding(self.total_evacuated))],
                 'header': True
             })]
         if len(self.impact_category_ordering):

@@ -90,12 +90,6 @@ class ClassifiedRasterHazardPopulationFunction(
             },
             {
                 'content': tr(
-                    'The layers contained `no data`. This missing data was '
-                    'carried through to the impact layer.'),
-                'condition': self.no_data_warning
-            },
-            {
-                'content': tr(
                     '`No data` values in the impact layer were treated as 0 '
                     'when counting the affected or total population.'),
                 'condition': self.no_data_warning
