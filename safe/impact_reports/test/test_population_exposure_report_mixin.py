@@ -120,7 +120,7 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
             },
             {
                 'content': [
-                    u'Needs that should be provided test frequency', u'Total'],
+                    u'Relief be provided test frequency', u'Total'],
                 'header': True
             },
             {'content': [u'test name 1 [u]', u'300']},

@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 
-from safe.common.tables import Table, TableRow
+import safe.messaging as m
 
 
 class ReportMixin(object):
@@ -74,7 +74,11 @@ class ReportMixin(object):
         :returns: Returns a tabulated version of the report
         :rtype: basestring
         """
-        tabulated_report = []
+        message = m.Message(style_class='container')
+        table = m.Table(
+            style_class='table table-condensed table-striped')
+        table.caption = None
+
         for row in report:
             row_template = {
                 'content': '',
@@ -93,7 +97,8 @@ class ReportMixin(object):
                         'Problem formatting arguments into content.'
                         'The element count of the arguments must equal '
                         'the element count of the content.')
-                    assert len(content) == len(arguments), message
+                    if len(content) != len(arguments):
+                        raise Exception(message)
                     # pylint: disable=bad-builtin
                     # pylint: disable=deprecated-lambda
                     content = map(lambda c, a: c % a, content, arguments)
@@ -103,14 +108,22 @@ class ReportMixin(object):
                     content = row_template['content'] % arguments
 
             if row_template['header']:
-                table_row = TableRow(content, header=True)
+                # Start a new table if we encounter a header
+                message.add(table)
+                table = m.Table(
+                    style_class='table table-condensed table-striped')
+                table_row = m.Row(content, header=True, align='center')
             else:
-                table_row = TableRow(content)
-            tabulated_report.append(table_row)
+                table_row = m.Row(content, align='right')
+            table.add(table_row)
 
-        html_tabulated_report = Table(tabulated_report).toNewlineFreeString()
-        return html_tabulated_report
+        message.add(table)
+        message = message.to_html(
+            suppress_newlines=True,
+            in_div_flag=True)
+        return message
 
     @property
     def blank_line(self):
+        """Blank line of content."""
         return {'content': ''}

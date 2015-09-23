@@ -15,7 +15,7 @@ from safe.impact_functions.inundation.flood_raster_population\
 from safe.impact_functions.bases.continuous_rh_continuous_re import \
     ContinuousRHContinuousRE
 from safe.utilities.i18n import tr
-from safe.common.tables import Table, TableRow
+from safe.impact_functions.core import no_population_impact_message
 from safe.common.exceptions import ZeroImpactException
 from safe.storage.raster import Raster
 from safe.common.utilities import (
@@ -29,6 +29,7 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+import safe.messaging as m
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -58,14 +59,20 @@ class FloodEvacuationRasterHazardFunction(
         :rtype: list
         """
         thresholds = self.parameters['thresholds'].value
+        if get_needs_provenance_value(self.parameters) is None:
+            needs_provenance = ''
+        else:
+            needs_provenance = tr(get_needs_provenance_value(self.parameters))
+
         notes = [
             {
-                'content': tr('Notes'),
+                'content': tr('Notes and assumptions'),
                 'header': True
             },
             {
-                'content': tr('Total population: %s') % population_rounding(
-                    self.total_population)
+                'content': tr(
+                    'Total population in the analysis area: %s'
+                ) % population_rounding(self.total_population)
             },
             {
                 'content': tr(
@@ -73,17 +80,17 @@ class FloodEvacuationRasterHazardFunction(
                     'exceed %(eps).1f m.') % {'eps': thresholds[-1]},
             },
             {
-                'content': tr(get_needs_provenance_value(self.parameters)),
+                'content': needs_provenance,
             },
             {
                 'content': tr(
-                    'The layers contained `no data`. This missing data was '
-                    'carried through to the impact layer.'),
+                    'The layers contained "no data" values. This missing data '
+                    'was carried through to the impact layer.'),
                 'condition': self.no_data_warning
             },
             {
                 'content': tr(
-                    '`No data` values in the impact layer were treated as 0 '
+                    '"No data"   values in the impact layer were treated as 0 '
                     'when counting the affected or total population.'),
                 'condition': self.no_data_warning
             },
@@ -103,12 +110,20 @@ class FloodEvacuationRasterHazardFunction(
 
     def _tabulate_zero_impact(self):
         thresholds = self.parameters['thresholds'].value
-        table_body = [
-            self.question,
-            TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                      '%s' % format_int(self.total_evacuated)],
-                     header=True)]
-        return table_body
+        message = m.Message()
+        table = m.Table(
+            style_class='table table-condensed table-striped')
+        row = m.Row()
+        label = m.ImportantText(
+            tr('People in %.1f m of water') % thresholds[-1])
+        content = '%s' % format_int(self.total_evacuated)
+        row.add(m.Cell(label))
+        row.add(m.Cell(content))
+        table.add(row)
+        table.caption = self.question
+        message.add(table)
+        message = message.to_html(suppress_newlines=True)
+        return message
 
     def run(self):
         """Risk plugin for flood population evacuation.
@@ -190,9 +205,8 @@ class FloodEvacuationRasterHazardFunction(
 
         # check for zero impact
         if numpy.nanmax(impact) == 0 == numpy.nanmin(impact):
-            table_body = self._tabulate_zero_impact()
-            my_message = Table(table_body).toNewlineFreeString()
-            raise ZeroImpactException(my_message)
+            message = no_population_impact_message(self.question)
+            raise ZeroImpactException(message)
 
         # Create style
         colours = [

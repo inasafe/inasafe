@@ -458,8 +458,6 @@ class ImpactReport(object):
 
         legend = self.composition.getComposerItemById('impact-legend')
         if legend is not None:
-            legend_attributes = self.map_legend_attributes
-            legend_title = legend_attributes.get('legend_title', None)
 
             symbol_count = 1
             # noinspection PyUnresolvedReferences
@@ -477,9 +475,8 @@ class ImpactReport(object):
             else:
                 legend.setColumnCount(symbol_count / 5 + 1)
 
-            if legend_title is None:
-                legend_title = ""
-            legend.setTitle(legend_title)
+            # Set back to blank to #2409
+            legend.setTitle("")
 
             # Set Legend
             # Since QGIS 2.6, legend.model() is obsolete

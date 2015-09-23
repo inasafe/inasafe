@@ -25,7 +25,7 @@ from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
 from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
-from safe.common.tables import Table, TableRow
+from safe.impact_functions.core import no_population_impact_message
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -73,9 +73,10 @@ class FloodEvacuationVectorHazardFunction(
         :rtype: list
         """
         notes = [
-            {'content': tr('Notes'), 'header': True},
+            {'content': tr('Notes and assumptions'), 'header': True},
             {
-                'content': tr('Total population: %s') % format_int(
+                'content': tr(
+                    'Total population in the analysis area: %s') % format_int(
                     population_rounding(self.total_population))
             },
             {
@@ -99,7 +100,7 @@ class FloodEvacuationVectorHazardFunction(
             },
             {
                 'content': tr(
-                    '`No data` values in the impact layer were treated as 0 '
+                    '"No data" values in the impact layer were treated as 0 '
                     'when counting the affected or total population.'),
                 'condition': self.no_data_warning
             },
@@ -233,14 +234,8 @@ class FloodEvacuationVectorHazardFunction(
             new_covered_exposure_data.flat[:], len(colours))
 
         # check for zero impact
-        if min(classes) == 0 == max(classes):
-            table_body = [
-                self.question,
-                TableRow(
-                    [tr('People affected'),
-                     '%s' % format_int(total_affected_population)],
-                    header=True)]
-            message = Table(table_body).toNewlineFreeString()
+        if total_affected_population == 0:
+            message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
         interval_classes = humanize_class(classes)

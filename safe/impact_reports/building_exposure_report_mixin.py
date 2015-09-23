@@ -101,7 +101,7 @@ class BuildingExposureReportMixin(ReportMixin):
         hospitals_closed = self.hospitals_closed
         return [
             {
-                'content': tr('Action Checklist:'),
+                'content': tr('Action checklist'),
                 'header': True
             },
             {
@@ -147,7 +147,8 @@ class BuildingExposureReportMixin(ReportMixin):
         affect_types = self._impact_breakdown
         impact_summary_report = [
             {
-                'content': [tr('Hazard Category')] + affect_types,
+                # We leave the top left cell blank in the summary table
+                'content': [tr('')] + affect_types,
                 'header': True
             }]
         for (category, building_breakdown) in self.affected_buildings.items():
@@ -166,21 +167,21 @@ class BuildingExposureReportMixin(ReportMixin):
             impact_summary_report.append(
                 {
                     'content': [
-                        tr(tr('Total Buildings Affected')),
+                        tr(tr('Total affected buildings')),
                         format_int(self.total_affected_buildings)],
                     'header': True
                 })
         impact_summary_report.append(
             {
                 'content': [
-                    tr('Buildings Not Affected'),
+                    tr('Unaffected buildings'),
                     format_int(self.total_unaffected_buildings)],
                 'header': True
             })
         impact_summary_report.append(
             {
                 'content': [
-                    tr('All Buildings'),
+                    tr('All buildings'),
                     format_int(self.total_buildings)],
                 'header': True
             })
@@ -236,8 +237,10 @@ class BuildingExposureReportMixin(ReportMixin):
         :returns: The buildings breakdown report.
         :rtype: list
 
-        ..Notes:
-        Expect affected buildings to be given as following:
+        .. note::
+
+            Expect affected buildings to be given as following:
+
             affected_buildings = OrderedDict([
                 (category, {building_type: amount}),
             e.g.

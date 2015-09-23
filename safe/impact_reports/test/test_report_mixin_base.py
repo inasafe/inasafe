@@ -50,18 +50,20 @@ class ReportMixinTest(unittest.TestCase):
         self.assertListEqual(self.mixin.notes(), [], message)
         message = 'Default value for %s should be blank' % 'generate_report'
         self.assertListEqual(self.mixin.generate_report(), [], message)
-        message = 'The default HTML report should be blank.'
+
         blank_table = (
-            u'<table class="table table-striped condensed"> <tbody> '
+            u'<table class="table table-condensed table-striped"><tbody>'
             u'</tbody></table>')
         self.assertEqual(
-            self.mixin.generate_html_report(), blank_table, message)
+            self.mixin.generate_html_report(), blank_table)
 
     def test_0002_parse_to_html(self):
         """Test parsing to HTML"""
+
+        # Table heading
         table_heading = (
-            u'<table class="table table-striped condensed"> <tbody>  <tr>   '
-            u'<th colspan="100%">Heading</th>  </tr> </tbody></table>')
+            u'<table class="table table-condensed table-striped"><tbody><tr>'
+            u'<th>Heading</th></tr></tbody></table>')
         heading = [
             {
                 'content': 'Heading',
@@ -70,11 +72,12 @@ class ReportMixinTest(unittest.TestCase):
 
         self.assertEqual(
             self.mixin.parse_to_html(heading),
-            table_heading,
-            'Table Heading.')
+            table_heading)
+
+        # Table with a heading list.
         table_heading_list = (
-            u'<table class="table table-striped condensed"> <tbody>  <tr>   '
-            u'<th>Heading</th>   <th>List</th>  </tr> </tbody></table>')
+            u'<table class="table table-condensed table-striped"><tbody><tr>'
+            u'<th>Heading</th><th>List</th></tr></tbody></table>')
         heading_list = [
             {
                 'content': ['Heading', 'List'],
@@ -82,22 +85,23 @@ class ReportMixinTest(unittest.TestCase):
             }]
         self.assertEqual(
             self.mixin.parse_to_html(heading_list),
-            table_heading_list,
-            'Table with a heading list.')
+            table_heading_list)
+        # Table with row
         table_row = (
-            u'<table class="table table-striped condensed"> <tbody>  <tr>   '
-            u'<td colspan="100%">Row</td>  </tr> </tbody></table>')
+            u'<table class="table table-condensed table-striped"><tbody><tr>'
+            u'<td>Row</td></tr></tbody></table>')
         row = [
             {
                 'content': 'Row'
             }]
         self.assertEqual(
             self.mixin.parse_to_html(row),
-            table_row,
-            'Table with row.')
+            table_row)
+
+        # 'Table with row list.'
         table_row_list = (
-            u'<table class="table table-striped condensed"> <tbody>  <tr>   '
-            u'<td>Row</td>   <td>List</td>  </tr> </tbody></table>')
+            u'<table class="table table-condensed table-striped"><tbody><tr>'
+            u'<td>Row</td><td>List</td></tr></tbody></table>')
         row_list = [
             {
                 'content': ['Row', 'List']
@@ -105,22 +109,24 @@ class ReportMixinTest(unittest.TestCase):
         self.assertEqual(
             self.mixin.parse_to_html(row_list),
             table_row_list,
-            'Table with row list.')
+            )
         table_variables = (
-            u'<table class="table table-striped condensed"> <tbody>  <tr>   '
-            u'<td colspan="100%">Fill Value</td>  </tr> </tbody></table>')
+            u'<table class="table table-condensed table-striped"><tbody><tr>'
+            u'<td>Fill Value</td></tr></tbody></table>')
         variables = [
             {
                 'content': '%s',
                 'arguments': ('Fill Value',)
             }]
+        # Variable parsing
         self.assertEqual(
             self.mixin.parse_to_html(variables),
-            table_variables,
-            'Variables.')
+            table_variables)
+
+        # Varible list
         table_variables_list = (
-            u'<table class="table table-striped condensed"> <tbody>  <tr>   '
-            u'<td>Fill Value</td>   <td>Fill Value Two</td>  </tr> </tbody>'
+            u'<table class="table table-striped condensed"><tbody><tr>'
+            u'<td>Fill Value</td><td>Fill Value Two</td></tr></tbody>'
             u'</table>'
         )
         variables_list = [
@@ -130,8 +136,7 @@ class ReportMixinTest(unittest.TestCase):
             }]
         self.assertEqual(
             self.mixin.parse_to_html(variables_list),
-            table_variables_list,
-            'Varibale list.')
+            table_variables_list)
         variables_list_badly_formatted = [
             {
                 'content': ['%s', '%s', '%s', '%s'],
@@ -142,8 +147,8 @@ class ReportMixinTest(unittest.TestCase):
             self.mixin.parse_to_html,
             variables_list_badly_formatted)
         table_conditianal_true = (
-            u'<table class="table table-striped condensed"> <tbody>  <tr>   '
-            u'<td colspan="100%">Show this</td>  </tr> </tbody></table>')
+            u'<table class="table table-striped condensed"><tbody><tr>'
+            u'<td colspan="100%">Show this</td></tr></tbody></table>')
         conditianal_true = [
             {
                 'content': 'Show this',
@@ -154,7 +159,7 @@ class ReportMixinTest(unittest.TestCase):
             table_conditianal_true,
             'Conditional True.')
         table_coniditional_false = (
-            u'<table class="table table-striped condensed"> <tbody> '
+            u'<table class="table table-striped condensed"><tbody>'
             u'</tbody></table>')
         conditianal_false = [
             {
@@ -166,8 +171,8 @@ class ReportMixinTest(unittest.TestCase):
             table_coniditional_false,
             'Conditional False.')
         table_all_together = (
-            u'<table class="table table-striped condensed"> <tbody>  <tr>   '
-            u'<th colspan="100%">Show this</th>  </tr> </tbody></table>')
+            u'<table class="table table-striped condensed"><tbody><tr>'
+            u'<th>Show this</th></tr></tbody></table>')
         all_together = [
             {
                 'content': 'Show %s',

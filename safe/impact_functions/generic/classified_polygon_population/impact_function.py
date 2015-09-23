@@ -27,7 +27,7 @@ from safe.common.utilities import (
     create_classes,
     create_label,
     get_thousand_separator)
-from safe.common.tables import Table, TableRow
+from safe.impact_functions.core import no_population_impact_message
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import (
     add_needs_parameters,
@@ -60,9 +60,10 @@ class ClassifiedPolygonHazardPopulationFunction(
         :rtype: list
         """
         notes = [
-            {'content': tr('Notes'), 'header': True},
+            {'content': tr('Notes and assumptions'), 'header': True},
             {
-                'content': tr('Total population: %s') % format_int(
+                'content': tr(
+                    'Total population in the analysis area: %s') % format_int(
                     population_rounding(self.total_population))
             },
             {
@@ -166,13 +167,7 @@ class ClassifiedPolygonHazardPopulationFunction(
 
         # check for zero impact
         if total_affected_population == 0:
-            table_body = [
-                self.question,
-                TableRow(
-                    [tr('People impacted'),
-                     '%s' % format_int(total_affected_population)],
-                    header=True)]
-            message = Table(table_body).toNewlineFreeString()
+            message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
         impact_table = impact_summary = self.generate_html_report()
@@ -224,8 +219,9 @@ class ClassifiedPolygonHazardPopulationFunction(
         map_title = tr('People impacted by each hazard zone')
         legend_title = tr('Population')
         legend_units = tr('(people per cell)')
-        legend_notes = tr('Thousand separator is represented by  %s' %
-                          get_thousand_separator())
+        legend_notes = tr(
+            'Thousand separator is represented by  %s' %
+            get_thousand_separator())
 
         # Create vector layer and return
         impact_layer = Raster(
@@ -233,13 +229,14 @@ class ClassifiedPolygonHazardPopulationFunction(
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
             name=tr('People impacted by each hazard zone'),
-            keywords={'impact_summary': impact_summary,
-                      'impact_table': impact_table,
-                      'target_field': self.target_field,
-                      'map_title': map_title,
-                      'legend_notes': legend_notes,
-                      'legend_units': legend_units,
-                      'legend_title': legend_title},
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'target_field': self.target_field,
+                'map_title': map_title,
+                'legend_notes': legend_notes,
+                'legend_units': legend_units,
+                'legend_title': legend_title},
             style_info=style_info)
 
         self._impact = impact_layer

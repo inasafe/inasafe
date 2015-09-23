@@ -28,7 +28,7 @@ from safe.impact_functions.core import (
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int, get_thousand_separator
-from safe.common.tables import Table, TableRow
+from safe.impact_functions.core import no_population_impact_message
 from safe.common.utilities import create_classes, create_label, humanize_class
 from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
@@ -66,9 +66,10 @@ class ContinuousHazardPopulationFunction(
         :rtype: list
         """
         notes = [
-            {'content': tr('Notes'), 'header': True},
+            {'content': tr('Notes and assumptions'), 'header': True},
             {
-                'content': tr('Total population: %s') % format_int(
+                'content': tr(
+                    'Total population in the analysis area: %s') % format_int(
                     population_rounding(self.total_population))
             },
             {
@@ -89,7 +90,7 @@ class ContinuousHazardPopulationFunction(
             },
             {
                 'content': tr(
-                    '`No data` values in the impact layer were treated as 0 '
+                    '"No data" values in the impact layer were treated as 0 '
                     'when counting the affected or total population.'),
                 'condition': self.no_data_warning
             },
@@ -178,14 +179,9 @@ class ContinuousHazardPopulationFunction(
         self.unaffected_population = (
             self.total_population - self.total_affected_population)
 
-        # Check for zero impact
+        # check for zero impact
         if self.total_affected_population == 0:
-            table_body = [
-                self.question,
-                TableRow(
-                    [tr('People impacted'),
-                     '%s' % format_int(0)], header=True)]
-            message = Table(table_body).toNewlineFreeString()
+            message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
         # Don't show digits less than a 1000

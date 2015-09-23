@@ -27,7 +27,8 @@ from safe.common.utilities import (
     format_int,
     create_classes,
     create_label,
-    get_thousand_separator)
+    get_thousand_separator,
+    round_thousand)
 from safe.utilities.i18n import tr
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
@@ -149,6 +150,7 @@ class ITBFatalityFunction(
         """
         total_fatalities = self.total_fatalities
         total_displaced = self.total_evacuated
+        rounded_displaced = format_int(population_rounding(total_displaced))
         checklist = [
             {
                 'content': tr('Action checklist'),
@@ -158,28 +160,27 @@ class ITBFatalityFunction(
                 'content': tr(
                     'Are there enough victim identification units available '
                     'for %s people?') % (
-                        population_rounding(total_fatalities)),
+                        format_int(population_rounding(total_fatalities))),
                 'condition': total_fatalities
             },
             {
                 'content': tr(
                     'Are there enough shelters and relief items available for '
-                    '%s people?') % (population_rounding(total_displaced)),
+                    '%s people?') % rounded_displaced,
                 'condition': total_displaced
-
             },
             {
                 'content': tr(
                     'If yes, where are they located and how will we '
                     'distribute them?'),
-                'condition': total_displaced
+                'condition': format_int(total_displaced)
 
             },
             {
                 'content': tr(
                     'If no, where can we obtain additional relief items '
                     'from and how will we transport them?'),
-                'condition': total_displaced
+                'condition': format_int(total_displaced)
 
             },
 
@@ -187,18 +188,24 @@ class ITBFatalityFunction(
         return checklist
 
     def notes(self):
+        """Notes and caveats for the IF report.
+
+        :returns: List of dicts containing notes.
+        :rtype: list
+        """
         notes = [
             {
-                'content': tr('Notes'),
+                'content': tr('Notes and assumptions'),
                 'header': True
             },
             {
-                'content': tr('Total population: %s') % format_int(
+                'content': tr('Total population in the analysis area: %s'
+                              ) % format_int(
                     population_rounding(self.total_population))
             },
             {
                 'content': tr(
-                    '<sup>1</sup>People are considered to be displaced if '
+                    '<sup>1</sup>People are displaced if '
                     'they experience and survive a shake level'
                     'of more than 5 on the MMI scale.')
             },
