@@ -85,12 +85,14 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.progress_dialog.setAutoClose(False)
         title = self.tr('InaSAFE OpenStreetMap Downloader')
         self.progress_dialog.setWindowTitle(title)
-        # Set up context help
+
+        # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
+
         # Disable boundaries group box until boundary checkbox is ticked
         self.boundary_group.setEnabled(False)
 
@@ -188,12 +190,12 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         .. versionadded:: 3.2
         """
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
     def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
-        self.stacked_widget.setCurrentIndex(0)
+        self.main_stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 
@@ -203,7 +205,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         string += message.to_html()
         string += footer
 
-        self.web_view.setHtml(string)
+        self.help_web_view.setHtml(string)
 
     def restore_state(self):
         """ Read last state of GUI from configuration file."""
