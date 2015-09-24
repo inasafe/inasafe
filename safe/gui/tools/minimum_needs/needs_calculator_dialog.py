@@ -17,7 +17,7 @@ import logging
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
 from PyQt4 import QtGui, QtCore
 
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSignature, pyqtSlot
 
 from safe.common.version import get_version
 from safe.storage.core import read_layer as safe_read_layer
@@ -25,10 +25,10 @@ from safe.storage.vector import Vector
 from safe.utilities.gis import is_point_layer, is_polygon_layer
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.utilities import add_ordered_combo_item
-from safe.utilities.help import show_context_help
 from safe.impact_functions.core import evacuated_population_weekly_needs
 from safe import messaging as m
 from safe.messaging import styles
+from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -51,8 +51,13 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             'InaSAFE %s Minimum Needs Calculator' % get_version()))
         self.polygon_layers_to_combo()
         self.show_info()
-        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
+
+        # Set up things for context help
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.main_stacked_widget.setCurrentIndex(1)
 
         # Fix for issue 1699 - cancel button does nothing
         cancel_button = self.button_box.button(QtGui.QDialogButtonBox.Cancel)
@@ -96,7 +101,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         string += message.to_html()
         string += footer
 
-        self.webView.setHtml(string)
+        self.info_web_view.setHtml(string)
 
     def minimum_needs(self, input_layer, population_name):
         """Compute minimum needs given a layer and a column containing pop.
@@ -246,7 +251,42 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         QgsMapLayerRegistry.instance().addMapLayers([new_layer])
         self.done(QtGui.QDialog.Accepted)
 
-    @staticmethod
-    def show_help():
-        """Load the help text for the minimum needs dialog."""
-        show_context_help('minimum_needs')
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
+
+        ..versionadded: 3.2.1
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded: 3.2.1
+        """
+        self.main_stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
+        """Show usage info to the user."""
+        # Read the header and footer html snippets
+        self.main_stacked_widget.setCurrentIndex(0)
+        header = html_header()
+        footer = html_footer()
+
+        string = header
+
+        message = needs_calculator_help()
+
+        string += message.to_html()
+        string += footer
+
+        self.help_web_view.setHtml(string)
