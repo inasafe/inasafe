@@ -136,10 +136,18 @@ class PostprocessorManager(QtCore.QObject):
             has_no_data = False
             table = m.Table(
                 style_class='table table-condensed table-striped')
-            table.caption = self.tr('Detailed %s report') % (tr(
-                get_postprocessor_human_name(processor)).lower())
+            name = get_postprocessor_human_name(processor).lower()
 
-            # Dirty hack to make "evacuated" comes out in the report.
+            import pydevd
+            pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
+            if name == 'building type':
+                table.caption = self.tr('Closed buildings')
+            elif name == 'road type':
+                table.caption = self.tr('Closed roads')
+            elif name == 'people':
+                table.caption = self.tr('Affected people')
+
+            # Dirty hack to make "evacuated" come out in the report.
             # Currently only MinimumNeeds that calculate from evacuation
             # percentage.
             if processor == 'MinimumNeeds':

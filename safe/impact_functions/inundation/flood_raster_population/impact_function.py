@@ -58,6 +58,11 @@ class FloodEvacuationRasterHazardFunction(
         :rtype: list
         """
         thresholds = self.parameters['thresholds'].value
+        if get_needs_provenance_value(self.parameters) is None:
+            needs_provenance = ''
+        else:
+            needs_provenance = tr(get_needs_provenance_value(self.parameters))
+
         notes = [
             {
                 'content': tr('Notes'),
@@ -73,7 +78,7 @@ class FloodEvacuationRasterHazardFunction(
                     'exceed %(eps).1f m.') % {'eps': thresholds[-1]},
             },
             {
-                'content': tr(get_needs_provenance_value(self.parameters)),
+                'content': needs_provenance,
             },
             {
                 'content': tr(
