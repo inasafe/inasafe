@@ -138,8 +138,6 @@ class PostprocessorManager(QtCore.QObject):
                 style_class='table table-condensed table-striped')
             name = get_postprocessor_human_name(processor).lower()
 
-            import pydevd
-            pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
             if name == 'building type':
                 table.caption = self.tr('Closed buildings')
             elif name == 'road type':
@@ -230,10 +228,15 @@ class PostprocessorManager(QtCore.QObject):
                     'values.') % (
                         self.aggregator.get_default_keyword(
                             'NO_DATA'))))
-            message.add(m.EmphasizedText(self.tr(
+            caption = m.EmphasizedText(self.tr(
                 'Columns containing exclusively 0 and "%s" '
                 'have not been shown in the table.' %
-                self.aggregator.get_default_keyword('NO_DATA'))))
+                self.aggregator.get_default_keyword('NO_DATA')))
+            message.add(
+                m.Paragraph(
+                    caption,
+                    style_class='caption')
+                )
 
         return message
 
