@@ -5846,8 +5846,8 @@ ke
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="422"/>
-        <source>ISO 19155 Metadata</source>
-        <translation>ISO 19155 Metadata</translation>
+        <source>ISO 19115 Metadata</source>
+        <translation>ISO 19115 Metadata</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="67"/>

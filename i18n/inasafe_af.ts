@@ -5789,7 +5789,7 @@ to
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="422"/>
-        <source>ISO 19155 Metadata</source>
+        <source>ISO 19115 Metadata</source>
         <translation type="unfinished"/>
     </message>
     <message>
