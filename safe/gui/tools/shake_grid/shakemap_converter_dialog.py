@@ -25,7 +25,7 @@ from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QFileInfo, pyqtSignature
+from PyQt4.QtCore import QFileInfo, pyqtSignature, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 from qgis.utils import iface
@@ -37,6 +37,7 @@ from safe.utilities.help import show_context_help
 from safe.utilities.styling import mmi_ramp
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
+from safe.gui.tools.help.shakemap_converter_help import shakemap_converter_help
 
 
 INFO_STYLE = styles.INFO_STYLE
@@ -73,9 +74,13 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.input_path.textChanged.connect(self.on_input_path_textChanged)
         # noinspection PyUnresolvedReferences
         self.output_path.textChanged.connect(self.on_output_path_textChanged)
+
         # Set up things for context help
-        help_button = self.button_box.button(QDialogButtonBox.Help)
-        help_button.clicked.connect(ShakemapConverterDialog.show_help)
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.stacked_widget.setCurrentIndex(1)
 
         self.show_info()
 
@@ -258,3 +263,43 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
             self, self.tr('Output file'), 'grid.tif',
             self.tr('Raster file(*.tif)'))
         self.output_path.setText(filename)
+
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
+
+        ..versionadded: 3.2.1
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded: 3.2.1
+        """
+        self.stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
+        """Show usage info to the user."""
+        # Read the header and footer html snippets
+        self.stacked_widget.setCurrentIndex(0)
+        header = html_header()
+        footer = html_footer()
+
+        string = header
+
+        message = shakemap_converter_help()
+
+        string += message.to_html()
+        string += footer
+
+        self.web_view.setHtml(string)
