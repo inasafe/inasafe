@@ -40,7 +40,7 @@ except ImportError:
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QUrl
+from PyQt4.QtCore import QSettings, pyqtSignature, QUrl, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog, QDesktopServices
 
@@ -68,7 +68,7 @@ from safe.utilities.gis import qgis_version
 from safe.utilities.utilities import (
     html_to_file,
     add_ordered_combo_item)
-from safe.utilities.help import show_context_help
+from safe.gui.tools.help.impact_merge_help import impact_merge_help
 from safe.utilities.keyword_io import KeywordIO
 from safe.defaults import (
     disclaimer, white_inasafe_logo_path, supporters_logo_path)
@@ -157,9 +157,12 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         # Get all current project layers for combo box
         self.get_project_layers()
 
-        # Set up context help
-        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
+        # Set up things for context help
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.stacked_widget.setCurrentIndex(1)
 
         # Show usage info
         self.show_info()
@@ -225,11 +228,6 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         """ Store current state of GUI to configuration file """
         settings = QSettings()
         settings.setValue('directory', self.output_directory.text())
-
-    @staticmethod
-    def show_help():
-        """Load the help text for the dialog."""
-        show_context_help('impact_layer_merge_tool')
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_directory_chooser_clicked(self):
@@ -1165,3 +1163,44 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             legend.synchronizeWithModel()
 
         return composition
+
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
+
+        ..versionadded: 3.2.1
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded: 3.2.1
+        """
+        self.stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
+        """Show usage info to the user."""
+        # Read the header and footer html snippets
+        self.stacked_widget.setCurrentIndex(0)
+        header = html_header()
+        footer = html_footer()
+
+        string = header
+
+        message = impact_merge_help()
+
+        string += message.to_html()
+        string += footer
+
+        self.help_web_view.setHtml(string)
+
