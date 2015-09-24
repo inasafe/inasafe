@@ -73,9 +73,10 @@ class FloodEvacuationVectorHazardFunction(
         :rtype: list
         """
         notes = [
-            {'content': tr('Notes'), 'header': True},
+            {'content': tr('Notes and assumptions'), 'header': True},
             {
-                'content': tr('Total population: %s') % format_int(
+                'content': tr(
+                    'Total population in the analysis area: %s') % format_int(
                     population_rounding(self.total_population))
             },
             {
@@ -99,7 +100,7 @@ class FloodEvacuationVectorHazardFunction(
             },
             {
                 'content': tr(
-                    '`No data` values in the impact layer were treated as 0 '
+                    '"No data" values in the impact layer were treated as 0 '
                     'when counting the affected or total population.'),
                 'condition': self.no_data_warning
             },

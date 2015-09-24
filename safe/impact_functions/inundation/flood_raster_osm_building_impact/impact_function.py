@@ -50,32 +50,30 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         threshold = self.parameters['threshold'].value
         return [
             {
-                'content': tr('Notes'),
+                'content': tr('Notes and assumptions'),
                 'header': True
             },
             {
                 'content': tr(
-                    'Buildings are considered flooded when flood levels '
+                    'Buildings are flooded when flood levels '
                     'exceed %.1f m') % threshold
             },
             {
                 'content': tr(
-                    'Buildings are considered wet when flood levels '
+                    'Buildings are wet when flood levels '
                     'are greater than 0 m but less than %.1f m') % threshold
             },
             {
                 'content': tr(
-                    'Buildings are considered dry when flood levels '
-                    'are 0 m or less.')
+                    'Buildings are dry when flood levels are 0 m.')
             },
             {
                 'content': tr(
-                    'Buildings are considered closed if they are '
-                    'flooded or wet.')
+                    'Buildings are closed if they are flooded or wet.')
             },
             {
                 'content': tr(
-                    'Buildings are considered open if they are dry.')
+                    'Buildings are open if they are dry.')
             }]
 
     @property

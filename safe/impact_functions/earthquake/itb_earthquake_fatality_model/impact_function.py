@@ -195,7 +195,7 @@ class ITBFatalityFunction(
         """
         notes = [
             {
-                'content': tr('Notes'),
+                'content': tr('Notes and assumptions'),
                 'header': True
             },
             {
@@ -205,7 +205,7 @@ class ITBFatalityFunction(
             },
             {
                 'content': tr(
-                    '<sup>1</sup>People are considered to be displaced if '
+                    '<sup>1</sup>People are displaced if '
                     'they experience and survive a shake level'
                     'of more than 5 on the MMI scale.')
             },

@@ -49,7 +49,7 @@ class VolcanoPolygonBuildingFunction(
         volcano_names = self.volcano_names
         return [
             {
-                'content': tr('Notes'),
+                'content': tr('Notes and assumptions'),
                 'header': True
             },
             {

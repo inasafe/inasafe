@@ -151,9 +151,9 @@ class PopulationExposureReportMixin(ReportMixin):
         return impact_summary_report
 
     def minimum_needs_breakdown(self):
-        """Breakdown by building type.
+        """Breakdown by population.
 
-        :returns: The buildings breakdown report.
+        :returns: The population breakdown report.
         :rtype: list
         """
         minimum_needs_breakdown_report = [{
@@ -165,7 +165,7 @@ class PopulationExposureReportMixin(ReportMixin):
             minimum_needs_breakdown_report.append(
                 {
                     'content': [
-                        tr('Needs that should be provided %s' % frequency),
+                        tr('Relief items to be provided %s' % frequency),
                         tr('Total')],
                     'header': True
                 })
@@ -183,7 +183,8 @@ class PopulationExposureReportMixin(ReportMixin):
         """Get the ordering of the impact categories.
 
         :returns: The categories by defined or default ordering.
-        :rtype: list"""
+        :rtype: list
+        """
         if (
                 not hasattr(self, '_impact_category_ordering') or
                 not self._impact_category_ordering):
