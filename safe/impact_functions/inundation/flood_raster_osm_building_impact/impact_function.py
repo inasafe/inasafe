@@ -55,27 +55,27 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
             },
             {
                 'content': tr(
-                    'Buildings are said to be inundated when flood levels '
+                    'Buildings are considered flooded when flood levels '
                     'exceed %.1f m') % threshold
             },
             {
                 'content': tr(
-                    'Buildings are said to be wet when flood levels '
+                    'Buildings are considered wet when flood levels '
                     'are greater than 0 m but less than %.1f m') % threshold
             },
             {
                 'content': tr(
-                    'Buildings are said to be dry when flood levels '
+                    'Buildings are considered dry when flood levels '
                     'are 0 m or less.')
             },
             {
                 'content': tr(
-                    'Buildings are said to be closed if they are '
-                    'inundated or wet.')
+                    'Buildings are considered closed if they are '
+                    'flooded or wet.')
             },
             {
                 'content': tr(
-                    'Buildings are said to be open if they are dry.')
+                    'Buildings are considered open if they are dry.')
             }]
 
     @property
@@ -85,7 +85,7 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         :returns: The categories that equal effected.
         :rtype: list
         """
-        return [tr('Number Inundated'), tr('Number of Wet Buildings')]
+        return [tr('Flooded'), tr('Wet')]
 
     def run(self):
         """Flood impact to buildings (e.g. from Open Street Map)."""
@@ -122,9 +122,9 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         self.buildings = {}
         # Impacted building breakdown
         self.affected_buildings = OrderedDict([
-            (tr('Number Inundated'), {}),
-            (tr('Number of Wet Buildings'), {}),
-            (tr('Number of Dry Buildings'), {})
+            (tr('Flooded'), {}),
+            (tr('Wet'), {}),
+            (tr('Dry'), {})
         ])
         for i in range(total_features):
             # Get the interpolated depth
@@ -158,9 +158,9 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
             # Add calculated impact to existing attributes
             features[i][self.target_field] = inundated_status
             category = [
-                tr('Number of Dry Buildings'),
-                tr('Number Inundated'),
-                tr('Number of Wet Buildings')][inundated_status]
+                tr('Dry'),
+                tr('Flooded'),
+                tr('Wet')][inundated_status]
             self.affected_buildings[category][usage][
                 tr('Buildings Affected')] += 1
 
@@ -170,9 +170,9 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         impact_table = impact_summary = self.generate_html_report()
 
         # For printing map purpose
-        map_title = tr('Buildings inundated')
-        legend_title = tr('Structure inundated status')
-        legend_units = tr('(inundated, wet, or dry)')
+        map_title = tr('Flooded buildings')
+        legend_title = tr('Flooded structure status')
+        legend_units = tr('(flooded, wet, or dry)')
 
         style_classes = [
             dict(
@@ -190,7 +190,7 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
                 size=1
             ),
             dict(
-                label=tr('Inundated (>= %.1f m)') % threshold,
+                label=tr('Flooded (>= %.1f m)') % threshold,
                 value=1,
                 colour='#F31A1C',
                 transparency=0,
