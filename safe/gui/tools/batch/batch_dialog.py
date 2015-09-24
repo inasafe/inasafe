@@ -123,7 +123,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
         self.restore_state()
 
@@ -677,9 +677,9 @@ class BatchDialog(QDialog, FORM_CLASS):
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
     def help_toggled(self, flag):
-        """Show or hide the help tab in the stacked widget.
+        """Show or hide the help tab in the main stacked widget.
 
-        ..versionadded: 3.2
+        ..versionadded: 3.2.1
 
         :param flag: Flag indicating whether help should be shown or hidden.
         :type flag: bool
@@ -694,14 +694,14 @@ class BatchDialog(QDialog, FORM_CLASS):
     def hide_help(self):
         """Hide the usage info from the user.
 
-        .. versionadded:: 3.2
+        .. versionadded:: 3.2.1
         """
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
     def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
-        self.stacked_widget.setCurrentIndex(0)
+        self.main_stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 
@@ -712,7 +712,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         string += message.to_html()
         string += footer
 
-        self.web_view.setHtml(string)
+        self.help_web_view.setHtml(string)
 
 
 def read_scenarios(filename):

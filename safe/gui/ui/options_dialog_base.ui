@@ -19,14 +19,26 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <widget class="QStackedWidget" name="stacked_widget">
+    <widget class="QStackedWidget" name="main_stacked_widget">
      <property name="currentIndex">
       <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="web_view">
+        <widget class="QWebView" name="help_web_view">
          <property name="url">
           <url>
            <string>about:blank</string>
@@ -38,6 +50,18 @@
      </widget>
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_5">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
@@ -76,8 +100,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>658</width>
-                <height>574</height>
+                <width>682</width>
+                <height>592</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_4">

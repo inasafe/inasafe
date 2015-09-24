@@ -162,7 +162,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
         # Show usage info
         self.show_info()
@@ -1186,12 +1186,12 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
 
         .. versionadded: 3.2.1
         """
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
     def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
-        self.stacked_widget.setCurrentIndex(0)
+        self.main_stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 

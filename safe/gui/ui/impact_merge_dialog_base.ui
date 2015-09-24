@@ -25,12 +25,24 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QStackedWidget" name="stacked_widget">
+    <widget class="QStackedWidget" name="main_stacked_widget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QWebView" name="help_web_view">
          <property name="url">
@@ -44,6 +56,18 @@
      </widget>
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QWebView" name="web_view">
          <property name="url">
@@ -160,32 +184,7 @@
         </widget>
        </item>
       </layout>
-      <zorder>webView</zorder>
-      <zorder>web_view</zorder>
       <zorder>first_layer_label</zorder>
-      <zorder></zorder>
-      <zorder>first_layer</zorder>
-      <zorder>second_layer</zorder>
-      <zorder>report_template_checkbox</zorder>
-      <zorder>second_layer_label</zorder>
-      <zorder>output_directory_label</zorder>
-      <zorder>splitter</zorder>
-      <zorder>aggregation_layer_label</zorder>
-      <zorder>aggregation_layer</zorder>
-      <zorder>first_layer_label</zorder>
-      <zorder></zorder>
-      <zorder>first_layer</zorder>
-      <zorder>second_layer</zorder>
-      <zorder>report_template_checkbox</zorder>
-      <zorder>second_layer_label</zorder>
-      <zorder>splitter</zorder>
-      <zorder>output_directory_label</zorder>
-      <zorder>button_box</zorder>
-      <zorder>web_view</zorder>
-      <zorder>aggregation_layer_label</zorder>
-      <zorder>aggregation_layer</zorder>
-      <zorder>first_layer_label</zorder>
-      <zorder></zorder>
       <zorder>first_layer</zorder>
       <zorder>second_layer</zorder>
       <zorder>report_template_checkbox</zorder>

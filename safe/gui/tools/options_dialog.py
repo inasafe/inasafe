@@ -73,7 +73,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
         self.grpNotImplemented.hide()
         self.adjustSize()
@@ -292,11 +292,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'inasafe/ISO19115_LICENSE',
             self.iso19115_license_le.text())
 
-    @staticmethod
-    def show_help():
-        """Show context help for the options dialog."""
-        show_context_help('options')
-
     def accept(self):
         """Method invoked when OK button is clicked."""
         self.save_state()
@@ -471,12 +466,12 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         .. versionadded: 3.2.1
         """
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
     def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
-        self.stacked_widget.setCurrentIndex(0)
+        self.main_stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 
@@ -487,4 +482,4 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         string += message.to_html()
         string += footer
 
-        self.web_view.setHtml(string)
+        self.help_web_view.setHtml(string)

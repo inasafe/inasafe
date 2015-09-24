@@ -25,14 +25,26 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QStackedWidget" name="stacked_widget">
+    <widget class="QStackedWidget" name="main_stacked_widget">
      <property name="currentIndex">
       <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_5">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="web_view">
+        <widget class="QWebView" name="help_web_view">
          <property name="url">
           <url>
            <string>about:blank</string>
@@ -42,10 +54,22 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2">
+     <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_6">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="webView">
+        <widget class="QWebView" name="info_web_view">
          <property name="url">
           <url>
            <string>about:blank</string>

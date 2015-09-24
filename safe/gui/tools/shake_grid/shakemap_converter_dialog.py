@@ -80,14 +80,9 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
         self.show_info()
-
-    @staticmethod
-    def show_help():
-        """Show context help for the converter dialog."""
-        show_context_help('converter')
 
     def show_info(self):
         """Show usage text to the user."""
@@ -123,7 +118,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         string += message.to_html()
         string += footer
 
-        self.webView.setHtml(string)
+        self.info_web_view.setHtml(string)
 
     # noinspection PyPep8Naming
     def on_output_path_textChanged(self):
@@ -173,7 +168,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         message.add(tips)
         string += message.to_html()
         string += footer
-        self.webView.setHtml(string)
+        self.info_web_view.setHtml(string)
 
     def get_output_from_input(self):
         """Create default output location based on input location.
@@ -286,12 +281,12 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
 
         .. versionadded: 3.2.1
         """
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
     def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
-        self.stacked_widget.setCurrentIndex(0)
+        self.main_stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 
@@ -302,4 +297,4 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         string += message.to_html()
         string += footer
 
-        self.web_view.setHtml(string)
+        self.help_web_view.setHtml(string)
