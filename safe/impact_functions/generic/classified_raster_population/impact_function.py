@@ -239,7 +239,7 @@ class ClassifiedRasterHazardPopulationFunction(
             style_type='rasterStyle')
 
         # For printing map purpose
-        map_title = tr('Population affected by each class')
+        map_title = tr('Number of people affected in each class')
         legend_title = tr('Number of People')
         legend_units = tr('(people per cell)')
         legend_notes = tr(
@@ -251,7 +251,7 @@ class ClassifiedRasterHazardPopulationFunction(
             data=affected_population,
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
-            name=tr('Population which %s') % (
+            name=tr('People that might %s') % (
                 self.impact_function_manager
                 .get_function_title(self).lower()),
             keywords={
