@@ -33,7 +33,6 @@ from qgis.utils import iface
 from safe.common.version import get_version
 from safe import messaging as m
 from safe.messaging import styles
-from safe.utilities.help import show_context_help
 from safe.utilities.styling import mmi_ramp
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.gui.tools.shake_grid.shake_grid import convert_mmi_data
