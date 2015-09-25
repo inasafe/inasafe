@@ -35,6 +35,7 @@ from PyQt4.QtGui import (
     QWidget,
     QScrollArea,
     QVBoxLayout)
+from PyQt4.QtCore import pyqtSignature, pyqtSlot
 
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class
@@ -43,6 +44,8 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
 from safe_extras.parameters.parameter_exceptions import CollectionLengthError
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.resource_parameter_widget import ResourceParameterWidget
+from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.gui.tools.help.function_options_help import function_options_help
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -75,6 +78,13 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         self._result = None
         self.values = OrderedDict()
+
+        # Set up things for context help
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.main_stacked_widget.setCurrentIndex(1)
 
     # noinspection PyCallingNonCallable,PyMethodMayBeStatic
     def bind(self, widget, property_name, function):
@@ -210,7 +220,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         :param parameter_value: Mandatory representing the value referenced
         by the key.
-        :type parameter_value: object
+        :type parameter_value: object, list
 
         :returns: a function that return the value of widget
 
@@ -292,3 +302,43 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
     def result(self):
         """Get the result."""
         return self._result
+
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
+
+        ..versionadded: 3.2.1
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded: 3.2.1
+        """
+        self.main_stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
+        """Show usage info to the user."""
+        # Read the header and footer html snippets
+        self.main_stacked_widget.setCurrentIndex(0)
+        header = html_header()
+        footer = html_footer()
+
+        string = header
+
+        message = function_options_help()
+
+        string += message.to_html()
+        string += footer
+
+        self.help_web_view.setHtml(string)
