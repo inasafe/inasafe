@@ -5,6 +5,7 @@ from safe.messaging import styles
 
 INFO_STYLE = styles.INFO_STYLE
 
+
 def osm_downloader_help():
     """Help message for OSM Downloader dialog.
 

@@ -19,9 +19,7 @@ def batch_help():
     :rtype: messaging.message.Message
     """
     heading = m.Heading(tr('Batch Runner'), **INFO_STYLE)
-    body = tr(
-            ''
-        )
+    body = tr('')
 
     message = m.Message()
     message.add(m.Brand())

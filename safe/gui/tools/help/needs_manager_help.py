@@ -19,9 +19,7 @@ def needs_manager_helps():
     :rtype: messaging.message.Message
     """
     heading = m.Heading(tr('Minimum Needs Manager Help'), **INFO_STYLE)
-    body = tr(
-            ''
-        )
+    body = tr('')
 
     message = m.Message()
     message.add(m.Brand())

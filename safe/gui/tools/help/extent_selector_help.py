@@ -7,6 +7,7 @@ from safe.messaging import styles
 
 INFO_STYLE = styles.INFO_STYLE
 
+
 def extent_selector_help():
     """Help message for extent selector dialog.
 

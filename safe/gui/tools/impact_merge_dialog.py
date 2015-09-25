@@ -1203,4 +1203,3 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         string += footer
 
         self.help_web_view.setHtml(string)
-

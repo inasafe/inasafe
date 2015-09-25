@@ -18,10 +18,8 @@ def impact_merge_help():
     :returns: A message object containing helpful information.
     :rtype: messaging.message.Message
     """
-    heading = m.Heading(tr('Batch Runner'), **INFO_STYLE)
-    body = tr(
-            ''
-        )
+    heading = m.Heading(tr('Impact Layer Merge Help'), **INFO_STYLE)
+    body = tr('')
 
     message = m.Message()
     message.add(m.Brand())

@@ -7,6 +7,7 @@ from safe.messaging import styles
 
 INFO_STYLE = styles.INFO_STYLE
 
+
 def options_help():
     """Help message for extent selector dialog.
 
@@ -14,8 +15,7 @@ def options_help():
     :rtype: messaging.message.Message
     """
     heading = m.Heading(tr('InaSAFE Options Help'), **INFO_STYLE)
-    body = tr(''
-              )
+    body = tr('')
 
     message = m.Message()
     message.add(m.Brand())

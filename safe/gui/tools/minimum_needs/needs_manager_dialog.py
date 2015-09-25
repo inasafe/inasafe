@@ -47,7 +47,8 @@ from safe_extras.parameters.parameter_exceptions import (
     InvalidMinimumError)
 from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.text_parameter import TextParameter
-from safe.utilities.resources import resources_path, get_ui_class, html_footer, html_header
+from safe.utilities.resources import (
+    resources_path, get_ui_class, html_footer, html_header)
 from safe.messaging import styles
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.utilities.i18n import tr
