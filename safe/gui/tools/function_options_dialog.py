@@ -38,7 +38,6 @@ from PyQt4.QtGui import (
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 
 from safe.utilities.i18n import tr
-from safe.utilities.resources import get_ui_class
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 from safe_extras.parameters.parameter_exceptions import CollectionLengthError

@@ -66,7 +66,7 @@ from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
     set_vector_categorized_style)
-from safe.impact_statistics.function_options_dialog import (
+from safe.gui.tools.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import temp_dir
 from safe.common.exceptions import ReadLayerError, TemplateLoadingError

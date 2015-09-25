@@ -45,7 +45,7 @@ from safe.defaults import (
     age_postprocessor,
     minimum_needs_selector)
 from safe.common.resource_parameter import ResourceParameter
-from safe.impact_statistics.function_options_dialog import (
+from safe.gui.tools.function_options_dialog import (
     FunctionOptionsDialog)
 from safe_extras.parameters.input_list_parameter import InputListParameter
 
