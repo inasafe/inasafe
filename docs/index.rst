@@ -1,10 +1,13 @@
-.. InaSAFE documentation master file, created by
-   sphinx-quickstart on Wed Sep 16 11:54:36 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+InaSAFE Source Documentation
+============================
 
-Welcome to InaSAFE's documentation!
-===================================
+This site provides detailed developer-centric documentation for the InaSAFE
+code base. If you are looking for user-centric documentation, please visit
+http://docs.inasafe.org where you will find overviews, tutorials etc.
+
+This documentation is a companion to the source code for InaSAFE which is
+available at http://github.com/AIFDR/inasafe
+
 
 Contents:
 
@@ -19,4 +22,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
