@@ -250,22 +250,22 @@
         <translation>Feature %d has no geometry or geometry is invalid</translation>
     </message>
     <message>
-        <location filename="defaults.py" line="453"/>
+        <location filename="defaults.py" line="464"/>
         <source>InaSAFE is not a hazard modelling tool.</source>
         <translation type="unfinished">InaSAFE is not a hazard modelling tool.</translation>
     </message>
     <message>
-        <location filename="defaults.py" line="454"/>
+        <location filename="defaults.py" line="465"/>
         <source>Polygon area analysis (such as land use) is not yet supported.</source>
         <translation type="unfinished">Polygon area analysis (such as land use) is not yet supported.</translation>
     </message>
     <message>
-        <location filename="defaults.py" line="459"/>
+        <location filename="defaults.py" line="470"/>
         <source>Population by administration boundary is not yet supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="defaults.py" line="461"/>
+        <location filename="defaults.py" line="472"/>
         <source>InaSAFE is a Free and Open Source Software (FOSS) project, published under the GPL V3 license. As such you may freely download, share and (if you like) modify the software.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -275,7 +275,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="defaults.py" line="456"/>
+        <location filename="defaults.py" line="467"/>
         <source>Population count data (raster) must be provided in WGS84 geographic coordinates.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1045,12 +1045,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="98"/>
+        <location filename="population_exposure_report_mixin.py" line="99"/>
         <source>Are there enough shelters and relief items available for %s people?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="103"/>
+        <location filename="population_exposure_report_mixin.py" line="104"/>
         <source>If yes, where are they located and how will we distribute them?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1255,17 +1255,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="314"/>
+        <location filename="population_exposure_report_mixin.py" line="315"/>
         <source>Population Not Affected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="92"/>
+        <location filename="population_exposure_report_mixin.py" line="93"/>
         <source>How will warnings be disseminated?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="108"/>
+        <location filename="population_exposure_report_mixin.py" line="109"/>
         <source>If no, where can we obtain additional relief items from and how will we transport them to here?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1615,7 +1615,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="569"/>
+        <location filename="impact_report.py" line="580"/>
         <source>Analysis Results</source>
         <translation type="unfinished">Analysis Results</translation>
     </message>
@@ -1828,7 +1828,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="319"/>
+        <location filename="population_exposure_report_mixin.py" line="320"/>
         <source>People impacted</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3094,7 +3094,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="88"/>
+        <location filename="population_exposure_report_mixin.py" line="89"/>
         <source>Action checklist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3379,47 +3379,47 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="95"/>
+        <location filename="population_exposure_report_mixin.py" line="96"/>
         <source>How will we reach evacuated people?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="120"/>
+        <location filename="population_exposure_report_mixin.py" line="121"/>
         <source>Population needing evacuation &lt;sup&gt;1&lt;/sup&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="129"/>
+        <location filename="population_exposure_report_mixin.py" line="130"/>
         <source>Total affected population</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="144"/>
+        <location filename="population_exposure_report_mixin.py" line="145"/>
         <source>Unaffected population</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="159"/>
+        <location filename="population_exposure_report_mixin.py" line="160"/>
         <source>Evacuated population minimum needs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="164"/>
+        <location filename="population_exposure_report_mixin.py" line="165"/>
         <source>Needs that should be provided %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="315"/>
+        <location filename="population_exposure_report_mixin.py" line="316"/>
         <source>Unaffected Population</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="318"/>
+        <location filename="population_exposure_report_mixin.py" line="319"/>
         <source>Total Impacted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="320"/>
+        <location filename="population_exposure_report_mixin.py" line="321"/>
         <source>Total Population Affected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3735,52 +3735,52 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="351"/>
+        <location filename="impact_report.py" line="353"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="353"/>
+        <location filename="impact_report.py" line="355"/>
         <source>Disclaimer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="354"/>
+        <location filename="impact_report.py" line="356"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="355"/>
+        <location filename="impact_report.py" line="357"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="356"/>
+        <location filename="impact_report.py" line="358"/>
         <source>Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="357"/>
+        <location filename="impact_report.py" line="359"/>
         <source>This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="361"/>
+        <location filename="impact_report.py" line="363"/>
         <source>Assessment carried out using InaSAFE release %s.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="363"/>
+        <location filename="impact_report.py" line="365"/>
         <source>Legend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="364"/>
+        <location filename="impact_report.py" line="366"/>
         <source>Analysis information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_report.py" line="365"/>
+        <location filename="impact_report.py" line="367"/>
         <source>Report produced by</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4841,57 +4841,57 @@ p, li { white-space: pre-wrap; }
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="151"/>
+        <location filename="dock_base.ui" line="167"/>
         <source>about:blank</source>
         <translation>about:blank</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="35"/>
+        <location filename="dock_base.ui" line="137"/>
         <source>Question: In the event of</source>
         <translation>Question: In the event of</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="92"/>
+        <location filename="dock_base.ui" line="94"/>
         <source>How many</source>
         <translation>How many</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="59"/>
+        <location filename="dock_base.ui" line="68"/>
         <source>&amp;Might</source>
         <translation>&amp;Might</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="79"/>
+        <location filename="dock_base.ui" line="81"/>
         <source>Aggregate results by</source>
         <translation>Aggregate results by</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="195"/>
+        <location filename="dock_base.ui" line="211"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="255"/>
+        <location filename="dock_base.ui" line="271"/>
         <source>Run</source>
         <translation>Run</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="28"/>
+        <location filename="dock_base.ui" line="37"/>
         <source>Show question form</source>
         <translation>Show question form</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="128"/>
+        <location filename="dock_base.ui" line="130"/>
         <source>Options ...</source>
         <translation>Options ...</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="235"/>
+        <location filename="dock_base.ui" line="251"/>
         <source>Print ...</source>
         <translation>Print ...</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="215"/>
+        <location filename="dock_base.ui" line="231"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5046,182 +5046,182 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ImpactMergeDialog</name>
     <message>
-        <location filename="impact_merge_dialog.py" line="95"/>
+        <location filename="impact_merge_dialog.py" line="96"/>
         <source>InaSAFE Impact Layer Merge Tool</source>
         <translation>InaSAFE Impact Layer Merge Tool</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="175"/>
+        <location filename="impact_merge_dialog.py" line="176"/>
         <source>Impact Layer Merge Tool</source>
         <translation>Impact Layer Merge Tool</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="182"/>
+        <location filename="impact_merge_dialog.py" line="183"/>
         <source>Run an impact assessment for an area using aggregation. e.g.Flood Impact on Buildings aggregated by municipal boundaries.</source>
         <translation>Run an impact assessment for an area using aggregation. e.g.Flood Impact on Buildings aggregated by municipal boundaries.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="185"/>
+        <location filename="impact_merge_dialog.py" line="186"/>
         <source>Run a second impact assessment for the same area using the same aggregation. e.g. Flood Impact on People aggregated by municipal boundaries.</source>
         <translation>Run a second impact assessment for the same area using the same aggregation. e.g. Flood Impact on People aggregated by municipal boundaries.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="189"/>
+        <location filename="impact_merge_dialog.py" line="190"/>
         <source>Open this tool and select each impact layer from the pick lists provided below.</source>
         <translation>Open this tool and select each impact layer from the pick lists provided below.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="192"/>
+        <location filename="impact_merge_dialog.py" line="193"/>
         <source>Select the aggregation layer that was used to generate the first and second impact layer.</source>
         <translation>Select the aggregation layer that was used to generate the first and second impact layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="195"/>
+        <location filename="impact_merge_dialog.py" line="196"/>
         <source>Select an output directory.</source>
         <translation>Select an output directory.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="202"/>
+        <location filename="impact_merge_dialog.py" line="203"/>
         <source>Click OK to generate the per aggregation area combined summaries.</source>
         <translation>Click OK to generate the per aggregation area combined summaries.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="310"/>
+        <location filename="impact_merge_dialog.py" line="311"/>
         <source>InaSAFE Merge Impact Tool Information</source>
         <translation>InaSAFE Merge Impact Tool Information</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="282"/>
+        <location filename="impact_merge_dialog.py" line="283"/>
         <source>InaSAFE Merge Impact Tools Information</source>
         <translation>InaSAFE Merge Impact Tools Information</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="298"/>
+        <location filename="impact_merge_dialog.py" line="299"/>
         <source>InaSAFE Merge Impact Tools Error</source>
         <translation>InaSAFE Merge Impact Tools Error</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="310"/>
+        <location filename="impact_merge_dialog.py" line="311"/>
         <source>Report from merging two impact layers was generated successfully.</source>
         <translation>Report from merging two impact layers was generated successfully.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="387"/>
+        <location filename="impact_merge_dialog.py" line="388"/>
         <source>Entire Area</source>
         <translation>Entire Area</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="407"/>
+        <location filename="impact_merge_dialog.py" line="408"/>
         <source>First layer is not valid.</source>
         <translation>First layer is not valid.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="410"/>
+        <location filename="impact_merge_dialog.py" line="411"/>
         <source>Second layer is not valid.</source>
         <translation>Second layer is not valid.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="413"/>
+        <location filename="impact_merge_dialog.py" line="414"/>
         <source>First layer must be different to second layer.</source>
         <translation>First layer must be different to second layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="462"/>
+        <location filename="impact_merge_dialog.py" line="463"/>
         <source>Directory %s does not exist</source>
         <translation>Directory %s does not exist</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="463"/>
+        <location filename="impact_merge_dialog.py" line="464"/>
         <source>Directory %s does not exist. Do you want to create it?</source>
         <translation>Directory %s does not exist. Do you want to create it?</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="475"/>
+        <location filename="impact_merge_dialog.py" line="476"/>
         <source>Output directory cannot be empty.</source>
         <translation>Output directory cannot be empty.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="512"/>
+        <location filename="impact_merge_dialog.py" line="513"/>
         <source>No keywords found for first impact layer.</source>
         <translation>No keywords found for first impact layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="552"/>
+        <location filename="impact_merge_dialog.py" line="553"/>
         <source>No keywords exist in aggregation layer.</source>
         <translation>No keywords exist in aggregation layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="555"/>
+        <location filename="impact_merge_dialog.py" line="556"/>
         <source>Keyword aggregation attribute not found for aggregation layer.</source>
         <translation>Keyword aggregation attribute not found for aggregation layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="176"/>
+        <location filename="impact_merge_dialog.py" line="177"/>
         <source>This tool will merge the outputs from two impact maps for the same area. The maps must be created using the same aggregation areas and same hazard. To use:</source>
         <translation>This tool will merge the outputs from two impact maps for the same area. The maps must be created using the same aggregation areas and same hazard. To use:</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="515"/>
+        <location filename="impact_merge_dialog.py" line="516"/>
         <source>Keyword %s not found for first layer.</source>
         <translation>Keyword %s not found for first layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="526"/>
+        <location filename="impact_merge_dialog.py" line="527"/>
         <source>No keywords found for second impact layer.</source>
         <translation>No keywords found for second impact layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="529"/>
+        <location filename="impact_merge_dialog.py" line="530"/>
         <source>Keyword %s not found for second layer.</source>
         <translation>Keyword %s not found for second layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="538"/>
+        <location filename="impact_merge_dialog.py" line="539"/>
         <source>First impact layer and second impact layer do not use the same hazard layer.</source>
         <translation>First impact layer and second impact layer do not use the same hazard layer.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="197"/>
+        <location filename="impact_merge_dialog.py" line="198"/>
         <source>Check &quot;Use customized report template&quot; checkbox and select the report template file if you want to use your own template. Note that all the map composer components that are needed must be fulfilled.</source>
         <translation>Check &quot;Use customized report template&quot; checkbox and select the report template file if you want to use your own template. Note that all the map composer components that are needed must be fulfilled.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="238"/>
+        <location filename="impact_merge_dialog.py" line="239"/>
         <source>Select Output Directory</source>
         <translation>Select Output Directory</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="246"/>
+        <location filename="impact_merge_dialog.py" line="247"/>
         <source>Select Report Template</source>
         <translation>Select Report Template</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="246"/>
+        <location filename="impact_merge_dialog.py" line="247"/>
         <source>QPT File (*.qpt)</source>
         <translation>QPT File (*.qpt)</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="436"/>
+        <location filename="impact_merge_dialog.py" line="437"/>
         <source>Template file does not exist.</source>
         <translation>Template file does not exist.</translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="804"/>
+        <location filename="impact_merge_dialog.py" line="805"/>
         <source>Total</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="1118"/>
+        <location filename="impact_merge_dialog.py" line="1119"/>
         <source>Components: %s could not be found, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="616"/>
+        <location filename="impact_merge_dialog.py" line="617"/>
         <source>Please choose impact layers with aggregated postprocessor if you want to use aggregation layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="655"/>
+        <location filename="impact_merge_dialog.py" line="656"/>
         <source>First and Second layer does not use chosen Aggregation layer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5338,11 +5338,6 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>KeywordIO</name>
     <message>
-        <location filename="keyword_io.py" line="229"/>
-        <source>Expected extraKeywords to be a dictionary. Got %s</source>
-        <translation>Expected extraKeywords to be a dictionary. Got %s</translation>
-    </message>
-    <message>
         <location filename="keyword_io.py" line="242"/>
         <source>Failed to copy keywords file from : 
 %s
@@ -5367,6 +5362,11 @@ to
         <location filename="keyword_io.py" line="753"/>
         <source>The following keywords are defined for the active layer:</source>
         <translation type="unfinished">The following keywords are defined for the active layer:</translation>
+    </message>
+    <message>
+        <location filename="keyword_io.py" line="229"/>
+        <source>Expected extra keywords to be a dictionary. Got %s</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -68,67 +68,67 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="75"/>
+        <location filename="utilities.py" line="74"/>
         <source>No details provided</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="121"/>
+        <location filename="utilities.py" line="120"/>
         <source>%i seconds</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="123"/>
+        <location filename="utilities.py" line="122"/>
         <source>a minute</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="127"/>
+        <location filename="utilities.py" line="126"/>
         <source>over an hour</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="129"/>
+        <location filename="utilities.py" line="128"/>
         <source>%i hours and %i minutes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="132"/>
+        <location filename="utilities.py" line="131"/>
         <source>%i days, %i hours and %i minutes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="153"/>
+        <location filename="utilities.py" line="152"/>
         <source>sourced from</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="154"/>
+        <location filename="utilities.py" line="153"/>
         <source>Hazard details</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="157"/>
+        <location filename="utilities.py" line="156"/>
         <source>Exposure details</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="165"/>
+        <location filename="utilities.py" line="164"/>
         <source>Hazard layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="181"/>
+        <location filename="utilities.py" line="180"/>
         <source>an unknown source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="176"/>
+        <location filename="utilities.py" line="175"/>
         <source>Exposure layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="197"/>
+        <location filename="utilities.py" line="196"/>
         <source>Software notes</source>
         <translation type="unfinished"/>
     </message>
@@ -203,7 +203,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="125"/>
+        <location filename="utilities.py" line="124"/>
         <source>%s minutes</source>
         <translation type="unfinished"/>
     </message>
@@ -228,12 +228,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="gis.py" line="386"/>
+        <location filename="utilities.py" line="202"/>
+        <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software!InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR &amp; the World Bank</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="utilities.py" line="1198"/>
         <source>Input layer must be a InaSAFE spatial object. I got %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="gis.py" line="408"/>
+        <location filename="utilities.py" line="1220"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation type="unfinished"/>
     </message>
@@ -248,22 +253,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="453"/>
+        <location filename="defaults.py" line="443"/>
         <source>InaSAFE is not a hazard modelling tool.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="454"/>
+        <location filename="defaults.py" line="444"/>
         <source>Polygon area analysis (such as land use) is not yet supported.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="459"/>
+        <location filename="defaults.py" line="449"/>
         <source>Population by administration boundary is not yet supported.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="461"/>
+        <location filename="defaults.py" line="451"/>
         <source>InaSAFE is a Free and Open Source Software (FOSS) project, published under the GPL V3 license. As such you may freely download, share and (if you like) modify the software.</source>
         <translation type="unfinished"/>
     </message>
@@ -273,7 +278,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="456"/>
+        <location filename="defaults.py" line="446"/>
         <source>Population count data (raster) must be provided in WGS84 geographic coordinates.</source>
         <translation type="unfinished"/>
     </message>
@@ -288,7 +293,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="test_translations.py" line="82"/>
+        <location filename="metadata_definitions.py" line="55"/>
         <source>Be affected</source>
         <translation type="unfinished"/>
     </message>
@@ -743,7 +748,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="167"/>
+        <location filename="parameter_definitions.py" line="28"/>
         <source>Thresholds [m]</source>
         <translation type="unfinished"/>
     </message>
@@ -763,12 +768,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="173"/>
+        <location filename="definitions.py" line="60"/>
         <source>Aggregation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="311"/>
+        <location filename="building_exposure_report_mixin.py" line="198"/>
         <source>Building type</source>
         <translation type="unfinished"/>
     </message>
@@ -928,7 +933,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="94"/>
         <source>An exposure raster layer where each cell represent population count.</source>
         <translation type="unfinished"/>
     </message>
@@ -948,22 +953,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="53"/>
+        <location filename="impact_function.py" line="60"/>
         <source>Notes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="250"/>
+        <location filename="impact_function.py" line="227"/>
         <source>Thousand separator is represented by  %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="235"/>
+        <location filename="impact_function.py" line="211"/>
         <source>(people per cell)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="335"/>
+        <location filename="impact_function.py" line="210"/>
         <source>Population</source>
         <translation type="unfinished"/>
     </message>
@@ -978,7 +983,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>Vector polygon layer extracted from OSM where each polygon represents the footprint of a building.</source>
         <translation type="unfinished"/>
     </message>
@@ -1003,12 +1008,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="223"/>
+        <location filename="impact_function.py" line="192"/>
         <source>(building)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="222"/>
+        <location filename="impact_function.py" line="191"/>
         <source>Building count</source>
         <translation type="unfinished"/>
     </message>
@@ -1028,7 +1033,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_profile.py" line="265"/>
+        <location filename="defaults.py" line="395"/>
         <source>Provenance</source>
         <translation type="unfinished"/>
     </message>
@@ -1093,22 +1098,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="203"/>
+        <location filename="impact_function.py" line="171"/>
         <source>Low</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="206"/>
+        <location filename="impact_function.py" line="164"/>
         <source>Medium</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="209"/>
+        <location filename="impact_function.py" line="157"/>
         <source>High</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="165"/>
+        <location filename="impact_function.py" line="224"/>
         <source>Buildings Affected</source>
         <translation type="unfinished"/>
     </message>
@@ -1173,7 +1178,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="62"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>Be impacted</source>
         <translation type="unfinished"/>
     </message>
@@ -1243,7 +1248,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="174"/>
+        <location filename="impact_function.py" line="233"/>
         <source>Structure inundated status</source>
         <translation type="unfinished"/>
     </message>
@@ -1268,12 +1273,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="241"/>
+        <location filename="impact_function.py" line="249"/>
         <source>Number of People</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="241"/>
+        <location filename="impact_function.py" line="217"/>
         <source>Population which %s</source>
         <translation type="unfinished"/>
     </message>
@@ -1283,7 +1288,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="70"/>
+        <location filename="metadata_definitions.py" line="62"/>
         <source>N/A</source>
         <translation type="unfinished"/>
     </message>
@@ -1328,12 +1333,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="457"/>
+        <location filename="impact_function.py" line="236"/>
         <source>Not Inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="460"/>
+        <location filename="impact_function.py" line="238"/>
         <source>Inundated</source>
         <translation type="unfinished"/>
     </message>
@@ -1368,12 +1373,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="108"/>
+        <location filename="impact_function.py" line="167"/>
         <source>People in %.1f m of water</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="233"/>
+        <location filename="impact_function.py" line="209"/>
         <source>People in need of evacuation</source>
         <translation type="unfinished"/>
     </message>
@@ -1383,7 +1388,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="173"/>
+        <location filename="impact_function.py" line="232"/>
         <source>Buildings inundated</source>
         <translation type="unfinished"/>
     </message>
@@ -1393,7 +1398,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="57"/>
         <source>Be flooded</source>
         <translation type="unfinished"/>
     </message>
@@ -1613,7 +1618,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_report.py" line="569"/>
+        <location filename="impact_report.py" line="534"/>
         <source>Analysis Results</source>
         <translation type="unfinished"/>
     </message>
@@ -1633,7 +1638,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="96"/>
+        <location filename="metadata_definitions.py" line="98"/>
         <source>The number of classes is three.</source>
         <translation type="unfinished"/>
     </message>
@@ -1713,7 +1718,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="173"/>
+        <location filename="impact_function.py" line="148"/>
         <source>Unknown</source>
         <translation type="unfinished"/>
     </message>
@@ -1856,7 +1861,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="476"/>
+        <location filename="defaults.py" line="359"/>
         <source>weekly</source>
         <translation type="unfinished"/>
     </message>
@@ -2366,7 +2371,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="397"/>
+        <location filename="definitions.py" line="727"/>
         <source>Units</source>
         <translation type="unfinished"/>
     </message>
@@ -2471,7 +2476,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_profile.py" line="267"/>
+        <location filename="defaults.py" line="396"/>
         <source>The provenance of minimum needs</source>
         <translation type="unfinished"/>
     </message>
@@ -3062,12 +3067,12 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="73"/>
+        <location filename="impact_function.py" line="69"/>
         <source>Volcanoes considered: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="78"/>
+        <location filename="impact_function.py" line="74"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if they are within the volcanic hazard zones.</source>
         <translation type="unfinished"/>
     </message>
@@ -3127,7 +3132,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="parameter_definitions.py" line="47"/>
+        <location filename="parameter_definitions.py" line="57"/>
         <source>Medium Hazard class threshold.</source>
         <translation type="unfinished"/>
     </message>
@@ -3137,7 +3142,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="parameter_definitions.py" line="69"/>
+        <location filename="parameter_definitions.py" line="74"/>
         <source>High Hazard class threshold.</source>
         <translation type="unfinished"/>
     </message>
@@ -3147,7 +3152,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="75"/>
+        <location filename="impact_function.py" line="82"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if they are in a hazard zone.</source>
         <translation type="unfinished"/>
     </message>
@@ -3182,7 +3187,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="80"/>
+        <location filename="impact_function.py" line="87"/>
         <source>Map shows the numbers of people in high, medium, and low hazard class areas.</source>
         <translation type="unfinished"/>
     </message>
@@ -3307,22 +3312,22 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="parameter_definitions.py" line="38"/>
+        <location filename="parameter_definitions.py" line="29"/>
         <source>Up to three thresholds (in meters) can be set in an increasing order. The impact function will report the number of people per threshold you define here. Specify the upper bound for each threshold. The lower bound of the first threshold shall be zero. People in water depths above the maximum threshold will be classified as needing evacuation.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="71"/>
+        <location filename="impact_function.py" line="61"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if flood levels exceed %(eps).1f m.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="153"/>
+        <location filename="impact_function.py" line="131"/>
         <source>People in &gt;= %.1f m of water</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="161"/>
+        <location filename="impact_function.py" line="139"/>
         <source>People in %.1f m to %.1f m of water</source>
         <translation type="unfinished"/>
     </message>
@@ -3568,7 +3573,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="94"/>
+        <location filename="metadata_definitions.py" line="97"/>
         <source>Raster layer contains population affected and the minimum needs based on number of the population affected.</source>
         <translation type="unfinished"/>
     </message>
@@ -3683,18 +3688,8 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="454"/>
-        <source>Road inundated status</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="66"/>
-        <source>Buildings are said to be inundated when in a region with field &quot;%s&quot; in &quot;%s&quot;.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="utilities.py" line="202"/>
-        <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software! %s</source>
+        <location filename="wizard_strings.py" line="146"/>
+        <source>&lt;p&gt;You selected &lt;b&gt;%s %s&lt;/b&gt; as hazard input to &lt;b&gt;%s&lt;/b&gt; function.&lt;/p&gt; &lt;p&gt;Please help us to find your &lt;b&gt;hazard&lt;/b&gt; layer. A hazard layer represents something that will impact the people or infrastructure in an area. For example flood, earthquake and tsunami inundation are all different kinds of hazards. Select the appropriate option below to indicate where your data resides:&lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3723,63 +3718,18 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_report.py" line="351"/>
-        <source>Version</source>
+        <location filename="impact_function.py" line="454"/>
+        <source>Road inundated status</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_report.py" line="353"/>
-        <source>Disclaimer</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_report.py" line="354"/>
-        <source>Date</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_report.py" line="355"/>
-        <source>Time</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_report.py" line="356"/>
-        <source>Note</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_report.py" line="357"/>
-        <source>This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_report.py" line="361"/>
-        <source>Assessment carried out using InaSAFE release %s.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_report.py" line="363"/>
-        <source>Legend</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_report.py" line="364"/>
-        <source>Analysis information</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_report.py" line="365"/>
-        <source>Report produced by</source>
+        <location filename="impact_function.py" line="66"/>
+        <source>Buildings are said to be inundated when in a region with field &quot;%s&quot; in &quot;%s&quot;.</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="abstract_list.py" line="78"/>
         <source>Null (PyQt4.QtCore.QPyNullVariant) found from the data.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="wizard_strings.py" line="146"/>
-        <source>&lt;p&gt;You selected &lt;b&gt;%s %s&lt;/b&gt; as hazard input to &lt;b&gt;%s&lt;/b&gt; function.&lt;/p&gt; &lt;p&gt;Please help us to find your &lt;b&gt;hazard&lt;/b&gt; layer. A hazard layer represents something that will impact the people or infrastructure in an area. For example flood, earthquake and tsunami inundation are all different kinds of hazards. Select the appropriate option below to indicate where your data resides:&lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -5789,7 +5739,7 @@ to
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="422"/>
-        <source>ISO 19115 Metadata</source>
+        <source>ISO 19155 Metadata</source>
         <translation type="unfinished"/>
     </message>
     <message>
