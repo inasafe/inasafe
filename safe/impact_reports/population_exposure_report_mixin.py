@@ -28,7 +28,7 @@ from safe.impact_functions.core import (
 
 
 class PopulationExposureReportMixin(ReportMixin):
-    """Building specific report.
+    """Population specific report.
     """
 
     def __init__(self):
@@ -36,8 +36,9 @@ class PopulationExposureReportMixin(ReportMixin):
 
         .. versionadded:: 3.2
 
-        ..Notes:
-        Expect affected population as following:
+        ..Notes::
+
+            Expect affected population as following:
 
             _affected_population = OrderedDict([
                 (impact level, amount),
@@ -76,7 +77,7 @@ class PopulationExposureReportMixin(ReportMixin):
         return report
 
     def action_checklist(self):
-        """Breakdown by building type.
+        """Population action.
 
         :returns: The buildings breakdown report.
         :rtype: list

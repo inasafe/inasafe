@@ -118,7 +118,7 @@ class ImpactReport(object):
             self._template = template
         else:
             self._template = resources_path(
-                'qgis-composer-templates', 'blue-portrait-a4.qpt')
+                'qgis-composer-templates', 'a4-portrait-blue.qpt')
 
         # Also recreate template composition
         self._template_composition = TemplateComposition(

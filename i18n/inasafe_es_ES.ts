@@ -5810,8 +5810,8 @@ to
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="422"/>
-        <source>ISO 19155 Metadata</source>
-        <translation>Metadatos ISO 19155</translation>
+        <source>ISO 19115 Metadata</source>
+        <translation>Metadatos ISO 19115</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="67"/>

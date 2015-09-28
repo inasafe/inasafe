@@ -42,7 +42,7 @@ class ImpactReportTest(unittest.TestCase):
         layer, _ = load_layer(impact_layer_path)
 
         template = resources_path(
-            'qgis-composer-templates', 'blue-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
         title = report.map_title
         expected_title = 'People affected by flood prone areas'
@@ -55,7 +55,7 @@ class ImpactReportTest(unittest.TestCase):
         layer_path = test_data_path('hazard', 'tsunami_wgs84.tif')
         layer, _ = load_layer(layer_path)
         template = resources_path(
-            'qgis-composer-templates', 'blue-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
         title = report.map_title
         expected_title = None
@@ -69,7 +69,7 @@ class ImpactReportTest(unittest.TestCase):
         layer, _ = load_layer(impact_layer_path)
 
         template = resources_path(
-            'qgis-composer-templates', 'blue-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
         # There are missing elements in the template
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
@@ -95,7 +95,7 @@ class ImpactReportTest(unittest.TestCase):
         CANVAS.refresh()
 
         template = resources_path(
-            'qgis-composer-templates', 'blue-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
         out_path = unique_filename(
             prefix='map_default_template_test',
@@ -159,7 +159,7 @@ class ImpactReportTest(unittest.TestCase):
         CANVAS.refresh()
 
         template = resources_path(
-            'qgis-composer-templates', 'blue-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
 
         # Set custom logo
@@ -204,7 +204,7 @@ class ImpactReportTest(unittest.TestCase):
         CANVAS.refresh()
 
         template = resources_path(
-            'qgis-composer-templates', 'blue-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
         report.template = template  # just to cover set template
         out_path = unique_filename(
