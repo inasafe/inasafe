@@ -52,6 +52,42 @@ class FloodPolygonRoadsFunction(
         # The 'wet' variable
         self.wet = 'wet'
 
+    def notes(self):
+        """Return the notes section of the report.
+
+        .. versionadded:: 3.2.1
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+
+        hazard_terminology = tr('flooded')
+        flood_value = self.hazard_class_mapping[self.wet]
+
+        return [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Roads are %s when it is located on hazard polygon '
+                    'that has value %s in attribute %s.' % (
+                        hazard_terminology,
+                        ', '.join(flood_value),
+                        self.hazard_class_attribute
+                    ))
+            },
+            {
+                'content': tr(
+                    'Roads are closed if they are %s.' % hazard_terminology)
+            },
+            {
+                'content': tr(
+                    'Roads are open if they are not %s.' % hazard_terminology)
+            }
+        ]
+
     def run(self):
         """Experimental impact function for flood polygons on roads."""
         self.validate()
