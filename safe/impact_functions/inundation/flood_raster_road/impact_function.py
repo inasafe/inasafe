@@ -315,6 +315,56 @@ class FloodRasterRoadsFunction(
             }
         ]
 
+
+    def action_checklist(self):
+        """Action checklist for the itb earthquake fatality report.
+
+        .. versionadded:: 3.2.1
+
+        :returns: The action checklist
+        :rtype: list
+        """
+        checklist = [
+            {
+                'content': tr('Action checklist'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Try to Identify which potential roads that able to '
+                    'access for evacuation and logistic distribution purpose. '
+                    'What type of transportation reliable to use in that '
+                    'order?')
+            },
+            {
+                'content': tr(
+                    'Identify what equipment needed to open access of '
+                    'affected roads. Where the resources or equipment to open '
+                    'access affected roads located? who/what department '
+                    'responsible to mobilize?')
+            },
+            {
+                'content': tr(
+                    'Which roads can be used to evacuate people or to '
+                    'distribute logistics?')
+            },
+            {
+                'content': tr(
+                    'What type of vehicles can use the unaffected roads?')
+            },
+            {
+                'content': tr(
+                    'What sort of equipment will be needed to reopen roads & '
+                    'where will we get it?')
+            },
+            {
+                'content': tr(
+                    'Which government department is responsible for supplying '
+                    'equipment ?')
+            }
+        ]
+        return checklist
+
     def run(self):
         """Run the impact function.
 
