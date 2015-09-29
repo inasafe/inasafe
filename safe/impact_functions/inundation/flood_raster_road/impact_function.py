@@ -277,6 +277,42 @@ class FloodRasterRoadsFunction(
         """Constructor."""
         super(FloodRasterRoadsFunction, self).__init__()
 
+    def notes(self):
+        """Return the notes section of the report.
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        threshold = self.parameters['min threshold'].value
+        hazard = self.hazard.keyword('hazard')
+        hazard_terminology = tr('flooded')
+        hazard_object = tr('flood')
+        if hazard == 'flood':
+            # Use flooded
+            pass
+        elif hazard == 'tsunami':
+            hazard_terminology = tr('inundated')
+            hazard_object = tr('water')
+        return [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Roads are %s when %s levels exceed %.2f m.' %
+                    (hazard_terminology, hazard_object, threshold))
+            },
+            {
+                'content': tr(
+                    'Roads are closed if they are %s.' % hazard_terminology)
+            },
+            {
+                'content': tr(
+                    'Roads are open if they are not %s.' % hazard_terminology)
+            }
+        ]
+
     def run(self):
         """Run the impact function.
 
