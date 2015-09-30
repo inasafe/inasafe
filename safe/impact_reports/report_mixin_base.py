@@ -27,13 +27,13 @@ class ReportMixin(object):
         :returns: The report in html format.
         :rtype: basestring
         """
-        return self.parse_to_html(self.generate_report())
+        return self.generate_report().to_html()
 
     def generate_report(self):
         """Defining the interface.
 
         :returns: An itemized breakdown of the report.
-        :rtype: list
+        :rtype: messaging.Message
         """
         return []
 
@@ -41,7 +41,7 @@ class ReportMixin(object):
         """The actions to be taken in for the impact on this exposure type.
 
         :returns: The action checklist.
-        :rtype: list
+        :rtype: messaging.Message
         """
         return []
 
@@ -49,7 +49,7 @@ class ReportMixin(object):
         """The impact summary.
 
         :returns: The action checklist.
-        :rtype: list
+        :rtype: messaging.Message
         """
         return []
 
@@ -57,12 +57,13 @@ class ReportMixin(object):
         """Additional notes to be used.
 
         :return: The notes to be added to this report
+        :rtype: safe.messaging.Message
 
         ..Notes:
         Notes are very much specific to IFs so it is expected that this method
         is overwritten in the IF if needed.
         """
-        return []
+        return m.Message()
 
     @staticmethod
     def parse_to_html(report):

@@ -89,41 +89,9 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0001_generate_report(self):
         """Generate a blank report."""
-        blank_report = self.building_mixin_blank.generate_report()
-        expected_blank_report = [
-            {'content': ''},
-            {'content': ''},
-            {'content': [u''], 'header': True},
-            {'content': [u'Unaffected buildings', '0'], 'header': True},
-            {'content': [u'All buildings', '0'], 'header': True},
-            {'content': ''},
-            {'content': [u'Building type', u'Total'], 'header': True},
-            {'content': ''},
-            {'content': u'Action checklist', 'header': True},
-            {'content': u'Are the critical facilities still open?'},
-            {'content': (
-                u'Which structures have warning capacity (eg. sirens, '
-                u'speakers, etc.)?')},
-            {'content': u'Which buildings will be evacuation centres?'},
-            {'content': u'Where will we locate the operations centre?'},
-            {'content': (
-                u'Where will we locate warehouse and/or distribution '
-                u'centres?')},
-            {
-                'content': (
-                    u'Where will the students from the %s closed schools go '
-                    u'to study?'),
-                'arguments': ('0',),
-                'condition': False
-            },
-            {
-                'content': (
-                    u'Where will the patients from the %s closed hospitals '
-                    u'go for treatment and how will we transport them?'),
-                'arguments': ('0',),
-                'condition': False},
-            {'content': ''}]
-        self.assertListEqual(blank_report, expected_blank_report)
+        blank_report = self.building_mixin_blank.generate_report().to_text()
+        expected_blank_report = '    \n\n\n---\n**Unaffected buildings**0------\n**Total**0---\n\n\n---\n**Building type****Total**------\n**Total**---\n\n*Action checklist\n\n - Are the critical facilities still open?\n - Which structures have warning capacity (eg. sirens, speakers, etc.)?\n - Which buildings will be evacuation centres?\n - Where will we locate the operations centre?\n - Where will we locate warehouse and/or distribution centres?\n\n\n\n'
+        self.assertEqual(blank_report, expected_blank_report)
 
     def test_0002_action_checklist(self):
         """The default action check list."""

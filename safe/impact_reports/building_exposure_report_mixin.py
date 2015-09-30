@@ -13,10 +13,11 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 
 from collections import OrderedDict
-
+from operator import add
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
+import safe.messaging as m
 
 
 class BuildingExposureReportMixin(ReportMixin):
@@ -78,79 +79,61 @@ class BuildingExposureReportMixin(ReportMixin):
         """Breakdown by building type.
 
         :returns: The report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        report = [{'content': self.question}]
-        report += [{'content': ''}]  # Blank line to separate report sections
-        report += self.impact_summary()
-        report += [{'content': ''}]  # Blank line to separate report sections
-        report += self.buildings_breakdown()
-        report += [{'content': ''}]  # Blank line to separate report sections
-        report += self.action_checklist()
-        report += [{'content': ''}]  # Blank line to separate report sections
-        report += self.notes()
-        return report
+        message = m.Message()
+        message.add(m.Paragraph(self.question))
+        message.add(self.impact_summary())
+        message.add(self.buildings_breakdown())
+        message.add(self.action_checklist())
+        message.add(self.notes())
+        return message
 
     def action_checklist(self):
         """Breakdown by building type.
 
         :returns: The buildings breakdown report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
         schools_closed = self.schools_closed
         hospitals_closed = self.hospitals_closed
-        return [
-            {
-                'content': tr('Action checklist'),
-                'header': True
-            },
-            {
-                'content': tr('Are the critical facilities still open?')
-            },
-            {
-                'content': tr(
-                    'Which structures have warning capacity '
-                    '(eg. sirens, speakers, etc.)?')},
-            {
-                'content': tr('Which buildings will be evacuation centres?')
-            },
-            {
-                'content': tr('Where will we locate the operations centre?')
-            },
-            {
-                'content': tr(
-                    'Where will we locate warehouse and/or distribution '
-                    'centres?')
-            },
-            {
-                'content': tr(
-                    'Where will the students from the %s closed schools go to '
-                    'study?'),
-                'arguments': (format_int(schools_closed),),
-                'condition': schools_closed > 0
-            },
-            {
-                'content': tr(
-                    'Where will the patients from the %s closed hospitals go '
-                    'for treatment and how will we transport them?'),
-                'arguments': (format_int(hospitals_closed),),
-                'condition': hospitals_closed > 0
-            }
-        ]
+
+        message = m.Message(style_class='container')
+        message.add(m.Heading(tr('Action checklist')))
+        checklist = m.BulletedList()
+        checklist.add(tr('Are the critical facilities still open?'))
+        checklist.add(tr(
+            'Which structures have warning capacity (eg. sirens, speakers, '
+            'etc.)?'))
+        checklist.add(tr('Which buildings will be evacuation centres?'))
+        checklist.add(tr('Where will we locate the operations centre?'))
+        checklist.add(
+            tr('Where will we locate warehouse and/or distribution centres?'))
+        if schools_closed > 0:
+            checklist.add(tr(
+                'Where will the students from the %s closed schools '
+                'go to study?') % format_int(schools_closed))
+        if hospitals_closed > 0:
+            checklist.add(tr(
+                'Where will the patients from the %s closed hospitals go '
+                'for treatment and how will we transport them?') % format_int(
+                    hospitals_closed))
+        message.add(checklist)
+        return message
 
     def impact_summary(self):
-        """The impact summary as per category
+        """The impact summary as per category.
 
         :returns: The impact summary.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
         affect_types = self._impact_breakdown
-        impact_summary_report = [
-            {
-                # We leave the top left cell blank in the summary table
-                'content': [tr('')] + affect_types,
-                'header': True
-            }]
+        message = m.Message(style_class='container')
+        table = m.Table(style_class='table table-condensed table-striped')
+        table.caption = None
+        row = m.Row()
+        row.add(m.Cell('', header=True))  # intentionally empty top left cell
+        row.add(m.Cell('Buildings affected', header=True))
         for (category, building_breakdown) in self.affected_buildings.items():
             total_affected = [0] * len(affect_types)
             for affected_breakdown in building_breakdown.values():
@@ -159,83 +142,102 @@ class BuildingExposureReportMixin(ReportMixin):
                     total_affected[count] += number_affected
             total_affected_formatted = [
                 format_int(affected) for affected in total_affected]
-            impact_summary_report.append(
-                {
-                    'content': [tr(category)] + total_affected_formatted
-                })
+            row = m.Row()
+            row.add(m.Cell(tr(category), header=True))
+            row.add(m.Cell(total_affected_formatted, align='right'))
+            table.add(row)
+
         if len(self._affected_categories) > 1:
-            impact_summary_report.append(
-                {
-                    'content': [
-                        tr(tr('Total affected buildings')),
-                        format_int(self.total_affected_buildings)],
-                    'header': True
-                })
-        impact_summary_report.append(
-            {
-                'content': [
-                    tr('Unaffected buildings'),
-                    format_int(self.total_unaffected_buildings)],
-                'header': True
-            })
-        impact_summary_report.append(
-            {
-                'content': [
-                    tr('All buildings'),
-                    format_int(self.total_buildings)],
-                'header': True
-            })
-        return impact_summary_report
+            row = m.Row()
+            row.add(m.Cell(tr('Affected buildings'), header=True))
+            row.add(m.Cell(
+                format_int(self.total_affected_buildings), align='right'))
+            table.add(row)
+
+        row = m.Row()
+        row.add(m.Cell(tr('Unaffected buildings'), header=True))
+        row.add(m.Cell(
+            format_int(self.total_unaffected_buildings), align='right'))
+        table.add(row)
+
+        row = m.Row()
+        row.add(m.Cell(tr('Total'), header=True))
+        row.add(m.Cell(
+            format_int(self.total_buildings), align='right'))
+        table.add(row)
+        message.add(table)
+        return message
 
     def buildings_breakdown(self):
         """Breakdown by building type.
 
         :returns: The buildings breakdown report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        buildings_breakdown_report = []
-        category_names = self.affected_buildings.keys()
-        table_headers = [tr('Building type')]
-        table_headers += [tr(category) for category in category_names]
-        table_headers += [tr('Total')]
-        buildings_breakdown_report.append(
-            {
-                'content': table_headers,
-                'header': True
-            })
+        message = m.Message(style_class='container')
+        table = m.Table(style_class='table table-condensed table-striped')
+        table.caption = None
+        impact_names = self.affected_buildings.keys()  # e.g. flooded, wet, dry
+
+        row = m.Row()
+        row.add(m.Cell('Building type', header=True))
+        for name in impact_names:
+            row.add(m.Cell(tr(name), header=True))
+        row.add(m.Cell(tr('Total'), header=True))
+        table.add(row)
+
         # Let's sort alphabetically first
         building_types = [building_type for building_type in self.buildings]
         building_types.sort()
+        impact_totals = []  # Used to store the total for each impact name
+        # Initialise totals with zeros
+        for _ in impact_names:
+            impact_totals.append(0)
+        # Now build the main table
         for building_type in building_types:
+            row = m.Row()
             building_type_name = building_type.replace('_', ' ')
-            affected_by_usage = []
-            for category in category_names:
-                if building_type in self.affected_buildings[category]:
-                    affected_by_usage.append(
-                        self.affected_buildings[category][
+            impact_subtotals = []
+            for name in impact_names:
+                if building_type in self.affected_buildings[name]:
+                    impact_subtotals.append(
+                        self.affected_buildings[name][
                             building_type].values()[0])
                 else:
-                    affected_by_usage.append(0)
-            building_detail = (
-                # building type
-                [building_type_name.capitalize()] +
-                # categories
-                [format_int(x) for x in affected_by_usage] +
-                # total
-                [format_int(self.buildings[building_type])])
-            buildings_breakdown_report.append(
-                {
-                    'content': building_detail
-                })
+                    impact_subtotals.append(0)
+            # add the subtotal to the cumulative total
+            # see http://stackoverflow.com/questions/18713321/element
+            #     -wise-addition-of-2-lists-in-python
+            impact_totals = map(add, impact_totals, impact_subtotals)
 
-        return buildings_breakdown_report
+            row.add(m.Cell(building_type_name.capitalize(), header=True))
+            # list out the subtotals for this category per impact type
+            for value in impact_subtotals:
+                row.add(m.Cell(format_int(value), align='right'))
+            # totals column
+            row.add(m.Cell(
+                format_int(self.buildings[building_type]),
+                header=True,
+                align='right'))
+            table.add(row)
+
+        # list out the TOTALS for this category per impact type
+        row = m.Row()
+        row.add(m.Cell(tr('Total'), header=True))
+        for value in impact_totals:
+            row.add(m.Cell(format_int(value), align='right', header=True))
+        table.add(row)
+
+        message.add(table)
+
+        return message
 
     @property
     def schools_closed(self):
         """Get the number of schools
 
-        :returns: The buildings breakdown report.
-        :rtype: list
+        :returns: Count of closed schools.
+        :rtype: int
 
         .. note::
 
@@ -253,10 +255,10 @@ class BuildingExposureReportMixin(ReportMixin):
 
     @property
     def hospitals_closed(self):
-        """Get the number of schools
+        """Get the number of hospitals.
 
-        :returns: The buildings breakdown report.
-        :rtype: list
+        :returns: Count of closed hospitals.
+        :rtype: int
 
         ..Notes:
         Expect affected buildings to be given as following:

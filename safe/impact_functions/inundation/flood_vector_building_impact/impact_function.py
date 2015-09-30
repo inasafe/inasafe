@@ -34,7 +34,7 @@ from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-
+import safe.messaging as m
 
 class FloodPolygonBuildingFunction(
         ClassifiedVHClassifiedVE,
@@ -53,24 +53,19 @@ class FloodPolygonBuildingFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        return [
-            {
-                'content': tr('Notes and assumptions'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Buildings are flooded when in a region with '
-                    'field "%s" in "%s".') % (
-                        self.hazard_class_attribute,
-                        ', '.join([
-                            unicode(hazard_class) for
-                            hazard_class in self.hazard_class_mapping[self.wet]
-                        ]))
-            }
-        ]
+        message = m.Message(style_class='container')
+        message.add(m.Heading(tr('Notes and assumptions')))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Buildings are flooded when in a region with '
+            'field "%s" in "%s".') % (
+                self.hazard_class_attribute,
+                ', '.join([
+                    unicode(hazard_class) for
+                    hazard_class in self.hazard_class_mapping[self.wet]
+                ])))
 
     def run(self):
         """Experimental impact function."""
