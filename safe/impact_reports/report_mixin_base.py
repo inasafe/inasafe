@@ -112,9 +112,9 @@ class ReportMixin(object):
                 message.add(table)
                 table = m.Table(
                     style_class='table table-condensed table-striped')
-                table_row = m.Row(content, header=True, align='center')
+                table_row = m.Row(content, header=True)
             else:
-                table_row = m.Row(content, align='right')
+                table_row = m.Row(content)
             table.add(table_row)
 
         message.add(table)
