@@ -61,8 +61,9 @@ class FloodPolygonRoadsFunction(
         :rtype: list
         """
 
-        hazard_terminology = tr('flooded')
-        flood_value = self.hazard_class_mapping[self.wet]
+        hazard_terminology = tr('inundated')
+        flood_value = [unicode(hazard_class)
+                       for hazard_class in self.hazard_class_mapping[self.wet]]
 
         return [
             {
@@ -71,12 +72,13 @@ class FloodPolygonRoadsFunction(
             },
             {
                 'content': tr(
-                    'Roads are %s when it is located on hazard polygon '
-                    'that has value %s in attribute %s.' % (
+                    'Roads are said to be %s when in a region with field'
+                    ' "%s" in "%s" .' % (
                         hazard_terminology,
-                        ', '.join(flood_value),
-                        self.hazard_class_attribute
-                    ))
+                        self.hazard_class_attribute,
+                        ', '.join(flood_value)
+                    )
+                )
             },
             {
                 'content': tr(
