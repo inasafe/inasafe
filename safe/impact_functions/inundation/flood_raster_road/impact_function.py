@@ -315,7 +315,6 @@ class FloodRasterRoadsFunction(
             }
         ]
 
-
     def action_checklist(self):
         """Action checklist for the itb earthquake fatality report.
 
