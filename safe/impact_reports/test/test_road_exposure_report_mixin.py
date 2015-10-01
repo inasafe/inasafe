@@ -58,7 +58,6 @@ class RoadExposureReportMixinTest(unittest.TestCase):
         blank_report = self.road_mixin_blank.generate_report().to_text()
         # self.assertListEqual(blank_report, expected_blank_report, message)
         self.assertIn('**Road Type**', blank_report)
-        self.assertIn('**Flooded in the threshold (m)**', blank_report)
         self.assertIn('**Total (m)**', blank_report)
 
     def test_0002_road_breakdown(self):
