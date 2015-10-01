@@ -277,6 +277,93 @@ class FloodRasterRoadsFunction(
         """Constructor."""
         super(FloodRasterRoadsFunction, self).__init__()
 
+    def notes(self):
+        """Return the notes section of the report.
+
+        ..versionadded: 3.2.1
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        threshold = self.parameters['min threshold'].value
+        hazard = self.hazard.keyword('hazard')
+        hazard_terminology = tr('flooded')
+        hazard_object = tr('flood')
+        if hazard == 'flood':
+            # Use flooded
+            pass
+        elif hazard == 'tsunami':
+            hazard_terminology = tr('inundated')
+            hazard_object = tr('water')
+        return [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Roads are %s when %s levels exceed %.2f m.' %
+                    (hazard_terminology, hazard_object, threshold))
+            },
+            {
+                'content': tr(
+                    'Roads are closed if they are %s.' % hazard_terminology)
+            },
+            {
+                'content': tr(
+                    'Roads are open if they are not %s.' % hazard_terminology)
+            }
+        ]
+
+    def action_checklist(self):
+        """Action checklist for the itb earthquake fatality report.
+
+        .. versionadded:: 3.2.1
+
+        :returns: The action checklist
+        :rtype: list
+        """
+        checklist = [
+            {
+                'content': tr('Action checklist'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Try to Identify which potential roads that able to '
+                    'access for evacuation and logistic distribution purpose. '
+                    'What type of transportation reliable to use in that '
+                    'order?')
+            },
+            {
+                'content': tr(
+                    'Identify what equipment needed to open access of '
+                    'affected roads. Where the resources or equipment to open '
+                    'access affected roads located? who/what department '
+                    'responsible to mobilize?')
+            },
+            {
+                'content': tr(
+                    'Which roads can be used to evacuate people or to '
+                    'distribute logistics?')
+            },
+            {
+                'content': tr(
+                    'What type of vehicles can use the unaffected roads?')
+            },
+            {
+                'content': tr(
+                    'What sort of equipment will be needed to reopen roads & '
+                    'where will we get it?')
+            },
+            {
+                'content': tr(
+                    'Which government department is responsible for supplying '
+                    'equipment ?')
+            }
+        ]
+        return checklist
+
     def run(self):
         """Run the impact function.
 
