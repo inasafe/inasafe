@@ -60,11 +60,11 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         checklist.add(tr(
             'Buildings are wet when flood levels '
             'are greater than 0 m but less than %.1f m') % threshold)
-        checklist.add(
-            'Buildings are dry when flood levels are 0 m.')
-        checklist.add(
-            'Buildings are closed if they are flooded or wet.')
-        checklist.add('Buildings are open if they are dry.')
+        checklist.add(tr(
+            'Buildings are dry when flood levels are 0 m.'))
+        checklist.add(tr(
+            'Buildings are closed if they are flooded or wet.'))
+        checklist.add(tr('Buildings are open if they are dry.'))
         message.add(checklist)
         return message
 

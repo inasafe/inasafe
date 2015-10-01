@@ -81,7 +81,7 @@ class PopulationExposureReportMixin(ReportMixin):
         :rtype: safe.messaging.Message
         """
         message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist')))
+        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
         checklist.add(tr('How will warnings be disseminated?'))
         checklist.add(tr('How will we reach evacuated people?'))
@@ -110,7 +110,7 @@ class PopulationExposureReportMixin(ReportMixin):
             tr('Population needing evacuation <sup>1</sup>'),
             header=True))
         evacuated = format_int(population_rounding(self.total_evacuated))
-        row.add(m.Cell(evacuated))
+        row.add(m.Cell(evacuated, align='right'))
         table.add(row)
         if len(self.impact_category_ordering):
             table.add(m.Row())  # add a blank line
@@ -120,7 +120,7 @@ class PopulationExposureReportMixin(ReportMixin):
                 header=True))
             affected = format_int(
                 population_rounding(self.total_affected_population))
-            row.add(m.Cell(affected))
+            row.add(m.Cell(affected, align='right'))
             table.add(row)
 
             for category in self.impact_category_ordering:
@@ -130,7 +130,7 @@ class PopulationExposureReportMixin(ReportMixin):
                 ))
                 row = m.Row()
                 row.add(m.Cell(tr(category), header=True))
-                row.add(m.Cell(population_in_category))
+                row.add(m.Cell(population_in_category, align='right'))
                 table.add(row)
 
         table.add(m.Row())  # add a blank line
@@ -139,7 +139,7 @@ class PopulationExposureReportMixin(ReportMixin):
         unaffected = format_int(
             population_rounding(self.unaffected_population))
         row.add(m.Cell(tr('Unaffected population'), header=True))
-        row.add(m.Cell(unaffected))
+        row.add(m.Cell(unaffected, align='right'))
         table.add(row)
         message.add(table)
         return message
@@ -164,12 +164,15 @@ class PopulationExposureReportMixin(ReportMixin):
                 tr('Relief items to be provided %s' % frequency),
                 header=True
             ))
-            row.add(m.Cell(tr('Total'), header=True))
+            row.add(m.Cell(tr('Total'), header=True, align='right'))
             table.add(row)
             for resource in needs:
                 row = m.Row()
                 row.add(m.Cell(tr(resource['table name'])))
-                row.add(m.Cell(tr(format_int(resource['amount']))))
+                row.add(m.Cell(
+                    tr(format_int(resource['amount'])),
+                    align='right'
+                ))
                 table.add(row)
         message.add(table)
         return message
