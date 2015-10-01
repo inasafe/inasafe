@@ -60,6 +60,13 @@ class RoadExposureReportMixin(ReportMixin):
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
         table.caption = None
+
+        row = m.Row()
+        row.add(m.Cell(tr('Breakdown by road type'), header=True))
+        row.add(m.Cell('', header=True))  # intentionally empty top left cell
+        row.add(m.Cell('', header=True))  # intentionally empty top left cell
+        table.add(row)
+
         row = m.Row()
         row.add(m.Cell(tr('Road Type'), header=True))
         for affected_category in affected_categories:
@@ -100,7 +107,6 @@ class RoadExposureReportMixin(ReportMixin):
         row.add(m.Cell(tr('Breakdown by road type'), header=True))
         row.add(m.Cell('', header=True))  # intentionally empty top left cell
         row.add(m.Cell('', header=True))  # intentionally empty top left cell
-
         table.add(row)
 
         for road_type in self.road_lengths:
@@ -120,6 +126,25 @@ class RoadExposureReportMixin(ReportMixin):
             row.add(m.Cell(
                 format_int(int(self.road_lengths[road_type])), align='right'))
             table.add(row)
+
+        # adding total (copied from impact summary
+        affected_categories = self.affected_road_categories
+
+        total_affected = [0] * len(affected_categories)
+        for (category, road_breakdown) in self.affected_road_lengths.items():
+            number_affected = sum(road_breakdown.values())
+            count = affected_categories.index(category)
+            total_affected[count] = format_int(int(number_affected))
+
+        row = m.Row()
+        row.add(m.Cell(tr('Total'), header=True))
+        for total_affected_value in total_affected:
+            row.add(m.Cell(total_affected_value, align='right', header=True))
+        row.add(m.Cell(
+            format_int(int(self.total_road_length)),
+            align='right',
+            header=True))
+        table.add(row)
 
         message.add(table)
 
