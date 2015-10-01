@@ -35,7 +35,7 @@ class ReportMixin(object):
         :returns: An itemized breakdown of the report.
         :rtype: safe.messaging.Message
         """
-        return []
+        return m.Message()
 
     def action_checklist(self):
         """The actions to be taken in for the impact on this exposure type.
@@ -43,7 +43,7 @@ class ReportMixin(object):
         :returns: The action checklist.
         :rtype: safe.messaging.Message
         """
-        return []
+        return m.Message()
 
     def impact_summary(self):
         """The impact summary.
@@ -51,7 +51,7 @@ class ReportMixin(object):
         :returns: The action checklist.
         :rtype: safe.messaging.Message
         """
-        return []
+        return m.Message()
 
     def notes(self):
         """Additional notes to be used.
