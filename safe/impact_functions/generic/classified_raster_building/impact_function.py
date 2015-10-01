@@ -182,7 +182,7 @@ class ClassifiedRasterHazardBuildingFunction(
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self.html_report()
 
         # For printing map purpose
         map_title = tr('Buildings affected')

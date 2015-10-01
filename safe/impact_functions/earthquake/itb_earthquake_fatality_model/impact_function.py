@@ -27,13 +27,14 @@ from safe.common.utilities import (
     format_int,
     create_classes,
     create_label,
-    get_thousand_separator,
-    round_thousand)
+    get_thousand_separator)
 from safe.utilities.i18n import tr
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+import safe.messaging as m
+from safe.messaging import styles
 
 __author__ = 'lucernae'
 __date__ = '24/03/15'
@@ -151,41 +152,28 @@ class ITBFatalityFunction(
         total_fatalities = self.total_fatalities
         total_displaced = self.total_evacuated
         rounded_displaced = format_int(population_rounding(total_displaced))
-        checklist = [
-            {
-                'content': tr('Action checklist'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Are there enough victim identification units available '
-                    'for %s people?') % (
-                        format_int(population_rounding(total_fatalities))),
-                'condition': total_fatalities
-            },
-            {
-                'content': tr(
-                    'Are there enough shelters and relief items available for '
-                    '%s people?') % rounded_displaced,
-                'condition': total_displaced
-            },
-            {
-                'content': tr(
-                    'If yes, where are they located and how will we '
-                    'distribute them?'),
-                'condition': format_int(total_displaced)
-
-            },
-            {
-                'content': tr(
-                    'If no, where can we obtain additional relief items '
-                    'from and how will we transport them?'),
-                'condition': format_int(total_displaced)
-
-            },
-
-        ]
-        return checklist
+        message = m.Message(style_class='container')
+        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        if total_fatalities:
+            checklist.add(tr(
+                'Are there enough victim identification units available '
+                'for %s people?') % (
+                format_int(population_rounding(total_fatalities))))
+        if total_displaced:
+            checklist.add(tr(
+                'Are there enough shelters and relief items available for '
+                '%s people?') % rounded_displaced)
+        if rounded_displaced:
+            checklist.add(tr(
+                'If yes, where are they located and how will we '
+                'distribute them?'))
+        if total_displaced:
+            checklist.add(tr(
+                'If no, where can we obtain additional relief items '
+                'from and how will we transport them?'))
+        message.add(checklist)
+        return message
 
     def notes(self):
         """Notes and caveats for the IF report.
@@ -193,60 +181,46 @@ class ITBFatalityFunction(
         :returns: List of dicts containing notes.
         :rtype: list
         """
-        notes = [
-            {
-                'content': tr('Notes and assumptions'),
-                'header': True
-            },
-            {
-                'content': tr('Total population in the analysis area: %s'
-                              ) % format_int(
-                    population_rounding(self.total_population))
-            },
-            {
-                'content': tr(
-                    '<sup>1</sup>People are displaced if '
-                    'they experience and survive a shake level'
-                    'of more than 5 on the MMI scale.')
-            },
-            {
-                'content': tr(
-                    'The fatality calculation assumes that '
-                    'no fatalities occur for shake levels below 4 '
-                    'and fatality counts of less than 50 are '
-                    'disregarded.')
-            },
-            {
-                'content': tr(
-                    'Fatality model is from Institut Teknologi Bandung 2012.'),
-                'condition': self.__class__ == ITBFatalityFunction
-            },
-            {
-                'content': tr(
-                    'Fatality model is from the '
-                    'Population Vulnerability Pager Model.'),
-                'condition': self.__class__ != ITBFatalityFunction
-            },
-            {
-                'content': tr(
-                    'Map shows the estimation of displaced population.')
-            },
-            {
-                'content': tr(get_needs_provenance_value(self.parameters))
-            },
-            {
-                'content': tr(
-                    'All values are rounded up to the nearest integer in '
-                    'order to avoid representing human lives as fractions.'),
-            },
-            {
-                'content': tr(
-                    'Population rounding is applied to all population '
-                    'values, which may cause discrepancies when adding '
-                    'values.')
-            }
-        ]
-        return notes
+        message = m.Message(style_class='container')
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+
+        checklist = m.BulletedList()
+
+        checklist.add(tr(
+            'Total population in the analysis area: %s'
+            ) % format_int(population_rounding(self.total_population)))
+
+        checklist.add(tr(
+            '<sup>1</sup>People are displaced if '
+            'they experience and survive a shake level'
+            'of more than 5 on the MMI scale.'))
+
+        checklist.add(tr(
+            'The fatality calculation assumes that '
+            'no fatalities occur for shake levels below 4 '
+            'and fatality counts of less than 50 are '
+            'disregarded.'))
+
+        if self.__class__ != ITBFatalityFunction:
+            checklist.add(tr(
+                'Fatality model is from Institut Teknologi Bandung 2012.'))
+            checklist.add(tr(
+                'Fatality model is from the Population Vulnerability '
+                'Pager Model.'))
+
+        checklist.add(tr('Map shows the estimation of displaced population.'))
+
+        checklist.add(tr(get_needs_provenance_value(self.parameters)))
+        checklist.add(tr(
+            'All values are rounded up to the nearest integer in '
+            'order to avoid representing human lives as fractions.'))
+        checklist.add(tr(
+            'Population rounding is applied to all population '
+            'values, which may cause discrepancies when adding values.'))
+
+        message.add(checklist)
+        return message
 
     def run(self):
         """Indonesian Earthquake Fatality Model."""
@@ -328,7 +302,7 @@ class ITBFatalityFunction(
         total_needs = self.total_needs
 
         # Result
-        impact_summary = self.generate_html_report()
+        impact_summary = self.html_report()
         impact_table = impact_summary
 
         # Create style

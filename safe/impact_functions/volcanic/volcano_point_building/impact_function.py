@@ -180,7 +180,7 @@ class VolcanoPointBuildingFunction(
         self._consolidate_to_other()
 
         # Generate simple impact report
-        impact_summary = impact_table = self.generate_html_report()
+        impact_summary = impact_table = self.html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',

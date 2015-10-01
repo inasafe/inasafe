@@ -219,7 +219,7 @@ class FloodPolygonRoadsFunction(
                 self.affected_road_lengths[
                     flooded_keyword][road_type] += length
 
-        impact_summary = self.generate_html_report()
+        impact_summary = self.html_report()
 
         # For printing map purpose
         map_title = tr('Roads inundated')

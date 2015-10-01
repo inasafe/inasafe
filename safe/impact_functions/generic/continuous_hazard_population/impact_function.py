@@ -178,7 +178,7 @@ class ContinuousHazardPopulationFunction(
         ]
         total_needs = self.total_needs
 
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self.html_report()
 
         # Style for impact layer
         colours = [

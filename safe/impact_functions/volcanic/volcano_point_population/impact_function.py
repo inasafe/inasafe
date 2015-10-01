@@ -187,7 +187,7 @@ class VolcanoPointPopulationFunction(
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self.html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',

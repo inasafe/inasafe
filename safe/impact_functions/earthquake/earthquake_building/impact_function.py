@@ -233,7 +233,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         # Consolidate the small building usage groups < 25 to other
         self._consolidate_to_other()
 
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self.html_report()
 
         # Create style
         style_classes = [dict(label=class_1['label'], value=class_1['class'],

@@ -157,7 +157,7 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
         # Generate simple impact report
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self.html_report()
 
         # For printing map purpose
         map_title = tr('Flooded buildings')

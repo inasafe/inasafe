@@ -21,7 +21,7 @@ class ReportMixin(object):
     .. versionadded:: 3.1
     """
 
-    def generate_html_report(self):
+    def html_report(self):
         """Generate an HTML report.
 
         :returns: The report in html format.
@@ -64,67 +64,3 @@ class ReportMixin(object):
         is overwritten in the IF if needed.
         """
         return m.Message()
-
-    @staticmethod
-    def parse_to_html(report):
-        """Convert a json compatible list of results to a tabulated version.
-
-        :param report: A json compatible report
-        :type report: list
-
-        :returns: Returns a tabulated version of the report
-        :rtype: basestring
-        """
-        message = m.Message(style_class='container')
-        table = m.Table(
-            style_class='table table-condensed table-striped')
-        table.caption = None
-
-        for row in report:
-            row_template = {
-                'content': '',
-                'condition': True,
-                'arguments': (),
-                'header': False
-            }
-            row_template.update(row)
-            if not row_template['condition']:
-                continue
-            content = row_template['content']
-            if row_template['arguments']:
-                arguments = row_template['arguments']
-                if hasattr(content, '__iter__'):
-                    message = (
-                        'Problem formatting arguments into content.'
-                        'The element count of the arguments must equal '
-                        'the element count of the content.')
-                    if len(content) != len(arguments):
-                        raise Exception(message)
-                    # pylint: disable=bad-builtin
-                    # pylint: disable=deprecated-lambda
-                    content = map(lambda c, a: c % a, content, arguments)
-                    # pylint: enable=deprecated-lambda
-                    # pylint: enable=bad-builtin
-                else:
-                    content = row_template['content'] % arguments
-
-            if row_template['header']:
-                # Start a new table if we encounter a header
-                message.add(table)
-                table = m.Table(
-                    style_class='table table-condensed table-striped')
-                table_row = m.Row(content, header=True)
-            else:
-                table_row = m.Row(content)
-            table.add(table_row)
-
-        message.add(table)
-        message = message.to_html(
-            suppress_newlines=True,
-            in_div_flag=True)
-        return message
-
-    @property
-    def blank_line(self):
-        """Blank line of content."""
-        return {'content': ''}

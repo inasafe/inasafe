@@ -89,7 +89,7 @@ class FloodEvacuationRasterHazardFunction(
             'order to avoid representing human lives as fractions.'))
         checklist.add(tr(
             'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding value.'))
+            'values, which may cause discrepancies when adding values.'))
 
         message.add(checklist)
         return message
@@ -184,7 +184,7 @@ class FloodEvacuationRasterHazardFunction(
         ]
 
         # Result
-        impact_summary = self.generate_html_report()
+        impact_summary = self.html_report()
         impact_table = impact_summary
 
         total_needs = self.total_needs

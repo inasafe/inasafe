@@ -223,7 +223,7 @@ class FloodPolygonBuildingFunction(
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
 
-        impact_summary = self.generate_html_report()
+        impact_summary = self.html_report()
 
         # For printing map purpose
         map_title = tr('Buildings inundated')
