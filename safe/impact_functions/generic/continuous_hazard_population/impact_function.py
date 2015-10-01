@@ -14,6 +14,12 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 import numpy
 
 from safe.impact_functions.generic\
@@ -27,7 +33,7 @@ from safe.impact_functions.core import (
     has_no_data)
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
-from safe.common.utilities import format_int, get_thousand_separator
+from safe.common.utilities import get_thousand_separator
 from safe.impact_functions.core import no_population_impact_message
 from safe.common.utilities import create_classes, create_label, humanize_class
 from safe.common.exceptions import (
@@ -36,12 +42,8 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-__revision__ = '$Format:%H$'
-__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+import safe.messaging as m
+from safe.messaging import styles
 
 
 class ContinuousHazardPopulationFunction(
@@ -63,51 +65,36 @@ class ContinuousHazardPopulationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        notes = [
-            {'content': tr('Notes and assumptions'), 'header': True},
-            {
-                'content': tr(
-                    'Total population in the analysis area: %s') % format_int(
-                    population_rounding(self.total_population))
-            },
-            {
-                'content': tr(
-                    '<sup>1</sup>People need evacuation if they are in a '
-                    'hazard zone.')
-            },
-            {
-                'content': tr(
-                    'Map shows the numbers of people in high, medium, '
-                    'and low hazard class areas.')
-            },
-            {
-                'content': tr(
-                    'The layers contained `no data`. This missing data was '
-                    'carried through to the impact layer.'),
-                'condition': self.no_data_warning
-            },
-            {
-                'content': tr(
-                    '"No data" values in the impact layer were treated as 0 '
-                    'when counting the affected or total population.'),
-                'condition': self.no_data_warning
-            },
-            {
-                'content': tr(
-                    'All values are rounded up to the nearest integer in '
-                    'order to avoid representing human lives as fractions.'),
-            },
-            {
-                'content': tr(
-                    'Population rounding is applied to all population '
-                    'values, which may cause discrepancies when adding '
-                    'values.'
-                )
-            }
-        ]
-        return notes
+        message = m.Message(style_class='container')
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Total population in the analysis area: %s'
+            ) % population_rounding(self.total_population))
+        checklist.add(tr(
+            '<sup>1</sup>People need evacuation if they are in a '
+            'hazard zone.'))
+        checklist.add(tr(
+            'Map shows the numbers of people in high, medium, '
+            'and low hazard class areas.'))
+        if self.no_data_warning:
+            checklist.add(tr(
+                'The layers contained "no data" values. This missing data '
+                'was carried through to the impact layer.'))
+            checklist.add(tr(
+                '"No data" values in the impact layer were treated as 0 '
+                'when counting the affected or total population.'))
+        checklist.add(tr(
+            'All values are rounded up to the nearest integer in '
+            'order to avoid representing human lives as fractions.'))
+        checklist.add(tr(
+            'Population rounding is applied to all population '
+            'values, which may cause discrepancies when adding value.'))
+        message.add(checklist)
+        return message
 
     def run(self):
         """Plugin for impact of population as derived by continuous hazard.

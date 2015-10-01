@@ -34,6 +34,8 @@ from safe.gui.tools.minimum_needs.needs_profile import (
     filter_needs_parameters)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+import safe.messaging as m
+from safe.messaging import styles
 
 
 class ClassifiedPolygonHazardPopulationFunction(
@@ -57,38 +59,34 @@ class ClassifiedPolygonHazardPopulationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        notes = [
-            {'content': tr('Notes and assumptions'), 'header': True},
-            {
-                'content': tr(
-                    'Total population in the analysis area: %s') % format_int(
-                    population_rounding(self.total_population))
-            },
-            {
-                'content': tr(
-                    '<sup>1</sup>People need evacuation if they are in a '
-                    'hazard zone.')
-            },
-            {
-                'content': tr(
-                    'Map shows population count in high, medium, and low '
-                    'hazard area.')
-            },
-            {
-                'content': tr(
-                    'All values are rounded up to the nearest integer in '
-                    'order to avoid representing human lives as fractions.'),
-            },
-            {
-                'content': tr(
-                    'Population rounding is applied to all population '
-                    'values, which may cause discrepancies when adding '
-                    'values.')
-            }
-        ]
-        return notes
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        population = format_int(population_rounding(self.total_population))
+        checklist.add(tr(
+            'Total population in the analysis area: %s') % population)
+        threshold = format_int(self.parameters['evacuation_percentage'].value)
+        checklist.add(tr(
+            '<sup>1</sup>The evacuation threshold used to determine '
+            'population needing evacuation is %s%%.') % threshold)
+        if self.no_data_warning:
+            checklist.add(tr(
+                'The layers contained "no data" values. This missing data '
+                'was carried through to the impact layer.'))
+            checklist.add(tr(
+                '"No data" values in the impact layer were treated as 0 '
+                'when counting the affected or total population.'))
+        checklist.add(tr(
+            'All values are rounded up to the nearest integer in '
+            'order to avoid representing human lives as fractions.'))
+        checklist.add(tr(
+            'Population rounding is applied to all population '
+            'values, which may cause discrepancies when adding values.'))
+        message.add(checklist)
+        return message
 
     def run(self):
         """Run classified population evacuation Impact Function.

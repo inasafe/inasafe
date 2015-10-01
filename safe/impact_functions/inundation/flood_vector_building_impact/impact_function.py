@@ -66,6 +66,8 @@ class FloodPolygonBuildingFunction(
                     unicode(hazard_class) for
                     hazard_class in self.hazard_class_mapping[self.wet]
                 ])))
+        message.add(checklist)
+        return message
 
     def run(self):
         """Experimental impact function."""
