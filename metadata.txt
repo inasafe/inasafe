@@ -25,19 +25,9 @@ status=alpha
 # Optional items:
 
 changelog=
-        3.2.0
-        feature - New extent selector dialog
-        feature - Overhauled wizard for impact functions
-        feature - Show warnings using QgsMessageBar when analysis extent is not correct
-        feature - New theme!
-        feature - Moved Impact Function options to keywords where possible
-        feature - Improved user interface for impact function options
-        feature - Improved report templates and added new replacement tokens for templates
-        bugfix - Prevent hazard attribute names from masking exposure names during interpolation (#2090)
-        bugfix - show building aggregation in volcano impact functions (#2103 #2014)
-        bugfix - show building aggregation in volcanic ash impact function (#2105)
-        bugfix - totals of affected buildings in aggregation regions now calculated correctly (#2144)
-        bugfix - many many other bugfixes to improve consistency of reporting and robustness
+        3.2.1
+        bugfix - Global clean up of reports for consistency, terminology and style
+        bugfix - Show nicer formatted message in dock when no impact function is available
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
