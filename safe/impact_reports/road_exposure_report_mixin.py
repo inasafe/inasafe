@@ -62,8 +62,8 @@ class RoadExposureReportMixin(ReportMixin):
         row = m.Row()
         row.add(m.Cell(tr('Road Type'), header=True))
         for affected_category in affected_categories:
-            row.add(m.Cell(affected_category, header=True))
-        row.add(m.Cell(tr('Total (m)'), header=True))
+            row.add(m.Cell(affected_category, header=True, align='right'))
+        row.add(m.Cell(tr('Total (m)'), header=True, align='right'))
         table.add(row)
 
         total_affected = [0] * len(affected_categories)
@@ -75,9 +75,8 @@ class RoadExposureReportMixin(ReportMixin):
         row = m.Row()
         row.add(m.Cell(tr('All')))
         for total_affected_value in total_affected:
-            row.add(m.Cell(total_affected_value))
-        # row.add(m.Cell(total_affected[0]))
-        row.add(m.Cell(format_int(int(self.total_road_length))))
+            row.add(m.Cell(total_affected_value, align='right'))
+        row.add(m.Cell(format_int(int(self.total_road_length)), align='right'))
         table.add(row)
 
         message.add(table)
@@ -98,6 +97,9 @@ class RoadExposureReportMixin(ReportMixin):
 
         row = m.Row()
         row.add(m.Cell(tr('Breakdown by road type'), header=True))
+        row.add(m.Cell('', header=True))  # intentionally empty top left cell
+        row.add(m.Cell('', header=True))  # intentionally empty top left cell
+
         table.add(row)
 
         for road_type in self.road_lengths:
@@ -112,8 +114,10 @@ class RoadExposureReportMixin(ReportMixin):
             row = m.Row()
             row.add(m.Cell(road_type.capitalize()))
             for affected_by_usage_value in affected_by_usage:
-                row.add(m.Cell(format_int(int(affected_by_usage_value))))
-            row.add(m.Cell(format_int(int(self.road_lengths[road_type]))))
+                row.add(m.Cell(
+                    format_int(int(affected_by_usage_value)), align='right'))
+            row.add(m.Cell(
+                format_int(int(self.road_lengths[road_type])), align='right'))
             table.add(row)
 
         message.add(table)
