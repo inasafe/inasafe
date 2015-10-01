@@ -63,15 +63,14 @@ class RoadExposureReportMixinTest(unittest.TestCase):
     def test_0002_road_breakdown(self):
         """Test the buildings breakdown."""
         roads_breakdown = self.road_mixin.roads_breakdown().to_text()
-        message = 'roads breakdown is not as expected.'
 
-        self.assertIn('**Breakdown by road type**', roads_breakdown, message)
-        self.assertIn('Main', roads_breakdown, message)
-        self.assertIn('133', roads_breakdown, message)
-        self.assertIn('Side', roads_breakdown, message)
-        self.assertIn('10', roads_breakdown, message)
-        self.assertIn('Bike', roads_breakdown, message)
-        self.assertIn('1', roads_breakdown, message)
+        self.assertIn('**Breakdown by road type**', roads_breakdown)
+        self.assertIn('Main', roads_breakdown)
+        self.assertIn('133', roads_breakdown)
+        self.assertIn('Side', roads_breakdown)
+        self.assertIn('10', roads_breakdown)
+        self.assertIn('Bike', roads_breakdown)
+        self.assertIn('1', roads_breakdown)
 
     def test_0003_total(self):
         """Test general methods."""
