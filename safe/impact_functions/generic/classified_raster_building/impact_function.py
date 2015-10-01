@@ -30,6 +30,7 @@ from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.common.exceptions import KeywordNotFoundError
 import safe.messaging as m
+from safe.messaging import styles
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -52,7 +53,8 @@ class ClassifiedRasterHazardBuildingFunction(
         :rtype: safe.messaging.Message
         """
         message = m.Message()
-        message.add(m.Heading(tr('Notes and assumptions')))
+        message.add(m.Heading(
+            tr('Notes and assumptions'), **styles.INFO_STYLE))
         message.add(tr(
             'Map shows buildings affected in low, medium and '
             'high hazard class areas.'))

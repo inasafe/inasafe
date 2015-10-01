@@ -35,6 +35,7 @@ from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 import safe.messaging as m
+from safe.messaging import styles
 
 class FloodPolygonBuildingFunction(
         ClassifiedVHClassifiedVE,
@@ -56,7 +57,8 @@ class FloodPolygonBuildingFunction(
         :rtype: safe.messaging.Message
         """
         message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Notes and assumptions')))
+        message.add(m.Heading(
+            tr('Notes and assumptions'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
         checklist.add(tr(
             'Buildings are flooded when in a region with '
