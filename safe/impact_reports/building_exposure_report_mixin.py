@@ -140,11 +140,10 @@ class BuildingExposureReportMixin(ReportMixin):
                 for affect_type, number_affected in affected_breakdown.items():
                     count = affect_types.index(affect_type)
                     total_affected[count] += number_affected
-            total_affected_formatted = [
-                format_int(affected) for affected in total_affected]
             row = m.Row()
             row.add(m.Cell(tr(category), header=True))
-            row.add(m.Cell(total_affected_formatted, align='right'))
+            for affected in total_affected:
+                row.add(m.Cell(format_int(affected), align='right'))
             table.add(row)
 
         if len(self._affected_categories) > 1:

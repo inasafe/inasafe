@@ -114,7 +114,9 @@ class Row(MessageElement):
         :rtype: basestring
         """
         row = '---\n'
-        for cell in self.cells:
+        for index, cell in enumerate(self.cells):
+            if index > 0:
+                row += ', '
             row += cell.to_text()
         row += '---'
 
