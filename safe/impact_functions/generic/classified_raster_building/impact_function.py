@@ -29,7 +29,7 @@ from safe.impact_functions.generic.classified_raster_building\
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.common.exceptions import KeywordNotFoundError
-
+import safe.messaging as m
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -49,18 +49,14 @@ class ClassifiedRasterHazardBuildingFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        return [
-            {
-                'content': tr('Notes and assumptions'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Map shows buildings affected in low, medium and '
-                    'high hazard class areas.')
-            }]
+        message = m.Message()
+        message.add(m.Heading(tr('Notes and assumptions')))
+        message.add(tr(
+            'Map shows buildings affected in low, medium and '
+            'high hazard class areas.'))
+        return message
 
     def run(self):
         """Classified hazard impact to buildings (e.g. from Open Street Map).

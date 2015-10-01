@@ -18,6 +18,7 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
 import safe.messaging as m
+from safe.messaging import styles
 
 
 class BuildingExposureReportMixin(ReportMixin):
@@ -99,7 +100,7 @@ class BuildingExposureReportMixin(ReportMixin):
         hospitals_closed = self.hospitals_closed
 
         message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist')))
+        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
         checklist.add(tr('Are the critical facilities still open?'))
         checklist.add(tr(
@@ -192,6 +193,8 @@ class BuildingExposureReportMixin(ReportMixin):
         # Initialise totals with zeros
         for _ in impact_names:
             impact_totals.append(0)
+        # And one extra total for the cumuluative total column
+        impact_totals.append(0)
         # Now build the main table
         for building_type in building_types:
             row = m.Row()
@@ -204,21 +207,22 @@ class BuildingExposureReportMixin(ReportMixin):
                             building_type].values()[0])
                 else:
                     impact_subtotals.append(0)
-            # add the subtotal to the cumulative total
-            # see http://stackoverflow.com/questions/18713321/element
-            #     -wise-addition-of-2-lists-in-python
-            impact_totals = map(add, impact_totals, impact_subtotals)
-
             row.add(m.Cell(building_type_name.capitalize(), header=True))
             # list out the subtotals for this category per impact type
             for value in impact_subtotals:
                 row.add(m.Cell(format_int(value), align='right'))
             # totals column
+            line_total = format_int(self.buildings[building_type])
+            impact_subtotals.append(self.buildings[building_type])
             row.add(m.Cell(
-                format_int(self.buildings[building_type]),
+                line_total,
                 header=True,
                 align='right'))
             table.add(row)
+            # add the subtotal to the cumulative total
+            # see http://stackoverflow.com/questions/18713321/element
+            #     -wise-addition-of-2-lists-in-python
+            impact_totals = map(add, impact_totals, impact_subtotals)
 
         # list out the TOTALS for this category per impact type
         row = m.Row()

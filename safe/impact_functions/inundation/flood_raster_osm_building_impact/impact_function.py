@@ -27,6 +27,8 @@ from safe.common.utilities import get_osm_building_usage, verify
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+import safe.messaging as m
+from safe.messaging import styles
 from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -45,36 +47,26 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
+        message = m.Message(style_class='container')
         threshold = self.parameters['threshold'].value
-        return [
-            {
-                'content': tr('Notes and assumptions'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Buildings are flooded when flood levels '
-                    'exceed %.1f m') % threshold
-            },
-            {
-                'content': tr(
-                    'Buildings are wet when flood levels '
-                    'are greater than 0 m but less than %.1f m') % threshold
-            },
-            {
-                'content': tr(
-                    'Buildings are dry when flood levels are 0 m.')
-            },
-            {
-                'content': tr(
-                    'Buildings are closed if they are flooded or wet.')
-            },
-            {
-                'content': tr(
-                    'Buildings are open if they are dry.')
-            }]
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Buildings are flooded when flood levels '
+            'exceed %.1f m') % threshold)
+        checklist.add(tr(
+            'Buildings are wet when flood levels '
+            'are greater than 0 m but less than %.1f m') % threshold)
+        checklist.add(
+            'Buildings are dry when flood levels are 0 m.')
+        checklist.add(
+            'Buildings are closed if they are flooded or wet.')
+        checklist.add('Buildings are open if they are dry.')
+        message.add(checklist)
+        return message
 
     @property
     def _affected_categories(self):
