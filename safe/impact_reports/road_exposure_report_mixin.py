@@ -61,7 +61,7 @@ class RoadExposureReportMixin(ReportMixin):
         table.caption = None
         row = m.Row()
         row.add(m.Cell(tr('Road Type'), header=True))
-        row.add(m.Cell(affected_categories, header=True))
+        row.add(m.Cell(tr('Flooded in the threshold (m)'), header=True))
         row.add(m.Cell(tr('Total (m)'), header=True))
         table.add(row)
 
@@ -73,7 +73,7 @@ class RoadExposureReportMixin(ReportMixin):
 
         row = m.Row()
         row.add(m.Cell(tr('All')))
-        row.add(m.Cell(total_affected))
+        row.add(m.Cell(sum(total_affected)))
         row.add(m.Cell(format_int(int(self.total_road_length))))
         table.add(row)
 
@@ -85,7 +85,7 @@ class RoadExposureReportMixin(ReportMixin):
         """Breakdown by road type.
 
         :returns: The roads breakdown report.
-        :rtype: list
+        :rtype: safe.message.Message
         """
         category_names = self.affected_road_categories
 
@@ -108,7 +108,7 @@ class RoadExposureReportMixin(ReportMixin):
                     affected_by_usage.append(0)
             row = m.Row()
             row.add(m.Cell(road_type.capitalize()))
-            row.add(m.Cell(format_int(int(x)) for x in affected_by_usage))
+            row.add(m.Cell(sum(format_int(int(x)) for x in affected_by_usage)))
             row.add(m.Cell(format_int(int(self.road_lengths[road_type]))))
             table.add(row)
 
