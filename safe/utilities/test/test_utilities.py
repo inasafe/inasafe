@@ -3,6 +3,7 @@
 
 import unittest
 import os
+import codecs
 from unittest import expectedFailure
 
 from safe.definitions import inasafe_keyword_version
@@ -97,9 +98,18 @@ class UtilitiesTest(unittest.TestCase):
             'exposure_title': 'Sample Exposure Title',
             'exposure_source': 'Sample Exposure Source'}
         attribution = impact_attribution(keywords)
-        print attribution
-        # noinspection PyArgumentList
-        self.assertEqual(len(attribution.to_text()), 170)
+        control_file_path = test_data_path(
+            'control',
+            'files',
+            'impact-layer-attribution.txt')
+        expected_result = codecs.open(
+            control_file_path,
+            mode='r',
+            encoding='utf-8').readlines()
+
+        for line in expected_result:
+            line = line.replace('\n', '')
+            self.assertIn(line, attribution.to_text())
 
     @expectedFailure
     def test_localised_attribution(self):
