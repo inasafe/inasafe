@@ -98,6 +98,7 @@ class RoadExposureReportMixin(ReportMixin):
         :rtype: safe.message.Message
         """
         category_names = self.affected_road_categories
+        affected_categories = self.affected_road_categories
 
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
@@ -107,6 +108,13 @@ class RoadExposureReportMixin(ReportMixin):
         row.add(m.Cell(tr('Breakdown by road type'), header=True))
         row.add(m.Cell('', header=True))  # intentionally empty top left cell
         row.add(m.Cell('', header=True))  # intentionally empty top left cell
+        table.add(row)
+
+        row = m.Row()
+        row.add(m.Cell(tr('Road Type'), header=True))
+        for affected_category in affected_categories:
+            row.add(m.Cell(affected_category, header=True, align='right'))
+        row.add(m.Cell(tr('Total (m)'), header=True, align='right'))
         table.add(row)
 
         for road_type in self.road_lengths:
@@ -128,8 +136,6 @@ class RoadExposureReportMixin(ReportMixin):
             table.add(row)
 
         # adding total (copied from impact summary
-        affected_categories = self.affected_road_categories
-
         total_affected = [0] * len(affected_categories)
         for (category, road_breakdown) in self.affected_road_lengths.items():
             number_affected = sum(road_breakdown.values())
