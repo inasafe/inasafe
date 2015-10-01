@@ -182,8 +182,8 @@ class BuildingExposureReportMixin(ReportMixin):
         row = m.Row()
         row.add(m.Cell('Building type', header=True))
         for name in impact_names:
-            row.add(m.Cell(tr(name), header=True))
-        row.add(m.Cell(tr('Total'), header=True))
+            row.add(m.Cell(tr(name), header=True, align='right'))
+        row.add(m.Cell(tr('Total'), header=True, align='right'))
         table.add(row)
 
         # Let's sort alphabetically first
