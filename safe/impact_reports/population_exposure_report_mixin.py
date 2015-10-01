@@ -26,7 +26,7 @@ from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding)
 import safe.messaging as m
-
+from safe.messaging import styles
 
 class PopulationExposureReportMixin(ReportMixin):
     """Population specific report.
@@ -100,40 +100,49 @@ class PopulationExposureReportMixin(ReportMixin):
         """The impact summary as per category
 
         :returns: The impact summary.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        impact_summary_report = [(
-            {
-                'content': [
-                    tr('Population needing evacuation <sup>1</sup>'),
-                    '%s' % format_int(
-                        population_rounding(self.total_evacuated))],
-                'header': True
-            })]
+        message = m.Message(style_class='container')
+        table = m.Table(style_class='table table-condensed table-striped')
+        table.caption = None
+        row = m.Row()
+        row.add(m.Cell(
+            tr('Population needing evacuation <sup>1</sup>'),
+            header=True))
+        evacuated = format_int(population_rounding(self.total_evacuated))
+        row.add(m.Cell(evacuated))
+        table.add(row)
         if len(self.impact_category_ordering):
-            impact_summary_report.append(self.blank_line)
-            impact_summary_report.append({
-                'content': [
-                    tr('Total affected population'),
-                    format_int(population_rounding(
-                        self.total_affected_population))],
-                'header': True
-            })
+            table.add(m.Row())  # add a blank line
+            row = m.Row()
+            row.add(m.Cell(
+                tr('Total affected population'),
+                header=True))
+            affected = format_int(
+                population_rounding(self.total_affected_population))
+            row.add(m.Cell(affected))
+            table.add(row)
+
             for category in self.impact_category_ordering:
                 population_in_category = self.lookup_category(category)
                 population_in_category = format_int(population_rounding(
                     population_in_category
                 ))
-                impact_summary_report.append(
-                    {'content': [tr(category), population_in_category]})
-        impact_summary_report.append(self.blank_line)
-        impact_summary_report.append({
-            'content': [
-                tr('Unaffected population'),
-                format_int(population_rounding(self.unaffected_population))],
-            'header': True
-        })
-        return impact_summary_report
+                row = m.Row()
+                row.add(m.Cell(tr(category), header=True))
+                row.add(m.Cell(population_in_category))
+                table.add(row)
+
+        table.add(m.Row())  # add a blank line
+
+        row = m.Row()
+        unaffected = format_int(
+            population_rounding(self.unaffected_population))
+        row.add(m.Cell(tr('Unaffected population'), header=True))
+        row.add(m.Cell(unaffected))
+        table.add(row)
+        message.add(table)
+        return message
 
     def minimum_needs_breakdown(self):
         """Breakdown by population.
@@ -141,27 +150,29 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The population breakdown report.
         :rtype: list
         """
-        minimum_needs_breakdown_report = [{
-            'content': tr('Evacuated population minimum needs'),
-            'header': True
-        }]
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            tr('Evacuated population minimum needs'),
+            **styles.INFO_STYLE))
+        table = m.Table(
+            style_class='table table-condensed table-striped')
+        table.caption = None
         total_needs = self.total_needs
         for frequency, needs in total_needs.items():
-            minimum_needs_breakdown_report.append(
-                {
-                    'content': [
-                        tr('Relief items to be provided %s' % frequency),
-                        tr('Total')],
-                    'header': True
-                })
+            row = m.Row()
+            row.add(m.Cell(
+                tr('Relief items to be provided %s' % frequency),
+                header=True
+            ))
+            row.add(m.Cell(tr('Total'), header=True))
+            table.add(row)
             for resource in needs:
-                minimum_needs_breakdown_report.append(
-                    {
-                        'content': [
-                            tr(resource['table name']),
-                            tr(format_int(resource['amount']))]
-                    })
-        return minimum_needs_breakdown_report
+                row = m.Row()
+                row.add(m.Cell(tr(resource['table name'])))
+                row.add(m.Cell(tr(format_int(resource['amount']))))
+                table.add(row)
+        message.add(table)
+        return message
 
     @property
     def impact_category_ordering(self):
