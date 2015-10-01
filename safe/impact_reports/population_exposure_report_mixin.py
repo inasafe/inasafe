@@ -25,6 +25,7 @@ from safe.impact_reports.report_mixin_base import ReportMixin
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding)
+import safe.messaging as m
 
 
 class PopulationExposureReportMixin(ReportMixin):
@@ -65,51 +66,35 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The report.
         :rtype: list
         """
-        report = [{'content': self.question}]
-        report += [self.blank_line]  # Blank line to separate report sections
-        report += self.impact_summary()
-        report += [self.blank_line]
-        report += self.minimum_needs_breakdown()
-        report += [self.blank_line]
-        report += self.action_checklist()
-        report += [self.blank_line]
-        report += self.notes()
-        return report
+        message = m.Message()
+        message.add(m.Paragraph(self.question))
+        message.add(self.impact_summary())
+        message.add(self.minimum_needs_breakdown())
+        message.add(self.action_checklist())
+        message.add(self.notes())
+        return message
 
     def action_checklist(self):
         """Population action.
 
-        :returns: The buildings breakdown report.
-        :rtype: list
+        :returns: The population breakdown report.
+        :rtype: safe.messaging.Message
         """
-
-        return [
-            {
-                'content': tr('Action checklist'),
-                'header': True
-            },
-            {
-                'content': tr('How will warnings be disseminated?')
-            },
-            {
-                'content': tr('How will we reach evacuated people?')
-            },
-            {
-                'content': tr(
-                    'Are there enough shelters and relief items available '
-                    'for %s people?' % self.total_evacuated)
-            },
-            {
-                'content': tr(
-                    'If yes, where are they located and how will we '
-                    'distribute them?')
-            },
-            {
-                'content': tr(
-                    'If no, where can we obtain additional relief items from '
-                    'and how will we transport them to here?')
-            }
-        ]
+        message = m.Message(style_class='container')
+        message.add(m.Heading(tr('Action checklist')))
+        checklist = m.BulletedList()
+        checklist.add(tr('How will warnings be disseminated?'))
+        checklist.add(tr('How will we reach evacuated people?'))
+        checklist.add(tr(
+            'Are there enough shelters and relief items available '
+            'for %s people?' % self.total_evacuated))
+        checklist.add(tr(
+            'If yes, where are they located and how will we distribute them?'))
+        checklist.add(tr(
+            'If no, where can we obtain additional relief items from '
+            'and how will we transport them to here?'))
+        message.add(checklist)
+        return message
 
     def impact_summary(self):
         """The impact summary as per category

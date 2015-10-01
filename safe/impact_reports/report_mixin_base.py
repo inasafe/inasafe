@@ -27,13 +27,13 @@ class ReportMixin(object):
         :returns: The report in html format.
         :rtype: basestring
         """
-        return self.generate_report().to_html()
+        return self.generate_report().to_html(suppress_newlines=True)
 
     def generate_report(self):
         """Defining the interface.
 
         :returns: An itemized breakdown of the report.
-        :rtype: messaging.Message
+        :rtype: safe.messaging.Message
         """
         return []
 
@@ -41,7 +41,7 @@ class ReportMixin(object):
         """The actions to be taken in for the impact on this exposure type.
 
         :returns: The action checklist.
-        :rtype: messaging.Message
+        :rtype: safe.messaging.Message
         """
         return []
 
@@ -49,7 +49,7 @@ class ReportMixin(object):
         """The impact summary.
 
         :returns: The action checklist.
-        :rtype: messaging.Message
+        :rtype: safe.messaging.Message
         """
         return []
 
