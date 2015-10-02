@@ -23,7 +23,6 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    format_int,
     humanize_class,
     create_classes,
     create_label,
@@ -36,6 +35,7 @@ from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 import safe.messaging as m
 from safe.messaging import styles
+
 
 class VolcanoPolygonPopulationFunction(
         ClassifiedVHContinuousRE,

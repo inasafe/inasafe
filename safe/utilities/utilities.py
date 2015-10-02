@@ -181,13 +181,13 @@ def impact_attribution(keywords, inasafe_flag=False):
 
     report = m.Message()
     report.add(m.Heading(analysis_details, **INFO_STYLE))
+    report.add(hazard_details)
     report.add(m.Paragraph(
-
         hazard_title,
         join_words,
         hazard_source))
 
-    report.add(m.Heading(exposure_details, **INFO_STYLE))
+    report.add(exposure_details)
     report.add(m.Paragraph(
         exposure_title,
         join_words,

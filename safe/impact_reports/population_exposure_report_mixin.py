@@ -28,6 +28,7 @@ from safe.impact_functions.core import (
 import safe.messaging as m
 from safe.messaging import styles
 
+
 class PopulationExposureReportMixin(ReportMixin):
     """Population specific report.
     """
