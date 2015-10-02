@@ -52,6 +52,93 @@ class FloodPolygonRoadsFunction(
         # The 'wet' variable
         self.wet = 'wet'
 
+    def notes(self):
+        """Return the notes section of the report.
+
+        .. versionadded:: 3.2.1
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+
+        hazard_terminology = tr('inundated')
+        flood_value = [unicode(hazard_class)
+                       for hazard_class in self.hazard_class_mapping[self.wet]]
+
+        return [
+            {
+                'content': tr('Notes'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Roads are said to be %s when in a region with field'
+                    ' "%s" in "%s" .' % (
+                        hazard_terminology,
+                        self.hazard_class_attribute,
+                        ', '.join(flood_value)
+                    )
+                )
+            },
+            {
+                'content': tr(
+                    'Roads are closed if they are %s.' % hazard_terminology)
+            },
+            {
+                'content': tr(
+                    'Roads are open if they are not %s.' % hazard_terminology)
+            }
+        ]
+
+    def action_checklist(self):
+        """Action checklist for the itb earthquake fatality report.
+
+        .. versionadded:: 3.2.1
+
+        :returns: The action checklist
+        :rtype: list
+        """
+        checklist = [
+            {
+                'content': tr('Action checklist'),
+                'header': True
+            },
+            {
+                'content': tr(
+                    'Try to Identify which potential roads that able to '
+                    'access for evacuation and logistic distribution purpose. '
+                    'What type of transportation reliable to use in that '
+                    'order?')
+            },
+            {
+                'content': tr(
+                    'Identify what equipment needed to open access of '
+                    'affected roads. Where the resources or equipment to open '
+                    'access affected roads located? who/what department '
+                    'responsible to mobilize?')
+            },
+            {
+                'content': tr(
+                    'Which roads can be used to evacuate people or to '
+                    'distribute logistics?')
+            },
+            {
+                'content': tr(
+                    'What type of vehicles can use the unaffected roads?')
+            },
+            {
+                'content': tr(
+                    'What sort of equipment will be needed to reopen roads & '
+                    'where will we get it?')
+            },
+            {
+                'content': tr(
+                    'Which government department is responsible for supplying '
+                    'equipment ?')
+            }
+        ]
+        return checklist
+
     def run(self):
         """Experimental impact function for flood polygons on roads."""
         self.validate()
