@@ -1402,7 +1402,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type unassigned_values: list
 
         :param assigned_values: Dictionary with class as the key and list of
-            value as the the value of the dictionary. It will be put in
+            value as the value of the dictionary. It will be put in
             self.treeClasses.
         :type assigned_values: dict
 

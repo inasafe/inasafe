@@ -103,8 +103,8 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
             'limitations': [
                 tr('This function only flags buildings as impacted or not '
                    'either based on a fixed threshold in case of raster '
-                   'hazard or the the attributes mentioned under input '
-                   'in case of vector hazard.')
+                   'hazard layer or the attributes mentioned under input '
+                   'in case of vector hazard layer.')
             ],
             'citations': [],
             'layer_requirements': {
