@@ -6709,7 +6709,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     </message>
     <message>
         <location filename="shakemap_converter_dialog.py" line="259"/>
-        <source>Raster file a(*.tif)</source>
+        <source>Raster file (*.tif)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

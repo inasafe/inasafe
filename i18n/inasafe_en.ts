@@ -6686,7 +6686,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="shakemap_converter_dialog.py" line="259"/>
-        <source>Raster file a(*.tif)</source>
+        <source>Raster file (*.tif)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
