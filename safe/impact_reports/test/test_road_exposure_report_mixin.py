@@ -47,6 +47,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
                 'Side': 5.5,
                 'Bike': 1.2})
         ])
+        self.road_mixin.affected_road_categories = ['Flooded']
 
     def tearDown(self):
         """Run after each test."""
