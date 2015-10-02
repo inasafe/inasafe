@@ -256,5 +256,5 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         # noinspection PyCallByClass,PyTypeChecker
         filename = QFileDialog.getSaveFileName(
             self, self.tr('Output file'), 'grid.tif',
-            self.tr('Raster file (*.tif)'))
+            self.tr('Raster file a(*.tif)'))
         self.output_path.setText(filename)
