@@ -313,7 +313,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
         second_postprocessing_report = \
             self.impact_merge_dialog.second_impact['postprocessing_report']
         self.assertIn(
-            'Closed buildings',
+            'Detailed building type report',
             second_postprocessing_report)
 
         self.assertEqual(
@@ -333,7 +333,7 @@ class ImpactMergeDialogTest(unittest.TestCase):
         second_postprocessing_report = \
             self.impact_merge_dialog.second_impact['postprocessing_report']
         self.assertIn(
-            'Closed buildings',
+            'Detailed building type report',
             second_postprocessing_report)
         self.assertEqual(
             'KAB_NAME',
