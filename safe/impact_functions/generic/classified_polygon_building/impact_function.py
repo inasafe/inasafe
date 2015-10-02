@@ -35,6 +35,7 @@ from safe.engine.interpolation_qgis import interpolate_polygon_polygon
 import safe.messaging as m
 from safe.messaging import styles
 
+
 class ClassifiedPolygonHazardBuildingFunction(
         ClassifiedVHClassifiedVE,
         BuildingExposureReportMixin):

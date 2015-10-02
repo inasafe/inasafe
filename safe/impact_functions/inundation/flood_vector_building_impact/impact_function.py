@@ -37,6 +37,7 @@ from safe.impact_reports.building_exposure_report_mixin import (
 import safe.messaging as m
 from safe.messaging import styles
 
+
 class FloodPolygonBuildingFunction(
         ClassifiedVHClassifiedVE,
         BuildingExposureReportMixin):

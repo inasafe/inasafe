@@ -222,6 +222,7 @@ class BuildingExposureReportMixin(ReportMixin):
             # add the subtotal to the cumulative total
             # see http://stackoverflow.com/questions/18713321/element
             #     -wise-addition-of-2-lists-in-python
+            # pylint: disable=bad-builtin
             impact_totals = map(add, impact_totals, impact_subtotals)
 
         # list out the TOTALS for this category per impact type

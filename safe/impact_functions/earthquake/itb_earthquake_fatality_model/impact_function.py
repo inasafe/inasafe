@@ -159,7 +159,7 @@ class ITBFatalityFunction(
             checklist.add(tr(
                 'Are there enough victim identification units available '
                 'for %s people?') % (
-                format_int(population_rounding(total_fatalities))))
+                    format_int(population_rounding(total_fatalities))))
         if total_displaced:
             checklist.add(tr(
                 'Are there enough shelters and relief items available for '

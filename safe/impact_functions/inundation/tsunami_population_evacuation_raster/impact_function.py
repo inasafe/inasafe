@@ -31,6 +31,7 @@ from safe.impact_reports.population_exposure_report_mixin import \
 import safe.messaging as m
 from safe.messaging import styles
 
+
 # noinspection PyClassHasNoInit
 class TsunamiEvacuationFunction(
         ContinuousRHContinuousRE,
@@ -159,13 +160,11 @@ class TsunamiEvacuationFunction(
 
         # check for zero impact
         if numpy.nanmax(impact) == 0 == numpy.nanmin(impact):
-            table_body = [
-                self.question,
-                TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                          '%s' % format_int(0)],
-                         header=True)]
-            my_message = Table(table_body).toNewlineFreeString()
-            raise ZeroImpactException(my_message)
+            message = m.Message()
+            message.add(self.question)
+            message.add(tr('No people in %.1f m of water') % thresholds[-1])
+            message = message.to_html(suppress_newlines=True)
+            raise ZeroImpactException(message)
 
         # Create style
         colours = [

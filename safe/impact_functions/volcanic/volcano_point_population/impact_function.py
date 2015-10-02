@@ -36,6 +36,7 @@ from safe.impact_reports.population_exposure_report_mixin import \
 import safe.messaging as m
 from safe.messaging import styles
 
+
 class VolcanoPointPopulationFunction(
         ClassifiedVHContinuousRE,
         PopulationExposureReportMixin):
