@@ -40,11 +40,8 @@ class ReportMixinTest(unittest.TestCase):
 
     def test_0001_interface(self):
         """Test all interface methods give default blanks."""
-        blank_table = (
-            u'<table class="table table-condensed table-striped"><tbody>'
-            u'</tbody></table>')
-        self.assertEqual(
-            self.mixin.html_report(), blank_table)
+        blank_table = ''
+        self.assertEqual(self.mixin.html_report(), blank_table)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ReportMixinTest)
