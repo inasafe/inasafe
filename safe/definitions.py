@@ -270,7 +270,7 @@ hazard_tsunami = {
     'name': tr('Tsunami'),
     'description': tr(
         'A <b>tsunami</b> describes a large ocean wave or series or '
-        'waves usually caused by an under water earthquake or volcano.'
+        'waves usually caused by an under water earthquake or volcano. '
         'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
         'wave that strikes land may cause massive destruction and '
         'flooding.')
