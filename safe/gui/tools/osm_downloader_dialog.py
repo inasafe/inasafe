@@ -209,7 +209,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         tips = m.BulletedList()
         tips.add(self.tr(
             'Your current extent, when opening this window, will be used to '
-            'determine the area for which you want data to be retrieved.'
+            'determine the area for which you want data to be retrieved. '
             'You can interactively select the area by using the '
             '\'select on map\' button - which will temporarily hide this '
             'window and allow you to drag a rectangle on the map. After you '

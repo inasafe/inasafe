@@ -69,25 +69,12 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
             'overview': tr(
                 'To assess the impacts of (flood or tsunami) inundation '
                 'on building footprints originating from OpenStreetMap '
-                '(OSM).'),
+                '(OSM) with hazard in raster format.'),
             'detailed_description': tr(
                 'The inundation status is calculated for each building '
                 '(using the centroid if it is a polygon) based on the '
-                'hazard levels provided. if the hazard is given as a '
-                'raster a threshold of 1 meter is used. This is '
-                'configurable through the InaSAFE interface. If the '
-                'hazard is given as a vector polygon layer buildings are '
-                'considered to be impacted depending on the value of '
-                'hazard attributes (in order) affected" or "FLOODPRONE": '
-                'If a building is in a region that has attribute '
-                '"affected" set to True (or 1) it is impacted. If '
-                'attribute "affected" does not exist but "FLOODPRONE" '
-                'does, then the building is considered impacted if '
-                '"FLOODPRONE" is "yes". If neither affected" nor '
-                '"FLOODPRONE" is available, a building will be impacted '
-                'if it belongs to any polygon. The latter behaviour is '
-                'implemented through the attribute "inapolygon" which is '
-                'automatically assigned.'),
+                'flood threshold. The threshold can be configured in '
+                'impact function options.'),
             'hazard_input': tr(
                 'A hazard raster layer where each cell represents flood '
                 'depth (in meters).'),
@@ -102,9 +89,7 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                 'might be flooded.'),
             'limitations': [
                 tr('This function only flags buildings as impacted or not '
-                   'either based on a fixed threshold in case of raster '
-                   'hazard or the the attributes mentioned under input '
-                   'in case of vector hazard.')
+                   'either based on a fixed threshold')
             ],
             'citations': [],
             'layer_requirements': {

@@ -63,8 +63,15 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
             'author': 'AIFDR',
             'date_implemented': 'N/A',
             'hazard_input': tr(
-                'The hazard vector layer must be a polygon that has a '
-                'specific hazard zone attribute.'),
+                'The hazard layer must be a polygon layer. This layer '
+                'must have an attribute representing the volcano hazard '
+                'zone that can be specified in the impact function option. '
+                'There are three classes low, medium, and high. The default '
+                'values are "Kawasan Rawan Bencana I" for low, "Kawasan Rawan '
+                'Bencana II" for medium, and "Kawasan  Rawan Bencana III for '
+                'high." If you want to see the name of the volcano in the '
+                'result, you need to specify the volcano name attribute in '
+                'the Impact Function options.'),
             'exposure_input': tr(
                 'An exposure raster layer where each cell represents a '
                 'population count for that cell.'),

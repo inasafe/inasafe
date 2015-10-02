@@ -63,13 +63,13 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
             'hazard_input': tr(
                 'The hazard layer must be a polygon layer. This layer '
                 'must have an attribute representing the volcano hazard '
-                'zone that can be specified in the impact function option.'
-                'The valid values for the volcano hazard zone are "Kawasan '
-                'Rawan Bencana I", "Kawasan Rawan Bencana II", '
-                'or "Kawasan  Rawan Bencana III." If you want to see the '
-                'name of the volcano in the result, you need to specify '
-                'the volcano name attribute in the Impact Function '
-                'options.'),
+                'zone that can be specified in the impact function option. '
+                'There are three classes low, medium, and high. The default '
+                'values are "Kawasan Rawan Bencana I" for low, "Kawasan Rawan '
+                'Bencana II" for medium, and "Kawasan  Rawan Bencana III for '
+                'high." If you want to see the name of the volcano in the '
+                'result, you need to specify the volcano name attribute in '
+                'the Impact Function options.'),
             'exposure_input': tr(
                 'Vector polygon layer extracted from OSM where each '
                 'polygon represents the footprint of a building.'),
