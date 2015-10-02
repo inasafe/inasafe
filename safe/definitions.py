@@ -207,9 +207,9 @@ hazard_category_multiple_event = {
         'observations such as a hazard map of all observed volcanic '
         'deposits around a volcano. \n'
         'This type of hazard data shows those locations that might be '
-        'impacted by a volcanic eruption in the future . Another example '
+        'impacted by a volcanic eruption in the future. Another example '
         'might be a probabilistic hazard model that shows the likelihood of a '
-        'magnitude 7 earthquake happening in the next 50 yrs.')
+        'magnitude 7 earthquake happening in the next 50 years.')
 }
 
 hazard_category = {
