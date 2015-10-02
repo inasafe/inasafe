@@ -93,13 +93,13 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         expected_blank_report = [
             {'content': ''},
             {'content': ''},
-            {'content': [u'Hazard Category'], 'header': True},
-            {'content': [u'Buildings Not Affected', '0'], 'header': True},
-            {'content': [u'All Buildings', '0'], 'header': True},
+            {'content': [u''], 'header': True},
+            {'content': [u'Unaffected buildings', '0'], 'header': True},
+            {'content': [u'All buildings', '0'], 'header': True},
             {'content': ''},
             {'content': [u'Building type', u'Total'], 'header': True},
             {'content': ''},
-            {'content': u'Action Checklist:', 'header': True},
+            {'content': u'Action checklist', 'header': True},
             {'content': u'Are the critical facilities still open?'},
             {'content': (
                 u'Which structures have warning capacity (eg. sirens, '
@@ -123,8 +123,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
                 'arguments': ('0',),
                 'condition': False},
             {'content': ''}]
-        message = 'Blank report is not as expected.'
-        self.assertListEqual(blank_report, expected_blank_report, message)
+        self.assertListEqual(blank_report, expected_blank_report)
 
     def test_0002_action_checklist(self):
         """The default action check list."""
@@ -164,22 +163,21 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         impact_summary = self.building_mixin.impact_summary()
         expected_impact_summary = [
             {
-                'content': [u'Hazard Category', 'Affected', 'Value'],
+                'content': [u'', 'Affected', 'Value'],
                 'header': True
             },
             {'content': [u'Hazard Level 2', '12,050', '1,324,567,000']},
             {'content': [u'Hazard Level 1', '1,027', '21,284,567,111']},
             {
-                'content': [u'Total Buildings Affected', '13,077'],
+                'content': [u'Total affected buildings', '13,077'],
                 'header': True
             },
-            {'content': [u'Buildings Not Affected', '7,036'], 'header': True},
-            {'content': [u'All Buildings', '20,113'], 'header': True}]
-        message = 'Impact summary is not as expcted.'
+            {'content': [u'Unaffected buildings', '7,036'], 'header': True},
+            {'content': [u'All buildings', '20,113'], 'header': True}]
+
         self.assertListEqual(
             impact_summary,
-            expected_impact_summary,
-            message)
+            expected_impact_summary)
 
     def test_0004_buildings_breakdown(self):
         """Test the buildings breakdown."""

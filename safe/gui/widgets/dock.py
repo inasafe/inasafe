@@ -1018,6 +1018,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.restore_state()
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(True)
+        self.pbnShowQuestion.setVisible(False)
         # Note: Don't change the order of the next two lines otherwise there
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()

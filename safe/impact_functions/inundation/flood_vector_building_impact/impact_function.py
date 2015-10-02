@@ -57,12 +57,12 @@ class FloodPolygonBuildingFunction(
         """
         return [
             {
-                'content': tr('Notes'),
+                'content': tr('Notes and assumptions'),
                 'header': True
             },
             {
                 'content': tr(
-                    'Buildings are said to be inundated when in a region with '
+                    'Buildings are flooded when in a region with '
                     'field "%s" in "%s".') % (
                         self.hazard_class_attribute,
                         ', '.join([

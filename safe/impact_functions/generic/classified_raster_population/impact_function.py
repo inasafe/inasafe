@@ -73,9 +73,10 @@ class ClassifiedRasterHazardPopulationFunction(
         """
         notes = [
 
-            {'content': tr('Notes'), 'header': True},
+            {'content': tr('Notes and assumptions'), 'header': True},
             {
-                'content': tr('Total population: %s') % format_int(
+                'content': tr(
+                    'Total population in the analysis area: %s') % format_int(
                     population_rounding(self.total_population))
             },
             {
@@ -90,13 +91,7 @@ class ClassifiedRasterHazardPopulationFunction(
             },
             {
                 'content': tr(
-                    'The layers contained `no data`. This missing data was '
-                    'carried through to the impact layer.'),
-                'condition': self.no_data_warning
-            },
-            {
-                'content': tr(
-                    '`No data` values in the impact layer were treated as 0 '
+                    '"No data" values in the impact layer were treated as 0 '
                     'when counting the affected or total population.'),
                 'condition': self.no_data_warning
             },
@@ -245,7 +240,7 @@ class ClassifiedRasterHazardPopulationFunction(
             style_type='rasterStyle')
 
         # For printing map purpose
-        map_title = tr('Population affected by each class')
+        map_title = tr('Number of people affected in each class')
         legend_title = tr('Number of People')
         legend_units = tr('(people per cell)')
         legend_notes = tr(
@@ -257,7 +252,7 @@ class ClassifiedRasterHazardPopulationFunction(
             data=affected_population,
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
-            name=tr('Population which %s') % (
+            name=tr('People that might %s') % (
                 self.impact_function_manager
                 .get_function_title(self).lower()),
             keywords={

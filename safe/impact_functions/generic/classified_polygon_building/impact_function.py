@@ -58,7 +58,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         """
         return [
             {
-                'content': tr('Notes'),
+                'content': tr('Notes and assumptions'),
                 'header': True
             },
             {

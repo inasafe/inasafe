@@ -60,9 +60,10 @@ class ClassifiedPolygonHazardPopulationFunction(
         :rtype: list
         """
         notes = [
-            {'content': tr('Notes'), 'header': True},
+            {'content': tr('Notes and assumptions'), 'header': True},
             {
-                'content': tr('Total population: %s') % format_int(
+                'content': tr(
+                    'Total population in the analysis area: %s') % format_int(
                     population_rounding(self.total_population))
             },
             {

@@ -335,6 +335,7 @@ def round_thousand(value):
 
 def humanize_min_max(min_value, max_value, interval):
     """Return humanize value format for max and min.
+
     If the range between the max and min is less than one, the original
     value will be returned.
 

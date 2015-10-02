@@ -113,4 +113,5 @@ class ReportMixin(object):
 
     @property
     def blank_line(self):
+        """Blank line of content."""
         return {'content': ''}

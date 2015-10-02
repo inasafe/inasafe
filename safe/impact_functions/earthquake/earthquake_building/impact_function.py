@@ -58,7 +58,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         is_nexis = self.is_nexis
         return [
             {
-                'content': tr('Notes'),
+                'content': tr('Notes and assumptions'),
                 'header': True
             },
             {
