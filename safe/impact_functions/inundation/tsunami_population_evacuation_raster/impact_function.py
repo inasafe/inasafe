@@ -15,7 +15,6 @@ from safe.impact_functions.inundation\
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    format_int,
     verify,
     humanize_class,
     create_classes,

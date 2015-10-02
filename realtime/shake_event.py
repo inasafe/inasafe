@@ -963,7 +963,8 @@ class ShakeEvent(QObject):
         header_row.add(m.Cell(self.tr('Intensity'), header=True))
 
         affected_row = m.Row()
-        affected_row.add(m.Cell(self.tr('People Affected (x 1000)'), header=True))
+        affected_row.add(
+            m.Cell(self.tr('People Affected (x 1000)'), header=True))
 
         impact_row = m.Row()
         impact_row.add(m.Cell(self.tr('Perceived Shaking'), header=True))
