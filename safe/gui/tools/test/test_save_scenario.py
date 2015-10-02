@@ -87,7 +87,7 @@ class SaveScenarioTest(unittest.TestCase):
             DOCK,
             hazard='Classified Flood',
             exposure='Population',
-            function='Be affected by each hazard class',
+            function='Be affected in each hazard class',
             function_id='ClassifiedRasterHazardPopulationFunction')
         self.assertTrue(result, message)
         is_valid, message = self.save_scenario_dialog.validate_input()
@@ -106,7 +106,7 @@ class SaveScenarioTest(unittest.TestCase):
             DOCK,
             hazard='Classified Flood',
             exposure='Population',
-            function='Be affected by each hazard class',
+            function='Be affected in each hazard class',
             function_id='ClassifiedRasterHazardPopulationFunction')
         self.assertTrue(result, message)
 
@@ -165,7 +165,7 @@ class SaveScenarioTest(unittest.TestCase):
             DOCK,
             hazard='Classified Flood',
             exposure='Population',
-            function='Be affected by each hazard class',
+            function='Be affected in each hazard class',
             function_id='ClassifiedRasterHazardPopulationFunction')
         self.assertTrue(result, message)
         fake_dir = test_data_path()
