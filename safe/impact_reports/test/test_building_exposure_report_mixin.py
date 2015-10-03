@@ -89,119 +89,65 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0001_generate_report(self):
         """Generate a blank report."""
-        blank_report = self.building_mixin_blank.generate_report()
-        expected_blank_report = [
-            {'content': ''},
-            {'content': ''},
-            {'content': [u'Hazard Category'], 'header': True},
-            {'content': [u'Buildings Not Affected', '0'], 'header': True},
-            {'content': [u'All Buildings', '0'], 'header': True},
-            {'content': ''},
-            {'content': [u'Building type', u'Total'], 'header': True},
-            {'content': ''},
-            {'content': u'Action Checklist:', 'header': True},
-            {'content': u'Are the critical facilities still open?'},
-            {'content': (
-                u'Which structures have warning capacity (eg. sirens, '
-                u'speakers, etc.)?')},
-            {'content': u'Which buildings will be evacuation centres?'},
-            {'content': u'Where will we locate the operations centre?'},
-            {'content': (
-                u'Where will we locate warehouse and/or distribution '
-                u'centres?')},
-            {
-                'content': (
-                    u'Where will the students from the %s closed schools go '
-                    u'to study?'),
-                'arguments': ('0',),
-                'condition': False
-            },
-            {
-                'content': (
-                    u'Where will the patients from the %s closed hospitals '
-                    u'go for treatment and how will we transport them?'),
-                'arguments': ('0',),
-                'condition': False},
-            {'content': ''}]
-        message = 'Blank report is not as expected.'
-        self.assertListEqual(blank_report, expected_blank_report, message)
+        blank_report = self.building_mixin_blank.generate_report().to_text()
+        self.assertIn('**Unaffected buildings**, 0', blank_report)
+        self.assertIn('**Building type**, **Total**', blank_report)
+        self.assertIn('**Unaffected buildings**, 0', blank_report)
 
     def test_0002_action_checklist(self):
         """The default action check list."""
         action_checklist = self.building_mixin_blank.action_checklist()
-        expected_action_checklist = [
-            {'content': u'Action Checklist:', 'header': True},
-            {'content': u'Are the critical facilities still open?'},
-            {'content': (
-                u'Which structures have warning capacity (eg. sirens, '
-                u'speakers, etc.)?')},
-            {'content': u'Which buildings will be evacuation centres?'},
-            {'content': u'Where will we locate the operations centre?'},
-            {'content': (
-                u'Where will we locate warehouse and/or distribution '
-                u'centres?')},
-            {
-                'content': (
-                    u'Where will the students from the %s closed schools go '
-                    u'to study?'),
-                'arguments': ('0',),
-                'condition': False
-            },
-            {
-                'content': (
-                    u'Where will the patients from the %s closed hospitals '
-                    u'go for treatment and how will we transport them?'),
-                'arguments': ('0',),
-                'condition': False}]
-        message = 'Default action checklist not as expected.'
-        self.assertListEqual(
-            action_checklist,
-            expected_action_checklist,
-            message)
+        action_checklist = action_checklist.to_text()
+        self.assertIn(
+            u'Are the critical facilities still open?',
+            action_checklist)
+        self.assertIn(
+            u'Which structures have warning capacity (eg. sirens, '
+            u'speakers, etc.)?',
+            action_checklist)
+        self.assertIn(
+            u'Which buildings will be evacuation centres?',
+            action_checklist)
+        self.assertIn(
+            u'Where will we locate the operations centre?',
+            action_checklist
+        )
+        self.assertIn(
+            u'Where will we locate warehouse and/or distribution '
+            u'centres?',
+            action_checklist
+        )
+        self.assertNotIn(
+            u'Where will the students from the 0 closed schools go to study?',
+            action_checklist
+        )
+        self.assertNotIn(
+            u'Where will the patients from the %s closed hospitals '
+            u'go for treatment and how will we transport them?',
+            action_checklist)
 
     def test_0003_impact_summary(self):
         """Test the buildings impact summary."""
         impact_summary = self.building_mixin.impact_summary()
-        expected_impact_summary = [
-            {
-                'content': [u'Hazard Category', 'Affected', 'Value'],
-                'header': True
-            },
-            {'content': [u'Hazard Level 2', '12,050', '1,324,567,000']},
-            {'content': [u'Hazard Level 1', '1,027', '21,284,567,111']},
-            {
-                'content': [u'Total Buildings Affected', '13,077'],
-                'header': True
-            },
-            {'content': [u'Buildings Not Affected', '7,036'], 'header': True},
-            {'content': [u'All Buildings', '20,113'], 'header': True}]
-        message = 'Impact summary is not as expcted.'
-        self.assertListEqual(
-            impact_summary,
-            expected_impact_summary,
-            message)
+        impact_summary = impact_summary.to_text()
+
+        self.assertIn(
+            u'**Hazard Level 2**, 12,050, 1,324,567,000', impact_summary)
+        self.assertIn(
+            u'**Hazard Level 1**, 1,027, 21,284,567,111', impact_summary)
+        self.assertIn(u'**Affected buildings**, 13,077', impact_summary)
+        self.assertIn(u'**Unaffected buildings**, 7,036', impact_summary)
+        self.assertIn(u'**Total**, 20,113', impact_summary)
 
     def test_0004_buildings_breakdown(self):
         """Test the buildings breakdown."""
         buildings_breakdown = self.building_mixin.buildings_breakdown()
-        expected_buildings_breakdown = [
-            {
-                'content': [
-                    u'Building type',
-                    u'Hazard Level 2',
-                    u'Hazard Level 1',
-                    u'Total'],
-                'header': True
-            },
-            {'content': ['Religious', '0', '1', '3']},
-            {'content': ['Residential', '12,000', '1,000', '20,000']},
-            {'content': ['School', '50', '25', '100']},
-            {'content': ['University', '0', '1', '10']}]
-        message = 'building breakdown is not as expected.'
-        self.assertListEqual(
-            buildings_breakdown,
-            expected_buildings_breakdown,
-            message)
+        buildings_breakdown = buildings_breakdown.to_text()
+        self.assertIn(u'**Religious**, 0, 1, **3**', buildings_breakdown)
+        self.assertIn(
+            u'**Residential**, 12,000, 1,000, **20,000**', buildings_breakdown)
+        self.assertIn(u'**School**, 50, 25, **100**', buildings_breakdown)
+        self.assertIn(u'**University**, 0, 1, **10**', buildings_breakdown)
 
     def test_0005_schools_closed(self):
         """Test schools closed as expected."""

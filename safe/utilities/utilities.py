@@ -151,6 +151,7 @@ def impact_attribution(keywords, inasafe_flag=False):
         return None
 
     join_words = ' - %s ' % tr('sourced from')
+    analysis_details = tr('Analysis details')
     hazard_details = tr('Hazard details')
     hazard_title_keywords = 'hazard_title'
     hazard_source_keywords = 'hazard_source'
@@ -159,13 +160,11 @@ def impact_attribution(keywords, inasafe_flag=False):
     exposure_source_keyword = 'exposure_source'
 
     if hazard_title_keywords in keywords:
-        # We use safe translation infrastructure for this one (rather than Qt)
         hazard_title = tr(keywords[hazard_title_keywords])
     else:
         hazard_title = tr('Hazard layer')
 
     if hazard_source_keywords in keywords:
-        # We use safe translation infrastructure for this one (rather than Qt)
         hazard_source = tr(keywords[hazard_source_keywords])
     else:
         hazard_source = tr('an unknown source')
@@ -181,13 +180,14 @@ def impact_attribution(keywords, inasafe_flag=False):
         exposure_source = tr('an unknown source')
 
     report = m.Message()
-    report.add(m.Heading(hazard_details, **INFO_STYLE))
+    report.add(m.Heading(analysis_details, **INFO_STYLE))
+    report.add(hazard_details)
     report.add(m.Paragraph(
         hazard_title,
         join_words,
         hazard_source))
 
-    report.add(m.Heading(exposure_details, **INFO_STYLE))
+    report.add(exposure_details)
     report.add(m.Paragraph(
         exposure_title,
         join_words,

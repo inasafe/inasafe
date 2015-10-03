@@ -33,6 +33,8 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
+import safe.messaging as m
+from safe.messaging import styles
 
 
 def _raster_to_vector_cells(
@@ -283,8 +285,9 @@ class FloodRasterRoadsFunction(
         ..versionadded: 3.2.1
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
+
         threshold = self.parameters['min threshold'].value
         hazard = self.hazard.keyword('hazard')
         hazard_terminology = tr('flooded')
@@ -295,74 +298,21 @@ class FloodRasterRoadsFunction(
         elif hazard == 'tsunami':
             hazard_terminology = tr('inundated')
             hazard_object = tr('water')
-        return [
-            {
-                'content': tr('Notes'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Roads are %s when %s levels exceed %.2f m.' %
-                    (hazard_terminology, hazard_object, threshold))
-            },
-            {
-                'content': tr(
-                    'Roads are closed if they are %s.' % hazard_terminology)
-            },
-            {
-                'content': tr(
-                    'Roads are open if they are not %s.' % hazard_terminology)
-            }
-        ]
 
-    def action_checklist(self):
-        """Action checklist for the itb earthquake fatality report.
+        message = m.Message(style_class='container')
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Roads are %s when %s levels exceed %.2f m.' %
+            (hazard_terminology, hazard_object, threshold)))
+        checklist.add(tr(
+            'Roads are closed if they are %s.' % hazard_terminology))
+        checklist.add(tr(
+            'Roads are open if they are not %s.' % hazard_terminology))
 
-        .. versionadded:: 3.2.1
-
-        :returns: The action checklist
-        :rtype: list
-        """
-        checklist = [
-            {
-                'content': tr('Action checklist'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Try to Identify which potential roads that able to '
-                    'access for evacuation and logistic distribution purpose. '
-                    'What type of transportation reliable to use in that '
-                    'order?')
-            },
-            {
-                'content': tr(
-                    'Identify what equipment needed to open access of '
-                    'affected roads. Where the resources or equipment to open '
-                    'access affected roads located? who/what department '
-                    'responsible to mobilize?')
-            },
-            {
-                'content': tr(
-                    'Which roads can be used to evacuate people or to '
-                    'distribute logistics?')
-            },
-            {
-                'content': tr(
-                    'What type of vehicles can use the unaffected roads?')
-            },
-            {
-                'content': tr(
-                    'What sort of equipment will be needed to reopen roads & '
-                    'where will we get it?')
-            },
-            {
-                'content': tr(
-                    'Which government department is responsible for supplying '
-                    'equipment ?')
-            }
-        ]
-        return checklist
+        message.add(checklist)
+        return message
 
     def run(self):
         """Run the impact function.
@@ -534,7 +484,7 @@ class FloodRasterRoadsFunction(
                 self.affected_road_lengths[
                     flooded_keyword][road_type] += length
 
-        impact_summary = self.generate_html_report()
+        impact_summary = self.html_report()
 
         # For printing map purpose
         map_title = tr('Roads inundated')
