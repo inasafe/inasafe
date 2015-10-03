@@ -1291,7 +1291,7 @@
     <message>
         <location filename="impact_function.py" line="384"/>
         <source>The minimal threshold is greater then the maximal specified threshold. Please check the values.</source>
-        <translation type="unfinished"/>
+        <translation>The umbral mínimo es superior que el máximo especificado. Por favor verifique los valores.</translation>
     </message>
     <message>
         <location filename="road_exposure_report_mixin.py" line="64"/>
@@ -3024,7 +3024,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="impact_function.py" line="78"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if they are within the volcanic hazard zones.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;sup&gt;1&lt;/sup&gt;Gente necesitando evacuación si están dentro de las zonas de peligro de volcanes.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="96"/>
@@ -3801,12 +3801,12 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="impact_function.py" line="84"/>
         <source>Roads are closed if they are %s.</source>
-        <translation type="unfinished"/>
+        <translation>Caminos están cerrados si están %s.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="88"/>
         <source>Roads are open if they are not %s.</source>
-        <translation type="unfinished"/>
+        <translation>Caminos están abiertos si no están %s.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="107"/>
@@ -6705,7 +6705,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="shakemap_converter_dialog.py" line="259"/>
         <source>Raster file (*.tif)</source>
-        <translation type="unfinished"/>
+        <translation>Archivo de trama de mapa de bits (*.tif)</translation>
     </message>
 </context>
 <context>
