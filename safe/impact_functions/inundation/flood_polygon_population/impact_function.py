@@ -25,7 +25,7 @@ from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
 from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
-from safe.common.tables import Table, TableRow
+from safe.impact_functions.core import no_population_impact_message
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -39,6 +39,8 @@ from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.core import get_key_for_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+import safe.messaging as m
+from safe.messaging import styles
 
 __author__ = 'Rizky Maulana Nugraha'
 
@@ -70,56 +72,43 @@ class FloodEvacuationVectorHazardFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        notes = [
-            {'content': tr('Notes'), 'header': True},
-            {
-                'content': tr('Total population: %s') % format_int(
-                    population_rounding(self.total_population))
-            },
-            {
-                'content': tr(
-                    '<sup>1</sup>The evacuation threshold used to determine '
-                    'population needing evacuation is %s%%.'),
-                'arguments': format_int(
-                    self.parameters['evacuation_percentage'].value)
-            },
-            {
-                'content': tr(
-                    ''
-                    'are within any polygons.'),
-                'condition': not self.use_affected_field
-            },
-            {
-                'content': tr(
-                    'The layers contained `no data`. This missing data was '
-                    'carried through to the impact layer.'),
-                'condition': self.no_data_warning
-            },
-            {
-                'content': tr(
-                    '`No data` values in the impact layer were treated as 0 '
-                    'when counting the affected or total population.'),
-                'condition': self.no_data_warning
-            },
-            {
-                'content': get_needs_provenance_value(self.parameters)
-            },
-            {
-                'content': tr(
-                    'All values are rounded up to the nearest integer in '
-                    'order to avoid representing human lives as fractions.'),
-            },
-            {
-                'content': tr(
-                    'Population rounding is applied to all population '
-                    'values, which may cause discrepancies when adding '
-                    'values.'
-                )
-            }
-        ]
-        return notes
+        if get_needs_provenance_value(self.parameters) is None:
+            needs_provenance = ''
+        else:
+            needs_provenance = tr(get_needs_provenance_value(self.parameters))
+
+        message = m.Message(style_class='container')
+
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        population = format_int(population_rounding(self.total_population))
+        checklist.add(tr(
+            'Total population in the analysis area: %s') % population)
+        threshold = format_int(self.parameters['evacuation_percentage'].value)
+        checklist.add(tr(
+            '<sup>1</sup>The evacuation threshold used to determine '
+            'population needing evacuation is %s%%.') % threshold)
+
+        checklist.add(needs_provenance)
+        if self.no_data_warning:
+            checklist.add(tr(
+                'The layers contained "no data" values. This missing data '
+                'was carried through to the impact layer.'))
+            checklist.add(tr(
+                '"No data" values in the impact layer were treated as 0 '
+                'when counting the affected or total population.'))
+        checklist.add(tr(
+            'All values are rounded up to the nearest integer in '
+            'order to avoid representing human lives as fractions.'))
+        checklist.add(tr(
+            'Population rounding is applied to all population '
+            'values, which may cause discrepancies when adding values.'))
+
+        message.add(checklist)
+        return message
 
     def run(self):
         """Risk plugin for flood population evacuation.
@@ -224,7 +213,7 @@ class FloodEvacuationVectorHazardFunction(
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self.html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -233,14 +222,8 @@ class FloodEvacuationVectorHazardFunction(
             new_covered_exposure_data.flat[:], len(colours))
 
         # check for zero impact
-        if min(classes) == 0 == max(classes):
-            table_body = [
-                self.question,
-                TableRow(
-                    [tr('People affected'),
-                     '%s' % format_int(total_affected_population)],
-                    header=True)]
-            message = Table(table_body).toNewlineFreeString()
+        if total_affected_population == 0:
+            message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
         interval_classes = humanize_class(classes)

@@ -31,13 +31,35 @@ class Cell(MessageElement):
 
         :param: Text can be Text object or string
 
+        :param header: A flag to indicate if the cell should be treated as
+            a header cell. Depending on the ouput format cells may be rendered
+            differently e.g. with bold text.
+        :type header: bool
 
-        We pass the kwargs on to the base class so an exception is raised
+        :param align: A flag to indicate if special alignment should
+            be given to cells if supported in the output renderer.
+            Valid options are: None, 'left', 'right', 'center'
+
+        We pass the kwargs on to the base class after first removing the
+        kwargs that we explicitly expect here so an exception is raised
         if invalid keywords were passed. See:
 
         http://stackoverflow.com/questions/13124961/
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        # First check if we get a header keyword arg. If we do we will
+        # Format each cell with important_text, th or whatever is appropriate.
+        self.header_flag = False
+        if 'header' in kwargs:
+            self.header_flag = kwargs['header']
+            kwargs.pop('header')
+        # Also check if align parameter is called before calling the ABC
+        self.align = None
+        if 'align' in kwargs:
+            if kwargs['align'] in [None, 'left', 'right', 'center']:
+                self.align = kwargs['align']
+            kwargs.pop('align')
+
         super(Cell, self).__init__(**kwargs)
 
         # Special case for when we want to put a nested table in a cell
@@ -54,8 +76,29 @@ class Cell(MessageElement):
         :returns: The html representation of the Cell MessageElement
         :rtype: basestring
         """
-        return '<td%s>%s</td>\n' % (
-            self.html_attributes(), self.content.to_html())
+        # Apply bootstrap alignment classes first
+        if self.align is 'left':
+            if self.style_class is None:
+                self.style_class = 'text-left'
+            else:
+                self.style_class += ' text-left'
+        elif self.align is 'right':
+            if self.style_class is None:
+                self.style_class = 'text-right'
+            else:
+                self.style_classs += ' text-right'
+        elif self.align is 'center':
+            if self.style_class is None:
+                self.style_class = 'text-center'
+            else:
+                self.style_class += ' text-center'
+        # Check if we have a header or not then render
+        if self.header_flag is True:
+            return '<th%s>%s</th>\n' % (
+                self.html_attributes(), self.content.to_html())
+        else:
+            return '<td%s>%s</td>\n' % (
+                self.html_attributes(), self.content.to_html())
 
     def to_text(self):
         """Render a Cell MessageElement as plain text
@@ -64,7 +107,10 @@ class Cell(MessageElement):
         :rtype: basestring
 
         """
-        return '%s' % self.content
+        if self.header_flag is True:
+            return '**%s**' % self.content
+        else:
+            return '%s' % self.content
 
     def to_markdown(self):
         """Render a MessageElement queue as markdown

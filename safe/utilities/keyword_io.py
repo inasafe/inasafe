@@ -706,7 +706,7 @@ class KeywordIO(QObject):
                         return var
         return None
 
-    def to_message(self, keywords):
+    def to_message(self, keywords, show_header=True):
         """Format keywords as a message object.
 
         .. versionadded:: 3.2
@@ -717,10 +717,13 @@ class KeywordIO(QObject):
         :param keywords: Keywords to be converted to a message.
         :type keywords: dict
 
+        :param show_header: Flag indicating if InaSAFE logo etc. should be
+            added above the keywords table. Default is True.
+        :type show_header: bool
+
         :returns: A safe message object containing a table.
         :rtype: safe.messaging.message
         """
-        logo_element = m.Brand()
         # This order was determined in issue #2313
         preferred_order = [
             'title',
@@ -747,11 +750,14 @@ class KeywordIO(QObject):
             'keyword_version'
         ]  # everything else in arbitrary order
         report = m.Message()
-        report.add(logo_element)
-        report.add(m.Heading(self.tr(
-            'Layer keywords:'), **styles.INFO_STYLE))
-        report.add(m.Text(self.tr(
-            'The following keywords are defined for the active layer:')))
+        if show_header:
+            logo_element = m.Brand()
+            report.add(logo_element)
+            report.add(m.Heading(self.tr(
+                'Layer keywords:'), **styles.INFO_STYLE))
+            report.add(m.Text(self.tr(
+                'The following keywords are defined for the active layer:')))
+
         table = m.Table(style_class='table table-condensed table-striped')
         # First render out the preferred order keywords
         for keyword in preferred_order:
