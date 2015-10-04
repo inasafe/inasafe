@@ -28,6 +28,7 @@ changelog=
         3.2.1
         Global clean up of reports for consistency, terminology and style
         Show nicer formatted message in dock when no impact function is available
+        Bugfix: Don't show impact layers in wizard chooser
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
