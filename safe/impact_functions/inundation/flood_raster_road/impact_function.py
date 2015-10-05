@@ -332,7 +332,7 @@ class FloodRasterRoadsFunction(
 
         if threshold_min > threshold_max:
             message = tr(
-                'The minimal threshold is greater then the maximal specified '
+                'The minimal threshold is greater than the maximal specified '
                 'threshold. Please check the values.')
             raise GetDataError(message)
 
