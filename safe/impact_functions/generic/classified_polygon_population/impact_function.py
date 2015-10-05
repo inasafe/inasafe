@@ -68,17 +68,12 @@ class ClassifiedPolygonHazardPopulationFunction(
         population = format_int(population_rounding(self.total_population))
         checklist.add(tr(
             'Total population in the analysis area: %s') % population)
-        threshold = format_int(self.parameters['evacuation_percentage'].value)
         checklist.add(tr(
-            '<sup>1</sup>The evacuation threshold used to determine '
-            'population needing evacuation is %s%%.') % threshold)
-        if self.no_data_warning:
-            checklist.add(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            checklist.add(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
+            '<sup>1</sup>People need evacuation if they are in a '
+            'hazard zone.'))
+        checklist.add(tr(
+            'Map shows population count in high, medium, and low '
+            'hazard areas.'))
         checklist.add(tr(
             'All values are rounded up to the nearest integer in '
             'order to avoid representing human lives as fractions.'))

@@ -420,7 +420,7 @@ class FloodRasterRoadsFunction(
 
         if len(flood_cells_map) == 0:
             message = tr(
-                'There are no objects in the hazard layer with "value">%s.'
+                'There are no objects in the hazard layer with "value" > %s. '
                 'Please check the value or use other extent.' % (
                     threshold_min, ))
             raise GetDataError(message)
