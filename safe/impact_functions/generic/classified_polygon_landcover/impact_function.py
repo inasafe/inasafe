@@ -187,7 +187,8 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             TableRow(
                 [tr('All'),
                  total_affected_area,
-                 "%.0f%%" % (total_affected_area / total_area * 100),
+                 "%.0f%%" % ((total_affected_area / total_area) \
+                              if total_area != 0 else 0) * 100,
                  total_area]),
             TableRow(tr('Breakdown by land cover type'), header=True)]
         for t, v in all_landcovers.iteritems():

@@ -311,7 +311,7 @@ hazards = {
 # Exposure
 exposure_land_cover = {
     'key': 'land_cover',
-    'name': tr('Land cover'),
+    'name': tr('Land Cover'),
     'description': tr(
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
