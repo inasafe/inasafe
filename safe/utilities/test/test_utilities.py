@@ -195,10 +195,10 @@ class UtilitiesTest(unittest.TestCase):
         """Test for compare_version"""
         assert compare_version("1", "1") == 0
         assert compare_version("2.1", "2.2") < 0
-        assert compare_version("3.0.4.10", "3.0.4.2") > 0
-        assert compare_version("4.08", "4.08.01") < 0
-        assert compare_version("3.2.1.9.8144", "3.2") > 0
-        assert compare_version("3.2", "3.2.1.9.8144") < 0
+        assert compare_version("3.0.4.10", "3.0.4.2") == 0
+        assert compare_version("4.08", "4.08.01") == 0
+        assert compare_version("3.2.1.9.8144", "3.2") == 0
+        assert compare_version("3.2", "3.2.1.9.8144") == 0
         assert compare_version("1.2", "2.1") < 0
         assert compare_version("2.1", "1.2") > 0
         assert compare_version("5.6.7", "5.6.7") == 0
@@ -206,8 +206,8 @@ class UtilitiesTest(unittest.TestCase):
         assert compare_version("1.1.1", "1.01.1") == 0
         assert compare_version("1", "1.0") == 0
         assert compare_version("1.0", "1") == 0
-        assert compare_version("1.0", "1.0.1") < 0
-        assert compare_version("1.0.1", "1.0") > 0
+        assert compare_version("1.0", "1.0.1") == 0
+        assert compare_version("1.0.1", "1.0") == 0
         assert compare_version("1.0.2.0", "1.0.2") == 0
         assert compare_version("1.0.2.0.dev-123", "1.0.2") == 0
         assert compare_version("1.0.2.0.dev-123", "1.0.2.dev-345") == 0

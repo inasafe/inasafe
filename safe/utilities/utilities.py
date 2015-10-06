@@ -399,8 +399,10 @@ def compare_version(version1, version2):
         :returns: List of integer
         :rtype: list
         """
-        # Removing '.dev-ABCDEF' thing.
-        if '.dev' in v:
-            v = v.split('.dev')[0]
+        # Check only minor version
+        if v.count('.') > 1:
+            version_split = v.split('.')
+            v = version_split[0] + '.' + version_split[1]
+
         return [int(x) for x in re.sub(r'(\.0+)*$', '', v).split(".")]
     return cmp(normalize(version1), normalize(version2))
