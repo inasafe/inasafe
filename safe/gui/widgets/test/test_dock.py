@@ -661,6 +661,10 @@ class TestDock(TestCase):
             encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
+        result = result.replace(
+            '<th class="text-right">', ' ').replace('</th>', ' ')
+        result = result.replace(
+            '</td><td class="text-right">', ' ')
         for line in expected_result:
             line = line.replace('\n', '')
             self.assertIn(line, result)
@@ -714,6 +718,10 @@ class TestDock(TestCase):
             encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
+        result = result.replace(
+            '<th class="text-right">', ' ').replace('</th>', ' ')
+        result = result.replace(
+            '</td><td class="text-right">', ' ')
         for line in expected_result:
             line = line.replace('\n', '')
             self.assertIn(line, result)

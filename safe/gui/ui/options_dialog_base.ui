@@ -419,7 +419,7 @@
      </widget>
      <widget class="QWidget" name="tab_iso19115">
       <attribute name="title">
-       <string>ISO 19155 Metadata</string>
+       <string>ISO 19115 Metadata</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>

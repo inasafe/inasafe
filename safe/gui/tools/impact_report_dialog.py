@@ -132,7 +132,7 @@ class ImpactReportDialog(QtGui.QDialog, FORM_CLASS):
 
         try:
             default_template_path = resources_path(
-                'qgis-composer-templates', 'blue-portrait-a4.qpt')
+                'qgis-composer-templates', 'a4-portrait-blue.qpt')
             path = settings.value(
                 'inasafe/lastTemplate',
                 default_template_path,

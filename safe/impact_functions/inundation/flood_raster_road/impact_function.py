@@ -33,6 +33,8 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
+import safe.messaging as m
+from safe.messaging import styles
 
 
 def _raster_to_vector_cells(
@@ -277,6 +279,41 @@ class FloodRasterRoadsFunction(
         """Constructor."""
         super(FloodRasterRoadsFunction, self).__init__()
 
+    def notes(self):
+        """Return the notes section of the report.
+
+        ..versionadded: 3.2.1
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: safe.messaging.Message
+        """
+
+        threshold = self.parameters['min threshold'].value
+        hazard = self.hazard.keyword('hazard')
+        hazard_terminology = tr('flooded')
+        hazard_object = tr('flood')
+        if hazard == 'flood':
+            # Use flooded
+            pass
+        elif hazard == 'tsunami':
+            hazard_terminology = tr('inundated')
+            hazard_object = tr('water')
+
+        message = m.Message(style_class='container')
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Roads are %s when %s levels exceed %.2f m.' %
+            (hazard_terminology, hazard_object, threshold)))
+        checklist.add(tr(
+            'Roads are closed if they are %s.' % hazard_terminology))
+        checklist.add(tr(
+            'Roads are open if they are not %s.' % hazard_terminology))
+
+        message.add(checklist)
+        return message
+
     def run(self):
         """Run the impact function.
 
@@ -295,7 +332,7 @@ class FloodRasterRoadsFunction(
 
         if threshold_min > threshold_max:
             message = tr(
-                'The minimal threshold is greater then the maximal specified '
+                'The minimal threshold is greater than the maximal specified '
                 'threshold. Please check the values.')
             raise GetDataError(message)
 
@@ -383,7 +420,7 @@ class FloodRasterRoadsFunction(
 
         if len(flood_cells_map) == 0:
             message = tr(
-                'There are no objects in the hazard layer with "value">%s.'
+                'There are no objects in the hazard layer with "value" > %s. '
                 'Please check the value or use other extent.' % (
                     threshold_min, ))
             raise GetDataError(message)
@@ -447,7 +484,7 @@ class FloodRasterRoadsFunction(
                 self.affected_road_lengths[
                     flooded_keyword][road_type] += length
 
-        impact_summary = self.generate_html_report()
+        impact_summary = self.html_report()
 
         # For printing map purpose
         map_title = tr('Roads inundated')
