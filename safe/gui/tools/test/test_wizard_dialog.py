@@ -1414,8 +1414,9 @@ class WizardDialogTest(unittest.TestCase):
         #expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 0
         #expected_raster_polygon_functions_count = 2
+        expected_functions_count = 0
+        #expected_functions_count = 2
 
-        expected_functions_count = 2
         chosen_if = 'FloodRasterBuildingFunction'
 
         expected_hazard_layers_count = 1

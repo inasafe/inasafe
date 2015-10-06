@@ -66,8 +66,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE):
         self.prepare()
 
         # Identify hazard and exposure layers
-        hazard = self.hazard.layer()
-        exposure = self.exposure.layer()
+        hazard = self.hazard.layer
+        exposure = self.exposure.layer
 
         type_attr = self.parameters['area_type_field'].value
 

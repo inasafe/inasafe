@@ -195,7 +195,8 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             affected = imp_landcovers[t] if t in imp_landcovers else 0.
             affected_area = round(affected, 1)
             area = round(v, 1)
-            percent_affected = affected_area / area * 100
+            percent_affected = ((affected_area / area) \
+                                    if area != 0 else 0) * 100
             table_body.append(
                 TableRow([t, affected_area, "%.0f%%" % percent_affected, area])
             )
