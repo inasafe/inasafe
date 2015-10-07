@@ -1410,10 +1410,10 @@ class WizardDialogTest(unittest.TestCase):
         expected_hazards_count = 5
         expected_exposures_count = 5
         # expected_exposures_count = 4
-        expected_flood_structure_functions_count = 2
-        #expected_flood_structure_functions_count = 4
-        expected_raster_polygon_functions_count = 0
-        #expected_raster_polygon_functions_count = 2
+        #expected_flood_structure_functions_count = 2
+        expected_flood_structure_functions_count = 4
+        #expected_raster_polygon_functions_count = 0
+        expected_raster_polygon_functions_count = 2
         expected_functions_count = 0
         #expected_functions_count = 2
 
@@ -1476,7 +1476,7 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(row_count, expected_exposures_count, message)
 
         # step_fc_function_1: test number of functions for flood x structure
-        dialog.tblFunctions1.setCurrentCell(3, 1)
+        dialog.tblFunctions1.setCurrentCell(4, 1)
         count = len(dialog.selected_functions_1())
         message = ('Invalid functions count in the IF matrix 1! For flood '
                    'and structure there should be %d while there were: '
@@ -1490,7 +1490,7 @@ class WizardDialogTest(unittest.TestCase):
         # step_fc_function_2: test number of functions for raster flood
         # and polygon structure
         self.check_current_step(step_fc_function_2, dialog)
-        dialog.tblFunctions2.setCurrentCell(3, 0)
+        dialog.tblFunctions2.setCurrentCell(4, 0)
 
         count = len(dialog.selected_functions_2())
         message = ('Invalid functions count in the IF matrix 2! For '
