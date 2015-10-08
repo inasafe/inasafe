@@ -1490,7 +1490,7 @@ class WizardDialogTest(unittest.TestCase):
         # step_fc_function_2: test number of functions for raster flood
         # and polygon structure
         self.check_current_step(step_fc_function_2, dialog)
-        dialog.tblFunctions2.setCurrentCell(4, 0)
+        dialog.tblFunctions2.setCurrentCell(3, 0)
 
         count = len(dialog.selected_functions_2())
         message = ('Invalid functions count in the IF matrix 2! For '
