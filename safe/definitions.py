@@ -311,11 +311,20 @@ hazards = {
 # Exposure
 exposure_land_cover = {
     'key': 'land_cover',
-    'name': tr('Land cover'),
+    'name': tr('Land Cover'),
     'description': tr(
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
         ' hazard. This might include crops, forest and urban areas. ')
+}
+
+exposure_area = {
+    'key': 'area',
+    'name': tr('Area'),
+    'description': tr(
+        'The <b>area</b> exposure data describes features on '
+        'the surface of the earth that might be exposed to a particular '
+        ' hazard. This currently include urban areas. ')
 }
 
 exposure_people_in_building = {

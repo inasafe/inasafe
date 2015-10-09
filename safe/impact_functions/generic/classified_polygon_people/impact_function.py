@@ -11,6 +11,10 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+__author__ = 'Samweli Twesa Mwakisambwe "Samweli" <smwltwesa6@gmail.com>'
+__date__ = '8/5/15'
+
+
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
@@ -34,34 +38,26 @@ from safe.common.utilities import unique_filename
 from safe.common.tables import Table, TableRow
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
-from safe.impact_functions.generic.classified_polygon_landcover\
+from safe.impact_functions.generic.classified_polygon_people\
     .metadata_definitions \
-    import ClassifiedPolygonHazardLandCoverFunctionMetadata
+    import ClassifiedPolygonHazardPolygonPeopleFunctionMetadata
 
 
-class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
+class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE):
 
-    _metadata = ClassifiedPolygonHazardLandCoverFunctionMetadata()
+    _metadata = ClassifiedPolygonHazardPolygonPeopleFunctionMetadata()
 
     def __init__(self):
-        super(ClassifiedPolygonHazardLandCoverFunction, self).__init__()
+        super(ClassifiedPolygonHazardPolygonPeopleFunction, self).__init__()
 
         # Set the question of the IF (as the hazard data is not an event)
-        self.question = ('In each of the hazard zones which land cover types '
+        self.question = ('In each of the hazard zones which areas  '
                          'might be affected.')
 
-    def notes(self):
-        """Return the notes section of the report.
-
-        :return: The notes that should be attached to this impact report.
-        :rtype: list
-        """
-        return []   # TODO: what to put here?
-
     def run(self):
-        """Risk plugin for classified polygon hazard on land cover.
+        """Risk plugin for classified polygon hazard on area with population.
 
-        Counts area of land cover types exposed to hazard zones.
+        Counts areas exposed to hazard zones.
 
         :returns: Impact layer
         :rtype: Vector
@@ -73,7 +69,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         hazard = self.hazard.layer
         exposure = self.exposure.layer
 
-        type_attr = self.parameters['land_cover_type_field'].value
+        type_attr = self.parameters['area_type_field'].value
 
         # prepare objects for re-projection of geometries
         crs_wgs84 = QgsCoordinateReferenceSystem("EPSG:4326")
@@ -103,54 +99,80 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         filename = unique_filename(suffix='.shp')
         impact_fields = exposure.dataProvider().fields()
         impact_fields.append(QgsField(self.target_field, QVariant.Int))
+        unaffected_fields = exposure.dataProvider().fields()
+        unaffected_fields.append(QgsField(self.target_field, QVariant.Int))
+
         writer = QgsVectorFileWriter(
             filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
 
-        # prepare area calculator object
-        area_calc = QgsDistanceArea()
-        area_calc.setSourceCrs(exposure.crs())
-        area_calc.setEllipsoid("WGS84")
-        area_calc.setEllipsoidalMode(True)
-
         # iterate over all exposure polygons and calculate the impact
-        all_landcovers = {}
-        imp_landcovers = {}
+        all_areas = {}
+        imp_areas = {}
+
+        all_areas_ids = {}
+        all_affected_areas = {}
+        all_areas_population = {}
+
         for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
             geometry = f.geometry()
             bbox = geometry.boundingBox()
             # clip the exposure geometry to requested extent if necessary
             if not extent_exposure.contains(bbox):
                 geometry = geometry.intersection(extent_exposure_geom)
-            landcover_type = f[type_attr]
+            area_type = f[type_attr]
+            area_id = f.attribute('id')
+            all_areas_population[area_id] = f.attribute('population')
 
             # add to the total area of this land cover type
-            if landcover_type not in all_landcovers:
-                all_landcovers[landcover_type] = 0.
-            area = area_calc.measure(geometry) / 1e4
-            all_landcovers[landcover_type] += area
+            if area_type not in all_areas:
+                all_areas[area_type] = 0.
+
+            if area_id not in all_areas_ids:
+                all_areas_ids[area_id] = 0.
+
+            area = geometry.area()
+
+            all_areas[area_type] += area
+            all_areas_ids[area_id] += area
 
             # find possible intersections with hazard layer
             impacted_geometries = []
+            unaffected_geometries = []
+            impacted_features = {}
             for hazard_id in hazard_index.intersects(bbox):
                 hazard_geometry = hazard_features[hazard_id].geometry()
                 impact_geometry = geometry.intersection(hazard_geometry)
+
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue   # no intersection found
 
-                # add to the affected area of this land cover type
-                if landcover_type not in imp_landcovers:
-                    imp_landcovers[landcover_type] = 0.
-                area = area_calc.measure(impact_geometry) / 1e4
-                imp_landcovers[landcover_type] += area
+                # find unaffected area geometry
+                unaffected_geometry = geometry.symDifference(impact_geometry)
+
+                # add to the affected area of this area type
+                if area_type not in imp_areas:
+                    imp_areas[area_type] = 0.
+                if area_id not in all_affected_areas:
+                    all_affected_areas[area_id] = 0.
+                area = impact_geometry.area()
+                imp_areas[area_type] += area
+                all_affected_areas[area_id] += area
 
                 # write the impacted geometry
+
                 f_impact = QgsFeature(impact_fields)
                 f_impact.setGeometry(impact_geometry)
                 f_impact.setAttributes(f.attributes()+[1])
+
+                f_unaffected = QgsFeature(unaffected_fields)
+                f_unaffected.setGeometry(unaffected_geometry)
+                f_unaffected.setAttributes(f.attributes()+[0])
                 writer.addFeature(f_impact)
+                writer.addFeature(f_unaffected)
 
                 impacted_geometries.append(impact_geometry)
+
 
             # TODO: uncomment if not affected polygons should be written
             # # Make sure the geometry we work with is valid, otherwise geom.
@@ -171,35 +193,64 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             #     writer.addFeature(f_out)
 
         del writer
-        impact_layer = QgsVectorLayer(filename, "Impacted Land Cover", "ogr")
+        impact_layer = QgsVectorLayer(filename, "Impacted Areas", "ogr")
+
+        # Calculating the affect number of people percentage
+        # affected_people_percentages = {}
+        # for area in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
 
         # Generate the report of affected areas
-        total_affected_area = round(sum(imp_landcovers.values()), 1)
-        total_area = round(sum(all_landcovers.values()), 1)
+        total_affected_area = round(sum(imp_areas.values()), 1)
+        total_area = round(sum(all_areas.values()), 1)
+        total_population = sum(all_areas_population.values())
         table_body = [
             self.question,
             TableRow(
-                [tr('Land Cover Type'),
+                [tr('Area id'),
                  tr('Affected Area (ha)'),
                  tr('Affected Area (%)'),
-                 tr('Total (ha)')],
+                 tr('Total (ha)'),
+                 tr('Affected People'),
+                 tr('Affected People(%)'),
+                 tr('Total Number of People')],
                 header=True),
             TableRow(
                 [tr('All'),
                  total_affected_area,
                  "%.0f%%" % ((total_affected_area / total_area) \
-                              if total_area != 0 else 0) * 100,
-                 total_area]),
-            TableRow(tr('Breakdown by land cover type'), header=True)]
-        for t, v in all_landcovers.iteritems():
-            affected = imp_landcovers[t] if t in imp_landcovers else 0.
-            affected_area = round(affected, 1)
-            area = round(v, 1)
-            percent_affected = ((affected_area / area) \
-                                    if area != 0 else 0) * 100
+                                 if total_area != 0 else 0 * 100),
+                 total_area, tr(''), tr(''), tr(''),
+                 total_population]),
+
+            TableRow(tr('Breakdown by Area'), header=True)]
+
+        areas_affected_ratio = {}
+        # Assigning percentages to the affected areas
+        for t, v in all_areas_ids.iteritems():
+
+            affected = all_affected_areas[t] if t in all_affected_areas else 0.
+            single_total_area = v
+            affected_area_ratio = (affected / single_total_area) if v != 0 else 0
+
+            percent_affected = affected_area_ratio * 100
+            number_people_affected = affected_area_ratio * all_areas_population[t]
+
+            # rounding to float without decimal, we can't have number of people with decimal
+            number_people_affected = round(number_people_affected,0)
+            percent_people_affected = ((number_people_affected / all_areas_population[t]) \
+                                      if all_areas_population[t] != 0 else 0) * 100
+            affected *= 1e8
+            single_total_area *= 1e8
             table_body.append(
-                TableRow([t, affected_area, "%.0f%%" % percent_affected, area])
+
+                TableRow([t,"%.0f" % affected, "%.0f%%" % percent_affected,
+                          "%.0f" % single_total_area, "%.0f" % number_people_affected,
+                          "%.0f%%" % percent_people_affected,
+                          all_areas_population[t]])
             )
+            if t not in areas_affected_ratio:
+                areas_affected_ratio[t] = affected_area_ratio
+
         impact_summary = Table(table_body).toNewlineFreeString()
 
         # Define style for the impact layer
@@ -207,8 +258,14 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         transparent_color.setAlpha(0)
         style_classes = [
             dict(
+                label=tr('Not Affected'), value=0, colour='#1EFC7C',
+                transparency=0, size=0.5),
+            dict(
+                label=tr('Medium Affected'), value=0.5, colour='#FFA500',
+                transparency=0, size=0.5),
+            dict(
                 label=tr('Affected'), value=1,
-                colour=transparent_color, border_color='#F31A1C',
+                border_color='#F31A1C', colour='#F31A1C',
                 transparency=0, size=0.5)]
         style_info = dict(
             target_field=self.target_field,
@@ -218,10 +275,10 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=tr('Land cover affected by each hazard zone'),
+            name=tr('Areas affected by each hazard zone'),
             keywords={
                 'impact_summary': impact_summary,
-                'map_title': tr('Affected Land Cover'),
+                'map_title': tr('Affected Areas'),
                 'target_field': self.target_field
             },
             style_info=style_info)

@@ -1155,7 +1155,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure', 'Land Cover']
+        expected_subcategories = [u'Structure', u'Land Cover', u'Area']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # Choosing structure
@@ -1222,6 +1222,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_classification, dialog)
 
         expected_values = ['Flood classes', 'Generic classes']
+
         self.check_list(expected_values, dialog.lstClassifications)
         self.select_from_list_widget('Flood classes',
                                      dialog.lstClassifications)
@@ -1407,10 +1408,15 @@ class WizardDialogTest(unittest.TestCase):
         expected_test_layer_count = 2
 
         expected_hazards_count = 5
-        expected_exposures_count = 4
+        expected_exposures_count = 5
+        # expected_exposures_count = 4
+        #expected_flood_structure_functions_count = 2
         expected_flood_structure_functions_count = 4
+        #expected_raster_polygon_functions_count = 0
         expected_raster_polygon_functions_count = 2
+        #expected_functions_count = 0
         expected_functions_count = 2
+
         chosen_if = 'FloodRasterBuildingFunction'
 
         expected_hazard_layers_count = 1
@@ -1470,7 +1476,7 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(row_count, expected_exposures_count, message)
 
         # step_fc_function_1: test number of functions for flood x structure
-        dialog.tblFunctions1.setCurrentCell(3, 1)
+        dialog.tblFunctions1.setCurrentCell(4, 1)
         count = len(dialog.selected_functions_1())
         message = ('Invalid functions count in the IF matrix 1! For flood '
                    'and structure there should be %d while there were: '

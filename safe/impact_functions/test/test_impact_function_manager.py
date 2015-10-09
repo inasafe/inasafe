@@ -42,6 +42,7 @@ from safe.definitions import (
     hazard_earthquake,
     hazard_volcanic_ash,
     hazard_volcano,
+    exposure_area,
     exposure_structure,
     exposure_road,
     exposure_population,
@@ -200,7 +201,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         exposures = impact_function_manager.exposures_for_layer(
             'polygon')
-        expected = [exposure_structure, exposure_land_cover]
+        expected = [exposure_structure, exposure_land_cover, exposure_area]
         self.assertItemsEqual(exposures, expected)
 
         exposures = impact_function_manager.exposures_for_layer(
@@ -247,8 +248,9 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.available_exposures()
         expected_result = [
-            exposure_structure, exposure_road, exposure_population,
-            exposure_land_cover]
+            exposure_area, exposure_land_cover, exposure_population, exposure_road,
+            exposure_structure
+            ]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
