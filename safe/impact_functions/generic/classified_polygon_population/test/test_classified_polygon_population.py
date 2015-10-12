@@ -22,6 +22,7 @@ from safe.impact_functions.generic.classified_polygon_population\
     .impact_function import ClassifiedPolygonHazardPopulationFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
@@ -43,9 +44,8 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
         population_layer = read_layer(population_path)
 
         impact_function = ClassifiedPolygonHazardPopulationFunction.instance()
-        impact_function.hazard = generic_polygon_layer
-        impact_function.exposure = population_layer
-        impact_function.parameters['hazard zone attribute'] = 'h_zone'
+        impact_function.hazard = SafeLayer(generic_polygon_layer)
+        impact_function.exposure = SafeLayer(population_layer)
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
@@ -62,19 +62,20 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
     def test_filter(self):
         """TestClassifiedPolygonPopulationFunction: Test filtering IF"""
         hazard_keywords = {
-            'category': 'hazard',
-            'subcategory': 'earthquake',
-            'unit': 'classes',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'flood',
+            'hazard_category': 'multiple_event',
+            'vector_hazard_classification': 'generic_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous',
-            'unit': 'people_per_pixel'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

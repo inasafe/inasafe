@@ -11,24 +11,27 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_volcano,
-    unit_volcano_categorical,
-    layer_vector_polygon,
-    layer_raster_continuous,
-    exposure_population,
-    unit_people_per_pixel,
-    hazard_definition,
-    exposure_definition)
 from safe.defaults import (
     default_minimum_needs,
-    default_provenance,
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    layer_geometry_raster,
+    hazard_volcano,
+    volcano_vector_hazard_classes,
+    hazard_category_multiple_event,
+    hazard_category_single_event,
+    exposure_population,
+    count_exposure_unit,
+    volcano_name_field,
+)
 
 
 class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
@@ -60,8 +63,15 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
             'author': 'AIFDR',
             'date_implemented': 'N/A',
             'hazard_input': tr(
-                'The hazard vector layer must be a polygon that has a '
-                'specific hazard zone attribute.'),
+                'The hazard layer must be a polygon layer. This layer '
+                'must have an attribute representing the volcano hazard '
+                'zone that can be specified in the impact function option. '
+                'There are three classes low, medium, and high. The default '
+                'values are "Kawasan Rawan Bencana I" for low, "Kawasan Rawan '
+                'Bencana II" for medium, and "Kawasan  Rawan Bencana III for '
+                'high." If you want to see the name of the volcano in the '
+                'result, you need to specify the volcano name attribute in '
+                'the Impact Function options.'),
             'exposure_input': tr(
                 'An exposure raster layer where each cell represents a '
                 'population count for that cell.'),
@@ -77,34 +87,38 @@ class VolcanoPolygonPopulationFunctionMetadata(ImpactFunctionMetadata):
             'overview': tr(
                 'To assess the impact of a volcano eruption on people.'),
             'detailed_description': '',
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [hazard_volcano],
-                    'units': [unit_volcano_categorical],
-                    'layer_constraints': [
-                        layer_vector_polygon
-                    ]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_polygon],
+                    'hazard_categories': [
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
+                    ],
+                    'hazard_types': [hazard_volcano],
+                    'continuous_hazard_units': [],
+                    'vector_hazard_classifications': [
+                        volcano_vector_hazard_classes],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': [
+                        volcano_name_field]
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_population],
-                    'units': [unit_people_per_pixel],
-                    'layer_constraints': [layer_raster_continuous]
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'exposure_types': [exposure_population],
+                    'exposure_units': [count_exposure_unit],
+                    'exposure_class_fields': [],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
-                # The attribute of hazard zone in hazard layer
-                ('hazard zone attribute', 'KRB'),
-                # The attribute for name of the volcano in hazard layer
-                ('volcano name attribute', 'NAME'),
                 ('postprocessors', OrderedDict([
                     ('Gender', default_gender_postprocessor()),
                     ('Age', age_postprocessor()),
                     ('MinimumNeeds', minimum_needs_selector()),
                 ])),
-                ('minimum needs', default_minimum_needs()),
-                ('provenance', default_provenance())
+                ('minimum needs', default_minimum_needs())
             ])
         }
         return dict_meta

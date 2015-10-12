@@ -1,3 +1,5 @@
-category: hazard
-subcategory: earthquake
-unit: MMI
+layer_purpose: hazard
+hazard: earthquake
+hazard_category: single_event
+layer_mode: continuous
+continuous_hazard_unit: mmi

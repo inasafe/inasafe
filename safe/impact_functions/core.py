@@ -17,12 +17,12 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'christian@kartoza.com <Christian Christelis>'
 __revision__ = '$Format:%H$'
 __date__ = '29/04/2015'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
-
 
 import logging
 from math import ceil
@@ -30,6 +30,9 @@ import numpy
 from collections import OrderedDict
 
 from safe.defaults import default_minimum_needs
+from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
+import safe.messaging as m
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -53,6 +56,7 @@ def evacuated_population_weekly_needs(
     if not minimum_needs:
         minimum_needs = default_minimum_needs()
 
+    minimum_needs = filter_needs_parameters(minimum_needs)
     population_needs = OrderedDict()
     for resource in minimum_needs:
         resource = resource.serialize()
@@ -77,6 +81,8 @@ def evacuated_population_needs(population, minimum_needs):
     :returns: The needs for the evacuated population.
     :rtype: dict
     """
+    # Rizky : filter, only for valid serialized ResourceParameter
+    minimum_needs = [n for n in minimum_needs if 'frequency' in n]
     frequencies = []
     for resource in minimum_needs:
         if resource['frequency'] not in frequencies:
@@ -131,105 +137,55 @@ def population_rounding(number):
     return population_rounding_full(number)[0]
 
 
-# ---------------------------------------
-# Helpers for individual impact functions
-# --------------------------------------
-def get_hazard_layers(layers):
-    """Get list of layers that have category=='hazard'
-    """
-
-    return extract_layers(layers, 'category', 'hazard')
-
-
-def get_hazard_layer(layers):
-    """Get hazard layer from list of layers
-
-    If there are more than one, only the first is returned.
-    Use get_hazard_layers if more are expected and needed
-
-    If no layers fit the description None is returned
-    """
-
-    L = get_hazard_layers(layers)
-    if len(L) > 0:
-        return L[0]
-    else:
-        return None
-
-
-def get_exposure_layers(layers):
-    """Get list of layers that have category=='exposure'
-    """
-
-    return extract_layers(layers, 'category', 'exposure')
-
-
-def get_exposure_layer(layers):
-    """Get exposure layer from list of layers
-
-    If there are more than one, only the first is returned.
-    Use get_hazard_layers if more are expected and needed
-
-    If no layers fit the description None is returned
-    """
-
-    L = get_exposure_layers(layers)
-    if len(L) > 0:
-        return L[0]
-    else:
-        return None
-
-
-def extract_layers(layers, keyword, value):
-    """Extract layers with specified keyword/value pair
-    """
-
-    extracted_layers = []
-    for layer in layers:
-        if value in layer.get_keywords(keyword):
-            extracted_layers.append(layer)
-
-    return extracted_layers
-
-
-def convert_to_old_keywords(converter, keywords):
-    """Convert new keywords system to old keywords system by aliases.
-
-    Since we have new keywords system in definitions.py and assigned by wizard,
-    it will have backward incompatibility because the current impact function
-    selector still use the old system.
-
-     This method will convert new keywords to old keyword that has the same
-     objective.
-
-     :param converter: a dictionary that contains all possible aliases
-        from new keywords to old keywords.
-     :type converter: dict
-
-     :param keywords: list of dictionary keyword
-     :type keywords: list
-
-     .. versionadded:: 2.1
-    """
-    for keyword in keywords:
-        for key, value in keyword.iteritems():
-            try:
-                aliases = converter[key]
-                for alias_key, alias_value in aliases.iteritems():
-                    if value.lower() in alias_value:
-                        keyword[key] = alias_key
-                        break
-            except KeyError:
-                pass
-
-
 def has_no_data(layer_data):
     """Determine whether or not a layer contains nan values.
-
     :param layer_data: Layer data that is to be inspected.
     :type layer_data: ndarry
-
     :return: The True if there is nodata in layer_data.
     :rtype: bool
     """
     return numpy.isnan(numpy.sum(layer_data))
+
+
+def get_key_for_value(value, value_map):
+    """Obtain the key of a value from a value map.
+
+    :param value: The value mapped to a key in value_map.
+    :type value: int, str, float
+
+    :param value_map: A value mapping.
+    :type value_map: dict
+
+    :returns: A key for the value.
+    :rtype: str
+    """
+    for key, values in value_map.iteritems():
+        if value in values:
+            return key
+    return None
+
+
+def no_population_impact_message(question):
+    """Create a message that indicates that no population were impacted.
+
+    :param question: A question sentence that will be used as the table
+        caption.
+    :type question: basestring
+
+    :returns: An html document containing a nice message saying nobody was
+        impacted.
+    :rtype: basestring
+    """
+    message = m.Message()
+    table = m.Table(
+        style_class='table table-condensed table-striped')
+    row = m.Row()
+    label = m.ImportantText(tr('People impacted'))
+    content = 0
+    row.add(m.Cell(label))
+    row.add(m.Cell(content))
+    table.add(row)
+    table.caption = question
+    message.add(table)
+    message = message.to_html(suppress_newlines=True)
+    return message

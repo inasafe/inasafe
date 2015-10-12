@@ -27,6 +27,9 @@ from PyQt4.QtCore import QSettings
 
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.group_parameter import GroupParameter
+from safe_extras.parameters.text_parameter import TextParameter
+from safe_extras.parameters.unit import Unit
 
 from safe.common.resource_parameter import ResourceParameter
 from safe.utilities.i18n import tr
@@ -140,9 +143,10 @@ def default_gender_postprocessor():
     gender = BooleanParameter()
     gender.name = 'Gender'
     gender.value = True
+    gender.help_text = tr('Gender ratio breakdown.')
     gender.description = tr(
-        'Check this option if you wish to calculate the gender breakdown '
-        'on the affected population.'
+        'Check this option if you wish to calculate a breakdown by gender '
+        'for the affected population.'
     )
     return [gender]
 
@@ -156,6 +160,7 @@ def minimum_needs_selector():
     minimum_needs_flag = BooleanParameter()
     minimum_needs_flag.name = 'MinimumNeeds'
     minimum_needs_flag.value = True
+    minimum_needs_flag.help_text = tr('Minimum needs breakdown.')
     minimum_needs_flag.description = tr(
         'Check this option if you wish to calculate minimum needs for the '
         'affected population. Minimum needs will be calculated according to '
@@ -170,13 +175,30 @@ def age_postprocessor():
     :return: Selectors to activate age postprocessor.
     :rtype: list
     """
-    age = BooleanParameter()
+    age = GroupParameter()
     age.name = 'Age'
-    age.value = True
+    age.enable_parameter = True
+    age.must_scroll = False
+    age.help_text = tr('Age ratios breakdown.')
+    age.description = tr(
+        'Check this option if you wish to calculate a breakdown by age group'
+        'for the affected population. '
+    )
+
+    unit_ratio = Unit()
+    unit_ratio.name = tr('ratio')
+    unit_ratio.plural = tr('ratios')
+    unit_ratio.abbreviation = tr('ratio')
+    unit_ratio.description = tr(
+        'Ratio represents a fraction of 1, so it ranges from 0 to 1.'
+    )
 
     youth_ratio = FloatParameter()
     youth_ratio.name = 'Youth ratio'
     youth_ratio.value = get_defaults('YOUTH_RATIO')
+    youth_ratio.unit = unit_ratio
+    youth_ratio.allowed_units = [unit_ratio]
+    youth_ratio.help_text = tr('Youth ratio value.')
     youth_ratio.description = tr(
         'Youth ratio defines what proportion of the population have not yet '
         'achieved financial independence. The age threshold for youth can '
@@ -184,24 +206,34 @@ def age_postprocessor():
         'out what the relevant threshold is in your region. InaSAFE does not '
         'impose a particular age ratio scheme - it will break down the '
         'population according to the thresholds you define for your locality.'
+        'In InaSAFE, people 0-14 years old are defined as "youth". The '
+        'default youth ratio is 0.263.'
     )
 
     adult_ratio = FloatParameter()
     adult_ratio.name = 'Adult ratio'
     adult_ratio.value = get_defaults('ADULT_RATIO')
+    adult_ratio.unit = unit_ratio
+    adult_ratio.allowed_units = [unit_ratio]
+    adult_ratio.help_text = tr('Adult ratio value.')
     adult_ratio.description = tr(
         'Adult ratio defines what proportion of the population have '
         'passed into adulthood and are not yet aged. The age threshold for '
         'adults can vary by region - please consult with your local census '
         'bureau to find out what the relevant threshold is in your region. '
         'InaSAFE does not impose a particular age ratio scheme - it will '
-        'break down the population according to the thresholds you define for '
-        'your locality.'
+        'break down the population according to the thresholds you define '
+        'for your locality.'
+        'In InaSAFE, people 15-64 years old are defined as "adult". The '
+        'default adult ratio is 0.659.'
     )
 
     elderly_ratio = FloatParameter()
     elderly_ratio.name = 'Elderly ratio'
     elderly_ratio.value = get_defaults('ELDERLY_RATIO')
+    elderly_ratio.unit = unit_ratio
+    elderly_ratio.allowed_units = [unit_ratio]
+    elderly_ratio.help_text = tr('Elderly ratio value.')
     elderly_ratio.description = tr(
         'Elderly ratio defines what proportion of the population have '
         'passed from adulthood into their later life stage.  The age '
@@ -210,9 +242,24 @@ def age_postprocessor():
         'threshold is in your region. InaSAFE does not impose a particular '
         'age ratio scheme - it will break down the population according to '
         'the thresholds you define for your locality.'
+        'In InaSAFE, people 65 years old and over are defined as "elderly". '
+        'The default elderly ratio is 0.078.'
     )
 
-    return [age, youth_ratio, adult_ratio, elderly_ratio]
+    age.value = [youth_ratio, adult_ratio, elderly_ratio]
+
+    def _age_validator(parameters=None):
+        total_ratio = 0
+        for p in parameters:
+            total_ratio += p.value
+
+        if not total_ratio == 1:
+            message = tr('Total Age ratio is %s instead of 1') % total_ratio
+            raise ValueError(message)
+
+    age.custom_validator = _age_validator
+
+    return [age]
 
 
 def aggregation_categorical_postprocessor():
@@ -224,10 +271,12 @@ def aggregation_categorical_postprocessor():
     aggregation_categorical = BooleanParameter()
     aggregation_categorical.name = tr('Aggregation categorical')
     aggregation_categorical.value = True
+    aggregation_categorical.help_text = tr(
+        'Report breakdown by type/category.')
     aggregation_categorical.description = tr(
         'Enable the aggregation by categories. For example if you have '
-        'roads classified by type, you will get a breakdown by type of roads'
-        'per aggregation area.'
+        'roads classified by type, you will get a report broken down by road '
+        'type for each aggregation area.'
     )
 
     return [aggregation_categorical]
@@ -242,8 +291,11 @@ def road_type_postprocessor():
     road_type = BooleanParameter()
     road_type.name = tr('Road type')
     road_type.value = True
+    road_type.help_text = tr(
+        'Road breakdown by type.')
     road_type.description = tr(
-        'Check this option to enable reporting break down by road type.'
+        'Check this option if you want to enable a road impact report broken '
+        'down by road type.'
     )
 
     return [road_type]
@@ -259,8 +311,8 @@ def building_type_postprocessor():
     building_type.name = tr('Building type')
     building_type.value = True
     building_type.description = tr(
-        'Check this option to enable the generation of a break down buildings '
-        'by type for each aggregation area.'
+        'Check this option if you want to enable a building impact report'
+        'broken down by building type for each aggregation area.'
     )
 
     return [building_type]
@@ -316,9 +368,11 @@ def default_minimum_needs():
     toilets.maximum_allowed_value = 0.05
     toilets.name = tr('Toilets')
     toilets.help_text = tr(
-        'Toilets are not provided on a regular bases - it is expected that '
-        'installed toilets will be usable on a continuous basis.'
+        'Toilets are not provided on a regular basis - it is expected that '
+        'installed toilets will continue to be usable.'
     )
+
+    provenance = default_provenance()
 
     minimum_needs = [
         rice,
@@ -326,6 +380,7 @@ def default_minimum_needs():
         water,
         family_kits,
         toilets,
+        provenance
     ]
     return minimum_needs
 
@@ -336,7 +391,11 @@ def default_provenance():
     :return: default provenance.
     :rtype: str
     """
-    return 'The minimum needs are based on Perka 7/2008.'
+    field = TextParameter()
+    field.name = tr('Provenance')
+    field.description = tr('The provenance of minimum needs')
+    field.value = 'The minimum needs are based on BNPB Perka 7/2008.'
+    return field
 
 
 def disclaimer():
@@ -346,17 +405,37 @@ def disclaimer():
     :rtype: str
     """
     text = tr(
-        'InaSAFE has been jointly developed by Indonesian '
-        'Government-BNPB, Australian Government-AIFDR and the World '
-        'Bank-GFDRR. These agencies and the individual software '
-        'developers of InaSAFE take no responsibility for the '
-        'correctness of outputs from InaSAFE or decisions derived as '
-        'a consequence.')
+        'InaSAFE has been jointly developed by the Indonesian '
+        'Government-BNPB, the Australian Government, the World Bank-GFDRR and '
+        'independent contributors. These agencies and the individual software '
+        'developers of InaSAFE take no responsibility for the correctness of '
+        'outputs from InaSAFE or decisions derived as a consequence.')
     return text
 
 
-def default_organisation_logo_path():
-    """Get a default organisation logo path.
+def black_inasafe_logo_path():
+    """Get the path to the Black InaSAFE SVG logo.
+
+    .. versionadded:: 3.2
+    """
+    path = resources_path('img', 'logos', 'inasafe-logo-url.svg')
+    return path
+
+
+def white_inasafe_logo_path():
+    """Get the path to the White InaSAFE SVG logo.
+
+    .. versionadded:: 3.2
+    """
+    path = resources_path('img', 'logos', 'inasafe-logo-url-white.svg')
+    return path
+
+
+def supporters_logo_path():
+    """Get the supporters logo path.
+
+    .. versionchanged:: Changed in 3.2 from default_organisation_path to
+        supporters_logo_path.
 
     :return: Default organisation logo path.
     :rtype: str

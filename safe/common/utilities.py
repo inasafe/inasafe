@@ -18,6 +18,8 @@ import colorsys
 from collections import OrderedDict
 # pylint: enable=unused-import
 
+from PyQt4.QtCore import QPyNullVariant
+
 from safe.common.exceptions import VerificationError
 from safe.utilities.i18n import locale
 
@@ -48,16 +50,13 @@ class MEMORYSTATUSEX(ctypes.Structure):
 def verify(statement, message=None):
     """Verification of logical statement similar to assertions.
 
-    Input:
-      statement: expression
+    :param statement: Expression
+    :type statement: type, bool
 
-      message: error message in case statement evaluates as False
+    :param message: error message in case statement evaluates as False
+    :type message: str
 
-    Output:
-        None
-
-    Raises:
-        VerificationError in case statement evaluates to False
+    :raises: VerificationError
     """
 
     if bool(statement) is False:
@@ -290,16 +289,14 @@ def get_free_memory_osx():
 def format_int(x):
     """Format integer with separator between thousands.
 
-    Args:
-        x: int - a number to be formatted in a locale friendly way.
+    :param x: A number to be formatted in a locale friendly way.
+    :type x: int
 
-    Returns:
-        str - a locale friendly formatted string e.g. 1,000,0000.00
-            representing the original x. If a ValueError exception occurs,
-            x is simply returned.
+    :returns: A locale friendly formatted string e.g. 1,000,0000.00
+        representing the original x. If a ValueError exception occurs,
+        x is simply returned.
+    :rtype: basestring
 
-    Raises:
-        None
 
     From http://stackoverflow.com/questions/5513615/
                 add-thousands-separators-to-a-number
@@ -326,8 +323,13 @@ def format_int(x):
 
 
 def round_thousand(value):
-    """Round an integer to the nearest thousand if my_int
-    is more than a thousand
+    """Round an integer to the nearest thousand if more than a thousand.
+
+    :param value: Number to be rounded
+    :type value: int
+
+    :returns: The input value rounded to the nearest 1000.
+    :rtype: int
     """
     if value > 1000:
         value = value // 1000 * 1000
@@ -336,6 +338,7 @@ def round_thousand(value):
 
 def humanize_min_max(min_value, max_value, interval):
     """Return humanize value format for max and min.
+
     If the range between the max and min is less than one, the original
     value will be returned.
 
@@ -471,7 +474,10 @@ def humanize_class(my_classes):
     """
     min_value = 0
     if min_value - my_classes[0] == 0:
-        return humanize_class(my_classes[1:])
+        if len(my_classes) == 1:
+            return [('0', '0')]
+        else:
+            return humanize_class(my_classes[1:])
     humanize_classes = []
     interval = my_classes[-1] - my_classes[-2]
     for max_value in my_classes:
@@ -533,6 +539,9 @@ def create_classes(class_list, num_classes):
     """
     min_value = numpy.nanmin(class_list)
     max_value = numpy.nanmax(class_list)
+
+    if min_value == max_value == 0:
+        return [0]
 
     # If min_value == max_value (it only has 1 unique class), or
     # max_value <= 1.0, then we will populate the classes from 0 - max_value
@@ -678,7 +687,7 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
     must be less than 10 character.
 
     :param default_name: The default name for the attribute.
-    :type default_name: str
+    :type default_name: basestring
 
     :param attribute_names: Set of attribute names that should not be
         conflicted.
@@ -744,12 +753,16 @@ def get_osm_building_usage(attribute_names, feature):
     attribute_names_lower = [
         attribute_name.lower() for attribute_name in attribute_names]
 
+    # if the feature is from QGIS layer, NULL values are represented
+    # by QPyNullVariant instead of None, so we handle that explicitly
+
     usage = None
     # Prioritize 'type' attribute
     if 'type' in attribute_names_lower:
         attribute_index = attribute_names_lower.index('type')
         field_name = attribute_names[attribute_index]
-        usage = feature[field_name]
+        if not isinstance(feature[field_name], QPyNullVariant):
+            usage = feature[field_name]
 
     # Get the usage from other attribute names
     building_type_attributes = ['amenity', 'building_t', 'office', 'tourism',
@@ -759,13 +772,15 @@ def get_osm_building_usage(attribute_names, feature):
             attribute_index = attribute_names_lower.index(
                 type_attribute)
             field_name = attribute_names[attribute_index]
-            usage = feature[field_name]
+            if not isinstance(feature[field_name], QPyNullVariant):
+                usage = feature[field_name]
 
     # The last one is to get it from 'building' attribute
     if 'building' in attribute_names_lower and usage is None:
         attribute_index = attribute_names_lower.index('building')
         field_name = attribute_names[attribute_index]
-        usage = feature[field_name]
+        if not isinstance(feature[field_name], QPyNullVariant):
+            usage = feature[field_name]
 
         if usage is not None and usage.lower() == 'yes':
             usage = 'building'
@@ -884,3 +899,30 @@ def convert_to_list(var):
 
 def project_list(the_list, field):
     return [s[field] for s in the_list]
+
+
+def get_list_key(list_dict):
+    """Return list of key from a list of dictionary.
+
+    :param list_dict: List of dict, each dict has key as dictionary key.
+    :type list_dict: list
+
+    :returns: A list of key.
+    :rtype: list
+    """
+    return [x['key'] for x in list_dict]
+
+
+def is_key_exist(key, list_dictionary):
+    """Check if a key is in list_dictionary's key
+
+    :param key: The key
+    :type key: str
+
+    :param list_dictionary: List of dictionary
+    :type list_dictionary: list
+
+    :returns: True if exist, else False
+    :rtype: bool
+    """
+    return key in get_list_key(list_dictionary)

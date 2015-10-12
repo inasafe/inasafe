@@ -26,14 +26,9 @@ class Table(MessageElement):
     def __init__(self, *args, **kwargs):
         """Creates a table object
 
-        Args:
-            args can be list or Row
+        :param args: args can be list or Row
+        :type args: list, row
 
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
 
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
@@ -49,18 +44,14 @@ class Table(MessageElement):
             self.add(arg)
 
     def add(self, item):
-        """add a row
+        """Add a row to the table.
 
-        list can be passed and are automatically converted to Rows
+        List can be passed and are automatically converted to Rows
 
-        Args:
-            item an element to add to the rows can be list or Row object
+        :param item: Item an element to add to the rows can be list or Row
+            object
+        :type item: row, list
 
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
         """
         if isinstance(item, list):
             self.rows.append(Row(item))
@@ -72,14 +63,8 @@ class Table(MessageElement):
     def to_html(self):
         """Render a Table MessageElement as html
 
-        Args:
-            None
-
-        Returns:
-            Str the html representation of the Table MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: The html representation of the Table MessageElement
+        :rtype: basestring
         """
         table = '<table%s>\n' % self.html_attributes()
         if self.caption is not None:
@@ -94,13 +79,30 @@ class Table(MessageElement):
     def to_text(self):
         """Render a Table MessageElement as plain text
 
-        Args:
-            None
-
-        Returns:
-            Str the plain text representation of the Table MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: The text representation of the Table MessageElement
+        :rtype: basestring
         """
-        raise NotImplementedError('Please don\'t use this class directly')
+
+        table = ''
+        if self.caption is not None:
+            table += '%s</caption>\n' % self.caption
+        table += '\n'
+        for row in self.rows:
+            table += row.to_text()
+        return table
+
+    def to_markdown(self):
+        """Render a Table queue as markdown
+
+        :returns: Markdown representation of the Text Table.
+        :rtype: str
+        """
+        raise NotImplementedError('Please Implement this method')
+
+    def to_json(self):
+        """Render a Table queue as JSON
+
+        :returns: Json representation of the Text Table.
+        :rtype: str
+        """
+        raise NotImplementedError('Please Implement this method')

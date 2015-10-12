@@ -31,7 +31,8 @@ from qgis.core import (
     QgsVectorLayer,
     QgsMapLayerRegistry,
     QgsRectangle,
-    QgsCoordinateReferenceSystem)
+    QgsCoordinateReferenceSystem,
+    QgsProject)
 from PyQt4 import QtCore
 
 from safe.impact_functions import register_impact_functions
@@ -55,7 +56,7 @@ from safe.test.utilities import (
     set_small_jakarta_extent,
     get_qgis_app,
     TESTDATA,
-    HAZDATA)
+    clone_shp_layer)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.widgets.dock
@@ -67,79 +68,99 @@ from safe.utilities.styling import setRasterStyle
 from safe.utilities.gis import read_impact_layer, qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
-DOCK = Dock(IFACE)
 
 
 # noinspection PyArgumentList
 class TestDock(TestCase):
     """Test the InaSAFE GUI."""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.dock = Dock(IFACE)
+
     def setUp(self):
         """Fixture run before all tests"""
         register_impact_functions()
 
-        DOCK.show_only_visible_layers_flag = True
-        load_standard_layers(DOCK)
-        DOCK.cboHazard.setCurrentIndex(0)
-        DOCK.cboExposure.setCurrentIndex(0)
-        DOCK.cboFunction.setCurrentIndex(0)
-        DOCK.run_in_thread_flag = False
-        DOCK.show_only_visible_layers_flag = False
-        DOCK.set_layer_from_title_flag = False
-        DOCK.zoom_to_impact_flag = False
-        DOCK.hide_exposure_flag = False
-        DOCK.show_intermediate_layers = False
-        DOCK.user_extent = None
-        DOCK.user_extent_crs = None
+        self.dock.show_only_visible_layers_flag = True
+        load_standard_layers(self.dock)
+        self.dock.cboHazard.setCurrentIndex(0)
+        self.dock.cboExposure.setCurrentIndex(0)
+        self.dock.cboFunction.setCurrentIndex(0)
+        self.dock.run_in_thread_flag = False
+        self.dock.show_only_visible_layers_flag = False
+        self.dock.set_layer_from_title_flag = False
+        self.dock.zoom_to_impact_flag = False
+        self.dock.hide_exposure_flag = False
+        self.dock.show_intermediate_layers = False
+        self.dock.user_extent = None
+        self.dock.user_extent_crs = None
+        # For these tests we will generally use explicit overlap
+        # between hazard, exposure and view, so make that default
+        # see also safe/test/utilities.py where this is globally
+        # set to HazardExposure
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
 
     def tearDown(self):
         """Fixture run after each test"""
         QgsMapLayerRegistry.instance().removeAllMapLayers()
-        DOCK.cboHazard.clear()
-        DOCK.cboExposure.clear()
-        # DOCK.cboAggregation.clear() #dont do this because the cboAggregation
+        self.dock.cboHazard.clear()
+        self.dock.cboExposure.clear()
+        # self.dock.cboAggregation.clear()
+        # do not do this because the cboAggregation
         # need to be able to react to the status changes of the other combos
+
+        # Make sure we reinstate globale default analysis extents mode of
+        # hazard, exposure see also safe/test/utilities.py where this is
+        # globally set to HazardExposure
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposure')
 
     def test_defaults(self):
         """Test the GUI in its default state"""
-        print combos_to_string(DOCK)
-        self.assertEqual(DOCK.cboHazard.currentIndex(), 0)
-        self.assertEqual(DOCK.cboExposure.currentIndex(), 0)
-        self.assertEqual(DOCK.cboFunction.currentIndex(), 0)
-        self.assertEqual(DOCK.cboAggregation.currentIndex(), 0)
+        print combos_to_string(self.dock)
+        self.assertEqual(self.dock.cboHazard.currentIndex(), 0)
+        self.assertEqual(self.dock.cboExposure.currentIndex(), 0)
+        self.assertEqual(self.dock.cboFunction.currentIndex(), 0)
+        self.assertEqual(self.dock.cboAggregation.currentIndex(), 0)
 
     def test_validate(self):
         """Validate function work as expected"""
         self.tearDown()
-        # First check that we DONT validate a clear DOCK
-        flag, message = DOCK.validate()
+        # First check that we DONT validate a clear self.dock
+        flag, message = self.dock.validate()
         self.assertTrue(message is not None, 'No reason for failure given')
 
-        message = 'Validation expected to fail on a cleared DOCK.'
+        message = 'Validation expected to fail on a cleared self.dock.'
         self.assertEquals(flag, False, message)
 
-        # Now check we DO validate a populated DOCK
-        populate_dock(DOCK)
-        flag = DOCK.validate()
+        # Now check we DO validate a populated self.dock
+        populate_dock(self.dock)
+        flag = self.dock.validate()
         message = (
             'Validation expected to pass on a populated dock with selections.')
         self.assertTrue(flag, message)
 
     def test_set_ok_button_status(self):
-        """OK button changes properly according to DOCK validity"""
-        # First check that we ok ISNT enabled on a clear DOCK
+        """OK button changes properly according to self.dock validity"""
+        # First check that we ok ISNT enabled on a clear self.dock
         self.tearDown()
-        flag, message = DOCK.validate()
+        flag, message = self.dock.validate()
 
         self.assertTrue(message is not None, 'No reason for failure given')
-        message = 'Validation expected to fail on a cleared DOCK.'
+        message = 'Validation expected to fail on a cleared self.dock.'
         self.assertEquals(flag, False, message)
 
-        # Now check OK IS enabled on a populated DOCK
-        populate_dock(DOCK)
-        flag = DOCK.validate()
+        # Now check OK IS enabled on a populated self.dock
+        populate_dock(self.dock)
+        flag = self.dock.validate()
         message = (
-            'Validation expected to pass on a populated DOCK with selections.')
+            'Validation expected to pass on a populated self.dock with '
+            'selections.')
         self.assertTrue(flag, message)
 
     def test_insufficient_overlap(self):
@@ -148,13 +169,13 @@ class TestDock(TestCase):
         ..note:: See https://github.com/AIFDR/inasafe/issues/372
         """
         # Push OK with the left mouse button
-        button = DOCK.pbnRunStop
+        button = self.dock.pbnRunStop
 
         message = 'Run button was not enabled'
         self.assertTrue(button.isEnabled(), message)
-
+        set_jakarta_extent(self.dock)
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -164,30 +185,21 @@ class TestDock(TestCase):
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
         # Zoom to an area where there is no overlap with layers
-        rectangle = QgsRectangle(
-            106.635434302702, -6.101567666986,
-            106.635434302817, -6.101567666888)
+        rectangle = QgsRectangle(106.849, -6.153, 106.866, -6.134)
         CANVAS.setExtent(rectangle)
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        DOCK.define_user_analysis_extent(rectangle, crs)
-
-        # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
-
-        # Check for an error containing InsufficientOverlapError
-        expected_string = 'InsufficientOverlapError'
-        message = 'Result not as expected %s not in: %s' % (
-            expected_string, result)
-        # This is the expected impact number
-        self.assertIn(expected_string, result, message)
+        self.dock.define_user_analysis_extent(rectangle, crs)
+        self.dock.show_next_analysis_extent()
+        # Check that run button is disabled because extents do not overlap
+        message = 'Run button was not disabled'
+        self.assertFalse(button.isEnabled(), message)
 
     # disabled this test until further coding
     def xtest_print_map(self):
         """Test print map, especially on Windows."""
 
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Flood in Jakarta',
             exposure='Essential buildings',
             function='Be affected',
@@ -196,13 +208,13 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
+        set_jakarta_extent(self.dock)
 
         # Press RUN
-        button = DOCK.pbnRunStop
+        button = self.dock.pbnRunStop
         # noinspection PyCallByClass,PyTypeChecker
         button.click()
-        print_button = DOCK.pbnPrint
+        print_button = self.dock.pbnPrint
 
         try:
             # noinspection PyCallByClass,PyTypeChecker
@@ -214,16 +226,15 @@ class TestDock(TestCase):
             raise Exception('Exception is not expected, %s' % e)
 
     def test_result_styling(self):
-        """Test that ouputs from a model are correctly styled (colours and
-        opacity. """
+        """Test that colours and opacity from a model are correctly styled."""
 
         # Push OK with the left mouse button
 
         print '--------------------'
-        print combos_to_string(DOCK)
+        print combos_to_string(self.dock)
 
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -232,11 +243,11 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
+        set_jakarta_extent(self.dock)
 
-        DOCK.accept()
-        # DOCK.analysis.get_impact_layer()
-        safe_layer = DOCK.analysis.get_impact_layer()
+        self.dock.accept()
+        # self.dock.analysis.get_impact_layer()
+        safe_layer = self.dock.analysis.impact_layer
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()
         setRasterStyle(qgis_layer, style)
@@ -260,10 +271,11 @@ class TestDock(TestCase):
 
     def test_issue47(self):
         """Issue47: Hazard & exposure data are in different proj to viewport.
+
         See https://github.com/AIFDR/inasafe/issues/47"""
 
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -272,12 +284,12 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent(DOCK)
+        set_jakarta_google_extent(self.dock)
 
         # Press RUN
-        DOCK.accept()
+        self.dock.accept()
 
-        result = DOCK.wvResults.page_to_text()
+        result = self.dock.wvResults.page_to_text()
 
         message = 'Result not as expected: %s' % result
         # searching for values 6700 clean water [l] in result
@@ -289,7 +301,7 @@ class TestDock(TestCase):
         See https://github.com/AIFDR/inasafe/issues/306"""
 
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -298,12 +310,12 @@ class TestDock(TestCase):
         LOGGER.info("Canvas list before:\n%s" % canvas_list())
         # Enable on-the-fly reprojection
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent(DOCK)
+        set_jakarta_google_extent(self.dock)
         before_count = len(CANVAS.layers())
         # print 'Before count %s' % before_count
 
         # Press RUN
-        DOCK.accept()
+        self.dock.accept()
 
         # test issue #306
         after_count = len(CANVAS.layers())
@@ -313,19 +325,59 @@ class TestDock(TestCase):
         # print 'After count %s' % after_count
         self.assertTrue(before_count == after_count - 1, message)
 
+    def test_layer_legend_index(self):
+        """Test we can get the legend index for a layer.
+
+        .. versionadded:: 3.2
+
+        """
+
+        setup_scenario(
+            self.dock,
+            hazard='Continuous Flood',
+            exposure='Population',
+            function='Need evacuation',
+            function_id='FloodEvacuationRasterHazardFunction')
+        layer = self.dock.get_exposure_layer()
+        index = self.dock.layer_legend_index(layer)
+        self.assertTrue(index == 8)
+
+    def test_add_above_layer(self):
+        """Test we can add one layer above another - see #2322
+
+        .. versionadded:: 3.2
+        """
+
+        setup_scenario(
+            self.dock,
+            hazard='Continuous Flood',
+            exposure='Population',
+            function='Need evacuation',
+            function_id='FloodEvacuationRasterHazardFunction')
+        layer_path = join(TESTDATA, 'polygon_0.shp')
+        new_layer = QgsVectorLayer(layer_path, 'foo', 'ogr')
+        exposure_layer = self.dock.get_exposure_layer()
+        self.dock.add_above_layer(exposure_layer, new_layer)
+        root = QgsProject.instance().layerTreeRoot()
+        id_list = root.findLayerIds()
+        self.assertIn(new_layer.id(), id_list)
+        new_layer_position = id_list.index(new_layer.id())
+        existing_layer_position = id_list.index(exposure_layer.id())
+        self.assertTrue(new_layer_position, existing_layer_position)
+
     def test_load_layers(self):
         """Layers can be loaded and list widget was updated appropriately
         """
 
         hazard_layer_count, exposure_layer_count = load_standard_layers()
         message = 'Expect %s layer(s) in hazard list widget but got %s' % (
-            hazard_layer_count, DOCK.cboHazard.count())
+            hazard_layer_count, self.dock.cboHazard.count())
         # pylint: disable=W0106
-        self.assertEqual(DOCK.cboHazard.count(),
+        self.assertEqual(self.dock.cboHazard.count(),
                          hazard_layer_count), message
         message = 'Expect %s layer(s) in exposure list widget but got %s' % (
-            exposure_layer_count, DOCK.cboExposure.count())
-        self.assertEqual(DOCK.cboExposure.count(),
+            exposure_layer_count, self.dock.cboExposure.count())
+        self.assertEqual(self.dock.cboExposure.count(),
                          exposure_layer_count), message
         # pylint: disable=W0106
 
@@ -334,12 +386,15 @@ class TestDock(TestCase):
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         print 'Using QGIS: %s' % qgis_version()
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposure')
         self.tearDown()
-        button = DOCK.pbnRunStop
+        button = self.dock.pbnRunStop
         # First part of scenario should have enabled run
         file_list = [
-            join(HAZDATA, 'Flood_Current_Depth_Jakarta_geographic.asc'),
-            join(TESTDATA, 'Population_Jakarta_geographic.asc')]
+            test_data_path('hazard', 'continuous_flood_20_20.asc'),
+            test_data_path('exposure', 'pop_binary_raster_20_20.asc')]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
         message = (
@@ -363,45 +418,57 @@ class TestDock(TestCase):
         _, _ = load_layers(file_list, clear_flag)
         # set exposure to : Population Count (5kmx5km)
         # by moving one down
-        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() + 1)
-        actual_dict = get_ui_state(DOCK)
+        self.dock.cboExposure.setCurrentIndex(
+            self.dock.cboExposure.currentIndex() + 1)
+        actual_dict = get_ui_state(self.dock)
         expected_dict = {
             'Run Button Enabled': False,
             'Impact Function Id': '',
             'Impact Function Title': '',
-            'Hazard': 'A flood in Jakarta like in 2007',
+            'Hazard': 'Continuous Flood',
             'Exposure': 'Population Count (5kmx5km)'}
         message = ((
             'Run button was not disabled when exposure set to \n%s'
             '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
-                DOCK.cboExposure.currentText(),
+                self.dock.cboExposure.currentText(),
                 actual_dict,
                 expected_dict,
-                combos_to_string(DOCK)))
+                combos_to_string(self.dock)))
 
         self.assertTrue(expected_dict == actual_dict, message)
 
         # Now select again a valid layer and the run button
         # should be enabled
-        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() - 1)
+        self.dock.cboExposure.setCurrentIndex(
+            self.dock.cboExposure.currentIndex() - 1)
         message = (
             'Run button was not enabled when exposure set to \n%s' %
-            DOCK.cboExposure.currentText())
+            self.dock.cboExposure.currentText())
         self.assertTrue(button.isEnabled(), message)
 
     def test_issue160(self):
         """Test that multipart features can be used in a scenario - issue #160
         """
+        exposure_layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=True,
+            source_directory=test_data_path('exposure'))
 
-        exposure = test_data_path('exposure', 'buildings.shp')
-        hazard = test_data_path('hazard', 'flood_multipart_polygons.shp')
+        hazard_layer = clone_shp_layer(
+            name='flood_multipart_polygons',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
+
+        exposure_path = exposure_layer.source()
+        hazard_path = hazard_layer.source()
+
         # See https://github.com/AIFDR/inasafe/issues/71
         # Push OK with the left mouse button
         # print 'Using QGIS: %s' % qgis_version()
         self.tearDown()
-        button = DOCK.pbnRunStop
+        button = self.dock.pbnRunStop
         # First part of scenario should have enabled run
-        file_list = [hazard, exposure]
+        file_list = [hazard_path, exposure_path]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
         message = (
@@ -425,7 +492,7 @@ class TestDock(TestCase):
         _, _ = load_layers(file_list, clear_flag)
 
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Flood Polygon',
             exposure='Buildings',
             function='Be flooded',
@@ -439,12 +506,12 @@ class TestDock(TestCase):
         CANVAS.setExtent(expected_extent)
 
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        DOCK.define_user_analysis_extent(expected_extent, crs)
+        self.dock.define_user_analysis_extent(expected_extent, crs)
 
         # Press RUN
         # noinspection PyCallByClass,PyCallByClass,PyTypeChecker
-        DOCK.accept()
-        result = DOCK.wvResults.page_to_text()
+        self.dock.accept()
+        result = self.dock.wvResults.page_to_text()
 
         message = 'Result not as expected: %s' % result
         self.assertTrue(format_int(33) in result, message)
@@ -456,7 +523,7 @@ class TestDock(TestCase):
         # See https://github.com/AIFDR/inasafe/issues/581
 
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -465,16 +532,16 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_small_jakarta_extent(DOCK)
+        set_small_jakarta_extent(self.dock)
         # Press RUN
-        DOCK.accept()
-        result = DOCK.wvResults.page().currentFrame().toPlainText()
+        self.dock.accept()
+        result = self.dock.wvResults.page().currentFrame().toPlainText()
 
         message = 'Result not as expected: %s' % result
         self.assertTrue('IndexError' not in result, message)
         self.assertTrue(
             'It appears that no Population are affected by Continuous Flood.'
-            ' You may want to consider:' in result, message)
+            in result, message)
 
     def test_state(self):
         """Check if the save/restore state methods work. See also
@@ -482,18 +549,20 @@ class TestDock(TestCase):
         """
         # default selected layer is the third layer exposure
         # so, decrease the index by one to change it
-        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() - 1)
-        DOCK.save_state()
-        expected_dict = get_ui_state(DOCK)
-        # myState = DOCK.state
+        self.dock.cboExposure.setCurrentIndex(
+            self.dock.cboExposure.currentIndex() - 1)
+        self.dock.save_state()
+        expected_dict = get_ui_state(self.dock)
+        # myState = self.dock.state
         # Now reset and restore and check that it gets the old state
         # Html is not considered in restore test since the ready
         # message overwrites it in dock implementation
-        DOCK.cboExposure.setCurrentIndex(DOCK.cboExposure.currentIndex() - 1)
-        DOCK.restore_state()
-        result_dict = get_ui_state(DOCK)
+        self.dock.cboExposure.setCurrentIndex(
+            self.dock.cboExposure.currentIndex() - 1)
+        self.dock.restore_state()
+        result_dict = get_ui_state(self.dock)
         message = 'Got unexpected state: %s\nExpected: %s\n%s' % (
-            result_dict, expected_dict, combos_to_string(DOCK))
+            result_dict, expected_dict, combos_to_string(self.dock))
         self.assertTrue(expected_dict == result_dict, message)
 
         # Corner case test when two layers can have the
@@ -506,43 +575,65 @@ class TestDock(TestCase):
             test_data_path('exposure', 'pop_binary_raster_20_20.asc')
         ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
-        self.assertTrue(hazard_layer_count == 2)
-        self.assertTrue(exposure_layer_count == 1)
-        # we will have 2 impact function available right now:
-        # - ContinuousHazardPopulationFunction, titled: 'Be impacted'
+        message = 'Expecting 2 hazard layers, got %s' % hazard_layer_count
+        self.assertTrue(hazard_layer_count == 2, message)
+        message = 'Expecting 1 exposure layer, got %s' % exposure_layer_count
+        self.assertTrue(exposure_layer_count == 1, message)
+        # we will have 1 impact function available right now:
         # - FloodEvacuationRasterHazardFunction, titled: 'Need evacuation'
         # set it to the second for testing purposes
-        DOCK.cboFunction.setCurrentIndex(1)
-        DOCK.cboHazard.setCurrentIndex(0)
-        DOCK.cboExposure.setCurrentIndex(0)
-        expected_function = str(DOCK.cboFunction.currentText())
+        self.dock.cboFunction.setCurrentIndex(0)
+        self.dock.cboHazard.setCurrentIndex(0)
+        self.dock.cboExposure.setCurrentIndex(0)
+        expected_function = str(self.dock.cboFunction.currentText())
+
+        hazard_layer = self.dock.get_hazard_layer()
+        hazard_keywords = self.dock.keyword_io.read_keywords(hazard_layer)
+        exposure_layer = self.dock.get_exposure_layer()
+        exposure_keywords = self.dock.keyword_io.read_keywords(exposure_layer)
+
         # Now move down one hazard in the combo then verify
         # the function remains unchanged
-        DOCK.cboHazard.setCurrentIndex(1)
-        current_function = str(DOCK.cboFunction.currentText())
+        self.dock.cboHazard.setCurrentIndex(1)
+        current_function = str(self.dock.cboFunction.currentText())
+
+        hazard_layer = self.dock.get_hazard_layer()
+        hazard_keywords = self.dock.keyword_io.read_keywords(hazard_layer)
+        exposure_layer = self.dock.get_exposure_layer()
+        exposure_keywords = self.dock.keyword_io.read_keywords(exposure_layer)
+        from pprint import pprint
+        print 'Exposure keywords'
+        pprint(exposure_keywords)
+        print 'Hazard keywords'
+        pprint(hazard_keywords)
         message = (
             'Expected selected impact function to remain unchanged when '
-            'choosing a different hazard of the same category:'
-            ' %s\nExpected: %s\n%s' % (
-                expected_function, current_function, combos_to_string(DOCK)))
+            'choosing a different hazard of the same category.\n')
+        message += 'Expected IF: "%s"\n' % expected_function
+        message += 'Current IF: "%s"\n' % current_function
+        message += 'Current Dock State: %s' % combos_to_string(self.dock)
+        message += 'Hazard Keywords\n'
+        message += str(hazard_keywords) + '\n'
+        message += 'Exposure Keywords\n'
+        message += str(exposure_keywords) + '\n'
 
         self.assertTrue(expected_function == current_function, message)
-        DOCK.cboHazard.setCurrentIndex(0)
+        self.dock.cboHazard.setCurrentIndex(0)
         # Selected function should remain the same
-        # RM: modified it, because there is generic one right now as the first.
-        # the selected one should be FloodEvacuationRasterHazardFunction
-        DOCK.cboFunction.setCurrentIndex(1)
         expected = 'Need evacuation'
-        function = DOCK.cboFunction.currentText()
+        function = self.dock.cboFunction.currentText()
         message = 'Expected: %s, Got: %s' % (expected, function)
+
         self.assertTrue(function == expected, message)
 
     def test_full_run_pyzstats(self):
         """Aggregation results correct using our own python zonal stats code.
         """
-
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposure')
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -553,12 +644,12 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
+        set_jakarta_extent(self.dock)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
-        DOCK.accept()
+        self.dock.accept()
 
-        result = DOCK.wvResults.page_to_text()
+        result = self.dock.wvResults.page_to_text()
 
         control_file_path = test_data_path(
             'control',
@@ -570,6 +661,10 @@ class TestDock(TestCase):
             encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
+        result = result.replace(
+            '<th class="text-right">', ' ').replace('</th>', ' ')
+        result = result.replace(
+            '</td><td class="text-right">', ' ')
         for line in expected_result:
             line = line.replace('\n', '')
             self.assertIn(line, result)
@@ -588,7 +683,7 @@ class TestDock(TestCase):
         # TODO check that the values are similar enough to the python stats
 
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -599,7 +694,7 @@ class TestDock(TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
+        set_jakarta_extent(self.dock)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
 
@@ -607,11 +702,11 @@ class TestDock(TestCase):
         qgis_zonal_flag = bool(QtCore.QSettings().value(
             'inasafe/use_native_zonal_stats', False, type=bool))
         QtCore.QSettings().setValue('inasafe/use_native_zonal_stats', True)
-        DOCK.accept()
+        self.dock.accept()
         QtCore.QSettings().setValue('inasafe/use_native_zonal_stats',
                                     qgis_zonal_flag)
 
-        result = DOCK.wvResults.page_to_text()
+        result = self.dock.wvResults.page_to_text()
 
         control_file_path = test_data_path(
             'control',
@@ -623,15 +718,19 @@ class TestDock(TestCase):
             encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
+        result = result.replace(
+            '<th class="text-right">', ' ').replace('</th>', ' ')
+        result = result.replace(
+            '</td><td class="text-right">', ' ')
         for line in expected_result:
             line = line.replace('\n', '')
             self.assertIn(line, result)
 
     def test_layer_changed(self):
-        """Test the metadata is updated as the user highlights different
-        QGIS layers. For inasafe outputs, the table of results should be shown
-        See also
-        https://github.com/AIFDR/inasafe/issues/58
+        """Test the metadata is updated as the user highlights layers.
+
+        For inasafe outputs, the table of results should be shown
+        See also https://github.com/AIFDR/inasafe/issues/58
         """
         layer_path = os.path.join(TESTDATA, 'issue58.tif')
         layer, layer_type = load_layer(layer_path)
@@ -640,9 +739,9 @@ class TestDock(TestCase):
             ' %s\nExpected: undefined' % layer_type)
 
         self.assertTrue(layer_type == 'undefined', message)
-        DOCK.layer_changed(layer)
-        DOCK.save_state()
-        html = DOCK.state['report']
+        self.dock.layer_changed(layer)
+        self.dock.save_state()
+        html = self.dock.state['report']
         expected = '4229'
         message = "%s\nDoes not contain:\n%s" % (
             html,
@@ -661,7 +760,7 @@ class TestDock(TestCase):
 
         new_name = unique_filename(
             prefix='tsunami_building_assessment_saved_as_')
-        DOCK.save_auxiliary_files(
+        self.dock.save_auxiliary_files(
             layer, join(TESTDATA, '%s.shp' % new_name))
         new_keywords_filepath = os.path.join(
             TESTDATA, '%s.keywords' % new_name)
@@ -683,16 +782,16 @@ class TestDock(TestCase):
         # pylint: enable=unused-variable
 
         new_name = unique_filename(prefix='kecamatan_jakarta_osm_saved_as')
-        DOCK.save_auxiliary_files(
+        self.dock.save_auxiliary_files(
             layer, join(TESTDATA, '%s.shp' % new_name))
-        new_keywords_filepath = os.path.join(
+        new_keywords_file_path = os.path.join(
             TESTDATA, '%s.keywords' % new_name)
-        new_xml_filepath = os.path.join(TESTDATA, '%s.xml' % new_name)
+        new_xml_file_path = os.path.join(TESTDATA, '%s.xml' % new_name)
 
         message = 'New auxiliary file exist : '
         self.assertFalse(
-            os.path.isfile(new_keywords_filepath), '%s keywords' % message)
-        self.assertFalse(os.path.isfile(new_xml_filepath), '%s xml' % message)
+            os.path.isfile(new_keywords_file_path), '%s keywords' % message)
+        self.assertFalse(os.path.isfile(new_xml_file_path), '%s xml' % message)
 
     def test_new_layers_show_in_canvas(self):
         """Check that when we add a layer we can see it in the canvas list."""
@@ -713,14 +812,14 @@ class TestDock(TestCase):
         """Points near the edge of a raster hazard layer are interpolated OK"""
 
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
+        set_jakarta_extent(self.dock)
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Buildings',
             function='Be flooded',
             function_id='FloodRasterBuildingFunction')
-        DOCK.get_functions()
+        self.dock.get_functions()
         self.assertTrue(result, message)
 
     def test_has_parameters_button_disabled(self):
@@ -728,12 +827,12 @@ class TestDock(TestCase):
         compatible."""
         set_canvas_crs(GEOCRS, True)
         setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Earthquake',
             exposure='Roads',
             function='',
             function_id='')
-        tool_button = DOCK.toolFunctionOptions
+        tool_button = self.dock.toolFunctionOptions
         flag = tool_button.isEnabled()
         self.assertTrue(
             not flag,
@@ -743,14 +842,14 @@ class TestDock(TestCase):
         """Function configuration button is enabled when layers are compatible.
         """
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
+        set_jakarta_extent(self.dock)
         setup_scenario(
-            DOCK,
+            self.dock,
             hazard='A flood in Jakarta like in 2007',
             exposure='Penduduk Jakarta',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
-        tool_button = DOCK.toolFunctionOptions
+        tool_button = self.dock.toolFunctionOptions
         flag = tool_button.isEnabled()
         self.assertTrue(
             flag,
@@ -762,14 +861,14 @@ class TestDock(TestCase):
         """Memory requirements are calculated correctly when extents change.
         """
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(DOCK)
+        set_jakarta_extent(self.dock)
         setup_scenario(
-            DOCK,
+            self.dock,
             hazard='A flood in Jakarta like in 2007',
             exposure='Penduduk Jakarta',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
-        result = DOCK.checkMemoryUsage()
+        result = self.dock.checkMemoryUsage()
         message = 'Expected "3mb" to apear in : %s' % result
         self.assertTrue(result is not None, 'Check memory reported None')
         self.assertTrue('3mb' in result, message)
@@ -780,23 +879,25 @@ class TestDock(TestCase):
         message = (
             'The aggregation combobox should have only the "Entire '
             'area" item when the project has no layer. Found:'
-            ' %s' % (DOCK.cboAggregation.currentText()))
+            ' %s' % (self.dock.cboAggregation.currentText()))
 
-        self.assertEqual(DOCK.cboAggregation.currentText(), DOCK.tr(
+        self.assertEqual(self.dock.cboAggregation.currentText(), self.dock.tr(
             'Entire area'), message)
 
         message = (
             'The aggregation combobox should be disabled when the '
             'project has no layer.')
 
-        self.assertTrue(not DOCK.cboAggregation.isEnabled(), message)
+        self.assertTrue(not self.dock.cboAggregation.isEnabled(), message)
 
     def test_cbo_aggregation_toggle(self):
         """Aggregation Combobox toggles on and off as expected."""
-
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposure')
         # With aggregation layer
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -807,11 +908,11 @@ class TestDock(TestCase):
         self.assertTrue(result, message)
 
         # With no aggregation layer
-        layer = DOCK.get_aggregation_layer()
+        layer = self.dock.get_aggregation_layer()
         layer_id = layer.id()
         QgsMapLayerRegistry.instance().removeMapLayer(layer_id)
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -822,13 +923,15 @@ class TestDock(TestCase):
 
     def test_set_dock_title(self):
         """Test the dock title gets set properly."""
-        DOCK.set_dock_title()
-        self.assertIn('InaSAFE', str(DOCK.windowTitle()))
+        self.dock.set_dock_title()
+        self.assertIn('InaSAFE', str(self.dock.windowTitle()))
 
     def wkt_to_coordinates(self, wkt):
         """Convert a wkt into a nested array of float pairs."""
         expected_coords = []
         wkt = wkt.replace('LINESTRING(', '').replace(')', '')
+        # QGIS 2.10 replaced LINESTRING with LineString in WKT
+        wkt = wkt.replace('LineString(', '').replace(')', '')
         coords = wkt.split(',')
         for item in coords:
             item = item.strip()
@@ -843,7 +946,7 @@ class TestDock(TestCase):
     def test_rubber_bands(self):
         """Test that the rubber bands get updated."""
         setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -851,37 +954,37 @@ class TestDock(TestCase):
             aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
 
-        DOCK.extent.show_rubber_bands = True
+        self.dock.extent.show_rubber_bands = True
         expected_vertex_count = 5
 
         # 4326 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, True)
-        set_small_jakarta_extent(DOCK)
-        DOCK.show_next_analysis_extent()
-        next_band = DOCK.extent.next_analysis_rubberband
+        set_small_jakarta_extent(self.dock)
+        self.dock.show_next_analysis_extent()
+        next_band = self.dock.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 4326 with disabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, False)
-        set_small_jakarta_extent(DOCK)
-        DOCK.show_next_analysis_extent()
-        next_band = DOCK.extent.next_analysis_rubberband
+        set_small_jakarta_extent(self.dock)
+        self.dock.show_next_analysis_extent()
+        next_band = self.dock.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 900913 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent(DOCK)
-        next_band = DOCK.extent.next_analysis_rubberband
+        set_jakarta_google_extent(self.dock)
+        next_band = self.dock.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 900913 with enabled on-the-fly reprojection - check last
         set_canvas_crs(GOOGLECRS, True)
-        set_jakarta_google_extent(DOCK)
+        set_jakarta_google_extent(self.dock)
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
-        DOCK.accept()
-        # DOCK.show_extent()
-        last_band = DOCK.extent.last_analysis_rubberband
+        self.dock.accept()
+        # self.dock.show_extent()
+        last_band = self.dock.extent.last_analysis_rubberband
         geometry = last_band.asGeometry().exportToWkt()
         expected = (
             'LINESTRING(11889533.87392097897827625 -691251.80866545776370913, '
@@ -918,10 +1021,10 @@ class TestDock(TestCase):
         extents = '106.772279, -6.237576, 106.885165, -6.165415'
         settings.setValue('inasafe/analysis_extent', extents)
         settings.setValue('inasafe/analysis_extent_crs', 'EPSG:4326')
-        DOCK.read_settings()
+        self.dock.read_settings()
 
         setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Continuous Flood',
             exposure='Population',
             function='Need evacuation',
@@ -929,32 +1032,35 @@ class TestDock(TestCase):
             aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
 
-        DOCK.extent.show_rubber_bands = True
+        self.dock.extent.show_rubber_bands = True
         expected_vertex_count = 2
 
         # 4326 with disabled on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
         # User extent should override this
-        set_small_jakarta_extent(DOCK)
-        DOCK.extent.show_user_analysis_extent()
-        user_band = DOCK.extent.user_analysis_rubberband
+        set_small_jakarta_extent(self.dock)
+        self.dock.extent.show_user_analysis_extent()
+        user_band = self.dock.extent.user_analysis_rubberband
         self.assertEqual(expected_vertex_count, user_band.numberOfVertices())
 
     def test_issue1191(self):
         """Test setting a layer's title in the kw directly from qgis api"""
-        DOCK.set_layer_from_title_flag = True
+        settings = QtCore.QSettings()
+        settings.setValue(
+            'inasafe/analysis_extents_mode', 'HazardExposure')
+        self.dock.set_layer_from_title_flag = True
         set_canvas_crs(GEOCRS, True)
-        set_yogya_extent(DOCK)
+        set_yogya_extent(self.dock)
 
         result, message = setup_scenario(
-            DOCK,
+            self.dock,
             hazard='Earthquake',
             exposure='Buildings',
             function='Be affected',
             function_id='EarthquakeBuildingFunction')
         self.assertTrue(result, message)
 
-        layer = DOCK.get_hazard_layer()
+        layer = self.dock.get_hazard_layer()
         keyword_io = KeywordIO()
 
         original_title = 'Earthquake'
@@ -971,7 +1077,7 @@ class TestDock(TestCase):
         layer.setLayerName(original_title)
         title = keyword_io.read_keywords(layer, 'title')
         self.assertEqual(title, original_title)
-        DOCK.set_layer_from_title_flag = False
+        self.dock.set_layer_from_title_flag = False
 
 
 if __name__ == '__main__':

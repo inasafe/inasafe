@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1003</width>
-    <height>639</height>
+    <width>1020</width>
+    <height>590</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -33,99 +33,171 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout_13">
+   <property name="verticalSpacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout_12">
-     <item row="0" column="2">
-      <widget class="QLabel" name="lblStep">
-       <property name="styleSheet">
-        <string notr="true">font: 14pt;</string>
-       </property>
-       <property name="text">
-        <string>[placeholder]</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="lblMainTitle">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">font: 14pt;</string>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt;Ina&lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;SAFE&lt;/span&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt; step by step&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="lblSubtitle">
-       <property name="text">
-        <string> Data-centric assessment...</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-       </property>
-       <property name="indent">
-        <number>-1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" rowspan="2">
-      <widget class="QLabel" name="lblMainIcon">
-       <property name="maximumSize">
-        <size>
-         <width>40</width>
-         <height>60</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="pixmap">
-        <pixmap>../../../icon.svg</pixmap>
-       </property>
-       <property name="scaledContents">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QGroupBox" name="title_group">
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: #2f3338; padding: 5px;</string>
+     </property>
+     <property name="title">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_27">
+      <property name="verticalSpacing">
+       <number>0</number>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_12">
+        <item row="0" column="2">
+         <widget class="QLabel" name="lblStep">
+          <property name="styleSheet">
+           <string notr="true">font: 14pt; color: #FFF;</string>
+          </property>
+          <property name="text">
+           <string>[placeholder]</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="lblMainTitle">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>18</pointsize>
+            <weight>50</weight>
+            <italic>false</italic>
+            <bold>false</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 18pt; color: #fff;</string>
+          </property>
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt;Ina&lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600;&quot;&gt;SAFE&lt;/span&gt;&lt;span style=&quot; font-size:22pt;&quot;&gt; step by step&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="lblSubtitle">
+          <property name="styleSheet">
+           <string notr="true">color: #FFF;</string>
+          </property>
+          <property name="text">
+           <string> Data-centric assessment...</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+          </property>
+          <property name="indent">
+           <number>-1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="2">
+         <widget class="QLabel" name="lblMainIcon">
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap>../../../resources/img/icons/icon-white.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QScrollArea" name="scrollArea_3">
+   <item row="2" column="0">
+    <widget class="QFrame" name="frame">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: #2f87a6; border: none;</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QScrollArea" name="scrollArea_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents_4">
+     <widget class="QWidget" name="scrollAreaWidgetContents">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1834</width>
-        <height>792</height>
+        <width>1003</width>
+        <height>400</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="spacing">
-        <number>0</number>
-       </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>400</height>
+       </size>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_26">
        <property name="margin">
         <number>0</number>
        </property>
-       <item>
+       <item row="0" column="0">
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -146,9 +218,15 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="currentIndex">
-          <number>26</number>
+          <number>14</number>
          </property>
          <widget class="QWidget" name="pg1Category">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="styleSheet">
            <string notr="true"/>
           </property>
@@ -171,32 +249,23 @@
            </item>
            <item>
             <layout class="QGridLayout" name="gridLayout_6">
-             <item row="0" column="0" rowspan="3">
-              <widget class="QListWidget" name="lstCategories">
-               <property name="enabled">
-                <bool>true</bool>
+             <item row="0" column="2">
+              <spacer name="verticalSpacer_14">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
                </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
                </property>
-               <property name="minimumSize">
+               <property name="sizeHint" stdset="0">
                 <size>
-                 <width>220</width>
-                 <height>100</height>
+                 <width>20</width>
+                 <height>40</height>
                 </size>
                </property>
-               <property name="maximumSize">
-                <size>
-                 <width>220</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-              </widget>
+              </spacer>
              </item>
-             <item row="2" column="1">
+             <item row="2" column="1" colspan="3">
               <widget class="QLabel" name="lblDescribeCategory">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -218,7 +287,20 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item row="1" column="3">
+              <spacer name="horizontalSpacer_7">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="2">
               <widget class="QLabel" name="lblIconCategory">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -252,11 +334,55 @@
                </property>
               </widget>
              </item>
+             <item row="1" column="1">
+              <spacer name="horizontalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="0" rowspan="3">
+              <widget class="QListWidget" name="lstCategories">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>220</width>
+                 <height>100</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>220</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
           </layout>
          </widget>
          <widget class="QWidget" name="pg2Subcategory">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="styleSheet">
            <string notr="true"/>
           </property>
@@ -279,7 +405,23 @@
            </item>
            <item>
             <layout class="QGridLayout" name="gridLayout">
-             <item row="2" column="1">
+             <item row="0" column="2">
+              <spacer name="verticalSpacer_15">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="2" column="1" colspan="3">
               <widget class="QLabel" name="lblDescribeSubcategory">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -304,7 +446,33 @@
                </property>
               </widget>
              </item>
+             <item row="1" column="3">
+              <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
              <item row="1" column="1">
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="2">
               <widget class="QLabel" name="lblIconSubcategory">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -344,7 +512,7 @@
              <item row="0" column="0" rowspan="3">
               <widget class="QListWidget" name="lstSubcategories">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -373,10 +541,93 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="pg3DataType">
+         <widget class="QWidget" name="pg3HazardCategory">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_30">
+           <item>
+            <widget class="QLabel" name="lblSelectHazardCategory">
+             <property name="styleSheet">
+              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout_17">
+             <item row="1" column="1">
+              <widget class="QLabel" name="lblDescribeHazardCategory">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+               </property>
+               <property name="text">
+                <string>[placeholder]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" rowspan="2">
+              <widget class="QListWidget" name="lstHazardCategories">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>220</width>
+                 <height>100</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>220</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="pg4LayerMode">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_27">
            <item>
-            <widget class="QLabel" name="lblSelectDataType">
+            <widget class="QLabel" name="lblSelectLayerMode">
              <property name="styleSheet">
               <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
              </property>
@@ -393,36 +644,8 @@
            </item>
            <item>
             <layout class="QGridLayout" name="gridLayout_23">
-             <item row="0" column="0">
-              <widget class="QListWidget" name="lstDataTypes">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>220</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>220</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="baseSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="1">
-              <widget class="QLabel" name="lblDescribeDataType">
+              <widget class="QLabel" name="lblDescribeLayerMode">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
@@ -446,11 +669,45 @@
                </property>
               </widget>
              </item>
+             <item row="0" column="0">
+              <widget class="QListWidget" name="lstLayerModes">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>220</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>220</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="pg3Units">
+         <widget class="QWidget" name="pg5Units">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_4">
            <item>
             <widget class="QLabel" name="lblSelectUnit">
@@ -470,10 +727,35 @@
            </item>
            <item>
             <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="1">
+              <widget class="QLabel" name="lblDescribeUnit">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+               </property>
+               <property name="text">
+                <string>[placeholder]</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+               <property name="margin">
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="0">
               <widget class="QListWidget" name="lstUnits">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -498,8 +780,48 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="lblDescribeUnit">
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="pg6Classification">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_31">
+           <item>
+            <widget class="QLabel" name="lblSelectClassification">
+             <property name="styleSheet">
+              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+             </property>
+             <property name="text">
+              <string>[placeholder]</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
+             <item>
+              <widget class="QListWidget" name="lstClassifications">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lblDescribeClassification">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                  <horstretch>0</horstretch>
@@ -518,16 +840,19 @@
                <property name="wordWrap">
                 <bool>true</bool>
                </property>
-               <property name="margin">
-                <number>0</number>
-               </property>
               </widget>
              </item>
             </layout>
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="pg4Field">
+         <widget class="QWidget" name="pg7Field">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
             <widget class="QLabel" name="lblSelectField">
@@ -548,7 +873,14 @@
            <item>
             <layout class="QGridLayout" name="gridLayout_3">
              <item row="1" column="0" colspan="2">
-              <widget class="QListWidget" name="lstFields"/>
+              <widget class="QListWidget" name="lstFields">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
              </item>
              <item row="1" column="2">
               <widget class="QLabel" name="lblDescribeField">
@@ -565,7 +897,7 @@
                 <string>[placeholder]</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -576,7 +908,13 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="pg5Resample">
+         <widget class="QWidget" name="pg8Resample">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_29">
            <item>
             <widget class="QLabel" name="lblSelectAllowResample">
@@ -616,7 +954,13 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="pg6Classify">
+         <widget class="QWidget" name="pg9Classify">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_14">
            <item>
             <widget class="QLabel" name="lblClassify">
@@ -638,6 +982,12 @@
             <layout class="QGridLayout" name="gridLayout_15">
              <item row="1" column="1">
               <widget class="QTreeWidget" name="treeClasses">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="styleSheet">
                 <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
                </property>
@@ -706,6 +1056,12 @@
              </item>
              <item row="1" column="0">
               <widget class="QListWidget" name="lstUniqueValues">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="styleSheet">
                 <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
                </property>
@@ -730,9 +1086,162 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="pg7Aggregations">
+         <widget class="QWidget" name="pg10ExtraKeywords">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_33">
+           <item>
+            <widget class="QLabel" name="lblSelectExtraKeywords">
+             <property name="styleSheet">
+              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+             </property>
+             <property name="text">
+              <string>Please input attribute(s) in this layer that represents specified parameters:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="kwExtraKeywordsGridLayout">
+             <item row="0" column="1">
+              <widget class="QComboBox" name="cboExtraKeyword1"/>
+             </item>
+             <item row="1" column="1">
+              <widget class="QComboBox" name="cboExtraKeyword2"/>
+             </item>
+             <item row="2" column="1">
+              <widget class="QComboBox" name="cboExtraKeyword3"/>
+             </item>
+             <item row="3" column="1">
+              <widget class="QComboBox" name="cboExtraKeyword4"/>
+             </item>
+             <item row="4" column="1">
+              <widget class="QComboBox" name="cboExtraKeyword5"/>
+             </item>
+             <item row="5" column="1">
+              <widget class="QComboBox" name="cboExtraKeyword6"/>
+             </item>
+             <item row="6" column="1">
+              <widget class="QComboBox" name="cboExtraKeyword7"/>
+             </item>
+             <item row="7" column="1">
+              <widget class="QComboBox" name="cboExtraKeyword8"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblExtraKeyword1">
+               <property name="text">
+                <string>Attribute 1</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="lblExtraKeyword2">
+               <property name="text">
+                <string>Attribute 2</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="lblExtraKeyword3">
+               <property name="text">
+                <string>Attribute 3</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="lblExtraKeyword4">
+               <property name="text">
+                <string>Attribute 4</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="lblExtraKeyword5">
+               <property name="text">
+                <string>Attribute 5</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QLabel" name="lblExtraKeyword6">
+               <property name="text">
+                <string>Attribute 6</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QLabel" name="lblExtraKeyword7">
+               <property name="text">
+                <string>Attribute 7</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QLabel" name="lblExtraKeyword8">
+               <property name="text">
+                <string>Attribute 8</string>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>419</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="pg11Aggregations">
           <property name="enabled">
            <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">
            <item>
@@ -941,7 +1450,13 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="pg8Source">
+         <widget class="QWidget" name="pg12Source">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
             <widget class="QLabel" name="lblSelectSource">
@@ -1053,6 +1568,19 @@
                </property>
               </widget>
              </item>
+             <item row="4" column="1">
+              <widget class="QLineEdit" name="leSource_license"/>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="lblLicense">
+               <property name="text">
+                <string>License</string>
+               </property>
+               <property name="buddy">
+                <cstring>leSource_license</cstring>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
            <item>
@@ -1073,7 +1601,13 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="pg9Title">
+         <widget class="QWidget" name="pg13Title">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
             <widget class="QLabel" name="lblSelectTitle">
@@ -1115,11 +1649,30 @@
              </item>
             </layout>
            </item>
+           <item>
+            <spacer name="verticalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF01Constraints1">
-          <layout class="QVBoxLayout" name="verticalLayout_19">
-           <item>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_10">
+           <item row="0" column="0" colspan="4">
             <widget class="QLabel" name="lblSelectFunction1">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -1147,88 +1700,114 @@
              </property>
             </widget>
            </item>
-           <item>
-            <layout class="QGridLayout" name="gridLayout_10">
-             <item row="0" column="1">
-              <widget class="QLabel" name="label">
-               <property name="text">
-                <string>&lt;b&gt;Hazard&lt;/b&gt;</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QTableWidget" name="tblFunctions1">
-               <property name="editTriggers">
-                <set>QAbstractItemView::NoEditTriggers</set>
-               </property>
-               <property name="tabKeyNavigation">
-                <bool>false</bool>
-               </property>
-               <property name="showDropIndicator" stdset="0">
-                <bool>false</bool>
-               </property>
-               <property name="dragDropOverwriteMode">
-                <bool>false</bool>
-               </property>
-               <property name="selectionMode">
-                <enum>QAbstractItemView::SingleSelection</enum>
-               </property>
-               <row>
-                <property name="text">
-                 <string>People</string>
-                </property>
-               </row>
-               <row>
-                <property name="text">
-                 <string>Construction</string>
-                </property>
-               </row>
-               <column>
-                <property name="text">
-                 <string>Flood</string>
-                </property>
-               </column>
-               <column>
-                <property name="text">
-                 <string>Tsunami</string>
-                </property>
-               </column>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QLabel" name="lblAvailableFunctions1">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>Available functions:</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
+           <item row="1" column="2">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>&lt;b&gt;Hazard&lt;/b&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>20</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1" colspan="3">
+            <widget class="QTableWidget" name="tblFunctions1">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <property name="tabKeyNavigation">
+              <bool>false</bool>
+             </property>
+             <property name="showDropIndicator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="dragDropOverwriteMode">
+              <bool>false</bool>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::SingleSelection</enum>
+             </property>
+             <row>
+              <property name="text">
+               <string>People</string>
+              </property>
+             </row>
+             <row>
+              <property name="text">
+               <string>Construction</string>
+              </property>
+             </row>
+             <column>
+              <property name="text">
+               <string>Flood</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Tsunami</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+           <item row="3" column="1" colspan="3">
+            <widget class="QLabel" name="lblAvailableFunctions1">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Available functions:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF02Constraints2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_26">
            <item>
             <widget class="QLabel" name="lblSelectFunction2">
@@ -1248,7 +1827,7 @@
               <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
              </property>
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Now, please select the data types for the &lt;span style=&quot; font-weight:600;&quot;&gt;hazard&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layers you want to use. Click on the cell in the table below that matches the data type for each. A &lt;span style=&quot; font-weight:600;&quot;&gt;continuous&lt;/span&gt; raster is one where cell values are real data values such as: &lt;span style=&quot; font-style:italic;&quot;&gt;depth of flood water in meters&lt;/span&gt; or the &lt;span style=&quot; font-style:italic;&quot;&gt;number of people per cell&lt;/span&gt;. A &lt;span style=&quot; font-weight:600;&quot;&gt;classified&lt;/span&gt; raster is one where cell values represent classes or zones such as: &lt;span style=&quot; font-style:italic;&quot;&gt;high hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;medium hazard zone&lt;/span&gt;, &lt;span style=&quot; font-style:italic;&quot;&gt;low hazard zones&lt;/span&gt;.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1390,6 +1969,12 @@
           </layout>
          </widget>
          <widget class="QWidget" name="pgF03Function">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_9">
            <item>
             <widget class="QLabel" name="lblSelectFunction">
@@ -1409,7 +1994,7 @@
               <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
              </property>
              <property name="text">
-              <string>&lt;p&gt;Below you can see a list of available &lt;b&gt;impact functions&lt;/b&gt; matching the selected hazard, exposure and their data types. Please choose which impact function would you like to use from the list below.&lt;/p&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1424,23 +2009,129 @@
              <property name="horizontalSpacing">
               <number>12</number>
              </property>
-             <item row="0" column="0">
-              <widget class="QListWidget" name="lstFunctions">
+             <item row="0" column="1">
+              <spacer name="horizontalSpacer_8">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>60</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="lblIconFunctionHazard">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
-                 <width>460</width>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>128</width>
+                 <height>127</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>icon</string>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="lblIconFunctionExposure">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>icon</string>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" rowspan="2">
+              <widget class="QListWidget" name="lstFunctions">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
                  <height>99</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>460</width>
+                 <width>9999</width>
                  <height>16777215</height>
                 </size>
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
+             <item row="0" column="4">
+              <spacer name="horizontalSpacer_9">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>60</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="1" colspan="4">
               <widget class="QLabel" name="lblDescribeFunction">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1448,11 +2139,20 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="font">
+                <font>
+                 <family>Ubuntu</family>
+                 <pointsize>11</pointsize>
+                 <weight>50</weight>
+                 <italic>false</italic>
+                 <bold>false</bold>
+                </font>
+               </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string>[placeholder]</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                <set>Qt::AlignCenter</set>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -1464,68 +2164,14 @@
           </layout>
          </widget>
          <widget class="QWidget" name="pgF10HazLayerOrigin">
-          <layout class="QVBoxLayout" name="verticalLayout_11">
-           <item>
-            <widget class="QLabel" name="lblSelectHazLayerOriginType">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>Please help us to find your &lt;b&gt;hazard&lt;/b&gt; layer. A hazard layer represents something that will impact the people or infrastructure in an area. For example flood, earthquake and tsunami inundation are all different kinds of hazards. Select the appropriate option below to indicate where you data resides:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="lblHazLayerOriginConstraint">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>[placeholder]</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="rbHazLayerFromCanvas">
-             <property name="text">
-              <string>I would like to use a hazard layer already loaded in QGIS
-(launches the hazard data registration wizard if needed)</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="rbHazLayerFromBrowser">
-             <property name="text">
-              <string>I would like to pick a hazard layer from disk
-(launches the hazard data registration wizard if needed)</string>
-             </property>
-            </widget>
-           </item>
-           <item>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_18">
+           <item row="3" column="0">
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -1538,9 +2184,113 @@
              </property>
             </spacer>
            </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="rbHazLayerFromCanvas">
+             <property name="text">
+              <string>I would like to use a hazard layer already loaded in QGIS
+(launches the InaSAFE Keywords Creation Wizard for hazard if needed)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" rowspan="2">
+            <spacer name="horizontalSpacer_10">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="3" rowspan="2">
+            <spacer name="horizontalSpacer_12">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="0">
+            <widget class="QRadioButton" name="rbHazLayerFromBrowser">
+             <property name="text">
+              <string>I would like to pick a hazard layer from disk
+(launches the InaSAFE Keywords Creation Wizard for hazard if needed)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2" rowspan="2">
+            <widget class="QLabel" name="lblIconIFCWHazardOrigin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" colspan="4">
+            <widget class="QLabel" name="lblSelectHazLayerOriginType">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF11HazLayerTOC">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_10">
            <item>
             <widget class="QLabel" name="lblSelectHazardLayer">
@@ -1548,7 +2298,7 @@
               <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
              </property>
              <property name="text">
-              <string>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;hazard&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1559,27 +2309,45 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="lblHazLayerFromCanvasConstraint">
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>[placeholder]</string>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
             <layout class="QGridLayout" name="gridLayout_16">
-             <item row="0" column="0">
+             <item row="0" column="3">
+              <widget class="QLabel" name="lblIconIFCWHazardFromCanvas">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>icon</string>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" rowspan="2">
               <widget class="QListWidget" name="lstCanvasHazLayers">
                <property name="enabled">
                 <bool>true</bool>
                </property>
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -1598,13 +2366,64 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
+             <item row="1" column="1">
+              <spacer name="horizontalSpacer_16">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="1" colspan="2">
+              <spacer name="horizontalSpacer_11">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="4">
+              <spacer name="horizontalSpacer_13">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="2" colspan="3">
               <widget class="QLabel" name="lblDescribeCanvasHazLayer">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -1616,6 +2435,12 @@
           </layout>
          </widget>
          <widget class="QWidget" name="pgF12HazLayerBrowser">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_12">
            <item>
             <widget class="QLabel" name="lblSelectBrowserHazLayer">
@@ -1623,20 +2448,7 @@
               <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
              </property>
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;hazard&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="lblHazLayerFromBrowserConstraint">
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>[placeholder]</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -1645,21 +2457,61 @@
            </item>
            <item>
             <layout class="QGridLayout" name="gridLayout_11">
-             <item row="0" column="1">
-              <widget class="QLabel" name="lblDescribeBrowserHazLayer">
+             <item row="0" column="3">
+              <widget class="QLabel" name="lblIconIFCWHazardFromBrowser">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
                <property name="text">
-                <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>icon</string>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
                </property>
                <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
+                <set>Qt::AlignCenter</set>
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
+             <item row="0" column="4">
+              <spacer name="horizontalSpacer_15">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="0" rowspan="2">
               <widget class="QTreeView" name="tvBrowserHazard">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>460</width>
@@ -1677,19 +2529,73 @@
                </attribute>
               </widget>
              </item>
+             <item row="1" column="1">
+              <spacer name="horizontalSpacer_17">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="1" colspan="2">
+              <spacer name="horizontalSpacer_14">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="2" colspan="3">
+              <widget class="QLabel" name="lblDescribeBrowserHazLayer">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF13ExpLayerOrigin">
-          <layout class="QVBoxLayout" name="verticalLayout_25">
-           <item>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_24">
+           <item row="0" column="0" colspan="4">
             <widget class="QLabel" name="lblSelectExpLayerOriginType">
              <property name="styleSheet">
               <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
              </property>
              <property name="text">
-              <string>Please help us to find your &lt;b&gt;exposure&lt;/b&gt; layer. An exposure layer represents people, property or infrastructure that may be affected in the event of a flood, earthquake, volcano etc. Select an appropriate option below to indicate where your data can be found:</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1699,36 +2605,15 @@
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QLabel" name="lblExpLayerOriginConstraint">
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>[placeholder]</string>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="rbExpLayerFromCanvas">
-             <property name="text">
-              <string>I would like to use an exposure layer already loaded in QGIS
-(launches the exposure data registration wizard if needed)</string>
-             </property>
-            </widget>
-           </item>
-           <item>
+           <item row="2" column="0">
             <widget class="QRadioButton" name="rbExpLayerFromBrowser">
              <property name="text">
               <string>I would like to pick an exposure layer from disk
-(launches the exposure data registration wizard if needed)</string>
+(launches the InaSAFE Keywords Creation Wizard for exposure if needed)</string>
              </property>
             </widget>
            </item>
-           <item>
+           <item row="3" column="0">
             <spacer name="verticalSpacer_2">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -1741,9 +2626,83 @@
              </property>
             </spacer>
            </item>
+           <item row="1" column="1" rowspan="2">
+            <spacer name="horizontalSpacer_18">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="3" rowspan="2">
+            <spacer name="horizontalSpacer_19">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="rbExpLayerFromCanvas">
+             <property name="text">
+              <string>I would like to use an exposure layer already loaded in QGIS
+(launches the InaSAFE Keywords Creation Wizard for exposure if needed)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2" rowspan="2">
+            <widget class="QLabel" name="lblIconIFCWExposureOrigin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF14ExpLayerTOC">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_23">
            <item>
             <widget class="QLabel" name="lblSelectExposureLayer">
@@ -1751,7 +2710,7 @@
               <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
              </property>
              <property name="text">
-              <string>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;exposure&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -1762,27 +2721,109 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="lblExpLayerFromCanvasConstraint">
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>[placeholder]</string>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
             <layout class="QGridLayout" name="gridLayout_19">
-             <item row="0" column="0">
+             <item row="1" column="1">
+              <spacer name="horizontalSpacer_22">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="4">
+              <spacer name="horizontalSpacer_27">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="lblIconIFCWExposureFromCanvas">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>icon</string>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" colspan="2">
+              <spacer name="horizontalSpacer_26">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="2" colspan="3">
+              <widget class="QLabel" name="lblDescribeCanvasExpLayer">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" rowspan="2">
               <widget class="QListWidget" name="lstCanvasExpLayers">
                <property name="enabled">
                 <bool>true</bool>
                </property>
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -1801,24 +2842,17 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="lblDescribeCanvasExpLayer">
-               <property name="text">
-                <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
             </layout>
            </item>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF15ExpLayerBrowser">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_20">
            <item>
             <widget class="QLabel" name="lblSelectBrowserExpLayer">
@@ -1826,20 +2860,7 @@
               <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
              </property>
              <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;exposure&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="lblExpLayerFromBrowserConstraint">
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>[placeholder]</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
@@ -1848,21 +2869,109 @@
            </item>
            <item>
             <layout class="QGridLayout" name="gridLayout_21">
-             <item row="0" column="1">
+             <item row="1" column="1">
+              <spacer name="horizontalSpacer_23">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="4">
+              <spacer name="horizontalSpacer_29">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="lblIconIFCWExposureFromBrowser">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>icon</string>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2" colspan="3">
               <widget class="QLabel" name="lblDescribeBrowserExpLayer">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
+             <item row="0" column="1" colspan="2">
+              <spacer name="horizontalSpacer_28">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="0" rowspan="2">
               <widget class="QTreeView" name="tvBrowserExposure">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>460</width>
@@ -1885,6 +2994,12 @@
           </layout>
          </widget>
          <widget class="QWidget" name="pgF16DisJointLayers">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_15">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -1941,8 +3056,14 @@ Please step back and select another layer.</string>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF17AggLayerOrigin">
-          <layout class="QVBoxLayout" name="verticalLayout_21">
-           <item>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_25">
+           <item row="0" column="0" colspan="3">
             <widget class="QLabel" name="lblSelectAggLayerOriginType">
              <property name="styleSheet">
               <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
@@ -1958,30 +3079,61 @@ Please step back and select another layer.</string>
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QRadioButton" name="rbAggLayerFromCanvas">
+           <item row="1" column="1" rowspan="2">
+            <widget class="QLabel" name="lblIconIFCWAggregationOrigin">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>128</width>
+               <height>128</height>
+              </size>
+             </property>
              <property name="text">
-              <string>I would like to use an aggregation layer already loaded in QGIS
-(launches the aggregation data registration wizard if needed)</string>
+              <string>icon</string>
+             </property>
+             <property name="scaledContents">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
-           <item>
+           <item row="2" column="0">
             <widget class="QRadioButton" name="rbAggLayerFromBrowser">
              <property name="text">
               <string>I would like to pick an aggregation layer from disk
-(launches the aggregation data registration wizard if needed)</string>
+(launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</string>
              </property>
             </widget>
            </item>
-           <item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="rbAggLayerFromCanvas">
+             <property name="text">
+              <string>I would like to use an aggregation layer already loaded in QGIS
+(launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
             <widget class="QRadioButton" name="rbAggLayerNoAggregation">
              <property name="text">
               <string>No thanks, I am happy to aggregate results for the entire analysis window</string>
              </property>
             </widget>
            </item>
-           <item>
+           <item row="4" column="0">
             <spacer name="verticalSpacer_3">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -1997,6 +3149,12 @@ Please step back and select another layer.</string>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF18AggLayerTOC">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_22">
            <item>
             <widget class="QLabel" name="lblSelectAggregationLayer">
@@ -2016,13 +3174,76 @@ Please step back and select another layer.</string>
            </item>
            <item>
             <layout class="QGridLayout" name="gridLayout_20">
-             <item row="0" column="0">
+             <item row="1" column="1">
+              <spacer name="horizontalSpacer_24">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="4">
+              <spacer name="horizontalSpacer_31">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="lblIconIFCWAggregationFromCanvas">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>icon</string>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0" rowspan="2">
               <widget class="QListWidget" name="lstCanvasAggLayers">
                <property name="enabled">
                 <bool>true</bool>
                </property>
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
@@ -2041,13 +3262,32 @@ Please step back and select another layer.</string>
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
+             <item row="0" column="1" colspan="2">
+              <spacer name="horizontalSpacer_30">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="2" colspan="3">
               <widget class="QLabel" name="lblDescribeCanvasAggLayer">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -2059,6 +3299,12 @@ Please step back and select another layer.</string>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF19AggLayerBrowser">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_24">
            <item>
             <widget class="QLabel" name="lblSelectBrowserAggLayer">
@@ -2075,21 +3321,96 @@ Please step back and select another layer.</string>
            </item>
            <item>
             <layout class="QGridLayout" name="gridLayout_22">
-             <item row="0" column="1">
+             <item row="1" column="1">
+              <spacer name="horizontalSpacer_25">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="4">
+              <spacer name="horizontalSpacer_33">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Fixed</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="lblIconIFCWAggregationFromBrowser">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>128</width>
+                 <height>128</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>icon</string>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2" colspan="3">
               <widget class="QLabel" name="lblDescribeBrowserAggLayer">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="text">
                 <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;i&gt;EXAMPLE:&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TITLE&lt;/span&gt;: Tsunami di Maumere (Mw 8.1)&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;CATEGORY&lt;/span&gt;: hazard&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SUBCATEGORY&lt;/span&gt;: tsunami&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;UNIT&lt;/span&gt;: m&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: AIFDR &lt;br/&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;... or (if no keywords):&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This layer has no keywords assigned&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;SOURCE&lt;/span&gt;: /mag/testdata/dummy/points.shp&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;TYPE&lt;/span&gt;: vector&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;GEOMETRY TYPE&lt;/span&gt;: point&lt;/p&gt;&lt;p&gt;In the next step you will be able to register this layer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="alignment">
-                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
+             <item row="0" column="0" rowspan="2">
               <widget class="QTreeView" name="tvBrowserAggregation">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>460</width>
@@ -2107,11 +3428,30 @@ Please step back and select another layer.</string>
                </attribute>
               </widget>
              </item>
+             <item row="0" column="1" colspan="2">
+              <spacer name="horizontalSpacer_32">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
             </layout>
            </item>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF20AggLayerDisjoint">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_13">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
@@ -2171,116 +3511,25 @@ Please step back and select another layer.</string>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF21Extent">
-          <layout class="QVBoxLayout" name="verticalLayout_17">
-           <item>
-            <widget class="QLabel" name="lblSelectExtentType">
-             <property name="styleSheet">
-              <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-             </property>
-             <property name="text">
-              <string>Please specify extent of your analysis. By clicking &quot;define it now&quot; you can invoke the extent selection tool.</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="rbExtentUser">
-             <property name="text">
-              <string>Use the extent defined by selecting an area on the map</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="lblExistingSelection">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="font">
-              <font>
-               <family>Ubuntu</family>
-               <pointsize>11</pointsize>
-               <weight>50</weight>
-               <italic>false</italic>
-               <bold>false</bold>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">padding-left: 20px;</string>
-             </property>
-             <property name="text">
-              <string>Your existing selection will be used if one has already been made</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="lblDefineExtentNow">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">padding-left: 20px;</string>
-             </property>
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Alternatively, &lt;a href=&quot;define_user_extent&quot;&gt; &lt;span style=&quot; text-decoration: underline; color:#e85290;&quot;&gt;define the analysis extent now...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="rbExtentScreen">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Use the current extent of the map display</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="rbExtentLayer">
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>50</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Use the extent of the analysis layers</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_4">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_28">
+           <item row="0" column="0">
+            <layout class="QVBoxLayout" name="layoutAnalysisExtent"/>
            </item>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF22ExtentDisjoint">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_28">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -2340,6 +3589,12 @@ Please step back and select another layer.</string>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF23ParamsIF">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QGridLayout" name="gridLayout_9">
            <item row="0" column="0">
             <layout class="QVBoxLayout" name="layoutIFParams">
@@ -2362,6 +3617,12 @@ Please step back and select another layer.</string>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF24Summary">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_18">
            <item>
             <widget class="QScrollArea" name="scrollArea">
@@ -2373,8 +3634,8 @@ Please step back and select another layer.</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>177</width>
-                <height>120</height>
+                <width>95</width>
+                <height>65</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_32">
@@ -2401,6 +3662,12 @@ Please step back and select another layer.</string>
           </layout>
          </widget>
          <widget class="QWidget" name="pgF25Progress">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_16">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -2429,7 +3696,7 @@ Please step back and select another layer.</string>
            <item>
             <widget class="MessageViewer" name="wvResults" native="true">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
+              <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -2438,6 +3705,12 @@ Please step back and select another layer.</string>
               <size>
                <width>100</width>
                <height>100</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
               </size>
              </property>
              <property name="url" stdset="0">
@@ -2480,20 +3753,17 @@ Please step back and select another layer.</string>
      </widget>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="4" column="0">
     <widget class="Line" name="line">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="5" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
+     <property name="margin">
+      <number>12</number>
      </property>
      <item>
       <widget class="QPushButton" name="pbnCancel">
@@ -2567,6 +3837,7 @@ Please step back and select another layer.</string>
   <tabstop>leSource_url</tabstop>
   <tabstop>leSource_scale</tabstop>
   <tabstop>leSource_date</tabstop>
+  <tabstop>leSource_license</tabstop>
   <tabstop>leTitle</tabstop>
   <tabstop>dsbFemaleRatioDefault</tabstop>
   <tabstop>cboYouthRatioAttribute</tabstop>

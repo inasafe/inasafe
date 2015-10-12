@@ -13,24 +13,26 @@ Contact : ole.moller.nielsen@gmail.com
 
 from collections import OrderedDict
 
+from safe.impact_functions.bases.classified_vh_classified_ve import \
+    ClassifiedVHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.volcanic.volcano_polygon_building\
     .metadata_definitions import VolcanoPolygonBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, KeywordNotFoundError
 from safe.common.utilities import (
     get_thousand_separator,
-    get_non_conflicting_attribute_name,
     get_osm_building_usage)
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+import safe.messaging as m
+from safe.messaging import styles
 
 
 class VolcanoPolygonBuildingFunction(
-        ImpactFunction,
+        ClassifiedVHClassifiedVE,
         BuildingExposureReportMixin):
     """Impact Function for Volcano Point on Building."""
 
@@ -38,100 +40,79 @@ class VolcanoPolygonBuildingFunction(
 
     def __init__(self):
         super(VolcanoPolygonBuildingFunction, self).__init__()
+        self.volcano_names = tr('Not specified in data')
 
     def notes(self):
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        volcano_names = self.volcano_names
-        return [
-            {
-                'content': tr('Notes'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Map shows buildings affected in each of the '
-                    'volcano hazard polygons.')
-            },
-            {
-                'content': tr(
-                    'Only buildings available in OpenStreetMap '
-                    'are considered.')
-            },
-            {
-                'content': tr('Volcanoes considered: %s.') % volcano_names,
-                'header': True
-            }
-        ]
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Map shows buildings affected in each of the volcano hazard '
+            'polygons.'))
+        names = tr('Volcanoes considered: %s.') % self.volcano_names
+        checklist.add(names)
+        message.add(checklist)
+        return message
 
-    def run(self, layers=None):
+    def run(self):
         """Risk plugin for volcano hazard on building/structure.
 
         Counts number of building exposed to each volcano hazard zones.
-
-        :param layers: List of layers expected to contain.
-                * hazard_layer: Hazard layer of volcano
-                * exposure_layer: Vector layer of structure data on
-                the same grid as hazard_layer
 
         :returns: Map of building exposed to volcanic hazard zones.
                   Table with number of buildings affected
         :rtype: dict
         """
         self.validate()
-        self.prepare(layers)
-        # Target Field
-        target_field = 'zone'
+        self.prepare()
 
-        # Not affected string
-        not_affected_value = 'Not Affected'
-
-        # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute']
-        name_attribute = self.parameters['volcano name attribute']
-
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard  # Volcano hazard layer
-        exposure_layer = self.exposure  # Building exposure layer
+        # Get parameters from layer's keywords
+        self.hazard_class_attribute = self.hazard.keyword('field')
+        name_attribute = self.hazard.keyword('volcano_name_field')
+        # Try to get the value from keyword, if not exist, it will not fail,
+        # but use the old get_osm_building_usage
+        try:
+            self.exposure_class_attribute = self.exposure.keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            self.exposure_class_attribute = None
 
         # Input checks
-        if not hazard_layer.is_polygon_data:
+        if not self.hazard.layer.is_polygon_data:
             message = (
                 'Input hazard must be a polygon. I got %s with '
                 'layer type %s' %
-                (hazard_layer.get_name(), hazard_layer.get_geometry_name()))
+                (self.hazard.name, self.hazard.layer.get_geometry_name()))
             raise Exception(message)
 
         # Check if hazard_zone_attribute exists in hazard_layer
-        if hazard_zone_attribute not in hazard_layer.get_attribute_names():
+        if (self.hazard_class_attribute not in
+                self.hazard.layer.get_attribute_names()):
             message = (
                 'Hazard data %s did not contain expected attribute %s ' %
-                (hazard_layer.get_name(), hazard_zone_attribute))
+                (self.hazard.name, self.hazard_class_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)
 
         # Get names of volcanoes considered
-        if name_attribute in hazard_layer.get_attribute_names():
+        if name_attribute in self.hazard.layer.get_attribute_names():
             volcano_name_list = set()
-            for row in hazard_layer.get_data():
+            for row in self.hazard.layer.get_data():
                 # Run through all polygons and get unique names
                 volcano_name_list.add(row[name_attribute])
             self.volcano_names = ', '.join(volcano_name_list)
         else:
             self.volcano_names = tr('Not specified in data')
 
-        # Find the target field name that has no conflict with default
-        # target
-        attribute_names = hazard_layer.get_attribute_names()
-        target_field = get_non_conflicting_attribute_name(
-            target_field, attribute_names)
-
         # Run interpolation function for polygon2raster
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, exposure_layer, attribute_name=None)
+            self.hazard.layer, self.exposure.layer)
 
         # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
@@ -139,7 +120,7 @@ class VolcanoPolygonBuildingFunction(
 
         # Hazard zone categories from hazard layer
         hazard_zone_categories = list(
-            set(hazard_layer.get_data(hazard_zone_attribute)))
+            set(self.hazard.layer.get_data(self.hazard_class_attribute)))
 
         self.buildings = {}
         self.affected_buildings = OrderedDict()
@@ -147,11 +128,15 @@ class VolcanoPolygonBuildingFunction(
             self.affected_buildings[hazard_category] = {}
 
         for i in range(len(features)):
-            hazard_value = features[i][hazard_zone_attribute]
+            hazard_value = features[i][self.hazard_class_attribute]
             if not hazard_value:
-                hazard_value = not_affected_value
-            features[i][target_field] = hazard_value
-            usage = get_osm_building_usage(attribute_names, features[i])
+                hazard_value = self._not_affected_value
+            features[i][self.target_field] = hazard_value
+            if (self.exposure_class_attribute and
+                    self.exposure_class_attribute in attribute_names):
+                usage = features[i][self.exposure_class_attribute]
+            else:
+                usage = get_osm_building_usage(attribute_names, features[i])
             if usage in [None, 'NULL', 'null', 'Null', 0]:
                 usage = tr('Unknown')
             if usage not in self.buildings:
@@ -169,9 +154,9 @@ class VolcanoPolygonBuildingFunction(
         self._consolidate_to_other()
 
         # Generate simple impact report
-        impact_summary = impact_table = self.generate_html_report()
+        impact_summary = impact_table = self.html_report()
         category_names = hazard_zone_categories
-        category_names.append(not_affected_value)
+        category_names.append(self._not_affected_value)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -198,16 +183,16 @@ class VolcanoPolygonBuildingFunction(
             style_classes.append(style_class)
 
         # Override style info with new classes and name
-        style_info = dict(target_field=target_field,
+        style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
         # For printing map purpose
         map_title = tr('Buildings affected by volcanic hazard zone')
+        legend_title = tr('Building count')
+        legend_units = tr('(building)')
         legend_notes = tr('Thousand separator is represented by %s' %
                           get_thousand_separator())
-        legend_units = tr('(building)')
-        legend_title = tr('Building count')
 
         # Create vector layer and return
         impact_layer = Vector(
@@ -217,7 +202,7 @@ class VolcanoPolygonBuildingFunction(
             name=tr('Buildings affected by volcanic hazard zone'),
             keywords={'impact_summary': impact_summary,
                       'impact_table': impact_table,
-                      'target_field': target_field,
+                      'target_field': self.target_field,
                       'map_title': map_title,
                       'legend_notes': legend_notes,
                       'legend_units': legend_units,

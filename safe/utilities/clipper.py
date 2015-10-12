@@ -246,7 +246,7 @@ def _clip_vector_layer(
 
     writer = QgsVectorFileWriter(
         file_name,
-        'UTF-8',
+        None,
         field_list,
         layer.wkbType(),
         geo_crs,

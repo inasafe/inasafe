@@ -26,7 +26,8 @@ import logging
 from datetime import datetime
 import numpy
 # noinspection PyPackageRequirements
-import pytz  # sudo apt-get install python-tz
+from tzlocal import get_localzone
+# declared in REQUIREMENTS.txt in docker-realtime-orchestration repo
 
 from qgis.core import (
     QgsPoint,
@@ -63,10 +64,6 @@ from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import read_layer as safe_read_layer
 from safe.engine.core import calculate_impact as safe_calculate_impact
 from safe.test.utilities import get_qgis_app
-from safe.common.tables import (
-    Table,
-    TableCell,
-    TableRow)
 from safe.common.version import get_version
 from safe.common.utilities import romanise
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
@@ -75,6 +72,7 @@ from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.resources import resources_path
 from safe.common.exceptions import TranslationLoadError
 from safe.gui.tools.shake_grid.shake_grid import ShakeGrid
+import safe.messaging as m
 from realtime.shake_data import ShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
@@ -169,8 +167,10 @@ class ShakeEvent(QObject):
             self.event_id = self.data.event_id
 
         # Convert grid.xml (we'll give the title with event_id)
+        # RM: convert event_id to str too. This avoid the layer name is
+        # falsely read as int
         self.shake_grid = ShakeGrid(
-            self.event_id, get_grid_source(), self.grid_file_path())
+            str(self.event_id), get_grid_source(), self.grid_file_path())
 
         self.population_raster_path = population_raster_path
         self.geonames_sqlite_path = geonames_sqlite_path
@@ -841,14 +841,13 @@ class ShakeEvent(QObject):
         :type file_name: str
 
         :param table: A Table instance.
-        :type table: Table
+        :type table: safe.messaging.table.Table
 
         :return: Full path to file that was created on disk.
         :rtype: str
         """
-        path = os.path.join(shakemap_extract_dir(),
-                            self.event_id,
-                            file_name)
+        path = os.path.join(
+            shakemap_extract_dir(), self.event_id, file_name)
         html_file = file(path, 'w')
         header_file = os.path.join(data_dir(), 'header.html')
         footer_file = os.path.join(data_dir(), 'footer.html')
@@ -860,7 +859,7 @@ class ShakeEvent(QObject):
         footer = footer_file.read()
         footer_file.close()
         html_file.write(header)
-        html_file.write(table.toNewlineFreeString())
+        html_file.write(table.to_html())
         html_file.write(footer)
         html_file.close()
         # Also bootstrap gets copied to extract dir
@@ -898,16 +897,19 @@ class ShakeEvent(QObject):
 
         :raise: Propagates any exceptions.
         """
+        message = m.Message(style_class='container')
+        table = m.Table(
+            style_class='table table-condensed table-striped')
+        row = m.Row()
+        row.add(m.Cell(''))
+        row.add(m.Cell(self.tr('Name'), header=True))
+        row.add(m.Cell(self.tr('Population (x 1000)'), header=True))
+        row.add(m.Cell(self.tr('Intensity'), header=True))
+        table.add(row)
         table_data = self.sorted_impacted_cities(row_count)
-        table_body = []
-        header = TableRow(
-            [
-                '',
-                self.tr('Name'),
-                self.tr('Population (x 1000)'),
-                self.tr('Intensity')],
-            header=True)
+
         for row_data in table_data:
+            row = m.Row()
             intensity = row_data['roman']
             name = row_data['name']
             population = int(round(row_data['population'] / 1000))
@@ -915,19 +917,17 @@ class ShakeEvent(QObject):
             colour_box = (
                 '<div style="width: 16px; height: 16px;'
                 'background-color: %s"></div>' % colour)
-            row = TableRow([
-                colour_box,
-                name,
-                population,
-                intensity])
-            table_body.append(row)
-
-        table = Table(
-            table_body, header_row=header,
-            table_class='table table-striped table-condensed')
+            # this one wont work - we need to update the cell class to support
+            # colour
+            row.add(m.Cell(colour_box))
+            row.add(m.Cell(name))
+            row.add(m.Cell(population))
+            row.add(m.Cell(intensity))
+            table.add(row)
+        message.add(table)
         # Also make an html file on disk
         path = self.write_html_table(
-            file_name='affected-cities.html', table=table)
+            file_name='affected-cities.html', table=message)
 
         return table, path
 
@@ -955,34 +955,39 @@ class ShakeEvent(QObject):
                 8: 0.0,
                 9: 0.0}
         """
-        header = [TableCell(self.tr('Intensity'), header=True)]
-        affected_row = [
-            TableCell(self.tr('People Affected (x 1000)'), header=True)]
-        impact_row = [TableCell(self.tr('Perceived Shaking'), header=True)]
+        message = m.Message(style_class='container')
+        table = m.Table(
+            style_class='table table-condensed table-striped')
+
+        header_row = m.Row()
+        header_row.add(m.Cell(self.tr('Intensity'), header=True))
+
+        affected_row = m.Row()
+        affected_row.add(
+            m.Cell(self.tr('People Affected (x 1000)'), header=True))
+
+        impact_row = m.Row()
+        impact_row.add(m.Cell(self.tr('Perceived Shaking'), header=True))
+
         for mmi in range(2, 10):
-            header.append(
-                TableCell(
-                    romanise(mmi),
-                    cell_class='mmi-%s' % mmi,
-                    header=True))
+            header_row.add(m.Cell(
+                romanise(mmi), style_class='mmi-%s' % mmi, header=True))
             if mmi in self.affected_counts:
                 # noinspection PyTypeChecker
-                affected_row.append(
-                    '%i' % round(self.affected_counts[mmi] / 1000))
+                affected_row.add(m.Cell(
+                    '%i' % round(self.affected_counts[mmi] / 1000)))
             else:
                 # noinspection PyTypeChecker
-                affected_row.append(0.00)
+                affected_row.add(m.Cell(0.00))
 
-            impact_row.append(TableCell(self.mmi_shaking(mmi)))
+            impact_row.append(m.Cell(self.mmi_shaking(mmi)))
 
-        table_body = list()
-        table_body.append(affected_row)
-        table_body.append(impact_row)
-        table = Table(
-            table_body, header_row=header,
-            table_class='table table-striped table-condensed')
+        table.add(header_row)
+        table.add(affected_row)
+        table.add(impact_row)
+        message.add(table)
         # noinspection PyTypeChecker
-        path = self.write_html_table(file_name='impacts.html', table=table)
+        path = self.write_html_table(file_name='impacts.html', table=message)
 
         return path
 
@@ -1040,12 +1045,12 @@ class ShakeEvent(QObject):
             str(clipped_hazard.source()))
         clipped_exposure_layer = safe_read_layer(
             str(clipped_exposure.source()))
-        layers = [clipped_hazard_layer, clipped_exposure_layer]
 
         function_id = 'ITBFatalityFunction'
         function = ImpactFunctionManager().get(function_id)
-
-        result = safe_calculate_impact(layers, function)
+        function.hazard = clipped_hazard_layer
+        function.exposure = clipped_exposure_layer
+        result = safe_calculate_impact(function)
         try:
             fatalities = result.keywords['fatalities_per_mmi']
             affected = result.keywords['exposed_per_mmi']
@@ -1263,23 +1268,10 @@ class ShakeEvent(QObject):
 
         :raise Propagates any exceptions.
         """
-        pdf_path = os.path.join(
-            shakemap_extract_dir(),
-            self.event_id,
-            '%s-%s.pdf' % (self.event_id, self.locale))
-        image_path = os.path.join(
-            shakemap_extract_dir(),
-            self.event_id,
-            '%s-%s.png' % (self.event_id, self.locale))
-        thumbnail_image_path = os.path.join(
-            shakemap_extract_dir(),
-            self.event_id,
-            '%s-thumb-%s.png' % (self.event_id, self.locale))
-        pickle_path = os.path.join(
-            shakemap_extract_dir(),
-            self.event_id,
-            '%s-metadata-%s.pickle' % (self.event_id, self.locale))
+        image_path, pdf_path, pickle_path, thumbnail_image_path = \
+            self.generate_result_path()
 
+        short_circuit_flag = False
         if not force_flag:
             # Check if the images already exist and if so
             # short circuit.
@@ -1294,7 +1286,6 @@ class ShakeEvent(QObject):
                 LOGGER.info('%s (already exists)' % pdf_path)
                 LOGGER.info('%s (already exists)' % image_path)
                 LOGGER.info('%s (already exists)' % thumbnail_image_path)
-                return pdf_path
 
         # Make sure the map layers have all been removed before we
         # start otherwise in batch mode we will get overdraws.
@@ -1328,6 +1319,11 @@ class ShakeEvent(QObject):
             logging.info('Created: %s', cities_html_path)
         except:  # pylint: disable=W0702
             logging.exception('No nearby cities found!')
+
+        if short_circuit_flag:
+            # short circuit after we calculated nearby cities
+            # (used in realtime push)
+            return pdf_path
 
         _, impacts_html_path = self.calculate_impacts()
         logging.info('Created: %s', impacts_html_path)
@@ -1489,6 +1485,42 @@ class ShakeEvent(QObject):
             'project.qgs')
         project.write(QFileInfo(project_path))
 
+    def generate_result_path(self):
+        """Generate path file for the result
+
+        :return: (image_path, pdf_path, pickle_path, thumbnail_image_path)
+        """
+        pdf_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-%s.pdf' % (self.event_id, self.locale))
+        image_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-%s.png' % (self.event_id, self.locale))
+        thumbnail_image_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-thumb-%s.png' % (self.event_id, self.locale))
+        pickle_path = os.path.join(
+            shakemap_extract_dir(),
+            self.event_id,
+            '%s-metadata-%s.pickle' % (self.event_id, self.locale))
+        return image_path, pdf_path, pickle_path, thumbnail_image_path
+
+    def generate_result_path_dict(self):
+        """Generate result path as dict.
+
+        :return: keys: 'pdf', 'image', 'pickle', 'thumbnail'
+        """
+        paths = self.generate_result_path()
+        return {
+            'pdf': paths[1],
+            'image': paths[0],
+            'pickle': paths[2],
+            'thumbnail': paths[3]
+        }
+
     # noinspection PyMethodMayBeStatic
     def bearing_to_cardinal(self, bearing):
         """Given a bearing in degrees return it as compass units e.g. SSE.
@@ -1567,8 +1599,9 @@ class ShakeEvent(QObject):
             ' into account the population and cities affected by different '
             'levels of ground shaking. The estimate is based on ground '
             'shaking data from BMKG, population count data derived by '
-            'AIFDR from worldpop.org.uk, place information from geonames.org '
-            'and software developed by BNPB. Limitations in the estimates of '
+            'Australian Government from worldpop.org.uk, place information '
+            'from geonames.org and software developed by BNPB. '
+            'Limitations in the estimates of '
             'ground shaking, population and place names datasets may '
             'result in significant misrepresentation of the on-the-ground '
             'situation in the figures shown here. Consequently decisions '
@@ -1581,8 +1614,8 @@ class ShakeEvent(QObject):
             'This report was created using InaSAFE version %s. Visit '
             'http://inasafe.org for more information.') % get_version()
         credits_text = self.tr(
-            'Supported by the Australia-Indonesia Facility for Disaster '
-            'Reduction, Geoscience Australia and the World Bank-GFDRR.')
+            'Supported by the Australian Government, Geoscience Australia '
+            'and the World Bank-GFDRR.')
         # Format the lat lon from decimal degrees to dms
         point = QgsPoint(
             self.shake_grid.longitude,
@@ -1663,22 +1696,16 @@ class ShakeEvent(QObject):
 
         .. note:: Code based on Ole's original impact_map work.
         """
-        # Work out interval since earthquake (assume both are GMT)
-        year = self.shake_grid.year
-        month = self.shake_grid.month
-        day = self.shake_grid.day
-        hour = self.shake_grid.hour
-        minute = self.shake_grid.minute
-        second = self.shake_grid.second
+        # Work out interval since earthquake
 
-        eq_date = datetime(year, month, day, hour, minute, second)
+        # get eq time (already with timezone)
+        eq_date = self.shake_grid.time
 
-        # Hack - remove when ticket:10 has been resolved
-        tz = pytz.timezone('Asia/Jakarta')  # Or 'Etc/GMT+7'
-        now = datetime.utcnow()
-        now_jakarta = now.replace(tzinfo=pytz.utc).astimezone(tz)
-        eq_jakarta = eq_date.replace(tzinfo=tz).astimezone(tz)
-        time_delta = now_jakarta - eq_jakarta
+        # get current local time
+        now = datetime.now()
+        local_tz = get_localzone()
+        now = now.replace(tzinfo=local_tz)
+        time_delta = now - eq_date
 
         # Work out string to report time elapsed after quake
         if time_delta.days == 0:
@@ -1733,7 +1760,7 @@ class ShakeEvent(QObject):
         """
         return self.tr('Version: %s' % get_version())
 
-    def __str__(self):
+    def __unicode__(self):
         """The unicode representation for an event object's state.
 
         :return: A string describing the ShakeGridConverter instance
@@ -1813,6 +1840,9 @@ class ShakeEvent(QObject):
             'search_boxes: %(search_boxes)s\n'
             % event_dict)
         return event_string
+
+    def __str__(self):
+        return self.__unicode__()
 
     def setup_i18n(self):
         """Setup internationalisation for the reports.

@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
+from safe.storage.safe_layer import SafeLayer
 
 __author__ = 'lucernae'
 __filename__ = 'test_classified_hazard_building'
@@ -46,8 +47,8 @@ class TestContinuousHazardPopulationFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact = function.impact
 
@@ -72,17 +73,20 @@ class TestContinuousHazardPopulationFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'metres_depth',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'hazard': 'flood',
+            'hazard_category': 'multiple_event',
+            'continuous_hazard_unit': 'generic'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

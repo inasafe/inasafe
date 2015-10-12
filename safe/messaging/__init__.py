@@ -15,6 +15,7 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+from .item.brand import Brand
 from .item.text import Text
 from .item.important_text import ImportantText
 from .item.emphasized_text import EmphasizedText

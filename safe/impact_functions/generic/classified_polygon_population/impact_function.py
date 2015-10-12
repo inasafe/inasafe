@@ -12,7 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import numpy
 
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.bases.classified_vh_continuous_re import \
+    ClassifiedVHContinuousRE
 from safe.impact_functions.generic.classified_polygon_population\
     .metadata_definitions import \
     ClassifiedPolygonHazardPopulationFunctionMetadata
@@ -25,21 +26,27 @@ from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator,
-    get_non_conflicting_attribute_name)
-from safe.common.tables import Table, TableRow
+    get_thousand_separator)
+from safe.impact_functions.core import no_population_impact_message
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import (
+    add_needs_parameters,
+    filter_needs_parameters)
+from safe.impact_reports.population_exposure_report_mixin import \
+    PopulationExposureReportMixin
+import safe.messaging as m
+from safe.messaging import styles
 
 
-class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
+class ClassifiedPolygonHazardPopulationFunction(
+        ClassifiedVHContinuousRE,
+        PopulationExposureReportMixin):
     """Impact Function for Classified Polygon on Population."""
 
     _metadata = ClassifiedPolygonHazardPopulationFunctionMetadata()
 
     def __init__(self):
         super(ClassifiedPolygonHazardPopulationFunction, self).__init__()
-        self.target_field = 'population'
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
         # AG: Use the proper minimum needs, update the parameters
@@ -48,15 +55,36 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
         self.question = ('In each of the hazard zones how many people '
                          'might be impacted.')
 
-    def run(self, layers=None):
+    def notes(self):
+        """Return the notes section of the report.
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: safe.messaging.Message
+        """
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        population = format_int(population_rounding(self.total_population))
+        checklist.add(tr(
+            'Total population in the analysis area: %s') % population)
+        checklist.add(tr(
+            '<sup>1</sup>People need evacuation if they are in a '
+            'hazard zone.'))
+        checklist.add(tr(
+            'Map shows population count in high, medium, and low '
+            'hazard areas.'))
+        checklist.add(tr(
+            'All values are rounded up to the nearest integer in '
+            'order to avoid representing human lives as fractions.'))
+        checklist.add(tr(
+            'Population rounding is applied to all population '
+            'values, which may cause discrepancies when adding values.'))
+        message.add(checklist)
+        return message
+
+    def run(self):
         """Run classified population evacuation Impact Function.
-
-        :param layers: List of layers expected to contain where two layers
-            should be present.
-
-            * hazard_layer: Vector polygon layer
-            * exposure_layer: Raster layer of population data on the same grid
-                as hazard_layer
 
         Counts number of people exposed to each hazard zones.
 
@@ -69,52 +97,42 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             * Exception - When hazard layer is not vector layer
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
-        # Parameters
-        hazard_zone_attribute = self.parameters['hazard zone attribute']
-
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard
-        exposure_layer = self.exposure
+        # Value from layer's keywords
+        self.hazard_class_attribute = self.hazard.keyword('field')
 
         # Input checks
-        if not hazard_layer.is_polygon_data:
-            msg = ('Input hazard must be a polygon layer. I got %s with '
-                   'layer type %s' % (hazard_layer.get_name(),
-                                      hazard_layer.get_geometry_name()))
+        msg = ('Input hazard must be a polygon layer. I got %s with '
+               'layer type %s' % (
+                   self.hazard.name, self.hazard.layer.get_geometry_name()))
+        if not self.hazard.layer.is_polygon_data:
             raise Exception(msg)
 
-        # Check if hazard_zone_attribute exists in hazard_layer
-        if hazard_zone_attribute not in hazard_layer.get_attribute_names():
+        # Check if hazard_class_attribute exists in hazard_layer
+        if (self.hazard_class_attribute not in
+                self.hazard.layer.get_attribute_names()):
             msg = ('Hazard data %s does not contain expected hazard '
                    'zone attribute "%s". Please change it in the option. ' %
-                   (hazard_layer.get_name(), hazard_zone_attribute))
+                   (self.hazard.name, self.hazard_class_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(msg)
 
         # Get unique hazard zones from the layer attribute
         self.hazard_zones = list(
-            set(hazard_layer.get_data(hazard_zone_attribute)))
-
-        # Find the target field name that has no conflict with default target
-        attribute_names = hazard_layer.get_attribute_names()
-        new_target_field = get_non_conflicting_attribute_name(
-            self.target_field, attribute_names)
-        self.target_field = new_target_field
+            set(self.hazard.layer.get_data(self.hazard_class_attribute)))
 
         # Interpolated layer represents grid cell that lies in the polygon
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
-                hazard_layer,
-                exposure_layer,
+                self.hazard.layer,
+                self.exposure.layer,
                 attribute_name=self.target_field
             )
 
         # Initialise total population affected by each hazard zone
-        affected_population = {}
         for hazard_zone in self.hazard_zones:
-            affected_population[hazard_zone] = 0
+            self.affected_population[hazard_zone] = 0
 
         # Count total affected population per hazard zone
         for row in interpolated_layer.get_data():
@@ -123,68 +141,29 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this hazard zone
-                hazard_zone = row[hazard_zone_attribute]
-                affected_population[hazard_zone] += population
+                hazard_zone = row[self.hazard_class_attribute]
+                self.affected_population[hazard_zone] += population
 
         # Count total population from exposure layer
-        total_population = population_rounding(
-            int(numpy.nansum(exposure_layer.get_data())))
+        self.total_population = int(
+            numpy.nansum(self.exposure.layer.get_data()))
 
         # Count total affected population
-        total_affected_population = reduce(
-            lambda x, y: x + y,
-            [population for population in affected_population.values()])
+        total_affected_population = self.total_affected_population
+        self.unaffected_population = (
+            self.total_population - total_affected_population)
+
+        self.minimum_needs = [
+            parameter.serialize() for parameter in
+            filter_needs_parameters(self.parameters['minimum needs'])
+        ]
 
         # check for zero impact
         if total_affected_population == 0:
-            table_body = [
-                self.question,
-                TableRow(
-                    [tr('People impacted'),
-                     '%s' % format_int(total_affected_population)],
-                    header=True)]
-            message = Table(table_body).toNewlineFreeString()
+            message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
-        # Generate impact report for the pdf map
-        blank_cell = ''
-        table_body = [
-            self.question,
-            TableRow(
-                [
-                    tr('People impacted'),
-                    '%s' % format_int(
-                        population_rounding(total_affected_population)),
-                    blank_cell],
-                header=True)]
-
-        for hazard_zone in self.hazard_zones:
-            table_body.append(
-                TableRow(
-                    [
-                        hazard_zone,
-                        format_int(
-                            population_rounding(
-                                affected_population[hazard_zone]))
-                    ]))
-
-        table_body.extend([
-            TableRow(tr(
-                'Map shows the number of people impacted in each of the '
-                'hazard zones.'))])
-
-        impact_table = Table(table_body).toNewlineFreeString()
-
-        # Extend impact report for on-screen display
-        table_body.extend(
-            [TableRow(tr('Notes'), header=True),
-             tr('Total population: %s in the exposure layer') % format_int(
-                 total_population),
-             tr('"nodata" values in the exposure layer are treated as 0 '
-                'when counting the affected or total population')]
-        )
-
-        impact_summary = Table(table_body).toNewlineFreeString()
+        impact_table = impact_summary = self.html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -231,10 +210,11 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
 
         # For printing map purpose
         map_title = tr('People impacted by each hazard zone')
-        legend_notes = tr('Thousand separator is represented by  %s' %
-                          get_thousand_separator())
-        legend_units = tr('(people per cell)')
         legend_title = tr('Population')
+        legend_units = tr('(people per cell)')
+        legend_notes = tr(
+            'Thousand separator is represented by  %s' %
+            get_thousand_separator())
 
         # Create vector layer and return
         impact_layer = Raster(
@@ -242,13 +222,14 @@ class ClassifiedPolygonHazardPopulationFunction(ImpactFunction):
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
             name=tr('People impacted by each hazard zone'),
-            keywords={'impact_summary': impact_summary,
-                      'impact_table': impact_table,
-                      'target_field': self.target_field,
-                      'map_title': map_title,
-                      'legend_notes': legend_notes,
-                      'legend_units': legend_units,
-                      'legend_title': legend_title},
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'target_field': self.target_field,
+                'map_title': map_title,
+                'legend_notes': legend_notes,
+                'legend_units': legend_units,
+                'legend_title': legend_title},
             style_info=style_info)
 
         self._impact = impact_layer

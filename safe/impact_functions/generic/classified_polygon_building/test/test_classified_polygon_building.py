@@ -19,8 +19,11 @@ import unittest
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.generic.classified_polygon_building.impact_function\
     import ClassifiedPolygonHazardBuildingFunction
-from safe.test.utilities import test_data_path
-from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
+from safe.test.utilities import get_qgis_app, test_data_path
+from qgis.core import QgsVectorLayer
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
@@ -37,13 +40,19 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
             'hazard', 'classified_generic_polygon.shp')
         building_path = test_data_path('exposure', 'buildings.shp')
 
-        hazard_layer = read_layer(generic_polygon_path)
-        exposure_layer = read_layer(building_path)
+        hazard_layer = QgsVectorLayer(generic_polygon_path, 'Hazard', 'ogr')
+        exposure_layer = QgsVectorLayer(building_path, 'Buildings', 'ogr')
+
+        # Let's set the extent to the hazard extent
+        extent = hazard_layer.extent()
+        rect_extent = [
+            extent.xMinimum(), extent.yMaximum(),
+            extent.xMaximum(), extent.yMinimum()]
 
         impact_function = ClassifiedPolygonHazardBuildingFunction.instance()
-        impact_function.hazard = hazard_layer
-        impact_function.exposure = exposure_layer
-        impact_function.parameters['hazard zone attribute'] = 'h_zone'
+        impact_function.hazard = SafeLayer(hazard_layer)
+        impact_function.exposure = SafeLayer(exposure_layer)
+        impact_function.requested_extent = rect_extent
         impact_function.run()
         impact_layer = impact_function.impact
 
@@ -54,14 +63,68 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
 
-        zone_sum = impact_layer.get_data(attribute='zone')
+        zone_sum = impact_layer.get_data(
+            attribute=impact_function.target_field)
         high_zone_count = zone_sum.count('High Hazard Zone')
         medium_zone_count = zone_sum.count('Medium Hazard Zone')
         low_zone_count = zone_sum.count('Low Hazard Zone')
         # The result
         expected_high_count = 11
         expected_medium_count = 161
-        expected_low_count = 0
+        expected_low_count = 2
+        message = 'Expecting %s for High Hazard Zone, but it returns %s' % (
+            high_zone_count, expected_high_count)
+        self.assertEqual(high_zone_count, expected_high_count, message)
+
+        message = 'Expecting %s for Medium Hazard Zone, but it returns %s' % (
+            expected_medium_count, medium_zone_count)
+        self.assertEqual(medium_zone_count, expected_medium_count, message)
+
+        message = 'Expecting %s for Low Hazard Zone, but it returns %s' % (
+            expected_low_count, low_zone_count)
+        self.assertEqual(expected_low_count, low_zone_count, message)
+
+    def test_run_point_exposure(self):
+        """Run the IF for point exposure.
+
+        See https://github.com/AIFDR/inasafe/issues/2156.
+        """
+        generic_polygon_path = test_data_path(
+            'hazard', 'classified_generic_polygon.shp')
+        building_path = test_data_path('exposure', 'building-points.shp')
+
+        hazard_layer = QgsVectorLayer(generic_polygon_path, 'Hazard', 'ogr')
+        exposure_layer = QgsVectorLayer(building_path, 'Buildings', 'ogr')
+
+        # Let's set the extent to the hazard extent
+        extent = hazard_layer.extent()
+        rect_extent = [
+            extent.xMinimum(), extent.yMaximum(),
+            extent.xMaximum(), extent.yMinimum()]
+
+        impact_function = ClassifiedPolygonHazardBuildingFunction.instance()
+        impact_function.hazard = SafeLayer(hazard_layer)
+        impact_function.exposure = SafeLayer(exposure_layer)
+        impact_function.requested_extent = rect_extent
+        impact_function.run()
+        impact_layer = impact_function.impact
+
+        # Check the question
+        expected_question = ('In each of the hazard zones how many buildings '
+                             'might be affected.')
+        message = 'The question should be %s, but it returns %s' % (
+            expected_question, impact_function.question)
+        self.assertEqual(expected_question, impact_function.question, message)
+
+        zone_sum = impact_layer.get_data(
+            attribute=impact_function.target_field)
+        high_zone_count = zone_sum.count('High Hazard Zone')
+        medium_zone_count = zone_sum.count('Medium Hazard Zone')
+        low_zone_count = zone_sum.count('Low Hazard Zone')
+        # The result
+        expected_high_count = 12
+        expected_medium_count = 172
+        expected_low_count = 3
         message = 'Expecting %s for High Hazard Zone, but it returns %s' % (
             high_zone_count, expected_high_count)
         self.assertEqual(high_zone_count, expected_high_count, message)
@@ -77,20 +140,20 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """TestGenericPolygonBuildingFunction: Test filtering IF"""
         hazard_keywords = {
-            'title': 'Generic Polygon',
-            'category': 'hazard',
-            'subcategory': 'earthquake',
-            'unit': 'classes',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'flood',
+            'hazard_category': 'multiple_event',
+            'vector_hazard_classification': 'generic_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'structure',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
-        }
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure',
+            }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)

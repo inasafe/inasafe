@@ -23,20 +23,19 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 import numpy
 import itertools
 
+from safe.impact_functions.bases.classified_rh_continuous_re import \
+    ClassifiedRHContinuousRE
 from safe.impact_functions.core import (
-    evacuated_population_needs,
     population_rounding,
     has_no_data)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
-    format_int,
     humanize_class,
     create_classes,
     create_label,
     get_thousand_separator)
 from safe.utilities.i18n import tr
-from safe.common.tables import Table, TableRow
-from safe.impact_functions.base import ImpactFunction
+from safe.impact_functions.core import no_population_impact_message
 from safe.impact_functions.generic.\
     classified_raster_population.metadata_definitions import \
     ClassifiedRasterHazardPopulationMetadata
@@ -45,9 +44,15 @@ from safe.impact_functions.impact_function_manager\
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
+from safe.impact_reports.population_exposure_report_mixin import \
+    PopulationExposureReportMixin
+import safe.messaging as m
+from safe.messaging import styles
 
 
-class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
+class ClassifiedRasterHazardPopulationFunction(
+        ClassifiedRHContinuousRE,
+        PopulationExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Plugin for impact of population as derived by classified hazard."""
 
@@ -59,81 +64,45 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
+        self.no_data_warning = False
 
-    def _tabulate(self, high, low, medium, minimum_needs, no_impact, question,
-                  total_impact):
-        # Generate impact report for the pdf map
-        table_body = [question,
-                      TableRow([tr('Total Population Affected '),
-                                '%s' % format_int(total_impact)],
-                               header=True),
-                      TableRow([tr('Population in High hazard class areas '),
-                                '%s' % format_int(high)]),
-                      TableRow([tr('Population in Medium hazard class areas '),
-                                '%s' % format_int(medium)]),
-                      TableRow([tr('Population in Low hazard class areas '),
-                                '%s' % format_int(low)]),
-                      TableRow([tr('Population Not Affected'),
-                                '%s' % format_int(no_impact)]),
-                      TableRow(
-                          tr('Table below shows the minimum needs for all '
-                             'evacuated people'))]
-        total_needs = evacuated_population_needs(
-            total_impact, minimum_needs)
-        for frequency, needs in total_needs.items():
-            table_body.append(TableRow(
-                [
-                    tr('Needs should be provided %s' % frequency),
-                    tr('Total')
-                ],
-                header=True))
-            for resource in needs:
-                table_body.append(TableRow([
-                    tr(resource['table name']),
-                    format_int(resource['amount'])]))
-        return table_body, total_needs
+    def notes(self):
+        """Return the notes section of the report.
 
-    def _tabulate_action_checklist(self, table_body, total, no_data_warning):
-        table_body.append(
-            TableRow(tr('Action Checklist:'), header=True))
-        table_body.append(
-            TableRow(tr('How will warnings be disseminated?')))
-        table_body.append(
-            TableRow(tr('How will we reach stranded people?')))
-        table_body.append(
-            TableRow(tr('Do we have enough relief items?')))
-        table_body.append(
-            TableRow(
-                tr('If yes, where are they located and how will we distribute '
-                   'them?')))
-        table_body.append(
-            TableRow(
-                tr('If no, where can we obtain additional relief items from '
-                   'and how will we transport them to here?')))
-        # Extend impact report for on-screen display
-        table_body.extend([
-            TableRow(tr('Notes'), header=True),
-            tr('Map shows the numbers of people in high, medium, and low '
-               'hazard class areas'),
-            tr('Total population: %s') % format_int(total)
-        ])
-        if no_data_warning:
-            table_body.extend([
-                tr('The layers contained `no data`. This missing data was '
-                   'carried through to the impact layer.'),
-                tr('`No data` values in the impact layer were treated as 0 '
-                   'when counting the affected or total population.')
-            ])
-        return table_body
+        :return: The notes that should be attached to this impact report.
+        :rtype: safe.messaging.Message
+        """
+        message = m.Message(style_class='container')
 
-    def run(self, layers=None):
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Total population in the analysis area: %s'
+            ) % population_rounding(self.total_population))
+        checklist.add(tr(
+            '<sup>1</sup>People need evacuation if they are in a '
+            'hazard zone.'))
+
+        if self.no_data_warning:
+            checklist.add(tr(
+                'The layers contained "no data" values. This missing data '
+                'was carried through to the impact layer.'))
+            checklist.add(tr(
+                '"No data" values in the impact layer were treated as 0 '
+                'when counting the affected or total population.'))
+        checklist.add(tr(
+            'All values are rounded up to the nearest integer in '
+            'order to avoid representing human lives as fractions.'))
+        checklist.add(tr(
+            'Population rounding is applied to all population '
+            'values, which may cause discrepancies when adding value.'))
+
+        message.add(checklist)
+        return message
+
+    def run(self):
         """Plugin for impact of population as derived by classified hazard.
-
-        Input
-        :param layers: List of layers expected to contain
-
-              * hazard_layer: Raster layer of classified hazard
-              * exposure_layer: Raster layer of population data
 
         Counts number of people exposed to each class of the hazard
 
@@ -142,13 +111,14 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
           Table with number of people in each class
         """
         self.validate()
-        self.prepare(layers)
+        self.prepare()
 
         # The 3 classes
         # TODO (3.2): shouldnt these be defined in keywords rather? TS
-        low_class = self.parameters['low_hazard_class']
-        medium_class = self.parameters['medium_hazard_class']
-        high_class = self.parameters['high_hazard_class']
+        categorical_hazards = self.parameters['Categorical hazards'].value
+        low_class = categorical_hazards[0].value
+        medium_class = categorical_hazards[1].value
+        high_class = categorical_hazards[2].value
 
         # The classes must be different to each other
         unique_classes_flag = all(
@@ -160,18 +130,13 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
                 'There is hazard class that has the same value with other '
                 'class. Please check the parameters.')
 
-        # Identify hazard and exposure layers
-        hazard_layer = self.hazard  # Classified Hazard
-        exposure_layer = self.exposure  # Population Raster
-
         # Extract data as numeric arrays
-        hazard_data = hazard_layer.get_data(nan=True)  # Class
-        no_data_warning = False
+        hazard_data = self.hazard.layer.get_data(nan=True)  # Class
         if has_no_data(hazard_data):
-            no_data_warning = True
+            self.no_data_warning = True
 
         # Calculate impact as population exposed to each class
-        population = exposure_layer.get_data(scaling=True)
+        population = self.exposure.layer.get_data(scaling=True)
 
         # Get all population data that falls in each hazard class
         high_hazard_population = numpy.where(
@@ -195,44 +160,31 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
             affected_population)
 
         # Count totals
-        total_population = int(numpy.nansum(population))
-        total_high_population = int(numpy.nansum(high_hazard_population))
-        total_medium_population = int(numpy.nansum(medium_hazard_population))
-        total_low_population = int(numpy.nansum(low_hazard_population))
-        total_affected = int(numpy.nansum(affected_population))
-        total_not_affected = total_population - total_affected
+        self.total_population = int(numpy.nansum(population))
+        self.affected_population[
+            tr('Population in High hazard class areas')] = int(
+                numpy.nansum(high_hazard_population))
+        self.affected_population[
+            tr('Population in Medium hazard class areas')] = int(
+                numpy.nansum(medium_hazard_population))
+        self.affected_population[
+            tr('Population in Low hazard class areas')] = int(
+                numpy.nansum(low_hazard_population))
+        self.unaffected_population = (
+            self.total_population - self.total_affected_population)
 
         # check for zero impact
-        if total_affected == 0:
-            table_body = [
-                self.question,
-                TableRow(
-                    [tr('People affected'),
-                     '%s' % format_int(total_affected)], header=True)]
-            message = Table(table_body).toNewlineFreeString()
+        if self.total_affected_population == 0:
+            message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
-        minimum_needs = [
+        self.minimum_needs = [
             parameter.serialize() for parameter in
             self.parameters['minimum needs']
         ]
 
-        table_body, total_needs = self._tabulate(
-            population_rounding(total_high_population),
-            population_rounding(total_low_population),
-            population_rounding(total_medium_population),
-            minimum_needs,
-            population_rounding(total_not_affected),
-            self.question,
-            population_rounding(total_affected))
-
-        impact_table = Table(table_body).toNewlineFreeString()
-
-        table_body = self._tabulate_action_checklist(
-            table_body,
-            population_rounding(total_population),
-            no_data_warning)
-        impact_summary = Table(table_body).toNewlineFreeString()
+        total_needs = self.total_needs
+        impact_table = impact_summary = self.html_report()
 
         # Create style
         colours = [
@@ -274,19 +226,19 @@ class ClassifiedRasterHazardPopulationFunction(ImpactFunction):
             style_type='rasterStyle')
 
         # For printing map purpose
-        map_title = tr('Population affected by each class')
+        map_title = tr('Number of people affected in each class')
+        legend_title = tr('Number of People')
+        legend_units = tr('(people per cell)')
         legend_notes = tr(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
-        legend_units = tr('(people per cell)')
-        legend_title = tr('Number of People')
 
         # Create raster object and return
         raster_layer = Raster(
             data=affected_population,
-            projection=exposure_layer.get_projection(),
-            geotransform=exposure_layer.get_geotransform(),
-            name=tr('Population which %s') % (
+            projection=self.exposure.layer.get_projection(),
+            geotransform=self.exposure.layer.get_geotransform(),
+            name=tr('People that might %s') % (
                 self.impact_function_manager
                 .get_function_title(self).lower()),
             keywords={

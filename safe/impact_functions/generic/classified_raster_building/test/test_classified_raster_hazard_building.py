@@ -15,7 +15,6 @@ __author__ = 'lucernae'
 __filename__ = 'test_classified_hazard_building'
 __date__ = '23/03/15'
 
-
 import unittest
 import math
 
@@ -25,6 +24,7 @@ from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.storage.core import read_layer
 from safe.test.utilities import test_data_path
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestClassifiedHazardBuildingFunction(unittest.TestCase):
@@ -43,8 +43,8 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
-        function.hazard = hazard_layer
-        function.exposure = exposure_layer
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact_layer = function.impact
         impact_data = impact_layer.get_data()
@@ -72,18 +72,20 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
-            'subcategory': 'flood',
-            'unit': 'classes',
-            'layer_type': 'raster',
-            'data_type': 'classified'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'raster',
+            'hazard': 'flood',
+            'hazard_category': 'multiple_event',
+            'raster_hazard_classification': 'generic_raster_hazard_classes'
         }
 
         exposure_keywords = {
-            'subcategory': 'structure',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'exposure': 'structure',
         }
-
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \

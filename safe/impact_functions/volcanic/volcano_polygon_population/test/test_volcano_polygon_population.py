@@ -22,6 +22,7 @@ from safe.impact_functions.volcanic.volcano_polygon_population\
     .impact_function import VolcanoPolygonPopulationFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
@@ -44,8 +45,8 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
         impact_function = VolcanoPolygonPopulationFunction.instance()
 
         # 2. Run merapi krb
-        impact_function.hazard = merapi_krb_layer
-        impact_function.exposure = population_layer
+        impact_function.hazard = SafeLayer(merapi_krb_layer)
+        impact_function.exposure = SafeLayer(population_layer)
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
@@ -62,18 +63,21 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
     def test_filter(self):
         """TestVolcanoPolygonPopulationFunction: Test filtering IF"""
         hazard_keywords = {
-            'category': 'hazard',
-            'subcategory': 'volcano',
-            'layer_type': 'vector',
-            'data_type': 'polygon'
+            'title': 'merapi',
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'polygon',
+            'hazard': 'volcano',
+            'hazard_category': 'multiple_event',
+            'vector_hazard_classification': 'volcano_vector_hazard_classes'
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous',
-            'unit': 'people_per_pixel'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(

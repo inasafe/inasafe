@@ -11,6 +11,7 @@ from safe.engine.core import calculate_impact
 from safe.engine.interpolation import (
     interpolate_polygon_raster,
     interpolate_raster_vector_points,
+    interpolate_polygon_points,
     assign_hazard_values_to_exposure_data,
     tag_polygons_by_grid)
 from safe.impact_functions import register_impact_functions
@@ -19,7 +20,7 @@ from safe.storage.core import (
     read_layer,
     write_vector_data,
     write_raster_data)
-from safe.storage.vector import Vector
+from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
 from safe.gis.polygon import (
     separate_points_by_polygon,
@@ -441,8 +442,9 @@ class TestEngine(unittest.TestCase):
         plugin_list = self.impact_function_manager.filter_by_metadata(
             'id', plugin_name)
         IF = plugin_list[0].instance()
-
-        calculate_impact(layers=[H, E], impact_function=IF)
+        IF.hazard = H
+        IF.exposure = E
+        calculate_impact(impact_function=IF)
 
         message = 'The user directory is empty : %s' % temp_directory
         assert os.listdir(temp_directory) != [], message
@@ -466,9 +468,9 @@ class TestEngine(unittest.TestCase):
 
         function_id = 'FloodRasterBuildingFunction'
         impact_function = self.impact_function_manager.get(function_id)
-        impact_vector = calculate_impact(
-            layers=[hazard_layer, exposure_layer],
-            impact_function=impact_function)
+        impact_function.hazard = hazard_layer
+        impact_function.exposure = exposure_layer
+        impact_vector = calculate_impact(impact_function=impact_function)
 
         self.assertEqual(
             impact_vector.get_keywords()['hazard_title'], hazard_title)
@@ -1712,17 +1714,16 @@ class TestEngine(unittest.TestCase):
 
             impact_function = self.impact_function_manager.get(
                 function_id)
-
+            impact_function.hazard = hazard_layer
+            impact_function.exposure = exposure_layer
             # Call impact calculation engine normally
-            calculate_impact(layers=[hazard_layer, exposure_layer],
-                             impact_function=impact_function)
+            calculate_impact(impact_function=impact_function)
 
             # Make keyword value empty and verify exception is raised
-            expected_category = exposure_layer.keywords['category']
-            exposure_layer.keywords['category'] = ''
+            expected_layer_purpose = exposure_layer.keywords['layer_purpose']
+            exposure_layer.keywords['layer_purpose'] = ''
             try:
-                calculate_impact(layers=[hazard_layer, exposure_layer],
-                                 impact_function=impact_function)
+                calculate_impact(impact_function=impact_function)
             except VerificationError, e:
                 # Check expected error message
                 assert 'No value found' in str(e)
@@ -1731,17 +1732,16 @@ class TestEngine(unittest.TestCase):
                 raise Exception(msg)
 
             # Restore for next test
-            exposure_layer.keywords['category'] = expected_category
+            exposure_layer.keywords['layer_purpose'] = expected_layer_purpose
 
             # Remove critical keywords and verify exception is raised
             if i == 0:
-                del hazard_layer.keywords['category']
+                del hazard_layer.keywords['layer_purpose']
             else:
-                del hazard_layer.keywords['subcategory']
+                del hazard_layer.keywords['layer_mode']
 
             try:
-                calculate_impact(layers=[hazard_layer, exposure_layer],
-                                 impact_function=impact_function)
+                calculate_impact(impact_function=impact_function)
             except VerificationError, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)
@@ -1876,6 +1876,47 @@ class TestEngine(unittest.TestCase):
         r = normal_cdf(numpy.log(10))
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
+
+    def test_conflicting_attribute_names(self):
+        """Test that hazard layer attribute names do not mask exposure layer.
+
+        This is based on observations in issues # 2090.
+        """
+        vector_file = ('%s/building_Maumere.shp' % TESTDATA)
+        layer = read_layer(vector_file)
+        layer_attributes = layer.get_data()
+        layer_geometry = layer.get_geometry()
+
+        # Cut down to make test quick
+        hazard_layer = Vector(
+            data=layer_attributes[790:800],
+            geometry=layer_geometry[790:800],
+            projection=layer.get_projection())
+
+        exposure_layer = Vector(
+            data=layer_attributes[690:700],
+            geometry=layer_geometry[790:800],
+            projection=layer.get_projection())
+        exposure_centroid_layer = convert_polygons_to_centroids(exposure_layer)
+
+        hazard_attributes = hazard_layer.get_attribute_names()
+        exposure_attributes = exposure_layer.get_attribute_names()
+
+        interpolated_layer = interpolate_polygon_points(
+            hazard_layer,
+            exposure_centroid_layer)
+
+        interpolated_attributes = interpolated_layer.get_attribute_names()
+        message = (
+            "Since the layers are based on the same layer, "
+            "the attributes should be the same.")
+        self.assertListEqual(hazard_attributes, exposure_attributes, message)
+        message = "All attributes should be copied. Plus 2 default attributes"
+        self.assertEqual(
+            len(hazard_attributes) + len(exposure_attributes) + 2,
+            len(interpolated_attributes),
+            message)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestEngine, 'test')

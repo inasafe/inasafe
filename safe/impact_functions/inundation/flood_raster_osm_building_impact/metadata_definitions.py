@@ -14,21 +14,27 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = "lucernae"
 
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    hazard_definition,
-    hazard_flood,
-    hazard_tsunami,
-    layer_vector_polygon,
-    exposure_definition,
-    exposure_structure,
-    unit_building_type_type,
-    unit_building_generic,
-    layer_vector_point, unit_metres_depth, unit_feet_depth,
-    layer_raster_continuous)
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_raster_osm_building_impact\
+    .parameter_definitions import threshold
 from safe.utilities.i18n import tr
+from safe.definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    layer_geometry_point,
+    layer_geometry_raster,
+    hazard_flood,
+    hazard_category_single_event,
+    hazard_category_multiple_event,
+    exposure_structure,
+    unit_metres,
+    unit_feet,
+    hazard_tsunami,
+    structure_class_field
+)
 
 
 class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
@@ -63,25 +69,12 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
             'overview': tr(
                 'To assess the impacts of (flood or tsunami) inundation '
                 'on building footprints originating from OpenStreetMap '
-                '(OSM).'),
+                '(OSM) with hazard in raster format.'),
             'detailed_description': tr(
                 'The inundation status is calculated for each building '
                 '(using the centroid if it is a polygon) based on the '
-                'hazard levels provided. if the hazard is given as a '
-                'raster a threshold of 1 meter is used. This is '
-                'configurable through the InaSAFE interface. If the '
-                'hazard is given as a vector polygon layer buildings are '
-                'considered to be impacted depending on the value of '
-                'hazard attributes (in order) affected" or "FLOODPRONE": '
-                'If a building is in a region that has attribute '
-                '"affected" set to True (or 1) it is impacted. If '
-                'attribute "affected" does not exist but "FLOODPRONE" '
-                'does, then the building is considered impacted if '
-                '"FLOODPRONE" is "yes". If neither affected" nor '
-                '"FLOODPRONE" is available, a building will be impacted '
-                'if it belongs to any polygon. The latter behaviour is '
-                'implemented through the attribute "inapolygon" which is '
-                'automatically assigned.'),
+                'flood threshold. The threshold can be configured in '
+                'impact function options.'),
             'hazard_input': tr(
                 'A hazard raster layer where each cell represents flood '
                 'depth (in meters).'),
@@ -96,39 +89,37 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                 'might be flooded.'),
             'limitations': [
                 tr('This function only flags buildings as impacted or not '
-                   'either based on a fixed threshold in case of raster '
-                   'hazard or the the attributes mentioned under input '
-                   'in case of vector hazard.')
+                   'either based on a fixed threshold')
             ],
             'citations': [],
-            'categories': {
+            'layer_requirements': {
                 'hazard': {
-                    'definition': hazard_definition,
-                    'subcategories': [
-                        hazard_flood,
-                        hazard_tsunami
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [
+                        hazard_category_single_event,
+                        hazard_category_multiple_event
                     ],
-                    'units': [
-                        unit_metres_depth,
-                        unit_feet_depth],
-                    'layer_constraints': [
-                        layer_raster_continuous,
-                        ]
+                    'hazard_types': [hazard_flood, hazard_tsunami],
+                    'continuous_hazard_units': [unit_feet, unit_metres],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
                 },
                 'exposure': {
-                    'definition': exposure_definition,
-                    'subcategories': [exposure_structure],
-                    'units': [
-                        unit_building_type_type,
-                        unit_building_generic],
-                    'layer_constraints': [
-                        layer_vector_polygon,
-                        layer_vector_point
-                    ]
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [
+                        layer_geometry_point,
+                        layer_geometry_polygon
+                    ],
+                    'exposure_types': [exposure_structure],
+                    'exposure_units': [],
+                    'exposure_class_fields': [structure_class_field],
+                    'additional_keywords': []
                 }
             },
             'parameters': OrderedDict([
-                ('threshold [m]', 1.0),
+                ('threshold', threshold()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))

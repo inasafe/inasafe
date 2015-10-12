@@ -168,10 +168,15 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[category: hazard
+<![CDATA[hazard: volcano
+hazard_category: multiple_event
+keyword_version: 3.2
+layer_geometry: point
+layer_mode: classified
+layer_purpose: hazard
 source: smithsonian
-subcategory: volcano
 title: Volcano Point
+volcano_name_field: NAME
 ]]>
 </inasafe_keywords>
             </gmd:supplementalInformation>

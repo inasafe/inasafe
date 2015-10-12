@@ -22,6 +22,7 @@ from safe.impact_functions.volcanic.volcano_point_population\
     .impact_function import VolcanoPointPopulationFunction
 from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
+from safe.storage.safe_layer import SafeLayer
 
 
 class TestVolcanoPointPopulationFunction(unittest.TestCase):
@@ -44,8 +45,8 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
         impact_function = VolcanoPointPopulationFunction.instance()
 
         # Run merapi point
-        impact_function.hazard = merapi_point_layer
-        impact_function.exposure = population_layer
+        impact_function.hazard = SafeLayer(merapi_point_layer)
+        impact_function.exposure = SafeLayer(population_layer)
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
@@ -65,20 +66,20 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
     def test_filter(self):
         """TestVolcanoPointPopulationFunction: Test filtering IF"""
         hazard_keywords = {
-            'category': 'hazard',
-            'subcategory': 'volcano',
-            'layer_type': 'vector',
-            'data_type': 'point'
+            'layer_purpose': 'hazard',
+            'layer_mode': 'classified',
+            'layer_geometry': 'point',
+            'hazard': 'volcano',
+            'hazard_category': 'multiple_event',
         }
 
         exposure_keywords = {
-            'category': 'exposure',
-            'subcategory': 'population',
-            'layer_type': 'raster',
-            'data_type': 'continuous',
-            'unit': 'people_per_pixel'
+            'layer_purpose': 'exposure',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'exposure': 'population',
+            'exposure_unit': 'count'
         }
-
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)
         message = 'There should be 1 impact function, but there are: %s' % \
