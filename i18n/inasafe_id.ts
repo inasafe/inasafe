@@ -1254,6 +1254,11 @@
         <translation>Tidak Tersedia</translation>
     </message>
     <message>
+        <location filename="impact_function.py" line="334"/>
+        <source>The minimal threshold is greater then the maximal specified threshold. Please check the values.</source>
+        <translation>Ambang batas minimal lebih besar dari ambang batas maksimal yang ditentukan. Silahkan cek kembali nilai tersebut.</translation>
+    </message>
+    <message>
         <location filename="road_exposure_report_mixin.py" line="115"/>
         <source>Road Type</source>
         <translation>Jenis Jalan</translation>
@@ -2124,35 +2129,35 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>yang menunjukan Distrika (distrik) di</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2509"/>
+        <location filename="wizard_dialog.py" line="2508"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the %s for hazard if needed)</source>
         <translation>Saya ingin menggunakan lapisan ancaman yang telah dimuat di QGIS
 (munculkan %s untuk ancaman jika diperlukan)</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2516"/>
+        <location filename="wizard_dialog.py" line="2515"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation>Saya ingin menggunakan lapisan ancaman yang telah dimuat di QGIS
 (tidak ditemukan lapisan yang sesuai)</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3124"/>
+        <location filename="wizard_dialog.py" line="3122"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the %s for exposure if needed)</source>
         <translation>Saya ingin menggunakan lapisan keterpaparan yang telah dimuat di QGIS
 (munculkan %s untuk keterpaparan jika diperlukan)</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3133"/>
+        <location filename="wizard_dialog.py" line="3131"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation>Saya ingin menggunakan lapisan keterpaparan yang telah dimuat di QGIS
 (tidak ditemuakn lapisan yang sesuai)</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3315"/>
+        <location filename="wizard_dialog.py" line="3313"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation>Saya ingin menggunakan lapisan agregasi yang telah dimuat di QGIS
@@ -3248,7 +3253,7 @@ Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua o
         <translation>Diagnosa</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3307"/>
+        <location filename="wizard_dialog.py" line="3305"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the %s for aggregation if needed)</source>
         <translation>Saya ingin menggunakan lapisan agregasi yang telah dimuat di QGIS
@@ -3856,11 +3861,6 @@ Tipe data ancaman ini menunjukkan lokasi-lokasi yang mungkin terdampak oleh letu
         <location filename="population_exposure_report_mixin.py" line="165"/>
         <source>Relief items to be provided %s</source>
         <translation>Barang bantuan yang perlu disediakan %s</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="334"/>
-        <source>The minimal threshold is greater than the maximal specified threshold. Please check the values.</source>
-        <translation>Ambang batas minimal lebih besar dari ambang batas maksimal yang ditentukan. Silahkan cek kembali nilai tersebut.</translation>
     </message>
 </context>
 <context>
@@ -6820,22 +6820,22 @@ p, li { white-space: pre-wrap; }
         <translation>Nilai unik: %s</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3777"/>
+        <location filename="wizard_dialog.py" line="3775"/>
         <source>Finish</source>
         <translation>Selesai</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3939"/>
+        <location filename="wizard_dialog.py" line="3937"/>
         <source>Next</source>
         <translation>Lanjut</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4433"/>
+        <location filename="wizard_dialog.py" line="4431"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4433"/>
+        <location filename="wizard_dialog.py" line="4431"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation>Terjadi kesalahan saat penyimpanan kata kunci (keyword):
@@ -6847,72 +6847,72 @@ p, li { white-space: pre-wrap; }
         <translation>Pergunakan default</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4455"/>
+        <location filename="wizard_dialog.py" line="4453"/>
         <source>Title of the layer.</source>
         <translation>Judul layer.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4456"/>
+        <location filename="wizard_dialog.py" line="4454"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation>Silahkan catat siapa yang memiliki layer ini, misalnya OpenStreetMap</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4459"/>
+        <location filename="wizard_dialog.py" line="4457"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation>Kapan data ini dikumpulkan atau didownload, misalnya 1-Mei-2014</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4461"/>
+        <location filename="wizard_dialog.py" line="4459"/>
         <source>What is the scale of this layer?</source>
         <translation>Apa skala dari layer ini?</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4462"/>
+        <location filename="wizard_dialog.py" line="4460"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
         <translation>Apakah pemilik layer memiliki situs sendiri misalnya www.openstreetmap.org</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3819"/>
+        <location filename="wizard_dialog.py" line="3817"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation>Jumlah dari rasio umur default adalah %s dan lebih dari 1. Silahkan atur rasio umur default sehingga mereka tidak lebih dari 1.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3644"/>
+        <location filename="wizard_dialog.py" line="3642"/>
         <source>no aggregation</source>
         <translation>tanpa agregasi</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3779"/>
+        <location filename="wizard_dialog.py" line="3777"/>
         <source>Run</source>
         <translation>Hitung</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3646"/>
+        <location filename="wizard_dialog.py" line="3644"/>
         <source>Please ensure the following information is correct and press Run.</source>
         <translation>Pastikan informasi berikut benar dan tekan Jalan.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3651"/>
+        <location filename="wizard_dialog.py" line="3649"/>
         <source>impact function</source>
         <translation>fungsi dampak</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3651"/>
+        <location filename="wizard_dialog.py" line="3649"/>
         <source>hazard layer</source>
         <translation>layer ancaman</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3651"/>
+        <location filename="wizard_dialog.py" line="3649"/>
         <source>exposure layer</source>
         <translation>layer keterpaparan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3651"/>
+        <location filename="wizard_dialog.py" line="3649"/>
         <source>aggregation layer</source>
         <translation>layer agregasi</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3530"/>
+        <location filename="wizard_dialog.py" line="3528"/>
         <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
         <translation>Silahkan set parameter fungsi dampak.&lt;br/&gt;Parameter untuk fungsi dampak &quot;%s&quot; yang dapat dimodifikasi adalah:</translation>
     </message>
@@ -6927,32 +6927,32 @@ p, li { white-space: pre-wrap; }
         <translation>Wizard pembuat keyword untuk layer &lt;b&gt;%s&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2749"/>
+        <location filename="wizard_dialog.py" line="2748"/>
         <source>Hazard</source>
         <translation>Ancaman</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2753"/>
+        <location filename="wizard_dialog.py" line="2752"/>
         <source>Exposure</source>
         <translation>Keterpaparan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2761"/>
+        <location filename="wizard_dialog.py" line="2760"/>
         <source>classified data</source>
         <translation>data terklasifikasi</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2763"/>
+        <location filename="wizard_dialog.py" line="2762"/>
         <source>Unit</source>
         <translation>Satuan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3578"/>
+        <location filename="wizard_dialog.py" line="3576"/>
         <source>Enabled</source>
         <translation>Aktif</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3578"/>
+        <location filename="wizard_dialog.py" line="3576"/>
         <source>Disabled</source>
         <translation>Tidak aktif</translation>
     </message>
@@ -6977,82 +6977,82 @@ p, li { white-space: pre-wrap; }
         <translation>Ikhtisar</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2774"/>
+        <location filename="wizard_dialog.py" line="2773"/>
         <source>Title</source>
         <translation>Judul</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2956"/>
+        <location filename="wizard_dialog.py" line="2955"/>
         <source>Purpose</source>
         <translation>Tujuan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2774"/>
+        <location filename="wizard_dialog.py" line="2773"/>
         <source>Source</source>
         <translation>Sumber</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2781"/>
+        <location filename="wizard_dialog.py" line="2780"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign key words now.</source>
         <translation>Versi kata kunci lapisan Anda (%s) tidak cocok dengan versi InaSAFE Anda (%s). Jika Anda ingin menggunakannya sebagai lapisan keterpaparan, ancaman, atau agregasi di analisis, silahkan perbarui kata kuncinya. Klik Lanjut untuk memberikan kata kunci sekarang.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2806"/>
+        <location filename="wizard_dialog.py" line="2805"/>
         <source>This layer has no valid keywords assigned</source>
         <translation>Lapisan ini tidak memiliki kata kunci yang valid</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2806"/>
+        <location filename="wizard_dialog.py" line="2805"/>
         <source>SOURCE</source>
         <translation>SUMBER</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2806"/>
+        <location filename="wizard_dialog.py" line="2805"/>
         <source>TYPE</source>
         <translation>TIPE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2806"/>
+        <location filename="wizard_dialog.py" line="2805"/>
         <source>In the next step you will be able to assign keywords to this layer.</source>
         <translation>Di langkah selanjutnya Anda akan bisa memberikan kata kunci untuk lapisan ini.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2956"/>
+        <location filename="wizard_dialog.py" line="2955"/>
         <source>Layer</source>
         <translation>Lapisan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2956"/>
+        <location filename="wizard_dialog.py" line="2955"/>
         <source>Required</source>
         <translation>Diperlukan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2956"/>
+        <location filename="wizard_dialog.py" line="2955"/>
         <source>Geometry</source>
         <translation>Geometri</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2956"/>
+        <location filename="wizard_dialog.py" line="2955"/>
         <source>Layer mode</source>
         <translation>Mode lapisan</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3033"/>
+        <location filename="wizard_dialog.py" line="3032"/>
         <source>Not a valid layer.</source>
         <translation>Tidak ada lapisan yang valid.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3053"/>
+        <location filename="wizard_dialog.py" line="3051"/>
         <source>This layer&apos;s keywords or type are not suitable:</source>
         <translation>Kata kunci  atau tipe lapisan ini tidak sesuai:</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3749"/>
+        <location filename="wizard_dialog.py" line="3747"/>
         <source>Running analysis...</source>
         <translation>Menjalankan analisis...</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3464"/>
+        <location filename="wizard_dialog.py" line="3462"/>
         <source>Please specify extent of your analysis:</source>
         <translation>Mohon tentukan luasan analisis Anda:</translation>
     </message>

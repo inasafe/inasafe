@@ -112,7 +112,10 @@ from safe.gui.tools.wizard_strings import (
     allow_resampling_question,
     field_question_subcategory_unit,
     field_question_subcategory_classified,
+<<<<<<< HEAD
     field_question_subcategory_classified_id,
+=======
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
     field_question_aggregation,
     classification_question,
     classify_vector_question,
@@ -161,6 +164,7 @@ step_kw_layermode = 4
 step_kw_unit = 5
 step_kw_classification = 6
 step_kw_field = 7
+<<<<<<< HEAD
 step_kw_id_field = 8
 step_kw_resample = 9
 step_kw_classify = 10
@@ -187,6 +191,33 @@ step_fc_extent_disjoint = 30
 step_fc_params = 31
 step_fc_summary = 32
 step_fc_analysis = 33
+=======
+step_kw_resample = 8
+step_kw_classify = 9
+step_kw_extrakeywords = 10
+step_kw_aggregation = 11
+step_kw_source = 12
+step_kw_title = 13
+step_fc_function_1 = 14
+step_fc_function_2 = 15
+step_fc_function_3 = 16
+step_fc_hazlayer_origin = 17
+step_fc_hazlayer_from_canvas = 18
+step_fc_hazlayer_from_browser = 19
+step_fc_explayer_origin = 20
+step_fc_explayer_from_canvas = 21
+step_fc_explayer_from_browser = 22
+step_fc_disjoint_layers = 23
+step_fc_agglayer_origin = 24
+step_fc_agglayer_from_canvas = 25
+step_fc_agglayer_from_browser = 26
+step_fc_agglayer_disjoint = 27
+step_fc_extent = 28
+step_fc_extent_disjoint = 29
+step_fc_params = 30
+step_fc_summary = 31
+step_fc_analysis = 32
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
 
 
 # Aggregations' keywords
@@ -458,6 +489,7 @@ class WizardDialog(QDialog, FORM_CLASS):
     # pylint: disable=unused-argument
     def resizeEvent(self, ev):
         """Trigger MessageViewer size update on window resize
+<<<<<<< HEAD
 
         .. note:: This is an automatic Qt slot
            executed when the window size changes.
@@ -469,6 +501,19 @@ class WizardDialog(QDialog, FORM_CLASS):
     def purposes_for_layer(self):
         """Return a list of valid purposes for the current layer.
 
+=======
+
+        .. note:: This is an automatic Qt slot
+           executed when the window size changes.
+        """
+        pass
+        # self.update_MessageViewer_size()
+    # pylint: disable=unused-argument
+
+    def purposes_for_layer(self):
+        """Return a list of valid purposes for the current layer.
+
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
         :returns: A list where each value represents a valid purpose.
         :rtype: list
         """
@@ -565,6 +610,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             return self.impact_function_manager.hazard_additional_keywords(
                 layer_mode_key, layer_geometry_key,
                 hazard_category_key, hazard_key)
+<<<<<<< HEAD
         else:
             exposure_key = self.selected_subcategory()['key']
             return self.impact_function_manager.exposure_additional_keywords(
@@ -588,6 +634,31 @@ class WizardDialog(QDialog, FORM_CLASS):
                 # No field for classified point hazards
                 return ''
         else:
+=======
+        else:
+            exposure_key = self.selected_subcategory()['key']
+            return self.impact_function_manager.exposure_additional_keywords(
+                layer_mode_key, layer_geometry_key, exposure_key)
+
+    def field_keyword_for_the_layer(self):
+        """Return the proper keyword for field for the current layer.
+        Expected values are: 'field', 'structure_class_field', road_class_field
+
+        :returns: the field keyword
+        :rtype: string
+        """
+
+        if self.selected_category() == layer_purpose_aggregation:
+            # purpose: aggregation
+            return 'aggregation attribute'
+        elif self.selected_category() == layer_purpose_hazard:
+            # purpose: hazard
+            if (self.selected_layermode() == layer_mode_classified and
+                    is_point_layer(self.layer)):
+                # No field for classified point hazards
+                return ''
+        else:
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
             # purpose: exposure
             layer_mode_key = self.selected_layermode()['key']
             layer_geometry_key = self.get_layer_geometry_id()
@@ -1180,6 +1251,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         subcategory = self.selected_subcategory()
         unit = self.selected_unit()
         if category == layer_purpose_aggregation:
+<<<<<<< HEAD
             question_text = field_question_aggregation
         elif self.selected_layermode() == layer_mode_continuous and unit:
             # unique values, continuous or categorical data
@@ -1236,6 +1308,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         subcategory = self.selected_subcategory()
         unit = self.selected_unit()
         if category == layer_purpose_aggregation:
+=======
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
             question_text = field_question_aggregation
         elif self.selected_layermode() == layer_mode_continuous and unit:
             # unique values, continuous or categorical data
@@ -1247,7 +1321,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 unit['name'],
                 subcategory_unit_relation)
         else:
+<<<<<<< HEAD
             question_text = field_question_subcategory_classified_id % (
+=======
+            question_text = field_question_subcategory_classified % (
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
                 subcategory['name'])
         self.lblSelectField.setText(question_text)
         self.lstFields.clear()
@@ -1536,7 +1614,11 @@ class WizardDialog(QDialog, FORM_CLASS):
     # noinspection PyPep8Naming
     def on_cboExtraKeyword3_currentIndexChanged(self, indx):
         """This is an automatic Qt slot executed when the
+<<<<<<< HEAD
            3rd extra self.stackedWidgetkeyword combobox selection changes.
+=======
+           3rd extra keyword combobox selection changes.
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
 
         :param indx: The new index.
         :type indx: int or str
@@ -2503,8 +2585,13 @@ class WizardDialog(QDialog, FORM_CLASS):
         for layer in self.iface.mapCanvas().layers():
             try:
                 keywords = self.keyword_io.read_keywords(layer)
+<<<<<<< HEAD
                 if ('layer_purpose' not in keywords and
                             'impact_summary' not in keywords):
+=======
+                if ('layer_purpose' not in keywords
+                        and 'impact_summary' not in keywords):
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
                     keywords = None
             except (HashNotFoundError,
                     OperationalError,
@@ -3080,8 +3167,13 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
+<<<<<<< HEAD
             if ('layer_purpose' not in keywords and
                         'impact_summary' not in keywords):
+=======
+            if ('layer_purpose' not in keywords
+                    and 'impact_summary' not in keywords):
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
                 keywords = None
         except (HashNotFoundError,
                 OperationalError,
@@ -4128,9 +4220,13 @@ class WizardDialog(QDialog, FORM_CLASS):
                     self.classifications_for_layer():
                 new_step = step_kw_classify
             else:
+<<<<<<< HEAD
                 new_step = step_kw_id_field
         elif current_step == step_kw_id_field:
             new_step = step_kw_extrakeywords
+=======
+                new_step = step_kw_extrakeywords
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
         elif current_step == step_kw_resample:
             new_step = step_kw_extrakeywords
         elif current_step == step_kw_classify:
@@ -4275,8 +4371,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_classification
             else:
                 new_step = step_kw_layermode
+<<<<<<< HEAD
         elif current_step == step_kw_id_field:
             new_step = step_kw_field
+=======
+>>>>>>> e312429405a5d09aa57c3f0eb20ae2880c17ab9d
         elif current_step == step_kw_resample:
             new_step = step_kw_unit
         elif current_step == step_kw_classify:

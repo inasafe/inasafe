@@ -1254,6 +1254,11 @@
         <translation>S/A</translation>
     </message>
     <message>
+        <location filename="impact_function.py" line="334"/>
+        <source>The minimal threshold is greater then the maximal specified threshold. Please check the values.</source>
+        <translation>The umbral mínimo es superior que el máximo especificado. Por favor verifique los valores.</translation>
+    </message>
+    <message>
         <location filename="road_exposure_report_mixin.py" line="115"/>
         <source>Road Type</source>
         <translation>Tipo de camino</translation>
@@ -2117,31 +2122,31 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation>el cual representa Distrika (districtos) en</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2509"/>
+        <location filename="wizard_dialog.py" line="2508"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the %s for hazard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2516"/>
+        <location filename="wizard_dialog.py" line="2515"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3124"/>
+        <location filename="wizard_dialog.py" line="3122"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the %s for exposure if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3133"/>
+        <location filename="wizard_dialog.py" line="3131"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3315"/>
+        <location filename="wizard_dialog.py" line="3313"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
@@ -3232,7 +3237,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation>Diagnósticos</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3307"/>
+        <location filename="wizard_dialog.py" line="3305"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the %s for aggregation if needed)</source>
         <translation type="unfinished"/>
@@ -3836,11 +3841,6 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="population_exposure_report_mixin.py" line="165"/>
         <source>Relief items to be provided %s</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="334"/>
-        <source>The minimal threshold is greater than the maximal specified threshold. Please check the values.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6784,22 +6784,22 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3777"/>
+        <location filename="wizard_dialog.py" line="3775"/>
         <source>Finish</source>
         <translation>Final</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3939"/>
+        <location filename="wizard_dialog.py" line="3937"/>
         <source>Next</source>
         <translation>Próximo</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4433"/>
+        <location filename="wizard_dialog.py" line="4431"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4433"/>
+        <location filename="wizard_dialog.py" line="4431"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished"/>
@@ -6810,72 +6810,72 @@ p, li { white-space: pre-wrap; }
         <translation>Usar predeterminado</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4455"/>
+        <location filename="wizard_dialog.py" line="4453"/>
         <source>Title of the layer.</source>
         <translation>Título de la capa.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4456"/>
+        <location filename="wizard_dialog.py" line="4454"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4459"/>
+        <location filename="wizard_dialog.py" line="4457"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4461"/>
+        <location filename="wizard_dialog.py" line="4459"/>
         <source>What is the scale of this layer?</source>
         <translation>¿Cuál es la escala de esta capa?</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4462"/>
+        <location filename="wizard_dialog.py" line="4460"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
         <translation>¿Poseen los custodios su propio sitio de internet, p. ej.: www.openstreetmap.org?</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3819"/>
+        <location filename="wizard_dialog.py" line="3817"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3644"/>
+        <location filename="wizard_dialog.py" line="3642"/>
         <source>no aggregation</source>
         <translation>Sin agregado</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3779"/>
+        <location filename="wizard_dialog.py" line="3777"/>
         <source>Run</source>
         <translation>Ejecutar</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3646"/>
+        <location filename="wizard_dialog.py" line="3644"/>
         <source>Please ensure the following information is correct and press Run.</source>
         <translation>Por favor asegúrese que la siguiente información es correcta y presione Ejecutar.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3651"/>
+        <location filename="wizard_dialog.py" line="3649"/>
         <source>impact function</source>
         <translation>función de impacto</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3651"/>
+        <location filename="wizard_dialog.py" line="3649"/>
         <source>hazard layer</source>
         <translation>capa peligro</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3651"/>
+        <location filename="wizard_dialog.py" line="3649"/>
         <source>exposure layer</source>
         <translation>capa exposición</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3651"/>
+        <location filename="wizard_dialog.py" line="3649"/>
         <source>aggregation layer</source>
         <translation>capa de agregado</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3530"/>
+        <location filename="wizard_dialog.py" line="3528"/>
         <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
         <translation type="unfinished"/>
     </message>
@@ -6890,32 +6890,32 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2749"/>
+        <location filename="wizard_dialog.py" line="2748"/>
         <source>Hazard</source>
         <translation>Peligro</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2753"/>
+        <location filename="wizard_dialog.py" line="2752"/>
         <source>Exposure</source>
         <translation>Exposición</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2761"/>
+        <location filename="wizard_dialog.py" line="2760"/>
         <source>classified data</source>
         <translation>información clasificada</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2763"/>
+        <location filename="wizard_dialog.py" line="2762"/>
         <source>Unit</source>
         <translation>Unidad</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3578"/>
+        <location filename="wizard_dialog.py" line="3576"/>
         <source>Enabled</source>
         <translation>Habilitado</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3578"/>
+        <location filename="wizard_dialog.py" line="3576"/>
         <source>Disabled</source>
         <translation>Deshabilitado</translation>
     </message>
@@ -6940,82 +6940,82 @@ p, li { white-space: pre-wrap; }
         <translation>Información general</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2774"/>
+        <location filename="wizard_dialog.py" line="2773"/>
         <source>Title</source>
         <translation>Título</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2956"/>
+        <location filename="wizard_dialog.py" line="2955"/>
         <source>Purpose</source>
         <translation>Propósito</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2774"/>
+        <location filename="wizard_dialog.py" line="2773"/>
         <source>Source</source>
         <translation>Fuente</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2781"/>
+        <location filename="wizard_dialog.py" line="2780"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign key words now.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2806"/>
+        <location filename="wizard_dialog.py" line="2805"/>
         <source>This layer has no valid keywords assigned</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2806"/>
+        <location filename="wizard_dialog.py" line="2805"/>
         <source>SOURCE</source>
         <translation>FUENTE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2806"/>
+        <location filename="wizard_dialog.py" line="2805"/>
         <source>TYPE</source>
         <translation>TIPO</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2806"/>
+        <location filename="wizard_dialog.py" line="2805"/>
         <source>In the next step you will be able to assign keywords to this layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2956"/>
+        <location filename="wizard_dialog.py" line="2955"/>
         <source>Layer</source>
         <translation>Capa</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2956"/>
+        <location filename="wizard_dialog.py" line="2955"/>
         <source>Required</source>
         <translation>Necesario</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2956"/>
+        <location filename="wizard_dialog.py" line="2955"/>
         <source>Geometry</source>
         <translation>Geometría</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2956"/>
+        <location filename="wizard_dialog.py" line="2955"/>
         <source>Layer mode</source>
         <translation>Modo capa</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3033"/>
+        <location filename="wizard_dialog.py" line="3032"/>
         <source>Not a valid layer.</source>
         <translation>No es una capa válida.</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3053"/>
+        <location filename="wizard_dialog.py" line="3051"/>
         <source>This layer&apos;s keywords or type are not suitable:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3749"/>
+        <location filename="wizard_dialog.py" line="3747"/>
         <source>Running analysis...</source>
         <translation>Ejecutando análisis...</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3464"/>
+        <location filename="wizard_dialog.py" line="3462"/>
         <source>Please specify extent of your analysis:</source>
         <translation type="unfinished"/>
     </message>
