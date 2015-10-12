@@ -1225,13 +1225,10 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.lstFields.setCurrentRow(fields.index(field))
         self.auto_select_one_item(self.lstFields)
 
-
-
     # ===========================
     # STEP_KW_ID_FIELD
     # ===========================
 
-    # noinspection PyPep8Naming
     def set_widgets_step_kw_id_field(self):
         """Set widgets on the Field tab."""
         self.treeClasses.clear()
@@ -1539,7 +1536,7 @@ class WizardDialog(QDialog, FORM_CLASS):
     # noinspection PyPep8Naming
     def on_cboExtraKeyword3_currentIndexChanged(self, indx):
         """This is an automatic Qt slot executed when the
-           3rd extra keyword combobox selection changes.
+           3rd extra self.stackedWidgetkeyword combobox selection changes.
 
         :param indx: The new index.
         :type indx: int or str
@@ -4014,8 +4011,6 @@ class WizardDialog(QDialog, FORM_CLASS):
             return bool(self.selected_classification())
         if step == step_kw_field:
             return bool(self.selected_field() or not self.lstFields.count())
-        if step == step_kw_id_field:
-            return bool(self.selected_field() or not self.lstFields.count())
         if step == step_kw_resample:
             return True
         if step == step_kw_classify:
@@ -4084,8 +4079,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         :returns: The next step number or None if finished.
         :rtype: int
         """
-        new_step = None
-
         if current_step == step_kw_category:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_field
@@ -4227,7 +4220,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         elif current_step in [step_fc_function_1, step_fc_function_2,
                               step_fc_function_3,
                               step_fc_params, step_fc_summary]:
-                new_step = current_step + 1
+            new_step = current_step + 1
         elif current_step == step_fc_analysis:
             new_step = None  # Wizard complete
 
