@@ -876,8 +876,8 @@ class WizardDialogTest(unittest.TestCase):
         message = 'It should auto select, but it does not.'
         self.assertTrue(dialog.lstSubcategories.currentRow() == 0, message)
         num_item = dialog.lstSubcategories.count()
-        message = 'There is should be only one item, I got %s' % num_item
-        self.assertTrue(num_item == 1, message)
+        message = 'There are should be only two items, I got %s' % num_item
+        self.assertTrue(num_item == 2, message)
 
     def test_integrated_point(self):
         """Test for point layer and all possibilities."""
@@ -1155,7 +1155,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure']
+        expected_subcategories = ['Structure', 'Area']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if automatically select the only option
@@ -1408,7 +1408,8 @@ class WizardDialogTest(unittest.TestCase):
         expected_test_layer_count = 2
 
         expected_hazards_count = 5
-        expected_exposures_count = 3
+        # expected_exposures_count = 3
+        expected_exposures_count = 4
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 2
         expected_functions_count = 2
