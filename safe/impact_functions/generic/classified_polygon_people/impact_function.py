@@ -35,15 +35,21 @@ from PyQt4.QtGui import QColor
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.common.utilities import unique_filename
-from safe.common.tables import Table, TableRow
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.impact_functions.generic.classified_polygon_people\
     .metadata_definitions \
     import ClassifiedPolygonHazardPolygonPeopleFunctionMetadata
 
+from safe.impact_reports.area_exposure_report_mixin import \
+    AreaExposureReportMixin
+import safe.messaging as m
+from safe.messaging import styles
+from safe.impact_functions.core import no_population_impact_message
+from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
-class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE):
+class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE,
+                                                   AreaExposureReportMixin):
 
     _metadata = ClassifiedPolygonHazardPolygonPeopleFunctionMetadata()
 
@@ -206,29 +212,14 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE):
         # Generate the report of affected areas
         total_affected_area = round(sum(imp_areas.values()), 1)
         total_area = round(sum(all_areas.values()), 1)
-        total_population = sum(all_areas_population.values())
-        table_body = [
-            self.question,
-            TableRow(
-                [tr('Area id'),
-                 tr('Affected Area (ha)'),
-                 tr('Affected Area (%)'),
-                 tr('Total (ha)'),
-                 tr('Affected People'),
-                 tr('Affected People(%)'),
-                 tr('Total Number of People')],
-                header=True),
-            TableRow(
-                [tr('All'),
-                 total_affected_area,
-                 "%.0f%%" % ((total_affected_area / total_area) \
-                                 if total_area != 0 else 0 * 100),
-                 total_area, tr(''), tr(''), tr(''),
-                 total_population]),
-
-            TableRow(tr('Breakdown by Area'), header=True)]
+        self.total_population = sum(all_areas_population.values())
 
         areas_affected_ratio = {}
+
+        # Initialize all the affected area population
+        for area_id in all_areas_ids.iteritems():
+            self.affected_population[area_id] = 0
+
         # Assigning percentages to the affected areas
         for t, v in all_areas_ids.iteritems():
 
@@ -241,21 +232,24 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE):
 
             # rounding to float without decimal, we can't have number of people with decimal
             number_people_affected = round(number_people_affected,0)
+
+            self.affected_population[t] = number_people_affected
+
             percent_people_affected = ((number_people_affected / all_areas_population[t]) \
                                       if all_areas_population[t] != 0 else 0) * 100
             affected *= 1e8
             single_total_area *= 1e8
-            table_body.append(
 
-                TableRow([t,"%.0f" % affected, "%.0f%%" % percent_affected,
-                          "%.0f" % single_total_area, "%.0f" % number_people_affected,
-                          "%.0f%%" % percent_people_affected,
-                          all_areas_population[t]])
-            )
             if t not in areas_affected_ratio:
                 areas_affected_ratio[t] = affected_area_ratio
 
-        impact_summary = Table(table_body).toNewlineFreeString()
+        total_affected_population = self.total_affected_population
+
+        if total_affected_population == 0:
+            message = no_population_impact_message(self.question)
+            raise ZeroImpactException(message)
+
+        impact_summary = self.html_report()
 
         # Define style for the impact layer
         transparent_color = QColor()
