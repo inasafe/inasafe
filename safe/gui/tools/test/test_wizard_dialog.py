@@ -1164,6 +1164,7 @@ class WizardDialogTest(unittest.TestCase):
         #     expected_subcategories[0], dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to layer mode
+        dialog.pbnNext.click()
 
         # check if in step layer mode
         self.check_current_step(step_kw_layermode, dialog)
