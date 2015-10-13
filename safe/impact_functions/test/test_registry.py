@@ -95,7 +95,7 @@ class TestRegistry(unittest.TestCase):
             'Continuous raster hazard on population',
             'Classified polygon hazard on population',
             'Classified polygon hazard on buildings',
-            'Classified polygon hazard on people',
+            'Classified polygon hazard on polygon people',
             'Earthquake on buildings',
             'Earthquake ITB fatality function',
             'Earthquake PAGER fatality function',
