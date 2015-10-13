@@ -18,14 +18,9 @@ __date__ = '13/10/15'
 from collections import OrderedDict
 
 from safe.utilities.i18n import tr
-from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
 
-from safe.impact_functions.core import (
-    evacuated_population_needs,
-    population_rounding)
 import safe.messaging as m
-from safe.messaging import styles
 
 
 class AreaExposureReportMixin(ReportMixin):
@@ -33,32 +28,22 @@ class AreaExposureReportMixin(ReportMixin):
     """
 
     def __init__(self):
-        """Population specific report mixin.
+        """Area specific report mixin.
 
         .. versionadded:: 3.2
 
         ..Notes::
 
-            Expect affected population as following:
-
-            _affected_population = OrderedDict([
-                (impact level, amount),
-            e.g.
-                (People in high hazard area, 1000),
-                (People in medium hazard area, 100),
-                (People in low hazard area, 5),
-            )]
 
         """
         self._question = ''
+        self._areas = {}
+        self._affected_areas = {}
+        self._areas_population = {}
         self._total_population = 0
         self._unaffected_population = 0
-        self._evacuation_category = 0
-        self._evacuation_percentage = 0
-        self._minimum_needs = []
         self._affected_population = {}
         self._other_population_counts = {}
-        self._impact_category_ordering = []
 
     def generate_report(self):
         """Breakdown by building type.
@@ -81,90 +66,84 @@ class AreaExposureReportMixin(ReportMixin):
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
         table.caption = None
+
         row = m.Row()
-        row.add(m.Cell(
-            tr('Population needing evacuation <sup>1</sup>'),
-            header=True))
-        evacuated = format_int(population_rounding(self.total_evacuated))
-        row.add(m.Cell(evacuated, align='right'))
+        row.add(m.Cell(tr('Area id'), header=True))
+        row.add(m.Cell(tr('Affected Area (ha)'), header=True))
+        row.add(m.Cell(tr('Affected Area (%)'), header=True))
+        row.add(m.Cell(tr('Total (ha)'), header=True))
+        row.add(m.Cell(tr('Affected People'), header=True))
+        row.add(m.Cell(tr('Affected People(%)'), header=True))
+        row.add(m.Cell(tr('Total Number of People'), header=True))
+
         table.add(row)
-        if len(self.impact_category_ordering):
-            table.add(m.Row())  # add a blank line
+
+        second_row = m.Row()
+        second_row.add(m.Cell(tr('All')))
+        total_affected_area = self.total_affected_areas
+        total_area = self.total_areas
+        percentage_affected_area = ((total_affected_area / total_area ) \
+                                    if total_area != 0 else 0) * 100
+        percentage_affected_area = round(percentage_affected_area, 1)
+
+        total_affected_population = self.total_affected_population
+        total_population = self.total_population
+        percentage_affected_people = ((total_affected_population / total_population ) \
+                                    if total_population != 0 else 0) * 100
+        percentage_affected_people = round(percentage_affected_people, 1)
+        total_affected_area *= 1e8
+        total_affected_area = round(total_affected_area, 0)
+        total_area *= 1e8
+        total_area = round(total_area, 0)
+
+        second_row.add(m.Cell(total_affected_area))
+        second_row.add(m.Cell(percentage_affected_area))
+        second_row.add(m.Cell(total_area))
+        second_row.add(m.Cell(total_affected_population))
+        second_row.add(m.Cell(percentage_affected_area))
+        second_row.add(m.Cell(total_population))
+
+        table.add(second_row)
+
+        break_row = m.Row()
+        break_row.add(m.Cell(tr('Breakdown by Area'), header=True))
+        table.add(break_row)
+
+        areas = self.areas
+        affected_areas = self.affected_areas
+
+        for t, v in areas.iteritems():
+            affected = affected_areas[t] if t in affected_areas else 0.
+            single_total_area = v
+            affected_area_ratio = (affected / single_total_area) if v != 0 else 0
+
+            percent_affected = affected_area_ratio * 100
+            percent_affected = round(percent_affected, 1)
+            number_people_affected = affected_area_ratio * self.areas_population[t]
+
+            # rounding to float without decimal, we can't have number of people with decimal
+
+            number_people_affected = round(number_people_affected, 0)
+
+            percent_people_affected = ((number_people_affected / self.areas_population[t]) \
+                                         if self.areas_population[t] != 0 else 0) * 100
+
+            affected *= 1e8
+            single_total_area *= 1e8
+
             row = m.Row()
-            row.add(m.Cell(
-                tr('Total affected population'),
-                header=True))
-            affected = format_int(
-                population_rounding(self.total_affected_population))
-            row.add(m.Cell(affected, align='right'))
+            row.add(m.Cell(t))
+            row.add(m.Cell("%.0f" % affected))
+            row.add(m.Cell("%.1f%%" % percent_affected))
+            row.add(m.Cell("%.0f" % single_total_area))
+            row.add(m.Cell("%.0f" % number_people_affected))
+            row.add(m.Cell("%.1f%%" % percent_people_affected))
+            row.add(m.Cell(self.areas_population[t]))
             table.add(row)
 
-            for category in self.impact_category_ordering:
-                population_in_category = self.lookup_category(category)
-                population_in_category = format_int(population_rounding(
-                    population_in_category
-                ))
-                row = m.Row()
-                row.add(m.Cell(tr(category), header=True))
-                row.add(m.Cell(population_in_category, align='right'))
-                table.add(row)
-
-        table.add(m.Row())  # add a blank line
-
-        row = m.Row()
-        unaffected = format_int(
-            population_rounding(self.unaffected_population))
-        row.add(m.Cell(tr('Unaffected population'), header=True))
-        row.add(m.Cell(unaffected, align='right'))
-        table.add(row)
         message.add(table)
+
         return message
-
-
-
-    @property
-    def impact_category_ordering(self):
-        """Get the ordering of the impact categories.
-
-        :returns: The categories by defined or default ordering.
-        :rtype: list
-        """
-        if (
-                not hasattr(self, '_impact_category_ordering') or
-                not self._impact_category_ordering):
-            self._impact_category_ordering = self.affected_population.keys()
-        return self._impact_category_ordering
-
-    @impact_category_ordering.setter
-    def impact_category_ordering(self, impact_category_ordering):
-        """Overwrite existing category ordering.
-
-        :param impact_category_ordering: The new ordering.
-        :type impact_category_ordering: list.
-        """
-        self._impact_category_ordering = impact_category_ordering
-
-    @property
-    def other_population_counts(self):
-        """The population counts which are not explicitly included in affected.
-
-        :returns: Population counts.
-        :rtype: dict
-        """
-        if not hasattr(self, '_other_population_counts'):
-            self._other_population_counts = {}
-        return self._other_population_counts
-
-    @other_population_counts.setter
-    def other_population_counts(self, other_counts):
-        """Set the other population counts.
-
-        :param other_counts: Population counts.
-        :type other_counts: dict
-        """
-        if not hasattr(self, '_other_population_counts'):
-            self._other_population_counts = {}
-        self._other_population_counts = other_counts
 
     @property
     def affected_population(self):
@@ -226,6 +205,87 @@ class AreaExposureReportMixin(ReportMixin):
         self._unaffected_population = unaffected_population
 
     @property
+    def affected_areas(self):
+        """Get the affected areas.
+
+        :returns: affected areas.
+        :rtype: {}.
+        """
+        return self._affected_areas
+
+    @affected_areas.setter
+    def affected_areas(self, affected_areas):
+        """Set the affected areas.
+
+        :param affected_areas: affected areas.
+        :type affected_areas:dict
+        """
+        self._affected_areas = affected_areas
+
+    @property
+    def total_affected_areas(self):
+        """Get the total affected areas.
+
+        :returns: Total affected areas.
+        :rtype: int.
+        """
+        return sum(self.affected_areas.values())
+
+    @property
+    def areas_population(self):
+        """Get the areas population.
+
+        :returns: areas population.
+        :rtype: dict.
+        """
+        return self._areas_population
+
+    @areas_population.setter
+    def areas_population(self, areas_population):
+        """Set the areas population.
+
+        :param areas_population: area population.
+        :type areas_population:dict
+        """
+        self._areas_population = areas_population
+
+    @property
+    def total_areas_population(self):
+        """Get the total affected areas.
+
+        :returns: Total affected areas.
+        :rtype: int.
+        """
+        return sum(self.areas_population.values())
+
+    @property
+    def total_areas(self):
+        """Get the total area.
+
+        :returns: Total area.
+        :rtype: int.
+        """
+        return sum(self.areas.values())
+
+    @property
+    def areas(self):
+        """Get the areas.
+
+        :returns: areas.
+        :rtype: dict.
+        """
+        return self._areas
+
+    @areas.setter
+    def areas(self, areas):
+        """Set the areas.
+
+        :param areas.
+        :type areas: dict
+        """
+        self._areas = areas
+
+    @property
     def total_affected_population(self):
         """Get the total affected population.
 
@@ -233,71 +293,6 @@ class AreaExposureReportMixin(ReportMixin):
         :rtype: int.
         """
         return sum(self.affected_population.values())
-
-    def lookup_category(self, category):
-        """Lookup a category by its name.
-
-        :param category: The category to be looked up.
-        :type category: basestring
-
-        :returns: The category's count.
-        :rtype: int
-
-        .. note:: The category may be any valid category, but it also includes
-            'Population Not Affected', 'Unaffected Population' for unaffected
-            as well as 'Total Impacted', 'People impacted',
-            'Total Population Affected' for total affected population. This
-            diversity is to accodate existing usages, which have evolved
-            separately. We may want to update these when we have decided on a
-            single convention.
-        """
-        if category in self.affected_population.keys():
-            return self.affected_population[category]
-        if category in self.other_population_counts.keys():
-            return self.other_population_counts[category]
-        if category in [
-                tr('Population Not Affected'),
-                tr('Unaffected Population')]:
-            return self.unaffected_population
-        if category in [
-                tr('Total Impacted'),
-                tr('People impacted'),
-                tr('Total Population Affected')]:
-            return self.total_affected_population
-
-    @property
-    def total_needs(self):
-        """Get the total minimum needs based on the total evacuated.
-
-        :returns: Total minimum needs.
-        :rtype: dict
-        """
-        total_population_evacuated = self.total_evacuated
-        return evacuated_population_needs(
-            total_population_evacuated, self.minimum_needs)
-
-    @property
-    def total_evacuated(self):
-        """Get the total evacuated population.
-
-        :returns: The total evacuated population.
-        :rtype: int
-
-        .. note:: The total evacuated is said to either the evacuated amount,
-        failing that the total affected population and if applicable reduced
-        by a evacuation percentage.
-        """
-        if hasattr(self, '_evacuation_category') and self._evacuation_category:
-            evacuated_population = self.affected_population[
-                self._evacuation_category]
-        else:
-            evacuated_population = self.total_affected_population
-        if (
-                hasattr(self, '_evacuation_percentage') and
-                self._evacuation_percentage):
-            evacuated_population = (
-                evacuated_population * self._evacuation_percentage / 100)
-        return int(evacuated_population)
 
     @property
     def total_population(self):
@@ -318,24 +313,3 @@ class AreaExposureReportMixin(ReportMixin):
         :type total_population: int
         """
         self._total_population = total_population
-
-    @property
-    def minimum_needs(self):
-        """Get the minimum needs as specified, or default.
-
-        :returns: The minimum needs parameters.
-        :rtype: list
-        """
-        if not hasattr(self, '_minimum_needs'):
-            self._minimum_needs = []
-        return self._minimum_needs
-
-    @minimum_needs.setter
-    def minimum_needs(self, minimum_needs):
-        """Set the minimum needs parameters list.
-
-        :param minimum_needs: Minimum needs
-        :type minimum_needs: list
-        """
-        self._minimum_needs = minimum_needs
-

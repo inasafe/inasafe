@@ -48,6 +48,7 @@ from safe.messaging import styles
 from safe.impact_functions.core import no_population_impact_message
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
+
 class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE,
                                                    AreaExposureReportMixin):
 
@@ -77,9 +78,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE,
 
         type_attr = self.parameters['area_type_field'].value
 
-        #TODO use keyword to take id and population values
-        #id_attr = self.exposure.keyword('id_field')
-        #pop_attr = self.exposure.keyword('population_field')
+        # TODO use keyword to take id and population values
+        # id_attr = self.exposure.keyword('id_field')
+        # pop_attr = self.exposure.keyword('population_field')
 
         # prepare objects for re-projection of geometries
         crs_wgs84 = QgsCoordinateReferenceSystem("EPSG:4326")
@@ -210,38 +211,25 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE,
         # for area in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
 
         # Generate the report of affected areas
-        total_affected_area = round(sum(imp_areas.values()), 1)
-        total_area = round(sum(all_areas.values()), 1)
+
         self.total_population = sum(all_areas_population.values())
+        self.areas = all_areas_ids
+        self.affected_areas = all_affected_areas
+        self.areas_population = all_areas_population
 
-        areas_affected_ratio = {}
-
-        # Initialize all the affected area population
-        for area_id in all_areas_ids.iteritems():
-            self.affected_population[area_id] = 0
-
-        # Assigning percentages to the affected areas
+        # Calculating number of people affected
         for t, v in all_areas_ids.iteritems():
 
             affected = all_affected_areas[t] if t in all_affected_areas else 0.
             single_total_area = v
             affected_area_ratio = (affected / single_total_area) if v != 0 else 0
 
-            percent_affected = affected_area_ratio * 100
             number_people_affected = affected_area_ratio * all_areas_population[t]
 
             # rounding to float without decimal, we can't have number of people with decimal
-            number_people_affected = round(number_people_affected,0)
+            number_people_affected = round(number_people_affected, 0)
 
             self.affected_population[t] = number_people_affected
-
-            percent_people_affected = ((number_people_affected / all_areas_population[t]) \
-                                      if all_areas_population[t] != 0 else 0) * 100
-            affected *= 1e8
-            single_total_area *= 1e8
-
-            if t not in areas_affected_ratio:
-                areas_affected_ratio[t] = affected_area_ratio
 
         total_affected_population = self.total_affected_population
 
