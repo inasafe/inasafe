@@ -1159,8 +1159,9 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if automatically select the only option
-        self.check_current_text(
-            expected_subcategories[0], dialog.lstSubcategories)
+        # does not check anymore, there are now two options
+        # self.check_current_text(
+        #     expected_subcategories[0], dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to layer mode
 
