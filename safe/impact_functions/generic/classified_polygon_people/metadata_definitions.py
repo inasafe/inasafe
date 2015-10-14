@@ -30,7 +30,8 @@ from safe.impact_functions.generic.\
     classified_polygon_people import parameter_definitions
 
 
-class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(ImpactFunctionMetadata):
+class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
+        ImpactFunctionMetadata):
 
     @staticmethod
     def as_dict():

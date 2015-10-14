@@ -49,8 +49,8 @@ from safe.impact_functions.core import no_population_impact_message
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
 
-class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE,
-                                                   AreaExposureReportMixin):
+class ClassifiedPolygonHazardPolygonPeopleFunction(
+        ClassifiedVHClassifiedVE, AreaExposureReportMixin):
 
     _metadata = ClassifiedPolygonHazardPolygonPeopleFunctionMetadata()
 
@@ -64,7 +64,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE,
     def run(self):
         """Risk plugin for classified polygon hazard on area with population.
 
-        Counts areas exposed to hazard zones.
+        Counts areas exposed to hazard zones and then computes the the
+        proportion of each area that is inundated. The population in each
+        area is then calculated as the proportion of the original population
+        to the flooded area.
 
         :returns: Impact layer
         :rtype: Vector
@@ -148,15 +151,15 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE,
 
             # find possible intersections with hazard layer
             impacted_geometries = []
-            unaffected_geometries = []
-            impacted_features = {}
+            # unaffected_geometries = []
+            # impacted_features = {}
             for hazard_id in hazard_index.intersects(bbox):
                 hazard_geometry = hazard_features[hazard_id].geometry()
                 impact_geometry = geometry.intersection(hazard_geometry)
 
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
-                    continue   # no intersection found
+                    continue  # no intersection found
 
                 # find unaffected area geometry
                 unaffected_geometry = geometry.symDifference(impact_geometry)
@@ -183,7 +186,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE,
                 writer.addFeature(f_unaffected)
 
                 impacted_geometries.append(impact_geometry)
-
 
             # TODO: uncomment if not affected polygons should be written
             # # Make sure the geometry we work with is valid, otherwise geom.
@@ -220,13 +222,22 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(ClassifiedVHClassifiedVE,
         # Calculating number of people affected
         for t, v in all_areas_ids.iteritems():
 
-            affected = all_affected_areas[t] if t in all_affected_areas else 0.
+            if t in all_affected_areas:
+                affected = all_affected_areas[t]
+            else:
+                affected = 0.0
+
             single_total_area = v
-            affected_area_ratio = (affected / single_total_area) if v != 0 else 0
+            if v:
+                affected_area_ratio = affected / single_total_area
+            else:
+                affected_area_ratio = 0
 
-            number_people_affected = affected_area_ratio * all_areas_population[t]
+            number_people_affected = (
+                affected_area_ratio * all_areas_population[t])
 
-            # rounding to float without decimal, we can't have number of people with decimal
+            # rounding to float without decimal, we can't have number
+            # of people with decimal
             number_people_affected = round(number_people_affected, 0)
 
             self.affected_population[t] = number_people_affected
