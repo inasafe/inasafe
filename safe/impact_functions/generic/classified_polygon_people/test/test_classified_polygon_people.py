@@ -63,11 +63,10 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             area = f.geometry().area() * 1e8
             features[f['id']] = round(area, 1)
         expected_features = {
-            1: 19.1,
-            2: 0.6,
-            3: 19.2,
-            4: 4.1,
-
+            1: 7552.2,
+            2: 12341.9,
+            3: 1779.0,
+            4: 12944.1
         }
         self.assertEqual(features, expected_features)
 
