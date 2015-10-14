@@ -68,13 +68,13 @@ class AreaExposureReportMixin(ReportMixin):
         table.caption = None
 
         row = m.Row()
-        row.add(m.Cell(tr('Area id'), header=True))
-        row.add(m.Cell(tr('Affected Area (ha)'), header=True))
-        row.add(m.Cell(tr('Affected Area (%)'), header=True))
-        row.add(m.Cell(tr('Total (ha)'), header=True))
-        row.add(m.Cell(tr('Affected People'), header=True))
-        row.add(m.Cell(tr('Affected People(%)'), header=True))
-        row.add(m.Cell(tr('Total Number of People'), header=True))
+        row.add(m.Cell(tr('Area id'), header=True, align='right'))
+        row.add(m.Cell(tr('Affected Area (ha)'), header=True, align='right'))
+        row.add(m.Cell(tr('Affected Area (%)'), header=True,align='right'))
+        row.add(m.Cell(tr('Total (ha)'), header=True, align='right'))
+        row.add(m.Cell(tr('Affected People'), header=True, align='right'))
+        row.add(m.Cell(tr('Affected People(%)'), header=True, align='right'))
+        row.add(m.Cell(tr('Total Number of People'), header=True, align='right'))
 
         table.add(row)
 
@@ -96,12 +96,12 @@ class AreaExposureReportMixin(ReportMixin):
         total_area *= 1e8
         total_area = round(total_area, 0)
 
-        second_row.add(m.Cell(total_affected_area))
-        second_row.add(m.Cell(percentage_affected_area))
-        second_row.add(m.Cell(total_area))
-        second_row.add(m.Cell(total_affected_population))
-        second_row.add(m.Cell(percentage_affected_area))
-        second_row.add(m.Cell(total_population))
+        second_row.add(m.Cell(total_affected_area, align='right'))
+        second_row.add(m.Cell(percentage_affected_area, align='right'))
+        second_row.add(m.Cell(total_area, align='right'))
+        second_row.add(m.Cell(total_affected_population, align='right'))
+        second_row.add(m.Cell(percentage_affected_area, align='right'))
+        second_row.add(m.Cell(total_population, align='right'))
 
         table.add(second_row)
 
@@ -133,12 +133,12 @@ class AreaExposureReportMixin(ReportMixin):
 
             row = m.Row()
             row.add(m.Cell(t))
-            row.add(m.Cell("%.0f" % affected))
-            row.add(m.Cell("%.1f%%" % percent_affected))
-            row.add(m.Cell("%.0f" % single_total_area))
-            row.add(m.Cell("%.0f" % number_people_affected))
-            row.add(m.Cell("%.1f%%" % percent_people_affected))
-            row.add(m.Cell(self.areas_population[t]))
+            row.add(m.Cell("%.0f" % affected, align='right'))
+            row.add(m.Cell("%.1f%%" % percent_affected, align='right'))
+            row.add(m.Cell("%.0f" % single_total_area,align='right'))
+            row.add(m.Cell("%.0f" % number_people_affected, align='right'))
+            row.add(m.Cell("%.1f%%" % percent_people_affected, align='right'))
+            row.add(m.Cell(self.areas_population[t], align='right'))
             table.add(row)
 
         message.add(table)
