@@ -1160,11 +1160,11 @@ class WizardDialogTest(unittest.TestCase):
 
         # check if automatically select the only option
         # does not check anymore, there are now two options
-        # self.check_current_text(
-        #     expected_subcategories[0], dialog.lstSubcategories)
+        self.select_from_list_widget('Structure', dialog.lstSubcategories)
+
+        self.check_current_text('Structure', dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to layer mode
-        dialog.pbnNext.click()
 
         # check if in step layer mode
         self.check_current_step(step_kw_layermode, dialog)
