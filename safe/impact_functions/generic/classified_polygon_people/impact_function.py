@@ -126,6 +126,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         all_areas_ids = {}
         all_affected_areas = {}
         all_areas_population = {}
+        all_affected_geometry = []
 
         for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
             geometry = f.geometry()
@@ -164,6 +165,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 # find unaffected area geometry
                 unaffected_geometry = geometry.symDifference(impact_geometry)
 
+                all_affected_geometry.append(impact_geometry)
+
                 # add to the affected area of this area type
                 if area_type not in imp_areas:
                     imp_areas[area_type] = 0.
@@ -172,6 +175,16 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 area = impact_geometry.area()
                 imp_areas[area_type] += area
                 all_affected_areas[area_id] += area
+
+                # for later check of the past affected geometries so as to avoid
+                # overlapping of unaffected and affected geometries
+                # for geometry in all_affected_geometry:
+                #     geo_intersection = geometry.intersection(unaffected_geometry)
+                #
+                #     if not geo_intersection.wkbType() == QGis.WKBPolygon and \
+                #             not geo_intersection.wkbType() == QGis.WKBMultiPolygon:
+                #         continue  # no intersection found
+                #     unaffected_geometry = geometry.symDifference(unaffected_geometry)
 
                 # write the impacted geometry
 
