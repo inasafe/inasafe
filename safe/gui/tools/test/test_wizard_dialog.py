@@ -1159,7 +1159,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if automatically select the only option
-        # does not check anymore, there are now two options
+
         self.select_from_list_widget('Structure', dialog.lstSubcategories)
 
         self.check_current_text('Structure', dialog.lstSubcategories)
