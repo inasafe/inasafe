@@ -39,8 +39,8 @@ def batch_help():
         'When the batch process completes, it will also produce a summary '
         'report like this:')))
 
-    table = m.Table()
-    row = m.Row(m.Cell(tr('InaSAFE Batch Report File')), heading=True)
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row(m.Cell(tr('InaSAFE Batch Report File')), header=True)
     table.add(row)
     table.add(m.Row(m.Cell('P: gempa bumi Sumatran fault (Mw7.8)')))
     table.add(m.Row(m.Cell('P: gempa di Yogya tahun 2006')))
