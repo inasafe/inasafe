@@ -38,14 +38,8 @@ class Message(MessageElement):
         Strings can be passed and are automatically converted in to
         item.Text()
 
-        Args:
-            MessageElement message, an element to add to the message queue
+        :arg args: One or more elements to add to the message queue
 
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
 
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
@@ -80,15 +74,6 @@ class Message(MessageElement):
 
     def clear(self):
         """clear MessageElement queue
-
-        Args:
-            None
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
         """
         self.message = []
 

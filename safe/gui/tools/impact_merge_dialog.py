@@ -698,7 +698,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         Example::
 
            {"Jakarta Barat":
-               {"Detailed Building Type Report":
+               {"Closed buildings":
                    {"Total inundated":150,
                     "Places of Worship": "No data"
                    }
@@ -757,7 +757,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         Example::
 
             {"Jakarta Barat":
-                {"Detailed Building Type Report":
+                {"Closed buildings":
                     {"Total inundated":150,
                      "Places of Worship": "No data"
                     }

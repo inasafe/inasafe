@@ -245,7 +245,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         # noinspection PyCallByClass,PyTypeChecker
         filename = QFileDialog.getOpenFileName(
             self, self.tr('Input file'), 'grid.xml',
-            self.tr('Raw grid file(*.xml)'))
+            self.tr('Raw grid file (*.xml)'))
         self.input_path.setText(filename)
 
     @pyqtSignature('')  # prevents actions being handled twice
@@ -255,7 +255,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         # noinspection PyCallByClass,PyTypeChecker
         filename = QFileDialog.getSaveFileName(
             self, self.tr('Output file'), 'grid.tif',
-            self.tr('Raster file(*.tif)'))
+            self.tr('Raster file (*.tif)'))
         self.output_path.setText(filename)
 
     @pyqtSlot()

@@ -394,7 +394,7 @@ def default_provenance():
     field = TextParameter()
     field.name = tr('Provenance')
     field.description = tr('The provenance of minimum needs')
-    field.value = 'The minimum needs are based on Perka 7/2008.'
+    field.value = 'The minimum needs are based on BNPB Perka 7/2008.'
     return field
 
 

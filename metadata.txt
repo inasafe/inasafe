@@ -9,13 +9,13 @@
 
 
 [general]
-name=InaSAFE-Dev
+name=InaSAFE
 qgisMinimumVersion=2.0
 qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=3.2.0
+version=3.2.1
 # alpha, beta, rc or final
 status=final
 
@@ -25,19 +25,10 @@ status=final
 # Optional items:
 
 changelog=
-        3.2.0
-        feature - New extent selector dialog
-        feature - Overhauled wizard for impact functions
-        feature - Show warnings using QgsMessageBar when analysis extent is not correct
-        feature - New theme!
-        feature - Moved Impact Function options to keywords where possible
-        feature - Improved user interface for impact function options
-        feature - Improved report templates and added new replacement tokens for templates
-        bugfix - Prevent hazard attribute names from masking exposure names during interpolation (#2090)
-        bugfix - show building aggregation in volcano impact functions (#2103 #2014)
-        bugfix - show building aggregation in volcanic ash impact function (#2105)
-        bugfix - totals of affected buildings in aggregation regions now calculated correctly (#2144)
-        bugfix - many many other bugfixes to improve consistency of reporting and robustness
+        3.2.1
+        Global clean up of reports for consistency, terminology and style
+        Show nicer formatted message in dock when no impact function is available
+        Bugfix: Don't show impact layers in wizard chooser
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards

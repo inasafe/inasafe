@@ -1403,7 +1403,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type unassigned_values: list
 
         :param assigned_values: Dictionary with class as the key and list of
-            value as the the value of the dictionary. It will be put in
+            value as the value of the dictionary. It will be put in
             self.treeClasses.
         :type assigned_values: dict
 
@@ -2376,8 +2376,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             return True
 
         # Compare layer keywords with explicitly set constraints
-        # Reject if layer purpose doesn't match
-        if ('layer_purpose' in keywords and
+        # Reject if layer purpose missing or doesn't match
+        if ('layer_purpose' not in keywords or
                 keywords['layer_purpose'] != layer_purpose):
             return False
 
@@ -2445,7 +2445,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         for layer in self.iface.mapCanvas().layers():
             try:
                 keywords = self.keyword_io.read_keywords(layer)
-                if 'layer_purpose' not in keywords:
+                if ('layer_purpose' not in keywords and
+                            'impact_summary' not in keywords):
                     keywords = None
             except (HashNotFoundError,
                     OperationalError,
@@ -3021,7 +3022,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
-            if 'layer_purpose' not in keywords:
+            if ('layer_purpose' not in keywords and
+                        'impact_summary' not in keywords):
                 keywords = None
         except (HashNotFoundError,
                 OperationalError,
