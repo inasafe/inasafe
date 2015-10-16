@@ -7,7 +7,8 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.resources import resources_path
-
+from safe.gui.tools.help.function_options_help import content as options
+from safe.gui.tools.help.impact_report_help import content as report
 INFO_STYLE = styles.INFO_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
@@ -236,49 +237,8 @@ def dock_help():
 
     heading = m.Heading(tr('Analysis parameters'), **INFO_STYLE)
     message.add(heading)
-
-    message.add(m.Paragraph(tr(
-        'Depending on which Impact Function you have chosen you have '
-        'different options available for adjust the parameters of the '
-        'question you are asking. Some Impact Functions have more '
-        'configurable Options than others. To open the Impact Function '
-        'Configuration Dialog you need to click on the "Options ..." '
-        'button next to the selected impact function paragraph in the '
-        'InaSAFE dock. You might have up to 3 tabs visible:'
-    )))
-
-    bullets = m.BulletedList()
-    bullets.add(m.Text(
-        m.ImportantText(tr('Options')),
-        tr(
-            '- Depending in the Impact function you selected, you can '
-            'influence the result of your question here (the Impact Function) '
-            'by setting different initial values which are presented '
-            'depending on the function you choose (Some Impact functions '
-            'might now be able to be influenced).')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('Postprocessors')),
-        tr(
-            '- Takes the results from the impact function and calculates '
-            'derivative indicators, for example if you have an affected '
-            'population total, the Gender postprocessor will calculate gender '
-            'specific indicators such as additional nutritional requirements '
-            'for pregnant women.')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('Minimum Needs')),
-        tr(
-            '- If the analysis uses population exposure, InaSAFE calculates '
-            'the minimum needs of the people affected by the impact scenario. '
-            'You should refer to the minimum needs tool for configuring the '
-            'global defaults used in these calculations. '),
-        m.Image(
-            'file:///%s/img/icons/'
-            'show-minimum-needs.svg' % resources_path(),
-            **SMALL_ICON_STYLE),
-        tr(
-            ' This panel will let you override global defaults for a specifc'
-           'anallysis run')))
-    message.add(bullets)
+    # this adds the help content from the IF options dialog
+    message.add(options())
 
     heading = m.Heading(tr('Generating impact reports'), **INFO_STYLE)
     message.add(heading)
@@ -290,52 +250,6 @@ def dock_help():
         'panel will also enable it.'
     )))
 
-# todo - move this to print composer help dialog
-
-    message.add(m.Paragraph(tr(
-        'To start report generation you need to click on the Print... '
-        'button in the buttons area. This will open the Impact report '
-        'dialog which has three main areas.')))
-
-    bullets = m.BulletedList()
-    bullets.add(m.Text(
-        m.ImportantText(tr('Area to print')),
-        tr(
-            ' - There are two options available. Choose Current extent if '
-            'current canvas extent represents necessary area. Analysis '
-            'extent will set extent of the report map to impact layer '
-            'extent.'
-           )))
-    bullets.add(m.Text(
-        m.ImportantText(tr('Template to use')),
-        tr(
-            ' - Here you can select desired template for your report. All '
-            'templates bundled with InaSAFE are available here, plus '
-            'templates from user-defined template directory (see Options '
-            'for information how to set templates directory). It is also '
-            'possible to select custom template from any location: just '
-            'activate radiobutton under combobox and provide path to template '
-            'using the "..." button.'
-           )))
-    bullets.add(m.Text(
-        m.ImportantText(tr('Template to use')),
-        tr(
-            ' - Here you can select desired template for your report. All '
-            'templates bundled with InaSAFE are available here, plus '
-            'templates from user-defined template directory (see Options '
-            'for information how to set templates directory). It is also '
-            'possible to select custom template from any location: just '
-            'activate radiobutton under combobox and provide path to template '
-            'using the "..." button.'
-           )))
-    bullets.add(m.Text(
-        m.ImportantText(tr('Buttons area')),
-        tr(
-            ' - In this area you will find buttons to open the report as '
-            'a PDF or in the QGIS print composer. You can also get help by '
-            'clicking on the help button or using the close button to close '
-            'the print dialog.'
-        )))
-    message.add(bullets)
-
+    # This adds the help content of the print dialog
+    message.add(report())
     return message

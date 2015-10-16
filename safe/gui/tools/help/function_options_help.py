@@ -6,24 +6,84 @@ __author__ = 'ismailsunni'
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.resources import resources_path
 
 INFO_STYLE = styles.INFO_STYLE
+SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
 
 def function_options_help():
     """Help message for Batch Dialog.
 
-    .. versionadded:: 3.2.1
+    ..versionadded:: 3.2.1
 
     :returns: A message object containing helpful information.
     :rtype: messaging.message.Message
     """
     heading = m.Heading(tr('Function Options Help'), **INFO_STYLE)
-    body = tr('')
+    body = content()
 
     message = m.Message()
     message.add(m.Brand())
     message.add(heading)
     message.add(body)
 
+    return message
+
+
+def content():
+    """Helper method that returns just the content.
+
+    This method was added so that the text could be resused in the
+    dock_help module.
+
+    ..versionadded:: 3.2.2
+
+    :returns: A message object without brand element.
+    :rtype: safe.messaging.message.Message
+    """
+
+    message = m.Message()
+    message.add(m.Paragraph(tr(
+        'Depending on which Impact Function you have chosen you have '
+        'different options available for adjust the parameters of the '
+        'question you are asking. Some Impact Functions have more '
+        'configurable Options than others. To open the Impact Function '
+        'Configuration Dialog you need to click on the "Options ..." '
+        'button next to the selected impact function paragraph in the '
+        'InaSAFE dock. You might have up to 3 tabs visible:'
+    )))
+
+    bullets = m.BulletedList()
+    bullets.add(m.Text(
+        m.ImportantText(tr('Options')),
+        tr(
+            '- Depending in the Impact function you selected, you can '
+            'influence the result of your question here (the Impact Function) '
+            'by setting different initial values which are presented '
+            'depending on the function you choose (Some Impact functions '
+            'might now be able to be influenced).')))
+    bullets.add(m.Text(
+        m.ImportantText(tr('Postprocessors')),
+        tr(
+            '- Takes the results from the impact function and calculates '
+            'derivative indicators, for example if you have an affected '
+            'population total, the Gender postprocessor will calculate gender '
+            'specific indicators such as additional nutritional requirements '
+            'for pregnant women.')))
+    bullets.add(m.Text(
+        m.ImportantText(tr('Minimum Needs')),
+        tr(
+            '- If the analysis uses population exposure, InaSAFE calculates '
+            'the minimum needs of the people affected by the impact scenario. '
+            'You should refer to the minimum needs tool for configuring the '
+            'global defaults used in these calculations. '),
+        m.Image(
+            'file:///%s/img/icons/'
+            'show-minimum-needs.svg' % resources_path(),
+            **SMALL_ICON_STYLE),
+        tr(
+            ' This panel will let you override global defaults for a specifc'
+           'anallysis run')))
+    message.add(bullets)
     return message
