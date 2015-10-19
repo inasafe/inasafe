@@ -1,11 +1,13 @@
 # coding=utf-8
-__author__ = 'ismailsunni'
+"""Help text for options dialog."""
 
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 
 INFO_STYLE = styles.INFO_STYLE
+
+__author__ = 'ismailsunni'
 
 
 def options_help():

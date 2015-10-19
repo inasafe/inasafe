@@ -1,12 +1,13 @@
 # coding=utf-8
-
-__author__ = 'ismailsunni'
+"""Help text for impact merge tool"""
 
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 INFO_STYLE = styles.INFO_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
+
+__author__ = 'ismailsunni'
 
 
 def impact_merge_help():
@@ -62,8 +63,8 @@ def content():
         'merge tool allows you to do this.'
     )))
 
-    heading = m.Heading(tr('Prerequisites'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('Prerequisites'), **INFO_STYLE)
+    message.add(header)
 
     message.add(m.Paragraph(tr(
         'In order to use this tool, please bear in mind the following '
@@ -80,8 +81,8 @@ def content():
     ))
     message.add(bullets)
 
-    heading = m.Heading(tr('Procedure'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('Procedure'), **INFO_STYLE)
+    message.add(header)
 
     message.add(m.Paragraph(tr(
         'To use this tool, follow this procedure:'
@@ -118,8 +119,8 @@ def content():
     ))
     message.add(bullets)
 
-    heading = m.Heading(tr('Generated outputs¶'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('Generated outputs'), **INFO_STYLE)
+    message.add(header)
 
     message.add(m.Paragraph(tr(
         'The tool will generate a PDF per aggregation area. The PDFs will be '
@@ -140,8 +141,8 @@ def content():
             'be opened automatically.'))
     ))
 
-    heading = m.Heading(tr('Using Customized Template'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('Using Customized Template'), **INFO_STYLE)
+    message.add(header)
 
     message.add(m.Paragraph(tr(
         'The default template report is located in '
@@ -190,8 +191,8 @@ def content():
         'the template.'
     )))
 
-    heading = m.Heading(tr('Map Template Elements'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('Map Template Elements'), **INFO_STYLE)
+    message.add(header)
 
     message.add(m.Paragraph(tr(
         'In terms of value replacement, there are three groups of elements '

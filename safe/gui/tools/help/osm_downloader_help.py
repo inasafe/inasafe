@@ -1,4 +1,6 @@
 # coding=utf-8
+"""Help text for OSM Downloader."""
+
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles

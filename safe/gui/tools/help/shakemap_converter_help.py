@@ -1,11 +1,13 @@
 # coding=utf-8
-__author__ = 'ismailsunni'
+"""Help text for shakemap convertor."""
 
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 
 INFO_STYLE = styles.INFO_STYLE
+
+__author__ = 'ismailsunni'
 
 
 def shakemap_converter_help():
@@ -50,5 +52,28 @@ def content():
     :returns: A message object without brand element.
     :rtype: safe.messaging.message.Message
     """
+
     message = m.Message()
+    body = tr(
+        'This tool will convert an earthquake \'shakemap\' that is in '
+        'grid xml format to a GeoTIFF file. The imported file can be used '
+        'in InaSAFE as an input for impact functions that require an '
+        'earthquake layer.  To use this tool effectively:')
+    tips = m.BulletedList()
+    tips.add(tr(
+        'Select a grid.xml for the input layer.'))
+    tips.add(tr(
+        'Choose where to write the output layer to.'
+    ))
+    tips.add(tr(
+        'Choose the interpolation algorithm that should be used when '
+        'converting the xml grid to a raster. If unsure keep the default.'
+    ))
+    tips.add(tr(
+        'If you want to obtain shake data you can get download it free from '
+        'the USGS shakemap site: '
+        'http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013'))
+
+    message.add(body)
+    message.add(tips)
     return message

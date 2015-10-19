@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>513</width>
-    <height>650</height>
+    <width>531</width>
+    <height>523</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,15 +69,6 @@
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="web_view">
-         <property name="url">
-          <url>
-           <string>about:blank</string>
-          </url>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
         <widget class="QLabel" name="first_layer_label">
          <property name="text">
           <string>&amp;First impact layer</string>
@@ -87,46 +78,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QComboBox" name="first_layer"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="second_layer_label">
-         <property name="text">
-          <string>&amp;Second impact layer</string>
-         </property>
-         <property name="buddy">
-          <cstring>second_layer</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QComboBox" name="second_layer"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="aggregation_layer_label">
-         <property name="text">
-          <string>&amp;Aggregation Layer</string>
-         </property>
-         <property name="buddy">
-          <cstring>aggregation_layer</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QComboBox" name="aggregation_layer"/>
-       </item>
        <item row="7" column="0">
-        <widget class="QLabel" name="output_directory_label">
-         <property name="text">
-          <string>&amp;Output directory</string>
-         </property>
-         <property name="buddy">
-          <cstring>output_directory</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QLineEdit" name="output_directory">
@@ -144,14 +96,53 @@
          </item>
         </layout>
        </item>
-       <item row="9" column="0">
+       <item row="1" column="0">
+        <widget class="QComboBox" name="first_layer"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="second_layer_label">
+         <property name="text">
+          <string>&amp;Second impact layer</string>
+         </property>
+         <property name="buddy">
+          <cstring>second_layer</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QComboBox" name="second_layer"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QComboBox" name="aggregation_layer"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="aggregation_layer_label">
+         <property name="text">
+          <string>&amp;Aggregation Layer</string>
+         </property>
+         <property name="buddy">
+          <cstring>aggregation_layer</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="output_directory_label">
+         <property name="text">
+          <string>&amp;Output directory</string>
+         </property>
+         <property name="buddy">
+          <cstring>output_directory</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
         <widget class="QCheckBox" name="report_template_checkbox">
          <property name="text">
           <string>&amp;Use customized report template</string>
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
+       <item row="9" column="0">
         <widget class="QSplitter" name="splitter">
          <property name="enabled">
           <bool>false</bool>
@@ -191,7 +182,6 @@
       <zorder>second_layer_label</zorder>
       <zorder>output_directory_label</zorder>
       <zorder>splitter</zorder>
-      <zorder>web_view</zorder>
       <zorder>aggregation_layer_label</zorder>
       <zorder>aggregation_layer</zorder>
      </widget>

@@ -68,12 +68,10 @@ def content():
 
     )))
     message.add(m.Paragraph(tr(
-        'Minimum needs are grouped into regional or linguistic ‘profiles’. '
-        'The default profile is ‘BNPB_en’ - the english profile for the '
+        'Minimum needs are grouped into regional or linguistic \'profiles\'. '
+        'The default profile is \'BNPB_en\' - the english profile for the '
         'national disaster agency in Indonesia.'
-    )))
-    message.add(m.Paragraph(tr(
-        'You will see that their profile defines requirements for displaced '
+        'You will see that this profile defines requirements for displaced '
         'persons in terms of Rice, Drinking Water, Clean Water (for bathing '
         'etc.), Family Kits (with personal hygiene items) and provision of '
         'toilets.'

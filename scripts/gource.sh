@@ -4,7 +4,7 @@ echo "A script to generate a source video progression"
 echo "see http://woostuff.wordpress.com/2011/01/03/generating-a-gource-source-commit-history-visualization-for-qgis-quantum-gis/"
 echo "Run it from the root directory e.g. scripts/$0"
 
-gource --title "InaSAFE" --logo gui/resources/img/icon.png \
+gource --title "InaSAFE" --logo ../resources/img/icon.png \
     --hide filenames \
     --date-format "%d, %B %Y" \
     --seconds-per-day 0.05 \

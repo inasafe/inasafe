@@ -1,7 +1,5 @@
 # coding=utf-8
-
-__author__ = 'ismailsunni'
-
+"""Help text for the dock widget."""
 
 from safe.utilities.i18n import tr
 from safe import messaging as m
@@ -11,6 +9,8 @@ from safe.gui.tools.help.function_options_help import content as options
 from safe.gui.tools.help.impact_report_help import content as report
 INFO_STYLE = styles.INFO_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
+
+__author__ = 'ismailsunni'
 
 
 def dock_help():
@@ -87,8 +87,8 @@ def content():
         'At any time you can obtain help in InaSAFE by clicking on the '
         'help buttons provided on each dock and dialog.')))
 
-    heading = m.Heading(tr('The questions area'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('The questions area'), **INFO_STYLE)
+    message.add(header)
     message.add(m.Paragraph(tr(
         'The intention of InaSAFE is to make it really simple and easy to '
         'perform your impact analysis. The question area provides a simple '
@@ -157,8 +157,8 @@ def content():
         'were probably affected in that area.'
     )))
 
-    heading = m.Heading(tr('The results area'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('The results area'), **INFO_STYLE)
+    message.add(header)
 
     message.add(m.Paragraph(tr(
         'After running an analysis, the question area is hidden to maximise '
@@ -177,7 +177,7 @@ def content():
         'will also be displayed in the results area. When you select a hazard '
         'or exposure layer in the QGIS layers list, the keywords for that '
         'layer will be shown in the Results area, making it easy to '
-        'understand what metadata exists for that layer.' )))
+        'understand what metadata exists for that layer.')))
 
     message.add(m.Paragraph(tr(
         'The Results area is also used to display status information. For '
@@ -208,8 +208,8 @@ def content():
         'with InaSAFE active again in the Layers list of QGIS.'
     )))
 
-    heading = m.Heading(tr('The Buttons Area'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('The Buttons Area'), **INFO_STYLE)
+    message.add(header)
 
     message.add(m.Paragraph(tr(
         'The buttons area contains four buttons:')))
@@ -238,8 +238,8 @@ def content():
             'enabled.')))
     message.add(bullets)
 
-    heading = m.Heading(tr('Data conversions'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('Data conversions'), **INFO_STYLE)
+    message.add(header)
 
     message.add(m.Paragraph(tr(
         'When running a scenario, the data being used needs to be processed '
@@ -265,13 +265,13 @@ def content():
         '(EPSG:4326) coordinate reference system before analysis.'))
     message.add(bullets)
 
-    heading = m.Heading(tr('Analysis parameters'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('Analysis parameters'), **INFO_STYLE)
+    message.add(header)
     # this adds the help content from the IF options dialog
     message.add(options())
 
-    heading = m.Heading(tr('Generating impact reports'), **INFO_STYLE)
-    message.add(heading)
+    header = m.Heading(tr('Generating impact reports'), **INFO_STYLE)
+    message.add(header)
 
     message.add(m.Paragraph(tr(
         'When the scenario analysis completed you may want to generate a '

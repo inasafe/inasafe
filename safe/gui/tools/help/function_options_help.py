@@ -1,7 +1,5 @@
 # coding=utf-8
-
-__author__ = 'ismailsunni'
-
+"""Help text for the IF options dialog."""
 
 from safe.utilities.i18n import tr
 from safe import messaging as m
@@ -10,6 +8,8 @@ from safe.utilities.resources import resources_path
 
 INFO_STYLE = styles.INFO_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
+
+__author__ = 'ismailsunni'
 
 
 def function_options_help():

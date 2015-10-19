@@ -81,44 +81,6 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
 
-        self.show_info()
-
-    def show_info(self):
-        """Show usage text to the user."""
-        header = html_header()
-        footer = html_footer()
-        string = header
-
-        heading = m.Heading(self.tr('Shakemap Grid Importer'), **INFO_STYLE)
-        body = self.tr(
-            'This tool will convert an earthquake \'shakemap\' that is in '
-            'grid xml format to a GeoTIFF file. The imported file can be used '
-            'in InaSAFE as an input for impact functions that require and '
-            'earthquake layer.  To use this tool effectively:'
-        )
-        tips = m.BulletedList()
-        tips.add(self.tr(
-            'Select a grid.xml for the input layer.'))
-        tips.add(self.tr(
-            'Choose where to write the output layer to.'
-        ))
-        tips.add(self.tr(
-            'Choose the interpolation algorithm that should be used when '
-            'converting the xml grid to a raster. If unsure keep the default.'
-        ))
-        tips.add(self.tr(
-            'If you want to obtain shake data you can get it for free from '
-            'the USGS shakemap site: '
-            'http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013'))
-        message = m.Message()
-        message.add(heading)
-        message.add(body)
-        message.add(tips)
-        string += message.to_html()
-        string += footer
-
-        self.info_web_view.setHtml(string)
-
     # noinspection PyPep8Naming
     def on_output_path_textChanged(self):
         """Action when output file name is changed.

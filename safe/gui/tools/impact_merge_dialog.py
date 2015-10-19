@@ -165,55 +165,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         self.main_stacked_widget.setCurrentIndex(1)
 
         # Show usage info
-        self.show_info()
         self.restore_state()
-
-    def show_info(self):
-        """Show usage info to the user."""
-        # Read the header and footer html snippets
-        header = html_header()
-        footer = html_footer()
-
-        string = header
-
-        heading = m.Heading(self.tr('Impact Layer Merge Tool'), **INFO_STYLE)
-        body = self.tr(
-            'This tool will merge the outputs from two impact maps for the '
-            'same area. The maps must be created using the same aggregation '
-            'areas and same hazard. To use:'
-        )
-        tips = m.BulletedList()
-        tips.add(self.tr(
-            'Run an impact assessment for an area using aggregation. e.g.'
-            'Flood Impact on Buildings aggregated by municipal boundaries.'))
-        tips.add(self.tr(
-            'Run a second impact assessment for the same area using the same '
-            'aggregation. e.g. Flood Impact on People aggregated by '
-            'municipal boundaries.'))
-        tips.add(self.tr(
-            'Open this tool and select each impact layer from the pick lists '
-            'provided below.'))
-        tips.add(self.tr(
-            'Select the aggregation layer that was used to generate the '
-            'first and second impact layer.'))
-        tips.add(self.tr(
-            'Select an output directory.'))
-        tips.add(self.tr(
-            'Check "Use customized report template" checkbox and select the '
-            'report template file if you want to use your own template. Note '
-            'that all the map composer components that are needed must be '
-            'fulfilled.'))
-        tips.add(self.tr(
-            'Click OK to generate the per aggregation area combined '
-            'summaries.'))
-        message = m.Message()
-        message.add(heading)
-        message.add(body)
-        message.add(tips)
-        string += message.to_html()
-        string += footer
-
-        self.web_view.setHtml(string)
 
     def restore_state(self):
         """ Read last state of GUI from configuration file."""

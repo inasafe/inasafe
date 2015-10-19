@@ -1,15 +1,14 @@
 # coding=utf-8
-
-__author__ = 'ismailsunni'
-
+"""Impact report help text."""
 
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
-from safe.utilities.resources import resources_path
 
 INFO_STYLE = styles.INFO_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
+
+__author__ = 'ismailsunni'
 
 
 def impact_report_help():

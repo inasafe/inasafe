@@ -1,7 +1,5 @@
 # coding=utf-8
-
-__author__ = 'ismailsunni'
-
+"""Help text for needs calculator."""
 
 from safe.utilities.i18n import tr
 from safe import messaging as m
@@ -9,6 +7,8 @@ from safe.messaging import styles
 
 INFO_STYLE = styles.INFO_STYLE
 
+
+__author__ = 'ismailsunni'
 
 def needs_calculator_help():
     """Help message for needs calculator dialog.
