@@ -4,8 +4,10 @@
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.resources import resources_path
 
 INFO_STYLE = styles.INFO_STYLE
+SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
 __author__ = 'ismailsunni'
 
@@ -118,148 +120,161 @@ def content():
            'breakdowns of impact results will be added to the current QGIS'
            'project. You can generally leave this option disabled. ')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr('Female ratio default value')),
+        tr(' - When doing an analysis that uses population as the '
+           'exposure layer, various post-processors are used to produce a '
+           'demographic breakdown. In the case of the gender breakdown, '
+           'InaSAFE will report on how many males versus females are present '
+           'in each aggregation area. If there is no female ratio attribute '
+           'defined in the aggregation layer, the value in this setting will '
+           'be used to determine what the ratio between males to females '
+           'is.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr('Location for results')),
+        tr(' - By default, InaSAFE will write impact layer and intermediate '
+           'outputs to the system temporary directory. On some operating '
+           'systems, these temporary files will be deleted on each reboot. '
+           'If you wish to, you can specify an alternative directory '
+           'to use for storing these temporary files.')))
     message.add(bullets)
 
-
-    header = m.Heading(tr(''), **INFO_STYLE)
+    header = m.Heading(tr('Template options tab'), **INFO_STYLE)
     message.add(header)
 
     message.add(m.Paragraph(tr(
-        ''
+        'This tab has options relating to the printing of reports and the '
+        'generation of map composer templates.'
     )))
 
     bullets = m.BulletedList()
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Prompt me when template has missing elements')),
+        tr(' - You can define your own templates in InaSAFE. In some cases '
+           'critical elements on the template may be ommitted during this '
+           'template definition process. Should this happen, InaSAFE can '
+           'warn you when you try to use the template that it is missing '
+           'vital map components.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Use custom organisation logo')),
+        tr(' - By default, InaSAFE will add the supporters logo to each '
+           'map template. The supporters logo is also used at tbe bottom '
+           'of the dock panel if the \'show organisation logo in dock\' '
+           'option is enabled. You can use this option to replace the '
+           'organisation logo with that of your own organisation. The logo '
+           'will be rescaled automatically to fill the space provided.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Use custom north arrow image')),
+        tr(' - InaSAFE provides a basic north arrow which is placed on '
+           'generated map compositions and rendered PDF reports. You can '
+           'replace this north arrow with one of your own choosing using '
+           'this option.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Additional template directory')),
+        tr(' - When generating a print report, InaSAFE will offer a number '
+           'of pre-defined templates for you to use. For example there '
+           'is an A4 variant, an A3 variant and so on. You can use this '
+           'option to specify additional search directories to be used '
+           'when presenting a list of available templates. This is useful '
+           'in cases where you have created your own custom map templates '
+           'and you wish to use them for report production.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Use custom disclaimer text')),
+        tr(' - By default, InaSAFE will display a disclaimer on reports '
+           'advising readers of the report to exercise caution when '
+           'interpreting the outputs presented. You can override this '
+           'text using this option, though we do advise that you include '
+           'a similar statement of caution in your overridden text.')))
     message.add(bullets)
 
-
-    header = m.Heading(tr(''), **INFO_STYLE)
+    header = m.Heading(tr('ISO 19115 metadata tab'), **INFO_STYLE)
     message.add(header)
 
     message.add(m.Paragraph(tr(
-        ''
+        'This tab is used to define various options related to the '
+        'automated generation of ISO 19115 metadata which is associated with '
+        'hazard, exposure, aggregation and impact layers.'
     )))
 
     bullets = m.BulletedList()
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Organisation')),
+        tr(' - Use this option to specify the name of your organisation.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Contact email')),
+        tr(' - Use this option to specify the contact person\s email '
+           'address to use in the generated metadata document.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Website')),
+        tr(' - Use this option to set the website address to be used in '
+           'the generated metadata document.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Analysis title')),
+        tr(' - Use this to set the title value for the generated metadata '
+           'document.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Analysis license')),
+        tr(' - Use this to set the usage and redistribution license for the '
+           'generated impact layer.')))
     message.add(bullets)
 
-    header = m.Heading(tr(''), **INFO_STYLE)
+    header = m.Heading(tr('Advanced tab'), **INFO_STYLE)
     message.add(header)
 
     message.add(m.Paragraph(tr(
-        ''
+        'This tab contains options intended for advanced users only.'
     )))
 
     bullets = m.BulletedList()
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Keyword cache for remote databases')),
+        tr(' - When InaSAFE is used with remote layers (for example a '
+           'database layer or a WFS layer), it is not possible to store the '
+           'keywords for the layer with the layer itself. To accommodate for '
+           'these types of layers, InaSAFE writes the keywords to a small '
+           'file based database (using sqlite) and then retrieves them based'
+           'on unique connection details used for that layer. You can '
+           'specify a custom path to be used for storing the keywords '
+           'database using this option.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Help to improve InaSAFE by submitting errors to a remote server')),
+        tr(' - With this option enabled, InaSAFE will post any errors that '
+           'occur to an online server for analysis by our development team. '
+           'This option is disabled by default as some may consider some of '
+           'the data submitted (IP Address, logged in user name) to be '
+           'sensitive.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Enable developer mode')),
+        tr(' - When this option is enabled, right clicking on the webview '
+           'widget in the dock will allow you to debug the generated HTML. '
+           'In addition, if the metadata.txt for the running InaSAFE is '
+           'set to \'alpha\', an additional icon will be added to the '
+           'toolbar to add test layers to the QGIS project.'),
+        m.Image(
+            'file:///%s/img/icons/'
+            'add-test-layers.svg' % resources_path(),
+            **SMALL_ICON_STYLE)))
     bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
-    bullets.add(m.Text(
-        m.ImportantText(tr('')),
-        tr(' - ')))
+        m.ImportantText(tr(
+            'Use QGIS zonal statistics')),
+        tr(' - Some versions of QGIS shipped with a buggy zonal statistics '
+           'algorithm. With this option you can elect whether to use '
+           'built in zonal statistics functions from QGIS or to use '
+           'an implementation of zonal statistics included with InaSAFE. '
+           'At some point in the future we expect to deprecate this feature '
+           'but for now we suggest to use the InaSAFE implementation.')))
     message.add(bullets)
 
     return message
