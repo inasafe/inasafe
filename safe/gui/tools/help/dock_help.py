@@ -14,18 +14,48 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
 
 def dock_help():
-    """Help message for Batch Dialog.
+    """Help message for Dock Widget.
 
-    .. versionadded:: 3.2.1
+    ..versionadded:: 3.2.1
 
     :returns: A message object containing helpful information.
     :rtype: messaging.message.Message
     """
+
     message = m.Message()
     message.add(m.Brand())
-    heading = m.Heading(tr('InaSAFE dock help'), **INFO_STYLE)
-    message.add(heading)
+    message.add(heading())
+    message.add(content())
+    return message
 
+
+def heading():
+    """Helper method that returns just the header.
+
+    This method was added so that the text could be resused in the
+    other contexts.
+
+    ..versionadded:: 3.2.2
+
+    :returns: A heading object.
+    :rtype: safe.messaging.heading.Heading
+    """
+    message = m.Heading(tr('InaSAFE dock help'), **INFO_STYLE)
+    return message
+
+
+def content():
+    """Helper method that returns just the content.
+
+    This method was added so that the text could be resused in the
+    dock_help module.
+
+    ..versionadded:: 3.2.2
+
+    :returns: A message object without brand element.
+    :rtype: safe.messaging.message.Message
+    """
+    message = m.Message()
     paragraph = m.Paragraph(tr(
         'This document describes the usage of the InaSAFE \'dock panel\''
         '- which is an interface for running risk scenarios within the QGIS '

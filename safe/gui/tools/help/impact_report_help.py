@@ -15,19 +15,31 @@ SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 def impact_report_help():
     """Help message for Batch Dialog.
 
-    .. versionadded:: 3.2.1
+    ..versionadded:: 3.2.1
 
     :returns: A message object containing helpful information.
     :rtype: messaging.message.Message
     """
-    heading = m.Heading(tr('Impact Report Help'), **INFO_STYLE)
-    body = content()
 
     message = m.Message()
     message.add(m.Brand())
-    message.add(heading)
-    message.add(body)
+    message.add(heading())
+    message.add(content())
+    return message
 
+
+def heading():
+    """Helper method that returns just the header.
+
+    This method was added so that the text could be resused in the
+    other contexts.
+
+    ..versionadded:: 3.2.2
+
+    :returns: A heading object.
+    :rtype: safe.messaging.heading.Heading
+    """
+    message = m.Heading(tr('Impact report help'), **INFO_STYLE)
     return message
 
 

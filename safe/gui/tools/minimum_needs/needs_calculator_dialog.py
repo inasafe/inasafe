@@ -50,7 +50,6 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr(
             'InaSAFE %s Minimum Needs Calculator' % get_version()))
         self.polygon_layers_to_combo()
-        self.show_info()
 
         # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -65,43 +64,6 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         # Fix ends
         ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
         ok_button.clicked.connect(self.accept)
-
-    def show_info(self):
-        """Show basic usage instructions."""
-        header = html_header()
-        footer = html_footer()
-        string = header
-
-        heading = m.Heading(self.tr('Minimum Needs Calculator'), **INFO_STYLE)
-        body = self.tr(
-            'This tool will calculated minimum needs for evacuated people. To '
-            'use this tool effectively:'
-        )
-        tips = m.BulletedList()
-        tips.add(self.tr(
-            'Load a point or polygon layer in QGIS. Typically the layer will '
-            'represent administrative districts where people have gone to an '
-            'evacuation center.'))
-        tips.add(self.tr(
-            'Ensure that the layer has an INTEGER attribute for the number of '
-            'displaced people associated with each feature.'
-        ))
-        tips.add(self.tr(
-            'Use the pick lists below to select the layer and the population '
-            'field and then press \'OK\'.'
-        ))
-        tips.add(self.tr(
-            'A new layer will be added to QGIS after the calculation is '
-            'complete. The layer will contain the minimum needs per district '
-            '/ administrative boundary.'))
-        message = m.Message()
-        message.add(heading)
-        message.add(body)
-        message.add(tips)
-        string += message.to_html()
-        string += footer
-
-        self.info_web_view.setHtml(string)
 
     def minimum_needs(self, input_layer, population_name):
         """Compute minimum needs given a layer and a column containing pop.
