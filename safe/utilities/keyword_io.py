@@ -6,8 +6,6 @@
    library.
 
 """
-from safe.storage.utilities import read_keywords
-from safe.utilities.i18n import tr
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -38,6 +36,8 @@ from safe.utilities.utilities import (
     write_keywords_to_file)
 from safe import messaging as m
 from safe.messaging import styles
+from safe.storage.utilities import read_keywords
+from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_string
 from safe.common.exceptions import (
     HashNotFoundError,
