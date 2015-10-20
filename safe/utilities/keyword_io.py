@@ -6,6 +6,9 @@
    library.
 
 """
+from safe.storage.utilities import read_keywords
+from safe.utilities.i18n import tr
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -81,6 +84,39 @@ class KeywordIO(QObject):
         :type path: str
         """
         self.keyword_db_path = str(path)
+
+    @classmethod
+    def read_keywords_file(cls, filename, keyword=None):
+        """Read keywords from a keywords file and return as dictionary
+
+        This serves as a wrapper function that should be provided by Keyword
+        IO. Use this if you are sure that the filename is a keyword file.
+
+        :param filename: The filename of the keyword, typically with .xml or
+            .keywords extension
+        :type filename: str
+
+        :param keyword: If set, will extract only the specified keyword
+              from the keywords dict.
+        :type keyword: str
+
+        :returns: A dict if keyword is omitted, otherwise the value for the
+            given key if it is present.
+        :rtype: dict, str
+
+        :raises: KeywordNotFoundError
+        """
+        dictionary = read_keywords(filename)
+
+        # if no keyword was supplied, just return the dict
+        if keyword is None:
+            return dictionary
+        if keyword not in dictionary:
+            message = tr('No value was found in file %s for keyword %s' % (
+                filename, keyword))
+            raise KeywordNotFoundError(message)
+
+        return dictionary[keyword]
 
     def read_keywords(self, layer, keyword=None):
         """Read keywords for a datasource and return them as a dictionary.
