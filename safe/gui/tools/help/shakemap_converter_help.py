@@ -13,7 +13,7 @@ __author__ = 'ismailsunni'
 def shakemap_converter_help():
     """Help message for extent selector dialog.
 
-    ..versionadded:: 3.2.1
+    .. versionadded:: 3.2.1
 
     :returns: A message object containing helpful information.
     :rtype: messaging.message.Message
@@ -29,10 +29,10 @@ def shakemap_converter_help():
 def heading():
     """Helper method that returns just the header.
 
-    This method was added so that the text could be resused in the
+    This method was added so that the text could be reused in the
     other contexts.
 
-    ..versionadded:: 3.2.2
+    .. versionadded:: 3.2.2
 
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
@@ -44,10 +44,10 @@ def heading():
 def content():
     """Helper method that returns just the content.
 
-    This method was added so that the text could be resused in the
+    This method was added so that the text could be reused in the
     dock_help module.
 
-    ..versionadded:: 3.2.2
+    .. versionadded:: 3.2.2
 
     :returns: A message object without brand element.
     :rtype: safe.messaging.message.Message

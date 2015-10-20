@@ -282,7 +282,7 @@ class FloodRasterRoadsFunction(
     def notes(self):
         """Return the notes section of the report.
 
-        ..versionadded: 3.2.1
+        .. versionadded: 3.2.1
 
         :return: The notes that should be attached to this impact report.
         :rtype: safe.messaging.Message

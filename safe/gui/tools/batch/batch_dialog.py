@@ -679,7 +679,7 @@ class BatchDialog(QDialog, FORM_CLASS):
     def help_toggled(self, flag):
         """Show or hide the help tab in the main stacked widget.
 
-        ..versionadded: 3.2.1
+        .. versionadded: 3.2.1
 
         :param flag: Flag indicating whether help should be shown or hidden.
         :type flag: bool

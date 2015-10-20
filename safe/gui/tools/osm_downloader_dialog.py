@@ -173,7 +173,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 
-        ..versionadded: 3.2
+        .. versionadded: 3.2
 
         :param flag: Flag indicating whether help should be shown or hidden.
         :type flag: bool
