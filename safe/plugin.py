@@ -24,7 +24,7 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
-from qgis.core import QgsRectangle
+from qgis.core import QgsRectangle, QgsRasterLayer, QgsMapLayerRegistry
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QLocale,
@@ -313,6 +313,21 @@ class Plugin(object):
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
         self.add_action(self.action_import_dialog)
 
+    def _create_add_osm_layer_action(self):
+        """Create action for import OSM Dialog."""
+        icon = resources_path('img', 'icons', 'add-osm-tiles-layer.svg')
+        self.action_add_osm_layer = QAction(
+            QIcon(icon),
+            self.tr('Add OpenStreetMap Tile Layer'),
+            self.iface.mainWindow())
+        self.action_add_osm_layer.setStatusTip(self.tr(
+            'Add OpenStreetMap Tile Layer'))
+        self.action_add_osm_layer.setWhatsThis(self.tr(
+            'Use this to add an OSM layer to your map. '
+            'It needs internet access to function.'))
+        self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
+        self.add_action(self.action_add_osm_layer)
+
     def _create_impact_merge_action(self):
         """Create action for impact layer merge Dialog."""
         icon = resources_path('img', 'icons', 'show-impact-merge.svg')
@@ -424,6 +439,7 @@ class Plugin(object):
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
         self._create_osm_downloader_action()
+        self._create_add_osm_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
@@ -645,6 +661,23 @@ class Plugin(object):
 
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
+
+    def show_osm_downloader(self):
+        """Show the OSM buildings downloader dialog."""
+        from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
+
+        dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
+        dialog.show()  # non modal
+
+    def add_osm_layer(self):
+        """Add OSM tile layer to the map.
+
+        This uses a gdal wrapper around the OSM tile service - see the
+        WorldOSM.gdal file for how it is constructed.
+        """
+        path = resources_path('osm', 'WorldOSM.gdal')
+        layer = QgsRasterLayer(path, self.tr('OpenStreetMap'))
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
