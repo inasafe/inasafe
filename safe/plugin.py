@@ -24,7 +24,12 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
-from qgis.core import QgsRectangle, QgsRasterLayer, QgsMapLayerRegistry
+from qgis.core import (
+    QGis,
+    QgsRectangle,
+    QgsRasterLayer,
+    QgsMapLayerRegistry,
+    QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QLocale,
@@ -677,6 +682,21 @@ class Plugin(object):
         """
         path = resources_path('osm', 'WorldOSM.gdal')
         layer = QgsRasterLayer(path, self.tr('OpenStreetMap'))
+        registry = QgsMapLayerRegistry.instance()
+
+        # For older versions we just add directly to the top of legend
+        if QGis.QGIS_VERSION_INT < 20400:
+            # True flag adds layer directly to legend
+            registry.addMapLayer(layer, True)
+            return
+        # Otherwise try to add it as the last layer in the list
+        # False flag prevents layer being added to legend
+        registry.addMapLayer(layer, False)
+        root = QgsProject.instance().layerTreeRoot()
+        index = len(root.findLayers()) + 1
+        LOGGER.info('Inserting layer %s at position %s' % (
+            layer.source(), index))
+        root.insertLayer(index, layer)
         QgsMapLayerRegistry.instance().addMapLayer(layer)
 
     def show_batch_runner(self):
