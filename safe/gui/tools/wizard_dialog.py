@@ -3455,7 +3455,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.swExtent:
             self.swExtent.hide()
 
-        self.swExtent = self.extent_dialog.stacked_widget
+        self.swExtent = self.extent_dialog.main_stacked_widget
         self.layoutAnalysisExtent.addWidget(self.swExtent)
 
     def write_extent(self):
