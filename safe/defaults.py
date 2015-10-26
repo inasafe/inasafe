@@ -394,7 +394,7 @@ def default_provenance():
     field = TextParameter()
     field.name = tr('Provenance')
     field.description = tr('The provenance of minimum needs')
-    field.value = 'The minimum needs are based on Perka 7/2008.'
+    field.value = 'The minimum needs are based on BNPB Perka 7/2008.'
     return field
 
 
@@ -413,8 +413,29 @@ def disclaimer():
     return text
 
 
-def default_organisation_logo_path():
-    """Get a default organisation logo path.
+def black_inasafe_logo_path():
+    """Get the path to the Black InaSAFE SVG logo.
+
+    .. versionadded:: 3.2
+    """
+    path = resources_path('img', 'logos', 'inasafe-logo-url.svg')
+    return path
+
+
+def white_inasafe_logo_path():
+    """Get the path to the White InaSAFE SVG logo.
+
+    .. versionadded:: 3.2
+    """
+    path = resources_path('img', 'logos', 'inasafe-logo-url-white.svg')
+    return path
+
+
+def supporters_logo_path():
+    """Get the supporters logo path.
+
+    .. versionchanged:: Changed in 3.2 from default_organisation_path to
+        supporters_logo_path.
 
     :return: Default organisation logo path.
     :rtype: str

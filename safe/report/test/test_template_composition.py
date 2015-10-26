@@ -29,7 +29,7 @@ LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 INASAFE_TEMPLATE_PATH = resources_path(
-    'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+    'qgis-composer-templates', 'a4-portrait-blue.qpt')
 
 
 class TemplateCompositionTest(unittest.TestCase):
@@ -57,13 +57,17 @@ class TemplateCompositionTest(unittest.TestCase):
         """Test if we can get missing elements correctly."""
         # Copy the inasafe template to temp dir
         template_path = os.path.join(
-            temp_dir('test'), 'inasafe-portrait-a4.qpt')
+            temp_dir('test'), 'a4-portrait-blue.qpt')
         shutil.copy2(INASAFE_TEMPLATE_PATH, template_path)
 
         template_composition = TemplateComposition(template_path=template_path)
         # No missing elements here
-        component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
-                         'impact-map', 'impact-legend']
+        component_ids = [
+            'white-inasafe-logo',
+            'north-arrow',
+            'organisation-logo',
+            'impact-map',
+            'impact-legend']
         template_composition.component_ids = component_ids
         message = 'There should be no missing elements, but it gets: %s' % (
             template_composition.missing_elements)
@@ -72,9 +76,12 @@ class TemplateCompositionTest(unittest.TestCase):
             template_composition.missing_elements, expected_result, message)
 
         # There are missing elements
-        component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
-                         'impact-map', 'impact-legend',
-                         'i-added-element-id-here-nooo']
+        component_ids = [
+            'white-inasafe-logo',
+            'north-arrow',
+            'organisation-logo',
+            'impact-map', 'impact-legend',
+            'i-added-element-id-here-nooo']
         template_composition.component_ids = component_ids
         message = 'There should be no missing elements, but it gets: %s' % (
             template_composition.missing_elements)
@@ -89,7 +96,7 @@ class TemplateCompositionTest(unittest.TestCase):
         """Test we can load template correctly."""
         # Copy the inasafe template to temp dir
         template_path = os.path.join(
-            temp_dir('test'), 'inasafe-portrait-a4.qpt')
+            temp_dir('test'), 'a4-portrait-blue.qpt')
         shutil.copy2(INASAFE_TEMPLATE_PATH, template_path)
 
         template_composition = TemplateComposition(
@@ -99,8 +106,12 @@ class TemplateCompositionTest(unittest.TestCase):
 
         # Check the element of the composition
         # In that template, there should be these components:
-        component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
-                         'impact-map', 'impact-legend']
+        component_ids = [
+            'white-inasafe-logo',
+            'north-arrow',
+            'organisation-logo',
+            'impact-map',
+            'impact-legend']
         for component_id in component_ids:
             component = template_composition.composition.getComposerItemById(
                 component_id)

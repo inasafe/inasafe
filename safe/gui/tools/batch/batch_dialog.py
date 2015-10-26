@@ -583,7 +583,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         """
         # FIXME: check if impact_layer is the real impact layer...
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         impact_report = ImpactReport(self.iface, template, impact_layer)
 
         LOGGER.debug('Create Report: %s' % title)

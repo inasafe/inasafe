@@ -65,40 +65,22 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
     def test_0001_generate_report(self):
         """Generate a blank report."""
         blank_report = self.population_mixin_blank.generate_report()
-        expected_blank_report = [
-            {'content': ''},
-            {'content': ''},
-            {
-                'content':
-                    [u'Population needing evacuation <sup>1</sup>', '0'],
-                'header': True
-            },
-            {'content': ''},
-            {'content': [u'Unaffected population', '0'], 'header': True},
-            {'content': ''},
-            {'content': u'Evacuated population minimum needs', 'header': True},
-            {'content': ''}, {'content': u'Action checklist', 'header': True},
-            {'content': u'How will warnings be disseminated?'},
-            {'content': u'How will we reach evacuated people?'},
-            {
-                'content':
-                    u'Are there enough shelters and relief items available '
-                    u'for 0 people?'
-            },
-            {
-                'content':
-                    u'If yes, where are they located and how will we '
-                    u'distribute them?'
-            },
-            {
-                'content':
-                    u'If no, where can we obtain additional relief items '
-                    u'from and how will we transport them to here?'
-            },
-            {'content': ''}
-        ]
-        message = 'Blank report is not as expected.'
-        self.assertListEqual(blank_report, expected_blank_report, message)
+        blank_report = blank_report.to_text()
+        expected_strings = [
+            u'**Population needing evacuation <sup>1</sup>**, 0',
+            u'**Unaffected population**, 0',
+            u'Evacuated population minimum needs',
+            u'Action checklist',
+            u'How will warnings be disseminated?',
+            u'How will we reach evacuated people?',
+            (u'Are there enough shelters and relief items available '
+             u'for 0 people?'),
+            (u'If yes, where are they located and how will we '
+             u'distribute them?'),
+            (u'If no, where can we obtain additional relief items '
+             u'from and how will we transport them to here?')]
+        for item in expected_strings:
+            self.assertIn(item, blank_report)
 
     def test_0002_category_ordering(self):
         """Test correct category ordering."""
@@ -113,24 +95,17 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
     def test_0003_minimum_needs_breakdown(self):
         """Test minimum needs breakdown."""
         needs_breakdown = self.population_mixin.minimum_needs_breakdown()
-        expected_needs_breakdown = [
-            {
-                'content': u'Evacuated population minimum needs',
-                'header': True
-            },
-            {
-                'content': [
-                    u'Needs that should be provided test frequency', u'Total'],
-                'header': True
-            },
-            {'content': [u'test name 1 [u]', u'300']},
-            {'content': [u'test name 2 [u]', u'600']}
+        needs_breakdown = needs_breakdown.to_text()
+
+        expected_needs = [
+            u'Evacuated population minimum needs',
+            u'**Relief items to be provided test frequency**',
+            u'test name 1 [u], 300',
+            u'test name 2 [u], 600'
         ]
-        message = 'Needs beakdown is not as expected.'
-        self.assertListEqual(
-            needs_breakdown,
-            expected_needs_breakdown,
-            message)
+
+        for item in expected_needs:
+            self.assertIn(item, needs_breakdown)
 
     def test_0004_population_counts(self):
         """Test correct category ordering."""

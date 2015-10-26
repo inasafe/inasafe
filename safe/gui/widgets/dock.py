@@ -61,7 +61,7 @@ from safe.utilities.qgis_utilities import (
     display_information_message_bar)
 from safe.defaults import (
     limitations,
-    default_organisation_logo_path)
+    supporters_logo_path)
 from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -405,7 +405,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # whether to show or not a custom Logo
         self.organisation_logo_path = settings.value(
             'inasafe/organisation_logo_path',
-            default_organisation_logo_path(),
+            supporters_logo_path(),
             type=str)
         # This is a fix for 3.0.0 change where we no longer provide Qt4
         # Qt4 resource bundles, so if the path points into a resource
@@ -416,7 +416,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             invalid_path_flag = True
             settings.setValue(
                 'inasafe/organisation_logo_path',
-                default_organisation_logo_path())
+                supporters_logo_path())
 
         # Changed default to False for new users in 3.2 - see #2171
         show_logos_flag = bool(settings.value(
@@ -515,7 +515,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if logo_not_exist or invalid_logo_size:
             settings.setValue(
                 'inasafe/organisation_logo_path',
-                default_organisation_logo_path())
+                supporters_logo_path())
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
@@ -621,25 +621,27 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         # myHazardFilename = self.getHazardLayer().source()
         # noinspection PyTypeChecker
-        hazard_keywords = str(
-            self.keyword_io.read_keywords(self.get_hazard_layer()))
+        hazard_keywords = self.keyword_io.read_keywords(
+            self.get_hazard_layer())
         # myExposureFilename = self.getExposureLayer().source()
         # noinspection PyTypeChecker
-        exposure_keywords = str(
-            self.keyword_io.read_keywords(self.get_exposure_layer()))
+        exposure_keywords = self.keyword_io.read_keywords(
+            self.get_exposure_layer())
         heading = m.Heading(
-            self.tr('No valid functions:'), **WARNING_STYLE)
+            self.tr('No valid functions'), **WARNING_STYLE)
         notes = m.Paragraph(self.tr(
             'No functions are available for the inputs you have specified. '
             'Try selecting a different combination of inputs. Please '
             'consult the user manual for details on what constitute '
             'valid inputs for a given risk function.'))
         hazard_heading = m.Heading(
-            self.tr('Hazard keywords:'), **INFO_STYLE)
-        hazard_keywords = m.Paragraph(hazard_keywords)
+            self.tr('Hazard keywords'), **INFO_STYLE)
+        hazard_keywords = self.keyword_io.to_message(
+            hazard_keywords, show_header=False)
         exposure_heading = m.Heading(
-            self.tr('Exposure keywords:'), **INFO_STYLE)
-        exposure_keywords = m.Paragraph(exposure_keywords)
+            self.tr('Exposure keywords'), **INFO_STYLE)
+        exposure_keywords = self.keyword_io.to_message(
+            exposure_keywords, show_header=False)
         message = m.Message(
             heading,
             notes,
@@ -1018,6 +1020,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.restore_state()
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(True)
+        self.pbnShowQuestion.setVisible(False)
         # Note: Don't change the order of the next two lines otherwise there
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
@@ -1925,8 +1928,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # Make sure the file paths can wrap nicely:
             wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-            wrapped_table_path = table_pdf_path.replace(os.sep,
-                                                        '<wbr>' + os.sep)
+            wrapped_table_path = table_pdf_path.replace(
+                os.sep, '<wbr>' + os.sep)
             status = m.Message(
                 m.Heading(self.tr('Map Creator'), **INFO_STYLE),
                 m.Paragraph(self.tr(

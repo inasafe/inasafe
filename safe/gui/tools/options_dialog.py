@@ -30,7 +30,7 @@ from safe.utilities.help import show_context_help
 from safe.common.utilities import temp_dir
 from safe.defaults import (
     disclaimer,
-    default_organisation_logo_path,
+    supporters_logo_path,
     default_north_arrow_path,
     get_defaults)
 from safe.utilities.keyword_io import KeywordIO
@@ -141,10 +141,10 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         # Restore Organisation Logo Path
         org_logo_path = settings.value(
             'inasafe/organisation_logo_path',
-            default_organisation_logo_path(),
+            supporters_logo_path(),
             type=str)
         custom_org_logo_flag = (
-            org_logo_path != default_organisation_logo_path())
+            org_logo_path != supporters_logo_path())
         self.custom_org_logo_checkbox.setChecked(custom_org_logo_flag)
         self.leOrganisationLogoPath.setText(org_logo_path)
 
@@ -373,11 +373,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             # Use previous org logo path
             path = settings.value(
                 'inasafe/organisation_logo_path',
-                default_organisation_logo_path(),
+                supporters_logo_path(),
                 type=str)
         else:
             # Set organisation path line edit to default one
-            path = default_organisation_logo_path()
+            path = supporters_logo_path()
 
         self.leOrganisationLogoPath.setText(path)
 

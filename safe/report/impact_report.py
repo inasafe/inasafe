@@ -51,7 +51,9 @@ from safe.utilities.utilities import impact_attribution, html_to_file
 from safe.utilities.resources import html_footer, html_header, resource_url
 from safe.utilities.i18n import tr
 from safe.defaults import (
-    default_organisation_logo_path,
+    white_inasafe_logo_path,
+    black_inasafe_logo_path,
+    supporters_logo_path,
     default_north_arrow_path)
 from safe.report.template_composition import TemplateComposition
 
@@ -80,9 +82,11 @@ class ImpactReport(object):
         self._layer = layer
         self._extent = self._iface.mapCanvas().extent()
         self._page_dpi = 300.0
-        self._safe_logo = resources_path(
-            'img', 'logos', 'inasafe-logo-url.svg')
-        self._organisation_logo = default_organisation_logo_path()
+        self._black_inasafe_logo = black_inasafe_logo_path()
+        self._white_inasafe_logo = white_inasafe_logo_path()
+        # User can change this path in preferences
+        self._organisation_logo = supporters_logo_path()
+        self._supporters_logo = supporters_logo_path()
         self._north_arrow = default_north_arrow_path()
         self._disclaimer = disclaimer()
 
@@ -114,7 +118,7 @@ class ImpactReport(object):
             self._template = template
         else:
             self._template = resources_path(
-                'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+                'qgis-composer-templates', 'a4-portrait-blue.qpt')
 
         # Also recreate template composition
         self._template_composition = TemplateComposition(
@@ -190,21 +194,12 @@ class ImpactReport(object):
             self._north_arrow = default_north_arrow_path()
 
     @property
-    def safe_logo(self):
-        """Getter to safe logo path."""
-        return self._safe_logo
+    def inasafe_logo(self):
+        """Getter to safe logo path.
 
-    @safe_logo.setter
-    def safe_logo(self, logo):
-        """Set image that will be used as safe logo in reports.
-
-        :param logo: Path to the safe logo image.
-        :type logo: str
+        .. versionchanged:: 3.2 - this property is now read only.
         """
-        if isinstance(logo, basestring) and os.path.exists(logo):
-            self._safe_logo = logo
-        else:
-            self._safe_logo = default_organisation_logo_path()
+        return self._black_inasafe_logo
 
     @property
     def organisation_logo(self):
@@ -221,7 +216,18 @@ class ImpactReport(object):
         if isinstance(logo, basestring) and os.path.exists(logo):
             self._organisation_logo = logo
         else:
-            self._organisation_logo = default_organisation_logo_path()
+            self._organisation_logo = supporters_logo_path()
+
+    @property
+    def supporters_logo(self):
+        """Getter to supporters logo path - this is a read only property.
+
+        It always returns the InaSAFE supporters logo unlike the organisation
+        logo which is customisable.
+
+        .. versionadded:: 3.2
+        """
+        return self._supporters_logo
 
     @property
     def disclaimer(self):
@@ -338,8 +344,24 @@ class ImpactReport(object):
             'impact-title': title,
             'date': date,
             'time': time,
-            'safe-version': version,
-            'disclaimer': self.disclaimer
+            'safe-version': version,  # deprecated
+            'disclaimer': self.disclaimer,
+            # These added in 3.2
+            'version-title': tr('Version'),
+            'inasafe-version': version,
+            'disclaimer-title': tr('Disclaimer'),
+            'date-title': tr('Date'),
+            'time-title': tr('Time'),
+            'caution-title': tr('Note'),
+            'caution-text': tr(
+                'This assessment is a guide - we strongly recommend that you '
+                'ground truth the results shown here before deploying '
+                'resources and / or personnel.'),
+            'version-text': tr(
+                'Assessment carried out using InaSAFE release %s.' % version),
+            'legend-title': tr('Legend'),
+            'information-title': tr('Analysis information'),
+            'supporters-title': tr('Report produced by')
         }
 
         # Load template
@@ -351,25 +373,49 @@ class ImpactReport(object):
 
     def draw_composition(self):
         """Draw all the components in the composition."""
-        safe_logo = self.composition.getComposerItemById('safe-logo')
-        north_arrow = self.composition.getComposerItemById('north-arrow')
+        # This is deprecated - use inasafe-logo-<colour> rather
+        safe_logo = self.composition.getComposerItemById(
+            'safe-logo')
+        # Next two options replace safe logo in 3.2
+        black_inasafe_logo = self.composition.getComposerItemById(
+            'black-inasafe-logo')
+        white_inasafe_logo = self.composition.getComposerItemById(
+            'white-inasafe-logo')
+        north_arrow = self.composition.getComposerItemById(
+            'north-arrow')
         organisation_logo = self.composition.getComposerItemById(
             'organisation-logo')
+        supporters_logo = self.composition.getComposerItemById(
+            'supporters-logo')
 
         if qgis_version() < 20600:
             if safe_logo is not None:
-                safe_logo.setPictureFile(self.safe_logo)
+                # its deprecated so just use black_inasafe_logo
+                safe_logo.setPictureFile(self.inasafe_logo)
+            if black_inasafe_logo is not None:
+                black_inasafe_logo.setPictureFile(self._black_inasafe_logo)
+            if white_inasafe_logo is not None:
+                white_inasafe_logo.setPictureFile(self._white_inasafe_logo)
             if north_arrow is not None:
                 north_arrow.setPictureFile(self.north_arrow)
             if organisation_logo is not None:
                 organisation_logo.setPictureFile(self.organisation_logo)
+            if supporters_logo is not None:
+                supporters_logo.setPictureFile(self.supporters_logo)
         else:
             if safe_logo is not None:
-                safe_logo.setPicturePath(self.safe_logo)
+                # its deprecated so just use black_inasafe_logo
+                safe_logo.setPicturePath(self.inasafe_logo)
+            if black_inasafe_logo is not None:
+                black_inasafe_logo.setPicturePath(self._black_inasafe_logo)
+            if white_inasafe_logo is not None:
+                white_inasafe_logo.setPicturePath(self._white_inasafe_logo)
             if north_arrow is not None:
                 north_arrow.setPicturePath(self.north_arrow)
             if organisation_logo is not None:
                 organisation_logo.setPicturePath(self.organisation_logo)
+            if supporters_logo is not None:
+                supporters_logo.setPicturePath(self.supporters_logo)
 
         # Set impact report table
         table = self.composition.getComposerItemById('impact-report')
@@ -412,8 +458,6 @@ class ImpactReport(object):
 
         legend = self.composition.getComposerItemById('impact-legend')
         if legend is not None:
-            legend_attributes = self.map_legend_attributes
-            legend_title = legend_attributes.get('legend_title', None)
 
             symbol_count = 1
             # noinspection PyUnresolvedReferences
@@ -431,9 +475,8 @@ class ImpactReport(object):
             else:
                 legend.setColumnCount(symbol_count / 5 + 1)
 
-            if legend_title is None:
-                legend_title = ""
-            legend.setTitle(legend_title)
+            # Set back to blank to #2409
+            legend.setTitle("")
 
             # Set Legend
             # Since QGIS 2.6, legend.model() is obsolete
@@ -525,7 +568,7 @@ class ImpactReport(object):
         # shown on screen (see FloodOsmBuilding)
         # Unless the impact_summary is None, we will use impact_table as the
         # alternative
-        html = LOGO_ELEMENT.to_html()
+        html = m.Brand().to_html()
         html += m.Heading(tr('Analysis Results'), **INFO_STYLE).to_html()
         if summary_table is None:
             html += full_table
@@ -549,6 +592,7 @@ class ImpactReport(object):
             map_settings = QgsMapSettings()
 
         # A4 Portrait
+        # TODO: Will break when we try to use larger print layouts TS
         paper_width = 210
         paper_height = 297
 

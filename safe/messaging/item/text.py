@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid - **Paragraph.**
 
@@ -16,6 +17,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+from PyQt4.QtCore import QPyNullVariant
+from safe.utilities.i18n import tr
+
 from message_element import MessageElement
 from exceptions import InvalidMessageItemError
 
@@ -59,6 +63,9 @@ class Text(MessageElement):
             self.text.append(PlainText(text))
         elif isinstance(text, Text):
             self.text.append(text)
+        elif isinstance(text, QPyNullVariant):
+            self.text.append(PlainText(
+                tr('Null (PyQt4.QtCore.QPyNullVariant) found from the data.')))
         else:
             raise InvalidMessageItemError(text, text.__class__)
 

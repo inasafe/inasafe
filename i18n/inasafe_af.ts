@@ -38,7 +38,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="zonal_stats.py" line="133"/>
+        <location filename="clipper.py" line="231"/>
         <source>Could not obtain data provider from layer &quot;%s&quot;</source>
         <translation type="unfinished"/>
     </message>
@@ -68,52 +68,52 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="74"/>
+        <location filename="utilities.py" line="75"/>
         <source>No details provided</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="120"/>
+        <location filename="utilities.py" line="121"/>
         <source>%i seconds</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="122"/>
+        <location filename="utilities.py" line="123"/>
         <source>a minute</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="126"/>
+        <location filename="utilities.py" line="127"/>
         <source>over an hour</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="128"/>
+        <location filename="utilities.py" line="129"/>
         <source>%i hours and %i minutes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="131"/>
+        <location filename="utilities.py" line="132"/>
         <source>%i days, %i hours and %i minutes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="152"/>
+        <location filename="utilities.py" line="153"/>
         <source>sourced from</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="153"/>
+        <location filename="utilities.py" line="155"/>
         <source>Hazard details</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="156"/>
+        <location filename="utilities.py" line="158"/>
         <source>Exposure details</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="164"/>
+        <location filename="utilities.py" line="165"/>
         <source>Hazard layer</source>
         <translation type="unfinished"/>
     </message>
@@ -128,7 +128,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="196"/>
+        <location filename="utilities.py" line="197"/>
         <source>Software notes</source>
         <translation type="unfinished"/>
     </message>
@@ -203,7 +203,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="124"/>
+        <location filename="utilities.py" line="125"/>
         <source>%s minutes</source>
         <translation type="unfinished"/>
     </message>
@@ -228,17 +228,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="202"/>
-        <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software!InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR &amp; the World Bank</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="utilities.py" line="1198"/>
+        <location filename="gis.py" line="386"/>
         <source>Input layer must be a InaSAFE spatial object. I got %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="1220"/>
+        <location filename="gis.py" line="408"/>
         <source>Loaded impact layer &quot;%s&quot; is not valid</source>
         <translation type="unfinished"/>
     </message>
@@ -253,22 +248,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="443"/>
+        <location filename="defaults.py" line="464"/>
         <source>InaSAFE is not a hazard modelling tool.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="444"/>
+        <location filename="defaults.py" line="465"/>
         <source>Polygon area analysis (such as land use) is not yet supported.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="449"/>
+        <location filename="defaults.py" line="470"/>
         <source>Population by administration boundary is not yet supported.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="451"/>
+        <location filename="defaults.py" line="472"/>
         <source>InaSAFE is a Free and Open Source Software (FOSS) project, published under the GPL V3 license. As such you may freely download, share and (if you like) modify the software.</source>
         <translation type="unfinished"/>
     </message>
@@ -278,7 +273,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="446"/>
+        <location filename="defaults.py" line="467"/>
         <source>Population count data (raster) must be provided in WGS84 geographic coordinates.</source>
         <translation type="unfinished"/>
     </message>
@@ -288,12 +283,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="118"/>
+        <location filename="test_plugin.py" line="69"/>
         <source>A volcano eruption</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="55"/>
+        <location filename="test_translations.py" line="82"/>
         <source>Be affected</source>
         <translation type="unfinished"/>
     </message>
@@ -718,11 +713,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dynamic_translations.py" line="160"/>
-        <source>AggregationCategorical</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="dynamic_translations.py" line="161"/>
         <source>Displacement rate</source>
         <translation type="unfinished"/>
@@ -773,12 +763,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="60"/>
+        <location filename="dynamic_translations.py" line="173"/>
         <source>Aggregation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="198"/>
+        <location filename="dynamic_translations.py" line="174"/>
         <source>Building type</source>
         <translation type="unfinished"/>
     </message>
@@ -818,27 +808,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="332"/>
+        <location filename="minimum_needs.py" line="117"/>
         <source>Rice</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="342"/>
+        <location filename="minimum_needs.py" line="118"/>
         <source>Drinking Water</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="352"/>
+        <location filename="minimum_needs.py" line="119"/>
         <source>Clean Water</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="362"/>
+        <location filename="minimum_needs.py" line="120"/>
         <source>Family Kits</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="369"/>
+        <location filename="minimum_needs.py" line="121"/>
         <source>Toilets</source>
         <translation type="unfinished"/>
     </message>
@@ -863,7 +853,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="200"/>
+        <location filename="road_exposure_report_mixin.py" line="147"/>
         <source>Total</source>
         <translation type="unfinished"/>
     </message>
@@ -928,7 +918,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>Need evacuation</source>
         <translation type="unfinished"/>
     </message>
@@ -938,7 +928,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="94"/>
+        <location filename="metadata_definitions.py" line="91"/>
         <source>An exposure raster layer where each cell represent population count.</source>
         <translation type="unfinished"/>
     </message>
@@ -953,27 +943,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="43"/>
+        <location filename="impact_function.py" line="111"/>
         <source>Not specified in data</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="60"/>
-        <source>Notes</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="225"/>
+        <location filename="impact_function.py" line="215"/>
         <source>Thousand separator is represented by  %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="211"/>
+        <location filename="impact_function.py" line="236"/>
         <source>(people per cell)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="212"/>
+        <location filename="impact_function.py" line="205"/>
         <source>Population</source>
         <translation type="unfinished"/>
     </message>
@@ -993,32 +978,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="333"/>
+        <location filename="building_exposure_report_mixin.py" line="342"/>
         <source>Other</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="64"/>
-        <source>Only buildings available in OpenStreetMap are considered.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="206"/>
+        <location filename="impact_function.py" line="198"/>
         <source>Buildings affected by volcanic hazard zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="208"/>
+        <location filename="impact_function.py" line="237"/>
         <source>Thousand separator is represented by %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="193"/>
+        <location filename="impact_function.py" line="192"/>
         <source>(building)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="194"/>
+        <location filename="impact_function.py" line="191"/>
         <source>Building count</source>
         <translation type="unfinished"/>
     </message>
@@ -1028,72 +1008,62 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="310"/>
+        <location filename="impact_function.py" line="291"/>
         <source>Number of fatalities</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="315"/>
+        <location filename="impact_function.py" line="296"/>
         <source>Number of people displaced</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="395"/>
+        <location filename="needs_profile.py" line="265"/>
         <source>Provenance</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="105"/>
-        <source>Action Checklist:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="160"/>
+        <location filename="impact_function.py" line="159"/>
         <source>Are there enough victim identification units available for %s people?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="98"/>
+        <location filename="population_exposure_report_mixin.py" line="90"/>
         <source>Are there enough shelters and relief items available for %s people?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="103"/>
+        <location filename="population_exposure_report_mixin.py" line="93"/>
         <source>If yes, where are they located and how will we distribute them?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="179"/>
+        <location filename="impact_function.py" line="172"/>
         <source>If no, where can we obtain additional relief items from and how will we transport them?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="77"/>
-        <source>Total population: %s</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="206"/>
+        <location filename="impact_function.py" line="199"/>
         <source>The fatality calculation assumes that no fatalities occur for shake levels below 4 and fatality counts of less than 50 are disregarded.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="110"/>
+        <location filename="impact_function.py" line="88"/>
         <source>All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="349"/>
+        <location filename="impact_function.py" line="330"/>
         <source>Earthquake impact to population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="288"/>
+        <location filename="impact_function.py" line="235"/>
         <source>Population Count</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="356"/>
+        <location filename="impact_function.py" line="337"/>
         <source>Estimated displaced population per cell</source>
         <translation type="unfinished"/>
     </message>
@@ -1103,17 +1073,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="171"/>
+        <location filename="impact_function.py" line="204"/>
         <source>Low</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="164"/>
+        <location filename="impact_function.py" line="207"/>
         <source>Medium</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="157"/>
+        <location filename="impact_function.py" line="210"/>
         <source>High</source>
         <translation type="unfinished"/>
     </message>
@@ -1123,27 +1093,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="219"/>
+        <location filename="impact_function.py" line="220"/>
         <source>Buildings value ($M)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="221"/>
+        <location filename="impact_function.py" line="222"/>
         <source>Contents value ($M)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="65"/>
+        <location filename="impact_function.py" line="67"/>
         <source>High hazard is defined as shake levels greater than %i on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="72"/>
+        <location filename="impact_function.py" line="71"/>
         <source>Medium hazard is defined as shake levels between %i and %i on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="77"/>
+        <location filename="impact_function.py" line="75"/>
         <source>Low hazard is defined as shake levels between %i and %i on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
@@ -1153,27 +1123,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="249"/>
+        <location filename="impact_function.py" line="250"/>
         <source>Building affected by earthquake</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="250"/>
+        <location filename="impact_function.py" line="251"/>
         <source>The level of the impact is according to the threshold the user input.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="252"/>
+        <location filename="impact_function.py" line="253"/>
         <source>(mmi)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="253"/>
+        <location filename="impact_function.py" line="254"/>
         <source>Impact level</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="205"/>
+        <location filename="impact_function.py" line="194"/>
         <source>Estimated buildings affected</source>
         <translation type="unfinished"/>
     </message>
@@ -1188,62 +1158,47 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="167"/>
-        <source>Total Buildings Affected</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="building_exposure_report_mixin.py" line="174"/>
-        <source>Buildings Not Affected</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="building_exposure_report_mixin.py" line="181"/>
-        <source>All Buildings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="building_exposure_report_mixin.py" line="109"/>
+        <location filename="building_exposure_report_mixin.py" line="106"/>
         <source>Are the critical facilities still open?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="112"/>
+        <location filename="building_exposure_report_mixin.py" line="107"/>
         <source>Which structures have warning capacity (eg. sirens, speakers, etc.)?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="116"/>
+        <location filename="building_exposure_report_mixin.py" line="110"/>
         <source>Which buildings will be evacuation centres?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="119"/>
+        <location filename="building_exposure_report_mixin.py" line="111"/>
         <source>Where will we locate the operations centre?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="122"/>
+        <location filename="building_exposure_report_mixin.py" line="112"/>
         <source>Where will we locate warehouse and/or distribution centres?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="127"/>
+        <location filename="building_exposure_report_mixin.py" line="115"/>
         <source>Where will the students from the %s closed schools go to study?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="building_exposure_report_mixin.py" line="134"/>
+        <location filename="building_exposure_report_mixin.py" line="119"/>
         <source>Where will the patients from the %s closed hospitals go for treatment and how will we transport them?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="178"/>
+        <location filename="impact_function.py" line="176"/>
         <source>Not Affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="191"/>
+        <location filename="impact_function.py" line="190"/>
         <source>Buildings affected</source>
         <translation type="unfinished"/>
     </message>
@@ -1253,7 +1208,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="174"/>
+        <location filename="impact_function.py" line="233"/>
         <source>Structure inundated status</source>
         <translation type="unfinished"/>
     </message>
@@ -1263,27 +1218,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="314"/>
+        <location filename="population_exposure_report_mixin.py" line="317"/>
         <source>Population Not Affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="92"/>
+        <location filename="population_exposure_report_mixin.py" line="88"/>
         <source>How will warnings be disseminated?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="108"/>
+        <location filename="population_exposure_report_mixin.py" line="95"/>
         <source>If no, where can we obtain additional relief items from and how will we transport them to here?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="253"/>
+        <location filename="impact_function.py" line="230"/>
         <source>Number of People</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="215"/>
+        <location filename="impact_function.py" line="242"/>
         <source>Population which %s</source>
         <translation type="unfinished"/>
     </message>
@@ -1293,62 +1248,52 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="62"/>
+        <location filename="metadata_definitions.py" line="60"/>
         <source>N/A</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="297"/>
-        <source>The minimal threshold is greater then the maximal specified threshold. Please check the values.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="385"/>
-        <source>There are no objects in the hazard layer with &quot;value&quot;&gt;%s.Please check the value or use other extent.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="road_exposure_report_mixin.py" line="64"/>
+        <location filename="road_exposure_report_mixin.py" line="115"/>
         <source>Road Type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="421"/>
+        <location filename="impact_function.py" line="458"/>
         <source>Flooded in the threshold (m)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="66"/>
+        <location filename="road_exposure_report_mixin.py" line="118"/>
         <source>Total (m)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="74"/>
+        <location filename="road_exposure_report_mixin.py" line="85"/>
         <source>All</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="90"/>
+        <location filename="road_exposure_report_mixin.py" line="109"/>
         <source>Breakdown by road type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="452"/>
+        <location filename="impact_function.py" line="225"/>
         <source>Roads inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="232"/>
+        <location filename="impact_function.py" line="228"/>
         <source>Not Inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="234"/>
+        <location filename="impact_function.py" line="230"/>
         <source>Inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="467"/>
+        <location filename="impact_function.py" line="242"/>
         <source>Flooded roads</source>
         <translation type="unfinished"/>
     </message>
@@ -1358,7 +1303,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="90"/>
+        <location filename="metadata_definitions.py" line="97"/>
         <source>Provide details about how many people would likely need to be evacuated, where they are located and what resources would be required to support them.</source>
         <translation type="unfinished"/>
     </message>
@@ -1378,12 +1323,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="167"/>
+        <location filename="impact_function.py" line="104"/>
         <source>People in %.1f m of water</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="207"/>
+        <location filename="impact_function.py" line="234"/>
         <source>People in need of evacuation</source>
         <translation type="unfinished"/>
     </message>
@@ -1393,22 +1338,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="230"/>
+        <location filename="impact_function.py" line="232"/>
         <source>Buildings inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="245"/>
+        <location filename="impact_function.py" line="249"/>
         <source>Flooded buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="57"/>
+        <location filename="metadata_definitions.py" line="55"/>
         <source>Be flooded</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="164"/>
+        <location filename="impact_function.py" line="198"/>
         <source>Temporarily closed (m)</source>
         <translation type="unfinished"/>
     </message>
@@ -1418,22 +1363,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="239"/>
-        <source>People affected</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="291"/>
+        <location filename="impact_function.py" line="277"/>
         <source>People affected by flood prone areas</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="286"/>
-        <source>Thousand separator is represented by &apos;.&apos;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="287"/>
+        <location filename="impact_function.py" line="271"/>
         <source>(people per polygon)</source>
         <translation type="unfinished"/>
     </message>
@@ -1443,7 +1378,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="88"/>
         <source>A hazard raster layer where each cell represents flood depth (in meters).</source>
         <translation type="unfinished"/>
     </message>
@@ -1453,68 +1388,23 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
-        <source>To assess the impacts of (flood or tsunami) inundation on building footprints originating from OpenStreetMap (OSM).</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="94"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>Vector polygon or point layer extracted from OSM where each feature represents the footprint of a building.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="97"/>
+        <location filename="metadata_definitions.py" line="76"/>
         <source>Vector layer contains building is estimated to be flooded and the breakdown of the building by type.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="104"/>
-        <source>This function only flags buildings as impacted or not either based on a fixed threshold in case of raster hazard or the the attributes mentioned under input in case of vector hazard.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="162"/>
-        <source>Number Inundated</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="163"/>
-        <source>Number of Wet Buildings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="161"/>
-        <source>Number of Dry Buildings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="57"/>
-        <source>Buildings are said to be inundated when flood levels exceed %.1f m</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="62"/>
-        <source>Buildings are said to be wet when flood levels are greater than 0 m but less than %.1f m</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="177"/>
+        <location filename="impact_function.py" line="168"/>
         <source>Dry (&lt;= 0 m)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="184"/>
+        <location filename="impact_function.py" line="175"/>
         <source>Wet (0 m - %.1f m)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="191"/>
-        <source>Inundated (&gt;= %.1f m)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="198"/>
-        <source>(inundated, wet, or dry)</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1545,11 +1435,6 @@
     <message>
         <location filename="definitions.py" line="250"/>
         <source>A &lt;b&gt;flood&lt;/b&gt; describes the inundation of land that is normally dry by a large amount of water. For example: A &lt;b&gt;flood&lt;/b&gt; can occur after heavy rainfall, when a river overflows its banks or when a dam breaks. The effect of a &lt;b&gt;flood&lt;/b&gt; is for land that is normally dry to become wet.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="271"/>
-        <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an under water earthquake or volcano.A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1628,7 +1513,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_report.py" line="534"/>
+        <location filename="impact_report.py" line="576"/>
         <source>Analysis Results</source>
         <translation type="unfinished"/>
     </message>
@@ -1668,11 +1553,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="248"/>
-        <source>Population affected by each class</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions.py" line="262"/>
         <source>&lt;b&gt;Volcanic ash&lt;/b&gt; describes fragments of pulverized rock, minerals and volcanic glass, created during volcanic eruptions, less than 2 mm (0.079 inches) in diameter</source>
         <translation type="unfinished"/>
@@ -1683,28 +1563,23 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="144"/>
+        <location filename="impact_function.py" line="142"/>
         <source>High Hazard Class</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="145"/>
+        <location filename="impact_function.py" line="143"/>
         <source>Medium Hazard Class</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="146"/>
+        <location filename="impact_function.py" line="144"/>
         <source>Low Hazard Class</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="60"/>
+        <location filename="impact_function.py" line="58"/>
         <source>Map shows buildings affected in low, medium and high hazard class areas.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="73"/>
-        <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the hazard levels provided. if the hazard is given as a raster a threshold of 1 meter is used. This is configurable through the InaSAFE interface. If the hazard is given as a vector polygon layer buildings are considered to be impacted depending on the value of hazard attributes (in order) affected&quot; or &quot;FLOODPRONE&quot;: If a building is in a region that has attribute &quot;affected&quot; set to True (or 1) it is impacted. If attribute &quot;affected&quot; does not exist but &quot;FLOODPRONE&quot; does, then the building is considered impacted if &quot;FLOODPRONE&quot; is &quot;yes&quot;. If neither affected&quot; nor &quot;FLOODPRONE&quot; is available, a building will be impacted if it belongs to any polygon. The latter behaviour is implemented through the attribute &quot;inapolygon&quot; which is automatically assigned.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1718,12 +1593,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="59"/>
+        <location filename="impact_function.py" line="75"/>
         <source>Map shows buildings affected in each of the volcano buffered zones.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="69"/>
+        <location filename="impact_function.py" line="58"/>
         <source>Volcanoes considered: %s.</source>
         <translation type="unfinished"/>
     </message>
@@ -1733,7 +1608,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="228"/>
+        <location filename="impact_function.py" line="222"/>
         <source>Buildings affected by volcanic buffered point</source>
         <translation type="unfinished"/>
     </message>
@@ -1748,7 +1623,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="56"/>
+        <location filename="impact_function.py" line="55"/>
         <source>Map shows buildings affected in each of the volcano hazard polygons.</source>
         <translation type="unfinished"/>
     </message>
@@ -1791,21 +1666,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="67"/>
-        <source>Buildings are said to be dry when flood levels are 0 m or less.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="72"/>
-        <source>Buildings are said to be closed if they are inundated or wet.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="77"/>
-        <source>Buildings are said to be open if they are dry.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="metadata_definitions.py" line="72"/>
         <source>This function will categorised the continuous hazard level into 3 category based on the threshold that has been input by the user. After that, this function will calculate how many people will be impacted per category for all categories in the hazard layer.</source>
         <translation type="unfinished"/>
@@ -1813,11 +1673,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="base.py" line="432"/>
         <source>In the event of %(hazard)s how many %(exposure)s might %(impact)s</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="building_exposure_report_mixin.py" line="151"/>
-        <source>Hazard Category</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -1831,7 +1686,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="254"/>
+        <location filename="impact_function.py" line="247"/>
         <source>People affected by the buffered point volcano</source>
         <translation type="unfinished"/>
     </message>
@@ -1841,12 +1696,12 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="319"/>
+        <location filename="population_exposure_report_mixin.py" line="322"/>
         <source>People impacted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="231"/>
+        <location filename="impact_function.py" line="220"/>
         <source>People impacted by each hazard zone</source>
         <translation type="unfinished"/>
     </message>
@@ -1871,7 +1726,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="359"/>
+        <location filename="needs_manager_dialog.py" line="476"/>
         <source>weekly</source>
         <translation type="unfinished"/>
     </message>
@@ -1946,7 +1801,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="100"/>
+        <location filename="metadata_definitions.py" line="87"/>
         <source>Provide details about where critical infrastructure might be flooded.</source>
         <translation type="unfinished"/>
     </message>
@@ -1986,32 +1841,27 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="74"/>
-        <source>Map shows population count in high, medium, and low hazard area.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="200"/>
+        <location filename="impact_function.py" line="223"/>
         <source>People in each hazard areas (low, medium, high)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="253"/>
+        <location filename="impact_function.py" line="237"/>
         <source>Low Population [%i people/cell]</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="257"/>
+        <location filename="impact_function.py" line="241"/>
         <source>Medium Population [%i people/cell]</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="261"/>
+        <location filename="impact_function.py" line="245"/>
         <source>High Population [%i people/cell]</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="242"/>
+        <location filename="impact_function.py" line="231"/>
         <source>Population might %s</source>
         <translation type="unfinished"/>
     </message>
@@ -2136,23 +1986,13 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
-        <source>The hazard vector layer must be a polygon that has a specific hazard zone attribute.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="68"/>
+        <location filename="metadata_definitions.py" line="75"/>
         <source>An exposure raster layer where each cell represents a population count for that cell.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="78"/>
         <source>A vector layer containing people affected per hazard zone and the minimum needs based on the number of people affected.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="63"/>
-        <source>The hazard layer must be a polygon layer. This layer must have an attribute representing the volcano hazard zone that can be specified in the impact function option.The valid values for the volcano hazard zone are &quot;Kawasan Rawan Bencana I&quot;, &quot;Kawasan Rawan Bencana II&quot;, or &quot;Kawasan  Rawan Bencana III.&quot; If you want to see the name of the volcano in the result, you need to specify the volcano name attribute in the Impact Function options.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2166,7 +2006,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="80"/>
+        <location filename="metadata_definitions.py" line="87"/>
         <source>To assess the impact of a volcano eruption on people.</source>
         <translation type="unfinished"/>
     </message>
@@ -2196,18 +2036,8 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="80"/>
-        <source>To assess the the number of people that may be impacted by each hazard zone.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="metadata_definitions.py" line="93"/>
         <source>Provide details about the number of buildings that are within each hazard class.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="95"/>
-        <source>The layers contained `no data`. This missing data was carried through to the impact layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2223,16 +2053,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="metadata_definitions.py" line="72"/>
         <source>Provide details about how many buildings fall within each hazard zone.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="68"/>
-        <source>Be affected by each class</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="69"/>
-        <source>Be affected by each hazard class</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2266,11 +2086,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="101"/>
-        <source>`No data` values in the impact layer were treated as 0 when counting the affected or total population.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="osm_downloader.py" line="132"/>
         <source>Fetching %s</source>
         <translation type="unfinished"/>
@@ -2301,31 +2116,31 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2507"/>
+        <location filename="wizard_dialog.py" line="2509"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the %s for hazard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2514"/>
+        <location filename="wizard_dialog.py" line="2516"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3121"/>
+        <location filename="wizard_dialog.py" line="3124"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the %s for exposure if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3130"/>
+        <location filename="wizard_dialog.py" line="3133"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3312"/>
+        <location filename="wizard_dialog.py" line="3315"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
@@ -2381,7 +2196,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="727"/>
+        <location filename="needs_manager_dialog.py" line="397"/>
         <source>Units</source>
         <translation type="unfinished"/>
     </message>
@@ -2486,7 +2301,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="396"/>
+        <location filename="needs_profile.py" line="267"/>
         <source>The provenance of minimum needs</source>
         <translation type="unfinished"/>
     </message>
@@ -2757,12 +2572,6 @@ In a vector (point) Volcano data the user specified buffer distances will be use
     <message>
         <location filename="definitions.py" line="195"/>
         <source>&lt;b&gt;Single event&lt;/b&gt; hazard data can be based on either a specific  event that has happened in the past, for example a flood like Jakarta 2013, or a possible event such as the tsunami that results from an earthquake near Bima that might happen in the future.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="205"/>
-        <source>&lt;b&gt;Multiple event&lt;/b&gt; hazard data can be based on historical observations such as a hazard map of all observed volcanic deposits around a volcano. 
-This type of hazard data shows those locations that might be impacted by a volcanic eruption in the future . Another example might be a probabilistic hazard model that shows the likelihood of a magnitude 7 earthquake happening in the next 50 yrs.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3077,57 +2886,42 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="69"/>
-        <source>Volcanoes considered: %s</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="74"/>
+        <location filename="impact_function.py" line="81"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if they are within the volcanic hazard zones.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="115"/>
+        <location filename="impact_function.py" line="91"/>
         <source>Population rounding is applied to all population values, which may cause discrepancies when adding values.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="198"/>
-        <source>Number of people that might need evacuation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="248"/>
+        <location filename="impact_function.py" line="231"/>
         <source>People affected by Volcano Hazard Zones</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="255"/>
+        <location filename="impact_function.py" line="239"/>
         <source>People affected by volcano hazard zones</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="88"/>
+        <location filename="road_exposure_report_mixin.py" line="169"/>
         <source>Action checklist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="200"/>
-        <source>&lt;sup&gt;1&lt;/sup&gt;People are considered to be displaced if they experience and survive a shake levelof more than 5 on the MMI scale.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="213"/>
+        <location filename="impact_function.py" line="206"/>
         <source>Fatality model is from Institut Teknologi Bandung 2012.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="218"/>
+        <location filename="impact_function.py" line="208"/>
         <source>Fatality model is from the Population Vulnerability Pager Model.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="224"/>
+        <location filename="impact_function.py" line="212"/>
         <source>Map shows the estimation of displaced population.</source>
         <translation type="unfinished"/>
     </message>
@@ -3142,7 +2936,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="parameter_definitions.py" line="57"/>
+        <location filename="parameter_definitions.py" line="47"/>
         <source>Medium Hazard class threshold.</source>
         <translation type="unfinished"/>
     </message>
@@ -3152,7 +2946,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="parameter_definitions.py" line="74"/>
+        <location filename="parameter_definitions.py" line="69"/>
         <source>High Hazard class threshold.</source>
         <translation type="unfinished"/>
     </message>
@@ -3162,7 +2956,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="82"/>
+        <location filename="impact_function.py" line="83"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if they are in a hazard zone.</source>
         <translation type="unfinished"/>
     </message>
@@ -3197,22 +2991,22 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="87"/>
+        <location filename="impact_function.py" line="80"/>
         <source>Map shows the numbers of people in high, medium, and low hazard class areas.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="170"/>
+        <location filename="impact_function.py" line="158"/>
         <source>Population in high hazard areas</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="173"/>
+        <location filename="impact_function.py" line="161"/>
         <source>Population in medium hazard areas</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="176"/>
+        <location filename="impact_function.py" line="164"/>
         <source>Population in low hazard areas</source>
         <translation type="unfinished"/>
     </message>
@@ -3262,17 +3056,17 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="179"/>
+        <location filename="impact_function.py" line="165"/>
         <source>Population in High hazard class areas</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="182"/>
+        <location filename="impact_function.py" line="168"/>
         <source>Population in Medium hazard class areas</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="185"/>
+        <location filename="impact_function.py" line="171"/>
         <source>Population in Low hazard class areas</source>
         <translation type="unfinished"/>
     </message>
@@ -3292,7 +3086,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="136"/>
+        <location filename="impact_function.py" line="170"/>
         <source>There are no objects in the hazard layer with %s (Affected Field) in %s (Affected Value). Please check the value or use a different extent.</source>
         <translation type="unfinished"/>
     </message>
@@ -3322,22 +3116,22 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="parameter_definitions.py" line="29"/>
+        <location filename="parameter_definitions.py" line="38"/>
         <source>Up to three thresholds (in meters) can be set in an increasing order. The impact function will report the number of people per threshold you define here. Specify the upper bound for each threshold. The lower bound of the first threshold shall be zero. People in water depths above the maximum threshold will be classified as needing evacuation.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="61"/>
+        <location filename="impact_function.py" line="77"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if flood levels exceed %(eps).1f m.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="131"/>
+        <location filename="impact_function.py" line="155"/>
         <source>People in &gt;= %.1f m of water</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="139"/>
+        <location filename="impact_function.py" line="163"/>
         <source>People in %.1f m to %.1f m of water</source>
         <translation type="unfinished"/>
     </message>
@@ -3367,28 +3161,18 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="81"/>
+        <location filename="impact_function.py" line="92"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;The evacuation threshold used to determine population needing evacuation is %s%%.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="88"/>
-        <source>are within any polygons.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="207"/>
+        <location filename="impact_function.py" line="197"/>
         <source>People within hazard field (&quot;%s&quot;) of value &quot;%s&quot;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="214"/>
+        <location filename="impact_function.py" line="204"/>
         <source>People within any hazard polygon.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="66"/>
-        <source>Buildings are said to be inundated when in a region with field &quot;%s&quot; in &quot;%s&quot; .</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3397,47 +3181,42 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="95"/>
+        <location filename="population_exposure_report_mixin.py" line="89"/>
         <source>How will we reach evacuated people?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="120"/>
+        <location filename="population_exposure_report_mixin.py" line="111"/>
         <source>Population needing evacuation &lt;sup&gt;1&lt;/sup&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="129"/>
+        <location filename="population_exposure_report_mixin.py" line="120"/>
         <source>Total affected population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="144"/>
+        <location filename="population_exposure_report_mixin.py" line="143"/>
         <source>Unaffected population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="159"/>
+        <location filename="population_exposure_report_mixin.py" line="156"/>
         <source>Evacuated population minimum needs</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="164"/>
-        <source>Needs that should be provided %s</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="population_exposure_report_mixin.py" line="315"/>
+        <location filename="population_exposure_report_mixin.py" line="318"/>
         <source>Unaffected Population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="318"/>
+        <location filename="population_exposure_report_mixin.py" line="321"/>
         <source>Total Impacted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="population_exposure_report_mixin.py" line="320"/>
+        <location filename="population_exposure_report_mixin.py" line="323"/>
         <source>Total Population Affected</source>
         <translation type="unfinished"/>
     </message>
@@ -3452,7 +3231,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3304"/>
+        <location filename="wizard_dialog.py" line="3307"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the %s for aggregation if needed)</source>
         <translation type="unfinished"/>
@@ -3548,11 +3327,6 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_strings.py" line="146"/>
-        <source>&lt;p&gt;You selected &lt;b&gt;%s %s&lt;/b&gt; as hazard input to &lt;b&gt;%s&lt;/b&gt; function.&lt;/p&gt; &lt;p&gt;Please help us to find your &lt;b&gt;hazard&lt;/b&gt; layer. A hazard layer represents something that will impact the people or infrastructure in an area. For example flood, earthquake and tsunami inundation are all different kinds of hazards. Select the appropriate option below to indicate where you data resides:&lt;/p&gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="wizard_strings.py" line="154"/>
         <source>&lt;p&gt;You selected &lt;b&gt;%s %s&lt;/b&gt; as hazard input to &lt;b&gt;%s&lt;/b&gt; function.&lt;/p&gt; &lt;p&gt;These are suitable layers currently loaded in QGIS. Please choose the hazard layer that you would like to use for your assessment.&lt;/p&gt;</source>
         <translation type="unfinished"/>
@@ -3583,17 +3357,17 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="204"/>
+        <location filename="impact_function.py" line="240"/>
         <source>No roads are flooded in this scenario.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="243"/>
+        <location filename="impact_function.py" line="247"/>
         <source>No buildings were impacted by this flood.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="97"/>
+        <location filename="metadata_definitions.py" line="94"/>
         <source>Raster layer contains population affected and the minimum needs based on number of the population affected.</source>
         <translation type="unfinished"/>
     </message>
@@ -3698,7 +3472,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="746"/>
+        <location filename="definitions.py" line="763"/>
         <source>Attribute field</source>
         <translation type="unfinished"/>
     </message>
@@ -3708,13 +3482,364 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="763"/>
-        <source>Attribute values</source>
+        <location filename="wizard_strings.py" line="146"/>
+        <source>&lt;p&gt;You selected &lt;b&gt;%s %s&lt;/b&gt; as hazard input to &lt;b&gt;%s&lt;/b&gt; function.&lt;/p&gt; &lt;p&gt;Please help us to find your &lt;b&gt;hazard&lt;/b&gt; layer. A hazard layer represents something that will impact the people or infrastructure in an area. For example flood, earthquake and tsunami inundation are all different kinds of hazards. Select the appropriate option below to indicate where your data resides:&lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="definitions.py" line="764"/>
-        <source>Attribute values identify features with similar meanings. For examplebuilding attributes may include schools and hospitals. </source>
+        <source>The attribute field identifies a field in the attribute table used to identify the function of a feature e.g.  a road type, building type, hazard zone etc.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="772"/>
+        <source>Attribute value</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="773"/>
+        <source>The attribute value identifies features with similar meanings. For example building attributes may include schools and hospitals. </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="780"/>
+        <source>Attribute value map</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="781"/>
+        <source>Attribute value maps are used to group related attribute values. For example flooded polygons with attribute values of &quot;yes&quot; , &quot;YES&quot;, &quot;1&quot; and &quot;Flooded&quot; might all be grouped together as &quot;FLOODPRONE&quot;.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="226"/>
+        <source>Road inundated status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="abstract_list.py" line="78"/>
+        <source>Null (PyQt4.QtCore.QPyNullVariant) found from the data.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="utilities.py" line="202"/>
+        <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software! %s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="353"/>
+        <source>Version</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="355"/>
+        <source>Disclaimer</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="356"/>
+        <source>Date</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="357"/>
+        <source>Time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="358"/>
+        <source>Note</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="359"/>
+        <source>This assessment is a guide - we strongly recommend that you ground truth the results shown here before deploying resources and / or personnel.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="363"/>
+        <source>Assessment carried out using InaSAFE release %s.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="365"/>
+        <source>Legend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="366"/>
+        <source>Analysis information</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_report.py" line="367"/>
+        <source>Report produced by</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="205"/>
+        <source>&lt;b&gt;Multiple event&lt;/b&gt; hazard data can be based on historical observations such as a hazard map of all observed volcanic deposits around a volcano. 
+This type of hazard data shows those locations that might be impacted by a volcanic eruption in the future. Another example might be a probabilistic hazard model that shows the likelihood of a magnitude 7 earthquake happening in the next 50 years.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="271"/>
+        <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an under water earthquake or volcano. A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="63"/>
+        <source>The hazard layer must be a polygon layer. This layer must have an attribute representing the volcano hazard zone that can be specified in the impact function option. There are three classes low, medium, and high. The default values are &quot;Kawasan Rawan Bencana I&quot; for low, &quot;Kawasan Rawan Bencana II&quot; for medium, and &quot;Kawasan  Rawan Bencana III for high.&quot; If you want to see the name of the volcano in the result, you need to specify the volcano name attribute in the Impact Function options.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="80"/>
+        <source>To assess the number of people that may be impacted by each hazard zone.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="69"/>
+        <source>To assess the impacts of (flood or tsunami) inundation on building footprints originating from OpenStreetMap (OSM) with hazard in raster format.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="73"/>
+        <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the flood threshold. The threshold can be configured in impact function options.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="91"/>
+        <source>This function only flags buildings as impacted or not either based on a fixed threshold</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="293"/>
+        <source>flooded</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="294"/>
+        <source>flood</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="66"/>
+        <source>inundated</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="300"/>
+        <source>water</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="306"/>
+        <source>Roads are %s when %s levels exceed %.2f m.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="81"/>
+        <source>Roads are closed if they are %s.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="83"/>
+        <source>Roads are open if they are not %s.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="road_exposure_report_mixin.py" line="171"/>
+        <source>Try to Identify which potential roads that able to access for evacuation and logistic distribution purpose. What type of transportation reliable to use in that order?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="road_exposure_report_mixin.py" line="175"/>
+        <source>Identify what equipment needed to open access of affected roads. Where the resources or equipment to open access affected roads located? who/what department responsible to mobilize?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="road_exposure_report_mixin.py" line="180"/>
+        <source>Which roads can be used to evacuate people or to distribute logistics?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="road_exposure_report_mixin.py" line="183"/>
+        <source>What type of vehicles can use the unaffected roads?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="road_exposure_report_mixin.py" line="185"/>
+        <source>What sort of equipment will be needed to reopen roads &amp; where will we get it?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="road_exposure_report_mixin.py" line="188"/>
+        <source>Which government department is responsible for supplying equipment ?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="422"/>
+        <source>There are no objects in the hazard layer with &quot;value&quot; &gt; %s. Please check the value or use other extent.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="61"/>
+        <source>To assess the impacts of (flood or tsunami) inundation on building footprints with hazard in vector format.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="64"/>
+        <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the value of hazard attribute. The attribute and the values that are considered as flooded can be configured in impact function options.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="70"/>
+        <source>A hazard vector layer whose attribute that can be used to mark whether a polygon is flood or not.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="75"/>
+        <source>Roads are said to be %s when in a region with field &quot;%s&quot; in &quot;%s&quot; .</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="utilities.py" line="154"/>
+        <source>Analysis details</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="71"/>
+        <source>Notes and assumptions</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="74"/>
+        <source>Total population in the analysis area: %s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="82"/>
+        <source>The layers contained &quot;no data&quot; values. This missing data was carried through to the impact layer.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="85"/>
+        <source>&quot;No data&quot; values in the impact layer were treated as 0 when counting the affected or total population.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="97"/>
+        <source>Population rounding is applied to all population values, which may cause discrepancies when adding value.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="74"/>
+        <source>Map shows population count in high, medium, and low hazard areas.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="229"/>
+        <source>Number of people affected in each class</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="237"/>
+        <source>People that might %s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="68"/>
+        <source>Be affected in each class</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="69"/>
+        <source>Be affected in each hazard class</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="194"/>
+        <source>&lt;sup&gt;1&lt;/sup&gt;People are displaced if they experience and survive a shake levelof more than 5 on the MMI scale.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="164"/>
+        <source>No people in %.1f m of water</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="57"/>
+        <source>Buildings are flooded when flood levels exceed %.1f m</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="60"/>
+        <source>Buildings are wet when flood levels are greater than 0 m but less than %.1f m</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="63"/>
+        <source>Buildings are dry when flood levels are 0 m.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="65"/>
+        <source>Buildings are closed if they are flooded or wet.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="67"/>
+        <source>Buildings are open if they are dry.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="153"/>
+        <source>Wet</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="151"/>
+        <source>Dry</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="164"/>
+        <source>Flooded structure status</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="165"/>
+        <source>(flooded, wet, or dry)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="182"/>
+        <source>Flooded (&gt;= %.1f m)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="64"/>
+        <source>Buildings are flooded when in a region with field &quot;%s&quot; in &quot;%s&quot;.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="building_exposure_report_mixin.py" line="153"/>
+        <source>Affected buildings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="building_exposure_report_mixin.py" line="159"/>
+        <source>Unaffected buildings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="population_exposure_report_mixin.py" line="165"/>
+        <source>Relief items to be provided %s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="334"/>
+        <source>The minimal threshold is greater than the maximal specified threshold. Please check the values.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -3843,450 +3968,500 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Aggregator</name>
     <message>
-        <location filename="aggregator.py" line="328"/>
+        <location filename="aggregator.py" line="339"/>
         <source>Select attribute</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="328"/>
+        <location filename="aggregator.py" line="339"/>
         <source>Please select which attribute you want to use as ID for the aggregated results</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="510"/>
+        <location filename="aggregator.py" line="521"/>
         <source>Aggregating results</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="550"/>
+        <location filename="aggregator.py" line="561"/>
         <source>Could not remove the unneeded fields</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="693"/>
+        <location filename="aggregator.py" line="704"/>
         <source>Calculating zonal statistics</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="693"/>
+        <location filename="aggregator.py" line="704"/>
         <source>Abort...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="701"/>
+        <location filename="aggregator.py" line="712"/>
         <source>ZonalStats: Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="701"/>
+        <location filename="aggregator.py" line="712"/>
         <source>You aborted aggregation, so there are no data for analysis. Exiting...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1089"/>
+        <location filename="aggregator.py" line="1124"/>
         <source>Preparing aggregation layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1089"/>
-        <source>We are clipping the aggregation layer to match the intersection of the hazard and exposure layer extents.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="aggregator.py" line="1120"/>
+        <location filename="aggregator.py" line="1153"/>
         <source>aggregation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1537"/>
+        <location filename="aggregator.py" line="1570"/>
         <source>preprocessed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1618"/>
+        <location filename="aggregator.py" line="1651"/>
         <source>Entire area</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1597"/>
+        <location filename="aggregator.py" line="1630"/>
         <source>An exception occurred when creating the entire area layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1603"/>
+        <location filename="aggregator.py" line="1636"/>
         <source>Area</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="470"/>
+        <location filename="aggregator.py" line="481"/>
         <source>Error: hazard layer is not provided.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="474"/>
+        <location filename="aggregator.py" line="485"/>
         <source>Error: exposure layer is not provided.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="510"/>
+        <location filename="aggregator.py" line="521"/>
         <source>This may take a little while - we are aggregating the impact by %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="520"/>
+        <location filename="aggregator.py" line="531"/>
         <source>Error when reading %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="528"/>
+        <location filename="aggregator.py" line="539"/>
         <source>%s aggregated to %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="569"/>
+        <location filename="aggregator.py" line="580"/>
         <source>%s is %s but it should be either vector or raster</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1263"/>
+        <location filename="aggregator.py" line="1296"/>
         <source>Pre-clipping input data...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1263"/>
+        <location filename="aggregator.py" line="1296"/>
         <source>Modifying %s to avoid intersections with the aggregation layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1677"/>
+        <location filename="aggregator.py" line="1710"/>
         <source>No &quot;target_field&quot; keyword found in the impact layer %s keywords. The impact function should define this.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1689"/>
+        <location filename="aggregator.py" line="1722"/>
         <source>No attribute &quot;%s&quot; was found in the attribute table for layer &quot;%s&quot;. The impact function must define this attribute for postprocessing to work.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="673"/>
+        <location filename="aggregator.py" line="684"/>
         <source>Aggregation on vector impact layers other than points or polygons or lines yet not implemented yet. Called on %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1052"/>
+        <location filename="aggregator.py" line="1063"/>
         <source>The target_field contains Null values. The impact function should define this.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="aggregator.py" line="1107"/>
+        <source>Clipping the aggregation layer to match the intersection of the hazard and exposure layer and the current view extents.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="aggregator.py" line="1112"/>
+        <source>clipping the aggregation layer to match the intersection of the hazard and exposure layer extents.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="aggregator.py" line="1116"/>
+        <source>Clipping the aggregation layer to match the bookmarked extents.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="aggregator.py" line="1120"/>
+        <source>Clipping the aggregation layer to match the intersection of your preferred analysis area.</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Analysis</name>
     <message>
-        <location filename="analysis.py" line="312"/>
+        <location filename="analysis.py" line="313"/>
         <source>There was insufficient overlap between the input layers and / or the layers and the viewable area. Please select two overlapping layers and zoom or pan to them or disable viewable area clipping in the options dialog. Full details follow:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="319"/>
+        <location filename="analysis.py" line="320"/>
         <source>Failed to obtain the optimal extent given:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="324"/>
+        <location filename="analysis.py" line="325"/>
         <source>Hazard: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="327"/>
+        <location filename="analysis.py" line="328"/>
         <source>Exposure: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="330"/>
+        <location filename="analysis.py" line="331"/>
         <source>Viewable area Geo Extent: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="333"/>
+        <location filename="analysis.py" line="334"/>
         <source>Hazard Geo Extent: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="336"/>
+        <location filename="analysis.py" line="337"/>
         <source>Exposure Geo Extent: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="339"/>
+        <location filename="analysis.py" line="340"/>
         <source>Details: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="590"/>
+        <location filename="analysis.py" line="591"/>
         <source>theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: /ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="605"/>
+        <location filename="analysis.py" line="606"/>
         <source>Bounding boxes of hazard data, exposure data and viewport did not overlap, so no computation was done. Please make sure you pan to where the data is and that hazard and exposure data overlaps.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="618"/>
+        <location filename="analysis.py" line="619"/>
         <source>Clip parameters are not set!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="635"/>
+        <location filename="analysis.py" line="636"/>
         <source>Processing started</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="636"/>
+        <location filename="analysis.py" line="637"/>
         <source>Please wait - processing may take a while depending on your hardware configuration and the analysis extents and data.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="648"/>
+        <location filename="analysis.py" line="649"/>
         <source>No valid layers</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="649"/>
+        <location filename="analysis.py" line="650"/>
         <source>Please ensure your hazard and exposure layers are set in the question area and then press run again.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="658"/>
+        <location filename="analysis.py" line="659"/>
         <source>This analysis will calculate the impact of</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="658"/>
+        <location filename="analysis.py" line="659"/>
         <source>on</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="670"/>
-        <source>and bullet_list the results</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="analysis.py" line="670"/>
+        <location filename="analysis.py" line="671"/>
         <source>aggregated by</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="690"/>
+        <location filename="analysis.py" line="691"/>
         <source>The following postprocessors will be used:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="718"/>
+        <location filename="analysis.py" line="719"/>
         <source>A problem was encountered when trying to determine the analysis extents.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="788"/>
+        <location filename="analysis.py" line="812"/>
         <source>Preparing hazard data</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="789"/>
-        <source>We are resampling and clipping the hazard layer to match the intersection of the exposure layer and the current view extents.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="analysis.py" line="808"/>
+        <location filename="analysis.py" line="830"/>
         <source>Preparing exposure data</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="809"/>
-        <source>We are resampling and clipping the exposure layer to match the intersection of the hazard layer and the current view extents.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="analysis.py" line="974"/>
+        <location filename="analysis.py" line="1015"/>
         <source>Analysis Results</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="977"/>
+        <location filename="analysis.py" line="1018"/>
         <source>Notes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="982"/>
+        <location filename="analysis.py" line="1023"/>
         <source>It appears that no %s are affected by %s. You may want to consider:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="987"/>
+        <location filename="analysis.py" line="1028"/>
         <source>Check that you are not zoomed in too much and thus excluding %s from your analysis area.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="991"/>
+        <location filename="analysis.py" line="1032"/>
         <source>Check that the exposure is not no-data or zero for the entire area of your analysis.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="994"/>
+        <location filename="analysis.py" line="1035"/>
         <source>Check that your impact function thresholds do not exclude all features unintentionally.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="898"/>
+        <location filename="analysis.py" line="939"/>
         <source>Aggregation error occurred.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="918"/>
+        <location filename="analysis.py" line="959"/>
         <source>An error occurred when calling a GDAL command</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="922"/>
+        <location filename="analysis.py" line="963"/>
         <source>An error occurred when writing clip file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="926"/>
+        <location filename="analysis.py" line="967"/>
         <source>An exception occurred when setting up the impact calculator.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="931"/>
+        <location filename="analysis.py" line="972"/>
         <source>An error occurred because there are no features visible in the current view. Try zooming out or panning until some features become visible.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="937"/>
+        <location filename="analysis.py" line="978"/>
         <source>An error occurred because you are using a layer containing count data (e.g. population count) which will not scale accurately if we re-project it from its native coordinate reference system to WGS84/GeoGraphic.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="1007"/>
+        <location filename="analysis.py" line="1048"/>
         <source>An error occurred because it appears that your system does not have sufficient memory. Upgrading your computer so that it has more memory may help. Alternatively, consider using a smaller geographical area for your analysis, or using rasters with a larger cell size.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="957"/>
+        <location filename="analysis.py" line="998"/>
         <source>Calculating impact</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="958"/>
+        <location filename="analysis.py" line="999"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="872"/>
+        <location filename="analysis.py" line="913"/>
         <source>No impact layer was generated.
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="1016"/>
+        <location filename="analysis.py" line="1057"/>
         <source>An exception occurred when running the impact analysis.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis.py" line="998"/>
+        <location filename="analysis.py" line="1039"/>
         <source>Check that your dataset coordinate reference system is compatible with InaSAFE&apos;s current requirements.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis.py" line="671"/>
+        <source>and bullet list the results</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis.py" line="793"/>
+        <source>Resampling and clipping the hazard layer to match the intersection of the exposure layer and the current view extents.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis.py" line="798"/>
+        <source>Resampling and clipping the hazard layer to match the intersection of the exposure layer extents.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis.py" line="802"/>
+        <source>Resampling and clipping the hazard layer to match the bookmarked extents.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis.py" line="806"/>
+        <source>Resampling and clipping the hazard layer to match the intersection of your preferred analysis area.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis.py" line="837"/>
+        <source>Resampling and clipping the exposure layer to match the intersection of the hazard layer and the current view extents.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis.py" line="842"/>
+        <source>Resampling and clipping the exposure layer to match the intersection of the hazard layer extents.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis.py" line="846"/>
+        <source>Resampling and clipping the exposure layer to match the bookmarked extents.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis.py" line="850"/>
+        <source>Resampling and clipping the exposure layer to match the intersection of your preferred analysis area.</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>AnalysisHandler</name>
     <message>
-        <location filename="analysis_handler.py" line="415"/>
+        <location filename="analysis_handler.py" line="412"/>
         <source>Error loading impact layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="461"/>
+        <location filename="analysis_handler.py" line="458"/>
         <source>Analysis Results</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="494"/>
+        <location filename="analysis_handler.py" line="491"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="585"/>
+        <location filename="analysis_handler.py" line="582"/>
         <source>InaSAFE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="533"/>
+        <location filename="analysis_handler.py" line="530"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="543"/>
+        <location filename="analysis_handler.py" line="540"/>
         <source>OK</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="693"/>
+        <location filename="analysis_handler.py" line="690"/>
         <source>Map Creator</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="556"/>
+        <location filename="analysis_handler.py" line="553"/>
         <source>Report generation cancelled!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="594"/>
+        <location filename="analysis_handler.py" line="591"/>
         <source>Preparing map and report</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="626"/>
+        <location filename="analysis_handler.py" line="623"/>
         <source>Template is missing some elements</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="629"/>
+        <location filename="analysis_handler.py" line="626"/>
         <source>The composer template you are printing to is missing these elements: %s. Do you still want to continue</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="663"/>
+        <location filename="analysis_handler.py" line="660"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="669"/>
+        <location filename="analysis_handler.py" line="666"/>
         <source>Write to PDF</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="669"/>
+        <location filename="analysis_handler.py" line="666"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="678"/>
+        <location filename="analysis_handler.py" line="675"/>
         <source>Printing cancelled!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="693"/>
-        <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="analysis_handler.py" line="693"/>
+        <location filename="analysis_handler.py" line="690"/>
         <source>and</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="analysis_handler.py" line="585"/>
+        <location filename="analysis_handler.py" line="582"/>
         <source>Please select a valid template before printing. The template you choose does not exist.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis_handler.py" line="690"/>
+        <source>Your PDF was created....</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="analysis_handler.py" line="690"/>
+        <source>Opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4414,308 +4589,308 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Dock</name>
     <message>
-        <location filename="dock.py" line="630"/>
-        <source>No valid functions:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dock.py" line="637"/>
-        <source>Hazard keywords:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dock.py" line="640"/>
-        <source>Exposure keywords:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dock.py" line="604"/>
+        <location filename="dock.py" line="607"/>
         <source>Ready</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1012"/>
+        <location filename="dock.py" line="1017"/>
         <source>Entire area</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2060"/>
+        <location filename="dock.py" line="2126"/>
         <source>InaSAFE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1227"/>
+        <location filename="dock.py" line="1233"/>
         <source>You may not have sufficient free system memory to carry out this analysis. See the dock panel message for more information. Would you like to continue regardless?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1723"/>
+        <location filename="dock.py" line="1789"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1870"/>
+        <location filename="dock.py" line="1936"/>
         <source>Map Creator</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1774"/>
+        <location filename="dock.py" line="1840"/>
         <source>Preparing map and report</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1847"/>
+        <location filename="dock.py" line="1913"/>
         <source>Write to PDF</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1847"/>
+        <location filename="dock.py" line="1913"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1856"/>
+        <location filename="dock.py" line="1922"/>
         <source>Printing cancelled!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="565"/>
+        <location filename="dock.py" line="568"/>
         <source>hazard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="569"/>
+        <location filename="dock.py" line="572"/>
         <source>exposure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="606"/>
+        <location filename="dock.py" line="609"/>
         <source>Run</source>
         <translation>Begin</translation>
     </message>
     <message>
-        <location filename="dock.py" line="606"/>
+        <location filename="dock.py" line="609"/>
         <source>button.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="632"/>
+        <location filename="dock.py" line="635"/>
         <source>No functions are available for the inputs you have specified. Try selecting a different combination of inputs. Please consult the user manual for details on what constitute valid inputs for a given risk function.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1202"/>
+        <location filename="dock.py" line="1208"/>
         <source>A problem was encountered when trying to determine the analysis extents.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1348"/>
+        <location filename="dock.py" line="1416"/>
         <source>Error loading impact layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1505"/>
+        <location filename="dock.py" line="1571"/>
         <source>Analysis Results</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1541"/>
+        <location filename="dock.py" line="1607"/>
         <source>Layer keywords missing:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1870"/>
+        <location filename="dock.py" line="1936"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1870"/>
+        <location filename="dock.py" line="1936"/>
         <source>and</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1421"/>
+        <location filename="dock.py" line="1482"/>
         <source>Impact layer %s was neither a raster or a vector layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1734"/>
+        <location filename="dock.py" line="1800"/>
         <source>Report generation cancelled!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1841"/>
+        <location filename="dock.py" line="1907"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="559"/>
+        <location filename="dock.py" line="562"/>
         <source>These are the minimum steps you need to follow in order to use InaSAFE:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="569"/>
+        <location filename="dock.py" line="572"/>
         <source>Add at least one </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="565"/>
+        <location filename="dock.py" line="568"/>
         <source> layer (e.g. earthquake MMI) to QGIS.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="569"/>
+        <location filename="dock.py" line="572"/>
         <source> layer (e.g. structures) to QGIS.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="582"/>
+        <location filename="dock.py" line="585"/>
         <source>Click on the </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="582"/>
+        <location filename="dock.py" line="585"/>
         <source> button below.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1805"/>
+        <location filename="dock.py" line="1871"/>
         <source>Template is missing some elements</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1808"/>
+        <location filename="dock.py" line="1874"/>
         <source>The composer template you are printing to is missing these elements: %s. Do you still want to continue</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="508"/>
+        <location filename="dock.py" line="511"/>
         <source>InaSAFE %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1762"/>
+        <location filename="dock.py" line="1828"/>
         <source>Please select a valid template before printing. The template you choose does not exist.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="485"/>
+        <location filename="dock.py" line="488"/>
         <source>Due to backwards incompatibility with InaSAFE 2.0.0, the paths to your preferred organisation logo and north arrow may have been reset to their default values. Please check in Plugins -&gt; InaSAFE -&gt; Options that your paths are still correct and update them if needed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="573"/>
+        <location filename="dock.py" line="576"/>
         <source>Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords creation wizard </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="573"/>
+        <location filename="dock.py" line="576"/>
         <source> in the toolbar.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1579"/>
+        <location filename="dock.py" line="1645"/>
         <source> icon in the toolbar.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="736"/>
+        <location filename="dock.py" line="741"/>
         <source>Error while saving</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="731"/>
+        <location filename="dock.py" line="736"/>
         <source>The destination location must be writable.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="736"/>
+        <location filename="dock.py" line="741"/>
         <source>Something went wrong.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="498"/>
+        <location filename="dock.py" line="501"/>
         <source>The file for organization logo in %s doesn&apos;t exists. Please check in Plugins -&gt; InaSAFE -&gt; Options that your paths are still correct and update them if needed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="508"/>
+        <location filename="dock.py" line="511"/>
         <source>The file for organization logo has zero height. Please provide valid file for organization logo.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="558"/>
+        <location filename="dock.py" line="561"/>
         <source>Getting started</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="588"/>
+        <location filename="dock.py" line="591"/>
         <source>Limitations</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="594"/>
+        <location filename="dock.py" line="597"/>
         <source>Disclaimer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2067"/>
+        <location filename="dock.py" line="2133"/>
         <source>You can now proceed to run your analysis by clicking the</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="654"/>
+        <location filename="dock.py" line="659"/>
         <source>Currently there are no overlapping extents between the hazard layer, the exposure layer and the user defined analysis area. Try zooming to the analysis area, clearing the analysis area or defining a new one using the analysis area definition tool.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1211"/>
+        <location filename="dock.py" line="1217"/>
         <source>Your aggregation layer does not have valid keywords for aggregation. Please launch keyword wizard to assign keywords in this layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1218"/>
+        <location filename="dock.py" line="1224"/>
         <source>A problem was encountered because the aggregation layer does not have proper keywords for aggregation layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1543"/>
+        <location filename="dock.py" line="1609"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1577"/>
+        <location filename="dock.py" line="1643"/>
         <source>Layer Keyword&apos;s Version Mismatch:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1579"/>
+        <location filename="dock.py" line="1645"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2032"/>
+        <location filename="dock.py" line="2098"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2037"/>
+        <location filename="dock.py" line="2103"/>
         <source>Analysis environment ready</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2037"/>
+        <location filename="dock.py" line="2103"/>
         <source>More info ...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2060"/>
+        <location filename="dock.py" line="2126"/>
         <source>No overlapping extents</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2073"/>
+        <location filename="dock.py" line="2139"/>
         <source>Insufficient overlap</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock.py" line="633"/>
+        <source>No valid functions</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock.py" line="640"/>
+        <source>Hazard keywords</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock.py" line="644"/>
+        <source>Exposure keywords</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -4727,57 +4902,57 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_base.ui" line="151"/>
+        <location filename="dock_base.ui" line="167"/>
         <source>about:blank</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_base.ui" line="35"/>
+        <location filename="dock_base.ui" line="137"/>
         <source>Question: In the event of</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_base.ui" line="92"/>
+        <location filename="dock_base.ui" line="94"/>
         <source>How many</source>
         <translation>Hoe veel</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="59"/>
+        <location filename="dock_base.ui" line="68"/>
         <source>&amp;Might</source>
         <translation>&amp;Mag</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="79"/>
+        <location filename="dock_base.ui" line="81"/>
         <source>Aggregate results by</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_base.ui" line="195"/>
+        <location filename="dock_base.ui" line="211"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="255"/>
+        <location filename="dock_base.ui" line="271"/>
         <source>Run</source>
         <translation>Begin</translation>
     </message>
     <message>
-        <location filename="dock_base.ui" line="28"/>
+        <location filename="dock_base.ui" line="37"/>
         <source>Show question form</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_base.ui" line="128"/>
+        <location filename="dock_base.ui" line="130"/>
         <source>Options ...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_base.ui" line="235"/>
+        <location filename="dock_base.ui" line="251"/>
         <source>Print ...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_base.ui" line="215"/>
+        <location filename="dock_base.ui" line="231"/>
         <source>About</source>
         <translation type="unfinished"/>
     </message>
@@ -4932,182 +5107,182 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ImpactMergeDialog</name>
     <message>
-        <location filename="impact_merge_dialog.py" line="95"/>
+        <location filename="impact_merge_dialog.py" line="96"/>
         <source>InaSAFE Impact Layer Merge Tool</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="175"/>
+        <location filename="impact_merge_dialog.py" line="176"/>
         <source>Impact Layer Merge Tool</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="182"/>
+        <location filename="impact_merge_dialog.py" line="183"/>
         <source>Run an impact assessment for an area using aggregation. e.g.Flood Impact on Buildings aggregated by municipal boundaries.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="185"/>
+        <location filename="impact_merge_dialog.py" line="186"/>
         <source>Run a second impact assessment for the same area using the same aggregation. e.g. Flood Impact on People aggregated by municipal boundaries.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="189"/>
+        <location filename="impact_merge_dialog.py" line="190"/>
         <source>Open this tool and select each impact layer from the pick lists provided below.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="192"/>
+        <location filename="impact_merge_dialog.py" line="193"/>
         <source>Select the aggregation layer that was used to generate the first and second impact layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="195"/>
+        <location filename="impact_merge_dialog.py" line="196"/>
         <source>Select an output directory.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="202"/>
+        <location filename="impact_merge_dialog.py" line="203"/>
         <source>Click OK to generate the per aggregation area combined summaries.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="310"/>
+        <location filename="impact_merge_dialog.py" line="311"/>
         <source>InaSAFE Merge Impact Tool Information</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="282"/>
+        <location filename="impact_merge_dialog.py" line="283"/>
         <source>InaSAFE Merge Impact Tools Information</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="298"/>
+        <location filename="impact_merge_dialog.py" line="299"/>
         <source>InaSAFE Merge Impact Tools Error</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="310"/>
+        <location filename="impact_merge_dialog.py" line="311"/>
         <source>Report from merging two impact layers was generated successfully.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="387"/>
+        <location filename="impact_merge_dialog.py" line="388"/>
         <source>Entire Area</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="407"/>
+        <location filename="impact_merge_dialog.py" line="408"/>
         <source>First layer is not valid.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="410"/>
+        <location filename="impact_merge_dialog.py" line="411"/>
         <source>Second layer is not valid.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="413"/>
+        <location filename="impact_merge_dialog.py" line="414"/>
         <source>First layer must be different to second layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="462"/>
+        <location filename="impact_merge_dialog.py" line="463"/>
         <source>Directory %s does not exist</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="463"/>
+        <location filename="impact_merge_dialog.py" line="464"/>
         <source>Directory %s does not exist. Do you want to create it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="475"/>
+        <location filename="impact_merge_dialog.py" line="476"/>
         <source>Output directory cannot be empty.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="512"/>
+        <location filename="impact_merge_dialog.py" line="513"/>
         <source>No keywords found for first impact layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="552"/>
+        <location filename="impact_merge_dialog.py" line="553"/>
         <source>No keywords exist in aggregation layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="555"/>
+        <location filename="impact_merge_dialog.py" line="556"/>
         <source>Keyword aggregation attribute not found for aggregation layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="176"/>
+        <location filename="impact_merge_dialog.py" line="177"/>
         <source>This tool will merge the outputs from two impact maps for the same area. The maps must be created using the same aggregation areas and same hazard. To use:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="515"/>
+        <location filename="impact_merge_dialog.py" line="516"/>
         <source>Keyword %s not found for first layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="526"/>
+        <location filename="impact_merge_dialog.py" line="527"/>
         <source>No keywords found for second impact layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="529"/>
+        <location filename="impact_merge_dialog.py" line="530"/>
         <source>Keyword %s not found for second layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="538"/>
+        <location filename="impact_merge_dialog.py" line="539"/>
         <source>First impact layer and second impact layer do not use the same hazard layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="197"/>
+        <location filename="impact_merge_dialog.py" line="198"/>
         <source>Check &quot;Use customized report template&quot; checkbox and select the report template file if you want to use your own template. Note that all the map composer components that are needed must be fulfilled.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="238"/>
+        <location filename="impact_merge_dialog.py" line="239"/>
         <source>Select Output Directory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="246"/>
+        <location filename="impact_merge_dialog.py" line="247"/>
         <source>Select Report Template</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="246"/>
+        <location filename="impact_merge_dialog.py" line="247"/>
         <source>QPT File (*.qpt)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="436"/>
+        <location filename="impact_merge_dialog.py" line="437"/>
         <source>Template file does not exist.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="804"/>
+        <location filename="impact_merge_dialog.py" line="805"/>
         <source>Total</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="1118"/>
+        <location filename="impact_merge_dialog.py" line="1119"/>
         <source>Components: %s could not be found, </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="616"/>
+        <location filename="impact_merge_dialog.py" line="617"/>
         <source>Please choose impact layers with aggregated postprocessor if you want to use aggregation layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_dialog.py" line="655"/>
+        <location filename="impact_merge_dialog.py" line="656"/>
         <source>First and Second layer does not use chosen Aggregation layer</source>
         <translation type="unfinished"/>
     </message>
@@ -5224,12 +5399,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>KeywordIO</name>
     <message>
-        <location filename="keyword_io.py" line="228"/>
-        <source>Expected extraKeywords to be a dictionary. Got %s</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="keyword_io.py" line="241"/>
+        <location filename="keyword_io.py" line="242"/>
         <source>Failed to copy keywords file from : 
 %s
 to
@@ -5237,18 +5407,23 @@ to
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="keyword_io.py" line="186"/>
+        <location filename="keyword_io.py" line="187"/>
         <source>Keyword database path: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="keyword_io.py" line="728"/>
+        <location filename="keyword_io.py" line="756"/>
         <source>Layer keywords:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="keyword_io.py" line="730"/>
+        <location filename="keyword_io.py" line="758"/>
         <source>The following keywords are defined for the active layer:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="keyword_io.py" line="229"/>
+        <source>Expected extra keywords to be a dictionary. Got %s</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -5679,7 +5854,7 @@ to
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="422"/>
-        <source>ISO 19155 Metadata</source>
+        <source>ISO 19115 Metadata</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -5790,11 +5965,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="osm_downloader_dialog.py" line="210"/>
-        <source>Your current extent, when opening this window, will be used to determine the area for which you want data to be retrieved.You can interactively select the area by using the &apos;select on map&apos; button - which will temporarily hide this window and allow you to drag a rectangle on the map. After you have finished dragging the rectangle, this window will reappear.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="osm_downloader_dialog.py" line="300"/>
         <source>Bounding box from the map canvas</source>
         <translation type="unfinished"/>
@@ -5847,6 +6017,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="osm_downloader_dialog.py" line="387"/>
         <source>No feature selected. Please make sure you have checked one feature.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="osm_downloader_dialog.py" line="210"/>
+        <source>Your current extent, when opening this window, will be used to determine the area for which you want data to be retrieved. You can interactively select the area by using the &apos;select on map&apos; button - which will temporarily hide this window and allow you to drag a rectangle on the map. After you have finished dragging the rectangle, this window will reappear.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6006,11 +6181,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="plugin.py" line="337"/>
-        <source>Toggle rubber bands showing scenarion extents.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="plugin.py" line="360"/>
         <source>Set the analysis area for InaSAFE</source>
         <translation type="unfinished"/>
@@ -6100,52 +6270,77 @@ p, li { white-space: pre-wrap; }
         <source>Add test layers</source>
         <translation type="unfinished"/>
     </message>
+    <message>
+        <location filename="plugin.py" line="337"/>
+        <source>Toggle rubber bands showing scenario extents.</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>PostprocessorManager</name>
     <message>
-        <location filename="postprocessor_manager.py" line="289"/>
+        <location filename="postprocessor_manager.py" line="323"/>
         <source>Aggregation unit</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="135"/>
-        <source>Detailed %s report</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="postprocessor_manager.py" line="192"/>
+        <location filename="postprocessor_manager.py" line="217"/>
         <source>Total in aggregation areas</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="200"/>
+        <location filename="postprocessor_manager.py" line="225"/>
         <source>* &quot;%s&quot; values mean that there where some problems while calculating them. This did not affect the other values.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="490"/>
+        <location filename="postprocessor_manager.py" line="526"/>
         <source>%s postprocessor problem</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="509"/>
+        <location filename="postprocessor_manager.py" line="570"/>
         <source>Postprocessing report partially skipped</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="513"/>
+        <location filename="postprocessor_manager.py" line="574"/>
         <source>Due to a problem while processing the results, part of the detailed postprocessing report is unavailable:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="145"/>
+        <location filename="postprocessor_manager.py" line="155"/>
         <source>Detailed %s report (for people needing evacuation)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="156"/>
+        <location filename="postprocessor_manager.py" line="166"/>
         <source>Detailed %s report (affected people)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="173"/>
+        <source>Could not compute the %s report.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="142"/>
+        <source>Closed buildings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="144"/>
+        <source>Closed roads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="146"/>
+        <source>Affected people</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="231"/>
+        <source>Columns containing exclusively 0 and &quot;%s&quot; have not been shown in the table.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6190,198 +6385,188 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ShakeEvent</name>
     <message>
-        <location filename="shake_event.py" line="257"/>
+        <location filename="shake_event.py" line="254"/>
         <source>Not felt</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="259"/>
+        <location filename="shake_event.py" line="256"/>
         <source>Weak</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="284"/>
+        <location filename="shake_event.py" line="281"/>
         <source>Light</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="285"/>
+        <location filename="shake_event.py" line="282"/>
         <source>Moderate</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="262"/>
+        <location filename="shake_event.py" line="259"/>
         <source>Strong</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="263"/>
+        <location filename="shake_event.py" line="260"/>
         <source>Very strong</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="264"/>
+        <location filename="shake_event.py" line="261"/>
         <source>Severe</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="265"/>
+        <location filename="shake_event.py" line="262"/>
         <source>Violent</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="266"/>
+        <location filename="shake_event.py" line="263"/>
         <source>Extreme</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="282"/>
+        <location filename="shake_event.py" line="279"/>
         <source>None</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="283"/>
+        <location filename="shake_event.py" line="280"/>
         <source>Very light</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="286"/>
+        <location filename="shake_event.py" line="283"/>
         <source>Mod/Heavy</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="287"/>
+        <location filename="shake_event.py" line="284"/>
         <source>Heavy</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="288"/>
+        <location filename="shake_event.py" line="285"/>
         <source>Very heavy</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="909"/>
+        <location filename="shake_event.py" line="908"/>
         <source>Name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="964"/>
+        <location filename="shake_event.py" line="966"/>
         <source>Intensity</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="966"/>
+        <location filename="shake_event.py" line="969"/>
         <source>People Affected (x 1000)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="967"/>
+        <location filename="shake_event.py" line="973"/>
         <source>Perceived Shaking</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1582"/>
+        <location filename="shake_event.py" line="1584"/>
         <source>Estimated Earthquake Impact</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1583"/>
+        <location filename="shake_event.py" line="1585"/>
         <source>Estimated number of people affected by each MMI level</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1585"/>
+        <location filename="shake_event.py" line="1587"/>
         <source>Estimated fatalities</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1616"/>
-        <source>Supported by the Australia-Indonesia Facility for Disaster Reduction, Geoscience Australia and the World Bank-GFDRR.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="shake_event.py" line="1627"/>
+        <location filename="shake_event.py" line="1630"/>
         <source>km</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1628"/>
+        <location filename="shake_event.py" line="1631"/>
         <source>of</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1629"/>
+        <location filename="shake_event.py" line="1632"/>
         <source>bearing</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1638"/>
+        <location filename="shake_event.py" line="1641"/>
         <source>n/a</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1645"/>
+        <location filename="shake_event.py" line="1648"/>
         <source>Elapsed time since event</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1669"/>
+        <location filename="shake_event.py" line="1672"/>
         <source>Latitude</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1671"/>
+        <location filename="shake_event.py" line="1674"/>
         <source>Longitude</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1673"/>
+        <location filename="shake_event.py" line="1676"/>
         <source>Depth</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1676"/>
+        <location filename="shake_event.py" line="1679"/>
         <source>Located</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1719"/>
+        <location filename="shake_event.py" line="1722"/>
         <source>minute(s)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1719"/>
+        <location filename="shake_event.py" line="1722"/>
         <source>hour(s)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1733"/>
+        <location filename="shake_event.py" line="1736"/>
         <source>days</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1733"/>
+        <location filename="shake_event.py" line="1736"/>
         <source>weeks</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1761"/>
+        <location filename="shake_event.py" line="1764"/>
         <source>Version: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1613"/>
+        <location filename="shake_event.py" line="1616"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org for more information.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1597"/>
+        <location filename="shake_event.py" line="1599"/>
         <source>Population count per grid cell</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="shake_event.py" line="1598"/>
-        <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population count data derived by AIFDR from worldpop.org.uk, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6390,8 +6575,18 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shake_event.py" line="1596"/>
+        <location filename="shake_event.py" line="1598"/>
         <source>Nearby Places</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="shake_event.py" line="1600"/>
+        <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population count data derived by Australian Government from worldpop.org.uk, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="shake_event.py" line="1619"/>
+        <source>Supported by the Australian Government, Geoscience Australia and the World Bank-GFDRR.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6463,18 +6658,18 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="shakemap_converter_dialog.py" line="249"/>
-        <source>Raw grid file(*.xml)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="shakemap_converter_dialog.py" line="259"/>
         <source>Output file</source>
         <translation type="unfinished"/>
     </message>
     <message>
+        <location filename="shakemap_converter_dialog.py" line="249"/>
+        <source>Raw grid file (*.xml)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="shakemap_converter_dialog.py" line="259"/>
-        <source>Raster file(*.tif)</source>
+        <source>Raster file (*.tif)</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6554,244 +6749,249 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WizardDialog</name>
     <message>
-        <location filename="wizard_dialog.py" line="1156"/>
+        <location filename="wizard_dialog.py" line="1157"/>
         <source>Field type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1157"/>
+        <location filename="wizard_dialog.py" line="1158"/>
         <source>Unique values: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3763"/>
+        <location filename="wizard_dialog.py" line="3777"/>
         <source>Finish</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3918"/>
+        <location filename="wizard_dialog.py" line="3939"/>
         <source>Next</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4414"/>
+        <location filename="wizard_dialog.py" line="4433"/>
         <source>InaSAFE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4414"/>
+        <location filename="wizard_dialog.py" line="4433"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1810"/>
+        <location filename="wizard_dialog.py" line="1811"/>
         <source>Use default</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4436"/>
+        <location filename="wizard_dialog.py" line="4455"/>
         <source>Title of the layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4437"/>
+        <location filename="wizard_dialog.py" line="4456"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4440"/>
+        <location filename="wizard_dialog.py" line="4459"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4442"/>
+        <location filename="wizard_dialog.py" line="4461"/>
         <source>What is the scale of this layer?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4443"/>
+        <location filename="wizard_dialog.py" line="4462"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3805"/>
+        <location filename="wizard_dialog.py" line="3819"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3630"/>
+        <location filename="wizard_dialog.py" line="3644"/>
         <source>no aggregation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3765"/>
+        <location filename="wizard_dialog.py" line="3779"/>
         <source>Run</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3632"/>
+        <location filename="wizard_dialog.py" line="3646"/>
         <source>Please ensure the following information is correct and press Run.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3637"/>
+        <location filename="wizard_dialog.py" line="3651"/>
         <source>impact function</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3637"/>
+        <location filename="wizard_dialog.py" line="3651"/>
         <source>hazard layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3637"/>
+        <location filename="wizard_dialog.py" line="3651"/>
         <source>exposure layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3637"/>
+        <location filename="wizard_dialog.py" line="3651"/>
         <source>aggregation layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3516"/>
+        <location filename="wizard_dialog.py" line="3530"/>
         <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="402"/>
+        <location filename="wizard_dialog.py" line="403"/>
         <source>Keywords update wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="406"/>
+        <location filename="wizard_dialog.py" line="407"/>
         <source>Keywords creation wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2747"/>
+        <location filename="wizard_dialog.py" line="2749"/>
         <source>Hazard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2751"/>
+        <location filename="wizard_dialog.py" line="2753"/>
         <source>Exposure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2759"/>
+        <location filename="wizard_dialog.py" line="2761"/>
         <source>classified data</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2761"/>
+        <location filename="wizard_dialog.py" line="2763"/>
         <source>Unit</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3564"/>
+        <location filename="wizard_dialog.py" line="3578"/>
         <source>Enabled</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3564"/>
+        <location filename="wizard_dialog.py" line="3578"/>
         <source>Disabled</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="415"/>
+        <location filename="wizard_dialog.py" line="416"/>
         <source>Use this wizard to run a guided impact assessment</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2101"/>
+        <location filename="wizard_dialog.py" line="2102"/>
         <source>Available functions:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2239"/>
+        <location filename="wizard_dialog.py" line="2240"/>
         <source>Function</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2242"/>
+        <location filename="wizard_dialog.py" line="2243"/>
         <source>Overview</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2772"/>
+        <location filename="wizard_dialog.py" line="2774"/>
         <source>Title</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2954"/>
+        <location filename="wizard_dialog.py" line="2956"/>
         <source>Purpose</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2772"/>
+        <location filename="wizard_dialog.py" line="2774"/>
         <source>Source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2779"/>
+        <location filename="wizard_dialog.py" line="2781"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign key words now.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2804"/>
+        <location filename="wizard_dialog.py" line="2806"/>
         <source>This layer has no valid keywords assigned</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2804"/>
+        <location filename="wizard_dialog.py" line="2806"/>
         <source>SOURCE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2804"/>
+        <location filename="wizard_dialog.py" line="2806"/>
         <source>TYPE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2804"/>
+        <location filename="wizard_dialog.py" line="2806"/>
         <source>In the next step you will be able to assign keywords to this layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2954"/>
+        <location filename="wizard_dialog.py" line="2956"/>
         <source>Layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2954"/>
+        <location filename="wizard_dialog.py" line="2956"/>
         <source>Required</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2954"/>
+        <location filename="wizard_dialog.py" line="2956"/>
         <source>Geometry</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2954"/>
+        <location filename="wizard_dialog.py" line="2956"/>
         <source>Layer mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3031"/>
+        <location filename="wizard_dialog.py" line="3033"/>
         <source>Not a valid layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3050"/>
+        <location filename="wizard_dialog.py" line="3053"/>
         <source>This layer&apos;s keywords or type are not suitable:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3735"/>
+        <location filename="wizard_dialog.py" line="3749"/>
         <source>Running analysis...</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="3464"/>
+        <source>Please specify extent of your analysis:</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6803,117 +7003,117 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2133"/>
+        <location filename="wizard_dialog_base.ui" line="2152"/>
         <source>[placeholder]</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2844"/>
+        <location filename="wizard_dialog_base.ui" line="2863"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1007"/>
+        <location filename="wizard_dialog_base.ui" line="1026"/>
         <source>Classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1018"/>
+        <location filename="wizard_dialog_base.ui" line="1037"/>
         <source>Classified unique values</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1031"/>
+        <location filename="wizard_dialog_base.ui" line="1050"/>
         <source>Unclassified unique values</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1485"/>
+        <location filename="wizard_dialog_base.ui" line="1504"/>
         <source>Scale</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1545"/>
+        <location filename="wizard_dialog_base.ui" line="1564"/>
         <source>Date</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1518"/>
+        <location filename="wizard_dialog_base.ui" line="1537"/>
         <source>Source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1505"/>
+        <location filename="wizard_dialog_base.ui" line="1524"/>
         <source>URL</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1599"/>
+        <location filename="wizard_dialog_base.ui" line="1618"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be &apos;A flood in Jakarta&apos; (for a hazard layer) or &apos;People living in jakarta&apos; (for an exposure layer).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1617"/>
+        <location filename="wizard_dialog_base.ui" line="1636"/>
         <source>Title</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3848"/>
+        <location filename="wizard_dialog_base.ui" line="3771"/>
         <source>Cancel</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3871"/>
+        <location filename="wizard_dialog_base.ui" line="3794"/>
         <source>Back</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3881"/>
+        <location filename="wizard_dialog_base.ui" line="3804"/>
         <source>Next</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1260"/>
+        <location filename="wizard_dialog_base.ui" line="1279"/>
         <source>Youth ratio attribute</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1290"/>
+        <location filename="wizard_dialog_base.ui" line="1309"/>
         <source>Adult ratio attribute</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1410"/>
+        <location filename="wizard_dialog_base.ui" line="1429"/>
         <source>Youth ratio default</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1327"/>
+        <location filename="wizard_dialog_base.ui" line="1346"/>
         <source>Female ratio default</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1337"/>
+        <location filename="wizard_dialog_base.ui" line="1356"/>
         <source>Adult ratio default</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1347"/>
+        <location filename="wizard_dialog_base.ui" line="1366"/>
         <source>Elderly ratio attribute</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1377"/>
+        <location filename="wizard_dialog_base.ui" line="1396"/>
         <source>Female ratio attribute</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1387"/>
+        <location filename="wizard_dialog_base.ui" line="1406"/>
         <source>Elderly ratio default</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1448"/>
+        <location filename="wizard_dialog_base.ui" line="1467"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Where does the data come from? You may want to write more or less short comment about its source.&lt;/p&gt;&lt;p&gt;This step is optional.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
@@ -6923,118 +7123,113 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3688"/>
+        <location filename="wizard_dialog_base.ui" line="3604"/>
         <source>TextLabel</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3030"/>
+        <location filename="wizard_dialog_base.ui" line="3049"/>
         <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3113"/>
+        <location filename="wizard_dialog_base.ui" line="3132"/>
         <source>No thanks, I am happy to aggregate results for the entire analysis window</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3146"/>
+        <location filename="wizard_dialog_base.ui" line="3165"/>
         <source>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;aggregation&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3296"/>
+        <location filename="wizard_dialog_base.ui" line="3315"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;aggregation&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3508"/>
-        <source>Please specify extent of your analysis. By clicking &quot;define it now&quot; you can invoke the extent selection tool.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="3732"/>
+        <location filename="wizard_dialog_base.ui" line="3648"/>
         <source>Here goes the summary...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3764"/>
+        <location filename="wizard_dialog_base.ui" line="3680"/>
         <source>Running analysis...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3802"/>
+        <location filename="wizard_dialog_base.ui" line="3718"/>
         <source>about:blank</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3812"/>
+        <location filename="wizard_dialog_base.ui" line="3728"/>
         <source>Open in web browser</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3819"/>
+        <location filename="wizard_dialog_base.ui" line="3735"/>
         <source>Generate PDF</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3826"/>
+        <location filename="wizard_dialog_base.ui" line="3742"/>
         <source>Open in composer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1826"/>
+        <location filename="wizard_dialog_base.ui" line="1845"/>
         <source>&lt;b&gt;Hazard&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1836"/>
+        <location filename="wizard_dialog_base.ui" line="1855"/>
         <source>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1738"/>
+        <location filename="wizard_dialog_base.ui" line="1757"/>
         <source>People</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1743"/>
+        <location filename="wizard_dialog_base.ui" line="1762"/>
         <source>Construction</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1748"/>
+        <location filename="wizard_dialog_base.ui" line="1767"/>
         <source>Flood</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1753"/>
+        <location filename="wizard_dialog_base.ui" line="1772"/>
         <source>Tsunami</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1938"/>
+        <location filename="wizard_dialog_base.ui" line="1957"/>
         <source>Available functions:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1897"/>
+        <location filename="wizard_dialog_base.ui" line="1916"/>
         <source>Point</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1905"/>
+        <location filename="wizard_dialog_base.ui" line="1924"/>
         <source>Line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1913"/>
+        <location filename="wizard_dialog_base.ui" line="1932"/>
         <source>Polygon</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1921"/>
+        <location filename="wizard_dialog_base.ui" line="1940"/>
         <source>Raster</source>
         <translation type="unfinished"/>
     </message>
@@ -7044,151 +7239,126 @@ Please step back and select another layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1243"/>
+        <location filename="wizard_dialog_base.ui" line="1262"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
 &lt;p&gt;Please input these ratio attributes below for aggregation. For each attribute you can choose whether it should be:&lt;/p&gt;
 &lt;ol&gt;&lt;li&gt;defined in an attribute of the aggregation polygon (so that you can for example have different ratios per aggregation area)&lt;/li&gt;&lt;li&gt;defined as a global default for the aggregation layer, or&lt;/li&gt;&lt;li&gt;ignored&lt;/li&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1674"/>
+        <location filename="wizard_dialog_base.ui" line="1693"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This wizard will guide you through the process of running an InaSAFE assessment. The assessment will combine hazard data (such as a flood layer) with exposure data (such as population, roads or buildings) to help you to understand the potential impact of such an event. To start, please select the &lt;b&gt;hazard&lt;/b&gt; and &lt;b&gt;exposure&lt;/b&gt; you want to use by clicking a cell in the matrix below.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3053"/>
+        <location filename="wizard_dialog_base.ui" line="3072"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Would you like to &lt;span style=&quot; font-weight:600;&quot;&gt;aggregate&lt;/span&gt; the results of your analysis by sub-regions? Aggregation will break down the analysis results for each area in the specified aggregation layer. Aggregation is optional. Please select from an option below in order to indicate how you would like to go about aggregating the results.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3591"/>
-        <source>Use the extent of the analysis layers</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="3578"/>
-        <source>Use the current extent of the map display</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="919"/>
+        <location filename="wizard_dialog_base.ui" line="938"/>
         <source>Never resample this layer to the hazard layer resolution</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3482"/>
+        <location filename="wizard_dialog_base.ui" line="3501"/>
         <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3521"/>
-        <source>Use the extent defined by selecting an area on the map</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="3666"/>
+        <location filename="wizard_dialog_base.ui" line="3582"/>
         <source>The selected extent doesn't intersect input layers.
 Please step back and select another layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3546"/>
-        <source>Your existing selection will be used if one has already been made</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="3565"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Alternatively, &lt;a href=&quot;define_user_extent&quot;&gt; &lt;span style=&quot; text-decoration: underline; color:#e85290;&quot;&gt;define the analysis extent now...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="wizard_dialog_base.ui" line="1084"/>
+        <location filename="wizard_dialog_base.ui" line="1103"/>
         <source>Please input attribute(s) in this layer that represents specified parameters:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1123"/>
+        <location filename="wizard_dialog_base.ui" line="1142"/>
         <source>Attribute 1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1133"/>
+        <location filename="wizard_dialog_base.ui" line="1152"/>
         <source>Attribute 2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1143"/>
+        <location filename="wizard_dialog_base.ui" line="1162"/>
         <source>Attribute 3</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1153"/>
+        <location filename="wizard_dialog_base.ui" line="1172"/>
         <source>Attribute 4</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1163"/>
+        <location filename="wizard_dialog_base.ui" line="1182"/>
         <source>Attribute 5</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1173"/>
+        <location filename="wizard_dialog_base.ui" line="1192"/>
         <source>Attribute 6</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1183"/>
+        <location filename="wizard_dialog_base.ui" line="1202"/>
         <source>Attribute 7</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1193"/>
+        <location filename="wizard_dialog_base.ui" line="1212"/>
         <source>Attribute 8</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1558"/>
+        <location filename="wizard_dialog_base.ui" line="1577"/>
         <source>License</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3358"/>
+        <location filename="wizard_dialog_base.ui" line="3377"/>
         <source>icon</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2171"/>
+        <location filename="wizard_dialog_base.ui" line="2190"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the InaSAFE Keywords Creation Wizard for hazard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2208"/>
+        <location filename="wizard_dialog_base.ui" line="2227"/>
         <source>I would like to pick a hazard layer from disk
 (launches the InaSAFE Keywords Creation Wizard for hazard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2592"/>
+        <location filename="wizard_dialog_base.ui" line="2611"/>
         <source>I would like to pick an exposure layer from disk
 (launches the InaSAFE Keywords Creation Wizard for exposure if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2642"/>
+        <location filename="wizard_dialog_base.ui" line="2661"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the InaSAFE Keywords Creation Wizard for exposure if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3097"/>
+        <location filename="wizard_dialog_base.ui" line="3116"/>
         <source>I would like to pick an aggregation layer from disk
 (launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3105"/>
+        <location filename="wizard_dialog_base.ui" line="3124"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</source>
         <translation type="unfinished"/>
@@ -7197,7 +7367,7 @@ Please step back and select another layer.</source>
 <context>
     <name>self.dock</name>
     <message>
-        <location filename="test_dock.py" line="835"/>
+        <location filename="test_dock.py" line="884"/>
         <source>Entire area</source>
         <translation type="unfinished"/>
     </message>

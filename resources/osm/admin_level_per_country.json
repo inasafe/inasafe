@@ -106,6 +106,21 @@
 	  "10": "Barangays"
 	}
   },
+  "Thailand": {
+	"bbox": [97.2, 20.5, 105.7, 5.4],
+	"levels": {
+	  "1": "N/A",
+	  "2": "National Border",
+	  "3": "N/A",
+	  "4": "Province (Changwat)",
+	  "5": "N/A",
+	  "6": "District (Amphoe)",
+	  "7": "N/A",
+	  "8": "Subdisrict (Tambon)",
+	  "9": "",
+	  "10": "Village (Muban)"
+	}
+  },
   "Zimbabwe": {
 	"bbox": [24.65, -15.40, 33.18, -22.47],
 	"levels": {
