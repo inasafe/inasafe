@@ -21,6 +21,7 @@ from safe.utilities.i18n import tr
 from safe.impact_reports.report_mixin_base import ReportMixin
 
 import safe.messaging as m
+from safe.common.utilities import format_int
 
 
 class AreaExposureReportMixin(ReportMixin):
@@ -126,34 +127,45 @@ class AreaExposureReportMixin(ReportMixin):
         percentage_affected_people = round(percentage_affected_people, 1)
 
         total_affected_area *= 1e8
-        total_affected_area = round(total_affected_area, 0)
+        total_affected_area = round(total_affected_area, 1)
         total_area *= 1e8
         total_area = round(total_area, 0)
+        total_affected_population = round(total_affected_population, 0)
+        total_population = round(total_population, 0)
 
         second_row.add(m.Cell(
-            total_affected_area,
+            format_int(int(total_affected_area)),
             align='right'))
         second_row.add(m.Cell(
-            percentage_affected_area,
+            "%.0f%%" % percentage_affected_area,
             align='right'))
         second_row.add(m.Cell(
-            total_area,
+            format_int(int(total_area)),
             align='right'))
         second_row.add(m.Cell(
-            total_affected_population,
+            format_int(int(total_affected_population)),
             align='right'))
         second_row.add(m.Cell(
-            percentage_affected_area,
+            "%.0f%%" % percentage_affected_area,
             align='right'))
         second_row.add(m.Cell(
-            total_population, align='right'))
+            format_int(int(total_population)),
+            align='right'))
 
         table.add(second_row)
 
         break_row = m.Row()
         break_row.add(m.Cell(
             tr('Breakdown by Area'),
-            header=True))
+            header=True,
+            align='right'))
+        # intentionally empty top left cell
+        break_row.add(m.Cell('', header=True))
+        break_row.add(m.Cell('', header=True))
+        break_row.add(m.Cell('', header=True))
+        break_row.add(m.Cell('', header=True))
+        break_row.add(m.Cell('', header=True))
+        break_row.add(m.Cell('', header=True))
         table.add(break_row)
 
         areas = self.areas
@@ -197,22 +209,22 @@ class AreaExposureReportMixin(ReportMixin):
             row = m.Row()
             row.add(m.Cell(t))
             row.add(m.Cell(
-                "%.0f" % affected,
+                format_int(int(affected)),
                 align='right'))
             row.add(m.Cell(
                 "%.1f%%" % percent_affected,
                 align='right'))
             row.add(m.Cell(
-                "%.0f" % single_total_area,
+                format_int(int(single_total_area)),
                 align='right'))
             row.add(m.Cell(
-                "%.0f" % number_people_affected,
+                format_int(int(number_people_affected)),
                 align='right'))
             row.add(m.Cell(
                 "%.1f%%" % percent_people_affected,
                 align='right'))
             row.add(m.Cell(
-                self.areas_population[t],
+                format_int(int(self.areas_population[t])),
                 align='right'))
             table.add(row)
 
