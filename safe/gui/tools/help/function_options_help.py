@@ -94,7 +94,7 @@ def content():
             'show-minimum-needs.svg' % resources_path(),
             **SMALL_ICON_STYLE),
         tr(
-            ' This panel will let you override global defaults for a specifc'
-           'anallysis run')))
+            ' This panel will let you override global defaults for a specific'
+            'analysis run')))
     message.add(bullets)
     return message
