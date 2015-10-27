@@ -39,7 +39,6 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, pyqtSlot, QSettings, pyqtSignal
 
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.help import show_context_help
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
@@ -66,7 +65,7 @@ from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
     set_vector_categorized_style)
-from safe.impact_statistics.function_options_dialog import (
+from safe.gui.tools.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import temp_dir
 from safe.common.exceptions import ReadLayerError, TemplateLoadingError
@@ -92,6 +91,7 @@ from safe.common.exceptions import (
     InsufficientMemoryWarning)
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
+from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
@@ -1515,10 +1515,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Return text to display in report panel
         return report
 
-    @staticmethod
-    def show_help():
-        """Load the help text into the system browser."""
-        show_context_help(context='dock')
+    def show_help(self):
+        """Open the About dialog."""
+        # noinspection PyTypeChecker
+        dialog = HelpDialog(self)
+        dialog.show()
 
     def hide_busy(self):
         """A helper function to indicate processing is done."""

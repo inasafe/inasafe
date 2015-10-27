@@ -14,40 +14,7 @@
    <string>Minimum Needs Calculator</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QWebView" name="webView" native="true">
-     <property name="url" stdset="0">
-      <url>
-       <string>about:blank</string>
-      </url>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0">
-    <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Affected people Layer</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QComboBox" name="cboPolygonLayers"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Affected people field</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="cboFields"/>
-     </item>
-    </layout>
-   </item>
-   <item row="2" column="0">
     <widget class="QDialogButtonBox" name="button_box">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -55,6 +22,78 @@
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
      </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QStackedWidget" name="main_stacked_widget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="page">
+      <layout class="QGridLayout" name="gridLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QWebView" name="help_web_view">
+         <property name="url">
+          <url>
+           <string>about:blank</string>
+          </url>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_1">
+      <layout class="QGridLayout" name="gridLayout_4">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Affected people Layer</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="cboPolygonLayers"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Affected people field</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="cboFields"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

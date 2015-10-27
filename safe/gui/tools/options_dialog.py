@@ -24,9 +24,8 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSignature, pyqtSlot
 
-from safe.utilities.help import show_context_help
 from safe.common.utilities import temp_dir
 from safe.defaults import (
     disclaimer,
@@ -34,8 +33,9 @@ from safe.defaults import (
     default_north_arrow_path,
     get_defaults)
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.resources import get_ui_class
+from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.common.version import get_version
+from safe.gui.tools.help.options_help import options_help
 
 FORM_CLASS = get_ui_class('options_dialog_base.ui')
 
@@ -68,8 +68,12 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.defaults = get_defaults()
 
         # Set up things for context help
-        button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        button.clicked.connect(self.show_help)
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.main_stacked_widget.setCurrentIndex(1)
+
         self.grpNotImplemented.hide()
         self.adjustSize()
         self.restore_state()
@@ -287,11 +291,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'inasafe/ISO19115_LICENSE',
             self.iso19115_license_le.text())
 
-    @staticmethod
-    def show_help():
-        """Show context help for the options dialog."""
-        show_context_help('options')
-
     def accept(self):
         """Method invoked when OK button is clicked."""
         self.save_state()
@@ -443,3 +442,43 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             org_disclaimer = disclaimer()
 
         self.txtDisclaimer.setPlainText(org_disclaimer)
+
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
+
+        .. versionadded: 3.2.1
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded: 3.2.1
+        """
+        self.main_stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
+        """Show usage info to the user."""
+        # Read the header and footer html snippets
+        self.main_stacked_widget.setCurrentIndex(0)
+        header = html_header()
+        footer = html_footer()
+
+        string = header
+
+        message = options_help()
+
+        string += message.to_html()
+        string += footer
+
+        self.help_web_view.setHtml(string)
