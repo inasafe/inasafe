@@ -26,7 +26,6 @@ from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 
-from safe.utilities.help import show_context_help
 from safe.common.utilities import temp_dir
 from safe.defaults import (
     disclaimer,
