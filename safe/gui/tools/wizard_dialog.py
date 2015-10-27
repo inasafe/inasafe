@@ -24,6 +24,7 @@ import re
 import json
 from collections import OrderedDict
 from sqlite3 import OperationalError
+
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 import numpy
@@ -96,7 +97,7 @@ from safe.common.resource_parameter import ResourceParameter
 from safe.common.version import get_version
 from safe_extras.parameters.group_parameter import GroupParameter
 from safe.utilities.resources import get_ui_class, resources_path
-from safe.impact_statistics.function_options_dialog import (
+from safe.gui.tools.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
@@ -3454,7 +3455,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.swExtent:
             self.swExtent.hide()
 
-        self.swExtent = self.extent_dialog.stacked_widget
+        self.swExtent = self.extent_dialog.main_stacked_widget
         self.layoutAnalysisExtent.addWidget(self.swExtent)
 
     def write_extent(self):

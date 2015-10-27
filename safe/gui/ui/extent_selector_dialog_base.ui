@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>609</width>
-    <height>363</height>
+    <width>621</width>
+    <height>375</height>
    </rect>
   </property>
   <property name="font">
@@ -36,14 +36,14 @@
     <number>12</number>
    </property>
    <item row="0" column="0">
-    <widget class="QStackedWidget" name="stacked_widget">
+    <widget class="QStackedWidget" name="main_stacked_widget">
      <property name="currentIndex">
       <number>1</number>
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
-        <widget class="QWebView" name="web_view">
+        <widget class="QWebView" name="help_web_view">
          <property name="minimumSize">
           <size>
            <width>200</width>
@@ -59,8 +59,20 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page2">
+     <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
@@ -300,7 +312,7 @@
   <tabstop>capture_button</tabstop>
   <tabstop>show_warnings</tabstop>
   <tabstop>show_confirmations</tabstop>
-  <tabstop>web_view</tabstop>
+  <tabstop>help_web_view</tabstop>
  </tabstops>
  <resources/>
  <connections>

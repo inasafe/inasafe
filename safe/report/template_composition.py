@@ -31,7 +31,7 @@ from safe.common.exceptions import TemplateLoadingError
 class TemplateComposition(object):
     """Class for handling composition using specific template.
 
-    ..versionadded: 3.0
+    .. versionadded: 3.0
     """
     def __init__(self, template_path=None, map_settings=None):
         """Class constructor."""
