@@ -850,7 +850,7 @@
     <message>
         <location filename="aggregation_postprocessor.py" line="46"/>
         <source>Calculates generic aggregation statistics</source>
-        <translation type="unfinished"/>
+        <translation>Calcule des statistiques génériques de l&apos;agrégation</translation>
     </message>
     <message>
         <location filename="road_exposure_report_mixin.py" line="147"/>
@@ -995,7 +995,7 @@
     <message>
         <location filename="impact_function.py" line="192"/>
         <source>(building)</source>
-        <translation type="unfinished"/>
+        <translation>(bâtiment)</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="191"/>
@@ -1130,7 +1130,7 @@
     <message>
         <location filename="impact_function.py" line="251"/>
         <source>The level of the impact is according to the threshold the user input.</source>
-        <translation>Le niveau de l’impact dépend du seuil indiqué par l utilisateur</translation>
+        <translation>Le niveau de l’impact dépend du seuil indiqué par l&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="253"/>
@@ -1420,7 +1420,7 @@
     <message>
         <location filename="definitions.py" line="352"/>
         <source>A &lt;b&gt;structure&lt;/b&gt; can be any relatively permanent man made feature such as a building (an enclosed structure with walls and a roof) or a telecommunications facility or a bridge.</source>
-        <translation>Une &lt;b&gt;structure&lt;/b&gt; est tout type d&apos;objet relativement permanent construit par l&apos;homme tel qu&apos;un bâtiment (une structure avec des murs et un toit), un centre de télécommunications ou un pont.</translation>
+        <translation>Une &lt;b&gt;structure&lt;/b&gt; correspond à tout type d&apos;objet relativement permanent construit par l&apos;homme, tel qu&apos;un bâtiment (une structure avec des murs et un toit), un centre de télécommunications ou un pont.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="392"/>
@@ -1465,7 +1465,7 @@
     <message>
         <location filename="definitions.py" line="608"/>
         <source>This is a binary description for an area. The area is either &lt;b&gt;wet&lt;/b&gt; (affected by flood water) or &lt;b&gt;dry&lt;/b&gt; (not affected by flood water). This unit does not describe how &lt;b&gt;wet&lt;/b&gt; or &lt;b&gt;dry&lt;/b&gt; an area is.</source>
-        <translation type="unfinished"/>
+        <translation>Il s&apos;agit d&apos;une description binaire pour une zone, qui est soit &lt;b&gt;humide&lt;/b&gt; (affectée par l&apos;inondation) ou &lt;b&gt;sèche&lt;/b&gt; (non affectée par l&apos;inondation). Cette unité ne décrit pas combien la zone est &lt;b&gt;humide&lt;/b&gt; ou &lt;b&gt;sèche&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="679"/>
@@ -1480,7 +1480,7 @@
     <message>
         <location filename="definitions.py" line="32"/>
         <source>Global default</source>
-        <translation type="unfinished"/>
+        <translation>Même proportion pour toutes les zones</translation>
     </message>
     <message>
         <location filename="definitions.py" line="37"/>
@@ -1560,7 +1560,7 @@
     <message>
         <location filename="definitions.py" line="148"/>
         <source>A layer composed of linear features. Currently only &lt;b&gt;road exposure&lt;/b&gt;line layers are supported by InaSAFE.</source>
-        <translation type="unfinished"/>
+        <translation>Une couche vectorielle composée d&apos;objets linéaires. Pour l&apos;instant, seules les couches de &lt;b&gt;réseau routier&lt;/b&gt; sont supportées par InaSAFE.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="142"/>
@@ -2197,7 +2197,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="needs_manager_dialog.py" line="388"/>
         <source>A &lt;b&gt;unit&lt;/b&gt; is the basic measurement unit used for computing the allowance per individual. For example when planning water rations the unit would be single litre.</source>
-        <translation type="unfinished"/>
+        <translation>Une &lt;b&gt;unité&lt;/b&gt; est l&apos;unité de mesure fondamentale utilisée pour calculer l&apos;allocation par individu. Par exemple, lorsqu&apos;il s&apos;agit de rations d&apos;eau, l&apos;unité est le litre. </translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="397"/>
@@ -2212,7 +2212,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="needs_manager_dialog.py" line="401"/>
         <source>&lt;b&gt;Units&lt;/b&gt; are the basic measurement used for computing the allowance per individual. For example when planning water rations the units would be litres.</source>
-        <translation type="unfinished"/>
+        <translation>Une &lt;b&gt;unité&lt;/b&gt; est l&apos;unité de mesure fondamentale utilisée pour calculer l&apos;allocation par individu. Par exemple, lorsqu&apos;il s&apos;agit de rations d&apos;eau, l&apos;unité est le litre. </translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="410"/>
@@ -2227,7 +2227,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="needs_manager_dialog.py" line="413"/>
         <source>A &lt;b&gt;unti abbreviation&lt;/b&gt; is the basic measurement unit&apos;s shortened. For example when planning water rations the units would be l.</source>
-        <translation type="unfinished"/>
+        <translation>Une &lt;b&gt;abréviation d&apos;unité&lt;/b&gt; est la forme raccourcie d&apos;une unité de mesure fondamentale. Par exemple, lorsqu&apos;il s&apos;agit de litres, l&apos;abréviation de l&apos;unité est l. </translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="422"/>
@@ -2242,7 +2242,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="needs_manager_dialog.py" line="429"/>
         <source>The &lt;b&gt;minimum&lt;/b&gt; is the minimum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be less than 0.5l. This is enforced when tweaking a minimum needs set before an impact evaluation</source>
-        <translation type="unfinished"/>
+        <translation>Le &lt;b&gt;minimum&lt;/b&gt; est la quantité minimale allouée par personne pour une ressource. Par exemple, il est possible d&apos;imposer que la ration d&apos;eau quotidienne par personne ne devrait jamais être en-dessus de 0,5 l. Cela est imposé lors de l&apos;application d&apos;un ensemble de besoins minimaux avant une évaluation d&apos;impacts. </translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="438"/>
@@ -2257,7 +2257,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="needs_manager_dialog.py" line="445"/>
         <source>The &lt;b&gt;maximum&lt;/b&gt; is the maximum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be more than 50l. This is enforced when tweaking a minimum needs set before an impact evaluation.</source>
-        <translation type="unfinished"/>
+        <translation>Le &lt;b&gt;maximum&lt;/b&gt; est la quantité maximale allouée par personne pour une ressource. Par exemple, il est possible d&apos;imposer que la ration d&apos;eau quotidienne par personne ne devrait jamais être au-dessus de 50 l. Cela est imposé lors de l&apos;application d&apos;un ensemble de besoins maximaux avant une évaluation d&apos;impacts. </translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="454"/>
@@ -2272,7 +2272,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="needs_manager_dialog.py" line="461"/>
         <source>The &lt;b&gt;default&lt;/b&gt; is the default allowed quantity of the resource per person. For example you may indicate that the water ration per person weekly should be 67l.</source>
-        <translation type="unfinished"/>
+        <translation>La &lt;b&gt;valeur par défaut&lt;/b&gt; est la quantité par défaut allouée par personne pour une ressource. Par exemple, il est possible d&apos;indiquer que la ration d&apos;eau quotidienne par personne devrait être de 25 l.</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="468"/>
@@ -2382,7 +2382,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="defaults.py" line="146"/>
         <source>Gender ratio breakdown.</source>
-        <translation type="unfinished"/>
+        <translation>Répartition des proportions de genre.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="147"/>
@@ -2397,7 +2397,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="defaults.py" line="182"/>
         <source>Age ratios breakdown.</source>
-        <translation type="unfinished"/>
+        <translation>Répartition des proportions de classes d&apos;âge.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="183"/>
@@ -2407,52 +2407,52 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="defaults.py" line="191"/>
         <source>ratio</source>
-        <translation type="unfinished"/>
+        <translation>proportion</translation>
     </message>
     <message>
         <location filename="defaults.py" line="190"/>
         <source>ratios</source>
-        <translation type="unfinished"/>
+        <translation>proportions</translation>
     </message>
     <message>
         <location filename="defaults.py" line="192"/>
         <source>Ratio represents a fraction of 1, so it ranges from 0 to 1.</source>
-        <translation type="unfinished"/>
+        <translation>Une proportion représente une fraction de 1. Elle varie donc entre 0 et 1. </translation>
     </message>
     <message>
         <location filename="defaults.py" line="201"/>
         <source>Youth ratio value.</source>
-        <translation type="unfinished"/>
+        <translation>Valeur de la proportion des jeunes.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="202"/>
         <source>Youth ratio defines what proportion of the population have not yet achieved financial independence. The age threshold for youth can vary by region - please consult with your local census bureau to findout what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality.In InaSAFE, people 0-14 years old are defined as &quot;youth&quot;. The default youth ratio is 0.263.</source>
-        <translation type="unfinished"/>
+        <translation>La proportion des jeunes définit la proportion de la population qui n&apos;a pas atteint l&apos;âge de l&apos;indépendance financière. Le seuil d&apos;âge correspondant peut varier selon les régions. Il convient de consulter l&apos;institution en charge du recensement pour connaître l&apos;âge qui correspond pour la région. InaSAFE n&apos;impose pas un modèle de proportion de classes d&apos;âge, mais va répartir la population selon les valeurs que vous définissez. Dans InaSAFE, les personnes entre 0 et 14 ans sont définies comme &quot;jeunes&quot;. La valeur par défaut pour la proportion de jeunes est de 0,263.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="218"/>
         <source>Adult ratio value.</source>
-        <translation type="unfinished"/>
+        <translation>Valeur de la proportion des adultes.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="219"/>
         <source>Adult ratio defines what proportion of the population have passed into adulthood and are not yet aged. The age threshold for adults can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality.In InaSAFE, people 15-64 years old are defined as &quot;adult&quot;. The default adult ratio is 0.659.</source>
-        <translation type="unfinished"/>
+        <translation>La proportion des adultes définit la proportion de la population passée dans l&apos;âge adulte et qui n&apos;est pas encore âgée. Les seuils d&apos;âges correspondants peuvent varier selon les régions. Il convient de consulter l&apos;institution en charge du recensement pour connaître ceux qui correspondent pour la région. InaSAFE n&apos;impose pas un modèle de proportion de classes d&apos;âge, mais va répartir la population selon les valeurs que vous définissez. Dans InaSAFE, les personnes entre 15 et 64 ans sont définies comme &quot;adultes&quot;. La valeur par défaut pour la proportion d&apos;adultes est de 0,659.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="236"/>
         <source>Elderly ratio value.</source>
-        <translation type="unfinished"/>
+        <translation>Valeur de la proportion des personnes âgées.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="237"/>
         <source>Elderly ratio defines what proportion of the population have passed from adulthood into their later life stage.  The age threshold for being considered elderly can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality.In InaSAFE, people 65 years old and over are defined as &quot;elderly&quot;. The default elderly ratio is 0.078.</source>
-        <translation type="unfinished"/>
+        <translation>La proportion des personnes âgées définit la proportion de la population passée de l&apos;âge adulte au troisième âge. Le seuil de l&apos;âge correspondant peut varier selon les régions. Il convient de consulter l&apos;institution en charge du recensement pour connaître le seuil qui convient pour la région. InaSAFE n&apos;impose pas un modèle de proportion de classes d&apos;âge, mais va répartir la population selon les valeurs que vous définissez. Dans InaSAFE, les personnes au-delà de 65 ans sont définies comme &quot;personnes âgées&quot;. La valeur par défaut pour la proportion de personnes âgées est de 0,078.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="257"/>
         <source>Total Age ratio is %s instead of 1</source>
-        <translation type="unfinished"/>
+        <translation>Le total des proportions des classes d&apos;âge est de %s au lieu de 1. </translation>
     </message>
     <message>
         <location filename="defaults.py" line="274"/>
@@ -2492,7 +2492,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="definitions.py" line="44"/>
         <source>A &lt;b&gt;hazard&lt;/b&gt; layer represents something that will impact on the people, infrastructure or  land cover in an area. For example; flood, earthquake, tsunami and volcano are all examples of hazards.</source>
-        <translation>Une couche d&apos;&lt;b&gt;aléas&lt;/b&gt; représente un événement qui va impacter les populations, les infrastructures ou l’occupation du sol d&apos;une zone. inondation, séisme, tsunami et volcans sont des exemples d&apos;aléas. </translation>
+        <translation>Une couche d&apos;&lt;b&gt;aléas&lt;/b&gt; représente un événement qui va impacter les populations, les infrastructures ou l’occupation du sol d&apos;une zone. Inondations, séismes, tsunamis ou activités volcaniques sont des exemples d&apos;aléas. </translation>
     </message>
     <message>
         <location filename="definitions.py" line="370"/>
@@ -2502,7 +2502,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="definitions.py" line="53"/>
         <source>An &lt;b&gt;exposure&lt;/b&gt; layer represents people, property, infrastructure or land cover that may be affected in the event of a flood, earthquake, volcano etc.</source>
-        <translation>Une couche d&apos;&lt;b&gt;enjeux&lt;/b&gt; représente des populations, des propriétés ou des infrastructures qui peuvent être affectées par une inondation, un séisme, un volcan, etc</translation>
+        <translation>Une couche d&apos;&lt;b&gt;enjeux&lt;/b&gt; représente des populations, des propriétés ou des infrastructures qui peuvent être affectées par une inondation, un séisme, un volcan, etc.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="61"/>
@@ -2512,7 +2512,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="definitions.py" line="71"/>
         <source>The purpose of the layer can be hazard layer, exposure layer, or aggregation layer</source>
-        <translation type="unfinished"/>
+        <translation>La couche peut être une couche d&apos;aléas, d&apos;enjeux ou d&apos;agrégation. </translation>
     </message>
     <message>
         <location filename="definitions.py" line="84"/>
@@ -2545,12 +2545,12 @@ Des valeurs classifiées dans une couche d&apos;enjeux au format vectoriel peuve
     <message>
         <location filename="definitions.py" line="138"/>
         <source>Point</source>
-        <translation type="unfinished"/>
+        <translation>Point</translation>
     </message>
     <message>
         <location filename="definitions.py" line="139"/>
         <source>A layer composed of points which each represent a feature on the earth. Currently the only point data supported by InaSAFE are &lt;b&gt;volcano hazard&lt;/b&gt; layers and building points.</source>
-        <translation type="unfinished"/>
+        <translation>Une couche vectorielle composée d&apos;objets ponctuels qui chacun représente un objet sur Terre. Pour l&apos;instant, les seules données ponctuelles supportées par InaSAFE sont les &lt;b&gt;volcans&lt;/b&gt; et les emplacements de bâtiments. </translation>
     </message>
     <message>
         <location filename="definitions.py" line="147"/>
@@ -2565,7 +2565,7 @@ Des valeurs classifiées dans une couche d&apos;enjeux au format vectoriel peuve
     <message>
         <location filename="definitions.py" line="156"/>
         <source>A layer composed on polygon features that represent areas of hazard or exposure. For example areas of flood represented as polygons (for a hazard) or building footprints represented as polygons (for an exposure). The polygon layer will often need the presence of specific layer attributes too - these will vary from impact function to impact function and whether the layer represents a hazard or an exposure layer. Polygon layers can also be used for aggregation - where impact analysis results per boundary such as village or district boundaries.</source>
-        <translation type="unfinished"/>
+        <translation>Une couche composée d&apos;objets polygonaux qui representent des zones d&apos;aléas ou d&apos;enjeux. Par exemple, des zones d&apos;inondation représentées sous forme de polygones (pour un aléa) ou des empreintes de bâtiments (pour un enjeu). La couche de polygones nécessite souvent la présence d&apos;attributs spécifiques, qui varient selon la fonction d&apos;impact utilisée et selon que la couche représente des aléas ou des enjeux. Les couches de poygones peuvent aussi être utilisées pour une agrégation, lorsque les résultats d&apos;une analyse d&apos;impact sont présentés selon des zones administratives comme celles de villages ou de districts. </translation>
     </message>
     <message>
         <location filename="definitions.py" line="170"/>
@@ -2620,13 +2620,14 @@ Des valeurs classifiées dans une couche d&apos;enjeux au format vectoriel peuve
     <message>
         <location filename="definitions.py" line="315"/>
         <source>The &lt;b&gt;land cover&lt;/b&gt; exposure data describes features on the surface of the earth that might be exposed to a particular  hazard. This might include crops, forest and urban areas. </source>
-        <translation type="unfinished"/>
+        <translation>La donnée d&apos;enjeux sur la &lt;b&gt;couverture terrestre&lt;/b&gt; décrit des objets à la surface de la Terre qui peuvent être affectés par des aléas, tels que des récoltes, des forêts ou des zones urbaines. </translation>
     </message>
     <message>
         <location filename="definitions.py" line="324"/>
         <source>The &lt;b&gt;people in buildings&lt;/b&gt; exposure data is an experimental data set that assigns the population of a specific administrative area to the buildings with a residential function in that area.
 The process of assigning people to buildings assumes that all people and buildings in the area are mapped. There are no InaSAFE impact functions that use this exposure data yet.</source>
-        <translation type="unfinished"/>
+        <translation>La donnée d&apos;enjeux &lt;b&gt;personnes dans les bâtiments&lt;/b&gt; est un jeu de données expérimental qui affecte la population d&apos;une zone administrative spécifique aux bâtiments de la zone, identifiés comme ayant une fonction résidentielle. 
+Le processus d&apos;affection des personnes aux bâtiments considère que toutes les personnes et tous les bâtiments ont été cartographiés. Il n&apos;y a encore aucune fonction d&apos;impact InaSAFE qui utilise cette donnée d&apos;enjeux. </translation>
     </message>
     <message>
         <location filename="definitions.py" line="343"/>
@@ -2641,7 +2642,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="371"/>
         <source>&lt;b&gt;Exposure&lt;/b&gt; data represents things that are at risk when faced with a potential hazard. </source>
-        <translation type="unfinished"/>
+        <translation>Les données d&apos;&lt;b&gt;enjeux&lt;/b&gt; représentent des objets menacés lorsqu&apos;ils sont confrontés à un aléa potentiel. </translation>
     </message>
     <message>
         <location filename="definitions.py" line="380"/>
@@ -2736,7 +2737,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="455"/>
         <source>Percentage values ranges from 0 to 100. It represents a ratio of hundred.</source>
-        <translation type="unfinished"/>
+        <translation>Les valeurs des pourcentages varient de 0 à 100. Elle représentent une proportion sur un total de 100. </translation>
     </message>
     <message>
         <location filename="definitions.py" line="635"/>
@@ -2806,7 +2807,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="607"/>
         <source>Flood classes</source>
-        <translation type="unfinished"/>
+        <translation>Classes d&apos;inondation</translation>
     </message>
     <message>
         <location filename="definitions.py" line="678"/>
@@ -2841,7 +2842,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="670"/>
         <source>This is a binary description for an area. The area is either &lt;b&gt;wet&lt;/b&gt; (affected by tsunami) or &lt;b&gt;dry&lt;/b&gt; (not affected by tsunami). This unit does not describe how &lt;b&gt;wet&lt;/b&gt; or &lt;b&gt;dry&lt;/b&gt; an area is.</source>
-        <translation type="unfinished"/>
+        <translation>Il s&apos;agit d&apos;une description binaire pour une zone, qui est soit &lt;b&gt;humide&lt;/b&gt; (affectée par le tsunami) ou &lt;b&gt;sèche&lt;/b&gt; (non affectée par le tsunami). Cette unité ne décrit pas combien la zone est &lt;b&gt;humide&lt;/b&gt; ou &lt;b&gt;sèche&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="713"/>
@@ -3231,7 +3232,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="function_options_dialog.py" line="133"/>
         <source>This impact function does not have any options to configure</source>
-        <translation type="unfinished"/>
+        <translation>Cette fonction d&apos;impact ne possède pas d&apos;options à configurer. </translation>
     </message>
     <message>
         <location filename="error_message.py" line="194"/>
@@ -3248,17 +3249,18 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="wizard_strings.py" line="20"/>
         <source>By following the simple steps in this wizard, you can assign keywords to your layer: &lt;b&gt;%s&lt;/b&gt;. First you need to define the purpose of your layer. Is it a &lt;b&gt;hazard&lt;/b&gt;, &lt;b&gt;exposure&lt;/b&gt;, or &lt;b&gt;aggregation&lt;/b&gt; layer? </source>
-        <translation>En suivant les étapes simples de cet assistant, vous pouvez affecter des mots-clés à votre couche &lt;b&gt;%s&lt;/b&gt;. Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre couche : &lt;b&gt;aléas&lt;/b&gt;,  &lt;b&gt;enjeux&lt;/b&gt; ou &lt;b&gt; agrégation&lt;/b&gt; ?</translation>
+        <translation>En suivant les étapes simples de cet assistant, vous pouvez affecter des mots-clés à votre couche &lt;b&gt;%s&lt;/b&gt;. 
+Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre couche : &lt;b&gt;aléas&lt;/b&gt;,  &lt;b&gt;enjeux&lt;/b&gt; ou &lt;b&gt; agrégation&lt;/b&gt; ?</translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="25"/>
         <source>You have selected a layer that needs to have keywords assigned or updated. In the next steps you can assign keywords to that layer. First you need to confirm the layer is a &lt;b&gt;hazard&lt;/b&gt; layer.</source>
-        <translation type="unfinished"/>
+        <translation>Vous avez sélectionné une couche qui nécessite que des mots-clés lui soient affectés ou mis à jour. Dans les prochaines étapes, vous pourrez affecter des mots-clés à cette couche. Mais tout d&apos;abord, il est nécessaire de confirmer qu&apos;il s&apos;agit d&apos;une couche d&apos;&lt;b&gt;aléas&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="29"/>
         <source>You have selected a layer that needs to have keywords assigned or updated. In the next steps you can assign keywords to that layer. First you need to confirm the layer is an &lt;b&gt;exposure&lt;/b&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Vous avez sélectionné une couche pour laquelle il est nécessaire de définir ou mettre à jour les mots-clés InaSAFE. Dans les prochaines étapes, vous pourrez attribuer des mot-clés à cette couche. Vous devez d&apos;abord confirmer qu&apos;il s&apos;agit bien d&apos;une couche d&apos;&lt;b&gt;enjeux&lt;/b&gt;. </translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="37"/>
@@ -3273,7 +3275,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="wizard_strings.py" line="47"/>
         <source>What kind of &lt;b&gt;exposure&lt;/b&gt; does this layer represent? Is it a &lt;b&gt;population&lt;/b&gt;, &lt;b&gt;structure&lt;/b&gt;, or &lt;b&gt;road&lt;/b&gt; layer? &lt;p&gt;The choice you make here will determine which impact functions this exposure layer can be used with. For example, if you choose &lt;b&gt;population&lt;/b&gt; you will be able to use this exposure layer with impact functions such as &lt;b&gt;flood impact on population&lt;/b&gt;.&lt;/p&gt;</source>
-        <translation>Quel type d&apos;&lt;b&lt;enjeux&lt;/b&gt; représente cette couche ? Est-ce une couche de &lt;b&gt;population&lt;/b&gt;, &lt;b&gt;structure&lt;/b&gt;, or de &lt;b&gt;route&lt;/b&gt; ? &lt;p&gt;Le choix à faire ici va déterminer quelles fonctions d&apos;impact peuvent être utilisées avec. Par exemple, si &lt;b&gt;population&lt;/b&gt; a été choisie, vous serez en mesure d&apos;utiliser cette couche d&apos;enjeux avec des fonctions d&apos;impact telles que &lt;b&gt;impact d&apos;inondation sur la population&lt;/b&gt;.&lt;/p&gt;</translation>
+        <translation>Quel type d&apos;&lt;b&gt;enjeux&lt;/b&gt; représente cette couche ? Est-ce une couche de &lt;b&gt;population&lt;/b&gt;, &lt;b&gt;structure&lt;/b&gt;, or de &lt;b&gt;route&lt;/b&gt; ? &lt;p&gt;Le choix à faire ici va déterminer quelles fonctions d&apos;impact peuvent être utilisées avec. Par exemple, si &lt;b&gt;population&lt;/b&gt; a été choisie, vous serez en mesure d&apos;utiliser cette couche d&apos;enjeux avec des fonctions d&apos;impact telles que l&apos;&lt;b&gt;impact d&apos;inondation sur la population&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="55"/>
@@ -3283,22 +3285,22 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="wizard_strings.py" line="60"/>
         <source>You have selected &lt;b&gt;%s&lt;/b&gt; for this &lt;b&gt;%s&lt;/b&gt; layer. &lt;p&gt;We need to confirm that attribute values in this vector layer have been &lt;b&gt;classified&lt;/b&gt; and are represented by a code.&lt;/p&gt;</source>
-        <translation>Vous avez sélectionné &lt;b&gt;%s&lt;/b&gt; pour la couche d&apos;&lt;b&gt;%s&lt;/b&gt;. &lt;p&gt;Il est nécessaire maintenant de confirmer qu&apos;elle possède des valeurs attributaires &lt;b&gt;classifiées&lt;/b&gt; et sont représentées par un code. &lt;/p&gt;</translation>
+        <translation>Vous avez sélectionné &lt;b&gt;%s&lt;/b&gt; pour la couche d&apos;&lt;b&gt;%s&lt;/b&gt;. &lt;p&gt;Il est nécessaire maintenant de confirmer qu&apos;elle possède des valeurs attributaires &lt;b&gt;classifiées&lt;/b&gt;, selon une codification. &lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="65"/>
         <source>You have selected &lt;b&gt;%s&lt;/b&gt; for this &lt;b&gt;%s&lt;/b&gt; layer type. &lt;p&gt;We need to know what units the continuous data are in. For example in a raster layer, each cell might represent depth in metres or depth in feet.&lt;/p&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Vous avez sélectionné &lt;b&gt;%s&lt;/b&gt; pour cette couche de type &lt;b&gt;%s&lt;/b&gt;. &lt;p&gt;InaSAFE a besoin de connaître l&apos;unité de cette donnée continue. Par exemple, dans une couche matricielle (raster), chaque pixel peut représenter une profondeur en mètres ou en pieds.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="70"/>
         <source>You have selected &lt;b&gt;%s %s&lt;/b&gt; for this &lt;b&gt;%s data&lt;/b&gt; raster layer. &lt;p&gt;For some exposure types you may not want InaSAFE to resample the raster to the hazard layer resolution during analyses. Please select the check box below if you want to set the &lt;i&gt;allow_resampling&lt;/i&gt; keyword to &lt;i&gt;False&lt;/i&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Vous avez sélectionné &lt;b&gt;%s %s&lt;/b pour cette couche matricielle de données &lt;b&gt;%s&lt;/b&gt;. &lt;p&gt;Pour certains types d&apos;enjeux, vous pouvez préférer qu&apos;InaSAFE ne ré-échantillonne pas la couche matricielle à la résolution de la couche d&apos;aléas durant l&apos;analyse. Cochez SVP la case ci-dessous si vous souhaitez que le paramètre &lt;i&gt;allow_resampling&lt;/i&gt; soit &lt;i&gt;False&lt;/i&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="102"/>
         <source>You have selected a &lt;b&gt;%s %s&lt;/b&gt; for the vector layer measured in &lt;b&gt;%s&lt;/b&gt;. Please select the attribute in this layer that represents %s.</source>
-        <translation type="unfinished"/>
+        <translation>Vous avez sélectionné une &lt;b&gt;%s %s&lt;/b&gt; pour la couche vectorielle mesurée en &lt;b&gt;%s&lt;/b&gt;. Sélectionnez SVP l&apos;attribut dans cette couche qui représente %s.</translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="106"/>
@@ -3308,7 +3310,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="wizard_strings.py" line="110"/>
         <source>You have selected a vector &lt;b&gt;aggregation&lt;/b&gt; layer. Please select the attribute in this layer that has the names of the aggregation areas.</source>
-        <translation type="unfinished"/>
+        <translation>Vous avez sélectionné une couche vectorielle d&apos;&lt;b&gt;agrégation&lt;/b&gt;. Sélectionnez SVP l&apos;attribut dans cette couche qui contient les noms des zones d&apos;agrégation. </translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="113"/>
@@ -3383,7 +3385,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="wizard_strings.py" line="33"/>
         <source>You have selected a layer that needs to have keywords assigned or updated. In the next steps you can assign keywords to that layer. First you need to confirm the layer is an &lt;b&gt;aggregation&lt;/b&gt; layer.</source>
-        <translation type="unfinished"/>
+        <translation>Vous avez sélectionné une couche pour laquelle il est nécessaire de définir ou mettre à jour les mots-clés InaSAFE. Dans les prochaines étapes, vous pourrez attribuer des mot-clés à cette couche. Vous devez d&apos;abord confirmer qu&apos;il s&apos;agit bien d&apos;une couche d&apos;&lt;b&gt;agrégation&lt;/b&gt;. </translation>
     </message>
     <message>
         <location filename="definitions.py" line="301"/>
@@ -3393,12 +3395,12 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="70"/>
         <source>Purpose</source>
-        <translation type="unfinished"/>
+        <translation>Catégorie</translation>
     </message>
     <message>
         <location filename="definitions.py" line="125"/>
         <source>Data type</source>
-        <translation type="unfinished"/>
+        <translation>Type de données</translation>
     </message>
     <message>
         <location filename="definitions.py" line="126"/>
@@ -3408,12 +3410,12 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="179"/>
         <source>Geometry</source>
-        <translation type="unfinished"/>
+        <translation>Géométrie</translation>
     </message>
     <message>
         <location filename="definitions.py" line="180"/>
         <source>Layer geometry can be either raster or vector. There are three possible vector geometries: point, line, and polygon. </source>
-        <translation type="unfinished"/>
+        <translation>Le format des couches peut être matriciel (raster) ou vectoriel. Les couches vectorielles sont trois types de géométries possibles : point, ligne et polygone. </translation>
     </message>
     <message>
         <location filename="definitions.py" line="194"/>
@@ -3463,7 +3465,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="697"/>
         <source>Classes</source>
-        <translation type="unfinished"/>
+        <translation>Classes</translation>
     </message>
     <message>
         <location filename="definitions.py" line="592"/>
@@ -3503,7 +3505,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="772"/>
         <source>Attribute value</source>
-        <translation type="unfinished"/>
+        <translation>Valeur du champ d&apos;attributs</translation>
     </message>
     <message>
         <location filename="definitions.py" line="773"/>
@@ -3513,7 +3515,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="definitions.py" line="780"/>
         <source>Attribute value map</source>
-        <translation type="unfinished"/>
+        <translation>Valeur du champ d&apos;attributs</translation>
     </message>
     <message>
         <location filename="definitions.py" line="781"/>
@@ -3533,7 +3535,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="utilities.py" line="202"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org to get your free copy of this software! %s</source>
-        <translation type="unfinished"/>
+        <translation>Ce rapport a été créé avec la version %s d&apos;InaSAFE. Rendez-vous sur http://inasafe.org pour obtenir votre copie gratuite du logiciel !</translation>
     </message>
     <message>
         <location filename="impact_report.py" line="353"/>
@@ -3548,7 +3550,7 @@ The process of assigning people to buildings assumes that all people and buildin
     <message>
         <location filename="impact_report.py" line="356"/>
         <source>Date</source>
-        <translation type="unfinished"/>
+        <translation>Date</translation>
     </message>
     <message>
         <location filename="impact_report.py" line="357"/>
@@ -3659,7 +3661,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="road_exposure_report_mixin.py" line="171"/>
         <source>Try to Identify which potential roads that able to access for evacuation and logistic distribution purpose. What type of transportation reliable to use in that order?</source>
-        <translation type="unfinished"/>
+        <translation>Essayer d&apos;identifier quelle routes sont potentiellement accessibles pour les besoins de l&apos;évacuation et la logistique de distribution. Quel est moyen de transport fiable dans ces conditions ?</translation>
     </message>
     <message>
         <location filename="road_exposure_report_mixin.py" line="175"/>
@@ -3862,17 +3864,17 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="about_dialog.py" line="76"/>
         <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
-        <translation type="unfinished"/>
+        <translation>Édité par Hugo Garduño de The Noun Project</translation>
     </message>
     <message>
         <location filename="about_dialog.py" line="78"/>
         <source>&quot;Add icon&quot; designed by Michael Zenaty from the Noun Project</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;icône ajouter a été créée par  Michael Zenaty de the Noun Project</translation>
     </message>
     <message>
         <location filename="about_dialog.py" line="80"/>
         <source>&quot;Remove icon&quot; designed by Dalpat Prajapati from the Noun Project</source>
-        <translation type="unfinished"/>
+        <translation>L&apos;icône de suppression a été créée par Dalpat Prajapati de the Noun Project</translation>
     </message>
     <message>
         <location filename="about_dialog.py" line="83"/>
@@ -3910,12 +3912,12 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="about_dialog_base.ui" line="119"/>
         <source>Supporters</source>
-        <translation type="unfinished"/>
+        <translation>Supporteurs</translation>
     </message>
     <message>
         <location filename="about_dialog_base.ui" line="145"/>
         <source>Image Credits</source>
-        <translation type="unfinished"/>
+        <translation>Crédits des images</translation>
     </message>
     <message>
         <location filename="about_dialog_base.ui" line="33"/>
@@ -4103,7 +4105,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="aggregator.py" line="1710"/>
         <source>No &quot;target_field&quot; keyword found in the impact layer %s keywords. The impact function should define this.</source>
-        <translation type="unfinished"/>
+        <translation>Pas de mot-clé &quot;target_field&quot; trouvé parmi les mots-clés de la couche d&apos;impacts %s. La fonction d&apos;impact devrait pourtant le définir.</translation>
     </message>
     <message>
         <location filename="aggregator.py" line="1722"/>
@@ -4306,7 +4308,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="analysis.py" line="972"/>
         <source>An error occurred because there are no features visible in the current view. Try zooming out or panning until some features become visible.</source>
-        <translation type="unfinished"/>
+        <translation>Une erreur est survenue car il n&apos;y a pas d&apos;objets visibles dans la vue courante. Essayez de dézoomer ou de déplacer la vue pour que des objets apparaissent. </translation>
     </message>
     <message>
         <location filename="analysis.py" line="978"/>
@@ -4704,7 +4706,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="1607"/>
         <source>Layer keywords missing:</source>
-        <translation type="unfinished"/>
+        <translation>Absence de mot-clés pour la couche :</translation>
     </message>
     <message>
         <location filename="dock.py" line="1936"/>
@@ -4799,7 +4801,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="1645"/>
         <source> icon in the toolbar.</source>
-        <translation type="unfinished"/>
+        <translation>dans la barre d&apos;outils.</translation>
     </message>
     <message>
         <location filename="dock.py" line="741"/>
@@ -4849,22 +4851,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="659"/>
         <source>Currently there are no overlapping extents between the hazard layer, the exposure layer and the user defined analysis area. Try zooming to the analysis area, clearing the analysis area or defining a new one using the analysis area definition tool.</source>
-        <translation type="unfinished"/>
+        <translation>Pour le moment, il n&apos;y a pas de chevauchement entre les étendues géographiques de la couche d&apos;aléas, de la couche d&apos;enjeux et de la zone d&apos;analyse définie par l&apos;utilisateur. </translation>
     </message>
     <message>
         <location filename="dock.py" line="1217"/>
         <source>Your aggregation layer does not have valid keywords for aggregation. Please launch keyword wizard to assign keywords in this layer.</source>
-        <translation type="unfinished"/>
+        <translation>Votre couche d&apos;agrégation ne contient pas de mots-clés valides pour l&apos;agrégation. Utilisez SVP l’assistant de création de mots-clés pour en affecter à cette couche. </translation>
     </message>
     <message>
         <location filename="dock.py" line="1224"/>
         <source>A problem was encountered because the aggregation layer does not have proper keywords for aggregation layer.</source>
-        <translation type="unfinished"/>
+        <translation>Un problème est survenu car la couche d&apos;agrégation ne possède pas de mots-clés adaptés à une couche d&apos;agrégation. </translation>
     </message>
     <message>
         <location filename="dock.py" line="1609"/>
         <source>No keywords have been defined for this layer yet. If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
-        <translation type="unfinished"/>
+        <translation>Aucun mot-clé n&apos;a encore été défini pour cette couche. SI vous souhaitez l&apos;utiliser comme couche d&apos;enjeux, d&apos;aléas ou d&apos;agrégation dans une analyse, veuillez utiliser l’assistant de création pour ajouter des mots-clés.  Vous pouvez ouvrir l’assistant en cliquant sur l&apos;icône </translation>
     </message>
     <message>
         <location filename="dock.py" line="1643"/>
@@ -4874,7 +4876,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="1645"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
-        <translation type="unfinished"/>
+        <translation>La version (%s) des mots-clés de votre couche ne fonctionne pas avec votre version d&apos;InaSAFE (%s). Si vous souhaitez utiliser cette couche en tant que couche d&apos;aléas, enjeux ou agrégation dans une analyse InaSAFE, veuillez mettre à jour les mots-clés en utilisant l&apos;assistant de création de mots-clés. Vous pouvez l&apos;ouvrir en cliquant sur </translation>
     </message>
     <message>
         <location filename="dock.py" line="2098"/>
@@ -4894,7 +4896,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="2126"/>
         <source>No overlapping extents</source>
-        <translation type="unfinished"/>
+        <translation>Pas de chevauchements dans l&apos;étendue des couches</translation>
     </message>
     <message>
         <location filename="dock.py" line="2139"/>
@@ -4909,12 +4911,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="640"/>
         <source>Hazard keywords</source>
-        <translation type="unfinished"/>
+        <translation>Mots-clés des aléas</translation>
     </message>
     <message>
         <location filename="dock.py" line="644"/>
         <source>Exposure keywords</source>
-        <translation type="unfinished"/>
+        <translation>Mots-clés pour les enjeux</translation>
     </message>
 </context>
 <context>
@@ -5471,7 +5473,7 @@ to
     <message>
         <location filename="message_viewer.py" line="136"/>
         <source>Open in web browser</source>
-        <translation type="unfinished"/>
+        <translation>Ouvrir dans un navigateur web</translation>
     </message>
     <message>
         <location filename="message_viewer.py" line="292"/>
@@ -5534,7 +5536,7 @@ to
     <message>
         <location filename="needs_calculator_dialog.py" line="130"/>
         <source>Please change the value of %1 in attribute %s to integer format</source>
-        <translation type="unfinished"/>
+        <translation>Veuillez changer la valeur de %1 dans l&apos;attribut %s au format entiers</translation>
     </message>
 </context>
 <context>
@@ -5996,7 +5998,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="osm_downloader_dialog.py" line="300"/>
         <source>Bounding box from the map canvas</source>
-        <translation>Rectangle de délimitation géographique depuis l&apos;étendue de la carte</translation>
+        <translation>Rectangle de délimitation géographique correspondant à l&apos;étendue de la carte</translation>
     </message>
     <message>
         <location filename="osm_downloader_dialog.py" line="566"/>
@@ -6591,7 +6593,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="shake_event.py" line="1616"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org for more information.</source>
-        <translation type="unfinished"/>
+        <translation>Ce rapport a été créé avec la version %s d&apos;InaSAFE. Rendez-vous sur http://inasafe.org pour plus d&apos;information.</translation>
     </message>
     <message>
         <location filename="shake_event.py" line="1599"/>
@@ -6694,12 +6696,12 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="shakemap_converter_dialog.py" line="249"/>
         <source>Raw grid file (*.xml)</source>
-        <translation type="unfinished"/>
+        <translation>Fichier de grille brute (*.xml)</translation>
     </message>
     <message>
         <location filename="shakemap_converter_dialog.py" line="259"/>
         <source>Raster file (*.tif)</source>
-        <translation type="unfinished"/>
+        <translation>Fichier raster (*.tif)</translation>
     </message>
 </context>
 <context>
@@ -6707,7 +6709,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="14"/>
         <source>InaSAFE - Shakemap Importer</source>
-        <translation type="unfinished"/>
+        <translation>InaSAFE - Importation Shakemap</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="21"/>
@@ -6737,7 +6739,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="70"/>
         <source>Source</source>
-        <translation type="unfinished"/>
+        <translation>Source</translation>
     </message>
     <message>
         <location filename="shakemap_importer_dialog_base.ui" line="91"/>
@@ -6806,7 +6808,8 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <location filename="wizard_dialog.py" line="4433"/>
         <source>An error was encountered when saving the keywords:
 %s</source>
-        <translation type="unfinished"/>
+        <translation>Une erreur est survenue lors de la sauvegarde des mots-clés suivants :
+%s</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="1811"/>
@@ -6841,7 +6844,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog.py" line="3819"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
-        <translation type="unfinished"/>
+        <translation>La somme des valeurs par défaut des proportions des classes d&apos;âge est supérieure à 1. Veuillez ajuster les valeurs par défaut des proportions des âges pour que leur somme ne dépasse pas 1. </translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="3644"/>
@@ -6906,22 +6909,22 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog.py" line="2761"/>
         <source>classified data</source>
-        <translation type="unfinished"/>
+        <translation>donnée classifiée</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="2763"/>
         <source>Unit</source>
-        <translation type="unfinished"/>
+        <translation>Unité</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="3578"/>
         <source>Enabled</source>
-        <translation type="unfinished"/>
+        <translation>Activé</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="3578"/>
         <source>Disabled</source>
-        <translation type="unfinished"/>
+        <translation>Désactivé</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="416"/>
@@ -6951,17 +6954,17 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog.py" line="2956"/>
         <source>Purpose</source>
-        <translation type="unfinished"/>
+        <translation>Catégorie</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="2774"/>
         <source>Source</source>
-        <translation type="unfinished"/>
+        <translation>Source</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="2781"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign key words now.</source>
-        <translation type="unfinished"/>
+        <translation>La version (%s) des mots-clés de votre couche ne fonctionne pas avec votre version d&apos;InaSAFE (%s). Si vous souhaitez utiliser cette couche en tant que couche d&apos;aléas, enjeux ou agrégation dans une analyse InaSAFE, veuillez mettre à jour les mots-clés. Cliquez sur Suivant si vous souhaitez affecter des mots-clés maintenant. </translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="2806"/>
@@ -6971,12 +6974,12 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog.py" line="2806"/>
         <source>SOURCE</source>
-        <translation type="unfinished"/>
+        <translation>SOURCE</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="2806"/>
         <source>TYPE</source>
-        <translation type="unfinished"/>
+        <translation>TYPE</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="2806"/>
@@ -6986,17 +6989,17 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog.py" line="2956"/>
         <source>Layer</source>
-        <translation type="unfinished"/>
+        <translation>Couche</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="2956"/>
         <source>Required</source>
-        <translation type="unfinished"/>
+        <translation>Requis</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="2956"/>
         <source>Geometry</source>
-        <translation type="unfinished"/>
+        <translation>Géométrie</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="2956"/>
@@ -7006,7 +7009,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog.py" line="3033"/>
         <source>Not a valid layer.</source>
-        <translation type="unfinished"/>
+        <translation>Pas une couche valide.</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="3053"/>
@@ -7021,7 +7024,7 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog.py" line="3464"/>
         <source>Please specify extent of your analysis:</source>
-        <translation type="unfinished"/>
+        <translation>Veuillez spécifier l&apos;étendue de votre analyse :</translation>
     </message>
 </context>
 <context>
@@ -7034,17 +7037,17 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog_base.ui" line="2152"/>
         <source>[placeholder]</source>
-        <translation type="unfinished"/>
+        <translation>[placeholder]</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="2863"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1026"/>
         <source>Classes</source>
-        <translation type="unfinished"/>
+        <translation>Classes</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1037"/>
@@ -7064,17 +7067,17 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog_base.ui" line="1564"/>
         <source>Date</source>
-        <translation type="unfinished"/>
+        <translation>Date</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1537"/>
         <source>Source</source>
-        <translation type="unfinished"/>
+        <translation>Source</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1524"/>
         <source>URL</source>
-        <translation type="unfinished"/>
+        <translation>URL</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1618"/>
@@ -7099,47 +7102,47 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog_base.ui" line="3804"/>
         <source>Next</source>
-        <translation type="unfinished"/>
+        <translation>Suivant</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1279"/>
         <source>Youth ratio attribute</source>
-        <translation type="unfinished"/>
+        <translation>Attribut pour la proportion des jeunes</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1309"/>
         <source>Adult ratio attribute</source>
-        <translation type="unfinished"/>
+        <translation>Attribut pour la proportion des adultes</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1429"/>
         <source>Youth ratio default</source>
-        <translation type="unfinished"/>
+        <translation>Valeur par défaut de la proportion des jeunes</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1346"/>
         <source>Female ratio default</source>
-        <translation type="unfinished"/>
+        <translation>Valeur par défaut de la proportion des femmes</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1356"/>
         <source>Adult ratio default</source>
-        <translation type="unfinished"/>
+        <translation>Valeur par défaut de la proportion des adultes</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1366"/>
         <source>Elderly ratio attribute</source>
-        <translation type="unfinished"/>
+        <translation>Attribut pour la proportion des personnes âgées</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1396"/>
         <source>Female ratio attribute</source>
-        <translation type="unfinished"/>
+        <translation>Attribut pour la proportion des femmes</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1406"/>
         <source>Elderly ratio default</source>
-        <translation type="unfinished"/>
+        <translation>Valeur par défaut de la proportion des personnes âgées</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1467"/>
@@ -7154,13 +7157,14 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
     <message>
         <location filename="wizard_dialog_base.ui" line="3604"/>
         <source>TextLabel</source>
-        <translation type="unfinished"/>
+        <translation>Étiquette de texte</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3049"/>
         <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
-        <translation type="unfinished"/>
+        <translation>La couche d&apos;agrégation et la couche d&apos;enjeux ne se chevauchent pas, car elles couvrent des zones disjointes.
+Veuillez revenir en arrière et choisir une autre couche. </translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3132"/>
@@ -7195,22 +7199,22 @@ Please step back and select another layer.</source>
     <message>
         <location filename="wizard_dialog_base.ui" line="3728"/>
         <source>Open in web browser</source>
-        <translation type="unfinished"/>
+        <translation>Ouvrir dans un navigateur web</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3735"/>
         <source>Generate PDF</source>
-        <translation type="unfinished"/>
+        <translation>Créer un PDF</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3742"/>
         <source>Open in composer</source>
-        <translation type="unfinished"/>
+        <translation>Ouvrir dans le composeur d&apos;impression</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1845"/>
         <source>&lt;b&gt;Hazard&lt;/b&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;Aléas&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1855"/>
@@ -7220,22 +7224,22 @@ Please step back and select another layer.</source>
     <message>
         <location filename="wizard_dialog_base.ui" line="1757"/>
         <source>People</source>
-        <translation type="unfinished"/>
+        <translation>Personnes</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1762"/>
         <source>Construction</source>
-        <translation type="unfinished"/>
+        <translation>Construction</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1767"/>
         <source>Flood</source>
-        <translation type="unfinished"/>
+        <translation>Inondation</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1772"/>
         <source>Tsunami</source>
-        <translation type="unfinished"/>
+        <translation>Tsunami</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1957"/>
@@ -7245,22 +7249,22 @@ Please step back and select another layer.</source>
     <message>
         <location filename="wizard_dialog_base.ui" line="1916"/>
         <source>Point</source>
-        <translation type="unfinished"/>
+        <translation>Point</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1924"/>
         <source>Line</source>
-        <translation type="unfinished"/>
+        <translation>Ligne</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1932"/>
         <source>Polygon</source>
-        <translation type="unfinished"/>
+        <translation>Polygone</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1940"/>
         <source>Raster</source>
-        <translation type="unfinished"/>
+        <translation>Matrice (raster)</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="98"/>
@@ -7273,8 +7277,8 @@ Please step back and select another layer.</source>
 &lt;p&gt;Please input these ratio attributes below for aggregation. For each attribute you can choose whether it should be:&lt;/p&gt;
 &lt;ol&gt;&lt;li&gt;defined in an attribute of the aggregation polygon (so that you can for example have different ratios per aggregation area)&lt;/li&gt;&lt;li&gt;defined as a global default for the aggregation layer, or&lt;/li&gt;&lt;li&gt;ignored&lt;/li&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
-&lt;p&gt;Indiquez ci-dessous le attributs des proportions pour l&apos;agrégation. Pour chaque attribut, vous pouvez choisir s&apos;il doit être :&lt;/p
-&lt;ol&gt;&lt;li&gt;défini dans un attribut de la couche des polygones d&apos;agrégation (de sorte que vous pouvez par exemple avoir différentes proportions pour chaque zone d&apos;agrégation),&lt;/li&gt;&lt;li&gt;défini comme une valeur par défaut pour toute la couche d&apos;agrégation, ou &lt;/li&gt;&lt;li&gt;ignoré&lt;/li&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;p&gt;Indiquez ci-dessous les attributs des proportions pour l&apos;agrégation. Pour chaque attribut, vous pouvez choisir s&apos;il doit être :&lt;/p
+&lt;ol&gt;&lt;li&gt;- défini dans un attribut de la couche des polygones d&apos;agrégation (de sorte que vous pouvez par exemple avoir différentes proportions pour chaque zone d&apos;agrégation),&lt;/li&gt;&lt;li&gt; - défini comme une valeur par défaut pour toute la couche d&apos;agrégation, ou &lt;/li&gt;&lt;li&gt; - ignoré&lt;/li&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1693"/>
@@ -7289,13 +7293,14 @@ Please step back and select another layer.</source>
     <message>
         <location filename="wizard_dialog_base.ui" line="938"/>
         <source>Never resample this layer to the hazard layer resolution</source>
-        <translation type="unfinished"/>
+        <translation>Ne jamais ré-échantillonner cette couche à la résolution de la couche d&apos;aléas. </translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3501"/>
         <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
-        <translation type="unfinished"/>
+        <translation>La couche d&apos;agrégation et la couche d&apos;aléas ne se chevauchent pas, car elles couvrent des zones disjointes.
+Veuillez revenir en arrière et choisir une autre couche. </translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3582"/>
@@ -7312,52 +7317,52 @@ Revenez en arrière et sélectionnez une autre couche.</translation>
     <message>
         <location filename="wizard_dialog_base.ui" line="1142"/>
         <source>Attribute 1</source>
-        <translation type="unfinished"/>
+        <translation>Attribut 1</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1152"/>
         <source>Attribute 2</source>
-        <translation type="unfinished"/>
+        <translation>Attribut 2</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1162"/>
         <source>Attribute 3</source>
-        <translation type="unfinished"/>
+        <translation>Attribut 3</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1172"/>
         <source>Attribute 4</source>
-        <translation type="unfinished"/>
+        <translation>Attribut 4</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1182"/>
         <source>Attribute 5</source>
-        <translation type="unfinished"/>
+        <translation>Attribut 5</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1192"/>
         <source>Attribute 6</source>
-        <translation type="unfinished"/>
+        <translation>Attribut 6</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1202"/>
         <source>Attribute 7</source>
-        <translation type="unfinished"/>
+        <translation>Attribut 7</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1212"/>
         <source>Attribute 8</source>
-        <translation type="unfinished"/>
+        <translation>Attribut 8</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="1577"/>
         <source>License</source>
-        <translation type="unfinished"/>
+        <translation>Licence</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3377"/>
         <source>icon</source>
-        <translation type="unfinished"/>
+        <translation>icône</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="2190"/>
@@ -7407,7 +7412,7 @@ Revenez en arrière et sélectionnez une autre couche.</translation>
     <message>
         <location filename="test_dock.py" line="884"/>
         <source>Entire area</source>
-        <translation type="unfinished"/>
+        <translation>Zone entière</translation>
     </message>
 </context>
 </TS>
