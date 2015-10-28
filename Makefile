@@ -47,6 +47,10 @@ test-translations:
 	@echo "Missing translations - for more info run: make translation-stats"
 	@echo "----------------------------------------------------------------"
 	@python scripts/missing_translations.py `pwd` id
+	@python scripts/missing_translations.py `pwd` fr
+	@python scripts/missing_translations.py `pwd` af
+	@python scripts/missing_translations.py `pwd` es_ES
+
 
 translation-stats:
 	@echo
