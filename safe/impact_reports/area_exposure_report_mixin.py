@@ -69,6 +69,91 @@ class AreaExposureReportMixin(ReportMixin):
         table.caption = None
 
         row = m.Row()
+        row = self.head_row(row)
+        table.add(row)
+
+        second_row = m.Row()
+        second_row = self.total_row(second_row)
+        table.add(second_row)
+
+        break_row = m.Row()
+        break_row.add(m.Cell(
+            tr('Breakdown by Area'),
+            header=True,
+            align='right'))
+        # intentionally empty top left cell
+        break_row.add(m.Cell('', header=True))
+        break_row.add(m.Cell('', header=True))
+        break_row.add(m.Cell('', header=True))
+        break_row.add(m.Cell('', header=True))
+        break_row.add(m.Cell('', header=True))
+        break_row.add(m.Cell('', header=True))
+        table.add(break_row)
+
+        table = self.impact_calculation(table)
+
+        message.add(table)
+
+        return message
+
+    def impact_calculation(self, table):
+        """ Calculates impact on each area
+
+        :param table: A table with first and second row
+        :type table:Table
+
+        :return A table with impact on each area
+        :rtype Table
+        """
+        areas = self.areas
+        affected_areas = self.affected_areas
+        for t, v in areas.iteritems():
+            if t in affected_areas:
+                affected = affected_areas[t]
+            else:
+                affected = 0.0
+            single_total_area = v
+
+            if v:
+                affected_area_ratio = affected / single_total_area
+            else:
+                affected_area_ratio = 0.0
+            percent_affected = affected_area_ratio * 100
+            percent_affected = round(percent_affected, 1)
+            number_people_affected = (
+                affected_area_ratio * self.areas_population[t])
+
+            # rounding to float without decimal, we can't have number
+            #  of people with decimal
+            number_people_affected = round(number_people_affected, 0)
+
+            if self.areas_population[t] != 0:
+                percent_people_affected = (
+                    (number_people_affected / self.areas_population[t]) *
+                    100)
+            else:
+                percent_people_affected = 0
+            affected *= 1e8
+            single_total_area *= 1e8
+
+            impact_row = self.impact_row(
+                t, affected, percent_affected,
+                single_total_area, number_people_affected,
+                percent_people_affected)
+
+            table.add(impact_row)
+
+        return table
+
+    def head_row(self, row):
+        """Set and return header row in impact summary
+
+        :param row: The empty header row
+        :type row: Row
+
+        :return Header row with content
+        :rtype Row
+        """
         row.add(m.Cell(
             tr('Area id'),
             header=True,
@@ -98,41 +183,37 @@ class AreaExposureReportMixin(ReportMixin):
             header=True,
             align='right'))
 
-        table.add(row)
+        return row
 
-        second_row = m.Row()
-        second_row.add(m.Cell(tr('All')))
-        total_affected_area = self.total_affected_areas
-        total_area = self.total_areas
+    def second_row(self,
+                   second_row,
+                   total_affected_area,
+                   percentage_affected_area,
+                   total_area,
+                   total_affected_population,
+                   total_population):
+        """Adds values to the second row columns
 
-        if total_area != 0:
-            percentage_affected_area = (
-                (total_affected_area / total_area) *
-                100)
-        else:
-            percentage_affected_area = 0
+        :param total_affected_area: total affected area
+        :type total_affected_area: float
 
-        percentage_affected_area = round(percentage_affected_area, 1)
+        :param percentage_affected_area: percentage of
+        affected area
+        :type percentage_affected_area: float
 
-        total_affected_population = self.total_affected_population
-        total_population = self.total_population
+        :param total_area: total area
+        :type total_area: float
 
-        if total_population != 0:
-            percentage_affected_people = (
-                (total_affected_population / total_population) *
-                100)
-        else:
-            percentage_affected_people = 0
+        :param total_affected_population: total affected
+        population
+        :type total_affected_population: float
 
-        percentage_affected_people = round(percentage_affected_people, 1)
+        :param total_population: total population
+        :type total_population:float
 
-        total_affected_area *= 1e8
-        total_affected_area = round(total_affected_area, 1)
-        total_area *= 1e8
-        total_area = round(total_area, 0)
-        total_affected_population = round(total_affected_population, 0)
-        total_population = round(total_population, 0)
-
+        :return second_row
+        :rtype Row
+        """
         second_row.add(m.Cell(
             format_int(int(total_affected_area)),
             align='right'))
@@ -152,85 +233,107 @@ class AreaExposureReportMixin(ReportMixin):
             format_int(int(total_population)),
             align='right'))
 
-        table.add(second_row)
+        return second_row
 
-        break_row = m.Row()
-        break_row.add(m.Cell(
-            tr('Breakdown by Area'),
-            header=True,
+    def total_row(self, second_row):
+        """Calculates the total of each single column
+
+        :param second_row: second row in the summary
+        :type second_row: Row
+
+        :return second_row: second row with contents
+        :rtype: second_row: Row
+        """
+        second_row.add(m.Cell(tr('All')))
+        total_affected_area = self.total_affected_areas
+        total_area = self.total_areas
+
+        if total_area != 0:
+            percentage_affected_area = (
+                (total_affected_area / total_area) *
+                100)
+        else:
+            percentage_affected_area = 0
+        percentage_affected_area = round(percentage_affected_area, 1)
+
+        total_affected_population = self.total_affected_population
+        total_population = self.total_population
+
+        if total_population != 0:
+            percentage_affected_people = (
+                (total_affected_population / total_population) *
+                100)
+        else:
+            percentage_affected_people = 0
+        percentage_affected_people = round(percentage_affected_people, 1)
+
+        total_affected_area *= 1e8
+        total_affected_area = round(total_affected_area, 1)
+        total_area *= 1e8
+        total_area = round(total_area, 0)
+        total_affected_population = round(total_affected_population, 0)
+        total_population = round(total_population, 0)
+
+        second_row = self.second_row(
+            second_row,
+            total_affected_area,
+            percentage_affected_area,
+            total_area,
+            total_affected_population,
+            total_population)
+
+        return second_row
+
+    def impact_row(self,
+                   area_id, affected, percent_affected,
+                   single_total_area, number_people_affected,
+                   percent_people_affected):
+        """Adds the calculated results into respective impact row
+
+        :param table: table with first and second row
+        :type table: Table
+
+        :param area_id: Area id
+        :type area_id: int
+
+        :param percent_affected: percentage of affected area
+        :type percent_affected:float
+
+        :param single_total_area: total area of the land
+        :type single_total_area:float
+
+        :param number_people_affected: number of people affected
+        :type number_people_affected:float
+
+        :param percent_people_affected: percentage of people affected
+        in the area
+        :type percent_people_affected:float
+
+        :return row: the new impact row
+        :rtype row: Row
+        """
+        row = m.Row()
+        row.add(m.Cell(area_id))
+        row.add(m.Cell(
+            format_int(int(affected)),
             align='right'))
-        # intentionally empty top left cell
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        table.add(break_row)
+        row.add(m.Cell(
+            "%.1f%%" % percent_affected,
+            align='right'))
+        row.add(m.Cell(
+            format_int(int(single_total_area)),
+            align='right'))
+        row.add(m.Cell(
+            format_int(int(number_people_affected)),
+            align='right'))
+        row.add(m.Cell(
+            "%.1f%%" % percent_people_affected,
+            align='right'))
+        row.add(m.Cell(
+            format_int(int(self.areas_population[area_id])),
+            align='right'))
 
-        areas = self.areas
-        affected_areas = self.affected_areas
-
-        for t, v in areas.iteritems():
-
-            if t in affected_areas:
-                affected = affected_areas[t]
-            else:
-                affected = 0.0
-
-            single_total_area = v
-            if v:
-                affected_area_ratio = affected / single_total_area
-            else:
-                affected_area_ratio = 0.0
-
-            percent_affected = affected_area_ratio * 100
-
-            percent_affected = round(percent_affected, 1)
-
-            number_people_affected = (
-                affected_area_ratio * self.areas_population[t])
-
-            # rounding to float without decimal, we can't have number
-            #  of people with decimal
-
-            number_people_affected = round(number_people_affected, 0)
-
-            if self.areas_population[t] != 0:
-                percent_people_affected = (
-                    (number_people_affected / self.areas_population[t]) *
-                    100)
-            else:
-                percent_people_affected = 0
-
-            affected *= 1e8
-            single_total_area *= 1e8
-
-            row = m.Row()
-            row.add(m.Cell(t))
-            row.add(m.Cell(
-                format_int(int(affected)),
-                align='right'))
-            row.add(m.Cell(
-                "%.1f%%" % percent_affected,
-                align='right'))
-            row.add(m.Cell(
-                format_int(int(single_total_area)),
-                align='right'))
-            row.add(m.Cell(
-                format_int(int(number_people_affected)),
-                align='right'))
-            row.add(m.Cell(
-                "%.1f%%" % percent_people_affected,
-                align='right'))
-            row.add(m.Cell(
-                format_int(int(self.areas_population[t])),
-                align='right'))
-            table.add(row)
-
-        message.add(table)
-
-        return message
+        return row
 
     @property
     def affected_population(self):
