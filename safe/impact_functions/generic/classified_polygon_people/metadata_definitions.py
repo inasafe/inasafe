@@ -22,6 +22,7 @@ from safe.definitions import (
     layer_geometry_polygon,
     hazard_all,
     hazard_category_single_event,
+    hazard_category_multiple_event,
     exposure_area,
     generic_vector_hazard_classes,
 )
@@ -75,7 +76,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'hazard_categories': [
-                        hazard_category_single_event
+                        hazard_category_single_event,
+                        hazard_category_multiple_event
                     ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
