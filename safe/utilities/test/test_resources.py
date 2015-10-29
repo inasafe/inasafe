@@ -32,7 +32,7 @@ class TestResources(unittest.TestCase):
     def test_resources_path(self):
         """Test we can get the path to the resources dir nicely.
 
-        ..versionadded:: 3.0
+        .. versionadded:: 3.0
         """
         css_path = resources_path('css', 'bootstrap.css')
         self.assertTrue(
@@ -42,7 +42,7 @@ class TestResources(unittest.TestCase):
     def test_resources_url(self):
         """Test we can get the path as a local url nicely.
 
-        ..versionadded:: 3.0
+        .. versionadded:: 3.0
         """
         url = resource_url(
             resources_path(
