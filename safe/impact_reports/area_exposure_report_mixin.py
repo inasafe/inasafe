@@ -73,6 +73,7 @@ class AreaExposureReportMixin(ReportMixin):
         table.add(row)
 
         second_row = m.Row()
+        second_row.add(m.Cell(tr('All')))
         second_row = self.total_row(second_row)
         table.add(second_row)
 
@@ -81,7 +82,7 @@ class AreaExposureReportMixin(ReportMixin):
             tr('Breakdown by Area'),
             header=True,
             align='right'))
-        # intentionally empty top left cell
+        # intentionally empty right cells
         break_row.add(m.Cell('', header=True))
         break_row.add(m.Cell('', header=True))
         break_row.add(m.Cell('', header=True))
@@ -91,7 +92,10 @@ class AreaExposureReportMixin(ReportMixin):
         table.add(break_row)
 
         table = self.impact_calculation(table)
-
+        last_row = m.Row()
+        last_row.add(m.Cell(
+            tr('Total')))
+        table.add(self.total_row(last_row))
         message.add(table)
 
         return message
@@ -185,13 +189,13 @@ class AreaExposureReportMixin(ReportMixin):
 
         return row
 
-    def second_row(self,
-                   second_row,
-                   total_affected_area,
-                   percentage_affected_area,
-                   total_area,
-                   total_affected_population,
-                   total_population):
+    def row(self,
+            row,
+            total_affected_area,
+            percentage_affected_area,
+            total_area,
+            total_affected_population,
+            total_population):
         """Adds values to the second row columns
 
         :param total_affected_area: total affected area
@@ -211,40 +215,40 @@ class AreaExposureReportMixin(ReportMixin):
         :param total_population: total population
         :type total_population:float
 
-        :return second_row
+        :return row
         :rtype Row
         """
-        second_row.add(m.Cell(
+        row.add(m.Cell(
             format_int(int(total_affected_area)),
             align='right'))
-        second_row.add(m.Cell(
+        row.add(m.Cell(
             "%.0f%%" % percentage_affected_area,
             align='right'))
-        second_row.add(m.Cell(
+        row.add(m.Cell(
             format_int(int(total_area)),
             align='right'))
-        second_row.add(m.Cell(
+        row.add(m.Cell(
             format_int(int(total_affected_population)),
             align='right'))
-        second_row.add(m.Cell(
+        row.add(m.Cell(
             "%.0f%%" % percentage_affected_area,
             align='right'))
-        second_row.add(m.Cell(
+        row.add(m.Cell(
             format_int(int(total_population)),
             align='right'))
 
-        return second_row
+        return row
 
-    def total_row(self, second_row):
+    def total_row(self, row):
         """Calculates the total of each single column
 
-        :param second_row: second row in the summary
-        :type second_row: Row
+        :param row: row in the summary
+        :type row: Row
 
-        :return second_row: second row with contents
-        :rtype: second_row: Row
+        :return row:  row with total contents
+        :rtype: row: Row
         """
-        second_row.add(m.Cell(tr('All')))
+
         total_affected_area = self.total_affected_areas
         total_area = self.total_areas
 
@@ -274,15 +278,15 @@ class AreaExposureReportMixin(ReportMixin):
         total_affected_population = round(total_affected_population, 0)
         total_population = round(total_population, 0)
 
-        second_row = self.second_row(
-            second_row,
+        row = self.row(
+            row,
             total_affected_area,
             percentage_affected_area,
             total_area,
             total_affected_population,
             total_population)
 
-        return second_row
+        return row
 
     def impact_row(self,
                    area_id, affected, percent_affected,

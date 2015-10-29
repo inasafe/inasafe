@@ -1,5 +1,5 @@
 exposure: area
-field: type
+field: id
 keyword_version: 3.2
 layer_geometry: polygon
 layer_mode: classified
