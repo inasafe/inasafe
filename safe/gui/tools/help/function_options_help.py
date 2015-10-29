@@ -73,7 +73,7 @@ def content():
             'influence the result of your question here (the Impact Function) '
             'by setting different values to the defaults that will be loaded.  '
             'The options available will depend on the impact function you '
-            'choose (Some Impact functions do not allow users to change the '
+            'choose (some Impact functions do not allow users to change the '
             'default parameters).')))
     bullets.add(m.Text(
         m.ImportantText(tr('Postprocessors')),
