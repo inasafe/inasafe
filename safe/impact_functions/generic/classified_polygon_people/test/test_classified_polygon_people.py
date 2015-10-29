@@ -35,7 +35,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
     def test_run(self):
         function = ClassifiedPolygonHazardPolygonPeopleFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'floods.shp')
+        hazard_path = test_data_path('hazard', 'classified_generic_polygon.shp')
         exposure_path = test_data_path('exposure', 'census.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
@@ -63,10 +63,10 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             area = f.geometry().area() * 1e8
             features[f['id']] = round(area, 1)
         expected_features = {
-            1: 7552.2,
-            2: 12341.9,
-            3: 1779.0,
-            4: 12944.1
+            1: 2460.7,
+            2: 6755.5,
+            3: 948.4,
+            4: 4638.9
         }
         self.assertEqual(features, expected_features)
 
@@ -85,8 +85,8 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'hazard': 'generic',
-            'hazard_category': 'single_event',
-            'field': 'level',
+            'hazard_category': 'multiple_event',
+            'field': 'h_zone',
             'vector_hazard_classification': 'generic_vector_hazard_classes',
         }
 

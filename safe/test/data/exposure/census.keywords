@@ -1,3 +1,5 @@
+area_name_field: name
+area_population_field: population
 exposure: area
 field: id
 keyword_version: 3.2

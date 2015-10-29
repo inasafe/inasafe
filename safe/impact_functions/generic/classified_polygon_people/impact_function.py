@@ -128,6 +128,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         all_areas_population = {}
         all_affected_geometry = []
 
+        area_population_attribute = self.exposure.keyword('area_population_field')
+        area_id_attribute = self.exposure.keyword('field')
+
         for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
             geometry = f.geometry()
             bbox = geometry.boundingBox()
@@ -135,8 +138,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             if not extent_exposure.contains(bbox):
                 geometry = geometry.intersection(extent_exposure_geom)
             area_type = f[type_attr]
-            area_id = f.attribute('id')
-            all_areas_population[area_id] = f.attribute('population')
+            area_id = f.attribute(area_id_attribute)
+            all_areas_population[area_id] = f.attribute(area_population_attribute)
 
             # add to the total area of this land cover type
             if area_type not in all_areas:

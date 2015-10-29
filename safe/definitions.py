@@ -766,6 +766,20 @@ volcano_name_field = {
     'description': tr('Attribute where the volcano name is located.')
 }
 
+area_name_field = {
+    'key': 'area_name_field',
+    'name': tr('Name field'),
+    'type': 'field',
+    'description': tr('Attribute for the area name ')
+}
+
+area_population_field = {
+    'key': 'area_population_field',
+    'name': tr('Population field'),
+    'type': 'field',
+    'description': tr('Attribute for the population on the area')
+}
+
 # General terminology and descriptive terms
 
 field = {

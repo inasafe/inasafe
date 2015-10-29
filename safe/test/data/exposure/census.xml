@@ -172,7 +172,9 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[exposure: area
+<![CDATA[area_name_field: name
+area_population_field: population
+exposure: area
 field: id
 keyword_version: 3.2
 layer_geometry: polygon

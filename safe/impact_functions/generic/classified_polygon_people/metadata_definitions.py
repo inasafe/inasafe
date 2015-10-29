@@ -18,13 +18,15 @@ from safe.common.utilities import OrderedDict
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.definitions import (
-    layer_mode_classified,
-    layer_geometry_polygon,
+    area_name_field,
+    area_population_field,
+    exposure_area,
     hazard_all,
     hazard_category_single_event,
     hazard_category_multiple_event,
-    exposure_area,
     generic_vector_hazard_classes,
+    layer_mode_classified,
+    layer_geometry_polygon
 )
 from safe.utilities.i18n import tr
 from safe.impact_functions.generic.\
@@ -92,7 +94,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
                     'exposure_types': [exposure_area],
                     'exposure_units': [],
                     'exposure_class_fields': [],
-                    'additional_keywords': []
+                    'additional_keywords': [area_name_field,
+                                            area_population_field]
                 }
             },
             'parameters': OrderedDict([
