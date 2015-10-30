@@ -43,8 +43,6 @@ from safe.impact_functions.generic.classified_polygon_people\
 
 from safe.impact_reports.area_exposure_report_mixin import \
     AreaExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 from safe.impact_functions.core import no_population_impact_message
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 
