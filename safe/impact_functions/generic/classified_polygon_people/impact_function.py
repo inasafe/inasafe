@@ -134,10 +134,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             if geometry is not None:
                 bbox = geometry.boundingBox()
             else:
-                continue
+                bbox = None
             # clip the exposure geometry to requested extent if necessary
             if not extent_exposure.contains(bbox):
                 geometry = geometry.intersection(extent_exposure_geom)
+
             area_type = f[type_attr]
             area_id = f.attribute(area_id_attribute)
             all_areas_population[area_id] = f.attribute(area_population_attribute)
