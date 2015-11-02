@@ -116,7 +116,7 @@ def download_exposure(command_line_arguments):
         command_line_arguments.exposure += '.shp'
 
 
-def get_impact_function_list():
+def get_impact_function_list(arguments):
     """Returns all available impact function ids.
 
     .. versionadded:: 3.2
@@ -125,9 +125,18 @@ def get_impact_function_list():
     :rtype: list
     """
     LOGGER.debug('get IF list')
-    registry = Registry()
-    LOGGER.debug(registry.impact_functions)
-    return registry.impact_functions
+    manager = ImpactFunctionManager()
+    if arguments.hazard and arguments.exposure:
+        hazard = get_hazard(arguments)
+        exposure = get_exposure(arguments)
+        keyword_io = KeywordIO()
+        hazard_keyword = keyword_io.read_keywords(hazard)
+        exposure_keyword = keyword_io.read_keywords(exposure)
+        ifs = manager.filter_by_keywords(hazard_keyword, exposure_keyword)
+    else:
+        ifs = manager.filter()
+    LOGGER.debug(ifs)
+    return ifs
 
 
 def show_impact_function_names(impact_functions):
@@ -138,8 +147,11 @@ def show_impact_function_names(impact_functions):
     :param impact_functions: A list of impact function ids.
     :type: list of strings.
     """
+    print ""
+    print "Available Impact Function:"
     for impact_function in impact_functions:
         print impact_function.__name__
+    print ""
 
 
 # all paths are made to be absolute
@@ -276,12 +288,16 @@ def analysis_setup(command_line_arguments, hazard, exposure):
     settings = QSettings()
     crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
     analysis.user_extent_crs = QgsCoordinateReferenceSystem(crs)
-    analysis.user_extent = QgsRectangle(
-        float(command_line_arguments.extent[0]),
-        float(command_line_arguments.extent[1]),
-        float(command_line_arguments.extent[2]),
-        float(command_line_arguments.extent[3])
-    )
+    try:
+        analysis.user_extent = QgsRectangle(
+            float(command_line_arguments.extent[0]),
+            float(command_line_arguments.extent[1]),
+            float(command_line_arguments.extent[2]),
+            float(command_line_arguments.extent[3])
+        )
+    except AttributeError:
+        print "No extents"
+        pass
     analysis.impact_function = impact_function
     analysis.setup_analysis()
     return analysis
@@ -305,7 +321,11 @@ def run_impact_function(command_line_arguments):
     analysis.run_analysis()
     impact_layer = analysis.impact_layer
     write_results(command_line_arguments, impact_layer)
-    build_report(command_line_arguments)
+    try:
+        if command_line_arguments.report_template:
+            build_report(command_line_arguments)
+    except AttributeError:
+        pass
 
 
 def build_report(cli_arguments):
@@ -367,7 +387,7 @@ def write_results(cli_arguments, impact_layer):
 
 
 if __name__ == '__main__':
-    print "insafe"
+    print "inasafe"
     print ""
     try:
         # Parse arguments, use usage.txt as syntax definition.
@@ -382,7 +402,7 @@ if __name__ == '__main__':
         if arguments.show_list is True:
             # setup functions
             register_impact_functions()
-            show_impact_function_names(get_impact_function_list())
+            show_impact_function_names(get_impact_function_list(arguments))
         elif arguments.version is True:
             print "QGIS VERSION: " + str(qgis_version()).replace('0', '.')
         # user is only interested in doing a download
