@@ -147,10 +147,11 @@ def show_impact_function_names(impact_functions):
     :param impact_functions: A list of impact function ids.
     :type: list of strings.
     """
+    manager = ImpactFunctionManager()
     print ""
     print "Available Impact Function:"
     for impact_function in impact_functions:
-        print impact_function.__name__
+        print manager.get_function_id(impact_function)
     print ""
 
 
