@@ -4190,7 +4190,7 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="252"/>
+        <location filename="impact_merge_help.py" line="156"/>
         <source>impact-map</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4210,7 +4210,7 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="256"/>
+        <location filename="impact_merge_help.py" line="162"/>
         <source>summary-report</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4220,12 +4220,12 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="260"/>
+        <location filename="impact_merge_help.py" line="165"/>
         <source>aggregation-area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="264"/>
+        <location filename="impact_merge_help.py" line="168"/>
         <source>map-scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4235,7 +4235,7 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="270"/>
+        <location filename="impact_merge_help.py" line="171"/>
         <source>map-legend</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4250,7 +4250,7 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="276"/>
+        <location filename="impact_merge_help.py" line="177"/>
         <source>merged-report-table</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4316,17 +4316,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     </message>
     <message>
         <location filename="impact_merge_help.py" line="233"/>
-        <source>impact-title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_merge_help.py" line="233"/>
         <source>It indicates the title of two impacts. The value will be &quot;first_impact_title and second_impact_title&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_merge_help.py" line="238"/>
-        <source>hazard-title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4515,7 +4505,7 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="219"/>
+        <location filename="needs_manager_help.py" line="226"/>
         <source>When switching to edit or add resource mode, the minimum needs manager will be updated to show the resource editor. Each resource is described in terms of:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4610,52 +4600,52 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="204"/>
+        <location filename="needs_manager_help.py" line="211"/>
         <source>Would generate a human readable sentence like this:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="207"/>
+        <location filename="needs_manager_help.py" line="214"/>
         <source>A displaced person should be provided with 2.8 kilogram/kilograms/kg of rice. Though no less than 0 and no more than 100. This should be provided daily.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="212"/>
+        <location filename="needs_manager_help.py" line="219"/>
         <source>Once you have populated the resource elements, click the Save resource button to return to the profile view. You will see the new resource added in the profile&apos;s resource list.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="218"/>
+        <location filename="needs_manager_help.py" line="225"/>
         <source>Managing profiles</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="224"/>
+        <location filename="needs_manager_help.py" line="231"/>
         <source>In addition to the profiles that come as standard with InaSAFE, you can create new ones, either from scratch, or based on an existing one (which you can then modify).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="229"/>
+        <location filename="needs_manager_help.py" line="236"/>
         <source>Use the New button to create new profile. When prompted, give your profile a name e.g. &apos;JakartaProfile&apos;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="233"/>
+        <location filename="needs_manager_help.py" line="240"/>
         <source>Note: The profile must be saved in your home directory under .qgis2/minimum_needs in order for InaSAFE to successfully detect it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="237"/>
+        <location filename="needs_manager_help.py" line="244"/>
         <source>An alternative way to create a new profile is to use the Save as to clone an existing profile. The clone profile can then be edited according to your specific needs.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="242"/>
+        <location filename="needs_manager_help.py" line="249"/>
         <source>Active profile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_help.py" line="243"/>
+        <location filename="needs_manager_help.py" line="250"/>
         <source>It is important to note, that which ever profile you select in the Profile pick list, will be considered active and will be used as the basis for all minimum needs analysis. You need to restart QGIS before the changed profile become active.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5092,6 +5082,11 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="needs_manager_dialog.py" line="445"/>
         <source>The &lt;b&gt;maximum&lt;/b&gt; is the maximum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be more than 67l. This is enforced when tweaking a maximum needs set before an impact evaluation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_help.py" line="197"/>
+        <source>A displaced person should be provided with {{ %s }} {{ %s }}/{{ %s }}/{{ %s }} of {{ %s }}. Though no less than {{ %s }} and no more than {{ %s }}. This should be provided {{ %s }}.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
