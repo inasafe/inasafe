@@ -2223,11 +2223,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="413"/>
-        <source>A &lt;b&gt;unti abbreviation&lt;/b&gt; is the basic measurement unit&apos;s shortened. For example when planning water rations the units would be l.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="needs_manager_dialog.py" line="422"/>
         <source>Minimum allowed</source>
         <translation type="unfinished"></translation>
@@ -2250,11 +2245,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="needs_manager_dialog.py" line="443"/>
         <source>The maximum allowable quantity per person. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="needs_manager_dialog.py" line="445"/>
-        <source>The &lt;b&gt;maximum&lt;/b&gt; is the maximum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be more than 50l. This is enforced when tweaking a minimum needs set before an impact evaluation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2423,28 +2413,13 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="defaults.py" line="202"/>
-        <source>Youth ratio defines what proportion of the population have not yet achieved financial independence. The age threshold for youth can vary by region - please consult with your local census bureau to findout what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality.In InaSAFE, people 0-14 years old are defined as &quot;youth&quot;. The default youth ratio is 0.263.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="defaults.py" line="218"/>
         <source>Adult ratio value.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="defaults.py" line="219"/>
-        <source>Adult ratio defines what proportion of the population have passed into adulthood and are not yet aged. The age threshold for adults can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality.In InaSAFE, people 15-64 years old are defined as &quot;adult&quot;. The default adult ratio is 0.659.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="defaults.py" line="236"/>
         <source>Elderly ratio value.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="defaults.py" line="237"/>
-        <source>Elderly ratio defines what proportion of the population have passed from adulthood into their later life stage.  The age threshold for being considered elderly can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality.In InaSAFE, people 65 years old and over are defined as &quot;elderly&quot;. The default elderly ratio is 0.078.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5092,6 +5067,31 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="osm_downloader_help.py" line="61"/>
         <source>Your current extent, when opening this window, will be used to determine the area for which you want data to be retrieved. You can interactively select the area by using the &apos;select on map&apos; button - which will temporarily hide this window and allow you to drag a rectangle on the map. After you have finished dragging the rectangle, this window will reappear.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="defaults.py" line="202"/>
+        <source>Youth ratio defines what proportion of the population have not yet achieved financial independence. The age threshold for youth can vary by region - please consult with your local census bureau to findout what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality. In InaSAFE, people 0-14 years old are defined as &quot;youth&quot;. The default youth ratio is 0.263.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="defaults.py" line="219"/>
+        <source>Adult ratio defines what proportion of the population have passed into adulthood and are not yet aged. The age threshold for adults can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality. In InaSAFE, people 15-64 years old are defined as &quot;adult&quot;. The default adult ratio is 0.659.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="defaults.py" line="237"/>
+        <source>Elderly ratio defines what proportion of the population have passed from adulthood into their later life stage.  The age threshold for being considered elderly can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality. In InaSAFE, people 65 years old and over are defined as &quot;elderly&quot;. The default elderly ratio is 0.078.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="413"/>
+        <source>A &lt;b&gt;unit abbreviation&lt;/b&gt; is the basic measurement unit&apos;s shortened. For example when planning water rations the units would be l.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="445"/>
+        <source>The &lt;b&gt;maximum&lt;/b&gt; is the maximum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be more than 67l. This is enforced when tweaking a maximum needs set before an impact evaluation.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -8007,13 +8007,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">InaSAFE</translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4434"/>
-        <source>An error was encountered when saving the keywords:
-%s</source>
-        <translation type="unfinished">An error was encountered when saving the keywords:
-%s</translation>
-    </message>
-    <message>
         <location filename="wizard_dialog.py" line="1812"/>
         <source>Use default</source>
         <translation type="unfinished">Use default</translation>
@@ -8164,11 +8157,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2782"/>
-        <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign key words now.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="wizard_dialog.py" line="2807"/>
         <source>This layer has no valid keywords assigned</source>
         <translation type="unfinished"></translation>
@@ -8226,6 +8214,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_dialog.py" line="3465"/>
         <source>Please specify extent of your analysis:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="2782"/>
+        <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign keywords now.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="4434"/>
+        <source>An error was encountered when saving the following keywords:
+ %s</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
