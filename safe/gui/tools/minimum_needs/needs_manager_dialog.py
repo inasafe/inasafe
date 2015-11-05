@@ -407,7 +407,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         unit_abbreviation_parameter.help_text = tr(
             'Abbreviations of unit for the resources. e.g. l, kg etc.')
         unit_abbreviation_parameter.description = tr(
-            "A <b>unti abbreviation</b> is the basic measurement unit's "
+            "A <b>unit abbreviation</b> is the basic measurement unit's "
             "shortened. For example when planning water rations "
             "the units would be l.")
         unit_abbreviation_parameter.is_required = True
@@ -441,7 +441,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             'The <b>maximum</b> is the maximum allowed quantity of the '
             'resource per person. For example you may dictate that the water '
             'ration per person per day should never be allowed to be more '
-            'than 50l. This is enforced when tweaking a minimum needs set '
+            'than 67l. This is enforced when tweaking a maximum needs set '
             'before an impact evaluation.')
         maximum_parameter.value = 100.0
 
