@@ -648,7 +648,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="function_options_help.py" line="77"/>
+        <location filename="function_options_help.py" line="78"/>
         <source>Postprocessors</source>
         <translation type="unfinished"/>
     </message>
@@ -2221,11 +2221,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="413"/>
-        <source>A &lt;b&gt;unti abbreviation&lt;/b&gt; is the basic measurement unit&apos;s shortened. For example when planning water rations the units would be l.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="needs_manager_dialog.py" line="422"/>
         <source>Minimum allowed</source>
         <translation type="unfinished"/>
@@ -2248,11 +2243,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="needs_manager_dialog.py" line="443"/>
         <source>The maximum allowable quantity per person. </source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="needs_manager_dialog.py" line="445"/>
-        <source>The &lt;b&gt;maximum&lt;/b&gt; is the maximum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be more than 50l. This is enforced when tweaking a minimum needs set before an impact evaluation.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2421,28 +2411,13 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="202"/>
-        <source>Youth ratio defines what proportion of the population have not yet achieved financial independence. The age threshold for youth can vary by region - please consult with your local census bureau to findout what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality.In InaSAFE, people 0-14 years old are defined as &quot;youth&quot;. The default youth ratio is 0.263.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="defaults.py" line="218"/>
         <source>Adult ratio value.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="defaults.py" line="219"/>
-        <source>Adult ratio defines what proportion of the population have passed into adulthood and are not yet aged. The age threshold for adults can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality.In InaSAFE, people 15-64 years old are defined as &quot;adult&quot;. The default adult ratio is 0.659.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="defaults.py" line="236"/>
         <source>Elderly ratio value.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="defaults.py" line="237"/>
-        <source>Elderly ratio defines what proportion of the population have passed from adulthood into their later life stage.  The age threshold for being considered elderly can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality.In InaSAFE, people 65 years old and over are defined as &quot;elderly&quot;. The default elderly ratio is 0.078.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -3888,11 +3863,6 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_help.py" line="59"/>
-        <source>This document describes the usage of the InaSAFE &apos;dock panel&apos;- which is an interface for running risk scenarios within the QGIS environment. If you are a new user, you may also consider using the &apos;Impact Function Centric Wizard&apos; to run the analysis. You can launch the wizard by clicking on this icon in the toolbar:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="dock_help.py" line="72"/>
         <source>You can drag and drop the dock panel to reposition it in the user interface. For example, dragging the panel towards the right margin of the QGIS application will dock it to the right side of the screen.</source>
         <translation type="unfinished"/>
@@ -3948,28 +3918,8 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_help.py" line="107"/>
-        <source>The formulation of these questions if carried out by loading layers into QGIS that represent either hazard scenarios or exposure data.A hazard, for example, may be represented as, a raster layer in QGIS where each pixel in the raster represents the current flood depth following an inundation event. An exposure layer could be represented, for example, as vector polygon data representing building outlines, or a raster outline where each pixel represents the number of people thought to be resident in that cell.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="116"/>
-        <source>The impact function will combine these two input layers in a mathematical model in order to derive what the impacts of the hazard will be on the exposure infrastructure or people. By selecting a combination from the hazard and exposure combo boxes, an appropriate set of impact functions will be listed in the combo box. You may be wondering how the InaSAFE plugin determines whether a layer should be listed in the hazard or exposure combo boxes? The plugin relies on simple keyword metadata to be associated with each layer. You can define these keywords by selecting a layer and then clicking the InaSAFE Keywords Wizard icon on the toolbar: </source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="dock_help.py" line="116"/>
         <source>The wizard will guide you through the process of defining the keywords for that layer.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="134"/>
-        <source>Based on the combination of hazard and exposure layers that are selected, the Impact Function list (shown in the combo box under &quot;Might&quot; in the InaSAFE dock panel)  will be updated. Each impact function can only work with specific combinations of hazard and exposure types, so the options shown here will be limited accordingly.The chosen impact function can be configured (if applicable) by pressing the small ellipses (...) button next to the chosen impact function. This is explained in more detail below under the heading &quot;Setting Analysis Parameters&quot;.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="144"/>
-        <source>Aggregation is the process whereby we group the results of the analysis by district so that you can see how many people, roads or buildings were affected in each area. This will help you to understand where the most critical needs are. Aggregation is optional in InaSAFE - if you do not use aggregation, the entire analysis area will be used for the data summaries. Typically aggregation layers in InaSAFE have as attributes the name of the district or reporting area. It is also possible to use extended attributes to indicate the ratio of men and women; youth, adults and elderly living in each area. Where these are provided and the exposure layer is population, InaSAFE will provide a demographic breakdown per aggregation area indicating how many men, women etc. were probably affected in that area.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -4023,7 +3973,7 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_help.py" line="226"/>
+        <location filename="dock_help.py" line="217"/>
         <source>Help</source>
         <translation type="unfinished"/>
     </message>
@@ -4043,18 +3993,8 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_help.py" line="226"/>
-        <source>Print... - click on this if you wish to create a pdf of your impact scenarion project or just generate report and open it in composer for further tuning. An impact layer must be active before the Print button will be enabled.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="dock_help.py" line="233"/>
         <source>Run</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="233"/>
-        <source>- Run - if the combination of options in the Questions area&apos;s combo boxes will allow you to run a scenario, this button is enabled.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -4093,11 +4033,6 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_help.py" line="276"/>
-        <source>When the scenario analysis completed you may want to generate a report. Usually the &quot;Print...&quot;  button will be enabled immediately after analysis. Selecting an InaSAFE impact layer in QGIS Layers panel will also enable it.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="extent_selector_help.py" line="40"/>
         <source>Extent selector help</source>
         <translation type="unfinished"/>
@@ -4118,38 +4053,23 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="function_options_help.py" line="58"/>
-        <source>Depending on which Impact Function you have chosen you have different options available for adjust the parameters of the question you are asking. Some Impact Functions have more configurable Options than others. To open the Impact Function Configuration Dialog you need to click on the &quot;Options ...&quot; button next to the selected impact function paragraph in the InaSAFE dock. You might have up to 3 tabs visible:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="function_options_help.py" line="69"/>
         <source>Options</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="function_options_help.py" line="69"/>
-        <source>- Depending in the Impact function you selected, you can influence the result of your question here (the Impact Function) by setting different initial values which are presented depending on the function you choose (Some Impact functions might now be able to be influenced).</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="function_options_help.py" line="77"/>
+        <location filename="function_options_help.py" line="78"/>
         <source>- Takes the results from the impact function and calculates derivative indicators, for example if you have an affected population total, the Gender postprocessor will calculate gender specific indicators such as additional nutritional requirements for pregnant women.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="function_options_help.py" line="85"/>
+        <location filename="function_options_help.py" line="86"/>
         <source>Minimum Needs</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="function_options_help.py" line="85"/>
+        <location filename="function_options_help.py" line="86"/>
         <source>- If the analysis uses population exposure, InaSAFE calculates the minimum needs of the people affected by the impact scenario. You should refer to the minimum needs tool for configuring the global defaults used in these calculations. </source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="function_options_help.py" line="85"/>
-        <source> This panel will let you override global defaults for a specifcanallysis run</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -5028,11 +4948,6 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="osm_downloader_help.py" line="61"/>
-        <source>Your current extent, when opening this window, will be used to determine the area for which you want data to be retrieved.You can interactively select the area by using the &apos;select on map&apos; button - which will temporarily hide this window and allow you to drag a rectangle on the map. After you have finished dragging the rectangle, this window will reappear.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="osm_downloader_help.py" line="69"/>
         <source>Check the output directory is correct. Note that the saved dataset will be called either roads.shp or buildings.shp (and associated files).</source>
         <translation type="unfinished"/>
@@ -5085,6 +5000,96 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="shakemap_converter_help.py" line="72"/>
         <source>If you want to obtain shake data you can get download it free from the USGS shakemap site: http://earthquake.usgs.gov/earthquakes/shakemap/list.php?y=2013</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="59"/>
+        <source>This document describes the usage of the InaSAFE &apos;dock panel&apos;- which is an interface for running hazard scenarios within the QGIS environment. If you are a new user, you may also consider using the &apos;Impact Function Centric Wizard&apos; to run the analysis. You can launch the wizard by clicking on this icon in the toolbar:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="107"/>
+        <source>The formulation of these questions if carried out by loading layers into QGIS that represent either hazard scenarios or exposure data. A hazard, for example, may be represented as, a raster layer in QGIS where each pixel in the raster represents the current flood depth following an inundation event. An exposure layer could be represented, for example, as vector polygon data representing building outlines, or a raster outline where each pixel represents the number of people thought to be resident in that cell.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="116"/>
+        <source>The impact function will combine these two input layers in a mathematical model in order to derive what the impacts of the hazard will be on the exposed infrastructure or people. By selecting a combination from the hazard and exposure combo boxes, an appropriate set of impact functions will be listed in the combo box. You may be wondering how the InaSAFE plugin determines whether a layer should be listed in the hazard or exposure combo boxes? The plugin relies on simple keyword metadata to be associated with each layer. You can define these keywords by selecting a layer and then clicking the InaSAFE Keywords Wizard icon on the toolbar: </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="134"/>
+        <source>Based on the combination of hazard and exposure layers that are selected, the Impact Function list (shown in the combo box under &quot;Might&quot; in the InaSAFE dock panel)  will be updated. Each impact function can only work with specific combinations of hazard and exposure types, so the options shown here will be limited accordingly. The chosen impact function can be configured (if applicable) by pressing the small ellipses (...) button next to the chosen impact function. This is explained in more detail below under the heading &quot;Setting Analysis Parameters&quot;.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="144"/>
+        <source>Aggregation is the process whereby we group the analysis results by district so that you can see how many people, roads or buildings were affected in each area. This will help you to understand where the most critical needs are.  Aggregation is optional in InaSAFE - if you do not use aggregation, the entire analysis area will be used for the data summaries. Typically aggregation layers in InaSAFE have as attributes the name of the district or reporting area. It is also possible to use extended attributes to indicate the ratio of men and women; youth, adults and elderly living in each area. Where these are provided and the exposure layer is population, InaSAFE will provide a demographic breakdown per aggregation area indicating how many men, women etc. were probably affected in that area.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="226"/>
+        <source>Print</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="226"/>
+        <source>... - click on this if you wish to create a pdf of your impact scenario project or just generate a report and open it in composer for further tuning. An impact layer must be active before the Print button will be enabled.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="233"/>
+        <source>- if the combination of options in the Questions area&apos;s combo boxes will allow you to run a scenario, this button is enabled.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="276"/>
+        <source>When the impact analysis has completed you may want to generate a report. Usually the &quot;Print...&quot;  button will be enabled immediately after analysis. Selecting an InaSAFE impact layer in QGIS Layers panel will also enable it.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="function_options_help.py" line="58"/>
+        <source>Depending on which Impact Function you have chosen you have different options available for adjusting the parameters of the question you are asking. Some Impact Functions have more configurable Options than others. To open the Impact Function Configuration Dialog you need to click on the &quot;Options ...&quot; button next to the selected impact function paragraph in the InaSAFE dock. You might have up to 3 tabs visible:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="function_options_help.py" line="69"/>
+        <source>- Depending in the Impact function you selected, you can influence the result of your question here (the Impact Function) by setting different values to the defaults that will be loaded.  The options available will depend on the impact function you choose (some Impact functions do not allow users to change the default parameters).</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="function_options_help.py" line="86"/>
+        <source> This panel will let you override global defaults for a specific analysis run.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="osm_downloader_help.py" line="61"/>
+        <source>Your current extent, when opening this window, will be used to determine the area for which you want data to be retrieved. You can interactively select the area by using the &apos;select on map&apos; button - which will temporarily hide this window and allow you to drag a rectangle on the map. After you have finished dragging the rectangle, this window will reappear.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="defaults.py" line="202"/>
+        <source>Youth ratio defines what proportion of the population have not yet achieved financial independence. The age threshold for youth can vary by region - please consult with your local census bureau to findout what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality. In InaSAFE, people 0-14 years old are defined as &quot;youth&quot;. The default youth ratio is 0.263.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="defaults.py" line="219"/>
+        <source>Adult ratio defines what proportion of the population have passed into adulthood and are not yet aged. The age threshold for adults can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality. In InaSAFE, people 15-64 years old are defined as &quot;adult&quot;. The default adult ratio is 0.659.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="defaults.py" line="237"/>
+        <source>Elderly ratio defines what proportion of the population have passed from adulthood into their later life stage.  The age threshold for being considered elderly can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality. In InaSAFE, people 65 years old and over are defined as &quot;elderly&quot;. The default elderly ratio is 0.078.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="413"/>
+        <source>A &lt;b&gt;unit abbreviation&lt;/b&gt; is the basic measurement unit&apos;s shortened. For example when planning water rations the units would be l.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="needs_manager_dialog.py" line="445"/>
+        <source>The &lt;b&gt;maximum&lt;/b&gt; is the maximum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be more than 67l. This is enforced when tweaking a maximum needs set before an impact evaluation.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7995,12 +8000,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4434"/>
-        <source>An error was encountered when saving the keywords:
-%s</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="wizard_dialog.py" line="1812"/>
         <source>Use default</source>
         <translation type="unfinished"/>
@@ -8151,11 +8150,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2782"/>
-        <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign key words now.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="wizard_dialog.py" line="2807"/>
         <source>This layer has no valid keywords assigned</source>
         <translation type="unfinished"/>
@@ -8213,6 +8207,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_dialog.py" line="3465"/>
         <source>Please specify extent of your analysis:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="2782"/>
+        <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign keywords now.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="4434"/>
+        <source>An error was encountered when saving the following keywords:
+ %s</source>
         <translation type="unfinished"/>
     </message>
 </context>
