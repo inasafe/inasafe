@@ -195,11 +195,18 @@ def content():
     )))
 
     message.add(m.EmphasizedText(tr(
-        'A displaced person should be provided with {{ Default }} '
-        '{{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of '
-        '{{ Resource name }}. Though no less than {{ Minimum allowed }} '
-        'and no more than {{ Maximum allowed }}. This should be '
-        'provided {{ Frequency }}.'
+        'A displaced person should be provided with {{ %s }} '
+        '{{ %s }}/{{ %s }}/{{ %s }} of {{ %s }}. Though no less than {{ %s }} '
+        'and no more than {{ %s }}. This should be provided {{ %s }}.' % (
+            'Default',
+            'Unit',
+            'Units',
+            'Unit abbreviation',
+            'Resource name',
+            'Minimum allowed',
+            'Maximum allowed',
+            'Frequency'
+        )
     )))
     message.add(m.Paragraph(tr(
         'Would generate a human readable sentence like this:')))

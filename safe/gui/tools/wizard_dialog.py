@@ -2779,7 +2779,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 'your InaSAFE version (%s). If you wish to use it as an '
                 'exposure, hazard, or aggregation layer in an analysis, '
                 'please update the keywords. Click Next if you want to assign '
-                'key words now.' % (keyword_version or 'No Version',
+                'keywords now.' % (keyword_version or 'No Version',
                                     get_version()))
         else:
             # The layer is keywordless
@@ -4420,8 +4420,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),
                 ((self.tr(
-                    'An error was encountered when saving the keywords:\n'
-                    '%s') % error_message.to_html())))
+                    'An error was encountered when saving the following '
+                    'keywords:\n %s') % error_message.to_html())))
         if self.dock is not None:
             # noinspection PyUnresolvedReferences
             self.dock.get_layers()
