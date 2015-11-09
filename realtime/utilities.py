@@ -113,8 +113,8 @@ def setup_logger():
     http://docs.python.org/howto/logging-cookbook.html
     """
     sentry_url = (
-        'http://fda607badbe440be9a2fa6b22e759c72'
-        ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
+        'http://7674f55697ba4c0d81d12ac0efa82e7a'
+        ':b197c79de15045509f5f9a1bf97e09da@sentry.kartoza.com/2')
     setup_logger_safe(realtime_logger_name(), sentry_url=sentry_url)
 
 
