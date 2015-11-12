@@ -47,6 +47,10 @@ test-translations:
 	@echo "Missing translations - for more info run: make translation-stats"
 	@echo "----------------------------------------------------------------"
 	@python scripts/missing_translations.py `pwd` id
+	@python scripts/missing_translations.py `pwd` fr
+	@python scripts/missing_translations.py `pwd` af
+	@python scripts/missing_translations.py `pwd` es_ES
+
 
 translation-stats:
 	@echo
@@ -114,6 +118,12 @@ quicktest: pep8 pylint dependency_test unwanted_strings run_data_audit test-tran
 # usage: make test_suite_quick PACKAGE=common
 test_suite_quick:
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe/${PACKAGE} --with-id
+
+# Similar with test_suite_quick, but for all tests.
+# you can pass an argument called PACKAGE to run only tests in that package
+# usage: make test_suite_all PACKAGE=common
+test_suite_all:
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -v safe/${PACKAGE} --with-id
 
 # Run pep8 style checking
 #http://pypi.python.org/pypi/pep8
@@ -394,3 +404,17 @@ jenkins-realtime-test:
 	# xvfb-run --server-args=":101 -screen 0, 1024x768x24" make check
 	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); xvfb-run --server-args="-screen 0, 1024x768x24" \
 	nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=realtime realtime || :
+
+apidocs:
+	@echo
+	@echo "---------------------------------------------------------------"
+	@echo ""Generating API doc for InaSAFE
+	@echo "---------------------------------------------------------------"
+	@echo "Please make sure you have cloned inasafe-doc repository"
+	@echo "Generating RST files for apidoc..."
+	@sphinx-apidoc -f -e -o docs/apidocs safe realtime
+	@echo "RST files for apidocs has been created."
+	@echo "Building HTML API docs..."
+	@cd docs && $(MAKE) html
+	@echo "HTML API docs has been builded."
+	@echo "You can look it under docs/_build directory.."

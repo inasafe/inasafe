@@ -31,6 +31,7 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_all,
+    hazard_category_single_event,
     hazard_category_multiple_event,
     count_exposure_unit,
     generic_raster_hazard_classes,
@@ -64,8 +65,8 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
         dict_meta = {
             'id': 'ClassifiedRasterHazardPopulationFunction',
             'name': tr('Classified raster hazard on population'),
-            'impact': tr('Be affected by each class'),
-            'title': tr('Be affected by each hazard class'),
+            'impact': tr('Be affected in each class'),
+            'title': tr('Be affected in each hazard class'),
             'function_type': 'old-style',
             'author': 'Dianne Bencito',
             'date_implemented': 'N/A',
@@ -101,7 +102,9 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_raster],
                     'hazard_categories': [
-                        hazard_category_multiple_event],
+                        hazard_category_single_event,
+                        hazard_category_multiple_event
+                    ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [],

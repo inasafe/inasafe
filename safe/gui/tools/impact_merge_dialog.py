@@ -40,7 +40,7 @@ except ImportError:
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QUrl
+from PyQt4.QtCore import QSettings, pyqtSignature, QUrl, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QDialog, QMessageBox, QFileDialog, QDesktopServices
 
@@ -68,9 +68,10 @@ from safe.utilities.gis import qgis_version
 from safe.utilities.utilities import (
     html_to_file,
     add_ordered_combo_item)
-from safe.utilities.help import show_context_help
+from safe.gui.tools.help.impact_merge_help import impact_merge_help
 from safe.utilities.keyword_io import KeywordIO
-from safe.defaults import disclaimer
+from safe.defaults import (
+    disclaimer, white_inasafe_logo_path, supporters_logo_path)
 from safe.utilities.unicode import get_string
 
 INFO_STYLE = styles.INFO_STYLE
@@ -101,12 +102,12 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             'qgis-composer-templates', 'merged_report.qpt')
 
         # Safe Logo Path
-        self.safe_logo_path = resources_path(
-            'img', 'logos', 'inasafe-logo-url.png')
+        self.safe_logo_path = white_inasafe_logo_path()
 
-        # Organisation Logo Path
-        self.organisation_logo_path = resources_path(
-            'img', 'logos', 'supporters.png')
+        # Organisation Logo Path - defaults to supporters logo, will be
+        # updated to user defined organisation logo path in read_settings in
+        # user has specified a custom logo.
+        self.organisation_logo_path = supporters_logo_path()
 
         # Disclaimer text
         self.disclaimer = disclaimer()
@@ -138,11 +139,14 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             'aggregation_attribute': None
         }
 
+        # Available aggregation layer
+        self.available_aggregation = []
+
         # The summary report, contains report for each aggregation area
-        self.summary_report = {}
+        self.summary_report = OrderedDict()
 
         # The html reports and its file path
-        self.html_reports = {}
+        self.html_reports = OrderedDict()
 
         # A boolean flag whether to merge entire area or aggregated
         self.entire_area_mode = False
@@ -153,60 +157,15 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         # Get all current project layers for combo box
         self.get_project_layers()
 
-        # Set up context help
-        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
+        # Set up things for context help
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.main_stacked_widget.setCurrentIndex(1)
 
         # Show usage info
-        self.show_info()
         self.restore_state()
-
-    def show_info(self):
-        """Show usage info to the user."""
-        # Read the header and footer html snippets
-        header = html_header()
-        footer = html_footer()
-
-        string = header
-
-        heading = m.Heading(self.tr('Impact Layer Merge Tool'), **INFO_STYLE)
-        body = self.tr(
-            'This tool will merge the outputs from two impact maps for the '
-            'same area. The maps must be created using the same aggregation '
-            'areas and same hazard. To use:'
-        )
-        tips = m.BulletedList()
-        tips.add(self.tr(
-            'Run an impact assessment for an area using aggregation. e.g.'
-            'Flood Impact on Buildings aggregated by municipal boundaries.'))
-        tips.add(self.tr(
-            'Run a second impact assessment for the same area using the same '
-            'aggregation. e.g. Flood Impact on People aggregated by '
-            'municipal boundaries.'))
-        tips.add(self.tr(
-            'Open this tool and select each impact layer from the pick lists '
-            'provided below.'))
-        tips.add(self.tr(
-            'Select the aggregation layer that was used to generate the '
-            'first and second impact layer.'))
-        tips.add(self.tr(
-            'Select an output directory.'))
-        tips.add(self.tr(
-            'Check "Use customized report template" checkbox and select the '
-            'report template file if you want to use your own template. Note '
-            'that all the map composer components that are needed must be '
-            'fulfilled.'))
-        tips.add(self.tr(
-            'Click OK to generate the per aggregation area combined '
-            'summaries.'))
-        message = m.Message()
-        message.add(heading)
-        message.add(body)
-        message.add(tips)
-        string += message.to_html()
-        string += footer
-
-        self.web_view.setHtml(string)
 
     def restore_state(self):
         """ Read last state of GUI from configuration file."""
@@ -221,11 +180,6 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         """ Store current state of GUI to configuration file """
         settings = QSettings()
         settings.setValue('directory', self.output_directory.text())
-
-    @staticmethod
-    def show_help():
-        """Load the help text for the dialog."""
-        show_context_help('impact_layer_merge_tool')
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_directory_chooser_clicked(self):
@@ -348,6 +302,8 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         self.first_layer.clear()
         self.second_layer.clear()
         self.aggregation_layer.clear()
+        # empty list
+        self.available_aggregation[:] = []
 
         for layer in layers:
             try:
@@ -360,6 +316,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
                 except (NoKeywordsFoundError, KeywordNotFoundError):
                     # Skip if there are no keywords at all
                     continue
+                self.available_aggregation.append(layer)
                 add_ordered_combo_item(
                     self.aggregation_layer,
                     layer.name(),
@@ -430,8 +387,12 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
                     self.tr('Template file does not exist.'))
 
         # Flag whether to merge entire area or based on aggregation unit
-        if self.aggregation['layer'] is None:
-            self.entire_area_mode = True
+        # Rizky: Fix nasty bug where the dialog stuck in entire_area_mode
+        # the mode should be rechecked based on selected aggregation layer
+        self.entire_area_mode = True
+        if (self.aggregation_layer.currentIndex() > 0 and
+                not self.aggregation['layer'] is None):
+            self.entire_area_mode = False
 
     def require_directory(self):
         """Ensure directory path entered in dialog exist.
@@ -570,6 +531,81 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         second_report_dict = self.generate_report_dictionary_from_dom(
             second_impact_tables)
 
+        # Rizky: Consistency checks with aggregation
+        # Make sure the aggregation layer both presents in both layers
+
+        # We shouldn't have problems with Entire Area mode. It just means
+        # the impact layer and summary is merged into single report.
+        # We can have 3 cases:
+        # 1. If both of them were not aggregated, we can just merge the map
+        #    only
+        # 2. If both of them were aggregated, we can just merge the map, and
+        #    merge postprocessor report using 'Total aggregation in areas' key
+        # 3. If only one of them were aggregated, we can just merge the map,
+        #    and uses postprocessor report from the one who has.
+        if self.entire_area_mode:
+            # We won't be bothered with the map, it will be merged anyway in
+            # all 3 cases. We should bother with the postprocessor report.
+            # If one of them has the report, it means it will contain more
+            # than one report keys. We can just swap the first report if they
+            # have one key, and the second have more than one
+            if (len(first_report_dict.keys()) == 1 and
+                    len(second_report_dict.keys()) > 1):
+                swap_var = first_report_dict
+                first_report_dict = second_report_dict
+                second_report_dict = swap_var
+        # This condition will covers aggregated mode
+        # For this case, we should make sure both layers are aggregated with
+        # the same aggregation layer of the chosen aggregation layer
+        else:
+            # check that both layers must have aggregated postprocessor.
+            # aggregated postprocessor means the report_dict must have minimum
+            # 2 keys
+            if not (len(first_report_dict.keys()) > 1 and
+                    len(second_report_dict.keys()) > 1):
+                raise InvalidLayerError(self.tr(
+                    'Please choose impact layers with aggregated '
+                    'postprocessor if you want to use aggregation layer.'))
+
+            # collect all report keys (will contain aggregation areas in the
+            # report)
+            report_keys = first_report_dict.keys()
+            # Discard the last keys. It will always contains total area, not
+            # aggregated area
+            if len(report_keys) > 0:
+                del report_keys[-1]
+
+            sec_report = second_report_dict.keys()
+            if len(sec_report) > 0:
+                del sec_report[-1]
+
+            for k in sec_report:
+                if k not in report_keys:
+                    report_keys.append(k)
+
+            # collect all aggregation areas in aggregation layer
+            layer = self.aggregation['layer']
+            aggregation_attr = self.aggregation['aggregation_attribute']
+            aggregation_attr_index = layer.fieldNameIndex(aggregation_attr)
+            aggregation_keys = []
+            for f in layer.getFeatures():
+                area = f[aggregation_attr_index]
+                if area not in aggregation_keys:
+                    aggregation_keys.append(area)
+
+            is_subset = True
+            for k in report_keys:
+                if k not in aggregation_keys:
+                    is_subset = False
+
+            if not is_subset:
+                # This means report keys contains area keys that is not in
+                # aggregation layer. Which means possibly it is using the
+                # wrong aggregation layer.
+                raise InvalidLayerError(
+                    self.tr('First and Second layer does not use chosen '
+                            'Aggregation layer'))
+
         # Generate report summary for all aggregation unit
         self.generate_report_summary(first_report_dict, second_report_dict)
 
@@ -614,7 +650,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         Example::
 
            {"Jakarta Barat":
-               {"Detailed Building Type Report":
+               {"Closed buildings":
                    {"Total inundated":150,
                     "Places of Worship": "No data"
                    }
@@ -673,7 +709,7 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
         Example::
 
             {"Jakarta Barat":
-                {"Detailed Building Type Report":
+                {"Closed buildings":
                     {"Total inundated":150,
                      "Places of Worship": "No data"
                     }
@@ -908,7 +944,10 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             composer_map.setGridIntervalY(y_interval)
 
             # Self.html_reports must have only 1 key value pair
-            area_title = list(self.html_reports.keys())[0]
+            # Rizky: If layer components were aggregated, html_reports will
+            # have several key value pairs. So we get the last value because
+            # it is for the total/entire area
+            area_title = list(self.html_reports.keys())[-1]
 
             # Set Report Summary
             summary_report = composition.getComposerItemById('summary-report')
@@ -1076,3 +1115,43 @@ class ImpactMergeDialog(QDialog, FORM_CLASS):
             legend.synchronizeWithModel()
 
         return composition
+
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
+
+        .. versionadded: 3.2.1
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded: 3.2.1
+        """
+        self.main_stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
+        """Show usage info to the user."""
+        # Read the header and footer html snippets
+        self.main_stacked_widget.setCurrentIndex(0)
+        header = html_header()
+        footer = html_footer()
+
+        string = header
+
+        message = impact_merge_help()
+
+        string += message.to_html()
+        string += footer
+
+        self.help_web_view.setHtml(string)

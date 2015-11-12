@@ -31,7 +31,7 @@ from safe.utilities.file_downloader import FileDownloader
 from safe.common.exceptions import DownloadError, CanceledImportDialogError
 from safe.common.version import get_version
 
-URL_OSM_PREFIX = 'http://osm.linfiniti.com/'
+URL_OSM_PREFIX = 'http://osm.inasafe.org/'
 URL_OSM_SUFFIX = '-shp'
 
 LOGGER = logging.getLogger('InaSAFE')

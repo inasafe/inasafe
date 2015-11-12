@@ -23,7 +23,8 @@ from safe.utilities.i18n import tr
 from safe.impact_functions.generic.classified_polygon_building\
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError
+from safe.common.exceptions import InaSAFEError, KeywordNotFoundError, \
+    ZeroImpactException
 from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage,
@@ -31,6 +32,8 @@ from safe.common.utilities import (
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.engine.interpolation_qgis import interpolate_polygon_polygon
+import safe.messaging as m
+from safe.messaging import styles
 
 
 class ClassifiedPolygonHazardBuildingFunction(
@@ -53,19 +56,17 @@ class ClassifiedPolygonHazardBuildingFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        return [
-            {
-                'content': tr('Notes'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Map shows buildings affected in each of these hazard '
-                    'zones: %s') % ', '.join(self.hazard_zones)
-            }
-        ]
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Map shows buildings affected in each of these hazard '
+            'zones: %s') % ', '.join(self.hazard_zones))
+        message.add(checklist)
+        return message
 
     def run(self):
         """Risk plugin for classified polygon hazard on building/structure.
@@ -80,16 +81,23 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.prepare()
 
         # Value from layer's keywords
-        hazard_zone_attribute = self.hazard.keyword('field')
+        self.hazard_class_attribute = self.hazard.keyword('field')
+        # Try to get the value from keyword, if not exist, it will not fail,
+        # but use the old get_osm_building_usage
+        try:
+            self.exposure_class_attribute = self.exposure.keyword(
+                'structure_class_field')
+        except KeywordNotFoundError:
+            self.exposure_class_attribute = None
 
         hazard_zone_attribute_index = self.hazard.layer.fieldNameIndex(
-            hazard_zone_attribute)
+            self.hazard_class_attribute)
 
         # Check if hazard_zone_attribute exists in hazard_layer
         if hazard_zone_attribute_index < 0:
             message = (
                 'Hazard data %s does not contain expected attribute %s ' %
-                (self.hazard.layer.name(), hazard_zone_attribute))
+                (self.hazard.layer.name(), self.hazard_class_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)
 
@@ -114,19 +122,28 @@ class ClassifiedPolygonHazardBuildingFunction(
         interpolated_layer.dataProvider().addAttributes([new_field])
         interpolated_layer.updateFields()
 
-        attribute_names = [field.name() for field in
-                           interpolated_layer.pendingFields()]
+        attribute_names = [
+            field.name() for field in interpolated_layer.pendingFields()]
         target_field_index = interpolated_layer.fieldNameIndex(
             self.target_field)
         changed_values = {}
 
+        if interpolated_layer.featureCount() < 1:
+            raise ZeroImpactException()
+
         # Extract relevant interpolated data
         for feature in interpolated_layer.getFeatures():
-            hazard_value = feature[hazard_zone_attribute]
+            hazard_value = feature[self.hazard_class_attribute]
             if not hazard_value:
                 hazard_value = self._not_affected_value
             changed_values[feature.id()] = {target_field_index: hazard_value}
-            usage = get_osm_building_usage(attribute_names, feature)
+
+            if (self.exposure_class_attribute and
+                    self.exposure_class_attribute in attribute_names):
+                usage = feature[self.exposure_class_attribute]
+            else:
+                usage = get_osm_building_usage(attribute_names, feature)
+
             if usage is None:
                 usage = tr('Unknown')
             if usage not in self.buildings:
@@ -145,7 +162,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         self._consolidate_to_other()
 
         # Generate simple impact report
-        impact_summary = impact_table = self.generate_html_report()
+        impact_summary = impact_table = self.html_report()
 
         # Create style
         categories = self.hazard_zones
@@ -171,10 +188,10 @@ class ClassifiedPolygonHazardBuildingFunction(
 
         # For printing map purpose
         map_title = tr('Buildings affected by each hazard zone')
+        legend_title = tr('Building count')
+        legend_units = tr('(building)')
         legend_notes = tr('Thousand separator is represented by %s' %
                           get_thousand_separator())
-        legend_units = tr('(building)')
-        legend_title = tr('Building count')
 
         # Create vector layer and return
         impact_layer = Vector(

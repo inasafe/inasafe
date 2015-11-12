@@ -35,6 +35,7 @@ from PyQt4.QtGui import (
     QMessageBox,
     QIcon
 )
+from PyQt4.QtCore import pyqtSignature, pyqtSlot
 
 from safe.common.resource_parameter import ResourceParameter
 from safe_extras.parameters.float_parameter import FloatParameter
@@ -46,11 +47,12 @@ from safe_extras.parameters.parameter_exceptions import (
     InvalidMinimumError)
 from safe_extras.parameters.string_parameter import StringParameter
 from safe_extras.parameters.text_parameter import TextParameter
-from safe.utilities.help import show_context_help
-from safe.utilities.resources import resources_path, get_ui_class
+from safe.utilities.resources import (
+    resources_path, get_ui_class, html_footer, html_header)
 from safe.messaging import styles
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.utilities.i18n import tr
+from safe.gui.tools.help.needs_manager_help import needs_manager_helps
 
 
 INFO_STYLE = styles.INFO_STYLE
@@ -147,10 +149,12 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         self.save_profile_as_button.clicked.connect(
             self.save_profile_as)
 
-        # Set up context help
-        self.help_context = 'needs_manager'
-        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
+        # Set up things for context help
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.main_stacked_widget.setCurrentIndex(1)
 
         self.minimum_needs = NeedsProfile()
         self.edit_item = None
@@ -214,10 +218,6 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             self.switch_context(self.profile_edit_page)
         else:
             super(NeedsManagerDialog, self).reject()
-
-    def show_help(self):
-        """Load the help text for the dialog."""
-        show_context_help(self.help_context)
 
     def populate_resource_list(self):
         """Populate the list resource list.
@@ -407,7 +407,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         unit_abbreviation_parameter.help_text = tr(
             'Abbreviations of unit for the resources. e.g. l, kg etc.')
         unit_abbreviation_parameter.description = tr(
-            "A <b>unti abbreviation</b> is the basic measurement unit's "
+            "A <b>unit abbreviation</b> is the basic measurement unit's "
             "shortened. For example when planning water rations "
             "the units would be l.")
         unit_abbreviation_parameter.is_required = True
@@ -441,7 +441,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             'The <b>maximum</b> is the maximum allowed quantity of the '
             'resource per person. For example you may dictate that the water '
             'ration per person per day should never be allowed to be more '
-            'than 50l. This is enforced when tweaking a minimum needs set '
+            'than 67l. This is enforced when tweaking a maximum needs set '
             'before an impact evaluation.')
         maximum_parameter.value = 100.0
 
@@ -760,3 +760,43 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             )
             self.minimum_needs.remove_profile(profile_name)
             self.select_profile(self.profile_combo.currentIndex())
+
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
+
+        .. versionadded: 3.2.1
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded: 3.2.1
+        """
+        self.main_stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
+        """Show usage info to the user."""
+        # Read the header and footer html snippets
+        self.main_stacked_widget.setCurrentIndex(0)
+        header = html_header()
+        footer = html_footer()
+
+        string = header
+
+        message = needs_manager_helps()
+
+        string += message.to_html()
+        string += footer
+
+        self.help_web_view.setHtml(string)

@@ -27,6 +27,8 @@ from safe.common.utilities import get_osm_building_usage, verify
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+import safe.messaging as m
+from safe.messaging import styles
 from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -45,38 +47,26 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
+        message = m.Message(style_class='container')
         threshold = self.parameters['threshold'].value
-        return [
-            {
-                'content': tr('Notes'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Buildings are said to be inundated when flood levels '
-                    'exceed %.1f m') % threshold
-            },
-            {
-                'content': tr(
-                    'Buildings are said to be wet when flood levels '
-                    'are greater than 0 m but less than %.1f m') % threshold
-            },
-            {
-                'content': tr(
-                    'Buildings are said to be dry when flood levels '
-                    'are 0 m or less.')
-            },
-            {
-                'content': tr(
-                    'Buildings are said to be closed if they are '
-                    'inundated or wet.')
-            },
-            {
-                'content': tr(
-                    'Buildings are said to be open if they are dry.')
-            }]
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Buildings are flooded when flood levels '
+            'exceed %.1f m') % threshold)
+        checklist.add(tr(
+            'Buildings are wet when flood levels '
+            'are greater than 0 m but less than %.1f m') % threshold)
+        checklist.add(tr(
+            'Buildings are dry when flood levels are 0 m.'))
+        checklist.add(tr(
+            'Buildings are closed if they are flooded or wet.'))
+        checklist.add(tr('Buildings are open if they are dry.'))
+        message.add(checklist)
+        return message
 
     @property
     def _affected_categories(self):
@@ -85,7 +75,7 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         :returns: The categories that equal effected.
         :rtype: list
         """
-        return [tr('Number Inundated'), tr('Number of Wet Buildings')]
+        return [tr('Flooded'), tr('Wet')]
 
     def run(self):
         """Flood impact to buildings (e.g. from Open Street Map)."""
@@ -122,9 +112,9 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
         self.buildings = {}
         # Impacted building breakdown
         self.affected_buildings = OrderedDict([
-            (tr('Number Inundated'), {}),
-            (tr('Number of Wet Buildings'), {}),
-            (tr('Number of Dry Buildings'), {})
+            (tr('Flooded'), {}),
+            (tr('Wet'), {}),
+            (tr('Dry'), {})
         ])
         for i in range(total_features):
             # Get the interpolated depth
@@ -137,12 +127,12 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
                 inundated_status = 2  # wet
 
             # Count affected buildings by usage type if available
-                if (structure_class_field in attribute_names and
-                        structure_class_field):
-                    usage = features[i].get(structure_class_field, None)
-                else:
-                    usage = get_osm_building_usage(
-                        attribute_names, features[i])
+            if (structure_class_field in attribute_names and
+                    structure_class_field):
+                usage = features[i].get(structure_class_field, None)
+            else:
+                usage = get_osm_building_usage(
+                    attribute_names, features[i])
 
             if usage is None or usage == 0:
                 usage = 'unknown'
@@ -158,20 +148,21 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
             # Add calculated impact to existing attributes
             features[i][self.target_field] = inundated_status
             category = [
-                tr('Number of Dry Buildings'),
-                tr('Number of Wet Buildings'),
-                tr('Number Inundated')][inundated_status]
+                tr('Dry'),
+                tr('Flooded'),
+                tr('Wet')][inundated_status]
             self.affected_buildings[category][usage][
                 tr('Buildings Affected')] += 1
 
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
         # Generate simple impact report
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self.html_report()
 
-        # Prepare impact layer
-        map_title = tr('Buildings inundated')
-        legend_title = tr('Structure inundated status')
+        # For printing map purpose
+        map_title = tr('Flooded buildings')
+        legend_title = tr('Flooded structure status')
+        legend_units = tr('(flooded, wet, or dry)')
 
         style_classes = [
             dict(
@@ -189,19 +180,17 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
                 size=1
             ),
             dict(
-                label=tr('Inundated (>= %.1f m)') % threshold,
+                label=tr('Flooded (>= %.1f m)') % threshold,
                 value=1,
                 colour='#F31A1C',
                 transparency=0,
                 size=1
             )]
-        legend_units = tr('(inundated, wet, or dry)')
 
         style_info = dict(target_field=self.target_field,
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        # Create vector layer and return
         vector_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
@@ -212,10 +201,11 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
                 'impact_table': impact_table,
                 'target_field': self.target_field,
                 'map_title': map_title,
-                'legend_units': legend_units,
                 'legend_title': legend_title,
+                'legend_units': legend_units,
                 'buildings_total': total_features,
                 'buildings_affected': self.total_affected_buildings},
             style_info=style_info)
+        # Create vector layer and return
         self._impact = vector_layer
         return vector_layer

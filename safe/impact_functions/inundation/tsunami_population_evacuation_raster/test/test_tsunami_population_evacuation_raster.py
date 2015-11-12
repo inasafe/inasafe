@@ -65,12 +65,12 @@ class TestTsunamiEvacuationRaster(unittest.TestCase):
 
         # #FIXME: This doesn't make sense due to clipping above. Update
         # clip_layers
-        expected_evacuated = 1200
+        expected_evacuated = 1198
         self.assertEqual(evacuated, expected_evacuated)
-        self.assertEqual(total_needs_weekly['Rice [kg]'], 3360)
+        self.assertEqual(total_needs_weekly['Rice [kg]'], 3355)
         self.assertEqual(total_needs_weekly['Family Kits'], 240)
-        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 21000)
-        self.assertEqual(total_needs_weekly['Clean Water [l]'], 80400)
+        self.assertEqual(total_needs_weekly['Drinking Water [l]'], 20965)
+        self.assertEqual(total_needs_weekly['Clean Water [l]'], 80266)
         self.assertEqual(total_needs_single['Toilets'], 60)
 
     def test_filter(self):

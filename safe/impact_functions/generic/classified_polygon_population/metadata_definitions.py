@@ -17,6 +17,7 @@ from safe.definitions import (
     layer_geometry_polygon,
     layer_geometry_raster,
     hazard_all,
+    hazard_category_single_event,
     hazard_category_multiple_event,
     exposure_population,
     generic_vector_hazard_classes,
@@ -77,7 +78,7 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
             'limitations': [],
             'citations': [],
             'overview': tr(
-                'To assess the the number of people that may be impacted by '
+                'To assess the number of people that may be impacted by '
                 'each hazard zone.'),
             'detailed_description': '',
             'layer_requirements': {
@@ -85,6 +86,7 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'hazard_categories': [
+                        hazard_category_single_event,
                         hazard_category_multiple_event
                     ],
                     'hazard_types': hazard_all,

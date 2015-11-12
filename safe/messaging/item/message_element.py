@@ -29,8 +29,10 @@ class MessageElement(object):
         Constructor for a message element
         :param element_id: Optional id - will be ignored in text renderer.
         :param style_class: Optional class = will be ignored in text renderer.
+
         :param icon: Optional bootstrap glyph icon class used for html renderer
         :param attributes: Optional html attributes you can add to an element.
+
         :return: None
 
         For glyphicons see http://twitter.github.io/bootstrap/base-css

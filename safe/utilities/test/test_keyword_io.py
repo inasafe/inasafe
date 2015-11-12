@@ -247,6 +247,49 @@ class KeywordIOTest(unittest.TestCase):
             copied_keywords, expected_keywords, out_path)
         self.assertDictEqual(copied_keywords, expected_keywords, message)
 
+    def test_definition(self):
+        """Test we can get definitions for keywords.
+
+        .. versionadded:: 3.2
+
+        """
+        keyword = 'hazards'
+        definition = self.keyword_io.definition(keyword)
+        self.assertTrue('description' in definition)
+
+    def test_to_message(self):
+        """Test we can convert keywords to a message object.
+
+        .. versionadded:: 3.2
+
+        """
+        keywords = self.keyword_io.read_keywords(self.vector_layer)
+        message = self.keyword_io.to_message(keywords).to_text()
+        self.assertIn('*Exposure*, structure------', message)
+
+    def test_dict_to_row(self):
+        """Test the dict to row helper works.
+
+        .. versionadded:: 3.2
+        """
+        keyword_value = (
+            "{'high': ['Kawasan Rawan Bencana III'], "
+            "'medium': ['Kawasan Rawan Bencana II'], "
+            "'low': ['Kawasan Rawan Bencana I']}")
+        table = self.keyword_io._dict_to_row(keyword_value)
+        self.assertIn(
+            u'\n---\n*high*, Kawasan Rawan Bencana III------',
+            table.to_text())
+        # should also work passing a dict
+        keyword_value = {
+            'high': ['Kawasan Rawan Bencana III'],
+            'medium': ['Kawasan Rawan Bencana II'],
+            'low': ['Kawasan Rawan Bencana I']}
+        table = self.keyword_io._dict_to_row(keyword_value)
+        self.assertIn(
+            u'\n---\n*high*, Kawasan Rawan Bencana III------',
+            table.to_text())
+
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordIOTest)
     runner = unittest.TextTestRunner(verbosity=2)

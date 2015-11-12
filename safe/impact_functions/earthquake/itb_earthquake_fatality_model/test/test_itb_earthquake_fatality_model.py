@@ -37,6 +37,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
 
     def test_run(self):
         """TestITEarthquakeFatalityFunction: Test running the IF."""
+        # FIXME(Hyeuk): test requires more realistic hazard and population data
         eq_path = test_data_path('hazard', 'earthquake.tif')
         population_path = test_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
@@ -64,9 +65,31 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         message = 'The question should be %s, but it returns %s' % (
             expected_question, impact_function.question)
         self.assertEqual(expected_question, impact_function.question, message)
-        # Count by hand,
-        # 1 = low, 2 = medium, 3 = high
-        expected_exposed_per_mmi = {
+
+        expected_result = {
+            'total_population': 200,
+            'total_fatalities': 0,  # should be zero FIXME
+            'total_displaced': 200
+        }
+        for key_ in expected_result.keys():
+            result = impact_layer.get_keywords(key_)
+            message = 'Expecting %s, but it returns %s' % (
+                expected_result[key_], result)
+            self.assertEqual(expected_result[key_], result, message)
+
+        expected_result = {}
+        expected_result['fatalities_per_mmi'] = {
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 0.17778,
+            9: 0,
+            10: 0
+        }
+        expected_result['exposed_per_mmi'] = {
             2: 0,
             3: 0,
             4: 0,
@@ -74,13 +97,29 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             6: 0,
             7: 0,
             8: 200,
-            9: 0
+            9: 0,
+            10: 0
         }
-        result = impact_layer.get_keywords('exposed_per_mmi')
+        expected_result['displaced_per_mmi'] = {
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0,
+            6: 0,
+            7: 0,
+            8: 199.82221,
+            9: 0,
+            10: 0
+        }
 
-        message = 'Expecting %s, but it returns %s' % (
-            expected_exposed_per_mmi, result)
-        self.assertEqual(expected_exposed_per_mmi, result, message)
+        for key_ in expected_result.keys():
+            result = impact_layer.get_keywords(key_)
+            for item in expected_result[key_].keys():
+                message = 'Expecting %s, but it returns %s' % (
+                    expected_result[key_][item], result[item])
+                self.assertAlmostEqual(
+                    expected_result[key_][item],
+                    result[item], places=4, msg=message)
 
     def test_filter(self):
         """TestITBEarthquakeFatalityFunction: Test filtering IF"""
@@ -112,3 +151,6 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
+
+if __name__ == '__main__':
+    unittest.main()

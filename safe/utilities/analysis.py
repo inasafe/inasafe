@@ -12,21 +12,17 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'ismail@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '10/20/14'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 # noinspection PyPackageRequirements
 import numpy
 import logging
 
+# noinspection PyPackageRequirements
+from PyQt4 import QtCore
+from PyQt4.QtCore import QSettings
+
 from qgis.core import (
     QgsMapLayer,
-    QgsCoordinateReferenceSystem,
     QGis)
-from PyQt4 import QtCore
 
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
@@ -73,8 +69,14 @@ from safe.common.signals import (
     ANALYSIS_DONE_SIGNAL)
 from safe_extras.pydispatch import dispatcher
 from safe.common.exceptions import BoundingBoxError, NoValidLayerError
-from safe.utilities.resources import resource_url
 from safe.engine.core import calculate_impact
+
+
+__author__ = 'ismail@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '10/20/14'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -82,9 +84,7 @@ WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
-LOGO_ELEMENT = m.Image(
-    resource_url(styles.logo_element()),
-    'InaSAFE Logo')
+LOGO_ELEMENT = m.Brand()
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -112,7 +112,6 @@ class Analysis(object):
         self.show_intermediate_layers = None
         self.run_in_thread_flag = None
         self.map_canvas = None
-        self.clip_to_viewport = None
         self.user_extent = None
         self.user_extent_crs = None
 
@@ -343,9 +342,6 @@ class Analysis(object):
             self.tr('Exposure Geo Extent: %s') % (
                 str(exposure_geoextent)))
         analysis_inputs.add(
-            self.tr('Viewable area clipping enabled: %s') % (
-                str(self.clip_to_viewport)))
-        analysis_inputs.add(
             self.tr('Details: %s') % (
                 str(e)))
         message.add(analysis_inputs)
@@ -375,16 +371,6 @@ class Analysis(object):
         """
         hazard_layer = self.hazard_layer
         exposure_layer = self.exposure_layer
-        analysis_geoextent = None
-
-        if self.user_extent is not None \
-                and self.user_extent_crs is not None:
-            # User has defined preferred extent, so use that
-            analysis_geoextent = extent_to_array(
-                self.user_extent,
-                self.user_extent_crs)
-        elif self.clip_to_viewport:
-            analysis_geoextent = viewport_geo_array(self.map_canvas)
 
         # Get the Hazard extents as an array in EPSG:4326
         hazard_geoextent = extent_to_array(
@@ -395,9 +381,31 @@ class Analysis(object):
             exposure_layer.extent(),
             exposure_layer.crs())
 
-        # Reproject all extents to EPSG:4326 if needed
-        geo_crs = QgsCoordinateReferenceSystem()
-        geo_crs.createFromId(4326, QgsCoordinateReferenceSystem.EpsgCrsId)
+        # get the current view extents
+        viewport_extent = viewport_geo_array(self.map_canvas)
+
+        # Set the anlysis extents based on user's desired behaviour
+        settings = QtCore.QSettings()
+        mode_name = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        # Default to using canvas extents if no case below matches
+        analysis_geoextent = viewport_extent
+        if mode_name == 'HazardExposureView':
+            analysis_geoextent = viewport_extent
+
+        elif mode_name == 'HazardExposure':
+            analysis_geoextent = None
+
+        elif mode_name == 'HazardExposureBookmark' or \
+                mode_name == 'HazardExposureBoundingBox':
+            if self.user_extent is not None \
+                    and self.user_extent_crs is not None:
+                # User has defined preferred extent, so use that
+                analysis_geoextent = extent_to_array(
+                    self.user_extent,
+                    self.user_extent_crs)
+
         # Now work out the optimal extent between the two layers and
         # the current view extent. The optimal extent is the intersection
         # between the two layers and the viewport.
@@ -408,17 +416,10 @@ class Analysis(object):
             # always be used, otherwise the data will be clipped to
             # the viewport unless the user has deselected clip to viewport in
             # options.
-            if (self.clip_to_viewport or (
-                    self.user_extent is not None and
-                    self.user_extent_crs is not None)):
-                geo_extent = self.get_optimal_extent(
-                    hazard_geoextent,
-                    exposure_geoextent,
-                    analysis_geoextent)
-            else:
-                geo_extent = self.get_optimal_extent(
-                    hazard_geoextent,
-                    exposure_geoextent)
+            geo_extent = self.get_optimal_extent(
+                hazard_geoextent,
+                exposure_geoextent,
+                analysis_geoextent)
 
         except InsufficientOverlapError, e:
             message = self.generate_insufficient_overlap_message(
@@ -430,6 +431,7 @@ class Analysis(object):
                 analysis_geoextent)
             raise InsufficientOverlapError(message)
 
+        # TODO: move this to its own function
         # Next work out the ideal spatial resolution for rasters
         # in the analysis. If layers are not native WGS84, we estimate
         # this based on the geographic extents
@@ -514,7 +516,7 @@ class Analysis(object):
                 user_extent_enabled = (
                     self.user_extent is not None and
                     self.user_extent_crs is not None)
-                if self.clip_to_viewport or user_extent_enabled:
+                if user_extent_enabled:
                     # Get intersection between exposure and analysis extent
                     geo_extent = bbox_intersection(
                         exposure_geoextent, analysis_geoextent)
@@ -671,7 +673,7 @@ class Analysis(object):
                     self.aggregation_layer, self.aggregation_keyword)
                 # noinspection PyTypeChecker
                 text.add(m.Text(
-                    self.tr('and bullet_list the results'),
+                    self.tr('and bullet list the results'),
                     m.ImportantText(self.tr('aggregated by')),
                     m.EmphasizedText(aggregation_name)))
             except AttributeError:
@@ -706,6 +708,7 @@ class Analysis(object):
             # KeyError is for when ['postprocessors'] is unavailable
             pass
 
+        # noinspection PyTypeChecker
         self.send_static_message(message)
 
         # Find out what the usable extent and cell size are
@@ -713,6 +716,8 @@ class Analysis(object):
             self.clip_parameters = self.get_clip_parameters()
             buffered_geoextent = self.clip_parameters[1]
             cell_size = self.clip_parameters[2]
+        except InsufficientOverlapError as e:
+            raise e
         except (RuntimeError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
             context = self.tr(
@@ -720,8 +725,6 @@ class Analysis(object):
                 'analysis extents.'
             )
             self.analysis_error(e, context)
-            raise e
-        except InsufficientOverlapError as e:
             raise e
 
         if not self.force_memory:
@@ -800,16 +803,39 @@ class Analysis(object):
                 hazard_layer, exposure_layer, geo_extent,
                 rescale_values, allow_resampling)
 
+        # Find out what clipping behaviour we have - see #2210
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        detail = None
+        if mode == 'HazardExposureView':
+            detail = self.tr(
+                'Resampling and clipping the hazard layer to match the '
+                'intersection of the exposure layer and the current view '
+                'extents.')
+        elif mode == 'HazardExposure':
+            detail = self.tr(
+                'Resampling and clipping the hazard layer to match the '
+                'intersection of the exposure layer extents.')
+        elif mode == 'HazardExposureBookmark':
+            detail = self.tr(
+                'Resampling and clipping the hazard layer to match the '
+                'bookmarked extents.')
+        elif mode == 'HazardExposureBoundingBox':
+            detail = self.tr(
+                'Resampling and clipping the hazard layer to match the '
+                'intersection of your preferred analysis area.')
+
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
         title = self.tr('Preparing hazard data')
-        detail = self.tr(
-            'We are resampling and clipping the hazard layer to match the '
-            'intersection of the exposure layer and the current view extents.')
+
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
+        # noinspection PyTypeChecker
         self.send_dynamic_message(message)
         try:
             clipped_hazard = clip_layer(
@@ -823,12 +849,32 @@ class Analysis(object):
             raise e
 
         title = self.tr('Preparing exposure data')
-        detail = self.tr(
-            'We are resampling and clipping the exposure layer to match the '
-            'intersection of the hazard layer and the current view extents.')
+        # Find out what clipping behaviour we have - see #2210
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        if mode == 'HazardExposureView':
+            detail = self.tr(
+                'Resampling and clipping the exposure layer to match '
+                'the intersection of the hazard layer and the current view '
+                'extents.')
+        elif mode == 'HazardExposure':
+            detail = self.tr(
+                'Resampling and clipping the exposure layer to match '
+                'the intersection of the hazard layer extents.')
+        elif mode == 'HazardExposureBookmark':
+            detail = self.tr(
+                'Resampling and clipping the exposure layer to match '
+                'the bookmarked extents.')
+        elif mode == 'HazardExposureBoundingBox':
+            detail = self.tr(
+                'Resampling and clipping the exposure layer to match '
+                'the intersection of your preferred analysis area.')
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
+        # noinspection PyTypeChecker
         self.send_dynamic_message(message)
 
         clipped_exposure = clip_layer(
@@ -978,6 +1024,7 @@ class Analysis(object):
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
+        # noinspection PyTypeChecker
         self.send_dynamic_message(message)
 
         try:
@@ -1009,7 +1056,12 @@ class Analysis(object):
             check_list.add(self.tr(
                 'Check that your impact function thresholds do not '
                 'exclude all features unintentionally.'))
+            # See #2288 and 2293
+            check_list.add(self.tr(
+                'Check that your dataset coordinate reference system is '
+                'compatible with InaSAFE\'s current requirements.'))
             report.add(check_list)
+            # noinspection PyTypeChecker
             self.send_static_message(report)
             self.send_analysis_done_signal()
             return

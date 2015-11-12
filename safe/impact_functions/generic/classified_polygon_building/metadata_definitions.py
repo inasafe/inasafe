@@ -20,6 +20,7 @@ from safe.definitions import (
     hazard_category_multiple_event,
     exposure_structure,
     generic_vector_hazard_classes,
+    hazard_category_single_event,
     structure_class_field
 )
 from safe.impact_functions.impact_function_metadata import \
@@ -78,7 +79,8 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_polygon],
                     'hazard_categories': [
-                        hazard_category_multiple_event
+                        hazard_category_multiple_event,
+                        hazard_category_single_event
                     ],
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],

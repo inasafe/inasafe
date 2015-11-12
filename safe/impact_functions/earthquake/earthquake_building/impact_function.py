@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 __author__ = 'lucernae'
 __date__ = '24/03/15'
 
@@ -27,7 +26,10 @@ from safe.common.utilities import get_osm_building_usage
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.common.exceptions import KeywordNotFoundError
+from safe.common.exceptions import KeywordNotFoundError, ZeroImpactException
+import safe.messaging as m
+from safe.messaging import styles
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -49,38 +51,37 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
+        message = m.Message(style_class='container')
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+
         # Thresholds for mmi breakdown.
         t0 = self.parameters['low_threshold'].value
         t1 = self.parameters['medium_threshold'].value
         t2 = self.parameters['high_threshold'].value
         is_nexis = self.is_nexis
-        return [
-            {
-                'content': tr('Notes'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'High hazard is defined as shake levels greater '
-                    'than %i on the MMI scale.') % t2
-            },
-            {
-                'content': tr(
-                    'Medium hazard is defined as shake levels '
-                    'between %i and %i on the MMI scale.') % (t1, t2)
-            },
-            {
-                'content': tr(
-                    'Low hazard is defined as shake levels '
-                    'between %i and %i on the MMI scale.') % (t0, t1)
-            },
-            {
-                'content': tr(
-                    'Values are in units of 1 million Australian Dollars'),
-                'condition': is_nexis
-            }]
+
+        checklist.add(tr(
+            'High hazard is defined as shake levels greater '
+            'than %i on the MMI scale.') % t2)
+
+        checklist.add(tr(
+            'Medium hazard is defined as shake levels '
+            'between %i and %i on the MMI scale.') % (t1, t2))
+
+        checklist.add(tr(
+            'Low hazard is defined as shake levels '
+            'between %i and %i on the MMI scale.') % (t0, t1))
+
+        if is_nexis:
+            checklist.add(tr(
+                'Values are in units of 1 million Australian Dollars'))
+
+        message.add(checklist)
+        return message
 
     def run(self):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)."""
@@ -144,6 +145,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
             (tr('Medium'), {}),
             (tr('Low'), {})
         ])
+        removed = []
         for i in range(interpolate_size):
             # Classify building according to shake level
             # and calculate dollar losses
@@ -208,6 +210,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
                 category = tr('High')
             else:
                 # Not reported for less than level t0
+                removed.append(i)
                 continue
             attributes[i][self.target_field] = cls
             self.affected_buildings[
@@ -218,10 +221,19 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
                 self.affected_buildings[category][usage][
                     tr('Contents value ($M)')] += contents_value / 1000000.0
 
+        # remove uncategorized element
+        removed.reverse()
+        geometry = interpolate_result.get_geometry()
+        for i in range(0, len(removed)):
+            del attributes[removed[i]]
+            del geometry[removed[i]]
+
+        if len(attributes) < 1:
+            raise ZeroImpactException()
         # Consolidate the small building usage groups < 25 to other
         self._consolidate_to_other()
 
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self.html_report()
 
         # Create style
         style_classes = [dict(label=class_1['label'], value=class_1['class'],
@@ -245,7 +257,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         result_layer = Vector(
             data=attributes,
             projection=interpolate_result.get_projection(),
-            geometry=interpolate_result.get_geometry(),
+            geometry=geometry,
             name=tr('Estimated buildings affected'),
             keywords={
                 'impact_summary': impact_summary,

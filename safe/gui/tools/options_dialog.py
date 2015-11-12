@@ -24,18 +24,18 @@ import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSignature, pyqtSlot
 
-from safe.utilities.help import show_context_help
 from safe.common.utilities import temp_dir
 from safe.defaults import (
     disclaimer,
-    default_organisation_logo_path,
+    supporters_logo_path,
     default_north_arrow_path,
     get_defaults)
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.resources import get_ui_class
+from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.common.version import get_version
+from safe.gui.tools.help.options_help import options_help
 
 FORM_CLASS = get_ui_class('options_dialog_base.ui')
 
@@ -68,8 +68,12 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.defaults = get_defaults()
 
         # Set up things for context help
-        button = self.buttonBox.button(QtGui.QDialogButtonBox.Help)
-        button.clicked.connect(self.show_help)
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.main_stacked_widget.setCurrentIndex(1)
+
         self.grpNotImplemented.hide()
         self.adjustSize()
         self.restore_state()
@@ -115,10 +119,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.cbxHideExposure.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/clip_to_viewport', True, type=bool))
-        self.cbxClipToViewport.setChecked(flag)
-
-        flag = bool(settings.value(
             'inasafe/clip_hard', False, type=bool))
         self.cbxClipHard.setChecked(flag)
 
@@ -145,10 +145,10 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         # Restore Organisation Logo Path
         org_logo_path = settings.value(
             'inasafe/organisation_logo_path',
-            default_organisation_logo_path(),
+            supporters_logo_path(),
             type=str)
         custom_org_logo_flag = (
-            org_logo_path != default_organisation_logo_path())
+            org_logo_path != supporters_logo_path())
         self.custom_org_logo_checkbox.setChecked(custom_org_logo_flag)
         self.leOrganisationLogoPath.setText(org_logo_path)
 
@@ -164,7 +164,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         # Restore Show Organisation Logo in Dock Flag
         flag = bool(settings.value(
-            'inasafe/showOrganisationLogoInDockFlag', True, type=bool))
+            'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
         self.organisation_on_dock_checkbox.setChecked(flag)
 
         # Restore North Arrow Image Path
@@ -232,9 +232,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'inasafe/setHideExposureFlag',
             self.cbxHideExposure.isChecked())
         settings.setValue(
-            'inasafe/clip_to_viewport',
-            self.cbxClipToViewport.isChecked())
-        settings.setValue(
             'inasafe/clip_hard',
             self.cbxClipHard.isChecked())
         settings.setValue(
@@ -294,17 +291,13 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'inasafe/ISO19115_LICENSE',
             self.iso19115_license_le.text())
 
-    @staticmethod
-    def show_help():
-        """Show context help for the options dialog."""
-        show_context_help('options')
-
     def accept(self):
         """Method invoked when OK button is clicked."""
         self.save_state()
         self.dock.read_settings()
         self.close()
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolKeywordCachePath_clicked(self):
         """Auto-connect slot activated when cache file tool button is clicked.
@@ -317,6 +310,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(file_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolUserDirectoryPath_clicked(self):
         """Auto-connect slot activated when user directory tool button is
@@ -330,6 +324,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             QtGui.QFileDialog.ShowDirsOnly)
         self.leUserDirectoryPath.setText(dir_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolNorthArrowPath_clicked(self):
         """Auto-connect slot activated when north arrow tool button is clicked.
@@ -343,6 +338,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         if file_name != '':
             self.leNorthArrowPath.setText(file_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolOrganisationLogoPath_clicked(self):
         """Auto-connect slot activated when logo file tool button is clicked.
@@ -356,6 +352,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         if file_name != '':
             self.leOrganisationLogoPath.setText(file_name)
 
+    # noinspection PyPep8Naming
     @pyqtSignature('')  # prevents actions being handled twice
     def on_toolReportTemplatePath_clicked(self):
         """Auto-connect slot activated when report file tool button is clicked.
@@ -375,11 +372,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             # Use previous org logo path
             path = settings.value(
                 'inasafe/organisation_logo_path',
-                default_organisation_logo_path(),
+                supporters_logo_path(),
                 type=str)
         else:
             # Set organisation path line edit to default one
-            path = default_organisation_logo_path()
+            path = supporters_logo_path()
 
         self.leOrganisationLogoPath.setText(path)
 
@@ -445,3 +442,43 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             org_disclaimer = disclaimer()
 
         self.txtDisclaimer.setPlainText(org_disclaimer)
+
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the stacked widget.
+
+        .. versionadded: 3.2.1
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded: 3.2.1
+        """
+        self.main_stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
+        """Show usage info to the user."""
+        # Read the header and footer html snippets
+        self.main_stacked_widget.setCurrentIndex(0)
+        header = html_header()
+        footer = html_footer()
+
+        string = header
+
+        message = options_help()
+
+        string += message.to_html()
+        string += footer
+
+        self.help_web_view.setHtml(string)

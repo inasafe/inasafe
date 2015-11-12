@@ -30,15 +30,6 @@ class BulletedList(AbstractList):
         Strings can be passed and are automatically converted in to
         item.Text()
 
-        Args:
-            Text message, an element to add to the message
-
-        Returns:
-            None
-
-        Raises:
-            Errors are propagated
-
         We pass the kwargs on to the base class so an exception is raised
         if invalid keywords were passed. See:
 
@@ -48,16 +39,10 @@ class BulletedList(AbstractList):
         super(BulletedList, self).__init__(*args, **kwargs)
 
     def to_html(self):
-        """Render a Text MessageElement as html
+        """Render a Text MessageElement as html.
 
-        Args:
-            None
-
-        Returns:
-            Str the html representation of the Text MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: The html representation of the Text MessageElement
+        :rtype: basestring
         """
 
         if self.items is None:
@@ -70,16 +55,10 @@ class BulletedList(AbstractList):
             return html
 
     def to_text(self):
-        """Render a Text MessageElement as plain text
+        """Render a Text MessageElement as plain text.
 
-        Args:
-            None
-
-        Returns:
-            Str the plain text representation of the Text MessageElement
-
-        Raises:
-            Errors are propagated
+        :returns: The plain text representation of the Text MessageElement.
+        :rtype: basestring
         """
         if self.items is None:
             return

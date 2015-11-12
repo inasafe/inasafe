@@ -31,7 +31,7 @@ import sqlite3
 from qgis.core import QGis  # force sip2 api
 
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignal
+from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature, QSettings
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
@@ -43,11 +43,11 @@ from qgis.core import (
     QgsApplication,
     QgsCoordinateTransform)
 
-from safe import messaging as m
 from safe.utilities.resources import html_header, html_footer, get_ui_class
-from safe.utilities.help import show_context_help
+
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
+from safe.gui.tools.help.extent_selector_help import extent_selector_help
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -85,7 +85,6 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.parent = parent
         self.canvas = iface.mapCanvas()
         self.previous_map_tool = None
-        self.show_info()
         # Prepare the map tool
         self.tool = RectangleMapTool(self.canvas)
         self.previous_map_tool = self.canvas.mapTool()
@@ -123,9 +122,11 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
         self.ok_button.clicked.connect(self.accept)
         # Set up context help
-        self.help_context = 'user_extents'
-        help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
-        help_button.clicked.connect(self.show_help)
+        self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
+        # Allow toggling the help button
+        self.help_button.setCheckable(True)
+        self.help_button.toggled.connect(self.help_toggled)
+        self.main_stacked_widget.setCurrentIndex(1)
         # Reset / Clear button
         clear_button = self.button_box.button(QtGui.QDialogButtonBox.Reset)
         clear_button.setText(self.tr('Clear'))
@@ -133,49 +134,80 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
         # Populate the bookmarks list and connect the combobox
         self._populate_bookmarks_list()
-        self.comboBox_bookmarks_list.currentIndexChanged.connect(
+        self.bookmarks_list.currentIndexChanged.connect(
             self.bookmarks_index_changed)
 
-    def show_help(self):
-        """Load the help text for the dialog."""
-        show_context_help(self.help_context)
+        # Reinstate the last used radio button
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        if mode == 'HazardExposureView':
+            self.hazard_exposure_view_extent.setChecked(True)
+        elif mode == 'HazardExposure':
+            self.hazard_exposure_only.setChecked(True)
+        elif mode == 'HazardExposureBookmark':
+            self.hazard_exposure_bookmark.setChecked(True)
+        elif mode == 'HazardExposureBoundingBox':
+            self.hazard_exposure_user_extent.setChecked(True)
 
-    def show_info(self):
+        show_warnings = settings.value(
+            'inasafe/show_extent_warnings',
+            True,
+            type=bool)
+        if show_warnings:
+            self.show_warnings.setChecked(True)
+        else:
+            self.show_warnings.setChecked(False)
+
+        show_confirmations = settings.value(
+            'inasafe/show_extent_confirmations',
+            True,
+            type=bool)
+        if show_confirmations:
+            self.show_confirmations.setChecked(True)
+        else:
+            self.show_confirmations.setChecked(False)
+
+    @pyqtSlot()
+    @pyqtSignature('bool')  # prevents actions being handled twice
+    def help_toggled(self, flag):
+        """Show or hide the help tab in the main stacked widget.
+
+        .. versionadded: 3.2.1
+
+        :param flag: Flag indicating whether help should be shown or hidden.
+        :type flag: bool
+        """
+        if flag:
+            self.help_button.setText(self.tr('Hide Help'))
+            self.show_help()
+        else:
+            self.help_button.setText(self.tr('Show Help'))
+            self.hide_help()
+
+    def hide_help(self):
+        """Hide the usage info from the user.
+
+        .. versionadded:: 3.2.1
+        """
+        self.main_stacked_widget.setCurrentIndex(1)
+
+    def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
+        self.main_stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 
         string = header
 
-        heading = m.Heading(self.tr('User Extents Tool'), **INFO_STYLE)
-        body = self.tr(
-            'This tool allows you to specify exactly which geographical '
-            'region should be used for your analysis. You can either '
-            'enter the coordinates directly into the input boxes below '
-            '(using the same CRS as the canvas is currently set to), or '
-            'you can interactively select the area by using the \'select '
-            'on map\' button - which will temporarily hide this window and '
-            'allow you to drag a rectangle on the map. After you have '
-            'finished dragging the rectangle, this window will reappear. '
-            'You can also use one of your bookmarks to set the region. '
-            'If you enable the \'Toggle scenario outlines\' tool on the '
-            'InaSAFE toolbar, your user defined extent will be shown on '
-            'the map as a blue rectangle. Please note that when running '
-            'your analysis, the effective analysis extent will be the '
-            'intersection of the hazard extent, exposure extent and user '
-            'extent - thus the entire user extent area may not be used for '
-            'analysis.'
+        message = extent_selector_help()
 
-        )
-
-        message = m.Message()
-        message.add(heading)
-        message.add(body)
         string += message.to_html()
         string += footer
 
-        self.web_view.setHtml(string)
+        self.help_web_view.setHtml(string)
 
     def start_capture(self):
         """Start capturing the rectangle."""
@@ -196,6 +228,8 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         """
         self.tool.reset()
         self._populate_coordinates()
+        # Revert to using hazard, exposure and view as basis for analysis
+        self.hazard_exposure_view_extent.setChecked(True)
 
     def reject(self):
         """User rejected the rectangle.
@@ -210,6 +244,22 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     def accept(self):
         """User accepted the rectangle.
         """
+        mode = None
+        if self.hazard_exposure_view_extent.isChecked():
+            mode = 'HazardExposureView'
+        elif self.hazard_exposure_only.isChecked():
+            mode = 'HazardExposure'
+        elif self.hazard_exposure_bookmark.isChecked():
+            mode = 'HazardExposureBookmark'
+        elif self.hazard_exposure_user_extent.isChecked():
+            mode = 'HazardExposureBoundingBox'
+
+        LOGGER.info(
+            'Setting analysis extent mode to %s' % mode
+        )
+        settings = QSettings()
+        settings.setValue('inasafe/analysis_extents_mode', mode)
+
         self.canvas.unsetMapTool(self.tool)
         if self.previous_map_tool != self.tool:
             self.canvas.setMapTool(self.previous_map_tool)
@@ -226,6 +276,14 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             LOGGER.info(
                 'Extent selector setting user extents to nothing')
             self.clear_extent.emit()
+
+        # State handlers for showing warning message bars
+        settings.setValue(
+            'inasafe/show_extent_warnings',
+            self.show_warnings.isChecked())
+        settings.setValue(
+            'inasafe/show_extent_confirmations',
+            self.show_confirmations.isChecked())
 
         self.tool.reset()
         self.extent_selector_closed.emit()
@@ -286,37 +344,59 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     def bookmarks_index_changed(self):
         """Update the UI when the bookmarks combobox has changed.
         """
-        index = self.comboBox_bookmarks_list.currentIndex()
+        index = self.bookmarks_list.currentIndex()
         if index >= 0:
             self.tool.reset()
-            rectangle = self.comboBox_bookmarks_list.itemData(index)
+            rectangle = self.bookmarks_list.itemData(index)
             self.tool.set_rectangle(rectangle)
             self.canvas.setExtent(rectangle)
             self.ok_button.setEnabled(True)
         else:
             self.ok_button.setDisabled(True)
 
-    def on_checkBox_use_bookmark_toggled(self, use_bookmark):
-        """Update the UI when the user toggles the bookmarks checkbox.
+    def on_hazard_exposure_view_extent_toggled(self, enabled):
+        """Handler for hazard/exposure/view radiobutton toggle.
 
-        :param use_bookmark: The status of the checkbox.
-        :type use_bookmark: bool
+        :param enabled: The status of the radiobutton.
+        :type enabled: bool
         """
-        if use_bookmark:
+        if enabled:
+            self.tool.reset()
+            self._populate_coordinates()
+
+    def on_hazard_exposure_only_toggled(self, enabled):
+        """Handler for hazard/exposure radiobutton toggle.
+
+        :param enabled: The status of the radiobutton.
+        :type enabled: bool
+        """
+        if enabled:
+            self.tool.reset()
+            self._populate_coordinates()
+
+    def on_hazard_exposure_bookmark_toggled(self, enabled):
+        """Update the UI when the user toggles the bookmarks radiobutton.
+
+        :param enabled: The status of the radiobutton.
+        :type enabled: bool
+        """
+        if enabled:
             self.bookmarks_index_changed()
-            self.groupBox_coordinates.setDisabled(True)
         else:
-            self.groupBox_coordinates.setEnabled(True)
             self.ok_button.setEnabled(True)
         self._populate_coordinates()
 
     def _populate_bookmarks_list(self):
         """Read the sqlite database and populate the bookmarks list.
 
+        If no bookmarks are found, the bookmarks radio button will be disabled
+        and the label will be shown indicating that the user should add
+        bookmarks in QGIS first.
+
         Every bookmark are reprojected to mapcanvas crs.
         """
-
         # Connect to the QGIS sqlite database and check if the table exists.
+        # noinspection PyArgumentList
         db_file_path = QgsApplication.qgisUserDbFilePath()
         db = sqlite3.connect(db_file_path)
         cursor = db.cursor()
@@ -349,4 +429,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
                 if rectangle.isEmpty():
                     pass
 
-                self.comboBox_bookmarks_list.addItem(name, rectangle)
+                self.bookmarks_list.addItem(name, rectangle)
+        if self.bookmarks_list.currentIndex() >= 0:
+            self.create_bookmarks_label.hide()
+        else:
+            self.create_bookmarks_label.show()
+            self.hazard_exposure_bookmark.setDisabled(True)
+            self.bookmarks_list.hide()

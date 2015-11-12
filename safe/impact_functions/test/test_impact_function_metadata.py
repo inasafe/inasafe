@@ -47,7 +47,7 @@ from safe.impact_functions.generic.continuous_hazard_population \
 from safe.impact_functions.inundation.flood_polygon_population\
     .impact_function import FloodEvacuationVectorHazardFunction
 from safe.impact_functions.inundation.flood_polygon_roads.impact_function \
-    import FloodVectorRoadsExperimentalFunction
+    import FloodPolygonRoadsFunction
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import FloodRasterBuildingFunction
 from safe.impact_functions.inundation.flood_raster_population.impact_function\
@@ -72,6 +72,7 @@ from safe.impact_functions.volcanic.volcano_polygon_population\
 from safe.definitions import (
     layer_purpose_exposure,
     hazard_category_single_event,
+    hazard_category_multiple_event,
     hazard_earthquake,
     exposure_structure,
     count_exposure_unit,
@@ -111,7 +112,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             ContinuousHazardPopulationFunction(),
             # Inundation
             FloodEvacuationVectorHazardFunction(),
-            FloodVectorRoadsExperimentalFunction(),
+            FloodPolygonRoadsFunction(),
             FloodRasterBuildingFunction(),
             FloodEvacuationRasterHazardFunction(),
             FloodRasterRoadsFunction(),
@@ -174,12 +175,14 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         impact_function = EarthquakeBuildingFunction()
         hazard_categories = impact_function.metadata()\
             .hazard_categories_for_layer('raster')
-        expected = [hazard_category_single_event]
+        expected = [
+            hazard_category_single_event, hazard_category_multiple_event]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function.metadata() \
             .hazard_categories_for_layer('raster', 'earthquake')
-        expected = [hazard_category_single_event]
+        expected = [
+            hazard_category_single_event, hazard_category_multiple_event]
         self.assertItemsEqual(hazard_categories, expected)
 
         hazard_categories = impact_function.metadata() \
@@ -253,7 +256,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
 
         hazards = impact_function.metadata().available_hazards(
             'multiple_event')
-        expected = []
+        expected = [hazard_earthquake]
         self.assertItemsEqual(hazards, expected)
 
     def test_available_exposures(self):
