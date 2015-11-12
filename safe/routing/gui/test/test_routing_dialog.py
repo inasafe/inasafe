@@ -89,3 +89,5 @@ class RoutingDialogTest(unittest.TestCase):
 
         # We can't test the method because Processing it not fully loaded.
         self.assertTrue(exists(routable_model))
+
+    test_processing_model.slow = True
