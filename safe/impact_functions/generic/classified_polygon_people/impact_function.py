@@ -131,7 +131,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
             geometry = f.geometry()
-            geometry_area = geometry.area()
+            if geometry is not None:
+                geometry_area = geometry.area()
+            else:
+                geometry_area = 0.0
             if geometry is not None:
                 bbox = geometry.boundingBox()
             else:
@@ -163,8 +166,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             # impacted_features = {}
             for hazard_id in hazard_index.intersects(bbox):
                 hazard_geometry = hazard_features[hazard_id].geometry()
-                print hazard_features[hazard_id].attribute('h_zone')
-
                 impact_geometry = geometry.intersection(hazard_geometry)
 
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
@@ -200,31 +201,21 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 f_unaffected = QgsFeature(unaffected_fields)
                 f_impact = QgsFeature(impact_fields)
                 if hazard_attribute is not None:
-                    if hazard_attribute == "Low Hazard Zone":
-                        f_unaffected.setGeometry(unaffected_geometry)
-                        f_unaffected.setAttributes(f.attributes()+[0])
+                    f_unaffected.setGeometry(unaffected_geometry)
+                    f_unaffected.setAttributes(f.attributes()+[0])
+                    f_impact.setGeometry(impact_geometry)
 
-                        f_impact.setGeometry(impact_geometry)
+                    if hazard_attribute == "Low Hazard Zone":
                         f_impact.setAttributes(f.attributes()+[1])
 
                     elif hazard_attribute == "Medium Hazard Zone":
-                        f_unaffected.setGeometry(unaffected_geometry)
-                        f_unaffected.setAttributes(f.attributes()+[0])
-
-                        f_impact.setGeometry(impact_geometry)
                         f_impact.setAttributes(f.attributes()+[2])
 
                     elif hazard_attribute == "High Hazard Zone":
-                        f_unaffected.setGeometry(unaffected_geometry)
-                        f_unaffected.setAttributes(f.attributes()+[0])
-
-                        f_impact.setGeometry(impact_geometry)
                         f_impact.setAttributes(f.attributes()+[3])
                 else:
-                    f_unaffected.setGeometry(unaffected_geometry)
-                    f_unaffected.setAttributes(f.attributes()+[0])
-
                     f_impact.setGeometry(impact_geometry)
+                    f_unaffected.setAttributes(f.attributes()+[0])
                     f_impact.setAttributes(f.attributes()+[3])
 
                 writer.addFeature(f_impact)
