@@ -106,7 +106,7 @@ def content():
         'flood, tsunami, volcanic fall, earthquake and so on.')))
     message.add(m.Paragraph(tr(
         'The formulation of these questions if carried out by loading layers '
-        'into QGIS that represent either hazard scenarios or exposure data. '
+        'into QGIS that represent either hazard scenarios or exposure data.'
         'A hazard, for example, may be represented as, a raster layer in '
         'QGIS where each pixel in the raster represents the current flood '
         'depth following an inundation event. An exposure layer could be '

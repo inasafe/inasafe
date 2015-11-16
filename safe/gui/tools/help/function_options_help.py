@@ -57,7 +57,7 @@ def content():
     message = m.Message()
     message.add(m.Paragraph(tr(
         'Depending on which Impact Function you have chosen you have '
-        'different options available for adjusting the parameters of the '
+        'different options available for adjust the parameters of the '
         'question you are asking. Some Impact Functions have more '
         'configurable Options than others. To open the Impact Function '
         'Configuration Dialog you need to click on the "Options ..." '
