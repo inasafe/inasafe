@@ -116,7 +116,7 @@ def content():
     message.add(m.Paragraph(tr(
         'The impact function will combine these two input layers in a '
         'mathematical model in order to derive what the impacts of the '
-        'hazard will be on the exposure infrastructure or people. By '
+        'hazard will be on the exposed infrastructure or people. By '
         'selecting a combination from the hazard and exposure combo boxes, '
         'an appropriate set of impact functions will be listed in the '
         'combo box. You may be wondering how the InaSAFE plugin determines '
@@ -224,10 +224,10 @@ def content():
         tr(
             '- click on this to see short credits for the InaSAFE project.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('Help')),
+        m.ImportantText(tr('Print')),
         tr(
             'Print... - click on this if you wish to create a pdf of your '
-            'impact scenarion project or just generate report and open it in '
+            'impact scenario project or just generate report and open it in '
             'composer for further tuning. An impact layer must be active '
             'before the Print button will be enabled.')))
     bullets.add(m.Text(
@@ -274,7 +274,7 @@ def content():
     message.add(header)
 
     message.add(m.Paragraph(tr(
-        'When the scenario analysis completed you may want to generate a '
+        'When the scenario analysis has completed you may want to generate a '
         'report. Usually the "Print..."  button will be enabled immediately '
         'after analysis. Selecting an InaSAFE impact layer in QGIS Layers '
         'panel will also enable it.'
