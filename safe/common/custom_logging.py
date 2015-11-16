@@ -164,8 +164,8 @@ def setup_logger(logger_name, log_file=None, sentry_url=None):
     if env_inasafe_sentry or flag:
         if sentry_url is None:
             client = Client(
-                'http://c64a83978732474ea751d432ab943a6b'
-                ':d9d8e08786174227b9dcd8a4c3f6e9da@sentry.linfiniti.com/5')
+                'http://11b7c9cb73874f97807ebc1934575e92'
+                ':920cd274632443ccaa868246de202531@sentry.kartoza.com/5')
         else:
             client = Client(sentry_url)
         sentry_handler = SentryHandler(client)
