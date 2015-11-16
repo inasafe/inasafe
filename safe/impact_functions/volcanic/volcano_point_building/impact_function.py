@@ -29,6 +29,8 @@ from safe.engine.interpolation import (
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.common.exceptions import KeywordNotFoundError
+import safe.messaging as m
+from safe.messaging import styles
 
 
 class VolcanoPointBuildingFunction(
@@ -47,29 +49,19 @@ class VolcanoPointBuildingFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        volcano_names = self.volcano_names
-        return [
-            {
-                'content': tr('Notes'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Map shows buildings affected in each of the '
-                    'volcano buffered zones.')
-            },
-            {
-                'content': tr(
-                    'Only buildings available in OpenStreetMap '
-                    'are considered.')
-            },
-            {
-                'content': tr('Volcanoes considered: %s.') % volcano_names,
-                'header': True
-            }
-        ]
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Map shows buildings affected in each of the volcano buffered '
+            'zones.'))
+        names = tr('Volcanoes considered: %s.') % self.volcano_names
+        checklist.add(names)
+        message.add(checklist)
+        return message
 
     @property
     def _affected_categories(self):
@@ -188,7 +180,7 @@ class VolcanoPointBuildingFunction(
         self._consolidate_to_other()
 
         # Generate simple impact report
-        impact_summary = impact_table = self.generate_html_report()
+        impact_summary = impact_table = self.html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -213,16 +205,18 @@ class VolcanoPointBuildingFunction(
             style_classes.append(style_class)
 
         # Override style info with new classes and name
-        style_info = dict(target_field=target_field,
-                          style_classes=style_classes,
-                          style_type='categorizedSymbol')
+        style_info = dict(
+            target_field=target_field,
+            style_classes=style_classes,
+            style_type='categorizedSymbol')
 
         # For printing map purpose
         map_title = tr('Buildings affected by volcanic buffered point')
         legend_title = tr('Building count')
         legend_units = tr('(building)')
-        legend_notes = tr('Thousand separator is represented by %s' %
-                          get_thousand_separator())
+        legend_notes = tr(
+            'Thousand separator is represented by %s' %
+            get_thousand_separator())
 
         # Create vector layer and return
         impact_layer = Vector(
@@ -230,13 +224,14 @@ class VolcanoPointBuildingFunction(
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
             name=tr('Buildings affected by volcanic buffered point'),
-            keywords={'impact_summary': impact_summary,
-                      'impact_table': impact_table,
-                      'target_field': target_field,
-                      'map_title': map_title,
-                      'legend_notes': legend_notes,
-                      'legend_units': legend_units,
-                      'legend_title': legend_title},
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'target_field': target_field,
+                'map_title': map_title,
+                'legend_notes': legend_notes,
+                'legend_units': legend_units,
+                'legend_title': legend_title},
             style_info=style_info)
 
         self._impact = impact_layer

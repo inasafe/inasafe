@@ -17,7 +17,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
 
 __author__ = 'christian@kartoza.com <Christian Christelis>'
 __revision__ = '$Format:%H$'
@@ -31,6 +30,9 @@ import numpy
 from collections import OrderedDict
 
 from safe.defaults import default_minimum_needs
+from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
+import safe.messaging as m
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -161,3 +163,29 @@ def get_key_for_value(value, value_map):
         if value in values:
             return key
     return None
+
+
+def no_population_impact_message(question):
+    """Create a message that indicates that no population were impacted.
+
+    :param question: A question sentence that will be used as the table
+        caption.
+    :type question: basestring
+
+    :returns: An html document containing a nice message saying nobody was
+        impacted.
+    :rtype: basestring
+    """
+    message = m.Message()
+    table = m.Table(
+        style_class='table table-condensed table-striped')
+    row = m.Row()
+    label = m.ImportantText(tr('People impacted'))
+    content = 0
+    row.add(m.Cell(label))
+    row.add(m.Cell(content))
+    table.add(row)
+    table.caption = question
+    message.add(table)
+    message = message.to_html(suppress_newlines=True)
+    return message

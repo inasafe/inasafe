@@ -24,6 +24,7 @@ import re
 import json
 from collections import OrderedDict
 from sqlite3 import OperationalError
+
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 import numpy
@@ -96,7 +97,7 @@ from safe.common.resource_parameter import ResourceParameter
 from safe.common.version import get_version
 from safe_extras.parameters.group_parameter import GroupParameter
 from safe.utilities.resources import get_ui_class, resources_path
-from safe.impact_statistics.function_options_dialog import (
+from safe.gui.tools.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
@@ -1402,7 +1403,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type unassigned_values: list
 
         :param assigned_values: Dictionary with class as the key and list of
-            value as the the value of the dictionary. It will be put in
+            value as the value of the dictionary. It will be put in
             self.treeClasses.
         :type assigned_values: dict
 
@@ -2375,8 +2376,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             return True
 
         # Compare layer keywords with explicitly set constraints
-        # Reject if layer purpose doesn't match
-        if ('layer_purpose' in keywords and
+        # Reject if layer purpose missing or doesn't match
+        if ('layer_purpose' not in keywords or
                 keywords['layer_purpose'] != layer_purpose):
             return False
 
@@ -2444,7 +2445,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         for layer in self.iface.mapCanvas().layers():
             try:
                 keywords = self.keyword_io.read_keywords(layer)
-                if 'layer_purpose' not in keywords:
+                if ('layer_purpose' not in keywords and
+                            'impact_summary' not in keywords):
                     keywords = None
             except (HashNotFoundError,
                     OperationalError,
@@ -2777,7 +2779,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 'your InaSAFE version (%s). If you wish to use it as an '
                 'exposure, hazard, or aggregation layer in an analysis, '
                 'please update the keywords. Click Next if you want to assign '
-                'key words now.' % (keyword_version or 'No Version',
+                'keywords now.' % (keyword_version or 'No Version',
                                     get_version()))
         else:
             # The layer is keywordless
@@ -3020,7 +3022,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         try:
             keywords = self.keyword_io.read_keywords(layer)
-            if 'layer_purpose' not in keywords:
+            if ('layer_purpose' not in keywords and
+                        'impact_summary' not in keywords):
                 keywords = None
         except (HashNotFoundError,
                 OperationalError,
@@ -3452,7 +3455,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.swExtent:
             self.swExtent.hide()
 
-        self.swExtent = self.extent_dialog.stacked_widget
+        self.swExtent = self.extent_dialog.main_stacked_widget
         self.layoutAnalysisExtent.addWidget(self.swExtent)
 
     def write_extent(self):
@@ -4417,8 +4420,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             QtGui.QMessageBox.warning(
                 self, self.tr('InaSAFE'),
                 ((self.tr(
-                    'An error was encountered when saving the keywords:\n'
-                    '%s') % error_message.to_html())))
+                    'An error was encountered when saving the following '
+                    'keywords:\n %s') % error_message.to_html())))
         if self.dock is not None:
             # noinspection PyUnresolvedReferences
             self.dock.get_layers()

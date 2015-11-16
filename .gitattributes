@@ -18,7 +18,10 @@
 *.shx binary
 *.db binary
 *.zip binary
+
+# binary
 *.sqlite binary
+*.qm binary
 
 # fonts:
 *.eot binary

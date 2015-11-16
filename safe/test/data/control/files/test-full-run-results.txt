@@ -3,13 +3,12 @@ Drinking Water [l] 1,750
 Clean Water [l] 6,700
 Family Kits 20
 Toilets 5
-Total population: 200
+Total population in the analysis area: 200
 People need evacuation if flood levels exceed 1.0 m
 The minimum needs are based on Perka 7/2008.
 All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.
-Hazard details
 Continuous Flood - sourced from Akbar Gumbira
-Exposure details
+Analysis details
 Population - sourced from Not specified
 Detailed gender report (affected people)
 Kab_name Total Female count (affected) Weekly hygiene packs Additional weekly rice kg for pregnant and lactating women

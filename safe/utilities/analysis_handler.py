@@ -40,7 +40,7 @@ from safe.utilities.resources import (
     resources_path,
     resource_url)
 from safe.defaults import (
-    default_organisation_logo_path)
+    supporters_logo_path)
 from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
@@ -284,7 +284,7 @@ class AnalysisHandler(QObject):
         # noinspection PyAttributeOutsideInit
         self.organisation_logo_path = settings.value(
             'inasafe/organisation_logo_path',
-            default_organisation_logo_path(),
+            supporters_logo_path(),
             type=str)
 
     # noinspection PyUnresolvedReferences
@@ -683,14 +683,14 @@ class AnalysisHandler(QObject):
 
             # Make sure the file paths can wrap nicely:
             wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-            wrapped_table_path = table_pdf_path.replace(os.sep,
-                                                        '<wbr>' + os.sep)
+            wrapped_table_path = table_pdf_path.replace(
+                os.sep, '<wbr>' + os.sep)
             status = m.Message(
                 m.Heading(self.tr('Map Creator'), **INFO_STYLE),
+                m.Paragraph(self.tr('Your PDF was created....')),
                 m.Paragraph(self.tr(
-                    'Your PDF was created....opening using the default PDF '
-                    'viewer on your system. The generated pdfs were saved '
-                    'as:')),
+                    'Opening using the default PDF viewer on your system. '
+                    'The generated pdfs were saved as:')),
                 m.Paragraph(wrapped_map_path),
                 m.Paragraph(self.tr('and')),
                 m.Paragraph(wrapped_table_path))

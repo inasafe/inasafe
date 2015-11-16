@@ -23,6 +23,7 @@ from collections import OrderedDict
 from qgis.core import QgsFeatureRequest
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
+from PyQt4.QtCore import QPyNullVariant
 
 from safe.common.utilities import (
     unhumanize_number,
@@ -135,10 +136,16 @@ class PostprocessorManager(QtCore.QObject):
             has_no_data = False
             table = m.Table(
                 style_class='table table-condensed table-striped')
-            table.caption = self.tr('Detailed %s report') % (tr(
-                get_postprocessor_human_name(processor)).lower())
+            name = get_postprocessor_human_name(processor).lower()
 
-            # Dirty hack to make "evacuated" comes out in the report.
+            if name == 'building type':
+                table.caption = self.tr('Closed buildings')
+            elif name == 'road type':
+                table.caption = self.tr('Closed roads')
+            elif name == 'people':
+                table.caption = self.tr('Affected people')
+
+            # Dirty hack to make "evacuated" come out in the report.
             # Currently only MinimumNeeds that calculate from evacuation
             # percentage.
             if processor == 'MinimumNeeds':
@@ -177,7 +184,13 @@ class PostprocessorManager(QtCore.QObject):
             # used to calculate the totals row as per issue #690
             postprocessor_totals = OrderedDict()
 
+            null_index = 0  # counting how many null value in the data
             for zone_name, calc in sorted_results:
+                if isinstance(zone_name, QPyNullVariant):
+                    # I have made sure that the zone_name won't be Null in
+                    # run method. But just in case there is something wrong.
+                    zone_name = 'Unnamed Area %s' % null_index
+                    null_index += 1
                 row = m.Row(zone_name)
 
                 for indicator, calculation_data in calc.iteritems():
@@ -215,10 +228,15 @@ class PostprocessorManager(QtCore.QObject):
                     'values.') % (
                         self.aggregator.get_default_keyword(
                             'NO_DATA'))))
-            message.add(m.EmphasizedText(self.tr(
+            caption = m.EmphasizedText(self.tr(
                 'Columns containing exclusively 0 and "%s" '
-                'have been removed.' %
-                self.aggregator.get_default_keyword('NO_DATA'))))
+                'have not been shown in the table.' %
+                self.aggregator.get_default_keyword('NO_DATA')))
+            message.add(
+                m.Paragraph(
+                    caption,
+                    style_class='caption')
+                )
 
         return message
 
@@ -366,6 +384,8 @@ class PostprocessorManager(QtCore.QObject):
                 zone_name = str(feature.id())
             else:
                 zone_name = feature[name_filed_index]
+            if isinstance(zone_name, QPyNullVariant):
+                zone_name = 'Unnamed Area %s' % str(feature.id())
 
             # create dictionary of attributes to pass to postprocessor
             general_params = {

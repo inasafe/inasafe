@@ -65,8 +65,8 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
         dict_meta = {
             'id': 'ClassifiedRasterHazardPopulationFunction',
             'name': tr('Classified raster hazard on population'),
-            'impact': tr('Be affected by each class'),
-            'title': tr('Be affected by each hazard class'),
+            'impact': tr('Be affected in each class'),
+            'title': tr('Be affected in each hazard class'),
             'function_type': 'old-style',
             'author': 'Dianne Bencito',
             'date_implemented': 'N/A',

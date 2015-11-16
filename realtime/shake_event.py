@@ -64,10 +64,6 @@ from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import read_layer as safe_read_layer
 from safe.engine.core import calculate_impact as safe_calculate_impact
 from safe.test.utilities import get_qgis_app
-from safe.common.tables import (
-    Table,
-    TableCell,
-    TableRow)
 from safe.common.version import get_version
 from safe.common.utilities import romanise
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
@@ -76,6 +72,7 @@ from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.resources import resources_path
 from safe.common.exceptions import TranslationLoadError
 from safe.gui.tools.shake_grid.shake_grid import ShakeGrid
+import safe.messaging as m
 from realtime.shake_data import ShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
@@ -844,14 +841,13 @@ class ShakeEvent(QObject):
         :type file_name: str
 
         :param table: A Table instance.
-        :type table: Table
+        :type table: safe.messaging.table.Table
 
         :return: Full path to file that was created on disk.
         :rtype: str
         """
-        path = os.path.join(shakemap_extract_dir(),
-                            self.event_id,
-                            file_name)
+        path = os.path.join(
+            shakemap_extract_dir(), self.event_id, file_name)
         html_file = file(path, 'w')
         header_file = os.path.join(data_dir(), 'header.html')
         footer_file = os.path.join(data_dir(), 'footer.html')
@@ -863,7 +859,7 @@ class ShakeEvent(QObject):
         footer = footer_file.read()
         footer_file.close()
         html_file.write(header)
-        html_file.write(table.toNewlineFreeString())
+        html_file.write(table.to_html())
         html_file.write(footer)
         html_file.close()
         # Also bootstrap gets copied to extract dir
@@ -901,16 +897,19 @@ class ShakeEvent(QObject):
 
         :raise: Propagates any exceptions.
         """
+        message = m.Message(style_class='container')
+        table = m.Table(
+            style_class='table table-condensed table-striped')
+        row = m.Row()
+        row.add(m.Cell(''))
+        row.add(m.Cell(self.tr('Name'), header=True))
+        row.add(m.Cell(self.tr('Population (x 1000)'), header=True))
+        row.add(m.Cell(self.tr('Intensity'), header=True))
+        table.add(row)
         table_data = self.sorted_impacted_cities(row_count)
-        table_body = []
-        header = TableRow(
-            [
-                '',
-                self.tr('Name'),
-                self.tr('Population (x 1000)'),
-                self.tr('Intensity')],
-            header=True)
+
         for row_data in table_data:
+            row = m.Row()
             intensity = row_data['roman']
             name = row_data['name']
             population = int(round(row_data['population'] / 1000))
@@ -918,19 +917,17 @@ class ShakeEvent(QObject):
             colour_box = (
                 '<div style="width: 16px; height: 16px;'
                 'background-color: %s"></div>' % colour)
-            row = TableRow([
-                colour_box,
-                name,
-                population,
-                intensity])
-            table_body.append(row)
-
-        table = Table(
-            table_body, header_row=header,
-            table_class='table table-striped table-condensed')
+            # this one wont work - we need to update the cell class to support
+            # colour
+            row.add(m.Cell(colour_box))
+            row.add(m.Cell(name))
+            row.add(m.Cell(population))
+            row.add(m.Cell(intensity))
+            table.add(row)
+        message.add(table)
         # Also make an html file on disk
         path = self.write_html_table(
-            file_name='affected-cities.html', table=table)
+            file_name='affected-cities.html', table=message)
 
         return table, path
 
@@ -958,34 +955,39 @@ class ShakeEvent(QObject):
                 8: 0.0,
                 9: 0.0}
         """
-        header = [TableCell(self.tr('Intensity'), header=True)]
-        affected_row = [
-            TableCell(self.tr('People Affected (x 1000)'), header=True)]
-        impact_row = [TableCell(self.tr('Perceived Shaking'), header=True)]
+        message = m.Message(style_class='container')
+        table = m.Table(
+            style_class='table table-condensed table-striped')
+
+        header_row = m.Row()
+        header_row.add(m.Cell(self.tr('Intensity'), header=True))
+
+        affected_row = m.Row()
+        affected_row.add(
+            m.Cell(self.tr('People Affected (x 1000)'), header=True))
+
+        impact_row = m.Row()
+        impact_row.add(m.Cell(self.tr('Perceived Shaking'), header=True))
+
         for mmi in range(2, 10):
-            header.append(
-                TableCell(
-                    romanise(mmi),
-                    cell_class='mmi-%s' % mmi,
-                    header=True))
+            header_row.add(m.Cell(
+                romanise(mmi), style_class='mmi-%s' % mmi, header=True))
             if mmi in self.affected_counts:
                 # noinspection PyTypeChecker
-                affected_row.append(
-                    '%i' % round(self.affected_counts[mmi] / 1000))
+                affected_row.add(m.Cell(
+                    '%i' % round(self.affected_counts[mmi] / 1000)))
             else:
                 # noinspection PyTypeChecker
-                affected_row.append(0.00)
+                affected_row.add(m.Cell(0.00))
 
-            impact_row.append(TableCell(self.mmi_shaking(mmi)))
+            impact_row.append(m.Cell(self.mmi_shaking(mmi)))
 
-        table_body = list()
-        table_body.append(affected_row)
-        table_body.append(impact_row)
-        table = Table(
-            table_body, header_row=header,
-            table_class='table table-striped table-condensed')
+        table.add(header_row)
+        table.add(affected_row)
+        table.add(impact_row)
+        message.add(table)
         # noinspection PyTypeChecker
-        path = self.write_html_table(file_name='impacts.html', table=table)
+        path = self.write_html_table(file_name='impacts.html', table=message)
 
         return path
 
@@ -1597,8 +1599,9 @@ class ShakeEvent(QObject):
             ' into account the population and cities affected by different '
             'levels of ground shaking. The estimate is based on ground '
             'shaking data from BMKG, population count data derived by '
-            'AIFDR from worldpop.org.uk, place information from geonames.org '
-            'and software developed by BNPB. Limitations in the estimates of '
+            'Australian Government from worldpop.org.uk, place information '
+            'from geonames.org and software developed by BNPB. '
+            'Limitations in the estimates of '
             'ground shaking, population and place names datasets may '
             'result in significant misrepresentation of the on-the-ground '
             'situation in the figures shown here. Consequently decisions '
@@ -1611,8 +1614,8 @@ class ShakeEvent(QObject):
             'This report was created using InaSAFE version %s. Visit '
             'http://inasafe.org for more information.') % get_version()
         credits_text = self.tr(
-            'Supported by the Australia-Indonesia Facility for Disaster '
-            'Reduction, Geoscience Australia and the World Bank-GFDRR.')
+            'Supported by the Australian Government, Geoscience Australia '
+            'and the World Bank-GFDRR.')
         # Format the lat lon from decimal degrees to dms
         point = QgsPoint(
             self.shake_grid.longitude,

@@ -334,7 +334,7 @@ class Plugin(object):
         self.action_toggle_rubberbands = QAction(
             QIcon(icon),
             self.tr('Toggle Scenario Outlines'), self.iface.mainWindow())
-        message = self.tr('Toggle rubber bands showing scenarion extents.')
+        message = self.tr('Toggle rubber bands showing scenario extents.')
         self.action_toggle_rubberbands.setStatusTip(message)
         self.action_toggle_rubberbands.setWhatsThis(message)
         # Set initial state
