@@ -58,7 +58,7 @@ def content():
     message = m.Message()
     paragraph = m.Paragraph(tr(
         'This document describes the usage of the InaSAFE \'dock panel\''
-        '- which is an interface for running hazard scenarios within the QGIS '
+        '- which is an interface for running risk scenarios within the QGIS '
         'environment. If you are a new user, you may also consider using the '
         '\'Impact Function Centric Wizard\' to run the analysis. You can '
         'launch the wizard by clicking on this icon in the toolbar:'),
@@ -116,7 +116,7 @@ def content():
     message.add(m.Paragraph(tr(
         'The impact function will combine these two input layers in a '
         'mathematical model in order to derive what the impacts of the '
-        'hazard will be on the exposed infrastructure or people. By '
+        'hazard will be on the exposure infrastructure or people. By '
         'selecting a combination from the hazard and exposure combo boxes, '
         'an appropriate set of impact functions will be listed in the '
         'combo box. You may be wondering how the InaSAFE plugin determines '
@@ -136,16 +136,16 @@ def content():
         'selected, the Impact Function list (shown in the combo box under '
         '"Might" in the InaSAFE dock panel)  will be updated. Each impact '
         'function can only work with specific combinations of hazard and '
-        'exposure types, so the options shown here will be limited accordingly.'
-        ' The chosen impact function can be configured (if applicable) by '
-        'pressing the small ellipses (...) button next to the chosen impact '
-        'function. This is explained in more detail below under the heading '
-        '"Setting Analysis Parameters".')))
+        'exposure types, so the options shown here will be limited '
+        'accordingly. The chosen impact function can be configured (if '
+        'applicable) by pressing the small ellipses (...) button next to '
+        'the chosen impact function. This is explained in more detail below '
+        'under the heading "Setting Analysis Parameters".')))
     message.add(m.Paragraph(tr(
-        'Aggregation is the process whereby we group the analysis results '
-        'by district so that you can see how many people, roads or '
+        'Aggregation is the process whereby we group the results of the '
+        'analysis by district so that you can see how many people, roads or '
         'buildings were affected in each area. This will help you to '
-        'understand where the most critical needs are.  Aggregation is '
+        'understand where the most critical needs are. Aggregation is '
         'optional in InaSAFE - if you do not use aggregation, the entire '
         'analysis area will be used for the data summaries. Typically '
         'aggregation layers in InaSAFE have as attributes the name of the '
@@ -224,16 +224,16 @@ def content():
         tr(
             '- click on this to see short credits for the InaSAFE project.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('Print')),
+        m.ImportantText(tr('Help')),
         tr(
-            '... - click on this if you wish to create a pdf of your '
-            'impact scenario project or just generate a report and open it in '
+            'Print... - click on this if you wish to create a pdf of your '
+            'impact scenarion project or just generate report and open it in '
             'composer for further tuning. An impact layer must be active '
             'before the Print button will be enabled.')))
     bullets.add(m.Text(
         m.ImportantText(tr('Run')),
         tr(
-            '- if the combination of options in the Questions area\'s '
+            '- Run - if the combination of options in the Questions area\'s '
             'combo boxes will allow you to run a scenario, this button is '
             'enabled.')))
     message.add(bullets)
@@ -267,14 +267,14 @@ def content():
 
     header = m.Heading(tr('Analysis parameters'), **INFO_STYLE)
     message.add(header)
-    # this adds the help content from the IF options help dialog
+    # this adds the help content from the IF options dialog
     message.add(options())
 
     header = m.Heading(tr('Generating impact reports'), **INFO_STYLE)
     message.add(header)
 
     message.add(m.Paragraph(tr(
-        'When the impact analysis has completed you may want to generate a '
+        'When the scenario analysis completed you may want to generate a '
         'report. Usually the "Print..."  button will be enabled immediately '
         'after analysis. Selecting an InaSAFE impact layer in QGIS Layers '
         'panel will also enable it.'

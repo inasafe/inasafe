@@ -74,5 +74,4 @@ def content():
         'analysis.'))
     message.add(paragraph)
 
-
     return message

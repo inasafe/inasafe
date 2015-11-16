@@ -71,10 +71,9 @@ def content():
         tr(
             '- Depending in the Impact function you selected, you can '
             'influence the result of your question here (the Impact Function) '
-            'by setting different values to the defaults that will be loaded.  '
-            'The options available will depend on the impact function you '
-            'choose (some Impact functions do not allow users to change the '
-            'default parameters).')))
+            'by setting different initial values which are presented '
+            'depending on the function you choose (Some Impact functions '
+            'might now be able to be influenced).')))
     bullets.add(m.Text(
         m.ImportantText(tr('Postprocessors')),
         tr(
@@ -95,7 +94,7 @@ def content():
             'show-minimum-needs.svg' % resources_path(),
             **SMALL_ICON_STYLE),
         tr(
-            ' This panel will let you override global defaults for a specific '
-           'analysis run.')))
+            ' This panel will let you override global defaults for a specific'
+            'analysis run')))
     message.add(bullets)
     return message
