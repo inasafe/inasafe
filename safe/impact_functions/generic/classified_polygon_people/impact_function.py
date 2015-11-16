@@ -162,6 +162,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             # impacted_features = {}
             for hazard_id in hazard_index.intersects(bbox):
                 hazard_geometry = hazard_features[hazard_id].geometry()
+                print hazard_features[hazard_id].attribute('h_zone')
+
                 impact_geometry = geometry.intersection(hazard_geometry)
 
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
@@ -193,14 +195,37 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 #     unaffected_geometry = geometry.symDifference(unaffected_geometry)
 
                 # write the impacted geometry
-
-                f_impact = QgsFeature(impact_fields)
-                f_impact.setGeometry(impact_geometry)
-                f_impact.setAttributes(f.attributes()+[1])
-
+                hazard_attribute = hazard_features[hazard_id].attribute('h_zone')
                 f_unaffected = QgsFeature(unaffected_fields)
-                f_unaffected.setGeometry(unaffected_geometry)
-                f_unaffected.setAttributes(f.attributes()+[0])
+                f_impact = QgsFeature(impact_fields)
+                if hazard_attribute is not None:
+                    if hazard_attribute == "Low Hazard Zone":
+                        f_unaffected.setGeometry(unaffected_geometry)
+                        f_unaffected.setAttributes(f.attributes()+[0])
+
+                        f_impact.setGeometry(impact_geometry)
+                        f_impact.setAttributes(f.attributes()+[1])
+
+                    elif hazard_attribute == "Medium Hazard Zone":
+                        f_unaffected.setGeometry(unaffected_geometry)
+                        f_unaffected.setAttributes(f.attributes()+[0])
+
+                        f_impact.setGeometry(impact_geometry)
+                        f_impact.setAttributes(f.attributes()+[2])
+
+                    elif hazard_attribute == "High Hazard Zone":
+                        f_unaffected.setGeometry(unaffected_geometry)
+                        f_unaffected.setAttributes(f.attributes()+[0])
+
+                        f_impact.setGeometry(impact_geometry)
+                        f_impact.setAttributes(f.attributes()+[3])
+                else:
+                    f_unaffected.setGeometry(unaffected_geometry)
+                    f_unaffected.setAttributes(f.attributes()+[0])
+
+                    f_impact.setGeometry(impact_geometry)
+                    f_impact.setAttributes(f.attributes()+[3])
+
                 writer.addFeature(f_impact)
                 writer.addFeature(f_unaffected)
 
@@ -274,13 +299,13 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         transparent_color.setAlpha(0)
         style_classes = [
             dict(
-                label=tr('Not Affected'), value=0, colour='#1EFC7C',
+                label=tr('Not Affected'), value=1, colour='#1EFC7C',
                 transparency=0, size=0.5),
             dict(
-                label=tr('Medium Affected'), value=0.5, colour='#FFA500',
+                label=tr('Medium Affected'), value=2, colour='#FFA500',
                 transparency=0, size=0.5),
             dict(
-                label=tr('Affected'), value=1,
+                label=tr('Affected'), value=3,
                 border_color='#F31A1C', colour='#F31A1C',
                 transparency=0, size=0.5)]
         style_info = dict(
