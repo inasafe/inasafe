@@ -131,6 +131,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
             geometry = f.geometry()
+            geometry_area = geometry.area()
             if geometry is not None:
                 bbox = geometry.boundingBox()
             else:
@@ -154,7 +155,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             area = geometry.area()
 
             all_areas[area_type] += area
-            all_areas_ids[area_id] += area
+            all_areas_ids[area_id] += geometry_area
 
             # find possible intersections with hazard layer
             impacted_geometries = []
