@@ -10,8 +10,11 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import logging
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 from safe.utilities.i18n import tr
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class GenderPostprocessor(AbstractPostprocessor):
@@ -44,8 +47,9 @@ class GenderPostprocessor(AbstractPostprocessor):
         self.impact_total = params['impact_total']
         self.female_ratio = params['female_ratio']
         if self.female_ratio > 1:
-            self._raise_error('Female ratio should be lower max 1. Found: '
-                              '%s ' % self.female_ratio)
+            self._raise_error(
+                'Female ratio should be lower max 1. Found: '
+                '%s ' % self.female_ratio)
 
     def process(self):
         """Setup parameters parameters and performs all the calculations.
@@ -53,10 +57,11 @@ class GenderPostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.process(self)
         if self.impact_total is None or self.female_ratio is None:
-            self._log_message('%s not all params have been correctly '
-                              'initialized, setup needs to be called before '
-                              'process. Skipping this postprocessor'
-                              % self.__class__.__name__)
+            self._log_message(
+                '%s not all params have been correctly '
+                'initialized, setup needs to be called before '
+                'process. Skipping this postprocessor'
+                % self.__class__.__name__)
         else:
             self._calculate_total()
             self._calculate_females()
@@ -77,7 +82,7 @@ class GenderPostprocessor(AbstractPostprocessor):
         This indicator reports the total population.
         """
         name = tr('Total')
-
+        LOGGER.info(self.impact_total)
         try:
             result = self.impact_total
             result = int(round(result))
