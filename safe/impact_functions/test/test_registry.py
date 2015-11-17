@@ -204,6 +204,7 @@ class TestRegistry(unittest.TestCase):
         impact_functions = registry.filter_by_exposure(
             registry.impact_functions, exposure_metadata)
         expected = [
+            FloodPolygonBuildingFunction,
             FloodRasterBuildingFunction,
             ClassifiedRasterHazardBuildingFunction,
             ClassifiedPolygonHazardBuildingFunction,
