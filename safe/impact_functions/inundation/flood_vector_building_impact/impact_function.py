@@ -30,6 +30,7 @@ from safe.impact_functions.bases.classified_vh_classified_ve import \
 from safe.impact_functions.inundation.flood_vector_building_impact.\
     metadata_definitions import FloodPolygonBuildingFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.utilities.gis import is_point_layer
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
@@ -119,9 +120,13 @@ class FloodPolygonBuildingFunction(
             self.target_field)
         exposure_fields = exposure_provider.fields()
 
-        # Create layer to store the lines from E and extent
-        building_layer = QgsVectorLayer(
-            'Polygon?crs=' + srs, 'impact_buildings', 'memory')
+        # Create layer to store the buildings from E and extent
+        if is_point_layer(self.exposure.layer):
+            building_layer = QgsVectorLayer(
+                'Point?crs=' + srs, 'impact_buildings', 'memory')
+        else:
+            building_layer = QgsVectorLayer(
+                'Polygon?crs=' + srs, 'impact_buildings', 'memory')
         building_provider = building_layer.dataProvider()
 
         # Set attributes

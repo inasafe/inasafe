@@ -33,8 +33,9 @@ from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
-                                  BuildingExposureReportMixin):
+class FloodRasterBuildingFunction(
+        ContinuousRHClassifiedVE,
+        BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Inundation raster impact on building data."""
     _metadata = FloodRasterBuildingMetadata()
@@ -187,9 +188,10 @@ class FloodRasterBuildingFunction(ContinuousRHClassifiedVE,
                 size=1
             )]
 
-        style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes,
-                          style_type='categorizedSymbol')
+        style_info = dict(
+            target_field=self.target_field,
+            style_classes=style_classes,
+            style_type='categorizedSymbol')
 
         vector_layer = Vector(
             data=features,
