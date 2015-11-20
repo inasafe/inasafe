@@ -233,8 +233,10 @@ class BaseMetadata(object):
 
         self._last_update = datetime.now()
 
-        # check if metadata already exist on disk
-        self.read_from_ancillary_file(xml_uri)
+        try:
+            self.read_from_ancillary_file(xml_uri)
+        except IOError:
+            pass
 
     @abc.abstractproperty
     def dict(self):
