@@ -649,3 +649,13 @@ class BaseMetadata(object):
         :rtype: bool
         """
         return self._layer_is_file_based
+
+    def update_from_dict(self, keywords):
+        """Set properties of metadata using key and value from keywords
+
+        :param keywords: A dictionary of keywords (key, value).
+        :type keywords: dict
+
+        """
+        for key, value in keywords.iteritems():
+            setattr(self, key, value)
