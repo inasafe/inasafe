@@ -49,13 +49,23 @@ class TestGenericMetadata(TestCase):
 
     def test_json_write_no_metadata(self):
         """Test write metadata for no metadata layer file."""
+        with open(EXISTING_GENERIC_JSON) as f:
+            expected_json = f.read()
         self.assertTrue(os.path.isfile(EXISTING_NO_METADATA))
         self.assertFalse(os.path.isfile(EXISTING_NO_METADATA[:-3] + 'xml'))
         self.assertFalse(os.path.isfile(EXISTING_NO_METADATA[:-3] + 'json'))
         metadata = self.generate_test_metadata(EXISTING_NO_METADATA)
-        filename = unique_filename(suffix='.json', dir=TEMP_DIR)
-        metadata.write_to_file(filename)
-        print filename
+        json_filename = unique_filename(suffix='.json', dir=TEMP_DIR)
+        metadata.write_to_file(json_filename)
+
+        with open(json_filename) as f:
+            written_json = f.read()
+
+        self.assertEquals(expected_json, written_json)
+
+        xml_filename = unique_filename(suffix='.xml', dir=TEMP_DIR)
+        metadata.write_to_file(xml_filename)
+        print xml_filename
 
     def test_json_read(self):
         metadata = GenericLayerMetadata(EXISTING_GENERIC_FILE)
