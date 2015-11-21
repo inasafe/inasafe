@@ -77,8 +77,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         hazard = self.hazard.layer
         exposure = self.exposure.layer
 
-        type_attr = self.parameters['area_type_field'].value
-
         # TODO use keyword to take id and population values
         # id_attr = self.exposure.keyword('id_field')
         # pop_attr = self.exposure.keyword('population_field')
@@ -126,17 +124,16 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         all_areas_population = {}
         all_affected_geometry = []
 
-        area_population_attribute = self.exposure.keyword('area_population_field')
         area_id_attribute = self.exposure.keyword('field')
+        type_attr = self.exposure.keyword('area_population_field')
+        area_population_attribute = self.exposure.keyword('area_population_field')
 
         for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
             geometry = f.geometry()
-            if geometry is not None:
-                geometry_area = geometry.area()
-            else:
-                geometry_area = 0.0
+
             if geometry is not None:
                 bbox = geometry.boundingBox()
+                geometry_area = geometry.area()
             else:
                 continue
 
