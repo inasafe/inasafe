@@ -58,14 +58,17 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Set the question of the IF (as the hazard data is not an event)
         self.question = ('In each of the hazard zones which areas  '
                          'might be affected.')
+        self.all_areas_ids = {}
+        self.all_affected_areas = {}
+        self.all_areas_population = {}
 
     def run(self):
         """Risk plugin for classified polygon hazard on area with population.
 
         Counts areas exposed to hazard zones and then computes the the
-        proportion of each area that is inundated. The population in each
+        proportion of each area that is affected. The population in each
         area is then calculated as the proportion of the original population
-        to the flooded area.
+        to the affected area.
 
         :returns: Impact layer
         :rtype: Vector
@@ -76,10 +79,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Identify hazard and exposure layers
         hazard = self.hazard.layer
         exposure = self.exposure.layer
-
-        # TODO use keyword to take id and population values
-        # id_attr = self.exposure.keyword('id_field')
-        # pop_attr = self.exposure.keyword('population_field')
 
         # prepare objects for re-projection of geometries
         crs_wgs84 = QgsCoordinateReferenceSystem("EPSG:4326")
@@ -115,171 +114,29 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         writer = QgsVectorFileWriter(
             filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
 
-        # iterate over all exposure polygons and calculate the impact
-        all_areas = {}
-        imp_areas = {}
-
-        all_areas_ids = {}
-        all_affected_areas = {}
-        all_areas_population = {}
-        all_affected_geometry = []
-
-        area_id_attribute = self.exposure.keyword('field')
-        type_attr = self.exposure.keyword('area_population_field')
-        area_population_attribute = self.exposure.keyword('area_population_field')
-
-        for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
-            geometry = f.geometry()
-
-            if geometry is not None:
-                bbox = geometry.boundingBox()
-                geometry_area = geometry.area()
-            else:
-                continue
-
-            # clip the exposure geometry to requested extent if necessary
-            if not extent_exposure.contains(bbox):
-                geometry = geometry.intersection(extent_exposure_geom)
-
-            area_type = f[type_attr]
-            area_id = f.attribute(area_id_attribute)
-            all_areas_population[area_id] = f.attribute(area_population_attribute)
-
-            # add to the total area of this land cover type
-            if area_type not in all_areas:
-                all_areas[area_type] = 0.
-
-            if area_id not in all_areas_ids:
-                all_areas_ids[area_id] = 0.
-
-            area = geometry.area()
-
-            all_areas[area_type] += area
-            all_areas_ids[area_id] += geometry_area
-
-            # find possible intersections with hazard layer
-            impacted_geometries = []
-            # unaffected_geometries = []
-            # impacted_features = {}
-            for hazard_id in hazard_index.intersects(bbox):
-                hazard_geometry = hazard_features[hazard_id].geometry()
-                impact_geometry = geometry.intersection(hazard_geometry)
-
-                if not impact_geometry.wkbType() == QGis.WKBPolygon and \
-                   not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
-                    continue  # no intersection found
-
-                # find unaffected area geometry
-                unaffected_geometry = geometry.symDifference(impact_geometry)
-
-                all_affected_geometry.append(impact_geometry)
-
-                # add to the affected area of this area type
-                if area_type not in imp_areas:
-                    imp_areas[area_type] = 0.
-                if area_id not in all_affected_areas:
-                    all_affected_areas[area_id] = 0.
-                area = impact_geometry.area()
-                imp_areas[area_type] += area
-                all_affected_areas[area_id] += area
-
-                # for later check of the past affected geometries so as to avoid
-                # overlapping of unaffected and affected geometries
-                # for geometry in all_affected_geometry:
-                #     geo_intersection = geometry.intersection(unaffected_geometry)
-                #
-                #     if not geo_intersection.wkbType() == QGis.WKBPolygon and \
-                #             not geo_intersection.wkbType() == QGis.WKBMultiPolygon:
-                #         continue  # no intersection found
-                #     unaffected_geometry = geometry.symDifference(unaffected_geometry)
-
-                # write the impacted geometry
-                hazard_attribute = hazard_features[hazard_id].attribute('h_zone')
-                f_unaffected = QgsFeature(unaffected_fields)
-                f_impact = QgsFeature(impact_fields)
-                if hazard_attribute is not None:
-                    f_unaffected.setGeometry(unaffected_geometry)
-                    f_unaffected.setAttributes(f.attributes()+[0])
-                    f_impact.setGeometry(impact_geometry)
-
-                    if hazard_attribute == "Low Hazard Zone":
-                        f_impact.setAttributes(f.attributes()+[1])
-
-                    elif hazard_attribute == "Medium Hazard Zone":
-                        f_impact.setAttributes(f.attributes()+[2])
-
-                    elif hazard_attribute == "High Hazard Zone":
-                        f_impact.setAttributes(f.attributes()+[3])
-                else:
-                    f_impact.setGeometry(impact_geometry)
-                    f_unaffected.setAttributes(f.attributes()+[0])
-                    f_impact.setAttributes(f.attributes()+[3])
-
-                writer.addFeature(f_impact)
-                writer.addFeature(f_unaffected)
-
-                impacted_geometries.append(impact_geometry)
-
-            # TODO: uncomment if not affected polygons should be written
-            # # Make sure the geometry we work with is valid, otherwise geom.
-            # # processing operations (especially difference) may fail.
-            # # Validity checking is a slow operation, it would be better if we
-            # # could assume that all geometries are valid...
-            # if not geometry.isGeosValid():
-            #     geometry = geometry.buffer(0, 0)
-            #
-            # # write also not affected part of the exposure's feature
-            # geometry_out = geometry.difference(
-            #     QgsGeometry.unaryUnion(impacted_geometries))
-            # if geometry_out and (geometry_out.wkbType() == QGis.WKBPolygon or
-            #         geometry_out.wkbType() == QGis.WKBMultiPolygon):
-            #     f_out = QgsFeature(impact_fields)
-            #     f_out.setGeometry(geometry_out)
-            #     f_out.setAttributes(f.attributes()+[0])
-            #     writer.addFeature(f_out)
+        # Evaluating the impact
+        self.evaluate_impact(
+                        exposure, extent_exposure, extent_exposure_geom,
+                        hazard_index, hazard_features, writer,
+                        unaffected_fields, impact_fields
+                       )
 
         del writer
         impact_layer = QgsVectorLayer(filename, "Impacted Areas", "ogr")
 
-        # Calculating the affect number of people percentage
-        # affected_people_percentages = {}
-        # for area in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
-
         # Generate the report of affected areas
 
-        self.total_population = sum(all_areas_population.values())
-        self.areas = all_areas_ids
-        self.affected_areas = all_affected_areas
-        self.areas_population = all_areas_population
+        self.total_population = sum(self.all_areas_population.values())
+        self.areas = self.all_areas_ids
+        self.affected_areas = self.all_affected_areas
+        self.areas_population = self.all_areas_population
 
         # Calculating number of people affected
-        for t, v in all_areas_ids.iteritems():
+        # This will help area report mixin to know how
+        # to calculate the all row values before other
+        # rows values in the report table
 
-            if t in all_affected_areas:
-                affected = all_affected_areas[t]
-            else:
-                affected = 0.0
-
-            single_total_area = v
-            if v:
-                affected_area_ratio = affected / single_total_area
-            else:
-                affected_area_ratio = 0
-
-            number_people_affected = (
-                affected_area_ratio * all_areas_population[t])
-
-            # rounding to float without decimal, we can't have number
-            # of people with decimal
-            number_people_affected = round(number_people_affected, 0)
-
-            self.affected_population[t] = number_people_affected
-
-        total_affected_population = self.total_affected_population
-
-        if total_affected_population == 0:
-            message = no_population_impact_message(self.question)
-            raise ZeroImpactException(message)
+        self.evaluate_affected_people()
 
         impact_summary = self.html_report()
 
@@ -315,3 +172,241 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         self._impact = impact_layer
         return impact_layer
+
+    def evaluate_impact(self,
+                        exposure, extent_exposure,
+                        extent_exposure_geom,
+                        hazard_index, hazard_features, writer,
+                        unaffected_fields, impact_fields
+                        ):
+
+        """ Iterate over all exposure polygons and calculate the impact
+        :param exposure: Exposure layer
+        :type exposure: QgsMapLayer, Layer
+
+        :param extent_exposure: Exposure extent
+        :type extent_exposure: QgsRectangle
+
+        :param extent_exposure_geom: Geometry of the extent exposure
+        :type extent_exposure_geom: QgsGeometry
+
+        :param hazard_index: Index on hazard features
+        :type hazard_index: QgsSpatialIndex
+
+        :param hazard_features: List of hazard features
+        :type hazard_features: {}
+
+        :param writer: Object of writing the impact layer
+        :type writer: QgsVectorFileWriter
+
+        :param unaffected_fields: Unaffected fields in the impact layer
+        :type unaffected_fields: {}
+
+        :param impact_fields: Impacted fields in the impact layer
+        :type impact_fields: {}
+
+
+        :returns: impacted_geometries
+        :rtype: []
+        """
+        # Taking area necessary attributes
+        area_id_attribute = self.exposure.keyword('field')
+        type_attr = self.exposure.keyword('area_population_field')
+        area_population_attribute = self.exposure.keyword(
+            'area_population_field')
+
+        all_affected_geometry = []
+
+        all_areas = {}
+        imp_areas = {}
+
+        for f in exposure.getFeatures(
+                QgsFeatureRequest(extent_exposure)):
+            geometry = f.geometry()
+
+            if geometry is not None:
+                bbox = geometry.boundingBox()
+                geometry_area = geometry.area()
+            else:
+                continue
+
+            # clip the exposure geometry to requested extent if necessary
+            if not extent_exposure.contains(bbox):
+                geometry = geometry.intersection(extent_exposure_geom)
+
+            area_type = f[type_attr]
+            area_id = f.attribute(area_id_attribute)
+            self.all_areas_population[area_id] = f.attribute(
+                area_population_attribute)
+
+            # add to the total area of this land cover type
+            if area_type not in all_areas:
+                all_areas[area_type] = 0.
+
+            if area_id not in self.all_areas_ids:
+                self.all_areas_ids[area_id] = 0.
+
+            area = geometry.area()
+
+            all_areas[area_type] += area
+            self.all_areas_ids[area_id] += geometry_area
+
+            # find possible intersections with hazard layer
+            impacted_geometries = []
+            # unaffected_geometries = []
+            # impacted_features = {}
+            for hazard_id in hazard_index.intersects(bbox):
+                hazard_geometry = hazard_features[hazard_id].geometry()
+                impact_geometry = geometry.intersection(hazard_geometry)
+
+                if not impact_geometry.wkbType() == QGis.WKBPolygon and \
+                   not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
+                    continue  # no intersection found
+
+                # find unaffected area geometry
+                unaffected_geometry = geometry.symDifference(impact_geometry)
+
+                all_affected_geometry.append(impact_geometry)
+
+                # add to the affected area of this area type
+                if area_type not in imp_areas:
+                    imp_areas[area_type] = 0.
+                if area_id not in self.all_affected_areas:
+                    self.all_affected_areas[area_id] = 0.
+                area = impact_geometry.area()
+                imp_areas[area_type] += area
+                self.all_affected_areas[area_id] += area
+
+                self.assign_impact_level(f,
+                                         hazard_id,
+                                         hazard_features,
+                                         unaffected_fields,
+                                         impact_fields,
+                                         unaffected_geometry,
+                                         impact_geometry,
+                                         writer)
+
+                impacted_geometries.append(impact_geometry)
+
+        return impacted_geometries
+
+    def assign_impact_level(self,
+                            f,
+                            hazard_id,
+                            hazard_features,
+                            unaffected_fields,
+                            impact_fields,
+                            unaffected_geometry,
+                            impact_geometry,
+                            writer):
+        """ Assign different impacted areas with their
+        respective level of impact(Affected, Not Affected, Medium)
+
+        :param f: exposure feature
+        :type f: QgsFeature
+
+        :param hazard_id: id of analyzed hazard
+        :type hazard_id: int
+
+        :param hazard_features: List of hazard features
+        :type hazard_features: {}
+
+        :param unaffected_fields: Unaffected fields in the impact layer
+        :type unaffected_fields: {}
+
+        :param impact_fields: Impacted fields in the impact layer
+        :type impact_fields: {}
+
+        :param unaffected_geometry: untouched geometry by the hazard
+         layer
+        :type unaffected_geometry: QgsGeometry
+
+        :param impact_geometry: touched geometry by the hazard layer
+        :type impact_geometry: QgsGeometry
+
+        :param writer: Object of writing the impact layer
+        :type writer: QgsVectorFileWriter
+
+        """
+
+        # Checking the type of provided hazard using
+        # current flood and earthquake distinguishing
+        # attributes
+        try:
+            hazard_attribute = hazard_features[hazard_id].\
+                attribute('h_zone')
+        except KeyError:
+            try:
+                hazard_attribute = hazard_features[hazard_id].\
+                    attribute('FLOODPRONE')
+            except KeyError:
+                hazard_attribute = None
+
+        f_unaffected = QgsFeature(unaffected_fields)
+        f_impact = QgsFeature(impact_fields)
+
+        if hazard_attribute is not None:
+            f_unaffected.setGeometry(unaffected_geometry)
+            f_unaffected.setAttributes(f.attributes()+[0])
+            f_impact.setGeometry(impact_geometry)
+
+            if hazard_attribute == "Low Hazard Zone":
+                f_impact.setAttributes(f.attributes()+[1])
+
+            elif hazard_attribute == "Medium Hazard Zone":
+                f_impact.setAttributes(f.attributes()+[2])
+
+            elif hazard_attribute == "High Hazard Zone":
+                f_impact.setAttributes(f.attributes()+[3])
+
+            elif hazard_attribute == "YES":
+                f_impact.setAttributes(f.attributes()+[3])
+
+            elif hazard_attribute == "NO":
+                f_impact.setAttributes(f.attributes()+[1])
+
+        else:
+            f_impact.setGeometry(impact_geometry)
+            f_unaffected.setAttributes(f.attributes()+[1])
+            f_impact.setAttributes(f.attributes()+[3])
+
+        writer.addFeature(f_impact)
+        writer.addFeature(f_unaffected)
+
+    def evaluate_affected_people(self):
+        """ Calculate the number of people affected on the area
+        based on the affected area.
+        Currently we assume the population distribution is
+        uniform
+
+        :return:
+        """
+
+        for t, v in self.all_areas_ids.iteritems():
+
+            if t in self.all_affected_areas:
+                affected = self.all_affected_areas[t]
+            else:
+                affected = 0.0
+
+            single_total_area = v
+            if v:
+                affected_area_ratio = affected / single_total_area
+            else:
+                affected_area_ratio = 0
+
+            number_people_affected = (
+                affected_area_ratio * self.all_areas_population[t])
+
+            # rounding to float without decimal, we can't have number
+            # of people with decimal
+            number_people_affected = round(number_people_affected, 0)
+
+            self.affected_population[t] = number_people_affected
+
+        total_affected_population = self.total_affected_population
+
+        if total_affected_population == 0:
+            message = no_population_impact_message(self.question)
+            raise ZeroImpactException(message)
+

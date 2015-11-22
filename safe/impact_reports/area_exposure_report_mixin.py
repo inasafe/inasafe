@@ -263,14 +263,6 @@ class AreaExposureReportMixin(ReportMixin):
         total_affected_population = self.total_affected_population
         total_population = self.total_population
 
-        if total_population != 0:
-            percentage_affected_people = (
-                (total_affected_population / total_population) *
-                100)
-        else:
-            percentage_affected_people = 0
-        percentage_affected_people = round(percentage_affected_people, 1)
-
         total_affected_area *= 1e8
         total_affected_area = round(total_affected_area, 1)
         total_area *= 1e8
@@ -294,11 +286,11 @@ class AreaExposureReportMixin(ReportMixin):
                    percent_people_affected):
         """Adds the calculated results into respective impact row
 
-        :param table: table with first and second row
-        :type table: Table
-
         :param area_id: Area id
         :type area_id: int
+
+        :param affected: table with first and second row
+        :type affected: Table
 
         :param percent_affected: percentage of affected area
         :type percent_affected:float

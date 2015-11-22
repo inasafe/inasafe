@@ -776,7 +776,7 @@ area_type = {
     'key': 'area_type_field',
     'name': tr('Type field'),
     'type': 'field',
-    'description': tr('Attribute for the type of the area name ')
+    'description': tr('Attribute for the type of the area')
 }
 
 area_population_field = {
