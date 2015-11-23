@@ -29,7 +29,9 @@ from qgis.core import (
     QgsRectangle,
     QgsRasterLayer,
     QgsMapLayerRegistry,
-    QgsProject)
+    QgsProject,
+    QgsVectorLayer,
+    QgsVectorFileWriter)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QLocale,
@@ -333,6 +335,22 @@ class Plugin(object):
         self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
         self.add_action(self.action_add_osm_layer)
 
+    def _create_add_petajakarta_layer_action(self):
+        """Create action for import OSM Dialog."""
+        icon = resources_path('img', 'icons', 'add-petajakarta-layer.svg')
+        self.action_add_petajakarta_layer = QAction(
+            QIcon(icon),
+            self.tr('Add PetaJakarta Flood Layer'),
+            self.iface.mainWindow())
+        self.action_add_petajakarta_layer.setStatusTip(self.tr(
+            'Add PetaJakarta Flood Layer'))
+        self.action_add_petajakarta_layer.setWhatsThis(self.tr(
+            'Use this to add a PetaJakarta layer to your map. '
+            'It needs internet access to function.'))
+        self.action_add_petajakarta_layer.triggered.connect(
+            self.add_petajakarta_layer)
+        self.add_action(self.action_add_petajakarta_layer)
+
     def _create_impact_merge_action(self):
         """Create action for impact layer merge Dialog."""
         icon = resources_path('img', 'icons', 'show-impact-merge.svg')
@@ -445,6 +463,7 @@ class Plugin(object):
         self._add_spacer_to_menu()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
+        self._create_add_petajakarta_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
@@ -698,6 +717,26 @@ class Plugin(object):
             layer.source(), index))
         root.insertLayer(index, layer)
         QgsMapLayerRegistry.instance().addMapLayer(layer)
+
+    @staticmethod
+    def add_petajakarta_layer():
+        """Add petajakarta layer to the map.
+
+        This uses the PetaJakarta API to fetch the latest floods in JK. See
+        https://petajakarta.org/banjir/en/data/api/#aggregates
+        """
+        registry = QgsMapLayerRegistry.instance()
+        source = (
+            'https://petajakarta.org/banjir/data/api/v1/aggregates/live?'
+            'level=rw&hours=6&format=geojson')
+        layer = QgsVectorLayer(source, 'flood', 'ogr', False)
+        # Now save as shp
+        QgsVectorFileWriter.writeAsVectorFormat(
+            layer, '/tmp/foo.shp', 'CP1250', None, 'ESRI Shapefile')
+        del layer
+        layer = QgsVectorLayer('/tmp/foo.shp', 'flood', 'ogr', False)
+
+        registry.addMapLayer(layer)
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
