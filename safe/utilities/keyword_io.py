@@ -45,7 +45,8 @@ from safe.common.exceptions import (
     UnsupportedProviderError)
 from safe.storage.metadata_utilities import (
     generate_iso_metadata,
-    ISO_METADATA_KEYWORD_TAG)
+    ISO_METADATA_KEYWORD_TAG,
+    create_iso19115_metadata)
 from safe.common.utilities import verify
 import safe.definitions
 from safe.definitions import (
@@ -159,9 +160,12 @@ class KeywordIO(QObject):
             keywords[inasafe_keyword_version_key] = inasafe_keyword_version
             if flag:
                 write_keywords_to_file(source, keywords)
+                create_iso19115_metadata(source, keywords)
             else:
                 uri = self.normalize_uri(layer)
                 self.write_keywords_for_uri(uri, keywords)
+                create_iso19115_metadata(source, keywords)
+
             return
         except:
             raise
