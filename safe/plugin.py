@@ -29,9 +29,7 @@ from qgis.core import (
     QgsRectangle,
     QgsRasterLayer,
     QgsMapLayerRegistry,
-    QgsProject,
-    QgsVectorLayer,
-    QgsVectorFileWriter)
+    QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QLocale,
@@ -718,25 +716,15 @@ class Plugin(object):
         root.insertLayer(index, layer)
         QgsMapLayerRegistry.instance().addMapLayer(layer)
 
-    @staticmethod
-    def add_petajakarta_layer():
+    def add_petajakarta_layer(self):
         """Add petajakarta layer to the map.
 
         This uses the PetaJakarta API to fetch the latest floods in JK. See
         https://petajakarta.org/banjir/en/data/api/#aggregates
         """
-        registry = QgsMapLayerRegistry.instance()
-        source = (
-            'https://petajakarta.org/banjir/data/api/v1/aggregates/live?'
-            'level=rw&hours=6&format=geojson')
-        layer = QgsVectorLayer(source, 'flood', 'ogr', False)
-        # Now save as shp
-        QgsVectorFileWriter.writeAsVectorFormat(
-            layer, '/tmp/foo.shp', 'CP1250', None, 'ESRI Shapefile')
-        del layer
-        layer = QgsVectorLayer('/tmp/foo.shp', 'flood', 'ogr', False)
-
-        registry.addMapLayer(layer)
+        from safe.gui.tools.peta_jakarta_dialog import PetaJakartaDialog
+        dialog = PetaJakartaDialog(self.iface.mainWindow(), self.iface)
+        dialog.show()  # non modal
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""
