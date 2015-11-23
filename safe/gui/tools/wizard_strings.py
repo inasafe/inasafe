@@ -150,7 +150,7 @@ select_hazard_origin_question = tr(
     'in an area. '
     'For example flood, earthquake and tsunami inundation are all different '
     'kinds of hazards. Select the appropriate option below to indicate '
-    'where you data resides:</p>')  # (hazard_geom, hazard, imfunc)
+    'where your data resides:</p>')  # (hazard_geom, hazard, imfunc)
 select_hazlayer_from_canvas_question = tr(
     '<p>You selected <b>%s %s</b> as hazard input to <b>%s</b> function.</p> '
     '<p>These are suitable layers currently loaded in QGIS. Please choose '

@@ -207,9 +207,9 @@ hazard_category_multiple_event = {
         'observations such as a hazard map of all observed volcanic '
         'deposits around a volcano. \n'
         'This type of hazard data shows those locations that might be '
-        'impacted by a volcanic eruption in the future . Another example '
+        'impacted by a volcanic eruption in the future. Another example '
         'might be a probabilistic hazard model that shows the likelihood of a '
-        'magnitude 7 earthquake happening in the next 50 yrs.')
+        'magnitude 7 earthquake happening in the next 50 years.')
 }
 
 hazard_category = {
@@ -270,7 +270,7 @@ hazard_tsunami = {
     'name': tr('Tsunami'),
     'description': tr(
         'A <b>tsunami</b> describes a large ocean wave or series or '
-        'waves usually caused by an under water earthquake or volcano.'
+        'waves usually caused by an under water earthquake or volcano. '
         'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
         'wave that strikes land may cause massive destruction and '
         'flooding.')
@@ -758,10 +758,29 @@ volcano_name_field = {
 
 # General terminology and descriptive terms
 
+field = {
+    'key': 'field',
+    'name': tr('Attribute field'),
+    'description': tr(
+        'The attribute field identifies a field in the attribute table used '
+        'to identify the function of a feature e.g.  a road type, '
+        'building type, hazard zone etc.')
+}
+
+field_value = {
+    'key': 'field_value',
+    'name': tr('Attribute value'),
+    'description': tr(
+        'The attribute value identifies features with similar meanings. For '
+        'example building attributes may include schools and hospitals. ')
+}
+
 value_map = {
     'key': 'value_map',
-    'name': tr('Attribute values'),
+    'name': tr('Attribute value map'),
     'description': tr(
-        'Attribute values identify features with similar meanings. For example'
-        'building attributes may include schools and hospitals. ')
+        'Attribute value maps are used to group related attribute '
+        'values. For example flooded polygons with attribute values of "yes" '
+        ', "YES", "1" and "Flooded" might all be grouped together as '
+        '"FLOODPRONE".')
 }

@@ -32,6 +32,8 @@ from safe.common.utilities import (
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.engine.interpolation_qgis import interpolate_polygon_polygon
+import safe.messaging as m
+from safe.messaging import styles
 
 
 class ClassifiedPolygonHazardBuildingFunction(
@@ -54,19 +56,17 @@ class ClassifiedPolygonHazardBuildingFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        return [
-            {
-                'content': tr('Notes'),
-                'header': True
-            },
-            {
-                'content': tr(
-                    'Map shows buildings affected in each of these hazard '
-                    'zones: %s') % ', '.join(self.hazard_zones)
-            }
-        ]
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Map shows buildings affected in each of these hazard '
+            'zones: %s') % ', '.join(self.hazard_zones))
+        message.add(checklist)
+        return message
 
     def run(self):
         """Risk plugin for classified polygon hazard on building/structure.
@@ -162,7 +162,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         self._consolidate_to_other()
 
         # Generate simple impact report
-        impact_summary = impact_table = self.generate_html_report()
+        impact_summary = impact_table = self.html_report()
 
         # Create style
         categories = self.hazard_zones

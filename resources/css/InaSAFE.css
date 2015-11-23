@@ -72,3 +72,7 @@ h5 {
 .hidden {
     visibility: hidden;
 }
+
+.caption {
+  font-size: 8pt;
+}

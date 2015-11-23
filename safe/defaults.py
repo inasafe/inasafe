@@ -205,7 +205,7 @@ def age_postprocessor():
         'vary by region - please consult with your local census bureau to find'
         'out what the relevant threshold is in your region. InaSAFE does not '
         'impose a particular age ratio scheme - it will break down the '
-        'population according to the thresholds you define for your locality.'
+        'population according to the thresholds you define for your locality. '
         'In InaSAFE, people 0-14 years old are defined as "youth". The '
         'default youth ratio is 0.263.'
     )
@@ -223,7 +223,7 @@ def age_postprocessor():
         'bureau to find out what the relevant threshold is in your region. '
         'InaSAFE does not impose a particular age ratio scheme - it will '
         'break down the population according to the thresholds you define '
-        'for your locality.'
+        'for your locality. '
         'In InaSAFE, people 15-64 years old are defined as "adult". The '
         'default adult ratio is 0.659.'
     )
@@ -241,7 +241,7 @@ def age_postprocessor():
         'consult with your local census bureau to find out what the relevant '
         'threshold is in your region. InaSAFE does not impose a particular '
         'age ratio scheme - it will break down the population according to '
-        'the thresholds you define for your locality.'
+        'the thresholds you define for your locality. '
         'In InaSAFE, people 65 years old and over are defined as "elderly". '
         'The default elderly ratio is 0.078.'
     )
@@ -394,7 +394,7 @@ def default_provenance():
     field = TextParameter()
     field.name = tr('Provenance')
     field.description = tr('The provenance of minimum needs')
-    field.value = 'The minimum needs are based on Perka 7/2008.'
+    field.value = 'The minimum needs are based on BNPB Perka 7/2008.'
     return field
 
 
@@ -413,8 +413,29 @@ def disclaimer():
     return text
 
 
-def default_organisation_logo_path():
-    """Get a default organisation logo path.
+def black_inasafe_logo_path():
+    """Get the path to the Black InaSAFE SVG logo.
+
+    .. versionadded:: 3.2
+    """
+    path = resources_path('img', 'logos', 'inasafe-logo-url.svg')
+    return path
+
+
+def white_inasafe_logo_path():
+    """Get the path to the White InaSAFE SVG logo.
+
+    .. versionadded:: 3.2
+    """
+    path = resources_path('img', 'logos', 'inasafe-logo-url-white.svg')
+    return path
+
+
+def supporters_logo_path():
+    """Get the supporters logo path.
+
+    .. versionchanged:: Changed in 3.2 from default_organisation_path to
+        supporters_logo_path.
 
     :return: Default organisation logo path.
     :rtype: str

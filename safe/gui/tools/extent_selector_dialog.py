@@ -43,11 +43,11 @@ from qgis.core import (
     QgsApplication,
     QgsCoordinateTransform)
 
-from safe import messaging as m
 from safe.utilities.resources import html_header, html_footer, get_ui_class
 
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
+from safe.gui.tools.help.extent_selector_help import extent_selector_help
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -126,7 +126,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
         # Reset / Clear button
         clear_button = self.button_box.button(QtGui.QDialogButtonBox.Reset)
         clear_button.setText(self.tr('Clear'))
@@ -172,9 +172,9 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
     def help_toggled(self, flag):
-        """Show or hide the help tab in the stacked widget.
+        """Show or hide the help tab in the main stacked widget.
 
-        ..versionadded: 3.2
+        .. versionadded: 3.2.1
 
         :param flag: Flag indicating whether help should be shown or hidden.
         :type flag: bool
@@ -189,48 +189,25 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
     def hide_help(self):
         """Hide the usage info from the user.
 
-        .. versionadded:: 3.2
+        .. versionadded:: 3.2.1
         """
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
     def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
-        self.stacked_widget.setCurrentIndex(0)
+        self.main_stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 
         string = header
 
-        heading = m.Heading(self.tr('User Extents Tool'), **INFO_STYLE)
-        body = self.tr(
-            'This tool allows you to specify exactly which geographical '
-            'region should be used for your analysis. You can either '
-            'enter the coordinates directly into the input boxes below '
-            '(using the same CRS as the canvas is currently set to), or '
-            'you can interactively select the area by using the \'select '
-            'on map\' button - which will temporarily hide this window and '
-            'allow you to drag a rectangle on the map. After you have '
-            'finished dragging the rectangle, this window will reappear. '
-            'You can also use one of your bookmarks to set the region. '
-            'If you enable the \'Toggle scenario outlines\' tool on the '
-            'InaSAFE toolbar, your user defined extent will be shown on '
-            'the map as a blue rectangle. Please note that when running '
-            'your analysis, the effective analysis extent will be the '
-            'intersection of the hazard extent, exposure extent and user '
-            'extent - thus the entire user extent area may not be used for '
-            'analysis.'
+        message = extent_selector_help()
 
-        )
-
-        message = m.Message()
-        message.add(m.Brand())
-        message.add(heading)
-        message.add(body)
         string += message.to_html()
         string += footer
 
-        self.web_view.setHtml(string)
+        self.help_web_view.setHtml(string)
 
     def start_capture(self):
         """Start capturing the rectangle."""
