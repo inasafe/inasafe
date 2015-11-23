@@ -44,6 +44,14 @@ def data_dir():
     return dir_path
 
 
+def settings_dir():
+    """Return the path to the settings dir of realtime"""
+    dir_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), 'settings'))
+    make_directory(dir_path)
+    return dir_path
+
+
 def shakemap_zip_dir():
     """Create (if needed) and return the path to the base shakemap zip dir."""
     dir_path = os.path.join(base_data_dir(), 'shakemaps-zipped')

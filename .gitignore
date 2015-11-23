@@ -41,6 +41,8 @@ realtime/fixtures/context/Readme.txt
 realtime/fixtures/context/TM_WORLD_BORDERS-0.3*
 realtime/fixtures/exposure/IDN_mosaic/
 realtime/fixtures/exposure/population.*
+realtime/fixtures/settings/*
+!realtime/fixtures/settings/Readme.txt
 realtime/fixtures/indonesia.sqlite
 realtime/server_config.py
 safe/gui/ui/*.py
