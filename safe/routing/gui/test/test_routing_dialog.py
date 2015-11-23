@@ -21,13 +21,15 @@ import qgis  # pylint: disable=unused-import
 from os import remove
 from os.path import dirname, join, exists
 from safe.test.utilities import load_layers, get_qgis_app, test_data_path
+from qgis.core import QGis
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
 
 from safe.routing.gui.routing_dialog import RoutingDialog
 from safe.common.utilities import unique_filename
 
-
+@unittest.skipIf(
+    QGis.QGIS_VERSION_INT < 20900, 'Need QGIS 2.9 for running the unit tests')
 class RoutingDialogTest(unittest.TestCase):
     """Test Routing Dialog widget."""
 
@@ -89,5 +91,3 @@ class RoutingDialogTest(unittest.TestCase):
 
         # We can't test the method because Processing it not fully loaded.
         self.assertTrue(exists(routable_model))
-
-    test_processing_model.slow = True
