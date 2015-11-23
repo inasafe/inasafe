@@ -25,8 +25,8 @@ status=alpha
 # Optional items:
 
 changelog=
-        3.2.3
-        Fixed #2464 - Support polygon flood on points
+        3.3.0
+        Feature: Added support for downloading flood aggregates from PetaJakarta
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
