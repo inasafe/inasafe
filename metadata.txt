@@ -17,7 +17,7 @@ about=Developed for the Indonesian Government - BNPB, Australian Government - AI
 
 version=3.2.2
 # alpha, beta, rc or final
-status=final
+status=alpha
 
 
 # end of mandatory metadata
@@ -25,10 +25,8 @@ status=final
 # Optional items:
 
 changelog=
-        3.2.2
-        Added context help for all dialogs
-        Added Thailand profile to OSM downloader
-        Fixed issue with pushing python faults to sentry
+        3.2.3
+        Fixed #2464 - Support polygon flood on points
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards

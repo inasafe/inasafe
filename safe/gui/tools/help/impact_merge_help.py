@@ -231,12 +231,12 @@ def content():
 
     bullets = m.BulletedList()
     bullets.add(m.Text(
-        m.ImportantText(tr('impact-title')),
+        m.ImportantText('impact-title'),
         tr(
             'It indicates the title of two impacts. The value will be '
             '"first_impact_title and second_impact_title"')))
     bullets.add(m.Text(
-        m.ImportantText(tr('hazard-title')),
+        m.ImportantText('hazard-title'),
         tr(
             'It indicates the hazard title used to generate the '
             'impact layer.')))
@@ -250,31 +250,31 @@ def content():
 
     bullets = m.BulletedList()
     bullets.add(m.Text(
-        m.ImportantText(tr('impact-map')),
+        m.ImportantText('impact-map'),
         tr(
             ' - contains the map of two impact layers.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('summary-report')),
+        m.ImportantText('summary-report'),
         tr(
             ' - contains the summary of the impact from two impact layers.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('aggregation-area')),
+        m.ImportantText('aggregation-area'),
         tr(
             ' - contains the name of the aggregation area.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('map-scale')),
+        m.ImportantText('map-scale'),
         tr(
             ' - indicates the scale of the map. To work with any layer '
             'projection preferences, we encourage you to use a numeric '
             'scale bar.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('map-legend')),
+        m.ImportantText('map-legend'),
         tr(
             ' - shows the legend of merged impact layers. The map legend '
             'on default template is set to have two columns showing each '
             'impact layer legend.')))
     bullets.add(m.Text(
-        m.ImportantText(tr('merged-report-table')),
+        m.ImportantText('merged-report-table'),
         tr(
             '- contains the detailed information of each impact.')))
     message.add(bullets)

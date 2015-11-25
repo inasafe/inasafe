@@ -21,6 +21,7 @@ from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
     layer_geometry_polygon,
+    layer_geometry_point,
     hazard_flood,
     hazard_category_single_event,
     hazard_category_multiple_event,
@@ -96,7 +97,9 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 },
                 'exposure': {
                     'layer_mode': layer_mode_classified,
-                    'layer_geometries': [layer_geometry_polygon],
+                    'layer_geometries': [
+                        layer_geometry_polygon,
+                        layer_geometry_point],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
                     'exposure_class_fields': [structure_class_field],
