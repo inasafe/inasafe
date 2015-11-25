@@ -57,7 +57,7 @@ def content():
     message = m.Message()
     message.add(m.Paragraph(tr(
         'Depending on which Impact Function you have chosen you have '
-        'different options available for adjust the parameters of the '
+        'different options available for adjusting the parameters of the '
         'question you are asking. Some Impact Functions have more '
         'configurable Options than others. To open the Impact Function '
         'Configuration Dialog you need to click on the "Options ..." '
@@ -71,11 +71,12 @@ def content():
         tr(
             '- Depending in the Impact function you selected, you can '
             'influence the result of your question here (the Impact Function) '
-            'by setting different initial values which are presented '
-            'depending on the function you choose (Some Impact functions '
-            'might now be able to be influenced).')))
+            'by setting different values to the defaults that will be loaded.  '
+            'The options available will depend on the impact function you '
+            'choose (some Impact functions do not allow users to change the '
+            'default parameters).')))
     bullets.add(m.Text(
-        m.ImportantText(tr('Postprocessors')),
+        m.ImportantText(tr('Post-processors')),
         tr(
             '- Takes the results from the impact function and calculates '
             'derivative indicators, for example if you have an affected '
@@ -94,7 +95,7 @@ def content():
             'show-minimum-needs.svg' % resources_path(),
             **SMALL_ICON_STYLE),
         tr(
-            ' This panel will let you override global defaults for a specific'
-            'analysis run')))
+            ' This panel will let you override global defaults for a specific '
+            'analysis run.')))
     message.add(bullets)
     return message
