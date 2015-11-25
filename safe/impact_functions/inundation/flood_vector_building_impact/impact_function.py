@@ -171,9 +171,16 @@ class FloodPolygonBuildingFunction(
                     ', '.join(self.hazard_class_mapping[self.wet]))
             raise GetDataError(message)
 
+        transform = QgsCoordinateTransform(
+                self.exposure.layer.crs(),
+                self.hazard.layer.crs()
+        )
+
         features = []
         for feature in self.exposure.layer.getFeatures(request):
             building_geom = feature.geometry()
+            # Project the building geometry to hazard CRS
+            building_geom = transform.transform(building_geom)
             affected = False
             # get tentative list of intersecting hazard features
             # only based on intersection of bounding boxes
