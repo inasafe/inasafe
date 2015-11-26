@@ -257,3 +257,31 @@ def create_iso19115_metadata(layer_uri, keywords):
         metadata.write_to_db()
 
     return metadata
+
+def read_iso19115_metadata(layer_uri, keyword=None):
+    """Retrieve keywords from a metadata object
+    :param layer_uri:
+    :param keyword:
+    :return:
+    """
+    xml_uri = layer_uri.split('.')[0] + '.xml'
+    if not os.path.exists(xml_uri):
+        xml_uri = None
+    metadata = GenericLayerMetadata(layer_uri, xml_uri)
+    if metadata.layer_purpose == 'exposure':
+        metadata = ExposureLayerMetadata(layer_uri, xml_uri)
+    elif metadata.layer_purpose == 'hazard':
+        metadata = HazardLayerMetadata(layer_uri, xml_uri)
+    elif metadata.layer_purpose == 'aggregation':
+        metadata = AggregationLayerMetadata(layer_uri, xml_uri)
+    elif metadata.layer_purpose == 'impact':
+        metadata = ImpactLayerMetadata(layer_uri, xml_uri)
+
+    if keyword:
+        try:
+            return metadata.dict['properties'][keyword]['value']
+        except KeyError:
+            return None
+    # dictionary comprehension
+    return {
+        x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
