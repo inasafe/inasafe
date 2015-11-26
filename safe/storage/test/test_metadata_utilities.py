@@ -145,7 +145,7 @@ class TestCase(unittest.TestCase):
             include_keywords=False,
             source_directory=test_data_path('exposure'))
         keywords = {
-            'date': '26-03-2015 14:03',
+            # 'date': '26-03-2015 14:03',
             'exposure': 'structure',
             'keyword_version': '3.2',
             'layer_geometry': 'polygon',
@@ -156,12 +156,19 @@ class TestCase(unittest.TestCase):
             'structure_class_field': 'TYPE',
             'title': 'Buildings'
         }
-        create_iso19115_metadata(exposure_layer.source(), keywords)
+        metadata = create_iso19115_metadata(exposure_layer.source(), keywords)
 
         read_metadata = read_iso19115_metadata(exposure_layer.source())
 
-        for x in set(keywords.keys()) & set(read_metadata.keys()):
-            self.assertEqual(read_metadata[x], keywords[x])
+        for key in set(keywords.keys()) & set(read_metadata.keys()):
+            message = 'key %s have different value' % key
+            self.assertEqual(read_metadata[key], keywords[key], message)
+        for key in set(keywords.keys()) - set(read_metadata.keys()):
+            message = 'key %s is not found in ISO metadata' % key
+            self.assertEqual(read_metadata[key], keywords[key], message)
+        for key in set(read_metadata.keys()) - set(keywords.keys()):
+            message = 'key %s is not found in old keywords' % key
+            self.assertEqual(read_metadata[key], keywords[key], message)
 
 if __name__ == '__main__':
     my_suite = unittest.makeSuite(TestCase, 'test')

@@ -169,7 +169,7 @@ class KeywordIO(QObject):
             create_iso19115_metadata(source, keywords)
             return
         except:
-            raise 
+            raise
 
         # try:
         #     flag = self.are_keywords_file_based(layer)

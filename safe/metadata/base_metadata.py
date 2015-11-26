@@ -74,7 +74,7 @@ class BaseMetadata(object):
             'gmd:CI_Address/'
             'gmd:electronicMailAddress/'
             'gco:CharacterString'),
-        'document_date': (
+        'date': (
             'gmd:dateStamp/'
             'gco:Date'),
         'abstract': (

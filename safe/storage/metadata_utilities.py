@@ -283,5 +283,4 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         except KeyError:
             return None
     # dictionary comprehension
-    return {
-        x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
+    return {x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems() if x[1]['value'] is not None}
