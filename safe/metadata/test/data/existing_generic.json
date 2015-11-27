@@ -59,7 +59,7 @@
         "date", 
         "NoneType"
       ], 
-      "name": "date",
+      "name": "date", 
       "python_type": "NoneType", 
       "value": null, 
       "xml_path": "gmd:dateStamp/gco:Date"
