@@ -282,7 +282,8 @@ class BaseMetadata(object):
         :return: json representation of the metadata
         :rtype: str
         """
-        return json.dumps(self.dict, indent=2, sort_keys=True)
+        return json.dumps(
+            self.dict, indent=2, sort_keys=True, separators=(',', ': '))
 
     @abc.abstractmethod
     def read_json(self):
