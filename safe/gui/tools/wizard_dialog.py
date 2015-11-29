@@ -1945,7 +1945,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         current_keywords = self.get_keywords()
         body = self.keyword_io.to_message(current_keywords).to_html()
         # remove the branding div
-        body = re.sub(r'^.*div class="branding".*$', "<br/>", body, flags=re.MULTILINE)
+        body = re.sub(r'^.*div class="branding".*$', "<br/>",
+                      body, flags=re.MULTILINE)
 
         html = header + body + footer
         self.wvKwSummary.setHtml(html)
@@ -2477,7 +2478,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             try:
                 keywords = self.keyword_io.read_keywords(layer)
                 if ('layer_purpose' not in keywords and
-                            'impact_summary' not in keywords):
+                        'impact_summary' not in keywords):
                     keywords = None
             except (HashNotFoundError,
                     OperationalError,
@@ -2811,7 +2812,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 'exposure, hazard, or aggregation layer in an analysis, '
                 'please update the keywords. Click Next if you want to assign '
                 'keywords now.' % (keyword_version or 'No Version',
-                                    get_version()))
+                                   get_version()))
         else:
             # The layer is keywordless
             if is_point_layer(layer):
@@ -3054,7 +3055,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         try:
             keywords = self.keyword_io.read_keywords(layer)
             if ('layer_purpose' not in keywords and
-                        'impact_summary' not in keywords):
+                    'impact_summary' not in keywords):
                 keywords = None
         except (HashNotFoundError,
                 OperationalError,
