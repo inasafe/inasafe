@@ -167,25 +167,26 @@ step_kw_extrakeywords = 10
 step_kw_aggregation = 11
 step_kw_source = 12
 step_kw_title = 13
-step_fc_function_1 = 14
-step_fc_function_2 = 15
-step_fc_function_3 = 16
-step_fc_hazlayer_origin = 17
-step_fc_hazlayer_from_canvas = 18
-step_fc_hazlayer_from_browser = 19
-step_fc_explayer_origin = 20
-step_fc_explayer_from_canvas = 21
-step_fc_explayer_from_browser = 22
-step_fc_disjoint_layers = 23
-step_fc_agglayer_origin = 24
-step_fc_agglayer_from_canvas = 25
-step_fc_agglayer_from_browser = 26
-step_fc_agglayer_disjoint = 27
-step_fc_extent = 28
-step_fc_extent_disjoint = 29
-step_fc_params = 30
-step_fc_summary = 31
-step_fc_analysis = 32
+step_kw_summary = 14
+step_fc_function_1 = 15
+step_fc_function_2 = 16
+step_fc_function_3 = 17
+step_fc_hazlayer_origin = 18
+step_fc_hazlayer_from_canvas = 19
+step_fc_hazlayer_from_browser = 20
+step_fc_explayer_origin = 21
+step_fc_explayer_from_canvas = 22
+step_fc_explayer_from_browser = 23
+step_fc_disjoint_layers = 24
+step_fc_agglayer_origin = 25
+step_fc_agglayer_from_canvas = 26
+step_fc_agglayer_from_browser = 27
+step_fc_agglayer_disjoint = 28
+step_fc_extent = 29
+step_fc_extent_disjoint = 30
+step_fc_params = 31
+step_fc_summary = 32
+step_fc_analysis = 33
 
 
 # Aggregations' keywords
@@ -1918,6 +1919,36 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.layer:
             title = self.layer.name()
             self.leTitle.setText(title)
+
+    # ===========================
+    # STEP_KW_SUMMARY
+    # ===========================
+
+    def set_widgets_step_kw_summary(self):
+        """Set widgets on the Keywords Summary tab."""
+
+        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                os.pardir,
+                                                os.pardir,
+                                                os.pardir,
+                                                'resources'))
+        header_path = os.path.join(base_dir, 'header.html')
+        footer_path = os.path.join(base_dir, 'footer.html')
+        header_file = file(header_path)
+        footer_file = file(footer_path)
+        header = header_file.read()
+        footer = footer_file.read()
+        header_file.close()
+        footer_file.close()
+        header = header.replace('PATH', base_dir)
+
+        current_keywords = self.get_keywords()
+        body = self.keyword_io.to_message(current_keywords).to_html()
+        # remove the branding div
+        body = re.sub(r'^.*div class="branding".*$', "<br/>", body, flags=re.MULTILINE)
+
+        html = header + body + footer
+        self.wvKwSummary.setHtml(html)
 
     # ===========================
     # STEP_FC_FUNCTION_1
@@ -3759,7 +3790,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.parent_step is not None)
 
         # Set Next button label
-        if (step in [step_kw_title, step_fc_analysis] and
+        if (step in [step_kw_summary, step_fc_analysis] and
                 self.parent_step is None):
             self.pbnNext.setText(self.tr('Finish'))
         elif step == step_fc_summary:
@@ -3797,7 +3828,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         current_step = self.get_current_step()
 
         # Save keywords if it's the end of the keyword creation mode
-        if current_step == step_kw_title:
+        if current_step == step_kw_summary:
             self.save_current_keywords()
 
         if current_step == step_kw_aggregation:
@@ -3855,6 +3886,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.set_widgets_step_kw_source()
         elif new_step == step_kw_title:
             self.set_widgets_step_kw_title()
+        elif new_step == step_kw_summary:
+            self.set_widgets_step_kw_summary()
         elif new_step == step_fc_function_1:
             self.set_widgets_step_fc_function_1()
         elif new_step == step_fc_function_2:
@@ -3966,6 +3999,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             return True
         if step == step_kw_title:
             return bool(self.leTitle.text())
+        if step == step_kw_summary:
+            return True
         if step == step_fc_function_1:
             return bool(self.tblFunctions1.selectedItems())
         if step == step_fc_function_2:
@@ -4080,6 +4115,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         elif current_step == step_kw_source:
             new_step = step_kw_title
         elif current_step == step_kw_title:
+            new_step = step_kw_summary
+        elif current_step == step_kw_summary:
             if self.parent_step:
                 # Come back to the parent thread
                 new_step = self.parent_step
@@ -4255,6 +4292,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                     new_step = step_kw_unit
         elif current_step == step_kw_title:
             new_step = step_kw_source
+        elif current_step == step_kw_summary:
+            new_step = step_kw_title
         elif current_step == step_fc_function_1:
             new_step = step_fc_function_1
         elif current_step == step_fc_hazlayer_from_browser:
