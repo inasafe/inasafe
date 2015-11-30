@@ -55,7 +55,3 @@ def area_type_field():
     field.is_required = True
     field.value = 'type'
     return field
-
-
-
-

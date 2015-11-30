@@ -72,7 +72,8 @@ def register_impact_functions():
     impact_function_registry.register(
         ClassifiedPolygonHazardPopulationFunction)
     impact_function_registry.register(ClassifiedPolygonHazardBuildingFunction)
-    impact_function_registry.register(ClassifiedPolygonHazardPolygonPeopleFunction)
+    impact_function_registry.register(
+        ClassifiedPolygonHazardPolygonPeopleFunction)
     # Earthquake
     impact_function_registry.register(EarthquakeBuildingFunction)
     impact_function_registry.register(ITBFatalityFunction)

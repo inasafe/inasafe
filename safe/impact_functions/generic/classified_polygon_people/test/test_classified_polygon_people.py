@@ -35,7 +35,8 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
     def test_run(self):
         function = ClassifiedPolygonHazardPolygonPeopleFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'classified_generic_polygon.shp')
+        hazard_path = test_data_path('hazard',
+                                     'classified_generic_polygon.shp')
         exposure_path = test_data_path('exposure', 'census.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')

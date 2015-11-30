@@ -347,28 +347,28 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         if hazard_attribute is not None:
             f_unaffected.setGeometry(unaffected_geometry)
-            f_unaffected.setAttributes(f.attributes()+[0])
+            f_unaffected.setAttributes(f.attributes() + [0])
             f_impact.setGeometry(impact_geometry)
 
             if hazard_attribute == "Low Hazard Zone":
-                f_impact.setAttributes(f.attributes()+[1])
+                f_impact.setAttributes(f.attributes() + [1])
 
             elif hazard_attribute == "Medium Hazard Zone":
-                f_impact.setAttributes(f.attributes()+[2])
+                f_impact.setAttributes(f.attributes() + [2])
 
             elif hazard_attribute == "High Hazard Zone":
-                f_impact.setAttributes(f.attributes()+[3])
+                f_impact.setAttributes(f.attributes() + [3])
 
             elif hazard_attribute == "YES":
-                f_impact.setAttributes(f.attributes()+[3])
+                f_impact.setAttributes(f.attributes() + [3])
 
             elif hazard_attribute == "NO":
-                f_impact.setAttributes(f.attributes()+[1])
+                f_impact.setAttributes(f.attributes() + [1])
 
         else:
             f_impact.setGeometry(impact_geometry)
-            f_unaffected.setAttributes(f.attributes()+[1])
-            f_impact.setAttributes(f.attributes()+[3])
+            f_unaffected.setAttributes(f.attributes() + [1])
+            f_impact.setAttributes(f.attributes() + [3])
 
         writer.addFeature(f_impact)
         writer.addFeature(f_unaffected)
@@ -409,4 +409,3 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         if total_affected_population == 0:
             message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
-

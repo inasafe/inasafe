@@ -46,7 +46,8 @@ hazard_question = tr(
     'as <b>flood impact on population</b>.</p>')
 exposure_question = tr(
     'What kind of <b>exposure</b> does this layer represent? '
-    'Is it a <b>population</b>, <b>structure</b>, <b>area</b>, or <b>road</b> layer? '
+    'Is it a <b>population</b>, <b>structure</b>, <b>area</b>, or '
+    '<b>road</b> layer? '
     '<p>The choice you make here will determine '
     'which impact functions this exposure layer can be used with. '
     'For example, if you choose <b>population</b> you will be able to use '
@@ -110,7 +111,7 @@ field_question_subcategory_classified = tr(
 field_question_subcategory_classified_id = tr(
     'You have selected <b>classified</b> data for the vector <b>%s</b> layer. '
     'Please select the attribute in this layer that represents the ids.'
-) # (category, subcategory)
+)  # (category, subcategory)
 field_question_aggregation = tr(
     'You have selected a vector <b>aggregation</b> layer. Please select the '
     'attribute in this layer that has the names of the aggregation areas.')
