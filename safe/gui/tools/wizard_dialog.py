@@ -59,6 +59,8 @@ from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 from safe import definitions
 # pylint: enable=unused-import
 from safe.definitions import (
+    inasafe_keyword_version,
+    inasafe_keyword_version_key,
     global_default_attribute,
     do_not_use_attribute,
     continuous_hazard_unit,
@@ -600,6 +602,30 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Fallback to default
         return 'field'
 
+    def get_parent_mode_constraints(self):
+        """Return the category and subcategory keys to be set in the
+        subordinate mode.
+
+        :returns: (the category definition, the hazard/exposure definition)
+        :rtype: (dict, dict)
+        """
+        h, e, _hc, _ec = self.selected_impact_function_constraints()
+        if self.parent_step in [step_fc_hazlayer_from_canvas,
+                                step_fc_hazlayer_from_browser]:
+            category = layer_purpose_hazard
+            subcategory = h
+        elif self.parent_step in [step_fc_explayer_from_canvas,
+                                  step_fc_explayer_from_browser]:
+            category = layer_purpose_exposure
+            subcategory = e
+        elif self.parent_step:
+            category = layer_purpose_aggregation
+            subcategory = None
+        else:
+            category = None
+            subcategory = None
+        return category, subcategory
+
     # ===========================
     # STEP_KW_CATEGORY
     # ===========================
@@ -678,16 +704,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Check if layer keywords are already assigned
         category_keyword = self.get_existing_keyword('layer_purpose')
 
-        # Check if it's KW mode embedded in IFCW mode
+        # Overwrite the category_keyword if it's KW mode embedded in IFCW mode
         if self.parent_step:
-            if self.parent_step in [step_fc_hazlayer_from_canvas,
-                                    step_fc_hazlayer_from_browser]:
-                category_keyword = layer_purpose_hazard['key']
-            elif self.parent_step in [step_fc_explayer_from_canvas,
-                                      step_fc_explayer_from_browser]:
-                category_keyword = layer_purpose_exposure['key']
-            else:
-                category_keyword = layer_purpose_aggregation['key']
+            category_keyword = self.get_parent_mode_constraints()[0]['key']
 
         # Set values based on existing keywords or parent mode
         if category_keyword:
@@ -779,15 +798,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         key = self.selected_category()['key']
         keyword = self.get_existing_keyword(key)
 
-        # Check if it's KW mode embedded in IFCW
+        # Overwrite the keyword if it's KW mode embedded in IFCW mode
         if self.parent_step:
-            h, e, _hc, _ec = self.selected_impact_function_constraints()
-            if self.parent_step in [step_fc_hazlayer_from_canvas,
-                                    step_fc_hazlayer_from_browser]:
-                keyword = h['key']
-            elif self.parent_step in [step_fc_explayer_from_canvas,
-                                      step_fc_explayer_from_browser]:
-                keyword = e['key']
+            keyword = self.get_parent_mode_constraints()[1]['key']
 
         # Set values based on existing keywords or parent mode
         if keyword:
@@ -1927,6 +1940,9 @@ class WizardDialog(QDialog, FORM_CLASS):
     def set_widgets_step_kw_summary(self):
         """Set widgets on the Keywords Summary tab."""
 
+        current_keywords = self.get_keywords()
+        current_keywords[inasafe_keyword_version_key] = inasafe_keyword_version
+
         base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                 os.pardir,
                                                 os.pardir,
@@ -1942,11 +1958,26 @@ class WizardDialog(QDialog, FORM_CLASS):
         footer_file.close()
         header = header.replace('PATH', base_dir)
 
-        current_keywords = self.get_keywords()
-        body = self.keyword_io.to_message(current_keywords).to_html()
+        # TODO: Clone the dict inside keyword_io.to_message rather then here.
+        #       It pops the dict elements damaging the function parameter
+        body = self.keyword_io.to_message(dict(current_keywords)).to_html()
         # remove the branding div
-        body = re.sub(r'^.*div class="branding".*$', "<br/>",
+        body = re.sub(r'^.*div class="branding".*$', "",
                       body, flags=re.MULTILINE)
+
+        if self.parent_step:
+            # It's the KW mode embedded in IFCW mode,
+            # so check if the layer is compatible
+            im_func = self.selected_function()
+            if not self.is_layer_compatible(self.layer,
+                                            None,
+                                            current_keywords):
+                msg = self.tr(
+                    'The selected keywords don\'t match requirements of the '
+                    'selected impact fuction (%s). You can confinue with '
+                    'registering the layer, however, you\'ll need to choose '
+                    'another layer for that function.') % im_func['name']
+                body = '<br/><h5 class="problem">%s</h5> %s' % (msg, body)
 
         html = header + body + footer
         self.wvKwSummary.setHtml(html)
@@ -2360,7 +2391,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         self.pbnNext.setEnabled(True)
 
-    def is_layer_compatible(self, layer, layer_purpose, keywords=None):
+    def is_layer_compatible(self, layer, layer_purpose=None, keywords=None):
         """Validate if a given layer is compatible for selected IF
            as a given layer_purpose
 
@@ -2368,7 +2399,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type layer: QgsVectorLayer | QgsRasterLayer
 
         :param layer_purpose: The layer_purpose the layer is validated for
-        :type layer_purpose: string
+        :type layer_purpose: None, string
 
         :param keywords: The layer keywords
         :type keywords: None, dict
@@ -2376,6 +2407,26 @@ class WizardDialog(QDialog, FORM_CLASS):
         :returns: True if layer is appropriate for the selected role
         :rtype: boolean
         """
+
+        # If not explicitly stated, find the desired purpose
+        # from the parent step
+        if not layer_purpose:
+            layer_purpose = self.get_parent_mode_constraints()[0]['key']
+
+        # If not explicitly stated, read the layer's keywords
+        if not keywords:
+            try:
+                keywords = self.keyword_io.read_keywords(layer)
+                if ('layer_purpose' not in keywords and
+                        'impact_summary' not in keywords):
+                    keywords = None
+            except (HashNotFoundError,
+                    OperationalError,
+                    NoKeywordsFoundError,
+                    KeywordNotFoundError,
+                    InvalidParameterError,
+                    UnsupportedProviderError):
+                keywords = None
 
         # Get allowed subcategory and layer_geometry from IF constraints
         h, e, hc, ec = self.selected_impact_function_constraints()
@@ -4119,8 +4170,35 @@ class WizardDialog(QDialog, FORM_CLASS):
             new_step = step_kw_summary
         elif current_step == step_kw_summary:
             if self.parent_step:
-                # Come back to the parent thread
+                # Come back from KW to the parent IFCW thread.
                 new_step = self.parent_step
+                if self.is_layer_compatible(self.layer):
+                    # If the layer is compatible,
+                    # go to the next step (issue #2347)
+                    if new_step in [step_fc_hazlayer_from_canvas,
+                                    step_fc_explayer_from_canvas,
+                                    step_fc_agglayer_from_canvas]:
+                        new_step += 2
+                    else:
+                        new_step += 1
+                else:
+                    # If the layer is incompatible, stay on the parent step.
+                    # However, if the step is xxxLayerFromCanvas and there are
+                    # no compatible layers, the list will be empty,
+                    # so go one step back.
+                    haz = layer_purpose_hazard['key']
+                    exp = layer_purpose_exposure['key']
+                    agg = layer_purpose_aggregation['key']
+                    if (new_step == step_fc_hazlayer_from_canvas and not
+                            self.get_compatible_layers_from_canvas(haz)):
+                        new_step -= 1
+                    elif (new_step == step_fc_explayer_from_canvas and not
+                          self.get_compatible_layers_from_canvas(exp)):
+                        new_step -= 1
+                    elif (new_step == step_fc_agglayer_from_canvas and not
+                          self.get_compatible_layers_from_canvas(agg)):
+                        new_step -= 1
+
                 self.parent_step = None
                 self.is_selected_layer_keywordless = False
                 self.set_mode_label_to_ifcw()
