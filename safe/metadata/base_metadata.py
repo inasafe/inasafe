@@ -25,7 +25,6 @@ from datetime import datetime
 import json
 import os
 from xml.etree import ElementTree
-
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
 from safe.metadata.metadata_db_io import MetadataDbIO
 from safe.metadata.utils import (METADATA_XML_TEMPLATE,
@@ -153,6 +152,13 @@ class BaseMetadata(object):
             'gmd:supplementalInformation/'
             'inasafe/'
             'source/'
+            'gco:CharacterString'),
+        'datatype': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'datatype/'
             'gco:CharacterString')
     }
 
