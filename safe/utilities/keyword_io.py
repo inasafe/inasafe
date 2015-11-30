@@ -795,7 +795,7 @@ class KeywordIO(QObject):
             # Next the data source
             keyword = self.tr('Layer source')
             value = self.layer.source()
-            row = self._keyword_to_row(keyword, value)
+            row = self._keyword_to_row(keyword, value, wrap_slash=True)
             table.add(row)
 
         # Finalise the report
