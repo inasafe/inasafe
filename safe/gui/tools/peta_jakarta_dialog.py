@@ -179,13 +179,17 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             self, self.tr('Select download directory')))
 
     def accept(self):
-        """Do petajakarta download and display it in QGIS.
+        """Do PetaJakarta download and display it in QGIS.
 
         .. versionadded: 3.3
         """
 
         self.save_state()
-        self.require_directory()
+        try:
+            self.require_directory()
+        except CanceledImportDialogError:
+            return
+
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
         if self.three_hours.isChecked():
@@ -297,7 +301,8 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
                 line = line.replace(title_token, new_title)
                 output_file.write(line)
 
-    def copy_style(self, shapefile_path):
+    @staticmethod
+    def copy_style(shapefile_path):
         """Copy style from the OSM resource directory to the output path.
 
         .. versionadded: 3.3
