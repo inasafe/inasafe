@@ -273,7 +273,7 @@ class KeywordIOTest(unittest.TestCase):
         .. versionadded:: 3.3
         """
         keywords = KeywordIO(self.vector_layer)
-        message = keywords.to_message(keywords).to_text()
+        message = keywords.to_message().to_text()
         self.assertIn('*Reference system*, ', message)
 
     def test_dict_to_row(self):
