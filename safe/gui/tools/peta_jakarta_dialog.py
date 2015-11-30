@@ -13,13 +13,14 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import os
 import logging
+import time
 from shutil import copy
 from PyQt4 import QtCore
 from PyQt4.QtCore import QVariant
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
-    QGis, # force sip2 api
+    QGis,  # force sip2 api
     QgsRectangle,
     QgsMapLayerRegistry,
     QgsProject,
@@ -102,7 +103,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         expression = QRegExp('^[A-Za-z0-9-_]*$')
         validator = QRegExpValidator(expression, self.filename_prefix)
         self.filename_prefix.setValidator(validator)
-
+        self.time_stamp = None
         self.restore_state()
 
     @pyqtSlot()
@@ -201,57 +202,114 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         else:
             area = 'rw'
 
-        registry = QgsMapLayerRegistry.instance()
         source = (
             'https://petajakarta.org/banjir/data/api/v1/aggregates/live?'
             'level=%s&hours=%i&format=geojson') % (area, interval)
         layer = QgsVectorLayer(source, 'flood', 'ogr', False)
+        self.time_stamp = time.strftime('%d-%b-%G %H:%M:%S')
         # Now save as shp
-        name = 'jakarta_flood.shp'
+        name = '%s-jakarta_flood.shp' % area
         output_directory = self.output_directory.text()
         output_prefix = self.filename_prefix.text()
         overwrite = self.overwrite_flag.isChecked()
+        date_stamp_flag = self.include_date_flag.isChecked()
         output_base_file_path = self.get_output_base_path(
-            output_directory, output_prefix, name, overwrite)
+            output_directory,
+            output_prefix,
+            date_stamp_flag,
+            name,
+            overwrite)
         QgsVectorFileWriter.writeAsVectorFormat(
             layer, output_base_file_path, 'CP1250', None, 'ESRI Shapefile')
         # Get rid of the GeoJSON layer and rather use local shp
         del layer
 
-        # copy style
-        source_qml_path = resources_path('petajakarta', 'flood-style.qml')
-        output_qml_path = output_base_file_path.replace('shp', 'qml')
-        LOGGER.info('Copying qml to: %s' % output_qml_path)
-        copy(source_qml_path, output_qml_path)
+        self.copy_style(output_base_file_path)
 
-        # copy keywords
-        source_xml_path = resources_path('petajakarta', 'flood-keywords.xml')
-        output_xml_path = output_base_file_path.replace('shp', 'xml')
-        LOGGER.info('Copying xml to: %s' % output_xml_path)
-        copy(source_xml_path, output_xml_path)
+        self.copy_keywords(output_base_file_path)
+        layer = self.add_flooded_field(output_base_file_path)
+        # add the layer to the map
+        registry = QgsMapLayerRegistry.instance()
+        registry.addMapLayer(layer)
+        self.disable_busy_cursor()
+        self.done(QDialog.Accepted)
 
-        # create the layer from the local shp
+    def add_flooded_field(self, shapefile_path):
+        """Create the layer from the local shp adding the flooded field.
+
+        .. versionadded:: 3.3
+
+        Use this method to add a calculated field to a shapefile. The shapefile
+        should have a field called 'count' containing the number of flood
+        reports for the field. The field values will be set to 0 if the count
+        field is < 1, otherwise it will be set to 1.
+
+        :param shapefile_path: Path to the shapefile that will have the flooded
+            field added.
+        :type shapefile_path: basestring
+
+        :return: A vector layer with the flooded field added.
+        :rtype: QgsVectorLayer
+        """
         layer = QgsVectorLayer(
-            output_base_file_path, self.tr('Jakarta Floods'), 'ogr')
+            shapefile_path, self.tr('Jakarta Floods'), 'ogr')
         # Add a calculated field indicating if a poly is flooded or not
         # from PyQt4.QtCore import QVariant
         layer.startEditing()
         field = QgsField('flooded', QVariant.Int)
         layer.dataProvider().addAttributes([field])
         layer.commitChanges()
+        layer.startEditing()
         idx = layer.fieldNameIndex('flooded')
-        expression = QgsExpression('if("count" > 0, 1, 0 )')
+        expression = QgsExpression('count > 0')
         expression.prepare(layer.pendingFields())
-
         for feature in layer.getFeatures():
             feature[idx] = expression.evaluate(feature)
             layer.updateFeature(feature)
-
         layer.commitChanges()
-        # add the layer to the map
-        registry.addMapLayer(layer)
-        self.disable_busy_cursor()
-        self.done(QDialog.Accepted)
+        return layer
+
+    def copy_keywords(self, shapefile_path):
+        """Copy keywords from the OSM resource directory to the output path.
+
+        .. versionadded: 3.3
+
+        In addition to copying the template, tokens within the template will
+        be replaced with new values for the date token and title token.
+
+        :param shapefile_path: Path to the shapefile that will have the flooded
+            field added.
+        :type shapefile_path: basestring
+        """
+        source_xml_path = resources_path('petajakarta', 'flood-keywords.xml')
+        output_xml_path = shapefile_path.replace('shp', 'xml')
+        LOGGER.info('Copying xml to: %s' % output_xml_path)
+
+        title_token = '[TITLE]'
+        new_title = self.tr('Jakarta Floods - %s' % self.time_stamp)
+
+        date_token = '[DATE]'
+        new_date = self.time_stamp
+        with open(source_xml_path) as source_file, \
+                open(output_xml_path, 'w') as output_file:
+            for line in source_file:
+                line = line.replace(date_token, new_date)
+                line = line.replace(title_token, new_title)
+                output_file.write(line)
+
+    def copy_style(self, shapefile_path):
+        """Copy style from the OSM resource directory to the output path.
+
+        .. versionadded: 3.3
+
+        :param shapefile_path: Path to the shapefile that should get the path
+            added.
+        :type shapefile_path: basestring
+        """
+        source_qml_path = resources_path('petajakarta', 'flood-style.qml')
+        output_qml_path = shapefile_path.replace('shp', 'qml')
+        LOGGER.info('Copying qml to: %s' % output_qml_path)
+        copy(source_qml_path, output_qml_path)
 
     @staticmethod
     def disable_busy_cursor():
@@ -267,6 +325,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
             self,
             output_directory,
             output_prefix,
+            with_date_stamp,
             feature_type,
             overwrite):
         """Get a full base name path to save the shapefile.
@@ -279,7 +338,12 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         :param output_prefix: The prefix to add for the shapefile.
         :type output_prefix: str
 
-        :param feature_type: What kind of flooded should be downloaded.
+        :param with_date_stamp: Whether to add a datestamp in between the
+            file prefix and the feature_type for the shapefile name.
+        :type output_prefix: str
+
+        :param feature_type: What kind of data will be downloaded. Will be
+            used for the shapefile name.
         :type feature_type: str
 
         :param overwrite: Boolean to know if we can overwrite existing files.
@@ -288,6 +352,12 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         :return: The base path.
         :rtype: str
         """
+        if with_date_stamp and self.time_stamp is not None:
+            time_stamp = self.time_stamp.replace(' ', '-')
+            time_stamp = time_stamp.replace(':', '-')
+            time_stamp += '-'
+            feature_type = time_stamp + feature_type
+
         path = os.path.join(
             output_directory, '%s%s' % (output_prefix, feature_type))
 
@@ -330,7 +400,6 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         :return: The minimum prefix you should add to not overwrite a file.
         :rtype: int
         """
-
         basename = os.path.splitext(file_path)
         if i != 0:
             file_path_test = os.path.join(

@@ -58,8 +58,9 @@ def content():
     tips.add(tr(
         'Choose the reporting period - either 6, 3 or 1 hours.'))
     tips.add(tr(
-        'Choose the reporting area size - either subdistrict, village '
-        'or RW boundaries.'))
+        'Choose the reporting area type - either subdistrict, village '
+        'or RW boundaries. The area type will be prefixed into the '
+        'output filename e.g. \'rw-jakarta-flood\'.'))
     tips.add(tr(
         'Check the output directory is correct. Note that the saved '
         'dataset will be called jakarta_flood.shp (and '
@@ -68,14 +69,20 @@ def content():
     tips.add(tr(
         'If you wish you can specify a prefix to '
         'add in front of this default name. For example using a prefix '
-        'of \'23Nov-\' will cause the downloaded files to be saved as '
-        '\'23Nov-jakarta-flood.shp\'. Note that the only allowed prefix '
+        'of \'foo-\' will cause the downloaded files to be saved as e.g. '
+        '\'foo-rw-jakarta-flood.shp\'. Note that the only allowed prefix '
         'characters are A-Z, a-z, 0-9 and the characters \'-\' and \'_\'. '
         'You can leave this blank if you prefer.'
     ))
     tips.add(tr(
         'If a dataset already exists in the output directory it will be '
-        'overwritten.'
+        'overwritten it the "overwrite existing files" checkbox is ticked.'
+    ))
+    tips.add(tr(
+        'If the "include date/time in output filename" option is ticked, '
+        'the filename will be prefixed with a time stamp e.g. '
+        '\'foo-22-Mar-2015-08-01-2015-rw-jakarta-flood.shp\' where the date '
+        'timestamp is in the form DD-MMM-YYYY.'
     ))
     tips.add(tr(
         'This tool requires a working internet connection and fetching '
