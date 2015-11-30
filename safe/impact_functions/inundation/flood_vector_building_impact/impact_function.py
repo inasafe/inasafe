@@ -30,6 +30,7 @@ from safe.impact_functions.bases.classified_vh_classified_ve import \
 from safe.impact_functions.inundation.flood_vector_building_impact.\
     metadata_definitions import FloodPolygonBuildingFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.utilities.gis import is_point_layer
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
@@ -119,9 +120,14 @@ class FloodPolygonBuildingFunction(
             self.target_field)
         exposure_fields = exposure_provider.fields()
 
-        # Create layer to store the lines from E and extent
-        building_layer = QgsVectorLayer(
-            'Polygon?crs=' + srs, 'impact_buildings', 'memory')
+        # Create layer to store the buildings from E and extent
+        buildings_are_points = is_point_layer(self.exposure.layer)
+        if buildings_are_points:
+            building_layer = QgsVectorLayer(
+                'Point?crs=' + srs, 'impact_buildings', 'memory')
+        else:
+            building_layer = QgsVectorLayer(
+                'Polygon?crs=' + srs, 'impact_buildings', 'memory')
         building_provider = building_layer.dataProvider()
 
         # Set attributes
@@ -137,9 +143,10 @@ class FloodPolygonBuildingFunction(
         # for now we assume the extent is in 4326 because it
         # is set to that from geo_extent
         # See issue #1857
+        analysis_extent_crs = QgsCoordinateReferenceSystem(
+            'EPSG:%i' % self._requested_extent_crs)
         transform = QgsCoordinateTransform(
-            QgsCoordinateReferenceSystem(
-                'EPSG:%i' % self._requested_extent_crs),
+            analysis_extent_crs,
             self.hazard.layer.crs()
         )
         projected_extent = transform.transformBoundingBox(requested_extent)
@@ -171,23 +178,45 @@ class FloodPolygonBuildingFunction(
                     ', '.join(self.hazard_class_mapping[self.wet]))
             raise GetDataError(message)
 
+        # Filter out just those EXPOSURE features in the analysis extents
+        transform = QgsCoordinateTransform(
+                analysis_extent_crs,
+                self.exposure.layer.crs()
+        )
+        projected_extent = transform.transformBoundingBox(requested_extent)
+        request = QgsFeatureRequest()
+        request.setFilterRect(projected_extent)
+
+        # We will use this transform to project each exposure feature into
+        # the CRS of the Hazard.
+        transform = QgsCoordinateTransform(
+                self.exposure.layer.crs(),
+                self.hazard.layer.crs()
+        )
         features = []
         for feature in self.exposure.layer.getFeatures(request):
-            building_geom = feature.geometry()
+            # Make a deep copy as the geometry is passed by reference
+            # If we don't do this, subsequent operations will affect the
+            # original feature geometry as well as the copy TS
+            building_geom = QgsGeometry(feature.geometry())
+            # Project the building geometry to hazard CRS
+            building_bounds = transform.transform(building_geom.boundingBox())
             affected = False
             # get tentative list of intersecting hazard features
             # only based on intersection of bounding boxes
-            ids = hazard_index.intersects(building_geom.boundingBox())
+            ids = hazard_index.intersects(building_bounds)
             for fid in ids:
                 # run (slow) exact intersection test
+                building_geom.transform(transform)
                 if hazard_geometries[fid].intersects(building_geom):
                     affected = True
                     break
-            f = QgsFeature()
-            f.setGeometry(building_geom)
-            f.setAttributes(feature.attributes())
-            f[target_field_index] = 1 if affected else 0
-            features.append(f)
+            new_feature = QgsFeature()
+            # We write out the original feature geom, not the projected one
+            new_feature.setGeometry(feature.geometry())
+            new_feature.setAttributes(feature.attributes())
+            new_feature[target_field_index] = 1 if affected else 0
+            features.append(new_feature)
 
             # every once in a while commit the created features
             # to the output layer
