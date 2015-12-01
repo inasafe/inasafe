@@ -19,7 +19,7 @@ from safe.common.exceptions import (
 from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_string, get_unicode
 from safe.storage.metadata_utilities import (
-    write_keyword_in_iso_metadata, read_iso_metadata)
+    write_keyword_in_iso_metadata)
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'inapolygon'
@@ -195,8 +195,6 @@ def write_keywords(keywords, filename, sublayer=None):
 
     handle.close()
 
-    write_keyword_in_iso_metadata(filename)
-
 
 def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     """Read keywords dictionary from file
@@ -259,31 +257,16 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
            (keyword_filename, basename, basename))
     verify(ext == '.keywords' or ext == '.xml', msg)
 
-    metadata = False
     # check .keywords file exist
     keywords_file = os.path.isfile(keyword_filename) \
         and ext == '.keywords'
 
-    try:
-        # read the xml metadata first
-        metadata = read_iso_metadata(keyword_filename)
-    except (IOError, MetadataReadError):
-        # error reading xml metadata or file not exist
-        if keywords_file:
-            # if there is a keyword file generate an xml file also
-            write_keyword_in_iso_metadata(keyword_filename)
-            metadata = read_iso_metadata(keyword_filename)
-
-    # we have no valid xml metadata nor a keyword file
-    if not metadata and not keywords_file:
+    if not keywords_file:
         return {}
 
-    if metadata:
-        lines = metadata['keywords']
-    else:
-        # Read all entries
-        with open(keyword_filename, 'r') as fid:
-            lines = fid.readlines()
+    # Read all entries
+    with open(keyword_filename, 'r') as fid:
+        lines = fid.readlines()
 
     blocks = {}
     keywords = {}

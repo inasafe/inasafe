@@ -307,20 +307,10 @@ def read_file_keywords(layer_path, keyword=None):
     # priority for iso path first
     keyword_file_path = os.path.splitext(layer_path)[0]
     keyword_file_path += '.keywords'
-    keyword_iso_path = os.path.splitext(layer_path)[0]
-    keyword_iso_path += '.xml'
-    if not os.path.isfile(keyword_file_path)\
-            and not os.path.isfile(keyword_iso_path):
-        message = tr('No keywords file found for %s' % keyword_file_path)
-        raise NoKeywordsFoundError(message)
-    elif os.path.isfile(keyword_file_path) \
-            and not os.path.isfile(keyword_iso_path):
-        # switch to .keywords file if iso xml file didn't exist
-        keyword_iso_path = keyword_file_path
 
     # now get the requested keyword using the inasafe library
     try:
-        dictionary = read_keywords(keyword_iso_path)
+        dictionary = read_keywords(keyword_file_path)
     except Exception, e:
         message = tr(
             'Keyword retrieval failed for %s (%s) \n %s' % (
