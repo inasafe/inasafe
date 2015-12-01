@@ -80,7 +80,8 @@ from safe.definitions import (
     exposure_population,
     layer_mode_continuous,
     layer_geometry_raster,
-    structure_class_field
+    structure_class_field,
+    volcano_name_field,
 )
 
 
@@ -359,7 +360,16 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             hazard_category_key='single_event',
         )
         expected = []
-        print [x['key'] for x in result]
+        self.assertItemsEqual(result, expected)
+
+        impact_function = VolcanoPointBuildingFunction()
+        result = impact_function.metadata().hazard_additional_keywords(
+            layer_mode_key='classified',
+            layer_geometry_key='point',
+            hazard_category_key='multiple_event',
+            hazard_key='volcano'
+        )
+        expected = [volcano_name_field]
         self.assertItemsEqual(result, expected)
 
     def test_exposure_additional_keywords(self):
