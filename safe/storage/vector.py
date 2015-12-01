@@ -422,7 +422,12 @@ class Vector(Layer):
         base_name = os.path.splitext(filename)[0]
 
         # Look for any keywords
-        self.keywords = read_keywords(base_name + '.keywords')
+        from safe.storage.metadata_utilities import read_iso19115_metadata
+        from safe.common.exceptions import MetadataReadError
+        try:
+            self.keywords = read_iso19115_metadata(filename)
+        except MetadataReadError:
+            self.keywords = read_keywords(base_name + '.keywords')
 
         # FIXME (Ole): Should also look for style file to populate style_info
 
@@ -581,7 +586,9 @@ class Vector(Layer):
             raise IOError(msg)
 
         # Write keywords if any
-        write_keywords(self.keywords, base_name + '.keywords')
+        # write_keywords(self.keywords, base_name + '.keywords')
+        from safe.storage.metadata_utilities import create_iso19115_metadata
+        create_iso19115_metadata(file_name, self.keywords)
         self.read_from_file(file_name)
 
     def as_qgis_native(self):
@@ -812,7 +819,9 @@ class Vector(Layer):
             feature.Destroy()
 
         # Write keywords if any
-        write_keywords(self.keywords, base_name + '.keywords')
+        # write_keywords(self.keywords, base_name + '.keywords')
+        from safe.storage.metadata_utilities import create_iso19115_metadata
+        create_iso19115_metadata(filename, self.keywords)
 
         # FIXME (Ole): Maybe store style_info
 

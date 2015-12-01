@@ -276,6 +276,8 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         metadata = AggregationLayerMetadata(layer_uri, xml_uri)
     elif metadata.layer_purpose == 'impact':
         metadata = ImpactLayerMetadata(layer_uri, xml_uri)
+    else:
+        raise MetadataReadError
 
     if keyword:
         try:
