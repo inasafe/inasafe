@@ -362,7 +362,7 @@ exposure_area = {
     'description': tr(
         'The <b>area</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
-        ' hazard. This currently include urban areas. ')
+        'hazard. This currently include urban areas. ')
 }
 
 exposure_all = [

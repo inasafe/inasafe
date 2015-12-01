@@ -33,6 +33,9 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         registry.register(ClassifiedPolygonHazardPolygonPeopleFunction)
 
     def test_run(self):
+        """TestClassifiedPolygonPeopleFunction: Test running the IF."""
+
+        # 1. Initializing function with necessary data
         function = ClassifiedPolygonHazardPolygonPeopleFunction.instance()
 
         hazard_path = test_data_path('hazard',
@@ -42,9 +45,12 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         hazard_layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
         # noinspection PyCallingNonCallable
         exposure_layer = QgsVectorLayer(exposure_path, 'Area', 'ogr')
+
+        # 1.1 Asserting if the provided data are valid
         self.assertEqual(hazard_layer.isValid(), True)
         self.assertEqual(exposure_layer.isValid(), True)
 
+        # 2.Choosing the extent to run analysis
         extent = hazard_layer.extent()
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
@@ -53,24 +59,31 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         function.hazard = hazard_layer
         function.exposure = exposure_layer
         function.requested_extent = rect_extent
+
+        # 3. Running the analysis
         function.run()
         impact = function.impact
 
         impact = safe_to_qgis_layer(impact)
 
-        # self.assertEqual(impact.dataProvider().featureCount(), 3)
+        self.assertEqual(impact.dataProvider().featureCount(), 16L)
+
+        # 4. Asserting about the results found
         features = {}
-        for f in impact.getFeatures():
-            area = f.geometry().area() * 1e8
-            features[f['id']] = round(area, 1)
+        for feature in impact.getFeatures():
+            area = feature.geometry().area() * 1e8
+            features[feature['id']] = round(area, 1)
+
         expected_features = {
             1: 2460.7,
             2: 6755.5,
-            3: 948.4
+            3: 948.4,
+            4: 4638.9
         }
         self.assertEqual(features, expected_features)
 
     def test_keywords(self):
+        """TestClassifiedPolygonPeopleFunction: Test keywords IF"""
 
         exposure_keywords = {
             'layer_purpose': 'exposure',

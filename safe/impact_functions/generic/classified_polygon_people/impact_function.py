@@ -219,10 +219,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         all_areas = {}
         imp_areas = {}
+        impacted_geometries = []
 
-        for f in exposure.getFeatures(
+        for feature in exposure.getFeatures(
                 QgsFeatureRequest(extent_exposure)):
-            geometry = f.geometry()
+            geometry = feature.geometry()
 
             if geometry is not None:
                 bbox = geometry.boundingBox()
@@ -234,9 +235,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             if not extent_exposure.contains(bbox):
                 geometry = geometry.intersection(extent_exposure_geom)
 
-            area_type = f[type_attr]
-            area_id = f.attribute(area_id_attribute)
-            self.all_areas_population[area_id] = f.attribute(
+            area_type = feature[type_attr]
+            area_id = feature.attribute(area_id_attribute)
+            self.all_areas_population[area_id] = feature.attribute(
                 area_population_attribute)
 
             # add to the total area of this land cover type
@@ -252,7 +253,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             self.all_areas_ids[area_id] += geometry_area
 
             # find possible intersections with hazard layer
-            impacted_geometries = []
+
             # unaffected_geometries = []
             # impacted_features = {}
             for hazard_id in hazard_index.intersects(bbox):
@@ -277,33 +278,35 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 imp_areas[area_type] += area
                 self.all_affected_areas[area_id] += area
 
-                self.assign_impact_level(f,
-                                         hazard_id,
-                                         hazard_features,
-                                         unaffected_fields,
-                                         impact_fields,
-                                         unaffected_geometry,
-                                         impact_geometry,
-                                         writer)
+                self.assign_impact_level(
+                    feature,
+                    hazard_id,
+                    hazard_features,
+                    unaffected_fields,
+                    impact_fields,
+                    unaffected_geometry,
+                    impact_geometry,
+                    writer)
 
                 impacted_geometries.append(impact_geometry)
 
         return impacted_geometries
 
-    def assign_impact_level(self,
-                            f,
-                            hazard_id,
-                            hazard_features,
-                            unaffected_fields,
-                            impact_fields,
-                            unaffected_geometry,
-                            impact_geometry,
-                            writer):
+    def assign_impact_level(
+            self,
+            feature,
+            hazard_id,
+            hazard_features,
+            unaffected_fields,
+            impact_fields,
+            unaffected_geometry,
+            impact_geometry,
+            writer):
         """ Assign different impacted areas with their
         respective level of impact(Affected, Not Affected, Medium)
 
-        :param f: exposure feature
-        :type f: QgsFeature
+        :param feature: exposure feature
+        :type feature: QgsFeature
 
         :param hazard_id: id of analyzed hazard
         :type hazard_id: int
@@ -342,67 +345,68 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             except KeyError:
                 hazard_attribute = None
 
-        f_unaffected = QgsFeature(unaffected_fields)
-        f_impact = QgsFeature(impact_fields)
+        unaffected_feature = QgsFeature(unaffected_fields)
+        impacted_feature = QgsFeature(impact_fields)
 
         if hazard_attribute is not None:
-            f_unaffected.setGeometry(unaffected_geometry)
-            f_unaffected.setAttributes(f.attributes() + [0])
-            f_impact.setGeometry(impact_geometry)
+            unaffected_feature.setGeometry(unaffected_geometry)
+            unaffected_feature.setAttributes(feature.attributes() + [0])
+            impacted_feature.setGeometry(impact_geometry)
 
             if hazard_attribute == "Low Hazard Zone":
-                f_impact.setAttributes(f.attributes() + [1])
+                impacted_feature.setAttributes(feature.attributes() + [1])
 
             elif hazard_attribute == "Medium Hazard Zone":
-                f_impact.setAttributes(f.attributes() + [2])
+                impacted_feature.setAttributes(feature.attributes() + [2])
 
             elif hazard_attribute == "High Hazard Zone":
-                f_impact.setAttributes(f.attributes() + [3])
+                impacted_feature.setAttributes(feature.attributes() + [3])
 
             elif hazard_attribute == "YES":
-                f_impact.setAttributes(f.attributes() + [3])
+                impacted_feature.setAttributes(feature.attributes() + [3])
 
             elif hazard_attribute == "NO":
-                f_impact.setAttributes(f.attributes() + [1])
+                impacted_feature.setAttributes(feature.attributes() + [1])
 
         else:
-            f_impact.setGeometry(impact_geometry)
-            f_unaffected.setAttributes(f.attributes() + [1])
-            f_impact.setAttributes(f.attributes() + [3])
+            impacted_feature.setGeometry(impact_geometry)
+            unaffected_feature.setAttributes(feature.attributes() + [1])
+            impacted_feature.setAttributes(feature.attributes() + [3])
 
-        writer.addFeature(f_impact)
-        writer.addFeature(f_unaffected)
+        writer.addFeature(impacted_feature)
+        writer.addFeature(unaffected_feature)
 
     def evaluate_affected_people(self):
-        """ Calculate the number of people affected on the area
+        """Calculate the number of people affected on the area
         based on the affected area.
         Currently we assume the population distribution is
         uniform
 
-        :return:
+        :raises: ZeroImpactException
+
         """
 
-        for t, v in self.all_areas_ids.iteritems():
+        for area_id, area_value in self.all_areas_ids.iteritems():
 
-            if t in self.all_affected_areas:
-                affected = self.all_affected_areas[t]
+            if area_id in self.all_affected_areas:
+                affected = self.all_affected_areas[area_id]
             else:
                 affected = 0.0
 
-            single_total_area = v
-            if v:
+            single_total_area = area_value
+            if area_value:
                 affected_area_ratio = affected / single_total_area
             else:
                 affected_area_ratio = 0
 
             number_people_affected = (
-                affected_area_ratio * self.all_areas_population[t])
+                affected_area_ratio * self.all_areas_population[area_id])
 
             # rounding to float without decimal, we can't have number
             # of people with decimal
             number_people_affected = round(number_people_affected, 0)
 
-            self.affected_population[t] = number_people_affected
+            self.affected_population[area_id] = number_people_affected
 
         total_affected_population = self.total_affected_population
 

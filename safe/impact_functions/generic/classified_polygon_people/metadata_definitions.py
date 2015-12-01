@@ -30,8 +30,6 @@ from safe.definitions import (
     layer_geometry_polygon
 )
 from safe.utilities.i18n import tr
-from safe.impact_functions.generic.\
-    classified_polygon_people import parameter_definitions
 
 
 class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
@@ -95,13 +93,13 @@ class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
                     'exposure_types': [exposure_area],
                     'exposure_units': [],
                     'exposure_class_fields': [],
-                    'additional_keywords': [area_name_field,
-                                            area_type,
-                                            area_population_field
-                                            ]
+                    'additional_keywords': [
+                        area_name_field,
+                        area_type,
+                        area_population_field
+                    ]
                 }
             },
-            'parameters': OrderedDict([
-            ])
+            'parameters': OrderedDict([])
         }
         return dict_meta
