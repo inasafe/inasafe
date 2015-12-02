@@ -111,7 +111,7 @@ def _keywords_to_string(keywords, sublayer=None):
         verify(':' not in key, msg)
 
         # Store
-        result += '%s: %s\n' % (key, keywords[key])
+        result += get_unicode('%s: %s\n' % (key, keywords[key]))
     return result
 
 
