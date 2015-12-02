@@ -190,8 +190,8 @@ def write_keywords(keywords, filename, sublayer=None):
             handle.write(_keywords_to_string(keywords))
     else:
         # currently a simple layer so replace it with our content
-        keywords = get_string(_keywords_to_string(keywords, sublayer=sublayer))
-        handle.write(keywords)
+        keywords = _keywords_to_string(keywords, sublayer=sublayer)
+        handle.write(get_string(keywords))
 
     handle.close()
 
