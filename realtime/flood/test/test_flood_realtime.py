@@ -1,11 +1,11 @@
 # coding=utf-8
 import logging
+import os
 import unittest
 
-import os
+from realtime.flood.make_flood_map import process_event
 from realtime.flood.peta_jakarta_api import PetaJakartaAPI
 from realtime.utilities import realtime_logger_name
-from realtime.make_flood_map import process_event
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 

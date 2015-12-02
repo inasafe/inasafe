@@ -2,7 +2,8 @@
 """Simple helper for when you already have the grid.xml and just want a map."""
 # Tim Sutton, April 2013.
 import sys
-from shake_event import ShakeEvent
+
+from realtime.earthquake.shake_event import ShakeEvent
 
 if __name__ == '__main__':
     working_dir = sys.argv[1]

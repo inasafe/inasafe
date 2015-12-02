@@ -4,12 +4,14 @@
 This script will be executed in .bash_logout script of realtime processor.
 This will make the script executed after a user is pushing a shakemap.
 """
-import sys
-import re
 import os
+import re
+import sys
+
 from datetime import datetime
 from tzlocal import get_localzone
-from realtime.push_shake import notify_realtime_rest
+
+from realtime.earthquake.push_shake import notify_realtime_rest
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '03/09/15'

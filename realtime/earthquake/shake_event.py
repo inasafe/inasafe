@@ -73,7 +73,7 @@ from safe.utilities.resources import resources_path
 from safe.common.exceptions import TranslationLoadError
 from safe.gui.tools.shake_grid.shake_grid import ShakeGrid
 import safe.messaging as m
-from realtime.shake_data import ShakeData
+from realtime.earthquake.shake_data import ShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
@@ -980,7 +980,7 @@ class ShakeEvent(QObject):
                 # noinspection PyTypeChecker
                 affected_row.add(m.Cell(0.00))
 
-            impact_row.append(m.Cell(self.mmi_shaking(mmi)))
+            impact_row.add(m.Cell(self.mmi_shaking(mmi)))
 
         table.add(header_row)
         table.add(affected_row)
@@ -1859,6 +1859,7 @@ class ShakeEvent(QObject):
         root = os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__),
+                os.pardir,
                 os.pardir))
         translation_path = os.path.join(
             root,

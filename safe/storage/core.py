@@ -6,6 +6,8 @@
 
 import os
 
+from qgis.core import QgsVectorLayer, QgsRasterLayer
+
 from vector import Vector
 from raster import Raster
 from safe.common.utilities import verify, VerificationError
@@ -26,6 +28,30 @@ def read_layer(filename):
         return Raster(filename)
     elif ext in ['.shp', '.sqlite']:
         return Vector(filename)
+    else:
+        msg = ('Could not read %s. '
+               'Extension "%s" has not been implemented' % (filename, ext))
+        raise ReadLayerError(msg)
+
+
+def read_qgis_layer(filename):
+    """Read layer from file and return as QgsMapLayer
+
+    :param filename: the layer filename
+    :type filename: str
+
+    :return: QGIS Layer
+    :rtype: QgsMapLayer
+    """
+    base_name, ext = os.path.splitext(filename)
+    vector_extension = [
+        '.shp', '.sqlite', '.json']
+    raster_extension = ['.asc', '.tif', '.nc']
+
+    if ext in vector_extension:
+        return QgsVectorLayer(filename, base_name, 'ogr')
+    elif ext in raster_extension:
+        return QgsRasterLayer(filename, base_name)
     else:
         msg = ('Could not read %s. '
                'Extension "%s" has not been implemented' % (filename, ext))

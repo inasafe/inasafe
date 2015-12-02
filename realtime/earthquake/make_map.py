@@ -18,17 +18,18 @@ __date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import logging
 import os
 import sys
-import logging
 from urllib2 import URLError
 from zipfile import BadZipfile
 
-from realtime.utilities import data_dir, is_event_id, realtime_logger_name
-from realtime.shake_event import ShakeEvent
+from realtime.earthquake.shake_event import ShakeEvent
+
+from realtime.earthquake.push_shake import push_shake_event_to_rest
+from realtime.earthquake.shake_data import ShakeData
 from realtime.exceptions import EmptyShakeDirectoryError
-from realtime.push_shake import push_shake_event_to_rest
-from realtime.shake_data import ShakeData
+from realtime.utilities import data_dir, is_event_id, realtime_logger_name
 
 # Initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
@@ -210,5 +211,6 @@ if __name__ == '__main__':
         # noinspection PyBroadException
         try:
             process_event(working_dir=working_directory, locale=locale_option)
-        except:  # pylint: disable=W0702
+        except Exception as e:  # pylint: disable=W0702
             LOGGER.info('Process event failed')
+            LOGGER.exception(e)

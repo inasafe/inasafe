@@ -81,6 +81,7 @@ def process_event(working_directory):
         )
 
     event.calculate_impact()
+    event.generate_report()
 
 
 if __name__ == '__main__':

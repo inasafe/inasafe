@@ -17,28 +17,28 @@ __date__ = '2/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import difflib
+import logging
 import os
 import shutil
-import requests
 import unittest
-import logging
-import difflib
 
+import requests
 from qgis.core import QgsFeatureRequest
 
-from safe.common.utilities import temp_dir, unique_filename
-from safe.common.version import get_version
-from safe.test.utilities import test_data_path, get_qgis_app
+from realtime.earthquake.push_shake import INASAFE_REALTIME_REST_URL, \
+    push_shake_event_to_rest, \
+    generate_earthquake_detail_url, get_realtime_session, \
+    is_realtime_rest_configured, INASAFE_REALTIME_DATETIME_FORMAT
+from realtime.earthquake.shake_event import ShakeEvent
+from realtime.utilities import base_data_dir
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
     realtime_logger_name)
-from realtime.shake_event import ShakeEvent
-from realtime.utilities import base_data_dir
-from realtime.push_shake import INASAFE_REALTIME_REST_URL, \
-    push_shake_event_to_rest, \
-    generate_earthquake_detail_url, get_realtime_session, \
-    is_realtime_rest_configured, INASAFE_REALTIME_DATETIME_FORMAT
+from safe.common.utilities import temp_dir, unique_filename
+from safe.common.version import get_version
+from safe.test.utilities import test_data_path, get_qgis_app
 
 # The logger is initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())

@@ -1,56 +1,29 @@
 # coding=utf-8
 import json
 import logging
-import os
 import pytz
 import requests
 
+from realtime.push_rest import (
+    INASAFE_REALTIME_REST_URLPATTERN,
+    INASAFE_REALTIME_REST_LOGIN_URL, INASAFE_REALTIME_REST_USER,
+    INASAFE_REALTIME_REST_PASSWORD, INASAFE_REALTIME_REST_URL,
+    INASAFE_REALTIME_DATETIME_FORMAT, INASAFE_REALTIME_SHAKEMAP_HOOK_URL)
 from realtime.utilities import realtime_logger_name
 from realtime.exceptions import RESTRequestFailedError
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
-__date__ = '07/07/15'
+__date__ = '12/01/15'
 
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
-# Get Realtime Rest URL from the os environment
-INASAFE_REALTIME_REST_URL = None
-
-if 'INASAFE_REALTIME_REST_URL' in os.environ:
-    INASAFE_REALTIME_REST_URL = os.environ['INASAFE_REALTIME_REST_URL']
-
-INASAFE_REALTIME_SHAKEMAP_HOOK_URL = None
-if 'INASAFE_REALTIME_SHAKEMAP_HOOK_URL' in os.environ:
-    INASAFE_REALTIME_SHAKEMAP_HOOK_URL = os.environ[
-        'INASAFE_REALTIME_SHAKEMAP_HOOK_URL']
-
-INASAFE_REALTIME_REST_USER = None
-if 'INASAFE_REALTIME_REST_USER' in os.environ:
-    INASAFE_REALTIME_REST_USER = os.environ['INASAFE_REALTIME_REST_USER']
-
-INASAFE_REALTIME_REST_PASSWORD = None
-if 'INASAFE_REALTIME_REST_PASSWORD' in os.environ:
-    INASAFE_REALTIME_REST_PASSWORD = \
-        os.environ['INASAFE_REALTIME_REST_PASSWORD']
-
-INASAFE_REALTIME_REST_LOGIN_URL = None
-if 'INASAFE_REALTIME_REST_LOGIN_URL' in os.environ:
-    INASAFE_REALTIME_REST_LOGIN_URL = \
-        os.environ['INASAFE_REALTIME_REST_LOGIN_URL']
-
-INASAFE_REALTIME_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
-if 'INASAFE_REALTIME_DATETIME_FORMAT' in os.environ:
-    INASAFE_REALTIME_DATETIME_FORMAT = \
-        os.environ['INASAFE_REALTIME_DATETIME_FORMAT']
-
-INASAFE_REALTIME_REST_URLPATTERN = {
-    'login': INASAFE_REALTIME_REST_LOGIN_URL,
-    'earthquake': INASAFE_REALTIME_REST_URL + 'earthquake/',
-    'earthquake-detail': INASAFE_REALTIME_REST_URL + 'earthquake/<shake_id>',
-    'earthquake-report': INASAFE_REALTIME_REST_URL + 'earthquake-report/',
-    'earthquake-report-detail': (
-        INASAFE_REALTIME_REST_URL + 'earthquake-report/<shake_id>/<locale>')
+INASAFE_REALTIME_REST_URLPATTERN += {
+    'flood': INASAFE_REALTIME_REST_URL + 'flood/',
+    'flood-detail': INASAFE_REALTIME_REST_URL + 'flood/<event_id>',
+    'flood-report': INASAFE_REALTIME_REST_URL + 'flood-report/',
+    'flood-report-detail': (
+        INASAFE_REALTIME_REST_URL + 'flood-report/<event_id>/<locale>')
 }
 
 
@@ -92,60 +65,6 @@ def generate_earthquake_report_detail_url(shake_id, locale):
         'earthquake-report-detail'].replace(
             '<shake_id>', shake_id).replace(
                 '<locale>', locale)
-
-
-def get_realtime_session():
-    """Get session of logged in user in Realtime django app
-
-    :return: session requests object
-    """
-    session = requests.session()
-    r = session.get(INASAFE_REALTIME_REST_LOGIN_URL)
-    csrf_token = r.cookies.get('csrftoken')
-    login_data = {
-        'username': INASAFE_REALTIME_REST_USER,
-        'password': INASAFE_REALTIME_REST_PASSWORD,
-        'csrfmiddlewaretoken': csrf_token,
-        'next': INASAFE_REALTIME_REST_URL
-    }
-    session.post(INASAFE_REALTIME_REST_LOGIN_URL, data=login_data)
-    return session
-
-
-def is_realtime_rest_configured():
-    """Determine if realtime REST is configured.
-
-    :return: True if Realtime REST credentials is provided in os.environ
-    """
-    return (INASAFE_REALTIME_REST_URL and
-            INASAFE_REALTIME_REST_LOGIN_URL and
-            INASAFE_REALTIME_REST_USER and
-            INASAFE_REALTIME_REST_PASSWORD)
-
-
-def notify_realtime_rest(timestamp):
-    """Notify realtime rest that someone is logged in to realtime.
-
-    This can indicate someone is pushing raw shakemap files
-
-    :param timestamp: python datetime object indicating shakemap timestamp
-    :type timestamp: datetime.datetime
-    """
-    session = get_realtime_session()
-    timestamp_utc = timestamp.astimezone(tz=pytz.utc)
-    data = {
-        'timestamp': timestamp_utc.strftime(INASAFE_REALTIME_DATETIME_FORMAT)
-    }
-    cookies = session.get(INASAFE_REALTIME_REST_LOGIN_URL).cookies
-    session.headers['X-CSRFTOKEN'] = cookies.get('csrftoken')
-    response = session.post(
-        INASAFE_REALTIME_SHAKEMAP_HOOK_URL, data=data)
-    # We will not handle post error, since we don't need it.
-    # It just simply fails
-    if response.status_code != requests.codes.ok:
-        LOGGER.info(
-            'Notify Shakemap Push Failed : Error code %s',
-            response.status_code)
 
 
 def push_shake_event_to_rest(shake_event, fail_silent=True):
