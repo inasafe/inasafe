@@ -307,7 +307,9 @@ def read_file_keywords(layer_path, keyword=None):
     # priority for iso path first
     keyword_file_path = os.path.splitext(layer_path)[0]
     keyword_file_path += '.keywords'
-
+    if not os.path.isfile(keyword_file_path):
+        message = tr('No keywords file found for %s' % keyword_file_path)
+        raise NoKeywordsFoundError(message)
     # now get the requested keyword using the inasafe library
     try:
         dictionary = read_keywords(keyword_file_path)
