@@ -198,7 +198,7 @@ class AreaExposureReportMixin(ReportMixin):
             total_population):
         """Adds values to the second row columns
 
-        :param row: an empty row to be added
+        :param row: an empty row
         :type row: Row
 
         :param total_affected_area: total affected area
@@ -283,10 +283,14 @@ class AreaExposureReportMixin(ReportMixin):
 
         return row
 
-    def impact_row(self,
-                   area_id, affected, percent_affected,
-                   single_total_area, number_people_affected,
-                   percent_people_affected):
+    def impact_row(
+            self,
+            area_id,
+            affected,
+            percent_affected,
+            single_total_area,
+            number_people_affected,
+            percent_people_affected):
         """Adds the calculated results into respective impact row
 
         :param area_id: Area id

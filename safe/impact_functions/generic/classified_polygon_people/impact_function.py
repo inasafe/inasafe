@@ -114,10 +114,14 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         # Evaluating the impact
         self.evaluate_impact(
-                        exposure, extent_exposure, extent_exposure_geom,
-                        hazard_index, hazard_features, writer,
-                        unaffected_fields, impact_fields
-                       )
+            exposure,
+            extent_exposure,
+            extent_exposure_geom,
+            hazard_index,
+            hazard_features,
+            writer,
+            unaffected_fields,
+            impact_fields)
 
         del writer
         impact_layer = QgsVectorLayer(filename, "Impacted Areas", "ogr")
@@ -171,12 +175,16 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         self._impact = impact_layer
         return impact_layer
 
-    def evaluate_impact(self,
-                        exposure, extent_exposure,
-                        extent_exposure_geom,
-                        hazard_index, hazard_features, writer,
-                        unaffected_fields, impact_fields
-                        ):
+    def evaluate_impact(
+            self,
+            exposure,
+            extent_exposure,
+            extent_exposure_geom,
+            hazard_index,
+            hazard_features,
+            writer,
+            unaffected_fields,
+            impact_fields):
 
         """ Iterate over all exposure polygons and calculate the impact
         :param exposure: Exposure layer
