@@ -62,13 +62,18 @@ class KeywordIO(QObject):
     .keywords file and this plugins implementation of keyword caching in a
     local sqlite db used for supporting keywords for remote datasources."""
 
-    def __init__(self):
-        """Constructor for the KeywordIO object."""
+    def __init__(self, layer=None):
+        """Constructor for the KeywordIO object.
+
+        .. versionchanged:: 3.3 added optional layer parameter.
+
+        """
         QObject.__init__(self)
         # path to sqlite db path
         self.keyword_db_path = None
         self.setup_keyword_db_path()
         self.connection = None
+        self.layer = layer
 
     def set_keyword_db_path(self, path):
         """Set the path for the keyword database (sqlite).
@@ -706,15 +711,18 @@ class KeywordIO(QObject):
                         return var
         return None
 
-    def to_message(self, keywords, show_header=True):
+    def to_message(self, keywords=None, show_header=True):
         """Format keywords as a message object.
 
         .. versionadded:: 3.2
 
+        .. versionchanged:: 3.3 - default keywords to None
+
         The message object can then be rendered to html, plain text etc.
 
-
-        :param keywords: Keywords to be converted to a message.
+        :param keywords: Keywords to be converted to a message. Optional. If
+            not passed then we will attempt to get keywords from self.layer
+            if it is not None.
         :type keywords: dict
 
         :param show_header: Flag indicating if InaSAFE logo etc. should be
@@ -724,6 +732,8 @@ class KeywordIO(QObject):
         :returns: A safe message object containing a table.
         :rtype: safe.messaging.message
         """
+        if keywords is None and self.layer is not None:
+            keywords = self.read_keywords(self.layer)
         # This order was determined in issue #2313
         preferred_order = [
             'title',
@@ -772,10 +782,27 @@ class KeywordIO(QObject):
             value = keywords[keyword]
             row = self._keyword_to_row(keyword, value)
             table.add(row)
+
+        # If the keywords class was instantiated with a layer object
+        # we can add some context info not stored in the keywords themselves
+        # but that is still useful to see...
+        if self.layer:
+            # First the CRS
+            keyword = self.tr('Reference system')
+            value = self.layer.crs().authid()
+            row = self._keyword_to_row(keyword, value)
+            table.add(row)
+            # Next the data source
+            keyword = self.tr('Layer source')
+            value = self.layer.source()
+            row = self._keyword_to_row(keyword, value, wrap_slash=True)
+            table.add(row)
+
+        # Finalise the report
         report.add(table)
         return report
 
-    def _keyword_to_row(self, keyword, value):
+    def _keyword_to_row(self, keyword, value, wrap_slash=False):
         """Helper to make a message row from a keyword.
 
         .. versionadded:: 3.2
@@ -788,6 +815,12 @@ class KeywordIO(QObject):
 
         :param value: Value of the keyword to be rendered.
         :type value: basestring
+
+        :param wrap_slash: Whether to replace slashes with the slash plus the
+            html <wbr> tag which will help to e.g. wrap html in small cells if
+            it contains a long filename. Disabled by default as it may cause
+            side effects if the text contains html markup.
+        :type wrap_slash: bool
 
         :returns: A row to be added to a messaging table.
         :rtype: safe.messaging.items.row.Row
@@ -841,7 +874,7 @@ class KeywordIO(QObject):
 
         key = m.ImportantText(definition)
         row.add(m.Cell(key))
-        row.add(m.Cell(value))
+        row.add(m.Cell(value, wrap_slash=wrap_slash))
         return row
 
     def _dict_to_row(self, keyword_value):

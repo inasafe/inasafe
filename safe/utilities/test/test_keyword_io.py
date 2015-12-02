@@ -267,6 +267,15 @@ class KeywordIOTest(unittest.TestCase):
         message = self.keyword_io.to_message(keywords).to_text()
         self.assertIn('*Exposure*, structure------', message)
 
+    def test_layer_to_message(self):
+        """Test to show augmented keywords if KeywordsIO ctor passed a layer.
+
+        .. versionadded:: 3.3
+        """
+        keywords = KeywordIO(self.vector_layer)
+        message = keywords.to_message().to_text()
+        self.assertIn('*Reference system*, ', message)
+
     def test_dict_to_row(self):
         """Test the dict to row helper works.
 
