@@ -1664,6 +1664,16 @@
            </item>
           </layout>
          </widget>
+         <widget class="QWidget" name="pg14KwSummary">
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QWebView" name="wvKwSummary" native="true"/>
+           </item>
+          </layout>
+         </widget>
          <widget class="QWidget" name="pgF01Constraints1">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -3821,6 +3831,11 @@ Please step back and select another layer.</string>
    <extends>QWidget</extends>
    <header>safe.gui.widgets.message_viewer</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>qwebview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -393,6 +393,7 @@ class WizardDialogTest(unittest.TestCase):
                    'after a text entered')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
         dialog.pbnNext.click()
+        dialog.pbnNext.click()
 
         # test the resulting keywords
         keyword_io = KeywordIO()
@@ -589,6 +590,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.leSource_url.setText(source_url)
         dialog.leSource_date.setText(source_date)
         dialog.leSource_license.setText(source_license)
+        dialog.pbnNext.click()  # next
         dialog.pbnNext.click()  # next
         dialog.pbnNext.click()  # finish
 
