@@ -96,7 +96,8 @@ def process_event(working_dir=None, event_id=None, locale='en'):
         for shake_event in shake_events:
             shake_event.render_map(force_flag)
             # push the shakemap to realtime server
-            push_shake_event_to_rest(shake_event)
+            ret = push_shake_event_to_rest(shake_event)
+            LOGGER.info('Is Push successful? %s' % bool(ret))
 
 
 def create_shake_events(
@@ -211,6 +212,7 @@ if __name__ == '__main__':
         # noinspection PyBroadException
         try:
             process_event(working_dir=working_directory, locale=locale_option)
+            LOGGER.info('Process event end.')
         except Exception as e:  # pylint: disable=W0702
             LOGGER.info('Process event failed')
             LOGGER.exception(e)

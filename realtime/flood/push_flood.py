@@ -1,16 +1,16 @@
 # coding=utf-8
 import json
 import logging
-import pytz
+import os
+from zipfile import ZipFile
+
 import requests
 
-from realtime.push_rest import (
-    INASAFE_REALTIME_REST_URLPATTERN,
-    INASAFE_REALTIME_REST_LOGIN_URL, INASAFE_REALTIME_REST_USER,
-    INASAFE_REALTIME_REST_PASSWORD, INASAFE_REALTIME_REST_URL,
-    INASAFE_REALTIME_DATETIME_FORMAT, INASAFE_REALTIME_SHAKEMAP_HOOK_URL)
-from realtime.utilities import realtime_logger_name
 from realtime.exceptions import RESTRequestFailedError
+from realtime.flood.flood_event import FloodEvent
+from realtime.push_rest import (
+    InaSAFEDjangoREST)
+from realtime.utilities import realtime_logger_name
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '12/01/15'
@@ -18,63 +18,27 @@ __date__ = '12/01/15'
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
-INASAFE_REALTIME_REST_URLPATTERN += {
-    'flood': INASAFE_REALTIME_REST_URL + 'flood/',
-    'flood-detail': INASAFE_REALTIME_REST_URL + 'flood/<event_id>',
-    'flood-report': INASAFE_REALTIME_REST_URL + 'flood-report/',
-    'flood-report-detail': (
-        INASAFE_REALTIME_REST_URL + 'flood-report/<event_id>/<locale>')
-}
-
-
-def generate_earthquake_list_url():
-    """Generate url for earthquake list
-
-    :return: url
-    """
-    return INASAFE_REALTIME_REST_URLPATTERN['earthquake']
-
-
-def generate_earthquake_detail_url(shake_id):
-    """Generate url for earthquake detail
-
-    :param shake_id: the shake id of the event
-    :type shake_id str:
-    :return: url
-    """
-    return INASAFE_REALTIME_REST_URLPATTERN['earthquake-detail'].replace(
-        '<shake_id>', shake_id)
-
-
-def generate_earthquake_report_list_url():
-    """Generate url for earthquake report list
-
-    :return: url
-    """
-    return INASAFE_REALTIME_REST_URLPATTERN['earthquake-report']
-
-
-def generate_earthquake_report_detail_url(shake_id, locale):
-    """Generate url for earthquake report detail
-
-    :param shake_id: the shake id of the event
-    :param locale: the locale used for the report
-    :return: url
-    """
-    return INASAFE_REALTIME_REST_URLPATTERN[
-        'earthquake-report-detail'].replace(
-            '<shake_id>', shake_id).replace(
-                '<locale>', locale)
-
-
-def push_shake_event_to_rest(shake_event, fail_silent=True):
+def push_flood_event_to_rest(flood_event, fail_silent=True):
     """Pushing shake event Grid.xml description files to REST server.
 
-    :param shake_event: The shake event to push
-    :type shake_event: ShakeEvent
+    :param flood_event: The flood event to push
+    :type flood_event: FloodEvent
+
+    :param fail_silent: If set True, will still continue whan the push process
+        failed. Default vaule to True. If False, this method will raise
+        exception.
+    :type fail_silent:
+
+    :return: Return True if successfully pushed data
+    :rtype: bool
     """
+    if not flood_event.impact_exists:
+        LOGGER.info('No impact exists. Will not push anything')
+        return
+
+    inasafe_django = InaSAFEDjangoREST()
     # check credentials exists in os.environ
-    if not is_realtime_rest_configured():
+    if not inasafe_django.is_configured():
         LOGGER.info('Insufficient information to push shake map to '
                     'Django Realtime')
         LOGGER.info('Please set environment for INASAFE_REALTIME_REST_URL, '
@@ -83,47 +47,59 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
                     'INASAFE_REALTIME_REST_PASSWORD')
         return
 
-    event_dict = shake_event.event_dict()
-    earthquake_list_url = generate_earthquake_list_url()
-    earthquake_detail_url = generate_earthquake_detail_url(
-        shake_event.event_id)
-
     # set headers and cookie
     # begin communicating with server
     LOGGER.info('----------------------------------')
-    LOGGER.info('Push data to REST server: %s', INASAFE_REALTIME_REST_URL)
+    LOGGER.info('Push data to REST server: %s', inasafe_django.base_url())
     try:
-        session = get_realtime_session()
-        cookies = session.get(earthquake_list_url,
-                              params={'format': 'api'}).cookies
-        session.headers['X-CSRFTOKEN'] = cookies.get('csrftoken')
-        session.headers['Content-Type'] = 'application/json'
+        session = inasafe_django.rest
+
+        # Create a zipped impact layer
+        impact_zip_path = os.path.join(flood_event.report_path, 'impact.zip')
+
+        with ZipFile(impact_zip_path, 'w') as zipf:
+            for root, dirs, files in os.walk(flood_event.report_path):
+                for f in files:
+                    _, ext = os.path.splitext(f)
+                    if ('impact' in f and
+                            not f == 'impact.zip' and
+                            not ext == '.pdf'):
+                        filename = os.path.join(root, f)
+                        zipf.write(filename, arcname=f)
 
         # build the data request:
-        earthquake_data = {
-            'shake_id': shake_event.event_id,
-            'magnitude': float(event_dict.get('mmi')),
-            'depth': float(event_dict.get('depth-value')),
-            'time': str(shake_event.shake_grid.time),
-            'location': {
-                'type': 'Point',
-                'coordinates': [
-                    shake_event.shake_grid.longitude,
-                    shake_event.shake_grid.latitude
-                ]
-            },
-            'location_description': event_dict.get('place-name')
+        flood_data = {
+            'event_id': flood_event.report_id,
+            'time': flood_event.time,
+            'interval': flood_event.duration,
+            'source': flood_event.source,
+            'region': flood_event.region
         }
+        flood_data_file = {
+            'impact_layer': open(impact_zip_path)
+        }
+
+        # modify headers
+        headers = {
+            'X-CSRFTOKEN': inasafe_django.csrf_token,
+        }
+
         # check does the shake event already exists?
-        response = session.get(earthquake_detail_url)
+        response = session.flood(
+            flood_data['event_id']).GET()
         if response.status_code == requests.codes.ok:
             # event exists, we should update using PUT Url
-            response = session.put(earthquake_detail_url,
-                                   data=json.dumps(earthquake_data))
+            response = session.flood(
+                flood_data['event_id']).PUT(
+                data=flood_data,
+                files=flood_data_file,
+                headers=headers)
         elif response.status_code == requests.codes.not_found:
             # event does not exists, create using POST url
-            response = session.post(earthquake_list_url,
-                                    data=json.dumps(earthquake_data))
+            response = session.flood.POST(
+                data=flood_data,
+                files=flood_data_file,
+                headers=headers)
 
         if not (response.status_code == requests.codes.ok or
                 response.status_code == requests.codes.created):
@@ -131,49 +107,52 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
             error = RESTRequestFailedError(
                 url=response.url,
                 status_code=response.status_code,
-                data=json.dumps(earthquake_data))
+                data=flood_data)
             if fail_silent:
-                LOGGER.error(error.message)
+                LOGGER.info(error.message)
             else:
                 raise error
 
         # post the report
         # build report data
-        path_files = shake_event.generate_result_path_dict()
+        map_report_path = flood_event.map_report_path
+        table_report_path = flood_event.table_report_path
+
         event_report_dict = {
-            'shake_id': shake_event.event_id,
-            'language': shake_event.locale
+            'event_id': flood_event.report_id,
+            'language': flood_event.locale
         }
         event_report_files = {
-            'report_pdf': open(path_files.get('pdf')),
-            'report_image': open(path_files.get('image')),
-            'report_thumbnail': open(path_files.get('thumbnail'))
+            'impact_map': open(map_report_path),
+            'impact_report': open(table_report_path)
         }
         # check report exists
-        earthquake_report_detail_url = generate_earthquake_report_detail_url(
-            shake_event.event_id, shake_event.locale)
-        earthquake_report_list_url = generate_earthquake_report_list_url()
 
         # build headers and cookies
-        session = get_realtime_session()
-        response = session.get(earthquake_report_list_url,
-                               params={'format': 'api'})
-        cookies = response.cookies
-        csrftoken = cookies.get('csrftoken')
-        session.headers['X-CSRFToken'] = csrftoken
-        response = session.get(earthquake_report_detail_url)
+        headers = {
+            'X-CSRFTOKEN': inasafe_django.csrf_token,
+        }
+        response = session(
+            'flood-report',
+            event_report_dict['event_id'],
+            event_report_dict['language']).GET()
         if response.status_code == requests.codes.ok:
             # event exists, we should update using PUT Url
-            response = session.put(
-                earthquake_report_detail_url,
+            response = session(
+                'flood-report',
+                event_report_dict['event_id'],
+                event_report_dict['language']).PUT(
                 data=event_report_dict,
-                files=event_report_files)
+                files=event_report_files,
+                headers=headers)
         elif response.status_code == requests.codes.not_found:
             # event doesn't exists, we should update using POST url
-            response = session.post(
-                earthquake_report_list_url,
-                data=event_report_dict,
-                files=event_report_files)
+            response = session(
+                'flood-report',
+                event_report_dict['event_id']).POST(
+                    data=event_report_dict,
+                    files=event_report_files,
+                    headers=headers)
 
         if not (response.status_code == requests.codes.ok or
                 response.status_code == requests.codes.created):
@@ -187,9 +166,10 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
                 LOGGER.info(error.message)
             else:
                 raise error
+        return True
     # pylint: disable=broad-except
     except Exception as exc:
-        if not fail_silent:
-            LOGGER.info(exc.message)
+        if fail_silent:
+            LOGGER.warning(exc)
         else:
             raise exc

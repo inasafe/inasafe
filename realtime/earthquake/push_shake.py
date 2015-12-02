@@ -5,10 +5,10 @@ import logging
 import pytz
 import requests
 
+from realtime.exceptions import RESTRequestFailedError
 from realtime.push_rest import InaSAFEDjangoREST, \
     INASAFE_REALTIME_DATETIME_FORMAT
 from realtime.utilities import realtime_logger_name
-from realtime.exceptions import RESTRequestFailedError
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '07/07/15'
@@ -45,6 +45,14 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
 
     :param shake_event: The shake event to push
     :type shake_event: ShakeEvent
+
+    :param fail_silent: If set True, will still continue whan the push process
+        failed. Default vaule to True. If False, this method will raise
+        exception.
+    :type fail_silent: bool
+
+    :return: Return True if successfully pushed data
+    :rtype: bool
     """
     inasafe_django = InaSAFEDjangoREST()
     # check credentials exists in os.environ
@@ -86,15 +94,17 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
             'location_description': event_dict.get('place-name')
         }
         # check does the shake event already exists?
-        response = session.earthquake(shake_event.event_id).GET()
+        response = session.earthquake(
+            earthquake_data['shake_id']).GET()
         if response.status_code == requests.codes.ok:
             # event exists, we should update using PUT Url
-            response = session.earthquake(shake_event.event_id).PUT(
+            response = session.earthquake(
+                earthquake_data['shake_id']).PUT(
                 data=json.dumps(earthquake_data), headers=headers)
         elif response.status_code == requests.codes.not_found:
             # event does not exists, create using POST url
             response = session.earthquake.POST(
-                data=json.dumps(earthquake_data, headers=headers))
+                data=json.dumps(earthquake_data), headers=headers)
 
         if not (response.status_code == requests.codes.ok or
                 response.status_code == requests.codes.created):
@@ -104,7 +114,7 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
                 status_code=response.status_code,
                 data=json.dumps(earthquake_data))
             if fail_silent:
-                LOGGER.error(error.message)
+                LOGGER.info(error.message)
             else:
                 raise error
 
@@ -124,19 +134,26 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
 
         # build headers and cookies
         headers = {
-            'X-CSRFTOKEN': inasafe_django.csrf_token
+            'X-CSRFTOKEN': inasafe_django.csrf_token,
         }
-        response = session('earthquake-report', shake_event.event_id).GET()
+        response = session(
+            'earthquake-report',
+            event_report_dict['shake_id'],
+            event_report_dict['language']).GET()
         if response.status_code == requests.codes.ok:
             # event exists, we should update using PUT Url
-            response = session('earthquake-report', shake_event.event_id).PUT(
+            response = session(
+                'earthquake-report',
+                event_report_dict['shake_id'],
+                event_report_dict['language']).PUT(
                 data=event_report_dict,
                 files=event_report_files,
                 headers=headers)
         elif response.status_code == requests.codes.not_found:
             # event doesn't exists, we should update using POST url
             response = session(
-                'earthquake-report', shake_event.event_id).POST(
+                'earthquake-report',
+                event_report_dict['shake_id']).POST(
                     data=event_report_dict,
                     files=event_report_files,
                     headers=headers)
@@ -153,9 +170,11 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
                 LOGGER.info(error.message)
             else:
                 raise error
+
+        return True
     # pylint: disable=broad-except
     except Exception as exc:
-        if not fail_silent:
-            LOGGER.info(exc.message)
+        if fail_silent:
+            LOGGER.warning(exc)
         else:
             raise exc

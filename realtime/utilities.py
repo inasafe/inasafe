@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import logging
+
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '19/07/2012'

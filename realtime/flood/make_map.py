@@ -7,29 +7,25 @@ import os
 import sys
 
 # noinspection PyPackageRequirements
-
 from datetime import datetime
 
 from realtime.flood.flood_event import FloodEvent
+from realtime.flood.push_flood import push_flood_event_to_rest
 from realtime.utilities import realtime_logger_name, data_dir
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '11/24/15'
 
-
+# Initialized in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
-def process_event(working_directory):
+def process_event(working_directory, locale_option):
     """Process floodmap event
 
     :param working_dir:
     :return:
     """
-    # population_path = os.path.join(
-    #     os.environ['INASAFE_POPULATION_PATH'],
-    #     'exposure',
-    #     'population.tif')
     population_path = os.environ['INASAFE_FLOOD_POPULATION_PATH']
 
     # check settings file
@@ -67,21 +63,30 @@ def process_event(working_directory):
             'Valid level are: %s' % ','.join(allowed_level)
         )
 
-    LOGGER.info('Creating Flood Event.')
-    now = datetime.utcnow()
-    event = FloodEvent(
-        working_dir=working_directory,
-        population_raster_path=population_path,
-        duration=duration,
-        level=level,
-        year=now.year,
-        month=now.month,
-        day=now.day,
-        hour=now.hour
-        )
+    # We always want to generate en products too so we manipulate the locale
+    # list and loop through them:
+    locale_list = [locale_option]
+    if 'en' not in locale_list:
+        locale_list.append('en')
 
-    event.calculate_impact()
-    event.generate_report()
+    for locale in locale_list:
+        LOGGER.info('Creating Flood Event for locale %s.' % locale)
+        now = datetime.utcnow()
+        event = FloodEvent(
+            working_dir=working_directory,
+            locale=locale,
+            population_raster_path=population_path,
+            duration=duration,
+            level=level,
+            year=now.year,
+            month=now.month,
+            day=now.day,
+            hour=now.hour)
+
+        event.calculate_impact()
+        event.generate_report()
+        ret = push_flood_event_to_rest(flood_event=event)
+        LOGGER.info('Is Push successful? %s.' % bool(ret))
 
 
 if __name__ == '__main__':
@@ -97,4 +102,8 @@ if __name__ == '__main__':
             'Usage:\n%s [working_dir]'
         )
     working_directory = sys.argv[1]
-    process_event(working_directory)
+    try:
+        process_event(working_directory, locale_option)
+        LOGGER.info('Process event end.')
+    except Exception as e:
+        LOGGER.exception(e)

@@ -3,8 +3,11 @@ import logging
 import os
 import shutil
 
-from PyQt4.QtCore import QObject, QFileInfo, QVariant
-from qgis._core import QgsMapLayerRegistry
+import pytz
+import datetime
+from PyQt4.QtCore import QObject, QFileInfo, QVariant, QTranslator, \
+    QCoreApplication
+from qgis.core import QgsMapLayerRegistry
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -14,15 +17,13 @@ from qgis.core import (
 from realtime.exceptions import PetaJakartaAPIError
 from realtime.flood.peta_jakarta_api import PetaJakartaAPI
 from realtime.utilities import realtime_logger_name
-from safe.common.exceptions import ZeroImpactException
+from safe.common.exceptions import ZeroImpactException, TranslationLoadError
 from safe.engine.core import calculate_impact as safe_calculate_impact
 from safe.impact_functions.impact_function_manager import \
     ImpactFunctionManager
 from safe.report.impact_report import ImpactReport
-from safe.storage.raster import Raster
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.core import read_layer, read_qgis_layer
-from safe.utilities.gis import convert_to_safe_layer
 from safe.test.utilities import get_qgis_app
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import set_vector_categorized_style, \
@@ -42,6 +43,7 @@ class FloodEvent(QObject):
     def __init__(
             self,
             working_dir,
+            locale,
             population_raster_path,
             year,
             month,
@@ -62,6 +64,9 @@ class FloodEvent(QObject):
             duration,
             level
         )
+        self.time = datetime.datetime(year, month, day, hour, tzinfo=pytz.utc)
+        self.source = 'PetaJakarta - Jakarta'
+        self.region = 'Jakarta'
 
         self.report_path = os.path.join(self.working_dir, self.report_id)
 
@@ -85,11 +90,20 @@ class FloodEvent(QObject):
         self.impact_path = os.path.join(self.report_path, 'impact.tif')
         self.impact_layer = None
 
+        # Setup i18n
+        self.locale = locale
+        self.translator = None
+        self.setup_i18n()
+
         # Report
         self.map_report_path = os.path.join(
-            self.report_path, 'impact-map.pdf')
+            self.report_path, 'impact-map-%s.pdf' % self.locale)
         self.table_report_path = os.path.join(
-            self.report_path, 'impact-table.pdf')
+            self.report_path, 'impact-table-%s.pdf' % self.locale)
+
+    @property
+    def impact_exists(self):
+        return os.path.exists(self.impact_path)
 
     def save_hazard_data(self):
         hazard_geojson = PetaJakartaAPI.get_aggregate_report(
@@ -219,7 +233,7 @@ class FloodEvent(QObject):
 
     def generate_report(self):
         # Generate pdf report from impact
-        if not os.path.exists(self.impact_path):
+        if not self.impact_exists:
             # Cannot generate report when no impact layer present
             return
 
@@ -235,3 +249,39 @@ class FloodEvent(QObject):
         report.print_map_to_pdf(self.map_report_path)
         report.print_impact_table(self.table_report_path)
         layer_registry.removeAllMapLayers()
+
+    def setup_i18n(self):
+        """Setup internationalisation for the reports.
+
+        Args:
+           None
+        Returns:
+           None.
+        Raises:
+           TranslationLoadException
+        """
+        locale_name = self.locale
+
+        root = os.path.abspath(
+            os.path.join(
+                os.path.dirname(__file__),
+                os.pardir,
+                os.pardir))
+        translation_path = os.path.join(
+            root,
+            'i18n',
+            'inasafe_' + str(locale_name) + '.qm')
+        if os.path.exists(translation_path):
+            self.translator = QTranslator()
+            result = self.translator.load(translation_path)
+            LOGGER.debug('Switched locale to %s' % translation_path)
+            if not result:
+                message = 'Failed to load translation for %s' % locale_name
+                LOGGER.exception(message)
+                raise TranslationLoadError(message)
+            # noinspection PyTypeChecker, PyCallByClass, PyArgumentList
+            QCoreApplication.installTranslator(self.translator)
+        else:
+            if locale_name != 'en':
+                message = 'No translation exists for %s' % locale_name
+                LOGGER.exception(message)

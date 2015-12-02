@@ -50,7 +50,7 @@ INASAFE_REALTIME_REST_URLPATTERN = {
 class InaSAFEDjangoREST(object):
 
     def __init__(self):
-        self.base_rest = Hammock(INASAFE_REALTIME_REST_URL)
+        self.base_rest = Hammock(INASAFE_REALTIME_REST_URL, append_slash=True)
         self.session_login()
 
     def base_url(self):
@@ -80,7 +80,6 @@ class InaSAFEDjangoREST(object):
         :return: True if Realtime REST credentials is provided in os.environ
         """
         return (INASAFE_REALTIME_REST_URL and
-                INASAFE_REALTIME_REST_LOGIN_URL and
                 INASAFE_REALTIME_REST_USER and
                 INASAFE_REALTIME_REST_PASSWORD)
 
