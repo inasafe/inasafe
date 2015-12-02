@@ -198,6 +198,9 @@ class AreaExposureReportMixin(ReportMixin):
             total_population):
         """Adds values to the second row columns
 
+        :param row: an empty row to be added
+        :type row: Row
+
         :param total_affected_area: total affected area
         :type total_affected_area: float
 

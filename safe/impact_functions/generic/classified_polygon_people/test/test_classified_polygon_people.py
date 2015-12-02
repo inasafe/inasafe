@@ -65,7 +65,11 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         impact = function.impact
 
         impact = safe_to_qgis_layer(impact)
-        # self.assertEqual(impact.dataProvider().featureCount(), 3)
+
+        # Asserting for the number of features in the impact
+        # layer
+
+        self.assertEqual(impact.dataProvider().featureCount(), 12L)
 
         # 4. Asserting about the results found
         features = {}
@@ -103,8 +107,6 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
             hazard_keywords, exposure_keywords)
-        function_title = ImpactFunctionManager.get_function_title(
-                        impact_functions[0])
         message = 'There should be 1 impact function, but there are: %s' % \
                   len(impact_functions)
         self.assertEqual(1, len(impact_functions), message)

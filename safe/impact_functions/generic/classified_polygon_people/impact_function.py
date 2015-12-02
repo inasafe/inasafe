@@ -14,12 +14,10 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Samweli Twesa Mwakisambwe "Samweli" <smwltwesa6@gmail.com>'
 __date__ = '8/5/15'
 
-
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
-    QgsDistanceArea,
     QgsFeature,
     QgsFeatureRequest,
     QgsField,
@@ -44,7 +42,7 @@ from safe.impact_functions.generic.classified_polygon_people\
 from safe.impact_reports.area_exposure_report_mixin import \
     AreaExposureReportMixin
 from safe.impact_functions.core import no_population_impact_message
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
+from safe.common.exceptions import ZeroImpactException
 
 
 class ClassifiedPolygonHazardPolygonPeopleFunction(
@@ -99,10 +97,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # make spatial index of hazard
         hazard_index = QgsSpatialIndex()
         hazard_features = {}
-        for f in hazard.getFeatures(QgsFeatureRequest(extent_hazard)):
-            f.geometry().transform(hazard_to_exposure)
-            hazard_index.insertFeature(f)
-            hazard_features[f.id()] = QgsFeature(f)
+        for feature in hazard.getFeatures(QgsFeatureRequest(extent_hazard)):
+            feature.geometry().transform(hazard_to_exposure)
+            hazard_index.insertFeature(feature)
+            hazard_features[feature.id()] = QgsFeature(feature)
 
         # create impact layer
         filename = unique_filename(suffix='.shp')
