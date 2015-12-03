@@ -26,14 +26,17 @@ from xml.etree import ElementTree
 from safe.metadata.property import (
     CharacterStringProperty,
     DateProperty,
-    UrlProperty)
+    UrlProperty,
+    DictionaryProperty
+)
 
 
 # XML to python types conversions
 TYPE_CONVERSIONS = {
     'gco:CharacterString': CharacterStringProperty,
     'gco:Date': DateProperty,
-    'gmd:URL': UrlProperty
+    'gmd:URL': UrlProperty,
+    'gco:Dictionary': DictionaryProperty
 }
 
 # XML Namespaces

@@ -33,7 +33,7 @@ class DictionaryProperty(BaseProperty):
     A property that accepts date input
     """
     # if you edit this you need to adapt accordingly xml_value and is_valid
-    _allowed_python_types = [dict]
+    _allowed_python_types = [dict, NoneType]
 
     def __init__(self, name, value, xml_path):
         super(DictionaryProperty, self).__init__(
@@ -55,7 +55,7 @@ class DictionaryProperty(BaseProperty):
         if self.python_type is dict:
             return json.dumps(self.value)
         elif self.python_type is NoneType:
-            return {}
+            return ''
         else:
             raise RuntimeError('self._allowed_python_types and self.xml_value'
                                'are out of sync. This should never happen')

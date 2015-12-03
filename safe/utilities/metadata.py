@@ -100,14 +100,16 @@ def read_iso19115_metadata(layer_uri, keyword=None):
 
     return keywords
 
+
 def write_read_iso_19115_metadata(layer_uri, keywords):
     """Write ISO Metadata, and read again. Check if the keywords same.
     :param layer_uri:
     :param keywords:
+    :type keywords: dict
     :return:
     """
-    if os.path.exists(layer_uri):
-        os.remove(layer_uri.split('.')[0] + '.xml')
+    # if os.path.exists(layer_uri):
+    #     os.remove(layer_uri.split('.')[0] + '.xml')
     write_iso19115_metadata(layer_uri, keywords)
     iso_19115_keywords = read_iso19115_metadata(layer_uri)
     if (keywords != iso_19115_keywords):
@@ -121,5 +123,15 @@ def write_read_iso_19115_metadata(layer_uri, keywords):
         message += 'Missing keywords:\n'
         for key, value in missing_keywords.iteritems():
             message += '%s: %s\n' % (key, value)
+        message += '--------------------\n'
+        different_values = {}
+        for key in keywords.keys():
+            if key in iso_19115_keywords.keys():
+                if keywords[key] != iso_19115_keywords[key]:
+                    different_values[key] = (
+                        keywords[key], iso_19115_keywords[key])
+        for key, value in different_values.iteritems():
+            message += 'old - %s - %s - type: %s\n' % (key, value[0], type(value[0]))
+            message += 'new - %s - %s - type: %s\n' % (key, value[1], type(value[1]))
         raise MissingMetadata(message)
     return keywords
