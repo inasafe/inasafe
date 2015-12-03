@@ -27,6 +27,9 @@ status=final
 changelog=
         3.2.4
         Working implementation of on-the-fly-projection for polygon flood on building points/polys. fix #2475
+        [Wizard] Add Keywords Creation Wizard confirmation step. Fixes #2422
+        [IFCW] After registering keywords in the KW sub-thread, don't display again the step from where it was called. Fixes #2347
+        Fix some translation issues
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
