@@ -63,7 +63,21 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'raster_hazard_classification/'
-            'gco:CharacterString')
+            'gco:CharacterString'),
+        'field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'field/'
+            'gco:CharacterString'),
+        'value_map': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'value_map/'
+            'gco:Dictionary'),
     }
     _standard_properties = merge_dictionaries(
         GenericLayerMetadata._standard_properties, _standard_properties)
