@@ -95,3 +95,9 @@ popd
 echo "Your plugin archive has been generated as"
 ls -lah ${OUT}
 echo "${OUT}"
+
+# For nsis installer
+mv /tmp/${WORKDIR} /tmp/nsis-data
+makensis scripts/installer-recipe.nsis
+mv scripts/*.exe /tmp
+echo "NSIS Installer created in /tmp/"
