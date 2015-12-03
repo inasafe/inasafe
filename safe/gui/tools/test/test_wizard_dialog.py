@@ -400,10 +400,7 @@ class WizardDialogTest(unittest.TestCase):
         # noinspection PyTypeChecker
         keywords = keyword_io.read_keywords(layer)
 
-        message = 'Invalid metadata!\n Was: %s\n Should be: %s' % (
-            unicode(keywords), unicode(expected_keywords))
-
-        self.assertEqual(keywords, expected_keywords, message)
+        self.assertDictEqual(keywords, expected_keywords)
 
     def test_existing_keywords(self):
         """Test if keywords already exist."""
@@ -665,8 +662,7 @@ class WizardDialogTest(unittest.TestCase):
             'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
-        message = 'Source should be %s' % source
-        self.assertEqual(dialog.leSource.text(), source, message)
+        self.assertEqual(dialog.leSource.text(), source)
         self.assertEqual(dialog.leSource_url.text(), source_url)
         self.assertEqual(dialog.leSource_scale.text(), source_scale)
         self.assertEqual(dialog.leSource_date.text(), source_date)
