@@ -118,5 +118,3 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.type_field = None
         self.class_scores = None
         self.no_features = True
-
-

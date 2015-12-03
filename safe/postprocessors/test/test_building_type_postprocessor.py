@@ -4,20 +4,20 @@
 Test building type postprocessor
 """
 
+import unittest
+from collections import OrderedDict
+
+from safe.postprocessors.building_type_postprocessor import (
+    BuildingTypePostprocessor)
+
+POSTPROCESSOR = BuildingTypePostprocessor()
+
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '21/07/2015'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
-
-
-import unittest
-
-from safe.postprocessors.building_type_postprocessor import (
-    BuildingTypePostprocessor)
-
-POSTPROCESSOR = BuildingTypePostprocessor()
 
 
 class TestBuildingTypePostprocessor(unittest.TestCase):
@@ -31,7 +31,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
         # ratios_total < 1 should pass
         params = {
             'impact_total': 0,
-            'key_attribute': 'type',
+            'key_attribute': 'TYPE',
             u'Building type': True,
             'target_field': 'safe_ag__4',
             'impact_attrs': [
@@ -43,13 +43,16 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
         POSTPROCESSOR.setup(params)
         POSTPROCESSOR.process()
         results = POSTPROCESSOR.results()
-        message = (
-            'Expecting exactly 2 Government buildings to be affected. ',
-            'Using integer values in affected fields.')
-        self.assertEqual(
-            results[u'Government']['value'],
-            '2',
-            message)
+        expected = OrderedDict(
+            [(
+                u'Total Affected', {
+                    'value': {'Government': 2},
+                    'metadata': {}}), (
+                u'Total Counted', {
+                    'value': {'Government': 4},
+                    'metadata': {}})])
+        self.assertDictEqual(
+            expected, results)
 
     def test_process_string_values(self):
         """Test for checking if the ratio is wrong (total is more than one)."""
@@ -80,7 +83,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
         # ratios_total < 1 should pass
         params = {
             'impact_total': 0,
-            'key_attribute': 'type',
+            'key_attribute': 'TYPE',
             u'Building type': True,
             'target_field': 'safe_ag__4',
             'impact_attrs': [
