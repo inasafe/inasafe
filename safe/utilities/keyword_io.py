@@ -43,7 +43,8 @@ from safe.common.exceptions import (
     InvalidParameterError,
     NoKeywordsFoundError,
     UnsupportedProviderError,
-    MetadataReadError)
+    MetadataReadError,
+    MissingMetadata)
 from safe.storage.metadata_utilities import (
     generate_iso_metadata,
     ISO_METADATA_KEYWORD_TAG)
@@ -52,7 +53,10 @@ import safe.definitions
 from safe.definitions import (
     inasafe_keyword_version, inasafe_keyword_version_key)
 from safe.utilities.metadata import (
-    write_iso19115_metadata, read_iso19115_metadata)
+    write_iso19115_metadata,
+    read_iso19115_metadata,
+    write_read_iso_19115_metadata
+)
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -132,7 +136,8 @@ class KeywordIO(QObject):
             else:
                 uri = self.normalize_uri(layer)
                 keywords = self.read_keyword_from_uri(uri, keyword)
-            return keywords
+            return write_read_iso_19115_metadata(source, keywords)
+
         except (HashNotFoundError,
                 Exception,
                 OperationalError,

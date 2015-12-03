@@ -59,7 +59,8 @@ from safe.utilities.unicode import get_string
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
     write_iso19115_metadata,
-    read_iso19115_metadata
+    read_iso19115_metadata,
+    write_read_iso_19115_metadata
 )
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -432,7 +433,8 @@ class Vector(Layer):
         try:
             self.keywords = read_iso19115_metadata(filename)
         except MetadataReadError:
-            self.keywords = read_keywords(base_name + '.keywords')
+            keywords = read_keywords(base_name + '.keywords')
+            self.keywords = write_read_iso_19115_metadata(filename, keywords)
 
         # FIXME (Ole): Should also look for style file to populate style_info
 

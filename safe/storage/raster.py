@@ -40,7 +40,8 @@ from utilities import safe_to_qgis_layer
 from safe.utilities.unicode import get_string
 from safe.utilities.metadata import (
     write_iso19115_metadata,
-    read_iso19115_metadata
+    read_iso19115_metadata,
+    write_read_iso_19115_metadata
 )
 
 
@@ -212,7 +213,8 @@ class Raster(Layer):
         try:
             self.keywords = read_iso19115_metadata(filename)
         except MetadataReadError:
-            self.keywords = read_keywords(basename + '.keywords')
+            keywords = read_keywords(basename + '.keywords')
+            self.keywords = write_read_iso_19115_metadata(filename, keywords)
 
         # Determine name
         if 'title' in self.keywords:

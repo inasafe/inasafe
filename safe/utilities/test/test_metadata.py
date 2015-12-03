@@ -62,5 +62,25 @@ class TestMetadataUtilities(unittest.TestCase):
             message = 'key %s is not found in old keywords' % key
             self.assertEqual(read_metadata[key], keywords[key], message)
 
+    def test_write_read_iso_19115_metadata(self):
+        """Test for write_read_iso_19115_metadata."""
+        keywords = {
+            # 'date': '26-03-2015 14:03',
+            'exposure': 'structure',
+            'keyword_version': '3.2',
+            'layer_geometry': 'polygon',
+            'layer_mode': 'classified',
+            'layer_purpose': 'exposure',
+            'license': 'Open Data Commons Open Database License (ODbL)',
+            'source': 'OpenStreetMap - www.openstreetmap.org',
+            'structure_class_field': 'TYPE',
+            'title': 'Buildings'
+        }
+        layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=False,
+            source_directory=test_data_path('exposure'))
+        write_iso19115_metadata(layer.source(), keywords)
+
 if __name__ == '__main__':
     unittest.main()

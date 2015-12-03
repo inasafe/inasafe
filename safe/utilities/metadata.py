@@ -19,9 +19,18 @@ __date__ = '03/12/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import os
-from safe.common.exceptions import MetadataReadError, KeywordNotFoundError
-from safe.metadata import ExposureLayerMetadata, HazardLayerMetadata, \
-    AggregationLayerMetadata, ImpactLayerMetadata, GenericLayerMetadata
+from safe.common.exceptions import (
+    MetadataReadError,
+    KeywordNotFoundError,
+    MissingMetadata
+)
+from safe.metadata import (
+    ExposureLayerMetadata,
+    HazardLayerMetadata,
+    AggregationLayerMetadata,
+    ImpactLayerMetadata,
+    GenericLayerMetadata
+)
 
 
 def write_iso19115_metadata(layer_uri, keywords):
@@ -89,4 +98,18 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         except KeyError:
             raise KeywordNotFoundError
 
+    return keywords
+
+def write_read_iso_19115_metadata(layer_uri, keywords):
+    """Write ISO Metadata, and read again. Check if the keywords same.
+    :param layer_uri:
+    :param keywords:
+    :return:
+    """
+    write_iso19115_metadata(layer_uri, keywords)
+    iso_19115_keywords = read_iso19115_metadata(layer_uri)
+    if (keywords != iso_19115_keywords):
+        message = 'Old metadata: %s\n' % str(keywords)
+        message += 'ISO metadata: %s' % str(iso_19115_keywords)
+        raise MissingMetadata(message)
     return keywords
