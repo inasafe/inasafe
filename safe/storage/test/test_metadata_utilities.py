@@ -33,11 +33,10 @@ from safe.storage.metadata_utilities import (
     ISO_METADATA_KEYWORD_TAG,
     ISO_METADATA_KEYWORD_NESTING,
     generate_iso_metadata,
-    create_iso19115_metadata,
-    read_iso19115_metadata
 )
+
 from safe.common.utilities import unique_filename
-from safe.test.utilities import test_data_path, clone_shp_layer, EXPDATA
+from safe.test.utilities import test_data_path
 
 
 class TestCase(unittest.TestCase):
@@ -117,58 +116,7 @@ class TestCase(unittest.TestCase):
             metadata_xml,
             'XML should include today\'s date (%s)' % today)
 
-    def test_create_iso19115_metadata(self):
-        """Test for create_iso19115_metadata"""
-        exposure_layer = clone_shp_layer(
-            name='buildings',
-            include_keywords=False,
-            source_directory=test_data_path('exposure'))
-        keywords = {
-            'date': '26-03-2015 14:03',
-            'exposure': 'structure',
-            'keyword_version': 3.2,
-            'layer_geometry': 'polygon',
-            'layer_mode': 'classified',
-            'layer_purpose': 'exposure',
-            'license': 'Open Data Commons Open Database License (ODbL)',
-            'source': 'OpenStreetMap - www.openstreetmap.org',
-            'structure_class_field': 'TYPE',
-            'title': 'Buildings'
-        }
-        metadata = create_iso19115_metadata(exposure_layer.source(), keywords)
-        self.assertEqual(metadata.exposure, 'structure')
 
-    def test_read_iso19115_metadata(self):
-        """Test for read_iso19115_metadata method."""
-        exposure_layer = clone_shp_layer(
-            name='buildings',
-            include_keywords=False,
-            source_directory=test_data_path('exposure'))
-        keywords = {
-            # 'date': '26-03-2015 14:03',
-            'exposure': 'structure',
-            'keyword_version': '3.2',
-            'layer_geometry': 'polygon',
-            'layer_mode': 'classified',
-            'layer_purpose': 'exposure',
-            'license': 'Open Data Commons Open Database License (ODbL)',
-            'source': 'OpenStreetMap - www.openstreetmap.org',
-            'structure_class_field': 'TYPE',
-            'title': 'Buildings'
-        }
-        metadata = create_iso19115_metadata(exposure_layer.source(), keywords)
-
-        read_metadata = read_iso19115_metadata(exposure_layer.source())
-
-        for key in set(keywords.keys()) & set(read_metadata.keys()):
-            message = 'key %s have different value' % key
-            self.assertEqual(read_metadata[key], keywords[key], message)
-        for key in set(keywords.keys()) - set(read_metadata.keys()):
-            message = 'key %s is not found in ISO metadata' % key
-            self.assertEqual(read_metadata[key], keywords[key], message)
-        for key in set(read_metadata.keys()) - set(keywords.keys()):
-            message = 'key %s is not found in old keywords' % key
-            self.assertEqual(read_metadata[key], keywords[key], message)
 
 if __name__ == '__main__':
     my_suite = unittest.makeSuite(TestCase, 'test')

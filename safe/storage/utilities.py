@@ -18,8 +18,6 @@ from safe.common.exceptions import (
     BoundingBoxError, InaSAFEError, MetadataReadError)
 from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_string, get_unicode
-from safe.storage.metadata_utilities import (
-    write_keyword_in_iso_metadata)
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'inapolygon'

@@ -20,24 +20,15 @@ __date__ = '12/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-
 import copy
 import json
 import os
 import time
-
 from xml.etree import ElementTree
 
 from safe.common.exceptions import MetadataReadError
 from safe.defaults import get_defaults
 from safe.storage.iso_19115_template import ISO_METADATA_XML_TEMPLATE
-
-
-from safe.metadata.generic_layer_metadata import GenericLayerMetadata
-from safe.metadata.exposure_layer_metadata import ExposureLayerMetadata
-from safe.metadata.hazard_layer_metadata import HazardLayerMetadata
-from safe.metadata.aggregation_layer_metadata import AggregationLayerMetadata
-from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
 
 # list of tags to get to the InaSAFE keywords.
 # this is stored in a list so it can be easily used in a for loop
@@ -223,64 +214,3 @@ def read_iso_metadata(keyword_filename):
     return metadata
 
 
-def create_iso19115_metadata(layer_uri, keywords):
-    """Create metadata  object from a layer path and keywords dictionary.
-
-    :param layer_uri: Uri to layer.
-    :type layer_uri: str
-
-    :param keywords: Dictionary of keywords.
-    :type keywords: dict
-    """
-
-    if 'layer_purpose' in keywords.keys():
-        if keywords['layer_purpose'] == 'exposure':
-            metadata = ExposureLayerMetadata(layer_uri)
-        elif keywords['layer_purpose'] == 'hazard':
-            metadata = HazardLayerMetadata(layer_uri)
-        elif keywords['aggregation'] == 'aggregation':
-            metadata = AggregationLayerMetadata(layer_uri)
-        elif keywords['layer_purpose'] == 'impact':
-            metadata = ImpactLayerMetadata(layer_uri)
-        else:
-            metadata = GenericLayerMetadata(layer_uri)
-    else:
-        metadata = GenericLayerMetadata(layer_uri)
-
-    metadata.update_from_dict(keywords)
-
-    if metadata.layer_is_file_based:
-        xml_file_path = layer_uri.split('.')[0] + '.xml'
-        print xml_file_path
-        metadata.write_to_file(xml_file_path)
-    else:
-        metadata.write_to_db()
-
-    return metadata
-
-def read_iso19115_metadata(layer_uri, keyword=None):
-    """Retrieve keywords from a metadata object
-    :param layer_uri:
-    :param keyword:
-    :return:
-    """
-    xml_uri = layer_uri.split('.')[0] + '.xml'
-    if not os.path.exists(xml_uri):
-        xml_uri = None
-    metadata = GenericLayerMetadata(layer_uri, xml_uri)
-    if metadata.layer_purpose == 'exposure':
-        metadata = ExposureLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == 'hazard':
-        metadata = HazardLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == 'aggregation':
-        metadata = AggregationLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == 'impact':
-        metadata = ImpactLayerMetadata(layer_uri, xml_uri)
-
-    if keyword:
-        try:
-            return metadata.dict['properties'][keyword]['value']
-        except KeyError:
-            return None
-    # dictionary comprehension
-    return {x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems() if x[1]['value'] is not None}
