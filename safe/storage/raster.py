@@ -16,8 +16,13 @@ from safe.gis.numerics import (
     geotransform_to_axes,
     grid_to_points
 )
-from safe.common.exceptions import ReadLayerError, WriteLayerError
-from safe.common.exceptions import GetDataError, InaSAFEError
+from safe.common.exceptions import (
+    GetDataError,
+    InaSAFEError,
+    MetadataReadError,
+    ReadLayerError,
+    WriteLayerError
+)
 
 from layer import Layer
 from vector import Vector
@@ -204,8 +209,10 @@ class Raster(Layer):
                 raise ReadLayerError(msg)
 
         # Look for any keywords
-        self.keywords = read_iso19115_metadata(filename)
-        # self.keywords = read_keywords(basename + '.keywords')
+        try:
+            self.keywords = read_iso19115_metadata(filename)
+        except MetadataReadError:
+            self.keywords = read_keywords(basename + '.keywords')
 
         # Determine name
         if 'title' in self.keywords:

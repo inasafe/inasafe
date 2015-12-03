@@ -31,9 +31,13 @@ except ImportError:
 
 import copy as copy_module
 from osgeo import ogr, gdal
-from safe.common.exceptions import ReadLayerError, WriteLayerError
-from safe.common.exceptions import GetDataError, InaSAFEError
-
+from safe.common.exceptions import (
+    ReadLayerError,
+    WriteLayerError,
+    GetDataError,
+    InaSAFEError,
+    MetadataReadError
+)
 from layer import Layer
 from projection import Projection
 from geometry import Polygon
@@ -425,8 +429,10 @@ class Vector(Layer):
         base_name = os.path.splitext(filename)[0]
 
         # Look for any keywords
-        # self.keywords = read_keywords(base_name + '.keywords')
-        self.keywords = read_iso19115_metadata(filename)
+        try:
+            self.keywords = read_iso19115_metadata(filename)
+        except MetadataReadError:
+            self.keywords = read_keywords(base_name + '.keywords')
 
         # FIXME (Ole): Should also look for style file to populate style_info
 
@@ -546,7 +552,7 @@ class Vector(Layer):
                 # for more information
                 if fields[name] == _pseudo_inf:
                     fields[name] = float('nan')
-                # print 'Field', name, feature_type, j, fields[name]
+                    # print 'Field', name, feature_type, j, fields[name]
 
             data.append(fields)
         # Store geometry coordinates as a compact numeric array
