@@ -14,7 +14,8 @@ from safe.common.utilities import verify, unique_filename
 from safe.gis.numerics import (
     nan_allclose,
     geotransform_to_axes,
-    grid_to_points)
+    grid_to_points
+)
 from safe.common.exceptions import ReadLayerError, WriteLayerError
 from safe.common.exceptions import GetDataError, InaSAFEError
 
@@ -25,10 +26,17 @@ from projection import Projection
 from utilities import DRIVER_MAP
 from utilities import read_keywords
 from utilities import write_keywords
-from utilities import (geotransform_to_bbox, geotransform_to_resolution,
-                       check_geotransform)
+from utilities import (
+    geotransform_to_bbox,
+    geotransform_to_resolution,
+    check_geotransform)
+
 from utilities import safe_to_qgis_layer
 from safe.utilities.unicode import get_string
+from safe.utilities.metadata import (
+    write_iso19115_metadata,
+    read_iso19115_metadata
+)
 
 
 class Raster(Layer):
@@ -196,7 +204,8 @@ class Raster(Layer):
                 raise ReadLayerError(msg)
 
         # Look for any keywords
-        self.keywords = read_keywords(basename + '.keywords')
+        self.keywords = read_iso19115_metadata(filename)
+        # self.keywords = read_keywords(basename + '.keywords')
 
         # Determine name
         if 'title' in self.keywords:
@@ -307,7 +316,8 @@ class Raster(Layer):
         fid = None  # Close
 
         # Write keywords if any
-        write_keywords(self.keywords, basename + '.keywords')
+        write_iso19115_metadata(filename, self.keywords)
+        # write_keywords(self.keywords, basename + '.keywords')
 
     def read_from_qgis_native(self, qgis_layer):
         """Read raster data from qgis layer QgsRasterLayer.
@@ -340,7 +350,8 @@ class Raster(Layer):
             provider.crs())
 
         # Write keywords if any
-        write_keywords(self.keywords, base_name + '.keywords')
+        # write_keywords(self.keywords, base_name + '.keywords')
+        write_iso19115_metadata(file_name, self.keywords)
         self.read_from_file(file_name)
 
     def as_qgis_native(self):

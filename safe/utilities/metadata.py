@@ -19,7 +19,7 @@ __date__ = '03/12/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import os
-
+from safe.common.exceptions import MetadataReadError
 from safe.metadata import ExposureLayerMetadata, HazardLayerMetadata, \
     AggregationLayerMetadata, ImpactLayerMetadata, GenericLayerMetadata
 
@@ -83,6 +83,6 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         try:
             return metadata.dict['properties'][keyword]['value']
         except KeyError:
-            return None
+            raise MetadataReadError
     # dictionary comprehension
     return {x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems() if x[1]['value'] is not None}

@@ -53,7 +53,10 @@ from utilities import safe_to_qgis_layer
 from safe.common.utilities import unique_filename
 from safe.utilities.unicode import get_string
 from safe.utilities.i18n import tr
-
+from safe.utilities.metadata import (
+    write_iso19115_metadata,
+    read_iso19115_metadata
+)
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(99999999)
@@ -422,7 +425,8 @@ class Vector(Layer):
         base_name = os.path.splitext(filename)[0]
 
         # Look for any keywords
-        self.keywords = read_keywords(base_name + '.keywords')
+        # self.keywords = read_keywords(base_name + '.keywords')
+        self.keywords = read_iso19115_metadata(filename)
 
         # FIXME (Ole): Should also look for style file to populate style_info
 
@@ -581,7 +585,8 @@ class Vector(Layer):
             raise IOError(msg)
 
         # Write keywords if any
-        write_keywords(self.keywords, base_name + '.keywords')
+        # write_keywords(self.keywords, base_name + '.keywords')
+        write_iso19115_metadata(file_name, self.keywords)
         self.read_from_file(file_name)
 
     def as_qgis_native(self):
@@ -812,7 +817,8 @@ class Vector(Layer):
             feature.Destroy()
 
         # Write keywords if any
-        write_keywords(self.keywords, base_name + '.keywords')
+        # write_keywords(self.keywords, base_name + '.keywords')
+        write_iso19115_metadata(filename, self.keywords)
 
         # FIXME (Ole): Maybe store style_info
 

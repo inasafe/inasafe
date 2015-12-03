@@ -42,7 +42,8 @@ from safe.common.exceptions import (
     KeywordDbError,
     InvalidParameterError,
     NoKeywordsFoundError,
-    UnsupportedProviderError)
+    UnsupportedProviderError,
+    MetadataReadError)
 from safe.storage.metadata_utilities import (
     generate_iso_metadata,
     ISO_METADATA_KEYWORD_TAG)
@@ -50,6 +51,8 @@ from safe.common.utilities import verify
 import safe.definitions
 from safe.definitions import (
     inasafe_keyword_version, inasafe_keyword_version_key)
+from safe.utilities.metadata import (
+    write_iso19115_metadata, read_iso19115_metadata)
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -111,6 +114,13 @@ class KeywordIO(QObject):
 
         """
         source = layer.source()
+
+        # Try to read from ISO metadata first.
+        try:
+            return read_iso19115_metadata(source)
+        except MetadataReadError:
+            pass
+
         try:
             flag = self.are_keywords_file_based(layer)
         except UnsupportedProviderError:
@@ -149,22 +159,28 @@ class KeywordIO(QObject):
 
         :raises: UnsupportedProviderError
         """
-        try:
-            flag = self.are_keywords_file_based(layer)
-        except UnsupportedProviderError:
-            raise
-
         source = layer.source()
         try:
-            keywords[inasafe_keyword_version_key] = inasafe_keyword_version
-            if flag:
-                write_keywords_to_file(source, keywords)
-            else:
-                uri = self.normalize_uri(layer)
-                self.write_keywords_for_uri(uri, keywords)
+            write_iso19115_metadata(source, keywords)
             return
-        except:
-            raise
+        except Exception as e:
+            raise e
+        #
+        # try:
+        #     flag = self.are_keywords_file_based(layer)
+        # except UnsupportedProviderError:
+        #     raise
+
+        # try:
+        #     keywords[inasafe_keyword_version_key] = inasafe_keyword_version
+        #     if flag:
+        #         write_keywords_to_file(source, keywords)
+        #     else:
+        #         uri = self.normalize_uri(layer)
+        #         self.write_keywords_for_uri(uri, keywords)
+        #     return
+        # except:
+        #     raise
 
 
     def update_keywords(self, layer, keywords):
