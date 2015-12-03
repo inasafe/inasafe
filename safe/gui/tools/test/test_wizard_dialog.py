@@ -660,21 +660,17 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 9 - enter source
         self.check_current_step(step_kw_source, dialog)
-        message = ('Invalid Next button state in step 9! Disabled while '
-                   'source is optional')
+        message = (
+            'Invalid Next button state in step 9! Disabled while '
+            'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
         message = 'Source should be %s' % source
         self.assertEqual(dialog.leSource.text(), source, message)
-        message = 'Source Url should be %s' % source_url
-        self.assertEqual(dialog.leSource_url.text(), source_url, message)
-        message = 'Source Scale should be %s' % source_scale
-        self.assertEqual(dialog.leSource_scale.text(), source_scale, message)
-        message = 'Source Date should be %s' % source_date
-        self.assertEqual(dialog.leSource_date.text(), source_date, message)
-        message = 'Source License should be %s' % source_license
-        self.assertEqual(dialog.leSource_license.text(),
-                         source_license, message)
+        self.assertEqual(dialog.leSource_url.text(), source_url)
+        self.assertEqual(dialog.leSource_scale.text(), source_scale)
+        self.assertEqual(dialog.leSource_date.text(), source_date)
+        self.assertEqual(dialog.leSource_license.text(), source_license)
         dialog.pbnNext.click()
 
         dialog.pbnCancel.click()
