@@ -28,6 +28,7 @@ changelog=
         3.2.4
         Working implementation of on-the-fly-projection for polygon flood on building points/polys. fix #2475
         Add new impact function Classified polygon hazard on polygon people
+        Add new impact function Earthquake ITB Bayesian Fatality
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
