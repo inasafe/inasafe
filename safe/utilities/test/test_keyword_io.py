@@ -265,7 +265,39 @@ class KeywordIOTest(unittest.TestCase):
         """
         keywords = self.keyword_io.read_keywords(self.vector_layer)
         message = self.keyword_io.to_message(keywords).to_text()
-        self.assertIn('Exposure*structure------', message)
+        self.assertIn('*Exposure*, structure------', message)
+
+    def test_layer_to_message(self):
+        """Test to show augmented keywords if KeywordsIO ctor passed a layer.
+
+        .. versionadded:: 3.3
+        """
+        keywords = KeywordIO(self.vector_layer)
+        message = keywords.to_message().to_text()
+        self.assertIn('*Reference system*, ', message)
+
+    def test_dict_to_row(self):
+        """Test the dict to row helper works.
+
+        .. versionadded:: 3.2
+        """
+        keyword_value = (
+            "{'high': ['Kawasan Rawan Bencana III'], "
+            "'medium': ['Kawasan Rawan Bencana II'], "
+            "'low': ['Kawasan Rawan Bencana I']}")
+        table = self.keyword_io._dict_to_row(keyword_value)
+        self.assertIn(
+            u'\n---\n*high*, Kawasan Rawan Bencana III------',
+            table.to_text())
+        # should also work passing a dict
+        keyword_value = {
+            'high': ['Kawasan Rawan Bencana III'],
+            'medium': ['Kawasan Rawan Bencana II'],
+            'low': ['Kawasan Rawan Bencana I']}
+        table = self.keyword_io._dict_to_row(keyword_value)
+        self.assertIn(
+            u'\n---\n*high*, Kawasan Rawan Bencana III------',
+            table.to_text())
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordIOTest)

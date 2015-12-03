@@ -1,0 +1,4 @@
+*****Analysis details
+    Sample Hazard Title - sourced from Sample Hazard Source
+    Sample Exposure Title - sourced from Sample Exposure Source
+

@@ -36,6 +36,7 @@ from safe.common.exceptions import (
     KeywordNotFoundError)
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
+from safe.defaults import disclaimer
 from safe import messaging as m
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
@@ -150,6 +151,7 @@ def impact_attribution(keywords, inasafe_flag=False):
         return None
 
     join_words = ' - %s ' % tr('sourced from')
+    analysis_details = tr('Analysis details')
     hazard_details = tr('Hazard details')
     hazard_title_keywords = 'hazard_title'
     hazard_source_keywords = 'hazard_source'
@@ -158,13 +160,11 @@ def impact_attribution(keywords, inasafe_flag=False):
     exposure_source_keyword = 'exposure_source'
 
     if hazard_title_keywords in keywords:
-        # We use safe translation infrastructure for this one (rather than Qt)
         hazard_title = tr(keywords[hazard_title_keywords])
     else:
         hazard_title = tr('Hazard layer')
 
     if hazard_source_keywords in keywords:
-        # We use safe translation infrastructure for this one (rather than Qt)
         hazard_source = tr(keywords[hazard_source_keywords])
     else:
         hazard_source = tr('an unknown source')
@@ -180,13 +180,14 @@ def impact_attribution(keywords, inasafe_flag=False):
         exposure_source = tr('an unknown source')
 
     report = m.Message()
-    report.add(m.Heading(hazard_details, **INFO_STYLE))
+    report.add(m.Heading(analysis_details, **INFO_STYLE))
+    report.add(hazard_details)
     report.add(m.Paragraph(
         hazard_title,
         join_words,
         hazard_source))
 
-    report.add(m.Heading(exposure_details, **INFO_STYLE))
+    report.add(exposure_details)
     report.add(m.Paragraph(
         exposure_title,
         join_words,
@@ -197,9 +198,8 @@ def impact_attribution(keywords, inasafe_flag=False):
         # noinspection PyUnresolvedReferences
         inasafe_phrase = tr(
             'This report was created using InaSAFE version %s. Visit '
-            'http://inasafe.org to get your free copy of this software!'
-            'InaSAFE has been jointly developed by BNPB, AusAid/AIFDRR & the '
-            'World Bank') % (get_version())
+            'http://inasafe.org to get your free copy of this software! %s'
+            ) % (get_version(), disclaimer())
 
         report.add(m.Paragraph(m.Text(inasafe_phrase)))
     return report
@@ -399,8 +399,10 @@ def compare_version(version1, version2):
         :returns: List of integer
         :rtype: list
         """
-        # Removing '.dev-ABCDEF' thing.
-        if '.dev' in v:
-            v = v.split('.dev')[0]
+        # Check only minor version
+        if v.count('.') > 1:
+            version_split = v.split('.')
+            v = version_split[0] + '.' + version_split[1]
+
         return [int(x) for x in re.sub(r'(\.0+)*$', '', v).split(".")]
     return cmp(normalize(version1), normalize(version2))

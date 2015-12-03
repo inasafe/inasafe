@@ -70,7 +70,7 @@ def get_qgis_app():
 
     :returns: Handle to QGIS app, canvas, iface and parent. If there are any
         errors the tuple members will be returned as None.
-    :rtype: (QgsApplication, CANVAS, IFACE, PARENT)
+    :rtype: (QgsApplication, CANVAS, IFload_standard_layersACE, PARENT)
 
     If QGIS is already running the handle to that app will be returned.
     """
@@ -926,9 +926,11 @@ def load_standard_layers(dock=None):
         test_data_path('idp', 'potential-idp.shp'),
         test_data_path('exposure', 'building-points.shp'),
         test_data_path('exposure', 'buildings.shp'),
+        test_data_path('exposure', 'census.shp'),
         test_data_path('hazard', 'volcano_point.shp'),
         test_data_path('exposure', 'roads.shp'),
         test_data_path('hazard', 'flood_multipart_polygons.shp'),
+        test_data_path('hazard', 'floods.shp'),
         test_data_path('hazard', 'classified_generic_polygon.shp'),
         test_data_path('hazard', 'volcano_krb.shp'),
         test_data_path('exposure', 'pop_binary_raster_20_20.asc'),

@@ -21,6 +21,7 @@ from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
     layer_geometry_polygon,
+    layer_geometry_point,
     hazard_flood,
     hazard_category_single_event,
     hazard_category_multiple_event,
@@ -58,11 +59,24 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
             'function_type': 'qgis2.0',
             'author': 'Dmitry Kolesov',
             'date_implemented': 'N/A',
-            'overview': tr('N/A'),
-            'detailed_description': tr('N/A'),
-            'hazard_input': '',
-            'exposure_input': '',
-            'output': '',
+            'overview': tr(
+                'To assess the impacts of (flood or tsunami) inundation '
+                'on building footprints with hazard in vector format.'),
+            'detailed_description': tr(
+                'The inundation status is calculated for each building '
+                '(using the centroid if it is a polygon) based on the value '
+                'of hazard attribute. The attribute and the values that are '
+                'considered as flooded can be configured in impact function '
+                'options.'),
+            'hazard_input': tr(
+                'A hazard vector layer whose attribute that can be used to '
+                'mark whether a polygon is flood or not.'),
+            'exposure_input': tr(
+                'Vector polygon or point layer extracted from OSM where '
+                'each feature represents the footprint of a building.'),
+            'output': tr(
+                'Vector layer contains building is estimated to be '
+                'flooded and the breakdown of the building by type.'),
             'actions': '',
             'limitations': [],
             'citations': [],
@@ -83,7 +97,9 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 },
                 'exposure': {
                     'layer_mode': layer_mode_classified,
-                    'layer_geometries': [layer_geometry_polygon],
+                    'layer_geometries': [
+                        layer_geometry_polygon,
+                        layer_geometry_point],
                     'exposure_types': [exposure_structure],
                     'exposure_units': [],
                     'exposure_class_fields': [structure_class_field],

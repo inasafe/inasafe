@@ -39,7 +39,6 @@ import json
 from safe.common.exceptions import (
     CanceledImportDialogError,
     FileMissingError)
-from safe import messaging as m
 from safe.utilities.osm_downloader import download
 from safe.utilities.gis import (
     viewport_geo_array,
@@ -47,13 +46,14 @@ from safe.utilities.gis import (
     validate_geo_array)
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class, resources_path)
-from safe.messaging import styles
+
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
     display_warning_message_bar)
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
+from safe.gui.tools.help.osm_downloader_help import osm_downloader_help
 
-INFO_STYLE = styles.INFO_STYLE
+
 LOGGER = logging.getLogger('InaSAFE')
 
 FORM_CLASS = get_ui_class('osm_downloader_dialog_base.ui')
@@ -85,12 +85,14 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.progress_dialog.setAutoClose(False)
         title = self.tr('InaSAFE OpenStreetMap Downloader')
         self.progress_dialog.setWindowTitle(title)
-        # Set up context help
+
+        # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         # Allow toggling the help button
         self.help_button.setCheckable(True)
         self.help_button.toggled.connect(self.help_toggled)
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
+
         # Disable boundaries group box until boundary checkbox is ticked
         self.boundary_group.setEnabled(False)
 
@@ -171,7 +173,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
     def help_toggled(self, flag):
         """Show or hide the help tab in the stacked widget.
 
-        ..versionadded: 3.2
+        .. versionadded: 3.2
 
         :param flag: Flag indicating whether help should be shown or hidden.
         :type flag: bool
@@ -188,70 +190,22 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         .. versionadded:: 3.2
         """
-        self.stacked_widget.setCurrentIndex(1)
+        self.main_stacked_widget.setCurrentIndex(1)
 
     def show_help(self):
         """Show usage info to the user."""
         # Read the header and footer html snippets
-        self.stacked_widget.setCurrentIndex(0)
+        self.main_stacked_widget.setCurrentIndex(0)
         header = html_header()
         footer = html_footer()
 
         string = header
 
-        heading = m.Heading(self.tr('OSM Downloader'), **INFO_STYLE)
-        body = self.tr(
-            'This tool will fetch building (\'structure\') or road ('
-            '\'highway\') data from the OpenStreetMap project for you. '
-            'The downloaded data will have InaSAFE keywords defined and a '
-            'default QGIS style applied. To use this tool effectively:'
-        )
-        tips = m.BulletedList()
-        tips.add(self.tr(
-            'Your current extent, when opening this window, will be used to '
-            'determine the area for which you want data to be retrieved.'
-            'You can interactively select the area by using the '
-            '\'select on map\' button - which will temporarily hide this '
-            'window and allow you to drag a rectangle on the map. After you '
-            'have finished dragging the rectangle, this window will '
-            'reappear.'))
-        tips.add(self.tr(
-            'Check the output directory is correct. Note that the saved '
-            'dataset will be called either roads.shp or buildings.shp (and '
-            'associated files).'
-        ))
-        tips.add(self.tr(
-            'By default simple file names will be used (e.g. roads.shp, '
-            'buildings.shp). If you wish you can specify a prefix to '
-            'add in front of this default name. For example using a prefix '
-            'of \'padang-\' will cause the downloaded files to be saved as '
-            '\'padang-roads.shp\' and \'padang-buildings.shp\'. Note that '
-            'the only allowed prefix characters are A-Z, a-z, 0-9 and the '
-            'characters \'-\' and \'_\'. You can leave this blank if you '
-            'prefer.'
-        ))
-        tips.add(self.tr(
-            'If a dataset already exists in the output directory it will be '
-            'overwritten.'
-        ))
-        tips.add(self.tr(
-            'This tool requires a working internet connection and fetching '
-            'buildings or roads will consume your bandwidth.'))
-        tips.add(m.Link(
-            'http://www.openstreetmap.org/copyright',
-            text=self.tr(
-                'Downloaded data is copyright OpenStreetMap contributors'
-                ' (click for more info).')
-        ))
-        message = m.Message()
-        message.add(m.Brand())
-        message.add(heading)
-        message.add(body)
-        message.add(tips)
+        message = osm_downloader_help()
         string += message.to_html()
         string += footer
 
-        self.web_view.setHtml(string)
+        self.help_web_view.setHtml(string)
 
     def restore_state(self):
         """ Read last state of GUI from configuration file."""

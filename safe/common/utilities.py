@@ -289,16 +289,14 @@ def get_free_memory_osx():
 def format_int(x):
     """Format integer with separator between thousands.
 
-    Args:
-        x: int - a number to be formatted in a locale friendly way.
+    :param x: A number to be formatted in a locale friendly way.
+    :type x: int
 
-    Returns:
-        str - a locale friendly formatted string e.g. 1,000,0000.00
-            representing the original x. If a ValueError exception occurs,
-            x is simply returned.
+    :returns: A locale friendly formatted string e.g. 1,000,0000.00
+        representing the original x. If a ValueError exception occurs,
+        x is simply returned.
+    :rtype: basestring
 
-    Raises:
-        None
 
     From http://stackoverflow.com/questions/5513615/
                 add-thousands-separators-to-a-number
@@ -325,8 +323,13 @@ def format_int(x):
 
 
 def round_thousand(value):
-    """Round an integer to the nearest thousand if my_int
-    is more than a thousand
+    """Round an integer to the nearest thousand if more than a thousand.
+
+    :param value: Number to be rounded
+    :type value: int
+
+    :returns: The input value rounded to the nearest 1000.
+    :rtype: int
     """
     if value > 1000:
         value = value // 1000 * 1000
@@ -335,6 +338,7 @@ def round_thousand(value):
 
 def humanize_min_max(min_value, max_value, interval):
     """Return humanize value format for max and min.
+
     If the range between the max and min is less than one, the original
     value will be returned.
 

@@ -21,7 +21,8 @@ from urlparse import urlparse
 import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
-import cPickle as pickle
+from cPickle import loads, dumps, HIGHEST_PROTOCOL
+from ast import literal_eval
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -61,13 +62,18 @@ class KeywordIO(QObject):
     .keywords file and this plugins implementation of keyword caching in a
     local sqlite db used for supporting keywords for remote datasources."""
 
-    def __init__(self):
-        """Constructor for the KeywordIO object."""
+    def __init__(self, layer=None):
+        """Constructor for the KeywordIO object.
+
+        .. versionchanged:: 3.3 added optional layer parameter.
+
+        """
         QObject.__init__(self)
         # path to sqlite db path
         self.keyword_db_path = None
         self.setup_keyword_db_path()
         self.connection = None
+        self.layer = layer
 
     def set_keyword_db_path(self, path):
         """Set the path for the keyword database (sqlite).
@@ -169,7 +175,7 @@ class KeywordIO(QObject):
         """Update keywords for a datasource.
 
         :param layer: A QGIS QgsMapLayer instance.
-        :type layer: QgsMapLayer
+        :type layer: qgis.core.QgsMapLayer
 
         :param keywords: A dict containing all the keywords to be updated
               for the layer.
@@ -226,7 +232,7 @@ class KeywordIO(QObject):
         if extra_keywords is None:
             extra_keywords = {}
         message = self.tr(
-            'Expected extraKeywords to be a dictionary. Got '
+            'Expected extra keywords to be a dictionary. Got '
             '%s' % str(type(extra_keywords))[1:-1])
         verify(isinstance(extra_keywords, dict), message)
         # compute the output keywords file name
@@ -544,7 +550,7 @@ class KeywordIO(QObject):
             cursor.execute(sql)
             data = cursor.fetchone()
             metadata_xml = generate_iso_metadata(keywords)
-            pickle_dump = pickle.dumps(metadata_xml, pickle.HIGHEST_PROTOCOL)
+            pickle_dump = dumps(metadata_xml, HIGHEST_PROTOCOL)
             if data is None:
                 # insert a new rec
                 # cursor.execute('insert into keyword(hash) values(:hash);',
@@ -621,7 +627,7 @@ class KeywordIO(QObject):
             data = data[0]  # first field
 
             # get the ISO XML out of the DB
-            metadata = pickle.loads(str(data))
+            metadata = loads(str(data))
 
             # the uri already had a KW entry in the DB using the old KW system
             # we use that dictionary to update the entry to the new ISO based
@@ -705,30 +711,63 @@ class KeywordIO(QObject):
                         return var
         return None
 
-    def to_message(self, keywords):
-        """Format keywords as amessage object.
+    def to_message(self, keywords=None, show_header=True):
+        """Format keywords as a message object.
 
         .. versionadded:: 3.2
 
+        .. versionchanged:: 3.3 - default keywords to None
+
         The message object can then be rendered to html, plain text etc.
+
+        :param keywords: Keywords to be converted to a message. Optional. If
+            not passed then we will attempt to get keywords from self.layer
+            if it is not None.
+        :type keywords: dict
+
+        :param show_header: Flag indicating if InaSAFE logo etc. should be
+            added above the keywords table. Default is True.
+        :type show_header: bool
 
         :returns: A safe message object containing a table.
         :rtype: safe.messaging.message
         """
-        logo_element = m.Brand()
+        if keywords is None and self.layer is not None:
+            keywords = self.read_keywords(self.layer)
+        # This order was determined in issue #2313
         preferred_order = [
             'title',
             'layer_purpose',
             'exposure',
             'hazard',
+            'hazard_category',
             'layer_geometry',
-            'layer_mode']  # everything else in arbitrary order
+            'layer_mode',
+            'vector_hazard_classification',
+            'exposure_unit',
+            'continuous_hazard_unit',
+            'volcano_name_field',
+            'road_class_field',
+            'structure_class_field',
+            'field',
+            'value_map',  # attribute values
+            'resample',
+            'source',
+            'url',
+            'scale',
+            'license',
+            'date',
+            'keyword_version'
+        ]  # everything else in arbitrary order
         report = m.Message()
-        report.add(logo_element)
-        report.add(m.Heading(self.tr(
-            'Layer keywords:'), **styles.INFO_STYLE))
-        report.add(m.Text(self.tr(
-            'The following keywords are defined for the active layer:')))
+        if show_header:
+            logo_element = m.Brand()
+            report.add(logo_element)
+            report.add(m.Heading(self.tr(
+                'Layer keywords:'), **styles.INFO_STYLE))
+            report.add(m.Text(self.tr(
+                'The following keywords are defined for the active layer:')))
+
         table = m.Table(style_class='table table-condensed table-striped')
         # First render out the preferred order keywords
         for keyword in preferred_order:
@@ -743,10 +782,27 @@ class KeywordIO(QObject):
             value = keywords[keyword]
             row = self._keyword_to_row(keyword, value)
             table.add(row)
+
+        # If the keywords class was instantiated with a layer object
+        # we can add some context info not stored in the keywords themselves
+        # but that is still useful to see...
+        if self.layer:
+            # First the CRS
+            keyword = self.tr('Reference system')
+            value = self.layer.crs().authid()
+            row = self._keyword_to_row(keyword, value)
+            table.add(row)
+            # Next the data source
+            keyword = self.tr('Layer source')
+            value = self.layer.source()
+            row = self._keyword_to_row(keyword, value, wrap_slash=True)
+            table.add(row)
+
+        # Finalise the report
         report.add(table)
         return report
 
-    def _keyword_to_row(self, keyword, value):
+    def _keyword_to_row(self, keyword, value, wrap_slash=False):
         """Helper to make a message row from a keyword.
 
         .. versionadded:: 3.2
@@ -759,6 +815,12 @@ class KeywordIO(QObject):
 
         :param value: Value of the keyword to be rendered.
         :type value: basestring
+
+        :param wrap_slash: Whether to replace slashes with the slash plus the
+            html <wbr> tag which will help to e.g. wrap html in small cells if
+            it contains a long filename. Disabled by default as it may cause
+            side effects if the text contains html markup.
+        :type wrap_slash: bool
 
         :returns: A row to be added to a messaging table.
         :rtype: safe.messaging.items.row.Row
@@ -774,9 +836,91 @@ class KeywordIO(QObject):
             definition = self.tr(keyword.capitalize().replace('_', ' '))
         else:
             definition = definition['name']
-        # Add this keyword to report
-        value = get_string(value)
+
+        # We deal with some special cases first:
+
+        # In this case the value contains a DICT that we want to present nicely
+        if keyword == 'value_map':
+            value = self._dict_to_row(value)
+        # In these KEYWORD cases we show the DESCRIPTION for
+        # the VALUE definition
+        elif keyword in [
+                'vector_hazard_classification',
+                'raster_hazard_classification']:
+            # get the definition for this class from definitions.py
+            value = self.definition(value)
+            value = value['description']
+        # In these VALUE cases we show the DESCRIPTION for
+        # the VALUE definition
+        elif value in []:
+            # get the definition for this class from definitions.py
+            value = self.definition(value)
+            value = value['description']
+        # In these VALUE cases we show the NAME for the VALUE definition
+        elif value in [
+                'multiple_event',
+                'single_event',
+                'point',
+                'line',
+                'polygon'
+                'field']:
+            # get the name for this class from definitions.py
+            value = self.definition(value)
+            value = value['name']
+        # otherwise just treat the keyword as literal text
+        else:
+            # Otherwise just directly read the value
+            value = get_string(value)
+
         key = m.ImportantText(definition)
         row.add(m.Cell(key))
-        row.add(m.Cell(value))
+        row.add(m.Cell(value, wrap_slash=wrap_slash))
         return row
+
+    def _dict_to_row(self, keyword_value):
+        """Helper to make a message row from a keyword where value is a dict.
+
+        .. versionadded:: 3.2
+
+        Use this when constructing a table from keywords to display as
+        part of a message object. This variant will unpack the dict and
+        present it nicely in the keyword value area as a nested table in the
+        cell.
+
+        We are expecting keyword value would be something like this:
+
+            "{'high': ['Kawasan Rawan Bencana III'], "
+            "'medium': ['Kawasan Rawan Bencana II'], "
+            "'low': ['Kawasan Rawan Bencana I']}"
+
+        Or by passing a python dict object with similar layout to above.
+
+        i.e. A string representation of a dict where the values are lists.
+
+        :param keyword_value: Value of the keyword to be rendered. This must
+            be a string representation of a dict, or a dict.
+        :type keyword_value: basestring, dict
+
+        :returns: A table to be added into a cell in the keywords table.
+        :rtype: safe.messaging.items.table
+        """
+        LOGGER.info('Converting to dict: %s' % keyword_value)
+        if isinstance(keyword_value, basestring):
+            keyword_value = literal_eval(keyword_value)
+        table = m.Table(style_class='table table-condensed')
+        for key, value_list in keyword_value.iteritems():
+            row = m.Row()
+            # Firs the heading
+            key = m.ImportantText(key)
+            row.add(m.Cell(key))
+            # Then the value. If it contains more than one element we
+            # present it as a bullet list, otherwise just as simple text
+            if len(value_list) > 1:
+                bullets = m.BulletedList()
+                for item in value_list:
+                    bullets.add(item)
+                row.add(m.Cell(bullets))
+            else:
+                row.add(m.Cell(value_list[0]))
+            table.add(row)
+        return table

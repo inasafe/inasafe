@@ -15,19 +15,19 @@ from safe.impact_functions.inundation\
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
-    format_int,
     verify,
     humanize_class,
     create_classes,
     create_label,
-    get_thousand_separator
-)
-from safe.common.tables import Table, TableRow
+    get_thousand_separator)
+
 from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters, get_needs_provenance_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+import safe.messaging as m
+from safe.messaging import styles
 
 
 # noinspection PyClassHasNoInit
@@ -47,49 +47,45 @@ class TsunamiEvacuationFunction(
         self.no_data_warning = False
 
     def notes(self):
+        """Return the notes section of the report.
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: safe.messaging.Message
+        """
         thresholds = self.parameters['thresholds'].value
-        notes = [
-            {
-                'content': tr('Notes'),
-                'header': True
-            },
-            {
-                'content': tr('Total population: %s') % format_int(
-                    population_rounding(self.total_population))
-            },
-            {
-                'content': tr(
-                    '<sup>1</sup>People need evacuation if flood levels '
-                    'exceed %(eps).1f m.') % {'eps': thresholds[-1]},
-            },
-            {
-                'content': tr(get_needs_provenance_value(self.parameters)),
-            },
-            {
-                'content': tr(
-                    'The layers contained `no data`. This missing data was '
-                    'carried through to the impact layer.'),
-                'condition': self.no_data_warning
-            },
-            {
-                'content': tr(
-                    '`No data` values in the impact layer were treated as 0 '
-                    'when counting the affected or total population.'),
-                'condition': self.no_data_warning
-            },
-            {
-                'content': tr(
-                    'All values are rounded up to the nearest integer in '
-                    'order to avoid representing human lives as fractions.'),
-            },
-            {
-                'content': tr(
-                    'Population rounding is applied to all population '
-                    'values, which may cause discrepancies when adding '
-                    'values.')
-            }
-        ]
-        return notes
+        if get_needs_provenance_value(self.parameters) is None:
+            needs_provenance = ''
+        else:
+            needs_provenance = tr(get_needs_provenance_value(self.parameters))
+
+        message = m.Message(style_class='container')
+
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        checklist.add(tr(
+            'Total population in the analysis area: %s'
+            ) % population_rounding(self.total_population))
+        checklist.add(tr(
+            '<sup>1</sup>People need evacuation if flood levels '
+            'exceed %(eps).1f m.') % {'eps': thresholds[-1]})
+        checklist.add(needs_provenance)
+        if self.no_data_warning:
+            checklist.add(tr(
+                'The layers contained "no data" values. This missing data '
+                'was carried through to the impact layer.'))
+            checklist.add(tr(
+                '"No data" values in the impact layer were treated as 0 '
+                'when counting the affected or total population.'))
+        checklist.add(tr(
+            'All values are rounded up to the nearest integer in '
+            'order to avoid representing human lives as fractions.'))
+        checklist.add(tr(
+            'Population rounding is applied to all population '
+            'values, which may cause discrepancies when adding values.'))
+
+        message.add(checklist)
+        return message
 
     def run(self):
         """Risk plugin for tsunami population evacuation.
@@ -158,17 +154,15 @@ class TsunamiEvacuationFunction(
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self.html_report()
 
         # check for zero impact
         if numpy.nanmax(impact) == 0 == numpy.nanmin(impact):
-            table_body = [
-                self.question,
-                TableRow([(tr('People in %.1f m of water') % thresholds[-1]),
-                          '%s' % format_int(0)],
-                         header=True)]
-            my_message = Table(table_body).toNewlineFreeString()
-            raise ZeroImpactException(my_message)
+            message = m.Message()
+            message.add(self.question)
+            message.add(tr('No people in %.1f m of water') % thresholds[-1])
+            message = message.to_html(suppress_newlines=True)
+            raise ZeroImpactException(message)
 
         # Create style
         colours = [

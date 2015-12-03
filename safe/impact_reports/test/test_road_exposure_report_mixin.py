@@ -47,6 +47,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
                 'Side': 5.5,
                 'Bike': 1.2})
         ])
+        self.road_mixin.affected_road_categories = ['Flooded']
 
     def tearDown(self):
         """Run after each test."""
@@ -55,32 +56,22 @@ class RoadExposureReportMixinTest(unittest.TestCase):
 
     def test_0001_generate_report(self):
         """Generate a blank report."""
-        blank_report = self.road_mixin_blank.generate_report()
-        expected_blank_report = [
-            {'content': ''},
-            {'content': ''},
-            {'content': [u'Road Type', u'Total (m)'], 'header': True},
-            {'content': [u'All', '0']},
-            {'content': ''},
-            {'content': u'Breakdown by road type', 'header': True},
-            {'content': ''},
-            {'content': ''}]
-        message = 'Blank report is not as expected.'
-        self.assertListEqual(blank_report, expected_blank_report, message)
+        blank_report = self.road_mixin_blank.generate_report().to_text()
+        # self.assertListEqual(blank_report, expected_blank_report, message)
+        self.assertIn('**Road Type**', blank_report)
+        self.assertIn('**Total (m)**', blank_report)
 
     def test_0002_road_breakdown(self):
         """Test the buildings breakdown."""
-        roads_breakdown = self.road_mixin.roads_breakdown()
-        expected_roads_breakdown = [
-            {'content': u'Breakdown by road type', 'header': True},
-            {'content': ['Main', '133']},
-            {'content': ['Side', '10']},
-            {'content': ['Bike', '1']}]
-        message = 'roads breakdown is not as expected.'
-        self.assertListEqual(
-            roads_breakdown,
-            expected_roads_breakdown,
-            message)
+        roads_breakdown = self.road_mixin.roads_breakdown().to_text()
+
+        self.assertIn('**Breakdown by road type**', roads_breakdown)
+        self.assertIn('Main', roads_breakdown)
+        self.assertIn('133', roads_breakdown)
+        self.assertIn('Side', roads_breakdown)
+        self.assertIn('10', roads_breakdown)
+        self.assertIn('Bike', roads_breakdown)
+        self.assertIn('1', roads_breakdown)
 
     def test_0003_total(self):
         """Test general methods."""

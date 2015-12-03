@@ -42,7 +42,7 @@ class ImpactReportTest(unittest.TestCase):
         layer, _ = load_layer(impact_layer_path)
 
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
         title = report.map_title
         expected_title = 'People affected by flood prone areas'
@@ -55,7 +55,7 @@ class ImpactReportTest(unittest.TestCase):
         layer_path = test_data_path('hazard', 'tsunami_wgs84.tif')
         layer, _ = load_layer(layer_path)
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
         title = report.map_title
         expected_title = None
@@ -69,7 +69,7 @@ class ImpactReportTest(unittest.TestCase):
         layer, _ = load_layer(impact_layer_path)
 
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
         # There are missing elements in the template
         component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
@@ -95,7 +95,7 @@ class ImpactReportTest(unittest.TestCase):
         CANVAS.refresh()
 
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
         out_path = unique_filename(
             prefix='map_default_template_test',
@@ -115,26 +115,28 @@ class ImpactReportTest(unittest.TestCase):
         # Check the components in composition are default components
         if qgis_version() < 20500:
             safe_logo = report.composition.getComposerItemById(
-                'safe-logo').pictureFile()
+                'inasafe-logo').pictureFile()
             north_arrow = report.composition.getComposerItemById(
                 'north-arrow').pictureFile()
             org_logo = report.composition.getComposerItemById(
                 'organisation-logo').pictureFile()
         else:
             safe_logo = report.composition.getComposerItemById(
-                'safe-logo').picturePath()
+                'white-inasafe-logo').picturePath()
             north_arrow = report.composition.getComposerItemById(
                 'north-arrow').picturePath()
             org_logo = report.composition.getComposerItemById(
                 'organisation-logo').picturePath()
 
         expected_safe_logo = resources_path(
-            'img', 'logos', 'inasafe-logo-url.svg')
+            'img', 'logos', 'inasafe-logo-url-white.svg')
         expected_north_arrow = resources_path(
             'img', 'north_arrows', 'simple_north_arrow.png')
         expected_org_logo = resources_path('img', 'logos', 'supporters.png')
 
-        message = 'The safe logo path is not the default one'
+        message = (
+            'The safe logo path is not the default one: %s isn\'t %s' %
+            (expected_safe_logo, safe_logo))
         self.assertEqual(expected_safe_logo, safe_logo, message)
 
         message = 'The north arrow path is not the default one'
@@ -157,7 +159,7 @@ class ImpactReportTest(unittest.TestCase):
         CANVAS.refresh()
 
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
 
         # Set custom logo
@@ -202,7 +204,7 @@ class ImpactReportTest(unittest.TestCase):
         CANVAS.refresh()
 
         template = resources_path(
-            'qgis-composer-templates', 'inasafe-portrait-a4.qpt')
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
         report = ImpactReport(IFACE, template, layer)
         report.template = template  # just to cover set template
         out_path = unique_filename(

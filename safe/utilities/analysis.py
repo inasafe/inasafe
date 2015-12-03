@@ -18,6 +18,7 @@ import logging
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
+from PyQt4.QtCore import QSettings
 
 from qgis.core import (
     QgsMapLayer,
@@ -668,7 +669,7 @@ class Analysis(object):
                     self.aggregation_layer, self.aggregation_keyword)
                 # noinspection PyTypeChecker
                 text.add(m.Text(
-                    self.tr('and bullet_list the results'),
+                    self.tr('and bullet list the results'),
                     m.ImportantText(self.tr('aggregated by')),
                     m.EmphasizedText(aggregation_name)))
             except AttributeError:
@@ -782,13 +783,34 @@ class Analysis(object):
             hazard_layer = self.clip_parameters[5]
         except:
             raise
+        # Find out what clipping behaviour we have - see #2210
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        detail = None
+        if mode == 'HazardExposureView':
+            detail = self.tr(
+                'Resampling and clipping the hazard layer to match the '
+                'intersection of the exposure layer and the current view '
+                'extents.')
+        elif mode == 'HazardExposure':
+            detail = self.tr(
+                'Resampling and clipping the hazard layer to match the '
+                'intersection of the exposure layer extents.')
+        elif mode == 'HazardExposureBookmark':
+            detail = self.tr(
+                'Resampling and clipping the hazard layer to match the '
+                'bookmarked extents.')
+        elif mode == 'HazardExposureBoundingBox':
+            detail = self.tr(
+                'Resampling and clipping the hazard layer to match the '
+                'intersection of your preferred analysis area.')
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
         title = self.tr('Preparing hazard data')
-        detail = self.tr(
-            'We are resampling and clipping the hazard layer to match the '
-            'intersection of the exposure layer and the current view extents.')
+
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
@@ -806,9 +828,28 @@ class Analysis(object):
             raise e
 
         title = self.tr('Preparing exposure data')
-        detail = self.tr(
-            'We are resampling and clipping the exposure layer to match the '
-            'intersection of the hazard layer and the current view extents.')
+        # Find out what clipping behaviour we have - see #2210
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        if mode == 'HazardExposureView':
+            detail = self.tr(
+                'Resampling and clipping the exposure layer to match '
+                'the intersection of the hazard layer and the current view '
+                'extents.')
+        elif mode == 'HazardExposure':
+            detail = self.tr(
+                'Resampling and clipping the exposure layer to match '
+                'the intersection of the hazard layer extents.')
+        elif mode == 'HazardExposureBookmark':
+            detail = self.tr(
+                'Resampling and clipping the exposure layer to match '
+                'the bookmarked extents.')
+        elif mode == 'HazardExposureBoundingBox':
+            detail = self.tr(
+                'Resampling and clipping the exposure layer to match '
+                'the intersection of your preferred analysis area.')
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))

@@ -21,6 +21,8 @@ import os
 import shutil
 from datetime import datetime
 import logging
+import filecmp
+
 
 from realtime.utilities import is_event_id
 from realtime.utilities import (
@@ -178,17 +180,21 @@ class ShakeData(object):
             /tmp/inasafe/realtime/shakemaps-extracted/20131105060809/grid.xml
         """
         final_grid_xml_file = os.path.join(self.extract_dir(), 'grid.xml')
+
+        # move grid.xml from working dir to the extracted dir
+        local_path = os.path.join(self.working_dir, self.event_id)
+        source_grid_xml = os.path.join(local_path, 'output', 'grid.xml')
+
         if not os.path.exists(self.extract_dir()):
             make_directory(self.extract_dir())
 
         if force_flag or self.force_flag:
             self.remove_extracted_files()
         elif os.path.exists(final_grid_xml_file):
-            return final_grid_xml_file
+            if filecmp.cmp(final_grid_xml_file, source_grid_xml):
+                return final_grid_xml_file
+            # if it is not identical, copy again
 
-        # move grid.xml from working dir to the extracted dir
-        local_path = os.path.join(self.working_dir, self.event_id)
-        source_grid_xml = os.path.join(local_path, 'output', 'grid.xml')
         if not os.path.exists(source_grid_xml):
             raise FileNotFoundError(
                 'The output does not contain %s file.' %

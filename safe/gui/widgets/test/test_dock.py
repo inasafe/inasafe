@@ -340,7 +340,7 @@ class TestDock(TestCase):
             function_id='FloodEvacuationRasterHazardFunction')
         layer = self.dock.get_exposure_layer()
         index = self.dock.layer_legend_index(layer)
-        self.assertTrue(index == 8)
+        self.assertTrue(index == 10)
 
     def test_add_above_layer(self):
         """Test we can add one layer above another - see #2322
@@ -661,6 +661,10 @@ class TestDock(TestCase):
             encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
+        result = result.replace(
+            '<th class="text-right">', ' ').replace('</th>', ' ')
+        result = result.replace(
+            '</td><td class="text-right">', ' ')
         for line in expected_result:
             line = line.replace('\n', '')
             self.assertIn(line, result)
@@ -714,6 +718,10 @@ class TestDock(TestCase):
             encoding='utf-8').readlines()
         result = result.replace(
             '</td> <td>', ' ').replace('</td><td>', ' ')
+        result = result.replace(
+            '<th class="text-right">', ' ').replace('</th>', ' ')
+        result = result.replace(
+            '</td><td class="text-right">', ' ')
         for line in expected_result:
             line = line.replace('\n', '')
             self.assertIn(line, result)

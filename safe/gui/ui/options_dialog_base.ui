@@ -17,17 +17,14 @@
    <iconset>
     <normaloff>:/plugins/inasafe/icon.png</normaloff>:/plugins/inasafe/icon.png</iconset>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QTabWidget" name="tabWidget">
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <widget class="QStackedWidget" name="main_stacked_widget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
-     <widget class="QWidget" name="tab_basic">
-      <attribute name="title">
-       <string>Basic Options</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_4">
+     <widget class="QWidget" name="page">
+      <layout class="QGridLayout" name="gridLayout">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -41,235 +38,595 @@
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QScrollArea" name="scrollArea">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
+        <widget class="QWebView" name="help_web_view">
+         <property name="url">
+          <url>
+           <string>about:blank</string>
+          </url>
          </property>
-         <property name="frameShadow">
-          <enum>QFrame::Sunken</enum>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_1">
+      <layout class="QGridLayout" name="gridLayout_5">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>0</number>
          </property>
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="scrollAreaWidgetContents">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>682</width>
-            <height>604</height>
-           </rect>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
+         <widget class="QWidget" name="tab_basic">
+          <attribute name="title">
+           <string>Basic Options</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_4">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item row="0" column="0">
+            <widget class="QScrollArea" name="scrollArea">
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Sunken</enum>
+             </property>
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>682</width>
+                <height>592</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QCheckBox" name="organisation_on_dock_checkbox">
+                 <property name="text">
+                  <string>Show organisation logo in InaSAFE dock</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="cbxVisibleLayersOnly">
+                 <property name="text">
+                  <string>Only show visible layers in InaSAFE dock</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="cbxSetLayerNameFromTitle">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>Set QGIS layer name from 'title' in keywords</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="cbxZoomToImpact">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>Zoom to impact layer on scenario estimate completion</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="cbxHideExposure">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="text">
+                  <string>Hide exposure layer on scenario estimate completion</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="cbxClipHard">
+                 <property name="text">
+                  <string>When clipping to analysis extents, also clip features (i.e. will clip polygon smaller)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="cbxShowPostprocessingLayers">
+                 <property name="toolTip">
+                  <string>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</string>
+                 </property>
+                 <property name="text">
+                  <string>Show intermediate layers generated by postprocessing</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QLabel" name="label_6">
+                   <property name="text">
+                    <string>Female ratio default value</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QDoubleSpinBox" name="dsbFemaleRatioDefault">
+                   <property name="accelerated">
+                    <bool>true</bool>
+                   </property>
+                   <property name="maximum">
+                    <double>1.000000000000000</double>
+                   </property>
+                   <property name="singleStep">
+                    <double>0.010000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="custom_UseUserDirectory_checkbox">
+                 <property name="text">
+                  <string>Location for results</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item>
+                  <widget class="QSplitter" name="splitter_user_directory">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <widget class="QLineEdit" name="leUserDirectoryPath">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                   <widget class="QToolButton" name="toolUserDirectoryPath">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="text">
+                     <string>...</string>
+                    </property>
+                   </widget>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QGroupBox" name="grpNotImplemented">
+                 <property name="title">
+                  <string>Not yet implemented</string>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_3">
+                  <item row="8" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_4">
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit_4">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QToolButton" name="toolButton_4">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="text">
+                       <string>...</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="7" column="0">
+                   <widget class="QLabel" name="label_4">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="text">
+                     <string>Organisation name (for maps, reports etc.)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QCheckBox" name="cbxBubbleLayersUp">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="text">
+                     <string>Bubble exposure and hazard layers to top when selected</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="9" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_5">
+                    <item>
+                     <widget class="QLabel" name="label_5">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="text">
+                       <string>DPI (Maps and reports)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QSpinBox" name="spinBox">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="10" column="0">
+                   <widget class="QCheckBox" name="cbxUseThread">
+                    <property name="text">
+                     <string>Run analysis in a separate thread (experimental)</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_templates">
+          <attribute name="title">
+           <string>Template Options</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QCheckBox" name="organisation_on_dock_checkbox">
+            <widget class="QCheckBox" name="template_warning_checkbox">
              <property name="text">
-              <string>Show organisation logo in InaSAFE dock</string>
+              <string>Prompt me in cases when a template has missing elements</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="cbxVisibleLayersOnly">
+            <widget class="QCheckBox" name="custom_org_logo_checkbox">
              <property name="text">
-              <string>Only show visible layers in InaSAFE dock</string>
+              <string>Use custom organisation logo</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="cbxSetLayerNameFromTitle">
+            <widget class="QSplitter" name="splitter_org_logo">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <widget class="QLineEdit" name="leOrganisationLogoPath">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>100</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+             <widget class="QToolButton" name="toolOrganisationLogoPath">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="custom_north_arrow_checkbox">
+             <property name="text">
+              <string>Use custom north arrow image</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSplitter" name="splitter_north_arrow">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <widget class="QLineEdit" name="leNorthArrowPath">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>100</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+             <widget class="QToolButton" name="toolNorthArrowPath">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="custom_templates_dir_checkbox">
+             <property name="text">
+              <string>Additional report templates directory</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSplitter" name="splitter_custom_report">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <widget class="QLineEdit" name="leReportTemplatePath">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>100</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+             </widget>
+             <widget class="QToolButton" name="toolReportTemplatePath">
+              <property name="text">
+               <string>...</string>
+              </property>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="custom_org_disclaimer_checkbox">
+             <property name="text">
+              <string>Use custom organisation disclaimer text</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPlainTextEdit" name="txtDisclaimer">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_iso19115">
+          <attribute name="title">
+           <string>ISO 19155 Metadata</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Organisation</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="iso19115_organization_le">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Contact Email</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="iso19115_email_le">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Website</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="iso19115_url_le">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Analysis Title</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="iso19115_title_le">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Analysis License</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="iso19115_license_le">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_advanced">
+          <attribute name="title">
+           <string>Advanced</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lblKeywordCache">
              <property name="enabled">
               <bool>true</bool>
              </property>
              <property name="text">
-              <string>Set QGIS layer name from 'title' in keywords</string>
+              <string>Keyword cache for remote datasources</string>
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QCheckBox" name="cbxZoomToImpact">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Zoom to impact layer on scenario estimate completion</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="cbxHideExposure">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Hide exposure layer on scenario estimate completion</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="cbxClipHard">
-             <property name="text">
-              <string>When clipping to analysis extents, also clip features (i.e. will clip polygon smaller)</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="cbxShowPostprocessingLayers">
-             <property name="toolTip">
-              <string>Turn on to see the intermediate files generated by the postprocessing steps in the map canvas</string>
-             </property>
-             <property name="text">
-              <string>Show intermediate layers generated by postprocessing</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
+           <item row="1" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <widget class="QLabel" name="label_6">
-               <property name="text">
-                <string>Female ratio default value</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDoubleSpinBox" name="dsbFemaleRatioDefault">
-               <property name="accelerated">
+              <widget class="QLineEdit" name="leKeywordCachePath">
+               <property name="enabled">
                 <bool>true</bool>
                </property>
-               <property name="maximum">
-                <double>1.000000000000000</double>
-               </property>
-               <property name="singleStep">
-                <double>0.010000000000000</double>
-               </property>
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+              <widget class="QToolButton" name="toolKeywordCachePath">
+               <property name="enabled">
+                <bool>true</bool>
                </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
+               <property name="text">
+                <string>...</string>
                </property>
-              </spacer>
+              </widget>
              </item>
             </layout>
            </item>
-           <item>
-            <widget class="QCheckBox" name="custom_UseUserDirectory_checkbox">
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="cbxUseSentry">
              <property name="text">
-              <string>Location for results</string>
+              <string>Help to improve InaSAFE by submitting errors to a remote server (needs restart)</string>
              </property>
             </widget>
            </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_2">
-             <item>
-              <widget class="QSplitter" name="splitter_user_directory">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <widget class="QLineEdit" name="leUserDirectoryPath">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-               </widget>
-               <widget class="QToolButton" name="toolUserDirectoryPath">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="grpNotImplemented">
-             <property name="title">
-              <string>Not yet implemented</string>
+           <item row="3" column="0">
+            <widget class="QTextBrowser" name="textBrowser">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
-             <layout class="QGridLayout" name="gridLayout_3">
-              <item row="8" column="0">
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
-                <item>
-                 <widget class="QLineEdit" name="lineEdit_4">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QToolButton" name="toolButton_4">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="7" column="0">
-               <widget class="QLabel" name="label_4">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Organisation name (for maps, reports etc.)</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QCheckBox" name="cbxBubbleLayersUp">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Bubble exposure and hazard layers to top when selected</string>
-                </property>
-               </widget>
-              </item>
-              <item row="9" column="0">
-               <layout class="QHBoxLayout" name="horizontalLayout_5">
-                <item>
-                 <widget class="QLabel" name="label_5">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="text">
-                   <string>DPI (Maps and reports)</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="spinBox">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item row="10" column="0">
-               <widget class="QCheckBox" name="cbxUseThread">
-                <property name="text">
-                 <string>Run analysis in a separate thread (experimental)</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.Helvetica Neue DeskInterface'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
             </widget>
            </item>
-           <item>
-            <spacer name="verticalSpacer">
+           <item row="4" column="0">
+            <widget class="QCheckBox" name="cbxDevMode">
+             <property name="text">
+              <string>Enable developer mode (needs restart)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QCheckBox" name="cbxNativeZonalStats">
+             <property name="text">
+              <string>Use QGIS zonal statistics (leave unchecked to use InaSAFE's zonal statistics)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <spacer name="verticalSpacer_2">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
@@ -287,319 +644,10 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_templates">
-      <attribute name="title">
-       <string>Template Options</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QCheckBox" name="template_warning_checkbox">
-         <property name="text">
-          <string>Prompt me in cases when a template has missing elements</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="custom_org_logo_checkbox">
-         <property name="text">
-          <string>Use custom organisation logo</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSplitter" name="splitter_org_logo">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <widget class="QLineEdit" name="leOrganisationLogoPath">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>100</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-         <widget class="QToolButton" name="toolOrganisationLogoPath">
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="custom_north_arrow_checkbox">
-         <property name="text">
-          <string>Use custom north arrow image</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSplitter" name="splitter_north_arrow">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <widget class="QLineEdit" name="leNorthArrowPath">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>100</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-         <widget class="QToolButton" name="toolNorthArrowPath">
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="custom_templates_dir_checkbox">
-         <property name="text">
-          <string>Additional report templates directory</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSplitter" name="splitter_custom_report">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <widget class="QLineEdit" name="leReportTemplatePath">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>100</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-         <widget class="QToolButton" name="toolReportTemplatePath">
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="custom_org_disclaimer_checkbox">
-         <property name="text">
-          <string>Use custom organisation disclaimer text</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPlainTextEdit" name="txtDisclaimer">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_iso19115">
-      <attribute name="title">
-       <string>ISO 19155 Metadata</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Organisation</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="iso19115_organization_le">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Contact Email</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="iso19115_email_le">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>Website</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="iso19115_url_le">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Analysis Title</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="iso19115_title_le">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Analysis License</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="iso19115_license_le">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_advanced">
-      <attribute name="title">
-       <string>Advanced</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_6">
-       <item row="0" column="0">
-        <widget class="QLabel" name="lblKeywordCache">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string>Keyword cache for remote datasources</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QLineEdit" name="leKeywordCachePath">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolKeywordCachePath">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="cbxUseSentry">
-         <property name="text">
-          <string>Help to improve InaSAFE by submitting errors to a remote server (needs restart)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QTextBrowser" name="textBrowser">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="html">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.Helvetica Neue DeskInterface'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QCheckBox" name="cbxDevMode">
-         <property name="text">
-          <string>Enable developer mode (needs restart)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QCheckBox" name="cbxNativeZonalStats">
-         <property name="text">
-          <string>Use QGIS zonal statistics (leave unchecked to use InaSAFE's zonal statistics)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
-   <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="button_box">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -610,50 +658,20 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKitWidgets/QWebView</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
-  <tabstop>organisation_on_dock_checkbox</tabstop>
-  <tabstop>cbxVisibleLayersOnly</tabstop>
-  <tabstop>cbxSetLayerNameFromTitle</tabstop>
-  <tabstop>cbxZoomToImpact</tabstop>
-  <tabstop>cbxHideExposure</tabstop>
-  <tabstop>cbxClipHard</tabstop>
-  <tabstop>cbxShowPostprocessingLayers</tabstop>
-  <tabstop>dsbFemaleRatioDefault</tabstop>
-  <tabstop>cbxBubbleLayersUp</tabstop>
-  <tabstop>lineEdit_4</tabstop>
-  <tabstop>toolButton_4</tabstop>
-  <tabstop>spinBox</tabstop>
-  <tabstop>buttonBox</tabstop>
-  <tabstop>cbxUseThread</tabstop>
-  <tabstop>cbxNativeZonalStats</tabstop>
-  <tabstop>textBrowser</tabstop>
-  <tabstop>cbxDevMode</tabstop>
-  <tabstop>txtDisclaimer</tabstop>
-  <tabstop>toolKeywordCachePath</tabstop>
-  <tabstop>cbxUseSentry</tabstop>
-  <tabstop>leKeywordCachePath</tabstop>
-  <tabstop>template_warning_checkbox</tabstop>
-  <tabstop>custom_org_logo_checkbox</tabstop>
-  <tabstop>leOrganisationLogoPath</tabstop>
-  <tabstop>toolOrganisationLogoPath</tabstop>
-  <tabstop>custom_north_arrow_checkbox</tabstop>
-  <tabstop>leNorthArrowPath</tabstop>
-  <tabstop>toolNorthArrowPath</tabstop>
-  <tabstop>custom_templates_dir_checkbox</tabstop>
-  <tabstop>leReportTemplatePath</tabstop>
-  <tabstop>toolReportTemplatePath</tabstop>
-  <tabstop>custom_org_disclaimer_checkbox</tabstop>
-  <tabstop>iso19115_organization_le</tabstop>
-  <tabstop>iso19115_email_le</tabstop>
-  <tabstop>iso19115_url_le</tabstop>
-  <tabstop>iso19115_title_le</tabstop>
-  <tabstop>iso19115_license_le</tabstop>
-  <tabstop>tabWidget</tabstop>
+  <tabstop>button_box</tabstop>
  </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>button_box</sender>
    <signal>accepted()</signal>
    <receiver>OptionsDialogBase</receiver>
    <slot>accept()</slot>
@@ -669,7 +687,7 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>button_box</sender>
    <signal>rejected()</signal>
    <receiver>OptionsDialogBase</receiver>
    <slot>reject()</slot>
@@ -681,86 +699,6 @@ p, li { white-space: pre-wrap; }
     <hint type="destinationlabel">
      <x>462</x>
      <y>519</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>custom_org_disclaimer_checkbox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>txtDisclaimer</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>273</x>
-     <y>258</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>273</x>
-     <y>395</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>custom_org_logo_checkbox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>splitter_org_logo</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>124</x>
-     <y>57</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>97</x>
-     <y>117</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>custom_north_arrow_checkbox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>splitter_north_arrow</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>128</x>
-     <y>202</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>98</x>
-     <y>230</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>custom_templates_dir_checkbox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>splitter_custom_report</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>151</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>98</x>
-     <y>290</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>custom_UseUserDirectory_checkbox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>splitter_user_directory</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>327</x>
-     <y>284</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>327</x>
-     <y>313</y>
     </hint>
    </hints>
   </connection>

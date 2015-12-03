@@ -1,7 +1,7 @@
 InaSAFE
 =======
 
-[![InaSAFE Screenshot](http://blogtest.inasafe.org/wp-content/uploads/2015/02/about-screenshot14.png)](http://inasafe.org)
+[![InaSAFE Screenshot](http://inasafe.org/wp-content/uploads/2015/02/about-screenshot14.png)](http://inasafe.org)
 
 InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
@@ -22,16 +22,16 @@ Story queue on Waffle:
 
 [![Throughput Graph](https://graphs.waffle.io/aifdr/inasafe/throughput.svg)](https://waffle.io/aifdr/inasafe/metrics)
 
-* Current test status master: [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=master)](https://travis-ci.org/AIFDR/inasafe) and
+* Current test status master: [![Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=master)](https://travis-ci.org/inasafe/inasafe) and
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AIFDR/inasafe/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AIFDR/inasafe/?branch=master)
 
-* Current test status develop: [![Build Status](https://travis-ci.org/AIFDR/inasafe.svg?branch=develop)](https://travis-ci.org/AIFDR/inasafe) and 
+* Current test status develop: [![Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=develop)](https://travis-ci.org/inasafe/inasafe) and
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AIFDR/inasafe/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/AIFDR/inasafe/?branch=develop)
 
 
 PyPi Downloads for the 'safe' library (currently pip package is unmaintained):
 
-* [![Downloads](https://pypip.in/d/python-safe/badge.png)](https://crate.io/packages/python-safe)
+* [![PyPI version](https://badge.fury.io/py/python-safe.svg)](https://badge.fury.io/py/python-safe)
 
 
 
@@ -77,6 +77,8 @@ System Requirements
 History
 =======
 
+* In March 2011, Risk In A Box (the predecessor to InaSAFE) was built as a web 
+  application running as a GeoNode Plugin.
 * InaSAFE development as a QGIS plugin started in January 2012.
 * In October 2012, version 1.0 of InaSAFE was launched at the [5th Asian ministerial conference on disaster risk reduction (AMCDRR)](
   http://www.unisdr.org/we/inform/events/23540) where it was demonstrated to 

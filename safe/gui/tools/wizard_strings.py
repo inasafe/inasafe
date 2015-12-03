@@ -46,7 +46,8 @@ hazard_question = tr(
     'as <b>flood impact on population</b>.</p>')
 exposure_question = tr(
     'What kind of <b>exposure</b> does this layer represent? '
-    'Is it a <b>population</b>, <b>structure</b>, or <b>road</b> layer? '
+    'Is it a <b>population</b>, <b>structure</b>, <b>area</b>, or '
+    '<b>road</b> layer? '
     '<p>The choice you make here will determine '
     'which impact functions this exposure layer can be used with. '
     'For example, if you choose <b>population</b> you will be able to use '
@@ -106,6 +107,10 @@ field_question_subcategory_unit = tr(
 field_question_subcategory_classified = tr(
     'You have selected <b>classified</b> data for the vector <b>%s</b> layer. '
     'Please select the attribute in this layer that represents the classes.'
+)
+field_question_subcategory_classified_id = tr(
+    'You have selected <b>classified</b> data for the vector <b>%s</b> layer. '
+    'Please select the attribute in this layer that represents the ids.'
 )  # (category, subcategory)
 field_question_aggregation = tr(
     'You have selected a vector <b>aggregation</b> layer. Please select the '
@@ -150,7 +155,7 @@ select_hazard_origin_question = tr(
     'in an area. '
     'For example flood, earthquake and tsunami inundation are all different '
     'kinds of hazards. Select the appropriate option below to indicate '
-    'where you data resides:</p>')  # (hazard_geom, hazard, imfunc)
+    'where your data resides:</p>')  # (hazard_geom, hazard, imfunc)
 select_hazlayer_from_canvas_question = tr(
     '<p>You selected <b>%s %s</b> as hazard input to <b>%s</b> function.</p> '
     '<p>These are suitable layers currently loaded in QGIS. Please choose '

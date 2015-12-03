@@ -27,13 +27,15 @@ from safe.common.utilities import (
     create_classes,
     create_label,
     get_thousand_separator)
-from safe.common.tables import Table, TableRow
+from safe.impact_functions.core import no_population_impact_message
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import (
     add_needs_parameters,
     filter_needs_parameters)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+import safe.messaging as m
+from safe.messaging import styles
 
 
 class ClassifiedPolygonHazardPopulationFunction(
@@ -57,37 +59,29 @@ class ClassifiedPolygonHazardPopulationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
-        notes = [
-            {'content': tr('Notes'), 'header': True},
-            {
-                'content': tr('Total population: %s') % format_int(
-                    population_rounding(self.total_population))
-            },
-            {
-                'content': tr(
-                    '<sup>1</sup>People need evacuation if they are in a '
-                    'hazard zone.')
-            },
-            {
-                'content': tr(
-                    'Map shows population count in high, medium, and low '
-                    'hazard area.')
-            },
-            {
-                'content': tr(
-                    'All values are rounded up to the nearest integer in '
-                    'order to avoid representing human lives as fractions.'),
-            },
-            {
-                'content': tr(
-                    'Population rounding is applied to all population '
-                    'values, which may cause discrepancies when adding '
-                    'values.')
-            }
-        ]
-        return notes
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        population = format_int(population_rounding(self.total_population))
+        checklist.add(tr(
+            'Total population in the analysis area: %s') % population)
+        checklist.add(tr(
+            '<sup>1</sup>People need evacuation if they are in a '
+            'hazard zone.'))
+        checklist.add(tr(
+            'Map shows population count in high, medium, and low '
+            'hazard areas.'))
+        checklist.add(tr(
+            'All values are rounded up to the nearest integer in '
+            'order to avoid representing human lives as fractions.'))
+        checklist.add(tr(
+            'Population rounding is applied to all population '
+            'values, which may cause discrepancies when adding values.'))
+        message.add(checklist)
+        return message
 
     def run(self):
         """Run classified population evacuation Impact Function.
@@ -166,16 +160,10 @@ class ClassifiedPolygonHazardPopulationFunction(
 
         # check for zero impact
         if total_affected_population == 0:
-            table_body = [
-                self.question,
-                TableRow(
-                    [tr('People impacted'),
-                     '%s' % format_int(total_affected_population)],
-                    header=True)]
-            message = Table(table_body).toNewlineFreeString()
+            message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
-        impact_table = impact_summary = self.generate_html_report()
+        impact_table = impact_summary = self.html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -224,8 +212,9 @@ class ClassifiedPolygonHazardPopulationFunction(
         map_title = tr('People impacted by each hazard zone')
         legend_title = tr('Population')
         legend_units = tr('(people per cell)')
-        legend_notes = tr('Thousand separator is represented by  %s' %
-                          get_thousand_separator())
+        legend_notes = tr(
+            'Thousand separator is represented by  %s' %
+            get_thousand_separator())
 
         # Create vector layer and return
         impact_layer = Raster(
@@ -233,13 +222,14 @@ class ClassifiedPolygonHazardPopulationFunction(
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
             name=tr('People impacted by each hazard zone'),
-            keywords={'impact_summary': impact_summary,
-                      'impact_table': impact_table,
-                      'target_field': self.target_field,
-                      'map_title': map_title,
-                      'legend_notes': legend_notes,
-                      'legend_units': legend_units,
-                      'legend_title': legend_title},
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'target_field': self.target_field,
+                'map_title': map_title,
+                'legend_notes': legend_notes,
+                'legend_units': legend_units,
+                'legend_title': legend_title},
             style_info=style_info)
 
         self._impact = impact_layer

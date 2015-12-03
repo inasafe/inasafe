@@ -207,9 +207,9 @@ hazard_category_multiple_event = {
         'observations such as a hazard map of all observed volcanic '
         'deposits around a volcano. \n'
         'This type of hazard data shows those locations that might be '
-        'impacted by a volcanic eruption in the future . Another example '
+        'impacted by a volcanic eruption in the future. Another example '
         'might be a probabilistic hazard model that shows the likelihood of a '
-        'magnitude 7 earthquake happening in the next 50 yrs.')
+        'magnitude 7 earthquake happening in the next 50 years.')
 }
 
 hazard_category = {
@@ -270,7 +270,7 @@ hazard_tsunami = {
     'name': tr('Tsunami'),
     'description': tr(
         'A <b>tsunami</b> describes a large ocean wave or series or '
-        'waves usually caused by an under water earthquake or volcano.'
+        'waves usually caused by an under water earthquake or volcano. '
         'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
         'wave that strikes land may cause massive destruction and '
         'flooding.')
@@ -356,12 +356,22 @@ exposure_structure = {
         'bridge.')
 }
 
+exposure_area = {
+    'key': 'area',
+    'name': tr('Area'),
+    'description': tr(
+        'The <b>area</b> exposure data describes features on '
+        'the surface of the earth that might be exposed to a particular '
+        'hazard. This currently include urban areas. ')
+}
+
 exposure_all = [
     exposure_land_cover,
     exposure_people_in_building,
     exposure_population,
     exposure_road,
-    exposure_structure
+    exposure_structure,
+    exposure_area
 ]
 
 # Renamed key from exposure to exposures in 3.2 because key was not unique TS
@@ -756,12 +766,51 @@ volcano_name_field = {
     'description': tr('Attribute where the volcano name is located.')
 }
 
+area_name_field = {
+    'key': 'area_name_field',
+    'name': tr('Name field'),
+    'type': 'field',
+    'description': tr('Attribute for the area name ')
+}
+area_type = {
+    'key': 'area_type_field',
+    'name': tr('Type field'),
+    'type': 'field',
+    'description': tr('Attribute for the type of the area')
+}
+
+area_population_field = {
+    'key': 'area_population_field',
+    'name': tr('Population field'),
+    'type': 'field',
+    'description': tr('Attribute for the population on the area')
+}
+
 # General terminology and descriptive terms
+
+field = {
+    'key': 'field',
+    'name': tr('Attribute field'),
+    'description': tr(
+        'The attribute field identifies a field in the attribute table used '
+        'to identify the function of a feature e.g.  a road type, '
+        'building type, hazard zone etc.')
+}
+
+field_value = {
+    'key': 'field_value',
+    'name': tr('Attribute value'),
+    'description': tr(
+        'The attribute value identifies features with similar meanings. For '
+        'example building attributes may include schools and hospitals. ')
+}
 
 value_map = {
     'key': 'value_map',
-    'name': tr('Attribute values'),
+    'name': tr('Attribute value map'),
     'description': tr(
-        'Attribute values identify features with similar meanings. For example'
-        'building attributes may include schools and hospitals. ')
+        'Attribute value maps are used to group related attribute '
+        'values. For example flooded polygons with attribute values of "yes" '
+        ', "YES", "1" and "Flooded" might all be grouped together as '
+        '"FLOODPRONE".')
 }
