@@ -343,6 +343,9 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
         if sublayer in blocks:
             return blocks[sublayer]
     else:
+        if 'keyword_version' in first_keywords.keys():
+            first_keywords['keyword_version'] = str(
+                first_keywords['keyword_version'])
         return first_keywords
 
 

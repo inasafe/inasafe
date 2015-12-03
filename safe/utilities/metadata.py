@@ -112,7 +112,10 @@ def write_read_iso_19115_metadata(layer_uri, keywords):
     #     os.remove(layer_uri.split('.')[0] + '.xml')
     write_iso19115_metadata(layer_uri, keywords)
     iso_19115_keywords = read_iso19115_metadata(layer_uri)
-    if (keywords != iso_19115_keywords):
+    temp_keywords = keywords.copy()
+    if 'date' in temp_keywords.keys():
+        temp_keywords.pop('date')
+    if (temp_keywords != iso_19115_keywords):
         missing_keywords = {}
         missing_keys = set(keywords.keys()) - set(iso_19115_keywords.keys())
         for key in missing_keys:
@@ -134,4 +137,6 @@ def write_read_iso_19115_metadata(layer_uri, keywords):
             message += 'old - %s - %s - type: %s\n' % (key, value[0], type(value[0]))
             message += 'new - %s - %s - type: %s\n' % (key, value[1], type(value[1]))
         raise MissingMetadata(message)
-    return keywords
+    if os.path.exists(layer_uri.split('.')[0] + '.keywords'):
+        os.remove(layer_uri.split('.')[0] + '.keywords')
+    return iso_19115_keywords
