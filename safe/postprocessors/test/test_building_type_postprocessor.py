@@ -27,7 +27,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
         POSTPROCESSOR.clear()
 
     def test_process_integer_values(self):
-        """Test for checking if the ratio is wrong (total is more than one)."""
+        """Test for building types as integer values."""
         # ratios_total < 1 should pass
         params = {
             'impact_total': 0,
@@ -55,7 +55,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             expected, results)
 
     def test_process_string_values(self):
-        """Test for checking if the ratio is wrong (total is more than one)."""
+        """Test for building types as string values."""
         # ratios_total < 1 should pass
         params = {
             'impact_total': 0,
@@ -71,12 +71,15 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
         POSTPROCESSOR.setup(params)
         POSTPROCESSOR.process()
         results = POSTPROCESSOR.results()
-        message = (
-            'Expecting exactly 2 Government buildings to be affected. ',
-            'Using string values in affected fields.\n %s' % results)
-        self.assertTrue(u'Government' in results)
-        value = results[u'Government']['value']
-        self.assertEqual(value, 2, message)
+        expected = OrderedDict(
+            [(
+                u'Total Affected', {
+                    'value': {'Government': 2},
+                    'metadata': {}}), (
+                u'Total Counted', {
+                    'value': {'Government': 4},
+                    'metadata': {}})])
+        self.assertDictEqual(expected, results)
 
     def test_total_affected_calculated_correctly(self):
         """Test to see that the totalling of buildings is done correctly."""
@@ -95,13 +98,19 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
         POSTPROCESSOR.setup(params)
         POSTPROCESSOR.process()
         results = POSTPROCESSOR.results()
-        message = (
-            'Expecting exactly 3 buildings have been affected. ',
-            'In Zone 1 and Zone 2.')
-        self.assertEqual(
-            results[u'Total Affected']['value'],
-            '3',
-            message)
+        expected = OrderedDict(
+            [(
+                u'Total Affected', {
+                    'value': {
+                        'Museum': 1,
+                        'Government': 2},
+                    'metadata': {}}), (
+                u'Total Counted', {
+                    'value': {
+                        'Museum': 1,
+                        'Government': 3},
+                    'metadata': {}})])
+        self.assertDictEqual(expected, results)
 
 
 if __name__ == '__main__':

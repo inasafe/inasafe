@@ -66,6 +66,8 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         # there are no features in this postprocessing polygon
         if len(self.impact_attrs):
             self.no_features = True
+        self.class_scores = {}
+        self.class_totals = {}
 
     def process(self):
         """Concrete implementation that performs all indicators calculations.
