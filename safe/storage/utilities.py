@@ -111,7 +111,7 @@ def _keywords_to_string(keywords, sublayer=None):
         verify(':' not in key, msg)
 
         # Store
-        result += get_unicode('%s: %s\n' % (key, keywords[key]))
+        result += '%s: %s\n' % (key, keywords[key])
     return result
 
 
@@ -277,6 +277,7 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
         # Remove trailing (but not preceeding!) whitespace
         # FIXME: Can be removed altogether
         text = line.rstrip()
+        text = get_unicode(text)
 
         # Ignore blank lines
         if text == '':
