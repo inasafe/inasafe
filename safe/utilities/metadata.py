@@ -106,10 +106,20 @@ def write_read_iso_19115_metadata(layer_uri, keywords):
     :param keywords:
     :return:
     """
+    if os.path.exists(layer_uri):
+        os.remove(layer_uri.split('.')[0] + '.xml')
     write_iso19115_metadata(layer_uri, keywords)
     iso_19115_keywords = read_iso19115_metadata(layer_uri)
     if (keywords != iso_19115_keywords):
+        missing_keywords = {}
+        missing_keys = set(keywords.keys()) - set(iso_19115_keywords.keys())
+        for key in missing_keys:
+            missing_keywords[key] = keywords[key]
         message = 'Old metadata: %s\n' % str(keywords)
-        message += 'ISO metadata: %s' % str(iso_19115_keywords)
+        message += 'ISO metadata: %s\n' % str(iso_19115_keywords)
+        message += 'Layer location : %s\n' % layer_uri
+        message += 'Missing keywords:\n'
+        for key, value in missing_keywords.iteritems():
+            message += '%s: %s\n' % (key, value)
         raise MissingMetadata(message)
     return keywords
