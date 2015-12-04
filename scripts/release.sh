@@ -98,6 +98,6 @@ echo "${OUT}"
 
 # For nsis installer
 mv /tmp/${WORKDIR} /tmp/nsis-data
-makensis scripts/installer-recipe.nsis
+makensis scripts/windows-install-builder.nsi
 mv scripts/*.exe /tmp
 echo "NSIS Installer created in /tmp/"

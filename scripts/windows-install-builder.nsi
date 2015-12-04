@@ -1,3 +1,8 @@
+; Use the modern UI
+!include "MUI2.nsh"
+; Added by Tim to get optimal compression
+SetCompressor /SOLID lzma
+
 # define name of installer
 OutFile "InaSAFE-3.2.4-plugin.exe"
 
@@ -12,9 +17,9 @@ RequestExecutionLevel user
 ;Interface Settings
 
 !define MUI_ABORTWARNING
-!define MUI_ICON ".\Installer-Files\Install_InaSAFE.ico"
-!define MUI_UNICON ".\Installer-Files\Uninstall_InaSAFE.ico"
-!define MUI_HEADERIMAGE_BITMAP_NOSTETCH ".\Installer-Files\InstallHeaderImage.bmp"
+!define MUI_ICON ".\Installer-Files\install-inasafe.ico"
+!define MUI_UNICON ".\Installer-Files\uninstall-inasafe.ico"
+!define MUI_HEADERIMAGE_BITMAP_NOSTRETCH ".\Installer-Files\InstallHeaderImage.bmp"
 !define MUI_HEADERIMAGE_UNBITMAP_NOSTRETCH ".\Installer-Files\UnInstallHeaderImage.bmp"
 !define MUI_WELCOMEFINISHPAGE_BITMAP ".\Installer-Files\WelcomeFinishPage.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP ".\Installer-Files\WelcomeFinishPage.bmp"
@@ -25,12 +30,7 @@ RequestExecutionLevel user
 
 !define MUI_WELCOMEPAGE_TITLE_3LINES
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE ${LICENSE_FILE}
-
-!define MUI_PAGE_CUSTOMFUNCTION_PRE CheckUpdate
-!insertmacro MUI_PAGE_DIRECTORY
-
-!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MUI_PAGE_LICENSE "..\LICENSE.txt"
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_TITLE_3LINES
 !insertmacro MUI_PAGE_FINISH
@@ -42,6 +42,9 @@ RequestExecutionLevel user
 
 # start default section
 Section
+    ;Added by Tim to set the reg key so that the plugin is enabled by default
+    WriteRegStr HKEY_CURRENT_USER "Software\QGIS\QGIS2\PythonPlugins" "inasafe" "true"
+
     SetOutPath $INSTDIR
     File /r /tmp/nsis-data/inasafe/*
     WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -55,14 +58,5 @@ Section "uninstall"
     RMDir /r $INSTDIR
 SectionEnd
 
-;----------------------------------------------------------------------------------------------------------------------------
-
-;Installer Section Descriptions
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-        !insertmacro MUI_DESCRIPTION_TEXT ${SecQGIS} "Install ${QGIS_BASE}"
-        !insertmacro MUI_DESCRIPTION_TEXT ${SecNorthCarolinaSDB} "Download and install the North Carolina sample data set"
-        !insertmacro MUI_DESCRIPTION_TEXT ${SecSpearfishSDB} "Download and install the South Dakota (Spearfish) sample data set"
-        !insertmacro MUI_DESCRIPTION_TEXT ${SecAlaskaSDB} "Download and install the Alaska sample database (shapefiles and TIFF data)"
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;----------------------------------------------------------------------------------------------------------------------------
