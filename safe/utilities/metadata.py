@@ -61,7 +61,6 @@ def write_iso19115_metadata(layer_uri, keywords):
 
     if metadata.layer_is_file_based:
         xml_file_path = layer_uri.split('.')[0] + '.xml'
-        print xml_file_path
         metadata.write_to_file(xml_file_path)
     else:
         metadata.write_to_db()
@@ -113,8 +112,6 @@ def write_read_iso_19115_metadata(layer_uri, keywords):
     write_iso19115_metadata(layer_uri, keywords)
     iso_19115_keywords = read_iso19115_metadata(layer_uri)
     temp_keywords = keywords.copy()
-    if 'date' in temp_keywords.keys():
-        temp_keywords.pop('date')
     if (temp_keywords != iso_19115_keywords):
         missing_keywords = {}
         missing_keys = set(keywords.keys()) - set(iso_19115_keywords.keys())
