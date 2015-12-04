@@ -48,7 +48,7 @@ def write_iso19115_metadata(layer_uri, keywords):
             metadata = ExposureLayerMetadata(layer_uri)
         elif keywords['layer_purpose'] == 'hazard':
             metadata = HazardLayerMetadata(layer_uri)
-        elif keywords['aggregation'] == 'aggregation':
+        elif keywords['layer_purpose'] == 'aggregation':
             metadata = AggregationLayerMetadata(layer_uri)
         elif keywords['layer_purpose'] == 'impact':
             metadata = ImpactLayerMetadata(layer_uri)
@@ -90,7 +90,12 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     # dictionary comprehension
     keywords = {x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems() if x[1]['value'] is not None}
     if 'keyword_version' not in keywords.keys():
-        raise MetadataReadError
+        message = 'Layer uri: %s\n' % layer_uri
+        message += 'Keywords file: %s\n' % os.path.exists(layer_uri.split('.')[0] + '.xml')
+        message += 'keywords:\n'
+        for k, v in keywords.iteritems():
+            message = '%s: %s\n' % (k, v)
+        raise MetadataReadError(message)
     if keyword:
         try:
             return keywords['value']
