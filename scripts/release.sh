@@ -1,4 +1,5 @@
 #!/bin/bash
+
 echo "Export the plugin to a zip with no .git folder"
 if test -z "$1"
 then
@@ -95,3 +96,6 @@ popd
 echo "Your plugin archive has been generated as"
 ls -lah ${OUT}
 echo "${OUT}"
+
+make test-translations
+make pep8

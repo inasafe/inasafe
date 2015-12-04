@@ -71,7 +71,7 @@ def content():
         tr(
             '- Depending in the Impact function you selected, you can '
             'influence the result of your question here (the Impact Function) '
-            'by setting different values to the defaults that will be loaded.  '
+            'by setting different values to the defaults that will be loaded. '
             'The options available will depend on the impact function you '
             'choose (some Impact functions do not allow users to change the '
             'default parameters).')))
