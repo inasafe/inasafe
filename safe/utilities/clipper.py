@@ -445,7 +445,7 @@ def _clip_raster_layer(
 
     # Check for existence of keywords file
     base, _ = os.path.splitext(working_layer)
-    keywords_path = base + '.keywords'
+    keywords_path = base + '.xml'
     message = tr(
         'Input file to be clipped "%s" does not have the '
         'expected keywords file %s' % (
