@@ -1,9 +1,0 @@
-exposure: structure
-keyword_version: 3.2
-layer_geometry: polygon
-layer_mode: classified
-layer_purpose: exposure
-license: Open Data Commons Open Database License (ODbL)
-source: OpenStreetMap - www.openstreetmap.org
-structure_class_field: TYPE
-title: Buildings
