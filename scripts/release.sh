@@ -97,7 +97,13 @@ ls -lah ${OUT}
 echo "${OUT}"
 
 # For nsis installer
+brew install rpl
+brew install makensis
+cp scripts/windows-install-builder.nsi scripts/build.nsi
+rpl "[[VERSION]]" "${VERSION}" scripts/build.nsi
+#rm scripts/build.nsi
 mv /tmp/${WORKDIR} /tmp/nsis-data
 makensis scripts/windows-install-builder.nsi
 mv scripts/*.exe /tmp
 echo "NSIS Installer created in /tmp/"
+ls /tmp/InaSAFE*.exe
