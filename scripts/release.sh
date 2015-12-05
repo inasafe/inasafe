@@ -107,3 +107,7 @@ rm scripts/build.nsi
 mv scripts/*.exe /tmp
 echo "NSIS Installer created in /tmp/"
 ls /tmp/InaSAFE*.exe
+
+
+make test-translations
+make pep8
