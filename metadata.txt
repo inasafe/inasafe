@@ -30,6 +30,7 @@ changelog=
         [Wizard] Add Keywords Creation Wizard confirmation step. Fixes #2422
         [IFCW] After registering keywords in the KW sub-thread, don't display again the step from where it was called. Fixes #2347
         Fix some translation issues
+        Added windows installer files
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
