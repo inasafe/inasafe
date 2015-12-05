@@ -853,7 +853,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="83"/>
+        <location filename="gender_postprocessor.py" line="84"/>
         <source>Total</source>
         <translation type="unfinished"/>
     </message>
@@ -883,22 +883,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="37"/>
+        <location filename="gender_postprocessor.py" line="38"/>
         <source>Calculates gender related statistics.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="99"/>
+        <location filename="gender_postprocessor.py" line="100"/>
         <source>Female count (affected)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="114"/>
+        <location filename="gender_postprocessor.py" line="115"/>
         <source>Weekly hygiene packs</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="136"/>
+        <location filename="gender_postprocessor.py" line="137"/>
         <source>Additional weekly rice kg for pregnant and lactating women</source>
         <translation type="unfinished"/>
     </message>
@@ -1143,7 +1143,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="194"/>
+        <location filename="impact_function.py" line="196"/>
         <source>Estimated buildings affected</source>
         <translation type="unfinished"/>
     </message>
@@ -1208,7 +1208,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="233"/>
+        <location filename="impact_function.py" line="262"/>
         <source>Structure inundated status</source>
         <translation type="unfinished"/>
     </message>
@@ -1283,12 +1283,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="236"/>
+        <location filename="impact_function.py" line="265"/>
         <source>Not Inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="238"/>
+        <location filename="impact_function.py" line="267"/>
         <source>Inundated</source>
         <translation type="unfinished"/>
     </message>
@@ -1333,22 +1333,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="223"/>
+        <location filename="impact_function.py" line="252"/>
         <source>Flooded</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="232"/>
+        <location filename="impact_function.py" line="261"/>
         <source>Buildings inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="249"/>
+        <location filename="impact_function.py" line="278"/>
         <source>Flooded buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="57"/>
+        <location filename="metadata_definitions.py" line="58"/>
         <source>Be flooded</source>
         <translation type="unfinished"/>
     </message>
@@ -1388,22 +1388,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>Vector polygon or point layer extracted from OSM where each feature represents the footprint of a building.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="76"/>
+        <location filename="metadata_definitions.py" line="77"/>
         <source>Vector layer contains building is estimated to be flooded and the breakdown of the building by type.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="168"/>
+        <location filename="impact_function.py" line="169"/>
         <source>Dry (&lt;= 0 m)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="175"/>
+        <location filename="impact_function.py" line="176"/>
         <source>Wet (0 m - %.1f m)</source>
         <translation type="unfinished"/>
     </message>
@@ -1676,12 +1676,12 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="93"/>
+        <location filename="impact_function.py" line="94"/>
         <source>Field &quot;%s&quot; is not present in the attribute table of the hazard layer. Please change the Affected Field parameter in the IF Option.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="107"/>
+        <location filename="impact_function.py" line="108"/>
         <source>Field &quot;%s&quot; is not present in the attribute table of the exposure layer. Please change the Building Type Field parameter in the IF Option.</source>
         <translation type="unfinished"/>
     </message>
@@ -1766,7 +1766,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="55"/>
+        <location filename="metadata_definitions.py" line="56"/>
         <source>Polygon flood on buildings</source>
         <translation type="unfinished"/>
     </message>
@@ -2116,31 +2116,31 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2510"/>
+        <location filename="wizard_dialog.py" line="2593"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the %s for hazard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2517"/>
+        <location filename="wizard_dialog.py" line="2600"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3125"/>
+        <location filename="wizard_dialog.py" line="3208"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the %s for exposure if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3134"/>
+        <location filename="wizard_dialog.py" line="3217"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3316"/>
+        <location filename="wizard_dialog.py" line="3399"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (no suitable layers found)</source>
         <translation type="unfinished"/>
@@ -3151,7 +3151,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="169"/>
+        <location filename="impact_function.py" line="176"/>
         <source>There are no objects in the hazard layer with %s value in %s. Please check your data or use another attribute.</source>
         <translation type="unfinished"/>
     </message>
@@ -3206,7 +3206,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3308"/>
+        <location filename="wizard_dialog.py" line="3391"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the %s for aggregation if needed)</source>
         <translation type="unfinished"/>
@@ -3337,7 +3337,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="247"/>
+        <location filename="impact_function.py" line="276"/>
         <source>No buildings were impacted by this flood.</source>
         <translation type="unfinished"/>
     </message>
@@ -3658,17 +3658,17 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="61"/>
+        <location filename="metadata_definitions.py" line="62"/>
         <source>To assess the impacts of (flood or tsunami) inundation on building footprints with hazard in vector format.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the value of hazard attribute. The attribute and the values that are considered as flooded can be configured in impact function options.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="70"/>
+        <location filename="metadata_definitions.py" line="71"/>
         <source>A hazard vector layer whose attribute that can be used to mark whether a polygon is flood or not.</source>
         <translation type="unfinished"/>
     </message>
@@ -3743,57 +3743,57 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="57"/>
+        <location filename="impact_function.py" line="58"/>
         <source>Buildings are flooded when flood levels exceed %.1f m</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="60"/>
+        <location filename="impact_function.py" line="61"/>
         <source>Buildings are wet when flood levels are greater than 0 m but less than %.1f m</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="63"/>
+        <location filename="impact_function.py" line="64"/>
         <source>Buildings are dry when flood levels are 0 m.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="65"/>
+        <location filename="impact_function.py" line="66"/>
         <source>Buildings are closed if they are flooded or wet.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="67"/>
+        <location filename="impact_function.py" line="68"/>
         <source>Buildings are open if they are dry.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="153"/>
+        <location filename="impact_function.py" line="154"/>
         <source>Wet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="151"/>
+        <location filename="impact_function.py" line="152"/>
         <source>Dry</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="164"/>
+        <location filename="impact_function.py" line="165"/>
         <source>Flooded structure status</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="165"/>
+        <location filename="impact_function.py" line="166"/>
         <source>(flooded, wet, or dry)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="182"/>
+        <location filename="impact_function.py" line="183"/>
         <source>Flooded (&gt;= %.1f m)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="64"/>
+        <location filename="impact_function.py" line="65"/>
         <source>Buildings are flooded when in a region with field &quot;%s&quot; in &quot;%s&quot;.</source>
         <translation type="unfinished"/>
     </message>
@@ -4908,22 +4908,22 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="options_help.py" line="257"/>
+        <location filename="options_help.py" line="258"/>
         <source>Enable developer mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="options_help.py" line="257"/>
+        <location filename="options_help.py" line="258"/>
         <source> - When this option is enabled, right clicking on the webview widget in the dock will allow you to debug the generated HTML. In addition, if the metadata.txt for the running InaSAFE is set to &apos;alpha&apos;, an additional icon will be added to the toolbar to add test layers to the QGIS project.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="options_help.py" line="269"/>
+        <location filename="options_help.py" line="270"/>
         <source>Use QGIS zonal statistics</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="options_help.py" line="269"/>
+        <location filename="options_help.py" line="270"/>
         <source> - Some versions of QGIS shipped with a buggy zonal statistics algorithm. With this option you can elect whether to use built in zonal statistics functions from QGIS or to use an implementation of zonal statistics included with InaSAFE. At some point in the future we expect to deprecate this feature but for now we suggest to use the InaSAFE implementation.</source>
         <translation type="unfinished"/>
     </message>
@@ -7970,249 +7970,254 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>WizardDialog</name>
     <message>
-        <location filename="wizard_dialog.py" line="1158"/>
+        <location filename="wizard_dialog.py" line="1172"/>
         <source>Field type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1159"/>
+        <location filename="wizard_dialog.py" line="1173"/>
         <source>Unique values: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3778"/>
+        <location filename="wizard_dialog.py" line="3861"/>
         <source>Finish</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3940"/>
+        <location filename="wizard_dialog.py" line="4025"/>
         <source>Next</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4434"/>
+        <location filename="wizard_dialog.py" line="4552"/>
         <source>InaSAFE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="1812"/>
+        <location filename="wizard_dialog.py" line="1826"/>
         <source>Use default</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4456"/>
+        <location filename="wizard_dialog.py" line="4574"/>
         <source>Title of the layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4457"/>
+        <location filename="wizard_dialog.py" line="4575"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4460"/>
+        <location filename="wizard_dialog.py" line="4578"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4462"/>
+        <location filename="wizard_dialog.py" line="4580"/>
         <source>What is the scale of this layer?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4463"/>
+        <location filename="wizard_dialog.py" line="4581"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3820"/>
+        <location filename="wizard_dialog.py" line="3903"/>
         <source>The sum of age ratio default is %s and it is more than 1. Please adjust the age ratio default so that they will not more than 1.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3645"/>
+        <location filename="wizard_dialog.py" line="3728"/>
         <source>no aggregation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3780"/>
+        <location filename="wizard_dialog.py" line="3863"/>
         <source>Run</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3647"/>
+        <location filename="wizard_dialog.py" line="3730"/>
         <source>Please ensure the following information is correct and press Run.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3652"/>
+        <location filename="wizard_dialog.py" line="3735"/>
         <source>impact function</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3652"/>
+        <location filename="wizard_dialog.py" line="3735"/>
         <source>hazard layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3652"/>
+        <location filename="wizard_dialog.py" line="3735"/>
         <source>exposure layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3652"/>
+        <location filename="wizard_dialog.py" line="3735"/>
         <source>aggregation layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3531"/>
+        <location filename="wizard_dialog.py" line="3614"/>
         <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="404"/>
+        <location filename="wizard_dialog.py" line="407"/>
         <source>Keywords update wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="408"/>
+        <location filename="wizard_dialog.py" line="411"/>
         <source>Keywords creation wizard for layer &lt;b&gt;%s&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2750"/>
+        <location filename="wizard_dialog.py" line="2833"/>
         <source>Hazard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2754"/>
+        <location filename="wizard_dialog.py" line="2837"/>
         <source>Exposure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2762"/>
+        <location filename="wizard_dialog.py" line="2845"/>
         <source>classified data</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2764"/>
+        <location filename="wizard_dialog.py" line="2847"/>
         <source>Unit</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3579"/>
+        <location filename="wizard_dialog.py" line="3662"/>
         <source>Enabled</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3579"/>
+        <location filename="wizard_dialog.py" line="3662"/>
         <source>Disabled</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="417"/>
+        <location filename="wizard_dialog.py" line="420"/>
         <source>Use this wizard to run a guided impact assessment</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2103"/>
+        <location filename="wizard_dialog.py" line="2166"/>
         <source>Available functions:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2241"/>
+        <location filename="wizard_dialog.py" line="2304"/>
         <source>Function</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2244"/>
+        <location filename="wizard_dialog.py" line="2307"/>
         <source>Overview</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2775"/>
+        <location filename="wizard_dialog.py" line="2858"/>
         <source>Title</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2957"/>
+        <location filename="wizard_dialog.py" line="3040"/>
         <source>Purpose</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2775"/>
+        <location filename="wizard_dialog.py" line="2858"/>
         <source>Source</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2807"/>
+        <location filename="wizard_dialog.py" line="2890"/>
         <source>This layer has no valid keywords assigned</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2807"/>
+        <location filename="wizard_dialog.py" line="2890"/>
         <source>SOURCE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2807"/>
+        <location filename="wizard_dialog.py" line="2890"/>
         <source>TYPE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2807"/>
+        <location filename="wizard_dialog.py" line="2890"/>
         <source>In the next step you will be able to assign keywords to this layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2957"/>
+        <location filename="wizard_dialog.py" line="3040"/>
         <source>Layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2957"/>
+        <location filename="wizard_dialog.py" line="3040"/>
         <source>Required</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2957"/>
+        <location filename="wizard_dialog.py" line="3040"/>
         <source>Geometry</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2957"/>
+        <location filename="wizard_dialog.py" line="3040"/>
         <source>Layer mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3034"/>
+        <location filename="wizard_dialog.py" line="3117"/>
         <source>Not a valid layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3054"/>
+        <location filename="wizard_dialog.py" line="3137"/>
         <source>This layer&apos;s keywords or type are not suitable:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3750"/>
+        <location filename="wizard_dialog.py" line="3833"/>
         <source>Running analysis...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="3465"/>
+        <location filename="wizard_dialog.py" line="3548"/>
         <source>Please specify extent of your analysis:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="2782"/>
+        <location filename="wizard_dialog.py" line="2865"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign keywords now.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog.py" line="4434"/>
+        <location filename="wizard_dialog.py" line="4552"/>
         <source>An error was encountered when saving the following keywords:
  %s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="wizard_dialog.py" line="1976"/>
+        <source>The selected keywords don&apos;t match requirements of the selected impact fuction (%s). You can confinue with registering the layer, however, you&apos;ll need to choose another layer for that function.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8224,12 +8229,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2152"/>
+        <location filename="wizard_dialog_base.ui" line="2162"/>
         <source>[placeholder]</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2863"/>
+        <location filename="wizard_dialog_base.ui" line="2873"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
@@ -8279,17 +8284,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3771"/>
+        <location filename="wizard_dialog_base.ui" line="3781"/>
         <source>Cancel</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3794"/>
+        <location filename="wizard_dialog_base.ui" line="3804"/>
         <source>Back</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3804"/>
+        <location filename="wizard_dialog_base.ui" line="3814"/>
         <source>Next</source>
         <translation type="unfinished"/>
     </message>
@@ -8344,113 +8349,113 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3604"/>
+        <location filename="wizard_dialog_base.ui" line="3614"/>
         <source>TextLabel</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3049"/>
+        <location filename="wizard_dialog_base.ui" line="3059"/>
         <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3132"/>
+        <location filename="wizard_dialog_base.ui" line="3142"/>
         <source>No thanks, I am happy to aggregate results for the entire analysis window</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3165"/>
+        <location filename="wizard_dialog_base.ui" line="3175"/>
         <source>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;aggregation&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3315"/>
+        <location filename="wizard_dialog_base.ui" line="3325"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;aggregation&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3648"/>
+        <location filename="wizard_dialog_base.ui" line="3658"/>
         <source>Here goes the summary...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3680"/>
+        <location filename="wizard_dialog_base.ui" line="3690"/>
         <source>Running analysis...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3718"/>
+        <location filename="wizard_dialog_base.ui" line="3728"/>
         <source>about:blank</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3728"/>
+        <location filename="wizard_dialog_base.ui" line="3738"/>
         <source>Open in web browser</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3735"/>
+        <location filename="wizard_dialog_base.ui" line="3745"/>
         <source>Generate PDF</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3742"/>
+        <location filename="wizard_dialog_base.ui" line="3752"/>
         <source>Open in composer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1845"/>
+        <location filename="wizard_dialog_base.ui" line="1855"/>
         <source>&lt;b&gt;Hazard&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1855"/>
+        <location filename="wizard_dialog_base.ui" line="1865"/>
         <source>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1757"/>
+        <location filename="wizard_dialog_base.ui" line="1767"/>
         <source>People</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1762"/>
+        <location filename="wizard_dialog_base.ui" line="1772"/>
         <source>Construction</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1767"/>
+        <location filename="wizard_dialog_base.ui" line="1777"/>
         <source>Flood</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1772"/>
+        <location filename="wizard_dialog_base.ui" line="1782"/>
         <source>Tsunami</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1957"/>
+        <location filename="wizard_dialog_base.ui" line="1967"/>
         <source>Available functions:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1916"/>
+        <location filename="wizard_dialog_base.ui" line="1926"/>
         <source>Point</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1924"/>
+        <location filename="wizard_dialog_base.ui" line="1934"/>
         <source>Line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1932"/>
+        <location filename="wizard_dialog_base.ui" line="1942"/>
         <source>Polygon</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1940"/>
+        <location filename="wizard_dialog_base.ui" line="1950"/>
         <source>Raster</source>
         <translation type="unfinished"/>
     </message>
@@ -8467,12 +8472,12 @@ Please step back and select another layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="1693"/>
+        <location filename="wizard_dialog_base.ui" line="1703"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This wizard will guide you through the process of running an InaSAFE assessment. The assessment will combine hazard data (such as a flood layer) with exposure data (such as population, roads or buildings) to help you to understand the potential impact of such an event. To start, please select the &lt;b&gt;hazard&lt;/b&gt; and &lt;b&gt;exposure&lt;/b&gt; you want to use by clicking a cell in the matrix below.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3072"/>
+        <location filename="wizard_dialog_base.ui" line="3082"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Would you like to &lt;span style=&quot; font-weight:600;&quot;&gt;aggregate&lt;/span&gt; the results of your analysis by sub-regions? Aggregation will break down the analysis results for each area in the specified aggregation layer. Aggregation is optional. Please select from an option below in order to indicate how you would like to go about aggregating the results.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"/>
     </message>
@@ -8482,13 +8487,13 @@ Please step back and select another layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3501"/>
+        <location filename="wizard_dialog_base.ui" line="3511"/>
         <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3582"/>
+        <location filename="wizard_dialog_base.ui" line="3592"/>
         <source>The selected extent doesn't intersect input layers.
 Please step back and select another layer.</source>
         <translation type="unfinished"/>
@@ -8544,42 +8549,42 @@ Please step back and select another layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3377"/>
+        <location filename="wizard_dialog_base.ui" line="3387"/>
         <source>icon</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2190"/>
+        <location filename="wizard_dialog_base.ui" line="2200"/>
         <source>I would like to use a hazard layer already loaded in QGIS
 (launches the InaSAFE Keywords Creation Wizard for hazard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2227"/>
+        <location filename="wizard_dialog_base.ui" line="2237"/>
         <source>I would like to pick a hazard layer from disk
 (launches the InaSAFE Keywords Creation Wizard for hazard if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2611"/>
+        <location filename="wizard_dialog_base.ui" line="2621"/>
         <source>I would like to pick an exposure layer from disk
 (launches the InaSAFE Keywords Creation Wizard for exposure if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="2661"/>
+        <location filename="wizard_dialog_base.ui" line="2671"/>
         <source>I would like to use an exposure layer already loaded in QGIS
 (launches the InaSAFE Keywords Creation Wizard for exposure if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3116"/>
+        <location filename="wizard_dialog_base.ui" line="3126"/>
         <source>I would like to pick an aggregation layer from disk
 (launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="wizard_dialog_base.ui" line="3124"/>
+        <location filename="wizard_dialog_base.ui" line="3134"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
 (launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</source>
         <translation type="unfinished"/>
