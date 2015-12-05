@@ -1,14 +1,8 @@
 #!/bin/bash
 echo "Export the plugin to a zip with no .git folder"
-if test -z "$1"
-then
-  echo "usage: $0 <new version>"
-  echo "e.g. : $0 0.3.0"
-  exit
-fi
+echo "And build a windows installer" 
 
-VERSION=$1
-
+VERSION=`cat metadata.txt | grep ^version | sed 's/version=//g'`
 # TODO
 #replace _type_ = 'alpha' or 'beta' with final
 
