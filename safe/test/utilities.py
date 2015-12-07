@@ -1065,6 +1065,7 @@ def clone_shp_layer(
     extensions = ['.shp', '.shx', '.dbf', '.prj']
     if include_keywords:
         extensions.append('.keywords')
+        extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
     for ext in extensions:
@@ -1131,6 +1132,7 @@ def clone_raster_layer(
     extensions = ['.prj', '.sld', 'qml', '.prj', extension]
     if include_keywords:
         extensions.append('.keywords')
+        extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
     for ext in extensions:
@@ -1153,7 +1155,7 @@ def remove_vector_temp_file(file_path):
     :type file_path: str
     """
     file_path = file_path[:-4]
-    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords']
+    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords', '.xml']
     extensions.extend(['.prj', '.sld', 'qml'])
     for ext in extensions:
         if os.path.exists(file_path + ext):
