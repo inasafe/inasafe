@@ -23,6 +23,7 @@ from xml.etree import ElementTree
 from safe.metadata import BaseMetadata
 from safe.metadata.provenance import Provenance
 from safe.metadata.utils import reading_ancillary_files, XML_NS, prettify_xml
+from safe.metadata.utils import merge_dictionaries
 
 
 class ImpactLayerMetadata(BaseMetadata):
@@ -50,6 +51,18 @@ class ImpactLayerMetadata(BaseMetadata):
     # remember to add an attribute or a setter property with the same name
     # these are properties that need special getters and setters thus are
     # not put in the standard_properties
+    _standard_properties = {
+        'target_field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'target_field/'
+            'gco:CharacterString'),
+    }
+    _standard_properties = merge_dictionaries(
+        BaseMetadata._standard_properties, _standard_properties)
+
     _special_properties = {
         'provenance': (
             'gmd:identificationInfo/'
