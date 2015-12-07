@@ -1541,13 +1541,6 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
-              <widget class="QLineEdit" name="leSource_date">
-               <property name="styleSheet">
-                <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-               </property>
-              </widget>
-             </item>
              <item row="1" column="1">
               <widget class="QLineEdit" name="leSource_url">
                <property name="styleSheet">
@@ -1564,7 +1557,7 @@
                 <string>Date</string>
                </property>
                <property name="buddy">
-                <cstring>leSource_date</cstring>
+                <cstring>dtSource_date</cstring>
                </property>
               </widget>
              </item>
@@ -1578,6 +1571,16 @@
                </property>
                <property name="buddy">
                 <cstring>leSource_license</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QgsDateTimeEdit" name="dtSource_date">
+               <property name="displayFormat">
+                <string>dd.MM.yyyy HH:mm</string>
+               </property>
+               <property name="calendarPopup">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -3827,6 +3830,11 @@ Please step back and select another layer.</string>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>QgsDateTimeEdit</class>
+   <extends>QDateTimeEdit</extends>
+   <header>qgsdatetimeedit.h</header>
+  </customwidget>
+  <customwidget>
    <class>MessageViewer</class>
    <extends>QWidget</extends>
    <header>safe.gui.widgets.message_viewer</header>
@@ -3851,7 +3859,7 @@ Please step back and select another layer.</string>
   <tabstop>leSource</tabstop>
   <tabstop>leSource_url</tabstop>
   <tabstop>leSource_scale</tabstop>
-  <tabstop>leSource_date</tabstop>
+  <tabstop>dtSource_date</tabstop>
   <tabstop>leSource_license</tabstop>
   <tabstop>leTitle</tabstop>
   <tabstop>dsbFemaleRatioDefault</tabstop>
