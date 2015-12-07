@@ -98,6 +98,7 @@ from safe.gui.tools.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
+import safe.gui.tools.wizard_strings
 from safe.gui.tools.wizard_strings import (
     category_question,
     category_question_hazard,
@@ -123,27 +124,6 @@ from safe.gui.tools.wizard_strings import (
     select_explayer_from_canvas_question,
     select_explayer_from_browser_question,
     create_postGIS_connection_first)
-
-# TODO(Ismail): We need a better way to import all of these string
-# pylint: disable=unused-import
-from safe.gui.tools.wizard_strings import (
-    earthquake_mmi_question,
-    exposure_question,
-    flood_feet_depth_question,
-    flood_metres_depth_question,
-    flood_wetdry_question,
-    hazard_question,
-    population_density_question,
-    population_number_question,
-    road_road_type_question,
-    structure_building_type_question,
-    tephra_kgm2_question,
-    tsunami_feet_depth_question,
-    tsunami_metres_depth_question,
-    tsunami_wetdry_question,
-    volcano_volcano_categorical_question
-)
-# pylint: enable=unused-import
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -214,10 +194,9 @@ def get_question_text(constant):
     :returns: The value of the constant or red error message.
     :rtype: string
     """
-    try:
-        # TODO Eval = bad
-        return eval(constant)  # pylint: disable=eval-used
-    except NameError:
+    if constant in dir(safe.gui.tools.wizard_strings):
+        return getattr(safe.gui.tools.wizard_strings, constant)
+    else:
         return '<b>MISSING CONSTANT: %s</b>' % constant
 
 
