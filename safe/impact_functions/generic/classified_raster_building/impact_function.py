@@ -191,21 +191,26 @@ class ClassifiedRasterHazardBuildingFunction(
         legend_title = tr('Structure inundated status')
         legend_units = tr('(Low, Medium, High)')
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.affected_field,
+            'map_title': map_title,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'buildings_total': buildings_total,
+            'buildings_affected': self.total_affected_buildings
+        }
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Create vector layer and return
         vector_layer = Vector(
             data=attributes,
             projection=self.exposure.layer.get_projection(),
             geometry=self.exposure.layer.get_geometry(),
             name=tr('Estimated buildings affected'),
-            keywords={
-                'impact_summary': impact_summary,
-                'impact_table': impact_table,
-                'target_field': self.affected_field,
-                'map_title': map_title,
-                'legend_units': legend_units,
-                'legend_title': legend_title,
-                'buildings_total': buildings_total,
-                'buildings_affected': self.total_affected_buildings},
+            keywords=impact_layer_keywords,
             style_info=style_info)
         self._impact = vector_layer
         return vector_layer

@@ -272,23 +272,28 @@ class FloodEvacuationVectorHazardFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        extra_keywords={
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.target_field,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'affected_population': total_affected_population,
+            'total_population': self.total_population,
+            'total_needs': self.total_needs
+        }
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Create vector layer and return
         impact_layer = Raster(
             data=new_covered_exposure_data,
             projection=covered_exposure.get_projection(),
             geotransform=covered_exposure.get_geotransform(),
             name=tr('People affected by flood prone areas'),
-            keywords={
-                'impact_summary': impact_summary,
-                'impact_table': impact_table,
-                'target_field': self.target_field,
-                'map_title': map_title,
-                'legend_notes': legend_notes,
-                'legend_units': legend_units,
-                'legend_title': legend_title,
-                'affected_population': total_affected_population,
-                'total_population': self.total_population,
-                'total_needs': self.total_needs},
+            keywords=impact_layer_keywords,
             style_info=style_info)
         self._impact = impact_layer
         return impact_layer

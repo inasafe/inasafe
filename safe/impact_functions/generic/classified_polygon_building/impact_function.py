@@ -12,15 +12,13 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from collections import OrderedDict
-
 from qgis.core import QgsField, QgsRectangle
 from PyQt4.QtCore import QVariant
-
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.impact_functions.generic.classified_polygon_building\
+from safe.impact_functions.generic.classified_polygon_building \
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
 from safe.common.exceptions import InaSAFEError, KeywordNotFoundError, \
@@ -37,8 +35,8 @@ from safe.messaging import styles
 
 
 class ClassifiedPolygonHazardBuildingFunction(
-        ClassifiedVHClassifiedVE,
-        BuildingExposureReportMixin):
+    ClassifiedVHClassifiedVE,
+    BuildingExposureReportMixin):
     """Impact Function for Generic Polygon on Building."""
 
     _metadata = ClassifiedPolygonHazardBuildingFunctionMetadata()
@@ -139,7 +137,7 @@ class ClassifiedPolygonHazardBuildingFunction(
             changed_values[feature.id()] = {target_field_index: hazard_value}
 
             if (self.exposure_class_attribute and
-                    self.exposure_class_attribute in attribute_names):
+                        self.exposure_class_attribute in attribute_names):
                 usage = feature[self.exposure_class_attribute]
             else:
                 usage = get_osm_building_usage(attribute_names, feature)
@@ -182,28 +180,36 @@ class ClassifiedPolygonHazardBuildingFunction(
             i += 1
 
         # Override style info with new classes and name
-        style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes,
-                          style_type='categorizedSymbol')
+        style_info = dict(
+            target_field=self.target_field,
+            style_classes=style_classes,
+            style_type='categorizedSymbol'
+        )
 
         # For printing map purpose
         map_title = tr('Buildings affected by each hazard zone')
         legend_title = tr('Building count')
         legend_units = tr('(building)')
-        legend_notes = tr('Thousand separator is represented by %s' %
-                          get_thousand_separator())
+        legend_notes = tr(
+            'Thousand separator is represented by %s' %
+            get_thousand_separator())
+
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.target_field,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title
+        }
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create vector layer and return
         impact_layer = Vector(
             data=interpolated_layer,
             name=tr('Buildings affected by each hazard zone'),
-            keywords={'impact_summary': impact_summary,
-                      'impact_table': impact_table,
-                      'target_field': self.target_field,
-                      'map_title': map_title,
-                      'legend_notes': legend_notes,
-                      'legend_units': legend_units,
-                      'legend_title': legend_title},
+            keywords=impact_layer_keywords,
             style_info=style_info)
 
         self._impact = impact_layer

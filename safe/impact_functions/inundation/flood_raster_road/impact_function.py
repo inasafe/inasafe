@@ -502,15 +502,20 @@ class FloodRasterRoadsFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        extra_keywords={
+            'impact_summary': impact_summary,
+            'map_title': map_title,
+            'legend_title': legend_title,
+            'target_field': target_field
+        }
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Convert QgsVectorLayer to inasafe layer and return it
         line_layer = Vector(
             data=line_layer,
             name=tr('Flooded roads'),
-            keywords={
-                'impact_summary': impact_summary,
-                'map_title': map_title,
-                'legend_title': legend_title,
-                'target_field': target_field},
+            keywords=impact_layer_keywords,
             style_info=style_info)
         self._impact = line_layer
         return line_layer

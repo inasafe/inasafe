@@ -330,29 +330,35 @@ class ITBFatalityFunction(
         map_title = tr('Earthquake impact to population')
         legend_title = tr('Population Count')
         legend_units = tr('(people per cell)')
-        legend_notes = tr('Thousand separator is represented by %s' %
-                          get_thousand_separator())
+        legend_notes = tr(
+            'Thousand separator is represented by %s' %
+            get_thousand_separator())
+
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'exposed_per_mmi': number_of_exposed,
+            'total_population': self.total_population,
+            'total_fatalities': population_rounding(self.total_fatalities),
+            'total_fatalities_raw': self.total_fatalities,
+            'fatalities_per_mmi': number_of_fatalities,
+            'total_displaced': population_rounding(total_displaced),
+            'displaced_per_mmi': number_of_displaced,
+            'impact_table': impact_table,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'total_needs': total_needs
+        }
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
         raster = Raster(
             mask,
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
-            keywords={
-                'impact_summary': impact_summary,
-                'exposed_per_mmi': number_of_exposed,
-                'total_population': self.total_population,
-                'total_fatalities': population_rounding(self.total_fatalities),
-                'total_fatalities_raw': self.total_fatalities,
-                'fatalities_per_mmi': number_of_fatalities,
-                'total_displaced': population_rounding(total_displaced),
-                'displaced_per_mmi': number_of_displaced,
-                'impact_table': impact_table,
-                'map_title': map_title,
-                'legend_notes': legend_notes,
-                'legend_units': legend_units,
-                'legend_title': legend_title,
-                'total_needs': total_needs},
+            keywords=impact_layer_keywords,
             name=tr('Estimated displaced population per cell'),
             style_info=style_info)
         self._impact = raster

@@ -242,16 +242,33 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
                               colour='#ffaa00', transparency=1),
                          dict(label=class_3['label'], value=class_3['class'],
                               colour='#ff0000', transparency=1)]
-        style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes,
-                          style_type='categorizedSymbol')
+        style_info = dict(
+            target_field=self.target_field,
+            style_classes=style_classes,
+            style_type='categorizedSymbol'
+        )
 
         # For printing map purpose
         map_title = tr('Building affected by earthquake')
-        legend_notes = tr('The level of the impact is according to the '
-                          'threshold the user input.')
+        legend_notes = tr(
+            'The level of the impact is according to the threshold the user '
+            'input.')
         legend_units = tr('(mmi)')
         legend_title = tr('Impact level')
+
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'target_field': self.target_field,
+            'statistics_type': self.statistics_type,
+            'statistics_classes': self.statistics_classes
+        }
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create vector layer and return
         result_layer = Vector(
@@ -259,16 +276,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
             projection=interpolate_result.get_projection(),
             geometry=geometry,
             name=tr('Estimated buildings affected'),
-            keywords={
-                'impact_summary': impact_summary,
-                'impact_table': impact_table,
-                'map_title': map_title,
-                'legend_notes': legend_notes,
-                'legend_units': legend_units,
-                'legend_title': legend_title,
-                'target_field': self.target_field,
-                'statistics_type': self.statistics_type,
-                'statistics_classes': self.statistics_classes},
+            keywords=impact_layer_keywords,
             style_info=style_info)
 
         msg = 'Created vector layer %s' % str(result_layer)

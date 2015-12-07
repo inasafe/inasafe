@@ -28,6 +28,7 @@ from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
 from safe.utilities.gis import convert_to_safe_layer
 from safe.storage.safe_layer import SafeLayer
+from safe.definitions import inasafe_keyword_version
 
 
 class ImpactFunction(object):
@@ -508,3 +509,21 @@ class ImpactFunction(object):
             'qgis2.0', it needs to have the extent set.
         # """
         pass
+
+    def generate_impact_keywords(self, extra_keywords=None):
+        """Obtain keywords for the impact layer.
+
+        :param extra_keywords: Additional keywords from the analysis.
+        :type extra_keywords: dict
+
+        :returns: Impact layer's keywords.
+        :rtype: dict
+        """
+        keywords = {
+            'layer_purpose': 'impact',
+            'keyword_version': inasafe_keyword_version,
+        }
+        if extra_keywords:
+            keywords.update(extra_keywords)
+
+        return keywords
