@@ -499,7 +499,7 @@ class WizardDialogTest(unittest.TestCase):
         message = 'Source Url should be empty'
         self.assertEqual(dialog.leSource_url.text(), '', message)
         message = 'Source Date should be empty'
-        self.assertEqual(dialog.leSource_date.text(), '', message)
+        self.assertTrue(dialog.dtSource_date.dateTime().isNull(), message)
         message = 'Source Scale should be empty'
         self.assertEqual(dialog.leSource_scale.text(), '', message)
         dialog.pbnNext.click()
@@ -582,13 +582,15 @@ class WizardDialogTest(unittest.TestCase):
         source = 'Source'
         source_scale = 'Source Scale'
         source_url = 'Source Url'
-        source_date = 'Source Date'
+        source_date = QtCore.QDateTime.fromString(
+            '06-12-2015 12:30',
+            'dd-MM-yyyy HH:mm')
         source_license = 'Source License'
 
         dialog.leSource.setText(source)
         dialog.leSource_scale.setText(source_scale)
         dialog.leSource_url.setText(source_url)
-        dialog.leSource_date.setText(source_date)
+        dialog.dtSource_date.setDateTime(source_date)
         dialog.leSource_license.setText(source_license)
         dialog.pbnNext.click()  # next
         dialog.pbnNext.click()  # next
@@ -670,8 +672,9 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(dialog.leSource_url.text(), source_url, message)
         message = 'Source Scale should be %s' % source_scale
         self.assertEqual(dialog.leSource_scale.text(), source_scale, message)
-        message = 'Source Date should be %s' % source_date
-        self.assertEqual(dialog.leSource_date.text(), source_date, message)
+        message = 'Source Date should be %s' % source_date.toString(
+            'dd-MM-yyyy HH:mm')
+        self.assertEqual(dialog.dtSource_date.dateTime(), source_date, message)
         message = 'Source License should be %s' % source_license
         self.assertEqual(dialog.leSource_license.text(),
                          source_license, message)

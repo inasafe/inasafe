@@ -41,7 +41,7 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, QSettings, QPyNullVariant
+from PyQt4.QtCore import pyqtSignature, QSettings, QPyNullVariant, QDateTime
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog,
@@ -1902,9 +1902,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.leSource_scale.setText(get_unicode(source_scale))
 
         source_date = self.get_existing_keyword('date')
-        if source_date or source_date == 0:
-            self.leSource_date.setText(get_unicode(source_date))
-
+        if source_date:
+            self.dtSource_date.setDateTime(
+                QDateTime.fromString(get_unicode(source_date),
+                                     'dd-MM-yyyy HH:mm'))
+        else:
+            self.dtSource_date.clear()
         source_url = self.get_existing_keyword('url')
         if source_url or source_url == 0:
             self.leSource_url.setText(get_unicode(source_url))
@@ -4513,8 +4516,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['url'] = get_unicode(self.leSource_url.text())
         if self.leSource_scale.text():
             keywords['scale'] = get_unicode(self.leSource_scale.text())
-        if self.leSource_date.text():
-            keywords['date'] = get_unicode(self.leSource_date.text())
+        if self.dtSource_date.dateTime():
+            keywords['date'] = get_unicode(
+                self.dtSource_date.dateTime().toString('dd-MM-yyyy HH:mm'))
         if self.leSource_license.text():
             keywords['license'] = get_unicode(self.leSource_license.text())
         if self.leTitle.text():
@@ -4576,6 +4580,6 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         self.leTitle.setToolTip(title_tooltip)
         self.leSource.setToolTip(source_tooltip)
-        self.leSource_date.setToolTip(date_tooltip)
+        self.dtSource_date.setToolTip(date_tooltip)
         self.leSource_scale.setToolTip(scale_tooltip)
         self.leSource_url.setToolTip(url_tooltip)
