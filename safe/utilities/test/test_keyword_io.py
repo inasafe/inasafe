@@ -149,20 +149,16 @@ class KeywordIOTest(unittest.TestCase):
         """
         keywords = self.keyword_io.read_keywords(self.raster_layer)
         expected_keywords = self.expected_raster_keywords
-        source = self.raster_layer.source()
-        message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
-            keywords, expected_keywords, source)
-        self.assertDictEqual(keywords, expected_keywords, message)
+
+        self.assertDictEqual(keywords, expected_keywords)
 
     def test_read_vector_file_keywords(self):
         """Test read vector file keywords with the generic readKeywords method.
          """
         keywords = self.keyword_io.read_keywords(self.vector_layer)
         expected_keywords = self.expected_vector_keywords
-        source = self.vector_layer.source()
-        message = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
-            keywords, expected_keywords, source)
-        self.assertDictEqual(keywords, expected_keywords, message)
+
+        self.assertDictEqual(keywords, expected_keywords)
 
     def test_read_keywordless_layer(self):
         """Test read 'keyword' file from keywordless layer.
@@ -195,8 +191,8 @@ class KeywordIOTest(unittest.TestCase):
             'layer_mode': 'continuous',
             'keyword_version': inasafe_keyword_version
         }
-        message = 'Got:\n%s\nExpected:\n%s' % (keywords, expected_keywords)
-        self.assertDictEqual(keywords, expected_keywords, message)
+        self.maxDiff = None
+        self.assertDictEqual(keywords, expected_keywords)
 
     def test_read_db_keywords(self):
         """Can we read sqlite kw with the generic read_keywords method
@@ -222,15 +218,13 @@ class KeywordIOTest(unittest.TestCase):
         expected_source = (
             'dbname=\'exposure.sqlite\' table="buildings_osm_4326" ('
             'Geometry) sql=')
-        message = 'Got source: %s\n\nExpected %s\n' % (
-            sqlite_layer.source(), expected_source)
-        self.assertEqual(sqlite_layer.source(), expected_source, message)
+
+        self.assertEqual(sqlite_layer.source(), expected_source)
 
         keywords = self.keyword_io.read_keywords(sqlite_layer)
         expected_keywords = self.expected_sqlite_keywords
-        message = 'Got: %s\n\nExpected %s\n\nSource: %s' % (
-            keywords, expected_keywords, self.sqlite_layer.source())
-        self.assertDictEqual(keywords, expected_keywords, message)
+
+        self.assertDictEqual(keywords, expected_keywords)
 
         # Delete SQL Layer so that we can delete the file
         del sqlite_layer
@@ -243,9 +237,8 @@ class KeywordIOTest(unittest.TestCase):
         self.keyword_io.copy_keywords(self.raster_layer, out_path)
         copied_keywords = read_file_keywords(out_path)
         expected_keywords = self.expected_raster_keywords
-        message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
-            copied_keywords, expected_keywords, out_path)
-        self.assertDictEqual(copied_keywords, expected_keywords, message)
+        
+        self.assertDictEqual(copied_keywords, expected_keywords)
 
     def test_definition(self):
         """Test we can get definitions for keywords.
