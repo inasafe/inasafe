@@ -121,7 +121,7 @@ class KeywordIO(QObject):
 
         # Try to read from ISO metadata first.
         try:
-            return read_iso19115_metadata(source)
+            return read_iso19115_metadata(source, keyword)
         except MetadataReadError:
             pass
 
@@ -132,11 +132,11 @@ class KeywordIO(QObject):
 
         try:
             if flag:
-                keywords = read_file_keywords(source, keyword)
+                keywords = read_file_keywords(source)
             else:
                 uri = self.normalize_uri(layer)
-                keywords = self.read_keyword_from_uri(uri, keyword)
-            return write_read_iso_19115_metadata(source, keywords)
+                keywords = self.read_keyword_from_uri(uri)
+            return write_read_iso_19115_metadata(source, keywords, keyword)
 
         except (HashNotFoundError,
                 Exception,

@@ -105,7 +105,7 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     return keywords
 
 
-def write_read_iso_19115_metadata(layer_uri, keywords):
+def write_read_iso_19115_metadata(layer_uri, keywords, keyword=None):
     """Write ISO Metadata, and read again. Check if the keywords same.
     :param layer_uri:
     :param keywords:
@@ -141,4 +141,10 @@ def write_read_iso_19115_metadata(layer_uri, keywords):
         raise MissingMetadata(message)
     if os.path.exists(layer_uri.split('.')[0] + '.keywords'):
         os.remove(layer_uri.split('.')[0] + '.keywords')
-    return iso_19115_keywords
+    if keyword:
+        if keyword in iso_19115_keywords.keys():
+            return iso_19115_keywords[keyword]
+        else:
+            return None
+    else:
+        return iso_19115_keywords
