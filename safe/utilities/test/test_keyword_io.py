@@ -19,6 +19,7 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.common.exceptions import HashNotFoundError
 from safe.common.utilities import temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
+from safe.utilities.unicode import get_unicode
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -176,20 +177,23 @@ class KeywordIOTest(unittest.TestCase):
             extension='.tif',
             include_keywords=True,
             source_directory=test_data_path('hazard'))
-        new_keywords = {'category': 'exposure', 'test': 'TEST'}
+        new_keywords = {
+            'hazard_category': 'multiple_event'
+        }
         self.keyword_io.update_keywords(layer, new_keywords)
         keywords = self.keyword_io.read_keywords(layer)
         expected_keywords = {
-            'category': 'exposure',
-            'hazard_category': 'single_event',
+            'hazard_category': 'multiple_event',
             'title': 'Tsunami',
             'hazard': 'tsunami',
             'continuous_hazard_unit': 'metres',
-            'test': 'TEST',
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
             'keyword_version': inasafe_keyword_version
+        }
+        expected_keywords = {
+            k: get_unicode(v) for k, v in expected_keywords.iteritems()
         }
         self.maxDiff = None
         self.assertDictEqual(keywords, expected_keywords)
