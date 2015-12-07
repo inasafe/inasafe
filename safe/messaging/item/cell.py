@@ -110,15 +110,22 @@ class Cell(MessageElement):
                 self.style_class = 'text-center'
             else:
                 self.style_class += ' text-center'
+
+        # Special case for when we want to put a nested table in a cell
+        # We don't use isinstance because of recursive imports with table
+        class_name = self.content.__class__.__name__
+        if class_name in ['BulletedList', 'Table']:
+            html = self.content.to_html()
+        else:
+            html = self.content.to_html(wrap_slash=self.wrap_slash)
+
         # Check if we have a header or not then render
         if self.header_flag is True:
             return '<th%s>%s</th>\n' % (
-                self.html_attributes(), self.content.to_html(
-                    wrap_slash=self.wrap_slash))
+                self.html_attributes(), html)
         else:
             return '<td%s>%s</td>\n' % (
-                self.html_attributes(), self.content.to_html(
-                    wrap_slash=self.wrap_slash))
+                self.html_attributes(), html)
 
     def to_text(self):
         """Render a Cell MessageElement as plain text
