@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
-__date__ = '03/12/15'
+__date__ = '07/12/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
@@ -21,19 +21,20 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import json
 from types import NoneType
 
+
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty
 
 
-class DictionaryProperty(BaseProperty):
+class IntegerProperty(BaseProperty):
     """
     A property that accepts date input
     """
     # if you edit this you need to adapt accordingly xml_value and is_valid
-    _allowed_python_types = [dict, NoneType]
+    _allowed_python_types = [int, NoneType]
 
     def __init__(self, name, value, xml_path):
-        super(DictionaryProperty, self).__init__(
+        super(IntegerProperty, self).__init__(
             name, value, xml_path, self._allowed_python_types)
 
     @classmethod
@@ -43,14 +44,14 @@ class DictionaryProperty(BaseProperty):
 
     def cast_from_str(self, value):
         try:
-            return json.loads(value)
+            return int(value)
         except ValueError as e:
             raise MetadataCastError(e)
 
     @property
     def xml_value(self):
-        if self.python_type is dict:
-            return json.dumps(self.value)
+        if self.python_type is int:
+            return str(self.value)
         elif self.python_type is NoneType:
             return ''
         else:

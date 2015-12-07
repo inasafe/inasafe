@@ -19,7 +19,6 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import json
 from xml.etree import ElementTree
-
 from safe.metadata import BaseMetadata
 from safe.metadata.provenance import Provenance
 from safe.metadata.utils import reading_ancillary_files, XML_NS, prettify_xml
@@ -52,12 +51,117 @@ class ImpactLayerMetadata(BaseMetadata):
     # these are properties that need special getters and setters thus are
     # not put in the standard_properties
     _standard_properties = {
+        'elapsed_time': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'elapsed_time/'
+            'gco:Integer'),
+        'hazard_title': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'hazard_title/'
+            'gco:CharacterString'),
+        'postprocessing_report': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'postprocessing_report/'
+            'gco:CharacterString'),
+        'exposure_title': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'exposure_title/'
+            'gco:CharacterString'),
+        'legend_title': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'legend_title/'
+            'gco:CharacterString'),
+        'legend_notes': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'legend_notes/'
+            'gco:CharacterString'),
+        'exposure_source': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'exposure_source/'
+            'gco:CharacterString'),
+        'map_title': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'map_title/'
+            'gco:CharacterString'),
+        'legend_units': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'legend_units/'
+            'gco:CharacterString'),
+        'impact_summary': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'impact_summary/'
+            'gco:CharacterString'),
+        'user': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'user/'
+            'gco:CharacterString'),
+        'host_name': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'host_name/'
+            'gco:CharacterString'),
+        'time_stamp': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'time_stamp/'
+            'gco:CharacterString'),
+        'hazard_source': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'hazard_source/'
+            'gco:CharacterString'),
         'target_field': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'target_field/'
+            'gco:CharacterString'),
+        'impact_table': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'impact_table/'
             'gco:CharacterString'),
     }
     _standard_properties = merge_dictionaries(
@@ -119,7 +223,8 @@ class ImpactLayerMetadata(BaseMetadata):
         metadata = self.dict
 
         metadata['provenance'] = self.provenance.dict
-        return json.dumps(metadata, indent=2, sort_keys=True, separators=(',', ': '))
+        return json.dumps(metadata, indent=2, sort_keys=True,
+                          separators=(',', ': '))
 
     def read_json(self):
         """

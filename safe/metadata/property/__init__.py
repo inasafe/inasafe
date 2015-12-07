@@ -24,3 +24,4 @@ from safe.metadata.property.character_string_property import (
 from safe.metadata.property.date_property import DateProperty
 from safe.metadata.property.url_property import UrlProperty
 from safe.metadata.property.dictionary_property import DictionaryProperty
+from safe.metadata.property.integer_property import IntegerProperty

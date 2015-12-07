@@ -27,16 +27,17 @@ from safe.metadata.property import (
     CharacterStringProperty,
     DateProperty,
     UrlProperty,
-    DictionaryProperty
+    DictionaryProperty,
+    IntegerProperty,
 )
-
 
 # XML to python types conversions
 TYPE_CONVERSIONS = {
     'gco:CharacterString': CharacterStringProperty,
     'gco:Date': DateProperty,
     'gmd:URL': UrlProperty,
-    'gco:Dictionary': DictionaryProperty
+    'gco:Dictionary': DictionaryProperty,
+    'gco:Integer': IntegerProperty
 }
 
 # XML Namespaces
