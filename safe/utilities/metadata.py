@@ -98,7 +98,7 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         raise MetadataReadError(message)
     if keyword:
         try:
-            return keywords['value']
+            return keywords[keyword]
         except KeyError:
             raise KeywordNotFoundError(
                 'Keyword with key %s is not found' % keyword)
