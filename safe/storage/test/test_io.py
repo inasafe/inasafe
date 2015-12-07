@@ -361,8 +361,8 @@ class TestIO(unittest.TestCase):
         V = read_layer(filename)
 
         # Add some additional keywords
-        V.keywords['kw1'] = 'value1'
-        V.keywords['kw2'] = 'value2'
+        V.keywords['keyword_version'] = '3.3'
+        V.keywords['title'] = 'test'
 
         # Check string representation of vector class
         assert str(V).startswith('Vector data')
@@ -375,8 +375,8 @@ class TestIO(unittest.TestCase):
         data = V_ref.get_data()
         projection = V_ref.get_projection()
 
-        assert 'kw1' in V_ref.get_keywords()
-        assert 'kw2' in V_ref.get_keywords()
+        assert 'keyword_version' in V_ref.get_keywords()
+        assert 'title' in V_ref.get_keywords()
 
         # Create new object from test data
         v_new = Vector(data=data, projection=projection, geometry=geometry,
@@ -995,7 +995,7 @@ class TestIO(unittest.TestCase):
                       'AUTHORITY["EPSG","4326"]]')
         geotransform = (lon_ul, dlon, 0, lat_ul, 0, dlat)
         R1 = Raster(A1, projection, geotransform,
-                    keywords={'testkwd': 'testval', 'size': 'small'})
+                    keywords={'keyword_version': '3.2', 'title': 'test'})
 
         # Check string representation of raster class
         assert str(R1).startswith('Raster data')
