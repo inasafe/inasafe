@@ -172,24 +172,27 @@
           <scale>
             <gco:CharacterString/>
           </scale>
-          <datatype>
-            <gco:CharacterString/>
-          </datatype>
           <keyword_version>
             <gco:CharacterString/>
           </keyword_version>
-          <layer_mode>
+          <datatype>
             <gco:CharacterString/>
-          </layer_mode>
-          <report>
-            <gco:CharacterString/>
-          </report>
+          </datatype>
           <layer_geometry>
             <gco:CharacterString/>
           </layer_geometry>
+          <report>
+            <gco:CharacterString/>
+          </report>
           <layer_purpose>
             <gco:CharacterString/>
           </layer_purpose>
+          <layer_mode>
+            <gco:CharacterString/>
+          </layer_mode>
+          <target_field>
+            <gco:CharacterString/>
+          </target_field>
           <source>
             <gco:CharacterString/>
           </source>

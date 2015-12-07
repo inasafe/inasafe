@@ -207,6 +207,19 @@
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/source/gco:CharacterString"
     },
+    "target_field": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "target_field",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/target_field/gco:CharacterString"
+    },
     "title": {
       "allowed_python_types": [
         "str",
