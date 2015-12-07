@@ -60,14 +60,8 @@ class Table(MessageElement):
         else:
             raise InvalidMessageItemError(item, item.__class__)
 
-    def to_html(self, wrap_slash=False):
+    def to_html(self):
         """Render a Table MessageElement as html
-
-        :param wrap_slash: Whether to replace slashes with the slash plus the
-            html <wbr> tag which will help to e.g. wrap html in small cells if
-            it contains a long filename. Disabled by default as it may cause
-            side effects if the text contains html markup.
-        :type wrap_slash: bool
 
         :returns: The html representation of the Table MessageElement
         :rtype: basestring
@@ -79,11 +73,6 @@ class Table(MessageElement):
         for row in self.rows:
             table += row.to_html()
         table += '</tbody>\n</table>\n'
-
-        if wrap_slash:
-            # This is a hack to make text wrappable with long filenames TS 3.3
-            text = text.replace('/', '/<wbr>')
-            text = text.replace('\\', '\\<wbr>')
 
         return table
 
