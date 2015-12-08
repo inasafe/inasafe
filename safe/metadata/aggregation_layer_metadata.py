@@ -49,7 +49,7 @@ class AggregationLayerMetadata(GenericLayerMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'adult_ratio_default/'
-            'gco:CharacterString'),
+            'gco:Float'),
         'elderly_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
@@ -63,7 +63,7 @@ class AggregationLayerMetadata(GenericLayerMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'elderly_ratio_default/'
-            'gco:CharacterString'),
+            'gco:Float'),
         'female_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
@@ -77,7 +77,7 @@ class AggregationLayerMetadata(GenericLayerMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'female_ratio_default/'
-            'gco:CharacterString'),
+            'gco:Float'),
         'youth_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
@@ -91,7 +91,7 @@ class AggregationLayerMetadata(GenericLayerMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'youth_ratio_default/'
-            'gco:CharacterString')
+            'gco:Float')
     }
     _standard_properties = merge_dictionaries(
         GenericLayerMetadata._standard_properties, _standard_properties)

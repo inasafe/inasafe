@@ -10,46 +10,50 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from types import NoneType
-from safe.metadata.property import BaseProperty
 
-__author__ = 'marco@opengis.ch'
+__author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
-__date__ = '27/05/2015'
+__date__ = '07/12/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
-class CharacterStringProperty(BaseProperty):
+import json
+from types import NoneType
+
+
+from safe.common.exceptions import MetadataCastError
+from safe.metadata.property import BaseProperty
+
+
+class FloatProperty(BaseProperty):
     """
-    A property that accepts any type of input and stores it as string
+    A property that accepts date input
     """
     # if you edit this you need to adapt accordingly xml_value and is_valid
-    _allowed_python_types = [str, unicode, int, float, NoneType]
+    _allowed_python_types = [float, NoneType]
 
     def __init__(self, name, value, xml_path):
-        if isinstance(value, str):
-            value = unicode(value)
-        super(CharacterStringProperty, self).__init__(
+        super(FloatProperty, self).__init__(
             name, value, xml_path, self._allowed_python_types)
 
     @classmethod
     def is_valid(cls, value):
-        # any string sequence is valid.
+        # the date types constructors already complain if a date is not valid.
         return True
 
     def cast_from_str(self, value):
-        # return the original string
-        return value
+        try:
+            return float(value)
+        except ValueError as e:
+            raise MetadataCastError(e)
 
     @property
     def xml_value(self):
-        if self.python_type is NoneType:
-            return ''
-        elif (self.python_type in self.allowed_python_types and self.python_type != unicode):
+        if self.python_type is float:
             return str(self.value)
-        elif self.python_type == unicode:
-            return unicode(self.value)
+        elif self.python_type is NoneType:
+            return ''
         else:
             raise RuntimeError('self._allowed_python_types and self.xml_value'
                                'are out of sync. This should never happen')

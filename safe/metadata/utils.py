@@ -30,6 +30,7 @@ from safe.metadata.property import (
     DictionaryProperty,
     IntegerProperty,
     BooleanProperty,
+    FloatProperty,
 )
 
 # XML to python types conversions
@@ -40,6 +41,7 @@ TYPE_CONVERSIONS = {
     'gco:Dictionary': DictionaryProperty,
     'gco:Integer': IntegerProperty,
     'gco:Boolean': BooleanProperty,
+    'gco:Float': FloatProperty,
 }
 
 # XML Namespaces
