@@ -25,6 +25,8 @@ from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model \
     .impact_function import PAGFatalityFunction
+from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model \
+    .impact_function import ITBBayesianFatalityFunction
 from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
 from safe.impact_functions.inundation.flood_vector_building_impact\
@@ -265,6 +267,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         )
         expected = [
             ITBFatalityFunction.metadata().as_dict(),
+            ITBBayesianFatalityFunction.metadata().as_dict(),
             PAGFatalityFunction.metadata().as_dict(),
             ContinuousHazardPopulationFunction.metadata().as_dict()]
 
