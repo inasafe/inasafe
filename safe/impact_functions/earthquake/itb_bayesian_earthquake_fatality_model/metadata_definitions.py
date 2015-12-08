@@ -56,7 +56,7 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
         """
         dict_meta = {
             'id': 'ITBBayesianFatalityFunction',
-            'name': tr('Earthquake ITB fatality function based on'
+            'name': tr('Earthquake ITB fatality function based on '
                        'a Bayesian approach'),
             'impact': tr('Die or be displaced according ITB bayesian model'),
             'title': tr('Die or be displaced according ITB bayesian model'),
