@@ -301,6 +301,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             feature_types.append('buildings')
         if self.building_points_flag.isChecked():
             feature_types.append('building-points')
+        if self.flood_prone_flag.isChecked():
+            feature_types.append('flood-prone')
         if self.potential_idp_flag.isChecked():
             feature_types.append('potential-idp')
         if self.boundary_flag.isChecked():
