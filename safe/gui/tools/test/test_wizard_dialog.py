@@ -217,10 +217,7 @@ class WizardDialogTest(unittest.TestCase):
         categories = []
         hazard_index = -1
         for i in range(expected_category_count):
-            # pylint: disable=eval-used
-            category_name = eval(
-                dialog.lstCategories.item(i).data(Qt.UserRole))['key']
-            # pylint: enable=eval-used
+            category_name = dialog.lstCategories.item(i).data(Qt.UserRole)
             categories.append(category_name)
             if category_name == chosen_category:
                 hazard_index = i
@@ -255,10 +252,7 @@ class WizardDialogTest(unittest.TestCase):
         subcategories = []
         tsunami_index = -1
         for i in range(expected_subcategory_count):
-            # pylint: disable=eval-used
-            subcategory_name = eval(
-                dialog.lstSubcategories.item(i).data(Qt.UserRole))['key']
-            # pylint: enable=eval-used
+            subcategory_name = dialog.lstSubcategories.item(i).data(Qt.UserRole)
             subcategories.append(subcategory_name)
             if subcategory_name == chosen_subcategory:
                 tsunami_index = i
@@ -291,10 +285,8 @@ class WizardDialogTest(unittest.TestCase):
         hazard_categories = []
         scenario_index = -1
         for i in range(expected_hazard_category_count):
-            # pylint: disable=eval-used
-            hazard_category_name = eval(
-                dialog.lstHazardCategories.item(i).data(Qt.UserRole))['name']
-            # pylint: enable=eval-used
+            key = dialog.lstHazardCategories.item(i).data(Qt.UserRole)
+            hazard_category_name = KeywordIO.definition(key)['name']
             hazard_categories.append(hazard_category_name)
             if hazard_category_name == chosen_hazard_category:
                 scenario_index = i
@@ -329,10 +321,7 @@ class WizardDialogTest(unittest.TestCase):
         # Get all the modes given and save the classified index
         modes = []
         for i in range(expected_mode_count):
-            # pylint: disable=eval-used
-            mode_name = eval(
-                dialog.lstLayerModes.item(i).data(Qt.UserRole))['key']
-            # pylint: enable=eval-used
+            mode_name = dialog.lstLayerModes.item(i).data(Qt.UserRole)
             modes.append(mode_name)
         # Check if units is the same with expected_units
         message = ('Invalid modes! It should be "%s" while it was '
@@ -496,7 +485,7 @@ class WizardDialogTest(unittest.TestCase):
         message = 'Source Url should be empty'
         self.assertEqual(dialog.leSource_url.text(), '', message)
         message = 'Source Date should be empty'
-        self.assertEqual(dialog.leSource_date.text(), '', message)
+        self.assertTrue(dialog.dtSource_date.dateTime().isNull(), message)
         message = 'Source Scale should be empty'
         self.assertEqual(dialog.leSource_scale.text(), '', message)
         dialog.pbnNext.click()
@@ -579,13 +568,15 @@ class WizardDialogTest(unittest.TestCase):
         source = 'Source'
         source_scale = 'Source Scale'
         source_url = 'Source Url'
-        source_date = 'Source Date'
+        source_date = QtCore.QDateTime.fromString(
+            '06-12-2015 12:30',
+            'dd-MM-yyyy HH:mm')
         source_license = 'Source License'
 
         dialog.leSource.setText(source)
         dialog.leSource_scale.setText(source_scale)
         dialog.leSource_url.setText(source_url)
-        dialog.leSource_date.setText(source_date)
+        dialog.dtSource_date.setDateTime(source_date)
         dialog.leSource_license.setText(source_license)
         dialog.pbnNext.click()  # next
         dialog.pbnNext.click()  # next
@@ -665,7 +656,9 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(dialog.leSource.text(), source)
         self.assertEqual(dialog.leSource_url.text(), source_url)
         self.assertEqual(dialog.leSource_scale.text(), source_scale)
-        self.assertEqual(dialog.leSource_date.text(), source_date)
+        self.assertEqual(dialog.dtSource_date.dateTime(), source_date)
+
+        self.assertEqual(dialog.dtSource_date.text(), source_date)
         self.assertEqual(dialog.leSource_license.text(), source_license)
         dialog.pbnNext.click()
 

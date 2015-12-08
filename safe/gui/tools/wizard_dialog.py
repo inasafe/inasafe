@@ -41,7 +41,7 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, QSettings, QPyNullVariant
+from PyQt4.QtCore import pyqtSignature, QSettings, QPyNullVariant, QDateTime
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog,
@@ -53,11 +53,6 @@ from PyQt4.QtGui import (
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
-# pylint: disable=unused-import
-# TODO: to get rid of the following import,
-# TODO: we need to get rid of all those evals...TS
-from safe import definitions
-# pylint: enable=unused-import
 from safe.definitions import (
     inasafe_keyword_version,
     inasafe_keyword_version_key,
@@ -216,10 +211,9 @@ def get_question_text(constant):
     :returns: The value of the constant or red error message.
     :rtype: string
     """
-    try:
-        # TODO Eval = bad
-        return eval(constant)  # pylint: disable=eval-used
-    except NameError:
+    if constant in dir(safe.gui.tools.wizard_strings):
+        return getattr(safe.gui.tools.wizard_strings, constant)
+    else:
         return '<b>MISSING CONSTANT: %s</b>' % constant
 
 
@@ -663,11 +657,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: dict, None
         """
         item = self.lstCategories.currentItem()
-
         try:
-            # pylint: disable=eval-used
-            return eval(item.data(QtCore.Qt.UserRole))
-            # pylint: enable=eval-used
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -691,11 +682,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             categories += ['aggregation']
         for category in categories:
             if not isinstance(category, dict):
-                # pylint: disable=eval-used
-                category = eval('definitions.layer_purpose_%s' % category)
-                # pylint: enable=eval-used
+                category = KeywordIO().definition(category)
             item = QListWidgetItem(category['name'], self.lstCategories)
-            item.setData(QtCore.Qt.UserRole, unicode(category))
+            item.setData(QtCore.Qt.UserRole, category['key'])
             self.lstCategories.addItem(item)
 
         # Check if layer keywords are already assigned
@@ -710,10 +699,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             categories = []
             for index in xrange(self.lstCategories.count()):
                 item = self.lstCategories.item(index)
-                # pylint: disable=eval-used
-                category = eval(item.data(QtCore.Qt.UserRole))
-                # pylint: enable=eval-used
-                categories.append(category['key'])
+                categories.append(item.data(QtCore.Qt.UserRole))
             if category_keyword in categories:
                 self.lstCategories.setCurrentRow(
                     categories.index(category_keyword))
@@ -765,9 +751,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstSubcategories.currentItem()
         try:
-            # pylint: disable=eval-used
-            return eval(item.data(QtCore.Qt.UserRole))
-            # pylint: enable=eval-used
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -788,7 +772,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             get_question_text('%s_question' % category['key']))
         for i in self.subcategories_for_layer():
             item = QListWidgetItem(i['name'], self.lstSubcategories)
-            item.setData(QtCore.Qt.UserRole, unicode(i))
+            item.setData(QtCore.Qt.UserRole, i['key'])
             self.lstSubcategories.addItem(item)
 
         # Check if layer keywords are already assigned
@@ -804,10 +788,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             subcategories = []
             for index in xrange(self.lstSubcategories.count()):
                 item = self.lstSubcategories.item(index)
-                # pylint: disable=eval-used
-                subcategory = eval(item.data(QtCore.Qt.UserRole))
-                # pylint: enable=eval-used
-                subcategories.append(subcategory['key'])
+                subcategories.append(item.data(QtCore.Qt.UserRole))
             if keyword in subcategories:
                 self.lstSubcategories.setCurrentRow(
                     subcategories.index(keyword))
@@ -849,11 +830,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: dict, None
         """
         item = self.lstHazardCategories.currentItem()
-
         try:
-            # pylint: disable=eval-used
-            return eval(item.data(QtCore.Qt.UserRole))
-            # pylint: enable=eval-used
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -872,13 +850,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         hazard_categories = self.hazard_categories_for_layer()
         for hazard_category in hazard_categories:
             if not isinstance(hazard_category, dict):
-                # pylint: disable=eval-used
-                hazard_category = eval(
-                    'definitions.hazard_category_%s' % hazard_category)
-                # pylint: enable=eval-used
+                hazard_category = KeywordIO().definition(hazard_category)
             item = QListWidgetItem(
-                hazard_category['name'], self.lstHazardCategories)
-            item.setData(QtCore.Qt.UserRole, unicode(hazard_category))
+                hazard_category['name'],
+                self.lstHazardCategories)
+            item.setData(QtCore.Qt.UserRole, hazard_category['key'])
             self.lstHazardCategories.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
@@ -887,10 +863,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             categories = []
             for index in xrange(self.lstHazardCategories.count()):
                 item = self.lstHazardCategories.item(index)
-                # pylint: disable=eval-used
-                hazard_category = eval(item.data(QtCore.Qt.UserRole))
-                # pylint: enable=eval-used
-                categories.append(hazard_category['key'])
+                categories.append(item.data(QtCore.Qt.UserRole))
             if category_keyword in categories:
                 self.lstHazardCategories.setCurrentRow(
                     categories.index(category_keyword))
@@ -930,9 +903,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstLayerModes.currentItem()
         try:
-            # pylint: disable=eval-used
-            return eval(item.data(QtCore.Qt.UserRole))
-            # pylint: enable=eval-used
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -958,7 +929,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         layer_modes = self.layermodes_for_layer()
         for layer_mode in layer_modes:
             item = QListWidgetItem(layer_mode['name'], self.lstLayerModes)
-            item.setData(QtCore.Qt.UserRole, unicode(layer_mode))
+            item.setData(QtCore.Qt.UserRole, layer_mode['key'])
             self.lstUnits.addItem(item)
 
         # Set value to existing keyword or default value
@@ -1006,9 +977,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstUnits.currentItem()
         try:
-            # pylint: disable=eval-used
-            return eval(item.data(QtCore.Qt.UserRole))
-            # pylint: enable=eval-used
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1043,7 +1012,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             #     continue
             # else:
             item = QListWidgetItem(unit_for_layer['name'], self.lstUnits)
-            item.setData(QtCore.Qt.UserRole, unicode(unit_for_layer))
+            item.setData(QtCore.Qt.UserRole, unit_for_layer['key'])
             self.lstUnits.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
@@ -1057,10 +1026,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             units = []
             for index in xrange(self.lstUnits.count()):
                 item = self.lstUnits.item(index)
-                # pylint: disable=eval-used
-                unit = eval(item.data(QtCore.Qt.UserRole))
-                # pylint: enable=eval-used
-                units.append(unit['key'])
+                units.append(item.data(QtCore.Qt.UserRole))
             if unit_id in units:
                 self.lstUnits.setCurrentRow(units.index(unit_id))
 
@@ -1095,9 +1061,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstClassifications.currentItem()
         try:
-            # pylint: disable=eval-used
-            return eval(item.data(QtCore.Qt.UserRole))
-            # pylint: enable=eval-used
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1114,12 +1078,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         classifications = self.classifications_for_layer()
         for classification in classifications:
             if not isinstance(classification, dict):
-                # pylint: disable=eval-used
-                classification = eval('definitions.%s' % classification)
-                # pylint: enable=eval-used
+                classification = KeywordIO.definition(classification)
             item = QListWidgetItem(
-                classification['name'], self.lstClassifications)
-            item.setData(QtCore.Qt.UserRole, unicode(classification))
+                classification['name'],
+                self.lstClassifications)
+            item.setData(QtCore.Qt.UserRole, classification['key'])
             self.lstClassifications.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
@@ -1130,10 +1093,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             classifications = []
             for index in xrange(self.lstClassifications.count()):
                 item = self.lstClassifications.item(index)
-                # pylint: disable=eval-used
-                classification = eval(item.data(QtCore.Qt.UserRole))
-                # pylint: enable=eval-used
-                classifications.append(classification['key'])
+                classifications.append(item.data(QtCore.Qt.UserRole))
             if classification_keyword in classifications:
                 self.lstClassifications.setCurrentRow(
                     classifications.index(classification_keyword))
@@ -1169,7 +1129,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         desc = '<br/>%s: %s<br/><br/>' % (self.tr('Field type'), field_type)
         desc += self.tr('Unique values: %s') % ', '.join(unique_values_str)
         self.lblDescribeField.setText(desc)
-        # Enable the next button
+        # Enable the next buttonlayer_purpose_aggregation
         self.pbnNext.setEnabled(True)
 
     def selected_field(self):
@@ -1902,9 +1862,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.leSource_scale.setText(get_unicode(source_scale))
 
         source_date = self.get_existing_keyword('date')
-        if source_date or source_date == 0:
-            self.leSource_date.setText(get_unicode(source_date))
-
+        if source_date:
+            self.dtSource_date.setDateTime(
+                QDateTime.fromString(get_unicode(source_date),
+                                     'dd-MM-yyyy HH:mm'))
+        else:
+            self.dtSource_date.clear()
         source_url = self.get_existing_keyword('url')
         if source_url or source_url == 0:
             self.leSource_url.setText(get_unicode(source_url))
@@ -4521,8 +4484,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['url'] = get_unicode(self.leSource_url.text())
         if self.leSource_scale.text():
             keywords['scale'] = get_unicode(self.leSource_scale.text())
-        if self.leSource_date.text():
-            keywords['date'] = get_unicode(self.leSource_date.text())
+        if self.dtSource_date.dateTime():
+            keywords['date'] = get_unicode(
+                self.dtSource_date.dateTime().toString('dd-MM-yyyy HH:mm'))
         if self.leSource_license.text():
             keywords['license'] = get_unicode(self.leSource_license.text())
         if self.leTitle.text():
@@ -4584,6 +4548,6 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         self.leTitle.setToolTip(title_tooltip)
         self.leSource.setToolTip(source_tooltip)
-        self.leSource_date.setToolTip(date_tooltip)
+        self.dtSource_date.setToolTip(date_tooltip)
         self.leSource_scale.setToolTip(scale_tooltip)
         self.leSource_url.setToolTip(url_tooltip)
