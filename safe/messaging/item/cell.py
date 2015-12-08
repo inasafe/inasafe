@@ -39,6 +39,14 @@ class Cell(MessageElement):
         :param align: A flag to indicate if special alignment should
             be given to cells if supported in the output renderer.
             Valid options are: None, 'left', 'right', 'center'
+        :type align: basestring
+
+        :param wrap_slash: Whether to replace slashes with the slash plus the
+            html <wbr> tag which will help to e.g. wrap html in small cells if
+            it contains a long filename. Disabled by default as it may cause
+            side effects if the text contains html markup. Only affects
+            to_html calls.
+        :type wrap_slash: bool
 
         We pass the kwargs on to the base class after first removing the
         kwargs that we explicitly expect here so an exception is raised
@@ -52,13 +60,23 @@ class Cell(MessageElement):
         self.header_flag = False
         if 'header' in kwargs:
             self.header_flag = kwargs['header']
+            # dont pass the kw on to the base class as we handled it here
             kwargs.pop('header')
+
         # Also check if align parameter is called before calling the ABC
         self.align = None
         if 'align' in kwargs:
             if kwargs['align'] in [None, 'left', 'right', 'center']:
                 self.align = kwargs['align']
+            # dont pass the kw on to the base class as we handled it here
             kwargs.pop('align')
+
+        # Check if slashes should be wrapped for html
+        self.wrap_slash = False
+        if 'wrap_slash' in kwargs:
+            self.wrap_slash = kwargs['wrap_slash']
+            # dont pass the kw on to the base class as we handled it here
+            kwargs.pop('wrap_slash')
 
         super(Cell, self).__init__(**kwargs)
 
@@ -86,19 +104,28 @@ class Cell(MessageElement):
             if self.style_class is None:
                 self.style_class = 'text-right'
             else:
-                self.style_classs += ' text-right'
+                self.style_class += ' text-right'
         elif self.align is 'center':
             if self.style_class is None:
                 self.style_class = 'text-center'
             else:
                 self.style_class += ' text-center'
+
+        # Special case for when we want to put a nested table in a cell
+        # We don't use isinstance because of recursive imports with table
+        class_name = self.content.__class__.__name__
+        if class_name in ['BulletedList', 'Table']:
+            html = self.content.to_html()
+        else:
+            html = self.content.to_html(wrap_slash=self.wrap_slash)
+
         # Check if we have a header or not then render
         if self.header_flag is True:
             return '<th%s>%s</th>\n' % (
-                self.html_attributes(), self.content.to_html())
+                self.html_attributes(), html)
         else:
             return '<td%s>%s</td>\n' % (
-                self.html_attributes(), self.content.to_html())
+                self.html_attributes(), html)
 
     def to_text(self):
         """Render a Cell MessageElement as plain text

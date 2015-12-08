@@ -35,6 +35,24 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         registry.clear()
         registry.register(ITBFatalityFunction)
 
+    def test_compute_fatality_rate(self):
+        impact_function = ITBFatalityFunction.instance()
+        expected_result = {2: 0,
+                           3: 0,
+                           4: 2.869e-6,
+                           5: 1.203e-5,
+                           6: 5.048e-5,
+                           7: 2.117e-4,
+                           8: 8.883e-4,
+                           9: 3.726e-3,
+                           10: 1.563e-2}
+        result = impact_function.compute_fatality_rate()
+        for item in expected_result.keys():
+            message = 'Expecting %s, but it returns %s' % (
+                expected_result[item], result[item])
+            self.assertAlmostEqual(expected_result[item],
+                                   result[item], places=4, msg=message)
+
     def test_run(self):
         """TestITEarthquakeFatalityFunction: Test running the IF."""
         # FIXME(Hyeuk): test requires more realistic hazard and population data
@@ -120,6 +138,12 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
                 self.assertAlmostEqual(
                     expected_result[key_][item],
                     result[item], places=4, msg=message)
+
+        expected_result = None
+        result = impact_layer.get_keywords('prob_fatality_mag')
+        message = 'Expecting %s, but it returns %s' % (
+            expected_result, result)
+        self.assertEqual(expected_result, result, message)
 
     def test_filter(self):
         """TestITBEarthquakeFatalityFunction: Test filtering IF"""
