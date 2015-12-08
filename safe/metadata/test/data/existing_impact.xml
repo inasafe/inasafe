@@ -169,33 +169,78 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
+          <exposure_title>
+            <gco:CharacterString/>
+          </exposure_title>
+          <map_title>
+            <gco:CharacterString/>
+          </map_title>
           <scale>
             <gco:CharacterString/>
           </scale>
-          <keyword_version>
+          <elapsed_time>
+            <gco:Integer/>
+          </elapsed_time>
+          <source>
             <gco:CharacterString/>
-          </keyword_version>
-          <datatype>
-            <gco:CharacterString/>
-          </datatype>
+          </source>
           <layer_geometry>
             <gco:CharacterString/>
           </layer_geometry>
+          <time_stamp>
+            <gco:CharacterString/>
+          </time_stamp>
+          <hazard_source>
+            <gco:CharacterString/>
+          </hazard_source>
+          <postprocessing_report>
+            <gco:CharacterString/>
+          </postprocessing_report>
+          <legend_units>
+            <gco:CharacterString/>
+          </legend_units>
+          <user>
+            <gco:CharacterString/>
+          </user>
           <report>
             <gco:CharacterString/>
           </report>
+          <hazard_title>
+            <gco:CharacterString/>
+          </hazard_title>
+          <keyword_version>
+            <gco:CharacterString/>
+          </keyword_version>
+          <legend_title>
+            <gco:CharacterString/>
+          </legend_title>
+          <legend_notes>
+            <gco:CharacterString/>
+          </legend_notes>
+          <exposure_source>
+            <gco:CharacterString/>
+          </exposure_source>
+          <datatype>
+            <gco:CharacterString/>
+          </datatype>
+          <host_name>
+            <gco:CharacterString/>
+          </host_name>
           <layer_purpose>
             <gco:CharacterString/>
           </layer_purpose>
+          <impact_table>
+            <gco:CharacterString/>
+          </impact_table>
           <layer_mode>
             <gco:CharacterString/>
           </layer_mode>
           <target_field>
             <gco:CharacterString/>
           </target_field>
-          <source>
+          <impact_summary>
             <gco:CharacterString/>
-          </source>
+          </impact_summary>
         </inasafe>
         <inasafe_provenance>
           <provenance_step timestamp="2015-06-25T13:07:13.100000">

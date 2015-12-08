@@ -77,6 +77,16 @@
       "value": null,
       "xml_path": "gmd:dateStamp/gco:Date"
     },
+    "elapsed_time": {
+      "allowed_python_types": [
+        "int",
+        "NoneType"
+      ],
+      "name": "elapsed_time",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/elapsed_time/gco:Integer"
+    },
     "email": {
       "allowed_python_types": [
         "str",
@@ -89,6 +99,97 @@
       "python_type": "NoneType",
       "value": null,
       "xml_path": "gmd:contact/gmd:CI_ResponsibleParty/gmd:contactInfo/gmd:CI_Contact/gmd:address/gmd:CI_Address/gmd:electronicMailAddress/gco:CharacterString"
+    },
+    "exposure_source": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "exposure_source",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/exposure_source/gco:CharacterString"
+    },
+    "exposure_title": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "exposure_title",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/exposure_title/gco:CharacterString"
+    },
+    "hazard_source": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "hazard_source",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/hazard_source/gco:CharacterString"
+    },
+    "hazard_title": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "hazard_title",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/hazard_title/gco:CharacterString"
+    },
+    "host_name": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "host_name",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/host_name/gco:CharacterString"
+    },
+    "impact_summary": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "impact_summary",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/impact_summary/gco:CharacterString"
+    },
+    "impact_table": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "impact_table",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/impact_table/gco:CharacterString"
     },
     "keyword_version": {
       "allowed_python_types": [
@@ -142,6 +243,45 @@
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/layer_purpose/gco:CharacterString"
     },
+    "legend_notes": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "legend_notes",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/legend_notes/gco:CharacterString"
+    },
+    "legend_title": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "legend_title",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/legend_title/gco:CharacterString"
+    },
+    "legend_units": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "legend_units",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/legend_units/gco:CharacterString"
+    },
     "license": {
       "allowed_python_types": [
         "str",
@@ -155,6 +295,19 @@
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString"
     },
+    "map_title": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "map_title",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/map_title/gco:CharacterString"
+    },
     "organisation": {
       "allowed_python_types": [
         "str",
@@ -167,6 +320,19 @@
       "python_type": "NoneType",
       "value": null,
       "xml_path": "gmd:contact/gmd:CI_ResponsibleParty/gmd:organisationName/gco:CharacterString"
+    },
+    "postprocessing_report": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "postprocessing_report",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/postprocessing_report/gco:CharacterString"
     },
     "report": {
       "allowed_python_types": [
@@ -220,6 +386,19 @@
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/target_field/gco:CharacterString"
     },
+    "time_stamp": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "time_stamp",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/time_stamp/gco:CharacterString"
+    },
     "title": {
       "allowed_python_types": [
         "str",
@@ -242,6 +421,19 @@
       "python_type": "NoneType",
       "value": null,
       "xml_path": "gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL"
+    },
+    "user": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "user",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/user/gco:CharacterString"
     }
   },
   "provenance": [
