@@ -16,6 +16,8 @@ from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model\
     .impact_function import PAGFatalityFunction
+from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model\
+    .impact_function import ITBBayesianFatalityFunction
 from safe.impact_functions.generic.classified_raster_building\
     .impact_function import ClassifiedRasterHazardBuildingFunction
 from safe.impact_functions.generic.classified_polygon_population\
@@ -65,6 +67,7 @@ def register_impact_functions():
     impact_function_registry.register(FloodRasterBuildingFunction)
     impact_function_registry.register(FloodRasterRoadsFunction)
     impact_function_registry.register(TsunamiEvacuationFunction)
+
     # Generic IF's
     impact_function_registry.register(ClassifiedRasterHazardBuildingFunction)
     impact_function_registry.register(ClassifiedRasterHazardPopulationFunction)
@@ -72,12 +75,17 @@ def register_impact_functions():
     impact_function_registry.register(
         ClassifiedPolygonHazardPopulationFunction)
     impact_function_registry.register(ClassifiedPolygonHazardBuildingFunction)
+    # Added in 3.3
     impact_function_registry.register(
         ClassifiedPolygonHazardPolygonPeopleFunction)
+
     # Earthquake
     impact_function_registry.register(EarthquakeBuildingFunction)
     impact_function_registry.register(ITBFatalityFunction)
     impact_function_registry.register(PAGFatalityFunction)
+    # Added in 3.3
+    impact_function_registry.register(ITBBayesianFatalityFunction)
+
     # Volcanic IF's
     impact_function_registry.register(VolcanoPointBuildingFunction)
     impact_function_registry.register(VolcanoPolygonBuildingFunction)
