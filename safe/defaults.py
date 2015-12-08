@@ -77,15 +77,15 @@ def define_defaults():
     defaults['ELDERLY_RATIO'] = float(value)
 
     # Keywords key names
-    defaults['FEMALE_RATIO_ATTR_KEY'] = 'female ratio attribute'
-    defaults['FEMALE_RATIO_KEY'] = 'female ratio default'
-    defaults['YOUTH_RATIO_ATTR_KEY'] = 'youth ratio attribute'
-    defaults['YOUTH_RATIO_KEY'] = 'youth ratio default'
-    defaults['ADULT_RATIO_ATTR_KEY'] = 'adult ratio attribute'
-    defaults['ADULT_RATIO_KEY'] = 'adult ratio default'
-    defaults['ELDERLY_RATIO_ATTR_KEY'] = 'elderly ratio attribute'
-    defaults['ELDERLY_RATIO_KEY'] = 'elderly ratio default'
-    defaults['AGGR_ATTR_KEY'] = 'aggregation attribute'
+    defaults['FEMALE_RATIO_ATTR_KEY'] = 'female_ratio_attribute'
+    defaults['FEMALE_RATIO_KEY'] = 'female_ratio_default'
+    defaults['YOUTH_RATIO_ATTR_KEY'] = 'youth_ratio_attribute'
+    defaults['YOUTH_RATIO_KEY'] = 'youth_ratio_default'
+    defaults['ADULT_RATIO_ATTR_KEY'] = 'adult_ratio_attribute'
+    defaults['ADULT_RATIO_KEY'] = 'adult_ratio_default'
+    defaults['ELDERLY_RATIO_ATTR_KEY'] = 'elderly_ratio_attribute'
+    defaults['ELDERLY_RATIO_KEY'] = 'elderly_ratio_default'
+    defaults['AGGR_ATTR_KEY'] = 'aggregation_attribute'
     defaults['NO_DATA'] = tr('No data')
 
     # defaults for iso_19115_template.xml
