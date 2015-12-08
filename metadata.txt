@@ -30,6 +30,7 @@ changelog=
         Add new impact function Classified polygon hazard on polygon people
         Add new impact function Earthquake ITB Bayesian Fatality
         Add flood prone areas download support for the OSM downloader
+        Use Date Picker in Keywords Wizard
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
