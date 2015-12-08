@@ -31,6 +31,7 @@ from safe.metadata import (
     ImpactLayerMetadata,
     GenericLayerMetadata
 )
+from safe.definitions import inasafe_keyword_version
 
 
 def write_iso19115_metadata(layer_uri, keywords):
@@ -58,6 +59,7 @@ def write_iso19115_metadata(layer_uri, keywords):
         metadata = GenericLayerMetadata(layer_uri)
 
     metadata.update_from_dict(keywords)
+    metadata.update_from_dict({'keyword_version': inasafe_keyword_version})
 
     if metadata.layer_is_file_based:
         xml_file_path = layer_uri.split('.')[0] + '.xml'
