@@ -784,3 +784,6 @@ value_map = {
         ', "YES", "1" and "Flooded" might all be grouped together as '
         '"FLOODPRONE".')
 }
+
+
+multipart_polygon_key = 'multipart_polygon'

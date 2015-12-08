@@ -29,6 +29,7 @@ from safe.metadata.property import (
     UrlProperty,
     DictionaryProperty,
     IntegerProperty,
+    BooleanProperty,
 )
 
 # XML to python types conversions
@@ -37,7 +38,8 @@ TYPE_CONVERSIONS = {
     'gco:Date': DateProperty,
     'gmd:URL': UrlProperty,
     'gco:Dictionary': DictionaryProperty,
-    'gco:Integer': IntegerProperty
+    'gco:Integer': IntegerProperty,
+    'gco:Boolean': BooleanProperty,
 }
 
 # XML Namespaces

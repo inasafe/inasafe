@@ -50,7 +50,7 @@ from safe.utilities.metadata import (
     read_iso19115_metadata,
     write_read_iso_19115_metadata
 )
-
+from safe.definitions import multipart_polygon_key
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
@@ -315,7 +315,7 @@ def _clip_vector_layer(
     keyword_io = KeywordIO()
     if extra_keywords is None:
         extra_keywords = {}
-    extra_keywords['had multipart polygon'] = has_multipart
+    extra_keywords[multipart_polygon_key] = has_multipart
     keyword_io.copy_keywords(
         layer, file_name, extra_keywords=extra_keywords)
     base_name = '%s clipped' % layer.name()

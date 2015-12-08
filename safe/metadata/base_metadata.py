@@ -34,6 +34,7 @@ from safe.metadata.utils import (METADATA_XML_TEMPLATE,
                                  read_property_from_xml,
                                  reading_ancillary_files)
 from safe.utilities.i18n import tr
+from safe.definitions import multipart_polygon_key
 
 
 class BaseMetadata(object):
@@ -159,7 +160,14 @@ class BaseMetadata(object):
             'gmd:supplementalInformation/'
             'inasafe/'
             'datatype/'
-            'gco:CharacterString')
+            'gco:CharacterString'),
+        'multipart_polygon': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            '%s/'
+            'gco:Boolean' % multipart_polygon_key)
     }
 
     def __getattr__(self, name):
