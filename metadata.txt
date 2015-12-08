@@ -15,7 +15,7 @@ qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=3.2.3
+version=3.2.5
 # alpha, beta, rc or final
 status=alpha
 
@@ -25,8 +25,10 @@ status=alpha
 # Optional items:
 
 changelog=
-        3.2.3
-        Fixed #2464 - Support polygon flood on points
+        3.2.4
+        Working implementation of on-the-fly-projection for polygon flood on building points/polys. fix #2475
+        Add new impact function Classified polygon hazard on polygon people
+        Add new impact function Earthquake ITB Bayesian Fatality
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards

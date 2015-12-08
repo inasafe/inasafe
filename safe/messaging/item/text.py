@@ -69,8 +69,14 @@ class Text(MessageElement):
         else:
             raise InvalidMessageItemError(text, text.__class__)
 
-    def to_html(self):
+    def to_html(self, wrap_slash=False):
         """Render a Text MessageElement as html.
+
+        :param wrap_slash: Whether to replace slashes with the slash plus the
+            html <wbr> tag which will help to e.g. wrap html in small cells if
+            it contains a long filename. Disabled by default as it may cause
+            side effects if the text contains html markup.
+        :type wrap_slash: bool
 
         :returns: Html representation of the Text MessageElement.
         :rtype: str
@@ -82,7 +88,12 @@ class Text(MessageElement):
             text = ''
             for t in self.text:
                 text += t.to_html() + ' '
-            return ' '.join(text.split())
+            text = ' '.join(text.split())
+        if wrap_slash:
+            # This is a hack to make text wrappable with long filenames TS 3.3
+            text = text.replace('/', '/<wbr>')
+            text = text.replace('\\', '\\<wbr>')
+        return text
 
     def to_text(self):
         """Render a Text MessageElement as plain text
