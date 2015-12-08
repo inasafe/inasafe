@@ -282,7 +282,7 @@ class ClipperTest(unittest.TestCase):
         # -------------------------------
         # Clip the vector to the bbox
         result = clip_layer(
-            vector_layer, geo_extent, extra_keywords={'kermit': 'piggy'})
+            vector_layer, geo_extent, extra_keywords={'title': 'piggy'})
 
         # Check the output is valid
         assert os.path.exists(result.source())
@@ -290,11 +290,11 @@ class ClipperTest(unittest.TestCase):
         keywords = safe_layer.get_keywords()
         # message = 'Extra keyword was not found in %s: %s' % (myResult,
         # keywords)
-        assert keywords['kermit'] == 'piggy'
+        assert keywords['title'] == 'piggy'
 
         # Clip the raster to the bbox
         result = clip_layer(
-            raster_layer, geo_extent, extra_keywords={'zoot': 'animal'})
+            raster_layer, geo_extent, extra_keywords={'email': 'animal'})
 
         # Check the output is valid
         assert os.path.exists(result.source())
@@ -303,7 +303,7 @@ class ClipperTest(unittest.TestCase):
 
         message = ('Extra keyword was not found in %s: %s' %
                    (result.source(), keywords))
-        assert keywords['zoot'] == 'animal', message
+        assert keywords['email'] == 'animal', message
 
     def test_raster_scaling(self):
         """Raster layers can be scaled when resampled.
