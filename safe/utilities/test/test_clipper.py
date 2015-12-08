@@ -142,9 +142,13 @@ class ClipperTest(unittest.TestCase):
         shutil.copyfile(source_file, test_file)
 
         # Create a keywords file
-        source_file = test_data_path('other', 'tenbytenraster.keywords')
-        keywords_file = test_file + '.keywords'
+        source_file = test_data_path('other', 'tenbytenraster.xml')
+        keywords_file = test_file + '.xml'
         shutil.copyfile(source_file, keywords_file)
+
+        # source_file = test_data_path('other', 'tenbytenraster.keywords')
+        # keywords_file = test_file + '.keywords'
+        # shutil.copyfile(source_file, keywords_file)
 
         # Test the raster layer
         raster_layer = QgsRasterLayer(test_file, 'ten by ten')
