@@ -3,7 +3,7 @@ import logging
 import os
 import unittest
 
-from realtime.flood.make_flood_map import process_event
+from realtime.flood.make_map import process_event
 from realtime.flood.peta_jakarta_api import PetaJakartaAPI
 from realtime.utilities import realtime_logger_name
 
@@ -29,4 +29,5 @@ class TestFloodRealtime(unittest.TestCase):
 
     def test_flood_event_calculate(self):
         working_dir = os.environ['FLOODMAPS_DIR']
-        process_event(working_dir)
+        process_event(working_dir, locale_option='id')
+

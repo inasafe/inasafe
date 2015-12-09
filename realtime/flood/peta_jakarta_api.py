@@ -17,7 +17,7 @@ class PetaJakartaAPI(object):
 
     @classmethod
     def get_aggregate_report(cls, duration, level):
-        rest_point = 'https://petajakarta.org/banjir/data/api/v1/' \
+        rest_point = 'https://petajakarta.org/banjir/data/api/v2/' \
                      'aggregates/live'
         params = {
             'hours': duration,

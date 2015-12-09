@@ -20,7 +20,7 @@ __date__ = '11/24/15'
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
-def process_event(working_directory, locale_option):
+def process_event(working_directory, locale_option='en'):
     """Process floodmap event
 
     :param working_dir:

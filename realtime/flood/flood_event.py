@@ -2,6 +2,7 @@
 import logging
 import os
 import shutil
+from zipfile import ZipFile
 
 import pytz
 import datetime
@@ -75,6 +76,7 @@ class FloodEvent(QObject):
 
         self.hazard_path = os.path.join(self.report_path, 'flood_data.json')
         self.hazard_layer = None
+        self.hazard_zip_path = os.path.join(self.report_path, 'hazard.zip')
 
         self.population_path = population_raster_path
         self.exposure_layer = None
@@ -165,6 +167,15 @@ class FloodEvent(QObject):
         }
 
         keyword_io.write_keywords(hazard_layer, keywords)
+
+        # archiving hazard layer
+        with ZipFile(self.hazard_zip_path, 'w') as zf:
+            for root, dirs, files in os.walk(self.report_path):
+                for f in files:
+                    _, ext = os.path.splitext(f)
+                    if 'flood_data' in f:
+                        filename = os.path.join(root, f)
+                        zf.write(filename, arcname=f)
 
     def load_hazard_data(self):
         self.hazard_path = os.path.join(self.report_path, 'flood_data.shp')

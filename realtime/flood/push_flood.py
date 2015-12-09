@@ -76,7 +76,8 @@ def push_flood_event_to_rest(flood_event, fail_silent=True):
             'region': flood_event.region
         }
         flood_data_file = {
-            'impact_layer': open(impact_zip_path)
+            'hazard_layer': open(flood_event.hazard_zip_path),
+            # 'impact_layer': open(impact_zip_path)
         }
 
         # modify headers
@@ -109,7 +110,7 @@ def push_flood_event_to_rest(flood_event, fail_silent=True):
                 status_code=response.status_code,
                 data=flood_data)
             if fail_silent:
-                LOGGER.info(error.message)
+                LOGGER.warning(error.message)
             else:
                 raise error
 
@@ -163,7 +164,7 @@ def push_flood_event_to_rest(flood_event, fail_silent=True):
                 files=event_report_files)
 
             if fail_silent:
-                LOGGER.info(error.message)
+                LOGGER.warning(error.message)
             else:
                 raise error
         return True
