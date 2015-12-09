@@ -904,7 +904,7 @@ class KeywordIO(QObject):
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        LOGGER.info('Converting to dict: %s' % keyword_value)
+        # LOGGER.info('Converting to dict: %s' % keyword_value)
         if isinstance(keyword_value, basestring):
             keyword_value = literal_eval(keyword_value)
         table = m.Table(style_class='table table-condensed')
