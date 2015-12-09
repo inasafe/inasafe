@@ -49,7 +49,8 @@ class OsmDownloaderDialogTest(unittest.TestCase):
         self.dialog.roads_flag.setChecked(False)
         self.dialog.buildings_flag.setChecked(False)
         self.dialog.building_points_flag.setChecked(False)
-        self.dialog.potential_idp_flag.setChecked(False)
+        self.dialog.flood_prone_flag.setChecked(False)
+        self.dialog.evacuation_centers_flag.setChecked(False)
         self.dialog.boundary_flag.setChecked(False)
         expected = []
         get = self.dialog.get_checked_features()
@@ -58,9 +59,14 @@ class OsmDownloaderDialogTest(unittest.TestCase):
         self.dialog.roads_flag.setChecked(True)
         self.dialog.buildings_flag.setChecked(True)
         self.dialog.building_points_flag.setChecked(True)
-        self.dialog.potential_idp_flag.setChecked(True)
+        self.dialog.flood_prone_flag.setChecked(False)
+        self.dialog.evacuation_centers_flag.setChecked(True)
         self.dialog.boundary_flag.setChecked(False)
-        expected = ['roads', 'buildings', 'building-points', 'potential-idp']
+        expected = [
+            'roads',
+            'buildings',
+            'building-points',
+            'evacuation-centers']
         get = self.dialog.get_checked_features()
         self.assertItemsEqual(expected, get)
 
@@ -69,10 +75,15 @@ class OsmDownloaderDialogTest(unittest.TestCase):
         self.dialog.roads_flag.setChecked(False)
         self.dialog.buildings_flag.setChecked(True)
         self.dialog.building_points_flag.setChecked(True)
-        self.dialog.potential_idp_flag.setChecked(True)
+        self.dialog.flood_prone_flag.setChecked(True)
+        self.dialog.evacuation_centers_flag.setChecked(True)
         self.dialog.boundary_flag.setChecked(True)
         expected = [
-            'buildings', 'building-points', 'potential-idp', 'boundary-6']
+            'buildings',
+            'building-points',
+            'flood-prone',
+            'evacuation-centers',
+            'boundary-6']
         get = self.dialog.get_checked_features()
         self.assertItemsEqual(expected, get)
 
