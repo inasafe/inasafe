@@ -233,8 +233,7 @@ class KeywordIO(QObject):
         :type source_layer: QgsMapLayer
 
         :param destination_file: The output filename that should be used
-            to store the keywords in. It can be a .shp or a .keywords for
-            example since the suffix will always be replaced with .keywords.
+            to store the keywords in. It's a path to a layer file.
         :type destination_file: str
 
         :param extra_keywords: A dict containing all the extra keywords
@@ -254,7 +253,7 @@ class KeywordIO(QObject):
         verify(isinstance(extra_keywords, dict), message)
         # compute the output keywords file name
         destination_base = os.path.splitext(destination_file)[0]
-        new_destination = destination_base + '.keywords'
+        new_destination = destination_base + '.xml'
         # write the extra keywords into the source dict
         try:
             for key in extra_keywords:

@@ -20,6 +20,7 @@ from safe.common.exceptions import HashNotFoundError
 from safe.common.utilities import temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
 from safe.utilities.unicode import get_unicode
+from safe.utilities.metadata import read_iso19115_metadata
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -237,11 +238,12 @@ class KeywordIOTest(unittest.TestCase):
     def test_copy_keywords(self):
         """Test we can copy the keywords."""
         out_path = unique_filename(
-            prefix='test_copy_keywords', suffix='.keywords')
+            prefix='test_copy_keywords', suffix='.shp')
         self.keyword_io.copy_keywords(self.raster_layer, out_path)
-        copied_keywords = read_file_keywords(out_path)
+        # copied_keywords = read_file_keywords(out_path.split('.')[0] + 'xml')
+        copied_keywords = read_iso19115_metadata(out_path)
         expected_keywords = self.expected_raster_keywords
-        
+
         self.assertDictEqual(copied_keywords, expected_keywords)
 
     def test_definition(self):
