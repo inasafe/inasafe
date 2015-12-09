@@ -175,12 +175,15 @@
           <raster_hazard_classification>
             <gco:CharacterString/>
           </raster_hazard_classification>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
           <continuous_hazard_unit>
             <gco:CharacterString/>
           </continuous_hazard_unit>
-          <scale>
+          <volcano_name_field>
             <gco:CharacterString/>
-          </scale>
+          </volcano_name_field>
           <field>
             <gco:CharacterString>h_zone</gco:CharacterString>
           </field>
@@ -196,6 +199,9 @@
           <hazard>
             <gco:CharacterString>earthquake</gco:CharacterString>
           </hazard>
+          <scale>
+            <gco:CharacterString/>
+          </scale>
           <report>
             <gco:CharacterString/>
           </report>
