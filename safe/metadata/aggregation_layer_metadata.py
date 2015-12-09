@@ -29,63 +29,63 @@ class AggregationLayerMetadata(GenericLayerMetadata):
     """
 
     _standard_properties = {
-        'aggregation_attribute': (
+        'aggregation attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'aggregation_attribute/'
             'gco:CharacterString'),
-        'adult_ratio_attribute': (
+        'adult ratio attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'adult_ratio_attribute/'
             'gco:CharacterString'),
-        'adult_ratio_default': (
+        'adult ratio default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'adult_ratio_default/'
             'gco:Float'),
-        'elderly_ratio_attribute': (
+        'elderly ratio attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'elderly_ratio_attribute/'
             'gco:CharacterString'),
-        'elderly_ratio_default': (
+        'elderly ratio default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'elderly_ratio_default/'
             'gco:Float'),
-        'female_ratio_attribute': (
+        'female ratio attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'female_ratio_attribute/'
             'gco:CharacterString'),
-        'female_ratio_default': (
+        'female ratio default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'female_ratio_default/'
             'gco:Float'),
-        'youth_ratio_attribute': (
+        'youth ratio attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'youth_ratio_attribute/'
             'gco:CharacterString'),
-        'youth_ratio_default': (
+        'youth ratio default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
