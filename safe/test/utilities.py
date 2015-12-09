@@ -27,7 +27,10 @@ from PyQt4 import QtGui  # pylint: disable=W0621
 from safe.gis.numerics import axes_to_points
 from safe.impact_functions import register_impact_functions
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.exceptions import NoKeywordsFoundError
+from safe.common.exceptions import (
+    NoKeywordsFoundError,
+    MetadataReadError
+)
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.metadata import read_iso19115_metadata
@@ -227,7 +230,10 @@ def load_layer(layer_path):
         try:
             keywords = read_file_keywords(layer_path)
         except:
-            keywords = read_iso19115_metadata(layer_path)
+            try:
+                keywords = read_iso19115_metadata(layer_path)
+            except NoKeywordsFoundError:
+                keywords = {}
         if 'layer_purpose' in keywords:
             layer_purpose = keywords['layer_purpose']
     except NoKeywordsFoundError:

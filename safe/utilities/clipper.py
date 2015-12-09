@@ -43,7 +43,8 @@ from safe.common.exceptions import (
     CallGDALError,
     InvalidProjectionError,
     InvalidClipGeometryError,
-    MetadataReadError
+    MetadataReadError,
+    NoKeywordsFoundError
 )
 from safe.storage.utilities import read_keywords
 from safe.utilities.metadata import (
@@ -466,7 +467,7 @@ def _clip_raster_layer(
     # in its keywords.
     try:
         keywords = read_iso19115_metadata(working_layer)
-    except MetadataReadError:
+    except (MetadataReadError, NoKeywordsFoundError):
         keywords = read_keywords(base + '.keywords')
         keywords = write_read_iso_19115_metadata(working_layer, keywords)
     if 'datatype' in keywords and keywords['datatype'] == 'count':

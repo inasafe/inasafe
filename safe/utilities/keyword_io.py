@@ -122,7 +122,7 @@ class KeywordIO(QObject):
         # Try to read from ISO metadata first.
         try:
             return read_iso19115_metadata(source, keyword)
-        except MetadataReadError:
+        except (MetadataReadError, NoKeywordsFoundError):
             pass
 
         try:
@@ -259,7 +259,8 @@ class KeywordIO(QObject):
         try:
             for key in extra_keywords:
                 keywords[key] = extra_keywords[key]
-            write_keywords_to_file(new_destination, keywords)
+            write_iso19115_metadata(destination_file, keywords)
+            # write_keywords_to_file(new_destination, keywords)
         except Exception, e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (

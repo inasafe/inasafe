@@ -36,6 +36,7 @@ from safe.common.exceptions import (
     WriteLayerError,
     GetDataError,
     InaSAFEError,
+    NoKeywordsFoundError,
     MetadataReadError
 )
 from layer import Layer
@@ -432,7 +433,7 @@ class Vector(Layer):
         # Look for any keywords
         try:
             self.keywords = read_iso19115_metadata(filename)
-        except MetadataReadError:
+        except NoKeywordsFoundError:
             keywords = read_keywords(base_name + '.keywords')
             self.keywords = write_read_iso_19115_metadata(filename, keywords)
 

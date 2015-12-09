@@ -22,7 +22,8 @@ import os
 from safe.common.exceptions import (
     MetadataReadError,
     KeywordNotFoundError,
-    MissingMetadata
+    MissingMetadata,
+    NoKeywordsFoundError
 )
 from safe.metadata import (
     ExposureLayerMetadata,
@@ -80,8 +81,9 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     if not os.path.exists(xml_uri):
         xml_uri = None
     if not xml_uri and os.path.exists(layer_uri):
-        message = 'Layer based file but no xml file.'
-        raise MetadataReadError(message)
+        message = 'Layer based file but no xml file.\n'
+        message += 'Layer path: %s.' % layer_uri
+        raise NoKeywordsFoundError(message)
     metadata = GenericLayerMetadata(layer_uri, xml_uri)
     if metadata.layer_purpose == 'exposure':
         metadata = ExposureLayerMetadata(layer_uri, xml_uri)

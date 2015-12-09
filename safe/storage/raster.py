@@ -21,7 +21,8 @@ from safe.common.exceptions import (
     InaSAFEError,
     MetadataReadError,
     ReadLayerError,
-    WriteLayerError
+    WriteLayerError,
+    NoKeywordsFoundError
 )
 
 from layer import Layer
@@ -212,7 +213,7 @@ class Raster(Layer):
         # Look for any keywords
         try:
             self.keywords = read_iso19115_metadata(filename)
-        except MetadataReadError:
+        except (MetadataReadError, NoKeywordsFoundError):
             keywords = read_keywords(basename + '.keywords')
             self.keywords = write_read_iso_19115_metadata(filename, keywords)
 
