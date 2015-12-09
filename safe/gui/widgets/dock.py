@@ -1359,8 +1359,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # False flag prevents layer being added to legend
         registry.addMapLayer(new_layer, False)
         index = self.layer_legend_index(existing_layer)
-        LOGGER.info('Inserting layer %s at position %s' % (
-            new_layer.source(), index))
+        # LOGGER.info('Inserting layer %s at position %s' % (
+        #     new_layer.source(), index))
         root = QgsProject.instance().layerTreeRoot()
         root.insertLayer(index, new_layer)
 
@@ -1717,7 +1717,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 InvalidParameterError,
                 NoKeywordsFoundError,
                 AttributeError), e:
-            LOGGER.info(e.message)
+            # LOGGER.info(e.message)
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
             if active_layer is None:

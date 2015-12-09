@@ -694,8 +694,8 @@ class Plugin(object):
         registry.addMapLayer(layer, False)
         root = QgsProject.instance().layerTreeRoot()
         index = len(root.findLayers()) + 1
-        LOGGER.info('Inserting layer %s at position %s' % (
-            layer.source(), index))
+        # LOGGER.info('Inserting layer %s at position %s' % (
+        #    layer.source(), index))
         root.insertLayer(index, layer)
         QgsMapLayerRegistry.instance().addMapLayer(layer)
 

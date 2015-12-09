@@ -172,9 +172,9 @@ def check_memory_usage(buffered_geo_extent, cell_size):
         message.add(suggestion_heading)
         message.add(suggestion)
         send_message(message)
-        LOGGER.info(message.to_text())
+        # LOGGER.info(message.to_text())
         return False
 
     send_message(message)
-    LOGGER.info(message.to_text())
+    # LOGGER.info(message.to_text())
     return True
