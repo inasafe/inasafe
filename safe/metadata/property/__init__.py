@@ -27,3 +27,4 @@ from safe.metadata.property.dictionary_property import DictionaryProperty
 from safe.metadata.property.integer_property import IntegerProperty
 from safe.metadata.property.boolean_property import BooleanProperty
 from safe.metadata.property.float_property import FloatProperty
+from safe.metadata.property.list_property import ListProperty
