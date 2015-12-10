@@ -139,6 +139,9 @@ def write_read_iso_19115_metadata(layer_uri, keywords, keyword=None):
     write_iso19115_metadata(layer_uri, keywords)
     iso_19115_keywords = read_iso19115_metadata(layer_uri)
     temp_keywords = keywords.copy()
+    # if there is no keyword_version, assume it the latest.
+    if 'keyword_version' not in temp_keywords.keys():
+        temp_keywords['keyword_version'] = inasafe_keyword_version
     if (temp_keywords != iso_19115_keywords):
         missing_keywords = {}
         missing_keys = set(keywords.keys()) - set(iso_19115_keywords.keys())
