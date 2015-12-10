@@ -104,7 +104,18 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         for k, v in keywords.iteritems():
             message += '%s: %s\n' % (k, v)
         raise MetadataReadError(message)
-    keywords = {x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
+    keywords = {}
+    temp_keywords = {x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
+    included = [
+        'aggregation attribute'
+    ]
+    for key in temp_keywords.iterkeys():
+        if key in included:
+            keywords[key] = temp_keywords[key]
+        else:
+            if temp_keywords[key] is not None:
+                keywords[key] = temp_keywords[key]
+
     if keyword:
         try:
             return keywords[keyword]
