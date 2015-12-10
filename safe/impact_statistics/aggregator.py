@@ -41,7 +41,6 @@ from qgis.analysis import QgsZonalStatistics
 # pylint: enable=no-name-in-module
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QSettings
-
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.utilities import (
     calculate_polygon_centroid,
@@ -81,7 +80,6 @@ from safe.common.exceptions import (
     InsufficientParametersError)
 from safe_extras.pydispatch import dispatcher
 
-
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
@@ -92,6 +90,8 @@ LOGGER = logging.getLogger('InaSAFE')
 # it can import processing (from QGIS / sextante),
 # pylint: disable=F0401
 from processing.core.Processing import Processing
+
+
 # pylint: enable=F0401
 
 
@@ -578,7 +578,7 @@ class Aggregator(QtCore.QObject):
         else:
             message = self.tr(
                 '%s is %s but it should be either vector or raster') % (
-                    qgis_impact_layer.name(), qgis_impact_layer.type())
+                          qgis_impact_layer.name(), qgis_impact_layer.type())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
@@ -761,7 +761,7 @@ class Aggregator(QtCore.QObject):
                 QgsField(self._count_field_name(), QtCore.QVariant.Double),
                 QgsField(self.sum_field_name(), QtCore.QVariant.Double),
                 QgsField(self._mean_field_name(), QtCore.QVariant.Double)
-                ]
+            ]
             provider.addAttributes(fields)
             self.layer.updateFields()
 
@@ -1028,8 +1028,8 @@ class Aggregator(QtCore.QObject):
             # Total impacted length in the aggregation polygons:
             total = {
                 feature_id: 0 for feature_id, __ in enumerate(
-                    self.layer.getFeatures(request))
-            }
+                self.layer.getFeatures(request))
+                }
 
             # Create slots for dicts
             self.impact_layer_attributes = []
@@ -1233,9 +1233,9 @@ class Aggregator(QtCore.QObject):
         self.attributes = {}
         self.attributes[self.get_default_keyword(
             'AGGR_ATTR_KEY')] = (
-                self.read_keywords(
-                    self.layer,
-                    self.get_default_keyword('AGGR_ATTR_KEY')))
+            self.read_keywords(
+                self.layer,
+                self.get_default_keyword('AGGR_ATTR_KEY')))
 
         female_ratio_key = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
         female_ratio_attribute = self.read_keywords(
@@ -1659,11 +1659,17 @@ class Aggregator(QtCore.QObject):
         try:
             self.update_keywords(
                 self.layer,
-                {self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name})
+                {
+                    self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name,
+                    'layer_purpose': 'aggregation'
+                })
         except InvalidParameterError:
             self.write_keywords(
                 self.layer,
-                {self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name})
+                {
+                    self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name,
+                    'layer_purpose': 'aggregation'
+                })
         except (UnsupportedProviderError, KeywordDbError), e:
             raise e
         return self.layer
@@ -1711,7 +1717,7 @@ class Aggregator(QtCore.QObject):
                 self.tr(
                     'No "target_field" keyword found in the impact layer %s '
                     'keywords. The impact function should define this.') % (
-                        impact_layer.name()))
+                    impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
             return False
@@ -1723,7 +1729,7 @@ class Aggregator(QtCore.QObject):
                 self.tr('No attribute "%s" was found in the attribute table '
                         'for layer "%s". The impact function must define this'
                         ' attribute for postprocessing to work.') % (
-                            self.target_field, impact_layer.name()))
+                    self.target_field, impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
             return False
