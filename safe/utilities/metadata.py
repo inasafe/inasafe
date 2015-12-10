@@ -104,6 +104,7 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         for k, v in keywords.iteritems():
             message += '%s: %s\n' % (k, v)
         raise MetadataReadError(message)
+    keywords = {x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
     if keyword:
         try:
             return keywords[keyword]

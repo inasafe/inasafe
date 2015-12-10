@@ -33,7 +33,10 @@ from safe.common.exceptions import (
 )
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
-from safe.utilities.metadata import read_iso19115_metadata
+from safe.utilities.metadata import (
+    read_iso19115_metadata,
+    write_read_iso_19115_metadata
+)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import read_file_keywords
 
@@ -229,6 +232,7 @@ def load_layer(layer_path):
     try:
         try:
             keywords = read_file_keywords(layer_path)
+            keywords = write_read_iso_19115_metadata(layer_path, keywords)
         except:
             try:
                 keywords = read_iso19115_metadata(layer_path)
