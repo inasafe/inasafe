@@ -1,3 +1,5 @@
+keyword_version: 3.2
+layer_purpose: impact
 statistics_classes: [0, 1, 2]
 statistics_type: class_count
 title: aggregation_test_impact_vector_small
