@@ -84,16 +84,33 @@ class PopulationExposureReportMixin(ReportMixin):
         message = m.Message(style_class='container')
         message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
+        checklist.add(tr('Which group or population is most affected?'))
+        checklist.add(
+            tr('Who are the vulnerable people in the population and why?'))
         checklist.add(tr('How will warnings be disseminated?'))
+        checklist.add(tr('What are people/s likely movements?'))
+        checklist.add(
+            tr('What are the security factors for the affected population?'))
+        checklist.add(
+            tr('What are the security factors for relief responders?'))
         checklist.add(tr('How will we reach evacuated people?'))
+        checklist.add(
+            tr('What kind of food does the population normally consume?'))
+        checklist.add(
+            tr('What are the critical non-food items required by the affected '
+               'population?'))
         checklist.add(tr(
-            'Are there enough shelters and relief items available '
+            'Are there enough water supply, sanitation, hygiene, food, shelter, '
+            'medicines and relief items available '
             'for %s people?' % self.total_evacuated))
         checklist.add(tr(
             'If yes, where are they located and how will we distribute them?'))
         checklist.add(tr(
-            'If no, where can we obtain additional relief items from '
-            'and how will we transport them to here?'))
+            'If no, where can we obtain additional relief items and how will '
+            'we distribute them?'))
+        checklist.add(tr('What are the related health risks?'))
+        checklist.add(
+            tr('Who are the key people responsible for coordination?'))
         message.add(checklist)
         return message
 
