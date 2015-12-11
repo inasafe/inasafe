@@ -45,9 +45,8 @@ class KeywordIOTest(unittest.TestCase):
         self.sqlite_layer = QgsVectorLayer(
             uri.uri(), 'OSM Buildings', 'spatialite')
         self.expected_sqlite_keywords = {
-            'category': 'exposure',
-            'datatype': 'OSM',
-            'subcategory': 'building'}
+            'datatype': 'OSM'
+        }
 
         # Raster Layer keywords
         hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
