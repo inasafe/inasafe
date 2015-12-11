@@ -1,14 +1,8 @@
 #!/bin/bash
 echo "Export the plugin to a zip with no .git folder"
-if test -z "$1"
-then
-  echo "usage: $0 <new version>"
-  echo "e.g. : $0 0.3.0"
-  exit
-fi
+echo "And build a windows installer" 
 
-VERSION=$1
-
+VERSION=`cat metadata.txt | grep ^version | sed 's/version=//g'`
 # TODO
 #replace _type_ = 'alpha' or 'beta' with final
 
@@ -95,3 +89,19 @@ popd
 echo "Your plugin archive has been generated as"
 ls -lah ${OUT}
 echo "${OUT}"
+
+# For nsis installer
+brew install rpl
+brew install makensis
+cp scripts/windows-install-builder.nsi scripts/build.nsi
+rpl "[[VERSION]]" "${VERSION}" scripts/build.nsi
+mv /tmp/${WORKDIR} /tmp/nsis-data
+makensis scripts/build.nsi
+rm scripts/build.nsi
+mv scripts/*.exe /tmp
+echo "NSIS Installer created in /tmp/"
+ls /tmp/InaSAFE*.exe
+
+
+make test-translations
+make pep8

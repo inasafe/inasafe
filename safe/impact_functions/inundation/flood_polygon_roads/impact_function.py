@@ -108,8 +108,8 @@ class FloodPolygonRoadsFunction(
             #     ''' % (affected_field, ))
             # raise GetDataError(message)
 
-        LOGGER.info('Affected field: %s' % self.hazard_class_attribute)
-        LOGGER.info('Affected field index: %s' % affected_field_index)
+        # LOGGER.info('Affected field: %s' % self.hazard_class_attribute)
+        # LOGGER.info('Affected field index: %s' % affected_field_index)
 
         # Filter geometry and data using the extent
         requested_extent = QgsRectangle(*self.requested_extent)

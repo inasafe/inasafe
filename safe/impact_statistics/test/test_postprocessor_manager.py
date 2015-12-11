@@ -114,7 +114,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         expected_count += 2
         after_count = len(CANVAS.layers())
 
-        LOGGER.info("Canvas list after:\n %s" % canvas_list())
+        # LOGGER.info("Canvas list after:\n %s" % canvas_list())
         message = (
             'Expected %s items in canvas, got %s' %
             (expected_count, after_count))
