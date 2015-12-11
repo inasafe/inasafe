@@ -32,6 +32,7 @@ from safe.metadata.property import (
     BooleanProperty,
     FloatProperty,
     ListProperty,
+    TupleProperty,
 )
 
 # XML to python types conversions
@@ -44,6 +45,7 @@ TYPE_CONVERSIONS = {
     'gco:Boolean': BooleanProperty,
     'gco:Float': FloatProperty,
     'gco:List': ListProperty,
+    'gco:Tuple': TupleProperty,
 }
 
 # XML Namespaces

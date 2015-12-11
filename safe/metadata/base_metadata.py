@@ -167,7 +167,14 @@ class BaseMetadata(object):
             'gmd:supplementalInformation/'
             'inasafe/'
             '%s/'
-            'gco:Boolean' % multipart_polygon_key)
+            'gco:Boolean' % multipart_polygon_key),
+        'resolution': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'resolution/'
+            'gco:Tuple')
     }
 
     def __getattr__(self, name):
