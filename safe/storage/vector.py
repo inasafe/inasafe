@@ -433,7 +433,7 @@ class Vector(Layer):
         # Look for any keywords
         try:
             self.keywords = read_iso19115_metadata(filename)
-        except NoKeywordsFoundError:
+        except (NoKeywordsFoundError, MetadataReadError):
             keywords = read_keywords(base_name + '.keywords')
             self.keywords = write_read_iso_19115_metadata(filename, keywords)
 

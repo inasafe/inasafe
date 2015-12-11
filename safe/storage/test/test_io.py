@@ -361,7 +361,7 @@ class TestIO(unittest.TestCase):
         V = read_layer(filename)
 
         # Add some additional keywords
-        V.keywords['keyword_version'] = '3.3'
+        V.keywords['keyword_version'] = '3.2'
         V.keywords['title'] = 'test'
 
         # Check string representation of vector class
