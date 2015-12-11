@@ -35,11 +35,8 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class FileDownloader(object):
     """The blueprint for downloading file from url."""
-    def __init__(self, manager, url, output_path, progress_dialog=None):
+    def __init__(self, url, output_path, progress_dialog=None):
         """Constructor of the class.
-
-        :param manager: QNetworkAccessManager instance to handle downloading.
-        :type manager: QNetworkAccessManager
 
         :param url: URL of file.
         :type url: str
@@ -51,7 +48,8 @@ class FileDownloader(object):
         :type progress_dialog: QWidget
 
         """
-        self.manager = manager
+        # noinspection PyArgumentList
+        self.manager = qgis.core.QgsNetworkAccessManager.instance()
         self.url = QUrl(url)
         self.output_path = output_path
         self.progress_dialog = progress_dialog
