@@ -168,15 +168,6 @@ class RoadExposureReportMixin(ReportMixin):
         message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
         checklist.add(tr(
-            'Try to Identify which potential roads that able to '
-            'access for evacuation and logistic distribution purpose. '
-            'What type of transportation reliable to use in that order?'))
-        checklist.add(tr(
-            'Identify what equipment needed to open access of '
-            'affected roads. Where the resources or equipment to open '
-            'access affected roads located? who/what department '
-            'responsible to mobilize?'))
-        checklist.add(tr(
             'Which roads can be used to evacuate people or to '
             'distribute logistics?'))
         checklist.add(tr(
