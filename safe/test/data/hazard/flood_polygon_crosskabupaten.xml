@@ -217,6 +217,9 @@
           <layer_purpose>
             <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>
+          <resolution>
+            <gco:Tuple/>
+          </resolution>
           <layer_mode>
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>

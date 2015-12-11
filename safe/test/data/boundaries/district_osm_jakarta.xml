@@ -220,6 +220,9 @@
           <female_ratio_default>
             <gco:Float/>
           </female_ratio_default>
+          <resolution>
+            <gco:Tuple/>
+          </resolution>
           <layer_mode>
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>

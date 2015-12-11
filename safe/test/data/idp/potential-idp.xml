@@ -196,6 +196,9 @@
           <layer_purpose>
             <gco:CharacterString>idp</gco:CharacterString>
           </layer_purpose>
+          <resolution>
+            <gco:Tuple/>
+          </resolution>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>

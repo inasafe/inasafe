@@ -199,6 +199,9 @@
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
+          <resolution>
+            <gco:Tuple/>
+          </resolution>
           <structure_class_field>
             <gco:CharacterString/>
           </structure_class_field>
