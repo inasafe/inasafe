@@ -828,6 +828,7 @@ class Vector(Layer):
         # Write keywords if any
         # write_keywords(self.keywords, base_name + '.keywords')
         write_iso19115_metadata(filename, self.keywords)
+        self.keywords = read_iso19115_metadata(filename)
 
         # FIXME (Ole): Maybe store style_info
 
