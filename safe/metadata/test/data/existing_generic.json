@@ -155,6 +155,16 @@
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:resourceConstraints/gmd:MD_Constraints/gmd:useLimitation/gco:CharacterString"
     },
+    "multipart_polygon": {
+      "allowed_python_types": [
+        "bool",
+        "NoneType"
+      ],
+      "name": "multipart_polygon",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/multipart_polygon/gco:Boolean"
+    },
     "organisation": {
       "allowed_python_types": [
         "str",
@@ -180,6 +190,16 @@
       "python_type": "unicode",
       "value": "My super report",
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/report/gco:CharacterString"
+    },
+    "resolution": {
+      "allowed_python_types": [
+        "tuple",
+        "NoneType"
+      ],
+      "name": "resolution",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/resolution/gco:Tuple"
     },
     "scale": {
       "allowed_python_types": [

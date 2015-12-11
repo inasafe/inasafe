@@ -169,15 +169,25 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <exposure_title>
+          <statistics_type>
             <gco:CharacterString/>
-          </exposure_title>
+          </statistics_type>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
           <map_title>
             <gco:CharacterString/>
           </map_title>
+          <impact_table>
+            <gco:List/>
+            <gco:CharacterString/>
+          </impact_table>
           <scale>
             <gco:CharacterString/>
           </scale>
+          <exposure_title>
+            <gco:CharacterString/>
+          </exposure_title>
           <elapsed_time>
             <gco:Integer/>
           </elapsed_time>
@@ -229,9 +239,9 @@
           <layer_purpose>
             <gco:CharacterString/>
           </layer_purpose>
-          <impact_table>
-            <gco:CharacterString/>
-          </impact_table>
+          <resolution>
+            <gco:Tuple/>
+          </resolution>
           <layer_mode>
             <gco:CharacterString/>
           </layer_mode>

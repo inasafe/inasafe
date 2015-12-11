@@ -308,6 +308,16 @@
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/map_title/gco:CharacterString"
     },
+    "multipart_polygon": {
+      "allowed_python_types": [
+        "bool",
+        "NoneType"
+      ],
+      "name": "multipart_polygon",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/multipart_polygon/gco:Boolean"
+    },
     "organisation": {
       "allowed_python_types": [
         "str",
@@ -347,6 +357,16 @@
       "value": "My super report",
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/report/gco:CharacterString"
     },
+    "resolution": {
+      "allowed_python_types": [
+        "tuple",
+        "NoneType"
+      ],
+      "name": "resolution",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/resolution/gco:Tuple"
+    },
     "scale": {
       "allowed_python_types": [
         "str",
@@ -372,6 +392,29 @@
       "python_type": "NoneType",
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/source/gco:CharacterString"
+    },
+    "statistics_classes": {
+      "allowed_python_types": [
+        "list",
+        "NoneType"
+      ],
+      "name": "statistics_classes",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/impact_table/gco:List"
+    },
+    "statistics_type": {
+      "allowed_python_types": [
+        "str",
+        "unicode",
+        "int",
+        "float",
+        "NoneType"
+      ],
+      "name": "statistics_type",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/statistics_type/gco:CharacterString"
     },
     "target_field": {
       "allowed_python_types": [
