@@ -585,10 +585,14 @@ class TestIO(unittest.TestCase):
 
         v = Vector(geometry=test_data[0], geometry_type='point')
         assert v.is_point_data
+        # The layer is never been writen, so the keyword_version is missing
+        v.keywords = v_ref.keywords
         assert v_ref == v
 
         v = Vector(geometry=test_data[0], geometry_type=1)
         assert v.is_point_data
+        # The layer is never been writen, so the keyword_version is missing
+        v.keywords = v_ref.keywords
         assert v_ref == v
 
         # Line data
@@ -607,6 +611,8 @@ class TestIO(unittest.TestCase):
                               rtol=1.0e-12, atol=1.0e-12)
 
         v = Vector(geometry=test_data, geometry_type=2)
+        # The layer is never been writen, so the keyword_version is missing
+        v.keywords = v_ref.keywords
         assert v == v_ref
 
         # Polygon data
@@ -625,9 +631,13 @@ class TestIO(unittest.TestCase):
                               rtol=1.0e-12, atol=1.0e-12)
 
         v = Vector(geometry=test_data, geometry_type='polygon')
+        # The layer is never been writen, so the keyword_version is missing
+        v.keywords = v_ref.keywords
         assert v == v_ref
 
         v = Vector(geometry=test_data, geometry_type=3)
+        # The layer is never been writen, so the keyword_version is missing
+        v.keywords = v_ref.keywords
         assert v == v_ref
 
     def test_polygons_with_inner_rings(self):
