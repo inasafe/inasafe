@@ -53,6 +53,7 @@ from PyQt4.QtGui import (
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
+import safe.definitions
 from safe.definitions import (
     inasafe_keyword_version,
     inasafe_keyword_version_key,
@@ -2880,11 +2881,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         imfunc = self.selected_function()
         lay_req = imfunc['layer_requirements'][layer_purpose]
 
-        if layer_purpose == 'hazard':
+        if layer_purpose == layer_purpose_hazard['key']:
             layer_purpose_key_name = layer_purpose_hazard['name']
             req_subcategory = h['key']
             req_geometry = hc['key']
-        elif layer_purpose == 'exposure':
+        elif layer_purpose == layer_purpose_exposure['key']:
             layer_purpose_key_name = layer_purpose_exposure['name']
             req_subcategory = e['key']
             req_geometry = ec['key']
@@ -2892,7 +2893,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer_purpose_key_name = layer_purpose_aggregation['name']
             req_subcategory = ''
             # For aggregation layers, only accept polygons
-            req_geometry = 'polygon'
+            req_geometry = layer_geometry_polygon['key']
         req_layer_mode = lay_req['layer_mode']['key']
 
         lay_geometry = self.get_layer_geometry_id(layer)
@@ -2918,7 +2919,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Classification
         classification_row = ''
         if (lay_req['layer_mode'] == layer_mode_classified and
-                layer_purpose == 'hazard'):
+                layer_purpose == layer_purpose_hazard['key']):
             # Determine the keyword key for the classification
             classification_obj = (raster_hazard_classification
                                   if is_raster_layer(layer)
@@ -2988,10 +2989,13 @@ class WizardDialog(QDialog, FORM_CLASS):
                 %s
             </table>
         ''' % (self.tr('Layer'), self.tr('Required'),
-               self.tr('Geometry'), lay_geometry, req_geometry,
-               self.tr('Purpose'), lay_purpose, layer_purpose,
+               safe.definitions.layer_geometry['name'],
+               lay_geometry, req_geometry,
+               safe.definitions.layer_purpose['name'],
+               lay_purpose, layer_purpose,
                layer_purpose_key_name, lay_subcategory, req_subcategory,
-               self.tr('Layer mode'), lay_layer_mode, req_layer_mode,
+               safe.definitions.layer_mode['name'],
+               lay_layer_mode, req_layer_mode,
                classification_row,
                units_row)
         return html
