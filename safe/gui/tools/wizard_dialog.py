@@ -1270,6 +1270,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             unique_values = numpy.unique(numpy.array(
                 ds.GetRasterBand(1).ReadAsArray()))
             field_type = 0
+            # Convert datatype to a json serializable type
+            if numpy.issubdtype(unique_values.dtype, float):
+                unique_values = [float(i) for i in unique_values]
+            else:
+                unique_values = [int(i) for i in unique_values]
         else:
             field = self.selected_field()
             field_index = self.layer.dataProvider().fields().indexFromName(
