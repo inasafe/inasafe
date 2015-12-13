@@ -1098,7 +1098,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Exit if no selection
         if not field:
             return
-
         fields = self.layer.dataProvider().fields()
         field_index = fields.indexFromName(field)
         # Exit if the selected field comes from a previous wizard run
@@ -1837,6 +1836,15 @@ class WizardDialog(QDialog, FORM_CLASS):
     # STEP_KW_SOURCE
     # ===========================
 
+    # noinspection PyPep8Naming
+    def on_ckbSource_date_toggled(self, state):
+        """This is an automatic Qt slot executed when the checkbox is toggled
+
+        :param state: the new state
+        :type state: boolean
+        """
+        self.dtSource_date.setEnabled(state)
+
     def set_widgets_step_kw_source(self):
         """Set widgets on the Source tab."""
         # Just set values based on existing keywords
@@ -1854,10 +1862,12 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         source_date = self.get_existing_keyword('date')
         if source_date:
+            self.ckbSource_date.setChecked(True)
             self.dtSource_date.setDateTime(
                 QDateTime.fromString(get_unicode(source_date),
                                      'dd-MM-yyyy HH:mm'))
         else:
+            self.ckbSource_date.setChecked(False)
             self.dtSource_date.clear()
 
         source_url = self.get_existing_keyword('url')
@@ -4475,7 +4485,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['url'] = get_unicode(self.leSource_url.text())
         if self.leSource_scale.text():
             keywords['scale'] = get_unicode(self.leSource_scale.text())
-        if self.dtSource_date.dateTime():
+        if self.ckbSource_date.isChecked():
             keywords['date'] = get_unicode(
                 self.dtSource_date.dateTime().toString('dd-MM-yyyy HH:mm'))
         if self.leSource_license.text():
