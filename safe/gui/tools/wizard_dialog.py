@@ -1099,8 +1099,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             return
 
         fields = self.layer.dataProvider().fields()
+        field_index = fields.indexFromName(field)
+        # Exit if the selected field comes from a previous wizard run
+        if field_index < 0:
+            return
         field_type = fields.field(field).typeName()
-        field_index = fields.indexFromName(self.selected_field())
         unique_values = self.layer.uniqueValues(field_index)[0:48]
         unique_values_str = [i is not None and unicode(i) or 'NULL'
                              for i in unique_values]
@@ -1834,10 +1837,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         source = self.get_existing_keyword('source')
         if source or source == 0:
             self.leSource.setText(get_unicode(source))
+        else:
+            self.leSource.clear()
 
         source_scale = self.get_existing_keyword('scale')
         if source_scale or source_scale == 0:
             self.leSource_scale.setText(get_unicode(source_scale))
+        else:
+            self.leSource_scale.clear()
 
         source_date = self.get_existing_keyword('date')
         if source_date:
@@ -1846,13 +1853,18 @@ class WizardDialog(QDialog, FORM_CLASS):
                                      'dd-MM-yyyy HH:mm'))
         else:
             self.dtSource_date.clear()
+
         source_url = self.get_existing_keyword('url')
         if source_url or source_url == 0:
             self.leSource_url.setText(get_unicode(source_url))
+        else:
+            self.leSource_url.clear()
 
         source_license = self.get_existing_keyword('license')
         if source_license or source_license == 0:
             self.leSource_license.setText(get_unicode(source_license))
+        else:
+            self.leSource_license.clear()
 
     # ===========================
     # STEP_KW_TITLE
