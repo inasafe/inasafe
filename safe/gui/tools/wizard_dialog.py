@@ -1098,6 +1098,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Exit if no selection
         if not field:
             return
+        # Exit if the selected field comes from a previous wizard run (vector)
+        if is_raster_layer(self.layer):
+            return
         fields = self.layer.dataProvider().fields()
         field_index = fields.indexFromName(field)
         # Exit if the selected field comes from a previous wizard run
