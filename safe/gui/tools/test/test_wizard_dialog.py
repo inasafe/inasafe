@@ -655,18 +655,11 @@ class WizardDialogTest(unittest.TestCase):
                    'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
-        message = 'Source should be %s' % source
-        self.assertEqual(dialog.leSource.text(), source, message)
-        message = 'Source Url should be %s' % source_url
-        self.assertEqual(dialog.leSource_url.text(), source_url, message)
-        message = 'Source Scale should be %s' % source_scale
-        self.assertEqual(dialog.leSource_scale.text(), source_scale, message)
-        message = 'Source Date should be %s' % source_date.toString(
-            'dd-MM-yyyy HH:mm')
-        self.assertEqual(dialog.dtSource_date.dateTime(), source_date, message)
-        message = 'Source License should be %s' % source_license
-        self.assertEqual(dialog.leSource_license.text(),
-                         source_license, message)
+        self.assertEqual(dialog.leSource.text(), source)
+        self.assertEqual(dialog.leSource_url.text(), source_url)
+        self.assertEqual(dialog.leSource_scale.text(), source_scale)
+        self.assertEqual(dialog.dtSource_date.dateTime(), source_date)
+        self.assertEqual(dialog.leSource_license.text(), source_license)
         dialog.pbnNext.click()
 
         dialog.pbnCancel.click()
