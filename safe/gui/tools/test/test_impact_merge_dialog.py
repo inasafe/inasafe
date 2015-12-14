@@ -570,7 +570,6 @@ class ImpactMergeDialogTest(unittest.TestCase):
         expected_reports_number = 3
         self.assertEqual(len(report_list), expected_reports_number)
 
-    @unittest.skip
     def test_load_template(self):
         """Test load_template function."""
         self.mock_the_dialog(test_entire_mode=False)
