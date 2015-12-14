@@ -169,37 +169,91 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <scale>
+          <statistics_type>
             <gco:CharacterString/>
-          </scale>
+          </statistics_type>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <datatype>
+          <map_title>
+            <gco:CharacterString>People affected by flood prone areas</gco:CharacterString>
+          </map_title>
+          <impact_table>
+            <gco:List/>
+            <gco:CharacterString>&lt;table class=&quot;table table-striped condensed&quot;&gt; &lt;tbody&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;In the event of &lt;i&gt;banjir jakarta&lt;/i&gt; how many &lt;i&gt;populasi jawa&lt;/i&gt; might &lt;i&gt;need evacuation&lt;/i&gt;&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;People affected&lt;/th&gt;   &lt;th&gt;4,000*&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;2&quot;&gt;* Number is rounded up to the nearest 100&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;People needing evacuation&lt;/th&gt;   &lt;th&gt;40*&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;2&quot;&gt;* Number is rounded up to the nearest 10&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Evacuation threshold&lt;/th&gt;   &lt;th&gt;1%&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Map shows the number of people affected in each flood prone area&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Table below shows the weekly minimum needs for all evacuated people&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Needs should be provided weekly&lt;/th&gt;   &lt;th&gt;Total&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Rice [kg]&lt;/td&gt;   &lt;td&gt;112&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Drinking Water [l]&lt;/td&gt;   &lt;td&gt;700&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Clean Water [l]&lt;/td&gt;   &lt;td&gt;2,680&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Family Kits&lt;/td&gt;   &lt;td&gt;8&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Needs should be provided single&lt;/th&gt;   &lt;th&gt;Total&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Toilets&lt;/td&gt;   &lt;td&gt;2&lt;/td&gt;  &lt;/tr&gt; &lt;/tbody&gt;&lt;/table&gt;</gco:CharacterString>
+          </impact_table>
+          <scale>
             <gco:CharacterString/>
-          </datatype>
-          <keyword_version>
-            <gco:CharacterString>3.2</gco:CharacterString>
-          </keyword_version>
-          <layer_mode>
-            <gco:CharacterString/>
-          </layer_mode>
-          <layer_geometry>
-            <gco:CharacterString/>
-          </layer_geometry>
+          </scale>
+          <exposure_title>
+            <gco:CharacterString>Populasi Jawa</gco:CharacterString>
+          </exposure_title>
+          <elapsed_time>
+            <gco:Integer>0</gco:Integer>
+          </elapsed_time>
           <source>
             <gco:CharacterString/>
           </source>
+          <layer_geometry>
+            <gco:CharacterString/>
+          </layer_geometry>
+          <time_stamp>
+            <gco:CharacterString>2015-03-04_10:14:18</gco:CharacterString>
+          </time_stamp>
+          <hazard_source>
+            <gco:CharacterString>OSM</gco:CharacterString>
+          </hazard_source>
+          <postprocessing_report>
+            <gco:CharacterString>&lt;table class=&quot;table table-condensed table-striped&quot;&gt;&lt;caption&gt;Detailed gender report (affected people)&lt;/caption&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Kab_name&lt;/td&gt;&lt;td&gt;Total&lt;/td&gt;&lt;td&gt;Female count (affected)&lt;/td&gt;&lt;td&gt;Weekly hygiene packs&lt;/td&gt;&lt;td&gt;Additional weekly rice kg for pregnant and lactating women&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JAKARTA BARAT&lt;/td&gt;&lt;td&gt;3,997&lt;/td&gt;&lt;td&gt;1,958&lt;/td&gt;&lt;td&gt;1,554&lt;/td&gt;&lt;td&gt;182&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JAKARTA PúSAT&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JAKARTA UTARA&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Total in aggregation areas&lt;/td&gt;&lt;td&gt;3,997&lt;/td&gt;&lt;td&gt;1,958&lt;/td&gt;&lt;td&gt;1,554&lt;/td&gt;&lt;td&gt;182&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;table class=&quot;table table-condensed table-striped&quot;&gt;&lt;caption&gt;Detailed age report (affected people)&lt;/caption&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Kab_name&lt;/td&gt;&lt;td&gt;Total&lt;/td&gt;&lt;td&gt;Youth count (affected)&lt;/td&gt;&lt;td&gt;Adult count (affected)&lt;/td&gt;&lt;td&gt;Elderly count (affected)&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JAKARTA BARAT&lt;/td&gt;&lt;td&gt;3,997&lt;/td&gt;&lt;td&gt;1,039&lt;/td&gt;&lt;td&gt;2,638&lt;/td&gt;&lt;td&gt;320&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JAKARTA PúSAT&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JAKARTA UTARA&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Total in aggregation areas&lt;/td&gt;&lt;td&gt;3,997&lt;/td&gt;&lt;td&gt;1,039&lt;/td&gt;&lt;td&gt;2,638&lt;/td&gt;&lt;td&gt;320&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;table class=&quot;table table-condensed table-striped&quot;&gt;&lt;caption&gt;Detailed minimum needs report (for people needing evacuation)&lt;/caption&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Kab_name&lt;/td&gt;&lt;td&gt;Rice [kg]&lt;/td&gt;&lt;td&gt;Drinking Water [l]&lt;/td&gt;&lt;td&gt;Clean Water [l]&lt;/td&gt;&lt;td&gt;Family Kits&lt;/td&gt;&lt;td&gt;Toilets&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JAKARTA BARAT&lt;/td&gt;&lt;td&gt;112&lt;/td&gt;&lt;td&gt;700&lt;/td&gt;&lt;td&gt;2,680&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JAKARTA PúSAT&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JAKARTA UTARA&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;td&gt;0&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Total in aggregation areas&lt;/td&gt;&lt;td&gt;112&lt;/td&gt;&lt;td&gt;700&lt;/td&gt;&lt;td&gt;2,680&lt;/td&gt;&lt;td&gt;8&lt;/td&gt;&lt;td&gt;2&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;</gco:CharacterString>
+          </postprocessing_report>
+          <legend_units>
+            <gco:CharacterString>(people per polygon)</gco:CharacterString>
+          </legend_units>
+          <user>
+            <gco:CharacterString>akbar</gco:CharacterString>
+          </user>
           <report>
             <gco:CharacterString/>
           </report>
-          <layer_purpose>
+          <hazard_title>
+            <gco:CharacterString>Banjir Jakarta</gco:CharacterString>
+          </hazard_title>
+          <keyword_version>
+            <gco:CharacterString>3.2</gco:CharacterString>
+          </keyword_version>
+          <legend_title>
+            <gco:CharacterString>Population Count</gco:CharacterString>
+          </legend_title>
+          <legend_notes>
+            <gco:CharacterString>Thousand separator is represented by '.'</gco:CharacterString>
+          </legend_notes>
+          <exposure_source>
+            <gco:CharacterString>AsiaPop</gco:CharacterString>
+          </exposure_source>
+          <datatype>
             <gco:CharacterString/>
+          </datatype>
+          <host_name>
+            <gco:CharacterString>mindpalace</gco:CharacterString>
+          </host_name>
+          <layer_purpose>
+            <gco:CharacterString>impact</gco:CharacterString>
           </layer_purpose>
           <resolution>
             <gco:Tuple/>
           </resolution>
+          <layer_mode>
+            <gco:CharacterString/>
+          </layer_mode>
+          <target_field>
+            <gco:CharacterString>population</gco:CharacterString>
+          </target_field>
+          <impact_summary>
+            <gco:CharacterString>&lt;table class=&quot;table table-striped condensed&quot;&gt; &lt;tbody&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;In the event of &lt;i&gt;banjir jakarta&lt;/i&gt; how many &lt;i&gt;populasi jawa&lt;/i&gt; might &lt;i&gt;need evacuation&lt;/i&gt;&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;People affected&lt;/th&gt;   &lt;th&gt;4,000*&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;2&quot;&gt;* Number is rounded up to the nearest 100&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;People needing evacuation&lt;/th&gt;   &lt;th&gt;40*&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;2&quot;&gt;* Number is rounded up to the nearest 10&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Evacuation threshold&lt;/th&gt;   &lt;th&gt;1%&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Map shows the number of people affected in each flood prone area&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Table below shows the weekly minimum needs for all evacuated people&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Needs should be provided weekly&lt;/th&gt;   &lt;th&gt;Total&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Rice [kg]&lt;/td&gt;   &lt;td&gt;112&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Drinking Water [l]&lt;/td&gt;   &lt;td&gt;700&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Clean Water [l]&lt;/td&gt;   &lt;td&gt;2,680&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Family Kits&lt;/td&gt;   &lt;td&gt;8&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Needs should be provided single&lt;/th&gt;   &lt;th&gt;Total&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Toilets&lt;/td&gt;   &lt;td&gt;2&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th colspan=&quot;100%&quot;&gt;Action Checklist:&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;How will warnings be disseminated?&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;How will we reach stranded people?&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Do we have enough relief items?&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;If yes, where are they located and how will we distribute them?&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;If no, where can we obtain additional relief items from and how will we transport them to here?&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th colspan=&quot;100%&quot;&gt;Notes&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Total population: 7,300&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;People need evacuation if in the area identified as &quot;Flood Prone&quot;&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Minimum needs are defined in BNPB regulation 7/2008&lt;/td&gt;  &lt;/tr&gt; &lt;/tbody&gt;&lt;/table&gt;</gco:CharacterString>
+          </impact_summary>
         </inasafe>
+        <inasafe_provenance>
+</inasafe_provenance>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
   </gmd:identificationInfo>
