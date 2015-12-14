@@ -107,7 +107,11 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     keywords = {}
     temp_keywords = {x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
     included = [
-        'aggregation attribute'
+        'aggregation attribute',
+        'female ratio attribute',
+        'youth ratio attribute',
+        'adult ratio attribute',
+        'elderly ratio attribute',
     ]
     for key in temp_keywords.iterkeys():
         if key in included:
