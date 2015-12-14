@@ -733,12 +733,12 @@ class TestDock(TestCase):
         See also https://github.com/AIFDR/inasafe/issues/58
         """
         layer_path = os.path.join(TESTDATA, 'issue58.tif')
-        layer, layer_type = load_layer(layer_path)
+        layer, layer_purpose = load_layer(layer_path)
         message = (
             'Unexpected category for issue58.tif.\nGot:'
-            ' %s\nExpected: undefined' % layer_type)
+            ' %s\nExpected: undefined' % layer_purpose)
 
-        self.assertTrue(layer_type == 'undefined', message)
+        self.assertTrue(layer_purpose == 'impact', message)
         self.dock.layer_changed(layer)
         self.dock.save_state()
         html = self.dock.state['report']

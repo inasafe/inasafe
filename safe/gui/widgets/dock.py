@@ -1688,7 +1688,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            if 'impact_summary' in keywords:
+            # if 'impact_summary' in keywords:
+            if keywords['layer_purpose'] == 'impact':
                 self.show_impact_keywords(keywords)
                 self.wvResults.impact_path = layer.source()
             else:
