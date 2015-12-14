@@ -85,6 +85,13 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'volcano_name_field/'
             'gco:CharacterString'),
+        'prob_fatality_mag': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'prob_fatality_mag/'
+            'gco:Tuple'),
     }
     _standard_properties = merge_dictionaries(
         GenericLayerMetadata._standard_properties, _standard_properties)

@@ -251,6 +251,13 @@ class ITBFatalityFunction(
         message.add(checklist)
         return message
 
+    def compute_probability(self, total_fatalities_raw):
+        """
+        :param total_fatalities_raw:
+        :return:
+        """
+        return None
+
     def run(self):
         """Indonesian Earthquake Fatality Model."""
         self.validate()
@@ -389,7 +396,8 @@ class ITBFatalityFunction(
             'legend_notes': legend_notes,
             'legend_units': legend_units,
             'legend_title': legend_title,
-            'total_needs': total_needs
+            'total_needs': total_needs,
+            'prob_fatality_mag': prob_fatality_mag,
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
