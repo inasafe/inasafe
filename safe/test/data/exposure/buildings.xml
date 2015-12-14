@@ -169,48 +169,57 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <source>
-            <gco:CharacterString>OpenStreetMap - www.openstreetmap.org</gco:CharacterString>
-          </source>
-          <scale>
-            <gco:CharacterString/>
-          </scale>
-          <layer_mode>
-            <gco:CharacterString>classified</gco:CharacterString>
-          </layer_mode>
-          <exposure_unit>
-            <gco:CharacterString/>
-          </exposure_unit>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <datatype>
+          <area_name_field>
             <gco:CharacterString/>
-          </datatype>
-          <keyword_version>
-            <gco:CharacterString>3.2</gco:CharacterString>
-          </keyword_version>
-          <report>
+          </area_name_field>
+          <area_population_field>
             <gco:CharacterString/>
-          </report>
+          </area_population_field>
+          <exposure_unit>
+            <gco:CharacterString/>
+          </exposure_unit>
+          <source>
+            <gco:CharacterString>OpenStreetMap - www.openstreetmap.org</gco:CharacterString>
+          </source>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
+          <field>
+            <gco:CharacterString/>
+          </field>
+          <scale>
+            <gco:CharacterString/>
+          </scale>
+          <report>
+            <gco:CharacterString/>
+          </report>
+          <exposure>
+            <gco:CharacterString>structure</gco:CharacterString>
+          </exposure>
+          <keyword_version>
+            <gco:CharacterString>3.2</gco:CharacterString>
+          </keyword_version>
+          <datatype>
+            <gco:CharacterString/>
+          </datatype>
+          <structure_class_field>
+            <gco:CharacterString>TYPE</gco:CharacterString>
+          </structure_class_field>
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
           <resolution>
             <gco:Tuple/>
           </resolution>
-          <structure_class_field>
-            <gco:CharacterString>TYPE</gco:CharacterString>
-          </structure_class_field>
+          <layer_mode>
+            <gco:CharacterString>classified</gco:CharacterString>
+          </layer_mode>
           <road_class_field>
             <gco:CharacterString/>
           </road_class_field>
-          <exposure>
-            <gco:CharacterString>structure</gco:CharacterString>
-          </exposure>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>

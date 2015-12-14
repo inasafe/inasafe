@@ -178,9 +178,9 @@
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <continuous_hazard_unit>
-            <gco:CharacterString/>
-          </continuous_hazard_unit>
+          <prob_fatality_mag>
+            <gco:Tuple/>
+          </prob_fatality_mag>
           <volcano_name_field>
             <gco:CharacterString>NAME</gco:CharacterString>
           </volcano_name_field>
@@ -205,6 +205,9 @@
           <report>
             <gco:CharacterString/>
           </report>
+          <continuous_hazard_unit>
+            <gco:CharacterString/>
+          </continuous_hazard_unit>
           <keyword_version>
             <gco:CharacterString>3.2</gco:CharacterString>
           </keyword_version>
