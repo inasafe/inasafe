@@ -1848,7 +1848,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.dtSource_date.clear()
         source_url = self.get_existing_keyword('url')
         if source_url or source_url == 0:
-            self.leSource_url.setText(get_unicode(source_url))
+            self.leSource_url.setText(get_unicode(source_url.toString()))
 
         source_license = self.get_existing_keyword('license')
         if source_license or source_license == 0:
