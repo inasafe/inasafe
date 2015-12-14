@@ -53,6 +53,7 @@ from PyQt4.QtGui import (
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
+import safe.definitions
 from safe.definitions import (
     inasafe_keyword_version,
     inasafe_keyword_version_key,
@@ -1097,10 +1098,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Exit if no selection
         if not field:
             return
-
+        # Exit if the selected field comes from a previous wizard run (vector)
+        if is_raster_layer(self.layer):
+            return
         fields = self.layer.dataProvider().fields()
+        field_index = fields.indexFromName(field)
+        # Exit if the selected field comes from a previous wizard run
+        if field_index < 0:
+            return
         field_type = fields.field(field).typeName()
-        field_index = fields.indexFromName(self.selected_field())
         unique_values = self.layer.uniqueValues(field_index)[0:48]
         unique_values_str = [i is not None and unicode(i) or 'NULL'
                              for i in unique_values]
@@ -1267,6 +1273,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             unique_values = numpy.unique(numpy.array(
                 ds.GetRasterBand(1).ReadAsArray()))
             field_type = 0
+            # Convert datatype to a json serializable type
+            if numpy.issubdtype(unique_values.dtype, float):
+                unique_values = [float(i) for i in unique_values]
+            else:
+                unique_values = [int(i) for i in unique_values]
         else:
             field = self.selected_field()
             field_index = self.layer.dataProvider().fields().indexFromName(
@@ -1828,31 +1839,51 @@ class WizardDialog(QDialog, FORM_CLASS):
     # STEP_KW_SOURCE
     # ===========================
 
+    # noinspection PyPep8Naming
+    def on_ckbSource_date_toggled(self, state):
+        """This is an automatic Qt slot executed when the checkbox is toggled
+
+        :param state: the new state
+        :type state: boolean
+        """
+        self.dtSource_date.setEnabled(state)
+
     def set_widgets_step_kw_source(self):
         """Set widgets on the Source tab."""
         # Just set values based on existing keywords
         source = self.get_existing_keyword('source')
         if source or source == 0:
             self.leSource.setText(get_unicode(source))
+        else:
+            self.leSource.clear()
 
         source_scale = self.get_existing_keyword('scale')
         if source_scale or source_scale == 0:
             self.leSource_scale.setText(get_unicode(source_scale))
+        else:
+            self.leSource_scale.clear()
 
         source_date = self.get_existing_keyword('date')
         if source_date:
+            self.ckbSource_date.setChecked(True)
             self.dtSource_date.setDateTime(
                 QDateTime.fromString(get_unicode(source_date),
                                      'dd-MM-yyyy HH:mm'))
         else:
+            self.ckbSource_date.setChecked(False)
             self.dtSource_date.clear()
+
         source_url = self.get_existing_keyword('url')
         if source_url or source_url == 0:
-            self.leSource_url.setText(get_unicode(source_url.toString()))
+            self.leSource_url.setText(get_unicode(source_url))
+        else:
+            self.leSource_url.clear()
 
         source_license = self.get_existing_keyword('license')
         if source_license or source_license == 0:
             self.leSource_license.setText(get_unicode(source_license))
+        else:
+            self.leSource_license.clear()
 
     # ===========================
     # STEP_KW_TITLE
@@ -2863,11 +2894,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         imfunc = self.selected_function()
         lay_req = imfunc['layer_requirements'][layer_purpose]
 
-        if layer_purpose == 'hazard':
+        if layer_purpose == layer_purpose_hazard['key']:
             layer_purpose_key_name = layer_purpose_hazard['name']
             req_subcategory = h['key']
             req_geometry = hc['key']
-        elif layer_purpose == 'exposure':
+        elif layer_purpose == layer_purpose_exposure['key']:
             layer_purpose_key_name = layer_purpose_exposure['name']
             req_subcategory = e['key']
             req_geometry = ec['key']
@@ -2875,7 +2906,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer_purpose_key_name = layer_purpose_aggregation['name']
             req_subcategory = ''
             # For aggregation layers, only accept polygons
-            req_geometry = 'polygon'
+            req_geometry = layer_geometry_polygon['key']
         req_layer_mode = lay_req['layer_mode']['key']
 
         lay_geometry = self.get_layer_geometry_id(layer)
@@ -2901,7 +2932,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Classification
         classification_row = ''
         if (lay_req['layer_mode'] == layer_mode_classified and
-                layer_purpose == 'hazard'):
+                layer_purpose == layer_purpose_hazard['key']):
             # Determine the keyword key for the classification
             classification_obj = (raster_hazard_classification
                                   if is_raster_layer(layer)
@@ -2971,10 +3002,13 @@ class WizardDialog(QDialog, FORM_CLASS):
                 %s
             </table>
         ''' % (self.tr('Layer'), self.tr('Required'),
-               self.tr('Geometry'), lay_geometry, req_geometry,
-               self.tr('Purpose'), lay_purpose, layer_purpose,
+               safe.definitions.layer_geometry['name'],
+               lay_geometry, req_geometry,
+               safe.definitions.layer_purpose['name'],
+               lay_purpose, layer_purpose,
                layer_purpose_key_name, lay_subcategory, req_subcategory,
-               self.tr('Layer mode'), lay_layer_mode, req_layer_mode,
+               safe.definitions.layer_mode['name'],
+               lay_layer_mode, req_layer_mode,
                classification_row,
                units_row)
         return html
@@ -4454,7 +4488,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['url'] = get_unicode(self.leSource_url.text())
         if self.leSource_scale.text():
             keywords['scale'] = get_unicode(self.leSource_scale.text())
-        if self.dtSource_date.dateTime():
+        if self.ckbSource_date.isChecked():
             keywords['date'] = get_unicode(
                 self.dtSource_date.dateTime().toString('dd-MM-yyyy HH:mm'))
         if self.leSource_license.text():

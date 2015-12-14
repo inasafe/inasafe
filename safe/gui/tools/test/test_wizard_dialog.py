@@ -487,8 +487,8 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(dialog.leSource.text(), '', message)
         message = 'Source Url should be empty'
         self.assertEqual(dialog.leSource_url.text(), '', message)
-        message = 'Source Date should be empty'
-        self.assertTrue(dialog.dtSource_date.dateTime().isNull(), message)
+        message = 'Source Date checkbox should be toggled off'
+        self.assertFalse(dialog.ckbSource_date.isChecked(), message)
         message = 'Source Scale should be empty'
         self.assertEqual(dialog.leSource_scale.text(), '', message)
         dialog.pbnNext.click()
@@ -579,6 +579,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.leSource.setText(source)
         dialog.leSource_scale.setText(source_scale)
         dialog.leSource_url.setText(source_url)
+        dialog.ckbSource_date.setChecked(True)
         dialog.dtSource_date.setDateTime(source_date)
         dialog.leSource_license.setText(source_license)
         dialog.pbnNext.click()  # next
