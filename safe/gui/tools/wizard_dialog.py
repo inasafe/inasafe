@@ -1874,6 +1874,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.dtSource_date.clear()
 
         source_url = self.get_existing_keyword('url')
+        try:
+            source_url = source_url.toString()
+        except AttributeError:
+            pass
+
         if source_url or source_url == 0:
             self.leSource_url.setText(get_unicode(source_url))
         else:
@@ -4430,7 +4435,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type keyword: str
 
         :returns: The value of the keyword.
-        :rtype: str
+        :rtype: str, QUrl
         """
         if self.existing_keywords is None:
             return None
