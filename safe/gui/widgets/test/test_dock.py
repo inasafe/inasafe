@@ -762,13 +762,10 @@ class TestDock(TestCase):
             prefix='tsunami_building_assessment_saved_as_')
         self.dock.save_auxiliary_files(
             layer, join(TESTDATA, '%s.shp' % new_name))
-        new_keywords_filepath = os.path.join(
-            TESTDATA, '%s.keywords' % new_name)
+
         new_xml_filepath = os.path.join(TESTDATA, '%s.xml' % new_name)
 
         message = 'New auxiliary file does not exist : '
-        self.assertTrue(
-            os.path.isfile(new_keywords_filepath), '%s keywords' % message)
         self.assertTrue(os.path.isfile(new_xml_filepath), '%s xml' % message)
 
     def test_layer_saved_as_without_keywords_and_xml(self):
@@ -791,7 +788,8 @@ class TestDock(TestCase):
         message = 'New auxiliary file exist : '
         self.assertFalse(
             os.path.isfile(new_keywords_file_path), '%s keywords' % message)
-        self.assertFalse(os.path.isfile(new_xml_file_path), '%s xml' % message)
+        # Will automatically add xml file for the metadata.
+        self.assertTrue(os.path.isfile(new_xml_file_path), '%s xml' % message)
 
     def test_new_layers_show_in_canvas(self):
         """Check that when we add a layer we can see it in the canvas list."""
