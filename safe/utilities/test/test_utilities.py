@@ -138,7 +138,8 @@ class UtilitiesTest(unittest.TestCase):
 
         keyword_file = test_data_path('other', 'jakarta_flood_design.keywords')
 
-        raster_keyword_path = raster_layer_path.split('.')[0] + '.keywords'
+        raster_keyword_path = (
+            os.path.splitext(raster_layer_path)[0] + '.keywords')
 
         shutil.copy2(keyword_file, raster_keyword_path)
 

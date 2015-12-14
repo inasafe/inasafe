@@ -63,7 +63,7 @@ def write_iso19115_metadata(layer_uri, keywords):
     metadata.update_from_dict({'keyword_version': inasafe_keyword_version})
 
     if metadata.layer_is_file_based:
-        xml_file_path = layer_uri.split('.')[0] + '.xml'
+        xml_file_path = os.path.splitext(layer_uri)[0] + '.xml'
         metadata.write_to_file(xml_file_path)
     else:
         metadata.write_to_db()
@@ -77,7 +77,7 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     :param keyword:
     :return:
     """
-    xml_uri = layer_uri.split('.')[0] + '.xml'
+    xml_uri = os.path.splitext(layer_uri)[0] + '.xml'
     if not os.path.exists(xml_uri):
         xml_uri = None
     if not xml_uri and os.path.exists(layer_uri):
@@ -99,7 +99,8 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     if 'keyword_version' not in keywords.keys() and xml_uri:
         message = 'No keyword version found. Metadata xml file is invalid.\n'
         message += 'Layer uri: %s\n' % layer_uri
-        message += 'Keywords file: %s\n' % os.path.exists(layer_uri.split('.')[0] + '.xml')
+        message += 'Keywords file: %s\n' % os.path.exists(
+            os.path.splitext(layer_uri)[0] + '.xml')
         message += 'keywords:\n'
         for k, v in keywords.iteritems():
             message += '%s: %s\n' % (k, v)
@@ -168,8 +169,8 @@ def write_read_iso_19115_metadata(layer_uri, keywords, keyword=None):
             message += 'old - %s - %s - type: %s\n' % (key, value[0], type(value[0]))
             message += 'new - %s - %s - type: %s\n' % (key, value[1], type(value[1]))
         raise MissingMetadata(message)
-    if os.path.exists(layer_uri.split('.')[0] + '.keywords'):
-        os.remove(layer_uri.split('.')[0] + '.keywords')
+    if os.path.exists(os.path.splitext(layer_uri)[0] + '.keywords'):
+        os.remove(os.path.splitext(layer_uri)[0] + '.keywords')
     if keyword:
         if keyword in iso_19115_keywords.keys():
             return iso_19115_keywords[keyword]
