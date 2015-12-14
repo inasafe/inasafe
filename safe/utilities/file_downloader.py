@@ -38,6 +38,8 @@ class FileDownloader(object):
     def __init__(self, url, output_path, progress_dialog=None):
         """Constructor of the class.
 
+        .. versionchanged:: 3.3 removed manager parameter.
+
         :param url: URL of file.
         :type url: str
 
