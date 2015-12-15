@@ -54,3 +54,6 @@ setup.cfg
 .svn
 .vagrant
 venv
+# This is a temporary working file for building the windows installer that does string replacement on version name
+scripts/build.nsi
+

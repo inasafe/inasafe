@@ -39,7 +39,6 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, pyqtSlot, QSettings, pyqtSignal
 
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.help import show_context_help
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
@@ -66,7 +65,7 @@ from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
     set_vector_categorized_style)
-from safe.impact_statistics.function_options_dialog import (
+from safe.gui.tools.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.common.utilities import temp_dir
 from safe.common.exceptions import ReadLayerError, TemplateLoadingError
@@ -92,6 +91,7 @@ from safe.common.exceptions import (
     InsufficientMemoryWarning)
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
+from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
@@ -636,12 +636,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'valid inputs for a given risk function.'))
         hazard_heading = m.Heading(
             self.tr('Hazard keywords'), **INFO_STYLE)
-        hazard_keywords = self.keyword_io.to_message(
-            hazard_keywords, show_header=False)
+        hazard_keywords = KeywordIO(self.get_hazard_layer()).to_message(
+            show_header=False)
         exposure_heading = m.Heading(
             self.tr('Exposure keywords'), **INFO_STYLE)
-        exposure_keywords = self.keyword_io.to_message(
-            exposure_keywords, show_header=False)
+        exposure_keywords = KeywordIO(self.get_exposure_layer()).to_message(
+            show_header=False)
         message = m.Message(
             heading,
             notes,
@@ -1359,8 +1359,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # False flag prevents layer being added to legend
         registry.addMapLayer(new_layer, False)
         index = self.layer_legend_index(existing_layer)
-        LOGGER.info('Inserting layer %s at position %s' % (
-            new_layer.source(), index))
+        # LOGGER.info('Inserting layer %s at position %s' % (
+        #     new_layer.source(), index))
         root = QgsProject.instance().layerTreeRoot()
         root.insertLayer(index, new_layer)
 
@@ -1515,10 +1515,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Return text to display in report panel
         return report
 
-    @staticmethod
-    def show_help():
-        """Load the help text into the system browser."""
-        show_context_help(context='dock')
+    def show_help(self):
+        """Open the About dialog."""
+        # noinspection PyTypeChecker
+        dialog = HelpDialog(self)
+        dialog.show()
 
     def hide_busy(self):
         """A helper function to indicate processing is done."""
@@ -1579,17 +1580,22 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(False)
 
-    def show_generic_keywords(self, keywords):
+    def show_generic_keywords(self, layer):
         """Show the keywords defined for the active layer.
 
         .. note:: The print button will be disabled if this method is called.
 
-        :param keywords: A keywords dictionary.
-        :type keywords: dict
+        .. versionchanged:: 3.3 - changed parameter from keywords object
+            to a layer object so that we can show extra stuff like CRS and
+            data source in the keywords.
+
+        :param layer: A QGIS layer.
+        :type layer: QgsMapLayer
         """
+        keywords = KeywordIO(layer)
         LOGGER.debug('Showing Generic Keywords')
         self.pbnPrint.setEnabled(False)
-        message = self.keyword_io.to_message(keywords)
+        message = keywords.to_message()
         # noinspection PyTypeChecker
         self.show_static_message(message)
 
@@ -1694,7 +1700,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     compare_result = compare_version(
                         keyword_version, self.inasafe_version)
                     if compare_result == 0:
-                        self.show_generic_keywords(keywords)
+                        self.show_generic_keywords(layer)
                     elif compare_result > 0:
                         # Layer has older version
                         self.show_keyword_version_message(
@@ -1711,7 +1717,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 InvalidParameterError,
                 NoKeywordsFoundError,
                 AttributeError), e:
-            LOGGER.info(e.message)
+            # LOGGER.info(e.message)
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
             if active_layer is None:

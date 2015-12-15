@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 import numpy
 import logging
 
@@ -128,20 +127,50 @@ class ITBFatalityFunction(
         ])
         self.total_fatalities = None
 
-    def fatality_rate(self, mmi):
+    def compute_fatality_rate(self):
         """ITB method to compute fatality rate.
-
-        :param mmi:
         """
         # As per email discussion with Ole, Trevor, Hadi, mmi < 4 will have
         # a fatality rate of 0 - Tim
-        if mmi < 4:
-            return 0
-
+        mmi_range = self.hardcoded_parameters['mmi_range']
         x = self.hardcoded_parameters['x']
         y = self.hardcoded_parameters['y']
-        # noinspection PyUnresolvedReferences
-        return numpy.power(10.0, x * mmi - y)
+        fatality_rate = {mmi: 0 if mmi < 4 else numpy.power(10.0, x * mmi - y)
+                         for mmi in mmi_range}
+        return fatality_rate
+
+    @staticmethod
+    def round_to_sum(prob_array):
+        """
+        Round a list of numbers while maintaining the sum.
+
+        http://stackoverflow.com/questions/792460/
+        how-to-round-floats-to-integers-while-preserving-their-sum
+
+        :param prob_array: array
+        :type prob_array: list(float)
+
+        :returns: A list of rounded numbers whose sum is equal to the
+            sum of the list of input numbers.
+        :rtype: list
+        """
+        nsize = len(prob_array)
+        array_sum = int(numpy.sum(prob_array))
+        floor_array = numpy.floor(prob_array)
+        lower_sum = int(numpy.sum(floor_array))
+        diff_dic = dict(enumerate(prob_array - floor_array))
+
+        difference = array_sum - lower_sum
+
+        if difference > 0:
+            # array is ordered in such a way that the numbers closest to the
+            # next one are at the top.
+            sorted_idx = sorted(diff_dic, key=diff_dic.get)
+            idx_change = [sorted_idx[x] for x in range(nsize-difference, nsize)]
+            floor_array[idx_change] += 1
+
+        assert(array_sum == int(numpy.sum(floor_array)))
+        return list(floor_array)
 
     def action_checklist(self):
         """Action checklist for the itb earthquake fatality report.
@@ -228,6 +257,7 @@ class ITBFatalityFunction(
         self.prepare()
 
         displacement_rate = self.hardcoded_parameters['displacement_rate']
+        fatality_rate = self.compute_fatality_rate()
 
         # Extract data grids
         hazard = self.hazard.layer.get_data()   # Ground Shaking
@@ -240,7 +270,6 @@ class ITBFatalityFunction(
         number_of_exposed = {}
         number_of_displaced = {}
         number_of_fatalities = {}
-
         # Calculate fatality rates for observed Intensity values (hazard
         # based on ITB power model
         mask = numpy.zeros(hazard.shape)
@@ -255,10 +284,11 @@ class ITBFatalityFunction(
 
             # Calculate expected number of fatalities per level
             exposed = numpy.nansum(mmi_matches)
-            fatalities = self.fatality_rate(mmi) * exposed
+            fatalities = fatality_rate[mmi] * exposed
 
             # Calculate expected number of displaced people per level
-            displacements = displacement_rate[mmi] * (exposed - fatalities)
+            displacements = displacement_rate[mmi] * (
+                exposed - numpy.median(fatalities))
 
             # Adjust displaced people to disregard fatalities.
             # Set to zero if there are more fatalities than displaced.
@@ -267,7 +297,7 @@ class ITBFatalityFunction(
 
             # Sum up numbers for map
             # We need to use matrices here and not just numbers #2235
-            mask += mmi_matches * (1 - self.fatality_rate(mmi))   # Displaced
+            mask += displacements   # Displaced
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
@@ -277,8 +307,19 @@ class ITBFatalityFunction(
             number_of_fatalities[mmi] = fatalities
 
         # Total statistics
+        total_fatalities_raw = numpy.nansum(
+            number_of_fatalities.values(), axis=0)
+
+        # Compute probability of fatality in each magnitude bin
+        if (self.__class__.__name__ == 'PAGFatalityFunction') or (
+                self.__class__.__name__ == 'ITBBayesianFatalityFunction'):
+            prob_fatality_mag = self.compute_probability(total_fatalities_raw)
+        else:
+            prob_fatality_mag = None
+
+        # Compute number of fatalities
         self.total_population = numpy.nansum(number_of_exposed.values())
-        self.total_fatalities = numpy.nansum(number_of_fatalities.values())
+        self.total_fatalities = numpy.median(total_fatalities_raw)
         total_displaced = numpy.nansum(number_of_displaced.values())
 
         # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
@@ -341,9 +382,9 @@ class ITBFatalityFunction(
             keywords={
                 'impact_summary': impact_summary,
                 'exposed_per_mmi': number_of_exposed,
+                'prob_fatality_mag': prob_fatality_mag,
                 'total_population': self.total_population,
                 'total_fatalities': population_rounding(self.total_fatalities),
-                'total_fatalities_raw': self.total_fatalities,
                 'fatalities_per_mmi': number_of_fatalities,
                 'total_displaced': population_rounding(total_displaced),
                 'displaced_per_mmi': number_of_displaced,

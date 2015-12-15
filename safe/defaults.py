@@ -205,7 +205,7 @@ def age_postprocessor():
         'vary by region - please consult with your local census bureau to find'
         'out what the relevant threshold is in your region. InaSAFE does not '
         'impose a particular age ratio scheme - it will break down the '
-        'population according to the thresholds you define for your locality.'
+        'population according to the thresholds you define for your locality. '
         'In InaSAFE, people 0-14 years old are defined as "youth". The '
         'default youth ratio is 0.263.'
     )
@@ -223,7 +223,7 @@ def age_postprocessor():
         'bureau to find out what the relevant threshold is in your region. '
         'InaSAFE does not impose a particular age ratio scheme - it will '
         'break down the population according to the thresholds you define '
-        'for your locality.'
+        'for your locality. '
         'In InaSAFE, people 15-64 years old are defined as "adult". The '
         'default adult ratio is 0.659.'
     )
@@ -241,7 +241,7 @@ def age_postprocessor():
         'consult with your local census bureau to find out what the relevant '
         'threshold is in your region. InaSAFE does not impose a particular '
         'age ratio scheme - it will break down the population according to '
-        'the thresholds you define for your locality.'
+        'the thresholds you define for your locality. '
         'In InaSAFE, people 65 years old and over are defined as "elderly". '
         'The default elderly ratio is 0.078.'
     )
