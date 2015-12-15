@@ -276,7 +276,7 @@ class FloodPolygonBuildingFunction(
             raise ZeroImpactException(tr(
                 'No buildings were impacted by this flood.'))
 
-        extra_keywords={
+        extra_keywords = {
             'impact_summary': impact_summary,
             'map_title': map_title,
             'legend_title': legend_title,

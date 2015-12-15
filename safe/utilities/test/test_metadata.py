@@ -6,6 +6,7 @@ from safe.utilities.metadata import (
     read_iso19115_metadata
 )
 
+
 class TestMetadataUtilities(unittest.TestCase):
     """Test for Metadata Utilities module."""
 

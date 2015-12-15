@@ -212,5 +212,3 @@ def read_iso_metadata(keyword_filename):
     metadata = {'keywords': keyword_element.text.split('\n')}
 
     return metadata
-
-

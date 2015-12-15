@@ -240,7 +240,7 @@ class FloodPolygonRoadsFunction(
             raise ZeroImpactException(
                 tr('No roads are flooded in this scenario.'))
 
-        extra_keywords={
+        extra_keywords = {
             'impact_summary': impact_summary,
             'map_title': map_title,
             'legend_title': legend_title,

@@ -61,7 +61,7 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
             'impact': tr('Die or be displaced according ITB bayesian model'),
             'title': tr('Die or be displaced according ITB bayesian model'),
             'function_type': 'old-style',
-            'author': 'ITB and GA', # FIXME
+            'author': 'ITB and GA',  # FIXME
             'date_implemented': 'N/A',
             'overview': tr(
                 'To assess the impact of an earthquake on population based '
@@ -77,7 +77,7 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
                    'Ryu, H. (2015). '
                    'An empirical fatality model for Indonesia based on '
                    'a Bayesian approach. Submitted for Journal of the '
-                   'Geological Society') # FIXME
+                   'Geological Society')  # FIXME
             ],
             'layer_requirements': {
                 'hazard': {

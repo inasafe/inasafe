@@ -165,7 +165,6 @@ class UtilitiesTest(unittest.TestCase):
         }
         self.assertDictEqual(keywords, expected_keywords)
 
-
     def test_compare_version(self):
         """Test for compare_version"""
         assert compare_version("1", "1") == 0

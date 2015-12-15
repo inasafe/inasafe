@@ -46,7 +46,8 @@ class CharacterStringProperty(BaseProperty):
     def xml_value(self):
         if self.python_type is NoneType:
             return ''
-        elif (self.python_type in self.allowed_python_types and self.python_type != unicode):
+        elif (self.python_type in self.allowed_python_types and
+                      self.python_type != unicode):
             return str(self.value)
         elif self.python_type == unicode:
             return unicode(self.value)

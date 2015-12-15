@@ -324,7 +324,8 @@ def read_file_keywords(layer_path, keyword=None):
     # if no keyword was supplied, just return the dict
     if keyword is None:
         if 'keyword_version' in dictionary.keys():
-            dictionary['keyword_version'] = get_string(dictionary['keyword_version'])
+            dictionary['keyword_version'] = get_string(
+                    dictionary['keyword_version'])
         return dictionary
     if keyword not in dictionary:
         message = tr('No value was found in file %s for keyword %s' % (

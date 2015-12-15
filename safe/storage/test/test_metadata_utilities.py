@@ -117,7 +117,6 @@ class TestCase(unittest.TestCase):
             'XML should include today\'s date (%s)' % today)
 
 
-
 if __name__ == '__main__':
     my_suite = unittest.makeSuite(TestCase, 'test')
     runner = unittest.TextTestRunner(verbosity=2)

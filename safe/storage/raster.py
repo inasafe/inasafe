@@ -447,9 +447,9 @@ class Raster(Layer):
         if scaling is None:
             # Redefine scaling from density keyword if possible
             keywords = self.get_keywords()
-            if ('datatype' in keywords
-                and keywords['datatype']
-                and keywords['datatype'].lower() == 'density'):
+            if ('datatype' in keywords and
+                    keywords['datatype'] and
+                        keywords['datatype'].lower() == 'density'):
                 scaling = True
             else:
                 scaling = False

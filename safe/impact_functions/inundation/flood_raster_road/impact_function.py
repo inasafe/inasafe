@@ -502,7 +502,7 @@ class FloodRasterRoadsFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
-        extra_keywords={
+        extra_keywords = {
             'impact_summary': impact_summary,
             'map_title': map_title,
             'legend_title': legend_title,

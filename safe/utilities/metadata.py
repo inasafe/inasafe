@@ -95,7 +95,9 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         metadata = ImpactLayerMetadata(layer_uri, xml_uri)
 
     # dictionary comprehension
-    keywords = {x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems() if x[1]['value'] is not None}
+    keywords = {
+        x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()
+        if x[1]['value'] is not None}
     if 'keyword_version' not in keywords.keys() and xml_uri:
         message = 'No keyword version found. Metadata xml file is invalid.\n'
         message += 'Layer uri: %s\n' % layer_uri
@@ -106,7 +108,8 @@ def read_iso19115_metadata(layer_uri, keyword=None):
             message += '%s: %s\n' % (k, v)
         raise MetadataReadError(message)
     keywords = {}
-    temp_keywords = {x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
+    temp_keywords = {
+        x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
     included = [
         'aggregation attribute',
         'female ratio attribute',
@@ -166,8 +169,10 @@ def write_read_iso_19115_metadata(layer_uri, keywords, keyword=None):
                     different_values[key] = (
                         keywords[key], iso_19115_keywords[key])
         for key, value in different_values.iteritems():
-            message += 'old - %s - %s - type: %s\n' % (key, value[0], type(value[0]))
-            message += 'new - %s - %s - type: %s\n' % (key, value[1], type(value[1]))
+            message += 'old - %s - %s - type: %s\n' % (
+                key, value[0], type(value[0]))
+            message += 'new - %s - %s - type: %s\n' % (
+                key, value[1], type(value[1]))
         raise MissingMetadata(message)
     if os.path.exists(os.path.splitext(layer_uri)[0] + '.keywords'):
         os.remove(os.path.splitext(layer_uri)[0] + '.keywords')

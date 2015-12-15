@@ -192,7 +192,6 @@ class KeywordIO(QObject):
         # except:
         #     raise
 
-
     def update_keywords(self, layer, keywords):
         """Update keywords for a datasource.
 

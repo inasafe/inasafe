@@ -193,7 +193,7 @@ class FloodRasterBuildingFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
-        extra_keywords={
+        extra_keywords = {
             'impact_summary': impact_summary,
             'impact_table': impact_table,
             'target_field': self.target_field,
