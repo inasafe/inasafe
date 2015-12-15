@@ -129,17 +129,22 @@ class FileDownloader(object):
         result = self.reply.error()
         if result == QNetworkReply.NoError:
             return True, None
+
         elif result == QNetworkReply.UnknownNetworkError:
             return False, tr(
                 'The network is unreachable. Please check your internet '
                 'connection.')
-        elif result == QNetworkReply.HostNotFoundError:
+
+        elif result == QNetworkReply.ProtocolUnknownError or \
+                result == QNetworkReply.HostNotFoundError:
             LOGGER.exception('Host not found : %s' % self.url.encodedHost())
             return False, tr(
                 'Sorry, the server is unreachable. Please try again later.')
+
         elif result == QNetworkReply.ContentNotFoundError:
             LOGGER.exception('Path not found : %s' % self.url.path())
             return False, tr('Sorry, the layer was not found on the server.')
+
         else:
             return result, self.reply.errorString()
 
