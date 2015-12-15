@@ -64,6 +64,7 @@ class CommandLineArguments(object):
         self.version = arguments_['--version']
         self.show_list = arguments_['--list-functions']
         self.impact_function = arguments_['--impact-function']
+        self.impact = arguments_['--impact']
         self.report_template = arguments_['--report-template']
         # optional arguments
         if not arguments_['--extent'] is None:
@@ -423,6 +424,9 @@ if __name__ == '__main__':
                 run_impact_function(arguments)
             else:
                 print "Download unsuccessful"
+        elif arguments.impact and arguments.output_file is not None:
+            print "Generating report"
+            build_report(arguments)
         else:
             print "Argument combination not recognised"
     except Exception as excp:
