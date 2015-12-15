@@ -45,7 +45,9 @@ from safe.common.exceptions import (
     UnsupportedProviderError)
 from safe.storage.metadata_utilities import (
     generate_iso_metadata,
-    ISO_METADATA_KEYWORD_TAG)
+    ISO_METADATA_KEYWORD_TAG,
+    create_iso19115_metadata,
+    read_iso19115_metadata)
 from safe.common.utilities import verify
 import safe.definitions
 from safe.definitions import (
@@ -116,6 +118,17 @@ class KeywordIO(QObject):
 
         """
         source = layer.source()
+        # Try to get from iso metadata.
+        try:
+            metadata_dict = read_iso19115_metadata(source, keyword)
+            # Need to check if the xml file is valid.
+            # For now, only check if there is layer_purpose.
+            # Next would be check the keyword's version.
+            if metadata_dict['layer_purpose']:
+                return metadata_dict
+        except:
+            pass
+
         try:
             flag = self.are_keywords_file_based(layer)
         except UnsupportedProviderError:
@@ -154,22 +167,30 @@ class KeywordIO(QObject):
 
         :raises: UnsupportedProviderError
         """
-        try:
-            flag = self.are_keywords_file_based(layer)
-        except UnsupportedProviderError:
-            raise
-
         source = layer.source()
+        keywords[inasafe_keyword_version_key] = inasafe_keyword_version
+
         try:
-            keywords[inasafe_keyword_version_key] = inasafe_keyword_version
-            if flag:
-                write_keywords_to_file(source, keywords)
-            else:
-                uri = self.normalize_uri(layer)
-                self.write_keywords_for_uri(uri, keywords)
+            create_iso19115_metadata(source, keywords)
             return
         except:
             raise
+
+        # try:
+        #     flag = self.are_keywords_file_based(layer)
+        # except UnsupportedProviderError:
+        #     raise
+        #
+        # try:
+        #     if flag:
+        #         write_keywords_to_file(source, keywords)
+        #     else:
+        #         uri = self.normalize_uri(layer)
+        #         self.write_keywords_for_uri(uri, keywords)
+        #         create_iso19115_metadata(source, keywords)
+        #     return
+        # except:
+        #     raise
 
     def update_keywords(self, layer, keywords):
         """Update keywords for a datasource.

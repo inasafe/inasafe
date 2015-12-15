@@ -44,6 +44,7 @@ from safe.common.exceptions import (
     InvalidProjectionError,
     InvalidClipGeometryError)
 from safe.utilities.utilities import read_file_keywords
+from safe.storage.metadata_utilities import read_iso19115_metadata
 
 
 LOGGER = logging.getLogger(name='InaSAFE')
@@ -458,7 +459,11 @@ def _clip_raster_layer(
     # FIXME (Ole): Need to deal with it - e.g. by automatically reprojecting
     # the layer at this point and setting the native resolution accordingly
     # in its keywords.
-    keywords = read_file_keywords(keywords_path)
+    from safe.common.exceptions import MetadataReadError
+    try:
+        keywords = read_iso19115_metadata(layer.source())
+    except MetadataReadError:
+        keywords = KeywordIO().read_keywords(layer)
     if 'datatype' in keywords and keywords['datatype'] == 'count':
         if str(layer.crs().authid()) != 'EPSG:4326':
 

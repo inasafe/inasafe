@@ -52,14 +52,14 @@
       "value": null, 
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:abstract/gco:CharacterString"
     }, 
-    "document_date": {
+    "date": {
       "allowed_python_types": [
         "QDate", 
         "datetime", 
         "date", 
         "NoneType"
       ], 
-      "name": "document_date", 
+      "name": "date", 
       "python_type": "NoneType", 
       "value": null, 
       "xml_path": "gmd:dateStamp/gco:Date"

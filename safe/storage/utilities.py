@@ -202,7 +202,7 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     """Read keywords dictionary from file
 
     :param keyword_filename: Name of keywords file. Extension expected to be
-        .keywords or .xml metadata.
+        .keywords
         The format of one line is expected to be either
         string: string or string
     :type keyword_filename: str
@@ -257,7 +257,7 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
     msg = ('Unknown extension for file %s. '
            'Expected %s.keywords or %s.xml' %
            (keyword_filename, basename, basename))
-    verify(ext == '.keywords' or ext == '.xml', msg)
+    verify(ext == '.keywords', msg)
 
     metadata = False
     # check .keywords file exist
@@ -266,13 +266,12 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
 
     try:
         # read the xml metadata first
-        metadata = read_iso_metadata(keyword_filename)
+        # metadata = read_iso_metadata(keyword_filename)
+        with open(keyword_filename) as keyword_file:
+            keyword_string = keyword_file.read()
+        metadata = {'keywords': keyword_string.split('\n')}
     except (IOError, MetadataReadError):
-        # error reading xml metadata or file not exist
-        if keywords_file:
-            # if there is a keyword file generate an xml file also
-            write_keyword_in_iso_metadata(keyword_filename)
-            metadata = read_iso_metadata(keyword_filename)
+        raise IOError
 
     # we have no valid xml metadata nor a keyword file
     if not metadata and not keywords_file:

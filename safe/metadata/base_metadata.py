@@ -25,7 +25,6 @@ from datetime import datetime
 import json
 import os
 from xml.etree import ElementTree
-
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
 from safe.metadata.metadata_db_io import MetadataDbIO
 from safe.metadata.utils import (METADATA_XML_TEMPLATE,
@@ -74,7 +73,7 @@ class BaseMetadata(object):
             'gmd:CI_Address/'
             'gmd:electronicMailAddress/'
             'gco:CharacterString'),
-        'document_date': (
+        'date': (
             'gmd:dateStamp/'
             'gco:Date'),
         'abstract': (
@@ -153,6 +152,13 @@ class BaseMetadata(object):
             'gmd:supplementalInformation/'
             'inasafe/'
             'source/'
+            'gco:CharacterString'),
+        'datatype': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'datatype/'
             'gco:CharacterString')
     }
 
@@ -233,8 +239,10 @@ class BaseMetadata(object):
 
         self._last_update = datetime.now()
 
-        # check if metadata already exist on disk
-        self.read_from_ancillary_file(xml_uri)
+        try:
+            self.read_from_ancillary_file(xml_uri)
+        except IOError:
+            pass
 
     @abc.abstractproperty
     def dict(self):
@@ -647,3 +655,13 @@ class BaseMetadata(object):
         :rtype: bool
         """
         return self._layer_is_file_based
+
+    def update_from_dict(self, keywords):
+        """Set properties of metadata using key and value from keywords
+
+        :param keywords: A dictionary of keywords (key, value).
+        :type keywords: dict
+
+        """
+        for key, value in keywords.iteritems():
+            setattr(self, key, value)

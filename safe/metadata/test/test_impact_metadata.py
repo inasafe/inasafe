@@ -189,3 +189,15 @@ class TestImpactMetadata(TestCase):
             'Title 3', 'Description of step 3', '2015-06-25T13:14:24.508984')
 
         return metadata
+
+    def test_update_from_dict(self):
+        """Test update_from_dict method."""
+        metadata = self.generate_test_metadata()
+        keywords = {
+            'layer_purpose': 'impact_layer',
+            'layer_geometry': 'raster'
+        }
+        metadata.update_from_dict(keywords)
+        self.assertEqual(metadata.layer_purpose, 'impact_layer')
+        self.assertEqual(metadata.layer_geometry, 'raster')
+        self.assertNotEqual(metadata.layer_mode, 'raster')

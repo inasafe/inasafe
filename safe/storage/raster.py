@@ -196,7 +196,12 @@ class Raster(Layer):
                 raise ReadLayerError(msg)
 
         # Look for any keywords
-        self.keywords = read_keywords(basename + '.keywords')
+        from safe.storage.metadata_utilities import read_iso19115_metadata
+        from safe.common.exceptions import MetadataReadError
+        try:
+            self.keywords = read_iso19115_metadata(filename)
+        except MetadataReadError:
+            self.keywords = read_keywords(basename + '.keywords')
 
         # Determine name
         if 'title' in self.keywords:
@@ -307,7 +312,11 @@ class Raster(Layer):
         fid = None  # Close
 
         # Write keywords if any
-        write_keywords(self.keywords, basename + '.keywords')
+        # write_keywords(self.keywords, basename + '.keywords')
+
+        from safe.storage.metadata_utilities import create_iso19115_metadata
+        create_iso19115_metadata(filename, self.keywords)
+
 
     def read_from_qgis_native(self, qgis_layer):
         """Read raster data from qgis layer QgsRasterLayer.
@@ -340,7 +349,9 @@ class Raster(Layer):
             provider.crs())
 
         # Write keywords if any
-        write_keywords(self.keywords, base_name + '.keywords')
+        # write_keywords(self.keywords, base_name + '.keywords')
+        from safe.storage.metadata_utilities import create_iso19115_metadata
+        create_iso19115_metadata(file_name, self.keywords)
         self.read_from_file(file_name)
 
     def as_qgis_native(self):

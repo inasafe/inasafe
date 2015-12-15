@@ -42,6 +42,8 @@ from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
+from safe.definitions import inasafe_keyword_version
+
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -307,20 +309,15 @@ def read_file_keywords(layer_path, keyword=None):
     # priority for iso path first
     keyword_file_path = os.path.splitext(layer_path)[0]
     keyword_file_path += '.keywords'
-    keyword_iso_path = os.path.splitext(layer_path)[0]
-    keyword_iso_path += '.xml'
-    if not os.path.isfile(keyword_file_path)\
-            and not os.path.isfile(keyword_iso_path):
+    if not os.path.isfile(keyword_file_path):
         message = tr('No keywords file found for %s' % keyword_file_path)
         raise NoKeywordsFoundError(message)
-    elif os.path.isfile(keyword_file_path) \
-            and not os.path.isfile(keyword_iso_path):
+    elif os.path.isfile(keyword_file_path):
         # switch to .keywords file if iso xml file didn't exist
-        keyword_iso_path = keyword_file_path
-
+        pass
     # now get the requested keyword using the inasafe library
     try:
-        dictionary = read_keywords(keyword_iso_path)
+        dictionary = read_keywords(keyword_file_path)
     except Exception, e:
         message = tr(
             'Keyword retrieval failed for %s (%s) \n %s' % (
@@ -329,6 +326,8 @@ def read_file_keywords(layer_path, keyword=None):
 
     # if no keyword was supplied, just return the dict
     if keyword is None:
+        if 'keyword_version' in dictionary.keys():
+            dictionary['keyword_version'] = str(dictionary['keyword_version'])
         return dictionary
     if keyword not in dictionary:
         message = tr('No value was found in file %s for keyword %s' % (
@@ -339,6 +338,8 @@ def read_file_keywords(layer_path, keyword=None):
         value = dictionary[keyword]
     except:
         raise
+    if 'keyword_version' == keyword:
+        value = str(value)
     return value
 
 
