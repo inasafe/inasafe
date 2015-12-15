@@ -102,14 +102,18 @@ class BuildingExposureReportMixin(ReportMixin):
         message = m.Message(style_class='container')
         message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
-        checklist.add(tr('Are the critical facilities still open?'))
         checklist.add(tr(
             'Which structures have warning capacity (eg. sirens, speakers, '
             'etc.)?'))
+        checklist.add(
+            tr('Are the water and electricity services still operating?'))
+        checklist.add(tr('Are the health centres still open?'))
+        checklist.add(tr('Are the other public services accessible?'))
         checklist.add(tr('Which buildings will be evacuation centres?'))
         checklist.add(tr('Where will we locate the operations centre?'))
         checklist.add(
             tr('Where will we locate warehouse and/or distribution centres?'))
+        checklist.add(tr('Are the schools and hospitals still active?'))
         if schools_closed > 0:
             checklist.add(tr(
                 'Where will the students from the %s closed schools '
