@@ -70,7 +70,8 @@
         "QDate",
         "datetime",
         "date",
-        "NoneType"
+        "NoneType",
+        "QDateTime"
       ],
       "name": "date",
       "python_type": "NoneType",
