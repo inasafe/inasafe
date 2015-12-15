@@ -1868,7 +1868,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.ckbSource_date.setChecked(True)
             self.dtSource_date.setDateTime(
                 QDateTime.fromString(get_unicode(source_date),
-                                     'dd-MM-yyyy HH:mm'))
+                                     'yyyy-MM-dd HH:mm:ss'))
         else:
             self.ckbSource_date.setChecked(False)
             self.dtSource_date.clear()
@@ -4494,8 +4494,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.leSource_scale.text():
             keywords['scale'] = get_unicode(self.leSource_scale.text())
         if self.ckbSource_date.isChecked():
-            keywords['date'] = get_unicode(
-                self.dtSource_date.dateTime().toString('dd-MM-yyyy HH:mm'))
+            keywords['date'] = self.dtSource_date.dateTime()
         if self.leSource_license.text():
             keywords['license'] = get_unicode(self.leSource_license.text())
         if self.leTitle.text():
