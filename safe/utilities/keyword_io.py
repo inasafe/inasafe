@@ -45,9 +45,6 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     MetadataReadError,
     MissingMetadata)
-from safe.storage.metadata_utilities import (
-    generate_iso_metadata,
-    ISO_METADATA_KEYWORD_TAG)
 from safe.common.utilities import verify
 import safe.definitions
 from safe.definitions import (
@@ -570,8 +567,7 @@ class KeywordIO(QObject):
                 'select dict from keyword where hash = \'%s\';' % hash_value)
             cursor.execute(sql)
             data = cursor.fetchone()
-            metadata_xml = generate_iso_metadata(keywords)
-            pickle_dump = dumps(metadata_xml, HIGHEST_PROTOCOL)
+            pickle_dump = dumps(keywords, HIGHEST_PROTOCOL)
             if data is None:
                 # insert a new rec
                 # cursor.execute('insert into keyword(hash) values(:hash);',
@@ -596,7 +592,7 @@ class KeywordIO(QObject):
         finally:
             self.close_connection()
 
-        return metadata_xml
+        return keywords
 
     def read_keyword_from_uri(self, uri, keyword=None):
         """Get metadata from the keywords file associated with a URI.
@@ -647,27 +643,22 @@ class KeywordIO(QObject):
                 raise HashNotFoundError('No hash found for %s' % hash_value)
             data = data[0]  # first field
 
-            # get the ISO XML out of the DB
-            metadata = loads(str(data))
+            # get the keywords out of the DB
+            keywords = loads(str(data))
 
             # the uri already had a KW entry in the DB using the old KW system
             # we use that dictionary to update the entry to the new ISO based
             # metadata system
-            if isinstance(metadata, dict):
-                metadata = self.write_keywords_for_uri(uri, metadata)
-
-            root = ElementTree.fromstring(metadata)
-            keyword_element = root.find(ISO_METADATA_KEYWORD_TAG)
-            dict_str = keyword_element.text
-            picked_dict = json.loads(dict_str)
+            if isinstance(keywords, dict):
+                keywords = self.write_keywords_for_uri(uri, keywords)
 
             if keyword is None:
-                return picked_dict
-            if keyword in picked_dict:
-                return picked_dict[keyword]
+                return keywords
+            if keyword in keywords:
+                return keywords[keyword]
             else:
                 raise KeywordNotFoundError('Keyword "%s" not found in %s' % (
-                    keyword, picked_dict))
+                    keyword, keywords))
 
         except sqlite.Error, e:
             LOGGER.debug("Error %s:" % e.args[0])

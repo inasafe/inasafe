@@ -198,7 +198,6 @@ class KeywordIOTest(unittest.TestCase):
         self.maxDiff = None
         self.assertDictEqual(keywords, expected_keywords)
 
-    @unittest.skip('We have replaced it with new metadata module.')
     def test_read_db_keywords(self):
         """Can we read sqlite kw with the generic read_keywords method
         """
