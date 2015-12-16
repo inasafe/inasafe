@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from string import Template  # pylint: disable=W0402
 from safe.utilities.resources import resources_path
 
-_xml_file = resources_path('iso_19115_template.xml')
+_xml_file = resources_path('../safe/metadata/iso_19115_template.xml')
 with open(_xml_file) as f:
     _template = f.read()
 
