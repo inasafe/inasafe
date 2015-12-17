@@ -48,6 +48,7 @@ from safe.common.exceptions import (
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
 from safe import messaging as m
+from safe.messaging.utilities import generate_insufficient_overlap_message
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.gis import (
     get_wgs84_resolution,
@@ -55,6 +56,7 @@ from safe.utilities.gis import (
     extent_to_array)
 from safe.utilities.utilities import get_error_message
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
+from safe.utilities.gis import get_optimal_extent
 from safe.messaging import styles
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
@@ -64,7 +66,7 @@ from safe.common.signals import (
     NOT_BUSY_SIGNAL,
     ANALYSIS_DONE_SIGNAL)
 from safe_extras.pydispatch import dispatcher
-from safe.common.exceptions import BoundingBoxError, NoValidLayerError
+from safe.common.exceptions import NoValidLayerError
 from safe.engine.core import calculate_impact
 
 
@@ -289,60 +291,6 @@ class Analysis(object):
             sender=self,
             message='')
 
-    def generate_insufficient_overlap_message(
-            self,
-            e,
-            exposure_geoextent,
-            exposure_layer,
-            hazard_geoextent,
-            hazard_layer,
-            viewport_geoextent):
-        """Generate insufficient overlap message.
-
-        :param e: An exception.
-        :param exposure_geoextent: Extent of the exposure layer.
-
-        :param exposure_layer: Exposure layer.
-        :param hazard_geoextent: Extent of the hazard layer.
-
-        :param hazard_layer:  Hazard layer instance.
-        :param viewport_geoextent: Viewport extents.
-
-        :return: An InaSAFE message object.
-        """
-        description = self.tr(
-            'There was insufficient overlap between the input layers '
-            'and / or the layers and the viewable area. Please select two '
-            'overlapping layers and zoom or pan to them or disable '
-            'viewable area clipping in the options dialog. Full details '
-            'follow:')
-        message = m.Message(description)
-        text = m.Paragraph(
-            self.tr('Failed to obtain the optimal extent given:'))
-        message.add(text)
-        analysis_inputs = m.BulletedList()
-        # We must use Qt string interpolators for tr to work properly
-        analysis_inputs.add(
-            self.tr('Hazard: %s') % (
-                hazard_layer.source()))
-        analysis_inputs.add(
-            self.tr('Exposure: %s') % (
-                exposure_layer.source()))
-        analysis_inputs.add(
-            self.tr('Viewable area Geo Extent: %s') % (
-                str(viewport_geoextent)))
-        analysis_inputs.add(
-            self.tr('Hazard Geo Extent: %s') % (
-                str(hazard_geoextent)))
-        analysis_inputs.add(
-            self.tr('Exposure Geo Extent: %s') % (
-                str(exposure_geoextent)))
-        analysis_inputs.add(
-            self.tr('Details: %s') % (
-                str(e)))
-        message.add(analysis_inputs)
-        return message
-
     def get_clip_parameters(self):
         """Calculate the best extents to use for the assessment.
 
@@ -380,7 +328,7 @@ class Analysis(object):
         # get the current view extents
         viewport_extent = viewport_geo_array(self.map_canvas)
 
-        # Set the anlysis extents based on user's desired behaviour
+        # Set the analysis extents based on user's desired behaviour
         settings = QtCore.QSettings()
         mode_name = settings.value(
             'inasafe/analysis_extents_mode',
@@ -412,13 +360,13 @@ class Analysis(object):
             # always be used, otherwise the data will be clipped to
             # the viewport unless the user has deselected clip to viewport in
             # options.
-            geo_extent = self.get_optimal_extent(
+            geo_extent = get_optimal_extent(
                 hazard_geoextent,
                 exposure_geoextent,
                 analysis_geoextent)
 
         except InsufficientOverlapError, e:
-            message = self.generate_insufficient_overlap_message(
+            message = generate_insufficient_overlap_message(
                 e,
                 exposure_geoextent,
                 exposure_layer,
@@ -540,77 +488,6 @@ class Analysis(object):
             exposure_layer,
             geo_extent,
             hazard_layer)
-
-    def get_optimal_extent(
-            self,
-            hazard_geo_extent,
-            exposure_geo_extent,
-            viewport_geo_extent=None):
-        """A helper function to determine what the optimal extent is.
-
-        Optimal extent should be considered as the intersection between
-        the three inputs. The inasafe library will perform various checks
-        to ensure that the extent is tenable, includes data from both
-        etc.
-
-        This is a thin wrapper around safe.storage.utilities.bbox_intersection
-
-        Typically the result of this function will be used to clip
-        input layers to a common extent before processing.
-
-        :param hazard_geo_extent: An array representing the hazard layer
-            extents in the form [xmin, ymin, xmax, ymax]. It is assumed that
-            the coordinates are in EPSG:4326 although currently no checks are
-            made to enforce this.
-        :type hazard_geo_extent: list
-
-        :param exposure_geo_extent: An array representing the exposure layer
-            extents in the form [xmin, ymin, xmax, ymax]. It is assumed that
-            the coordinates are in EPSG:4326 although currently no checks are
-            made to enforce this.
-        :type exposure_geo_extent: list
-
-        :param viewport_geo_extent: (optional) An array representing the
-            viewport extents in the form [xmin, ymin, xmax, ymax]. It is
-            assumed that the coordinates are in EPSG:4326 although currently
-            no checks are made to enforce this.
-
-            ..note:: We do minimal checking as the inasafe library takes care
-            of it for us.
-
-        :returns: An array containing an extent in the form
-            [xmin, ymin, xmax, ymax]
-            e.g.::
-            [100.03, -1.14, 100.81, -0.73]
-        :rtype: list
-
-        :raises: Any exceptions raised by the InaSAFE library will be
-            propagated.
-        """
-
-        message = self.tr(
-            'theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: '
-            '/ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s' %
-            (hazard_geo_extent, exposure_geo_extent))
-
-        if (hazard_geo_extent is None) or (exposure_geo_extent is None):
-            raise BoundingBoxError(message)
-
-        # .. note:: The bbox_intersection function below assumes that
-        # all inputs are in EPSG:4326
-        optimal_extent = bbox_intersection(
-            hazard_geo_extent, exposure_geo_extent, viewport_geo_extent)
-
-        if optimal_extent is None:
-            # Bounding boxes did not overlap
-            message = self.tr(
-                'Bounding boxes of hazard data, exposure data and viewport '
-                'did not overlap, so no computation was done. Please make '
-                'sure you pan to where the data is and that hazard and '
-                'exposure data overlaps.')
-            raise InsufficientOverlapError(message)
-
-        return optimal_extent
 
     def setup_aggregator(self):
         """Create an aggregator for this analysis run."""
