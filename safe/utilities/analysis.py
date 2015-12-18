@@ -617,6 +617,46 @@ class Analysis(object):
         else:
             raise InvalidAggregationKeywords
 
+        try:
+            self.setup_impact_function()
+        except CallGDALError, e:
+            self.analysis_error(e, self.tr(
+                'An error occurred when calling a GDAL command'))
+            return
+        except IOError, e:
+            self.analysis_error(e, self.tr(
+                'An error occurred when writing clip file'))
+            return
+        except InsufficientOverlapError, e:
+            self.analysis_error(e, self.tr(
+                'An exception occurred when setting up the '
+                'impact calculator.'))
+            return
+        except NoFeaturesInExtentError, e:
+            self.analysis_error(e, self.tr(
+                'An error occurred because there are no features visible in '
+                'the current view. Try zooming out or panning until some '
+                'features become visible.'))
+            return
+        except InvalidProjectionError, e:
+            self.analysis_error(e, self.tr(
+                'An error occurred because you are using a layer containing '
+                'count data (e.g. population count) which will not '
+                'scale accurately if we re-project it from its native '
+                'coordinate reference system to WGS84/GeoGraphic.'))
+            return
+        except MemoryError, e:
+            self.analysis_error(
+                e,
+                self.tr(
+                    'An error occurred because it appears that your '
+                    'system does not have sufficient memory. Upgrading '
+                    'your computer so that it has more memory may help. '
+                    'Alternatively, consider using a smaller geographical '
+                    'area for your analysis, or using rasters with a larger '
+                    'cell size.'))
+            return
+
     def analysis_error(self, exception, message):
         """A helper to spawn an error and halt processing.
 
@@ -830,46 +870,6 @@ class Analysis(object):
 
     def run_analysis(self):
         """It's similar with run function in previous dock.py"""
-        try:
-            self.setup_impact_function()
-        except CallGDALError, e:
-            self.analysis_error(e, self.tr(
-                'An error occurred when calling a GDAL command'))
-            return
-        except IOError, e:
-            self.analysis_error(e, self.tr(
-                'An error occurred when writing clip file'))
-            return
-        except InsufficientOverlapError, e:
-            self.analysis_error(e, self.tr(
-                'An exception occurred when setting up the '
-                'impact calculator.'))
-            return
-        except NoFeaturesInExtentError, e:
-            self.analysis_error(e, self.tr(
-                'An error occurred because there are no features visible in '
-                'the current view. Try zooming out or panning until some '
-                'features become visible.'))
-            return
-        except InvalidProjectionError, e:
-            self.analysis_error(e, self.tr(
-                'An error occurred because you are using a layer containing '
-                'count data (e.g. population count) which will not '
-                'scale accurately if we re-project it from its native '
-                'coordinate reference system to WGS84/GeoGraphic.'))
-            return
-        except MemoryError, e:
-            self.analysis_error(
-                e,
-                self.tr(
-                    'An error occurred because it appears that your '
-                    'system does not have sufficient memory. Upgrading '
-                    'your computer so that it has more memory may help. '
-                    'Alternatively, consider using a smaller geographical '
-                    'area for your analysis, or using rasters with a larger '
-                    'cell size.'))
-            return
-
         self.send_busy_signal()
 
         title = self.tr('Calculating impact')
