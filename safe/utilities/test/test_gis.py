@@ -166,23 +166,28 @@ class TestQGIS(unittest.TestCase):
         """Optimal extent is calculated correctly"""
 
         exposure_path = join(TESTDATA, 'Population_2010.asc')
-        hazard_path = join(HAZDATA,
-                                   'Lembang_Earthquake_Scenario.asc')
+        hazard_path = join(HAZDATA, 'Lembang_Earthquake_Scenario.asc')
 
         # Expected data
-        haz_metadata = {'bounding_box': (105.3000035,
-                                         -8.3749994999999995,
-                                         110.2914705,
-                                         -5.5667784999999999),
-                        'resolution': (0.0083330000000000001,
-                                       0.0083330000000000001)}
+        haz_metadata = {
+            'bounding_box': (
+                105.3000035,
+                -8.3749994999999995,
+                110.2914705,
+                -5.5667784999999999),
+            'resolution': (
+                0.0083330000000000001,
+                0.0083330000000000001)}
 
-        exp_metadata = {'bounding_box': (94.972335000000001,
-                                         -11.009721000000001,
-                                         141.0140016666665,
-                                         6.0736123333332639),
-                        'resolution': (0.0083333333333333003,
-                                       0.0083333333333333003)}
+        exp_metadata = {
+            'bounding_box': (
+                94.972335000000001,
+                -11.009721000000001,
+                141.0140016666665,
+                6.0736123333332639),
+            'resolution': (
+                0.0083333333333333003,
+                0.0083333333333333003)}
 
         # Verify relevant metada is ok
         H = read_layer(hazard_path)
