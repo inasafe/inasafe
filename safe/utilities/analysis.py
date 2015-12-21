@@ -60,13 +60,13 @@ from safe.utilities.clipper import clip_layer, adjust_clip_extent
 from safe.utilities.gis import get_optimal_extent
 from safe.messaging import styles
 from safe.common.signals import (
-    DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL,
-    BUSY_SIGNAL,
-    NOT_BUSY_SIGNAL,
-    ANALYSIS_DONE_SIGNAL)
-from safe_extras.pydispatch import dispatcher
+    analysis_error,
+    send_static_message,
+    send_busy_signal,
+    send_not_busy_signal,
+    send_error_message,
+    send_dynamic_message,
+    send_analysis_done_signal)
 from safe.common.exceptions import NoValidLayerError
 from safe.engine.core import calculate_impact
 
@@ -212,71 +212,6 @@ class Analysis(object):
         """
         title = layer_keyword.get('title', layer.name())
         return title
-
-    def send_static_message(self, message):
-        """Send a static message to the listeners.
-
-        Static messages represents a whole new message. Usually it will
-        replace the previous message.
-
-        :param message: An instance of our rich message class.
-        :type message: Message
-
-        """
-        dispatcher.send(
-            signal=STATIC_MESSAGE_SIGNAL,
-            sender=self,
-            message=message)
-
-    def send_dynamic_message(self, message):
-        """Send a dynamic message to the listeners.
-
-        Dynamic messages represents a progres. Usually it will be appended to
-        the previous messages.
-
-        :param message: An instance of our rich message class.
-        :type message: Message
-
-        """
-        dispatcher.send(
-            signal=DYNAMIC_MESSAGE_SIGNAL,
-            sender=self,
-            message=message)
-
-    def send_error_message(self, error_message):
-        """Send an error message to the listeners.
-
-        Error messages represents and error. It usually replace the previous
-        message since an error has been happened.
-
-        :param error_message: An instance of our rich error message class.
-        :type error_message: ErrorMessage
-        """
-        dispatcher.send(
-            signal=ERROR_MESSAGE_SIGNAL,
-            sender=self,
-            message=error_message)
-
-    def send_busy_signal(self):
-        """Send an busy signal to the listeners."""
-        dispatcher.send(
-            signal=BUSY_SIGNAL,
-            sender=self,
-            message='')
-
-    def send_not_busy_signal(self):
-        """Send an busy signal to the listeners."""
-        dispatcher.send(
-            signal=NOT_BUSY_SIGNAL,
-            sender=self,
-            message='')
-
-    def send_analysis_done_signal(self):
-        """Send an analysis done signal to the listeners."""
-        dispatcher.send(
-            signal=ANALYSIS_DONE_SIGNAL,
-            sender=self,
-            message='')
 
     def get_clip_parameters(self):
         """Calculate the best extents to use for the assessment.
@@ -568,8 +503,7 @@ class Analysis(object):
             # KeyError is for when ['postprocessors'] is unavailable
             pass
 
-        # noinspection PyTypeChecker
-        self.send_static_message(message)
+        send_static_message(self, message)
 
         # Find out what the usable extent and cell size are
         try:
@@ -584,7 +518,7 @@ class Analysis(object):
                 'A problem was encountered when trying to determine the '
                 'analysis extents.'
             )
-            self.analysis_error(e, context)
+            analysis_error(self, e, context)
             raise e
 
         if not self.force_memory:
@@ -597,33 +531,34 @@ class Analysis(object):
         try:
             self.setup_impact_function()
         except CallGDALError, e:
-            self.analysis_error(e, tr(
+            analysis_error(self, e, tr(
                 'An error occurred when calling a GDAL command'))
             return
         except IOError, e:
-            self.analysis_error(e, tr(
+            analysis_error(self, e, tr(
                 'An error occurred when writing clip file'))
             return
         except InsufficientOverlapError, e:
-            self.analysis_error(e, tr(
+            analysis_error(self, e, tr(
                 'An exception occurred when setting up the '
                 'impact calculator.'))
             return
         except NoFeaturesInExtentError, e:
-            self.analysis_error(e, tr(
+            analysis_error(self, e, tr(
                 'An error occurred because there are no features visible in '
                 'the current view. Try zooming out or panning until some '
                 'features become visible.'))
             return
         except InvalidProjectionError, e:
-            self.analysis_error(e, tr(
+            analysis_error(self, e, tr(
                 'An error occurred because you are using a layer containing '
                 'count data (e.g. population count) which will not '
                 'scale accurately if we re-project it from its native '
                 'coordinate reference system to WGS84/GeoGraphic.'))
             return
         except MemoryError, e:
-            self.analysis_error(
+            analysis_error(
+                self,
                 e,
                 tr(
                     'An error occurred because it appears that your '
@@ -644,23 +579,6 @@ class Analysis(object):
             pass
         else:
             raise InvalidAggregationKeywords
-
-    def analysis_error(self, exception, message):
-        """A helper to spawn an error and halt processing.
-
-        An exception will be logged, busy status removed and a message
-        displayed.
-
-        :param message: an ErrorMessage to display
-        :type message: ErrorMessage, Message
-
-        :param exception: An exception that was raised
-        :type exception: Exception
-        """
-        self.send_not_busy_signal()
-        LOGGER.exception(message)
-        message = get_error_message(exception, context=message)
-        self.send_error_message(message)
 
     def optimal_clip(self):
         """ A helper function to perform an optimal clip of the input data.
@@ -719,8 +637,7 @@ class Analysis(object):
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
-        # noinspection PyTypeChecker
-        self.send_dynamic_message(message)
+        send_dynamic_message(self, message)
         try:
             clipped_hazard = clip_layer(
                 layer=hazard_layer,
@@ -758,8 +675,7 @@ class Analysis(object):
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
-        # noinspection PyTypeChecker
-        self.send_dynamic_message(message)
+        send_dynamic_message(self, message)
 
         clipped_exposure = clip_layer(
             layer=exposure_layer,
@@ -816,9 +732,9 @@ class Analysis(object):
         if self.impact_layer is None:
             # Done was emitted, but no impact layer was calculated
             message = tr('No impact layer was generated.\n')
-            self.send_not_busy_signal()
-            self.send_error_message(message)
-            self.send_analysis_done_signal()
+            send_not_busy_signal(self)
+            send_error_message(self, message)
+            send_analysis_done_signal(self)
             return
         try:
             qgis_impact_layer = safe_to_qgis_layer(self.impact_layer)
@@ -828,7 +744,7 @@ class Analysis(object):
             self.aggregator.aggregate(self.impact_layer)
         except InvalidGeometryError, e:
             message = get_error_message(e)
-            self.send_error_message(message)
+            send_error_message(self, message)
             # self.analysis_done.emit(False)
             return
         except Exception, e:  # pylint: disable=W0703
@@ -843,7 +759,7 @@ class Analysis(object):
             content = self.aggregator.error_message
             exception = AggregationError(tr(
                 'Aggregation error occurred.'))
-            self.analysis_error(exception, content)
+            analysis_error(self, exception, content)
 
     def run_post_processor(self):
         """Carry out any postprocessing required for this impact layer.
@@ -853,12 +769,12 @@ class Analysis(object):
         self.postprocessor_manager.function_parameters = \
             self.impact_function.parameters
         self.postprocessor_manager.run()
-        self.send_not_busy_signal()
-        self.send_analysis_done_signal()
+        send_not_busy_signal(self)
+        send_analysis_done_signal(self)
 
     def run_analysis(self):
         """It's similar with run function in previous dock.py"""
-        self.send_busy_signal()
+        send_busy_signal(self)
 
         title = tr('Calculating impact')
         detail = tr(
@@ -868,8 +784,7 @@ class Analysis(object):
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
-        # noinspection PyTypeChecker
-        self.send_dynamic_message(message)
+        send_dynamic_message(self, message)
 
         try:
             self.impact_layer = calculate_impact(self.impact_function)
@@ -905,9 +820,8 @@ class Analysis(object):
                 'Check that your dataset coordinate reference system is '
                 'compatible with InaSAFE\'s current requirements.'))
             report.add(check_list)
-            # noinspection PyTypeChecker
-            self.send_static_message(report)
-            self.send_analysis_done_signal()
+            send_static_message(self, report)
+            send_analysis_done_signal(self)
             return
         except MemoryError, e:
             message = tr(
@@ -916,9 +830,10 @@ class Analysis(object):
                 'it has more memory may help. Alternatively, consider using a '
                 'smaller geographical area for your analysis, or using '
                 'rasters with a larger cell size.')
-            self.analysis_error(e, message)
+            analysis_error(self, e, message)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
-            self.analysis_error(
+            analysis_error(
+                self,
                 e,
                 tr('An exception occurred when running the impact analysis.'))
