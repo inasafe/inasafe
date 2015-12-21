@@ -593,17 +593,7 @@ class Analysis(object):
             if not result:
                 raise InsufficientMemoryWarning
 
-        self.setup_aggregator()
-
-        # go check if our postprocessing layer has any keywords set and if not
-        # prompt for them. if a prompt is shown run method is called by the
-        # accepted signal of the keywords dialog
-        self.aggregator.validate_keywords()
-        if self.aggregator.is_valid:
-            pass
-        else:
-            raise InvalidAggregationKeywords
-
+        # Setup the impact function
         try:
             self.setup_impact_function()
         except CallGDALError, e:
@@ -643,6 +633,17 @@ class Analysis(object):
                     'area for your analysis, or using rasters with a larger '
                     'cell size.'))
             return
+
+        self.setup_aggregator()
+
+        # go check if our postprocessing layer has any keywords set and if not
+        # prompt for them. if a prompt is shown run method is called by the
+        # accepted signal of the keywords dialog
+        self.aggregator.validate_keywords()
+        if self.aggregator.is_valid:
+            pass
+        else:
+            raise InvalidAggregationKeywords
 
     def analysis_error(self, exception, message):
         """A helper to spawn an error and halt processing.
