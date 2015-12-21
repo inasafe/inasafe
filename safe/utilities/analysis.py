@@ -54,6 +54,7 @@ from safe.utilities.gis import (
     get_wgs84_resolution,
     viewport_geo_array,
     extent_to_array)
+from safe.utilities.i18n import tr
 from safe.utilities.utilities import get_error_message
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
 from safe.utilities.gis import get_optimal_extent
@@ -195,20 +196,6 @@ class Analysis(object):
         :type layer: SAFE Layer, QgsMapLayer, QgsWrapper
         """
         self._impact_layer = layer
-
-    # noinspection PyMethodMayBeStatic
-    def tr(self, string):
-        """We implement this since we do not inherit QObject.
-
-        :param string: String for translation.
-        :type string: str
-
-        :returns: Translated version of string.
-        :rtype: str
-
-        """
-        # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-        return QtCore.QCoreApplication.translate('Analysis', string)
 
     @staticmethod
     def get_layer_title(layer, layer_keyword):
@@ -493,7 +480,7 @@ class Analysis(object):
         """Create an aggregator for this analysis run."""
         # Refactor from dock.prepare_aggregator
         if self.clip_parameters is None:
-            raise Exception(self.tr('Clip parameters are not set!'))
+            raise Exception(tr('Clip parameters are not set!'))
         try:
             buffered_geo_extent = self.impact_layer.extent
         except AttributeError:
@@ -510,8 +497,8 @@ class Analysis(object):
     def setup_analysis(self):
         """Setup analysis so that it will be ready for running."""
         # Refactor from dock.accept()
-        title = self.tr('Processing started')
-        details = self.tr(
+        title = tr('Processing started')
+        details = tr(
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
 
@@ -523,8 +510,8 @@ class Analysis(object):
                 self.hazard_layer, self.hazard_keyword)
             # aggregation layer could be set to AOI so no check for that
         except AttributeError:
-            title = self.tr('No valid layers')
-            details = self.tr(
+            title = tr('No valid layers')
+            details = tr(
                 'Please ensure your hazard and exposure layers are set '
                 'in the question area and then press run again.')
             message = m.Message(
@@ -534,9 +521,9 @@ class Analysis(object):
             raise NoValidLayerError(message)
 
         text = m.Text(
-            self.tr('This analysis will calculate the impact of'),
+            tr('This analysis will calculate the impact of'),
             m.EmphasizedText(hazard_name),
-            self.tr('on'),
+            tr('on'),
             m.EmphasizedText(exposure_name),
         )
 
@@ -546,8 +533,8 @@ class Analysis(object):
                     self.aggregation_layer, self.aggregation_keyword)
                 # noinspection PyTypeChecker
                 text.add(m.Text(
-                    self.tr('and bullet list the results'),
-                    m.ImportantText(self.tr('aggregated by')),
+                    tr('and bullet list the results'),
+                    m.ImportantText(tr('aggregated by')),
                     m.EmphasizedText(aggregation_name)))
             except AttributeError:
                 pass
@@ -565,7 +552,7 @@ class Analysis(object):
             post_processors_names = self.impact_function.parameters[
                 'postprocessors']
             post_processors = get_postprocessors(post_processors_names)
-            message.add(m.Paragraph(self.tr(
+            message.add(m.Paragraph(tr(
                 'The following postprocessors will be used:')))
 
             bullet_list = m.BulletedList()
@@ -593,7 +580,7 @@ class Analysis(object):
             raise e
         except (RuntimeError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
-            context = self.tr(
+            context = tr(
                 'A problem was encountered when trying to determine the '
                 'analysis extents.'
             )
@@ -620,26 +607,26 @@ class Analysis(object):
         try:
             self.setup_impact_function()
         except CallGDALError, e:
-            self.analysis_error(e, self.tr(
+            self.analysis_error(e, tr(
                 'An error occurred when calling a GDAL command'))
             return
         except IOError, e:
-            self.analysis_error(e, self.tr(
+            self.analysis_error(e, tr(
                 'An error occurred when writing clip file'))
             return
         except InsufficientOverlapError, e:
-            self.analysis_error(e, self.tr(
+            self.analysis_error(e, tr(
                 'An exception occurred when setting up the '
                 'impact calculator.'))
             return
         except NoFeaturesInExtentError, e:
-            self.analysis_error(e, self.tr(
+            self.analysis_error(e, tr(
                 'An error occurred because there are no features visible in '
                 'the current view. Try zooming out or panning until some '
                 'features become visible.'))
             return
         except InvalidProjectionError, e:
-            self.analysis_error(e, self.tr(
+            self.analysis_error(e, tr(
                 'An error occurred because you are using a layer containing '
                 'count data (e.g. population count) which will not '
                 'scale accurately if we re-project it from its native '
@@ -648,7 +635,7 @@ class Analysis(object):
         except MemoryError, e:
             self.analysis_error(
                 e,
-                self.tr(
+                tr(
                     'An error occurred because it appears that your '
                     'system does not have sufficient memory. Upgrading '
                     'your computer so that it has more memory may help. '
@@ -707,26 +694,26 @@ class Analysis(object):
             'HazardExposureView')
         detail = None
         if mode == 'HazardExposureView':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'intersection of the exposure layer and the current view '
                 'extents.')
         elif mode == 'HazardExposure':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'intersection of the exposure layer extents.')
         elif mode == 'HazardExposureBookmark':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'bookmarked extents.')
         elif mode == 'HazardExposureBoundingBox':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'intersection of your preferred analysis area.')
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
-        title = self.tr('Preparing hazard data')
+        title = tr('Preparing hazard data')
 
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
@@ -744,27 +731,27 @@ class Analysis(object):
         except IOError, e:
             raise e
 
-        title = self.tr('Preparing exposure data')
+        title = tr('Preparing exposure data')
         # Find out what clipping behaviour we have - see #2210
         settings = QSettings()
         mode = settings.value(
             'inasafe/analysis_extents_mode',
             'HazardExposureView')
         if mode == 'HazardExposureView':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the intersection of the hazard layer and the current view '
                 'extents.')
         elif mode == 'HazardExposure':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the intersection of the hazard layer extents.')
         elif mode == 'HazardExposureBookmark':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the bookmarked extents.')
         elif mode == 'HazardExposureBoundingBox':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the intersection of your preferred analysis area.')
         message = m.Message(
@@ -827,7 +814,7 @@ class Analysis(object):
         LOGGER.debug('Do aggregation')
         if self.impact_layer is None:
             # Done was emitted, but no impact layer was calculated
-            message = self.tr('No impact layer was generated.\n')
+            message = tr('No impact layer was generated.\n')
             self.send_not_busy_signal()
             self.send_error_message(message)
             self.send_analysis_done_signal()
@@ -853,7 +840,7 @@ class Analysis(object):
             self.run_post_processor()
         else:
             content = self.aggregator.error_message
-            exception = AggregationError(self.tr(
+            exception = AggregationError(tr(
                 'Aggregation error occurred.'))
             self.analysis_error(exception, content)
 
@@ -872,8 +859,8 @@ class Analysis(object):
         """It's similar with run function in previous dock.py"""
         self.send_busy_signal()
 
-        title = self.tr('Calculating impact')
-        detail = self.tr(
+        title = tr('Calculating impact')
+        detail = tr(
             'This may take a little while - we are computing the areas that '
             'will be impacted by the hazard and writing the result to a new '
             'layer.')
@@ -889,31 +876,31 @@ class Analysis(object):
         except ZeroImpactException, e:
             report = m.Message()
             report.add(LOGO_ELEMENT)
-            report.add(m.Heading(self.tr(
+            report.add(m.Heading(tr(
                 'Analysis Results'), **INFO_STYLE))
             report.add(m.Text(e.message))
-            report.add(m.Heading(self.tr('Notes'), **SUGGESTION_STYLE))
+            report.add(m.Heading(tr('Notes'), **SUGGESTION_STYLE))
             exposure_layer_title = self.get_layer_title(
                 self.exposure_layer, self.exposure_keyword)
             hazard_layer_title = self.get_layer_title(
                 self.hazard_layer, self.hazard_keyword)
-            report.add(m.Text(self.tr(
+            report.add(m.Text(tr(
                 'It appears that no %s are affected by %s. You may want '
                 'to consider:') % (
                     exposure_layer_title, hazard_layer_title)))
             check_list = m.BulletedList()
-            check_list.add(self.tr(
+            check_list.add(tr(
                 'Check that you are not zoomed in too much and thus '
                 'excluding %s from your analysis area.') % (
                     exposure_layer_title))
-            check_list.add(self.tr(
+            check_list.add(tr(
                 'Check that the exposure is not no-data or zero for the '
                 'entire area of your analysis.'))
-            check_list.add(self.tr(
+            check_list.add(tr(
                 'Check that your impact function thresholds do not '
                 'exclude all features unintentionally.'))
             # See #2288 and 2293
-            check_list.add(self.tr(
+            check_list.add(tr(
                 'Check that your dataset coordinate reference system is '
                 'compatible with InaSAFE\'s current requirements.'))
             report.add(check_list)
@@ -922,7 +909,7 @@ class Analysis(object):
             self.send_analysis_done_signal()
             return
         except MemoryError, e:
-            message = self.tr(
+            message = tr(
                 'An error occurred because it appears that your system does '
                 'not have sufficient memory. Upgrading your computer so that '
                 'it has more memory may help. Alternatively, consider using a '
@@ -933,5 +920,4 @@ class Analysis(object):
             # FIXME (Ole): This branch is not covered by the tests
             self.analysis_error(
                 e,
-                self.tr(
-                    'An exception occurred when running the impact analysis.'))
+                tr('An exception occurred when running the impact analysis.'))
