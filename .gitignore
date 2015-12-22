@@ -13,12 +13,9 @@ docs/output
 docs/release-approval-docs
 *.DS_Store
 .idea
-.idea/inasafe-dev.iml
 .idea/inasafe-realtime.iml
-.idea/misc.xml
 .idea/runConfigurations/make_map.xml
 .idea/runConfigurations/NoseTests_Realtime.xml
-.idea/workspace.xml
 keywords.db
 libpeerconnection.log
 nohup.out
