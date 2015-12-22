@@ -46,6 +46,9 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         self.statistics_type = 'class_count'
         self.statistics_classes = [0, 1, 2, 3]
         self.structure_class_field = None
+        self.provenance.append_step(
+                'Initialize Impact Function',
+                'Impact function is being initialized')
 
     def notes(self):
         """Return the notes section of the report.
@@ -87,6 +90,10 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         """Earthquake impact to buildings (e.g. from OpenStreetMap)."""
         self.validate()
         self.prepare()
+
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
 
         LOGGER.debug('Running earthquake building impact')
 
@@ -136,6 +143,10 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         attributes = interpolate_result.get_data()
 
         interpolate_size = len(interpolate_result)
+
+        self.provenance.append_step(
+            'Report Creation Step',
+            'Impact function is creating a report for the impact.')
 
         # Building breakdown
         self.buildings = {}
@@ -269,7 +280,9 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
-
+        self.provenance.append_step(
+            'Finishing Step',
+            'Impact function is finishing the analysis, storing the result.')
         # Create vector layer and return
         result_layer = Vector(
             data=attributes,

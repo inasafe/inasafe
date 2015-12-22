@@ -29,6 +29,7 @@ from safe.utilities.i18n import tr
 from safe.utilities.gis import convert_to_safe_layer
 from safe.storage.safe_layer import SafeLayer
 from safe.definitions import inasafe_keyword_version
+from safe.metadata.provenance import Provenance
 
 
 class ImpactFunction(object):
@@ -84,6 +85,8 @@ class ImpactFunction(object):
         self._target_field = 'safe_ag'
         # The string to mark not affected value in the vector impact layer
         self._not_affected_value = 'Not Affected'
+        # Store provenances
+        self._provenances = Provenance()
 
     @classmethod
     def metadata(cls):
@@ -99,21 +102,6 @@ class ImpactFunction(object):
         used in contexts where no QGIS is present.
         """
         return cls.metadata().as_dict().get('function_type', None)
-
-    @classmethod
-    def function_category(cls):
-        """Property for function category based on hazard categories.
-
-         Function category could be 'single_event' or/and 'multiple_event'.
-         Single event data type means that the data is captured by a
-         single observation, while 'multiple_event' has been aggregated for
-         some observations.
-
-         :returns: The hazard categories that this function supports.
-         :rtype: list
-        """
-        return cls.metadata().as_dict().get('layer_requirements').get(
-            'hazard').get('hazard_categories')
 
     @property
     def user(self):
@@ -472,6 +460,9 @@ class ImpactFunction(object):
     def validate(self):
         """Validate things needed before running the analysis."""
         # Validate that input layers are valid
+        self.provenance.append_step(
+            'Validating Step',
+            'Impact function is validating the inputs.')
         if (self.hazard is None) or (self.exposure is None):
             message = tr(
                 'Ensure that hazard and exposure layers are all set before '
@@ -508,7 +499,10 @@ class ImpactFunction(object):
             class. We will just need to check if the function_type is
             'qgis2.0', it needs to have the extent set.
         # """
-        pass
+        self.provenance.append_step(
+            'Preparation Step',
+            'Impact function is being prepared to run the analysis.')
+
 
     def generate_impact_keywords(self, extra_keywords=None):
         """Obtain keywords for the impact layer.
@@ -527,3 +521,8 @@ class ImpactFunction(object):
             keywords.update(extra_keywords)
 
         return keywords
+
+    @property
+    def provenance(self):
+        """Get the provenances"""
+        return self._provenances
