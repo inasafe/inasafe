@@ -38,6 +38,7 @@ from safe.common.exceptions import (
     InvalidProjectionError,
     CallGDALError,
     GetDataError)
+from safe.utilities.gis import get_optimal_extent
 from safe.utilities.clipper import (
     clip_layer,
     extent_to_kml,
@@ -60,8 +61,6 @@ from safe.test.utilities import (
 # AG: get_qgis_app() should be called before importing modules from
 # safe.utilities.analysis
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from safe.utilities.analysis import Analysis
 
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
@@ -259,8 +258,7 @@ class ClipperTest(unittest.TestCase):
         # the current view extent. The optimal extent is the intersection
         # between the two layers and the viewport.
         # Extent is returned as an array [xmin,ymin,xmax,ymax]
-        analysis = Analysis()
-        geo_extent = analysis.get_optimal_extent(
+        geo_extent = get_optimal_extent(
             hazard_geo_extent, exposure_geo_extent, view_port_geo_extent)
 
         # Clip the vector to the bbox
