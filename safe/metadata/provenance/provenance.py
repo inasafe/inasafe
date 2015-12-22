@@ -111,7 +111,7 @@ class Provenance(object):
         """
         return self._steps[index]
 
-    def append_step(self, title, description, timestamp=None):
+    def append_step(self, title, description, timestamp=None, data=None):
         """
         Append a new provenance step.
 
@@ -124,6 +124,6 @@ class Provenance(object):
         :return: the time of the ProvenanceStep
         :rtype: datetime
         """
-        step = ProvenanceStep(title, description, timestamp)
+        step = ProvenanceStep(title, description, timestamp, data)
         self._steps.append(step)
         return step.time

@@ -63,7 +63,7 @@ class IFProvenanceStep(ProvenanceStep):
                 raise InvalidProvenanceDataError(message)
 
         super(IFProvenanceStep, self).__init__(
-            title, description, timestamp, data)
+            title, description, timestamp=timestamp, data=data)
 
     def __getattr__(self, key):
         """
