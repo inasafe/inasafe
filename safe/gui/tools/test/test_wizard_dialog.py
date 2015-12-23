@@ -252,7 +252,8 @@ class WizardDialogTest(unittest.TestCase):
         subcategories = []
         tsunami_index = -1
         for i in range(expected_subcategory_count):
-            subcategory_name = dialog.lstSubcategories.item(i).data(Qt.UserRole)
+            subcategory_name = dialog.lstSubcategories.item(i).data(
+                    Qt.UserRole)
             subcategories.append(subcategory_name)
             if subcategory_name == chosen_subcategory:
                 tsunami_index = i
