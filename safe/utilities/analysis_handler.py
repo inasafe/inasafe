@@ -536,7 +536,7 @@ class AnalysisHandler(QObject):
         # Open Impact Report Dialog
         print_dialog = ImpactReportDialog(self.iface)
         print_dialog.button_ok = QtGui.QPushButton(self.tr('OK'))
-        print_dialog.buttonBox.addButton(
+        print_dialog.button_Box.addButton(
             print_dialog.button_ok,
             QtGui.QDialogButtonBox.ActionRole)
 

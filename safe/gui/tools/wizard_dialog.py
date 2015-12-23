@@ -81,7 +81,10 @@ from safe.utilities.gis import (
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.utilities import get_error_message, compare_version
+from safe.utilities.utilities import (
+    get_error_message,
+    is_keyword_version_supported
+)
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -2432,7 +2435,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not keywords or 'keyword_version' not in keywords:
             return True
         keyword_version = str(keywords['keyword_version'])
-        if compare_version(keyword_version, get_version()) != 0:
+        if not is_keyword_version_supported(keyword_version):
             return True
 
         # Compare layer keywords with explicitly set constraints
@@ -2648,8 +2651,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Check if the layer is keywordless
         if keywords and 'keyword_version' in keywords:
             kw_ver = str(keywords['keyword_version'])
-            self.is_selected_layer_keywordless = bool(
-                compare_version(kw_ver, get_version()) != 0)
+            self.is_selected_layer_keywordless = (
+                not is_keyword_version_supported(kw_ver))
         else:
             self.is_selected_layer_keywordless = True
 
@@ -2798,8 +2801,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             keyword_version = None
 
-        if (keywords and keyword_version and
-                compare_version(keyword_version, get_version()) == 0):
+        if (keywords and
+                keyword_version and
+                    is_keyword_version_supported(keyword_version)):
             # The layer has valid keywords
             purpose = keywords.get('layer_purpose')
             if purpose == layer_purpose_hazard['key']:
@@ -3120,8 +3124,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Check if the layer is keywordless
         if keywords and 'keyword_version' in keywords:
             kw_ver = str(keywords['keyword_version'])
-            self.is_selected_layer_keywordless = bool(
-                compare_version(kw_ver, get_version()) != 0)
+            self.is_selected_layer_keywordless = (
+                not is_keyword_version_supported(kw_ver))
         else:
             self.is_selected_layer_keywordless = True
 

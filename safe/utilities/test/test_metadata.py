@@ -5,6 +5,7 @@ from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata
 )
+from safe.definitions import inasafe_keyword_version
 
 
 class TestMetadataUtilities(unittest.TestCase):
@@ -40,7 +41,7 @@ class TestMetadataUtilities(unittest.TestCase):
         keywords = {
             # 'date': '26-03-2015 14:03',
             'exposure': 'structure',
-            'keyword_version': '3.2',
+            'keyword_version': inasafe_keyword_version,
             'layer_geometry': 'polygon',
             'layer_mode': 'classified',
             'layer_purpose': 'exposure',
@@ -54,8 +55,7 @@ class TestMetadataUtilities(unittest.TestCase):
         read_metadata = read_iso19115_metadata(exposure_layer.source())
 
         for key in set(keywords.keys()) & set(read_metadata.keys()):
-            message = 'key %s have different value' % key
-            self.assertEqual(read_metadata[key], keywords[key], message)
+            self.assertEqual(read_metadata[key], keywords[key])
         for key in set(keywords.keys()) - set(read_metadata.keys()):
             message = 'key %s is not found in ISO metadata' % key
             self.assertEqual(read_metadata[key], keywords[key], message)

@@ -423,8 +423,9 @@ class TestIO(unittest.TestCase):
         v_new.write_to_file(tmp_filename)
 
         v_tmp = read_layer(tmp_filename)
+        # Need to set this since we always use the latest version.
+        v_tmp.keywords['keyword_version'] = V_ref.keywords['keyword_version']
         assert v_tmp == V_ref
-        assert not v_tmp != V_ref
 
         # Check that equality raises exception when type is wrong
         try:
@@ -436,6 +437,8 @@ class TestIO(unittest.TestCase):
             raise Exception(msg)
 
         # Check that differences in keywords affect comparison
+        # Need to set this since we always use the latest version.
+        v_new.keywords['keyword_version'] = V_ref.keywords['keyword_version']
         assert v_new == V_ref
         v_tmp.keywords['kw2'] = 'blah'
         assert not v_tmp == V_ref
@@ -1087,7 +1090,9 @@ class TestIO(unittest.TestCase):
             raise Exception(msg)
 
         # Check keywords
-        assert R1.keywords == R2.keywords
+        # Need to set this since we always use the latest version.
+        R2.keywords['keyword_version'] = R1.keywords['keyword_version']
+        self.assertEqual(R1.keywords, R2.keywords)
 
         # Check override of ==
         assert R1 == R2
@@ -1253,9 +1258,9 @@ class TestIO(unittest.TestCase):
                 msg = 'Projections were different: %s != %s' % (p1, p2)
                 assert p1 == p1, msg
 
-                msg = 'Keywords were different: %s != %s' % (r1.keywords,
-                                                             r2.keywords)
-                assert r1.keywords == r2.keywords, msg
+                # Need to set this since we always use the latest version.
+                r2.keywords['keyword_version'] = r1.keywords['keyword_version']
+                self.assertEqual(r1.keywords, r2.keywords)
 
                 # Use overridden == and != to verify
                 assert r1 == r2
@@ -2510,6 +2515,8 @@ class TestIO(unittest.TestCase):
         assert L0.projection == L1.projection
 
         # Compare all
+        # Need to set this since we always use the latest version.
+        L1.keywords['keyword_version'] = L0.keywords['keyword_version']
         assert L0 == L1
 
     test_multipart_polygon_can_be_read.slow = True

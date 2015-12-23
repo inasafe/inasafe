@@ -53,20 +53,20 @@ class KeywordIOTest(unittest.TestCase):
         self.raster_layer, _ = load_layer(hazard_path)
         self.expected_raster_keywords = {
             'hazard_category': 'single_event',
-            'title': 'Tsunami',
-            'hazard': 'tsunami',
-            'continuous_hazard_unit': 'metres',
+            'title': 'Generic Continuous Flood',
+            'hazard': 'flood',
+            'continuous_hazard_unit': 'generic',
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
-            'keyword_version': inasafe_keyword_version
+            'keyword_version': '3.2'
         }
 
         # Vector Layer keywords
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
-            'keyword_version': inasafe_keyword_version,
+            'keyword_version': '3.2',
             'structure_class_field': 'FLOODED',
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
@@ -148,7 +148,12 @@ class KeywordIOTest(unittest.TestCase):
     def test_read_raster_file_keywords(self):
         """Can we read raster file keywords using generic readKeywords method
         """
-        keywords = self.keyword_io.read_keywords(self.raster_layer)
+        layer = clone_raster_layer(
+            name='generic_continuous_flood',
+            extension='.asc',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
+        keywords = self.keyword_io.read_keywords(layer)
         expected_keywords = self.expected_raster_keywords
 
         self.assertDictEqual(keywords, expected_keywords)
@@ -239,11 +244,19 @@ class KeywordIOTest(unittest.TestCase):
         """Test we can copy the keywords."""
         out_path = unique_filename(
             prefix='test_copy_keywords', suffix='.shp')
-        self.keyword_io.copy_keywords(self.raster_layer, out_path)
+        layer = clone_raster_layer(
+            name='generic_continuous_flood',
+            extension='.asc',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
+        self.keyword_io.copy_keywords(layer, out_path)
         # copied_keywords = read_file_keywords(out_path.split('.')[0] + 'xml')
         copied_keywords = read_iso19115_metadata(out_path)
         expected_keywords = self.expected_raster_keywords
+        expected_keywords['keyword_version'] = inasafe_keyword_version
 
+
+        self.maxDiff = None
         self.assertDictEqual(copied_keywords, expected_keywords)
 
     def test_definition(self):

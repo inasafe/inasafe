@@ -375,33 +375,47 @@ def replace_accentuated_characters(message):
     return message.decode('utf-8')
 
 
-def compare_version(version1, version2):
-    """Compare between InaSAFE version.
+def is_keyword_version_supported(
+        keyword_version, inasafe_version=inasafe_keyword_version):
+    """Check if the keyword version is supported by this InaSAFE version.
 
-    .. versionadded: 3.2
+    .. versionadded: 3.3
 
-    Adapted from http://stackoverflow.com/a/1714190/1198772
+    :param keyword_version: String representation of the keyword version.
+    :type keyword_version: str
 
-    :param version1: String representation of version 1
-    :type version1: str
-    :param version2: String representation of version 1
-    :type version2: str
+    :param inasafe_version: String representation of InaSAFE's version.
+    :type inasafe_version: str
 
-    :returns: -1, 0, 1 if less, same, and more respectively.
-    :rtype: int
+    :returns: True if supported, otherwise False.
+    :rtype: bool
     """
-    def normalize(v):
-        """
-        :param v: Version string
-        :type v: str
+    def minor_version(version):
+        """Obtain minor version of a version (x.y)
+        :param version: Version string.
+        :type version: str
 
-        :returns: List of integer
-        :rtype: list
+        :returns: Minor version.
+        :rtype: str
         """
-        # Check only minor version
-        if v.count('.') > 1:
-            version_split = v.split('.')
-            v = version_split[0] + '.' + version_split[1]
+        version_split = version.split('.')
+        return version_split[0] + '.' + version_split[1]
 
-        return [int(x) for x in re.sub(r'(\.0+)*$', '', v).split(".")]
-    return cmp(normalize(version1), normalize(version2))
+    version_compatibilities = {
+        '3.3': ['3.2']
+    }
+
+    # Convert to minor version.
+    keyword_version = minor_version(keyword_version)
+    inasafe_version = minor_version(inasafe_version)
+
+    if inasafe_version == keyword_version:
+        return True
+
+    if inasafe_version in version_compatibilities.keys():
+        if keyword_version in version_compatibilities[inasafe_version]:
+            return True
+        else:
+            return False
+    else:
+        return False
