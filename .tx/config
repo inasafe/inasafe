@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[inasafe-apps.safe]
+[inasafe-code.safe]
 file_filter = i18n/inasafe_<lang>.ts
 source_file = i18n/inasafe_en.ts
 source_lang = en
