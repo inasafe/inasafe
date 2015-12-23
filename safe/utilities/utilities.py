@@ -405,3 +405,49 @@ def compare_version(version1, version2):
 
         return [int(x) for x in re.sub(r'(\.0+)*$', '', v).split(".")]
     return cmp(normalize(version1), normalize(version2))
+
+
+def is_keyword_version_supported(
+        keyword_version, inasafe_version=inasafe_keyword_version):
+    """Check if the keyword version is supported by this InaSAFE version.
+
+    .. versionadded: 3.3
+
+    :param keyword_version: String representation of the keyword version.
+    :type keyword_version: str
+
+    :param inasafe_version: String representation of InaSAFE's version.
+    :type inasafe_version: str
+
+    :returns: True if supported, otherwise False.
+    :rtype: bool
+    """
+    def minor_version(version):
+        """Obtain minor version of a version (x.y)
+        :param version: Version string.
+        :type version: str
+
+        :returns: Minor version.
+        :rtype: str
+        """
+        version_split = version.split('.')
+        return version_split[0] + '.' + version_split[1]
+
+    version_compatibilities = {
+        '3.3': ['3.2']
+    }
+
+    # Convert to minor version.
+    keyword_version = minor_version(keyword_version)
+    inasafe_version = minor_version(inasafe_version)
+
+    if inasafe_version == keyword_version:
+        return True
+
+    if inasafe_version in version_compatibilities.keys():
+        if keyword_version in version_compatibilities[inasafe_version]:
+            return True
+        else:
+            return False
+    else:
+        return False

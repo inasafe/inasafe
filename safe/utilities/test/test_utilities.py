@@ -14,7 +14,8 @@ from safe.utilities.utilities import (
     impact_attribution,
     replace_accentuated_characters,
     read_file_keywords,
-    compare_version
+    compare_version,
+    is_keyword_version_supported
 )
 from safe.utilities.gis import qgis_version
 from safe.test.utilities import (
@@ -185,6 +186,16 @@ class UtilitiesTest(unittest.TestCase):
         assert compare_version("1.0.2.0", "1.0.2") == 0
         assert compare_version("1.0.2.0.dev-123", "1.0.2") == 0
         assert compare_version("1.0.2.0.dev-123", "1.0.2.dev-345") == 0
+
+    def test_is_keyword_version_supported(self):
+        """Test for is_keyword_version_supported."""
+        self.assertTrue(is_keyword_version_supported('3.2', '3.2'))
+        self.assertTrue(is_keyword_version_supported('3.2', '3.3'))
+        self.assertTrue(is_keyword_version_supported('3.2.1', '3.2'))
+        self.assertTrue(is_keyword_version_supported('3.2.1-alpha', '3.2'))
+        self.assertTrue(is_keyword_version_supported('3.2.1', '3.3'))
+        self.assertFalse(is_keyword_version_supported('3.02.1', '3.2'))
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest)
