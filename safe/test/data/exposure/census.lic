@@ -6,7 +6,7 @@
 
   <datafile>
     <filename>census.shp</filename>
-    <checksum>3055284495</checksum>
+    <checksum>1845636815</checksum>
     <publishable>Yes</publishable>
     <accountable>Samweli Mwakisambwe</accountable>
     <source>National Bureau of Statistics (NBS)</source>
@@ -19,7 +19,7 @@
 
   <datafile>
     <filename>census.shx</filename>
-    <checksum>3172842300</checksum>
+    <checksum>1940997223</checksum>
     <publishable>Yes</publishable>
     <accountable>Samweli Mwakisambwe</accountable>
     <source>National Bureau of Statistics (NBS)</source>
@@ -32,7 +32,7 @@
 
   <datafile>
     <filename>census.dbf</filename>
-    <checksum>3795215879</checksum>
+    <checksum>924590329</checksum>
     <publishable>Yes</publishable>
     <accountable>Samweli Mwakisambwe</accountable>
     <source>National Bureau of Statistics (NBS)</source>

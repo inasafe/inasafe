@@ -633,7 +633,7 @@ class Plugin(object):
         self.wizard.exec_()  # modal
 
     def show_function_centric_wizard(self):
-        """Show the keywords creation wizard."""
+        """Show the function centric wizard."""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.wizard_dialog import WizardDialog
 
@@ -694,8 +694,8 @@ class Plugin(object):
         registry.addMapLayer(layer, False)
         root = QgsProject.instance().layerTreeRoot()
         index = len(root.findLayers()) + 1
-        LOGGER.info('Inserting layer %s at position %s' % (
-            layer.source(), index))
+        # LOGGER.info('Inserting layer %s at position %s' % (
+        #    layer.source(), index))
         root.insertLayer(index, layer)
         QgsMapLayerRegistry.instance().addMapLayer(layer)
 
