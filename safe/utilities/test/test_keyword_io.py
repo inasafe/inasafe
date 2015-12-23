@@ -244,12 +244,19 @@ class KeywordIOTest(unittest.TestCase):
         """Test we can copy the keywords."""
         out_path = unique_filename(
             prefix='test_copy_keywords', suffix='.shp')
-        self.keyword_io.copy_keywords(self.raster_layer, out_path)
+        layer = clone_raster_layer(
+            name='generic_continuous_flood',
+            extension='.asc',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
+        self.keyword_io.copy_keywords(layer, out_path)
         # copied_keywords = read_file_keywords(out_path.split('.')[0] + 'xml')
         copied_keywords = read_iso19115_metadata(out_path)
         expected_keywords = self.expected_raster_keywords
         expected_keywords['keyword_version'] = inasafe_keyword_version
 
+
+        self.maxDiff = None
         self.assertDictEqual(copied_keywords, expected_keywords)
 
     def test_definition(self):
