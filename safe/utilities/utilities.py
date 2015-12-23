@@ -375,38 +375,6 @@ def replace_accentuated_characters(message):
     return message.decode('utf-8')
 
 
-def compare_version(version1, version2):
-    """Compare between InaSAFE version.
-
-    .. versionadded: 3.2
-
-    Adapted from http://stackoverflow.com/a/1714190/1198772
-
-    :param version1: String representation of version 1
-    :type version1: str
-    :param version2: String representation of version 1
-    :type version2: str
-
-    :returns: -1, 0, 1 if less, same, and more respectively.
-    :rtype: int
-    """
-    def normalize(v):
-        """
-        :param v: Version string
-        :type v: str
-
-        :returns: List of integer
-        :rtype: list
-        """
-        # Check only minor version
-        if v.count('.') > 1:
-            version_split = v.split('.')
-            v = version_split[0] + '.' + version_split[1]
-
-        return [int(x) for x in re.sub(r'(\.0+)*$', '', v).split(".")]
-    return cmp(normalize(version1), normalize(version2))
-
-
 def is_keyword_version_supported(
         keyword_version, inasafe_version=inasafe_keyword_version):
     """Check if the keyword version is supported by this InaSAFE version.
