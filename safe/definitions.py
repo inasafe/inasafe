@@ -19,10 +19,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # Please group them and sort them alphabetical
 from safe.utilities.i18n import tr
-from safe.common.version import get_version
 
 inasafe_keyword_version_key = 'keyword_version'
-inasafe_keyword_version = get_version()
+inasafe_keyword_version = '3.3'
 
 # constants
 small_number = 2 ** -53  # I think this is small enough
