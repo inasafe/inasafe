@@ -59,14 +59,14 @@ class KeywordIOTest(unittest.TestCase):
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
-            'keyword_version': inasafe_keyword_version
+            'keyword_version': '3.2'
         }
 
         # Vector Layer keywords
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
-            'keyword_version': inasafe_keyword_version,
+            'keyword_version': '3.2',
             'structure_class_field': 'FLOODED',
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
@@ -243,6 +243,7 @@ class KeywordIOTest(unittest.TestCase):
         # copied_keywords = read_file_keywords(out_path.split('.')[0] + 'xml')
         copied_keywords = read_iso19115_metadata(out_path)
         expected_keywords = self.expected_raster_keywords
+        expected_keywords['keyword_version'] = inasafe_keyword_version
 
         self.assertDictEqual(copied_keywords, expected_keywords)
 

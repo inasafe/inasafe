@@ -161,7 +161,7 @@ class UtilitiesTest(unittest.TestCase):
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
             'title': 'Jakarta flood like 2007 with structural improvements',
-            'keyword_version': inasafe_keyword_version
+            'keyword_version': '3.2'
         }
         self.assertDictEqual(keywords, expected_keywords)
 
