@@ -148,7 +148,12 @@ class KeywordIOTest(unittest.TestCase):
     def test_read_raster_file_keywords(self):
         """Can we read raster file keywords using generic readKeywords method
         """
-        keywords = self.keyword_io.read_keywords(self.raster_layer)
+        layer = clone_raster_layer(
+            name='tsunami_wgs84',
+            extension='.tif',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
+        keywords = self.keyword_io.read_keywords(layer)
         expected_keywords = self.expected_raster_keywords
 
         self.assertDictEqual(keywords, expected_keywords)
