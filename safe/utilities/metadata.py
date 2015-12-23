@@ -60,8 +60,8 @@ def write_iso19115_metadata(layer_uri, keywords):
         metadata = GenericLayerMetadata(layer_uri)
 
     metadata.update_from_dict(keywords)
-    if 'keyword_version' not in metadata.dict.keys():
-        metadata.update_from_dict({'keyword_version': inasafe_keyword_version})
+    # Always set keyword_version to the latest one.
+    metadata.update_from_dict({'keyword_version': inasafe_keyword_version})
 
     if metadata.layer_is_file_based:
         xml_file_path = os.path.splitext(layer_uri)[0] + '.xml'
