@@ -53,9 +53,9 @@ class KeywordIOTest(unittest.TestCase):
         self.raster_layer, _ = load_layer(hazard_path)
         self.expected_raster_keywords = {
             'hazard_category': 'single_event',
-            'title': 'Tsunami',
-            'hazard': 'tsunami',
-            'continuous_hazard_unit': 'metres',
+            'title': 'Generic Continuous Flood',
+            'hazard': 'flood',
+            'continuous_hazard_unit': 'generic',
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
@@ -149,8 +149,8 @@ class KeywordIOTest(unittest.TestCase):
         """Can we read raster file keywords using generic readKeywords method
         """
         layer = clone_raster_layer(
-            name='tsunami_wgs84',
-            extension='.tif',
+            name='generic_continuous_flood',
+            extension='.asc',
             include_keywords=True,
             source_directory=test_data_path('hazard'))
         keywords = self.keyword_io.read_keywords(layer)
