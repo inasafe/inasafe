@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import pytz
-
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '2/08/2012'
@@ -25,15 +23,16 @@ import os
 import shutil
 import unittest
 import datetime
+import pytz
 
 import requests
 from qgis.core import QgsFeatureRequest
 
 from realtime.push_rest import InaSAFEDjangoREST
 from realtime.earthquake.push_shake import \
-    push_shake_event_to_rest, \
-    INASAFE_REALTIME_DATETIME_FORMAT
+    push_shake_event_to_rest
 from realtime.earthquake.shake_event import ShakeEvent
+from realtime.earthquake.make_map import process_event
 from realtime.utilities import base_data_dir
 from realtime.utilities import (
     shakemap_extract_dir,
@@ -48,7 +47,9 @@ LOGGER = logging.getLogger(realtime_logger_name())
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Shake ID for this test
-SHAKE_ID = '20131105060809'
+shakes_id = ['20131105060809', '20150918201057']
+SHAKE_ID = shakes_id[0]
+SHAKE_ID_2 = shakes_id[1]
 
 
 class TestShakeEvent(unittest.TestCase):
@@ -60,21 +61,24 @@ class TestShakeEvent(unittest.TestCase):
         # file inside 20131105060809 folder to
         # shakemap_extract_dir/20131105060809/grid.xml
         shake_path = test_data_path('hazard', 'shake_data')
-        input_path = os.path.abspath(
-            os.path.join(shake_path, SHAKE_ID, 'output/grid.xml'))
-        target_folder = os.path.join(
-            shakemap_extract_dir(), SHAKE_ID)
-        if not os.path.exists(target_folder):
-            os.makedirs(target_folder)
 
-        target_path = os.path.abspath(os.path.join(target_folder, 'grid.xml'))
-        shutil.copyfile(input_path, target_path)
+        for shake_id in shakes_id:
+            input_path = os.path.abspath(
+                os.path.join(shake_path, shake_id, 'output/grid.xml'))
+            target_folder = os.path.join(
+                shakemap_extract_dir(), shake_id)
+            if not os.path.exists(target_folder):
+                os.makedirs(target_folder)
+
+            target_path = os.path.abspath(os.path.join(target_folder, 'grid.xml'))
+            shutil.copyfile(input_path, target_path)
 
     # noinspection PyPep8Naming
     def tearDown(self):
         """Delete the cached data."""
-        target_path = os.path.join(shakemap_extract_dir(), SHAKE_ID)
-        shutil.rmtree(target_path)
+        for shake_id in shakes_id:
+            target_path = os.path.join(shakemap_extract_dir(), shake_id)
+            shutil.rmtree(target_path)
 
     def test_grid_file_path(self):
         """Test grid_file_path works using cached data."""
@@ -593,7 +597,7 @@ class TestShakeEvent(unittest.TestCase):
                         shake_event.shake_grid.latitude
                     ]
                 },
-                'location_description': event_dict.get('place-name')
+                'location_description': event_dict.get('shake-grid-location')
             }
 
             for key, value in earthquake_data.iteritems():
@@ -606,6 +610,45 @@ class TestShakeEvent(unittest.TestCase):
                     )
                 else:
                     self.assertEqual(response.json()[key], value)
+
+    def test_uses_grid_location(self):
+        """Test regarding issue #2438
+        """
+        working_dir = shakemap_extract_dir()
+        population_path = os.path.join(
+            data_dir(),
+            'exposure',
+            'population.tif')
+        process_event(
+            working_dir=working_dir,
+            event_id=SHAKE_ID_2)
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID_2,
+            locale='en',
+            force_flag=True,
+            population_raster_path=population_path)
+        expected_location = 'Bantul'
+        self.assertEqual(
+            shake_event.event_dict()['shake-grid-location'],
+            expected_location)
+
+        inasafe_django = InaSAFEDjangoREST()
+
+        if inasafe_django.is_configured():
+            # generate report
+            shake_event.render_map()
+            # push to realtime django
+            push_shake_event_to_rest(shake_event)
+            # check shake event exists
+            session = inasafe_django.rest
+            response = session.earthquake(SHAKE_ID).GET()
+            self.assertEqual(response.status_code, requests.codes.ok)
+
+            self.assertEqual(
+                response.json()['location_description'],
+                shake_event.event_dict()['shake-grid-location'])
+
 
 
 class DictDiffer(object):

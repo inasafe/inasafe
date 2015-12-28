@@ -97,7 +97,7 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
                     shake_event.shake_grid.latitude
                 ]
             },
-            'location_description': event_dict.get('place-name')
+            'location_description': event_dict.get('shake-grid-location')
         }
         # check does the shake event already exists?
         response = session.earthquake(
