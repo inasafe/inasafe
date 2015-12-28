@@ -213,6 +213,7 @@ if __name__ == '__main__':
         try:
             process_event(working_dir=working_directory, locale=locale_option)
             LOGGER.info('Process event end.')
+            sys.exit(0)
         except Exception as e:  # pylint: disable=W0702
             LOGGER.info('Process event failed')
             LOGGER.exception(e)

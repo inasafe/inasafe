@@ -1742,13 +1742,14 @@ class ShakeEvent(QObject):
         # This is the topic of ticket:10
         # tz = pytz.timezone('Asia/Jakarta')  # Or 'Etc/GMT+7'
         # eq_date_jakarta = eq_date.replace(tzinfo=pytz.utc).astimezone(tz)
+        # RMN: convert the shakemap data to always point out in
         eq_date_jakarta = eq_date
 
         # The character %b will use the local word for month
         # However, setting the locale explicitly to test, does not work.
         # locale.setlocale(locale.LC_TIME, 'id_ID')
 
-        date_str = eq_date_jakarta.strftime('%d-%b-%y %H:%M:%S %Z')
+        date_str = eq_date_jakarta.strftime('%d-%b-%y %H:%M:%S %z')
         return date_str, lapse_string
 
     def version(self):

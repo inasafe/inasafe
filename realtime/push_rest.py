@@ -91,3 +91,11 @@ class InaSAFEDjangoREST(object):
     @property
     def csrf_token(self):
         return self.cookies.get('csrftoken')
+
+    @property
+    def is_logged_in(self):
+        headers = {
+            'X-CSRFTOKEN': self.csrf_token
+        }
+        r = self.base_rest.is_logged_in.GET(headers=headers)
+        return r.json().get('is_logged_in')

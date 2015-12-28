@@ -14,6 +14,9 @@ class TestPushREST(unittest.TestCase):
         self.inasafe_django = InaSAFEDjangoREST()
 
     def test_login(self):
-        r = self.inasafe_django.rest.is_logged_in.GET()
+        headers = {
+            'X-CSRFTOKEN': self.inasafe_django.csrf_token
+        }
+        r = self.inasafe_django.rest.is_logged_in.GET(headers=headers)
         self.assertEqual(r.status_code, codes.ok)
-        self.assertTrue(r.json()['is_logged_in'])
+        self.assertTrue(r.json().get('is_logged_in'))
