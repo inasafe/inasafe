@@ -47,14 +47,14 @@ class IFProvenanceStep(ProvenanceStep):
         'pyqt_version',
         'os',
         'inasafe_version',
-        'exposure_pixel_size',
-        'hazard_pixel_size',
-        'impact_pixel_size',
-        'analysis_extent',
-        'parameter'
+        # 'exposure_pixel_size',
+        # 'hazard_pixel_size',
+        # 'impact_pixel_size',
+        # 'analysis_extent',
+        # 'parameter'
     ]
 
-    def __init__(self, title, description, data, timestamp=None):
+    def __init__(self, title, description, timestamp=None, data=None):
         for key in self.impact_functions_fields:
             # check we have all the wanted keys
             if key not in data:

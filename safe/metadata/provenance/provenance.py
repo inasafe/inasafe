@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 from safe.metadata.provenance import ProvenanceStep
+from safe.metadata.provenance import IFProvenanceStep
 
 
 class Provenance(object):
@@ -117,13 +118,42 @@ class Provenance(object):
 
         :param title: the title of the ProvenanceStep
         :type title: str
+
         :param description: the description of the ProvenanceStep
         :type description: str
+
         :param timestamp: the time of the ProvenanceStep
-        :type timestamp: datetime
-        :return: the time of the ProvenanceStep
+        :type timestamp: datetime, None
+
+        :param data: The data of the ProvenanceStep
+        :type data: dict
+
+        :returns: the time of the ProvenanceStep
         :rtype: datetime
         """
         step = ProvenanceStep(title, description, timestamp, data)
+        self._steps.append(step)
+        return step.time
+
+    def append_if_provenance_step(
+            self, title, description, timestamp=None, data=None):
+        """Append a new IF provenance step.
+
+        :param title: the title of the IF ProvenanceStep
+        :type title: str
+
+        :param description: the description of the IF ProvenanceStep
+        :type description: str
+
+        :param timestamp: the time of the IF ProvenanceStep
+        :type timestamp: datetime, None
+
+        :param data: The data of the IF ProvenanceStep
+        :type data: dict
+
+        :returns: the time of the IF ProvenanceStep
+        :rtype: datetime
+        """
+        step = IFProvenanceStep(title, description, timestamp, data)
         self._steps.append(step)
         return step.time

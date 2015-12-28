@@ -19,6 +19,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from socket import gethostname
 import getpass
+import platform
+from datetime import datetime
+from qgis.utils import QGis
+from osgeo import gdal
+from PyQt4.QtCore import QT_VERSION_STR
+from PyQt4.Qt import PYQT_VERSION_STR
 
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -30,6 +36,7 @@ from safe.utilities.gis import convert_to_safe_layer
 from safe.storage.safe_layer import SafeLayer
 from safe.definitions import inasafe_keyword_version
 from safe.metadata.provenance import Provenance
+from safe.common.version import get_version
 
 
 class ImpactFunction(object):
@@ -526,3 +533,34 @@ class ImpactFunction(object):
     def provenance(self):
         """Get the provenances"""
         return self._provenances
+
+    def set_if_provenance(self):
+        """Set IF provenance step for the IF."""
+        data = {
+            'start_time': datetime.now() ,
+            'finish_time': datetime.now(),
+            'hazard_layer': self.hazard.keywords['title'],
+            'exposure_layer': self.exposure.keywords['title'],
+            'impact_function_id': self.metadata().as_dict()['id'],
+            'impact_function_version': '1.0',  # TODO: Add IF version.
+            'host_name': self.host_name,
+            'user': self.user,
+            'qgis_version': QGis.QGIS_VERSION,
+            'gdal_version': gdal.__version__,
+            'qt_version': QT_VERSION_STR,
+            'pyqt_version': PYQT_VERSION_STR,
+            'os': platform.version(),
+            'inasafe_version': get_version(),
+        # 'exposure_pixel_size',
+        # 'hazard_pixel_size',
+        # 'impact_pixel_size',
+        # 'analysis_extent',
+        # 'parameter'
+        }
+
+        self.provenance.append_if_provenance_step(
+            'IF Provenance',
+            'Impact function\'s provenance.',
+            timestamp=None,
+            data=data
+        )

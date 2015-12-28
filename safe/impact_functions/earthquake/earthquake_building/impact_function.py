@@ -280,9 +280,9 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
-        self.provenance.append_step(
-            'Finishing Step',
-            'Impact function is finishing the analysis, storing the result.')
+        
+        self.set_if_provenance()
+
         # Create vector layer and return
         result_layer = Vector(
             data=attributes,
