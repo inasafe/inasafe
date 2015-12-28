@@ -91,6 +91,7 @@ if __name__ == '__main__':
                 LOGGER.info('Process event failed')
                 LOGGER.exception(e)
                 LOGGER.info('Retrying to process event')
+        LOGGER.info('Shakemap %s handled' % (shake_id, ))
 
     handler = ShakemapPushHandler(working_dir, callback=process_shakemap)
     notifier = watch_shakemaps_push(working_dir, daemon=True, handler=handler)

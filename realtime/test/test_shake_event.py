@@ -366,6 +366,7 @@ class TestShakeEvent(unittest.TestCase):
         # noinspection PyUnresolvedReferences
         expected_dict = {
             'place-name': u'n/a',
+            'shake-grid-location': u'Papua',
             'depth-name': u'Depth',
             'fatalities-name': u'Estimated fatalities',
             'fatalities-count': u'0',  # 44 only after render
@@ -433,7 +434,7 @@ class TestShakeEvent(unittest.TestCase):
             u"M 3.6 5-11-2013 6:8:9 Latitude: 2°25'48.00"
             u'"S Longitude: 140°37'
             u"'"
-            u'12.00"E Depth: 10.0km Located 0.00km n/a of n/a')
+            u'12.00"E Depth: 10.0km Located 0.00km n/a of Papua')
         result = shake_event.event_info()
         message = ('Got:\n%s\nExpected:\n%s\n' %
                    (result, expected_result))
@@ -615,20 +616,16 @@ class TestShakeEvent(unittest.TestCase):
         """Test regarding issue #2438
         """
         working_dir = shakemap_extract_dir()
-        population_path = os.path.join(
-            data_dir(),
-            'exposure',
-            'population.tif')
-        process_event(
-            working_dir=working_dir,
-            event_id=SHAKE_ID_2)
+        # population_path =
         shake_event = ShakeEvent(
             working_dir=working_dir,
             event_id=SHAKE_ID_2,
             locale='en',
             force_flag=True,
-            population_raster_path=population_path)
-        expected_location = 'Bantul'
+            data_is_local_flag=True,
+            # population_raster_path=population_path
+        )
+        expected_location = 'Yogyakarta'
         self.assertEqual(
             shake_event.event_dict()['shake-grid-location'],
             expected_location)
@@ -642,7 +639,7 @@ class TestShakeEvent(unittest.TestCase):
             push_shake_event_to_rest(shake_event)
             # check shake event exists
             session = inasafe_django.rest
-            response = session.earthquake(SHAKE_ID).GET()
+            response = session.earthquake(SHAKE_ID_2).GET()
             self.assertEqual(response.status_code, requests.codes.ok)
 
             self.assertEqual(
