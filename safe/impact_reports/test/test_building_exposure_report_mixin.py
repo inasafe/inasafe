@@ -99,12 +99,15 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         action_checklist = self.building_mixin_blank.action_checklist()
         action_checklist = action_checklist.to_text()
         self.assertIn(
-            u'Are the critical facilities still open?',
-            action_checklist)
-        self.assertIn(
             u'Which structures have warning capacity (eg. sirens, '
             u'speakers, etc.)?',
             action_checklist)
+        self.assertIn(
+            u'Are the water and electricity services still operating?',
+            action_checklist)
+        self.assertIn(u'Are the health centres still open?', action_checklist)
+        self.assertIn(
+                u'Are the other public services accessible', action_checklist)
         self.assertIn(
             u'Which buildings will be evacuation centres?',
             action_checklist)

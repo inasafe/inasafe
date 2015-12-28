@@ -23,7 +23,6 @@ import tempfile
 #  force this test to use SIP API V.2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from PyQt4.QtNetwork import QNetworkAccessManager
 
 from safe.utilities.file_downloader import FileDownloader
 from safe.common.exceptions import DownloadError
@@ -37,7 +36,6 @@ class FileDownloaderTest(unittest.TestCase):
     # noinspection PyMethodMayBeStatic
     def test_download(self):
         """Test download."""
-        manager = QNetworkAccessManager(PARENT)
 
         # NOTE(gigih):
         # this is the hash of google front page.
@@ -50,8 +48,7 @@ class FileDownloaderTest(unittest.TestCase):
         url = 'https://www.google.com/images/srpr/logo11w.png'
         path = tempfile.mktemp()
 
-        file_downloader = FileDownloader(
-            manager, url, path)
+        file_downloader = FileDownloader(url, path)
         try:
             result = file_downloader.download()
         except IOError as ex:
