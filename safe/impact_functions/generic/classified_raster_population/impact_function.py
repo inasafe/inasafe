@@ -113,6 +113,10 @@ class ClassifiedRasterHazardPopulationFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # The 3 classes
         # TODO (3.2): shouldnt these be defined in keywords rather? TS
         categorical_hazards = self.parameters['Categorical hazards'].value
@@ -244,6 +248,8 @@ class ClassifiedRasterHazardPopulationFunction(
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         # Create raster object and return
         raster_layer = Raster(

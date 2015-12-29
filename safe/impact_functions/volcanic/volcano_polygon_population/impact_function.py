@@ -109,6 +109,10 @@ class VolcanoPolygonPopulationFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Parameters
         self.hazard_class_attribute = self.hazard.keyword('field')
         name_attribute = self.hazard.keyword('volcano_name_field')
@@ -246,6 +250,8 @@ class VolcanoPolygonPopulationFunction(
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         # Create vector layer and return
         impact_layer = Raster(

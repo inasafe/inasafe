@@ -33,8 +33,9 @@ from safe.messaging import styles
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
-                                 BuildingExposureReportMixin):
+class EarthquakeBuildingFunction(
+        ContinuousRHClassifiedVE,
+        BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Earthquake impact on building data."""
 
@@ -46,9 +47,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         self.statistics_type = 'class_count'
         self.statistics_classes = [0, 1, 2, 3]
         self.structure_class_field = None
-        self.provenance.append_step(
-                'Initialize Impact Function',
-                'Impact function is being initialized')
+
 
     def notes(self):
         """Return the notes section of the report.
@@ -143,10 +142,6 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         attributes = interpolate_result.get_data()
 
         interpolate_size = len(interpolate_result)
-
-        self.provenance.append_step(
-            'Report Creation Step',
-            'Impact function is creating a report for the impact.')
 
         # Building breakdown
         self.buildings = {}
@@ -279,9 +274,9 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
             'statistics_classes': self.statistics_classes
         }
 
-        self.set_if_provenance()
-
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         # Create vector layer and return
         result_layer = Vector(

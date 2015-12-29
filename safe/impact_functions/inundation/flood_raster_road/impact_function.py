@@ -323,6 +323,10 @@ class FloodRasterRoadsFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         target_field = self.target_field
         # Get parameters from layer's keywords
         road_class_field = self.exposure.keyword('road_class_field')
@@ -510,6 +514,8 @@ class FloodRasterRoadsFunction(
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         # Convert QgsVectorLayer to inasafe layer and return it
         line_layer = Vector(

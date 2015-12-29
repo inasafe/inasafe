@@ -111,6 +111,10 @@ class ContinuousHazardPopulationFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         thresholds = [
             p.value for p in self.parameters['Categorical thresholds'].value]
 
@@ -238,6 +242,8 @@ class ContinuousHazardPopulationFunction(
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         # Create raster object and return
         raster_layer = Raster(

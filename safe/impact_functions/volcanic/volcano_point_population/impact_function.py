@@ -117,6 +117,10 @@ class VolcanoPointPopulationFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Parameters
         radii = self.parameters['distances'].value
 
@@ -254,6 +258,8 @@ class VolcanoPointPopulationFunction(
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         impact_layer = Raster(
             data=covered_exposure_layer.get_data(),

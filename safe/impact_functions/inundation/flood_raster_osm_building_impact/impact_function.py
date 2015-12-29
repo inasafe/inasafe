@@ -83,6 +83,10 @@ class FloodRasterBuildingFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         threshold = self.parameters['threshold'].value  # Flood threshold [m]
 
         verify(isinstance(threshold, float),
@@ -205,6 +209,8 @@ class FloodRasterBuildingFunction(
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         vector_layer = Vector(
             data=features,

@@ -78,6 +78,10 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Value from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         # Try to get the value from keyword, if not exist, it will not fail,
@@ -203,7 +207,10 @@ class ClassifiedPolygonHazardBuildingFunction(
             'legend_units': legend_units,
             'legend_title': legend_title
         }
+
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         # Create vector layer and return
         impact_layer = Vector(

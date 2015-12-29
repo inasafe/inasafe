@@ -264,6 +264,10 @@ class ITBFatalityFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         displacement_rate = self.hardcoded_parameters['displacement_rate']
         fatality_rate = self.compute_fatality_rate()
 
@@ -402,6 +406,8 @@ class ITBFatalityFunction(
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         # Create raster object and return
         raster = Raster(

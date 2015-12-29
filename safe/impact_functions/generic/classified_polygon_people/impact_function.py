@@ -74,6 +74,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Identify hazard and exposure layers
         hazard = self.hazard.layer
         exposure = self.exposure.layer
@@ -160,6 +164,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             target_field=self.target_field,
             style_classes=style_classes,
             style_type='categorizedSymbol')
+
+        self.set_if_provenance()
 
         # Create vector layer and return
         impact_layer = Vector(

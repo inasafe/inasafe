@@ -125,6 +125,10 @@ class FloodEvacuationRasterHazardFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
         thresholds = self.parameters['thresholds'].value
@@ -249,6 +253,8 @@ class FloodEvacuationRasterHazardFunction(
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         # Create raster object and return
         raster = Raster(

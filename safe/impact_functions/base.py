@@ -54,6 +54,9 @@ class ImpactFunction(object):
                 super(FloodImpactFunction, self).__init__()
 
         """
+        self.provenance.append_step(
+            'Initialize Impact Function',
+            'Impact function is being initialized')
         # User who runs this
         self._user = getpass.getuser().replace(' ', '_')
         # The host that runs this

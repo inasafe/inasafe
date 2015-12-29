@@ -99,6 +99,10 @@ class ClassifiedPolygonHazardPopulationFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Value from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
 
@@ -227,6 +231,8 @@ class ClassifiedPolygonHazardPopulationFunction(
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
+        self.set_if_provenance()
 
         # Create vector layer and return
         impact_layer = Raster(
