@@ -133,6 +133,8 @@ def read_iso19115_metadata(layer_uri, keyword=None):
             message += 'Layer path: %s' % layer_uri
             raise KeywordNotFoundError(message)
 
+    if isinstance(metadata, ImpactLayerMetadata):
+        keywords['if_provenance'] = metadata.provenance
     return keywords
 
 
