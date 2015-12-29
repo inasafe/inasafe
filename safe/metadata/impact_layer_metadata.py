@@ -252,11 +252,20 @@ class ImpactLayerMetadata(BaseMetadata):
             if 'provenance' in metadata:
                 for provenance_step in metadata['provenance']:
                     try:
-                        self.append_provenance_step(
-                            provenance_step['title'],
-                            provenance_step['description'],
-                            provenance_step['time'],
-                        )
+                        title = provenance_step['title']
+                        if 'IF Provenance' in title:
+                            self.append_if_provenance_step(
+                                provenance_step['title'],
+                                provenance_step['description'],
+                                provenance_step['time'],
+                                provenance_step['data']
+                            )
+                        else:
+                            self.append_provenance_step(
+                                provenance_step['title'],
+                                provenance_step['description'],
+                                provenance_step['time'],
+                            )
                     except KeyError:
                         # we want to get as much as we can without raising
                         # errors
@@ -322,7 +331,20 @@ class ImpactLayerMetadata(BaseMetadata):
             description = step.find('description').text
             timestamp = step.get('timestamp')
 
-            self.append_provenance_step(title, description, timestamp)
+            if 'IF Provenance' in title:
+                data = {}
+                from safe.metadata.provenance import IFProvenanceStep
+                keys = IFProvenanceStep.impact_functions_fields
+                for key in keys:
+                    value = step.find(key)
+                    if value is not None:
+                        data[key] = value.text
+                    else:
+                        data[key] = ''
+                self.append_if_provenance_step(
+                        title, description, timestamp, data)
+            else:
+                self.append_provenance_step(title, description, timestamp)
 
     @property
     def provenance(self):
@@ -370,7 +392,7 @@ class ImpactLayerMetadata(BaseMetadata):
         :param data: The data of the step.
         :type data: dict
         """
-        step_time = self._provenance.append_step(
+        step_time = self._provenance.append_if_provenance_step(
                 title, description, timestamp, data)
         if step_time > self.last_update:
             self.last_update = step_time

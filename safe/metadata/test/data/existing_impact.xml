@@ -268,6 +268,29 @@
             <title>Test provenance title 3</title>
             <description>Test provenance description 3</description>
           </provenance_step>
+          <provenance_step timestamp="2015-06-25T13:07:17.100000">
+            <title>IF Provenance</title>
+            <description>IF Provenance</description>
+            <start_time>20140714_060955</start_time>
+            <finish_time>20140714_061255</finish_time>
+            <hazard_layer>path/to/hazard/layer</hazard_layer>
+            <exposure_layer>path/to/exposure/layer</exposure_layer>
+            <impact_function_id>IF_id</impact_function_id>
+            <impact_function_version>2.1</impact_function_version>
+            <host_name>my_computer</host_name>
+            <user>my_user</user>
+            <qgis_version>2.4</qgis_version>
+            <gdal_version>1.9.1</gdal_version>
+            <qt_version>4.5</qt_version>
+            <pyqt_version>5.1</pyqt_version>
+            <os>ubuntu 12.04</os>
+            <inasafe_version>2.1</inasafe_version>
+            <exposure_pixel_size>0.1</exposure_pixel_size>
+            <hazard_pixel_size>0.2</hazard_pixel_size>
+            <impact_pixel_size>0.1</impact_pixel_size>
+            <analysis_extent>[0, 1, 2, 2]</analysis_extent>
+            <parameter>{}</parameter>
+          </provenance_step>
         </inasafe_provenance>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>

@@ -50,7 +50,7 @@ class TestImpactMetadata(TestCase):
     def test_metadata_provenance(self):
         metadata = self.generate_test_metadata()
         self.assertEqual(metadata.provenance.count, 4)
-        self.assertEqual(metadata.provenance.last.title, 'Title 4')
+        self.assertEqual(metadata.provenance.last.title, 'IF Provenance')
 
     def test_metadata_date(self):
         metadata = ImpactLayerMetadata('random_layer_id')
@@ -159,15 +159,16 @@ class TestImpactMetadata(TestCase):
 
     def test_xml_to_json_to_xml(self):
         generated_metadata = ImpactLayerMetadata(
-            EXISTING_IMPACT_FILE,
-            xml_uri=EXISTING_IMPACT_XML)
+            EXISTING_IMPACT_FILE, xml_uri=EXISTING_IMPACT_XML
+        )
         with open(EXISTING_IMPACT_XML) as f:
             expected_metadata = f.read()
 
         json_tmp_file = unique_filename(suffix='.json', dir=TEMP_DIR)
         generated_metadata.write_to_file(json_tmp_file)
-        read_tmp_metadata = ImpactLayerMetadata(EXISTING_IMPACT_FILE,
-                                                json_uri=json_tmp_file)
+        read_tmp_metadata = ImpactLayerMetadata(
+                EXISTING_IMPACT_FILE, json_uri=json_tmp_file
+        )
         self.assertEquals(expected_metadata, read_tmp_metadata.xml)
 
     def generate_test_metadata(self):
@@ -213,7 +214,7 @@ class TestImpactMetadata(TestCase):
         metadata.append_provenance_step(
             'Title 3', 'Description of step 3', '2015-06-25T13:14:24.508984')
         metadata.append_if_provenance_step(
-            'Title 4',
+            'IF Provenance',
             'IF Provenance',
             '2015-06-25T13:14:24.510000',
             good_data
