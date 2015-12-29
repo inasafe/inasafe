@@ -97,6 +97,8 @@ class ImpactFunction(object):
         self._not_affected_value = 'Not Affected'
         # Store provenances
         self._provenances = Provenance()
+        # Start time
+        self._start_time = None
 
     @classmethod
     def metadata(cls):
@@ -469,6 +471,8 @@ class ImpactFunction(object):
 
     def validate(self):
         """Validate things needed before running the analysis."""
+        # Set start time.
+        self._start_time = datetime.now()
         # Validate that input layers are valid
         self.provenance.append_step(
             'Validating Step',
@@ -541,7 +545,7 @@ class ImpactFunction(object):
     def set_if_provenance(self):
         """Set IF provenance step for the IF."""
         data = {
-            'start_time': datetime.now() ,
+            'start_time': self._start_time ,
             'finish_time': datetime.now(),
             'hazard_layer': self.hazard.keywords['title'],
             'exposure_layer': self.exposure.keywords['title'],
