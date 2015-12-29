@@ -523,6 +523,7 @@ class ImpactFunction(object):
         keywords = {
             'layer_purpose': 'impact',
             'keyword_version': inasafe_keyword_version,
+            'if_provenance': self.provenance
         }
         if extra_keywords:
             keywords.update(extra_keywords)
