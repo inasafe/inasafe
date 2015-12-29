@@ -346,8 +346,21 @@ class ImpactLayerMetadata(BaseMetadata):
         :param description: the content of the step
         :type description: str
         :param timestamp: the time of the step
-        :type timestamp: datetime
+        :type timestamp: datetime, str
         """
         step_time = self._provenance.append_step(title, description, timestamp)
         if step_time > self.last_update:
             self.last_update = step_time
+
+    def update_from_dict(self, keywords):
+        """
+
+        :param keywords:
+        :return:
+        """
+        super(ImpactLayerMetadata, self).update_from_dict(keywords)
+
+        if 'if_provenance' in keywords.keys():
+            if_provenance = keywords['if_provenance']
+            for provenance_step in if_provenance:
+                self.provenance.append_provenance_step(provenance_step)

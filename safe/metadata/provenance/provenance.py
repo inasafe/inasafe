@@ -123,7 +123,7 @@ class Provenance(object):
         :type description: str
 
         :param timestamp: the time of the ProvenanceStep
-        :type timestamp: datetime, None
+        :type timestamp: datetime, None, str
 
         :param data: The data of the ProvenanceStep
         :type data: dict
@@ -157,3 +157,12 @@ class Provenance(object):
         step = IFProvenanceStep(title, description, timestamp, data)
         self._steps.append(step)
         return step.time
+
+    def append_provenance_step(self, provenance):
+        """Append provenance object
+
+        :param provenance: ProvenanceStep object
+        :type provenance: ProvenanceStep
+        """
+
+        self._steps.append(provenance)

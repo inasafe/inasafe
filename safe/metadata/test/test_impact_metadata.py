@@ -33,11 +33,16 @@ from safe.common.exceptions import MetadataReadError
 from safe.common.utilities import unique_filename
 
 from safe.metadata import ImpactLayerMetadata
+from safe.metadata.provenance import Provenance
 from safe.metadata.test import (
     TEMP_DIR,
     EXISTING_IMPACT_JSON,
-    EXISTING_IMPACT_FILE, INVALID_IMPACT_JSON,
-    INCOMPLETE_IMPACT_JSON, EXISTING_IMPACT_XML, TEST_XML_BASEPATH)
+    EXISTING_IMPACT_FILE,
+    INVALID_IMPACT_JSON,
+    INCOMPLETE_IMPACT_JSON,
+    EXISTING_IMPACT_XML,
+    TEST_XML_BASEPATH
+)
 
 
 class TestImpactMetadata(TestCase):
@@ -192,12 +197,49 @@ class TestImpactMetadata(TestCase):
 
     def test_update_from_dict(self):
         """Test update_from_dict method."""
-        metadata = self.generate_test_metadata()
+        good_data = {
+            'start_time': '20140714_060955',
+            'finish_time': '20140714_061255',
+            'hazard_layer': 'path/to/hazard/layer',
+            'exposure_layer': 'path/to/exposure/layer',
+            'impact_function_id': 'IF_id',
+            'impact_function_version': '2.1',
+            'host_name': 'my_computer',
+            'user': 'my_user',
+            'qgis_version': '2.4',
+            'gdal_version': '1.9.1',
+            'qt_version': '4.5',
+            'pyqt_version': '5.1',
+            'os': 'ubuntu 12.04',
+            'inasafe_version': '2.1',
+            'exposure_pixel_size': '0.1',
+            'hazard_pixel_size': '0.2',
+            'impact_pixel_size': '0.1',
+            'analysis_extent': [0, 1, 2, 2],
+            'parameter': {},
+        }
+
+        metadata = ImpactLayerMetadata('random_layer_id')
+        provenance = Provenance()
+        provenance.append_step(
+            'Title 1', 'Description of step 1', '2015-06-25T13:14:24.508974')
+        provenance.append_step(
+            'Title 2', 'Description of step 2', '2015-06-25T13:14:24.508980')
+        provenance.append_if_provenance_step(
+            'Title 3',
+            'Description of step 3',
+            '2015-06-25T13:14:24.508984',
+            data=good_data
+        )
         keywords = {
             'layer_purpose': 'impact_layer',
-            'layer_geometry': 'raster'
+            'layer_geometry': 'raster',
+            'if_provenance': provenance,
         }
         metadata.update_from_dict(keywords)
         self.assertEqual(metadata.layer_purpose, 'impact_layer')
         self.assertEqual(metadata.layer_geometry, 'raster')
         self.assertNotEqual(metadata.layer_mode, 'raster')
+        self.assertEqual(len(metadata.provenance.steps), 3)
+        self.assertEqual(metadata.provenance.get(2), provenance.get(2))
+        self.assertEqual(metadata.provenance.get(2).user, 'my_user')
