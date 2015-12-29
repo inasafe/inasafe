@@ -551,11 +551,13 @@ class ImpactFunction(object):
             'pyqt_version': PYQT_VERSION_STR,
             'os': platform.version(),
             'inasafe_version': get_version(),
-        # 'exposure_pixel_size',
-        # 'hazard_pixel_size',
-        # 'impact_pixel_size',
-        # 'analysis_extent',
-        # 'parameter'
+            # Temporary.
+            # TODO: Update it later.
+            'exposure_pixel_size': '',
+            'hazard_pixel_size': '',
+            'impact_pixel_size': '',
+            'analysis_extent': '',
+            'parameter': ''
         }
 
         self.provenance.append_if_provenance_step(
