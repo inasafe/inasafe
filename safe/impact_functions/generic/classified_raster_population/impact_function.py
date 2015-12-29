@@ -247,9 +247,9 @@ class ClassifiedRasterHazardPopulationFunction(
             'total_needs': total_needs
         }
 
-        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
-
         self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
         raster_layer = Raster(

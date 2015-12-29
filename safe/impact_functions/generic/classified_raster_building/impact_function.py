@@ -206,9 +206,9 @@ class ClassifiedRasterHazardBuildingFunction(
             'buildings_affected': self.total_affected_buildings
         }
 
-        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
-
         self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create vector layer and return
         vector_layer = Vector(

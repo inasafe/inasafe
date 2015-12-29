@@ -208,9 +208,9 @@ class VolcanoPolygonBuildingFunction(
             'legend_title': legend_title
         }
 
-        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
-
         self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create vector layer and return
         impact_layer = Vector(

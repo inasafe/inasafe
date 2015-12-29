@@ -513,9 +513,9 @@ class FloodRasterRoadsFunction(
             'target_field': target_field
         }
 
-        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
-
         self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Convert QgsVectorLayer to inasafe layer and return it
         line_layer = Vector(

@@ -251,9 +251,9 @@ class FloodPolygonRoadsFunction(
             'target_field': self.target_field
         }
 
-        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
-
         self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         line_layer = Vector(
             data=line_layer,
