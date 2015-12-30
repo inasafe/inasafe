@@ -212,8 +212,10 @@ class StylingTest(unittest.TestCase):
         """Verify that we give informative errors when style is not correct
            .. seealso:: https://github.com/AIFDR/inasafe/issues/230
         """
-        path = test_data_path('impact', 'polygons_for_styling.shp')
-        vector_layer, _ = load_layer(path)
+        vector_layer = clone_shp_layer(
+            name='polygons_for_styling',
+            include_keywords=True,
+            source_directory=test_data_path('impact'))
 
         style = {
             'legend_title': u'Population Count',

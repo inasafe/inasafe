@@ -169,24 +169,11 @@ def calculate_impact(impact_function):
     if impact_function.requires_clipping:
         check_data_integrity(layers)
 
-    # Start time
-    start_time = datetime.now()
-
     # Run IF
     result_layer = impact_function.run()
 
     # End time
     end_time = datetime.now()
-
-    # Elapsed time
-    elapsed_time = end_time - start_time
-    # Don's use this - see https://github.com/AIFDR/inasafe/issues/394
-    # elapsed_time_sec = elapsed_time.total_seconds()
-    elapsed_time_sec = elapsed_time.seconds + (elapsed_time.days * 24 * 3600)
-
-    # Eet current time stamp
-    # Need to change : to _ because : is forbidden in keywords
-    time_stamp = end_time.isoformat('_')
 
     # Get input layer sources
     # NOTE: We assume here that there is only one of each
@@ -209,11 +196,6 @@ def calculate_impact(impact_function):
         result_layer.keywords['%s_title' % layer_purpose] = title
         result_layer.keywords['%s_source' % layer_purpose] = source
         result_layer.keywords['%s' % layer_purpose] = category
-
-    result_layer.keywords['elapsed_time'] = elapsed_time_sec
-    result_layer.keywords['time_stamp'] = time_stamp[:19]  # remove decimal
-    result_layer.keywords['host_name'] = impact_function.host_name
-    result_layer.keywords['user'] = impact_function.user
 
     msg = 'Impact function %s returned None' % str(impact_function)
     verify(result_layer is not None, msg)

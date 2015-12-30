@@ -19,10 +19,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import json
 from xml.etree import ElementTree
-
 from safe.metadata import BaseMetadata
 from safe.metadata.provenance import Provenance
 from safe.metadata.utils import reading_ancillary_files, XML_NS, prettify_xml
+from safe.metadata.utils import merge_dictionaries
 
 
 class ImpactLayerMetadata(BaseMetadata):
@@ -50,6 +50,81 @@ class ImpactLayerMetadata(BaseMetadata):
     # remember to add an attribute or a setter property with the same name
     # these are properties that need special getters and setters thus are
     # not put in the standard_properties
+    _standard_properties = {
+        'postprocessing_report': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'postprocessing_report/'
+            'gco:CharacterString'),
+        'legend_title': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'legend_title/'
+            'gco:CharacterString'),
+        'legend_notes': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'legend_notes/'
+            'gco:CharacterString'),
+        'map_title': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'map_title/'
+            'gco:CharacterString'),
+        'legend_units': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'legend_units/'
+            'gco:CharacterString'),
+        'impact_summary': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'impact_summary/'
+            'gco:CharacterString'),
+        'target_field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'target_field/'
+            'gco:CharacterString'),
+        'impact_table': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'impact_table/'
+            'gco:CharacterString'),
+        'statistics_classes': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'impact_table/'
+            'gco:List'),
+        'statistics_type': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'statistics_type/'
+            'gco:CharacterString'),
+    }
+    _standard_properties = merge_dictionaries(
+        BaseMetadata._standard_properties, _standard_properties)
+
     _special_properties = {
         'provenance': (
             'gmd:identificationInfo/'
@@ -106,7 +181,8 @@ class ImpactLayerMetadata(BaseMetadata):
         metadata = self.dict
 
         metadata['provenance'] = self.provenance.dict
-        return json.dumps(metadata, indent=2, sort_keys=True)
+        return json.dumps(metadata, indent=2, sort_keys=True,
+                          separators=(',', ': '))
 
     def read_json(self):
         """
@@ -120,11 +196,20 @@ class ImpactLayerMetadata(BaseMetadata):
             if 'provenance' in metadata:
                 for provenance_step in metadata['provenance']:
                     try:
-                        self.append_provenance_step(
-                            provenance_step['title'],
-                            provenance_step['description'],
-                            provenance_step['time'],
-                        )
+                        title = provenance_step['title']
+                        if 'IF Provenance' in title:
+                            self.append_if_provenance_step(
+                                provenance_step['title'],
+                                provenance_step['description'],
+                                provenance_step['time'],
+                                provenance_step['data']
+                            )
+                        else:
+                            self.append_provenance_step(
+                                provenance_step['title'],
+                                provenance_step['description'],
+                                provenance_step['time'],
+                            )
                     except KeyError:
                         # we want to get as much as we can without raising
                         # errors
@@ -190,7 +275,20 @@ class ImpactLayerMetadata(BaseMetadata):
             description = step.find('description').text
             timestamp = step.get('timestamp')
 
-            self.append_provenance_step(title, description, timestamp)
+            if 'IF Provenance' in title:
+                data = {}
+                from safe.metadata.provenance import IFProvenanceStep
+                keys = IFProvenanceStep.impact_functions_fields
+                for key in keys:
+                    value = step.find(key)
+                    if value is not None:
+                        data[key] = value.text
+                    else:
+                        data[key] = ''
+                self.append_if_provenance_step(
+                        title, description, timestamp, data)
+            else:
+                self.append_provenance_step(title, description, timestamp)
 
     @property
     def provenance(self):
@@ -209,13 +307,49 @@ class ImpactLayerMetadata(BaseMetadata):
         """
         Add a step to the provenance of the metadata
 
-        :param title: the title of the step
+        :param title: The title of the step.
         :type title: str
-        :param description: the content of the step
+
+        :param description: The content of the step
         :type description: str
+
         :param timestamp: the time of the step
-        :type timestamp: datetime
+        :type timestamp: datetime, str
         """
         step_time = self._provenance.append_step(title, description, timestamp)
         if step_time > self.last_update:
             self.last_update = step_time
+
+    def append_if_provenance_step(
+            self, title, description, timestamp=None, data=None):
+        """Add a if provenance step to the provenance of the metadata
+
+        :param title: The title of the step.
+        :type title: str
+
+        :param description: The content of the step
+        :type description: str
+
+        :param timestamp: the time of the step
+        :type timestamp: datetime, str
+
+        :param data: The data of the step.
+        :type data: dict
+        """
+        step_time = self._provenance.append_if_provenance_step(
+                title, description, timestamp, data)
+        if step_time > self.last_update:
+            self.last_update = step_time
+
+    def update_from_dict(self, keywords):
+        """Update metadata value from a keywords dictionary.
+
+        :param keywords:
+        :return:
+        """
+        super(ImpactLayerMetadata, self).update_from_dict(keywords)
+
+        if 'if_provenance' in keywords.keys():
+            if_provenance = keywords['if_provenance']
+            for provenance_step in if_provenance:
+                self.provenance.append_provenance_step(provenance_step)

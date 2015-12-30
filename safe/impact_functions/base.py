@@ -19,6 +19,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from socket import gethostname
 import getpass
+import platform
+from datetime import datetime
+from qgis.utils import QGis
+from osgeo import gdal
+from PyQt4.QtCore import QT_VERSION_STR
+from PyQt4.Qt import PYQT_VERSION_STR
 
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -28,6 +34,9 @@ from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
 from safe.utilities.gis import convert_to_safe_layer
 from safe.storage.safe_layer import SafeLayer
+from safe.definitions import inasafe_keyword_version
+from safe.metadata.provenance import Provenance
+from safe.common.version import get_version
 
 
 class ImpactFunction(object):
@@ -83,6 +92,14 @@ class ImpactFunction(object):
         self._target_field = 'safe_ag'
         # The string to mark not affected value in the vector impact layer
         self._not_affected_value = 'Not Affected'
+        # Store provenances
+        self._provenances = Provenance()
+        # Start time
+        self._start_time = None
+
+        self.provenance.append_step(
+            'Initialize Impact Function',
+            'Impact function is being initialized')
 
     @classmethod
     def metadata(cls):
@@ -98,21 +115,6 @@ class ImpactFunction(object):
         used in contexts where no QGIS is present.
         """
         return cls.metadata().as_dict().get('function_type', None)
-
-    @classmethod
-    def function_category(cls):
-        """Property for function category based on hazard categories.
-
-         Function category could be 'single_event' or/and 'multiple_event'.
-         Single event data type means that the data is captured by a
-         single observation, while 'multiple_event' has been aggregated for
-         some observations.
-
-         :returns: The hazard categories that this function supports.
-         :rtype: list
-        """
-        return cls.metadata().as_dict().get('layer_requirements').get(
-            'hazard').get('hazard_categories')
 
     @property
     def user(self):
@@ -470,7 +472,12 @@ class ImpactFunction(object):
 
     def validate(self):
         """Validate things needed before running the analysis."""
+        # Set start time.
+        self._start_time = datetime.now()
         # Validate that input layers are valid
+        self.provenance.append_step(
+            'Validating Step',
+            'Impact function is validating the inputs.')
         if (self.hazard is None) or (self.exposure is None):
             message = tr(
                 'Ensure that hazard and exposure layers are all set before '
@@ -507,4 +514,64 @@ class ImpactFunction(object):
             class. We will just need to check if the function_type is
             'qgis2.0', it needs to have the extent set.
         # """
-        pass
+        self.provenance.append_step(
+            'Preparation Step',
+            'Impact function is being prepared to run the analysis.')
+
+
+    def generate_impact_keywords(self, extra_keywords=None):
+        """Obtain keywords for the impact layer.
+
+        :param extra_keywords: Additional keywords from the analysis.
+        :type extra_keywords: dict
+
+        :returns: Impact layer's keywords.
+        :rtype: dict
+        """
+        keywords = {
+            'layer_purpose': 'impact',
+            'keyword_version': inasafe_keyword_version,
+            'if_provenance': self.provenance
+        }
+        if extra_keywords:
+            keywords.update(extra_keywords)
+
+        return keywords
+
+    @property
+    def provenance(self):
+        """Get the provenances"""
+        return self._provenances
+
+    def set_if_provenance(self):
+        """Set IF provenance step for the IF."""
+        data = {
+            'start_time': self._start_time ,
+            'finish_time': datetime.now(),
+            'hazard_layer': self.hazard.keywords['title'],
+            'exposure_layer': self.exposure.keywords['title'],
+            'impact_function_id': self.metadata().as_dict()['id'],
+            'impact_function_version': '1.0',  # TODO: Add IF version.
+            'host_name': self.host_name,
+            'user': self.user,
+            'qgis_version': QGis.QGIS_VERSION,
+            'gdal_version': gdal.__version__,
+            'qt_version': QT_VERSION_STR,
+            'pyqt_version': PYQT_VERSION_STR,
+            'os': platform.version(),
+            'inasafe_version': get_version(),
+            # Temporary.
+            # TODO: Update it later.
+            'exposure_pixel_size': '',
+            'hazard_pixel_size': '',
+            'impact_pixel_size': '',
+            'analysis_extent': '',
+            'parameter': ''
+        }
+
+        self.provenance.append_if_provenance_step(
+            'IF Provenance',
+            'Impact function\'s provenance.',
+            timestamp=None,
+            data=data
+        )

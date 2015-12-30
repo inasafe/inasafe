@@ -42,14 +42,18 @@ from safe.common.exceptions import (
     KeywordDbError,
     InvalidParameterError,
     NoKeywordsFoundError,
-    UnsupportedProviderError)
-from safe.storage.metadata_utilities import (
-    generate_iso_metadata,
-    ISO_METADATA_KEYWORD_TAG)
+    UnsupportedProviderError,
+    MetadataReadError,
+    MissingMetadata)
 from safe.common.utilities import verify
 import safe.definitions
 from safe.definitions import (
     inasafe_keyword_version, inasafe_keyword_version_key)
+from safe.utilities.metadata import (
+    write_iso19115_metadata,
+    read_iso19115_metadata,
+    write_read_iso_19115_metadata
+)
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -116,6 +120,13 @@ class KeywordIO(QObject):
 
         """
         source = layer.source()
+
+        # Try to read from ISO metadata first.
+        try:
+            return read_iso19115_metadata(source, keyword)
+        except (MetadataReadError, NoKeywordsFoundError):
+            pass
+
         try:
             flag = self.are_keywords_file_based(layer)
         except UnsupportedProviderError:
@@ -123,11 +134,12 @@ class KeywordIO(QObject):
 
         try:
             if flag:
-                keywords = read_file_keywords(source, keyword)
+                keywords = read_file_keywords(source)
             else:
                 uri = self.normalize_uri(layer)
-                keywords = self.read_keyword_from_uri(uri, keyword)
-            return keywords
+                keywords = self.read_keyword_from_uri(uri)
+            return write_read_iso_19115_metadata(source, keywords, keyword)
+
         except (HashNotFoundError,
                 Exception,
                 OperationalError,
@@ -154,22 +166,28 @@ class KeywordIO(QObject):
 
         :raises: UnsupportedProviderError
         """
-        try:
-            flag = self.are_keywords_file_based(layer)
-        except UnsupportedProviderError:
-            raise
-
         source = layer.source()
         try:
-            keywords[inasafe_keyword_version_key] = inasafe_keyword_version
-            if flag:
-                write_keywords_to_file(source, keywords)
-            else:
-                uri = self.normalize_uri(layer)
-                self.write_keywords_for_uri(uri, keywords)
+            write_iso19115_metadata(source, keywords)
             return
-        except:
-            raise
+        except Exception as e:
+            raise e
+        #
+        # try:
+        #     flag = self.are_keywords_file_based(layer)
+        # except UnsupportedProviderError:
+        #     raise
+
+        # try:
+        #     keywords[inasafe_keyword_version_key] = inasafe_keyword_version
+        #     if flag:
+        #         write_keywords_to_file(source, keywords)
+        #     else:
+        #         uri = self.normalize_uri(layer)
+        #         self.write_keywords_for_uri(uri, keywords)
+        #     return
+        # except:
+        #     raise
 
     def update_keywords(self, layer, keywords):
         """Update keywords for a datasource.
@@ -216,8 +234,7 @@ class KeywordIO(QObject):
         :type source_layer: QgsMapLayer
 
         :param destination_file: The output filename that should be used
-            to store the keywords in. It can be a .shp or a .keywords for
-            example since the suffix will always be replaced with .keywords.
+            to store the keywords in. It's a path to a layer file.
         :type destination_file: str
 
         :param extra_keywords: A dict containing all the extra keywords
@@ -237,12 +254,13 @@ class KeywordIO(QObject):
         verify(isinstance(extra_keywords, dict), message)
         # compute the output keywords file name
         destination_base = os.path.splitext(destination_file)[0]
-        new_destination = destination_base + '.keywords'
+        new_destination = destination_base + '.xml'
         # write the extra keywords into the source dict
         try:
             for key in extra_keywords:
                 keywords[key] = extra_keywords[key]
-            write_keywords_to_file(new_destination, keywords)
+            write_iso19115_metadata(destination_file, keywords)
+            # write_keywords_to_file(new_destination, keywords)
         except Exception, e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
@@ -549,8 +567,7 @@ class KeywordIO(QObject):
                 'select dict from keyword where hash = \'%s\';' % hash_value)
             cursor.execute(sql)
             data = cursor.fetchone()
-            metadata_xml = generate_iso_metadata(keywords)
-            pickle_dump = dumps(metadata_xml, HIGHEST_PROTOCOL)
+            pickle_dump = dumps(keywords, HIGHEST_PROTOCOL)
             if data is None:
                 # insert a new rec
                 # cursor.execute('insert into keyword(hash) values(:hash);',
@@ -575,7 +592,7 @@ class KeywordIO(QObject):
         finally:
             self.close_connection()
 
-        return metadata_xml
+        return keywords
 
     def read_keyword_from_uri(self, uri, keyword=None):
         """Get metadata from the keywords file associated with a URI.
@@ -626,27 +643,22 @@ class KeywordIO(QObject):
                 raise HashNotFoundError('No hash found for %s' % hash_value)
             data = data[0]  # first field
 
-            # get the ISO XML out of the DB
-            metadata = loads(str(data))
+            # get the keywords out of the DB
+            keywords = loads(str(data))
 
             # the uri already had a KW entry in the DB using the old KW system
             # we use that dictionary to update the entry to the new ISO based
             # metadata system
-            if isinstance(metadata, dict):
-                metadata = self.write_keywords_for_uri(uri, metadata)
-
-            root = ElementTree.fromstring(metadata)
-            keyword_element = root.find(ISO_METADATA_KEYWORD_TAG)
-            dict_str = keyword_element.text
-            picked_dict = json.loads(dict_str)
+            if isinstance(keywords, dict):
+                keywords = self.write_keywords_for_uri(uri, keywords)
 
             if keyword is None:
-                return picked_dict
-            if keyword in picked_dict:
-                return picked_dict[keyword]
+                return keywords
+            if keyword in keywords:
+                return keywords[keyword]
             else:
                 raise KeywordNotFoundError('Keyword "%s" not found in %s' % (
-                    keyword, picked_dict))
+                    keyword, keywords))
 
         except sqlite.Error, e:
             LOGGER.debug("Error %s:" % e.args[0])

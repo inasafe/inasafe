@@ -117,6 +117,10 @@ class VolcanoPointPopulationFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Parameters
         radii = self.parameters['distances'].value
 
@@ -242,19 +246,27 @@ class VolcanoPointPopulationFunction(
             get_thousand_separator())
 
         # Create vector layer and return
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.target_field,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'total_needs': self.total_needs
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         impact_layer = Raster(
             data=covered_exposure_layer.get_data(),
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
             name=tr('People affected by the buffered point volcano'),
-            keywords={'impact_summary': impact_summary,
-                      'impact_table': impact_table,
-                      'target_field': self.target_field,
-                      'map_title': map_title,
-                      'legend_notes': legend_notes,
-                      'legend_units': legend_units,
-                      'legend_title': legend_title,
-                      'total_needs': self.total_needs},
+            keywords=impact_layer_keywords,
             style_info=style_info)
 
         self._impact = impact_layer

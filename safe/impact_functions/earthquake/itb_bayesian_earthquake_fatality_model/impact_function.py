@@ -77,9 +77,9 @@ class ITBBayesianFatalityFunction(ITBFatalityFunction):
         fatality_ = numpy.loadtxt(file_, dtype=float, delimiter=',')
         nsims = len(fatality_)
         fatality_rate = {}
-        for mmi in mmi_range[:2]: # mmi < 4
+        for mmi in mmi_range[:2]:  # mmi < 4
             fatality_rate[mmi] = numpy.zeros((nsims, 1))
-        for i, mmi in enumerate(mmi_range[2:]): # mmi >= 4
+        for i, mmi in enumerate(mmi_range[2:]):  # mmi >= 4
             fatality_rate[mmi] = fatality_[:, i][:, numpy.newaxis]
         return fatality_rate
 
@@ -98,9 +98,9 @@ class ITBBayesianFatalityFunction(ITBFatalityFunction):
 
         magnitude_bin = self.hardcoded_parameters['magnitude_bin']
         nsamples = float(len(total_fatalities))
-        cprob = numpy.ones(len(magnitude_bin)+1)
+        cprob = numpy.ones(len(magnitude_bin) + 1)
         for j, val in enumerate(magnitude_bin):
-            cprob[j] = numpy.sum(total_fatalities < val)/nsamples
+            cprob[j] = numpy.sum(total_fatalities < val) / nsamples
 
         prob = numpy.hstack((cprob[0], numpy.diff(cprob))) * 100.0
         return self.round_to_sum(prob)
