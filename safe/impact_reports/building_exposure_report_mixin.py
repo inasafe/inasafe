@@ -158,11 +158,14 @@ class BuildingExposureReportMixin(ReportMixin):
                 format_int(self.total_affected_buildings), align='right'))
             table.add(row)
 
-        row = m.Row()
-        row.add(m.Cell(tr('Not affected buildings'), header=True))
-        row.add(m.Cell(
-            format_int(self.total_unaffected_buildings), align='right'))
-        table.add(row)
+        # Only show not affected building row if the IF does not use custom
+        # affected categories
+        if self._affected_categories == self.affected_buildings.keys():
+            row = m.Row()
+            row.add(m.Cell(tr('Not affected buildings'), header=True))
+            row.add(m.Cell(
+                format_int(self.total_unaffected_buildings), align='right'))
+            table.add(row)
 
         row = m.Row()
         row.add(m.Cell(tr('Total'), header=True))
@@ -187,7 +190,10 @@ class BuildingExposureReportMixin(ReportMixin):
         row.add(m.Cell('Building type', header=True))
         for name in impact_names:
             row.add(m.Cell(tr(name), header=True, align='right'))
-        row.add(m.Cell(tr('Not Affected'), header=True, align='right'))
+        # Only show not affected building row if the IF does not use custom
+        # affected categories
+        if self._affected_categories == self.affected_buildings.keys():
+            row.add(m.Cell(tr('Not Affected'), header=True, align='right'))
         row.add(m.Cell(tr('Total'), header=True, align='right'))
         table.add(row)
 
@@ -198,8 +204,11 @@ class BuildingExposureReportMixin(ReportMixin):
         # Initialise totals with zeros
         for _ in impact_names:
             impact_totals.append(0)
-        # And one extra total for the unaffected column
-        impact_totals.append(0)
+        # Only show not affected building row if the IF does not use custom
+        # affected categories
+        if self._affected_categories == self.affected_buildings.keys():
+            # And one extra total for the unaffected column
+            impact_totals.append(0)
         # And one extra total for the cumulative total column
         impact_totals.append(0)
         # Now build the main table
@@ -215,8 +224,11 @@ class BuildingExposureReportMixin(ReportMixin):
                 else:
                     impact_subtotals.append(0)
             row.add(m.Cell(building_type_name.capitalize(), header=True))
-            # Add not affected subtotals
-            impact_subtotals.append(
+            # Only show not affected building row if the IF does not use custom
+            # affected categories
+            if self._affected_categories == self.affected_buildings.keys():
+                # Add not affected subtotals
+                impact_subtotals.append(
                     self.buildings[building_type] - sum(impact_subtotals))
             # list out the subtotals for this category per impact type
             for value in impact_subtotals:
