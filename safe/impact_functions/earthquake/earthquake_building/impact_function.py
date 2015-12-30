@@ -143,7 +143,8 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
         self.affected_buildings = OrderedDict([
             (tr('High'), {}),
             (tr('Medium'), {}),
-            (tr('Low'), {})
+            (tr('Low'), {}),
+            (self._not_affected_value, {})
         ])
         removed = []
         for i in range(interpolate_size):
@@ -210,8 +211,8 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
                 category = tr('High')
             else:
                 # Not reported for less than level t0
-                removed.append(i)
-                continue
+                cls = 0
+                category = self._not_affected_value
             attributes[i][self.target_field] = cls
             self.affected_buildings[
                 category][usage][tr('Buildings Affected')] += 1
