@@ -159,7 +159,7 @@ class BuildingExposureReportMixin(ReportMixin):
             table.add(row)
 
         row = m.Row()
-        row.add(m.Cell(tr('Unaffected buildings'), header=True))
+        row.add(m.Cell(tr('Not affected buildings'), header=True))
         row.add(m.Cell(
             format_int(self.total_unaffected_buildings), align='right'))
         table.add(row)
@@ -187,6 +187,7 @@ class BuildingExposureReportMixin(ReportMixin):
         row.add(m.Cell('Building type', header=True))
         for name in impact_names:
             row.add(m.Cell(tr(name), header=True, align='right'))
+        row.add(m.Cell(tr('Not Affected'), header=True, align='right'))
         row.add(m.Cell(tr('Total'), header=True, align='right'))
         table.add(row)
 
@@ -197,7 +198,9 @@ class BuildingExposureReportMixin(ReportMixin):
         # Initialise totals with zeros
         for _ in impact_names:
             impact_totals.append(0)
-        # And one extra total for the cumuluative total column
+        # And one extra total for the unaffected column
+        impact_totals.append(0)
+        # And one extra total for the cumulative total column
         impact_totals.append(0)
         # Now build the main table
         for building_type in building_types:
@@ -212,9 +215,13 @@ class BuildingExposureReportMixin(ReportMixin):
                 else:
                     impact_subtotals.append(0)
             row.add(m.Cell(building_type_name.capitalize(), header=True))
+            # Add not affected subtotals
+            impact_subtotals.append(
+                    self.buildings[building_type] - sum(impact_subtotals))
             # list out the subtotals for this category per impact type
             for value in impact_subtotals:
                 row.add(m.Cell(format_int(value), align='right'))
+
             # totals column
             line_total = format_int(self.buildings[building_type])
             impact_subtotals.append(self.buildings[building_type])
