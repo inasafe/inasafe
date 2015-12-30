@@ -144,7 +144,6 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
             (tr('High'), {}),
             (tr('Medium'), {}),
             (tr('Low'), {}),
-            (self._not_affected_value, {})
         ])
         removed = []
         for i in range(interpolate_size):
@@ -211,8 +210,8 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
                 category = tr('High')
             else:
                 # Not reported for less than level t0
-                cls = 0
-                category = self._not_affected_value
+                continue
+
             attributes[i][self.target_field] = cls
             self.affected_buildings[
                 category][usage][tr('Buildings Affected')] += 1
@@ -222,7 +221,7 @@ class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
                 self.affected_buildings[category][usage][
                     tr('Contents value ($M)')] += contents_value / 1000000.0
 
-        # remove uncategorized element
+        # remove un-categorized element
         removed.reverse()
         geometry = interpolate_result.get_geometry()
         for i in range(0, len(removed)):
