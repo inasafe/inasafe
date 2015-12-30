@@ -121,7 +121,6 @@ class VolcanoPolygonBuildingFunction(
         # Hazard zone categories from hazard layer
         hazard_zone_categories = list(
             set(self.hazard.layer.get_data(self.hazard_class_attribute)))
-        hazard_zone_categories.append(self._not_affected_value)
         category_names = hazard_zone_categories
 
         self.buildings = {}
