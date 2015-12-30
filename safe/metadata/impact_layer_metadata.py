@@ -51,33 +51,12 @@ class ImpactLayerMetadata(BaseMetadata):
     # these are properties that need special getters and setters thus are
     # not put in the standard_properties
     _standard_properties = {
-        'elapsed_time': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'elapsed_time/'
-            'gco:Integer'),
-        'hazard_title': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'hazard_title/'
-            'gco:CharacterString'),
         'postprocessing_report': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'postprocessing_report/'
-            'gco:CharacterString'),
-        'exposure_title': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'exposure_title/'
             'gco:CharacterString'),
         'legend_title': (
             'gmd:identificationInfo/'
@@ -92,13 +71,6 @@ class ImpactLayerMetadata(BaseMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'legend_notes/'
-            'gco:CharacterString'),
-        'exposure_source': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'exposure_source/'
             'gco:CharacterString'),
         'map_title': (
             'gmd:identificationInfo/'
@@ -120,34 +92,6 @@ class ImpactLayerMetadata(BaseMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'impact_summary/'
-            'gco:CharacterString'),
-        'user': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'user/'
-            'gco:CharacterString'),
-        'host_name': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'host_name/'
-            'gco:CharacterString'),
-        'time_stamp': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'time_stamp/'
-            'gco:CharacterString'),
-        'hazard_source': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'hazard_source/'
             'gco:CharacterString'),
         'target_field': (
             'gmd:identificationInfo/'
