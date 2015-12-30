@@ -54,9 +54,6 @@ class ImpactFunction(object):
                 super(FloodImpactFunction, self).__init__()
 
         """
-        self.provenance.append_step(
-            'Initialize Impact Function',
-            'Impact function is being initialized')
         # User who runs this
         self._user = getpass.getuser().replace(' ', '_')
         # The host that runs this
@@ -99,6 +96,10 @@ class ImpactFunction(object):
         self._provenances = Provenance()
         # Start time
         self._start_time = None
+
+        self.provenance.append_step(
+            'Initialize Impact Function',
+            'Impact function is being initialized')
 
     @classmethod
     def metadata(cls):
