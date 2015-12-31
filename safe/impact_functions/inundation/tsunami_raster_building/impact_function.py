@@ -186,28 +186,37 @@ class TsunamiRasterBuildingFunction(
         legend_title = tr('Inundated structure status')
         legend_units = tr('(low, medium, high, and very high)')
 
-        style_classes = []
-            # dict(
-            #     label=tr('Dry (<= 0 m)'),
-            #     value=0,
-            #     colour='#1EFC7C',
-            #     transparency=0,
-            #     size=1
-            # ),
-            # dict(
-            #     label=tr('Wet (0 m - %.1f m)') % threshold,
-            #     value=2,
-            #     colour='#FF9900',
-            #     transparency=0,
-            #     size=1
-            # ),
-            # dict(
-            #     label=tr('Inundated (>= %.1f m)') % threshold,
-            #     value=1,
-            #     colour='#F31A1C',
-            #     transparency=0,
-            #     size=1
-            # )]
+        style_classes = [
+            dict(
+                label=tr('Low'),
+                value=0,
+                colour='#1EFC7C',
+                transparency=0,
+                size=1
+            ),
+            dict(
+                label=tr('Medium'),
+                value=1,
+                colour='#F31A1C',
+                transparency=0,
+                size=1
+            ),
+            dict(
+                label=tr('High'),
+                value=2,
+                colour='#FF9900',
+                transparency=0,
+                size=1
+            ),
+
+            dict(
+                label=tr('Very High'),
+                value=3,
+                colour='#FF0000',
+                transparency=0,
+                size=1
+            ),
+        ]
 
         style_info = dict(
             target_field=self.target_field,

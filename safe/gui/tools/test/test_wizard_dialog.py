@@ -991,12 +991,12 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_layermode_index = 0
-        layermode_index = dialog.lstLayerModes.currentRow()
+        expected_layer_mode = 'Continuous'
+        layer_mode = dialog.lstLayerModes.currentItem().text()
         message = ('Expected %s, but I got %s' %
-                   (expected_layermode_index, layermode_index))
+                   (expected_layer_mode, layer_mode))
         self.assertEqual(
-            expected_layermode_index, layermode_index, message)
+            expected_layer_mode, layer_mode, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -1050,12 +1050,12 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_layermode_index = 1
-        layermode_index = dialog.lstLayerModes.currentRow()
+        expected_layer_mode = 'Continuous'
+        layer_mode = dialog.lstLayerModes.currentItem().text()
         message = ('Expected %s, but I got %s' %
-                   (expected_layermode_index, layermode_index))
+                   (expected_layer_mode, layer_mode))
         self.assertEqual(
-            expected_layermode_index, layermode_index, message)
+            expected_layer_mode, layer_mode, message)
 
         dialog.pbnNext.click()  # Go to unit
 
