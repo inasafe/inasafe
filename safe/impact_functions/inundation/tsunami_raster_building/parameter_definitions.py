@@ -22,23 +22,67 @@ from safe_extras.parameters.float_parameter import FloatParameter
 from safe.utilities.i18n import tr
 
 
-def threshold():
-    """Generator for the default threshold parameter.
+def low_threshold():
+    """Generate low hazard zone threshold parameter
 
-    :return: List of FloatParameter
+    :return: list of FloatParameter
     :rtype: list[FloatParameter]
     """
     field = FloatParameter()
-    field.name = tr('Thresholds [m]')
     field.is_required = True
+    field.name = 'Low Hazard Zone Threshold'
     field.precision = 2
-    field.value = 1.0  # default value
+    field.value = 1
+    field.minimum_allowed_value = 0
+    field.maximum_allowed_value = 100
     unit_metres = parameter_unit_metres()
     field.unit = unit_metres
     field.allowed_units = [unit_metres]
-    field.help_text = tr(
-        'Threshold value to categorize inundated area.')
+    field.help_text = tr('Low Hazard Zone threshold.')
     field.description = tr(
-        'Hazard value above the threshold in meter will be considered '
-        'inundated.')
+        'The threshold of hazard categorized as Low Hazard Zone in meter')
+    return field
+
+
+def medium_threshold():
+    """Generate moderate hazard zone threshold parameter
+
+    :return: list of FloatParameter
+    :rtype: list[FloatParameter]
+    """
+    field = FloatParameter()
+    field.is_required = True
+    field.name = 'Moderate Hazard Zone Threshold'
+    field.precision = 2
+    field.value = 3
+    field.minimum_allowed_value = 0
+    field.maximum_allowed_value = 100
+    unit_metres = parameter_unit_metres()
+    field.unit = unit_metres
+    field.allowed_units = [unit_metres]
+    field.help_text = tr('Moderate Hazard Zone threshold.')
+    field.description = tr(
+        'The threshold of hazard categorized as Moderate Hazard Zone in meter')
+    return field
+
+
+def high_threshold():
+    """Generate high  hazard zone threshold parameter
+
+    :return: list of FloatParameter
+    :rtype: list[FloatParameter]
+    """
+    field = FloatParameter()
+    field.is_required = True
+    field.name = 'High Hazard Zone Threshold'
+    field.precision = 2
+    field.value = 8
+    field.minimum_allowed_value = 0
+    field.maximum_allowed_value = 100
+    unit_metres = parameter_unit_metres()
+    field.unit = unit_metres
+    field.allowed_units = [unit_metres]
+    field.help_text = tr('High Hazard Zone threshold.')
+    field.description = tr(
+        'The threshold of hazard categorized as Moderate Hazard Zone in meter')
     return field

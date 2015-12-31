@@ -20,8 +20,12 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.tsunami_raster_building\
-    .parameter_definitions import threshold
+from safe.impact_functions.inundation.tsunami_raster_building \
+    .parameter_definitions import (
+    low_threshold,
+    medium_threshold,
+    high_threshold
+)
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
@@ -119,11 +123,16 @@ class TsunamiRasterBuildingMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 }
             },
-            'parameters': OrderedDict([
-                ('threshold', threshold()),
-                ('postprocessors', OrderedDict([
-                    ('BuildingType', building_type_postprocessor())
-                ]))
-            ])
+            'parameters': OrderedDict(
+                [
+                    ('low_threshold', low_threshold()),
+                    ('medium_threshold', medium_threshold()),
+                    ('high_threshold', high_threshold()),
+                    ('postprocessors', OrderedDict(
+                        [
+                            ('BuildingType', building_type_postprocessor())
+                        ])
+                    )
+                ])
         }
         return dict_meta
