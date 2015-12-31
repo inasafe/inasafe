@@ -47,6 +47,7 @@ class TsunamiRasterBuildingFunction(
 
     def __init__(self):
         """Constructor (calls ctor of base class)."""
+        self._target_field = 'depth'
         super(TsunamiRasterBuildingFunction, self).__init__()
 
     def notes(self):
@@ -56,7 +57,6 @@ class TsunamiRasterBuildingFunction(
         :rtype: safe.messaging.Message
         """
         message = m.Message(style_class='container')
-        threshold = self.parameters['threshold'].value
         message.add(
             m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
@@ -103,19 +103,16 @@ class TsunamiRasterBuildingFunction(
         self.validate()
         self.prepare()
 
-        threshold = self.parameters['threshold'].value  # Tsunami threshold [m]
-
-        verify(isinstance(threshold, float),
-               'Expected thresholds to be a float. Got %s' % str(threshold))
-
-        # Determine attribute name for hazard levels
-        hazard_attribute = 'depth'
+        # Thresholds for tsunami hazard zone breakdown.
+        low_max = self.parameters['low_threshold'].value
+        medium_max = self.parameters['medium_threshold'].value
+        high_max = self.parameters['high_threshold'].value
 
         # Interpolate hazard level to building locations
         interpolated_layer = assign_hazard_values_to_exposure_data(
             self.hazard.layer,
             self.exposure.layer,
-            attribute_name=hazard_attribute)
+            attribute_name=self.target_field)
 
         # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
@@ -133,19 +130,26 @@ class TsunamiRasterBuildingFunction(
         self.buildings = {}
         # Impacted building breakdown
         self.affected_buildings = OrderedDict([
-            (tr('Inundated'), {}),
-            (tr('Wet'), {}),
-            (tr('Dry'), {})
+            (tr('Low'), {}),
+            (tr('Medium'), {}),
+            (tr('High'), {}),
+            (tr('Very High'), {})
         ])
+        categories = self.affected_buildings.keys()
         for i in range(total_features):
             # Get the interpolated depth
-            water_depth = float(features[i]['depth'])
-            if water_depth <= 0:
-                inundated_status = 0  # dry
-            elif water_depth >= threshold:
-                inundated_status = 1  # inundated
+            water_depth = float(features[i][self.target_field])
+            if water_depth <= low_max:
+                inundated_status = 0  # low
+            elif low_max < water_depth <= medium_max:
+                inundated_status = 1  # medium
+            elif medium_max < water_depth <= high_max:
+                inundated_status = 2  # high
+            elif high_max < water_depth:
+                inundated_status = 3  # very high
+            # If not a number or a value beside real number.
             else:
-                inundated_status = 2  # wet
+                inundated_status = 0
 
             # Count affected buildings by usage type if available
             if (structure_class_field in attribute_names and
@@ -168,10 +172,7 @@ class TsunamiRasterBuildingFunction(
             self.buildings[usage] += 1
             # Add calculated impact to existing attributes
             features[i][self.target_field] = inundated_status
-            category = [
-                tr('Dry'),
-                tr('Inundated'),
-                tr('Wet')][inundated_status]
+            category = categories[inundated_status]
             self.affected_buildings[category][usage][
                 tr('Buildings Affected')] += 1
 
@@ -183,30 +184,30 @@ class TsunamiRasterBuildingFunction(
         # For printing map purpose
         map_title = tr('Inundated buildings')
         legend_title = tr('Inundated structure status')
-        legend_units = tr('(inundated, wet, or dry)')
+        legend_units = tr('(low, medium, high, and very high)')
 
-        style_classes = [
-            dict(
-                label=tr('Dry (<= 0 m)'),
-                value=0,
-                colour='#1EFC7C',
-                transparency=0,
-                size=1
-            ),
-            dict(
-                label=tr('Wet (0 m - %.1f m)') % threshold,
-                value=2,
-                colour='#FF9900',
-                transparency=0,
-                size=1
-            ),
-            dict(
-                label=tr('Inundated (>= %.1f m)') % threshold,
-                value=1,
-                colour='#F31A1C',
-                transparency=0,
-                size=1
-            )]
+        style_classes = []
+            # dict(
+            #     label=tr('Dry (<= 0 m)'),
+            #     value=0,
+            #     colour='#1EFC7C',
+            #     transparency=0,
+            #     size=1
+            # ),
+            # dict(
+            #     label=tr('Wet (0 m - %.1f m)') % threshold,
+            #     value=2,
+            #     colour='#FF9900',
+            #     transparency=0,
+            #     size=1
+            # ),
+            # dict(
+            #     label=tr('Inundated (>= %.1f m)') % threshold,
+            #     value=1,
+            #     colour='#F31A1C',
+            #     transparency=0,
+            #     size=1
+            # )]
 
         style_info = dict(
             target_field=self.target_field,
