@@ -60,26 +60,43 @@ class TsunamiRasterBuildingFunction(
         message.add(
             m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
+
+        # Thresholds for tsunami hazard zone breakdown.
+        low_max = self.parameters['low_threshold']
+        medium_max = self.parameters['medium_threshold']
+        high_max = self.parameters['high_threshold']
+
         checklist.add(tr(
-            'Buildings are inundated when tsunami levels exceed %.1f m')
-                % threshold)
+            'Low tsunami hazard zone is defined as inundation depth is less '
+            'than %.1f %s') % (low_max.value, low_max.unit.name))
         checklist.add(tr(
-            'Buildings are wet when tsunami levels are greater than 0 m but '
-            'less than %.1f m') % threshold)
-        checklist.add(tr('Buildings are dry when tsunami levels are 0 m.'))
-        checklist.add(tr('Buildings are closed if they are inundated or wet.'))
-        checklist.add(tr('Buildings are open if they are dry.'))
+            'Moderate tsunami hazard zone is defined as inundation depth is '
+            'more than %.1f %s but less than %.1f %s') % (
+            low_max.value,
+            low_max.unit.name,
+            medium_max.value,
+            medium_max.unit.name)
+        )
+        checklist.add(tr(
+            'High tsunami hazard zone is defined as inundation depth is '
+            'more than %.1f %s but less than %.1f %s') % (
+            medium_max.value,
+            medium_max.unit.name,
+            high_max.value,
+            high_max.unit.name)
+        )
+        checklist.add(tr(
+            'Very high tsunami hazard zone is defined as inundation depth is '
+            'more than %.1f %s') % (high_max.value, high_max.unit.name))
+
+        checklist.add(tr(
+            'Buildings are closed if they are in moderate, high, or very high '
+            'tsunami hazard zone.'))
+        checklist.add(tr(
+            'Buildings are open if they are in low tsunami hazard zone.'))
         message.add(checklist)
         return message
 
-    @property
-    def _affected_categories(self):
-        """Overwriting the affected categories, since 'unaffected' are counted.
-
-        :returns: The categories that equal effected.
-        :rtype: list
-        """
-        return [tr('Inundated'), tr('Wet')]
 
     def run(self):
         """Tsunami raster impact to buildings (e.g. from Open Street Map)."""
