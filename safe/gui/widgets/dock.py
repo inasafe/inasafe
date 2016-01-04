@@ -100,6 +100,7 @@ from safe_extras.pydispatch import dispatcher
 from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.utilities.unicode import get_unicode
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -1873,7 +1874,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.tr('Write to PDF'),
             os.path.join(temp_dir(), default_file_name),
             self.tr('Pdf File (*.pdf)'))
-        output_path = str(output_path)
+        output_path = get_unicode(output_path)
 
         if output_path is None or output_path == '':
             # noinspection PyTypeChecker

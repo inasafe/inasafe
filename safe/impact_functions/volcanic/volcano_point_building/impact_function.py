@@ -118,7 +118,6 @@ class VolcanoPointBuildingFunction(
         # Category names for the impact zone
         category_names = radii_meter
         self._affected_categories_volcano = radii_meter[:]
-        category_names.append(self._not_affected_value)
 
         # Get names of volcanoes considered
         if volcano_name_attribute in hazard_layer.get_attribute_names():

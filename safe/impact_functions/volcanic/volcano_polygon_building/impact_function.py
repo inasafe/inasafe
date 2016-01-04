@@ -121,6 +121,7 @@ class VolcanoPolygonBuildingFunction(
         # Hazard zone categories from hazard layer
         hazard_zone_categories = list(
             set(self.hazard.layer.get_data(self.hazard_class_attribute)))
+        category_names = hazard_zone_categories
 
         self.buildings = {}
         self.affected_buildings = OrderedDict()
@@ -132,19 +133,23 @@ class VolcanoPolygonBuildingFunction(
             if not hazard_value:
                 hazard_value = self._not_affected_value
             features[i][self.target_field] = hazard_value
+
             if (self.exposure_class_attribute and
                     self.exposure_class_attribute in attribute_names):
                 usage = features[i][self.exposure_class_attribute]
             else:
                 usage = get_osm_building_usage(attribute_names, features[i])
+
             if usage in [None, 'NULL', 'null', 'Null', 0]:
                 usage = tr('Unknown')
+
             if usage not in self.buildings:
                 self.buildings[usage] = 0
                 for category in self.affected_buildings.keys():
                     self.affected_buildings[category][
                         usage] = OrderedDict([
                             (tr('Buildings Affected'), 0)])
+
             self.buildings[usage] += 1
             if hazard_value in self.affected_buildings.keys():
                 self.affected_buildings[hazard_value][usage][
@@ -155,8 +160,6 @@ class VolcanoPolygonBuildingFunction(
 
         # Generate simple impact report
         impact_summary = impact_table = self.html_report()
-        category_names = hazard_zone_categories
-        category_names.append(self._not_affected_value)
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
