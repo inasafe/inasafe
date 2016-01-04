@@ -203,7 +203,7 @@
             <gco:CharacterString>population</gco:CharacterString>
           </exposure>
           <keyword_version>
-            <gco:CharacterString>3.2</gco:CharacterString>
+            <gco:CharacterString>3.3</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>
@@ -211,6 +211,9 @@
           <structure_class_field>
             <gco:CharacterString/>
           </structure_class_field>
+          <allow_resampling>
+            <gco:CharacterString/>
+          </allow_resampling>
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
