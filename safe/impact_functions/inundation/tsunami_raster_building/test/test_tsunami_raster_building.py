@@ -60,17 +60,19 @@ class TsunamiRasterBuildingFunctionTest(unittest.TestCase):
 
         # 1 = inundated, 2 = wet, 3 = dry
         expected_result = {
-            0: 117,
-            1: 64,
-            2: 0,
-            3: 0
+            0: 1,
+            1: 116,
+            2: 64,
+            3: 0,
+            4: 0
         }
 
         result = {
             0: 0,
             1: 0,
             2: 0,
-            3: 0
+            3: 0,
+            4: 0
         }
         for feature in impact_data:
             inundated_status = feature[impact_function.target_field]
