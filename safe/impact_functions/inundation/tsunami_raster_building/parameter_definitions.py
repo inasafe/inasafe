@@ -40,7 +40,9 @@ def low_threshold():
     field.allowed_units = [unit_metres]
     field.help_text = tr('Low Hazard Zone threshold.')
     field.description = tr(
-        'The threshold of hazard categorized as Low Hazard Zone in meter')
+        'The threshold of hazard categorized as Low Hazard Zone in meter. A '
+        'zone is categorized as Low Hazard Zone if the depth of tsunami '
+        'inundation is less than Low Hazard Zone Threshold.')
     return field
 
 
@@ -62,7 +64,10 @@ def medium_threshold():
     field.allowed_units = [unit_metres]
     field.help_text = tr('Moderate Hazard Zone threshold.')
     field.description = tr(
-        'The threshold of hazard categorized as Moderate Hazard Zone in meter')
+        'The threshold of hazard categorized as Moderate Hazard Zone in '
+        'meter. A zone is categorized as Medium Hazard Zone if the depth of '
+        'tsunami inundation is more than Low Hazard Zone Threshold and less '
+        'than Medium Hazard Zone Threshold.')
     return field
 
 
@@ -84,5 +89,10 @@ def high_threshold():
     field.allowed_units = [unit_metres]
     field.help_text = tr('High Hazard Zone threshold.')
     field.description = tr(
-        'The threshold of hazard categorized as Moderate Hazard Zone in meter')
+        'The threshold of hazard categorized as Moderate Hazard Zone in '
+        'meter. A zone is categorized as High Hazard Zone if the depth of '
+        'tsunami inundation is more than Medium Hazard Zone Threshold and less '
+        'than High Hazard Zone Threshold.'
+        'A zone that has more than High Hazard Zone Threshold is categorized '
+        'as Very High Hazard Zone.')
     return field

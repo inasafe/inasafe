@@ -197,14 +197,14 @@ class TsunamiRasterBuildingFunction(
             dict(
                 label=tr('Medium'),
                 value=1,
-                colour='#F31A1C',
+                colour='#FFFF00',
                 transparency=0,
                 size=1
             ),
             dict(
                 label=tr('High'),
                 value=2,
-                colour='#FF9900',
+                colour='#FFB700',
                 transparency=0,
                 size=1
             ),
