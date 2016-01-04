@@ -97,6 +97,19 @@ class TsunamiRasterBuildingFunction(
         message.add(checklist)
         return message
 
+    @property
+    def _affected_categories(self):
+        """Overwriting the affected categories, since 'unaffected' are counted.
+
+        :returns: The categories that equal effected.
+        :rtype: list
+        """
+        return [
+            tr('Low Hazard Zone'),
+            tr('Medium Hazard Zone'),
+            tr('High Hazard Zone'),
+            tr('Very High Hazard Zone'),
+        ]
 
     def run(self):
         """Tsunami raster impact to buildings (e.g. from Open Street Map)."""
@@ -130,23 +143,26 @@ class TsunamiRasterBuildingFunction(
         self.buildings = {}
         # Impacted building breakdown
         self.affected_buildings = OrderedDict([
-            (tr('Low'), {}),
-            (tr('Medium'), {}),
-            (tr('High'), {}),
-            (tr('Very High'), {})
+            (tr('Dry Zone'), {}),
+            (tr('Low Hazard Zone'), {}),
+            (tr('Medium Hazard Zone'), {}),
+            (tr('High Hazard Zone'), {}),
+            (tr('Very High Hazard Zone'), {})
         ])
         categories = self.affected_buildings.keys()
         for i in range(total_features):
             # Get the interpolated depth
             water_depth = float(features[i][self.target_field])
-            if water_depth <= low_max:
-                inundated_status = 0  # low
+            if water_depth <= 0:
+                inundated_status = 0
+            elif 0 < water_depth <= low_max:
+                inundated_status = 1  # low
             elif low_max < water_depth <= medium_max:
-                inundated_status = 1  # medium
+                inundated_status = 2  # medium
             elif medium_max < water_depth <= high_max:
-                inundated_status = 2  # high
+                inundated_status = 3  # high
             elif high_max < water_depth:
-                inundated_status = 3  # very high
+                inundated_status = 4  # very high
             # If not a number or a value beside real number.
             else:
                 inundated_status = 0
@@ -188,30 +204,37 @@ class TsunamiRasterBuildingFunction(
 
         style_classes = [
             dict(
-                label=tr('Low'),
+                label=tr('Dry'),
                 value=0,
-                colour='#1EFC7C',
+                colour='#00FF00',
                 transparency=0,
                 size=1
             ),
             dict(
-                label=tr('Medium'),
+                label=tr('Low Hazard Area'),
                 value=1,
                 colour='#FFFF00',
                 transparency=0,
                 size=1
             ),
             dict(
-                label=tr('High'),
+                label=tr('Medium Hazard Area'),
                 value=2,
                 colour='#FFB700',
                 transparency=0,
                 size=1
             ),
+            dict(
+                label=tr('High Hazard Area'),
+                value=3,
+                colour='#FF6F00',
+                transparency=0,
+                size=1
+            ),
 
             dict(
-                label=tr('Very High'),
-                value=3,
+                label=tr('Very High Hazard Area'),
+                value=4,
                 colour='#FF0000',
                 transparency=0,
                 size=1
