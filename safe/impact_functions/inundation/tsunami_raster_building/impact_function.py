@@ -49,6 +49,13 @@ class TsunamiRasterBuildingFunction(
         """Constructor (calls ctor of base class)."""
         self._target_field = 'depth'
         super(TsunamiRasterBuildingFunction, self).__init__()
+        self.hazard_classes = [
+            tr('Dry Zone'),
+            tr('Low Hazard Zone'),
+            tr('Medium Hazard Zone'),
+            tr('High Hazard Zone'),
+            tr('Very High Hazard Zone'),
+        ]
 
     def notes(self):
         """Return the notes section of the report.
@@ -67,33 +74,43 @@ class TsunamiRasterBuildingFunction(
         high_max = self.parameters['high_threshold']
 
         checklist.add(tr(
-            'Low tsunami hazard zone is defined as inundation depth is less '
-            'than %.1f %s') % (low_max.value, low_max.unit.name))
+            'Dry zone is defined as non-inundated area or has inundation depth '
+            'is 0 %s') % (low_max.unit.abbreviation)
+        )
+
+        checklist.add(tr(
+            'Low tsunami hazard zone is defined as inundation depth is more '
+            'than 0 %s but less than %.1f %s') % (
+            low_max.unit.abbreviation,
+            low_max.value,
+            low_max.unit.abbreviation)
+        )
         checklist.add(tr(
             'Moderate tsunami hazard zone is defined as inundation depth is '
             'more than %.1f %s but less than %.1f %s') % (
             low_max.value,
-            low_max.unit.name,
+            low_max.unit.abbreviation,
             medium_max.value,
-            medium_max.unit.name)
+            medium_max.unit.abbreviation)
         )
         checklist.add(tr(
             'High tsunami hazard zone is defined as inundation depth is '
             'more than %.1f %s but less than %.1f %s') % (
             medium_max.value,
-            medium_max.unit.name,
+            medium_max.unit.abbreviation,
             high_max.value,
-            high_max.unit.name)
+            high_max.unit.abbreviation)
         )
         checklist.add(tr(
             'Very high tsunami hazard zone is defined as inundation depth is '
-            'more than %.1f %s') % (high_max.value, high_max.unit.name))
+            'more than %.1f %s') % (
+            high_max.value, high_max.unit.abbreviation))
 
         checklist.add(tr(
-            'Buildings are closed if they are in moderate, high, or very high '
-            'tsunami hazard zone.'))
+            'Buildings are closed if they are in low, moderate, high, or very '
+            'high tsunami hazard zone.'))
         checklist.add(tr(
-            'Buildings are open if they are in low tsunami hazard zone.'))
+            'Buildings are opened if they are in dry zone.'))
         message.add(checklist)
         return message
 
@@ -104,12 +121,7 @@ class TsunamiRasterBuildingFunction(
         :returns: The categories that equal effected.
         :rtype: list
         """
-        return [
-            tr('Low Hazard Zone'),
-            tr('Medium Hazard Zone'),
-            tr('High Hazard Zone'),
-            tr('Very High Hazard Zone'),
-        ]
+        return self.hazard_classes[1:]
 
     def run(self):
         """Tsunami raster impact to buildings (e.g. from Open Street Map)."""
@@ -143,11 +155,11 @@ class TsunamiRasterBuildingFunction(
         self.buildings = {}
         # Impacted building breakdown
         self.affected_buildings = OrderedDict([
-            (tr('Dry Zone'), {}),
-            (tr('Low Hazard Zone'), {}),
-            (tr('Medium Hazard Zone'), {}),
-            (tr('High Hazard Zone'), {}),
-            (tr('Very High Hazard Zone'), {})
+            (self.hazard_classes[0], {}),
+            (self.hazard_classes[1], {}),
+            (self.hazard_classes[2], {}),
+            (self.hazard_classes[3], {}),
+            (self.hazard_classes[4], {})
         ])
         categories = self.affected_buildings.keys()
         for i in range(total_features):
@@ -204,28 +216,28 @@ class TsunamiRasterBuildingFunction(
 
         style_classes = [
             dict(
-                label=tr('Dry'),
+                label=self.hazard_classes[0],
                 value=0,
                 colour='#00FF00',
                 transparency=0,
                 size=1
             ),
             dict(
-                label=tr('Low Hazard Area'),
+                label=self.hazard_classes[1],
                 value=1,
                 colour='#FFFF00',
                 transparency=0,
                 size=1
             ),
             dict(
-                label=tr('Medium Hazard Area'),
+                label=self.hazard_classes[2],
                 value=2,
                 colour='#FFB700',
                 transparency=0,
                 size=1
             ),
             dict(
-                label=tr('High Hazard Area'),
+                label=self.hazard_classes[3],
                 value=3,
                 colour='#FF6F00',
                 transparency=0,
@@ -233,7 +245,7 @@ class TsunamiRasterBuildingFunction(
             ),
 
             dict(
-                label=tr('Very High Hazard Area'),
+                label=self.hazard_classes[4],
                 value=4,
                 colour='#FF0000',
                 transparency=0,
