@@ -166,7 +166,8 @@ class ITBFatalityFunction(
             # array is ordered in such a way that the numbers closest to the
             # next one are at the top.
             sorted_idx = sorted(diff_dic, key=diff_dic.get)
-            idx_change = [sorted_idx[x] for x in range(nsize-difference, nsize)]
+            idx_change = [
+                sorted_idx[x] for x in range(nsize - difference, nsize)]
             floor_array[idx_change] += 1
 
         assert(array_sum == int(numpy.sum(floor_array)))
