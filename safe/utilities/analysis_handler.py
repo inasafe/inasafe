@@ -320,6 +320,13 @@ class AnalysisHandler(QObject):
         .. note:: Copied or adapted from the dock
         """
         self.analysis = Analysis()
+
+        # Impact Function
+        impact_function = self.impact_function_manager.get(
+            self.parent.selected_function()['id'])
+        impact_function.parameters = self.parent.if_params
+        self.analysis.impact_function = impact_function
+
         # Layers
         self.analysis.hazard_layer = self.parent.hazard_layer
         self.analysis.exposure_layer = self.parent.exposure_layer
@@ -335,12 +342,6 @@ class AnalysisHandler(QObject):
         if self.analysis.aggregation_layer:
             self.analysis.aggregation_keyword = self.keyword_io.read_keywords(
                 self.parent.aggregation_layer)
-
-        # Impact Function
-        impact_function = self.impact_function_manager.get(
-            self.parent.selected_function()['id'])
-        impact_function.parameters = self.parent.if_params
-        self.analysis.impact_function = impact_function
 
         # Variables
         self.analysis.clip_hard = self.clip_hard
