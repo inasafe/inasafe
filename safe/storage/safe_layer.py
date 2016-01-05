@@ -155,7 +155,7 @@ class SafeLayer(object):
             return None
 
     def crs(self):
-        # FIXME Hack to get the extent.
+        # FIXME Hack to get the crs.
         if isinstance(self.layer, Layer):
             qgis_layer = self.layer.as_qgis_native()
             return qgis_layer.crs()
@@ -201,7 +201,7 @@ class SafeLayer(object):
 
     def geometry_type(self):
         if isinstance(self.layer, Vector):
-            return self.layer.as_qgis_native().geometry_type()
+            return self.layer.as_qgis_native().geometryType()
         elif isinstance(self.layer, QgsVectorLayer):
             return self.layer.geometryType()
         else:
