@@ -123,24 +123,8 @@ class PopulationExposureReportMixin(ReportMixin):
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
         table.caption = None
-        row = m.Row()
-        row.add(m.Cell(
-            tr('Population needing evacuation <sup>1</sup>'),
-            header=True))
-        evacuated = format_int(population_rounding(self.total_evacuated))
-        row.add(m.Cell(evacuated, align='right'))
-        table.add(row)
-        if len(self.impact_category_ordering):
-            table.add(m.Row())  # add a blank line
-            row = m.Row()
-            row.add(m.Cell(
-                tr('Total affected population'),
-                header=True))
-            affected = format_int(
-                population_rounding(self.total_affected_population))
-            row.add(m.Cell(affected, align='right'))
-            table.add(row)
 
+        if len(self.impact_category_ordering):
             for category in self.impact_category_ordering:
                 population_in_category = self.lookup_category(category)
                 population_in_category = format_int(population_rounding(
@@ -150,6 +134,24 @@ class PopulationExposureReportMixin(ReportMixin):
                 row.add(m.Cell(tr(category), header=True))
                 row.add(m.Cell(population_in_category, align='right'))
                 table.add(row)
+
+        table.add(m.Row())  # add a blank line
+        row = m.Row()
+        row.add(m.Cell(
+            tr('Population needing evacuation <sup>1</sup>'),
+            header=True))
+        evacuated = format_int(population_rounding(self.total_evacuated))
+        row.add(m.Cell(evacuated, align='right'))
+        table.add(row)
+
+        row = m.Row()
+        row.add(m.Cell(
+            tr('Total affected population'),
+            header=True))
+        affected = format_int(
+            population_rounding(self.total_affected_population))
+        row.add(m.Cell(affected, align='right'))
+        table.add(row)
 
         table.add(m.Row())  # add a blank line
 
@@ -202,8 +204,7 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The categories by defined or default ordering.
         :rtype: list
         """
-        if (
-                not hasattr(self, '_impact_category_ordering') or
+        if (not hasattr(self, '_impact_category_ordering') or
                 not self._impact_category_ordering):
             self._impact_category_ordering = self.affected_population.keys()
         return self._impact_category_ordering
