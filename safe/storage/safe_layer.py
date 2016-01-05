@@ -203,6 +203,6 @@ class SafeLayer(object):
         if isinstance(self.layer, Vector):
             return self.layer.as_qgis_native().geometry_type()
         elif isinstance(self.layer, QgsVectorLayer):
-            return self.layer.geometry_type()
+            return self.layer.geometryType()
         else:
             return None
