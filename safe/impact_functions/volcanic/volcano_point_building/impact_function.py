@@ -118,7 +118,7 @@ class VolcanoPointBuildingFunction(
         category_names = radii
         # In kilometers
         self._affected_categories_volcano = [
-            '%.1f km' % key for key in radii[::]]
+            tr('Radius %.1f km') % key for key in radii[::]]
 
         # Get names of volcanoes considered
         if volcano_name_attribute in hazard_layer.get_attribute_names():
@@ -179,7 +179,7 @@ class VolcanoPointBuildingFunction(
         # Adding 'km'
         affected_building_keys = self.affected_buildings.keys()
         for key in affected_building_keys:
-            self.affected_buildings['%.1f km' % key] = \
+            self.affected_buildings[tr('Radius %.1f km' % key)] = \
                 self.affected_buildings.pop(key)
 
         # Lump small entries and 'unknown' into 'other' category
@@ -198,7 +198,7 @@ class VolcanoPointBuildingFunction(
         i = 0
         for category_name in category_names:
             style_class = dict()
-            style_class['label'] = tr(category_name) + ' km'
+            style_class['label'] = tr('Radius %s km') % tr(category_name)
             style_class['transparency'] = 0
             style_class['value'] = category_name
             style_class['size'] = 1

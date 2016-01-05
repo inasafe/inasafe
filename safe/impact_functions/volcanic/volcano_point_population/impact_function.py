@@ -162,7 +162,7 @@ class VolcanoPointPopulationFunction(
 
         # Initialise affected population per categories
         for radius in radii:
-            category = 'Distance %s km ' % format_int(radius)
+            category = 'Radius %s km ' % format_int(radius)
             self.affected_population[category] = 0
 
         if has_no_data(self.exposure.layer.get_data(nan=True)):
@@ -174,7 +174,7 @@ class VolcanoPointPopulationFunction(
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this category
-                category = 'Distance %s km ' % format_int(
+                category = 'Radius %s km ' % format_int(
                     row[category_title])
                 self.affected_population[category] += population
 
