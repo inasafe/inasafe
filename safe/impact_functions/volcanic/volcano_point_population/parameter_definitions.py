@@ -20,10 +20,9 @@ def distance():
     field.name = 'Distances [km]'
     field.is_required = True
     field.minimum_item_count = 1
-    # Rizky: no reason for the number below. It can be any values to describe
-    # maximum item count. Feel free to change it when necessary.
-    # PS: it was my birthdate
-    field.maximum_item_count = 19
+    # Ismail: I choose 8 since in the IF, we only provide 8 colors in the
+    # style. More than 8 item, will create IndexError
+    field.maximum_item_count = 8
     field.element_type = float
     field.ordering = InputListParameter.AscendingOrder
     field.value = [3.0, 5.0, 10.0]
