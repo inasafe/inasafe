@@ -18,9 +18,10 @@ __date__ = '7/14/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from qgis.core import QgsVectorLayer, QgsMapLayer
+from qgis.core import QgsVectorLayer, QgsRasterLayer, QgsMapLayer
 from safe.storage.layer import Layer
 from safe.storage.vector import Vector
+from safe.storage.raster import Raster
 from safe.common.exceptions import KeywordNotFoundError, InvalidLayerError
 from safe.utilities.keyword_io import KeywordIO
 
@@ -150,5 +151,58 @@ class SafeLayer(object):
             return self.layer.as_qgis_native()
         elif isinstance(self.layer, QgsVectorLayer):
             return self.layer
+        else:
+            return None
+
+    def crs(self):
+        # FIXME Hack to get the extent.
+        if isinstance(self.layer, Layer):
+            qgis_layer = self.layer.as_qgis_native()
+            return qgis_layer.crs()
+        elif isinstance(self.layer, QgsMapLayer):
+            return self.layer.crs()
+
+    def extent(self):
+        if isinstance(self.layer, Layer):
+            # FIXME Hack to get the extent.
+            qgis_layer = self.layer.as_qgis_native()
+            return qgis_layer.extent()
+        elif isinstance(self.layer, QgsMapLayer):
+            return self.layer.extent()
+
+    def qgis_raster_layer(self):
+        """Get QgsRasterLayer representation of self.layer.
+
+        :returns: A QgsRasterLayer if it's raster.
+        :rtype: QgsRasterLayer, None
+        """
+        if isinstance(self.layer, Raster):
+            return self.layer.as_qgis_native()
+        elif isinstance(self.layer, QgsRasterLayer):
+            return self.layer
+        else:
+            return None
+
+    def qgis_layer(self):
+        if isinstance(self.layer, Layer):
+            return self.layer.as_qgis_native()
+        elif isinstance(self.layer, QgsMapLayer):
+            return self.layer
+        else:
+            return None
+
+    def layer_type(self):
+        if isinstance(self.layer, Layer):
+            return self.layer.as_qgis_native().type()
+        elif isinstance(self.layer, QgsMapLayer):
+            return self.layer.type()
+        else:
+            return None
+
+    def geometry_type(self):
+        if isinstance(self.layer, Vector):
+            return self.layer.as_qgis_native().geometry_type()
+        elif isinstance(self.layer, QgsVectorLayer):
+            return self.layer.geometry_type()
         else:
             return None
