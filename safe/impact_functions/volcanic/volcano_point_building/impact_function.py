@@ -109,15 +109,16 @@ class VolcanoPointBuildingFunction(
         # Make hazard layer by buffering the point
         centers = self.hazard.layer.get_geometry()
         features = self.hazard.layer.get_data()
-        radii_meter = [x * 1000 for x in radii]  # Convert to meters
         hazard_layer = buffer_points(
             centers,
-            radii_meter,
+            radii,
             hazard_zone_attribute,
             data_table=features)
         # Category names for the impact zone
-        category_names = radii_meter
-        self._affected_categories_volcano = radii_meter[:]
+        category_names = radii
+        # In kilometers
+        self._affected_categories_volcano = [
+            tr('Radius %.1f km') % key for key in radii[::]]
 
         # Get names of volcanoes considered
         if volcano_name_attribute in hazard_layer.get_attribute_names():
@@ -143,7 +144,7 @@ class VolcanoPointBuildingFunction(
 
         self.buildings = {}
         self.affected_buildings = OrderedDict()
-        for category in radii_meter:
+        for category in radii:
             self.affected_buildings[category] = {}
 
         # Iterate the interpolated building layer
@@ -175,6 +176,12 @@ class VolcanoPointBuildingFunction(
                 self.affected_buildings[hazard_value][usage][
                     tr('Buildings Affected')] += 1
 
+        # Adding 'km'
+        affected_building_keys = self.affected_buildings.keys()
+        for key in affected_building_keys:
+            self.affected_buildings[tr('Radius %.1f km' % key)] = \
+                self.affected_buildings.pop(key)
+
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
 
@@ -191,7 +198,7 @@ class VolcanoPointBuildingFunction(
         i = 0
         for category_name in category_names:
             style_class = dict()
-            style_class['label'] = tr(category_name)
+            style_class['label'] = tr('Radius %s km') % tr(category_name)
             style_class['transparency'] = 0
             style_class['value'] = category_name
             style_class['size'] = 1

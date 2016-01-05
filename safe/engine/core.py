@@ -280,7 +280,7 @@ def buffer_points(centers, radii, hazard_zone_attribute, data_table=None):
     :param centers: All center of each point (longitude, latitude)
     :type centers: list
 
-    :param radii: Desired approximate radii in meters (must be
+    :param radii: Desired approximate radii in kilometers (must be
         monotonically ascending). Can be either one number or list of numbers
     :type radii: int, list
 
@@ -310,7 +310,7 @@ def buffer_points(centers, radii, hazard_zone_attribute, data_table=None):
         inner_rings = None
         for radius in radii:
             # Generate circle polygon
-            circle = p.generate_circle(radius)
+            circle = p.generate_circle(radius * 1000)
             circles.append(Polygon(outer_ring=circle, inner_rings=inner_rings))
 
             # Store current circle and inner ring for next poly
