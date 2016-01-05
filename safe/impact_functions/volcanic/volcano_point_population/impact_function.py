@@ -137,9 +137,8 @@ class VolcanoPointPopulationFunction(
         category_title = 'Radius'
 
         centers = self.hazard.layer.get_geometry()
-        rad_m = [x * 1000 for x in radii]  # Convert to meters
         hazard_layer = buffer_points(
-            centers, rad_m, category_title, data_table=data_table)
+            centers, radii, category_title, data_table=data_table)
 
         # Get names of volcanoes considered
         if volcano_name_attribute in hazard_layer.get_attribute_names():
@@ -162,7 +161,7 @@ class VolcanoPointPopulationFunction(
             )
 
         # Initialise affected population per categories
-        for radius in rad_m:
+        for radius in radii:
             category = 'Distance %s km ' % format_int(radius)
             self.affected_population[category] = 0
 
