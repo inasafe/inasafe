@@ -74,7 +74,7 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_mode_classified)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.utilities.analysis_handler import AnalysisHandler
 from safe.utilities.gis import (
     is_raster_layer,
@@ -642,7 +642,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstCategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -666,7 +666,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             categories += ['aggregation']
         for category in categories:
             if not isinstance(category, dict):
-                category = KeywordIO().definition(category)
+                category = definition(category)
             item = QListWidgetItem(category['name'], self.lstCategories)
             item.setData(QtCore.Qt.UserRole, category['key'])
             self.lstCategories.addItem(item)
@@ -735,7 +735,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstSubcategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -815,7 +815,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstHazardCategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -834,7 +834,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         hazard_categories = self.hazard_categories_for_layer()
         for hazard_category in hazard_categories:
             if not isinstance(hazard_category, dict):
-                hazard_category = KeywordIO().definition(hazard_category)
+                hazard_category = definition(hazard_category)
             item = QListWidgetItem(hazard_category['name'],
                                    self.lstHazardCategories)
             item.setData(QtCore.Qt.UserRole, hazard_category['key'])
@@ -886,7 +886,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstLayerModes.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -960,7 +960,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstUnits.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1044,7 +1044,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstClassifications.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1061,7 +1061,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         classifications = self.classifications_for_layer()
         for classification in classifications:
             if not isinstance(classification, dict):
-                classification = KeywordIO.definition(classification)
+                classification = definition(classification)
             item = QListWidgetItem(classification['name'],
                                    self.lstClassifications)
             item.setData(QtCore.Qt.UserRole, classification['key'])

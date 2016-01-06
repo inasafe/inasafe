@@ -15,7 +15,7 @@ from safe.test.utilities import (
     get_qgis_app,
     test_data_path,
     clone_raster_layer)
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.common.exceptions import HashNotFoundError
 from safe.common.utilities import temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
@@ -254,8 +254,8 @@ class KeywordIOTest(unittest.TestCase):
 
         """
         keyword = 'hazards'
-        definition = self.keyword_io.definition(keyword)
-        self.assertTrue('description' in definition)
+        keyword_definition = definition(keyword)
+        self.assertTrue('description' in keyword_definition)
 
     def test_to_message(self):
         """Test we can convert keywords to a message object.

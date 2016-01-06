@@ -55,6 +55,36 @@ from safe.definitions import (
 LOGGER = logging.getLogger('InaSAFE')
 
 
+def definition(keyword):
+    """Given a keyword, try to get a definition dict for it.
+
+    .. versionadded:: 3.2
+
+    Definition dicts are defined in keywords.py. We try to return
+    one if present, otherwise we return none. Using this method you
+    can present rich metadata to the user e.g.
+
+    keyword = 'layer_purpose'
+    kio = safe.utilities.keyword_io.Keyword_IO()
+    definition = kio.definition(keyword)
+    print definition
+
+    :param keyword: A keyword key.
+    :type keyword: str
+
+    :returns: A dictionary containing the matched key definition
+        from definitions.py, otherwise None if no match was found.
+    :rtype: dict, None
+    """
+    for item in dir(safe.definitions):
+        if not item.startswith("__"):
+            var = getattr(safe.definitions, item)
+            if isinstance(var, dict):
+                if var.get('key') == keyword:
+                    return var
+    return None
+
+
 class KeywordIO(QObject):
     """Class for doing keyword read/write operations.
 
@@ -681,36 +711,6 @@ class KeywordIO(QObject):
 
         return statistics_type, statistics_classes
 
-    @staticmethod
-    def definition(keyword):
-        """Given a keyword, try to get a definition dict for it.
-
-        .. versionadded:: 3.2
-
-        Definition dicts are defined in keywords.py. We try to return
-        one if present, otherwise we return none. Using this method you
-        can present rich metadata to the user e.g.
-
-        keyword = 'layer_purpose'
-        kio = safe.utilities.keyword_io.Keyword_IO()
-        definition = kio.definition(keyword)
-        print definition
-
-        :param keyword: A keyword key.
-        :type keyword: str
-
-        :returns: A dictionary containing the matched key definition
-            from definitions.py, otherwise None if no match was found.
-        :rtype: dict, None
-        """
-        for item in dir(safe.definitions):
-            if not item.startswith("__"):
-                var = getattr(safe.definitions, item)
-                if isinstance(var, dict):
-                    if var.get('key') == keyword:
-                        return var
-        return None
-
     def to_message(self, keywords=None, show_header=True):
         """Format keywords as a message object.
 
@@ -831,11 +831,11 @@ class KeywordIO(QObject):
             value = self.tr(value)
         # we want to show the user the concept name rather than its key
         # if possible. TS
-        definition = self.definition(keyword)
-        if definition is None:
-            definition = self.tr(keyword.capitalize().replace('_', ' '))
+        keyword_definition = definition(keyword)
+        if keyword_definition is None:
+            keyword_definition = self.tr(keyword.capitalize().replace('_', ' '))
         else:
-            definition = definition['name']
+            keyword_definition = keyword_definition['name']
 
         # We deal with some special cases first:
 
@@ -843,20 +843,20 @@ class KeywordIO(QObject):
         if keyword == 'value_map':
             value = self._dict_to_row(value)
         # In these KEYWORD cases we show the DESCRIPTION for
-        # the VALUE definition
+        # the VALUE keyword_definition
         elif keyword in [
                 'vector_hazard_classification',
                 'raster_hazard_classification']:
-            # get the definition for this class from definitions.py
-            value = self.definition(value)
+            # get the keyword_definition for this class from definitions.py
+            value = keyword_definition(value)
             value = value['description']
         # In these VALUE cases we show the DESCRIPTION for
-        # the VALUE definition
+        # the VALUE keyword_definition
         elif value in []:
-            # get the definition for this class from definitions.py
-            value = self.definition(value)
+            # get the keyword_definition for this class from definitions.py
+            value = keyword_definition(value)
             value = value['description']
-        # In these VALUE cases we show the NAME for the VALUE definition
+        # In these VALUE cases we show the NAME for the VALUE keyword_definition
         elif value in [
                 'multiple_event',
                 'single_event',
@@ -865,14 +865,14 @@ class KeywordIO(QObject):
                 'polygon'
                 'field']:
             # get the name for this class from definitions.py
-            value = self.definition(value)
+            value = keyword_definition(value)
             value = value['name']
         # otherwise just treat the keyword as literal text
         else:
             # Otherwise just directly read the value
             value = get_string(value)
 
-        key = m.ImportantText(definition)
+        key = m.ImportantText(keyword_definition)
         row.add(m.Cell(key))
         row.add(m.Cell(value, wrap_slash=wrap_slash))
         return row
@@ -924,3 +924,5 @@ class KeywordIO(QObject):
                 row.add(m.Cell(value_list[0]))
             table.add(row)
         return table
+
+
