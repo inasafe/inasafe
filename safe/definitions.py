@@ -498,7 +498,7 @@ generic_vector_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'name': tr('high'),
+            'name': tr('High'),
             'description': tr('The location that has highest impact.'),
             'string_defaults': ['high'],
             'numeric_default_min': 5,
@@ -507,7 +507,7 @@ generic_vector_hazard_classes = {
         },
         {
             'key': 'medium',
-            'name': tr('medium'),
+            'name': tr('Medium'),
             'description': tr('The location that has medium impact.'),
             'string_defaults': ['medium'],
             'numeric_default_min': 3,
@@ -516,7 +516,7 @@ generic_vector_hazard_classes = {
         },
         {
             'key': 'low',
-            'name': tr('low'),
+            'name': tr('Low'),
             'description': tr('The location that has lowest impact.'),
             'string_defaults': ['low'],
             'numeric_default_min': 0,
