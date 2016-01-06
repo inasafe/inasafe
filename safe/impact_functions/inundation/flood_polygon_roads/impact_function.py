@@ -91,6 +91,10 @@ class FloodPolygonRoadsFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
@@ -239,15 +243,24 @@ class FloodPolygonRoadsFunction(
             # Raising an exception seems poor semantics here....
             raise ZeroImpactException(
                 tr('No roads are flooded in this scenario.'))
+
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'map_title': map_title,
+            'legend_title': legend_title,
+            'target_field': self.target_field
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         line_layer = Vector(
             data=line_layer,
             name=tr('Flooded roads'),
-            keywords={
-                'impact_summary': impact_summary,
-                'map_title': map_title,
-                'legend_title': legend_title,
-                'target_field': self.target_field},
-            style_info=style_info)
+            keywords=impact_layer_keywords,
+            style_info=style_info
+        )
 
         self._impact = line_layer
 

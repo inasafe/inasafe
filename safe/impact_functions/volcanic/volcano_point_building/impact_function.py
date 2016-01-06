@@ -82,6 +82,10 @@ class VolcanoPointBuildingFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Hazard Zone Attribute
         hazard_zone_attribute = 'radius'
 
@@ -224,20 +228,27 @@ class VolcanoPointBuildingFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': target_field,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Create vector layer and return
         impact_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
             name=tr('Buildings affected by volcanic buffered point'),
-            keywords={
-                'impact_summary': impact_summary,
-                'impact_table': impact_table,
-                'target_field': target_field,
-                'map_title': map_title,
-                'legend_notes': legend_notes,
-                'legend_units': legend_units,
-                'legend_title': legend_title},
+            keywords=impact_layer_keywords,
             style_info=style_info)
 
         self._impact = impact_layer
