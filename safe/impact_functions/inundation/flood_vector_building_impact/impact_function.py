@@ -78,6 +78,10 @@ class FloodPolygonBuildingFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
@@ -275,16 +279,24 @@ class FloodPolygonBuildingFunction(
         if building_layer.featureCount() < 1:
             raise ZeroImpactException(tr(
                 'No buildings were impacted by this flood.'))
+
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'map_title': map_title,
+            'legend_title': legend_title,
+            'target_field': self.target_field,
+            'buildings_total': self.total_buildings,
+            'buildings_affected': self.total_affected_buildings
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         building_layer = Vector(
             data=building_layer,
             name=tr('Flooded buildings'),
-            keywords={
-                'impact_summary': impact_summary,
-                'map_title': map_title,
-                'legend_title': legend_title,
-                'target_field': self.target_field,
-                'buildings_total': self.total_buildings,
-                'buildings_affected': self.total_affected_buildings},
+            keywords=impact_layer_keywords,
             style_info=style_info)
         self._impact = building_layer
         return building_layer

@@ -43,7 +43,7 @@ from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
     add_ordered_combo_item,
-    compare_version)
+    is_keyword_version_supported)
 from safe.defaults import (
     disclaimer,
     default_north_arrow_path)
@@ -955,7 +955,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     layer, 'layer_purpose')
                 keyword_version = str(self.keyword_io.read_keywords(
                     layer, 'keyword_version'))
-                if compare_version(keyword_version, self.inasafe_version) != 0:
+                if not is_keyword_version_supported(keyword_version):
                     continue
             except:  # pylint: disable=W0702
                 # continue ignoring this layer
@@ -1643,7 +1643,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            if 'impact_summary' in keywords:
+            # if 'impact_summary' in keywords:
+            if keywords['layer_purpose'] == 'impact':
                 self.show_impact_keywords(keywords)
                 self.wvResults.impact_path = layer.source()
             else:
@@ -1652,16 +1653,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         'No Version', self.inasafe_version)
                 else:
                     keyword_version = str(keywords['keyword_version'])
-                    compare_result = compare_version(
-                        keyword_version, self.inasafe_version)
-                    if compare_result == 0:
+                    supported = is_keyword_version_supported(
+                            keyword_version)
+                    if supported:
                         self.show_generic_keywords(layer)
-                    elif compare_result > 0:
-                        # Layer has older version
-                        self.show_keyword_version_message(
-                            keyword_version, self.inasafe_version)
-                    elif compare_result < 0:
-                        # Layer has newer version
+                    else:
+                        # Layer version is not supported
                         self.show_keyword_version_message(
                             keyword_version, self.inasafe_version)
 

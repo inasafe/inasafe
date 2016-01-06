@@ -36,6 +36,7 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe import messaging as m
 from safe.messaging import styles
+from safe.definitions import multipart_polygon_key
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -579,7 +580,7 @@ class PostprocessorManager(QtCore.QObject):
 
         try:
             if (self.keyword_io.read_keywords(
-                    self.aggregator.layer, 'had multipart polygon')):
+                    self.aggregator.layer, multipart_polygon_key)):
                 self._consolidate_multipart_stats()
         except KeywordNotFoundError:
             pass
