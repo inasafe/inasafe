@@ -95,7 +95,8 @@ brew install rpl
 brew install makensis
 cp scripts/windows-install-builder.nsi scripts/build.nsi
 rpl "[[VERSION]]" "${VERSION}" scripts/build.nsi
-mv /tmp/${WORKDIR} /tmp/nsis-data
+rm -rf /tmp/nsis-data
+mv ${WORKDIR} /tmp/nsis-data
 makensis scripts/build.nsi
 rm scripts/build.nsi
 mv scripts/*.exe /tmp
