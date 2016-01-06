@@ -98,7 +98,7 @@ class Analysis(object):
         # Layers
         self._hazard = None
         self._exposure = None
-        self._aggregation_layer = None
+        self._aggregation = None
         self._impact_layer = None
         self.hazard_keyword = None
         self.exposure_keyword = None
@@ -129,7 +129,7 @@ class Analysis(object):
         """Property for hazard layer.
 
         :returns: Hazard Layer of the analysis.
-        :rtype: QgsMapLayer
+        :rtype: SafeLayer
 
         """
         return self._hazard
@@ -158,7 +158,7 @@ class Analysis(object):
         """Property for exposure layer.
 
         :returns: Exposure Layer of the analysis.
-        :rtype: QgsMapLayer
+        :rtype: SafeLayer
 
         """
         return self._exposure
@@ -168,7 +168,7 @@ class Analysis(object):
         """Setter for exposure layer property.
 
         :param layer: exposure layer to be used for the analysis.
-        :type layer: SafeLayer
+        :type layer: SafeLayer, QgsMapLayer
         """
         if self.impact_function is None:
             raise Exception('IF not found')
@@ -187,20 +187,24 @@ class Analysis(object):
         """Property for aggregation layer.
 
         :returns: Aggregation Layer of the analysis.
-        :rtype: QgsMapLayer
+        :rtype: SafeLayer
 
         """
-        return self._aggregation_layer
+        return self._aggregation
 
     @aggregation_layer.setter
-    def aggregation_layer(self, aggregation_layer):
-        """Setter for the aggregation layer for the analysis.
+    def aggregation_layer(self, layer):
+        """Setter for the aggregation layer property.
 
-        :param aggregation_layer: The aggregation layer.
-        :type aggregation_layer: QgsMapLayer
-
+        :param layer: Aggregation layer to be used for the analysis.
+        :type layer: SafeLayer, Layer, QgsMapLayer
         """
-        self._aggregation_layer = aggregation_layer
+        if isinstance(layer, SafeLayer):
+            self._aggregation = layer
+        elif isinstance(layer, QgsMapLayer):
+            self._aggregation = SafeLayer(layer)
+        else:
+            self._aggregation = None
 
     @property
     def impact_layer(self):
@@ -423,8 +427,12 @@ class Analysis(object):
             buffered_geo_extent = self.clip_parameters[1]
 
         # setup aggregator to use buffered_geo_extent to deal with #759
+        if self.aggregation_layer is not None:
+            qgis_layer = self.aggregation_layer.qgis_layer()
+        else:
+            qgis_layer = None
         self.aggregator = Aggregator(
-            buffered_geo_extent, self.aggregation_layer)
+            buffered_geo_extent, qgis_layer)
 
         self.aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
@@ -462,8 +470,7 @@ class Analysis(object):
 
         if self.aggregation_layer is not None:
             try:
-                aggregation_name = self.aggregation_keyword.get(
-                    'title', self.aggregation_layer.name())
+                aggregation_name = self.aggregation_layer.name
                 # noinspection PyTypeChecker
                 text.add(m.Text(
                     tr('and bullet list the results'),
