@@ -848,13 +848,13 @@ class KeywordIO(QObject):
                 'vector_hazard_classification',
                 'raster_hazard_classification']:
             # get the keyword_definition for this class from definitions.py
-            value = keyword_definition(value)
+            value = definition(value)
             value = value['description']
         # In these VALUE cases we show the DESCRIPTION for
         # the VALUE keyword_definition
         elif value in []:
             # get the keyword_definition for this class from definitions.py
-            value = keyword_definition(value)
+            value = definition(value)
             value = value['description']
         # In these VALUE cases we show the NAME for the VALUE keyword_definition
         elif value in [
@@ -865,7 +865,7 @@ class KeywordIO(QObject):
                 'polygon'
                 'field']:
             # get the name for this class from definitions.py
-            value = keyword_definition(value)
+            value = definition(value)
             value = value['name']
         # otherwise just treat the keyword as literal text
         else:
