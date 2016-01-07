@@ -127,6 +127,7 @@ def array_to_geo_array(extent, source_crs):
         min_longitude, min_latitude, max_longitude, max_latitude)
     return extent_to_array(rectangle, source_crs)
 
+
 def rectangle_geo_array(rectangle, map_canvas):
     """Obtain the rectangle in EPSG:4326.
 

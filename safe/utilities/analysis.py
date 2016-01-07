@@ -325,7 +325,6 @@ class Analysis(object):
         crs = int(self.user_extent_crs.authid().replace('EPSG:', ''))
         self.impact_function.requested_extent_crs = crs
 
-
     def optimal_clip(self):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
