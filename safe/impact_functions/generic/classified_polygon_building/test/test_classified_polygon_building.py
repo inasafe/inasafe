@@ -65,9 +65,9 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
 
         zone_sum = impact_layer.get_data(
             attribute=impact_function.target_field)
-        high_zone_count = zone_sum.count('High')
-        medium_zone_count = zone_sum.count('Medium')
-        low_zone_count = zone_sum.count('Low')
+        high_zone_count = zone_sum.count('High Hazard Zone')
+        medium_zone_count = zone_sum.count('Medium Hazard Zone')
+        low_zone_count = zone_sum.count('Low Hazard Zone')
         # The result
         expected_high_count = 11
         expected_medium_count = 161
@@ -118,9 +118,9 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
 
         zone_sum = impact_layer.get_data(
             attribute=impact_function.target_field)
-        high_zone_count = zone_sum.count('High')
-        medium_zone_count = zone_sum.count('Medium')
-        low_zone_count = zone_sum.count('Low')
+        high_zone_count = zone_sum.count('High Hazard Zone')
+        medium_zone_count = zone_sum.count('Medium Hazard Zone')
+        low_zone_count = zone_sum.count('Low Hazard Zone')
         # The result
         expected_high_count = 12
         expected_medium_count = 172
