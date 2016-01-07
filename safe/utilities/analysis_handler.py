@@ -354,7 +354,7 @@ class AnalysisHandler(QObject):
         self.analysis.user_extent_crs = self.extent.user_extent_crs
 
         # Move layers to the IF. It's temporary.
-        analysis.prepare_analysis()
+        self.analysis.prepare_analysis()
 
     # noinspection PyUnresolvedReferences
     def completed(self):
