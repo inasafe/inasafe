@@ -150,7 +150,8 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         buildings_breakdown = buildings_breakdown.to_text()
         self.assertIn(u'**Religious**, 0, 1, 2, **3**', buildings_breakdown)
         self.assertIn(
-            u'**Residential**, 12,000, 1,000, 7,000, **20,000**', buildings_breakdown)
+            u'**Residential**, 12,000, 1,000, 7,000, **20,000**',
+            buildings_breakdown)
         self.assertIn(u'**School**, 50, 25, 25, **100**', buildings_breakdown)
         self.assertIn(u'**University**, 0, 1, 9, **10**', buildings_breakdown)
 

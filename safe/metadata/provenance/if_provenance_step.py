@@ -54,7 +54,7 @@ class IFProvenanceStep(ProvenanceStep):
         'parameter'
     ]
 
-    def __init__(self, title, description, data, timestamp=None):
+    def __init__(self, title, description, timestamp=None, data=None):
         for key in self.impact_functions_fields:
             # check we have all the wanted keys
             if key not in data:
@@ -63,7 +63,7 @@ class IFProvenanceStep(ProvenanceStep):
                 raise InvalidProvenanceDataError(message)
 
         super(IFProvenanceStep, self).__init__(
-            title, description, timestamp, data)
+            title, description, timestamp=timestamp, data=data)
 
     def __getattr__(self, key):
         """

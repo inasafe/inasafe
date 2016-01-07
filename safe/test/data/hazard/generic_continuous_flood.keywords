@@ -1,9 +1,0 @@
-hazard_category: single_event
-title: Generic Continuous Flood
-keyword_version: 1.0
-hazard: flood
-continuous_hazard_unit: generic
-source: Akbar Gumbira
-layer_geometry: raster
-layer_purpose: hazard
-layer_mode: continuous

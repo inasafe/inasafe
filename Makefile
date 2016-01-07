@@ -117,7 +117,7 @@ quicktest: pep8 pylint dependency_test unwanted_strings run_data_audit test-tran
 # you can pass an argument called PACKAGE to run only tests in that package
 # usage: make test_suite_quick PACKAGE=common
 test_suite_quick:
-	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe/${PACKAGE} --with-id
+	@-export PYTHONPATH=`pwd`:$(PYTHONPATH); nosetests -A 'not slow' -v safe/${PACKAGE} #--with-id
 
 # Similar with test_suite_quick, but for all tests.
 # you can pass an argument called PACKAGE to run only tests in that package
@@ -185,7 +185,7 @@ testdata:
 	@echo "Updating inasafe_data - public test and demo data repository"
 	@echo "Update the hash to check out a specific data version        "
 	@echo "------------------------------------------------------------"
-	@scripts/update-test-data.sh f29505f728ff31dcefa58c048138ea298bb9f332 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
+	@scripts/update-test-data.sh 292bdd0437a37183a0626ad3e526c198595b8847 2>&1 | tee tmp_warnings.txt; [ $${PIPESTATUS[0]} -eq 0 ] && rm -f tmp_warnings.txt || echo "Stored update warnings in tmp_warnings.txt";
 
 #check and show if there was an error retrieving the test data
 testdata_errorcheck:
