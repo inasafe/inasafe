@@ -9,7 +9,7 @@ VERSION=`cat metadata.txt | grep ^version | sed 's/version=//g'`
 #see http://stackoverflow.com/questions/1371261/get-current-working-directory-name-in-bash-script
 DIR='inasafe'
 
-OUT="/tmp/${DIR}.${1}.zip"
+OUT="/tmp/${DIR}.${VERSION}.zip"
 
 WORKDIR=/tmp/${DIR}$$
 mkdir -p ${WORKDIR}/${DIR}
@@ -17,6 +17,9 @@ git archive `git branch | grep '\*'| sed 's/^\* //g'` | tar -x -C ${WORKDIR}/${D
 rm -rf ${WORKDIR}/${DIR}/docs/en/_static/user*
 rm -rf ${WORKDIR}/${DIR}/docs/id/_static/user*
 rm -rf ${WORKDIR}/${DIR}/unit_test_data
+rm -rf ${WORKDIR}/${DIR}/run*
+rm -rf ${WORKDIR}/${DIR}/docs
+rm -rf ${WORKDIR}/${DIR}/Vagrantfile
 rm -rf ${WORKDIR}/${DIR}/.idea
 rm -rf ${WORKDIR}/${DIR}/Makefile
 rm -rf ${WORKDIR}/${DIR}/.git*
@@ -95,7 +98,8 @@ brew install rpl
 brew install makensis
 cp scripts/windows-install-builder.nsi scripts/build.nsi
 rpl "[[VERSION]]" "${VERSION}" scripts/build.nsi
-mv /tmp/${WORKDIR} /tmp/nsis-data
+rm -rf /tmp/nsis-data
+mv ${WORKDIR} /tmp/nsis-data
 makensis scripts/build.nsi
 rm scripts/build.nsi
 mv scripts/*.exe /tmp

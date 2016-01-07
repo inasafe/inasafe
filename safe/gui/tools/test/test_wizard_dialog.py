@@ -68,7 +68,7 @@ from safe.gui.tools.wizard_dialog import (
     step_fc_agglayer_origin,
     step_fc_extent,
     step_fc_params)
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.gui.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
@@ -287,7 +287,7 @@ class WizardDialogTest(unittest.TestCase):
         scenario_index = -1
         for i in range(expected_hazard_category_count):
             key = dialog.lstHazardCategories.item(i).data(Qt.UserRole)
-            hazard_category_name = KeywordIO.definition(key)['name']
+            hazard_category_name = definition(key)['name']
             hazard_categories.append(hazard_category_name)
             if hazard_category_name == chosen_hazard_category:
                 scenario_index = i
@@ -390,10 +390,7 @@ class WizardDialogTest(unittest.TestCase):
         # noinspection PyTypeChecker
         keywords = keyword_io.read_keywords(layer)
 
-        message = 'Invalid metadata!\n Was: %s\n Should be: %s' % (
-            unicode(keywords), unicode(expected_keywords))
-
-        self.assertEqual(keywords, expected_keywords, message)
+        self.assertEqual(keywords, expected_keywords)
 
     def test_existing_keywords(self):
         """Test if keywords already exist."""
@@ -544,9 +541,9 @@ class WizardDialogTest(unittest.TestCase):
         default_classes = classification['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
-            'low': ['Kawasan Rawan Bencana I'],
-            'medium': ['Kawasan Rawan Bencana II'],
-            'high': ['Kawasan Rawan Bencana III']
+            'Low Hazard Zone': ['Kawasan Rawan Bencana I'],
+            'Medium Hazard Zone': ['Kawasan Rawan Bencana II'],
+            'High Hazard Zone': ['Kawasan Rawan Bencana III']
         }
         dialog.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
@@ -1322,7 +1319,11 @@ class WizardDialogTest(unittest.TestCase):
 
         # check classified
         root = dialog.treeClasses.invisibleRootItem()
-        expected_classes = ['low', 'medium', 'high']
+        expected_classes = [
+            'Low Hazard Zone',
+            'Medium Hazard Zone',
+            'High Hazard Zone'
+        ]
         child_count = root.childCount()
         message = 'Child count must be %s' % len(expected_classes)
         self.assertEqual(len(expected_classes), child_count, message)

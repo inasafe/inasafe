@@ -557,7 +557,6 @@ class ImpactFunction(object):
             'Preparation Step',
             'Impact function is being prepared to run the analysis.')
 
-
     def generate_impact_keywords(self, extra_keywords=None):
         """Obtain keywords for the impact layer.
 
