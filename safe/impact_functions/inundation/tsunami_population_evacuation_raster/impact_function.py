@@ -145,7 +145,7 @@ class TsunamiEvacuationFunction(
             self.affected_population[thresholds_name] = val
 
         # Put the deepest area in top #2385
-        # self.impact_category_ordering.reverse()
+        self.impact_category_ordering.reverse()
 
         # Carry the no data values forward to the impact layer.
         impact = numpy.where(numpy.isnan(population), numpy.nan, impact)
