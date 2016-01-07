@@ -541,9 +541,9 @@ class WizardDialogTest(unittest.TestCase):
         default_classes = classification['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
-            'low': ['Kawasan Rawan Bencana I'],
-            'medium': ['Kawasan Rawan Bencana II'],
-            'high': ['Kawasan Rawan Bencana III']
+            'Low Hazard Zone': ['Kawasan Rawan Bencana I'],
+            'Medium Hazard Zone': ['Kawasan Rawan Bencana II'],
+            'High Hazard Zone': ['Kawasan Rawan Bencana III']
         }
         dialog.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
@@ -1319,7 +1319,11 @@ class WizardDialogTest(unittest.TestCase):
 
         # check classified
         root = dialog.treeClasses.invisibleRootItem()
-        expected_classes = ['low', 'medium', 'high']
+        expected_classes = [
+            'Low Hazard Zone',
+            'Medium Hazard Zone',
+            'High Hazard Zone'
+        ]
         child_count = root.childCount()
         message = 'Child count must be %s' % len(expected_classes)
         self.assertEqual(len(expected_classes), child_count, message)
