@@ -2119,7 +2119,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             # Temporary only, for checking the user extent
             analysis = self.prepare_analysis()
-            clip_parameters = analysis.impact_function.get_clip_parameters()
+            analysis.impact_function.set_clip_parameters()
+            clip_parameters = analysis.impact_function.clip_parameters
             return True, clip_parameters['adjusted_geo_extent']
         except (AttributeError, InsufficientOverlapError):
             return False, None

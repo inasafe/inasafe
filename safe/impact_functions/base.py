@@ -102,6 +102,8 @@ class ImpactFunction(object):
         self._callback = self.console_progress_callback
         # Set the default parameters
         self._parameters = self._metadata.parameters()
+        # Clip parameters
+        self._clip_parameters = None
         # Layer representing hazard e.g. flood
         self._hazard = None
         # Layer representing people / infrastructure that are exposed
@@ -361,6 +363,12 @@ class ImpactFunction(object):
         """Get the parameter."""
         return self._parameters
 
+    @property
+    def clip_parameters(self):
+        if self._clip_parameters is None:
+            raise Exception('Clip parameters is not defined.')
+        return self._clip_parameters
+
     @parameters.setter
     def parameters(self, parameters):
         """Set the parameter.
@@ -553,6 +561,7 @@ class ImpactFunction(object):
             'qgis2.0', it needs to have the extent set.
         """
         # self.message_pre_run()
+        # self.set_clip_parameters()
         self.provenance.append_step(
             'Preparation Step',
             'Impact function is being prepared to run the analysis.')
@@ -678,7 +687,7 @@ class ImpactFunction(object):
             pass
         send_static_message(self, message)
 
-    def get_clip_parameters(self):
+    def set_clip_parameters(self):
         """Calculate the best extents to use for the assessment.
 
         :returns: A dictionary consisting of:
@@ -865,7 +874,7 @@ class ImpactFunction(object):
                     get_wgs84_resolution(self.exposure.qgis_layer()),
                     exposure_geoextent)
 
-        return {
+        self._clip_parameters = {
             'extra_exposure_keywords': extra_exposure_keywords,
             'adjusted_geo_extent': adjusted_geo_extent,
             'cell_size': cell_size

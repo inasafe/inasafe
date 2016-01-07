@@ -234,7 +234,8 @@ class Analysis(object):
 
         # Find out what the usable extent and cell size are
         try:
-            self.clip_parameters = self.impact_function.get_clip_parameters()
+            self.impact_function.set_clip_parameters()
+            self.clip_parameters = self.impact_function.clip_parameters
             buffered_geoextent = self.clip_parameters['adjusted_geo_extent']
             cell_size = self.clip_parameters['cell_size']
         except InsufficientOverlapError as e:
