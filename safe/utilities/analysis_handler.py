@@ -306,7 +306,7 @@ class AnalysisHandler(QObject):
             raise e
 
         self.extent.show_last_analysis_extent(
-            self.analysis.clip_parameters[1])
+            self.analysis.clip_parameters['adjusted_geo_extent'])
 
         # Start the analysis
         self.analysis.run_analysis()
@@ -352,6 +352,9 @@ class AnalysisHandler(QObject):
         # Extent
         self.analysis.user_extent = self.extent.user_extent
         self.analysis.user_extent_crs = self.extent.user_extent_crs
+
+        # Move layers to the IF. It's temporary.
+        analysis.prepare_analysis()
 
     # noinspection PyUnresolvedReferences
     def completed(self):

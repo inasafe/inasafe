@@ -283,6 +283,9 @@ def analysis_setup(command_line_arguments, hazard, exposure):
         float(command_line_arguments.extent[2]),
         float(command_line_arguments.extent[3])
     )
+    # Move layers to the IF. It's temporary.
+    analysis.prepare_analysis()
+
     analysis.setup_analysis()
     return analysis
 

@@ -1138,7 +1138,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.extent.show_user_analysis_extent()  # blue
             try:
                 self.extent.show_last_analysis_extent(
-                    self.analysis.clip_parameters[1])  # red
+                    self.analysis.clip_parameters['adjusted_geo_extent']
+                )  # red
             except (AttributeError, TypeError):
                 pass
 
@@ -1157,7 +1158,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.analysis = self.prepare_analysis()
             self.analysis.setup_analysis()
             self.extent.show_last_analysis_extent(
-                self.analysis.clip_parameters[1])
+                self.analysis.clip_parameters['adjusted_geo_extent'])
             # Start the analysis
             self.analysis.run_analysis()
         except InsufficientOverlapError as e:
@@ -1281,6 +1282,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         analysis.map_canvas = self.iface.mapCanvas()
         analysis.user_extent = self.extent.user_extent
         analysis.user_extent_crs = self.extent.user_extent_crs
+
+        # Move layers to the IF. It's temporary.
+        analysis.prepare_analysis()
 
         return analysis
 
@@ -2115,7 +2119,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             # Temporary only, for checking the user extent
             analysis = self.prepare_analysis()
-            clip_parameters = analysis.get_clip_parameters()
-            return True, clip_parameters[1]
+            clip_parameters = analysis.impact_function.get_clip_parameters()
+            return True, clip_parameters['adjusted_geo_extent']
         except (AttributeError, InsufficientOverlapError):
             return False, None
