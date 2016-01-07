@@ -20,9 +20,11 @@ import numpy
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.generic.classified_polygon_population\
     .impact_function import ClassifiedPolygonHazardPopulationFunction
-from safe.test.utilities import test_data_path
+from safe.test.utilities import test_data_path, get_qgis_app
 from safe.storage.core import read_layer
 from safe.storage.safe_layer import SafeLayer
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
