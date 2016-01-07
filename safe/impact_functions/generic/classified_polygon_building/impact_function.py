@@ -222,7 +222,6 @@ class ClassifiedPolygonHazardBuildingFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
-
         extra_keywords = {
             'impact_summary': impact_summary,
             'impact_table': impact_table,

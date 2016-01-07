@@ -845,7 +845,8 @@ class KeywordIO(QObject):
         # if possible. TS
         keyword_definition = definition(keyword)
         if keyword_definition is None:
-            keyword_definition = self.tr(keyword.capitalize().replace('_', ' '))
+            keyword_definition = self.tr(keyword.capitalize().replace(
+                '_', ' '))
         else:
             keyword_definition = keyword_definition['name']
 
@@ -868,7 +869,8 @@ class KeywordIO(QObject):
             # get the keyword_definition for this class from definitions.py
             value = definition(value)
             value = value['description']
-        # In these VALUE cases we show the NAME for the VALUE keyword_definition
+        # In these VALUE cases we show the NAME for the VALUE
+        # keyword_definition
         elif value in [
                 'multiple_event',
                 'single_event',
@@ -936,5 +938,3 @@ class KeywordIO(QObject):
                 row.add(m.Cell(value_list[0]))
             table.add(row)
         return table
-
-

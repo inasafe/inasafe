@@ -138,7 +138,8 @@ class VolcanoPolygonPopulationFunction(
         # Check if hazard_class_attribute exists in hazard_layer
         if (self.hazard_class_attribute not in
                 self.hazard.layer.get_attribute_names()):
-            message = ('Hazard data %s did not contain expected attribute %s ' % (
+            message = tr(
+                'Hazard data %s did not contain expected attribute ''%s ' % (
                 self.hazard.layer.get_name(), self.hazard_class_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)

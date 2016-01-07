@@ -255,7 +255,6 @@ class KeywordIOTest(unittest.TestCase):
         expected_keywords = self.expected_raster_keywords
         expected_keywords['keyword_version'] = inasafe_keyword_version
 
-
         self.maxDiff = None
         self.assertDictEqual(copied_keywords, expected_keywords)
 
