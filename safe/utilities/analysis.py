@@ -42,7 +42,6 @@ from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.gis import extent_to_array
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import get_error_message
-from safe.utilities.clipper import clip_layer
 from safe.utilities.gis import convert_to_safe_layer
 from safe.messaging import styles
 from safe.common.signals import (
@@ -326,109 +325,6 @@ class Analysis(object):
         crs = int(self.user_extent_crs.authid().replace('EPSG:', ''))
         self.impact_function.requested_extent_crs = crs
 
-    def optimal_clip(self):
-        """ A helper function to perform an optimal clip of the input data.
-        Optimal extent should be considered as the intersection between
-        the three inputs. The InaSAFE library will perform various checks
-        to ensure that the extent is tenable, includes data from both
-        etc.
-
-        The result of this function will be two layers which are
-        clipped and re-sampled if needed, and in the EPSG:4326 geographic
-        coordinate reference system.
-
-        :returns: The clipped hazard and exposure layers.
-        :rtype: (QgsMapLayer, QgsMapLayer)
-        """
-
-        # Get the hazard and exposure layers selected in the combos
-        # and other related parameters needed for clipping.
-        try:
-            extra_exposure_keywords = self.clip_parameters[
-                'extra_exposure_keywords']
-            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
-            cell_size = self.clip_parameters['cell_size']
-        except:
-            raise
-        # Find out what clipping behaviour we have - see #2210
-        settings = QSettings()
-        mode = settings.value(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
-        detail = None
-        if mode == 'HazardExposureView':
-            detail = tr(
-                'Resampling and clipping the hazard layer to match the '
-                'intersection of the exposure layer and the current view '
-                'extents.')
-        elif mode == 'HazardExposure':
-            detail = tr(
-                'Resampling and clipping the hazard layer to match the '
-                'intersection of the exposure layer extents.')
-        elif mode == 'HazardExposureBookmark':
-            detail = tr(
-                'Resampling and clipping the hazard layer to match the '
-                'bookmarked extents.')
-        elif mode == 'HazardExposureBoundingBox':
-            detail = tr(
-                'Resampling and clipping the hazard layer to match the '
-                'intersection of your preferred analysis area.')
-        # Make sure that we have EPSG:4326 versions of the input layers
-        # that are clipped and (in the case of two raster inputs) resampled to
-        # the best resolution.
-        title = tr('Preparing hazard data')
-
-        message = m.Message(
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail))
-        send_dynamic_message(self, message)
-        try:
-            clipped_hazard = clip_layer(
-                layer=self.hazard_layer.qgis_layer(),
-                extent=adjusted_geo_extent,
-                cell_size=cell_size,
-                hard_clip_flag=self.clip_hard)
-        except CallGDALError, e:
-            raise e
-        except IOError, e:
-            raise e
-
-        title = tr('Preparing exposure data')
-        # Find out what clipping behaviour we have - see #2210
-        settings = QSettings()
-        mode = settings.value(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
-        if mode == 'HazardExposureView':
-            detail = tr(
-                'Resampling and clipping the exposure layer to match '
-                'the intersection of the hazard layer and the current view '
-                'extents.')
-        elif mode == 'HazardExposure':
-            detail = tr(
-                'Resampling and clipping the exposure layer to match '
-                'the intersection of the hazard layer extents.')
-        elif mode == 'HazardExposureBookmark':
-            detail = tr(
-                'Resampling and clipping the exposure layer to match '
-                'the bookmarked extents.')
-        elif mode == 'HazardExposureBoundingBox':
-            detail = tr(
-                'Resampling and clipping the exposure layer to match '
-                'the intersection of your preferred analysis area.')
-        message = m.Message(
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail))
-        send_dynamic_message(self, message)
-
-        clipped_exposure = clip_layer(
-            layer=self.exposure_layer.qgis_layer(),
-            extent=adjusted_geo_extent,
-            cell_size=cell_size,
-            extra_keywords=extra_exposure_keywords,
-            hard_clip_flag=self.clip_hard)
-        return clipped_hazard, clipped_exposure
-
     def setup_layers(self):
         """Setup impact function."""
         # Get the hazard and exposure layers selected in the combos
@@ -437,7 +333,7 @@ class Analysis(object):
         if self.impact_function.requires_clipping:
             # The impact function uses SAFE layers,
             # clip them
-            self.hazard_layer, self.exposure_layer = self.optimal_clip()
+            self.hazard_layer, self.exposure_layer = self.impact_function.optimal_clip()
             self.aggregator.set_layers(
                 self.hazard_layer.qgis_layer(),
                 self.exposure_layer.qgis_layer())
