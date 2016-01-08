@@ -172,6 +172,9 @@ class FloodEvacuationRasterHazardFunction(
             val = int(numpy.nansum(medium))
             self.affected_population[thresholds_name] = val
 
+        # Put the deepest area in top #2385
+        self.impact_category_ordering.reverse()
+
         self.total_population = total
         self.unaffected_population = total - self.total_affected_population
 
