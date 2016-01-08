@@ -55,6 +55,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
+        print rect_extent
 
         function.hazard = hazard_layer
         function.exposure = exposure_layer
@@ -69,7 +70,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         # Asserting for the number of features in the impact
         # layer
 
-        self.assertEqual(impact.dataProvider().featureCount(), 6L)
+        self.assertEqual(impact.dataProvider().featureCount(), 8L)
 
         # 4. Asserting about the results found
         features = {}
@@ -77,10 +78,12 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             area = feature.geometry().area() * 1e8
             features[feature['id']] = round(area, 1)
 
+        # expected features changes accordingly
+        # to the impact features
         expected_features = {
-            1: 2460.7,
-            2: 6755.5,
-            3: 948.4
+            1: 6438.5,
+            2: 5894.1,
+            3: 8534.3
         }
         self.assertEqual(features, expected_features)
 
