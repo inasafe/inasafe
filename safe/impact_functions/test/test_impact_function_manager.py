@@ -301,8 +301,8 @@ class TestImpactFunctionManager(unittest.TestCase):
             'population')
         expected = [
             (layer_mode_continuous, layer_geometry_raster),
+            (layer_mode_continuous, layer_geometry_polygon)
         ]
-
         self.assertItemsEqual(exposure_constraints, expected)
 
     def test_available_hazard_layer_modes(self):

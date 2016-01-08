@@ -69,7 +69,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         # Asserting for the number of features in the impact
         # layer
 
-        self.assertEqual(impact.dataProvider().featureCount(), 8L)
+        self.assertEqual(impact.dataProvider().featureCount(), 6L)
 
         # 4. Asserting about the results found
         features = {}
@@ -91,8 +91,9 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             'layer_purpose': 'exposure',
             'layer_mode': 'continuous',
             'layer_geometry': 'polygon',
-            'exposure': 'area',
-            'structure_class_field': 'type',
+            'exposure': 'population',
+            'structure_class_field': '',
+            'exposure_unit': 'density'
         }
 
         hazard_keywords = {
