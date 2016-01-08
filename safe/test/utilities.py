@@ -1079,7 +1079,7 @@ def clone_shp_layer(
         put the files into. Default to 'test'.
     :type target_directory: str
     """
-    extensions = ['.shp', '.shx', '.dbf', '.prj']
+    extensions = ['.shp', '.shx', '.dbf', '.prj', '_impact_report.html']
     if include_keywords:
         extensions.append('.keywords')
         extensions.append('.xml')
@@ -1146,7 +1146,8 @@ def clone_raster_layer(
         put the files into. Default to 'testing'.
     :type target_directory: str
     """
-    extensions = ['.prj', '.sld', 'qml', '.prj', extension]
+    extensions = [
+        '.prj', '.sld', 'qml', '.prj', extension, '_impact_report.html']
     if include_keywords:
         extensions.append('.keywords')
         extensions.append('.xml')
