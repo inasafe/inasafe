@@ -356,7 +356,6 @@ class ITBFatalityFunction(
 
         # Result
         impact_summary = self.html_report()
-        impact_table = impact_summary
 
         # Create style
         colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']
@@ -396,7 +395,6 @@ class ITBFatalityFunction(
             'fatalities_per_mmi': number_of_fatalities,
             'total_displaced': population_rounding(total_displaced),
             'displaced_per_mmi': number_of_displaced,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,

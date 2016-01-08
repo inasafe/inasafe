@@ -189,7 +189,6 @@ class FloodEvacuationRasterHazardFunction(
 
         # Result
         impact_summary = self.html_report()
-        impact_table = impact_summary
 
         total_needs = self.total_needs
 
@@ -243,7 +242,6 @@ class FloodEvacuationRasterHazardFunction(
 
         extra_keywords = {
             'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,

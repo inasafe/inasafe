@@ -559,7 +559,6 @@ class ImpactReport(object):
             output_path = unique_filename(suffix='.pdf', dir=temp_dir())
 
         summary_table = keywords.get('impact_summary', None)
-        full_table = keywords.get('impact_table', None)
         aggregation_table = keywords.get('postprocessing_report', None)
         attribution_table = impact_attribution(keywords)
 
@@ -570,9 +569,7 @@ class ImpactReport(object):
         # alternative
         html = m.Brand().to_html()
         html += m.Heading(tr('Analysis Results'), **INFO_STYLE).to_html()
-        if summary_table is None:
-            html += full_table
-        else:
+        if summary_table is not None:
             html += summary_table
 
         if aggregation_table is not None:

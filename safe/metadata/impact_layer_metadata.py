@@ -156,13 +156,6 @@ class ImpactLayerMetadata(BaseMetadata):
             'inasafe/'
             'target_field/'
             'gco:CharacterString'),
-        'impact_table': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'impact_table/'
-            'gco:CharacterString'),
         'statistics_classes': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'

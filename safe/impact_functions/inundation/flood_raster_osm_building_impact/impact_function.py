@@ -162,7 +162,7 @@ class FloodRasterBuildingFunction(
         # Lump small entries and 'unknown' into 'other' category
         self._consolidate_to_other()
         # Generate simple impact report
-        impact_table = impact_summary = self.html_report()
+        impact_summary = self.html_report()
 
         # For printing map purpose
         map_title = tr('Flooded buildings')
@@ -199,7 +199,6 @@ class FloodRasterBuildingFunction(
 
         extra_keywords = {
             'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_title': legend_title,
