@@ -241,9 +241,6 @@
           <layer_purpose>
             <gco:CharacterString/>
           </layer_purpose>
-          <impact_table>
-            <gco:CharacterString/>
-          </impact_table>
           <resolution>
             <gco:Tuple/>
           </resolution>
