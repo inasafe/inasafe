@@ -62,10 +62,7 @@ from safe.common.utilities import (
 from safe.common.exceptions import ReadLayerError, PointsInputError
 from safe.gis.polygon import (
     in_and_outside_polygon as points_in_and_outside_polygon)
-from safe.common.signals import (
-    DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL,
-)
+from safe.common.signals import send_dynamic_message
 from safe import messaging as m
 from safe.definitions import global_default_attribute, do_not_use_attribute
 from safe.messaging import styles
@@ -78,7 +75,6 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     InvalidLayerError,
     InsufficientParametersError)
-from safe_extras.pydispatch import dispatcher
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -342,8 +338,7 @@ class Aggregator(QtCore.QObject):
                 m.Paragraph(self.tr(
                     'Please select which attribute you want to use as ID for '
                     'the aggregated results')))
-            # noinspection PyTypeChecker
-            self._send_message(message)
+            send_dynamic_message(self, message)
 
             # keywords are already complete
             layer_purpose = keywords['layer_purpose']
@@ -523,8 +518,7 @@ class Aggregator(QtCore.QObject):
             m.Paragraph(self.tr(
                 'This may take a little while - we are aggregating the impact'
                 ' by %s' % self.layer.name())))
-        # noinspection PyTypeChecker
-        self._send_message(message)
+        send_dynamic_message(self, message)
 
         qgis_impact_layer = safe_to_qgis_layer(safe_impact_layer)
         if not qgis_impact_layer.isValid():
@@ -1126,8 +1120,7 @@ class Aggregator(QtCore.QObject):
                 self.tr('Preparing aggregation layer'),
                 **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
-        # noinspection PyTypeChecker
-        self._send_message(message)
+        send_dynamic_message(self, message)
 
         # This is used to hold an *in memory copy* of the aggregation layer
         # or a in memory layer with the clip extents as a feature.
@@ -1301,8 +1294,7 @@ class Aggregator(QtCore.QObject):
                 'Modifying %s to avoid intersections with the aggregation '
                 'layer'
             ) % (layer.name())))
-        # noinspection PyTypeChecker
-        self._send_message(message)
+        send_dynamic_message(self, message)
 
         layer_filename = layer.source()
         postprocessing_polygons = self.safe_layer.get_geometry()
@@ -1673,30 +1665,6 @@ class Aggregator(QtCore.QObject):
         except (UnsupportedProviderError, KeywordDbError), e:
             raise e
         return self.layer
-
-    def _send_message(self, message, dynamic=True):
-        """Send a message using the messaging system.
-
-
-        :param message: A message to display to the user.
-        :type message: Message
-
-        :param dynamic: Whether the message should be appended to the message
-            queue or replace it.
-        :type dynamic: bool
-
-        .. seealso::  https://github.com/AIFDR/inasafe/issues/577
-
-        """
-
-        message_type = STATIC_MESSAGE_SIGNAL
-        if dynamic:
-            message_type = DYNAMIC_MESSAGE_SIGNAL
-
-        dispatcher.send(
-            signal=message_type,
-            sender=self,
-            message=message)
 
     def _setup_target_field(self, impact_layer):
         """Set up self.target_field
