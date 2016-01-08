@@ -562,11 +562,6 @@ class ImpactReport(object):
         aggregation_table = keywords.get('postprocessing_report', None)
         attribution_table = impact_attribution(keywords)
 
-        # (AG) We will not use impact_table as most of the IF use that as:
-        # impact_table = impact_summary + some information intended to be
-        # shown on screen (see FloodOsmBuilding)
-        # Unless the impact_summary is None, we will use impact_table as the
-        # alternative
         html = m.Brand().to_html()
         html += m.Heading(tr('Analysis Results'), **INFO_STYLE).to_html()
         if summary_table is not None:
