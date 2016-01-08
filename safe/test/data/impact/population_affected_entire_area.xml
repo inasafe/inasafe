@@ -181,10 +181,6 @@
           <map_title>
             <gco:CharacterString>People affected by flood prone areas</gco:CharacterString>
           </map_title>
-          <impact_table>
-            <gco:List/>
-            <gco:CharacterString>&lt;table class=&quot;table table-striped condensed&quot;&gt; &lt;tbody&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;In the event of &lt;i&gt;a flood in jakarta&lt;/i&gt; how many &lt;i&gt;people&lt;/i&gt; might &lt;i&gt;need evacuation&lt;/i&gt;&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;People affected&lt;/th&gt;   &lt;th&gt;178,000*&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;People needing evacuation&lt;/th&gt;   &lt;th&gt;1,000*&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;2&quot;&gt;* Number is rounded to the nearest 1000&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Evacuation threshold&lt;/th&gt;   &lt;th&gt;1%&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Map shows population affected in each flood prone area&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Table below shows the weekly minium needs for all evacuated people&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Needs per week&lt;/th&gt;   &lt;th&gt;Total&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Rice [kg]&lt;/td&gt;   &lt;td&gt;2,800&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Drinking Water [l]&lt;/td&gt;   &lt;td&gt;17,500&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Clean Water [l]&lt;/td&gt;   &lt;td&gt;105,000&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Family Kits&lt;/td&gt;   &lt;td&gt;200&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Toilets&lt;/td&gt;   &lt;td&gt;50&lt;/td&gt;  &lt;/tr&gt; &lt;/tbody&gt;&lt;/table&gt;</gco:CharacterString>
-          </impact_table>
           <scale>
             <gco:CharacterString/>
           </scale>

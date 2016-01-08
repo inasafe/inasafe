@@ -181,10 +181,6 @@
           <map_title>
             <gco:CharacterString>Buildings inundated</gco:CharacterString>
           </map_title>
-          <impact_table>
-            <gco:List/>
-            <gco:CharacterString>&lt;table class=&quot;table table-striped condensed&quot;&gt; &lt;tbody&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;In the event of &lt;i&gt;banjir jakarta&lt;/i&gt; how many &lt;i&gt;buildings&lt;/i&gt; might &lt;i&gt;be flooded&lt;/i&gt;&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Building type&lt;/th&gt;   &lt;th&gt;Number flooded&lt;/th&gt;   &lt;th&gt;Total&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;All&lt;/td&gt;   &lt;td&gt;1&lt;/td&gt;   &lt;td&gt;5&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th colspan=&quot;100%&quot;&gt;Breakdown by building type&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Other&lt;/td&gt;   &lt;td&gt;1&lt;/td&gt;   &lt;td&gt;5&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th colspan=&quot;100%&quot;&gt;Action Checklist:&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Are the critical facilities still open?&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Which structures have warning capacity (eg. sirens, speakers, etc.)?&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Which buildings will be evacuation centres?&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Where will we locate the operations centre?&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Where will we locate warehouse and/or distribution centres?&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th colspan=&quot;100%&quot;&gt;Notes&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Buildings are said to be flooded when in regions marked as affected&lt;/td&gt;  &lt;/tr&gt; &lt;/tbody&gt;&lt;/table&gt;</gco:CharacterString>
-          </impact_table>
           <scale>
             <gco:CharacterString/>
           </scale>

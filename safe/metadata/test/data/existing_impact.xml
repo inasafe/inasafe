@@ -181,9 +181,6 @@
           <map_title>
             <gco:CharacterString/>
           </map_title>
-          <impact_table>
-            <gco:List/>
-          </impact_table>
           <scale>
             <gco:CharacterString/>
           </scale>

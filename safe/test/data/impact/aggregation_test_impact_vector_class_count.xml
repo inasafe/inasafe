@@ -178,10 +178,6 @@
           <map_title>
             <gco:CharacterString/>
           </map_title>
-          <impact_table>
-            <gco:List>[0, 1, 2]</gco:List>
-            <gco:CharacterString/>
-          </impact_table>
           <scale>
             <gco:CharacterString/>
           </scale>

@@ -161,7 +161,7 @@ class ImpactLayerMetadata(BaseMetadata):
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
-            'impact_table/'
+            'statistics_classes/'
             'gco:List'),
         'statistics_type': (
             'gmd:identificationInfo/'
