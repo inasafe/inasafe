@@ -33,20 +33,26 @@ from PyQt4.QtGui import QColor
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.common.utilities import unique_filename
-from safe.impact_functions.bases.classified_vh_classified_ve import \
-    ClassifiedVHClassifiedVE
+from safe.impact_functions.bases.classified_vh_continuous_ve import \
+    ClassifiedVHContinuousVE
 from safe.impact_functions.generic.classified_polygon_people\
     .metadata_definitions \
     import ClassifiedPolygonHazardPolygonPeopleFunctionMetadata
 
-from safe.impact_reports.area_exposure_report_mixin import \
-    AreaExposureReportMixin
+from safe.impact_reports.polygon_population_exposure_report_mixin import \
+    PolygonPopulationExposureReportMixin
 from safe.impact_functions.core import no_population_impact_message
 from safe.common.exceptions import ZeroImpactException
+import safe.messaging as m
+from safe.common.utilities import format_int
+from safe.impact_functions.core import (
+    population_rounding
+)
+from safe.messaging import styles
 
 
 class ClassifiedPolygonHazardPolygonPeopleFunction(
-        ClassifiedVHClassifiedVE, AreaExposureReportMixin):
+        ClassifiedVHContinuousVE, PolygonPopulationExposureReportMixin):
 
     _metadata = ClassifiedPolygonHazardPolygonPeopleFunctionMetadata()
 
@@ -59,14 +65,40 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         self.all_areas_ids = {}
         self.all_affected_areas = {}
         self.all_areas_population = {}
+        self.areas_names = {}
+        self.hazard_levels = {}
+
+    def notes(self):
+        """Return the notes section of the report.
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: safe.messaging.Message
+        """
+        message = m.Message(style_class='container')
+
+        message.add(
+            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        population = format_int(population_rounding(self.total_population))
+        checklist.add(tr(
+            'The Total population in the area is %s') % population)
+        checklist.add(tr(
+            'All values are rounded up to the nearest integer in '
+            'order to avoid representing human lives as fractions.'))
+        checklist.add(tr(
+            'Population rounding is applied to all population '
+            'values, which may cause discrepancies when adding values.'))
+
+        message.add(checklist)
+        return message
 
     def run(self):
-        """Risk plugin for classified polygon hazard on area with population.
+        """Risk plugin for classified polygon hazard on polygon population.
 
-        Counts areas exposed to hazard zones and then computes the the
-        proportion of each area that is affected. The population in each
-        area is then calculated as the proportion of the original population
-        to the affected area.
+        Counts population in an area exposed to hazard zones and then
+        computes the the  proportion of each area that is affected.
+        The population in each area is then calculated as the proportion
+        of the original population to the affected area.
 
         :returns: Impact layer
         :rtype: Vector
@@ -128,9 +160,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             impact_fields)
 
         del writer
-        impact_layer = QgsVectorLayer(filename, "Impacted Areas", "ogr")
+        impact_layer = QgsVectorLayer(filename, "Impacted Population", "ogr")
 
-        # Generate the report of affected areas
+        # Generate the report of affected populations in the areas
 
         self.total_population = sum(self.all_areas_population.values())
         self.areas = self.all_areas_ids
@@ -168,7 +200,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         extra_keywords = {
             'impact_summary': impact_summary,
             'target_field': self.target_field,
-            'map_title': tr('Affected Areas'),
+            'map_title': tr('Affected Populations'),
         }
 
         self.set_if_provenance()
@@ -178,7 +210,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=tr('Areas affected by each hazard zone'),
+            name=tr('Populations affected by each hazard zone'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 
@@ -226,10 +258,12 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         :rtype: []
         """
         # Taking area necessary attributes
-        area_id_attribute = self.exposure.keyword('field')
-        type_attr = self.exposure.keyword('area_population_field')
+        area_id_attribute = self.exposure.keyword('area_id_field')
+        type_attr = self.exposure.keyword('area_type_field')
         area_population_attribute = self.exposure.keyword(
-            'area_population_field')
+            'field')
+        area_name_attribute = self.exposure.keyword(
+            'area_name_field')
 
         all_affected_geometry = []
 
@@ -257,16 +291,18 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 area_population_attribute)
 
             # add to the total area of this land cover type
+            area = geometry.area()
             if area_type not in all_areas:
                 all_areas[area_type] = 0.
 
             if area_id not in self.all_areas_ids:
                 self.all_areas_ids[area_id] = 0.
 
-            area = geometry.area()
-
-            all_areas[area_type] += area
             self.all_areas_ids[area_id] += geometry_area
+            all_areas[area_type] += area
+
+            if area_id not in self.areas_names:
+                self.areas_names[area_id] = feature[area_name_attribute]
 
             # find possible intersections with hazard layer
 
@@ -364,33 +400,55 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         unaffected_feature = QgsFeature(unaffected_fields)
         impacted_feature = QgsFeature(impact_fields)
 
-        if hazard_attribute is not None:
-            unaffected_feature.setGeometry(unaffected_geometry)
-            unaffected_feature.setAttributes(feature.attributes() + [0])
-            impacted_feature.setGeometry(impact_geometry)
+        area_population_attribute = self.exposure.keyword(
+                'field')
 
+        unaffected_feature.setGeometry(unaffected_geometry)
+        impacted_feature.setGeometry(impact_geometry)
+
+        if hazard_attribute is not None:
+            unaffected_feature.setAttributes(feature.attributes() + [0])
             if hazard_attribute == "Low Hazard Zone":
                 impacted_feature.setAttributes(feature.attributes() + [1])
-
             elif hazard_attribute == "Medium Hazard Zone":
                 impacted_feature.setAttributes(feature.attributes() + [2])
-
             elif hazard_attribute == "High Hazard Zone":
                 impacted_feature.setAttributes(feature.attributes() + [3])
-
             elif hazard_attribute == "YES":
                 impacted_feature.setAttributes(feature.attributes() + [3])
-
             elif hazard_attribute == "NO":
                 impacted_feature.setAttributes(feature.attributes() + [1])
-
         else:
-            impacted_feature.setGeometry(impact_geometry)
             unaffected_feature.setAttributes(feature.attributes() + [1])
             impacted_feature.setAttributes(feature.attributes() + [3])
 
+        # passing the number of affected population
+        # to new resulted(impacted or unaffected) features
+
+        unaffected_population_number = self.calculate_population_number(
+                                            unaffected_geometry,
+                                            feature,
+                                            area_population_attribute)
+        unaffected_feature.setAttribute(
+            3,
+            unaffected_population_number)
+        impacted_population_number = self.calculate_population_number(
+                                              impact_geometry,
+                                              feature,
+                                              area_population_attribute)
+        impacted_feature.setAttribute(
+            3,
+            impacted_population_number)
+        # Getting number of population in different hazard
+        # levels
+
+        level_value = impacted_feature.attributes()[4]
+        if level_value not in self.hazard_levels:
+            self.hazard_levels[level_value] = impacted_population_number
+        else:
+            self.hazard_levels[level_value] += impacted_population_number
+
         writer.addFeature(impacted_feature)
-        writer.addFeature(unaffected_feature)
 
     def evaluate_affected_people(self):
         """Calculate the number of people affected on the area
@@ -429,3 +487,38 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         if total_affected_population == 0:
             message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
+
+    def calculate_population_number(self,
+                                    target_geometry,
+                                    feature,
+                                    area_population_attribute):
+
+        """ Calculate population number given the geometry of
+            the part of the layer and the whole layer
+            (as a feature)
+
+        :param target_geometry: geometry of layer part
+        :type target_geometry: QgsGeometry
+
+        :param feature: feature of the whole layer
+        :type feature: QgsFeature
+
+        :param area_population_attribute: attribute of population
+        :type area_population_attribute: string
+
+        :returns population_number: Number of Population
+        :rtype population_number:int
+        """
+        if target_geometry is not None and feature is not None:
+
+            target_area = target_geometry.area()
+            total_area = feature.geometry().area()
+
+            population_total = feature.attribute(
+                area_population_attribute)
+            population_number = (target_area / total_area) * population_total
+            population_number = round(population_number, 0)
+        else:
+            population_number = 0
+
+        return population_number

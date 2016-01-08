@@ -356,22 +356,13 @@ exposure_structure = {
         'bridge.')
 }
 
-exposure_area = {
-    'key': 'area',
-    'name': tr('Area'),
-    'description': tr(
-        'The <b>area</b> exposure data describes features on '
-        'the surface of the earth that might be exposed to a particular '
-        'hazard. This currently include urban areas. ')
-}
 
 exposure_all = [
     exposure_land_cover,
     exposure_people_in_building,
     exposure_population,
     exposure_road,
-    exposure_structure,
-    exposure_area
+    exposure_structure
 ]
 
 # Renamed key from exposure to exposures in 3.2 because key was not unique TS
@@ -772,18 +763,18 @@ area_name_field = {
     'type': 'field',
     'description': tr('Attribute for the area name ')
 }
-area_type = {
+area_type_field = {
     'key': 'area_type_field',
     'name': tr('Type field'),
     'type': 'field',
     'description': tr('Attribute for the type of the area')
 }
 
-area_population_field = {
-    'key': 'area_population_field',
-    'name': tr('Population field'),
+area_id_field = {
+    'key': 'area_id_field',
+    'name': tr('Id field'),
     'type': 'field',
-    'description': tr('Attribute for the population on the area')
+    'description': tr('Attribute for the id on the area')
 }
 
 # General terminology and descriptive terms

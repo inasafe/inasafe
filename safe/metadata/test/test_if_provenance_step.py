@@ -85,7 +85,10 @@ class TestImpactFunctionProvenanceStep(TestCase):
         }
 
         with self.assertRaises(InvalidProvenanceDataError):
-            IFProvenanceStep('TEST title', 'TEST description', data=partial_data)
+            IFProvenanceStep(
+                'TEST title',
+                'TEST description',
+                data=partial_data)
 
         IFProvenanceStep('TEST title', 'TEST description', data=self.good_data)
 

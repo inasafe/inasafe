@@ -19,15 +19,17 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.definitions import (
     area_name_field,
-    area_type,
-    area_population_field,
-    exposure_area,
+    area_type_field,
+    area_id_field,
+    exposure_population,
     hazard_all,
     hazard_category_single_event,
     hazard_category_multiple_event,
     generic_vector_hazard_classes,
     layer_mode_classified,
-    layer_geometry_polygon
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    density_exposure_unit
 )
 from safe.utilities.i18n import tr
 
@@ -88,15 +90,15 @@ class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
                     'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_polygon],
-                    'exposure_types': [exposure_area],
-                    'exposure_units': [],
+                    'exposure_types': [exposure_population],
+                    'exposure_units': [density_exposure_unit],
                     'exposure_class_fields': [],
                     'additional_keywords': [
+                        area_id_field,
                         area_name_field,
-                        area_type,
-                        area_population_field
+                        area_type_field
                     ]
                 }
             },
