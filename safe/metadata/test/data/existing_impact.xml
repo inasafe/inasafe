@@ -181,10 +181,9 @@
           <map_title>
             <gco:CharacterString/>
           </map_title>
-          <impact_table>
+          <statistics_classes>
             <gco:List/>
-            <gco:CharacterString/>
-          </impact_table>
+          </statistics_classes>
           <scale>
             <gco:CharacterString/>
           </scale>
@@ -242,6 +241,9 @@
           <layer_purpose>
             <gco:CharacterString/>
           </layer_purpose>
+          <impact_table>
+            <gco:CharacterString/>
+          </impact_table>
           <resolution>
             <gco:Tuple/>
           </resolution>
