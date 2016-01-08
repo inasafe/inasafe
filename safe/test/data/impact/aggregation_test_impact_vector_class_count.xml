@@ -178,6 +178,9 @@
           <map_title>
             <gco:CharacterString/>
           </map_title>
+          <statistics_classes>
+            <gco:List>[0, 1, 2]</gco:List>
+          </statistics_classes>
           <scale>
             <gco:CharacterString/>
           </scale>
