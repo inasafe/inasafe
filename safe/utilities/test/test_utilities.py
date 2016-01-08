@@ -165,7 +165,6 @@ class UtilitiesTest(unittest.TestCase):
         }
         self.assertDictEqual(keywords, expected_keywords)
 
-
     def test_is_keyword_version_supported(self):
         """Test for is_keyword_version_supported."""
         self.assertTrue(is_keyword_version_supported('3.2', '3.2'))

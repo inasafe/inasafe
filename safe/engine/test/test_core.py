@@ -36,6 +36,5 @@ class TestCore(unittest.TestCase):
         self.assertIsNotNone(impact_layer)
 
 
-
 if __name__ == '__main__':
     unittest.main()
