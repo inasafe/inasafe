@@ -183,7 +183,6 @@
           </map_title>
           <impact_table>
             <gco:List/>
-            <gco:CharacterString/>
           </impact_table>
           <scale>
             <gco:CharacterString/>
