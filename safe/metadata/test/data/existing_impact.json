@@ -166,19 +166,6 @@
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/host_name/gco:CharacterString"
     },
-    "impact_summary": {
-      "allowed_python_types": [
-        "str",
-        "unicode",
-        "int",
-        "float",
-        "NoneType"
-      ],
-      "name": "impact_summary",
-      "python_type": "NoneType",
-      "value": null,
-      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/impact_summary/gco:CharacterString"
-    },
     "keyword_version": {
       "allowed_python_types": [
         "str",
