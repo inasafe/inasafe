@@ -181,9 +181,9 @@
           <map_title>
             <gco:CharacterString>People affected by flood prone areas</gco:CharacterString>
           </map_title>
-          <impact_table>
-            <gco:CharacterString>&lt;table class=&quot;table table-striped condensed&quot;&gt; &lt;tbody&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;In the event of &lt;i&gt;banjir jakarta&lt;/i&gt; how many &lt;i&gt;populasi jawa&lt;/i&gt; might &lt;i&gt;need evacuation&lt;/i&gt;&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;People affected&lt;/th&gt;   &lt;th&gt;4,000*&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;2&quot;&gt;* Number is rounded up to the nearest 100&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;People needing evacuation&lt;/th&gt;   &lt;th&gt;40*&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;2&quot;&gt;* Number is rounded up to the nearest 10&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Evacuation threshold&lt;/th&gt;   &lt;th&gt;1%&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Map shows the number of people affected in each flood prone area&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Table below shows the weekly minimum needs for all evacuated people&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Needs should be provided weekly&lt;/th&gt;   &lt;th&gt;Total&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Rice [kg]&lt;/td&gt;   &lt;td&gt;112&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Drinking Water [l]&lt;/td&gt;   &lt;td&gt;700&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Clean Water [l]&lt;/td&gt;   &lt;td&gt;2,680&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Family Kits&lt;/td&gt;   &lt;td&gt;8&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Needs should be provided single&lt;/th&gt;   &lt;th&gt;Total&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Toilets&lt;/td&gt;   &lt;td&gt;2&lt;/td&gt;  &lt;/tr&gt; &lt;/tbody&gt;&lt;/table&gt;</gco:CharacterString>
-          </impact_table>
+          <statistics_classes>
+            <gco:List/>
+          </statistics_classes>
           <scale>
             <gco:CharacterString/>
           </scale>
@@ -241,6 +241,9 @@
           <layer_purpose>
             <gco:CharacterString>impact</gco:CharacterString>
           </layer_purpose>
+          <impact_table>
+            <gco:CharacterString>&lt;table class=&quot;table table-striped condensed&quot;&gt; &lt;tbody&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;In the event of &lt;i&gt;banjir jakarta&lt;/i&gt; how many &lt;i&gt;populasi jawa&lt;/i&gt; might &lt;i&gt;need evacuation&lt;/i&gt;&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;People affected&lt;/th&gt;   &lt;th&gt;4,000*&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;2&quot;&gt;* Number is rounded up to the nearest 100&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;People needing evacuation&lt;/th&gt;   &lt;th&gt;40*&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;2&quot;&gt;* Number is rounded up to the nearest 10&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Evacuation threshold&lt;/th&gt;   &lt;th&gt;1%&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Map shows the number of people affected in each flood prone area&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td colspan=&quot;100%&quot;&gt;Table below shows the weekly minimum needs for all evacuated people&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Needs should be provided weekly&lt;/th&gt;   &lt;th&gt;Total&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Rice [kg]&lt;/td&gt;   &lt;td&gt;112&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Drinking Water [l]&lt;/td&gt;   &lt;td&gt;700&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Clean Water [l]&lt;/td&gt;   &lt;td&gt;2,680&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Family Kits&lt;/td&gt;   &lt;td&gt;8&lt;/td&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;th&gt;Needs should be provided single&lt;/th&gt;   &lt;th&gt;Total&lt;/th&gt;  &lt;/tr&gt;  &lt;tr&gt;   &lt;td&gt;Toilets&lt;/td&gt;   &lt;td&gt;2&lt;/td&gt;  &lt;/tr&gt; &lt;/tbody&gt;&lt;/table&gt;</gco:CharacterString>
+          </impact_table>
           <resolution>
             <gco:Tuple/>
           </resolution>
