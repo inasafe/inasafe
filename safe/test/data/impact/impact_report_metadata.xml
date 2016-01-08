@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmd:MD_Metadata xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd">
+  <gmd:fileIdentifier>
+    <gco:CharacterString>None</gco:CharacterString>
+  </gmd:fileIdentifier>
+  <gmd:language>
+    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
+  </gmd:language>
+  <gmd:characterSet>
+    <gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</gmd:MD_CharacterSetCode>
+  </gmd:characterSet>
+  <gmd:hierarchyLevel>
+    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</gmd:MD_ScopeCode>
+  </gmd:hierarchyLevel>
+  <gmd:contact>
+    <gmd:CI_ResponsibleParty>
+      <gmd:organisationName>
+        <gco:CharacterString/>
+      </gmd:organisationName>
+      <gmd:contactInfo>
+        <gmd:CI_Contact>
+          <gmd:address>
+            <gmd:CI_Address>
+              <gmd:electronicMailAddress>
+                <gco:CharacterString/>
+              </gmd:electronicMailAddress>
+            </gmd:CI_Address>
+          </gmd:address>
+        </gmd:CI_Contact>
+      </gmd:contactInfo>
+      <gmd:role>
+        <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" codeSpace="ISOTC211/19115">pointOfContact</gmd:CI_RoleCode>
+      </gmd:role>
+    </gmd:CI_ResponsibleParty>
+  </gmd:contact>
+  <gmd:dateStamp>
+    <gco:Date/>
+  </gmd:dateStamp>
+  <gmd:metadataStandardName>
+    <gco:CharacterString>ISO 19115:2003 - Geographic information - Metadata</gco:CharacterString>
+  </gmd:metadataStandardName>
+  <gmd:metadataStandardVersion>
+    <gco:CharacterString>ISO 19115:2003</gco:CharacterString>
+  </gmd:metadataStandardVersion>
+  <gmd:identificationInfo>
+    <gmd:MD_DataIdentification>
+      <gmd:citation>
+        <gmd:CI_Citation>
+          <gmd:title>
+            <gco:CharacterString>impact_report_metadata</gco:CharacterString>
+          </gmd:title>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date/>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" codeSpace="ISOTC211/19115">publication</gmd:CI_DateTypeCode>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date/>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision" codeSpace="ISOTC211/19115">revision</gmd:CI_DateTypeCode>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:date>
+            <gmd:CI_Date>
+              <gmd:date>
+                <gco:Date/>
+              </gmd:date>
+              <gmd:dateType>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation" codeSpace="ISOTC211/19115">creation</gmd:CI_DateTypeCode>
+              </gmd:dateType>
+            </gmd:CI_Date>
+          </gmd:date>
+          <gmd:identifier>
+            <gmd:RS_Identifier>
+              <gmd:code>
+                <gco:CharacterString>None</gco:CharacterString>
+              </gmd:code>
+            </gmd:RS_Identifier>
+          </gmd:identifier>
+        </gmd:CI_Citation>
+      </gmd:citation>
+      <gmd:abstract>
+        <gco:CharacterString/>
+      </gmd:abstract>
+      <gmd:credit>
+        <gco:CharacterString/>
+      </gmd:credit>
+      <gmd:status>
+        <gmd:MD_ProgressCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="revision" codeSpace="ISOTC211/19115">revision</gmd:MD_ProgressCode>
+      </gmd:status>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:organisationName>
+            <gco:CharacterString/>
+          </gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress>
+                    <gco:CharacterString/>
+                  </gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+          <gmd:role>
+            <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointOfContact" codeSpace="ISOTC211/19115">pointOfContact</gmd:CI_RoleCode>
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
+      <gmd:resourceMaintenance>
+        <gmd:MD_MaintenanceInformation>
+          <gmd:maintenanceAndUpdateFrequency>
+            <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="continual" codeSpace="ISOTC211/19115">continual</gmd:MD_MaintenanceFrequencyCode>
+          </gmd:maintenanceAndUpdateFrequency>
+        </gmd:MD_MaintenanceInformation>
+      </gmd:resourceMaintenance>
+      <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>Human health and safety</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:type>
+            <gmd:MD_KeywordTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme" codeSpace="ISOTC211/19115">theme</gmd:MD_KeywordTypeCode>
+          </gmd:type>
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>GEMET - INSPIRE themes, version 1.0</gco:CharacterString>
+              </gmd:title>
+              <gmd:date>
+                <gmd:CI_Date>
+                  <gmd:date>
+                    <gco:Date>2008-06-01</gco:Date>
+                  </gmd:date>
+                  <gmd:dateType>
+                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" codeSpace="ISOTC211/19115">publication</gmd:CI_DateTypeCode>
+                  </gmd:dateType>
+                </gmd:CI_Date>
+              </gmd:date>
+            </gmd:CI_Citation>
+          </gmd:thesaurusName>
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+      <gmd:resourceConstraints>
+        <gmd:MD_Constraints>
+          <gmd:useLimitation>
+            <gco:CharacterString/>
+          </gmd:useLimitation>
+        </gmd:MD_Constraints>
+      </gmd:resourceConstraints>
+      <gmd:language>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
+      </gmd:language>
+      <gmd:topicCategory>
+        <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>
+      <gmd:extent>
+        <gmd:EX_Extent>
+                </gmd:EX_Extent>
+      </gmd:extent>
+      <gmd:supplementalInformation>
+        <inasafe_keywords/>
+        <inasafe>
+          <statistics_type>
+            <gco:CharacterString>class_count</gco:CharacterString>
+          </statistics_type>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
+          <map_title>
+            <gco:CharacterString>Building affected by earthquake</gco:CharacterString>
+          </map_title>
+          <statistics_classes>
+            <gco:List>[0, 1, 2, 3]</gco:List>
+          </statistics_classes>
+          <scale>
+            <gco:CharacterString/>
+          </scale>
+          <exposure_title>
+            <gco:CharacterString>Buildings</gco:CharacterString>
+          </exposure_title>
+          <elapsed_time>
+            <gco:Integer>0</gco:Integer>
+          </elapsed_time>
+          <source>
+            <gco:CharacterString/>
+          </source>
+          <layer_geometry>
+            <gco:CharacterString/>
+          </layer_geometry>
+          <time_stamp>
+            <gco:CharacterString>2016-01-08_16:16:33</gco:CharacterString>
+          </time_stamp>
+          <host_name>
+            <gco:CharacterString>estragon.local</gco:CharacterString>
+          </host_name>
+          <postprocessing_report>
+            <gco:CharacterString>&lt;table class=&quot;table table-condensed table-striped&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Area&lt;/td&gt;&lt;td&gt;safe_ag 2&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Entire area&lt;/td&gt;&lt;td&gt;181&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p class=&quot;caption&quot;&gt;&lt;em&gt;Columns containing exclusively 0 and &quot;No data&quot; have not been shown in the table.&lt;/em&gt;&lt;/p&gt;</gco:CharacterString>
+          </postprocessing_report>
+          <legend_units>
+            <gco:CharacterString>(mmi)</gco:CharacterString>
+          </legend_units>
+          <user>
+            <gco:CharacterString>ismailsunni</gco:CharacterString>
+          </user>
+          <report>
+            <gco:CharacterString/>
+          </report>
+          <hazard_title>
+            <gco:CharacterString>Earthquake</gco:CharacterString>
+          </hazard_title>
+          <keyword_version>
+            <gco:CharacterString>3.3</gco:CharacterString>
+          </keyword_version>
+          <legend_title>
+            <gco:CharacterString>Impact level</gco:CharacterString>
+          </legend_title>
+          <legend_notes>
+            <gco:CharacterString>The level of the impact is according to the threshold the user input.</gco:CharacterString>
+          </legend_notes>
+          <exposure_source>
+            <gco:CharacterString>OpenStreetMap - www.openstreetmap.org</gco:CharacterString>
+          </exposure_source>
+          <datatype>
+            <gco:CharacterString/>
+          </datatype>
+          <hazard_source>
+            <gco:CharacterString>Not specified</gco:CharacterString>
+          </hazard_source>
+          <layer_purpose>
+            <gco:CharacterString>impact</gco:CharacterString>
+          </layer_purpose>
+          <resolution>
+            <gco:Tuple/>
+          </resolution>
+          <layer_mode>
+            <gco:CharacterString/>
+          </layer_mode>
+          <target_field>
+            <gco:CharacterString>safe_ag</gco:CharacterString>
+          </target_field>
+        </inasafe>
+        <inasafe_provenance>
+          <provenance_step timestamp="2016-01-08T16:16:33.172424">
+            <title>Initialize Impact Function</title>
+            <description>Impact function is being initialized</description>
+          </provenance_step>
+          <provenance_step timestamp="2016-01-08T16:16:33.949155">
+            <title>Validating Step</title>
+            <description>Impact function is validating the inputs.</description>
+          </provenance_step>
+          <provenance_step timestamp="2016-01-08T16:16:33.949467">
+            <title>Preparation Step</title>
+            <description>Impact function is being prepared to run the analysis.</description>
+          </provenance_step>
+          <provenance_step timestamp="2016-01-08T16:16:33.949472">
+            <title>Calculating Step</title>
+            <description>Impact function is calculating the impact.</description>
+          </provenance_step>
+          <provenance_step timestamp="2016-01-08T16:16:33.968135">
+            <title>IF Provenance</title>
+            <description>Impact function's provenance.</description>
+            <start_time>2016-01-08 16:16:33.949148</start_time>
+            <finish_time>2016-01-08 16:16:33.967735</finish_time>
+            <hazard_layer>Earthquake</hazard_layer>
+            <exposure_layer>Buildings</exposure_layer>
+            <impact_function_id>EarthquakeBuildingFunction</impact_function_id>
+            <impact_function_version>1.0</impact_function_version>
+            <host_name>estragon.local</host_name>
+            <user>ismailsunni</user>
+            <qgis_version>2.8.3-Wien</qgis_version>
+            <gdal_version>1.11.2</gdal_version>
+            <qt_version>4.8.6</qt_version>
+            <pyqt_version>4.11.4</pyqt_version>
+            <os>Darwin Kernel Version 15.0.0: Sat Sep 19 15:53:46 PDT 2015; root:xnu-3247.10.11~1/RELEASE_X86_64</os>
+            <inasafe_version>3.3.0.dev-master</inasafe_version>
+            <exposure_pixel_size>None</exposure_pixel_size>
+            <hazard_pixel_size>None</hazard_pixel_size>
+            <impact_pixel_size>None</impact_pixel_size>
+            <analysis_extent>None</analysis_extent>
+            <parameter>None</parameter>
+          </provenance_step>
+        </inasafe_provenance>
+      </gmd:supplementalInformation>
+    </gmd:MD_DataIdentification>
+  </gmd:identificationInfo>
+  <gmd:distributionInfo>
+    <gmd:MD_Distribution>
+      <gmd:distributionFormat>
+        <gmd:MD_Format>
+          <gmd:name>
+            <gco:CharacterString>unknown</gco:CharacterString>
+          </gmd:name>
+          <gmd:version>
+            <gco:CharacterString>unknown</gco:CharacterString>
+          </gmd:version>
+        </gmd:MD_Format>
+      </gmd:distributionFormat>
+      <gmd:transferOptions>
+        <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL/>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+        </gmd:MD_DigitalTransferOptions>
+      </gmd:transferOptions>
+    </gmd:MD_Distribution>
+  </gmd:distributionInfo>
+  <gmd:dataQualityInfo>
+    <gmd:DQ_DataQuality>
+      <gmd:scope>
+        <gmd:DQ_Scope>
+          <gmd:level>
+            <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</gmd:MD_ScopeCode>
+          </gmd:level>
+        </gmd:DQ_Scope>
+      </gmd:scope>
+      <gmd:report>
+        <gmd:DQ_DomainConsistency>
+          <gmd:result>
+            <gmd:DQ_ConformanceResult>
+              <gmd:specification>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString/>
+                  </gmd:title>
+                  <gmd:date>
+                    <gmd:CI_Date>
+                      <gmd:date>
+                        <gco:Date/>
+                      </gmd:date>
+                      <gmd:dateType>
+                        <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation" codeSpace="ISOTC211/19115">creation</gmd:CI_DateTypeCode>
+                      </gmd:dateType>
+                    </gmd:CI_Date>
+                  </gmd:date>
+                </gmd:CI_Citation>
+              </gmd:specification>
+              <gmd:explanation>
+                <gco:CharacterString>See the referenced specification</gco:CharacterString>
+              </gmd:explanation>
+              <gmd:pass>
+                <gco:Boolean>true</gco:Boolean>
+              </gmd:pass>
+            </gmd:DQ_ConformanceResult>
+          </gmd:result>
+        </gmd:DQ_DomainConsistency>
+      </gmd:report>
+      <gmd:lineage>
+        <gmd:LI_Lineage>
+          <gmd:statement>
+            <gco:CharacterString/>
+          </gmd:statement>
+        </gmd:LI_Lineage>
+      </gmd:lineage>
+    </gmd:DQ_DataQuality>
+  </gmd:dataQualityInfo>
+  <gmd:metadataMaintenance>
+    <gmd:MD_MaintenanceInformation>
+      <gmd:maintenanceAndUpdateFrequency>
+        <gmd:MD_MaintenanceFrequencyCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MaintenanceFrequencyCode" codeListValue="continual" codeSpace="ISOTC211/19115">continual</gmd:MD_MaintenanceFrequencyCode>
+      </gmd:maintenanceAndUpdateFrequency>
+      <gmd:maintenanceNote>
+        <gco:CharacterString>This record was generated by InaSAFE (http://inasafe.org)</gco:CharacterString>
+      </gmd:maintenanceNote>
+    </gmd:MD_MaintenanceInformation>
+  </gmd:metadataMaintenance>
+</gmd:MD_Metadata>
