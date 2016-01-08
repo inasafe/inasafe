@@ -26,13 +26,13 @@ from safe.definitions import (
     hazard_category_single_event,
     hazard_category_multiple_event,
     generic_vector_hazard_classes,
+    flood_vector_hazard_classes,
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,
     density_exposure_unit
 )
 from safe.utilities.i18n import tr
-
 
 class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
         ImpactFunctionMetadata):
@@ -85,7 +85,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
-                        generic_vector_hazard_classes],
+                        generic_vector_hazard_classes,
+                        flood_vector_hazard_classes],
                     'raster_hazard_classifications': [],
                     'additional_keywords': []
                 },
