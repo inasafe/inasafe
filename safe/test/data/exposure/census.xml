@@ -224,7 +224,7 @@
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
           <area_type_field>
-            <gco:CharacterString>type</gco:CharacterString>
+            <gco:CharacterString/>
           </area_type_field>
           <layer_mode>
             <gco:CharacterString>continuous</gco:CharacterString>

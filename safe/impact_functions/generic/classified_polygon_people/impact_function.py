@@ -48,6 +48,7 @@ from safe.common.utilities import format_int
 from safe.impact_functions.core import (
     population_rounding
 )
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 from safe.messaging import styles
 
 
@@ -62,6 +63,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Set the question of the IF (as the hazard data is not an event)
         self.question = ('In each of the hazard zones which areas  '
                          'might be affected.')
+
+        # Use the proper minimum needs, update the parameters
+        self.parameters = add_needs_parameters(self.parameters)
+
         self.all_areas_ids = {}
         self.all_affected_areas = {}
         self.all_areas_population = {}
@@ -289,11 +294,13 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
             self.all_areas_ids[area_id] += geometry_area
 
+            # storing area id with its respective area name in
+            # self.areas_namesthis will help us in later in showing user names
+            #  and not ids
             if area_id not in self.areas_names:
                 self.areas_names[area_id] = feature[area_name_attribute]
 
             # find possible intersections with hazard layer
-
             # unaffected_geometries = []
             # impacted_features = {}
             for hazard_id in hazard_index.intersects(bbox):

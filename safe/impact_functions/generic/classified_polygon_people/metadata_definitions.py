@@ -31,7 +31,13 @@ from safe.definitions import (
     layer_geometry_polygon,
     density_exposure_unit
 )
+from safe.defaults import (
+    default_minimum_needs,
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector)
 from safe.utilities.i18n import tr
+
 
 class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
         ImpactFunctionMetadata):
@@ -101,6 +107,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
                     ]
                 }
             },
-            'parameters': OrderedDict([])
+            'parameters': OrderedDict([
+                ('minimum needs', default_minimum_needs())])
         }
         return dict_meta

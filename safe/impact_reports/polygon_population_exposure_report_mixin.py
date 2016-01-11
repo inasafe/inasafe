@@ -25,6 +25,7 @@ from safe.common.utilities import format_int
 from safe.impact_functions.core import (
     evacuated_population_needs
 )
+from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
 from safe.messaging import styles
 
 
@@ -146,7 +147,11 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         :returns: Total minimum needs.
         :rtype: dict
         """
-        total_population_evacuated = self.affected_population
+        total_population_evacuated = sum(self.affected_population.values())
+        self.minimum_needs = [
+            parameter.serialize() for parameter in
+            filter_needs_parameters(self.parameters['minimum needs'])
+        ]
 
         return evacuated_population_needs(
             total_population_evacuated, self.minimum_needs)
@@ -200,7 +205,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return message
 
-    def impact_calculation(self,table):
+    def impact_calculation(self, table):
         """ Calculates impact on each area
 
         :param table: A table with first and second row
@@ -249,7 +254,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return table
 
-    def head_row(self,row):
+    def head_row(self, row):
         """Set and return header row in impact summary
 
         :param row: The empty header row
@@ -323,27 +328,21 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         :rtype Row
         """
         row.add(m.Cell(
-            format_int(int(total_affected_area)),
-            align='right'))
+            format_int(int(total_affected_area)), align='right'))
         row.add(m.Cell(
-            "%.0f%%" % percentage_affected_area,
-            align='right'))
+            "%.0f%%" % percentage_affected_area, align='right'))
         row.add(m.Cell(
-            format_int(int(total_area)),
-            align='right'))
+            format_int(int(total_area)), align='right'))
         row.add(m.Cell(
-            format_int(int(total_affected_population)),
-            align='right'))
+            format_int(int(total_affected_population)), align='right'))
         row.add(m.Cell(
-            "%.0f%%" % percentage_affected_area,
-            align='right'))
+            "%.0f%%" % percentage_affected_area, align='right'))
         row.add(m.Cell(
-            format_int(int(total_population)),
-            align='right'))
+            format_int(int(total_population)), align='right'))
 
         return row
 
-    def total_row(self,row):
+    def total_row(self, row):
         """Calculates the total of each single column
 
         :param row: row in the summary
@@ -419,21 +418,15 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         area_name = self.area_name(area_id)
         row = m.Row()
         row.add(m.Cell(area_name))
+        row.add(m.Cell(format_int(int(affected)), align='right'))
         row.add(m.Cell(
-            format_int(int(affected)),
-            align='right'))
+            "%.1f%%" % percent_affected, align='right'))
         row.add(m.Cell(
-            "%.1f%%" % percent_affected,
-            align='right'))
-        row.add(m.Cell(
-            format_int(int(single_total_area)),
-            align='right'))
+            format_int(int(single_total_area)), align='right'))
         row.add(m.Cell(
             format_int(int(number_people_affected)),
             align='right'))
-        row.add(m.Cell(
-            "%.1f%%" % percent_people_affected,
-            align='right'))
+        row.add(m.Cell("%.1f%%" % percent_people_affected, align='right'))
         row.add(m.Cell(
             format_int(int(self.areas_population[area_id])),
             align='right'))
@@ -609,7 +602,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         """
         self._total_population = total_population
 
-    def area_name(self,area_id):
+    def area_name(self, area_id):
         """ Return the name of area.
 
         :param area_id: area id.
@@ -623,7 +616,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return area_name
 
-    def hazard_table(self,hazard_table):
+    def hazard_table(self, hazard_table):
         """ Return updated hazard table.
 
         :param hazard_table: hazard table.
@@ -634,32 +627,25 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         """
         hazard_table.caption = None
         head_row = m.Row()
-        head_row.add(m.Cell(
-            tr('Hazard Level'),
-            header=True,
-            align='right'))
-        head_row.add(m.Cell('   '),
-                    align='right')
+        head_row.add(m.Cell(tr('Hazard Level'), header=True))
         head_row.add(m.Cell(
             tr('Number of Population Affected'),
             header=True,
             align='right'))
+
         hazard_table.add(head_row)
         for id, value in self.hazard_levels.iteritems():
             level_name = self.hazard_level_name(id)
             row = m.Row()
-            row.add(m.Cell(level_name),
-                     align='right')
+            row.add(m.Cell(level_name))
             value = format_int(int(value))
-            row.add(m.Cell('   '),
-                    align='right')
-            row.add(m.Cell(value),
-                     align='right')
+
+            row.add(m.Cell(value, align='right'))
             hazard_table.add(row)
 
         return hazard_table
 
-    def hazard_level_name(self,id):
+    def hazard_level_name(self, id):
         """ Return name of level corresponding the id.
 
         :param id: hazard level id.
