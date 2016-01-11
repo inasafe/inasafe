@@ -294,7 +294,7 @@ class Analysis(object):
     def get_clip_parameters(self):
         """Calculate the best extents to use for the assessment.
 
-        :returns: A tuple consisting of:
+        :returns: A dictionary consisting of:
 
             * extra_exposure_keywords: dict - any additional keywords that
                 should be written to the exposure layer. For example if
@@ -481,13 +481,14 @@ class Analysis(object):
                     get_wgs84_resolution(exposure_layer),
                     exposure_geoextent)
 
-        return (
-            extra_exposure_keywords,
-            adjusted_geo_extent,
-            cell_size,
-            exposure_layer,
-            geo_extent,
-            hazard_layer)
+        return {
+            'extra_exposure_keywords': extra_exposure_keywords,
+            'adjusted_geo_extent': adjusted_geo_extent,
+            'cell_size': cell_size,
+            'exposure_layer': exposure_layer,
+            'geo_extent': geo_extent,
+            'hazard_layer': hazard_layer
+        }
 
     def setup_aggregator(self):
         """Create an aggregator for this analysis run."""
@@ -498,7 +499,7 @@ class Analysis(object):
             buffered_geo_extent = self.impact_layer.extent
         except AttributeError:
             # if we have no runner, set dummy extent
-            buffered_geo_extent = self.clip_parameters[1]
+            buffered_geo_extent = self.clip_parameters['adjusted_geo_extent']
 
         # setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
@@ -587,8 +588,8 @@ class Analysis(object):
         # Find out what the usable extent and cell size are
         try:
             self.clip_parameters = self.get_clip_parameters()
-            buffered_geoextent = self.clip_parameters[1]
-            cell_size = self.clip_parameters[2]
+            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
+            cell_size = self.clip_parameters['cell_size']
         except InsufficientOverlapError as e:
             raise e
         except (RuntimeError, AttributeError) as e:
@@ -602,7 +603,7 @@ class Analysis(object):
 
         if not self.force_memory:
             # Ensure there is enough memory
-            result = check_memory_usage(buffered_geoextent, cell_size)
+            result = check_memory_usage(adjusted_geo_extent, cell_size)
             if not result:
                 raise InsufficientMemoryWarning
 
@@ -692,12 +693,12 @@ class Analysis(object):
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
         try:
-            extra_exposure_keywords = self.clip_parameters[0]
-            adjusted_geo_extent = self.clip_parameters[1]
-            cell_size = self.clip_parameters[2]
-            exposure_layer = self.clip_parameters[3]
-            # geo_extent = self.clip_parameters[4]
-            hazard_layer = self.clip_parameters[5]
+            extra_exposure_keywords = self.clip_parameters[
+                'extra_exposure_keywords']
+            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
+            cell_size = self.clip_parameters['cell_size']
+            exposure_layer = self.clip_parameters['exposure_layer']
+            hazard_layer = self.clip_parameters['hazard_layer']
         except:
             raise
         # Find out what clipping behaviour we have - see #2210
@@ -785,14 +786,8 @@ class Analysis(object):
         """Setup impact function."""
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
-        # pylint: disable=unpacking-non-sequence
-        (_,
-         buffered_geo_extent,
-         _,
-         exposure_layer,
-         _,
-         hazard_layer) = self.clip_parameters
-        # pylint: enable=unpacking-non-sequence
+        exposure_layer = self.clip_parameters['exposure_layer']
+        hazard_layer = self.clip_parameters['hazard_layer']
 
         if self.impact_function.requires_clipping:
             # The impact function uses SAFE layers,
@@ -816,7 +811,8 @@ class Analysis(object):
             # It is a QGIS impact function,
             # clipping isn't needed, but we need to set up extent
             self.aggregator.set_layers(hazard_layer, exposure_layer)
-            self.impact_function.requested_extent = buffered_geo_extent
+            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
+            self.impact_function.requested_extent = adjusted_geo_extent
 
         # Set input layers
         self.impact_function.hazard = hazard_layer

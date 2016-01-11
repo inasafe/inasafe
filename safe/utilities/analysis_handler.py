@@ -338,7 +338,7 @@ class AnalysisHandler(QObject):
             raise e
 
         self.extent.show_last_analysis_extent(
-            self.analysis.clip_parameters[1])
+            self.analysis.clip_parameters['adjusted_geo_extent'])
 
         # Start the analysis
         self.analysis.run_analysis()
