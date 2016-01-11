@@ -161,7 +161,6 @@ class TestImpactMetadata(TestCase):
             expected_impact_summary = f.read()
         self.assertEqual(expected_impact_summary, metadata.impact_summary)
 
-
     def test_invalid_json_read(self):
         with self.assertRaises(MetadataReadError):
             ImpactLayerMetadata(

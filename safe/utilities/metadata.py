@@ -116,7 +116,7 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     keywords = {}
     temp_keywords = {
         x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
-        # noinspection PyUnresolvedReferences
+    # noinspection PyUnresolvedReferences
     if metadata.layer_purpose == 'impact':
         if metadata.impact_summary:
             temp_keywords['impact_summary'] = metadata.impact_summary
