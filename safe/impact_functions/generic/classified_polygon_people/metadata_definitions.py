@@ -19,7 +19,6 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.definitions import (
     area_name_field,
-    area_type_field,
     area_id_field,
     exposure_population,
     hazard_all,
@@ -98,8 +97,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
                     'exposure_class_fields': [],
                     'additional_keywords': [
                         area_id_field,
-                        area_name_field,
-                        area_type_field
+                        area_name_field
                     ]
                 }
             },

@@ -763,12 +763,6 @@ area_name_field = {
     'type': 'field',
     'description': tr('Attribute for the area name ')
 }
-area_type_field = {
-    'key': 'area_type_field',
-    'name': tr('Type field'),
-    'type': 'field',
-    'description': tr('Attribute for the type of the area')
-}
 
 area_id_field = {
     'key': 'area_id_field',

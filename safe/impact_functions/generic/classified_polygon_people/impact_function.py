@@ -96,7 +96,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         """Risk plugin for classified polygon hazard on polygon population.
 
         Counts population in an area exposed to hazard zones and then
-        computes the the  proportion of each area that is affected.
+        computes the proportion of each area that is affected.
         The population in each area is then calculated as the proportion
         of the original population to the affected area.
 
@@ -259,16 +259,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         """
         # Taking area necessary attributes
         area_id_attribute = self.exposure.keyword('area_id_field')
-        type_attr = self.exposure.keyword('area_type_field')
-        area_population_attribute = self.exposure.keyword(
-            'field')
-        area_name_attribute = self.exposure.keyword(
-            'area_name_field')
+        area_population_attribute = self.exposure.keyword('field')
+        area_name_attribute = self.exposure.keyword('area_name_field')
 
         all_affected_geometry = []
-
-        all_areas = {}
-        imp_areas = {}
         impacted_geometries = []
 
         for feature in exposure.getFeatures(
@@ -285,21 +279,15 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             if not extent_exposure.contains(bbox):
                 geometry = geometry.intersection(extent_exposure_geom)
 
-            area_type = feature[type_attr]
             area_id = feature.attribute(area_id_attribute)
+
             self.all_areas_population[area_id] = feature.attribute(
                 area_population_attribute)
-
-            # add to the total area of this land cover type
-            area = geometry.area()
-            if area_type not in all_areas:
-                all_areas[area_type] = 0.
 
             if area_id not in self.all_areas_ids:
                 self.all_areas_ids[area_id] = 0.
 
             self.all_areas_ids[area_id] += geometry_area
-            all_areas[area_type] += area
 
             if area_id not in self.areas_names:
                 self.areas_names[area_id] = feature[area_name_attribute]
@@ -322,12 +310,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 all_affected_geometry.append(impact_geometry)
 
                 # add to the affected area of this area type
-                if area_type not in imp_areas:
-                    imp_areas[area_type] = 0.
+
                 if area_id not in self.all_affected_areas:
                     self.all_affected_areas[area_id] = 0.
                 area = impact_geometry.area()
-                imp_areas[area_type] += area
+
                 self.all_affected_areas[area_id] += area
 
                 self.assign_impact_level(
@@ -400,8 +387,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         unaffected_feature = QgsFeature(unaffected_fields)
         impacted_feature = QgsFeature(impact_fields)
 
-        area_population_attribute = self.exposure.keyword(
-                'field')
+        area_population_attribute = self.exposure.keyword('field')
 
         unaffected_feature.setGeometry(unaffected_geometry)
         impacted_feature.setGeometry(impact_geometry)
@@ -426,19 +412,19 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # to new resulted(impacted or unaffected) features
 
         unaffected_population_number = self.calculate_population_number(
-                                            unaffected_geometry,
-                                            feature,
-                                            area_population_attribute)
-        unaffected_feature.setAttribute(
-            3,
-            unaffected_population_number)
+            unaffected_geometry,
+            feature,
+            area_population_attribute)
+
+        unaffected_feature.setAttribute(3, unaffected_population_number)
+
         impacted_population_number = self.calculate_population_number(
-                                              impact_geometry,
-                                              feature,
-                                              area_population_attribute)
-        impacted_feature.setAttribute(
-            3,
-            impacted_population_number)
+            impact_geometry,
+            feature,
+            area_population_attribute)
+
+        impacted_feature.setAttribute(3, impacted_population_number)
+
         # Getting number of population in different hazard
         # levels
 
@@ -488,10 +474,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
-    def calculate_population_number(self,
-                                    target_geometry,
-                                    feature,
-                                    area_population_attribute):
+    def calculate_population_number(
+            self,
+            target_geometry,
+            feature,
+            area_population_attribute):
 
         """ Calculate population number given the geometry of
             the part of the layer and the whole layer

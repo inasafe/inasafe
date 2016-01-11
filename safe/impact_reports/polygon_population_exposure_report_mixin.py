@@ -200,7 +200,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return message
 
-    def impact_calculation(self, table):
+    def impact_calculation(self,table):
         """ Calculates impact on each area
 
         :param table: A table with first and second row
@@ -249,7 +249,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return table
 
-    def head_row(self, row):
+    def head_row(self,row):
         """Set and return header row in impact summary
 
         :param row: The empty header row
@@ -289,7 +289,8 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return row
 
-    def row(self,
+    def row(
+            self,
             row,
             total_affected_area,
             percentage_affected_area,
@@ -342,7 +343,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return row
 
-    def total_row(self, row):
+    def total_row(self,row):
         """Calculates the total of each single column
 
         :param row: row in the summary
@@ -608,8 +609,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         """
         self._total_population = total_population
 
-    def area_name(self,
-                  area_id):
+    def area_name(self,area_id):
         """ Return the name of area.
 
         :param area_id: area id.
@@ -623,8 +623,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return area_name
 
-    def hazard_table(self,
-                     hazard_table):
+    def hazard_table(self,hazard_table):
         """ Return updated hazard table.
 
         :param hazard_table: hazard table.
@@ -660,8 +659,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return hazard_table
 
-    def hazard_level_name(self,
-                          id):
+    def hazard_level_name(self,id):
         """ Return name of level corresponding the id.
 
         :param id: hazard level id.
