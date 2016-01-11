@@ -212,6 +212,11 @@ def read_iso_metadata(keyword_filename):
     if keyword_element is None:
         raise MetadataReadError
 
-    metadata = {'keywords': keyword_element.text.split('\n')}
+    if keyword_element.text:
+        metadata = {'keywords': keyword_element.text.split('\n')}
 
-    return metadata
+        return metadata
+    else:
+        return {
+            'keywords' : []
+        }
