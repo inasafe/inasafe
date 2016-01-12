@@ -95,9 +95,9 @@ class Analysis(object):
         """Constructor."""
         # Please set Layers, Impact Functions, and Variables to run Analysis
         # Layers
-        self._hazard_layer = None
-        self._exposure_layer = None
-        self._aggregation_layer = None
+        self._hazard = None
+        self._exposure = None
+        self._aggregation = None
         self._impact_layer = None
         self.hazard_keyword = None
         self.exposure_keyword = None
@@ -124,64 +124,64 @@ class Analysis(object):
         self.num_dynamic_signals = 3
 
     @property
-    def hazard_layer(self):
+    def hazard(self):
         """Property for hazard layer.
 
         :returns: Hazard Layer of the analysis.
         :rtype: QgsMapLayer
 
         """
-        return self._hazard_layer
+        return self._hazard
 
-    @hazard_layer.setter
-    def hazard_layer(self, hazard_layer):
+    @hazard.setter
+    def hazard(self, hazard_layer):
         """Setter for the hazard layer for the analysis.
 
         :param hazard_layer: The hazard layer.
         :type hazard_layer: QgsMapLayer
 
         """
-        self._hazard_layer = hazard_layer
+        self._hazard = hazard_layer
 
     @property
-    def exposure_layer(self):
+    def exposure(self):
         """Property for exposure layer.
 
         :returns: Exposure Layer of the analysis.
         :rtype: QgsMapLayer
 
         """
-        return self._exposure_layer
+        return self._exposure
 
-    @exposure_layer.setter
-    def exposure_layer(self, exposure_layer):
+    @exposure.setter
+    def exposure(self, exposure_layer):
         """Setter for the exposure layer for the analysis.
 
         :param exposure_layer: The exposure layer.
         :type exposure_layer: QgsMapLayer
 
         """
-        self._exposure_layer = exposure_layer
+        self._exposure = exposure_layer
 
     @property
-    def aggregation_layer(self):
+    def aggregation(self):
         """Property for aggregation layer.
 
         :returns: Aggregation Layer of the analysis.
         :rtype: QgsMapLayer
 
         """
-        return self._aggregation_layer
+        return self._aggregation
 
-    @aggregation_layer.setter
-    def aggregation_layer(self, aggregation_layer):
+    @aggregation.setter
+    def aggregation(self, aggregation_layer):
         """Setter for the aggregation layer for the analysis.
 
         :param aggregation_layer: The aggregation layer.
         :type aggregation_layer: QgsMapLayer
 
         """
-        self._aggregation_layer = aggregation_layer
+        self._aggregation = aggregation_layer
 
     @property
     def impact_layer(self):
@@ -235,8 +235,8 @@ class Analysis(object):
             QgsMapLayer
         :raises: InsufficientOverlapError
         """
-        hazard_layer = self.hazard_layer
-        exposure_layer = self.exposure_layer
+        hazard_layer = self.hazard
+        exposure_layer = self.exposure
 
         # Get the Hazard extents as an array in EPSG:4326
         hazard_geoextent = extent_to_array(
@@ -425,7 +425,7 @@ class Analysis(object):
 
         # setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
-            buffered_geo_extent, self.aggregation_layer)
+            buffered_geo_extent, self.aggregation)
 
         self.aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
@@ -441,9 +441,9 @@ class Analysis(object):
         # trap for issue 706
         try:
             exposure_name = self.get_layer_title(
-                self.exposure_layer, self.exposure_keyword)
+                self.exposure, self.exposure_keyword)
             hazard_name = self.get_layer_title(
-                self.hazard_layer, self.hazard_keyword)
+                self.hazard, self.hazard_keyword)
             # aggregation layer could be set to AOI so no check for that
         except AttributeError:
             title = tr('No valid layers')
@@ -463,10 +463,10 @@ class Analysis(object):
             m.EmphasizedText(exposure_name),
         )
 
-        if self.aggregation_layer is not None:
+        if self.aggregation is not None:
             try:
                 aggregation_name = self.get_layer_title(
-                    self.aggregation_layer, self.aggregation_keyword)
+                    self.aggregation, self.aggregation_keyword)
                 # noinspection PyTypeChecker
                 text.add(m.Text(
                     tr('and bullet list the results'),
@@ -792,9 +792,9 @@ class Analysis(object):
             report.add(m.Text(e.message))
             report.add(m.Heading(tr('Notes'), **SUGGESTION_STYLE))
             exposure_layer_title = self.get_layer_title(
-                self.exposure_layer, self.exposure_keyword)
+                self.exposure, self.exposure_keyword)
             hazard_layer_title = self.get_layer_title(
-                self.hazard_layer, self.hazard_keyword)
+                self.hazard, self.hazard_keyword)
             report.add(m.Text(tr(
                 'It appears that no %s are affected by %s. You may want '
                 'to consider:') % (
