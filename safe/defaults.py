@@ -202,9 +202,9 @@ def age_postprocessor():
     youth_ratio.description = tr(
         'Youth ratio defines what proportion of the population have not yet '
         'achieved financial independence. The age threshold for youth can '
-        'vary by region - please consult with your local census bureau to find'
-        ' out what the relevant threshold is in your region. InaSAFE does not '
-        'impose a particular age ratio scheme - it will break down the '
+        'vary by region - please consult with your local census bureau to '
+        'find out what the relevant threshold is in your region. InaSAFE does '
+        'not impose a particular age ratio scheme - it will break down the '
         'population according to the thresholds you define for your locality. '
         'In InaSAFE, people 0-14 years old are defined as "youth". The '
         'default youth ratio is 0.263.'
