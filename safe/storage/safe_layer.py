@@ -157,7 +157,7 @@ class SafeLayer(object):
     def qgis_raster_layer(self):
         """Get QgsRasterLayer representation of self.layer.
 
-        .. versionadded:: 3.4
+        .. versionadded:: 3.3
 
         :returns: A QgsRasterLayer if it's raster.
         :rtype: QgsRasterLayer, None
@@ -172,7 +172,7 @@ class SafeLayer(object):
     def qgis_layer(self):
         """Get the qgis layer representation of self.layer.
 
-        .. versionadded:: 3.4
+        .. versionadded:: 3.3
 
         :returns: The QGIS layer.
         :rtype: QgsMapLayer, None
@@ -187,7 +187,7 @@ class SafeLayer(object):
     def crs(self):
         """Get the coordinate reference system of self.layer.
 
-        .. versionadded:: 3.4
+        .. versionadded:: 3.3
 
         :return: The coordinate reference system.
         :rtype: QgsCoordinateReferenceSystem
@@ -201,7 +201,7 @@ class SafeLayer(object):
     def extent(self):
         """Get the extent of self.layer.
 
-        .. versionadded:: 3.4
+        .. versionadded:: 3.3
 
         :return: The extent as a QgsRectangle.
         :rtype: QgsRectangle
@@ -215,7 +215,7 @@ class SafeLayer(object):
     def layer_type(self):
         """Get the type (raster or vector) of self.layer
 
-        .. versionadded:: 3.4
+        .. versionadded:: 3.3
 
         :return: The type.
         :rtype: QgsMapLayer::LayerType
@@ -232,7 +232,7 @@ class SafeLayer(object):
         """Get the geometry type if it's a vector layer.
         If it's a raster layer, it returns None.
 
-        .. versionadded:: 3.4
+        .. versionadded:: 3.3
 
         :return: The geometry type.
         :rtype: QGis::GeometryType
