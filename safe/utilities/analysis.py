@@ -227,25 +227,19 @@ class Analysis(object):
                 current viewport extents.
             * cell_size: float - the cell size that is the best of the
                 hazard and exposure rasters.
-            * exposure_layer: QgsMapLayer - layer representing exposure.
-            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unadjusted
-                intersection of the two input layers extents and the viewport.
-            * hazard_layer: QgsMapLayer - layer representing hazard.
         :rtype: dict, QgsRectangle, float, QgsMapLayer, QgsRectangle,
             QgsMapLayer
         :raises: InsufficientOverlapError
         """
-        hazard_layer = self.hazard
-        exposure_layer = self.exposure
 
         # Get the Hazard extents as an array in EPSG:4326
         hazard_geoextent = extent_to_array(
-            hazard_layer.extent(),
-            hazard_layer.crs())
+            self.hazard.extent(),
+            self.hazard.crs())
         # Get the Exposure extents as an array in EPSG:4326
         exposure_geoextent = extent_to_array(
-            exposure_layer.extent(),
-            exposure_layer.crs())
+            self.exposure.extent(),
+            self.exposure.crs())
 
         # get the current view extents
         viewport_extent = viewport_geo_array(self.map_canvas)
@@ -288,12 +282,13 @@ class Analysis(object):
                 analysis_geoextent)
 
         except InsufficientOverlapError, e:
+            # noinspection PyTypeChecker
             message = generate_insufficient_overlap_message(
                 e,
                 exposure_geoextent,
-                exposure_layer,
+                self.exposure,
                 hazard_geoextent,
-                hazard_layer,
+                self.hazard,
                 analysis_geoextent)
             raise InsufficientOverlapError(message)
 
@@ -308,14 +303,14 @@ class Analysis(object):
         adjusted_geo_extent = geo_extent
         cell_size = None
         extra_exposure_keywords = {}
-        if hazard_layer.type() == QgsMapLayer.RasterLayer:
+        if self.hazard.type() == QgsMapLayer.RasterLayer:
             # Hazard layer is raster
-            hazard_geo_cell_size, _ = get_wgs84_resolution(hazard_layer)
+            hazard_geo_cell_size, _ = get_wgs84_resolution(self.hazard)
 
-            if exposure_layer.type() == QgsMapLayer.RasterLayer:
+            if self.exposure.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
                 exposure_geo_cell_size, _ = get_wgs84_resolution(
-                    exposure_layer)
+                    self.exposure)
 
                 # See issue #1008 - the flag below is used to indicate
                 # if the user wishes to prevent resampling of exposure data
@@ -333,7 +328,7 @@ class Analysis(object):
                     # so gdalwarp can do clipping properly
                     adjusted_geo_extent = adjust_clip_extent(
                         geo_extent,
-                        get_wgs84_resolution(hazard_layer),
+                        get_wgs84_resolution(self.hazard),
                         hazard_geoextent)
                 else:
                     cell_size = exposure_geo_cell_size
@@ -342,7 +337,7 @@ class Analysis(object):
                     # so gdalwarp can do clipping properly
                     adjusted_geo_extent = adjust_clip_extent(
                         geo_extent,
-                        get_wgs84_resolution(exposure_layer),
+                        get_wgs84_resolution(self.exposure),
                         exposure_geoextent)
 
                 # Record native resolution to allow rescaling of exposure data
@@ -350,7 +345,7 @@ class Analysis(object):
                     extra_exposure_keywords['resolution'] = \
                         exposure_geo_cell_size
             else:
-                if exposure_layer.type() != QgsMapLayer.VectorLayer:
+                if self.exposure.type() != QgsMapLayer.VectorLayer:
                     raise RuntimeError
 
                 # In here we do not set cell_size so that in
@@ -362,7 +357,7 @@ class Analysis(object):
                 # so gdalwarp can do clipping properly
                 adjusted_geo_extent = adjust_clip_extent(
                     geo_extent,
-                    get_wgs84_resolution(hazard_layer),
+                    get_wgs84_resolution(self.hazard),
                     hazard_geoextent)
 
                 # If exposure is vector data grow hazard raster layer to
@@ -371,14 +366,14 @@ class Analysis(object):
                 # resolution to be available
                 adjusted_geo_extent = get_buffered_extent(
                     adjusted_geo_extent,
-                    get_wgs84_resolution(hazard_layer))
+                    get_wgs84_resolution(self.hazard))
         else:
             # Hazard layer is vector
             # In case hazard data is a point data set, we will need to set
             # the geo_extent to the extent of exposure and the analysis
             # extent. We check the extent first if the point extent intersects
             # with geo_extent.
-            if hazard_layer.geometryType() == QGis.Point:
+            if self.hazard.geometryType() == QGis.Point:
                 user_extent_enabled = (
                     self.user_extent is not None and
                     self.user_extent_crs is not None)
@@ -395,21 +390,18 @@ class Analysis(object):
                     geo_extent = exposure_geoextent
                 adjusted_geo_extent = geo_extent
 
-            if exposure_layer.type() == QgsMapLayer.RasterLayer:
+            if self.exposure.type() == QgsMapLayer.RasterLayer:
                 # Adjust the geo extent to be at the edge of the pixel in
                 # so gdalwarp can do clipping properly
                 adjusted_geo_extent = adjust_clip_extent(
                     geo_extent,
-                    get_wgs84_resolution(exposure_layer),
+                    get_wgs84_resolution(self.exposure),
                     exposure_geoextent)
 
         return {
             'extra_exposure_keywords': extra_exposure_keywords,
             'adjusted_geo_extent': adjusted_geo_extent,
-            'cell_size': cell_size,
-            'exposure_layer': exposure_layer,
-            'geo_extent': geo_extent,
-            'hazard_layer': hazard_layer
+            'cell_size': cell_size
         }
 
     def setup_aggregator(self):
@@ -602,8 +594,6 @@ class Analysis(object):
                 'extra_exposure_keywords']
             adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
             cell_size = self.clip_parameters['cell_size']
-            exposure_layer = self.clip_parameters['exposure_layer']
-            hazard_layer = self.clip_parameters['hazard_layer']
         except:
             raise
         # Find out what clipping behaviour we have - see #2210
@@ -640,7 +630,7 @@ class Analysis(object):
         send_dynamic_message(self, message)
         try:
             clipped_hazard = clip_layer(
-                layer=hazard_layer,
+                layer=self.hazard,
                 extent=adjusted_geo_extent,
                 cell_size=cell_size,
                 hard_clip_flag=self.clip_hard)
@@ -678,7 +668,7 @@ class Analysis(object):
         send_dynamic_message(self, message)
 
         clipped_exposure = clip_layer(
-            layer=exposure_layer,
+            layer=self.exposure,
             extent=adjusted_geo_extent,
             cell_size=cell_size,
             extra_keywords=extra_exposure_keywords,
@@ -689,8 +679,6 @@ class Analysis(object):
         """Setup impact function."""
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
-        exposure_layer = self.clip_parameters['exposure_layer']
-        hazard_layer = self.clip_parameters['hazard_layer']
 
         if self.impact_function.requires_clipping:
             # The impact function uses SAFE layers,
@@ -708,18 +696,18 @@ class Analysis(object):
                     KeywordDbError):
                 raise
             # Get clipped layers
-            hazard_layer = self.aggregator.hazard_layer
-            exposure_layer = self.aggregator.exposure_layer
+            self.hazard = self.aggregator.hazard_layer
+            self.exposure = self.aggregator.exposure_layer
         else:
             # It is a QGIS impact function,
             # clipping isn't needed, but we need to set up extent
-            self.aggregator.set_layers(hazard_layer, exposure_layer)
+            self.aggregator.set_layers(self.hazard, self.exposure)
             adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
             self.impact_function.requested_extent = adjusted_geo_extent
 
         # Set input layers
-        self.impact_function.hazard = hazard_layer
-        self.impact_function.exposure = exposure_layer
+        self.impact_function.hazard = self.hazard
+        self.impact_function.exposure = self.exposure
 
     def run_aggregator(self):
         """Run all post processing steps."""
