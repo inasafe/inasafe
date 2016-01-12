@@ -3821,7 +3821,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="batch_help.py" line="40"/>
         <source>Batch Runner</source>
-        <translation type="unfinished"/>
+        <translation>Ejecutante de archivo por lotes</translation>
     </message>
     <message>
         <location filename="batch_help.py" line="58"/>
@@ -3976,7 +3976,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="dock_help.py" line="217"/>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>Ayuda</translation>
     </message>
     <message>
         <location filename="dock_help.py" line="217"/>
@@ -3986,7 +3986,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="dock_help.py" line="222"/>
         <source>About</source>
-        <translation type="unfinished"/>
+        <translation>Acerca</translation>
     </message>
     <message>
         <location filename="dock_help.py" line="222"/>
@@ -3996,7 +3996,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="dock_help.py" line="233"/>
         <source>Run</source>
-        <translation type="unfinished"/>
+        <translation>Ejecutar</translation>
     </message>
     <message>
         <location filename="dock_help.py" line="241"/>
@@ -4056,7 +4056,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="function_options_help.py" line="69"/>
         <source>Options</source>
-        <translation type="unfinished"/>
+        <translation>Opciones</translation>
     </message>
     <message>
         <location filename="function_options_help.py" line="78"/>
@@ -4066,7 +4066,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="function_options_help.py" line="86"/>
         <source>Minimum Needs</source>
-        <translation type="unfinished"/>
+        <translation>Necesidades mínimas</translation>
     </message>
     <message>
         <location filename="function_options_help.py" line="86"/>
@@ -4141,7 +4141,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="impact_merge_help.py" line="108"/>
         <source>Select an output directory.</source>
-        <translation type="unfinished"/>
+        <translation>Seleccione un directorio de salida.</translation>
     </message>
     <message>
         <location filename="impact_merge_help.py" line="111"/>
@@ -4376,7 +4376,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="impact_report_help.py" line="64"/>
         <source>Area to print</source>
-        <translation type="unfinished"/>
+        <translation>Area a imprimir</translation>
     </message>
     <message>
         <location filename="impact_report_help.py" line="64"/>
@@ -4386,7 +4386,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="impact_report_help.py" line="72"/>
         <source>Template to use</source>
-        <translation type="unfinished"/>
+        <translation>Plantilla a utilizar</translation>
     </message>
     <message>
         <location filename="impact_report_help.py" line="72"/>
@@ -4751,7 +4751,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="options_help.py" line="132"/>
         <source>Location for results</source>
-        <translation type="unfinished"/>
+        <translation>Lugar por resultados</translation>
     </message>
     <message>
         <location filename="options_help.py" line="132"/>
@@ -4781,7 +4781,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="options_help.py" line="158"/>
         <source>Use custom organisation logo</source>
-        <translation type="unfinished"/>
+        <translation>Usar logo personalizado de la organización</translation>
     </message>
     <message>
         <location filename="options_help.py" line="158"/>
@@ -4791,7 +4791,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="options_help.py" line="167"/>
         <source>Use custom north arrow image</source>
-        <translation type="unfinished"/>
+        <translation>Usar imagen personalizada de la flecha indicando el norte</translation>
     </message>
     <message>
         <location filename="options_help.py" line="167"/>
@@ -4831,7 +4831,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="options_help.py" line="204"/>
         <source>Organisation</source>
-        <translation type="unfinished"/>
+        <translation>Organización</translation>
     </message>
     <message>
         <location filename="options_help.py" line="204"/>
@@ -4851,7 +4851,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="options_help.py" line="213"/>
         <source>Website</source>
-        <translation type="unfinished"/>
+        <translation>Sitio de internet</translation>
     </message>
     <message>
         <location filename="options_help.py" line="213"/>
@@ -4951,17 +4951,17 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="osm_downloader_help.py" line="84"/>
         <source>If a dataset already exists in the output directory it will be overwritten.</source>
-        <translation type="unfinished"/>
+        <translation>Si el conjunto de datos ya existe en el directorio de salida será sobreescrito.</translation>
     </message>
     <message>
         <location filename="osm_downloader_help.py" line="88"/>
         <source>This tool requires a working internet connection and fetching buildings or roads will consume your bandwidth.</source>
-        <translation type="unfinished"/>
+        <translation>Esta herramienta necesita de una conexión de internet funcionando para así recuperar información de edificios y caminos los cuales consumirán su ancho de banda.</translation>
     </message>
     <message>
         <location filename="osm_downloader_help.py" line="91"/>
         <source>Downloaded data is copyright OpenStreetMap contributors (click for more info).</source>
-        <translation type="unfinished"/>
+        <translation>Los datos descargados poseen derechos de autor de los colaboradores de OpenStreetMap (clic para mayor información).</translation>
     </message>
     <message>
         <location filename="shakemap_converter_help.py" line="40"/>
@@ -5279,7 +5279,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="aggregator.py" line="1153"/>
         <source>aggregation</source>
-        <translation type="unfinished"/>
+        <translation>agregado</translation>
     </message>
     <message>
         <location filename="aggregator.py" line="1570"/>
@@ -5794,12 +5794,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="batch_dialog.py" line="688"/>
         <source>Hide Help</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar Ayuda</translation>
     </message>
     <message>
         <location filename="batch_dialog.py" line="691"/>
         <source>Show Help</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar Ayuda</translation>
     </message>
 </context>
 <context>
@@ -5852,7 +5852,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="batch_dialog_base.ui" line="40"/>
         <source>about:blank</source>
-        <translation type="unfinished"/>
+        <translation>about:blank</translation>
     </message>
 </context>
 <context>
@@ -5873,12 +5873,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="help_dialog_base.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"/>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="help_dialog_base.ui" line="21"/>
         <source>about:blank</source>
-        <translation type="unfinished"/>
+        <translation>about:blank</translation>
     </message>
 </context>
 <context>
@@ -6378,12 +6378,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="function_options_dialog.py" line="316"/>
         <source>Hide Help</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar Ayuda</translation>
     </message>
     <message>
         <location filename="function_options_dialog.py" line="319"/>
         <source>Show Help</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar Ayuda</translation>
     </message>
 </context>
 <context>
@@ -6401,7 +6401,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="function_options_dialog_base.ui" line="40"/>
         <source>about:blank</source>
-        <translation type="unfinished"/>
+        <translation>about:blank</translation>
     </message>
 </context>
 <context>
@@ -6552,12 +6552,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="impact_merge_dialog.py" line="1134"/>
         <source>Hide Help</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar Ayuda</translation>
     </message>
     <message>
         <location filename="impact_merge_dialog.py" line="1137"/>
         <source>Show Help</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar Ayuda</translation>
     </message>
 </context>
 <context>
@@ -6638,12 +6638,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="impact_report_dialog.py" line="215"/>
         <source>Hide Help</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar Ayuda</translation>
     </message>
     <message>
         <location filename="impact_report_dialog.py" line="218"/>
         <source>Show Help</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar Ayuda</translation>
     </message>
 </context>
 <context>
@@ -6681,7 +6681,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="impact_report_dialog_base.ui" line="40"/>
         <source>about:blank</source>
-        <translation type="unfinished"/>
+        <translation>about:blank</translation>
     </message>
 </context>
 <context>
@@ -6776,12 +6776,12 @@ a
     <message>
         <location filename="needs_calculator_dialog.py" line="227"/>
         <source>Hide Help</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar Ayuda</translation>
     </message>
     <message>
         <location filename="needs_calculator_dialog.py" line="230"/>
         <source>Show Help</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar Ayuda</translation>
     </message>
 </context>
 <context>
@@ -6877,12 +6877,12 @@ a
     <message>
         <location filename="needs_manager_dialog.py" line="780"/>
         <source>Hide Help</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar Ayuda</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="783"/>
         <source>Show Help</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar Ayuda</translation>
     </message>
 </context>
 <context>
@@ -6940,7 +6940,7 @@ a
     <message>
         <location filename="needs_manager_dialog_base.ui" line="43"/>
         <source>about:blank</source>
-        <translation type="unfinished"/>
+        <translation>about:blank</translation>
     </message>
 </context>
 <context>
@@ -6988,12 +6988,12 @@ a
     <message>
         <location filename="options_dialog.py" line="458"/>
         <source>Hide Help</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar Ayuda</translation>
     </message>
     <message>
         <location filename="options_dialog.py" line="461"/>
         <source>Show Help</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar Ayuda</translation>
     </message>
 </context>
 <context>
@@ -7180,12 +7180,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="options_dialog_base.ui" line="44"/>
         <source>about:blank</source>
-        <translation type="unfinished"/>
+        <translation>about:blank</translation>
     </message>
     <message>
         <location filename="options_dialog_base.ui" line="466"/>
         <source>ISO 19155 Metadata</source>
-        <translation type="unfinished"/>
+        <translation>Metadatos ISO 19155</translation>
     </message>
 </context>
 <context>
@@ -7911,12 +7911,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="shakemap_converter_dialog.py" line="236"/>
         <source>Hide Help</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar Ayuda</translation>
     </message>
     <message>
         <location filename="shakemap_converter_dialog.py" line="239"/>
         <source>Show Help</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar Ayuda</translation>
     </message>
 </context>
 <context>

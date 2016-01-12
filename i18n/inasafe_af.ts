@@ -3975,7 +3975,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="dock_help.py" line="217"/>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>Help</translation>
     </message>
     <message>
         <location filename="dock_help.py" line="217"/>
@@ -3995,7 +3995,7 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="dock_help.py" line="233"/>
         <source>Run</source>
-        <translation type="unfinished"/>
+        <translation>Begin</translation>
     </message>
     <message>
         <location filename="dock_help.py" line="241"/>
@@ -8037,7 +8037,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_dialog.py" line="3863"/>
         <source>Run</source>
-        <translation type="unfinished"/>
+        <translation>Begin</translation>
     </message>
     <message>
         <location filename="wizard_dialog.py" line="3730"/>
