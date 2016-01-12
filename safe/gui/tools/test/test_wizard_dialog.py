@@ -541,9 +541,9 @@ class WizardDialogTest(unittest.TestCase):
         default_classes = classification['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
-            'Low Hazard Zone': ['Kawasan Rawan Bencana I'],
-            'Medium Hazard Zone': ['Kawasan Rawan Bencana II'],
-            'High Hazard Zone': ['Kawasan Rawan Bencana III']
+            'low': ['Kawasan Rawan Bencana I'],
+            'medium': ['Kawasan Rawan Bencana II'],
+            'high': ['Kawasan Rawan Bencana III']
         }
         dialog.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
