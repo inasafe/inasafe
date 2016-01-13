@@ -1264,17 +1264,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         analysis.exposure = self.get_exposure_layer()
         analysis.aggregation = self.get_aggregation_layer()
 
-        # noinspection PyTypeChecker
-        analysis.hazard_keyword = self.keyword_io.read_keywords(
-            self.get_hazard_layer())
-        # noinspection PyTypeChecker
-        analysis.exposure_keyword = self.keyword_io.read_keywords(
-            self.get_exposure_layer())
-        # Need to check since aggregation layer is not mandatory
-        if analysis.aggregation:
-            analysis.aggregation_keyword = self.keyword_io.read_keywords(
-                self.get_aggregation_layer())
-
         # Variables
         analysis.clip_hard = self.clip_hard
         analysis.show_intermediate_layers = self.show_intermediate_layers
