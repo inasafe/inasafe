@@ -124,6 +124,7 @@ class PopulationExposureReportMixin(ReportMixin):
         table = m.Table(style_class='table table-condensed table-striped')
         table.caption = None
 
+        # Breakdown by hazard level (if available)
         if len(self.impact_category_ordering):
             for category in self.impact_category_ordering:
                 population_in_category = self.lookup_category(category)
@@ -135,15 +136,7 @@ class PopulationExposureReportMixin(ReportMixin):
                 row.add(m.Cell(population_in_category, align='right'))
                 table.add(row)
 
-        table.add(m.Row())  # add a blank line
-        row = m.Row()
-        row.add(m.Cell(
-            tr('Population needing evacuation <sup>1</sup>'),
-            header=True))
-        evacuated = format_int(population_rounding(self.total_evacuated))
-        row.add(m.Cell(evacuated, align='right'))
-        table.add(row)
-
+        # Total affected population
         row = m.Row()
         row.add(m.Cell(
             tr('Total affected population'),
@@ -153,14 +146,37 @@ class PopulationExposureReportMixin(ReportMixin):
         row.add(m.Cell(affected, align='right'))
         table.add(row)
 
-        table.add(m.Row())  # add a blank line
-
+        # Non affected population
         row = m.Row()
         unaffected = format_int(
             population_rounding(self.unaffected_population))
         row.add(m.Cell(tr('Unaffected population'), header=True))
         row.add(m.Cell(unaffected, align='right'))
         table.add(row)
+
+        # Total Population
+        row = m.Row()
+        total_population = format_int(
+            population_rounding(self.total_population))
+        row.add(m.Cell(tr('Total population'), header=True))
+        row.add(m.Cell(total_population, align='right'))
+        table.add(row)
+
+        # Empty row
+        empty_row = m.Row()
+        empty_row.add(m.Cell(''))
+        empty_row.add(m.Cell(''))
+        table.add(empty_row)
+
+        # Population needing evacuation
+        row = m.Row()
+        row.add(m.Cell(
+            tr('Population needing evacuation <sup>1</sup>'),
+            header=True))
+        evacuated = format_int(population_rounding(self.total_evacuated))
+        row.add(m.Cell(evacuated, align='right'))
+        table.add(row)
+
         message.add(table)
         return message
 
