@@ -99,10 +99,12 @@ class PopulationExposureReportMixin(ReportMixin):
         checklist.add(
             tr('What are the critical non-food items required by the affected '
                'population?'))
+        evacuated_people = format_int(
+            population_rounding(self.total_affected_population))
         checklist.add(tr(
             'Are there enough water supply, sanitation, hygiene, food, '
             'shelter, medicines and relief items available for %s people?'
-            % self.total_evacuated))
+            % evacuated_people))
         checklist.add(tr(
             'If yes, where are they located and how will we distribute them?'))
         checklist.add(tr(
