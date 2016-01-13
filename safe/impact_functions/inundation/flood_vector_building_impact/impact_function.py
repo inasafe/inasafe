@@ -260,6 +260,10 @@ class FloodPolygonBuildingFunction(
                     tr('Buildings Affected')] += 1
 
         # Lump small entries and 'unknown' into 'other' category
+        # Building threshold #2468
+        postprocessors = self.parameters['postprocessors']
+        building_postprocessors = postprocessors['BuildingType'][0]
+        self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
         impact_summary = self.html_report()
