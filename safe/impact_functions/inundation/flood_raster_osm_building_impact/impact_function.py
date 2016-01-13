@@ -44,6 +44,9 @@ class FloodRasterBuildingFunction(
         """Constructor (calls ctor of base class)."""
         super(FloodRasterBuildingFunction, self).__init__()
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
     def notes(self):
         """Return the notes section of the report.
 

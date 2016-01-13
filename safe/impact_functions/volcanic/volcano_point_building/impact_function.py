@@ -45,6 +45,9 @@ class VolcanoPointBuildingFunction(
         self.volcano_names = tr('Not specified in data')
         self._affected_categories_volcano = []
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
     def notes(self):
         """Return the notes section of the report.
 

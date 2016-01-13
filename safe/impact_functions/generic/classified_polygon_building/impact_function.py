@@ -50,6 +50,9 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.question = ('In each of the hazard zones how many buildings '
                          'might be affected.')
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
     def notes(self):
         """Return the notes section of the report.
 

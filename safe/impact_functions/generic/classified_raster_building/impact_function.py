@@ -46,6 +46,9 @@ class ClassifiedRasterHazardBuildingFunction(
         super(ClassifiedRasterHazardBuildingFunction, self).__init__()
         self.affected_field = 'affected'
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
     def notes(self):
         """Return the notes section of the report.
 

@@ -42,6 +42,9 @@ class VolcanoPolygonBuildingFunction(
         super(VolcanoPolygonBuildingFunction, self).__init__()
         self.volcano_names = tr('Not specified in data')
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
     def notes(self):
         """Return the notes section of the report.
 

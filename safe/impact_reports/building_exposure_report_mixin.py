@@ -75,7 +75,7 @@ class BuildingExposureReportMixin(ReportMixin):
         self.question = ''
         self.buildings = {}
         self.affected_buildings = {}
-        self.threshold = 25
+        self.building_report_threshold = 25
 
     def generate_report(self):
         """Breakdown by building type.
@@ -363,7 +363,7 @@ class BuildingExposureReportMixin(ReportMixin):
         """Consolidate the small building usage groups < 25 to other."""
         other = tr('Other')
         for (usage, value) in self.buildings.items():
-            if value >= self.threshold:
+            if value >= self.building_report_threshold:
                 continue
             if other not in self.buildings.keys():
                 self.buildings[other] = 0

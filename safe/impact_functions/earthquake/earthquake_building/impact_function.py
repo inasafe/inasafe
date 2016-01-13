@@ -48,6 +48,9 @@ class EarthquakeBuildingFunction(
         self.statistics_classes = [0, 1, 2, 3]
         self.structure_class_field = None
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
 
     def notes(self):
         """Return the notes section of the report.
