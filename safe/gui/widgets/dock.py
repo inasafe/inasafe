@@ -1252,6 +1252,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         analysis = Analysis()
         analysis.map_canvas = self.iface.mapCanvas()
 
+        # Impact Functions
+        if self.get_function_id() != '':
+            impact_function = self.impact_function_manager.get(
+                self.get_function_id())
+            impact_function.parameters = self.impact_function_parameters
+            analysis.impact_function = impact_function
+
         # Layers
         analysis.hazard = self.get_hazard_layer()
         analysis.exposure = self.get_exposure_layer()
@@ -1268,20 +1275,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             analysis.aggregation_keyword = self.keyword_io.read_keywords(
                 self.get_aggregation_layer())
 
-        # Impact Functions
-        if self.get_function_id() != '':
-            impact_function = self.impact_function_manager.get(
-                self.get_function_id())
-            impact_function.parameters = self.impact_function_parameters
-            analysis.impact_function = impact_function
-
-            # Variables
-            analysis.clip_hard = self.clip_hard
-            analysis.show_intermediate_layers = self.show_intermediate_layers
-            analysis.run_in_thread_flag = self.run_in_thread_flag
-            analysis.map_canvas = self.iface.mapCanvas()
-            analysis.user_extent = self.extent.user_extent
-            analysis.user_extent_crs = self.extent.user_extent_crs
+        # Variables
+        analysis.clip_hard = self.clip_hard
+        analysis.show_intermediate_layers = self.show_intermediate_layers
+        analysis.run_in_thread_flag = self.run_in_thread_flag
+        analysis.map_canvas = self.iface.mapCanvas()
+        analysis.user_extent = self.extent.user_extent
+        analysis.user_extent_crs = self.extent.user_extent_crs
 
         return analysis
 

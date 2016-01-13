@@ -264,6 +264,7 @@ def analysis_setup(command_line_arguments, hazard, exposure):
         print ie.message
         raise ImportError
     analysis = Analysis()
+    analysis.impact_function = impact_function
     analysis.hazard = hazard
     analysis.exposure = exposure
     analysis.hazard_keyword = keyword_io.read_keywords(hazard)
@@ -282,7 +283,6 @@ def analysis_setup(command_line_arguments, hazard, exposure):
         float(command_line_arguments.extent[2]),
         float(command_line_arguments.extent[3])
     )
-    analysis.impact_function = impact_function
     analysis.setup_analysis()
     return analysis
 
