@@ -153,14 +153,15 @@ class PopulationExposureReportMixin(ReportMixin):
         row.add(m.Cell(affected, align='right'))
         table.add(row)
 
-        table.add(m.Row())  # add a blank line
+        # Removing this unaffected value per issue #2530
+        # table.add(m.Row())  # add a blank line
 
-        row = m.Row()
-        unaffected = format_int(
-            population_rounding(self.unaffected_population))
-        row.add(m.Cell(tr('Unaffected population'), header=True))
-        row.add(m.Cell(unaffected, align='right'))
-        table.add(row)
+        # row = m.Row()
+        # unaffected = format_int(
+        #     population_rounding(self.unaffected_population))
+        # row.add(m.Cell(tr('Unaffected population'), header=True))
+        # row.add(m.Cell(unaffected, align='right'))
+        # table.add(row)
         message.add(table)
         return message
 

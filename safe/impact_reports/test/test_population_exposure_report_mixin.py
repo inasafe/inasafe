@@ -68,7 +68,8 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
         blank_report = blank_report.to_text()
         expected_strings = [
             u'**Population needing evacuation <sup>1</sup>**, 0',
-            u'**Unaffected population**, 0',
+            # Commented out, see #2530
+            # u'**Unaffected population**, 0',
             u'Evacuated population minimum needs',
             u'Action checklist',
             u'How will warnings be disseminated?',
