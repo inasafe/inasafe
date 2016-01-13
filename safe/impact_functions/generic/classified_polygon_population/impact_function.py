@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import numpy
+from collections import OrderedDict
 
 from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
@@ -27,7 +28,9 @@ from safe.common.utilities import (
     create_classes,
     create_label,
     get_thousand_separator)
-from safe.impact_functions.core import no_population_impact_message
+from safe.impact_functions.core import (
+    no_population_impact_message,
+    get_key_for_value)
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import (
     add_needs_parameters,
@@ -36,6 +39,7 @@ from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 import safe.messaging as m
 from safe.messaging import styles
+from safe.utilities.keyword_io import definition
 
 
 class ClassifiedPolygonHazardPopulationFunction(
@@ -52,8 +56,8 @@ class ClassifiedPolygonHazardPopulationFunction(
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
         # Set the question of the IF (as the hazard data is not an event)
-        self.question = ('In each of the hazard zones how many people '
-                         'might be impacted.')
+        self.question = tr(
+            'In each of the hazard zones how many people might be impacted.')
 
     def notes(self):
         """Return the notes section of the report.
@@ -105,26 +109,43 @@ class ClassifiedPolygonHazardPopulationFunction(
 
         # Value from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
-
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
+        # TODO: Remove check to self.validate (Ismail)
         # Input checks
-        msg = ('Input hazard must be a polygon layer. I got %s with '
-               'layer type %s' % (
-                   self.hazard.name, self.hazard.layer.get_geometry_name()))
+        message = tr(
+            'Input hazard must be a polygon layer. I got %s with layer type '
+            '%s' % (self.hazard.name, self.hazard.layer.get_geometry_name()))
         if not self.hazard.layer.is_polygon_data:
-            raise Exception(msg)
+            raise Exception(message)
 
         # Check if hazard_class_attribute exists in hazard_layer
         if (self.hazard_class_attribute not in
                 self.hazard.layer.get_attribute_names()):
-            msg = ('Hazard data %s does not contain expected hazard '
+            message = ('Hazard data %s does not contain expected hazard '
                    'zone attribute "%s". Please change it in the option. ' %
                    (self.hazard.name, self.hazard_class_attribute))
             # noinspection PyExceptionInherit
-            raise InaSAFEError(msg)
+            raise InaSAFEError(message)
 
-        # Get unique hazard zones from the layer attribute
-        self.hazard_zones = list(
-            set(self.hazard.layer.get_data(self.hazard_class_attribute)))
+        # Retrieve the classification that is used by the hazard layer.
+        vector_hazard_classification = self.hazard.keyword(
+            'vector_hazard_classification')
+        # Get the dictionary that contains the definition of the classification
+        vector_hazard_classification = definition(vector_hazard_classification)
+        # Get the list classes in the classification
+        vector_hazard_classes = vector_hazard_classification['classes']
+        # Initialize OrderedDict of affected buildings
+        self.affected_population = OrderedDict()
+        # Iterate over vector hazard classes
+        for vector_hazard_class in vector_hazard_classes:
+            # Check if the key of class exist in hazard_class_mapping
+            if vector_hazard_class['key'] in self.hazard_class_mapping.keys():
+                # Replace the key with the name as we need to show the human
+                # friendly name in the report.
+                self.hazard_class_mapping[vector_hazard_class['name']] = \
+                    self.hazard_class_mapping.pop(vector_hazard_class['key'])
+                # Adding the class name as a key in affected_building
+                self.affected_population[vector_hazard_class['name']] = 0
 
         # Interpolated layer represents grid cell that lies in the polygon
         interpolated_layer, covered_exposure_layer = \
@@ -134,10 +155,6 @@ class ClassifiedPolygonHazardPopulationFunction(
                 attribute_name=self.target_field
             )
 
-        # Initialise total population affected by each hazard zone
-        for hazard_zone in self.hazard_zones:
-            self.affected_population[hazard_zone] = 0
-
         # Count total affected population per hazard zone
         for row in interpolated_layer.get_data():
             # Get population at this location
@@ -145,8 +162,12 @@ class ClassifiedPolygonHazardPopulationFunction(
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this hazard zone
-                hazard_zone = row[self.hazard_class_attribute]
-                self.affected_population[hazard_zone] += population
+                hazard_value = get_key_for_value(
+                    row[self.hazard_class_attribute],
+                    self.hazard_class_mapping)
+                if not hazard_value:
+                    hazard_value = self._not_affected_value
+                self.affected_population[hazard_value] += population
 
         # Count total population from exposure layer
         self.total_population = int(

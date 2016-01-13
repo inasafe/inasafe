@@ -264,8 +264,8 @@ def analysis_setup(command_line_arguments, hazard, exposure):
         print ie.message
         raise ImportError
     analysis = Analysis()
-    analysis.hazard_layer = hazard
-    analysis.exposure_layer = exposure
+    analysis.hazard = hazard
+    analysis.exposure = exposure
     analysis.hazard_keyword = keyword_io.read_keywords(hazard)
     analysis.exposure_keyword = keyword_io.read_keywords(exposure)
     analysis.clip_hard = False

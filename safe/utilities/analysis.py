@@ -54,18 +54,19 @@ from safe.utilities.gis import (
     get_wgs84_resolution,
     viewport_geo_array,
     extent_to_array)
+from safe.utilities.i18n import tr
 from safe.utilities.utilities import get_error_message
 from safe.utilities.clipper import clip_layer, adjust_clip_extent
 from safe.utilities.gis import get_optimal_extent
 from safe.messaging import styles
 from safe.common.signals import (
-    DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL,
-    BUSY_SIGNAL,
-    NOT_BUSY_SIGNAL,
-    ANALYSIS_DONE_SIGNAL)
-from safe_extras.pydispatch import dispatcher
+    analysis_error,
+    send_static_message,
+    send_busy_signal,
+    send_not_busy_signal,
+    send_error_message,
+    send_dynamic_message,
+    send_analysis_done_signal)
 from safe.common.exceptions import NoValidLayerError
 from safe.engine.core import calculate_impact
 
@@ -94,9 +95,9 @@ class Analysis(object):
         """Constructor."""
         # Please set Layers, Impact Functions, and Variables to run Analysis
         # Layers
-        self._hazard_layer = None
-        self._exposure_layer = None
-        self._aggregation_layer = None
+        self._hazard = None
+        self._exposure = None
+        self._aggregation = None
         self._impact_layer = None
         self.hazard_keyword = None
         self.exposure_keyword = None
@@ -123,64 +124,64 @@ class Analysis(object):
         self.num_dynamic_signals = 3
 
     @property
-    def hazard_layer(self):
+    def hazard(self):
         """Property for hazard layer.
 
         :returns: Hazard Layer of the analysis.
         :rtype: QgsMapLayer
 
         """
-        return self._hazard_layer
+        return self._hazard
 
-    @hazard_layer.setter
-    def hazard_layer(self, hazard_layer):
+    @hazard.setter
+    def hazard(self, hazard_layer):
         """Setter for the hazard layer for the analysis.
 
         :param hazard_layer: The hazard layer.
         :type hazard_layer: QgsMapLayer
 
         """
-        self._hazard_layer = hazard_layer
+        self._hazard = hazard_layer
 
     @property
-    def exposure_layer(self):
+    def exposure(self):
         """Property for exposure layer.
 
         :returns: Exposure Layer of the analysis.
         :rtype: QgsMapLayer
 
         """
-        return self._exposure_layer
+        return self._exposure
 
-    @exposure_layer.setter
-    def exposure_layer(self, exposure_layer):
+    @exposure.setter
+    def exposure(self, exposure_layer):
         """Setter for the exposure layer for the analysis.
 
         :param exposure_layer: The exposure layer.
         :type exposure_layer: QgsMapLayer
 
         """
-        self._exposure_layer = exposure_layer
+        self._exposure = exposure_layer
 
     @property
-    def aggregation_layer(self):
+    def aggregation(self):
         """Property for aggregation layer.
 
         :returns: Aggregation Layer of the analysis.
         :rtype: QgsMapLayer
 
         """
-        return self._aggregation_layer
+        return self._aggregation
 
-    @aggregation_layer.setter
-    def aggregation_layer(self, aggregation_layer):
+    @aggregation.setter
+    def aggregation(self, aggregation_layer):
         """Setter for the aggregation layer for the analysis.
 
         :param aggregation_layer: The aggregation layer.
         :type aggregation_layer: QgsMapLayer
 
         """
-        self._aggregation_layer = aggregation_layer
+        self._aggregation = aggregation_layer
 
     @property
     def impact_layer(self):
@@ -195,20 +196,6 @@ class Analysis(object):
         :type layer: SAFE Layer, QgsMapLayer, QgsWrapper
         """
         self._impact_layer = layer
-
-    # noinspection PyMethodMayBeStatic
-    def tr(self, string):
-        """We implement this since we do not inherit QObject.
-
-        :param string: String for translation.
-        :type string: str
-
-        :returns: Translated version of string.
-        :rtype: str
-
-        """
-        # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-        return QtCore.QCoreApplication.translate('Analysis', string)
 
     @staticmethod
     def get_layer_title(layer, layer_keyword):
@@ -226,75 +213,10 @@ class Analysis(object):
         title = layer_keyword.get('title', layer.name())
         return title
 
-    def send_static_message(self, message):
-        """Send a static message to the listeners.
-
-        Static messages represents a whole new message. Usually it will
-        replace the previous message.
-
-        :param message: An instance of our rich message class.
-        :type message: Message
-
-        """
-        dispatcher.send(
-            signal=STATIC_MESSAGE_SIGNAL,
-            sender=self,
-            message=message)
-
-    def send_dynamic_message(self, message):
-        """Send a dynamic message to the listeners.
-
-        Dynamic messages represents a progres. Usually it will be appended to
-        the previous messages.
-
-        :param message: An instance of our rich message class.
-        :type message: Message
-
-        """
-        dispatcher.send(
-            signal=DYNAMIC_MESSAGE_SIGNAL,
-            sender=self,
-            message=message)
-
-    def send_error_message(self, error_message):
-        """Send an error message to the listeners.
-
-        Error messages represents and error. It usually replace the previous
-        message since an error has been happened.
-
-        :param error_message: An instance of our rich error message class.
-        :type error_message: ErrorMessage
-        """
-        dispatcher.send(
-            signal=ERROR_MESSAGE_SIGNAL,
-            sender=self,
-            message=error_message)
-
-    def send_busy_signal(self):
-        """Send an busy signal to the listeners."""
-        dispatcher.send(
-            signal=BUSY_SIGNAL,
-            sender=self,
-            message='')
-
-    def send_not_busy_signal(self):
-        """Send an busy signal to the listeners."""
-        dispatcher.send(
-            signal=NOT_BUSY_SIGNAL,
-            sender=self,
-            message='')
-
-    def send_analysis_done_signal(self):
-        """Send an analysis done signal to the listeners."""
-        dispatcher.send(
-            signal=ANALYSIS_DONE_SIGNAL,
-            sender=self,
-            message='')
-
     def get_clip_parameters(self):
         """Calculate the best extents to use for the assessment.
 
-        :returns: A tuple consisting of:
+        :returns: A dictionary consisting of:
 
             * extra_exposure_keywords: dict - any additional keywords that
                 should be written to the exposure layer. For example if
@@ -305,25 +227,19 @@ class Analysis(object):
                 current viewport extents.
             * cell_size: float - the cell size that is the best of the
                 hazard and exposure rasters.
-            * exposure_layer: QgsMapLayer - layer representing exposure.
-            * geo_extent: list - [xmin, ymin, xmax, ymax] - the unadjusted
-                intersection of the two input layers extents and the viewport.
-            * hazard_layer: QgsMapLayer - layer representing hazard.
         :rtype: dict, QgsRectangle, float, QgsMapLayer, QgsRectangle,
             QgsMapLayer
         :raises: InsufficientOverlapError
         """
-        hazard_layer = self.hazard_layer
-        exposure_layer = self.exposure_layer
 
         # Get the Hazard extents as an array in EPSG:4326
         hazard_geoextent = extent_to_array(
-            hazard_layer.extent(),
-            hazard_layer.crs())
+            self.hazard.extent(),
+            self.hazard.crs())
         # Get the Exposure extents as an array in EPSG:4326
         exposure_geoextent = extent_to_array(
-            exposure_layer.extent(),
-            exposure_layer.crs())
+            self.exposure.extent(),
+            self.exposure.crs())
 
         # get the current view extents
         viewport_extent = viewport_geo_array(self.map_canvas)
@@ -366,12 +282,13 @@ class Analysis(object):
                 analysis_geoextent)
 
         except InsufficientOverlapError, e:
+            # noinspection PyTypeChecker
             message = generate_insufficient_overlap_message(
                 e,
                 exposure_geoextent,
-                exposure_layer,
+                self.exposure,
                 hazard_geoextent,
-                hazard_layer,
+                self.hazard,
                 analysis_geoextent)
             raise InsufficientOverlapError(message)
 
@@ -386,14 +303,14 @@ class Analysis(object):
         adjusted_geo_extent = geo_extent
         cell_size = None
         extra_exposure_keywords = {}
-        if hazard_layer.type() == QgsMapLayer.RasterLayer:
+        if self.hazard.type() == QgsMapLayer.RasterLayer:
             # Hazard layer is raster
-            hazard_geo_cell_size, _ = get_wgs84_resolution(hazard_layer)
+            hazard_geo_cell_size, _ = get_wgs84_resolution(self.hazard)
 
-            if exposure_layer.type() == QgsMapLayer.RasterLayer:
+            if self.exposure.type() == QgsMapLayer.RasterLayer:
                 # In case of two raster layers establish common resolution
                 exposure_geo_cell_size, _ = get_wgs84_resolution(
-                    exposure_layer)
+                    self.exposure)
 
                 # See issue #1008 - the flag below is used to indicate
                 # if the user wishes to prevent resampling of exposure data
@@ -411,7 +328,7 @@ class Analysis(object):
                     # so gdalwarp can do clipping properly
                     adjusted_geo_extent = adjust_clip_extent(
                         geo_extent,
-                        get_wgs84_resolution(hazard_layer),
+                        get_wgs84_resolution(self.hazard),
                         hazard_geoextent)
                 else:
                     cell_size = exposure_geo_cell_size
@@ -420,7 +337,7 @@ class Analysis(object):
                     # so gdalwarp can do clipping properly
                     adjusted_geo_extent = adjust_clip_extent(
                         geo_extent,
-                        get_wgs84_resolution(exposure_layer),
+                        get_wgs84_resolution(self.exposure),
                         exposure_geoextent)
 
                 # Record native resolution to allow rescaling of exposure data
@@ -428,7 +345,7 @@ class Analysis(object):
                     extra_exposure_keywords['resolution'] = \
                         exposure_geo_cell_size
             else:
-                if exposure_layer.type() != QgsMapLayer.VectorLayer:
+                if self.exposure.type() != QgsMapLayer.VectorLayer:
                     raise RuntimeError
 
                 # In here we do not set cell_size so that in
@@ -440,7 +357,7 @@ class Analysis(object):
                 # so gdalwarp can do clipping properly
                 adjusted_geo_extent = adjust_clip_extent(
                     geo_extent,
-                    get_wgs84_resolution(hazard_layer),
+                    get_wgs84_resolution(self.hazard),
                     hazard_geoextent)
 
                 # If exposure is vector data grow hazard raster layer to
@@ -449,14 +366,14 @@ class Analysis(object):
                 # resolution to be available
                 adjusted_geo_extent = get_buffered_extent(
                     adjusted_geo_extent,
-                    get_wgs84_resolution(hazard_layer))
+                    get_wgs84_resolution(self.hazard))
         else:
             # Hazard layer is vector
             # In case hazard data is a point data set, we will need to set
             # the geo_extent to the extent of exposure and the analysis
             # extent. We check the extent first if the point extent intersects
             # with geo_extent.
-            if hazard_layer.geometryType() == QGis.Point:
+            if self.hazard.geometryType() == QGis.Point:
                 user_extent_enabled = (
                     self.user_extent is not None and
                     self.user_extent_crs is not None)
@@ -473,36 +390,34 @@ class Analysis(object):
                     geo_extent = exposure_geoextent
                 adjusted_geo_extent = geo_extent
 
-            if exposure_layer.type() == QgsMapLayer.RasterLayer:
+            if self.exposure.type() == QgsMapLayer.RasterLayer:
                 # Adjust the geo extent to be at the edge of the pixel in
                 # so gdalwarp can do clipping properly
                 adjusted_geo_extent = adjust_clip_extent(
                     geo_extent,
-                    get_wgs84_resolution(exposure_layer),
+                    get_wgs84_resolution(self.exposure),
                     exposure_geoextent)
 
-        return (
-            extra_exposure_keywords,
-            adjusted_geo_extent,
-            cell_size,
-            exposure_layer,
-            geo_extent,
-            hazard_layer)
+        return {
+            'extra_exposure_keywords': extra_exposure_keywords,
+            'adjusted_geo_extent': adjusted_geo_extent,
+            'cell_size': cell_size
+        }
 
     def setup_aggregator(self):
         """Create an aggregator for this analysis run."""
         # Refactor from dock.prepare_aggregator
         if self.clip_parameters is None:
-            raise Exception(self.tr('Clip parameters are not set!'))
+            raise Exception(tr('Clip parameters are not set!'))
         try:
             buffered_geo_extent = self.impact_layer.extent
         except AttributeError:
             # if we have no runner, set dummy extent
-            buffered_geo_extent = self.clip_parameters[1]
+            buffered_geo_extent = self.clip_parameters['adjusted_geo_extent']
 
         # setup aggregator to use buffered_geo_extent to deal with #759
         self.aggregator = Aggregator(
-            buffered_geo_extent, self.aggregation_layer)
+            buffered_geo_extent, self.aggregation)
 
         self.aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
@@ -510,21 +425,21 @@ class Analysis(object):
     def setup_analysis(self):
         """Setup analysis so that it will be ready for running."""
         # Refactor from dock.accept()
-        title = self.tr('Processing started')
-        details = self.tr(
+        title = tr('Processing started')
+        details = tr(
             'Please wait - processing may take a while depending on your '
             'hardware configuration and the analysis extents and data.')
 
         # trap for issue 706
         try:
             exposure_name = self.get_layer_title(
-                self.exposure_layer, self.exposure_keyword)
+                self.exposure, self.exposure_keyword)
             hazard_name = self.get_layer_title(
-                self.hazard_layer, self.hazard_keyword)
+                self.hazard, self.hazard_keyword)
             # aggregation layer could be set to AOI so no check for that
         except AttributeError:
-            title = self.tr('No valid layers')
-            details = self.tr(
+            title = tr('No valid layers')
+            details = tr(
                 'Please ensure your hazard and exposure layers are set '
                 'in the question area and then press run again.')
             message = m.Message(
@@ -534,20 +449,20 @@ class Analysis(object):
             raise NoValidLayerError(message)
 
         text = m.Text(
-            self.tr('This analysis will calculate the impact of'),
+            tr('This analysis will calculate the impact of'),
             m.EmphasizedText(hazard_name),
-            self.tr('on'),
+            tr('on'),
             m.EmphasizedText(exposure_name),
         )
 
-        if self.aggregation_layer is not None:
+        if self.aggregation is not None:
             try:
                 aggregation_name = self.get_layer_title(
-                    self.aggregation_layer, self.aggregation_keyword)
+                    self.aggregation, self.aggregation_keyword)
                 # noinspection PyTypeChecker
                 text.add(m.Text(
-                    self.tr('and bullet list the results'),
-                    m.ImportantText(self.tr('aggregated by')),
+                    tr('and bullet list the results'),
+                    m.ImportantText(tr('aggregated by')),
                     m.EmphasizedText(aggregation_name)))
             except AttributeError:
                 pass
@@ -565,7 +480,7 @@ class Analysis(object):
             post_processors_names = self.impact_function.parameters[
                 'postprocessors']
             post_processors = get_postprocessors(post_processors_names)
-            message.add(m.Paragraph(self.tr(
+            message.add(m.Paragraph(tr(
                 'The following postprocessors will be used:')))
 
             bullet_list = m.BulletedList()
@@ -581,28 +496,27 @@ class Analysis(object):
             # KeyError is for when ['postprocessors'] is unavailable
             pass
 
-        # noinspection PyTypeChecker
-        self.send_static_message(message)
+        send_static_message(self, message)
 
         # Find out what the usable extent and cell size are
         try:
             self.clip_parameters = self.get_clip_parameters()
-            buffered_geoextent = self.clip_parameters[1]
-            cell_size = self.clip_parameters[2]
+            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
+            cell_size = self.clip_parameters['cell_size']
         except InsufficientOverlapError as e:
             raise e
         except (RuntimeError, AttributeError) as e:
             LOGGER.exception('Error calculating extents. %s' % str(e.message))
-            context = self.tr(
+            context = tr(
                 'A problem was encountered when trying to determine the '
                 'analysis extents.'
             )
-            self.analysis_error(e, context)
+            analysis_error(self, e, context)
             raise e
 
         if not self.force_memory:
             # Ensure there is enough memory
-            result = check_memory_usage(buffered_geoextent, cell_size)
+            result = check_memory_usage(adjusted_geo_extent, cell_size)
             if not result:
                 raise InsufficientMemoryWarning
 
@@ -620,35 +534,36 @@ class Analysis(object):
         try:
             self.setup_impact_function()
         except CallGDALError, e:
-            self.analysis_error(e, self.tr(
+            analysis_error(self, e, tr(
                 'An error occurred when calling a GDAL command'))
             return
         except IOError, e:
-            self.analysis_error(e, self.tr(
+            analysis_error(self, e, tr(
                 'An error occurred when writing clip file'))
             return
         except InsufficientOverlapError, e:
-            self.analysis_error(e, self.tr(
+            analysis_error(self, e, tr(
                 'An exception occurred when setting up the '
                 'impact calculator.'))
             return
         except NoFeaturesInExtentError, e:
-            self.analysis_error(e, self.tr(
+            analysis_error(self, e, tr(
                 'An error occurred because there are no features visible in '
                 'the current view. Try zooming out or panning until some '
                 'features become visible.'))
             return
         except InvalidProjectionError, e:
-            self.analysis_error(e, self.tr(
+            analysis_error(self, e, tr(
                 'An error occurred because you are using a layer containing '
                 'count data (e.g. population count) which will not '
                 'scale accurately if we re-project it from its native '
                 'coordinate reference system to WGS84/GeoGraphic.'))
             return
         except MemoryError, e:
-            self.analysis_error(
+            analysis_error(
+                self,
                 e,
-                self.tr(
+                tr(
                     'An error occurred because it appears that your '
                     'system does not have sufficient memory. Upgrading '
                     'your computer so that it has more memory may help. '
@@ -656,23 +571,6 @@ class Analysis(object):
                     'area for your analysis, or using rasters with a larger '
                     'cell size.'))
             return
-
-    def analysis_error(self, exception, message):
-        """A helper to spawn an error and halt processing.
-
-        An exception will be logged, busy status removed and a message
-        displayed.
-
-        :param message: an ErrorMessage to display
-        :type message: ErrorMessage, Message
-
-        :param exception: An exception that was raised
-        :type exception: Exception
-        """
-        self.send_not_busy_signal()
-        LOGGER.exception(message)
-        message = get_error_message(exception, context=message)
-        self.send_error_message(message)
 
     def optimal_clip(self):
         """ A helper function to perform an optimal clip of the input data.
@@ -692,12 +590,10 @@ class Analysis(object):
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
         try:
-            extra_exposure_keywords = self.clip_parameters[0]
-            adjusted_geo_extent = self.clip_parameters[1]
-            cell_size = self.clip_parameters[2]
-            exposure_layer = self.clip_parameters[3]
-            # geo_extent = self.clip_parameters[4]
-            hazard_layer = self.clip_parameters[5]
+            extra_exposure_keywords = self.clip_parameters[
+                'extra_exposure_keywords']
+            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
+            cell_size = self.clip_parameters['cell_size']
         except:
             raise
         # Find out what clipping behaviour we have - see #2210
@@ -707,35 +603,34 @@ class Analysis(object):
             'HazardExposureView')
         detail = None
         if mode == 'HazardExposureView':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'intersection of the exposure layer and the current view '
                 'extents.')
         elif mode == 'HazardExposure':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'intersection of the exposure layer extents.')
         elif mode == 'HazardExposureBookmark':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'bookmarked extents.')
         elif mode == 'HazardExposureBoundingBox':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'intersection of your preferred analysis area.')
         # Make sure that we have EPSG:4326 versions of the input layers
         # that are clipped and (in the case of two raster inputs) resampled to
         # the best resolution.
-        title = self.tr('Preparing hazard data')
+        title = tr('Preparing hazard data')
 
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
-        # noinspection PyTypeChecker
-        self.send_dynamic_message(message)
+        send_dynamic_message(self, message)
         try:
             clipped_hazard = clip_layer(
-                layer=hazard_layer,
+                layer=self.hazard,
                 extent=adjusted_geo_extent,
                 cell_size=cell_size,
                 hard_clip_flag=self.clip_hard)
@@ -744,37 +639,36 @@ class Analysis(object):
         except IOError, e:
             raise e
 
-        title = self.tr('Preparing exposure data')
+        title = tr('Preparing exposure data')
         # Find out what clipping behaviour we have - see #2210
         settings = QSettings()
         mode = settings.value(
             'inasafe/analysis_extents_mode',
             'HazardExposureView')
         if mode == 'HazardExposureView':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the intersection of the hazard layer and the current view '
                 'extents.')
         elif mode == 'HazardExposure':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the intersection of the hazard layer extents.')
         elif mode == 'HazardExposureBookmark':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the bookmarked extents.')
         elif mode == 'HazardExposureBoundingBox':
-            detail = self.tr(
+            detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the intersection of your preferred analysis area.')
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
-        # noinspection PyTypeChecker
-        self.send_dynamic_message(message)
+        send_dynamic_message(self, message)
 
         clipped_exposure = clip_layer(
-            layer=exposure_layer,
+            layer=self.exposure,
             extent=adjusted_geo_extent,
             cell_size=cell_size,
             extra_keywords=extra_exposure_keywords,
@@ -785,14 +679,6 @@ class Analysis(object):
         """Setup impact function."""
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
-        # pylint: disable=unpacking-non-sequence
-        (_,
-         buffered_geo_extent,
-         _,
-         exposure_layer,
-         _,
-         hazard_layer) = self.clip_parameters
-        # pylint: enable=unpacking-non-sequence
 
         if self.impact_function.requires_clipping:
             # The impact function uses SAFE layers,
@@ -810,27 +696,28 @@ class Analysis(object):
                     KeywordDbError):
                 raise
             # Get clipped layers
-            hazard_layer = self.aggregator.hazard_layer
-            exposure_layer = self.aggregator.exposure_layer
+            self.hazard = self.aggregator.hazard_layer
+            self.exposure = self.aggregator.exposure_layer
         else:
             # It is a QGIS impact function,
             # clipping isn't needed, but we need to set up extent
-            self.aggregator.set_layers(hazard_layer, exposure_layer)
-            self.impact_function.requested_extent = buffered_geo_extent
+            self.aggregator.set_layers(self.hazard, self.exposure)
+            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
+            self.impact_function.requested_extent = adjusted_geo_extent
 
         # Set input layers
-        self.impact_function.hazard = hazard_layer
-        self.impact_function.exposure = exposure_layer
+        self.impact_function.hazard = self.hazard
+        self.impact_function.exposure = self.exposure
 
     def run_aggregator(self):
         """Run all post processing steps."""
         LOGGER.debug('Do aggregation')
         if self.impact_layer is None:
             # Done was emitted, but no impact layer was calculated
-            message = self.tr('No impact layer was generated.\n')
-            self.send_not_busy_signal()
-            self.send_error_message(message)
-            self.send_analysis_done_signal()
+            message = tr('No impact layer was generated.\n')
+            send_not_busy_signal(self)
+            send_error_message(self, message)
+            send_analysis_done_signal(self)
             return
         try:
             qgis_impact_layer = safe_to_qgis_layer(self.impact_layer)
@@ -840,7 +727,7 @@ class Analysis(object):
             self.aggregator.aggregate(self.impact_layer)
         except InvalidGeometryError, e:
             message = get_error_message(e)
-            self.send_error_message(message)
+            send_error_message(self, message)
             # self.analysis_done.emit(False)
             return
         except Exception, e:  # pylint: disable=W0703
@@ -853,9 +740,9 @@ class Analysis(object):
             self.run_post_processor()
         else:
             content = self.aggregator.error_message
-            exception = AggregationError(self.tr(
+            exception = AggregationError(tr(
                 'Aggregation error occurred.'))
-            self.analysis_error(exception, content)
+            analysis_error(self, exception, content)
 
     def run_post_processor(self):
         """Carry out any postprocessing required for this impact layer.
@@ -865,23 +752,22 @@ class Analysis(object):
         self.postprocessor_manager.function_parameters = \
             self.impact_function.parameters
         self.postprocessor_manager.run()
-        self.send_not_busy_signal()
-        self.send_analysis_done_signal()
+        send_not_busy_signal(self)
+        send_analysis_done_signal(self)
 
     def run_analysis(self):
         """It's similar with run function in previous dock.py"""
-        self.send_busy_signal()
+        send_busy_signal(self)
 
-        title = self.tr('Calculating impact')
-        detail = self.tr(
+        title = tr('Calculating impact')
+        detail = tr(
             'This may take a little while - we are computing the areas that '
             'will be impacted by the hazard and writing the result to a new '
             'layer.')
         message = m.Message(
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
-        # noinspection PyTypeChecker
-        self.send_dynamic_message(message)
+        send_dynamic_message(self, message)
 
         try:
             self.impact_layer = calculate_impact(self.impact_function)
@@ -889,49 +775,48 @@ class Analysis(object):
         except ZeroImpactException, e:
             report = m.Message()
             report.add(LOGO_ELEMENT)
-            report.add(m.Heading(self.tr(
+            report.add(m.Heading(tr(
                 'Analysis Results'), **INFO_STYLE))
             report.add(m.Text(e.message))
-            report.add(m.Heading(self.tr('Notes'), **SUGGESTION_STYLE))
+            report.add(m.Heading(tr('Notes'), **SUGGESTION_STYLE))
             exposure_layer_title = self.get_layer_title(
-                self.exposure_layer, self.exposure_keyword)
+                self.exposure, self.exposure_keyword)
             hazard_layer_title = self.get_layer_title(
-                self.hazard_layer, self.hazard_keyword)
-            report.add(m.Text(self.tr(
+                self.hazard, self.hazard_keyword)
+            report.add(m.Text(tr(
                 'It appears that no %s are affected by %s. You may want '
                 'to consider:') % (
                     exposure_layer_title, hazard_layer_title)))
             check_list = m.BulletedList()
-            check_list.add(self.tr(
+            check_list.add(tr(
                 'Check that you are not zoomed in too much and thus '
                 'excluding %s from your analysis area.') % (
                     exposure_layer_title))
-            check_list.add(self.tr(
+            check_list.add(tr(
                 'Check that the exposure is not no-data or zero for the '
                 'entire area of your analysis.'))
-            check_list.add(self.tr(
+            check_list.add(tr(
                 'Check that your impact function thresholds do not '
                 'exclude all features unintentionally.'))
             # See #2288 and 2293
-            check_list.add(self.tr(
+            check_list.add(tr(
                 'Check that your dataset coordinate reference system is '
                 'compatible with InaSAFE\'s current requirements.'))
             report.add(check_list)
-            # noinspection PyTypeChecker
-            self.send_static_message(report)
-            self.send_analysis_done_signal()
+            send_static_message(self, report)
+            send_analysis_done_signal(self)
             return
         except MemoryError, e:
-            message = self.tr(
+            message = tr(
                 'An error occurred because it appears that your system does '
                 'not have sufficient memory. Upgrading your computer so that '
                 'it has more memory may help. Alternatively, consider using a '
                 'smaller geographical area for your analysis, or using '
                 'rasters with a larger cell size.')
-            self.analysis_error(e, message)
+            analysis_error(self, e, message)
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
-            self.analysis_error(
+            analysis_error(
+                self,
                 e,
-                self.tr(
-                    'An exception occurred when running the impact analysis.'))
+                tr('An exception occurred when running the impact analysis.'))

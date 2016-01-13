@@ -182,7 +182,7 @@ def age_postprocessor():
     age.must_scroll = False
     age.help_text = tr('Age ratios breakdown.')
     age.description = tr(
-        'Check this option if you wish to calculate a breakdown by age group'
+        'Check this option if you wish to calculate a breakdown by age group '
         'for the affected population. '
     )
 
@@ -203,9 +203,9 @@ def age_postprocessor():
     youth_ratio.description = tr(
         'Youth ratio defines what proportion of the population have not yet '
         'achieved financial independence. The age threshold for youth can '
-        'vary by region - please consult with your local census bureau to find'
-        'out what the relevant threshold is in your region. InaSAFE does not '
-        'impose a particular age ratio scheme - it will break down the '
+        'vary by region - please consult with your local census bureau to '
+        'find out what the relevant threshold is in your region. InaSAFE does '
+        'not impose a particular age ratio scheme - it will break down the '
         'population according to the thresholds you define for your locality. '
         'In InaSAFE, people 0-14 years old are defined as "youth". The '
         'default youth ratio is 0.263.'
@@ -312,7 +312,7 @@ def building_type_postprocessor():
     building_type.name = tr('Building type')
     building_type.enable_parameter = True
     building_type.description = tr(
-        'Check this option if you want to enable a building impact report'
+        'Check this option if you want to enable a building impact report '
         'broken down by building type for each aggregation area.'
     )
 

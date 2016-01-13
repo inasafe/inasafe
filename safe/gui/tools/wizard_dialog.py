@@ -74,7 +74,7 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_mode_classified)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.utilities.analysis_handler import AnalysisHandler
 from safe.utilities.gis import (
     is_raster_layer,
@@ -645,7 +645,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstCategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -669,7 +669,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             categories += ['aggregation']
         for category in categories:
             if not isinstance(category, dict):
-                category = KeywordIO().definition(category)
+                category = definition(category)
             item = QListWidgetItem(category['name'], self.lstCategories)
             item.setData(QtCore.Qt.UserRole, category['key'])
             self.lstCategories.addItem(item)
@@ -738,7 +738,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstSubcategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -818,7 +818,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstHazardCategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -837,7 +837,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         hazard_categories = self.hazard_categories_for_layer()
         for hazard_category in hazard_categories:
             if not isinstance(hazard_category, dict):
-                hazard_category = KeywordIO().definition(hazard_category)
+                hazard_category = definition(hazard_category)
             item = QListWidgetItem(hazard_category['name'],
                                    self.lstHazardCategories)
             item.setData(QtCore.Qt.UserRole, hazard_category['key'])
@@ -889,7 +889,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstLayerModes.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -963,7 +963,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstUnits.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1047,7 +1047,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstClassifications.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1064,7 +1064,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         classifications = self.classifications_for_layer()
         for classification in classifications:
             if not isinstance(classification, dict):
-                classification = KeywordIO.definition(classification)
+                classification = definition(classification)
             item = QListWidgetItem(classification['name'],
                                    self.lstClassifications)
             item.setData(QtCore.Qt.UserRole, classification['key'])
@@ -1260,7 +1260,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             for tree_leaf in tree_branch.takeChildren():
                 value_list += [tree_leaf.data(0, QtCore.Qt.UserRole)]
             if value_list:
-                value_map[tree_branch.text(0)] = value_list
+                value_map[tree_branch.data(0, QtCore.Qt.UserRole)] = value_list
         return value_map
 
     def set_widgets_step_kw_classify(self):
@@ -1291,11 +1291,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 classification['name'], field.upper()))
             unique_values = self.layer.uniqueValues(field_index)
 
-        # Assign unique values to classes (according to defauls)
+        # Assign unique values to classes (according to default)
         unassigned_values = list()
         assigned_values = dict()
         for default_class in default_classes:
-            assigned_values[default_class['name']] = list()
+            assigned_values[default_class['key']] = list()
         for unique_value in unique_values:
             if unique_value is None or isinstance(
                     unique_value, QPyNullVariant):
@@ -1313,7 +1313,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                         default_class['numeric_default_min'] <= unique_value <=
                         default_class['numeric_default_max']))
                 if condition_1 or condition_2:
-                    assigned_values[default_class['name']] += [unique_value]
+                    assigned_values[default_class['key']] += [unique_value]
                     assigned = True
             if not assigned:
                 # add to unassigned values list otherwise
@@ -1338,7 +1338,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         unassigned_values = list()
         assigned_values = dict()
         for default_class in default_classes:
-            assigned_values[default_class['name']] = list()
+            assigned_values[default_class['key']] = list()
         if isinstance(value_map, str):
             try:
                 value_map = json.loads(value_map)
@@ -1403,10 +1403,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
             tree_branch.setText(0, default_class['name'])
+            tree_branch.setData(0, QtCore.Qt.UserRole, default_class['key'])
             if 'description' in default_class:
                 tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
-            for value in assigned_values[default_class['name']]:
+            for value in assigned_values[default_class['key']]:
                 string_value = value is not None and unicode(value) or 'NULL'
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |

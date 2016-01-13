@@ -51,7 +51,6 @@ class EarthquakeBuildingFunction(
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
-
     def notes(self):
         """Return the notes section of the report.
 
