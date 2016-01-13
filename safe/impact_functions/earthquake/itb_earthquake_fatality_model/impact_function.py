@@ -367,11 +367,8 @@ class ITBFatalityFunction(
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
             style_class['quantity'] = classes[i]
-            if i == 0:
-                transparency = 100
-            else:
-                transparency = 30
-            style_class['transparency'] = transparency
+            # See #2529
+            style_class['transparency'] = 30
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
 
