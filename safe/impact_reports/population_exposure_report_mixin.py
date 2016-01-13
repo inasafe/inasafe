@@ -88,7 +88,7 @@ class PopulationExposureReportMixin(ReportMixin):
         checklist.add(
             tr('Who are the vulnerable people in the population and why?'))
         checklist.add(tr('How will warnings be disseminated?'))
-        checklist.add(tr('What are people/s likely movements?'))
+        checklist.add(tr('What are people\'s likely movements?'))
         checklist.add(
             tr('What are the security factors for the affected population?'))
         checklist.add(
