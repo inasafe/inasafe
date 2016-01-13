@@ -327,6 +327,8 @@ def building_type_postprocessor():
     threshold = IntegerParameter()
     threshold.name = 'Threshold'
     threshold.minimum_allowed_value = 1
+    # We shouldn't set a maximum, but there is a bug (#2468).
+    threshold.maximum_allowed_value = 9999
     threshold.value = 25
     threshold.unit = unit_threshold
     threshold.allowed_units = [unit_threshold]
