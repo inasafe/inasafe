@@ -182,7 +182,7 @@
             <gco:CharacterString/>
           </area_population_field>
           <exposure_unit>
-            <gco:CharacterString>density</gco:CharacterString>
+            <gco:CharacterString>count</gco:CharacterString>
           </exposure_unit>
           <area_id_field>
             <gco:CharacterString>id</gco:CharacterString>

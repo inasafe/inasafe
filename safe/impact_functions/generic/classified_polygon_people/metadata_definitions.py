@@ -29,7 +29,7 @@ from safe.definitions import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,
-    density_exposure_unit
+    count_exposure_unit
 )
 from safe.defaults import (
     default_minimum_needs,
@@ -99,7 +99,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
                     'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_polygon],
                     'exposure_types': [exposure_population],
-                    'exposure_units': [density_exposure_unit],
+                    'exposure_units': [count_exposure_unit],
                     'exposure_class_fields': [],
                     'additional_keywords': [
                         area_id_field,

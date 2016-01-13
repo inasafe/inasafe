@@ -49,6 +49,7 @@ from safe.impact_functions.core import (
     population_rounding
 )
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.utilities.keyword_io import definition
 from safe.messaging import styles
 
 
@@ -295,7 +296,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             self.all_areas_ids[area_id] += geometry_area
 
             # storing area id with its respective area name in
-            # self.areas_namesthis will help us in later in showing user names
+            # self.areas_names this will help us in later in showing user names
             #  and not ids
             if area_id not in self.areas_names:
                 self.areas_names[area_id] = feature[area_name_attribute]
@@ -381,15 +382,15 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Checking the type of provided hazard using
         # current flood and earthquake distinguishing
         # attributes
-        try:
-            hazard_attribute = hazard_features[hazard_id].\
-                attribute('h_zone')
-        except KeyError:
-            try:
-                hazard_attribute = hazard_features[hazard_id].\
-                    attribute('FLOODPRONE')
-            except KeyError:
-                hazard_attribute = None
+
+        hazard_class_field = self.hazard.keyword('field')
+        hazard_class_mapping = self.hazard.keyword('value_map')
+        hazard_attribute = hazard_features[hazard_id][hazard_class_field]
+
+        vector_hazard_classification = self.hazard.keyword(
+            'vector_hazard_classification')
+        vector_hazard_classification = definition(vector_hazard_classification)
+        vector_hazard_classes = vector_hazard_classification['classes']
 
         unaffected_feature = QgsFeature(unaffected_fields)
         impacted_feature = QgsFeature(impact_fields)
@@ -399,17 +400,30 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         unaffected_feature.setGeometry(unaffected_geometry)
         impacted_feature.setGeometry(impact_geometry)
 
-        if hazard_attribute is not None:
+        hazard_attribute_key = None
+        for vector_hazard_class in vector_hazard_classes:
+            if hazard_attribute == vector_hazard_class['name']:
+                hazard_attribute_key = vector_hazard_class['key']
+                break
+            # This makes sure logic is the same with other hazard
+            # types such as flood
+            if vector_hazard_class['name'] in hazard_class_mapping:
+                value = hazard_class_mapping[vector_hazard_class['name']]
+                if hazard_attribute == value[0]:
+                    hazard_attribute_key = vector_hazard_class['key']
+                    break
+
+        if hazard_attribute_key is not None:
             unaffected_feature.setAttributes(feature.attributes() + [0])
-            if hazard_attribute == "Low Hazard Zone":
+            if hazard_attribute_key == "low":
                 impacted_feature.setAttributes(feature.attributes() + [1])
-            elif hazard_attribute == "Medium Hazard Zone":
+            elif hazard_attribute_key == "medium":
                 impacted_feature.setAttributes(feature.attributes() + [2])
-            elif hazard_attribute == "High Hazard Zone":
+            elif hazard_attribute_key == "high":
                 impacted_feature.setAttributes(feature.attributes() + [3])
-            elif hazard_attribute == "YES":
+            elif hazard_attribute_key == "wet":
                 impacted_feature.setAttributes(feature.attributes() + [3])
-            elif hazard_attribute == "NO":
+            elif hazard_attribute_key == "dry":
                 impacted_feature.setAttributes(feature.attributes() + [1])
         else:
             unaffected_feature.setAttributes(feature.attributes() + [1])
@@ -434,12 +448,13 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         # Getting number of population in different hazard
         # levels
-
-        level_value = impacted_feature.attributes()[4]
-        if level_value not in self.hazard_levels:
-            self.hazard_levels[level_value] = impacted_population_number
-        else:
-            self.hazard_levels[level_value] += impacted_population_number
+        if hazard_attribute_key is not None:
+            if hazard_attribute_key not in self.hazard_levels:
+                self.hazard_levels[hazard_attribute_key] = \
+                    impacted_population_number
+            else:
+                self.hazard_levels[hazard_attribute_key] += \
+                    impacted_population_number
 
         writer.addFeature(impacted_feature)
 

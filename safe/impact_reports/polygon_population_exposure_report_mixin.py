@@ -26,6 +26,9 @@ from safe.impact_functions.core import (
     evacuated_population_needs
 )
 from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
+from safe.impact_functions.core import (
+    population_rounding
+)
 from safe.messaging import styles
 
 
@@ -75,6 +78,8 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         """
         message = m.Message(style_class='container')
         message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
+        population = population_rounding(
+            sum(self.affected_population.values()))
         checklist = m.BulletedList()
         checklist.add(tr('Which group or population is most affected?'))
         checklist.add(
@@ -94,7 +99,8 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         checklist.add(tr(
             'Are there enough water supply, sanitation, hygiene, food, '
             'shelter, medicines and relief items available for %s people?'
-            % self.affected_population))
+            % format_int(population)))
+
         checklist.add(tr(
             'If yes, where are they located and how will we distribute them?'))
         checklist.add(tr(
@@ -200,8 +206,8 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             style_class='table table-condensed table-striped')
         hazard_table = self.hazard_table(hazard_table)
 
-        message.add(table)
         message.add(hazard_table)
+        message.add(table)
 
         return message
 
@@ -634,11 +640,10 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             align='right'))
 
         hazard_table.add(head_row)
-        for id, value in self.hazard_levels.iteritems():
-            level_name = self.hazard_level_name(id)
+        for name, value in self.hazard_levels.iteritems():
             row = m.Row()
-            row.add(m.Cell(level_name))
-            value = format_int(int(value))
+            row.add(m.Cell(name))
+            value = format_int(population_rounding(value))
 
             row.add(m.Cell(value, align='right'))
             hazard_table.add(row)

@@ -44,7 +44,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
         # noinspection PyCallingNonCallable
-        exposure_layer = QgsVectorLayer(exposure_path, 'Area', 'ogr')
+        exposure_layer = QgsVectorLayer(exposure_path, 'Exposure', 'ogr')
 
         # 1.1 Asserting if the provided data are valid
         self.assertEqual(hazard_layer.isValid(), True)
@@ -95,7 +95,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             'layer_geometry': 'polygon',
             'exposure': 'population',
             'structure_class_field': '',
-            'exposure_unit': 'density'
+            'exposure_unit': 'count'
         }
 
         hazard_keywords = {
