@@ -841,6 +841,9 @@ class KeywordIO(QObject):
         # Translate titles explicitly if possible
         if keyword == 'title':
             value = self.tr(value)
+        # See #2569
+        if keyword == 'url':
+            value = value.toString()
         # we want to show the user the concept name rather than its key
         # if possible. TS
         keyword_definition = definition(keyword)
