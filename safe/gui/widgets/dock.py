@@ -1253,9 +1253,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         analysis.map_canvas = self.iface.mapCanvas()
 
         # Layers
-        analysis.hazard_layer = self.get_hazard_layer()
-        analysis.exposure_layer = self.get_exposure_layer()
-        analysis.aggregation_layer = self.get_aggregation_layer()
+        analysis.hazard = self.get_hazard_layer()
+        analysis.exposure = self.get_exposure_layer()
+        analysis.aggregation = self.get_aggregation_layer()
 
         # noinspection PyTypeChecker
         analysis.hazard_keyword = self.keyword_io.read_keywords(
@@ -1264,7 +1264,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         analysis.exposure_keyword = self.keyword_io.read_keywords(
             self.get_exposure_layer())
         # Need to check since aggregation layer is not mandatory
-        if analysis.aggregation_layer:
+        if analysis.aggregation:
             analysis.aggregation_keyword = self.keyword_io.read_keywords(
                 self.get_aggregation_layer())
 

@@ -321,9 +321,9 @@ class AnalysisHandler(QObject):
         """
         self.analysis = Analysis()
         # Layers
-        self.analysis.hazard_layer = self.parent.hazard_layer
-        self.analysis.exposure_layer = self.parent.exposure_layer
-        self.analysis.aggregation_layer = self.parent.aggregation_layer
+        self.analysis.hazard = self.parent.hazard_layer
+        self.analysis.exposure = self.parent.exposure_layer
+        self.analysis.aggregation = self.parent.aggregation_layer
         # TODO test if the implement aggregation layer works!
 
         # noinspection PyTypeChecker
@@ -332,7 +332,7 @@ class AnalysisHandler(QObject):
         self.analysis.exposure_keyword = self.keyword_io.read_keywords(
             self.parent.exposure_layer)
         # Need to check since aggregation layer is not mandatory
-        if self.analysis.aggregation_layer:
+        if self.analysis.aggregation:
             self.analysis.aggregation_keyword = self.keyword_io.read_keywords(
                 self.parent.aggregation_layer)
 
