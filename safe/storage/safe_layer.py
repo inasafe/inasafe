@@ -94,8 +94,8 @@ class SafeLayer(object):
     def keywords(self, keywords):
         """Setter for keywords property.
 
-        :param keywords: The actual layer.
-        :type keywords: QgsMapLayer, Layer
+        :param keywords: Keywords as a dictionary.
+        :type keywords: dict
         """
         self._keywords = keywords
 

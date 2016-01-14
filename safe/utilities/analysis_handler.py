@@ -320,27 +320,18 @@ class AnalysisHandler(QObject):
         .. note:: Copied or adapted from the dock
         """
         self.analysis = Analysis()
-        # Layers
-        self.analysis.hazard = self.parent.hazard_layer
-        self.analysis.exposure = self.parent.exposure_layer
-        self.analysis.aggregation = self.parent.aggregation_layer
-        # TODO test if the implement aggregation layer works!
-
-        # noinspection PyTypeChecker
-        self.analysis.hazard_keyword = self.keyword_io.read_keywords(
-            self.parent.hazard_layer)
-        self.analysis.exposure_keyword = self.keyword_io.read_keywords(
-            self.parent.exposure_layer)
-        # Need to check since aggregation layer is not mandatory
-        if self.analysis.aggregation:
-            self.analysis.aggregation_keyword = self.keyword_io.read_keywords(
-                self.parent.aggregation_layer)
 
         # Impact Function
         impact_function = self.impact_function_manager.get(
             self.parent.selected_function()['id'])
         impact_function.parameters = self.parent.if_params
         self.analysis.impact_function = impact_function
+
+        # Layers
+        self.analysis.hazard = self.parent.hazard_layer
+        self.analysis.exposure = self.parent.exposure_layer
+        self.analysis.aggregation = self.parent.aggregation_layer
+        # TODO test if the implement aggregation layer works!
 
         # Variables
         self.analysis.clip_hard = self.clip_hard
