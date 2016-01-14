@@ -88,56 +88,6 @@ class KeywordIOTest(unittest.TestCase):
         message = "Got: %s\nExpected: %s" % (hash_value, expected_hash)
         self.assertEqual(hash_value, expected_hash, message)
 
-    def test_write_read_keyword_from_uri(self):
-        """Test we can set and get keywords for a non local datasource"""
-        handle, filename = tempfile.mkstemp(
-            '.db', 'keywords_', temp_dir())
-
-        # Ensure the file is deleted before we try to write to it
-        # fixes windows specific issue where you get a message like this
-        # ERROR 1: c:\temp\inasafe\clip_jpxjnt.shp is not a directory.
-        # This is because mkstemp creates the file handle and leaves
-        # the file open.
-
-        os.close(handle)
-        os.remove(filename)
-        expected_keywords = {
-            'category': 'exposure',
-            'datatype': 'itb',
-            'subcategory': 'building'}
-        # SQL insert test
-        # On first write schema is empty and there is no matching hash
-        self.keyword_io.set_keyword_db_path(filename)
-        self.keyword_io.write_keywords_for_uri(PG_URI, expected_keywords)
-        # SQL Update test
-        # On second write schema is populated and we update matching hash
-        expected_keywords = {
-            'category': 'exposure',
-            'datatype': 'OSM',  # <--note the change here!
-            'subcategory': 'building'}
-        self.keyword_io.write_keywords_for_uri(PG_URI, expected_keywords)
-        # Test getting all keywords
-        keywords = self.keyword_io.read_keyword_from_uri(PG_URI)
-        message = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
-            keywords, expected_keywords, filename)
-        self.assertDictEqual(keywords, expected_keywords, message)
-        # Test getting just a single keyword
-        keyword = self.keyword_io.read_keyword_from_uri(PG_URI, 'datatype')
-        expected_keyword = 'OSM'
-        message = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
-            keyword, expected_keyword, filename)
-        self.assertDictEqual(keywords, expected_keywords, message)
-        # Test deleting keywords actually does delete
-        self.keyword_io.delete_keywords_for_uri(PG_URI)
-        try:
-            _ = self.keyword_io.read_keyword_from_uri(PG_URI, 'datatype')
-            # if the above didn't cause an exception then bad
-            message = 'Expected a HashNotFoundError to be raised'
-            assert message
-        except HashNotFoundError:
-            # we expect this outcome so good!
-            pass
-
     def test_are_keywords_file_based(self):
         """Can we correctly determine if keywords should be written to file or
         to database?"""
