@@ -210,11 +210,8 @@ class ContinuousHazardPopulationFunction(
                 label = create_label(interval_classes[i])
             style_class['label'] = label
             style_class['quantity'] = classes[i]
-            if i == 0:
-                transparency = 100
-            else:
-                transparency = 0
-            style_class['transparency'] = transparency
+            # See #2529
+            style_class['transparency'] = 0
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
 
