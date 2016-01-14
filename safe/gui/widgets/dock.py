@@ -1250,7 +1250,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def prepare_analysis(self):
         """Create analysis as a representation of current situation of dock."""
         analysis = Analysis()
-        analysis.map_canvas = self.iface.mapCanvas()
 
         # Impact Functions
         if self.get_function_id() != '':
