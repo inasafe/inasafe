@@ -23,6 +23,7 @@ import sqlite3 as sqlite
 from sqlite3 import OperationalError
 from cPickle import loads, dumps, HIGHEST_PROTOCOL
 from ast import literal_eval
+from PyQt4.QtCore import QUrl
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -841,9 +842,10 @@ class KeywordIO(QObject):
         # Translate titles explicitly if possible
         if keyword == 'title':
             value = self.tr(value)
-        # See #2569
+        # # See #2569
         if keyword == 'url':
-            value = value.toString()
+            if isinstance(value, QUrl):
+                value = value.toString()
         # we want to show the user the concept name rather than its key
         # if possible. TS
         keyword_definition = definition(keyword)
