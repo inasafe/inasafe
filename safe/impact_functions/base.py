@@ -29,7 +29,12 @@ from PyQt4.Qt import PYQT_VERSION_STR
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import (
-    InvalidExtentError, FunctionParametersError)
+    InvalidExtentError, FunctionParametersError, NoValidLayerError)
+from safe import messaging as m
+from safe.messaging import styles
+from safe.postprocessors.postprocessor_factory import (
+    get_postprocessors,
+    get_postprocessor_human_name)
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
 from safe.utilities.gis import convert_to_safe_layer
@@ -37,6 +42,11 @@ from safe.storage.safe_layer import SafeLayer
 from safe.definitions import inasafe_keyword_version
 from safe.metadata.provenance import Provenance
 from safe.common.version import get_version
+from safe.common.signals import send_static_message
+
+PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
+WARNING_STYLE = styles.WARNING_STYLE
+LOGO_ELEMENT = m.Brand()
 
 
 class ImpactFunction(object):
@@ -514,6 +524,10 @@ class ImpactFunction(object):
             class. We will just need to check if the function_type is
             'qgis2.0', it needs to have the extent set.
         # """
+
+        # Fixme : When Analysis.py will not exist anymore, we will uncomment.
+        # self.message_pre_run()
+
         self.provenance.append_step(
             'Preparation Step',
             'Impact function is being prepared to run the analysis.')
@@ -574,3 +588,66 @@ class ImpactFunction(object):
             timestamp=None,
             data=data
         )
+
+    def message_pre_run(self):
+        title = tr('Processing started')
+        details = tr(
+            'Please wait - processing may take a while depending on your '
+            'hardware configuration and the analysis extents and data.')
+        # trap for issue 706
+        try:
+            exposure_name = self.exposure.name
+            hazard_name = self.hazard.name
+            # aggregation layer could be set to AOI so no check for that
+        except AttributeError:
+            title = tr('No valid layers')
+            details = tr(
+                'Please ensure your hazard and exposure layers are set '
+                'in the question area and then press run again.')
+            message = m.Message(
+                LOGO_ELEMENT,
+                m.Heading(title, **WARNING_STYLE),
+                m.Paragraph(details))
+            raise NoValidLayerError(message)
+        text = m.Text(
+            tr('This analysis will calculate the impact of'),
+            m.EmphasizedText(hazard_name),
+            tr('on'),
+            m.EmphasizedText(exposure_name),
+        )
+        if self.aggregation is not None:
+            try:
+                aggregation_name = self.aggregation.name
+                # noinspection PyTypeChecker
+                text.add(m.Text(
+                    tr('and bullet list the results'),
+                    m.ImportantText(tr('aggregated by')),
+                    m.EmphasizedText(aggregation_name)))
+            except AttributeError:
+                pass
+        text.add('.')
+        message = m.Message(
+            LOGO_ELEMENT,
+            m.Heading(title, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(details),
+            m.Paragraph(text))
+        try:
+            # add which postprocessors will run when appropriated
+            post_processors_names = self.parameters['postprocessors']
+            post_processors = get_postprocessors(post_processors_names)
+            message.add(m.Paragraph(tr(
+                'The following postprocessors will be used:')))
+
+            bullet_list = m.BulletedList()
+
+            for name, post_processor in post_processors.iteritems():
+                bullet_list.add('%s: %s' % (
+                    get_postprocessor_human_name(name),
+                    post_processor.description()))
+            message.add(bullet_list)
+
+        except (TypeError, KeyError):
+            # TypeError is for when function_parameters is none
+            # KeyError is for when ['postprocessors'] is unavailable
+            pass
+        send_static_message(self, message)

@@ -28,9 +28,6 @@ from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe.impact_statistics.aggregator import Aggregator
 from safe.common.exceptions import ZeroImpactException
-from safe.postprocessors.postprocessor_factory import (
-    get_postprocessors,
-    get_postprocessor_human_name)
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
     bbox_intersection,
@@ -68,7 +65,6 @@ from safe.common.signals import (
     send_error_message,
     send_dynamic_message,
     send_analysis_done_signal)
-from safe.common.exceptions import NoValidLayerError
 from safe.engine.core import calculate_impact
 
 
@@ -152,6 +148,9 @@ class Analysis(object):
                 # convert for new style impact function
                 self._hazard = SafeLayer(hazard_layer)
 
+        # We transfer the layer to the IF.
+        self.impact_function.hazard = hazard_layer
+
     @property
     def exposure(self):
         """Property for exposure layer.
@@ -182,6 +181,9 @@ class Analysis(object):
                 # convert for new style impact function
                 self._exposure = SafeLayer(exposure_layer)
 
+        # We transfer the layer to the IF.
+        self.impact_function.exposure = exposure_layer
+
     @property
     def aggregation(self):
         """Property for aggregation layer.
@@ -206,6 +208,12 @@ class Analysis(object):
             self._aggregation = SafeLayer(aggregation_layer)
         else:
             self._aggregation = None
+
+        # We transfer the layer to the IF.
+        if self._aggregation is None:
+            self.impact_function.aggregation = None
+        else:
+            self.impact_function.aggregation = aggregation_layer
 
     @property
     def impact_layer(self):
@@ -441,75 +449,9 @@ class Analysis(object):
     def setup_analysis(self):
         """Setup analysis so that it will be ready for running."""
         # Refactor from dock.accept()
-        title = tr('Processing started')
-        details = tr(
-            'Please wait - processing may take a while depending on your '
-            'hardware configuration and the analysis extents and data.')
 
-        # trap for issue 706
-        try:
-            exposure_name = self.exposure.name
-            hazard_name = self.hazard.name
-            # aggregation layer could be set to AOI so no check for that
-        except AttributeError:
-            title = tr('No valid layers')
-            details = tr(
-                'Please ensure your hazard and exposure layers are set '
-                'in the question area and then press run again.')
-            message = m.Message(
-                LOGO_ELEMENT,
-                m.Heading(title, **WARNING_STYLE),
-                m.Paragraph(details))
-            raise NoValidLayerError(message)
-
-        text = m.Text(
-            tr('This analysis will calculate the impact of'),
-            m.EmphasizedText(hazard_name),
-            tr('on'),
-            m.EmphasizedText(exposure_name),
-        )
-
-        if self.aggregation is not None:
-            try:
-                aggregation_name = self.aggregation.name
-                # noinspection PyTypeChecker
-                text.add(m.Text(
-                    tr('and bullet list the results'),
-                    m.ImportantText(tr('aggregated by')),
-                    m.EmphasizedText(aggregation_name)))
-            except AttributeError:
-                pass
-
-        text.add('.')
-
-        message = m.Message(
-            LOGO_ELEMENT,
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(details),
-            m.Paragraph(text))
-
-        try:
-            # add which postprocessors will run when appropriated
-            post_processors_names = self.impact_function.parameters[
-                'postprocessors']
-            post_processors = get_postprocessors(post_processors_names)
-            message.add(m.Paragraph(tr(
-                'The following postprocessors will be used:')))
-
-            bullet_list = m.BulletedList()
-
-            for name, post_processor in post_processors.iteritems():
-                bullet_list.add('%s: %s' % (
-                    get_postprocessor_human_name(name),
-                    post_processor.description()))
-            message.add(bullet_list)
-
-        except (TypeError, KeyError):
-            # TypeError is for when function_parameters is none
-            # KeyError is for when ['postprocessors'] is unavailable
-            pass
-
-        send_static_message(self, message)
+        # Fixme : temporary call from here until we delete this file.
+        self.impact_function.message_pre_run()
 
         # Find out what the usable extent and cell size are
         try:
