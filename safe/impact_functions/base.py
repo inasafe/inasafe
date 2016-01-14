@@ -22,6 +22,7 @@ import getpass
 import platform
 from datetime import datetime
 from qgis.utils import QGis
+from qgis.core import QgsCoordinateReferenceSystem
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
@@ -71,13 +72,13 @@ class ImpactFunction(object):
 
         # Requested extent to use
         self._requested_extent = None
-        # Requested extent's CRS as EPSG number
-        self._requested_extent_crs = 4326
+        # Requested extent's CRS
+        self._requested_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
         # Actual extent to use - Read Only
         # For 'old-style' IF we do some manipulation to the requested extent
         self._actual_extent = None
-        # Actual extent's CRS as EPSG number - Read Only
-        self._actual_extent_crs = 4326
+        # Actual extent's CRS - Read Only
+        self._actual_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
         # set this to a gui call back / web callback etc as needed.
         self._callback = self.console_progress_callback
         # Set the default parameters
@@ -171,8 +172,8 @@ class ImpactFunction(object):
     def requested_extent_crs(self):
         """Property for the extent CRS of impact function analysis.
 
-        :returns: A number representing the EPSG code for the CRS. e.g. 4326
-        :rtype: int
+        :return crs: The coordinate reference system for the analysis boundary.
+        :rtype: QgsCoordinateReferenceSystem
         """
         return self._requested_extent_crs
 
@@ -183,8 +184,8 @@ class ImpactFunction(object):
         .. note:: We break our rule here on not allowing acronyms for
             parameter names.
 
-        :param crs: Analysis boundary EPSG CRS expressed as an integer.
-        :type crs: int
+        :param crs: The coordinate reference system for the analysis boundary.
+        :type crs: QgsCoordinateReferenceSystem
         """
         self._requested_extent_crs = crs
 
@@ -201,8 +202,8 @@ class ImpactFunction(object):
     def actual_extent_crs(self):
         """Property for the actual extent crs for analysis.
 
-        :returns: A number representing the EPSG code for the CRS. e.g. 4326
-        :rtype: int
+        :returns: The CRS for the actual extent.
+        :rtype: QgsCoordinateReferenceSystem
         """
         return self._actual_extent_crs
 
