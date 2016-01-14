@@ -385,6 +385,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         hazard_class_field = self.hazard.keyword('field')
         hazard_class_mapping = self.hazard.keyword('value_map')
+        area_population_attribute = self.exposure.keyword('field')
+
         hazard_attribute = hazard_features[hazard_id][hazard_class_field]
 
         vector_hazard_classification = self.hazard.keyword(
@@ -394,8 +396,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         unaffected_feature = QgsFeature(unaffected_fields)
         impacted_feature = QgsFeature(impact_fields)
-
-        area_population_attribute = self.exposure.keyword('field')
 
         unaffected_feature.setGeometry(unaffected_geometry)
         impacted_feature.setGeometry(impact_geometry)
@@ -413,21 +413,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                     hazard_attribute_key = vector_hazard_class['key']
                     break
 
-        if hazard_attribute_key is not None:
-            unaffected_feature.setAttributes(feature.attributes() + [0])
-            if hazard_attribute_key == "low":
-                impacted_feature.setAttributes(feature.attributes() + [1])
-            elif hazard_attribute_key == "medium":
-                impacted_feature.setAttributes(feature.attributes() + [2])
-            elif hazard_attribute_key == "high":
-                impacted_feature.setAttributes(feature.attributes() + [3])
-            elif hazard_attribute_key == "wet":
-                impacted_feature.setAttributes(feature.attributes() + [3])
-            elif hazard_attribute_key == "dry":
-                impacted_feature.setAttributes(feature.attributes() + [1])
-        else:
-            unaffected_feature.setAttributes(feature.attributes() + [1])
-            impacted_feature.setAttributes(feature.attributes() + [3])
+        self.assign_hazard_levels(
+            feature,
+            hazard_attribute_key,
+            unaffected_feature,
+            impacted_feature)
 
         # passing the number of affected population
         # to new resulted(impacted or unaffected) features
@@ -457,6 +447,44 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                     impacted_population_number
 
         writer.addFeature(impacted_feature)
+
+    def assign_hazard_levels(
+            self,
+            feature,
+            hazard_attribute_key,
+            unaffected_feature,
+            impacted_feature):
+        """ Assign different impacted areas with their
+        respective level of impact(Affected, Not Affected, Medium)
+
+        :param feature: exposure feature
+        :type feature: QgsFeature
+
+        :param hazard_attribute_key: attribute key of the analyzed hazard
+        :type hazard_attribute_key: string
+
+        :param unaffected_feature: Unaffected feature in the impact layer
+        :type unaffected_feature: QgsFeature
+
+        :param impacted_feature: Impacted feature in the impact layer
+        :type impacted_feature: QgsFeature
+        """
+
+        if hazard_attribute_key is not None:
+            unaffected_feature.setAttributes(feature.attributes() + [0])
+            if hazard_attribute_key == "low":
+                impacted_feature.setAttributes(feature.attributes() + [1])
+            elif hazard_attribute_key == "medium":
+                impacted_feature.setAttributes(feature.attributes() + [2])
+            elif hazard_attribute_key == "high":
+                impacted_feature.setAttributes(feature.attributes() + [3])
+            elif hazard_attribute_key == "wet":
+                impacted_feature.setAttributes(feature.attributes() + [3])
+            elif hazard_attribute_key == "dry":
+                impacted_feature.setAttributes(feature.attributes() + [1])
+        else:
+            unaffected_feature.setAttributes(feature.attributes() + [1])
+            impacted_feature.setAttributes(feature.attributes() + [3])
 
     def evaluate_affected_people(self):
         """Calculate the number of people affected on the area
