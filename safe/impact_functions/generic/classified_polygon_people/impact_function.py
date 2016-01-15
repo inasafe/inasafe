@@ -311,20 +311,34 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue  # no intersection found
+                hazard = hazard_features[hazard_id]
+                hazard_attribute_key = self.get_hazard_class_field_key(hazard)
 
                 # find unaffected area geometry
-                unaffected_geometry = geometry.symDifference(impact_geometry)
+
+                if hazard_attribute_key is not None and hazard_attribute_key \
+                        == "dry":
+                    # In case the impact geometry has a 'no or NO' value in
+                    # the flood column
+                    unaffected_geometry = geometry.symDifference(
+                        impact_geometry)
+                    if area_id not in self.all_affected_areas:
+                        self.all_affected_areas[area_id] = 0.
+                    area = 0
+
+                    self.all_affected_areas[area_id] += area
+                else:
+                    unaffected_geometry = geometry.symDifference(
+                        impact_geometry)
+                    # add to the affected area of this area type
+
+                    if area_id not in self.all_affected_areas:
+                        self.all_affected_areas[area_id] = 0.
+                    area = impact_geometry.area()
+
+                    self.all_affected_areas[area_id] += area
 
                 all_affected_geometry.append(impact_geometry)
-
-                # add to the affected area of this area type
-
-                if area_id not in self.all_affected_areas:
-                    self.all_affected_areas[area_id] = 0.
-                area = impact_geometry.area()
-
-                self.all_affected_areas[area_id] += area
-
                 self.assign_impact_level(
                     feature,
                     hazard_id,
@@ -383,35 +397,15 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # current flood and earthquake distinguishing
         # attributes
 
-        hazard_class_field = self.hazard.keyword('field')
-        hazard_class_mapping = self.hazard.keyword('value_map')
         area_population_attribute = self.exposure.keyword('field')
-
-        hazard_attribute = hazard_features[hazard_id][hazard_class_field]
-
-        vector_hazard_classification = self.hazard.keyword(
-            'vector_hazard_classification')
-        vector_hazard_classification = definition(vector_hazard_classification)
-        vector_hazard_classes = vector_hazard_classification['classes']
-
         unaffected_feature = QgsFeature(unaffected_fields)
         impacted_feature = QgsFeature(impact_fields)
 
         unaffected_feature.setGeometry(unaffected_geometry)
         impacted_feature.setGeometry(impact_geometry)
 
-        hazard_attribute_key = None
-        for vector_hazard_class in vector_hazard_classes:
-            if hazard_attribute == vector_hazard_class['name']:
-                hazard_attribute_key = vector_hazard_class['key']
-                break
-            # This makes sure logic is the same with other hazard
-            # types such as flood
-            if vector_hazard_class['name'] in hazard_class_mapping:
-                value = hazard_class_mapping[vector_hazard_class['name']]
-                if hazard_attribute == value[0]:
-                    hazard_attribute_key = vector_hazard_class['key']
-                    break
+        hazard = hazard_features[hazard_id]
+        hazard_attribute_key = self.get_hazard_class_field_key(hazard)
 
         self.assign_hazard_levels(
             feature,
@@ -447,6 +441,29 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                     impacted_population_number
 
         writer.addFeature(impacted_feature)
+
+    def get_hazard_class_field_key(self, hazard):
+        """ Assign different impacted areas with their
+        respective level of impact(Affected, Not Affected, Medium)
+
+        :param hazard: hazard feature
+        :type hazard: QgsFeature
+
+        :returns hazard_attribute_key: Key for the hazard class field
+        :rtype hazard_attribute_key: string
+
+        """
+
+        hazard_class_field = self.hazard.keyword('field')
+        hazard_attribute = hazard[hazard_class_field]
+        hazard_class_mapping = self.hazard.keyword('value_map')
+
+        hazard_attribute_key = None
+        for key, value in hazard_class_mapping.iteritems():
+            if value[0] == hazard_attribute:
+                hazard_attribute_key = key
+                break
+        return hazard_attribute_key
 
     def assign_hazard_levels(
             self,
