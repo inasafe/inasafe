@@ -43,29 +43,30 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.widgets.dock import Dock
 
 
-DOCK = Dock(IFACE)
-
-
 class SaveScenarioTest(unittest.TestCase):
     """Test save scenario tool."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.DOCK = Dock(IFACE)
 
     def setUp(self):
         """Fixture run before all tests."""
         os.environ['LANG'] = 'en'
-        DOCK.show_only_visible_layers_flag = True
-        load_standard_layers(DOCK)
-        DOCK.cboHazard.setCurrentIndex(0)
-        DOCK.cboExposure.setCurrentIndex(0)
-        DOCK.cboFunction.setCurrentIndex(0)
-        DOCK.run_in_thread_flag = False
-        DOCK.show_only_visible_layers_flag = False
-        DOCK.set_layer_from_title_flag = False
-        DOCK.zoom_to_impact_flag = False
-        DOCK.hide_exposure_flag = False
-        DOCK.show_intermediate_layers = False
+        self.DOCK.show_only_visible_layers_flag = True
+        load_standard_layers(self.DOCK)
+        self.DOCK.cboHazard.setCurrentIndex(0)
+        self.DOCK.cboExposure.setCurrentIndex(0)
+        self.DOCK.cboFunction.setCurrentIndex(0)
+        self.DOCK.run_in_thread_flag = False
+        self.DOCK.show_only_visible_layers_flag = False
+        self.DOCK.set_layer_from_title_flag = False
+        self.DOCK.zoom_to_impact_flag = False
+        self.DOCK.hide_exposure_flag = False
+        self.DOCK.show_intermediate_layers = False
 
         # Create scenario dialog
-        self.save_scenario_dialog = SaveScenarioDialog(IFACE, DOCK)
+        self.save_scenario_dialog = SaveScenarioDialog(IFACE, self.DOCK)
         # register impact functions
         register_impact_functions()
         self.impact_function_manager = ImpactFunctionManager()
@@ -74,9 +75,9 @@ class SaveScenarioTest(unittest.TestCase):
         """Fixture run after each test"""
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
-        DOCK.cboHazard.clear()
-        DOCK.cboExposure.clear()
-        # DOCK.cboAggregation.clear() #dont do this because the cboAggregation
+        self.DOCK.cboHazard.clear()
+        self.DOCK.cboExposure.clear()
+        # self.DOCK.cboAggregation.clear() #dont do this because the cboAggregation
         # need to be able to react to the status changes of the other combos
         self.save_scenario_dialog = None
 
@@ -84,7 +85,7 @@ class SaveScenarioTest(unittest.TestCase):
         """Test validate input."""
         # Valid Case
         result, message = setup_scenario(
-            DOCK,
+            self.DOCK,
             hazard='Classified Flood',
             exposure='Population',
             function='Be affected in each hazard class',
@@ -103,7 +104,7 @@ class SaveScenarioTest(unittest.TestCase):
     def test_save_scenario(self):
         """Test saving Current scenario."""
         result, message = setup_scenario(
-            DOCK,
+            self.DOCK,
             hazard='Classified Flood',
             exposure='Population',
             function='Be affected in each hazard class',
@@ -112,7 +113,7 @@ class SaveScenarioTest(unittest.TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(dock=DOCK)
+        set_jakarta_extent(dock=self.DOCK)
 
         # create unique file
         scenario_file = unique_filename(
@@ -162,7 +163,7 @@ class SaveScenarioTest(unittest.TestCase):
         """Test we calculate the relative paths correctly when saving scenario.
         """
         result, message = setup_scenario(
-            DOCK,
+            self.DOCK,
             hazard='Classified Flood',
             exposure='Population',
             function='Be affected in each hazard class',
@@ -171,8 +172,8 @@ class SaveScenarioTest(unittest.TestCase):
         fake_dir = test_data_path()
         scenario_file = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=fake_dir)
-        exposure_layer = str(DOCK.get_exposure_layer().publicSource())
-        hazard_layer = str(DOCK.get_hazard_layer().publicSource())
+        exposure_layer = str(self.DOCK.get_exposure_layer().publicSource())
+        hazard_layer = str(self.DOCK.get_hazard_layer().publicSource())
 
         relative_exposure = self.save_scenario_dialog.relative_path(
             scenario_file, exposure_layer)
@@ -195,3 +196,8 @@ class SaveScenarioTest(unittest.TestCase):
             self.assertEqual(
                 'hazard/classified_flood_20_20.asc',
                 relative_hazard)
+
+if __name__ == '__main__':
+    suite = unittest.makeSuite(SaveScenarioTest)
+    runner = unittest.TextTestRunner(verbosity=2)
+    runner.run(suite)
