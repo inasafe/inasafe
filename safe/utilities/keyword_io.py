@@ -134,8 +134,8 @@ class KeywordIO(QObject):
                 NoKeywordsFoundError,
                 KeywordNotFoundError,
                 InvalidParameterError,
-                UnsupportedProviderError):
-            raise
+                UnsupportedProviderError) as e:
+            raise e
 
     def write_keywords(self, layer, keywords):
         """Write keywords for a datasource.
@@ -183,7 +183,12 @@ class KeywordIO(QObject):
         """
         try:
             existing_keywords = self.read_keywords(layer)
-        except (HashNotFoundError, OperationalError, InvalidParameterError):
+        except (
+            HashNotFoundError,
+            OperationalError,
+            InvalidParameterError,
+            KeywordNotFoundError):
+
             existing_keywords = {}
         existing_keywords.update(keywords)
         try:

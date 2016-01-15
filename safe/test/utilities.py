@@ -28,7 +28,7 @@ from safe.gis.numerics import axes_to_points
 from safe.impact_functions import register_impact_functions
 from safe.utilities.utilities import read_file_keywords
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.exceptions import NoKeywordsFoundError
+from safe.common.exceptions import NoKeywordsFoundError, KeywordNotFoundError
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
 
@@ -225,7 +225,7 @@ def load_layer(layer_path):
         keywords = read_file_keywords(layer_path)
         if 'layer_purpose' in keywords:
             layer_purpose = keywords['layer_purpose']
-    except NoKeywordsFoundError:
+    except (NoKeywordsFoundError, KeywordNotFoundError):
         pass
 
     # Create QGis Layer Instance

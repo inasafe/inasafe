@@ -1083,6 +1083,14 @@ class TestDock(TestCase):
         self.assertEqual(title, original_title)
         self.dock.set_layer_from_title_flag = False
 
+    def test_future_keyword(self):
+        """Test if version 3.2 open future keywords."""
+        # Clear all loaded layers first.
+        file_list = [
+            test_data_path('exposure', 'buildings_keyword_3-3.shp')
+        ]
+        load_layers(file_list, clear_flag=True)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestDock)
