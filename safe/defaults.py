@@ -317,7 +317,7 @@ def building_type_postprocessor():
     )
 
     unit_threshold = Unit()
-    unit_threshold.name = tr('feature')
+    unit_threshold.name = tr('features')
     unit_threshold.plural = tr('features')
     unit_threshold.abbreviation = tr('features')
     unit_threshold.description = tr(
@@ -335,7 +335,7 @@ def building_type_postprocessor():
     threshold.help_text = tr('Threshold')
     threshold.description = tr(
         'The threshold is used to consolidate small building usage groups '
-        'which are inferior than this value.'
+        'which are within this threshold.'
     )
 
     building_type.value = [threshold]
