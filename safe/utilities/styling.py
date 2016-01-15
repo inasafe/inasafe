@@ -482,6 +482,13 @@ def set_raster_style(raster_layer, style):
             pixel.percentTransparent = transparency_percent
             transparency_list.append(pixel)
 
+    # Always set transparent for value = 0. See #2529
+    zero_pixel = QgsRasterTransparency.TransparentSingleValuePixel()
+    zero_pixel.min = 0
+    zero_pixel.max = 0
+    zero_pixel.percentTransparency = 100
+    transparency_list.append(zero_pixel)
+
     band = 1  # gdal counts bands from base 1
     LOGGER.debug('Setting colour ramp list')
     raster_shader = QgsRasterShader()
