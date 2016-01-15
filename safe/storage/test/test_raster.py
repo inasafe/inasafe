@@ -23,7 +23,7 @@ from safe.test.utilities import test_data_path, get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
-KEYWORD_PATH = test_data_path('hazard', 'jakarta_flood_design.keywords')
+KEYWORD_PATH = test_data_path('hazard', 'jakarta_flood_design.xml')
 RASTER_BASE = test_data_path('hazard', 'jakarta_flood_design')
 
 

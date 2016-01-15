@@ -23,7 +23,7 @@ if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
 
 
 LOGGER = logging.getLogger('InaSAFE')
-KEYWORD_PATH = test_data_path('exposure', 'exposure.keywords')
+KEYWORD_PATH = test_data_path('exposure', 'exposure.xml')
 SQLITE_PATH = test_data_path('exposure', 'exposure.sqlite')
 SHP_BASE = test_data_path('exposure', 'buildings_osm_4326')
 EXPOSURE_SUBLAYER_NAME = 'buildings_osm_4326'

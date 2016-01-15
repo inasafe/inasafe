@@ -26,6 +26,7 @@ from safe.storage.safe_layer import SafeLayer
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+
 class TestITBBayesianEarthquakeFatalityFunction(unittest.TestCase):
     """Test for ITB Bayesian Earthquake on Population Impact Function."""
 

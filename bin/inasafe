@@ -36,7 +36,6 @@ from safe.impact_functions.registry import Registry
 from safe.impact_functions import register_impact_functions
 from safe.test.utilities import get_qgis_app
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.report.impact_report import ImpactReport
 from safe.utilities.osm_downloader import download
@@ -255,7 +254,6 @@ def analysis_setup(command_line_arguments, hazard, exposure):
     impact_function_manager = ImpactFunctionManager()
     impact_function = impact_function_manager.get(
         command_line_arguments.impact_function)
-    keyword_io = KeywordIO()
 
     try:
         from safe.utilities.analysis import Analysis
@@ -264,10 +262,9 @@ def analysis_setup(command_line_arguments, hazard, exposure):
         print ie.message
         raise ImportError
     analysis = Analysis()
-    analysis.hazard_layer = hazard
-    analysis.exposure_layer = exposure
-    analysis.hazard_keyword = keyword_io.read_keywords(hazard)
-    analysis.exposure_keyword = keyword_io.read_keywords(exposure)
+    analysis.impact_function = impact_function
+    analysis.hazard = hazard
+    analysis.exposure = exposure
     analysis.clip_hard = False
     analysis.show_intermediate_layers = False
     analysis.run_in_thread_flag = False
@@ -282,7 +279,6 @@ def analysis_setup(command_line_arguments, hazard, exposure):
         float(command_line_arguments.extent[2]),
         float(command_line_arguments.extent[3])
     )
-    analysis.impact_function = impact_function
     analysis.setup_analysis()
     return analysis
 

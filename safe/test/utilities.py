@@ -26,11 +26,19 @@ from PyQt4 import QtGui  # pylint: disable=W0621
 # safe_qgis.__init__ to load all the configurations that we make for testing
 from safe.gis.numerics import axes_to_points
 from safe.impact_functions import register_impact_functions
-from safe.utilities.utilities import read_file_keywords
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.exceptions import NoKeywordsFoundError
+from safe.common.exceptions import (
+    NoKeywordsFoundError,
+    MetadataReadError
+)
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
+from safe.utilities.metadata import (
+    read_iso19115_metadata,
+    write_read_iso_19115_metadata
+)
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.utilities import read_file_keywords
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -222,7 +230,14 @@ def load_layer(layer_path):
     # Determine if layer is hazard or exposure
     layer_purpose = 'undefined'
     try:
-        keywords = read_file_keywords(layer_path)
+        try:
+            keywords = read_file_keywords(layer_path)
+            keywords = write_read_iso_19115_metadata(layer_path, keywords)
+        except:
+            try:
+                keywords = read_iso19115_metadata(layer_path)
+            except NoKeywordsFoundError:
+                keywords = {}
         if 'layer_purpose' in keywords:
             layer_purpose = keywords['layer_purpose']
     except NoKeywordsFoundError:
@@ -1067,6 +1082,7 @@ def clone_shp_layer(
     extensions = ['.shp', '.shx', '.dbf', '.prj']
     if include_keywords:
         extensions.append('.keywords')
+        extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
     for ext in extensions:
@@ -1133,6 +1149,7 @@ def clone_raster_layer(
     extensions = ['.prj', '.sld', 'qml', '.prj', extension]
     if include_keywords:
         extensions.append('.keywords')
+        extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
     for ext in extensions:
@@ -1155,7 +1172,7 @@ def remove_vector_temp_file(file_path):
     :type file_path: str
     """
     file_path = file_path[:-4]
-    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords']
+    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords', '.xml']
     extensions.extend(['.prj', '.sld', 'qml'])
     for ext in extensions:
         if os.path.exists(file_path + ext):

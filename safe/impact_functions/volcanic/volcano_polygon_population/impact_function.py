@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import numpy
+from collections import OrderedDict
 
 from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
@@ -27,7 +28,10 @@ from safe.common.utilities import (
     create_classes,
     create_label,
     get_thousand_separator)
-from safe.impact_functions.core import no_population_impact_message
+from safe.impact_functions.core import (
+    no_population_impact_message,
+    get_key_for_value
+)
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters, get_needs_provenance_value
@@ -35,6 +39,7 @@ from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 import safe.messaging as m
 from safe.messaging import styles
+from safe.utilities.keyword_io import definition
 
 
 class VolcanoPolygonPopulationFunction(
@@ -109,31 +114,37 @@ class VolcanoPolygonPopulationFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Parameters
         self.hazard_class_attribute = self.hazard.keyword('field')
         name_attribute = self.hazard.keyword('volcano_name_field')
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
 
         if has_no_data(self.exposure.layer.get_data(nan=True)):
             self.no_data_warning = True
 
         # Input checks
         if not self.hazard.layer.is_polygon_data:
-            msg = ('Input hazard must be a polygon layer. I got %s with '
-                   'layer type %s' % (self.hazard.layer.get_name(),
-                                      self.hazard.layer.get_geometry_name()))
-            raise Exception(msg)
+            message = tr(
+                'Input hazard must be a polygon layer. I got %s with layer '
+                'type %s' % (
+                    self.hazard.layer.get_name(),
+                    self.hazard.layer.get_geometry_name()))
+            raise Exception(message)
 
         # Check if hazard_class_attribute exists in hazard_layer
         if (self.hazard_class_attribute not in
                 self.hazard.layer.get_attribute_names()):
-            msg = ('Hazard data %s did not contain expected attribute %s ' % (
+            message = tr(
+                'Hazard data %s did not contain expected attribute ''%s ' % (
                 self.hazard.layer.get_name(), self.hazard_class_attribute))
             # noinspection PyExceptionInherit
-            raise InaSAFEError(msg)
+            raise InaSAFEError(message)
 
         features = self.hazard.layer.get_data()
-        hazard_zone_categories = list(
-            set(self.hazard.layer.get_data(self.hazard_class_attribute)))
 
         # Get names of volcanoes considered
         if name_attribute in self.hazard.layer.get_attribute_names():
@@ -144,6 +155,26 @@ class VolcanoPolygonPopulationFunction(
 
             self.volcano_names = ', '.join(set(volcano_name_list))
 
+        # Retrieve the classification that is used by the hazard layer.
+        vector_hazard_classification = self.hazard.keyword(
+            'vector_hazard_classification')
+        # Get the dictionary that contains the definition of the classification
+        vector_hazard_classification = definition(vector_hazard_classification)
+        # Get the list classes in the classification
+        vector_hazard_classes = vector_hazard_classification['classes']
+        # Initialize OrderedDict of affected buildings
+        self.affected_population = OrderedDict()
+        # Iterate over vector hazard classes
+        for vector_hazard_class in vector_hazard_classes:
+            # Check if the key of class exist in hazard_class_mapping
+            if vector_hazard_class['key'] in self.hazard_class_mapping.keys():
+                # Replace the key with the name as we need to show the human
+                # friendly name in the report.
+                self.hazard_class_mapping[vector_hazard_class['name']] = \
+                    self.hazard_class_mapping.pop(vector_hazard_class['key'])
+                # Adding the class name as a key in affected_building
+                self.affected_population[vector_hazard_class['name']] = 0
+
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
@@ -151,19 +182,19 @@ class VolcanoPolygonPopulationFunction(
                 self.exposure.layer,
                 attribute_name=self.target_field)
 
-        # Initialise total affected per category
-        for hazard_zone in hazard_zone_categories:
-            self.affected_population[hazard_zone] = 0
-
         # Count affected population per polygon and total
         for row in interpolated_layer.get_data():
             # Get population at this location
             population = row[self.target_field]
             if not numpy.isnan(population):
                 population = float(population)
-                # Update population count for this category
-                category = row[self.hazard_class_attribute]
-                self.affected_population[category] += population
+                # Update population count for this hazard zone
+                hazard_value = get_key_for_value(
+                    row[self.hazard_class_attribute],
+                    self.hazard_class_mapping)
+                if not hazard_value:
+                    hazard_value = self._not_affected_value
+                self.affected_population[hazard_value] += population
 
         # Count totals
         self.total_population = int(
@@ -234,21 +265,30 @@ class VolcanoPolygonPopulationFunction(
             'Thousand separator is represented by  %s' %
             get_thousand_separator())
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.target_field,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'total_needs': self.total_needs
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Create vector layer and return
         impact_layer = Raster(
             data=covered_exposure_layer.get_data(),
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
             name=tr('People affected by volcano hazard zones'),
-            keywords={'impact_summary': impact_summary,
-                      'impact_table': impact_table,
-                      'target_field': self.target_field,
-                      'map_title': map_title,
-                      'legend_notes': legend_notes,
-                      'legend_units': legend_units,
-                      'legend_title': legend_title,
-                      'total_needs': self.total_needs},
-            style_info=style_info)
+            keywords=impact_layer_keywords,
+            style_info=style_info
+        )
 
         self._impact = impact_layer
         return impact_layer

@@ -19,15 +19,34 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from socket import gethostname
 import getpass
+import platform
+from datetime import datetime
+from qgis.utils import QGis
+from osgeo import gdal
+from PyQt4.QtCore import QT_VERSION_STR
+from PyQt4.Qt import PYQT_VERSION_STR
 
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import (
-    InvalidExtentError, FunctionParametersError)
+    InvalidExtentError, FunctionParametersError, NoValidLayerError)
+from safe import messaging as m
+from safe.messaging import styles
+from safe.postprocessors.postprocessor_factory import (
+    get_postprocessors,
+    get_postprocessor_human_name)
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
 from safe.utilities.gis import convert_to_safe_layer
 from safe.storage.safe_layer import SafeLayer
+from safe.definitions import inasafe_keyword_version
+from safe.metadata.provenance import Provenance
+from safe.common.version import get_version
+from safe.common.signals import send_static_message
+
+PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
+WARNING_STYLE = styles.WARNING_STYLE
+LOGO_ELEMENT = m.Brand()
 
 
 class ImpactFunction(object):
@@ -83,6 +102,14 @@ class ImpactFunction(object):
         self._target_field = 'safe_ag'
         # The string to mark not affected value in the vector impact layer
         self._not_affected_value = 'Not Affected'
+        # Store provenances
+        self._provenances = Provenance()
+        # Start time
+        self._start_time = None
+
+        self.provenance.append_step(
+            'Initialize Impact Function',
+            'Impact function is being initialized')
 
     @classmethod
     def metadata(cls):
@@ -98,21 +125,6 @@ class ImpactFunction(object):
         used in contexts where no QGIS is present.
         """
         return cls.metadata().as_dict().get('function_type', None)
-
-    @classmethod
-    def function_category(cls):
-        """Property for function category based on hazard categories.
-
-         Function category could be 'single_event' or/and 'multiple_event'.
-         Single event data type means that the data is captured by a
-         single observation, while 'multiple_event' has been aggregated for
-         some observations.
-
-         :returns: The hazard categories that this function supports.
-         :rtype: list
-        """
-        return cls.metadata().as_dict().get('layer_requirements').get(
-            'hazard').get('hazard_categories')
 
     @property
     def user(self):
@@ -470,7 +482,12 @@ class ImpactFunction(object):
 
     def validate(self):
         """Validate things needed before running the analysis."""
+        # Set start time.
+        self._start_time = datetime.now()
         # Validate that input layers are valid
+        self.provenance.append_step(
+            'Validating Step',
+            'Impact function is validating the inputs.')
         if (self.hazard is None) or (self.exposure is None):
             message = tr(
                 'Ensure that hazard and exposure layers are all set before '
@@ -507,4 +524,130 @@ class ImpactFunction(object):
             class. We will just need to check if the function_type is
             'qgis2.0', it needs to have the extent set.
         # """
-        pass
+
+        # Fixme : When Analysis.py will not exist anymore, we will uncomment.
+        # self.message_pre_run()
+
+        self.provenance.append_step(
+            'Preparation Step',
+            'Impact function is being prepared to run the analysis.')
+
+    def generate_impact_keywords(self, extra_keywords=None):
+        """Obtain keywords for the impact layer.
+
+        :param extra_keywords: Additional keywords from the analysis.
+        :type extra_keywords: dict
+
+        :returns: Impact layer's keywords.
+        :rtype: dict
+        """
+        keywords = {
+            'layer_purpose': 'impact',
+            'keyword_version': inasafe_keyword_version,
+            'if_provenance': self.provenance
+        }
+        if extra_keywords:
+            keywords.update(extra_keywords)
+
+        return keywords
+
+    @property
+    def provenance(self):
+        """Get the provenances"""
+        return self._provenances
+
+    def set_if_provenance(self):
+        """Set IF provenance step for the IF."""
+        data = {
+            'start_time': self._start_time ,
+            'finish_time': datetime.now(),
+            'hazard_layer': self.hazard.keywords['title'],
+            'exposure_layer': self.exposure.keywords['title'],
+            'impact_function_id': self.metadata().as_dict()['id'],
+            'impact_function_version': '1.0',  # TODO: Add IF version.
+            'host_name': self.host_name,
+            'user': self.user,
+            'qgis_version': QGis.QGIS_VERSION,
+            'gdal_version': gdal.__version__,
+            'qt_version': QT_VERSION_STR,
+            'pyqt_version': PYQT_VERSION_STR,
+            'os': platform.version(),
+            'inasafe_version': get_version(),
+            # Temporary.
+            # TODO: Update it later.
+            'exposure_pixel_size': '',
+            'hazard_pixel_size': '',
+            'impact_pixel_size': '',
+            'analysis_extent': '',
+            'parameter': ''
+        }
+
+        self.provenance.append_if_provenance_step(
+            'IF Provenance',
+            'Impact function\'s provenance.',
+            timestamp=None,
+            data=data
+        )
+
+    def message_pre_run(self):
+        title = tr('Processing started')
+        details = tr(
+            'Please wait - processing may take a while depending on your '
+            'hardware configuration and the analysis extents and data.')
+        # trap for issue 706
+        try:
+            exposure_name = self.exposure.name
+            hazard_name = self.hazard.name
+            # aggregation layer could be set to AOI so no check for that
+        except AttributeError:
+            title = tr('No valid layers')
+            details = tr(
+                'Please ensure your hazard and exposure layers are set '
+                'in the question area and then press run again.')
+            message = m.Message(
+                LOGO_ELEMENT,
+                m.Heading(title, **WARNING_STYLE),
+                m.Paragraph(details))
+            raise NoValidLayerError(message)
+        text = m.Text(
+            tr('This analysis will calculate the impact of'),
+            m.EmphasizedText(hazard_name),
+            tr('on'),
+            m.EmphasizedText(exposure_name),
+        )
+        if self.aggregation is not None:
+            try:
+                aggregation_name = self.aggregation.name
+                # noinspection PyTypeChecker
+                text.add(m.Text(
+                    tr('and bullet list the results'),
+                    m.ImportantText(tr('aggregated by')),
+                    m.EmphasizedText(aggregation_name)))
+            except AttributeError:
+                pass
+        text.add('.')
+        message = m.Message(
+            LOGO_ELEMENT,
+            m.Heading(title, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(details),
+            m.Paragraph(text))
+        try:
+            # add which postprocessors will run when appropriated
+            post_processors_names = self.parameters['postprocessors']
+            post_processors = get_postprocessors(post_processors_names)
+            message.add(m.Paragraph(tr(
+                'The following postprocessors will be used:')))
+
+            bullet_list = m.BulletedList()
+
+            for name, post_processor in post_processors.iteritems():
+                bullet_list.add('%s: %s' % (
+                    get_postprocessor_human_name(name),
+                    post_processor.description()))
+            message.add(bullet_list)
+
+        except (TypeError, KeyError):
+            # TypeError is for when function_parameters is none
+            # KeyError is for when ['postprocessors'] is unavailable
+            pass
+        send_static_message(self, message)
