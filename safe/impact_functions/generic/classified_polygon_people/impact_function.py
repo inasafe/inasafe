@@ -443,8 +443,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         writer.addFeature(impacted_feature)
 
     def get_hazard_class_field_key(self, hazard):
-        """ Assign different impacted areas with their
-        respective level of impact(Affected, Not Affected, Medium)
+        """ Get the value of the class field key for the given hazard
 
         :param hazard: hazard feature
         :type hazard: QgsFeature
