@@ -366,8 +366,12 @@ class ImpactFunction(object):
         :param layer: Aggregation layer to be used for the analysis.
         :type layer: SafeLayer
         """
-        # add more robust checks here
-        self._aggregation = layer
+        if isinstance(layer, SafeLayer):
+            self._aggregation = layer
+        elif isinstance(layer, QgsMapLayer):
+            self._aggregation = SafeLayer(layer)
+        else:
+            self._aggregation = None
 
     @property
     def parameters(self):
