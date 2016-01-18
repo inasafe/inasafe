@@ -44,8 +44,6 @@ class EarthquakeBuildingFunction(
     def __init__(self):
         super(EarthquakeBuildingFunction, self).__init__()
         self.is_nexis = False
-        self.statistics_type = 'class_count'
-        self.statistics_classes = [0, 1, 2, 3]
         self.structure_class_field = None
 
         # From BuildingExposureReportMixin
@@ -240,6 +238,10 @@ class EarthquakeBuildingFunction(
         if len(attributes) < 1:
             raise ZeroImpactException()
         # Consolidate the small building usage groups < 25 to other
+        # Building threshold #2468
+        postprocessors = self.parameters['postprocessors']
+        building_postprocessors = postprocessors['BuildingType'][0]
+        self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
         impact_table = impact_summary = self.html_report()
@@ -273,8 +275,6 @@ class EarthquakeBuildingFunction(
             'legend_units': legend_units,
             'legend_title': legend_title,
             'target_field': self.target_field,
-            'statistics_type': self.statistics_type,
-            'statistics_classes': self.statistics_classes
         }
 
         self.set_if_provenance()

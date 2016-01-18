@@ -263,26 +263,6 @@ def age_postprocessor():
     return [age]
 
 
-def aggregation_categorical_postprocessor():
-    """Get aggregation categorical postprocessor selectors.
-
-    :return: List of boolean parameter.
-    :rtype: list
-    """
-    aggregation_categorical = BooleanParameter()
-    aggregation_categorical.name = tr('Aggregation categorical')
-    aggregation_categorical.value = True
-    aggregation_categorical.help_text = tr(
-        'Report breakdown by type/category.')
-    aggregation_categorical.description = tr(
-        'Enable the aggregation by categories. For example if you have '
-        'roads classified by type, you will get a report broken down by road '
-        'type for each aggregation area.'
-    )
-
-    return [aggregation_categorical]
-
-
 def road_type_postprocessor():
     """Get road-type parameter for postprocessing.
 
