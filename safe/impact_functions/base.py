@@ -107,6 +107,8 @@ class ImpactFunction(object):
         self._exposure = None
         # Layer used for aggregating results by area / district
         self._aggregation = None
+        # The best extents to use for the assessment
+        self._clip_parameters = None
         # Layer produced by the impact function
         self._impact = None
         # The question of the impact function
@@ -565,7 +567,7 @@ class ImpactFunction(object):
         # """
 
         # Fixme : When Analysis.py will not exist anymore, we will uncomment.
-        # self.message_pre_run()
+        # self.emit_pre_run_message()
 
         self.provenance.append_step(
             'Preparation Step',
@@ -628,7 +630,7 @@ class ImpactFunction(object):
             data=data
         )
 
-    def message_pre_run(self):
+    def emit_pre_run_message(self):
         """Inform the user about parameters before starting the processing."""
         title = tr('Processing started')
         details = tr(
@@ -693,7 +695,8 @@ class ImpactFunction(object):
             pass
         send_static_message(self, message)
 
-    def get_clip_parameters(self):
+    @property
+    def clip_parameters(self):
         """Calculate the best extents to use for the assessment.
 
         :returns: A dictionary consisting of:
@@ -712,177 +715,181 @@ class ImpactFunction(object):
         :raises: InsufficientOverlapError
         """
 
-        # Get the Hazard extents as an array in EPSG:4326
-        # noinspection PyTypeChecker
-        hazard_geoextent = extent_to_array(
-            self.hazard.extent(),
-            self.hazard.crs())
-        # Get the Exposure extents as an array in EPSG:4326
-        # noinspection PyTypeChecker
-        exposure_geoextent = extent_to_array(
-            self.exposure.extent(),
-            self.exposure.crs())
+        if self._clip_parameters is None:
 
-        # get the current view extents
-        viewport_extent = viewport_geo_array(self.map_canvas)
-
-        # Set the analysis extents based on user's desired behaviour
-        settings = QSettings()
-        mode_name = settings.value(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
-        # Default to using canvas extents if no case below matches
-        analysis_geoextent = viewport_extent
-        if mode_name == 'HazardExposureView':
-            analysis_geoextent = viewport_extent
-
-        elif mode_name == 'HazardExposure':
-            analysis_geoextent = None
-
-        elif mode_name == 'HazardExposureBookmark' or \
-                mode_name == 'HazardExposureBoundingBox':
-            if self.requested_extent is not None \
-                    and self.requested_extent_crs is not None:
-                # User has defined preferred extent, so use that
-                analysis_geoextent = array_to_geo_array(
-                    self.requested_extent,
-                    self.requested_extent_crs)
-
-        # Now work out the optimal extent between the two layers and
-        # the current view extent. The optimal extent is the intersection
-        # between the two layers and the viewport.
-        try:
-            # Extent is returned as an array [xmin,ymin,xmax,ymax]
-            # We will convert it to a QgsRectangle afterwards.
-            # If the user has defined a preferred analysis extent it will
-            # always be used, otherwise the data will be clipped to
-            # the viewport unless the user has deselected clip to viewport in
-            # options.
-            geo_extent = get_optimal_extent(
-                hazard_geoextent,
-                exposure_geoextent,
-                analysis_geoextent)
-
-        except InsufficientOverlapError, e:
+            # Get the Hazard extents as an array in EPSG:4326
             # noinspection PyTypeChecker
-            message = generate_insufficient_overlap_message(
-                e,
-                exposure_geoextent,
-                self.exposure.qgis_layer(),
-                hazard_geoextent,
-                self.hazard.qgis_layer(),
-                analysis_geoextent)
-            raise InsufficientOverlapError(message)
+            hazard_geoextent = extent_to_array(
+                self.hazard.extent(),
+                self.hazard.crs())
+            # Get the Exposure extents as an array in EPSG:4326
+            # noinspection PyTypeChecker
+            exposure_geoextent = extent_to_array(
+                self.exposure.extent(),
+                self.exposure.crs())
 
-        # TODO: move this to its own function
-        # Next work out the ideal spatial resolution for rasters
-        # in the analysis. If layers are not native WGS84, we estimate
-        # this based on the geographic extents
-        # rather than the layers native extents so that we can pass
-        # the ideal WGS84 cell size and extents to the layer prep routines
-        # and do all preprocessing in a single operation.
-        # All this is done in the function getWGS84resolution
-        adjusted_geo_extent = geo_extent
-        cell_size = None
-        extra_exposure_keywords = {}
-        if self.hazard.layer_type() == QgsMapLayer.RasterLayer:
-            # Hazard layer is raster
-            hazard_geo_cell_size, _ = get_wgs84_resolution(
-                self.hazard.qgis_layer())
+            # get the current view extents
+            viewport_extent = viewport_geo_array(self.map_canvas)
 
-            if self.exposure.layer_type() == QgsMapLayer.RasterLayer:
-                # In case of two raster layers establish common resolution
-                exposure_geo_cell_size, _ = get_wgs84_resolution(
-                    self.exposure.qgis_layer())
+            # Set the analysis extents based on user's desired behaviour
+            settings = QSettings()
+            mode_name = settings.value(
+                'inasafe/analysis_extents_mode',
+                'HazardExposureView')
+            # Default to using canvas extents if no case below matches
+            analysis_geoextent = viewport_extent
+            if mode_name == 'HazardExposureView':
+                analysis_geoextent = viewport_extent
 
-                # See issue #1008 - the flag below is used to indicate
-                # if the user wishes to prevent resampling of exposure data
-                keywords = self.exposure.keywords
-                allow_resampling_flag = True
-                if 'allow_resampling' in keywords:
-                    resampling_lower = keywords['allow_resampling'].lower()
-                    allow_resampling_flag = resampling_lower == 'true'
+            elif mode_name == 'HazardExposure':
+                analysis_geoextent = None
 
-                if hazard_geo_cell_size < exposure_geo_cell_size and \
-                        allow_resampling_flag:
-                    cell_size = hazard_geo_cell_size
+            elif mode_name == 'HazardExposureBookmark' or \
+                    mode_name == 'HazardExposureBoundingBox':
+                if self.requested_extent is not None \
+                        and self.requested_extent_crs is not None:
+                    # User has defined preferred extent, so use that
+                    analysis_geoextent = array_to_geo_array(
+                        self.requested_extent,
+                        self.requested_extent_crs)
 
-                    # Adjust the geo extent to coincide with hazard grids
+            # Now work out the optimal extent between the two layers and
+            # the current view extent. The optimal extent is the intersection
+            # between the two layers and the viewport.
+            try:
+                # Extent is returned as an array [xmin,ymin,xmax,ymax]
+                # We will convert it to a QgsRectangle afterwards.
+                # If the user has defined a preferred analysis extent it will
+                # always be used, otherwise the data will be clipped to
+                # the viewport unless the user has deselected clip to viewport in
+                # options.
+                geo_extent = get_optimal_extent(
+                    hazard_geoextent,
+                    exposure_geoextent,
+                    analysis_geoextent)
+
+            except InsufficientOverlapError, e:
+                # noinspection PyTypeChecker
+                message = generate_insufficient_overlap_message(
+                    e,
+                    exposure_geoextent,
+                    self.exposure.qgis_layer(),
+                    hazard_geoextent,
+                    self.hazard.qgis_layer(),
+                    analysis_geoextent)
+                raise InsufficientOverlapError(message)
+
+            # TODO: move this to its own function
+            # Next work out the ideal spatial resolution for rasters
+            # in the analysis. If layers are not native WGS84, we estimate
+            # this based on the geographic extents
+            # rather than the layers native extents so that we can pass
+            # the ideal WGS84 cell size and extents to the layer prep routines
+            # and do all preprocessing in a single operation.
+            # All this is done in the function getWGS84resolution
+            adjusted_geo_extent = geo_extent
+            cell_size = None
+            extra_exposure_keywords = {}
+            if self.hazard.layer_type() == QgsMapLayer.RasterLayer:
+                # Hazard layer is raster
+                hazard_geo_cell_size, _ = get_wgs84_resolution(
+                    self.hazard.qgis_layer())
+
+                if self.exposure.layer_type() == QgsMapLayer.RasterLayer:
+                    # In case of two raster layers establish common resolution
+                    exposure_geo_cell_size, _ = get_wgs84_resolution(
+                        self.exposure.qgis_layer())
+
+                    # See issue #1008 - the flag below is used to indicate
+                    # if the user wishes to prevent resampling of exposure data
+                    keywords = self.exposure.keywords
+                    allow_resampling_flag = True
+                    if 'allow_resampling' in keywords:
+                        resampling_lower = keywords['allow_resampling'].lower()
+                        allow_resampling_flag = resampling_lower == 'true'
+
+                    if hazard_geo_cell_size < exposure_geo_cell_size and \
+                            allow_resampling_flag:
+                        cell_size = hazard_geo_cell_size
+
+                        # Adjust the geo extent to coincide with hazard grids
+                        # so gdalwarp can do clipping properly
+                        adjusted_geo_extent = adjust_clip_extent(
+                            geo_extent,
+                            get_wgs84_resolution(self.hazard.qgis_layer()),
+                            hazard_geoextent)
+                    else:
+                        cell_size = exposure_geo_cell_size
+
+                        # Adjust extent to coincide with exposure grids
+                        # so gdalwarp can do clipping properly
+                        adjusted_geo_extent = adjust_clip_extent(
+                            geo_extent,
+                            get_wgs84_resolution(self.exposure.qgis_layer()),
+                            exposure_geoextent)
+
+                    # Record native resolution to allow rescaling of exposure data
+                    if not numpy.allclose(cell_size, exposure_geo_cell_size):
+                        extra_exposure_keywords['resolution'] = \
+                            exposure_geo_cell_size
+                else:
+                    if self.exposure.layer_type() != QgsMapLayer.VectorLayer:
+                        raise RuntimeError
+
+                    # In here we do not set cell_size so that in
+                    # _clip_raster_layer we can perform gdalwarp without
+                    # specifying cell size as we still want to have the original
+                    # pixel size.
+
+                    # Adjust the geo extent to be at the edge of the pixel in
                     # so gdalwarp can do clipping properly
                     adjusted_geo_extent = adjust_clip_extent(
                         geo_extent,
                         get_wgs84_resolution(self.hazard.qgis_layer()),
                         hazard_geoextent)
-                else:
-                    cell_size = exposure_geo_cell_size
 
-                    # Adjust extent to coincide with exposure grids
+                    # If exposure is vector data grow hazard raster layer to
+                    # ensure there are enough pixels for points at the edge of
+                    # the view port to be interpolated correctly. This requires
+                    # resolution to be available
+                    adjusted_geo_extent = get_buffered_extent(
+                        adjusted_geo_extent,
+                        get_wgs84_resolution(self.hazard.qgis_layer()))
+            else:
+                # Hazard layer is vector
+                # In case hazard data is a point data set, we will need to set
+                # the geo_extent to the extent of exposure and the analysis
+                # extent. We check the extent first if the point extent intersects
+                # with geo_extent.
+                if self.hazard.geometry_type() == QGis.Point:
+                    user_extent_enabled = (
+                        self.requested_extent is not None and
+                        self.requested_extent_crs is not None)
+                    if user_extent_enabled:
+                        # Get intersection between exposure and analysis extent
+                        geo_extent = bbox_intersection(
+                            exposure_geoextent, analysis_geoextent)
+                        # Check if the point is within geo_extent
+                        if bbox_intersection(
+                                geo_extent, exposure_geoextent) is None:
+                            raise InsufficientOverlapError
+
+                    else:
+                        geo_extent = exposure_geoextent
+                    adjusted_geo_extent = geo_extent
+
+                if self.exposure.layer_type() == QgsMapLayer.RasterLayer:
+                    # Adjust the geo extent to be at the edge of the pixel in
                     # so gdalwarp can do clipping properly
                     adjusted_geo_extent = adjust_clip_extent(
                         geo_extent,
                         get_wgs84_resolution(self.exposure.qgis_layer()),
                         exposure_geoextent)
 
-                # Record native resolution to allow rescaling of exposure data
-                if not numpy.allclose(cell_size, exposure_geo_cell_size):
-                    extra_exposure_keywords['resolution'] = \
-                        exposure_geo_cell_size
-            else:
-                if self.exposure.layer_type() != QgsMapLayer.VectorLayer:
-                    raise RuntimeError
+            self._clip_parameters = {
+                'extra_exposure_keywords': extra_exposure_keywords,
+                'adjusted_geo_extent': adjusted_geo_extent,
+                'cell_size': cell_size
+            }
 
-                # In here we do not set cell_size so that in
-                # _clip_raster_layer we can perform gdalwarp without
-                # specifying cell size as we still want to have the original
-                # pixel size.
-
-                # Adjust the geo extent to be at the edge of the pixel in
-                # so gdalwarp can do clipping properly
-                adjusted_geo_extent = adjust_clip_extent(
-                    geo_extent,
-                    get_wgs84_resolution(self.hazard.qgis_layer()),
-                    hazard_geoextent)
-
-                # If exposure is vector data grow hazard raster layer to
-                # ensure there are enough pixels for points at the edge of
-                # the view port to be interpolated correctly. This requires
-                # resolution to be available
-                adjusted_geo_extent = get_buffered_extent(
-                    adjusted_geo_extent,
-                    get_wgs84_resolution(self.hazard.qgis_layer()))
-        else:
-            # Hazard layer is vector
-            # In case hazard data is a point data set, we will need to set
-            # the geo_extent to the extent of exposure and the analysis
-            # extent. We check the extent first if the point extent intersects
-            # with geo_extent.
-            if self.hazard.geometry_type() == QGis.Point:
-                user_extent_enabled = (
-                    self.requested_extent is not None and
-                    self.requested_extent_crs is not None)
-                if user_extent_enabled:
-                    # Get intersection between exposure and analysis extent
-                    geo_extent = bbox_intersection(
-                        exposure_geoextent, analysis_geoextent)
-                    # Check if the point is within geo_extent
-                    if bbox_intersection(
-                            geo_extent, exposure_geoextent) is None:
-                        raise InsufficientOverlapError
-
-                else:
-                    geo_extent = exposure_geoextent
-                adjusted_geo_extent = geo_extent
-
-            if self.exposure.layer_type() == QgsMapLayer.RasterLayer:
-                # Adjust the geo extent to be at the edge of the pixel in
-                # so gdalwarp can do clipping properly
-                adjusted_geo_extent = adjust_clip_extent(
-                    geo_extent,
-                    get_wgs84_resolution(self.exposure.qgis_layer()),
-                    exposure_geoextent)
-
-        return {
-            'extra_exposure_keywords': extra_exposure_keywords,
-            'adjusted_geo_extent': adjusted_geo_extent,
-            'cell_size': cell_size
-        }
+        return self._clip_parameters

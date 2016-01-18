@@ -44,7 +44,6 @@ from safe.utilities.gis import extent_to_array
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import get_error_message
 from safe.utilities.clipper import clip_layer
-from safe.utilities.gis import convert_to_safe_layer
 from safe.messaging import styles
 from safe.common.signals import (
     analysis_error,
@@ -79,12 +78,6 @@ class Analysis(object):
 
     def __init__(self):
         """Constructor."""
-        # Please set Layers, Impact Functions, and Variables to run Analysis
-        # Layers
-        self._hazard = None
-        self._exposure = None
-        self._aggregation = None
-        self._impact_layer = None
 
         # Impact Function
         self.impact_function = None
@@ -93,13 +86,8 @@ class Analysis(object):
         self.clip_hard = None
         self.show_intermediate_layers = None
         self.run_in_thread_flag = None
-        self._map_canvas = None
-        self._user_extent = None
-        self._user_extent_crs = None
 
         self.force_memory = False
-
-        self.clip_parameters = None
 
         self.aggregator = None
         self.postprocessor_manager = None
@@ -113,7 +101,7 @@ class Analysis(object):
         :returns: Map canvas of the analysis.
         :rtype: QgsMapCanvas
         """
-        return self._map_canvas
+        return self.impact_function.map_canvas
 
     @map_canvas.setter
     def map_canvas(self, map_canvas):
@@ -123,19 +111,15 @@ class Analysis(object):
         :type map_canvas: QgsMapCanvas
 
         """
-        self._map_canvas = map_canvas
-
         # We transfer the map canvas to the IF.
         self.impact_function.map_canvas = map_canvas
 
     @property
     def user_extent(self):
-        return self._user_extent
+        return self.impact_function.requested_extent
 
     @user_extent.setter
     def user_extent(self, user_extent):
-        self._user_extent = user_extent
-
         # We transfer the extent to the IF as a list.
         extent = [
             user_extent.xMinimum(),
@@ -146,12 +130,10 @@ class Analysis(object):
 
     @property
     def user_extent_crs(self):
-        return self._user_extent_crs
+        return self.impact_function.requested_extent_crs
 
     @user_extent_crs.setter
     def user_extent_crs(self, user_extent_crs):
-        self._user_extent_crs = user_extent_crs
-
         # We transfer the CRS to the IF.
         self.impact_function.requested_extent_crs = user_extent_crs
 
@@ -163,7 +145,7 @@ class Analysis(object):
         :rtype: SafeLayer
 
         """
-        return self._hazard
+        return self.impact_function.hazard
 
     @hazard.setter
     def hazard(self, hazard_layer):
@@ -176,15 +158,6 @@ class Analysis(object):
         if self.impact_function is None:
             raise Exception('Impact Function not found.')
 
-        if isinstance(hazard_layer, SafeLayer):
-            self._hazard = hazard_layer
-        else:
-            if self.impact_function.requires_clipping:
-                self._hazard = SafeLayer(convert_to_safe_layer(hazard_layer))
-            else:
-                # convert for new style impact function
-                self._hazard = SafeLayer(hazard_layer)
-
         # We transfer the layer to the IF.
         self.impact_function.hazard = hazard_layer
 
@@ -196,7 +169,7 @@ class Analysis(object):
         :rtype: SafeLayer
 
         """
-        return self._exposure
+        return self.impact_function.exposure
 
     @exposure.setter
     def exposure(self, exposure_layer):
@@ -209,15 +182,6 @@ class Analysis(object):
         if self.impact_function is None:
             raise Exception('Impact Function not found.')
 
-        if isinstance(exposure_layer, SafeLayer):
-            self._exposure = exposure_layer
-        else:
-            if self.impact_function.requires_clipping:
-                self._exposure = SafeLayer(convert_to_safe_layer(exposure_layer))
-            else:
-                # convert for new style impact function
-                self._exposure = SafeLayer(exposure_layer)
-
         # We transfer the layer to the IF.
         self.impact_function.exposure = exposure_layer
 
@@ -229,7 +193,7 @@ class Analysis(object):
         :rtype: SafeLayer
 
         """
-        return self._aggregation
+        return self.impact_function.aggregation
 
     @aggregation.setter
     def aggregation(self, aggregation_layer):
@@ -239,23 +203,16 @@ class Analysis(object):
         :type aggregation_layer: QgsMapLayer,SafeLayer
 
         """
-        if isinstance(aggregation_layer, SafeLayer):
-            self._aggregation = aggregation_layer
-        elif isinstance(aggregation_layer, QgsMapLayer):
-            self._aggregation = SafeLayer(aggregation_layer)
-        else:
-            self._aggregation = None
-
-        # We transfer the layer to the IF.
-        if self._aggregation is None:
-            self.impact_function.aggregation = None
-        else:
+        if isinstance(aggregation_layer, SafeLayer) or \
+                isinstance(aggregation_layer, QgsMapLayer):
             self.impact_function.aggregation = aggregation_layer
+        else:
+            self.impact_function.aggregation = None
 
     @property
     def impact_layer(self):
         """Obtain impact layer from the runner."""
-        return self._impact_layer
+        return self.impact_function.impact_layer
 
     @impact_layer.setter
     def impact_layer(self, layer):
@@ -264,43 +221,18 @@ class Analysis(object):
         :param layer: The impact layer that would be assigned.
         :type layer: SAFE Layer, QgsMapLayer, QgsWrapper
         """
-        self._impact_layer = layer
-
-    def get_clip_parameters(self):
-        """Calculate the best extents to use for the assessment.
-
-        :returns: A dictionary consisting of:
-
-            * extra_exposure_keywords: dict - any additional keywords that
-                should be written to the exposure layer. For example if
-                rescaling is required for a raster, the original resolution
-                can be added to the keywords file.
-            * adjusted_geo_extent: list - [xmin, ymin, xmax, ymax] - the best
-                extent that can be used given the input datasets and the
-                current viewport extents.
-            * cell_size: float - the cell size that is the best of the
-                hazard and exposure rasters.
-        :rtype: dict, QgsRectangle, float, QgsMapLayer, QgsRectangle,
-            QgsMapLayer
-        :raises: InsufficientOverlapError
-
-        .. note::Delegates to get_clip_parameters in safe.impact_functions.base
-
-        FIXME, it's a bridge until we remove this file.
-        This function is called by the dock.
-        """
-        return self.impact_function.get_clip_parameters()
+        # There is not setter for impact layer as we are outside of the IF.
+        self.impact_function._impact_layer = layer
 
     def setup_aggregator(self):
         """Create an aggregator for this analysis run."""
         # Refactor from dock.prepare_aggregator
-        if self.clip_parameters is None:
-            raise Exception(tr('Clip parameters are not set!'))
+        clip_parameters = self.impact_function.clip_parameters
         try:
             buffered_geo_extent = self.impact_layer.extent
         except AttributeError:
             # if we have no runner, set dummy extent
-            buffered_geo_extent = self.clip_parameters['adjusted_geo_extent']
+            buffered_geo_extent = clip_parameters['adjusted_geo_extent']
 
         if self.aggregation is not None:
             qgis_layer = self.aggregation.qgis_layer()
@@ -319,13 +251,13 @@ class Analysis(object):
         # Refactor from dock.accept()
 
         # Fixme : temporary call from here until we delete this file.
-        self.impact_function.message_pre_run()
+        self.impact_function.emit_pre_run_message()
 
         # Find out what the usable extent and cell size are
         try:
-            self.clip_parameters = self.get_clip_parameters()
-            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
-            cell_size = self.clip_parameters['cell_size']
+            clip_parameters = self.impact_function.clip_parameters
+            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
+            cell_size = clip_parameters['cell_size']
         except InsufficientOverlapError as e:
             raise e
         except (RuntimeError, AttributeError) as e:
@@ -413,10 +345,11 @@ class Analysis(object):
         # Get the hazard and exposure layers selected in the combos
         # and other related parameters needed for clipping.
         try:
-            extra_exposure_keywords = self.clip_parameters[
+            clip_parameters = self.impact_function.clip_parameters
+            extra_exposure_keywords = clip_parameters[
                 'extra_exposure_keywords']
-            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
-            cell_size = self.clip_parameters['cell_size']
+            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
+            cell_size = clip_parameters['cell_size']
         except:
             raise
         # Find out what clipping behaviour we have - see #2210
@@ -526,7 +459,8 @@ class Analysis(object):
             # clipping isn't needed, but we need to set up extent
             self.aggregator.set_layers(
                 self.hazard.qgis_layer(), self.exposure.qgis_layer())
-            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
+            clip_parameters = self.impact_function.clip_parameters
+            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
             self.impact_function.requested_extent = adjusted_geo_extent
 
         # Set input layers
