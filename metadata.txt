@@ -15,7 +15,7 @@ qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=3.2.5
+version=3.2.6
 # alpha, beta, rc or final
 status=final
 
@@ -25,18 +25,9 @@ status=final
 # Optional items:
 
 changelog=
-        3.2.5
-        Adds data source and CRS to the keywords list in dock
-        Wizard: ged rid of eval() statements #2329
-        Use Date Picker in Keywords Wizard #2499
-        Fix Keywords Wizard crashes on repeated use #2514
-        Fix Crash Minidump when try to use InaSAFE keyword editor twice #2467
-        Fix #2515 BUG : Can Not Use the Wizard (because No module named qgsdatetimeedit)
-        Fix serializing classified raster values    
-        Fix #2504 - exception raised when messaging cell contains nested table or bullet list due to slashes param not being accepted by table class to_html() method.
-        Fix Python error in PDF generator and Open in Composer using IFCW #2532
-        Fix Python bug when creating a pdf map #2523
-
+        3.2.6
+        Add handler if found invalid xml file for version 3.2
+        Add test data for layer with keyword version 3.3 and add unit test for it.
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
