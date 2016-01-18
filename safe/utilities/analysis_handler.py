@@ -337,7 +337,6 @@ class AnalysisHandler(QObject):
         # Variables
         self.analysis.clip_hard = self.clip_hard
         self.analysis.show_intermediate_layers = self.show_intermediate_layers
-        self.analysis.run_in_thread_flag = self.run_in_thread_flag
         self.analysis.map_canvas = self.iface.mapCanvas()
 
         # Extent

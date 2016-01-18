@@ -109,6 +109,12 @@ class ImpactFunction(object):
         self._aggregation = None
         # The best extents to use for the assessment
         self._clip_parameters = None
+        # Clip features that extend beyond the extents.
+        self._clip_hard = False
+        # Show intermediate layers.
+        self._show_intermediate_layers = False
+        # Force memory.
+        self._force_memory = False
         # Layer produced by the impact function
         self._impact = None
         # The question of the impact function
@@ -386,6 +392,69 @@ class ImpactFunction(object):
         :type parameters: dict
         """
         self._parameters = parameters
+
+    @property
+    def clip_hard(self):
+        """Property if we need to clip features which are beyond the extents.
+
+        :return: The value.
+        :rtype: bool
+        """
+        return self._clip_hard
+
+    @clip_hard.setter
+    def clip_hard(self, clip_hard):
+        """Setter if we need to clip features which are beyond the extents.
+
+        :param clip_hard: The value.
+        :type clip_hard: bool
+        """
+        if isinstance(clip_hard, bool):
+            self._clip_hard = clip_hard
+        else:
+            raise Exception('clip_hard is not a boolean.')
+
+    @property
+    def show_intermediate_layers(self):
+        """Property if we show intermediate layers.
+
+        :return: The value.
+        :rtype: bool
+        """
+        return self._show_intermediate_layers
+
+    @show_intermediate_layers.setter
+    def show_intermediate_layers(self, show_intermediate_layers):
+        """Setter if we show intermediate layers.
+
+        :param show_intermediate_layers: The value.
+        :type show_intermediate_layers: bool
+        """
+        if isinstance(show_intermediate_layers, bool):
+            self._show_intermediate_layers = show_intermediate_layers
+        else:
+            raise Exception('show_intermediate_layers is not a boolean.')
+
+    @property
+    def force_memory(self):
+        """Property if we force memory.
+
+        :return: The value.
+        :rtype: bool
+        """
+        return self._force_memory
+
+    @force_memory.setter
+    def force_memory(self, flag):
+        """Setter if we force memory.
+
+        :param flag: The value.
+        :type flag: bool
+        """
+        if isinstance(flag, bool):
+            self._force_memory = flag
+        else:
+            raise Exception('force_memory is not a boolean.')
 
     @property
     def impact(self):

@@ -1267,7 +1267,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Variables
         analysis.clip_hard = self.clip_hard
         analysis.show_intermediate_layers = self.show_intermediate_layers
-        analysis.run_in_thread_flag = self.run_in_thread_flag
         analysis.map_canvas = self.iface.mapCanvas()
         analysis.user_extent = self.extent.user_extent
         analysis.user_extent_crs = self.extent.user_extent_crs

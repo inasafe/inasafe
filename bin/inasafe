@@ -267,7 +267,6 @@ def analysis_setup(command_line_arguments, hazard, exposure):
     analysis.exposure = exposure
     analysis.clip_hard = False
     analysis.show_intermediate_layers = False
-    analysis.run_in_thread_flag = False
     analysis.map_canvas = CANVAS
     # QSetting context
     settings = QSettings()

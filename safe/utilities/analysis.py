@@ -82,17 +82,32 @@ class Analysis(object):
         # Impact Function
         self.impact_function = None
 
-        # Variables
-        self.clip_hard = None
-        self.show_intermediate_layers = None
-        self.run_in_thread_flag = None
-
-        self.force_memory = False
-
         self.aggregator = None
         self.postprocessor_manager = None
 
-        self.num_dynamic_signals = 3
+    @property
+    def clip_hard(self):
+        return self.impact_function.clip_hard
+
+    @clip_hard.setter
+    def clip_hard(self, clip_hard):
+        self.impact_function.clip_hard = clip_hard
+
+    @property
+    def show_intermediate_layers(self):
+        return self.impact_function.show_intermediate_layers
+
+    @show_intermediate_layers.setter
+    def show_intermediate_layers(self, show_intermediate_layers):
+        self.impact_function.show_intermediate_layers = show_intermediate_layers
+
+    @property
+    def force_memory(self):
+        return self.impact_function.force_memory
+
+    @force_memory.setter
+    def force_memory(self, force_memory):
+        self.impact_function.force_memory = force_memory
 
     @property
     def map_canvas(self):
