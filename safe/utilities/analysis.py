@@ -212,7 +212,7 @@ class Analysis(object):
     @property
     def impact_layer(self):
         """Obtain impact layer from the runner."""
-        return self.impact_function.impact_layer
+        return self.impact_function.impact
 
     @impact_layer.setter
     def impact_layer(self, layer):
@@ -222,7 +222,7 @@ class Analysis(object):
         :type layer: SAFE Layer, QgsMapLayer, QgsWrapper
         """
         # There is not setter for impact layer as we are outside of the IF.
-        self.impact_function._impact_layer = layer
+        self.impact_function._impact = layer
 
     def setup_aggregator(self):
         """Create an aggregator for this analysis run."""

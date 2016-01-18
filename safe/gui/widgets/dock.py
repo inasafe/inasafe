@@ -1157,8 +1157,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_next_analysis_extent()
             self.analysis = self.prepare_analysis()
             self.analysis.setup_analysis()
+            clip_parameters = self.analysis.impact_function.clip_parameters
             self.extent.show_last_analysis_extent(
-                self.analysis.clip_parameters['adjusted_geo_extent'])
+                clip_parameters['adjusted_geo_extent'])
             # Start the analysis
             self.analysis.run_analysis()
         except InsufficientOverlapError as e:
