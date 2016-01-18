@@ -44,7 +44,12 @@ from safe.impact_reports.polygon_population_exposure_report_mixin import \
 from safe.impact_functions.core import no_population_impact_message
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 import safe.messaging as m
-from safe.common.utilities import format_int
+from safe.common.utilities import (
+    format_int,
+    humanize_class,
+    create_classes,
+    create_label
+)
 from safe.impact_functions.core import (
     population_rounding
 )
@@ -187,17 +192,45 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Define style for the impact layer
         transparent_color = QColor()
         transparent_color.setAlpha(0)
-        style_classes = [
-            dict(
-                label=tr('Not Affected'), value=1, colour='#1EFC7C',
-                transparency=0, size=0.5),
-            dict(
-                label=tr('Medium Affected'), value=2, colour='#FFA500',
-                transparency=0, size=0.5),
-            dict(
-                label=tr('Affected'), value=3,
-                border_color='#F31A1C', colour='#F31A1C',
-                transparency=0, size=0.5)]
+        
+        colours = ['#1EFC7C', '#FFA500', '#F31A1C']
+        affected_populations = self.affected_population.values()
+        affected_populations.sort()
+
+        classes = affected_populations
+        interval_classes = humanize_class(classes)
+        # Define style info for output polygons showing population counts
+        style_classes = []
+        for i in xrange(len(colours)):
+            style_class = dict()
+            style_class['label'] = create_label(interval_classes[i])
+            if i == 0:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Low Population %i ' % classes[i]))
+            elif i == 1:
+                label = create_label(
+                    interval_classes[i],
+                    tr('Medium Population %i ' % classes[i]))
+            elif i == 2:
+                label = create_label(
+                    interval_classes[i],
+                    tr('High Population %i ' % classes[i]))
+            else:
+                label = create_label(interval_classes[i])
+
+            if i == 0:
+                transparency = 0
+            else:
+                transparency = 0
+
+            style_class['label'] = label
+            style_class['value'] = (i + 1)
+            style_class['quantity'] = classes[i]
+            style_class['colour'] = colours[i]
+            style_class['transparency'] = transparency
+            style_classes.append(style_class)
+
         style_info = dict(
             target_field=self.target_field,
             style_classes=style_classes,
@@ -564,6 +597,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         :returns population_number: Number of Population
         :rtype population_number:int
+
+
+        :raises:
+            * Exception - When exposure data does not containing
+            expected values
         """
         if target_geometry is not None and feature is not None:
 
@@ -581,8 +619,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                            'exposure population type(Number). %s was found '
                            'instead of a Number' %
                            (population_total))
-            # noinspection PyExceptionInherit
-            raise InaSAFEError(message)
+                # noinspection PyExceptionInherit
+                raise InaSAFEError(message)
         else:
             population_number = 0
 
