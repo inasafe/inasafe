@@ -85,7 +85,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         checklist.add(
             tr('Who are the vulnerable people in the population and why?'))
         checklist.add(tr('How will warnings be disseminated?'))
-        checklist.add(tr('What are people/s likely movements?'))
+        checklist.add(tr('What are people\'s likely movements?'))
         checklist.add(
             tr('What are the security factors for the affected population?'))
         checklist.add(
@@ -640,13 +640,39 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             align='right'))
 
         hazard_table.add(head_row)
-        for name, value in self.hazard_levels.iteritems():
+        for key, value in self.hazard_levels.iteritems():
             row = m.Row()
-            row.add(m.Cell(name))
+            name = self.hazard_class_mapping[key][0]
+            row.add(m.Cell(name, header=True))
             value = format_int(population_rounding(value))
 
             row.add(m.Cell(value, align='right'))
             hazard_table.add(row)
+        # Total affected population
+        row = m.Row()
+        row.add(m.Cell(
+            tr('Total affected population'),
+            header=True))
+        affected = format_int(
+            population_rounding(self.total_affected_population))
+        row.add(m.Cell(affected, align='right'))
+        hazard_table.add(row)
+
+        # Non affected population
+        row = m.Row()
+        unaffected = format_int(
+            population_rounding(self.unaffected_population))
+        row.add(m.Cell(tr('Unaffected population'), header=True))
+        row.add(m.Cell(unaffected, align='right'))
+        hazard_table.add(row)
+
+        # Total Population
+        row = m.Row()
+        total_population = format_int(
+            population_rounding(self.total_population))
+        row.add(m.Cell(tr('Total population'), header=True))
+        row.add(m.Cell(total_population, align='right'))
+        hazard_table.add(row)
 
         return hazard_table
 

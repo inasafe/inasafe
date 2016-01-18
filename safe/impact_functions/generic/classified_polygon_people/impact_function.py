@@ -42,14 +42,13 @@ from safe.impact_functions.generic.classified_polygon_people\
 from safe.impact_reports.polygon_population_exposure_report_mixin import \
     PolygonPopulationExposureReportMixin
 from safe.impact_functions.core import no_population_impact_message
-from safe.common.exceptions import ZeroImpactException
+from safe.common.exceptions import InaSAFEError, ZeroImpactException
 import safe.messaging as m
 from safe.common.utilities import format_int
 from safe.impact_functions.core import (
     population_rounding
 )
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-from safe.utilities.keyword_io import definition
 from safe.messaging import styles
 
 
@@ -73,6 +72,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         self.all_areas_population = {}
         self.areas_names = {}
         self.hazard_levels = {}
+        self.hazard_class_mapping = {}
 
     def notes(self):
         """Return the notes section of the report.
@@ -455,10 +455,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         hazard_class_field = self.hazard.keyword('field')
         hazard_attribute = hazard[hazard_class_field]
-        hazard_class_mapping = self.hazard.keyword('value_map')
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
 
         hazard_attribute_key = None
-        for key, value in hazard_class_mapping.iteritems():
+        for key, value in self.hazard_class_mapping.iteritems():
             if value[0] == hazard_attribute:
                 hazard_attribute_key = key
                 break
@@ -535,6 +535,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             self.affected_population[area_id] = number_people_affected
 
         total_affected_population = self.total_affected_population
+        unaffected_population = self.total_population -\
+                                self.total_affected_population
+        self.unaffected_population = unaffected_population
 
         if total_affected_population == 0:
             message = no_population_impact_message(self.question)
@@ -569,8 +572,17 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
             population_total = feature.attribute(
                 area_population_attribute)
-            population_number = (target_area / total_area) * population_total
-            population_number = round(population_number, 0)
+            try:
+                population_number = (target_area / total_area) *\
+                                    population_total
+                population_number = round(population_number, 0)
+            except Exception as e:
+                message = ('Exposure data does not contain the expected '
+                           'exposure population type(Number). %s was found '
+                           'instead of a Number' %
+                           (population_total))
+            # noinspection PyExceptionInherit
+            raise InaSAFEError(message)
         else:
             population_number = 0
 
