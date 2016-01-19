@@ -831,8 +831,8 @@ class ImpactFunction(object):
                 # We will convert it to a QgsRectangle afterwards.
                 # If the user has defined a preferred analysis extent it will
                 # always be used, otherwise the data will be clipped to
-                # the viewport unless the user has deselected clip to viewport in
-                # options.
+                # the viewport unless the user has deselected clip to viewport
+                #  in options.
                 geo_extent = get_optimal_extent(
                     hazard_geoextent,
                     exposure_geoextent,
@@ -898,7 +898,7 @@ class ImpactFunction(object):
                             get_wgs84_resolution(self.exposure.qgis_layer()),
                             exposure_geoextent)
 
-                    # Record native resolution to allow rescaling of exposure data
+                    # Record native resolution to allow rescaling of exposure
                     if not numpy.allclose(cell_size, exposure_geo_cell_size):
                         extra_exposure_keywords['resolution'] = \
                             exposure_geo_cell_size
@@ -908,8 +908,8 @@ class ImpactFunction(object):
 
                     # In here we do not set cell_size so that in
                     # _clip_raster_layer we can perform gdalwarp without
-                    # specifying cell size as we still want to have the original
-                    # pixel size.
+                    # specifying cell size as we still want to have the
+                    # original pixel size.
 
                     # Adjust the geo extent to be at the edge of the pixel in
                     # so gdalwarp can do clipping properly
@@ -929,8 +929,8 @@ class ImpactFunction(object):
                 # Hazard layer is vector
                 # In case hazard data is a point data set, we will need to set
                 # the geo_extent to the extent of exposure and the analysis
-                # extent. We check the extent first if the point extent intersects
-                # with geo_extent.
+                # extent. We check the extent first if the point extent
+                # intersects with geo_extent.
                 if self.hazard.geometry_type() == QGis.Point:
                     user_extent_enabled = (
                         self.requested_extent is not None and

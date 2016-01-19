@@ -98,8 +98,8 @@ class Analysis(object):
         return self.impact_function.show_intermediate_layers
 
     @show_intermediate_layers.setter
-    def show_intermediate_layers(self, show_intermediate_layers):
-        self.impact_function.show_intermediate_layers = show_intermediate_layers
+    def show_intermediate_layers(self, flag):
+        self.impact_function.show_intermediate_layers = flag
 
     @property
     def force_memory(self):
