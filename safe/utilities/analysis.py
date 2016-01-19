@@ -176,7 +176,8 @@ class Analysis(object):
             self._exposure = exposure_layer
         else:
             if self.impact_function.requires_clipping:
-                self._exposure = SafeLayer(convert_to_safe_layer(exposure_layer))
+                self._exposure = SafeLayer(convert_to_safe_layer(
+                        exposure_layer))
             else:
                 # convert for new style impact function
                 self._exposure = SafeLayer(exposure_layer)
