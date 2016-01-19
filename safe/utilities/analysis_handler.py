@@ -35,7 +35,10 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution)
-from safe.utilities.gis import extent_string_to_array, read_impact_layer
+from safe.utilities.gis import (
+    extent_string_to_array,
+    read_impact_layer,
+    viewport_geo_array)
 from safe.utilities.resources import (
     resources_path,
     resource_url)
@@ -337,7 +340,8 @@ class AnalysisHandler(QObject):
         # Variables
         self.analysis.clip_hard = self.clip_hard
         self.analysis.show_intermediate_layers = self.show_intermediate_layers
-        self.analysis.map_canvas = self.iface.mapCanvas()
+        viewport = viewport_geo_array(self.iface.mapCanvas())
+        self.analysis.viewport_extent = viewport
 
         # Extent
         self.analysis.user_extent = self.extent.user_extent

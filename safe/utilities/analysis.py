@@ -110,24 +110,13 @@ class Analysis(object):
         self.impact_function.force_memory = force_memory
 
     @property
-    def map_canvas(self):
-        """Property for map canvas.
+    def viewport_extent(self):
+        return self.impact_function.viewport_extent
 
-        :returns: Map canvas of the analysis.
-        :rtype: QgsMapCanvas
-        """
-        return self.impact_function.map_canvas
-
-    @map_canvas.setter
-    def map_canvas(self, map_canvas):
-        """Setter for the map canvas for the analysis.
-
-        :param map_canvas: The map canvas.
-        :type map_canvas: QgsMapCanvas
-
-        """
-        # We transfer the map canvas to the IF.
-        self.impact_function.map_canvas = map_canvas
+    @viewport_extent.setter
+    def viewport_extent(self, viewport_extent):
+        # We transfer the viewport extent to the IF.
+        self.impact_function.viewport_extent = viewport_extent
 
     @property
     def user_extent(self):

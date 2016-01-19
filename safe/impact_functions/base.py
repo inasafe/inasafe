@@ -47,7 +47,6 @@ from safe.utilities.i18n import tr
 from safe.utilities.gis import (
     convert_to_safe_layer,
     get_wgs84_resolution,
-    viewport_geo_array,
     array_to_geo_array,
     extent_to_array,
     get_optimal_extent)
@@ -90,8 +89,8 @@ class ImpactFunction(object):
         self._requested_extent = None
         # Requested extent's CRS
         self._requested_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        # The current map canvas
-        self._map_canvas = None
+        # The current viewport extent of the map canvas
+        self._viewport_extent = None
         # Actual extent to use - Read Only
         # For 'old-style' IF we do some manipulation to the requested extent
         self._actual_extent = None
@@ -234,24 +233,25 @@ class ImpactFunction(object):
         return self._actual_extent_crs
 
     @property
-    def map_canvas(self):
-        """Property for map canvas.
+    def viewport_extent(self):
+        """Property for the viewport extent of the map canvas.
 
-        :returns: Map canvas of the analysis.
-        :rtype: QgsMapCanvas
+        :returns: Viewport extent in the form [xmin, ymin, xmax, ymax] where
+            all coordinates provided are in Geographic / EPSG:4326.
+        :rtype: list
+        """
+        return self._viewport_extent
+
+    @viewport_extent.setter
+    def viewport_extent(self, viewport_extent):
+        """Setter for the viewport extent of the map canvas.
+
+        :param viewport_extent: Viewport extent in the form
+            [xmin, ymin, xmax, ymax] in EPSG:4326.
+        :type viewport_extent: list
 
         """
-        return self._map_canvas
-
-    @map_canvas.setter
-    def map_canvas(self, map_canvas):
-        """Setter for the map canvas for the analysis.
-
-        :param map_canvas: The map canvas.
-        :type map_canvas: QgsMapCanvas
-
-        """
-        self._map_canvas = map_canvas
+        self._viewport_extent = viewport_extent
 
     @property
     def callback(self):
@@ -801,18 +801,15 @@ class ImpactFunction(object):
                 self.exposure.extent(),
                 self.exposure.crs())
 
-            # get the current view extents
-            viewport_extent = viewport_geo_array(self.map_canvas)
-
             # Set the analysis extents based on user's desired behaviour
             settings = QSettings()
             mode_name = settings.value(
                 'inasafe/analysis_extents_mode',
                 'HazardExposureView')
             # Default to using canvas extents if no case below matches
-            analysis_geoextent = viewport_extent
+            analysis_geoextent = self.viewport_extent
             if mode_name == 'HazardExposureView':
-                analysis_geoextent = viewport_extent
+                analysis_geoextent = self.viewport_extent
 
             elif mode_name == 'HazardExposure':
                 analysis_geoextent = None

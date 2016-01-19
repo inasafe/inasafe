@@ -48,6 +48,7 @@ from safe.defaults import (
     disclaimer,
     default_north_arrow_path)
 from safe.utilities.gis import (
+    viewport_geo_array,
     extent_string_to_array,
     read_impact_layer,
     vector_geometry_string)
@@ -1267,7 +1268,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Variables
         analysis.clip_hard = self.clip_hard
         analysis.show_intermediate_layers = self.show_intermediate_layers
-        analysis.map_canvas = self.iface.mapCanvas()
+        viewport = viewport_geo_array(self.iface.mapCanvas())
+        analysis.viewport_extent = viewport
         analysis.user_extent = self.extent.user_extent
         analysis.user_extent_crs = self.extent.user_extent_crs
 
