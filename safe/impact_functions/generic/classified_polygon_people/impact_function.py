@@ -192,41 +192,25 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Define style for the impact layer
         transparent_color = QColor()
         transparent_color.setAlpha(0)
-        
-        colours = ['#1EFC7C', '#FFA500', '#F31A1C']
-        affected_populations = self.affected_population.values()
-        affected_populations.sort()
 
-        classes = affected_populations
-        interval_classes = humanize_class(classes)
+        colours = ['#1EFC7C', '#FFA500', '#F31A1C']
+        classes = self.hazard_class_mapping.values()
+        if len(classes) == 3:
+            colours = ['#1EFC7C', '#FFA500', '#F31A1C']
+        elif len(classes) == 2:
+            colours = ['#1EFC7C', '#F31A1C']
+        else:
+            colours = ['#1EFC7C', '#FFA500', '#F31A1C']
+
         # Define style info for output polygons showing population counts
         style_classes = []
-        for i in xrange(len(colours)):
+        for i in xrange(len(classes)):
             style_class = dict()
-            style_class['label'] = create_label(interval_classes[i])
-            if i == 0:
-                label = create_label(
-                    interval_classes[i],
-                    tr('Low Population %i ' % classes[i]))
-            elif i == 1:
-                label = create_label(
-                    interval_classes[i],
-                    tr('Medium Population %i ' % classes[i]))
-            elif i == 2:
-                label = create_label(
-                    interval_classes[i],
-                    tr('High Population %i ' % classes[i]))
-            else:
-                label = create_label(interval_classes[i])
-
-            if i == 0:
-                transparency = 0
-            else:
-                transparency = 0
-
+            index = (len(classes) - i - 1)
+            label = classes[index][0]
+            transparency = 0
             style_class['label'] = label
             style_class['value'] = (i + 1)
-            style_class['quantity'] = classes[i]
             style_class['colour'] = colours[i]
             style_class['transparency'] = transparency
             style_classes.append(style_class)
@@ -528,9 +512,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             elif hazard_attribute_key == "high":
                 impacted_feature.setAttributes(feature.attributes() + [3])
             elif hazard_attribute_key == "wet":
-                impacted_feature.setAttributes(feature.attributes() + [3])
-            elif hazard_attribute_key == "dry":
                 impacted_feature.setAttributes(feature.attributes() + [1])
+            elif hazard_attribute_key == "dry":
+                impacted_feature.setAttributes(feature.attributes() + [2])
         else:
             unaffected_feature.setAttributes(feature.attributes() + [1])
             impacted_feature.setAttributes(feature.attributes() + [3])
