@@ -211,6 +211,8 @@ class FloodEvacuationVectorHazardFunction(
 
         self.total_population = int(
             numpy.nansum(self.exposure.layer.get_data(scaling=False)))
+        self.unaffected_population = (
+            self.total_population - self.total_affected_population)
 
         self.minimum_needs = [
             parameter.serialize() for parameter in
