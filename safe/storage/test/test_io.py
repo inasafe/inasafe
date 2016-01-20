@@ -361,8 +361,8 @@ class TestIO(unittest.TestCase):
         V = read_layer(filename)
 
         # Add some additional keywords
-        V.keywords['kw1'] = 'value1'
-        V.keywords['kw2'] = 'value2'
+        V.keywords['keyword_version'] = '3.2'
+        V.keywords['title'] = 'test'
 
         # Check string representation of vector class
         assert str(V).startswith('Vector data')
@@ -375,8 +375,8 @@ class TestIO(unittest.TestCase):
         data = V_ref.get_data()
         projection = V_ref.get_projection()
 
-        assert 'kw1' in V_ref.get_keywords()
-        assert 'kw2' in V_ref.get_keywords()
+        assert 'keyword_version' in V_ref.get_keywords()
+        assert 'title' in V_ref.get_keywords()
 
         # Create new object from test data
         v_new = Vector(data=data, projection=projection, geometry=geometry,
@@ -423,8 +423,9 @@ class TestIO(unittest.TestCase):
         v_new.write_to_file(tmp_filename)
 
         v_tmp = read_layer(tmp_filename)
+        # Need to set this since we always use the latest version.
+        v_tmp.keywords['keyword_version'] = V_ref.keywords['keyword_version']
         assert v_tmp == V_ref
-        assert not v_tmp != V_ref
 
         # Check that equality raises exception when type is wrong
         try:
@@ -436,6 +437,8 @@ class TestIO(unittest.TestCase):
             raise Exception(msg)
 
         # Check that differences in keywords affect comparison
+        # Need to set this since we always use the latest version.
+        v_new.keywords['keyword_version'] = V_ref.keywords['keyword_version']
         assert v_new == V_ref
         v_tmp.keywords['kw2'] = 'blah'
         assert not v_tmp == V_ref
@@ -585,10 +588,14 @@ class TestIO(unittest.TestCase):
 
         v = Vector(geometry=test_data[0], geometry_type='point')
         assert v.is_point_data
+        # The layer is never been writen, so the keyword_version is missing
+        v.keywords = v_ref.keywords
         assert v_ref == v
 
         v = Vector(geometry=test_data[0], geometry_type=1)
         assert v.is_point_data
+        # The layer is never been writen, so the keyword_version is missing
+        v.keywords = v_ref.keywords
         assert v_ref == v
 
         # Line data
@@ -607,6 +614,8 @@ class TestIO(unittest.TestCase):
                               rtol=1.0e-12, atol=1.0e-12)
 
         v = Vector(geometry=test_data, geometry_type=2)
+        # The layer is never been writen, so the keyword_version is missing
+        v.keywords = v_ref.keywords
         assert v == v_ref
 
         # Polygon data
@@ -625,9 +634,13 @@ class TestIO(unittest.TestCase):
                               rtol=1.0e-12, atol=1.0e-12)
 
         v = Vector(geometry=test_data, geometry_type='polygon')
+        # The layer is never been writen, so the keyword_version is missing
+        v.keywords = v_ref.keywords
         assert v == v_ref
 
         v = Vector(geometry=test_data, geometry_type=3)
+        # The layer is never been writen, so the keyword_version is missing
+        v.keywords = v_ref.keywords
         assert v == v_ref
 
     def test_polygons_with_inner_rings(self):
@@ -995,7 +1008,7 @@ class TestIO(unittest.TestCase):
                       'AUTHORITY["EPSG","4326"]]')
         geotransform = (lon_ul, dlon, 0, lat_ul, 0, dlat)
         R1 = Raster(A1, projection, geotransform,
-                    keywords={'testkwd': 'testval', 'size': 'small'})
+                    keywords={'keyword_version': '3.2', 'title': 'test'})
 
         # Check string representation of raster class
         assert str(R1).startswith('Raster data')
@@ -1077,7 +1090,9 @@ class TestIO(unittest.TestCase):
             raise Exception(msg)
 
         # Check keywords
-        assert R1.keywords == R2.keywords
+        # Need to set this since we always use the latest version.
+        R2.keywords['keyword_version'] = R1.keywords['keyword_version']
+        self.assertEqual(R1.keywords, R2.keywords)
 
         # Check override of ==
         assert R1 == R2
@@ -1243,9 +1258,9 @@ class TestIO(unittest.TestCase):
                 msg = 'Projections were different: %s != %s' % (p1, p2)
                 assert p1 == p1, msg
 
-                msg = 'Keywords were different: %s != %s' % (r1.keywords,
-                                                             r2.keywords)
-                assert r1.keywords == r2.keywords, msg
+                # Need to set this since we always use the latest version.
+                r2.keywords['keyword_version'] = r1.keywords['keyword_version']
+                self.assertEqual(r1.keywords, r2.keywords)
 
                 # Use overridden == and != to verify
                 assert r1 == r2
@@ -2500,6 +2515,8 @@ class TestIO(unittest.TestCase):
         assert L0.projection == L1.projection
 
         # Compare all
+        # Need to set this since we always use the latest version.
+        L1.keywords['keyword_version'] = L0.keywords['keyword_version']
         assert L0 == L1
 
     test_multipart_polygon_can_be_read.slow = True
