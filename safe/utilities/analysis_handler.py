@@ -35,7 +35,10 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution)
-from safe.utilities.gis import extent_string_to_array, read_impact_layer
+from safe.utilities.gis import (
+    extent_string_to_array,
+    read_impact_layer,
+    viewport_geo_array)
 from safe.utilities.resources import (
     resources_path,
     resource_url)
@@ -305,8 +308,9 @@ class AnalysisHandler(QObject):
         except InsufficientOverlapError as e:
             raise e
 
+        clip_parameters = self.analysis.impact_function.clip_parameters
         self.extent.show_last_analysis_extent(
-            self.analysis.clip_parameters['adjusted_geo_extent'])
+            clip_parameters['adjusted_geo_extent'])
 
         # Start the analysis
         self.analysis.run_analysis()
@@ -336,8 +340,8 @@ class AnalysisHandler(QObject):
         # Variables
         self.analysis.clip_hard = self.clip_hard
         self.analysis.show_intermediate_layers = self.show_intermediate_layers
-        self.analysis.run_in_thread_flag = self.run_in_thread_flag
-        self.analysis.map_canvas = self.iface.mapCanvas()
+        viewport = viewport_geo_array(self.iface.mapCanvas())
+        self.analysis.viewport_extent = viewport
 
         # Extent
         self.analysis.user_extent = self.extent.user_extent

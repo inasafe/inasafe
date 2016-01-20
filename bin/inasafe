@@ -36,7 +36,10 @@ from safe.impact_functions.registry import Registry
 from safe.impact_functions import register_impact_functions
 from safe.test.utilities import get_qgis_app
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.gis import qgis_version, validate_geo_array
+from safe.utilities.gis import (
+    qgis_version,
+    validate_geo_array,
+    viewport_geo_array)
 from safe.report.impact_report import ImpactReport
 from safe.utilities.osm_downloader import download
 
@@ -267,8 +270,8 @@ def analysis_setup(command_line_arguments, hazard, exposure):
     analysis.exposure = exposure
     analysis.clip_hard = False
     analysis.show_intermediate_layers = False
-    analysis.run_in_thread_flag = False
-    analysis.map_canvas = CANVAS
+    viewport = viewport_geo_array(CANVAS)
+    analysis.viewport_extent = viewport
     # QSetting context
     settings = QSettings()
     crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
