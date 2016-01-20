@@ -193,27 +193,37 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         transparent_color = QColor()
         transparent_color.setAlpha(0)
 
-        colours = ['#1EFC7C', '#FFA500', '#F31A1C']
-        classes = self.hazard_class_mapping.values()
+        classes = self.hazard_class_mapping
+
         if len(classes) == 3:
-            colours = ['#1EFC7C', '#FFA500', '#F31A1C']
+            classes_colours = {
+                "low": "#1EFC7C",
+                "medium": "#FFA500",
+                "high": "#F31A1C"}
         elif len(classes) == 2:
-            colours = ['#1EFC7C', '#F31A1C']
+            classes_colours = {
+                "dry": "#1EFC7C",
+                "wet": "#F31A1C"}
         else:
-            colours = ['#1EFC7C', '#FFA500', '#F31A1C']
+            classes_colours = {
+                "low": "#1EFC7C",
+                "medium": "#FFA500",
+                "high": "#F31A1C"}
 
         # Define style info for output polygons showing population counts
         style_classes = []
-        for i in xrange(len(classes)):
+        index = 0
+        for class_key, colour in classes_colours.items():
             style_class = dict()
-            index = (len(classes) - i - 1)
-            label = classes[index][0]
+            label = classes[class_key][0]
             transparency = 0
             style_class['label'] = label
-            style_class['value'] = (i + 1)
-            style_class['colour'] = colours[i]
+            style_class['value'] = (len(classes) - index)
+            style_class['colour'] = colour
             style_class['transparency'] = transparency
             style_classes.append(style_class)
+
+            index = index + 1
 
         style_info = dict(
             target_field=self.target_field,
