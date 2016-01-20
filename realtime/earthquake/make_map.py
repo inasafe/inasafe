@@ -44,6 +44,9 @@ def process_event(working_dir=None, event_id=None, locale='en'):
 
     :param locale: The locale that will be used. Default to en.
     :type locale: str
+
+    :return: Return True if succeeded
+    :rtype: bool
     """
     population_path = os.path.join(
         data_dir(),
@@ -98,6 +101,8 @@ def process_event(working_dir=None, event_id=None, locale='en'):
             # push the shakemap to realtime server
             ret = push_shake_event_to_rest(shake_event)
             LOGGER.info('Is Push successful? %s' % bool(ret))
+
+        return True
 
 
 def create_shake_events(

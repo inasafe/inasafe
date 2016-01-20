@@ -82,11 +82,10 @@ if __name__ == '__main__':
         done = False
         while not done:
             try:
-                process_event(
+                done = process_event(
                     working_dir=working_dir,
                     event_id=shake_id,
                     locale=locale_option)
-                done = True
             except Exception as e:  # pylint: disable=W0702
                 LOGGER.info('Process event failed')
                 LOGGER.exception(e)
