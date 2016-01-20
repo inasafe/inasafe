@@ -8,9 +8,12 @@ import os
 import re
 import sys
 
+import datetime
 import pyinotify
+from tzlocal import get_localzone
 
 from realtime.earthquake.make_map import process_event
+from realtime.earthquake.push_shake import notify_realtime_rest
 from realtime.utilities import realtime_logger_name
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
@@ -79,6 +82,8 @@ if __name__ == '__main__':
     def process_shakemap(shake_id=None):
         """Process a given shake_id for realtime shake"""
         LOGGER.info('Inotify received new shakemap')
+        tz = get_localzone()
+        notify_realtime_rest(datetime.datetime.now(tz=tz))
         done = False
         while not done:
             try:
