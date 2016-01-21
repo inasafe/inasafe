@@ -24,15 +24,28 @@ def generate_insufficient_overlap_message(
     """Generate insufficient overlap message.
 
     :param e: An exception.
-    :param exposure_geoextent: Extent of the exposure layer.
+    :type e: Exception
+
+    :param exposure_geoextent: Extent of the exposure layer in the form
+        [xmin, ymin, xmax, ymax] in EPSG:4326.
+    :type exposure_geoextent: list
 
     :param exposure_layer: Exposure layer.
-    :param hazard_geoextent: Extent of the hazard layer.
+    :type exposure_layer: QgsMapLayer
+
+    :param hazard_geoextent: Extent of the hazard layer in the form
+        [xmin, ymin, xmax, ymax] in EPSG:4326.
+    :type hazard_geoextent: list
 
     :param hazard_layer:  Hazard layer instance.
-    :param viewport_geoextent: Viewport extents.
+    :type hazard_layer: QgsMapLayer
+
+    :param viewport_geoextent: Viewport extents
+        as a list [xmin, ymin, xmax, ymax] in EPSG:4326.
+    :type viewport_geoextent: list
 
     :return: An InaSAFE message object.
+    :rtype: Message
     """
     description = tr(
         'There was insufficient overlap between the input layers and / or the '
