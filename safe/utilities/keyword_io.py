@@ -21,7 +21,8 @@ import sqlite3 as sqlite
 from sqlite3 import OperationalError
 from cPickle import loads, dumps, HIGHEST_PROTOCOL
 from ast import literal_eval
-from PyQt4.QtCore import QUrl
+from PyQt4.QtCore import QUrl, QDateTime
+from datetime import datetime
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -772,6 +773,11 @@ class KeywordIO(QObject):
         if keyword == 'url':
             if isinstance(value, QUrl):
                 value = value.toString()
+        if keyword == 'date':
+            if isinstance(value, QDateTime):
+                value = value.toString('d MMM yyyy')
+            elif isinstance(value, datetime):
+                value = value.strftime('%d %b %Y')
         # we want to show the user the concept name rather than its key
         # if possible. TS
         keyword_definition = definition(keyword)
