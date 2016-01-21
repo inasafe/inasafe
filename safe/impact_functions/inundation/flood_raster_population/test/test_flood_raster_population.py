@@ -107,29 +107,3 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
-
-    def test_regression_2553(self):
-        """Test for regression 2553.
-        see :
-
-        https://github.com/inasafe/inasafe/issues/2553
-        """
-        function = FloodEvacuationRasterHazardFunction.instance()
-
-        hazard_path = test_data_path(
-            'hazard', 'continuous_flood_unaligned.tif')
-        exposure_path = test_data_path(
-            'exposure', 'people_allow_resampling_true.tif')
-        hazard_layer = read_layer(hazard_path)
-        exposure_layer = read_layer(exposure_path)
-
-        function.parameters['thresholds'].value = [0.5, 0.7, 1.0]
-        function.hazard = SafeLayer(hazard_layer)
-        function.exposure = SafeLayer(exposure_layer)
-        function.run()
-        impact = function.impact
-
-        keywords = impact.get_keywords()
-        evacuated = float(keywords['evacuated'])
-        expected_evacuated = 1915.0
-        self.assertEqual(evacuated, expected_evacuated)

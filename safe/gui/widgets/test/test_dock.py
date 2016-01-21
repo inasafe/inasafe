@@ -251,7 +251,7 @@ class TestDock(TestCase):
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()
         setRasterStyle(qgis_layer, style)
-        # simple test for now - we could test explicity for style state
+        # simple test for now - we could test explicitly for style state
         # later if needed.
         message = (
             'Raster layer was not assigned a Singleband pseudocolor '
@@ -771,8 +771,9 @@ class TestDock(TestCase):
         self.assertTrue(os.path.isfile(new_xml_filepath), '%s xml' % message)
 
     def test_layer_saved_as_without_keywords_and_xml(self):
-        """Check that auxiliary files aren't created when they don't exist and
-        the 'saved as' is used.
+        """Check that auxiliary files aren't created when they don't exist.
+
+        ... and the 'saved as' is used.
         """
 
         layer_path = os.path.join(TESTDATA, 'kecamatan_jakarta_osm.shp')
@@ -1080,6 +1081,47 @@ class TestDock(TestCase):
         title = keyword_io.read_keywords(layer, 'title')
         self.assertEqual(title, original_title)
         self.dock.set_layer_from_title_flag = False
+
+    # noinspection PyUnusedLocal
+    def test_regression_2553(self):
+        """Test for regression 2553.
+
+        see :
+
+        https://github.com/inasafe/inasafe/issues/2553
+        """
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        self.dock.cboHazard.clear()
+        self.dock.cboExposure.clear()
+        settings = QtCore.QSettings()
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+
+        hazard_path = test_data_path(
+            'hazard', 'continuous_flood_unaligned.tif')
+        exposure_path = test_data_path(
+            'exposure', 'people_allow_resampling_true.tif')
+
+        hazard_layer, hazard_layer_purpose = load_layer(hazard_path)
+        exposure_layer, exposure_layer_purpose = load_layer(exposure_path)
+        QgsMapLayerRegistry.instance().addMapLayers(
+            [hazard_layer, exposure_layer])
+
+        result, message = setup_scenario(
+            self.dock,
+            hazard='a flood similar to 2007 in Jakarta',
+            exposure='people',
+            function='Need evacuation',
+            function_id='FloodEvacuationRasterHazardFunction')
+        self.assertTrue(result, message)
+        # Press RUN
+        self.dock.accept()
+
+        safe_layer = self.dock.analysis.impact_layer
+        keywords = safe_layer.get_keywords()
+        evacuated = float(keywords['evacuated'])
+        expected_evacuated = 1915.0
+        self.assertEqual(evacuated, expected_evacuated)
+
 
 
 if __name__ == '__main__':
