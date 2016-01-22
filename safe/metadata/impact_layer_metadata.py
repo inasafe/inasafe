@@ -170,13 +170,6 @@ class ImpactLayerMetadata(BaseMetadata):
             'inasafe/'
             'statistics_classes/'
             'gco:List'),
-        'statistics_type': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'statistics_type/'
-            'gco:CharacterString'),
     }
     _standard_properties = merge_dictionaries(
         BaseMetadata._standard_properties, _standard_properties)
