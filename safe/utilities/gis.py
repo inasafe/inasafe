@@ -7,6 +7,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QGis,
+    QgsRectangle,
     QgsVectorLayer,
     QgsRasterLayer)
 from safe.common.exceptions import \
@@ -99,6 +100,28 @@ def extent_to_array(extent, source_crs, dest_crs=None):
         transformed_extent.xMaximum(),
         transformed_extent.yMaximum()]
     return geo_extent
+
+
+def array_to_geo_array(extent, source_crs):
+    """Transform the extent in EPSG:4326.
+    :param extent: A list in the form [xmin, ymin, xmax, ymax].
+    :type extent: list
+    :param source_crs: Coordinate system used for input extent.
+    :type source_crs: QgsCoordinateReferenceSystem
+    :return: A list in the form [xmin, ymin, xmax, ymax] where all
+            coordinates provided are in Geographic / EPSG:4326.
+    :rtype: list
+    .. note:: Delegates to extent_to_array()
+    """
+
+    min_longitude = extent[0]
+    min_latitude = extent[1]
+    max_longitude = extent[2]
+    max_latitude = extent[3]
+
+    rectangle = QgsRectangle(
+        min_longitude, min_latitude, max_longitude, max_latitude)
+    return extent_to_array(rectangle, source_crs)
 
 
 def rectangle_geo_array(rectangle, map_canvas):

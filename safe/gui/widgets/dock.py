@@ -48,6 +48,7 @@ from safe.defaults import (
     disclaimer,
     default_north_arrow_path)
 from safe.utilities.gis import (
+    viewport_geo_array,
     extent_string_to_array,
     read_impact_layer,
     vector_geometry_string)
@@ -1137,9 +1138,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_next_analysis_extent()  # green
             self.extent.show_user_analysis_extent()  # blue
             try:
+                clip_parameters = self.analysis.impact_function.clip_parameters
                 self.extent.show_last_analysis_extent(
-                    self.analysis.clip_parameters[
-                        'adjusted_geo_extent'])  # red
+                    clip_parameters['adjusted_geo_extent'])  # red
             except (AttributeError, TypeError):
                 pass
 
@@ -1157,8 +1158,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_next_analysis_extent()
             self.analysis = self.prepare_analysis()
             self.analysis.setup_analysis()
+            clip_parameters = self.analysis.impact_function.clip_parameters
             self.extent.show_last_analysis_extent(
-                self.analysis.clip_parameters['adjusted_geo_extent'])
+                clip_parameters['adjusted_geo_extent'])
             # Start the analysis
             self.analysis.run_analysis()
         except InsufficientOverlapError as e:
@@ -1250,23 +1252,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def prepare_analysis(self):
         """Create analysis as a representation of current situation of dock."""
         analysis = Analysis()
-        analysis.map_canvas = self.iface.mapCanvas()
-
-        # Layers
-        analysis.hazard = self.get_hazard_layer()
-        analysis.exposure = self.get_exposure_layer()
-        analysis.aggregation = self.get_aggregation_layer()
-
-        # noinspection PyTypeChecker
-        analysis.hazard_keyword = self.keyword_io.read_keywords(
-            self.get_hazard_layer())
-        # noinspection PyTypeChecker
-        analysis.exposure_keyword = self.keyword_io.read_keywords(
-            self.get_exposure_layer())
-        # Need to check since aggregation layer is not mandatory
-        if analysis.aggregation:
-            analysis.aggregation_keyword = self.keyword_io.read_keywords(
-                self.get_aggregation_layer())
 
         # Impact Functions
         if self.get_function_id() != '':
@@ -1275,13 +1260,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             impact_function.parameters = self.impact_function_parameters
             analysis.impact_function = impact_function
 
-            # Variables
-            analysis.clip_hard = self.clip_hard
-            analysis.show_intermediate_layers = self.show_intermediate_layers
-            analysis.run_in_thread_flag = self.run_in_thread_flag
-            analysis.map_canvas = self.iface.mapCanvas()
-            analysis.user_extent = self.extent.user_extent
-            analysis.user_extent_crs = self.extent.user_extent_crs
+        # Layers
+        analysis.hazard = self.get_hazard_layer()
+        analysis.exposure = self.get_exposure_layer()
+        analysis.aggregation = self.get_aggregation_layer()
+
+        # Variables
+        analysis.clip_hard = self.clip_hard
+        analysis.show_intermediate_layers = self.show_intermediate_layers
+        viewport = viewport_geo_array(self.iface.mapCanvas())
+        analysis.viewport_extent = viewport
+        analysis.user_extent = self.extent.user_extent
+        analysis.user_extent_crs = self.extent.user_extent_crs
 
         return analysis
 
@@ -2116,7 +2106,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             # Temporary only, for checking the user extent
             analysis = self.prepare_analysis()
-            clip_parameters = analysis.get_clip_parameters()
+            clip_parameters = analysis.impact_function.clip_parameters
             return True, clip_parameters['adjusted_geo_extent']
         except (AttributeError, InsufficientOverlapError):
             return False, None

@@ -13,16 +13,16 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import json
 import os
 from os.path import expanduser
-from xml.etree import ElementTree
 from urlparse import urlparse
 import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
 from cPickle import loads, dumps, HIGHEST_PROTOCOL
 from ast import literal_eval
+from PyQt4.QtCore import QUrl, QDateTime
+from datetime import datetime
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -30,12 +30,13 @@ import qgis  # pylint: disable=unused-import
 from qgis.core import QgsDataSourceURI
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, QSettings
-from safe.utilities.utilities import (
-    read_file_keywords,
-    write_keywords_to_file)
+
+import safe.definitions
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.unicode import get_string
+from safe.utilities.utilities import read_file_keywords
+from safe.common.utilities import verify
 from safe.common.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
@@ -43,18 +44,13 @@ from safe.common.exceptions import (
     InvalidParameterError,
     NoKeywordsFoundError,
     UnsupportedProviderError,
-    MetadataReadError,
-    MissingMetadata)
-from safe.common.utilities import verify
-import safe.definitions
-from safe.definitions import (
-    inasafe_keyword_version, inasafe_keyword_version_key)
+    MetadataReadError
+)
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
     write_read_iso_19115_metadata
 )
-
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -298,42 +294,6 @@ class KeywordIO(QObject):
             raise Exception(message)
         return
 
-    def clear_keywords(self, layer):
-        """Convenience method to clear a layer's keywords.
-
-        :param layer: A QGIS QgsMapLayer instance.
-        :type layer: QgsMapLayer
-        """
-
-        self.write_keywords(layer, dict())
-
-    def delete_keywords(self, layer, keyword):
-        """Delete the keyword for a given layer..
-
-        This is a wrapper method that will 'do the right thing' to fetch
-        keywords for the given datasource. In particular, if the datasource
-        is remote (e.g. a database connection) it will fetch the keywords from
-        the keywords store.
-
-        :param layer: A QGIS QgsMapLayer instance.
-        :type layer: QgsMapLayer
-
-        :param keyword: The specified keyword will be deleted
-              from the keywords dict.
-        :type keyword: str
-
-        :returns: True if the keyword was sucessfully delete. False otherwise.
-        :rtype: bool
-        """
-
-        try:
-            keywords = self.read_keywords(layer)
-            keywords.pop(keyword)
-            self.write_keywords(layer, keywords)
-            return True
-        except (HashNotFoundError, KeyError):
-            return False
-
 # methods below here should be considered private
 
     def default_keyword_db_path(self):
@@ -494,38 +454,6 @@ class KeywordIO(QObject):
         hash_value.update(data_source)
         hash_value = hash_value.hexdigest()
         return hash_value
-
-    def delete_keywords_for_uri(self, uri):
-        """Delete keywords for a URI in the keywords database.
-
-        A hash will be constructed from the supplied uri and a lookup made
-        in a local SQLITE database for the keywords. If there is an existing
-        record for the hash, the entire record will be erased.
-
-        .. seealso:: write_keywords_for_uri, read_keywords_for_uri
-
-        :param uri: A layer uri. e.g. ```dbname=\'osm\' host=localhost
-            port=5432 user=\'foo\'password=\'bar\' sslmode=disable key=\'id\'
-            srid=4326```
-
-        :type uri: str
-        """
-        hash_value = self.hash_for_datasource(uri)
-        try:
-            cursor = self.get_cursor()
-            # now see if we have any data for our hash
-            sql = 'delete from keyword where hash = \'' + hash_value + '\';'
-            cursor.execute(sql)
-            self.connection.commit()
-        except sqlite.Error, e:
-            LOGGER.debug("SQLITE Error %s:" % e.args[0])
-            self.connection.rollback()
-        except Exception, e:
-            LOGGER.debug("Error %s:" % e.args[0])
-            self.connection.rollback()
-            raise
-        finally:
-            self.close_connection()
 
     def normalize_uri(self, layer):
         """Normalize URI from layer source. URI can be in a form
@@ -816,6 +744,15 @@ class KeywordIO(QObject):
         # Translate titles explicitly if possible
         if keyword == 'title':
             value = self.tr(value)
+        # # See #2569
+        if keyword == 'url':
+            if isinstance(value, QUrl):
+                value = value.toString()
+        if keyword == 'date':
+            if isinstance(value, QDateTime):
+                value = value.toString('d MMM yyyy')
+            elif isinstance(value, datetime):
+                value = value.strftime('%d %b %Y')
         # we want to show the user the concept name rather than its key
         # if possible. TS
         keyword_definition = definition(keyword)

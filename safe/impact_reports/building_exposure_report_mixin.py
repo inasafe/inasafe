@@ -279,7 +279,7 @@ class BuildingExposureReportMixin(ReportMixin):
                 (dry, {residential: 50, school: 50})
             ])
         """
-        return self._count_usage('school')
+        return self._count_usage('school', self._affected_categories)
 
     @property
     def hospitals_closed(self):
@@ -298,11 +298,26 @@ class BuildingExposureReportMixin(ReportMixin):
                 (dry, {residential: 50, school: 50})
             ])
         """
-        return self._count_usage('hospital')
+        return self._count_usage('hospital', self._affected_categories)
 
-    def _count_usage(self, usage):
+    def _count_usage(self, usage, categories=None):
+        """Obtain the number of usage (building) that in categories.
+
+        If categories is None, get all categories.
+
+        :param usage: Building usage.
+        :type usage: str
+
+        :param categories: Categories that's requested.
+        :type categories: list
+
+        :returns: Number of building that is usage and fall in categories.
+        :rtype: int
+        """
         count = 0
-        for category_breakdown in self.affected_buildings.values():
+        for category, category_breakdown in self.affected_buildings.items():
+            if categories and category not in categories:
+                continue
             for current_usage in category_breakdown:
                 if current_usage.lower() == usage.lower():
                     count += category_breakdown[current_usage].values()[0]

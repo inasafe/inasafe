@@ -35,7 +35,10 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution)
-from safe.utilities.gis import extent_string_to_array, read_impact_layer
+from safe.utilities.gis import (
+    extent_string_to_array,
+    read_impact_layer,
+    viewport_geo_array)
 from safe.utilities.resources import (
     resources_path,
     resource_url)
@@ -305,8 +308,9 @@ class AnalysisHandler(QObject):
         except InsufficientOverlapError as e:
             raise e
 
+        clip_parameters = self.analysis.impact_function.clip_parameters
         self.extent.show_last_analysis_extent(
-            self.analysis.clip_parameters['adjusted_geo_extent'])
+            clip_parameters['adjusted_geo_extent'])
 
         # Start the analysis
         self.analysis.run_analysis()
@@ -320,21 +324,6 @@ class AnalysisHandler(QObject):
         .. note:: Copied or adapted from the dock
         """
         self.analysis = Analysis()
-        # Layers
-        self.analysis.hazard = self.parent.hazard_layer
-        self.analysis.exposure = self.parent.exposure_layer
-        self.analysis.aggregation = self.parent.aggregation_layer
-        # TODO test if the implement aggregation layer works!
-
-        # noinspection PyTypeChecker
-        self.analysis.hazard_keyword = self.keyword_io.read_keywords(
-            self.parent.hazard_layer)
-        self.analysis.exposure_keyword = self.keyword_io.read_keywords(
-            self.parent.exposure_layer)
-        # Need to check since aggregation layer is not mandatory
-        if self.analysis.aggregation:
-            self.analysis.aggregation_keyword = self.keyword_io.read_keywords(
-                self.parent.aggregation_layer)
 
         # Impact Function
         impact_function = self.impact_function_manager.get(
@@ -342,11 +331,17 @@ class AnalysisHandler(QObject):
         impact_function.parameters = self.parent.if_params
         self.analysis.impact_function = impact_function
 
+        # Layers
+        self.analysis.hazard = self.parent.hazard_layer
+        self.analysis.exposure = self.parent.exposure_layer
+        self.analysis.aggregation = self.parent.aggregation_layer
+        # TODO test if the implement aggregation layer works!
+
         # Variables
         self.analysis.clip_hard = self.clip_hard
         self.analysis.show_intermediate_layers = self.show_intermediate_layers
-        self.analysis.run_in_thread_flag = self.run_in_thread_flag
-        self.analysis.map_canvas = self.iface.mapCanvas()
+        viewport = viewport_geo_array(self.iface.mapCanvas())
+        self.analysis.viewport_extent = viewport
 
         # Extent
         self.analysis.user_extent = self.extent.user_extent

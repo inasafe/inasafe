@@ -277,7 +277,6 @@ class ITBFatalityFunction(
         exposure = self.exposure.layer.get_data(scaling=True)
 
         # Calculate people affected by each MMI level
-        # FIXME (Ole): this range is 2-9. Should 10 be included?
         mmi_range = self.hardcoded_parameters['mmi_range']
         number_of_exposed = {}
         number_of_displaced = {}
@@ -290,9 +289,7 @@ class ITBFatalityFunction(
             # count people affected by this shake level
             step = self.hardcoded_parameters['step']
             mmi_matches = numpy.where(
-                (hazard > mmi - step) * (
-                    hazard <= mmi + step),
-                exposure, 0)
+                (hazard > mmi - step) * (hazard <= mmi + step), exposure, 0)
 
             # Calculate expected number of fatalities per level
             exposed = numpy.nansum(mmi_matches)
@@ -309,7 +306,7 @@ class ITBFatalityFunction(
 
             # Sum up numbers for map
             # We need to use matrices here and not just numbers #2235
-            mask += displacements   # Displaced
+            mask += mmi_matches   # Displaced
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
@@ -367,11 +364,7 @@ class ITBFatalityFunction(
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
             style_class['quantity'] = classes[i]
-            if i == 0:
-                transparency = 100
-            else:
-                transparency = 30
-            style_class['transparency'] = transparency
+            style_class['transparency'] = 30
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
 

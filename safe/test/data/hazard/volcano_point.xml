@@ -250,7 +250,7 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL/>
+                <gmd:URL>google.com</gmd:URL>
               </gmd:linkage>
             </gmd:CI_OnlineResource>
           </gmd:onLine>
