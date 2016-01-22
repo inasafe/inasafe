@@ -240,15 +240,10 @@ class VolcanoPolygonPopulationFunction(
             else:
                 label = create_label(interval_classes[i])
 
-            if i == 0:
-                transparency = 100
-            else:
-                transparency = 0
-
             style_class['label'] = label
             style_class['quantity'] = classes[i]
             style_class['colour'] = colours[i]
-            style_class['transparency'] = transparency
+            style_class['transparency'] = 0
             style_classes.append(style_class)
 
         # Override style info with new classes and name

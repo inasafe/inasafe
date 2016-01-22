@@ -147,12 +147,8 @@ class FloodPolygonBuildingFunction(
         # for now we assume the extent is in 4326 because it
         # is set to that from geo_extent
         # See issue #1857
-        analysis_extent_crs = QgsCoordinateReferenceSystem(
-            'EPSG:%i' % self._requested_extent_crs)
         transform = QgsCoordinateTransform(
-            analysis_extent_crs,
-            self.hazard.layer.crs()
-        )
+            self.requested_extent_crs, self.hazard.crs())
         projected_extent = transform.transformBoundingBox(requested_extent)
         request = QgsFeatureRequest()
         request.setFilterRect(projected_extent)
@@ -184,9 +180,7 @@ class FloodPolygonBuildingFunction(
 
         # Filter out just those EXPOSURE features in the analysis extents
         transform = QgsCoordinateTransform(
-                analysis_extent_crs,
-                self.exposure.layer.crs()
-        )
+            self.requested_extent_crs, self.exposure.layer.crs())
         projected_extent = transform.transformBoundingBox(requested_extent)
         request = QgsFeatureRequest()
         request.setFilterRect(projected_extent)
@@ -194,9 +188,7 @@ class FloodPolygonBuildingFunction(
         # We will use this transform to project each exposure feature into
         # the CRS of the Hazard.
         transform = QgsCoordinateTransform(
-                self.exposure.layer.crs(),
-                self.hazard.layer.crs()
-        )
+            self.exposure.crs(), self.hazard.crs())
         features = []
         for feature in self.exposure.layer.getFeatures(request):
             # Make a deep copy as the geometry is passed by reference

@@ -123,10 +123,8 @@ class FloodPolygonRoadsFunction(
         # is set to that from geo_extent
         # See issue #1857
         transform = QgsCoordinateTransform(
-            QgsCoordinateReferenceSystem(
-                'EPSG:%i' % self._requested_extent_crs),
-            self.hazard.layer.crs()
-        )
+            self.requested_extent_crs, self.hazard.crs())
+
         projected_extent = transform.transformBoundingBox(requested_extent)
         request = QgsFeatureRequest()
         request.setFilterRect(projected_extent)
