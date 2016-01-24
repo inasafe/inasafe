@@ -1080,9 +1080,9 @@ class ShakeEvent(QObject):
         keywords_path = os.path.join(
             shakemap_extract_dir(),
             self.event_id,
-            'impact-%s.keywords' % algorithm)
+            'impact-%s.xml' % algorithm)
         keywords_source = os.path.splitext(result.filename)[0]
-        keywords_source = '%s.keywords' % keywords_source
+        keywords_source = '%s.xml' % keywords_source
         shutil.copyfile(keywords_source, keywords_path)
         LOGGER.debug('Copied impact keywords to:\n%s\n' % keywords_path)
 
@@ -1644,6 +1644,9 @@ class ShakeEvent(QObject):
 
         # RMN: for fix #2438
         shake_grid_location = self.shake_grid.location
+        if self.shake_grid_location_city is None:
+            self.shake_grid_location_city = self.most_affected_city
+
         if self.shake_grid_location_city is None:
             direction = 0
             distance = 0

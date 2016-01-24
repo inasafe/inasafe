@@ -24,26 +24,29 @@ def notify_realtime_rest(timestamp):
     :param timestamp: python datetime object indicating shakemap timestamp
     :type timestamp: datetime.datetime
     """
-    inasafe_django = InaSAFEDjangoREST()
-    LOGGER.info(timestamp)
-    session = inasafe_django.rest
-    timestamp_utc = timestamp.astimezone(tz=pytz.utc)
-    data = {
-        'timestamp': timestamp_utc.strftime(INASAFE_REALTIME_DATETIME_FORMAT)
-    }
-    headers = {
-        'X-CSRFTOKEN': inasafe_django.csrf_token
-    }
-    LOGGER.info('Is Logged in %s' % session.is_logged_in.GET(headers=headers))
+    try:
+        inasafe_django = InaSAFEDjangoREST()
+        LOGGER.info(timestamp)
+        session = inasafe_django.rest
+        timestamp_utc = timestamp.astimezone(tz=pytz.utc)
+        data = {
+            'timestamp': timestamp_utc.strftime(INASAFE_REALTIME_DATETIME_FORMAT)
+        }
+        headers = {
+            'X-CSRFTOKEN': inasafe_django.csrf_token
+        }
+        LOGGER.info('Is Logged in %s' % session.is_logged_in.GET(headers=headers))
 
-    response = session.indicator.notify_shakemap_push.POST(
-        data=data, headers=headers)
-    # We will not handle post error, since we don't need it.
-    # It just simply fails
-    if response.status_code != requests.codes.ok:
-        LOGGER.info(
-            'Notify Shakemap Push Failed : Error code %s',
-            response.status_code)
+        response = session.indicator.notify_shakemap_push.POST(
+            data=data, headers=headers)
+        # We will not handle post error, since we don't need it.
+        # It just simply fails
+        if response.status_code != requests.codes.ok:
+            LOGGER.info(
+                'Notify Shakemap Push Failed : Error code %s',
+                response.status_code)
+    except Exception as exc:
+        LOGGER.exception(exc)
 
 
 def push_shake_event_to_rest(shake_event, fail_silent=True):

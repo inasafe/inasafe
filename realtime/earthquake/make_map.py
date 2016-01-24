@@ -102,7 +102,7 @@ def process_event(working_dir=None, event_id=None, locale='en'):
             ret = push_shake_event_to_rest(shake_event)
             LOGGER.info('Is Push successful? %s' % bool(ret))
 
-        return True
+    return True
 
 
 def create_shake_events(
