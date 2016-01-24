@@ -188,7 +188,7 @@ class ClassifiedRasterHazardPopulationFunction(
         ]
 
         total_needs = self.total_needs
-        impact_table = impact_summary = self.html_report()
+        impact_summary = self.html_report()
 
         # Create style
         colours = [
@@ -235,7 +235,6 @@ class ClassifiedRasterHazardPopulationFunction(
 
         extra_keywords = {
             'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,

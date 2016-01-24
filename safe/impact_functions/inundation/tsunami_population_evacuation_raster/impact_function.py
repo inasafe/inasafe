@@ -161,7 +161,7 @@ class TsunamiEvacuationFunction(
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        impact_table = impact_summary = self.html_report()
+        impact_summary = self.html_report()
 
         # check for zero impact
         if numpy.nanmax(impact) == 0 == numpy.nanmin(impact):
@@ -212,7 +212,6 @@ class TsunamiEvacuationFunction(
 
         extra_keywords = {
             'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,

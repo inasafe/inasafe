@@ -24,6 +24,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 
+import os
 from datetime import datetime, date
 from unittest import TestCase
 
@@ -139,6 +140,27 @@ class TestImpactMetadata(TestCase):
 
         self.assertEquals(expected_metadata, metadata.json)
 
+    def test_xml_write(self):
+        metadata = ImpactLayerMetadata(
+            EXISTING_IMPACT_FILE, EXISTING_IMPACT_XML)
+        with open(EXISTING_IMPACT_XML) as f:
+            expected_xml = f.read()
+
+        filename = unique_filename(suffix='.xml', dir=TEMP_DIR)
+        metadata.write_to_file(filename)
+        with open(filename) as f:
+            written_xml = f.read()
+
+        self.assertEquals(expected_xml, written_xml)
+
+        impact_report_path = (
+            os.path.splitext(filename)[0] + '_impact_report.html')
+
+        self.assertTrue(os.path.exists(impact_report_path))
+        with open(impact_report_path) as f:
+            expected_impact_summary = f.read()
+        self.assertEqual(expected_impact_summary, metadata.impact_summary)
+
     def test_invalid_json_read(self):
         with self.assertRaises(MetadataReadError):
             ImpactLayerMetadata(
@@ -167,7 +189,7 @@ class TestImpactMetadata(TestCase):
         json_tmp_file = unique_filename(suffix='.json', dir=TEMP_DIR)
         generated_metadata.write_to_file(json_tmp_file)
         read_tmp_metadata = ImpactLayerMetadata(
-                EXISTING_IMPACT_FILE, json_uri=json_tmp_file
+            EXISTING_IMPACT_FILE, json_uri=json_tmp_file
         )
         self.assertEquals(expected_metadata, read_tmp_metadata.xml)
 

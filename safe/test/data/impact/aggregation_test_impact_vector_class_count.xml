@@ -181,9 +181,6 @@
           <statistics_classes>
             <gco:List>[0, 1, 2]</gco:List>
           </statistics_classes>
-          <impact_table>
-            <gco:CharacterString/>
-          </impact_table>
           <scale>
             <gco:CharacterString/>
           </scale>

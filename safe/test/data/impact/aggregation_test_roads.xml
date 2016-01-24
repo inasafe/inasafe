@@ -178,9 +178,6 @@
           <map_title>
             <gco:CharacterString>Roads inundated</gco:CharacterString>
           </map_title>
-          <impact_table>
-            <gco:CharacterString/>
-          </impact_table>
           <scale>
             <gco:CharacterString/>
           </scale>

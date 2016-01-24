@@ -99,6 +99,11 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     keywords = {
         x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()
         if x[1]['value'] is not None}
+    # noinspection PyUnresolvedReferences
+    if metadata.layer_purpose == 'impact':
+        if metadata.impact_summary:
+            keywords['impact_summary'] = metadata.impact_summary
+
     if 'keyword_version' not in keywords.keys() and xml_uri:
         message = 'No keyword version found. Metadata xml file is invalid.\n'
         message += 'Layer uri: %s\n' % layer_uri
@@ -111,6 +116,10 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     keywords = {}
     temp_keywords = {
         x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
+    # noinspection PyUnresolvedReferences
+    if metadata.layer_purpose == 'impact':
+        if metadata.impact_summary:
+            temp_keywords['impact_summary'] = metadata.impact_summary
     included = [
         'aggregation attribute',
         'female ratio attribute',

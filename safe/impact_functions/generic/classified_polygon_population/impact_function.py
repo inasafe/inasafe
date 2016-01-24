@@ -188,7 +188,7 @@ class ClassifiedPolygonHazardPopulationFunction(
             message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
-        impact_table = impact_summary = self.html_report()
+        impact_summary = self.html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -238,7 +238,6 @@ class ClassifiedPolygonHazardPopulationFunction(
 
         extra_keywords = {
             'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,

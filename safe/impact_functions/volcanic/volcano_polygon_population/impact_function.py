@@ -207,7 +207,7 @@ class VolcanoPolygonPopulationFunction(
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        impact_table = impact_summary = self.html_report()
+        impact_summary = self.html_report()
 
         # check for zero impact
         if self.total_affected_population == 0:
@@ -262,7 +262,6 @@ class VolcanoPolygonPopulationFunction(
 
         extra_keywords = {
             'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,

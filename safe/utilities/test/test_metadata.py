@@ -1,4 +1,5 @@
 import unittest
+import os
 
 from safe.test.utilities import test_data_path, clone_shp_layer
 from safe.utilities.metadata import (
@@ -82,6 +83,20 @@ class TestMetadataUtilities(unittest.TestCase):
             include_keywords=False,
             source_directory=test_data_path('exposure'))
         write_iso19115_metadata(layer.source(), keywords)
+
+    def test_impact_layer_metadata(self):
+        """Test for impact layer metadata specific."""
+        impact_layer = clone_shp_layer(
+            name='impact_report_metadata',
+            include_keywords=True,
+            source_directory=test_data_path('impact'))
+
+        metadata = read_iso19115_metadata(impact_layer.source())
+        report_path = (
+            os.path.splitext(impact_layer.source())[0] + '_impact_report.html')
+        with open(report_path) as f:
+                impact_report = f.read()
+        self.assertEqual(metadata['impact_summary'], impact_report)
 
 if __name__ == '__main__':
     unittest.main()

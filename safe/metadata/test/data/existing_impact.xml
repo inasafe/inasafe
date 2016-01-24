@@ -202,9 +202,9 @@
           <time_stamp>
             <gco:CharacterString/>
           </time_stamp>
-          <hazard_source>
+          <host_name>
             <gco:CharacterString/>
-          </hazard_source>
+          </host_name>
           <postprocessing_report>
             <gco:CharacterString/>
           </postprocessing_report>
@@ -235,15 +235,12 @@
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <host_name>
+          <hazard_source>
             <gco:CharacterString/>
-          </host_name>
+          </hazard_source>
           <layer_purpose>
             <gco:CharacterString/>
           </layer_purpose>
-          <impact_table>
-            <gco:CharacterString/>
-          </impact_table>
           <resolution>
             <gco:Tuple/>
           </resolution>
@@ -253,9 +250,6 @@
           <target_field>
             <gco:CharacterString/>
           </target_field>
-          <impact_summary>
-            <gco:CharacterString/>
-          </impact_summary>
         </inasafe>
         <inasafe_provenance>
           <provenance_step timestamp="2015-06-25T13:07:13.100000">

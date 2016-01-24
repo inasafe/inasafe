@@ -17,6 +17,7 @@ __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
 import json
 from xml.etree import ElementTree
 from safe.metadata import BaseMetadata
@@ -114,13 +115,6 @@ class ImpactLayerMetadata(BaseMetadata):
             'inasafe/'
             'legend_units/'
             'gco:CharacterString'),
-        'impact_summary': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'impact_summary/'
-            'gco:CharacterString'),
         'user': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
@@ -155,13 +149,6 @@ class ImpactLayerMetadata(BaseMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'target_field/'
-            'gco:CharacterString'),
-        'impact_table': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'impact_table/'
             'gco:CharacterString'),
         'statistics_classes': (
             'gmd:identificationInfo/'
@@ -207,9 +194,11 @@ class ImpactLayerMetadata(BaseMetadata):
 
         # public members
         self.summary_data = None
+        self.impact_summary = ''
 
         # initialize base class
         super(ImpactLayerMetadata, self).__init__(layer_uri, xml_uri, json_uri)
+        self.get_impact_report()
 
     @property
     def dict(self):
@@ -409,3 +398,39 @@ class ImpactLayerMetadata(BaseMetadata):
             if_provenance = keywords['if_provenance']
             for provenance_step in if_provenance:
                 self.provenance.append_provenance_step(provenance_step)
+
+    def write_to_file(self, destination_path):
+        """
+        Writes the metadata json or xml to a file.
+
+        :param destination_path: the file path the file format is inferred
+        from the destination_path extension.
+        :type destination_path: str
+        :return: the written metadata
+        :rtype: str
+        """
+        super(ImpactLayerMetadata, self).write_to_file(destination_path)
+
+        # Write impact report and impact table in separated file
+        report_path = (
+            os.path.splitext(destination_path)[0] + '_impact_report.html')
+        report_content = self.impact_summary
+
+        if report_content:
+            with open(report_path, 'w') as f:
+                f.write(report_content)
+
+    def get_impact_report(self):
+        """
+
+        :return:
+        """
+        if self.xml_uri:
+            report_path = (
+                os.path.splitext(self.xml_uri)[0] + '_impact_report.html')
+            if not os.path.exists(report_path):
+                return
+            with open(report_path) as f:
+                impact_report = f.read()
+            if (not self.impact_summary) and impact_report:
+                self.impact_summary = impact_report
