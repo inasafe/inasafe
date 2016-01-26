@@ -91,8 +91,8 @@ def high_threshold():
     field.description = tr(
         'The threshold of hazard categorized as Moderate Hazard Zone in '
         'meter. A zone is categorized as High Hazard Zone if the depth of '
-        'tsunami inundation is more than Medium Hazard Zone Threshold and less '
-        'than High Hazard Zone Threshold.'
+        'tsunami inundation is more than Medium Hazard Zone Threshold and '
+        'less than High Hazard Zone Threshold.'
         'A zone that has more than High Hazard Zone Threshold is categorized '
         'as Very High Hazard Zone.')
     return field

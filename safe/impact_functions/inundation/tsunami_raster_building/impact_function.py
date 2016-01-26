@@ -76,8 +76,8 @@ class TsunamiRasterBuildingFunction(
         high_max = self.parameters['high_threshold']
 
         checklist.add(tr(
-            'Dry zone is defined as non-inundated area or has inundation depth '
-            'is 0 %s') % (low_max.unit.abbreviation)
+            'Dry zone is defined as non-inundated area or has inundation '
+            'depth is 0 %s') % (low_max.unit.abbreviation)
         )
 
         checklist.add(tr(
