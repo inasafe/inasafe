@@ -68,7 +68,7 @@ from safe.gui.tools.wizard_dialog import (
     step_fc_agglayer_origin,
     step_fc_extent,
     step_fc_params)
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.gui.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
@@ -252,7 +252,8 @@ class WizardDialogTest(unittest.TestCase):
         subcategories = []
         tsunami_index = -1
         for i in range(expected_subcategory_count):
-            subcategory_name = dialog.lstSubcategories.item(i).data(Qt.UserRole)
+            subcategory_name = dialog.lstSubcategories.item(i).data(
+                    Qt.UserRole)
             subcategories.append(subcategory_name)
             if subcategory_name == chosen_subcategory:
                 tsunami_index = i
@@ -286,7 +287,7 @@ class WizardDialogTest(unittest.TestCase):
         scenario_index = -1
         for i in range(expected_hazard_category_count):
             key = dialog.lstHazardCategories.item(i).data(Qt.UserRole)
-            hazard_category_name = KeywordIO.definition(key)['name']
+            hazard_category_name = definition(key)['name']
             hazard_categories.append(hazard_category_name)
             if hazard_category_name == chosen_hazard_category:
                 scenario_index = i
@@ -389,7 +390,7 @@ class WizardDialogTest(unittest.TestCase):
         # noinspection PyTypeChecker
         keywords = keyword_io.read_keywords(layer)
 
-        self.assertDictEqual(keywords, expected_keywords)
+        self.assertEqual(keywords, expected_keywords)
 
     def test_existing_keywords(self):
         """Test if keywords already exist."""
@@ -484,8 +485,8 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(dialog.leSource.text(), '', message)
         message = 'Source Url should be empty'
         self.assertEqual(dialog.leSource_url.text(), '', message)
-        message = 'Source Date should be empty'
-        self.assertTrue(dialog.dtSource_date.dateTime().isNull(), message)
+        message = 'Source Date checkbox should be toggled off'
+        self.assertFalse(dialog.ckbSource_date.isChecked(), message)
         message = 'Source Scale should be empty'
         self.assertEqual(dialog.leSource_scale.text(), '', message)
         dialog.pbnNext.click()
@@ -576,6 +577,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.leSource.setText(source)
         dialog.leSource_scale.setText(source_scale)
         dialog.leSource_url.setText(source_url)
+        dialog.ckbSource_date.setChecked(True)
         dialog.dtSource_date.setDateTime(source_date)
         dialog.leSource_license.setText(source_license)
         dialog.pbnNext.click()  # next
@@ -648,17 +650,14 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 9 - enter source
         self.check_current_step(step_kw_source, dialog)
-        message = (
-            'Invalid Next button state in step 9! Disabled while '
-            'source is optional')
+        message = ('Invalid Next button state in step 9! Disabled while '
+                   'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
         self.assertEqual(dialog.leSource.text(), source)
         self.assertEqual(dialog.leSource_url.text(), source_url)
         self.assertEqual(dialog.leSource_scale.text(), source_scale)
         self.assertEqual(dialog.dtSource_date.dateTime(), source_date)
-
-        self.assertEqual(dialog.dtSource_date.text(), source_date)
         self.assertEqual(dialog.leSource_license.text(), source_license)
         dialog.pbnNext.click()
 
@@ -990,12 +989,12 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_layermode_index = 0
-        layermode_index = dialog.lstLayerModes.currentRow()
+        expected_layer_mode = 'Continuous'
+        layer_mode = dialog.lstLayerModes.currentItem().text()
         message = ('Expected %s, but I got %s' %
-                   (expected_layermode_index, layermode_index))
+                   (expected_layer_mode, layer_mode))
         self.assertEqual(
-            expected_layermode_index, layermode_index, message)
+            expected_layer_mode, layer_mode, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -1049,12 +1048,12 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_layermode_index = 1
-        layermode_index = dialog.lstLayerModes.currentRow()
+        expected_layer_mode = 'Continuous'
+        layer_mode = dialog.lstLayerModes.currentItem().text()
         message = ('Expected %s, but I got %s' %
-                   (expected_layermode_index, layermode_index))
+                   (expected_layer_mode, layer_mode))
         self.assertEqual(
-            expected_layermode_index, layermode_index, message)
+            expected_layer_mode, layer_mode, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -1320,7 +1319,11 @@ class WizardDialogTest(unittest.TestCase):
 
         # check classified
         root = dialog.treeClasses.invisibleRootItem()
-        expected_classes = ['low', 'medium', 'high']
+        expected_classes = [
+            'Low Hazard Zone',
+            'Medium Hazard Zone',
+            'High Hazard Zone'
+        ]
         child_count = root.childCount()
         message = 'Child count must be %s' % len(expected_classes)
         self.assertEqual(len(expected_classes), child_count, message)

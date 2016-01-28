@@ -58,8 +58,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         # The buildings should all be categorised into 5000 zone
         zone_sum = impact_layer.get_data(
             attribute=impact_function.target_field)
-        krb3_zone_count = zone_sum.count('Kawasan Rawan Bencana III')
-        krb2_zone_count = zone_sum.count('Kawasan Rawan Bencana II')
+        krb3_zone_count = zone_sum.count('High Hazard Zone')
+        krb2_zone_count = zone_sum.count('Medium Hazard Zone')
         # The result (counted by hand)
         expected_krb3_count = 11
         expected_krb2_count = 161

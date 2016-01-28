@@ -254,9 +254,9 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         elif self.hazard_exposure_user_extent.isChecked():
             mode = 'HazardExposureBoundingBox'
 
-        LOGGER.info(
-            'Setting analysis extent mode to %s' % mode
-        )
+        # LOGGER.info(
+        #    'Setting analysis extent mode to %s' % mode
+        # )
         settings = QSettings()
         settings.setValue('inasafe/analysis_extents_mode', mode)
 
@@ -265,16 +265,16 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             self.canvas.setMapTool(self.previous_map_tool)
 
         if self.tool.rectangle() is not None:
-            LOGGER.info(
-                'Extent selector setting user extents to %s' %
-                self.tool.rectangle().toString())
+            # LOGGER.info(
+            #     'Extent selector setting user extents to %s' %
+            #     self.tool.rectangle().toString())
             self.extent_defined.emit(
                 self.tool.rectangle(),
                 self.canvas.mapRenderer().destinationCrs()
             )
         else:
-            LOGGER.info(
-                'Extent selector setting user extents to nothing')
+            # LOGGER.info(
+            #     'Extent selector setting user extents to nothing')
             self.clear_extent.emit()
 
         # State handlers for showing warning message bars

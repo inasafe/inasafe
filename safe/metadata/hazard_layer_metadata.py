@@ -63,7 +63,35 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'raster_hazard_classification/'
-            'gco:CharacterString')
+            'gco:CharacterString'),
+        'field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'field/'
+            'gco:CharacterString'),
+        'value_map': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'value_map/'
+            'gco:Dictionary'),
+        'volcano_name_field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'volcano_name_field/'
+            'gco:CharacterString'),
+        'prob_fatality_mag': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'prob_fatality_mag/'
+            'gco:Tuple'),
     }
     _standard_properties = merge_dictionaries(
         GenericLayerMetadata._standard_properties, _standard_properties)

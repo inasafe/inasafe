@@ -104,9 +104,9 @@
            </widget>
           </item>
           <item row="4" column="0">
-           <widget class="QCheckBox" name="potential_idp_flag">
+           <widget class="QCheckBox" name="evacuation_centers_flag">
             <property name="text">
-             <string extracomment="Internally displaced person">Potential internally displaced person camps</string>
+             <string extracomment="Internally displaced person">Evacuation centers</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -481,7 +481,7 @@
   <tabstop>roads_flag</tabstop>
   <tabstop>buildings_flag</tabstop>
   <tabstop>building_points_flag</tabstop>
-  <tabstop>potential_idp_flag</tabstop>
+  <tabstop>evacuation_centers_flag</tabstop>
   <tabstop>boundary_flag</tabstop>
   <tabstop>admin_level_comboBox</tabstop>
   <tabstop>country_comboBox</tabstop>

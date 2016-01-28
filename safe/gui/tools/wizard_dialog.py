@@ -53,6 +53,7 @@ from PyQt4.QtGui import (
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 # pylint: enable=F0401
 
+import safe.definitions
 from safe.definitions import (
     inasafe_keyword_version,
     inasafe_keyword_version_key,
@@ -73,14 +74,17 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_mode_classified)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.utilities.analysis_handler import AnalysisHandler
 from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.utilities import get_error_message, compare_version
+from safe.utilities.utilities import (
+    get_error_message,
+    is_keyword_version_supported
+)
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -98,6 +102,7 @@ from safe.gui.tools.function_options_dialog import (
     FunctionOptionsDialog)
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
+import safe.gui.tools.wizard_strings
 from safe.gui.tools.wizard_strings import (
     category_question,
     category_question_hazard,
@@ -123,26 +128,6 @@ from safe.gui.tools.wizard_strings import (
     select_explayer_from_canvas_question,
     select_explayer_from_browser_question,
     create_postGIS_connection_first)
-# TODO(Ismail): We need a better way to import all of these string
-# pylint: disable=unused-import
-from safe.gui.tools.wizard_strings import (
-    earthquake_mmi_question,
-    exposure_question,
-    flood_feet_depth_question,
-    flood_metres_depth_question,
-    flood_wetdry_question,
-    hazard_question,
-    population_density_question,
-    population_number_question,
-    road_road_type_question,
-    structure_building_type_question,
-    tephra_kgm2_question,
-    tsunami_feet_depth_question,
-    tsunami_metres_depth_question,
-    tsunami_wetdry_question,
-    volcano_volcano_categorical_question
-)
-# pylint: enable=unused-import
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -658,7 +643,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstCategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -682,7 +667,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             categories += ['aggregation']
         for category in categories:
             if not isinstance(category, dict):
-                category = KeywordIO().definition(category)
+                category = definition(category)
             item = QListWidgetItem(category['name'], self.lstCategories)
             item.setData(QtCore.Qt.UserRole, category['key'])
             self.lstCategories.addItem(item)
@@ -751,7 +736,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstSubcategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -831,7 +816,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstHazardCategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -850,6 +835,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         hazard_categories = self.hazard_categories_for_layer()
         for hazard_category in hazard_categories:
             if not isinstance(hazard_category, dict):
+                hazard_category = definition(hazard_category)
+            item = QListWidgetItem(hazard_category['name'],
+                                   self.lstHazardCategories)
                 hazard_category = KeywordIO().definition(hazard_category)
             item = QListWidgetItem(
                 hazard_category['name'],
@@ -903,7 +891,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstLayerModes.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -977,7 +965,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstUnits.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1061,7 +1049,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstClassifications.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1078,6 +1066,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         classifications = self.classifications_for_layer()
         for classification in classifications:
             if not isinstance(classification, dict):
+                classification = definition(classification)
+            item = QListWidgetItem(classification['name'],
+                                   self.lstClassifications)
                 classification = KeywordIO.definition(classification)
             item = QListWidgetItem(
                 classification['name'],
@@ -1116,8 +1107,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Exit if no selection
         if not field:
             return
-
+        # Exit if the selected field comes from a previous wizard run (vector)
+        if is_raster_layer(self.layer):
+            return
         fields = self.layer.dataProvider().fields()
+        field_index = fields.indexFromName(field)
+        # Exit if the selected field comes from a previous wizard run
+        if field_index < 0:
+            return
         field_type = fields.field(field).typeName()
         field_index = fields.indexFromName(self.selected_field())
         unique_values = self.layer.uniqueValues(field_index)[0:48]
@@ -1271,7 +1268,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             for tree_leaf in tree_branch.takeChildren():
                 value_list += [tree_leaf.data(0, QtCore.Qt.UserRole)]
             if value_list:
-                value_map[tree_branch.text(0)] = value_list
+                value_map[tree_branch.data(0, QtCore.Qt.UserRole)] = value_list
         return value_map
 
     def set_widgets_step_kw_classify(self):
@@ -1287,6 +1284,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             unique_values = numpy.unique(numpy.array(
                 ds.GetRasterBand(1).ReadAsArray()))
             field_type = 0
+            # Convert datatype to a json serializable type
+            if numpy.issubdtype(unique_values.dtype, float):
+                unique_values = [float(i) for i in unique_values]
+            else:
+                unique_values = [int(i) for i in unique_values]
         else:
             field = self.selected_field()
             field_index = self.layer.dataProvider().fields().indexFromName(
@@ -1297,11 +1299,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 classification['name'], field.upper()))
             unique_values = self.layer.uniqueValues(field_index)
 
-        # Assign unique values to classes (according to defauls)
+        # Assign unique values to classes (according to default)
         unassigned_values = list()
         assigned_values = dict()
         for default_class in default_classes:
-            assigned_values[default_class['name']] = list()
+            assigned_values[default_class['key']] = list()
         for unique_value in unique_values:
             if unique_value is None or isinstance(
                     unique_value, QPyNullVariant):
@@ -1319,7 +1321,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                         default_class['numeric_default_min'] <= unique_value <=
                         default_class['numeric_default_max']))
                 if condition_1 or condition_2:
-                    assigned_values[default_class['name']] += [unique_value]
+                    assigned_values[default_class['key']] += [unique_value]
                     assigned = True
             if not assigned:
                 # add to unassigned values list otherwise
@@ -1344,7 +1346,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         unassigned_values = list()
         assigned_values = dict()
         for default_class in default_classes:
-            assigned_values[default_class['name']] = list()
+            assigned_values[default_class['key']] = list()
         if isinstance(value_map, str):
             try:
                 value_map = json.loads(value_map)
@@ -1410,10 +1412,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
             tree_branch.setText(0, default_class['name'])
+            tree_branch.setData(0, QtCore.Qt.UserRole, default_class['key'])
             if 'description' in default_class:
                 tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
-            for value in assigned_values[default_class['name']]:
+            for value in assigned_values[default_class['key']]:
                 string_value = value is not None and unicode(value) or 'NULL'
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(
@@ -1850,31 +1853,56 @@ class WizardDialog(QDialog, FORM_CLASS):
     # STEP_KW_SOURCE
     # ===========================
 
+    # noinspection PyPep8Naming
+    def on_ckbSource_date_toggled(self, state):
+        """This is an automatic Qt slot executed when the checkbox is toggled
+
+        :param state: the new state
+        :type state: boolean
+        """
+        self.dtSource_date.setEnabled(state)
+
     def set_widgets_step_kw_source(self):
         """Set widgets on the Source tab."""
         # Just set values based on existing keywords
         source = self.get_existing_keyword('source')
         if source or source == 0:
             self.leSource.setText(get_unicode(source))
+        else:
+            self.leSource.clear()
 
         source_scale = self.get_existing_keyword('scale')
         if source_scale or source_scale == 0:
             self.leSource_scale.setText(get_unicode(source_scale))
+        else:
+            self.leSource_scale.clear()
 
         source_date = self.get_existing_keyword('date')
         if source_date:
+            self.ckbSource_date.setChecked(True)
             self.dtSource_date.setDateTime(
                 QDateTime.fromString(get_unicode(source_date),
-                                     'dd-MM-yyyy HH:mm'))
+                                     'yyyy-MM-dd HH:mm:ss'))
         else:
+            self.ckbSource_date.setChecked(False)
             self.dtSource_date.clear()
+
         source_url = self.get_existing_keyword('url')
+        try:
+            source_url = source_url.toString()
+        except AttributeError:
+            pass
+
         if source_url or source_url == 0:
             self.leSource_url.setText(get_unicode(source_url))
+        else:
+            self.leSource_url.clear()
 
         source_license = self.get_existing_keyword('license')
         if source_license or source_license == 0:
             self.leSource_license.setText(get_unicode(source_license))
+        else:
+            self.leSource_license.clear()
 
     # ===========================
     # STEP_KW_TITLE
@@ -2418,7 +2446,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not keywords or 'keyword_version' not in keywords:
             return True
         keyword_version = str(keywords['keyword_version'])
-        if compare_version(keyword_version, get_version()) != 0:
+        if not is_keyword_version_supported(keyword_version):
             return True
 
         # Compare layer keywords with explicitly set constraints
@@ -2634,8 +2662,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Check if the layer is keywordless
         if keywords and 'keyword_version' in keywords:
             kw_ver = str(keywords['keyword_version'])
-            self.is_selected_layer_keywordless = bool(
-                compare_version(kw_ver, get_version()) != 0)
+            self.is_selected_layer_keywordless = (
+                not is_keyword_version_supported(kw_ver))
         else:
             self.is_selected_layer_keywordless = True
 
@@ -2784,8 +2812,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             keyword_version = None
 
-        if (keywords and keyword_version and
-                compare_version(keyword_version, get_version()) == 0):
+        if (keywords and
+                keyword_version and
+                    is_keyword_version_supported(keyword_version)):
             # The layer has valid keywords
             purpose = keywords.get('layer_purpose')
             if purpose == layer_purpose_hazard['key']:
@@ -2885,11 +2914,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         imfunc = self.selected_function()
         lay_req = imfunc['layer_requirements'][layer_purpose]
 
-        if layer_purpose == 'hazard':
+        if layer_purpose == layer_purpose_hazard['key']:
             layer_purpose_key_name = layer_purpose_hazard['name']
             req_subcategory = h['key']
             req_geometry = hc['key']
-        elif layer_purpose == 'exposure':
+        elif layer_purpose == layer_purpose_exposure['key']:
             layer_purpose_key_name = layer_purpose_exposure['name']
             req_subcategory = e['key']
             req_geometry = ec['key']
@@ -2897,7 +2926,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer_purpose_key_name = layer_purpose_aggregation['name']
             req_subcategory = ''
             # For aggregation layers, only accept polygons
-            req_geometry = 'polygon'
+            req_geometry = layer_geometry_polygon['key']
         req_layer_mode = lay_req['layer_mode']['key']
 
         lay_geometry = self.get_layer_geometry_id(layer)
@@ -2923,7 +2952,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Classification
         classification_row = ''
         if (lay_req['layer_mode'] == layer_mode_classified and
-                layer_purpose == 'hazard'):
+                layer_purpose == layer_purpose_hazard['key']):
             # Determine the keyword key for the classification
             classification_obj = (
                 raster_hazard_classification
@@ -3000,10 +3029,13 @@ class WizardDialog(QDialog, FORM_CLASS):
                 %s
             </table>
         ''' % (self.tr('Layer'), self.tr('Required'),
-               self.tr('Geometry'), lay_geometry, req_geometry,
-               self.tr('Purpose'), lay_purpose, layer_purpose,
+               safe.definitions.layer_geometry['name'],
+               lay_geometry, req_geometry,
+               safe.definitions.layer_purpose['name'],
+               lay_purpose, layer_purpose,
                layer_purpose_key_name, lay_subcategory, req_subcategory,
-               self.tr('Layer mode'), lay_layer_mode, req_layer_mode,
+               safe.definitions.layer_mode['name'],
+               lay_layer_mode, req_layer_mode,
                classification_row,
                units_row)
         return html
@@ -3111,8 +3143,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Check if the layer is keywordless
         if keywords and 'keyword_version' in keywords:
             kw_ver = str(keywords['keyword_version'])
-            self.is_selected_layer_keywordless = bool(
-                compare_version(kw_ver, get_version()) != 0)
+            self.is_selected_layer_keywordless = (
+                not is_keyword_version_supported(kw_ver))
         else:
             self.is_selected_layer_keywordless = True
 
@@ -4426,7 +4458,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type keyword: str
 
         :returns: The value of the keyword.
-        :rtype: str
+        :rtype: str, QUrl
         """
         if self.existing_keywords is None:
             return None
@@ -4484,9 +4516,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['url'] = get_unicode(self.leSource_url.text())
         if self.leSource_scale.text():
             keywords['scale'] = get_unicode(self.leSource_scale.text())
-        if self.dtSource_date.dateTime():
-            keywords['date'] = get_unicode(
-                self.dtSource_date.dateTime().toString('dd-MM-yyyy HH:mm'))
+        if self.ckbSource_date.isChecked():
+            keywords['date'] = self.dtSource_date.dateTime()
         if self.leSource_license.text():
             keywords['license'] = get_unicode(self.leSource_license.text())
         if self.leTitle.text():

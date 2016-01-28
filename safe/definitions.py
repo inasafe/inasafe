@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from safe.utilities.i18n import tr
 
 inasafe_keyword_version_key = 'keyword_version'
-inasafe_keyword_version = 3.2
+inasafe_keyword_version = '3.3'
 
 # constants
 small_number = 2 ** -53  # I think this is small enough
@@ -498,7 +498,7 @@ generic_vector_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'name': tr('high'),
+            'name': tr('High Hazard Zone'),
             'description': tr('The location that has highest impact.'),
             'string_defaults': ['high'],
             'numeric_default_min': 5,
@@ -507,7 +507,7 @@ generic_vector_hazard_classes = {
         },
         {
             'key': 'medium',
-            'name': tr('medium'),
+            'name': tr('Medium Hazard Zone'),
             'description': tr('The location that has medium impact.'),
             'string_defaults': ['medium'],
             'numeric_default_min': 3,
@@ -516,7 +516,7 @@ generic_vector_hazard_classes = {
         },
         {
             'key': 'low',
-            'name': tr('low'),
+            'name': tr('Low Hazard Zone'),
             'description': tr('The location that has lowest impact.'),
             'string_defaults': ['low'],
             'numeric_default_min': 0,
@@ -537,7 +537,7 @@ volcano_vector_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'name': tr('high'),
+            'name': tr('High Hazard Zone'),
             'description': tr('The highest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
             'numeric_default_min': 0,
@@ -546,7 +546,7 @@ volcano_vector_hazard_classes = {
         },
         {
             'key': 'medium',
-            'name': tr('medium'),
+            'name': tr('Medium Hazard Zone'),
             'description': tr('The medium hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
             'numeric_default_min': 3,
@@ -555,7 +555,7 @@ volcano_vector_hazard_classes = {
         },
         {
             'key': 'low',
-            'name': tr('low'),
+            'name': tr('Low Hazard Zone'),
             'description': tr('The lowest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
             'numeric_default_min': 5,
@@ -814,3 +814,6 @@ value_map = {
         ', "YES", "1" and "Flooded" might all be grouped together as '
         '"FLOODPRONE".')
 }
+
+
+multipart_polygon_key = 'multipart_polygon'

@@ -33,10 +33,19 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout_13">
-   <property name="verticalSpacing">
+   <property name="leftMargin">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="verticalSpacing">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -54,10 +63,19 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout_27">
-      <property name="verticalSpacing">
+      <property name="leftMargin">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="verticalSpacing">
        <number>0</number>
       </property>
       <item row="0" column="0">
@@ -177,7 +195,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1003</width>
+        <width>1018</width>
         <height>400</height>
        </rect>
       </property>
@@ -194,7 +212,16 @@
        </size>
       </property>
       <layout class="QGridLayout" name="gridLayout_26">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="0" column="0">
@@ -218,7 +245,7 @@
           <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
          </property>
          <property name="currentIndex">
-          <number>14</number>
+          <number>11</number>
          </property>
          <widget class="QWidget" name="pg1Category">
           <property name="sizePolicy">
@@ -1488,7 +1515,49 @@
              <property name="verticalSpacing">
               <number>13</number>
              </property>
-             <item row="2" column="1">
+             <item row="3" column="0">
+              <widget class="QLabel" name="lblDate">
+               <property name="styleSheet">
+                <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+               </property>
+               <property name="text">
+                <string>Date</string>
+               </property>
+               <property name="buddy">
+                <cstring>ckbSource_date</cstring>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1" colspan="2">
+              <widget class="QLineEdit" name="leSource">
+               <property name="styleSheet">
+                <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1" colspan="2">
+              <widget class="QLineEdit" name="leSource_license"/>
+             </item>
+             <item row="3" column="2">
+              <widget class="QDateTimeEdit" name="dtSource_date">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="displayFormat">
+                <string>d MMM yyyy</string>
+               </property>
+               <property name="calendarPopup">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1" colspan="2">
               <widget class="QLineEdit" name="leSource_scale">
                <property name="styleSheet">
                 <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
@@ -1505,13 +1574,6 @@
                </property>
                <property name="buddy">
                 <cstring>leSource_scale</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QLineEdit" name="leSource">
-               <property name="styleSheet">
-                <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
                </property>
               </widget>
              </item>
@@ -1541,28 +1603,12 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item row="1" column="1" colspan="2">
               <widget class="QLineEdit" name="leSource_url">
                <property name="styleSheet">
                 <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
                </property>
               </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="lblDate">
-               <property name="styleSheet">
-                <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
-               </property>
-               <property name="text">
-                <string>Date</string>
-               </property>
-               <property name="buddy">
-                <cstring>dtSource_date</cstring>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QLineEdit" name="leSource_license"/>
              </item>
              <item row="4" column="0">
               <widget class="QLabel" name="lblLicense">
@@ -1575,12 +1621,15 @@
               </widget>
              </item>
              <item row="3" column="1">
-              <widget class="QgsDateTimeEdit" name="dtSource_date">
-               <property name="displayFormat">
-                <string>dd.MM.yyyy HH:mm</string>
+              <widget class="QCheckBox" name="ckbSource_date">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
                </property>
-               <property name="calendarPopup">
-                <bool>true</bool>
+               <property name="text">
+                <string/>
                </property>
               </widget>
              </item>
@@ -1673,7 +1722,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QWebView" name="wvKwSummary" native="true"/>
+            <widget class="QWebView" name="wvKwSummary"/>
            </item>
           </layout>
          </widget>
@@ -3647,8 +3696,8 @@ Please step back and select another layer.</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>95</width>
-                <height>65</height>
+                <width>98</width>
+                <height>63</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_32">
@@ -3775,7 +3824,16 @@ Please step back and select another layer.</string>
    </item>
    <item row="5" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>12</number>
+     </property>
+     <property name="topMargin">
+      <number>12</number>
+     </property>
+     <property name="rightMargin">
+      <number>12</number>
+     </property>
+     <property name="bottomMargin">
       <number>12</number>
      </property>
      <item>
@@ -3830,20 +3888,15 @@ Please step back and select another layer.</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QgsDateTimeEdit</class>
-   <extends>QDateTimeEdit</extends>
-   <header>qgsdatetimeedit.h</header>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKitWidgets/QWebView</header>
   </customwidget>
   <customwidget>
    <class>MessageViewer</class>
    <extends>QWidget</extends>
    <header>safe.gui.widgets.message_viewer</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QWebView</class>
-   <extends>QWidget</extends>
-   <header>qwebview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -3859,6 +3912,7 @@ Please step back and select another layer.</string>
   <tabstop>leSource</tabstop>
   <tabstop>leSource_url</tabstop>
   <tabstop>leSource_scale</tabstop>
+  <tabstop>ckbSource_date</tabstop>
   <tabstop>dtSource_date</tabstop>
   <tabstop>leSource_license</tabstop>
   <tabstop>leTitle</tabstop>
