@@ -25,12 +25,242 @@ status=alpha
 # Optional items:
 
 changelog=
-        3.2.4
+        3.3.0
         Working implementation of on-the-fly-projection for polygon flood on building points/polys. fix #2475
         Add new impact function Classified polygon hazard on polygon people
         Add new impact function Earthquake ITB Bayesian Fatality
         Add flood prone areas download support for the OSM downloader
-        Use Date Picker in Keywords Wizard
+        Use date Picker in Keywords Wizard
+759fde8 (HEAD -> develop, upstream/develop, origin/develop, origin/HEAD) Merge pull request #2595 from ismailsunni/fix_failing_test
+8485a67 PEP8
+51bc9d8 Fix failed test.
+42b4463 Merge pull request #2564 from Gustry/fix-2468
+63e3696 (etienne/develop) Merge pull request #2542 from ismailsunni/tsunami_raster_building_if
+b1dcf1c Merge pull request #2591 from ismailsunni/fix_2410_error_report
+083c2b9 (ismail/tsunami_raster_building_if) Merge branch 'develop' of github.com:inasafe/inasafe into tsunami_raster_building_if
+af9d701 (ismail/fix_2410_error_report) Better building usage count. Add categories as parameter.
+791e402 Merge pull request #2590 from ismailsunni/fix_2235_huge_difference
+4fe001e (ismail/fix_2235_huge_difference) Add more detail in unit test
+1a6ef37 Add the matrix not the number of displacement. Fix #2235
+9d904a0 Tidy up code.
+0ba5f8f (ismail/develop) Merge pull request #2580 from ismailsunni/fix_2529_zero_transparent
+35442b6 (ismail/fix_2529_zero_transparent) Merge branch 'develop' of github.com:inasafe/inasafe into fix_2529_zero_transparent
+bfd5ef0 Merge pull request #2586 from ismailsunni/fix_2585_qdate
+58803ea Fix typo that makes the problem before.
+1a7ee4e (ismail/fix_2585_qdate) Show only date in keyword wizard date selection.
+7806efa Show proper format of date in dock and wizard.
+efda664 Fix merged conflict.
+16b2ecf Merge pull request #2582 from Gustry/clip_parameters
+cbfc4e3 (etienne/clip_parameters) pep8
+53a1fe6 store the viewport extent instead of the map canvas
+58f8b8d Merge branch 'develop' of github.com:inasafe/inasafe into fix_2529_zero_transparent
+67fe710 PEP8
+faf9cfa Set all transparency to 0 if not value = 0
+27d04f7 (etienne/fix-2468) add threshold to earthquake
+4eacdb6 move var in base.py
+bcf789d fix clip_parameters in analysis_handler
+6962546 revert wrong commit on test data
+ea580ca fix aggregation layer setter
+31c9616 fix errors
+a34c7e0 move clip_parameters
+bf69f4b Merge pull request #2581 from ismailsunni/fix_2530_no_unaffected
+125395e fix DOCK test init
+a70108e disable building threshold in earthquake
+7080c04 fix docstring and typo
+16ed41a Merge pull request #2579 from Gustry/crs
+d20904e Merge branch 'develop' of github.com:inasafe/inasafe into tsunami_raster_building_if
+a3ff9d8 Update data test.
+817a5b5 Fix failed test.
+0fc7cb8 (ismail/fix_2530_no_unaffected) Add unaffected population in report in IF Flood polygon poppulation
+394c622 Set transparent for raster value = 0. Per #2529.
+c6cd621 move clip_parameters function in IF
+1b47004 use QgsCoordinateReferenceSystem instead of integer EPSG code
+4383b98 Merge pull request #2578 from Gustry/message
+7faaeb8 move message prerun
+4f54274 Merge pull request #2577 from ismailsunni/fix_2569_url_field
+987a145 Merge pull request #2574 from Gustry/safelayers
+f9c7879 (ismail/fix_2569_url_field) Clean up unused code in keyword_io.
+9c6771e Only handle for QUrl object.
+94186d3 Merge remote-tracking branch 'inasafe/develop' into fix_2569_url_field
+cef1a5f fix test, change AggregationCategorical to BuildingType postprocessing
+139a696 add building_report_threshold in every IF using building mixin
+63506e4 add maximum value
+0d9e9fa Merge branch 'develop' into fix-2468
+94f508f fix text : set self.building.report_threshold
+62db93d use SafeLayer in Analysis
+61a00a1 Merge pull request #2575 from ismailsunni/fix_2570_format_int
+829acda Fix URL extra 'code' in keyword in dock.
+9f67ced Merge pull request #2573 from ismailsunni/fix_apostrof
+e68febc Merge pull request #2568 from ismailsunni/fix_2545_report_order_consistency
+c6069f1 (ismail/fix_2570_format_int) Format number of pop in action list.
+37411e7 setup IF function before layers
+e30ff1d (ismail/fix_apostrof) Fix apostrof.
+74306c4 Tidy up code.
+5c35d43 Merge pull request #2566 from Gustry/self
+2684934 (ismail/fix_2545_report_order_consistency) Reorder impact report in population IF .
+6bdc67f use self.exposure and self.hazard in analysis
+199b170 rename hazard, exposure and aggregation in Analysis.py
+2859c86 add threshold parameter to the building postprocessor
+28af506 set the threshold in self
+707b667 Merge pull request #2563 from Gustry/space
+ea4c0d5 fix missing space
+d10d4d2 Merge pull request #2557 from Gustry/safe-layers
+3015911 fix missing spaces
+5d861db downgrade versionadded in safe_layer
+d5ae660 Merge pull request #2559 from Gustry/clip-param
+2892bd7 Merge pull request #2556 from Gustry/tr
+8fb7a82 Merge pull request #2561 from ismailsunni/value_mapping_key
+ab7dfca (ismail/value_mapping_key) Fix test.
+3b1e574 Use definition's key as key in value_map keyword not definition's name.
+6f5745e clip_parameters : replace the list by a dictionary
+39f90cd add docstrings to generate_insufficient_overlap_message
+a763fac add methods to safeLayer
+01c315e refactoring signals in safe
+6e59f43 refactoring signals
+5d059d7 use safe.utilities.i18n.tr() instead self.tr
+a06019a Merge pull request #2554 from Gustry/etienne
+9dc1b85 add myself to travis
+5db8f80 Merge pull request #2550 from ismailsunni/revert_deleted
+d4fd93b (ismail/revert_deleted) Update data test.
+7e460c3 Update data test.
+68dbe88 Revert accidentally delete.
+08960bc Merge pull request #2546 from ismailsunni/fix_2385_sorting_hazard_classification
+d91ab1f (ismail/fix_2385_sorting_hazard_classification) Fix failed test in test_wizard_dialog.
+edf8442 Change to High, Medium, Low Hazard Zone
+c06291f PEP8
+3c82cb8 Re-order tsunami depth in impact report in tsunami IF population.
+d15f36a Use value mapping in volcano polygon IF population to sort the result.
+e88ca1f Update test to make it pass.
+1b01752 Update name to more human friendly.
+c0a0121 Use value mapping in volcano IF building to sort the result.
+230636a Fix merged conflict.
+99ca67b Merge pull request #2548 from ismailsunni/backport_from_master_2527
+7e34526 Merge pull request #2539 from ismailsunni/iso_keywords_3
+c403903 Fix order by using Vector Classification in classified polygon population IF.
+f31ecf8 Add get_qgis_app to avoid error running one test.
+8424cb8 Fix failed test.
+7974568 (ismail/backport_from_master_2527) Remove some more unneeded files from plugin installer and fix version number reference in release.sh script.
+4e1d509 Small fix to nsis plugin exe generator logic
+13de436 Use Vector Classification to sort the hazard level in report.
+8eee33c Fix wrong refactor.
+ddaf518 Pull out definition method from KeywordIO class.
+2b207f5 Put the hazard order from high to low in flood and tsunami IF
+44fcd7b Merge pull request #2544 from ismailsunni/fix_2425_IF_volcano_unit
+9dc5063 (ismail/fix_2425_IF_volcano_unit) Move population breakdown to above total affected.
+2e9f1fa Use radius in IF Volcano.
+31c247c Set maximum number of distances to 8
+f644853 PEP8
+d0aebdf Use proper km in Volcano Point IF Population.
+0dfa119 Use kilometers in Volcano IF Building.
+9876400 Fix failed test.
+7b9f196 Add a better notes and coding style.
+e126a60 Update color and add dry zone.
+01a110e (ismail/iso_keywords_3) Change keywrod version data test to 3.3
+b37c63c Add better color style for impact layer and help in IF parameter.
+ffda2a1 Fix failed test and remove tsunami from flood raster IF.
+f759eba New IF works in test suite but not in QGIS (crash).
+de2714b Add notes for tsunami raster building IF.
+6280ea2 Merge pull request #2541 from ismailsunni/revert_modify_test_data
+4cafeaf Add low, moderate, high threshold for tsunami raster building IF.
+611d7b6 (ismail/revert_modify_test_data) Revert test data.
+1cf6c99 Merge branch 'develop' of github.com:inasafe/inasafe into tsunami_raster_building_if
+1a19e42 Merge pull request #2540 from ismailsunni/fix_2384_unaffected_column
+e68429c Fix failed test.
+19060c3 Register tsunami raster building IF.
+281a8fb Add tsunami raster building IF based on flood one.
+0fe1e91 (ismail/fix_2384_unaffected_column) Fix failed test.
+1b6f260 Add unexpected column for IF road.
+ca33fc0 If IF use custom affected categories, do not show unaffected column.
+9b3cf79 Remove not affected handling from IF volcano point.
+4513745 Remove not affected handling from IF volcano polygon.
+61f02d4 Remove not affected handling from IF Eq
+0596e37 Put handling for not affected building in mixin.
+d330a34 Add unaffected column in earthquake_building IF.
+790e50f Add unaffected column in volcano_polygon_building.
+7f476be Add allow_resampling properties
+f24a1b5 (ismail/fix_2384) Update gitignore
+106219b Update gitignore
+5e4f051 Fix set IF provenance order.
+6e34250 (ismail/if_provenance) Add proper start_time.
+751ecaa Put set_if_provenance before generating keywords for impact layer.
+bf6e136 Add new keywords to classified polygon people IF.
+36200ad Add IF provenance in all IF.
+4ba700b Read also IF Provenance for ImpactLayerMetadata.
+e42c31f Add test_core.py
+26fc7ad Add provenance to impact layer in EQ IF before returning result.
+8a3a4dc Make metadata able to write and read provenance in json and xml.
+0298f65 Make metadata able to write IF provenance.
+d4c46f6 Fix test due to update if provenance.
+637ed81 Adding method to save provenance to metadata object from dictionary.
+6e81b69 Adding if provenance step.
+2aeeb1b Merge branch 'iso_keywords_2' into if_provenance
+6e9a9a3 Merge branch 'develop' of github.com:inasafe/inasafe into iso_keywords_2
+ef0fd19 Merge branch 'iso_keywords_2' into if_provenance
+6dab88c Use clone layer also for another failed test.
+3ee8147 Add new xml file for data test.
+4c39bb9 Use clone layer to avoid modifying test data.
+7205a47 (rizky/develop) Merge pull request #2535 from ismailsunni/fix_2532
+15de8de (ismail/fix_2532) Fix #2532
+cc4c9e3 Use clone layer to avoid failing test unexpe
+f70155c [Wizard] Use standard QDateTimeEdit instead of QgsDateTimeEdit. Fixes #2515
+85cb82b Ensure the 'non-matching keywords' table uses strings imported from definitions. Fixes #2349.
+fa0fbb9 Fix serializing classified raster values
+b2e3b0d [Wizard] Clear old inputs on repeated use. Fixes #2514 and #2467
+4b0c659 #667 Use the network manager provided by QGIS and move it to the file_downloader file
+35b9b66 Fix merge conflict.
+c857e8a Update hash value for inasafe_data
+f7705ca Update file control for metadata test.
+a1632b2 Update test keywords.
+675cbc7 Revert changes related to new key for aggregation metadata.
+4cf9fac Update expected value to make test pass.
+3e384cc Update test keywords.
+1490431 Update keyword path in test.
+22b6cc8 (charlotte/develop) Update default road action checklist
+42e920d Update default population action checklist
+f906ec5 Update default buildings action checklist
+8687961 Update keywords for datatest.
+6208683 Add tuple property
+a999120 Update keywords path.
+cd5375a Set keyword to generate file because it's never been saved.
+1a7aec1 Read keywords again after saving to a file.
+1f84a73 Fix keywords version and exception
+5bd5dda Update test data keywords
+c07596c Update test data keywords
+b69d529 Update test data keywords.
+647536c Add ListProperty
+8844920 Add layer_purpose and keyword_version.
+9b4e06c Add layer_purpose for generated aggregation layer.
+b879727 Add keyword version to metadata if not found.
+cc8d440 Add duct type to for aggregation attribute to return None.
+5ff7094 Use default value in metadata as None.
+3191a00 Merge pull request #2512 from timlinux/less-noisy
+c80b5e8 Merge pull request #2511 from Gustry/network
+d8802d5 (origin/less-noisy, less-noisy) Comment out many debug messages that don't contribute much and add a lot of noise to travis logs
+889a742 Update keyword for aggregation.
+9a359e3 Fix keyword_io copy keywords method.
+bf8c553 Use additional type of exception.
+c2e8733 Use old aggregation key.
+faf5a6d Add more verbose exception.
+b2d3349 use read_iso19115 for reading metadata
+5fec957 Update data test metadata.
+503fd98 Use read_iso19115_metadata to read metadata.
+2c2022e inform the user about the network status in the OSM downloader
+d80a5e7 [KeywordWizard] Use QDateTimeEdit for date keyword. Fixes #2499
+543b887 Add target_field to impact layer metadata.
+1f7122f Add volcano_name_field to hazard layer metadata.
+75e1819 Add road_class_field to exposure metadata.
+5914bb7 add flood prone to the OSM downloader
+31eb225 Migrate to use ISO 19115 metadata.
+cd29284 Add changelog: add new IF Classified polygon hazard on polygon people
+797aec1 [IFCW] After registering keywords in the KW sub-thread, don't display again the step from where it was called. Fixes #2347
+fced60c Use wrap_slash for filename cells
+964917d Working implementation of on the fly projection for polygon flood on building points/polys. fix #2475
+922bc87 fix #2464 - support point buildings when doing polygon flood analysis
+36296e7 created new color symbology
+c671446 (rizky/update-raven) Update sentry dsn for InaSAFE desktop and Realtime
+adcff11 added % symbol to all percentages in report
+00bd2e6 Added option to add OSM tile layer
+
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards
