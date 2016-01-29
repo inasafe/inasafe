@@ -836,9 +836,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         for hazard_category in hazard_categories:
             if not isinstance(hazard_category, dict):
                 hazard_category = definition(hazard_category)
-            item = QListWidgetItem(hazard_category['name'],
-                                   self.lstHazardCategories)
-                hazard_category = KeywordIO().definition(hazard_category)
             item = QListWidgetItem(
                 hazard_category['name'],
                 self.lstHazardCategories)
@@ -1067,9 +1064,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         for classification in classifications:
             if not isinstance(classification, dict):
                 classification = definition(classification)
-            item = QListWidgetItem(classification['name'],
-                                   self.lstClassifications)
-                classification = KeywordIO.definition(classification)
             item = QListWidgetItem(
                 classification['name'],
                 self.lstClassifications)
@@ -1089,7 +1083,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.lstClassifications.setCurrentRow(
                     classifications.index(classification_keyword))
 
-        self.auto_select_one_item(self.lstClassifications)
+            self.auto_select_one_item(self.lstClassifications)
 
     # ===========================
     # STEP_KW_FIELD
