@@ -113,6 +113,10 @@ class ClassifiedRasterHazardPopulationFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # The 3 classes
         # TODO (3.2): shouldnt these be defined in keywords rather? TS
         categorical_hazards = self.parameters['Categorical hazards'].value
@@ -212,11 +216,7 @@ class ClassifiedRasterHazardPopulationFunction(
                 label = create_label(interval_classes[i])
             style_class['label'] = label
             style_class['quantity'] = classes[i]
-            if i == 0:
-                transparency = 100
-            else:
-                transparency = 0
-            style_class['transparency'] = transparency
+            style_class['transparency'] = 0
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
 
@@ -233,6 +233,20 @@ class ClassifiedRasterHazardPopulationFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'total_needs': total_needs
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Create raster object and return
         raster_layer = Raster(
             data=affected_population,
@@ -241,14 +255,7 @@ class ClassifiedRasterHazardPopulationFunction(
             name=tr('People that might %s') % (
                 self.impact_function_manager
                 .get_function_title(self).lower()),
-            keywords={
-                'impact_summary': impact_summary,
-                'impact_table': impact_table,
-                'map_title': map_title,
-                'legend_notes': legend_notes,
-                'legend_units': legend_units,
-                'legend_title': legend_title,
-                'total_needs': total_needs},
+            keywords=impact_layer_keywords,
             style_info=style_info)
         self._impact = raster_layer
         return raster_layer

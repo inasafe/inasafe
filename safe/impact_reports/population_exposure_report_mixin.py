@@ -84,16 +84,35 @@ class PopulationExposureReportMixin(ReportMixin):
         message = m.Message(style_class='container')
         message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
+        checklist.add(tr('Which group or population is most affected?'))
+        checklist.add(
+            tr('Who are the vulnerable people in the population and why?'))
         checklist.add(tr('How will warnings be disseminated?'))
+        checklist.add(tr('What are people\'s likely movements?'))
+        checklist.add(
+            tr('What are the security factors for the affected population?'))
+        checklist.add(
+            tr('What are the security factors for relief responders?'))
         checklist.add(tr('How will we reach evacuated people?'))
+        checklist.add(
+            tr('What kind of food does the population normally consume?'))
+        checklist.add(
+            tr('What are the critical non-food items required by the affected '
+               'population?'))
+        evacuated_people = format_int(
+            population_rounding(self.total_affected_population))
         checklist.add(tr(
-            'Are there enough shelters and relief items available '
-            'for %s people?' % self.total_evacuated))
+            'Are there enough water supply, sanitation, hygiene, food, '
+            'shelter, medicines and relief items available for %s people?'
+            % evacuated_people))
         checklist.add(tr(
             'If yes, where are they located and how will we distribute them?'))
         checklist.add(tr(
-            'If no, where can we obtain additional relief items from '
-            'and how will we transport them to here?'))
+            'If no, where can we obtain additional relief items and how will '
+            'we distribute them?'))
+        checklist.add(tr('What are the related health risks?'))
+        checklist.add(
+            tr('Who are the key people responsible for coordination?'))
         message.add(checklist)
         return message
 
@@ -106,24 +125,9 @@ class PopulationExposureReportMixin(ReportMixin):
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
         table.caption = None
-        row = m.Row()
-        row.add(m.Cell(
-            tr('Population needing evacuation <sup>1</sup>'),
-            header=True))
-        evacuated = format_int(population_rounding(self.total_evacuated))
-        row.add(m.Cell(evacuated, align='right'))
-        table.add(row)
-        if len(self.impact_category_ordering):
-            table.add(m.Row())  # add a blank line
-            row = m.Row()
-            row.add(m.Cell(
-                tr('Total affected population'),
-                header=True))
-            affected = format_int(
-                population_rounding(self.total_affected_population))
-            row.add(m.Cell(affected, align='right'))
-            table.add(row)
 
+        # Breakdown by hazard level (if available)
+        if len(self.impact_category_ordering):
             for category in self.impact_category_ordering:
                 population_in_category = self.lookup_category(category)
                 population_in_category = format_int(population_rounding(
@@ -134,14 +138,47 @@ class PopulationExposureReportMixin(ReportMixin):
                 row.add(m.Cell(population_in_category, align='right'))
                 table.add(row)
 
-        table.add(m.Row())  # add a blank line
+        # Total affected population
+        row = m.Row()
+        row.add(m.Cell(
+            tr('Total affected population'),
+            header=True))
+        affected = format_int(
+            population_rounding(self.total_affected_population))
+        row.add(m.Cell(affected, align='right'))
+        table.add(row)
 
+        # Non affected population
         row = m.Row()
         unaffected = format_int(
             population_rounding(self.unaffected_population))
         row.add(m.Cell(tr('Unaffected population'), header=True))
         row.add(m.Cell(unaffected, align='right'))
         table.add(row)
+
+        # Total Population
+        row = m.Row()
+        total_population = format_int(
+            population_rounding(self.total_population))
+        row.add(m.Cell(tr('Total population'), header=True))
+        row.add(m.Cell(total_population, align='right'))
+        table.add(row)
+
+        # Empty row
+        empty_row = m.Row()
+        empty_row.add(m.Cell(''))
+        empty_row.add(m.Cell(''))
+        table.add(empty_row)
+
+        # Population needing evacuation
+        row = m.Row()
+        row.add(m.Cell(
+            tr('Population needing evacuation <sup>1</sup>'),
+            header=True))
+        evacuated = format_int(population_rounding(self.total_evacuated))
+        row.add(m.Cell(evacuated, align='right'))
+        table.add(row)
+
         message.add(table)
         return message
 
@@ -185,8 +222,7 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The categories by defined or default ordering.
         :rtype: list
         """
-        if (
-                not hasattr(self, '_impact_category_ordering') or
+        if (not hasattr(self, '_impact_category_ordering') or
                 not self._impact_category_ordering):
             self._impact_category_ordering = self.affected_population.keys()
         return self._impact_category_ordering

@@ -35,11 +35,10 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class FileDownloader(object):
     """The blueprint for downloading file from url."""
-    def __init__(self, manager, url, output_path, progress_dialog=None):
+    def __init__(self, url, output_path, progress_dialog=None):
         """Constructor of the class.
 
-        :param manager: QNetworkAccessManager instance to handle downloading.
-        :type manager: QNetworkAccessManager
+        .. versionchanged:: 3.3 removed manager parameter.
 
         :param url: URL of file.
         :type url: str
@@ -51,7 +50,8 @@ class FileDownloader(object):
         :type progress_dialog: QWidget
 
         """
-        self.manager = manager
+        # noinspection PyArgumentList
+        self.manager = qgis.core.QgsNetworkAccessManager.instance()
         self.url = QUrl(url)
         self.output_path = output_path
         self.progress_dialog = progress_dialog
@@ -129,17 +129,22 @@ class FileDownloader(object):
         result = self.reply.error()
         if result == QNetworkReply.NoError:
             return True, None
+
         elif result == QNetworkReply.UnknownNetworkError:
             return False, tr(
                 'The network is unreachable. Please check your internet '
                 'connection.')
-        elif result == QNetworkReply.HostNotFoundError:
+
+        elif result == QNetworkReply.ProtocolUnknownError or \
+                result == QNetworkReply.HostNotFoundError:
             LOGGER.exception('Host not found : %s' % self.url.encodedHost())
             return False, tr(
                 'Sorry, the server is unreachable. Please try again later.')
+
         elif result == QNetworkReply.ContentNotFoundError:
             LOGGER.exception('Path not found : %s' % self.url.path())
             return False, tr('Sorry, the layer was not found on the server.')
+
         else:
             return result, self.reply.errorString()
 

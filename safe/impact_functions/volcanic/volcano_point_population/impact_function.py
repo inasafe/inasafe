@@ -117,6 +117,10 @@ class VolcanoPointPopulationFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Parameters
         radii = self.parameters['distances'].value
 
@@ -137,9 +141,8 @@ class VolcanoPointPopulationFunction(
         category_title = 'Radius'
 
         centers = self.hazard.layer.get_geometry()
-        rad_m = [x * 1000 for x in radii]  # Convert to meters
         hazard_layer = buffer_points(
-            centers, rad_m, category_title, data_table=data_table)
+            centers, radii, category_title, data_table=data_table)
 
         # Get names of volcanoes considered
         if volcano_name_attribute in hazard_layer.get_attribute_names():
@@ -162,8 +165,8 @@ class VolcanoPointPopulationFunction(
             )
 
         # Initialise affected population per categories
-        for radius in rad_m:
-            category = 'Distance %s km ' % format_int(radius)
+        for radius in radii:
+            category = 'Radius %s km ' % format_int(radius)
             self.affected_population[category] = 0
 
         if has_no_data(self.exposure.layer.get_data(nan=True)):
@@ -175,7 +178,7 @@ class VolcanoPointPopulationFunction(
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this category
-                category = 'Distance %s km ' % format_int(
+                category = 'Radius %s km ' % format_int(
                     row[category_title])
                 self.affected_population[category] += population
 
@@ -216,15 +219,10 @@ class VolcanoPointPopulationFunction(
             else:
                 label = create_label(interval_classes[i])
 
-            if i == 0:
-                transparency = 100
-            else:
-                transparency = 0
-
             style_class['label'] = label
             style_class['quantity'] = classes[i]
             style_class['colour'] = colours[i]
-            style_class['transparency'] = transparency
+            style_class['transparency'] = 0
             style_classes.append(style_class)
 
         # Override style info with new classes and name
@@ -242,19 +240,27 @@ class VolcanoPointPopulationFunction(
             get_thousand_separator())
 
         # Create vector layer and return
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.target_field,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'total_needs': self.total_needs
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         impact_layer = Raster(
             data=covered_exposure_layer.get_data(),
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
             name=tr('People affected by the buffered point volcano'),
-            keywords={'impact_summary': impact_summary,
-                      'impact_table': impact_table,
-                      'target_field': self.target_field,
-                      'map_title': map_title,
-                      'legend_notes': legend_notes,
-                      'legend_units': legend_units,
-                      'legend_title': legend_title,
-                      'total_needs': self.total_needs},
+            keywords=impact_layer_keywords,
             style_info=style_info)
 
         self._impact = impact_layer

@@ -166,7 +166,8 @@ class ITBFatalityFunction(
             # array is ordered in such a way that the numbers closest to the
             # next one are at the top.
             sorted_idx = sorted(diff_dic, key=diff_dic.get)
-            idx_change = [sorted_idx[x] for x in range(nsize-difference, nsize)]
+            idx_change = [
+                sorted_idx[x] for x in range(nsize - difference, nsize)]
             floor_array[idx_change] += 1
 
         assert(array_sum == int(numpy.sum(floor_array)))
@@ -251,10 +252,21 @@ class ITBFatalityFunction(
         message.add(checklist)
         return message
 
+    def compute_probability(self, total_fatalities_raw):
+        """
+        :param total_fatalities_raw:
+        :return:
+        """
+        return None
+
     def run(self):
         """Indonesian Earthquake Fatality Model."""
         self.validate()
         self.prepare()
+
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
 
         displacement_rate = self.hardcoded_parameters['displacement_rate']
         fatality_rate = self.compute_fatality_rate()
@@ -265,7 +277,6 @@ class ITBFatalityFunction(
         exposure = self.exposure.layer.get_data(scaling=True)
 
         # Calculate people affected by each MMI level
-        # FIXME (Ole): this range is 2-9. Should 10 be included?
         mmi_range = self.hardcoded_parameters['mmi_range']
         number_of_exposed = {}
         number_of_displaced = {}
@@ -278,9 +289,7 @@ class ITBFatalityFunction(
             # count people affected by this shake level
             step = self.hardcoded_parameters['step']
             mmi_matches = numpy.where(
-                (hazard > mmi - step) * (
-                    hazard <= mmi + step),
-                exposure, 0)
+                (hazard > mmi - step) * (hazard <= mmi + step), exposure, 0)
 
             # Calculate expected number of fatalities per level
             exposed = numpy.nansum(mmi_matches)
@@ -297,7 +306,7 @@ class ITBFatalityFunction(
 
             # Sum up numbers for map
             # We need to use matrices here and not just numbers #2235
-            mask += displacements   # Displaced
+            mask += mmi_matches   # Displaced
 
             # Generate text with result for this study
             # This is what is used in the real time system exposure table
@@ -355,11 +364,7 @@ class ITBFatalityFunction(
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
             style_class['quantity'] = classes[i]
-            if i == 0:
-                transparency = 100
-            else:
-                transparency = 30
-            style_class['transparency'] = transparency
+            style_class['transparency'] = 30
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
 
@@ -371,29 +376,38 @@ class ITBFatalityFunction(
         map_title = tr('Earthquake impact to population')
         legend_title = tr('Population Count')
         legend_units = tr('(people per cell)')
-        legend_notes = tr('Thousand separator is represented by %s' %
-                          get_thousand_separator())
+        legend_notes = tr(
+            'Thousand separator is represented by %s' %
+            get_thousand_separator())
+
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'exposed_per_mmi': number_of_exposed,
+            'total_population': self.total_population,
+            'total_fatalities': population_rounding(self.total_fatalities),
+            'total_fatalities_raw': self.total_fatalities,
+            'fatalities_per_mmi': number_of_fatalities,
+            'total_displaced': population_rounding(total_displaced),
+            'displaced_per_mmi': number_of_displaced,
+            'impact_table': impact_table,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'total_needs': total_needs,
+            'prob_fatality_mag': prob_fatality_mag,
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
         raster = Raster(
             mask,
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
-            keywords={
-                'impact_summary': impact_summary,
-                'exposed_per_mmi': number_of_exposed,
-                'prob_fatality_mag': prob_fatality_mag,
-                'total_population': self.total_population,
-                'total_fatalities': population_rounding(self.total_fatalities),
-                'fatalities_per_mmi': number_of_fatalities,
-                'total_displaced': population_rounding(total_displaced),
-                'displaced_per_mmi': number_of_displaced,
-                'impact_table': impact_table,
-                'map_title': map_title,
-                'legend_notes': legend_notes,
-                'legend_units': legend_units,
-                'legend_title': legend_title,
-                'total_needs': total_needs},
+            keywords=impact_layer_keywords,
             name=tr('Estimated displaced population per cell'),
             style_info=style_info)
         self._impact = raster
