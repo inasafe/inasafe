@@ -1083,7 +1083,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.lstClassifications.setCurrentRow(
                     classifications.index(classification_keyword))
 
-            self.auto_select_one_item(self.lstClassifications)
+        self.auto_select_one_item(self.lstClassifications)
 
     # ===========================
     # STEP_KW_FIELD
