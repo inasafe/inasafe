@@ -78,7 +78,7 @@ class ImpactReport(object):
         """
         LOGGER.debug('InaSAFE Impact Report class initialised')
         self._iface = iface
-        self._template = template
+        self.template = template
         self._layer = layer
         self._extent = self._iface.mapCanvas().extent()
         self._page_dpi = 300.0

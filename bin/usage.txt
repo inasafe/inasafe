@@ -5,7 +5,7 @@ Usage:
             --impact-function=IF_ID --report-template=TEMPLATE --output-file=FILE [--extent=XMIN:YMIN:XMAX:YMAX]
     inasafe [--hazard=HAZARD_FILE --exposure=EXP_FILE] (--version | --list-functions)
     inasafe --download --layers=LAYER_NAME [LAYER_NAME...] --extent=XMIN:YMIN:XMAX:YMAX
-    inasafe report --impact=IMPACT_FILE --report-template=TEMPLATE --output-file=FILE
+    inasafe report [--report-template=TEMPLATE] --output-file=IMPACT_FILE
 
 Options:
     -l --list-functions        List the available impact functions and exit. Can be used along
