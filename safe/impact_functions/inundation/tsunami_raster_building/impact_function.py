@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on OSM
+"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
 Buildings
 
 Contact : ole.moller.nielsen@gmail.com
@@ -11,14 +11,19 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'lucernae'
+__author__ = 'ismailsunni'
+__project_name__ = 'inasafe'
+__filename__ = 'impact_function'
+__date__ = '12/31/15'
+__copyright__ = 'imajimatika@gmail.com'
+
 
 import logging
 from collections import OrderedDict
 
 from safe.impact_functions.inundation\
-    .flood_raster_osm_building_impact.metadata_definitions import \
-    FloodRasterBuildingMetadata
+    .tsunami_raster_building.metadata_definitions import \
+    TsunamiRasterBuildingMetadata
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.storage.vector import Vector
@@ -33,17 +38,24 @@ from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class FloodRasterBuildingFunction(
+class TsunamiRasterBuildingFunction(
         ContinuousRHClassifiedVE,
         BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Inundation raster impact on building data."""
-    _metadata = FloodRasterBuildingMetadata()
+    _metadata = TsunamiRasterBuildingMetadata()
 
     def __init__(self):
         """Constructor (calls ctor of base class)."""
-        super(FloodRasterBuildingFunction, self).__init__()
-
+        self._target_field = 'depth'
+        super(TsunamiRasterBuildingFunction, self).__init__()
+        self.hazard_classes = [
+            tr('Dry Zone'),
+            tr('Low Hazard Zone'),
+            tr('Medium Hazard Zone'),
+            tr('High Hazard Zone'),
+            tr('Very High Hazard Zone'),
+        ]
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
@@ -54,21 +66,53 @@ class FloodRasterBuildingFunction(
         :rtype: safe.messaging.Message
         """
         message = m.Message(style_class='container')
-        threshold = self.parameters['threshold'].value
         message.add(
             m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
+
+        # Thresholds for tsunami hazard zone breakdown.
+        low_max = self.parameters['low_threshold']
+        medium_max = self.parameters['medium_threshold']
+        high_max = self.parameters['high_threshold']
+
         checklist.add(tr(
-            'Buildings are flooded when flood levels '
-            'exceed %.1f m') % threshold)
+            'Dry zone is defined as non-inundated area or has inundation '
+            'depth is 0 %s') % (low_max.unit.abbreviation)
+        )
+
         checklist.add(tr(
-            'Buildings are wet when flood levels '
-            'are greater than 0 m but less than %.1f m') % threshold)
+            'Low tsunami hazard zone is defined as inundation depth is more '
+            'than 0 %s but less than %.1f %s') % (
+            low_max.unit.abbreviation,
+            low_max.value,
+            low_max.unit.abbreviation)
+        )
         checklist.add(tr(
-            'Buildings are dry when flood levels are 0 m.'))
+            'Moderate tsunami hazard zone is defined as inundation depth is '
+            'more than %.1f %s but less than %.1f %s') % (
+            low_max.value,
+            low_max.unit.abbreviation,
+            medium_max.value,
+            medium_max.unit.abbreviation)
+        )
         checklist.add(tr(
-            'Buildings are closed if they are flooded or wet.'))
-        checklist.add(tr('Buildings are open if they are dry.'))
+            'High tsunami hazard zone is defined as inundation depth is '
+            'more than %.1f %s but less than %.1f %s') % (
+            medium_max.value,
+            medium_max.unit.abbreviation,
+            high_max.value,
+            high_max.unit.abbreviation)
+        )
+        checklist.add(tr(
+            'Very high tsunami hazard zone is defined as inundation depth is '
+            'more than %.1f %s') % (
+            high_max.value, high_max.unit.abbreviation))
+
+        checklist.add(tr(
+            'Buildings are closed if they are in low, moderate, high, or very '
+            'high tsunami hazard zone.'))
+        checklist.add(tr(
+            'Buildings are opened if they are in dry zone.'))
         message.add(checklist)
         return message
 
@@ -79,30 +123,23 @@ class FloodRasterBuildingFunction(
         :returns: The categories that equal effected.
         :rtype: list
         """
-        return [tr('Flooded'), tr('Wet')]
+        return self.hazard_classes[1:]
 
     def run(self):
-        """Flood impact to buildings (e.g. from Open Street Map)."""
+        """Tsunami raster impact to buildings (e.g. from Open Street Map)."""
         self.validate()
         self.prepare()
 
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
-
-        threshold = self.parameters['threshold'].value  # Flood threshold [m]
-
-        verify(isinstance(threshold, float),
-               'Expected thresholds to be a float. Got %s' % str(threshold))
-
-        # Determine attribute name for hazard levels
-        hazard_attribute = 'depth'
+        # Thresholds for tsunami hazard zone breakdown.
+        low_max = self.parameters['low_threshold'].value
+        medium_max = self.parameters['medium_threshold'].value
+        high_max = self.parameters['high_threshold'].value
 
         # Interpolate hazard level to building locations
         interpolated_layer = assign_hazard_values_to_exposure_data(
             self.hazard.layer,
             self.exposure.layer,
-            attribute_name=hazard_attribute)
+            attribute_name=self.target_field)
 
         # Extract relevant exposure data
         attribute_names = interpolated_layer.get_attribute_names()
@@ -120,19 +157,29 @@ class FloodRasterBuildingFunction(
         self.buildings = {}
         # Impacted building breakdown
         self.affected_buildings = OrderedDict([
-            (tr('Flooded'), {}),
-            (tr('Wet'), {}),
-            (tr('Dry'), {})
+            (self.hazard_classes[0], {}),
+            (self.hazard_classes[1], {}),
+            (self.hazard_classes[2], {}),
+            (self.hazard_classes[3], {}),
+            (self.hazard_classes[4], {})
         ])
+        categories = self.affected_buildings.keys()
         for i in range(total_features):
             # Get the interpolated depth
-            water_depth = float(features[i]['depth'])
+            water_depth = float(features[i][self.target_field])
             if water_depth <= 0:
-                inundated_status = 0  # dry
-            elif water_depth >= threshold:
-                inundated_status = 1  # inundated
+                inundated_status = 0
+            elif 0 < water_depth <= low_max:
+                inundated_status = 1  # low
+            elif low_max < water_depth <= medium_max:
+                inundated_status = 2  # medium
+            elif medium_max < water_depth <= high_max:
+                inundated_status = 3  # high
+            elif high_max < water_depth:
+                inundated_status = 4  # very high
+            # If not a number or a value beside real number.
             else:
-                inundated_status = 2  # wet
+                inundated_status = 0
 
             # Count affected buildings by usage type if available
             if (structure_class_field in attribute_names and
@@ -155,10 +202,7 @@ class FloodRasterBuildingFunction(
             self.buildings[usage] += 1
             # Add calculated impact to existing attributes
             features[i][self.target_field] = inundated_status
-            category = [
-                tr('Dry'),
-                tr('Flooded'),
-                tr('Wet')][inundated_status]
+            category = categories[inundated_status]
             self.affected_buildings[category][usage][
                 tr('Buildings Affected')] += 1
 
@@ -172,59 +216,68 @@ class FloodRasterBuildingFunction(
         impact_table = impact_summary = self.html_report()
 
         # For printing map purpose
-        map_title = tr('Flooded buildings')
-        legend_title = tr('Flooded structure status')
-        legend_units = tr('(flooded, wet, or dry)')
+        map_title = tr('Inundated buildings')
+        legend_title = tr('Inundated structure status')
+        legend_units = tr('(low, medium, high, and very high)')
 
         style_classes = [
             dict(
-                label=tr('Dry (<= 0 m)'),
+                label=self.hazard_classes[0],
                 value=0,
-                colour='#1EFC7C',
+                colour='#00FF00',
                 transparency=0,
                 size=1
             ),
             dict(
-                label=tr('Wet (0 m - %.1f m)') % threshold,
-                value=2,
-                colour='#FF9900',
-                transparency=0,
-                size=1
-            ),
-            dict(
-                label=tr('Flooded (>= %.1f m)') % threshold,
+                label=self.hazard_classes[1],
                 value=1,
-                colour='#F31A1C',
+                colour='#FFFF00',
                 transparency=0,
                 size=1
-            )]
+            ),
+            dict(
+                label=self.hazard_classes[2],
+                value=2,
+                colour='#FFB700',
+                transparency=0,
+                size=1
+            ),
+            dict(
+                label=self.hazard_classes[3],
+                value=3,
+                colour='#FF6F00',
+                transparency=0,
+                size=1
+            ),
+
+            dict(
+                label=self.hazard_classes[4],
+                value=4,
+                colour='#FF0000',
+                transparency=0,
+                size=1
+            ),
+        ]
 
         style_info = dict(
             target_field=self.target_field,
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
-        extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
-            'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_title': legend_title,
-            'legend_units': legend_units,
-            'buildings_total': total_features,
-            'buildings_affected': self.total_affected_buildings
-        }
-
-        self.set_if_provenance()
-
-        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
-
         vector_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
             name=tr('Estimated buildings affected'),
-            keywords=impact_layer_keywords,
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'target_field': self.target_field,
+                'map_title': map_title,
+                'legend_title': legend_title,
+                'legend_units': legend_units,
+                'buildings_total': total_features,
+                'buildings_affected': self.total_affected_buildings},
             style_info=style_info)
         # Create vector layer and return
         self._impact = vector_layer

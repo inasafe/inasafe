@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact on OSM
+"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
 Buildings
 
 Contact : ole.moller.nielsen@gmail.com
@@ -10,15 +10,22 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
-__author__ = "lucernae"
+__author__ = 'ismailsunni'
+__project_name__ = 'inasafe'
+__filename__ = 'metadata_definitions'
+__date__ = '12/31/15'
+__copyright__ = 'imajimatika@gmail.com'
 
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.flood_raster_osm_building_impact\
-    .parameter_definitions import threshold
+from safe.impact_functions.inundation.tsunami_raster_building \
+    .parameter_definitions import (
+    low_threshold,
+    medium_threshold,
+    high_threshold
+)
 from safe.utilities.i18n import tr
 from safe.definitions import (
     layer_mode_classified,
@@ -26,7 +33,6 @@ from safe.definitions import (
     layer_geometry_polygon,
     layer_geometry_point,
     layer_geometry_raster,
-    hazard_flood,
     hazard_category_single_event,
     hazard_category_multiple_event,
     exposure_structure,
@@ -37,10 +43,10 @@ from safe.definitions import (
 )
 
 
-class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
-    """Metadata for Flood Raster Building Impact Function.
+class TsunamiRasterBuildingMetadata(ImpactFunctionMetadata):
+    """Metadata for Tsunami Raster Building Impact Function.
 
-    .. versionadded:: 2.1
+    .. versionadded:: 3.3
 
     We only need to re-implement as_dict(), all other behaviours
     are inherited from the abstract base class.
@@ -58,38 +64,37 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'FloodRasterBuildingFunction',
-            'name': tr('Raster flood on buildings'),
-            'impact': tr('Be flooded'),
-            'title': tr('Be flooded'),
+            'id': 'TsunamiRasterBuildingFunction',
+            'name': tr('Raster tsunami on buildings'),
+            'impact': tr('Be inundated'),
+            'title': tr('Be inundated'),
             'function_type': 'old-style',
             # should be a list, but we can do it later.
-            'author': 'Ole Nielsen and Kristy van Putten',
+            'author': 'Ole Nielsen, Kristy van Putten, and Ismail Sunni',
             'date_implemented': 'N/A',
             'overview': tr(
-                'To assess the impacts of (flood or tsunami) inundation '
-                'on building footprints originating from OpenStreetMap '
-                '(OSM) with hazard in raster format.'),
+                'To assess the impacts of tsunami inundation on building '
+                'footprints in vector format with hazard in raster format.'),
             'detailed_description': tr(
                 'The inundation status is calculated for each building '
                 '(using the centroid if it is a polygon) based on the '
-                'flood threshold. The threshold can be configured in '
+                'tsunami threshold. The threshold can be configured in '
                 'impact function options.'),
             'hazard_input': tr(
-                'A hazard raster layer where each cell represents flood '
-                'depth (in meters).'),
+                'A hazard raster layer where each cell represents tsunami '
+                'inundation depth (in meters).'),
             'exposure_input': tr(
-                'Vector polygon or point layer extracted from OSM where '
-                'each feature represents the footprint of a building.'),
+                'Vector polygon or point layer where each feature represents '
+                'the footprint of a building.'),
             'output': tr(
                 'Vector layer contains building is estimated to be '
-                'flooded and the breakdown of the building by type.'),
+                'inundated and the breakdown of the building by type.'),
             'actions': tr(
                 'Provide details about where critical infrastructure '
-                'might be flooded.'),
-            'limitations': [
-                tr('This function only flags buildings as impacted or not '
-                   'either based on a fixed threshold')
+                'might be inundated.'),
+            'limitations': [tr(
+                'This function only flags buildings as impacted or not either '
+                'based on a fixed threshold')
             ],
             'citations': [],
             'layer_requirements': {
@@ -100,7 +105,7 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                         hazard_category_single_event,
                         hazard_category_multiple_event
                     ],
-                    'hazard_types': [hazard_flood],
+                    'hazard_types': [hazard_tsunami],
                     'continuous_hazard_units': [unit_feet, unit_metres],
                     'vector_hazard_classifications': [],
                     'raster_hazard_classifications': [],
@@ -118,11 +123,16 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 }
             },
-            'parameters': OrderedDict([
-                ('threshold', threshold()),
-                ('postprocessors', OrderedDict([
-                    ('BuildingType', building_type_postprocessor())
-                ]))
-            ])
+            'parameters': OrderedDict(
+                [
+                    ('low_threshold', low_threshold()),
+                    ('medium_threshold', medium_threshold()),
+                    ('high_threshold', high_threshold()),
+                    ('postprocessors', OrderedDict(
+                        [
+                            ('BuildingType', building_type_postprocessor())
+                        ])
+                    )
+                ])
         }
         return dict_meta

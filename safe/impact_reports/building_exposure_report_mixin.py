@@ -75,6 +75,7 @@ class BuildingExposureReportMixin(ReportMixin):
         self.question = ''
         self.buildings = {}
         self.affected_buildings = {}
+        self.building_report_threshold = 25
 
     def generate_report(self):
         """Breakdown by building type.
@@ -278,7 +279,7 @@ class BuildingExposureReportMixin(ReportMixin):
                 (dry, {residential: 50, school: 50})
             ])
         """
-        return self._count_usage('school')
+        return self._count_usage('school', self._affected_categories)
 
     @property
     def hospitals_closed(self):
@@ -297,11 +298,26 @@ class BuildingExposureReportMixin(ReportMixin):
                 (dry, {residential: 50, school: 50})
             ])
         """
-        return self._count_usage('hospital')
+        return self._count_usage('hospital', self._affected_categories)
 
-    def _count_usage(self, usage):
+    def _count_usage(self, usage, categories=None):
+        """Obtain the number of usage (building) that in categories.
+
+        If categories is None, get all categories.
+
+        :param usage: Building usage.
+        :type usage: str
+
+        :param categories: Categories that's requested.
+        :type categories: list
+
+        :returns: Number of building that is usage and fall in categories.
+        :rtype: int
+        """
         count = 0
-        for category_breakdown in self.affected_buildings.values():
+        for category, category_breakdown in self.affected_buildings.items():
+            if categories and category not in categories:
+                continue
             for current_usage in category_breakdown:
                 if current_usage.lower() == usage.lower():
                     count += category_breakdown[current_usage].values()[0]
@@ -359,11 +375,13 @@ class BuildingExposureReportMixin(ReportMixin):
         return sum(self.buildings.values())
 
     def _consolidate_to_other(self):
-        """Consolidate the small building usage groups < 25 to other."""
-        cutoff = 25
+        """Consolidate small building usage groups within self.threshold.
+
+        Small groups will be grouped together in the "other" group.
+        """
         other = tr('Other')
         for (usage, value) in self.buildings.items():
-            if value >= cutoff:
+            if value >= self.building_report_threshold:
                 continue
             if other not in self.buildings.keys():
                 self.buildings[other] = 0
