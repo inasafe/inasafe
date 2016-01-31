@@ -147,10 +147,19 @@ class Cell(MessageElement):
         """
         raise NotImplementedError('Please Implement this method')
 
-    def to_json(self):
-        """Render a MessageElement queue as JSON
+    def to_dict(self):
+        """Render a MessageElement as python dict
 
-        :returns: Json representation of the Text MessageElement.
-        :rtype: str
+        :return: Python dict representation
+        :rtype: dict
         """
-        raise NotImplementedError('Please Implement this method')
+        obj_dict = super(Cell, self).to_dict()
+        child_dict = {
+            'type': self.__class__.__name__,
+            'header_flag': self.header_flag,
+            'align': self.align,
+            'wrap_slash': self.wrap_slash,
+            'content': self.content.to_dict()
+        }
+        obj_dict.update(child_dict)
+        return obj_dict
