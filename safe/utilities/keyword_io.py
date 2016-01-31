@@ -128,7 +128,7 @@ class KeywordIO(QObject):
         IO. Use this if you are sure that the filename is a keyword file.
 
         :param filename: The filename of the keyword, typically with .xml or
-            .keywords extension
+            .keywords extension. If not, will raise exceptions
         :type filename: str
 
         :param keyword: If set, will extract only the specified keyword
@@ -139,9 +139,34 @@ class KeywordIO(QObject):
             given key if it is present.
         :rtype: dict, str
 
-        :raises: KeywordNotFoundError
+        :raises: KeywordNotFoundError, InvalidParameterError
         """
-        dictionary = read_keywords(filename)
+
+        # Try to read from ISO metadata first.
+        _, ext = os.path.splitext(filename)
+
+        if ext == '.xml':
+            try:
+                dictionary = read_iso19115_metadata(filename)
+            except (MetadataReadError, NoKeywordsFoundError):
+                pass
+        elif ext == '.keywords':
+            try:
+                dictionary = read_file_keywords(filename)
+                # update to xml based metadata
+                write_read_iso_19115_metadata(filename, dictionary)
+
+            except (HashNotFoundError,
+                    Exception,
+                    OperationalError,
+                    NoKeywordsFoundError,
+                    KeywordNotFoundError,
+                    InvalidParameterError,
+                    UnsupportedProviderError):
+                raise
+        else:
+            raise InvalidParameterError(
+                'Keywords file have .xml or .keywords extension')
 
         # if no keyword was supplied, just return the dict
         if keyword is None:

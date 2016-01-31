@@ -66,7 +66,7 @@ class KeywordIOTest(unittest.TestCase):
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
-            'keyword_version': '3.2',
+            'keyword_version': '3.3',
             'structure_class_field': 'FLOODED',
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
