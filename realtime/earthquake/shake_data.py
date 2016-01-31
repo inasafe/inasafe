@@ -185,15 +185,15 @@ class ShakeData(object):
         local_path = os.path.join(self.working_dir, self.event_id)
         source_grid_xml = os.path.join(local_path, 'output', 'grid.xml')
 
-        if not os.path.exists(self.extract_dir()):
-            make_directory(self.extract_dir())
-
         if force_flag or self.force_flag:
             self.remove_extracted_files()
         elif os.path.exists(final_grid_xml_file):
             if filecmp.cmp(final_grid_xml_file, source_grid_xml):
                 return final_grid_xml_file
             # if it is not identical, copy again
+
+        if not os.path.exists(self.extract_dir()):
+            make_directory(self.extract_dir())
 
         if not os.path.exists(source_grid_xml):
             raise FileNotFoundError(
