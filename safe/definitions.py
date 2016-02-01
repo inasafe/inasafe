@@ -761,14 +761,18 @@ area_name_field = {
     'key': 'area_name_field',
     'name': tr('Name field'),
     'type': 'field',
-    'description': tr('Attribute for the area name ')
+    'description': tr(
+            'Attribute for the area name. We will show the name for each area '
+            'by using this attribute.')
 }
 
 area_id_field = {
     'key': 'area_id_field',
     'name': tr('Id field'),
     'type': 'field',
-    'description': tr('Attribute for the id on the area')
+    'description': tr(
+            'Attribute for the id on the area. We will group the result by '
+            'this attribute')
 }
 
 # General terminology and descriptive terms
