@@ -713,7 +713,7 @@ count_exposure_unit = {
     'key': 'count',
     'name': tr('Count'),
     'description': tr(
-        'Number of people (or any other object) per pixel or building.')
+        'Number of people (or any other object) per pixel, building or area.')
 }
 
 density_exposure_unit = {

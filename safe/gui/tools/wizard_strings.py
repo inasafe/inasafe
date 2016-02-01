@@ -92,7 +92,7 @@ tephra_kgm2_question = tr(
     'tephra intensity in kg/m<sup>2</sup>')
 volcano_volcano_categorical_question = tr(
     'volcano hazard categorical level')
-population_number_question = tr(
+population_count_question = tr(
     'the number of people')
 population_density_question = tr(
     'people density in people/km<sup>2</sup>')
