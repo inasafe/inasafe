@@ -56,18 +56,18 @@ exposure_question = tr(
 layer_mode_raster_question = tr(
     'You have selected <b>%s %s</b> for this raster layer. '
     '<p>We need to know whether each cell in this raster represents '
-    '<b>continuous</b> data or if the data have been <b>classified</b>.</p>')
-    # (subcategory, category)
+    '<b>continuous</b> data or if the data have been <b>classified</b>.</p>'
+    )  # (subcategory, category)
 layer_mode_vector_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values represents <b>continuous</b> '
-    'data or if the data have been <b>classified</b>.</p>')
-    # (subcategory, category)
+    'data or if the data have been <b>classified</b>.</p>'
+    )  # (subcategory, category)
 layer_mode_vector_classified_confirm = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values in this vector layer have '
-    'been <b>classified</b> and are represented by a code.</p>')
-    # (subcategory, category)
+    'been <b>classified</b> and are represented by a code.</p>'
+    )  # (subcategory, category)
 layer_mode_vector_continuous_confirm = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values represents '
