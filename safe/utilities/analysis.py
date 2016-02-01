@@ -80,10 +80,21 @@ class Analysis(object):
         """Constructor."""
 
         # Impact Function
-        self.impact_function = None
+        self._impact_function = None
 
         self.aggregator = None
         self.postprocessor_manager = None
+
+    @property
+    def impact_function(self):
+        if not self._impact_function:
+            # RMN: need to put sane exception to easily identify errors
+            raise ValueError('Impact function property cannot be empty')
+        return self._impact_function
+
+    @impact_function.setter
+    def impact_function(self, impact_function):
+        self._impact_function = impact_function
 
     @property
     def clip_hard(self):

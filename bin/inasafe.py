@@ -15,6 +15,7 @@ Contact : jannes@kartoza.com
         cli: command line interface
     .. versionadded:: 3.2
 """
+from safe.storage.core import read_layer
 
 __author__ = 'Jannes Engelbrecht'
 __date__ = '16/04/15'
@@ -32,7 +33,6 @@ from qgis.core import (
     QgsCoordinateReferenceSystem)
 from PyQt4.QtCore import QSettings
 
-from safe.impact_functions.registry import Registry
 from safe.impact_functions import register_impact_functions
 from safe.test.utilities import get_qgis_app
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -40,6 +40,8 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.report.impact_report import ImpactReport
 from safe.utilities.osm_downloader import download
+from headless.tasks.utilities import generate_styles
+from safe.storage.utilities import safe_to_qgis_layer
 
 current_dir = os.path.abspath(
     os.path.realpath(os.environ['PWD']))
@@ -63,6 +65,7 @@ class CommandLineArguments(object):
         self.output_file = arguments_['--output-file']
         self.hazard = arguments_['--hazard']
         self.exposure = arguments_['--exposure']
+        self.aggregation = arguments_['--aggregation']
         self.version = arguments_['--version']
         self.show_list = arguments_['--list-functions']
         self.impact_function = arguments_['--impact-function']
@@ -176,6 +179,43 @@ def join_if_relative(path_argument):
         return os.path.abspath(path_argument)
 
 
+def get_layer(layer_path):
+    """Get layer from path.
+
+    .. versionadded:: 3.2
+
+    :param layer_path: User inputs.
+    :type layer_path: CommandLineArguments
+
+    :returns: Vector or Raster layer depending on input arguments.
+    :rtype: QgsVectorLayer, QgsRasterLayer
+
+    :raises: Exception
+    """
+    layer = None
+    try:
+        if os.path.splitext(layer_path)[1] == '.shp':
+            layer_base = join_if_relative(layer_path)
+            layer = QgsVectorLayer(
+                layer_base, 'cli_vector_hazard', 'ogr')
+        elif os.path.splitext(layer_path)[1] in \
+                ['.asc', '.tif', '.tiff']:
+            layer_base = join_if_relative(layer_path)
+            layer = QgsRasterLayer(
+                layer_base, 'cli_raster_hazard')
+        else:
+            print "Unknown filetype " + layer_path
+        if layer is not None and layer.isValid():
+            print "layer is VALID"
+        else:
+            print "layer is NOT VALID"
+            print "Perhaps run-env-linux.sh /usr"
+        return layer
+    except Exception as exception:
+        print exception.message
+        print exception.__doc__
+
+
 def get_hazard(arguments):
     """Get hazard layer.
 
@@ -189,28 +229,7 @@ def get_hazard(arguments):
 
     :raises: Exception
     """
-    hazard = None
-    try:
-        if os.path.splitext(arguments.hazard)[1] == '.shp':
-            hazard_base = join_if_relative(arguments.hazard)
-            hazard = QgsVectorLayer(
-                hazard_base, 'cli_vector_hazard', 'ogr')
-        elif os.path.splitext(arguments.hazard)[1] in \
-                ['.asc', '.tif', '.tiff']:
-            hazard_base = join_if_relative(arguments.hazard)
-            hazard = QgsRasterLayer(
-                hazard_base, 'cli_raster_hazard')
-        else:
-            print "Unknown filetype " + arguments.hazard
-        if hazard is not None and hazard.isValid():
-            print "hazard layer is VALID"
-        else:
-            print "hazard layer is NOT VALID"
-            print "Perhaps run-env-linux.sh /usr"
-        return hazard
-    except Exception as exception:
-        print exception.message
-        print exception.__doc__
+    return get_layer(arguments.hazard)
 
 
 def get_exposure(arguments):
@@ -226,31 +245,11 @@ def get_exposure(arguments):
 
     :raises: Exception
     """
-    exposure = None
-    try:
-        if os.path.splitext(arguments.exposure)[1] == '.shp':
-            exposure_base = join_if_relative(arguments.exposure)
-            LOGGER.debug(exposure_base)
-            exposure = QgsVectorLayer(exposure_base, 'cli_vector', 'ogr')
-        elif os.path.splitext(arguments.exposure)[1] in \
-                ['.asc', '.tif', '.tiff']:
-            exposure_base = join_if_relative(arguments.exposure)
-            LOGGER.debug(exposure_base)
-            exposure = QgsRasterLayer(exposure_base, 'cli_raster')
-        else:
-            print "Unknown filetype " + arguments.exposure
-        if exposure is not None and exposure.isValid():
-            print "exposure layer is VALID"
-        else:
-            print "exposure layer not valid"
-            print "Perhaps run-env-linux.sh /usr"
-        return exposure
-    except Exception as exception:
-        print exception.message
-        print exception.__doc__
+    return get_layer(arguments.exposure)
 
 
-def analysis_setup(command_line_arguments, hazard, exposure):
+def analysis_setup(command_line_arguments, hazard, exposure,
+                   aggregation=None):
     """Sets up an analysis object.
 
     .. versionadded:: 3.2
@@ -263,6 +262,9 @@ def analysis_setup(command_line_arguments, hazard, exposure):
 
     :param exposure: Exposure Layer
     :type exposure: QgsLayer
+
+    :param aggregation: Aggregation Layer
+    :type aggregation: QgsLayer
 
     :raises: Exception
     """
@@ -279,10 +281,12 @@ def analysis_setup(command_line_arguments, hazard, exposure):
         print ie.message
         raise ImportError
     analysis = Analysis()
-    analysis.hazard_layer = hazard
-    analysis.exposure_layer = exposure
-    analysis.hazard_keyword = keyword_io.read_keywords(hazard)
-    analysis.exposure_keyword = keyword_io.read_keywords(exposure)
+    analysis.impact_function = impact_function
+    analysis.hazard = hazard
+    analysis.exposure = exposure
+    analysis.aggregation = aggregation
+    # analysis.hazard_keyword = keyword_io.read_keywords(hazard)
+    # analysis.exposure_keyword = keyword_io.read_keywords(exposure)
     analysis.clip_hard = False
     analysis.show_intermediate_layers = False
     analysis.run_in_thread_flag = False
@@ -301,7 +305,6 @@ def analysis_setup(command_line_arguments, hazard, exposure):
     except AttributeError:
         print "No extents"
         pass
-    analysis.impact_function = impact_function
     analysis.setup_analysis()
     return analysis
 
@@ -320,16 +323,15 @@ def run_impact_function(command_line_arguments):
     """
     hazard = get_hazard(command_line_arguments)
     exposure = get_exposure(command_line_arguments)
-    analysis = analysis_setup(command_line_arguments, hazard, exposure)
+    aggregation = get_layer(command_line_arguments.aggregation)
+    analysis = analysis_setup(
+        command_line_arguments, hazard, exposure, aggregation)
     analysis.run_analysis()
     impact_layer = analysis.impact_layer
+    qgis_impact_layer = safe_to_qgis_layer(impact_layer)
     write_results(command_line_arguments, impact_layer)
-    try:
-        LOGGER.info('Report template arguments: %s' % repr(command_line_arguments.report_template))
-        if command_line_arguments.report_template is not None:
-            build_report(command_line_arguments)
-    except AttributeError:
-        pass
+
+    return impact_layer
 
 
 def build_report(cli_arguments):
@@ -347,8 +349,13 @@ def build_report(cli_arguments):
     """
     try:
         LOGGER.info('Building a report')
-        impact_layer = QgsVectorLayer(
-            cli_arguments.output_file, 'cli_impact', 'ogr')
+        basename, ext = os.path.splitext(cli_arguments.output_file)
+        if ext == '.shp':
+            impact_layer = QgsVectorLayer(
+                cli_arguments.output_file, 'Impact Layer', 'ogr')
+        elif ext == '.tif':
+            impact_layer = QgsRasterLayer(
+                cli_arguments.output_file, 'Impact Layer')
         layer_registry = QgsMapLayerRegistry.instance()
         layer_registry.removeAllMapLayers()
         layer_registry.addMapLayer(impact_layer)
@@ -385,10 +392,21 @@ def write_results(cli_arguments, impact_layer):
     :raises: Exception
     """
     try:
-        impact_layer.write_to_file(join_if_relative(cli_arguments.output_file))
+        # RMN: check output filename.
+        # Is it conforming the standard?
+        abs_path = join_if_relative(cli_arguments.output_file)
+        basename, ext = os.path.splitext(abs_path)
+        if not ext:
+            # Extension is empty. Append extension
+            if impact_layer.is_raster:
+                ext = '.tif'
+            else:
+                ext = '.shp'
+            abs_path += ext
+        impact_layer.write_to_file(abs_path)
     except Exception as exception:
         print exception.message
-        raise RuntimeError
+        raise RuntimeError(exception.message)
 
 
 if __name__ == '__main__':
@@ -429,7 +447,8 @@ if __name__ == '__main__':
                 run_impact_function(arguments)
             else:
                 print "Download unsuccessful"
-        elif arguments.impact and arguments.output_file is not None:
+        elif (arguments.report_template is not None and
+                arguments.output_file is not None):
             print "Generating report"
             build_report(arguments)
         else:

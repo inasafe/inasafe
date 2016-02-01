@@ -12,6 +12,7 @@ packages = (
     'headless',
 )
 
+# import all tasks package
 import headless.tasks.inasafe_wrapper
 
 app.autodiscover_tasks(packages)
