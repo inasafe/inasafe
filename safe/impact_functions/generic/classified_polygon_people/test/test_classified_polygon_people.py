@@ -44,7 +44,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
         # noinspection PyCallingNonCallable
-        exposure_layer = QgsVectorLayer(exposure_path, 'Area', 'ogr')
+        exposure_layer = QgsVectorLayer(exposure_path, 'Exposure', 'ogr')
 
         # 1.1 Asserting if the provided data are valid
         self.assertEqual(hazard_layer.isValid(), True)
@@ -69,7 +69,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         # Asserting for the number of features in the impact
         # layer
 
-        self.assertEqual(impact.dataProvider().featureCount(), 12L)
+        self.assertEqual(impact.dataProvider().featureCount(), 6L)
 
         # 4. Asserting about the results found
         features = {}
@@ -77,10 +77,12 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             area = feature.geometry().area() * 1e8
             features[feature['id']] = round(area, 1)
 
+        # expected features changes accordingly
+        # to the impact features
         expected_features = {
-            1: 2460.7,
-            2: 6755.5,
-            3: 948.4
+            1: 6438.5,
+            2: 5894.1,
+            3: 8534.3
         }
         self.assertEqual(features, expected_features)
 
@@ -89,10 +91,11 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
 
         exposure_keywords = {
             'layer_purpose': 'exposure',
-            'layer_mode': 'classified',
+            'layer_mode': 'continuous',
             'layer_geometry': 'polygon',
-            'exposure': 'area',
-            'structure_class_field': 'type',
+            'exposure': 'population',
+            'structure_class_field': '',
+            'exposure_unit': 'count'
         }
 
         hazard_keywords = {

@@ -78,6 +78,20 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'area_name_field/'
             'gco:CharacterString'),
+        'area_id_field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'area_id_field/'
+            'gco:CharacterString'),
+        'area_type_field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'area_type_field/'
+            'gco:CharacterString'),
         'allow_resampling': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
