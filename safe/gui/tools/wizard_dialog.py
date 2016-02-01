@@ -109,8 +109,8 @@ from safe.gui.tools.wizard_strings import (
     category_question_exposure,
     category_question_aggregation,
     hazard_category_question,
-    layermode_raster_question,
-    layermode_vector_question,
+    layer_mode_raster_question,
+    layer_mode_vector_question,
     layer_mode_vector_classified_confirm,
     layer_mode_vector_continuous_confirm,
     unit_question,
@@ -904,9 +904,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         category = self.selected_category()
         subcategory = self.selected_subcategory()
         layer_mode_question = (
-            layermode_raster_question
+            layer_mode_raster_question
             if is_raster_layer(self.layer)
-            else layermode_vector_question)
+            else layer_mode_vector_question)
 
         self.lblDescribeLayerMode.setText('')
         self.lstLayerModes.clear()
@@ -914,17 +914,17 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lstFields.clear()
         layer_modes = self.layermodes_for_layer()
         if is_raster_layer(self.layer):
-            layer_mode_question = layermode_raster_question
+            layer_mode_question = layer_mode_raster_question
         else:
             if len(layer_modes) == 2:
-                layer_mode_question = layermode_vector_question
+                layer_mode_question = layer_mode_vector_question
             elif len(layer_modes) == 1:
                 if layer_modes[0]['key'] == 'classified':
                     layer_mode_question = layer_mode_vector_classified_confirm
                 elif layer_modes[0]['key'] == 'continuous':
                     layer_mode_question = layer_mode_vector_continuous_confirm
                 else:
-                    layer_mode_question = layermode_vector_question
+                    layer_mode_question = layer_mode_vector_question
         self.lblSelectLayerMode.setText(
             layer_mode_question % (subcategory['name'], category['name']))
         for layer_mode in layer_modes:

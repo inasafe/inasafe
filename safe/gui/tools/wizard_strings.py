@@ -53,12 +53,12 @@ exposure_question = tr(
     'For example, if you choose <b>population</b> you will be able to use '
     'this exposure layer with impact functions such as <b>flood impact on '
     'population</b>.</p>')
-layermode_raster_question = tr(
+layer_mode_raster_question = tr(
     'You have selected <b>%s %s</b> for this raster layer. '
     '<p>We need to know whether each cell in this raster represents '
     '<b>continuous</b> data or if the data have been <b>classified</b>.</p>')
     # (subcategory, category)
-layermode_vector_question = tr(
+layer_mode_vector_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values represents <b>continuous</b> '
     'data or if the data have been <b>classified</b>.</p>')
