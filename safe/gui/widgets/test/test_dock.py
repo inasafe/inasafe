@@ -1141,8 +1141,7 @@ class TestDockRegressions(TestCase):
         # Check if there is a regression about keywords being updated from
         # another layer
         keywords = KeywordIO(hazard_layer)
-        self.assertIn('flood unaligned', keywords.to_message())
-
+        self.assertIn('flood unaligned', keywords.to_message().to_text())
 
         exposure_layer, exposure_layer_purpose = load_layer(exposure_path)
         QgsMapLayerRegistry.instance().addMapLayers(
