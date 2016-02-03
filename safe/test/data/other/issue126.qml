@@ -5,6 +5,7 @@
       <rasterTransparency>
         <singleValuePixelList>
           <pixelListEntry min="0" max="0" percentTransparent="100"/>
+          <pixelListEntry min="0" max="0" percentTransparent="0"/>
         </singleValuePixelList>
       </rasterTransparency>
       <rastershader>
