@@ -52,7 +52,6 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.impact_functions import register_impact_functions
 
 
-DOCK = Dock(IFACE)
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -60,23 +59,27 @@ LOGGER = logging.getLogger('InaSAFE')
 class AggregatorTest(unittest.TestCase):
     """Test the InaSAFE GUI"""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.DOCK = Dock(IFACE)
+
     # noinspection PyPep8Naming
     def setUp(self):
         """Fixture run before all tests"""
         register_impact_functions()
         self.maxDiff = None  # show full diff for assert errors
         os.environ['LANG'] = 'en'
-        DOCK.show_only_visible_layers_flag = True
-        load_standard_layers(DOCK)
-        DOCK.cboHazard.setCurrentIndex(0)
-        DOCK.cboExposure.setCurrentIndex(0)
-        DOCK.cboFunction.setCurrentIndex(0)
-        DOCK.run_in_thread_flag = False
-        DOCK.show_only_visible_layers_flag = False
-        DOCK.set_layer_from_title_flag = False
-        DOCK.zoom_to_impact_flag = False
-        DOCK.hide_exposure_flag = False
-        DOCK.show_intermediate_layers = False
+        self.DOCK.show_only_visible_layers_flag = True
+        load_standard_layers(self.DOCK)
+        self.DOCK.cboHazard.setCurrentIndex(0)
+        self.DOCK.cboExposure.setCurrentIndex(0)
+        self.DOCK.cboFunction.setCurrentIndex(0)
+        self.DOCK.run_in_thread_flag = False
+        self.DOCK.show_only_visible_layers_flag = False
+        self.DOCK.set_layer_from_title_flag = False
+        self.DOCK.zoom_to_impact_flag = False
+        self.DOCK.hide_exposure_flag = False
+        self.DOCK.show_intermediate_layers = False
         set_jakarta_extent()
 
         self._keywordIO = KeywordIO()
@@ -91,16 +94,16 @@ class AggregatorTest(unittest.TestCase):
         """Run after each test."""
         # Let's use a fresh registry, canvas, and dock for each test!
         QgsMapLayerRegistry.instance().removeAllMapLayers()
-        DOCK.cboHazard.clear()
-        DOCK.cboExposure.clear()
+        self.DOCK.cboHazard.clear()
+        self.DOCK.cboExposure.clear()
 
     def test_combo_aggregation_loaded_project(self):
         """Aggregation combo changes properly according loaded layers"""
         layer_list = [
-            DOCK.tr('Entire area'),
-            DOCK.tr(u"D\xedstr\xedct's of Jakarta")]
-        current_layers = [DOCK.cboAggregation.itemText(i) for i in range(
-            DOCK.cboAggregation.count())]
+            self.DOCK.tr('Entire area'),
+            self.DOCK.tr(u"D\xedstr\xedct's of Jakarta")]
+        current_layers = [self.DOCK.cboAggregation.itemText(i) for i in range(
+            self.DOCK.cboAggregation.count())]
 
         message = (
             'The aggregation combobox should have:\n %s \nFound: %s'
@@ -115,17 +118,17 @@ class AggregatorTest(unittest.TestCase):
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         result, message = setup_scenario(
-            DOCK,
+            self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer=u"Dístríct's of Jakarta",
             aggregation_enabled_flag=True)
-        set_jakarta_extent(dock=DOCK)
+        set_jakarta_extent(dock=self.DOCK)
         assert result, message
         # Press RUN
-        DOCK.accept()
-        attribute = DOCK.analysis.aggregator.attributes[attribute_key]
+        self.DOCK.accept()
+        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
         message = ('The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
@@ -142,19 +145,19 @@ class AggregatorTest(unittest.TestCase):
         # with 1 good aggregation attribute using
         # kabupaten_jakarta_singlepart_1_good_attr.shp
         result, message = setup_scenario(
-            DOCK,
+            self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
-        set_jakarta_extent(dock=DOCK)
+        set_jakarta_extent(dock=self.DOCK)
         assert result, message
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
-        DOCK.accept()
+        self.DOCK.accept()
         print attribute_key
-        print DOCK.analysis.aggregator.attributes
-        attribute = DOCK.analysis.aggregator.attributes[attribute_key]
+        print self.DOCK.analysis.aggregator.attributes
+        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
@@ -171,16 +174,16 @@ class AggregatorTest(unittest.TestCase):
         # with no good aggregation attribute using
         # kabupaten_jakarta_singlepart_0_good_attr.shp
         result, message = setup_scenario(
-            DOCK,
+            self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
-        set_jakarta_extent(dock=DOCK)
+        set_jakarta_extent(dock=self.DOCK)
         assert result, message
         # Press RUN
-        DOCK.accept()
-        attribute = DOCK.analysis.aggregator.attributes[attribute_key]
+        self.DOCK.accept()
+        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be None. Found: %s' % attribute)
         assert attribute is None, message
@@ -197,16 +200,16 @@ class AggregatorTest(unittest.TestCase):
         # with None aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart_with_None_keyword.shp
         result, message = setup_scenario(
-            DOCK,
+            self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
-        set_jakarta_extent(dock=DOCK)
+        set_jakarta_extent(dock=self.DOCK)
         assert result, message
         # Press RUN
-        DOCK.accept()
-        attribute = DOCK.analysis.aggregator.attributes[attribute_key]
+        self.DOCK.accept()
+        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
         message = ('The aggregation should be None. Found: %s' % attribute)
         assert attribute is None, message
 
@@ -240,7 +243,7 @@ class AggregatorTest(unittest.TestCase):
         load_layers(file_list, clear_flag=False)
 
         result, message = setup_scenario(
-            DOCK,
+            self.DOCK,
             hazard='Flood Polygon Cross Kabupaten',
             exposure='Population',
             function_id='FloodEvacuationVectorHazardFunction',
@@ -250,19 +253,19 @@ class AggregatorTest(unittest.TestCase):
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(dock=DOCK)
+        set_jakarta_extent(dock=self.DOCK)
         # Press RUN
-        DOCK.accept()
+        self.DOCK.accept()
 
         expected_feature_count = 5
         message = (
             'The preprocessing should have generated %s features, '
             'found %s' % (
                 expected_feature_count,
-                DOCK.analysis.aggregator.preprocessed_feature_count))
+                self.DOCK.analysis.aggregator.preprocessed_feature_count))
         self.assertEqual(
             expected_feature_count,
-            DOCK.analysis.aggregator.preprocessed_feature_count, message)
+            self.DOCK.analysis.aggregator.preprocessed_feature_count, message)
 
     def _create_aggregator(self,
                            use_aoi_mode,

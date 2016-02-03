@@ -157,7 +157,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         unaffected_fields.append(QgsField(self.target_field, QVariant.Int))
 
         writer = QgsVectorFileWriter(
-            filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
+            filename,
+            "utf-8",
+            impact_fields,
+            QGis.WKBPolygon,
+            exposure.crs())
 
         # Evaluating the impact
         self.evaluate_impact(
