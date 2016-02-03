@@ -1113,37 +1113,42 @@ class TestDockRegressions(TestCase):
         # see also safe/test/utilities.py where this is globally
         # set to HazardExposure
         settings = QtCore.QSettings()
-        settings.setValue(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        self.dock.cboHazard.clear()
+        self.dock.cboExposure.clear()
 
     # noinspection PyUnusedLocal
-    def test_regression_2553(self):
-        """Test for regression 2553.
+    def test_regression_2553_no_resample(self):
+        """Test for regression 2553 (no resampling).
 
         see :
 
         https://github.com/inasafe/inasafe/issues/2553
-        """
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
-        self.dock.cboHazard.clear()
-        self.dock.cboExposure.clear()
-        settings = QtCore.QSettings()
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
 
+        We want to verify that population with resampling should produce
+        a result within a reasonable range of the same analysis but doing
+        population with no resampling.
+
+        """
         hazard_path = test_data_path(
             'hazard', 'continuous_flood_unaligned.tif')
         exposure_path = test_data_path(
             'exposure', 'people_allow_resampling_false.tif')
 
         hazard_layer, hazard_layer_purpose = load_layer(hazard_path)
-
         # Check if there is a regression about keywords being updated from
-        # another layer
+        # another layer - see #2605
         keywords = KeywordIO(hazard_layer)
         self.assertIn('flood unaligned', keywords.to_message().to_text())
 
-        exposure_layer, exposure_layer_purpose = load_layer(exposure_path)
+        exposure_layer, exposure_layer_purpose = load_layer(
+            exposure_path)
+        keywords = KeywordIO(exposure_layer)
+        self.assertIn(
+            '*Allow resampling*, false------',
+            keywords.to_message().to_text())
+
         QgsMapLayerRegistry.instance().addMapLayers(
             [hazard_layer, exposure_layer])
 
@@ -1182,6 +1187,84 @@ class TestDockRegressions(TestCase):
             self.dock,
             hazard='flood unaligned',
             exposure='People never resample',
+            function='Need evacuation',
+            function_id='FloodEvacuationRasterHazardFunction')
+        self.assertTrue(result, message)
+        # Press RUN
+        self.dock.accept()
+
+        safe_layer = self.dock.analysis.impact_layer
+        keywords = safe_layer.get_keywords()
+        evacuated = float(keywords['evacuated'])
+        self.assertLess(evacuated, total_population)
+        expected_evacuated = 131.0
+        self.assertEqual(evacuated, expected_evacuated)
+
+    # noinspection PyUnusedLocal
+    def test_regression_2553_with_resample(self):
+        """Test for regression 2553 (with resampling).
+
+        see :
+
+        https://github.com/inasafe/inasafe/issues/2553
+
+        We want to verify that population with resampling should produce
+        a result within a reasonable range of the same analysis but doing
+        population with no resampling.
+
+        """
+        hazard_path = test_data_path(
+            'hazard', 'continuous_flood_unaligned.tif')
+        exposure_path = test_data_path(
+            'exposure', 'people_allow_resampling_true.tif')
+        hazard_layer, hazard_layer_purpose = load_layer(hazard_path)
+        # Check if there is a regression about keywords being updated from
+        # another layer - see #2605
+        keywords = KeywordIO(hazard_layer)
+        self.assertIn('flood unaligned', keywords.to_message().to_text())
+        # check we have the right layer properties
+        exposure_layer, exposure_layer_purpose = load_layer(
+            exposure_path)
+        keywords = KeywordIO(exposure_layer)
+        self.assertNotIn(
+            '*Allow resampling*, false------',
+            keywords.to_message().to_text())
+
+        QgsMapLayerRegistry.instance().addMapLayers(
+            [hazard_layer, exposure_layer])
+
+        # Count the total value of all exposure pixels
+        # this is arse about face but width is actually giving height
+        height = exposure_layer.width()
+        # this is arse about face but height is actually giving width
+        width = exposure_layer.height()
+        provider = exposure_layer.dataProvider()
+        # Bands count from 1!
+        block = provider.block(1, provider.extent(), height, width)
+        # Enable on-the-fly reprojection
+        set_canvas_crs(GEOCRS, True)
+
+        # This is the nicer way but wierdly it gets nan for every cell
+        total_population = 0.0
+        cell_count = 0
+        row = 0
+        # Iterate down each column to match the layout produced by r.stats
+        while row < width:
+            column = 0
+            while column < height:
+                cell_count += 1
+                value = block.value(row, column)
+                if value > 0:
+                    total_population += value
+                column += 1
+            row += 1
+        print "Total value of all cells is: %d" % total_population
+        print "Number of cells counted: %d" % cell_count
+
+        result, message = setup_scenario(
+            self.dock,
+            hazard='flood unaligned',
+            exposure='People allow resampling',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
