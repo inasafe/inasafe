@@ -5,9 +5,9 @@ import shutil
 import tempfile
 import unittest
 
-from headless.celeryconfig import deploy_output_dir, deploy_output_url
+from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
 from headless.tasks.inasafe_wrapper import filter_impact_function, \
-    run_analysis
+    run_analysis, read_keywords_iso_metadata
 from headless.tasks.utilities import archive_layer
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
@@ -45,6 +45,10 @@ class TestTaskCall(unittest.TestCase):
         self.exposure_temp = exposure_temp
         self.aggregation_temp = aggregation_temp
 
+        self.keywords_file = os.path.join(
+            self.inasafe_work_dir,
+            'safe/test/data/hazard/continuous_flood_20_20.xml')
+
     def test_filter_impact_function(self):
 
         celery_result = filter_impact_function.apply(
@@ -75,8 +79,8 @@ class TestTaskCall(unittest.TestCase):
         self.assertTrue(url_name)
 
         # check the file is generated in /home/web directory
-        relative_name = url_name.replace(deploy_output_url, '')
-        absolute_name = os.path.join(deploy_output_dir, relative_name)
+        relative_name = url_name.replace(DEPLOY_OUTPUT_URL, '')
+        absolute_name = os.path.join(DEPLOY_OUTPUT_DIR, relative_name)
         self.assertTrue(os.path.exists(absolute_name))
         # check  pdf report is generated
         basename, _ = os.path.splitext(absolute_name)
@@ -91,6 +95,22 @@ class TestTaskCall(unittest.TestCase):
 
         folder_name, _ = os.path.split(absolute_name)
         shutil.rmtree(folder_name)
+
+    def test_read_keywords(self):
+        result = read_keywords_iso_metadata.apply(args=[self.keywords_file])
+        expected = {
+            'hazard_category': u'single_event',
+            'keyword_version': u'3.3',
+            'title': u'Continuous Flood',
+            'hazard': u'flood',
+            'continuous_hazard_unit': u'metres',
+            'source': u'Akbar Gumbira',
+            'layer_geometry': u'raster',
+            'layer_purpose': u'hazard',
+            'layer_mode': u'continuous'
+        }
+        actual = result.get()
+        self.assertDictEqual(actual, expected)
 
 
 if __name__ == '__main__':

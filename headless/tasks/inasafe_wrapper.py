@@ -7,16 +7,17 @@ import os
 import tempfile
 
 import shutil
+import urllib
 import urlparse
 
-from headless import LOGGER_NAME
 from headless.celeryapp import app
-from headless.celeryconfig import deploy_output_dir, deploy_output_url
+from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
 from headless.tasks.utilities import download_layer, archive_layer, \
     generate_styles
 from bin.inasafe import CommandLineArguments, get_impact_function_list, \
     run_impact_function, build_report
 from safe.storage.utilities import safe_to_qgis_layer
+from safe.utilities.keyword_io import KeywordIO
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '1/19/16'
@@ -25,7 +26,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 @app.task
-def filter_impact_function(hazard, exposure):
+def filter_impact_function(hazard=None, exposure=None):
     """Filter impact functions
 
     :param hazard: URL or filepath of hazard
@@ -39,13 +40,19 @@ def filter_impact_function(hazard, exposure):
 
     """
     # download the file first
-    hazard_file = download_layer(hazard)
-    exposure_file = download_layer(exposure)
     arguments = CommandLineArguments()
-    arguments.hazard = hazard_file
-    arguments.exposure = exposure_file
+    if hazard and exposure:
+        hazard_file = download_layer(hazard)
+        exposure_file = download_layer(exposure)
+        arguments.hazard = hazard_file
+        arguments.exposure = exposure_file
+    else:
+        arguments.hazard = None
+        arguments.exposure = None
     ifs = get_impact_function_list(arguments)
-    return [f.metadata().as_dict() for f in ifs]
+    result = [f.metadata().as_dict()['id'] for f in ifs]
+    LOGGER.debug(result)
+    return result
 
 
 @app.task
@@ -66,7 +73,7 @@ def run_analysis(hazard, exposure, function, aggregation=None,
     # generate names for impact results
     # create date timestamp
     date_folder = datetime.datetime.now().strftime('%Y%m%d')
-    deploy_dir = os.path.join(deploy_output_dir, date_folder)
+    deploy_dir = os.path.join(DEPLOY_OUTPUT_DIR, date_folder)
     try:
         os.mkdir(deploy_dir)
     except:
@@ -98,7 +105,22 @@ def run_analysis(hazard, exposure, function, aggregation=None,
     # we need to return the url
     new_basename = os.path.basename(new_name)
     output_url = urlparse.urljoin(
-        deploy_output_url,
+        DEPLOY_OUTPUT_URL,
         '%s/%s' % (date_folder, new_basename)
     )
+    print DEPLOY_OUTPUT_URL
     return output_url
+
+
+@app.task
+def read_keywords_iso_metadata(metadata_url, keyword=None):
+    """Read xml metadata of a layer"""
+    filename, _ = urllib.urlretrieve(metadata_url)
+    # add xml extension
+    new_filename = filename+'.xml'
+    shutil.move(filename, new_filename)
+    keyword_io = KeywordIO()
+    keywords = keyword_io.read_keywords_file(new_filename)
+    if keyword:
+        return keywords.get(keyword, None)
+    return keywords

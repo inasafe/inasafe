@@ -403,6 +403,7 @@ def write_results(cli_arguments, impact_layer):
             else:
                 ext = '.shp'
             abs_path += ext
+        LOGGER.info(abs_path)
         impact_layer.write_to_file(abs_path)
     except Exception as exception:
         print exception.message

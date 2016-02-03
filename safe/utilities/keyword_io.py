@@ -145,6 +145,7 @@ class KeywordIO(QObject):
         # Try to read from ISO metadata first.
         _, ext = os.path.splitext(filename)
 
+        dictionary = {}
         if ext == '.xml':
             try:
                 dictionary = read_iso19115_metadata(filename)
