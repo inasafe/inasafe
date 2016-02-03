@@ -121,3 +121,18 @@ class Row(MessageElement):
         row += '---'
 
         return row
+
+    def to_dict(self):
+        """Render a MessageElement as python dict
+
+        :return: Python dict representation
+        :rtype: dict
+        """
+        obj_dict = super(Row, self).to_dict()
+        cells_dict = [c.to_dict() for c in self.cells]
+        child_dict = {
+            'type': self.__class__.__name__,
+            'cells': cells_dict
+        }
+        obj_dict.update(child_dict)
+        return child_dict
