@@ -27,7 +27,7 @@ from qgis.core import (
     QgsVectorFileWriter,
     QgsVectorLayer,
 )
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, QPyNullVariant
 from PyQt4.QtGui import QColor
 
 from safe.storage.vector import Vector
@@ -175,7 +175,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         # Generate the report of affected populations in the areas
 
-        self.total_population = sum(self.all_areas_population.values())
+        # To avoid Null
+        for value in self.all_affected_areas.values():
+            if isinstance(value, QPyNullVariant):
+                value = 0
+            self.total_population += value
         self.areas = self.all_areas_ids
         self.affected_areas = self.all_affected_areas
         self.areas_population = self.all_areas_population
@@ -316,6 +320,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
             self.all_areas_population[area_id] = feature.attribute(
                 area_population_attribute)
+
+            # To avoid Null
+            if isinstance(self.all_areas_population[area_id], QPyNullVariant):
+                self.all_areas_population[area_id] = 0
 
             if area_id not in self.all_areas_ids:
                 self.all_areas_ids[area_id] = 0.
@@ -604,6 +612,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
             population_total = feature.attribute(
                 area_population_attribute)
+            # To avoid Null
+            if isinstance(population_total, QPyNullVariant):
+                population_total = 0
             try:
                 population_number = (target_area / total_area) *\
                                     population_total
