@@ -1192,7 +1192,7 @@ class TestDockRegressions(TestCase):
         keywords = safe_layer.get_keywords()
         evacuated = float(keywords['evacuated'])
         self.assertLess(evacuated, total_population)
-        expected_evacuated = 1915.0
+        expected_evacuated = 131.0
         self.assertEqual(evacuated, expected_evacuated)
 
 if __name__ == '__main__':

@@ -1,9 +1,0 @@
-allow_resampling: false
-exposure: population
-exposure_unit: count
-keyword_version: 3.2
-layer_geometry: raster
-layer_mode: continuous
-layer_purpose: exposure
-source: AsiaPop
-title: people
