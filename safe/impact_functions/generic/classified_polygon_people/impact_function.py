@@ -66,8 +66,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         super(ClassifiedPolygonHazardPolygonPeopleFunction, self).__init__()
 
         # Set the question of the IF (as the hazard data is not an event)
-        self.question = ('In each of the hazard zones which areas  '
-                         'might be affected.')
+        self.question = tr(
+                'In each of the hazard zones which areas might be affected.')
 
         # Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
@@ -92,12 +92,12 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         checklist = m.BulletedList()
         population = format_int(population_rounding(self.total_population))
         checklist.add(tr(
-            'The Total population in the area is %s') % population)
+            'The total people in the area is %s') % population)
         checklist.add(tr(
             'All values are rounded up to the nearest integer in order to '
             'avoid representing human lives as fractions.'))
         checklist.add(tr(
-            'Population rounding is applied to all population values, which '
+            'People rounding is applied to all population values, which '
             'may cause discrepancies when adding values.'))
         checklist.add(tr('Null value will be considered as zero.'))
 
@@ -622,7 +622,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 population_number = round(population_number, 0)
             except Exception as e:
                 message = ('Exposure data does not contain the expected '
-                           'exposure population type(Number). %s was found '
+                           'exposure people type(Number). %s was found '
                            'instead of a Number' %
                            (population_total))
                 # noinspection PyExceptionInherit
