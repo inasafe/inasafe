@@ -1137,6 +1137,13 @@ class TestDockRegressions(TestCase):
             'exposure', 'people_allow_resampling_false.tif')
 
         hazard_layer, hazard_layer_purpose = load_layer(hazard_path)
+
+        # Check if there is a regression about keywords being updated from
+        # another layer
+        keywords = KeywordIO(hazard_layer)
+        self.assertIn('flood unaligned', keywords.to_message())
+
+
         exposure_layer, exposure_layer_purpose = load_layer(exposure_path)
         QgsMapLayerRegistry.instance().addMapLayers(
             [hazard_layer, exposure_layer])
