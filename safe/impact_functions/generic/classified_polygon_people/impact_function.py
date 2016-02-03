@@ -94,11 +94,12 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         checklist.add(tr(
             'The Total population in the area is %s') % population)
         checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
+            'All values are rounded up to the nearest integer in order to '
+            'avoid representing human lives as fractions.'))
         checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding values.'))
+            'Population rounding is applied to all population values, which '
+            'may cause discrepancies when adding values.'))
+        checklist.add(tr('Null value will be considered as zero.'))
 
         message.add(checklist)
         return message
