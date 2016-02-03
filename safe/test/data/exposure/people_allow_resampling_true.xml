@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>people no resampling</gco:CharacterString>
+            <gco:CharacterString>People allow resampling</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>

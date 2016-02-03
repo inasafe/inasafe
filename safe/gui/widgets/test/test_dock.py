@@ -1134,7 +1134,7 @@ class TestDockRegressions(TestCase):
         hazard_path = test_data_path(
             'hazard', 'continuous_flood_unaligned.tif')
         exposure_path = test_data_path(
-            'exposure', 'people_allow_resampling_true.tif')
+            'exposure', 'people_allow_resampling_false.tif')
 
         hazard_layer, hazard_layer_purpose = load_layer(hazard_path)
         exposure_layer, exposure_layer_purpose = load_layer(exposure_path)
@@ -1174,8 +1174,8 @@ class TestDockRegressions(TestCase):
 
         result, message = setup_scenario(
             self.dock,
-            hazard='a flood similar to 2007 in Jakarta',
-            exposure='people',
+            hazard='flood unaligned',
+            exposure='People never resample',
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)

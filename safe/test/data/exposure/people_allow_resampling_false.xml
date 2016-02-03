@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>People 6x6 no resampling</gco:CharacterString>
+            <gco:CharacterString>People never resample</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -185,7 +185,7 @@
             <gco:CharacterString>count</gco:CharacterString>
           </exposure_unit>
           <source>
-            <gco:CharacterString>AsiaPop</gco:CharacterString>
+            <gco:CharacterString>HKV</gco:CharacterString>
           </source>
           <layer_geometry>
             <gco:CharacterString>raster</gco:CharacterString>
@@ -212,7 +212,7 @@
             <gco:CharacterString/>
           </structure_class_field>
           <allow_resampling>
-            <gco:CharacterString/>
+            <gco:CharacterString>false</gco:CharacterString>
           </allow_resampling>
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
