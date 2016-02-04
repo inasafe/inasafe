@@ -46,6 +46,9 @@ class ClassifiedRasterHazardBuildingFunction(
         super(ClassifiedRasterHazardBuildingFunction, self).__init__()
         self.affected_field = 'affected'
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
     def notes(self):
         """Return the notes section of the report.
 
@@ -153,6 +156,10 @@ class ClassifiedRasterHazardBuildingFunction(
                 tr('Buildings Affected')] += 1
 
         # Consolidate the small building usage groups < 25 to other
+        # Building threshold #2468
+        postprocessors = self.parameters['postprocessors']
+        building_postprocessors = postprocessors['BuildingType'][0]
+        self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
         # Create style

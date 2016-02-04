@@ -8,6 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.messaging.item.cell import Cell
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -37,7 +38,7 @@ class Table(MessageElement):
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
         super(Table, self).__init__(**kwargs)
-        self.caption = None
+        self.caption = kwargs.get('caption', None)
         self.rows = []
 
         for arg in args:
@@ -99,10 +100,18 @@ class Table(MessageElement):
         """
         raise NotImplementedError('Please Implement this method')
 
-    def to_json(self):
-        """Render a Table queue as JSON
+    def to_dict(self):
+        """Render a MessageElement as python dict
 
-        :returns: Json representation of the Text Table.
-        :rtype: str
+        :return: Python dict representation
+        :rtype: dict
         """
-        raise NotImplementedError('Please Implement this method')
+        obj_dict = super(Table, self).to_dict()
+        rows_dict = [r.to_dict() for r in self.rows]
+        child_dict = {
+            'type': self.__class__.__name__,
+            'caption': self.caption,
+            'rows': rows_dict
+        }
+        obj_dict.update(child_dict)
+        return obj_dict

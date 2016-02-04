@@ -109,6 +109,23 @@ class Text(MessageElement):
                 text += t.to_text() + ' '
             return ' '.join(text.split())
 
+    def to_dict(self):
+        """Render a MessageElement as python dict
+
+        :return: Python dict representation
+        :rtype: dict
+        """
+        obj_dict = super(Text, self).to_dict()
+        texts_dict = None
+        if isinstance(self.text, list):
+            texts_dict = [t.to_dict() for t in self.text]
+        child_dict = {
+            'type': self.__class__.__name__,
+            'text': texts_dict
+        }
+        obj_dict.update(child_dict)
+        return obj_dict
+
 
 class PlainText(Text):
     """A class to model free text in the messaging system
@@ -166,3 +183,17 @@ class PlainText(Text):
             Errors are propagated
         """
         return self.text
+
+    def to_dict(self):
+        """Render a MessageElement as python dict
+
+        :return: Python dict representation
+        :rtype: dict
+        """
+        obj_dict = super(PlainText, self).to_dict()
+        child_dict = {
+            'type': self.__class__.__name__,
+            'text': self.text
+        }
+        obj_dict.update(child_dict)
+        return obj_dict

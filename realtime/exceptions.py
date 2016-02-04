@@ -127,3 +127,9 @@ class RESTRequestFailedError(Exception):
 
     def __str__(self):
         return self.__unicode__()
+
+
+class PetaJakartaAPIError(Exception):
+    """Raised if PetaJakarta REST API can't be accessed
+    """
+    pass
