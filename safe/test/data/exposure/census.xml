@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>census</gco:CharacterString>
+            <gco:CharacterString>Census</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>

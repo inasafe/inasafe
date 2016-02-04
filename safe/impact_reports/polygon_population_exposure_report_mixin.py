@@ -81,21 +81,21 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         population = population_rounding(
             sum(self.affected_population.values()))
         checklist = m.BulletedList()
-        checklist.add(tr('Which group or population is most affected?'))
+        checklist.add(tr('Which group or people is most affected?'))
         checklist.add(
             tr('Who are the vulnerable people in the population and why?'))
         checklist.add(tr('How will warnings be disseminated?'))
         checklist.add(tr('What are people\'s likely movements?'))
         checklist.add(
-            tr('What are the security factors for the affected population?'))
+            tr('What are the security factors for the affected people?'))
         checklist.add(
             tr('What are the security factors for relief responders?'))
         checklist.add(tr('How will we reach evacuated people?'))
         checklist.add(
-            tr('What kind of food does the population normally consume?'))
+            tr('What kind of food does the people normally consume?'))
         checklist.add(
             tr('What are the critical non-food items required by the affected '
-               'population?'))
+               'people?'))
         checklist.add(tr(
             'Are there enough water supply, sanitation, hygiene, food, '
             'shelter, medicines and relief items available for %s people?'
@@ -121,7 +121,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         """
         message = m.Message(style_class='container')
         message.add(m.Heading(
-            tr('Evacuated population minimum needs'),
+            tr('Evacuated people minimum needs'),
             **styles.INFO_STYLE))
         table = m.Table(
             style_class='table table-condensed table-striped')
@@ -633,9 +633,9 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         """
         hazard_table.caption = None
         head_row = m.Row()
-        head_row.add(m.Cell(tr('Hazard Level'), header=True))
+        head_row.add(m.Cell(tr('Hazard Zone'), header=True))
         head_row.add(m.Cell(
-            tr('Number of People'),
+            tr('Number of People Affected'),
             header=True,
             align='right'))
 

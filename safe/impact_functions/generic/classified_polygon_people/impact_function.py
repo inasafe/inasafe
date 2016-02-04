@@ -27,7 +27,7 @@ from qgis.core import (
     QgsVectorFileWriter,
     QgsVectorLayer,
 )
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, QPyNullVariant
 from PyQt4.QtGui import QColor
 
 from safe.storage.vector import Vector
@@ -66,8 +66,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         super(ClassifiedPolygonHazardPolygonPeopleFunction, self).__init__()
 
         # Set the question of the IF (as the hazard data is not an event)
-        self.question = ('In each of the hazard zones which areas  '
-                         'might be affected.')
+        self.question = tr(
+                'In each of the hazard zones which areas might be affected.')
 
         # Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
@@ -92,12 +92,14 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         checklist = m.BulletedList()
         population = format_int(population_rounding(self.total_population))
         checklist.add(tr(
-            'The Total population in the area is %s') % population)
+            'The total people in the area is %s') % population)
         checklist.add(tr(
-            'All values are rounded up to the nearest integer'))
+            'All values are rounded up to the nearest integer in order to '
+            'avoid representing human lives as fractions.'))
         checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding values.'))
+            'People rounding is applied to all population values, which '
+            'may cause discrepancies when adding values.'))
+        checklist.add(tr('Null value will be considered as zero.'))
 
         message.add(checklist)
         return message
@@ -156,11 +158,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         unaffected_fields.append(QgsField(self.target_field, QVariant.Int))
 
         writer = QgsVectorFileWriter(
-            filename,
-            "utf-8",
-            impact_fields,
-            QGis.WKBPolygon,
-            exposure.crs())
+            filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
 
         # Evaluating the impact
         self.evaluate_impact(
@@ -174,11 +172,14 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             impact_fields)
 
         del writer
-        impact_layer = QgsVectorLayer(filename, "Impacted Population", "ogr")
+        impact_layer = QgsVectorLayer(filename, "Impacted People", "ogr")
 
         # Generate the report of affected populations in the areas
-
-        self.total_population = sum(self.all_areas_population.values())
+        # To avoid Null
+        for value in self.all_areas_population.values():
+            if isinstance(value, QPyNullVariant):
+                value = 0
+            self.total_population += value
         self.areas = self.all_areas_ids
         self.affected_areas = self.all_affected_areas
         self.areas_population = self.all_areas_population
@@ -319,6 +320,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
             self.all_areas_population[area_id] = feature.attribute(
                 area_population_attribute)
+
+            # To avoid Null
+            if isinstance(self.all_areas_population[area_id], QPyNullVariant):
+                self.all_areas_population[area_id] = 0
 
             if area_id not in self.all_areas_ids:
                 self.all_areas_ids[area_id] = 0.
@@ -565,8 +570,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             self.affected_population[area_id] = number_people_affected
 
         total_affected_population = self.total_affected_population
-        unaffected_population = self.total_population -\
-                                self.total_affected_population
+        unaffected_population = (
+            self.total_population - self.total_affected_population)
         self.unaffected_population = unaffected_population
 
         if total_affected_population == 0:
@@ -605,17 +610,19 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             target_area = target_geometry.area()
             total_area = feature.geometry().area()
 
-            population_total = feature.attribute(
-                area_population_attribute)
+            population_total = feature.attribute(area_population_attribute)
+            # To avoid Null
+            if isinstance(population_total, QPyNullVariant):
+                population_total = 0
             try:
-                population_number = (target_area / total_area) *\
-                                    population_total
+                population_number = (
+                    (target_area / total_area) * population_total)
                 population_number = round(population_number, 0)
-            except Exception as e:
-                message = ('Exposure data does not contain the expected '
-                           'exposure population type(Number). %s was found '
-                           'instead of a Number' %
-                           (population_total))
+            except TypeError:
+                message = tr(
+                        'Exposure data does not contain the expected '
+                        'exposure people type(Number). %s was found instead '
+                        'of a Number' % population_total)
                 # noinspection PyExceptionInherit
                 raise InaSAFEError(message)
         else:
