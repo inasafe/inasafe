@@ -121,7 +121,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         """
         message = m.Message(style_class='container')
         message.add(m.Heading(
-            tr('Evacuated population minimum needs'),
+            tr('Evacuated people minimum needs'),
             **styles.INFO_STYLE))
         table = m.Table(
             style_class='table table-condensed table-striped')
