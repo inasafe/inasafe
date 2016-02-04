@@ -231,11 +231,11 @@ def load_layer(layer_path):
     layer_purpose = 'undefined'
     try:
         try:
-            keywords = read_file_keywords(layer_path)
-            keywords = write_read_iso_19115_metadata(layer_path, keywords)
+            keywords = read_iso19115_metadata(layer_path)
         except:
             try:
-                keywords = read_iso19115_metadata(layer_path)
+                keywords = read_file_keywords(layer_path)
+                keywords = write_read_iso_19115_metadata(layer_path, keywords)
             except NoKeywordsFoundError:
                 keywords = {}
         if 'layer_purpose' in keywords:
