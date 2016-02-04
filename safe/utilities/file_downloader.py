@@ -83,6 +83,7 @@ class FileDownloader(object):
         self.reply = self.manager.get(request)
         self.reply.readyRead.connect(self.get_buffer)
         self.reply.finished.connect(self.write_data)
+        self.manager.requestTimedOut.connect(self.request_timeout)
 
         if self.progress_dialog:
             # progress bar
@@ -113,7 +114,7 @@ class FileDownloader(object):
             # cancel
             def cancel_action():
                 """Cancel download."""
-                self.reply.abort()
+                self.manager.deleteReply(self.reply)
 
             self.reply.downloadProgress.connect(progress_event)
             self.progress_dialog.canceled.connect(cancel_action)
@@ -156,6 +157,12 @@ class FileDownloader(object):
 
     def write_data(self):
         """Write data to a file."""
+        self.manager.deleteReply(self.reply)
         self.output_file.write(self.downloaded_file_buffer)
         self.output_file.close()
         self.finished_flag = True
+
+    def request_timeout(self):
+        """The request timed out."""
+        if self.progress_dialog:
+            self.progress_dialog.hide()
