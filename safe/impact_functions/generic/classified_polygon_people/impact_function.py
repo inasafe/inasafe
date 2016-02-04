@@ -94,8 +94,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         checklist.add(tr(
             'The Total population in the area is %s') % population)
         checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
+            'All values are rounded up to the nearest integer'))
         checklist.add(tr(
             'Population rounding is applied to all population '
             'values, which may cause discrepancies when adding values.'))
@@ -237,7 +236,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         extra_keywords = {
             'impact_summary': impact_summary,
             'target_field': self.target_field,
-            'map_title': tr('Affected Populations'),
+            'map_title': tr('Affected People'),
         }
 
         self.set_if_provenance()
@@ -247,7 +246,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=tr('Populations affected by each hazard zone'),
+            name=tr('People affected by each hazard zone'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

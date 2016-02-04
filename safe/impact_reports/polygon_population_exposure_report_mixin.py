@@ -635,7 +635,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         head_row = m.Row()
         head_row.add(m.Cell(tr('Hazard Level'), header=True))
         head_row.add(m.Cell(
-            tr('Number of Population Affected'),
+            tr('Number of People'),
             header=True,
             align='right'))
 
@@ -651,7 +651,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         # Total affected population
         row = m.Row()
         row.add(m.Cell(
-            tr('Total affected population'),
+            tr('Total affected people'),
             header=True))
         affected = format_int(
             population_rounding(self.total_affected_population))
@@ -662,7 +662,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         row = m.Row()
         unaffected = format_int(
             population_rounding(self.unaffected_population))
-        row.add(m.Cell(tr('Unaffected population'), header=True))
+        row.add(m.Cell(tr('Unaffected people'), header=True))
         row.add(m.Cell(unaffected, align='right'))
         hazard_table.add(row)
 
@@ -670,7 +670,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         row = m.Row()
         total_population = format_int(
             population_rounding(self.total_population))
-        row.add(m.Cell(tr('Total population'), header=True))
+        row.add(m.Cell(tr('Total people'), header=True))
         row.add(m.Cell(total_population, align='right'))
         hazard_table.add(row)
 
