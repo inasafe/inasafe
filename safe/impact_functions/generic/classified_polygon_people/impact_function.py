@@ -175,9 +175,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         impact_layer = QgsVectorLayer(filename, "Impacted People", "ogr")
 
         # Generate the report of affected populations in the areas
-
         # To avoid Null
-        for value in self.all_affected_areas.values():
+        for value in self.all_areas_population.values():
             if isinstance(value, QPyNullVariant):
                 value = 0
             self.total_population += value
