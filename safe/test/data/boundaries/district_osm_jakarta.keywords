@@ -1,0 +1,9 @@
+license: Open Data Commons Open Database License (ODbL)
+title: This is not valid keywords. For Testing purpose.
+keyword_version: 3.2
+source: OpenStreetMap - www.openstreetmap.org
+layer_geometry: line
+layer_purpose: exposure
+layer_mode: classified
+road_class_field: OSM_TYPE
+exposure: road
