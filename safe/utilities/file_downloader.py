@@ -29,6 +29,7 @@ from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 from safe.common.utilities import humanize_file_size
 from safe.utilities.i18n import tr
+from safe.utilities.gis import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -128,7 +129,10 @@ class FileDownloader(object):
             QCoreApplication.processEvents()
 
         result = self.reply.error()
-        self.manager.deleteReply(self.reply)
+
+        if qgis_version() >= 21100:
+            self.manager.deleteReply(self.reply)
+
         if result == QNetworkReply.NoError:
             return True, None
 
