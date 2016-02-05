@@ -15,15 +15,15 @@ Contact : jannes@kartoza.com
         cli: command line interface
     .. versionadded:: 3.2
 """
-from safe.storage.core import read_layer
 
 __author__ = 'Jannes Engelbrecht'
 __date__ = '16/04/15'
 
-import os
 import logging
+import os
 import tempfile
 
+from PyQt4.QtCore import QSettings
 from docopt import docopt, DocoptExit
 from qgis.core import (
     QgsRasterLayer,
@@ -31,21 +31,17 @@ from qgis.core import (
     QgsRectangle,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem)
-from PyQt4.QtCore import QSettings
 
 from safe.impact_functions import register_impact_functions
-from safe.test.utilities import get_qgis_app
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.report.impact_report import ImpactReport
-from safe.utilities.osm_downloader import download
-from headless.tasks.utilities import generate_styles
 from safe.storage.utilities import safe_to_qgis_layer
+from safe.test.utilities import get_qgis_app
+from safe.utilities.gis import qgis_version, validate_geo_array
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.osm_downloader import download
 
-current_dir = os.path.abspath(
-    os.path.realpath(os.environ['PWD']))
-usage_dir = os.environ['InaSAFEQGIS'] + '/bin'
+usage_dir = os.path.dirname(os.path.abspath(__file__))
 usage = r""
 usage_file = file(os.path.join(usage_dir, 'usage.txt'))
 for delta in usage_file:
