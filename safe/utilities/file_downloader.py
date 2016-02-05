@@ -128,6 +128,7 @@ class FileDownloader(object):
             QCoreApplication.processEvents()
 
         result = self.reply.error()
+        self.manager.deleteReply(self.reply)
         if result == QNetworkReply.NoError:
             return True, None
 
@@ -157,7 +158,6 @@ class FileDownloader(object):
 
     def write_data(self):
         """Write data to a file."""
-        self.manager.deleteReply(self.reply)
         self.output_file.write(self.downloaded_file_buffer)
         self.output_file.close()
         self.finished_flag = True
