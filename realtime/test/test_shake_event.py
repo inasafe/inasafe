@@ -70,7 +70,8 @@ class TestShakeEvent(unittest.TestCase):
             if not os.path.exists(target_folder):
                 os.makedirs(target_folder)
 
-            target_path = os.path.abspath(os.path.join(target_folder, 'grid.xml'))
+            target_path = os.path.abspath(
+                    os.path.join(target_folder, 'grid.xml'))
             shutil.copyfile(input_path, target_path)
 
     # noinspection PyPep8Naming
@@ -315,11 +316,11 @@ class TestShakeEvent(unittest.TestCase):
             self.assertEqual(
                 table_dict['rows'][i]['cells'][1]
                 ['content']['text'][0]['text'],
-                expected_string[i-1].get('name'))
+                expected_string[i - 1].get('name'))
             self.assertEqual(
                 table_dict['rows'][i]['cells'][2]
                 ['content']['text'][0]['text'],
-                expected_string[i-1].get('population'))
+                expected_string[i - 1].get('population'))
 
         self.max_diff = None
 
@@ -645,7 +646,6 @@ class TestShakeEvent(unittest.TestCase):
             self.assertEqual(
                 response.json()['location_description'],
                 shake_event.event_dict()['shake-grid-location'])
-
 
 
 class DictDiffer(object):
