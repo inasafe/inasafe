@@ -30,4 +30,3 @@ class TestFloodRealtime(unittest.TestCase):
     def test_flood_event_calculate(self):
         working_dir = os.environ['FLOODMAPS_DIR']
         process_event(working_dir, locale_option='id')
-

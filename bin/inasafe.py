@@ -41,6 +41,8 @@ from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.osm_downloader import download
 
+current_dir = os.path.abspath(
+    os.path.realpath(os.getcwd()))
 usage_dir = os.path.dirname(os.path.abspath(__file__))
 usage = r""
 usage_file = file(os.path.join(usage_dir, 'usage.txt'))
