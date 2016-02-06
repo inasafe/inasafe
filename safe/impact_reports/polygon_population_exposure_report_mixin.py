@@ -632,22 +632,28 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         :rtype area_name: Table
         """
         hazard_table.caption = None
-        head_row = m.Row()
-        head_row.add(m.Cell(tr('Hazard Zone'), header=True))
-        head_row.add(m.Cell(
-            tr('Number of People Affected'),
-            header=True,
-            align='right'))
 
-        hazard_table.add(head_row)
         for key, value in self.hazard_levels.iteritems():
-            row = m.Row()
-            name = self.hazard_class_mapping[key][0]
-            row.add(m.Cell(name, header=True))
-            value = format_int(population_rounding(value))
 
-            row.add(m.Cell(value, align='right'))
+            name = self.hazard_class_mapping[key][0]
+            # This skips reporting people not affected in No zone
+            if key == 'wet':
+                row = m.Row()
+                row.add(m.Cell(tr(
+                    'People within hazard field ("%s") of value "%s"')
+                               % (self.hazard_class_field, name),
+                               header=True))
+                value = format_int(population_rounding(value))
+                row.add(m.Cell(value, align='right'))
+            elif key == 'dry':
+                continue
+            else:
+                row = m.Row()
+                row.add(m.Cell(name, header=True))
+                value = format_int(population_rounding(value))
+                row.add(m.Cell(value, align='right'))
             hazard_table.add(row)
+
         # Total affected population
         row = m.Row()
         row.add(m.Cell(

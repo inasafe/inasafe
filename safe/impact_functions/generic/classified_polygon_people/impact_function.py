@@ -46,15 +46,14 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 import safe.messaging as m
 from safe.common.utilities import (
     format_int,
-    humanize_class,
-    create_classes,
-    create_label
 )
 from safe.impact_functions.core import (
     population_rounding
 )
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 from safe.messaging import styles
+
+from safe.utilities.keyword_io import definition
 
 
 class ClassifiedPolygonHazardPolygonPeopleFunction(
@@ -78,6 +77,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         self.areas_names = {}
         self.hazard_levels = {}
         self.hazard_class_mapping = {}
+        self.hazard_class_field = None
 
     def notes(self):
         """Return the notes section of the report.
@@ -197,29 +197,38 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         transparent_color = QColor()
         transparent_color.setAlpha(0)
 
+        # Retrieve the classification that is used by the hazard layer.
+        vector_hazard_classification = self.hazard.keyword(
+            'vector_hazard_classification')
+        # Get the dictionary that contains the definition of the classification
+        vector_hazard_classification = definition(vector_hazard_classification)
+        # Get the list classes in the classification
+        vector_hazard_classes = vector_hazard_classification['classes']
+
         classes = self.hazard_class_mapping
 
-        if len(classes) == 3:
-            classes_colours = {
-                "low": "#1EFC7C",
-                "medium": "#FFA500",
-                "high": "#F31A1C"}
-        elif len(classes) == 2:
-            classes_colours = {
-                "dry": "#1EFC7C",
-                "wet": "#F31A1C"}
-        else:
-            classes_colours = {
-                "low": "#1EFC7C",
-                "medium": "#FFA500",
-                "high": "#F31A1C"}
+        classes_colours = {}
+
+        color_mapping = {
+            'wet': '#F31A1C',
+            'high': '#F31A1C',
+            'medium': '#FFA500',
+            'low': '#1EFC7C'}
+        # Assigning colors
+        for vector_hazard_class in vector_hazard_classes:
+            key = vector_hazard_class['key']
+            if key in classes.keys() and key in color_mapping.keys():
+                classes_colours[key] = color_mapping[key]
 
         # Define style info for output polygons showing population counts
         style_classes = []
         index = 0
         for class_key, colour in classes_colours.items():
             style_class = dict()
-            label = classes[class_key][0]
+            if class_key in classes.keys():
+                label = classes[class_key][0]
+            else:
+                continue
             transparency = 0
             style_class['label'] = label
             style_class['value'] = (len(classes) - index)
@@ -355,13 +364,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                         == "dry":
                     # In case the impact geometry has a 'no or NO' value in
                     # the flood column
-                    unaffected_geometry = geometry.symDifference(
-                        impact_geometry)
-                    if area_id not in self.all_affected_areas:
-                        self.all_affected_areas[area_id] = 0.
-                    area = 0
-
-                    self.all_affected_areas[area_id] += area
+                    continue
                 else:
                     unaffected_geometry = geometry.symDifference(
                         impact_geometry)
@@ -456,14 +459,18 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             feature,
             area_population_attribute)
 
-        unaffected_feature.setAttribute(3, unaffected_population_number)
+        unaffected_feature.setAttribute(
+            area_population_attribute,
+            unaffected_population_number)
 
         impacted_population_number = self.calculate_population_number(
             impact_geometry,
             feature,
             area_population_attribute)
 
-        impacted_feature.setAttribute(3, impacted_population_number)
+        impacted_feature.setAttribute(
+            area_population_attribute,
+            impacted_population_number)
 
         # Getting number of population in different hazard
         # levels
@@ -475,7 +482,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 self.hazard_levels[hazard_attribute_key] += \
                     impacted_population_number
 
-        writer.addFeature(impacted_feature)
+        # Writing all features except a no zone feature
+        if hazard_attribute_key != "dry":
+            writer.addFeature(impacted_feature)
 
     def get_hazard_class_field_key(self, hazard):
         """ Get the value of the class field key for the given hazard
@@ -488,8 +497,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         """
 
-        hazard_class_field = self.hazard.keyword('field')
-        hazard_attribute = hazard[hazard_class_field]
+        self.hazard_class_field = self.hazard.keyword('field')
+        hazard_attribute = hazard[self.hazard_class_field]
         self.hazard_class_mapping = self.hazard.keyword('value_map')
 
         hazard_attribute_key = None
@@ -614,17 +623,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             # To avoid Null
             if isinstance(population_total, QPyNullVariant):
                 population_total = 0
-            try:
-                population_number = (
-                    (target_area / total_area) * population_total)
-                population_number = round(population_number, 0)
-            except TypeError:
-                message = tr(
-                        'Exposure data does not contain the expected '
-                        'exposure people type(Number). %s was found instead '
-                        'of a Number' % population_total)
-                # noinspection PyExceptionInherit
-                raise InaSAFEError(message)
+
+            population_number = (
+                (target_area / total_area) * population_total)
+
         else:
             population_number = 0
 
