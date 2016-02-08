@@ -52,7 +52,7 @@
             "Default": "0.05",
             "Minimum allowed": "0.02",
             "Maximum allowed": "0.05",
-            "Frequency": "single",
+            "Frequency": "once",
             "Resource name": "Toilets",
             "Resource description": "",
             "Unit": "",
