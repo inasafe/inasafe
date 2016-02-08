@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict
-from safe.defaults import aggregation_categorical_postprocessor
+from safe.defaults import building_type_postprocessor
 from safe.impact_functions.earthquake.earthquake_building\
     .parameter_definitions import (
         low_threshold, medium_threshold, high_threshold)
@@ -110,8 +110,8 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                  ('medium_threshold', medium_threshold()),
                  ('high_threshold', high_threshold()),
                  ('postprocessors', OrderedDict([
-                     ('AggregationCategorical',
-                      aggregation_categorical_postprocessor())]))]
+                     ('BuildingType',
+                      building_type_postprocessor())]))]
             )
         }
         return dict_meta

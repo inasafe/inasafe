@@ -66,7 +66,7 @@ class KeywordIOTest(unittest.TestCase):
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
-            'keyword_version': '3.2',
+            'keyword_version': '3.3',
             'structure_class_field': 'FLOODED',
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
@@ -77,6 +77,9 @@ class KeywordIOTest(unittest.TestCase):
         # Keyword less layer
         keywordless_path = test_data_path('other', 'keywordless_layer.shp')
         self.keywordless_layer, _ = load_layer(keywordless_path)
+        # Keyword file
+        self.keyword_path = test_data_path(
+            'exposure', 'buildings_osm_4326.xml')
 
     def tearDown(self):
         pass
@@ -87,56 +90,6 @@ class KeywordIOTest(unittest.TestCase):
         expected_hash = '7cc153e1b119ca54a91ddb98a56ea95e'
         message = "Got: %s\nExpected: %s" % (hash_value, expected_hash)
         self.assertEqual(hash_value, expected_hash, message)
-
-    def test_write_read_keyword_from_uri(self):
-        """Test we can set and get keywords for a non local datasource"""
-        handle, filename = tempfile.mkstemp(
-            '.db', 'keywords_', temp_dir())
-
-        # Ensure the file is deleted before we try to write to it
-        # fixes windows specific issue where you get a message like this
-        # ERROR 1: c:\temp\inasafe\clip_jpxjnt.shp is not a directory.
-        # This is because mkstemp creates the file handle and leaves
-        # the file open.
-
-        os.close(handle)
-        os.remove(filename)
-        expected_keywords = {
-            'category': 'exposure',
-            'datatype': 'itb',
-            'subcategory': 'building'}
-        # SQL insert test
-        # On first write schema is empty and there is no matching hash
-        self.keyword_io.set_keyword_db_path(filename)
-        self.keyword_io.write_keywords_for_uri(PG_URI, expected_keywords)
-        # SQL Update test
-        # On second write schema is populated and we update matching hash
-        expected_keywords = {
-            'category': 'exposure',
-            'datatype': 'OSM',  # <--note the change here!
-            'subcategory': 'building'}
-        self.keyword_io.write_keywords_for_uri(PG_URI, expected_keywords)
-        # Test getting all keywords
-        keywords = self.keyword_io.read_keyword_from_uri(PG_URI)
-        message = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
-            keywords, expected_keywords, filename)
-        self.assertDictEqual(keywords, expected_keywords, message)
-        # Test getting just a single keyword
-        keyword = self.keyword_io.read_keyword_from_uri(PG_URI, 'datatype')
-        expected_keyword = 'OSM'
-        message = 'Got: %s\n\nExpected %s\n\nDB: %s' % (
-            keyword, expected_keyword, filename)
-        self.assertDictEqual(keywords, expected_keywords, message)
-        # Test deleting keywords actually does delete
-        self.keyword_io.delete_keywords_for_uri(PG_URI)
-        try:
-            _ = self.keyword_io.read_keyword_from_uri(PG_URI, 'datatype')
-            # if the above didn't cause an exception then bad
-            message = 'Expected a HashNotFoundError to be raised'
-            assert message
-        except HashNotFoundError:
-            # we expect this outcome so good!
-            pass
 
     def test_are_keywords_file_based(self):
         """Can we correctly determine if keywords should be written to file or
@@ -309,6 +262,17 @@ class KeywordIOTest(unittest.TestCase):
         self.assertIn(
             u'\n---\n*high*, Kawasan Rawan Bencana III------',
             table.to_text())
+
+    def test_keyword_io(self):
+        """Test read keywords directly from keywords file
+
+        .. versionadded:: 3.2
+        """
+        keywords = self.keyword_io.read_keywords_file(self.keyword_path)
+        expected_keywords = self.expected_vector_keywords
+        message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
+            keywords, expected_keywords, self.keyword_path)
+        self.assertDictEqual(keywords, expected_keywords, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordIOTest)

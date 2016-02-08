@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+# Earthquake
 from safe.impact_functions.earthquake.earthquake_building\
     .impact_function import EarthquakeBuildingFunction
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
@@ -18,6 +19,8 @@ from safe.impact_functions.earthquake.pager_earthquake_fatality_model\
     .impact_function import PAGFatalityFunction
 from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model\
     .impact_function import ITBBayesianFatalityFunction
+
+# Generic
 from safe.impact_functions.generic.classified_raster_building\
     .impact_function import ClassifiedRasterHazardBuildingFunction
 from safe.impact_functions.generic.classified_polygon_population\
@@ -30,6 +33,8 @@ from safe.impact_functions.generic.classified_polygon_building\
     .impact_function import ClassifiedPolygonHazardBuildingFunction
 from safe.impact_functions.generic.classified_polygon_people\
     .impact_function import ClassifiedPolygonHazardPolygonPeopleFunction
+
+# Inundation
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import FloodRasterBuildingFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -46,6 +51,10 @@ from safe.impact_functions.inundation.flood_polygon_population\
 from safe.impact_functions.inundation\
     .tsunami_population_evacuation_raster.impact_function import \
     TsunamiEvacuationFunction
+from safe.impact_functions.inundation.tsunami_raster_building.impact_function \
+    import TsunamiRasterBuildingFunction
+
+# Volcanic
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
     import VolcanoPointBuildingFunction
 from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
@@ -59,14 +68,13 @@ from safe.impact_functions.volcanic.volcano_point_population\
 def register_impact_functions():
     """Register all the impact functions available."""
     impact_function_registry = ImpactFunctionManager().registry
-    # Inundation IF's
-    impact_function_registry.register(FloodPolygonBuildingFunction)
-    impact_function_registry.register(FloodPolygonRoadsFunction)
-    impact_function_registry.register(FloodEvacuationVectorHazardFunction)
-    impact_function_registry.register(FloodEvacuationRasterHazardFunction)
-    impact_function_registry.register(FloodRasterBuildingFunction)
-    impact_function_registry.register(FloodRasterRoadsFunction)
-    impact_function_registry.register(TsunamiEvacuationFunction)
+
+    # Earthquake
+    impact_function_registry.register(EarthquakeBuildingFunction)
+    impact_function_registry.register(ITBFatalityFunction)
+    impact_function_registry.register(PAGFatalityFunction)
+    # Added in 3.3
+    impact_function_registry.register(ITBBayesianFatalityFunction)
 
     # Generic IF's
     impact_function_registry.register(ClassifiedRasterHazardBuildingFunction)
@@ -79,12 +87,16 @@ def register_impact_functions():
     impact_function_registry.register(
         ClassifiedPolygonHazardPolygonPeopleFunction)
 
-    # Earthquake
-    impact_function_registry.register(EarthquakeBuildingFunction)
-    impact_function_registry.register(ITBFatalityFunction)
-    impact_function_registry.register(PAGFatalityFunction)
+    # Inundation IF's
+    impact_function_registry.register(FloodPolygonBuildingFunction)
+    impact_function_registry.register(FloodPolygonRoadsFunction)
+    impact_function_registry.register(FloodEvacuationVectorHazardFunction)
+    impact_function_registry.register(FloodEvacuationRasterHazardFunction)
+    impact_function_registry.register(FloodRasterBuildingFunction)
+    impact_function_registry.register(FloodRasterRoadsFunction)
+    impact_function_registry.register(TsunamiEvacuationFunction)
     # Added in 3.3
-    impact_function_registry.register(ITBBayesianFatalityFunction)
+    impact_function_registry.register(TsunamiRasterBuildingFunction)
 
     # Volcanic IF's
     impact_function_registry.register(VolcanoPointBuildingFunction)

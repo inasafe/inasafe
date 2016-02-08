@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import logging
+
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '19/07/2012'
@@ -40,6 +42,14 @@ def data_dir():
     """Return the path to the standard data dir for e.g. geonames data."""
     dir_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), 'fixtures'))
+    make_directory(dir_path)
+    return dir_path
+
+
+def settings_dir():
+    """Return the path to the settings dir of realtime"""
+    dir_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), 'settings'))
     make_directory(dir_path)
     return dir_path
 
