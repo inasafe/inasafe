@@ -74,7 +74,8 @@ class TestShakemapMonitoring(unittest.TestCase):
         # trigger copy
         LOGGER.info('Copy folders')
         shutil.copytree(
-            self.shake_data, os.path.join(self.local_path, 'shakemaps', SHAKE_ID))
+            self.shake_data,
+            os.path.join(self.local_path, 'shakemaps', SHAKE_ID))
         LOGGER.info('End of folder copy')
         time.sleep(5)
         self.assertTrue(handler.file_handled)
@@ -105,7 +106,8 @@ class TestShakemapMonitoring(unittest.TestCase):
         # trigger copy
         LOGGER.info('Copy folders')
         shutil.copytree(
-            self.shake_data, os.path.join(self.local_path, 'shakemaps', SHAKE_ID))
+            self.shake_data,
+            os.path.join(self.local_path, 'shakemaps', SHAKE_ID))
         LOGGER.info('End of folder copy')
 
         # sleep to let inotify handles events

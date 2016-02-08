@@ -30,12 +30,14 @@ def notify_realtime_rest(timestamp):
         session = inasafe_django.rest
         timestamp_utc = timestamp.astimezone(tz=pytz.utc)
         data = {
-            'timestamp': timestamp_utc.strftime(INASAFE_REALTIME_DATETIME_FORMAT)
+            'timestamp': timestamp_utc.strftime(
+                    INASAFE_REALTIME_DATETIME_FORMAT)
         }
         headers = {
             'X-CSRFTOKEN': inasafe_django.csrf_token
         }
-        LOGGER.info('Is Logged in %s' % session.is_logged_in.GET(headers=headers))
+        LOGGER.info(
+                'Is Logged in %s' % session.is_logged_in.GET(headers=headers))
 
         response = session.indicator.notify_shakemap_push.POST(
             data=data, headers=headers)

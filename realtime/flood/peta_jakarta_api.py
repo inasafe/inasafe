@@ -29,4 +29,3 @@ class PetaJakartaAPI(object):
             LOGGER.error("Can't access API")
             return
         return r.text
-

@@ -325,7 +325,8 @@ def run_impact_function(command_line_arguments):
     impact_layer = analysis.impact_layer
     write_results(command_line_arguments, impact_layer)
     try:
-        LOGGER.info('Report template arguments: %s' % repr(command_line_arguments.report_template))
+        LOGGER.info('Report template arguments: %s' % repr(
+                command_line_arguments.report_template))
         if command_line_arguments.report_template is not None:
             build_report(command_line_arguments)
     except AttributeError:
