@@ -86,7 +86,6 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         }
         self.assertEqual(features, expected_features)
         expected_impact_summary = [
-            '**Hazard Zone**, **Number of People Affected**------',
             '**High Hazard Zone**, 4,600------',
             '**Medium Hazard Zone**, 65,700------',
             '**Low Hazard Zone**, 11,500------',
