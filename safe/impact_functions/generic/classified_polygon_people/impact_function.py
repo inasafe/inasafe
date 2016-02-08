@@ -211,9 +211,16 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         color_mapping = {
             'wet': '#F31A1C',
-            'high': '#F31A1C',
+            'low': '#1EFC7C',
             'medium': '#FFA500',
-            'low': '#1EFC7C'}
+            'high': '#F31A1C'
+            }
+        classes_values = {
+            'wet': 1,
+            'low': 1,
+            'medium': 2,
+            'high': 3
+        }
         # Assigning colors
         for vector_hazard_class in vector_hazard_classes:
             key = vector_hazard_class['key']
@@ -231,7 +238,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 continue
             transparency = 0
             style_class['label'] = label
-            style_class['value'] = (len(classes) - index)
+            style_class['value'] = classes_values[class_key]
             style_class['colour'] = colour
             style_class['transparency'] = transparency
             style_classes.append(style_class)
@@ -364,7 +371,13 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                         == "dry":
                     # In case the impact geometry has a 'no or NO' value in
                     # the flood column
-                    continue
+                    unaffected_geometry = geometry.symDifference(
+                        impact_geometry)
+                    if area_id not in self.all_affected_areas:
+                        self.all_affected_areas[area_id] = 0.
+                    area = 0
+
+                    self.all_affected_areas[area_id] += area
                 else:
                     unaffected_geometry = geometry.symDifference(
                         impact_geometry)
@@ -483,8 +496,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                     impacted_population_number
 
         # Writing all features except a no zone feature
-        if hazard_attribute_key != "dry":
-            writer.addFeature(impacted_feature)
+        writer.addFeature(impacted_feature)
 
     def get_hazard_class_field_key(self, hazard):
         """ Get the value of the class field key for the given hazard
