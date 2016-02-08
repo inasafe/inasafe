@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" sourcelanguage="" version="2.0">
 <context>
     <name>@default</name>
     <message>
@@ -5569,177 +5568,177 @@ Unsur-unsur tersebut adalah:</translation>
     <message>
         <location filename="defaults.py" line="184"/>
         <source>Check this option if you wish to calculate a breakdown by age group for the affected population. </source>
-        <translation type="unfinished"></translation>
+        <translation>Centang pilihan ini jika Anda ingin menghitung perincian berdasarkan grup usia dari populasi yang terdampak.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="203"/>
         <source>Youth ratio defines what proportion of the population have not yet achieved financial independence. The age threshold for youth can vary by region - please consult with your local census bureau to find out what the relevant threshold is in your region. InaSAFE does not impose a particular age ratio scheme - it will break down the population according to the thresholds you define for your locality. In InaSAFE, people 0-14 years old are defined as &quot;youth&quot;. The default youth ratio is 0.263.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nisbah pemuda menentukan berapa perbandingan dari populasi yang belum mencapai kebebasan finansial. Batas ambang usia untuk kategori pemuda dapat berbeda-beda untuk tiap daerah - mohon konsultasikan dengan badan sensus lokal Anda untuk mencari tahu batas ambang yang sesuai di wilayah Anda. InaSAFE tidak memaksakan skema nisbah usia tertentu - populasi akan dirinci berdasarkan batas ambang yang Anda didefiniskan untuk daerah lokal Anda. Di InaSAFE, orang yang berumur 0-14 tahun dikategorikan sebagai &quot;pemuda&quot;. Nisbah pemuda memiliki nilai default 0,263.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="294"/>
         <source>Check this option if you want to enable a building impact report broken down by building type for each aggregation area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktifkan pilihan ini untuk membuat perincian bangunan berdasarkan tipe untuk tiap wilayah agregasi.</translation>
     </message>
     <message>
         <location filename="defaults.py" line="302"/>
         <source>features</source>
-        <translation type="unfinished"></translation>
+        <translation>fitur</translation>
     </message>
     <message>
         <location filename="defaults.py" line="303"/>
         <source>Number of features.</source>
-        <translation type="unfinished"></translation>
+        <translation>Banyak fitur</translation>
     </message>
     <message>
         <location filename="defaults.py" line="315"/>
         <source>Threshold</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambang batas</translation>
     </message>
     <message>
         <location filename="defaults.py" line="316"/>
         <source>The threshold is used to consolidate small building usage groups which are within this threshold.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambang batas digunakan untuk menggabungkan kelompok bangunan dengan pengunaan sedikit dalam ambang batas ini.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="53"/>
         <source>Dry Zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Wilayah Kering</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="57"/>
         <source>Very High Hazard Zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Wilayah Ancaman Sangat Tinggi</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="78"/>
         <source>Dry zone is defined as non-inundated area or has inundation depth is 0 %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Wilayah kering didefinsiikan sebagai wilayah yang tidak tergenang atau yang memiliki kedalaman genangan 0 %s</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="83"/>
         <source>Low tsunami hazard zone is defined as inundation depth is more than 0 %s but less than %.1f %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Wilayah ancaman tsunami rendah didefinisikan dengan kedalaman genangan lebih dari 0 %s tetapi kurang dari %.1f %s</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="90"/>
         <source>Moderate tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Wilayah ancaman tsunami menengah didefinisikan dengan kedalaman genangan lebih dari %.1f %s tetapi kurang dari %.1f %s</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="98"/>
         <source>High tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Wilayah ancaman tsunami tinggi didefinisikan dengan kedalaman genangan lebih dari %.1f %s tetapi kurang dari %.1f %s</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="106"/>
         <source>Very high tsunami hazard zone is defined as inundation depth is more than %.1f %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Wilayah ancaman tsunami sangat tinggi didefinisikan dengan kedalaman genangan lebih dari %.1f %s</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="111"/>
         <source>Buildings are closed if they are in low, moderate, high, or very high tsunami hazard zone.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bangunan ditutup apabila berada di wilayah ancaman tsunami rendah, menengah, tinggi, atau sangat tinggi.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="114"/>
         <source>Buildings are opened if they are in dry zone.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bangunan dibuka apabila berada di wilayah kering.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="223"/>
         <source>Inundated buildings</source>
-        <translation type="unfinished"></translation>
+        <translation>Bangunan tergenang</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="224"/>
         <source>Inundated structure status</source>
-        <translation type="unfinished"></translation>
+        <translation>Status genangan bangunan</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="225"/>
         <source>(low, medium, high, and very high)</source>
-        <translation type="unfinished"></translation>
+        <translation>(rendah, menengah, tinggi, dan sangat tinggi)</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="68"/>
         <source>Raster tsunami on buildings</source>
-        <translation type="unfinished"></translation>
+        <translation>Tsunami raster pada bangunan</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="70"/>
         <source>Be inundated</source>
-        <translation type="unfinished"></translation>
+        <translation>Tergenang</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="75"/>
         <source>To assess the impacts of tsunami inundation on building footprints in vector format with hazard in raster format.</source>
-        <translation type="unfinished"></translation>
+        <translation>Untuk menghitung dampak genangan tsunami pada jejak keberadaan bangunan dalam format vektor dengan ancaman dalam format raster.</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="78"/>
         <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the tsunami threshold. The threshold can be configured in impact function options.</source>
-        <translation type="unfinished"></translation>
+        <translation>Status tergenang dihitung untuk seriap bangunan (menggunakan centroid jika berupa poligon) berdasarkan batas tsunami. Batas ini dapat diatur melalui opsi fungsi dampak.</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="83"/>
         <source>A hazard raster layer where each cell represents tsunami inundation depth (in meters).</source>
-        <translation type="unfinished"></translation>
+        <translation>Sebuah layer raster ancaman dimana setiap sel merepresentasikan kedalaman genangan tsunami (dalam meter).</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="86"/>
         <source>Vector polygon or point layer where each feature represents the footprint of a building.</source>
-        <translation type="unfinished"></translation>
+        <translation>Poligon vektor atau layer titik dimana masing-masing fitur merepresentasikan batas tapak sebuah bangunan.</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="89"/>
         <source>Vector layer contains building is estimated to be inundated and the breakdown of the building by type.</source>
-        <translation type="unfinished"></translation>
+        <translation>Layer data vektor berisi bangunan yang diperkirakan tergenang dan kerusakan berdasarkan jenis bangunannya.</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="92"/>
         <source>Provide details about where critical infrastructure might be inundated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Berikan detail di tempat mana infrastruktur kritis mungkin tergenang.</translation>
     </message>
     <message>
         <location filename="parameter_definitions.py" line="41"/>
         <source>Low Hazard Zone threshold.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambang Batas Wilayah Ancaman Rendah</translation>
     </message>
     <message>
         <location filename="parameter_definitions.py" line="42"/>
         <source>The threshold of hazard categorized as Low Hazard Zone in meter. A zone is categorized as Low Hazard Zone if the depth of tsunami inundation is less than Low Hazard Zone Threshold.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambang batas ancaman yang dikategorikan sebagai Wilayah Ancaman Rendah dalam meter. Sebuah wilayah dikategorikan sebagai Wilayah Ancaman Rendah jika kedalaman dari genangan tsunami kurang dari Ambang Batas Wilayah Ancaman Rendah.</translation>
     </message>
     <message>
         <location filename="parameter_definitions.py" line="65"/>
         <source>Moderate Hazard Zone threshold.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambang Batas Wilayah Ancaman Menengah.</translation>
     </message>
     <message>
         <location filename="parameter_definitions.py" line="66"/>
         <source>The threshold of hazard categorized as Moderate Hazard Zone in meter. A zone is categorized as Medium Hazard Zone if the depth of tsunami inundation is more than Low Hazard Zone Threshold and less than Medium Hazard Zone Threshold.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambang batas ancaman yang dikategorikan sebagai Wilayah Ancaman Menengah dalam meter. Sebuah wilayah dikategorikan sebagai Wilayah Ancaman Menengah jika kedalaman dari genangan tsunami lebih dari Ambang Batas Wilayah Ancaman Rendah dan kurang dari Ambang Batas Wilayah Ancaman Menengah.</translation>
     </message>
     <message>
         <location filename="parameter_definitions.py" line="90"/>
         <source>High Hazard Zone threshold.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambang Batas Wilayah Ancaman Tinggi.</translation>
     </message>
     <message>
         <location filename="parameter_definitions.py" line="91"/>
         <source>The threshold of hazard categorized as Moderate Hazard Zone in meter. A zone is categorized as High Hazard Zone if the depth of tsunami inundation is more than Medium Hazard Zone Threshold and less than High Hazard Zone Threshold.A zone that has more than High Hazard Zone Threshold is categorized as Very High Hazard Zone.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="population_exposure_report_mixin.py" line="92"/>
         <source>What are people&apos;s likely movements?</source>
-        <translation type="unfinished"></translation>
+        <translation>Apa tindakan penduduk yang mungkin terjadi?</translation>
     </message>
     <message>
         <location filename="population_exposure_report_mixin.py" line="164"/>
         <source>Total population</source>
-        <translation type="unfinished"></translation>
+        <translation>Jumlah penduduk</translation>
     </message>
 </context>
 <context>
@@ -5751,7 +5750,7 @@ Unsur-unsur tersebut adalah:</translation>
     </message>
     <message>
         <location filename="about_dialog.py" line="76"/>
-        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
+        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
         <translation>Tombol Edit oleh Hugo GarduÃ±o dari The Noun Project</translation>
     </message>
     <message>
@@ -5812,8 +5811,8 @@ Unsur-unsur tersebut adalah:</translation>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif'; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -5827,12 +5826,12 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -5850,7 +5849,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -5863,7 +5862,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -5876,7 +5875,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.bnpb.go.id/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Indonesia’s National Disaster Management Agency (BNPB)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://dfat.gov.au/geo/indonesia/development-assistance/Pages/disaster-risk-management-in-indonesia.aspx&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australian Government – Disaster Risk Management in Indonesia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -7586,7 +7585,7 @@ ke
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.Helvetica Neue DeskInterface&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.Helvetica Neue DeskInterface'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -8808,7 +8807,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3111"/>
-        <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
+        <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation>Lapisan ancaman dan keterpaparan tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -8944,14 +8943,14 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3563"/>
-        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
+        <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation>Lapisan agregasi dan ancaman tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3644"/>
-        <source>The selected extent doesn&apos;t intersect input layers.
+        <source>The selected extent doesn't intersect input layers.
 Please step back and select another layer.</source>
         <translation>Luasan yang dipilih tidak berpotongan dengan lapisan-lapisan masukan.
 Silahkan mundur ke langkah sebelumnya dan pilih lapisan lainnya.</translation>
@@ -9056,7 +9055,7 @@ Silahkan mundur ke langkah sebelumnya dan pilih lapisan lainnya.</translation>
     <message>
         <location filename="wizard_dialog_base.ui" line="1553"/>
         <source>d MMM yyyy</source>
-        <translation type="unfinished"></translation>
+        <translation>d MMM yyyy</translation>
     </message>
 </context>
 <context>
@@ -9064,12 +9063,12 @@ Silahkan mundur ke langkah sebelumnya dan pilih lapisan lainnya.</translation>
     <message>
         <location filename="test_aggregator.py" line="103"/>
         <source>Entire area</source>
-        <translation type="unfinished">Area keseluruhan</translation>
+        <translation>Area keseluruhan</translation>
     </message>
     <message>
         <location filename="test_aggregator.py" line="104"/>
-        <source>D&#xed;str&#xdc;t&apos;s of Jakarta</source>
-        <translation type="unfinished">DístrÜt&apos;s Jakarta</translation>
+        <source>DístrÜt&apos;s of Jakarta</source>
+        <translation>DístrÜt&apos;s Jakarta</translation>
     </message>
 </context>
 <context>
