@@ -132,6 +132,8 @@ class Analysis(object):
                 user_extent.xMaximum(),
                 user_extent.yMaximum()]
             self.impact_function.requested_extent = extent
+        elif user_extent is None:
+            pass
         else:
             # This is a temporary hack, analysis.py will disappear soon.
             raise Exception('The extent should be a QgsRectangle.')
