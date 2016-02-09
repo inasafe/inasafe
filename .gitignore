@@ -43,7 +43,7 @@ realtime/fixtures/settings/*
 !realtime/fixtures/settings/README
 realtime/fixtures/indonesia.sqlite
 realtime/server_config.py
-headless/celeryconfiglocal.py
+headless/celeryconfig.py
 safe/gui/ui/*.py
 result.txt
 riab_demo_data
