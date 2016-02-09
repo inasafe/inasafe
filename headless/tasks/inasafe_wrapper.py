@@ -1,13 +1,9 @@
 # coding=utf-8
-import logging
-
 import datetime
-
+import logging
 import os
-import tempfile
-
 import shutil
-import urllib
+import tempfile
 import urlparse
 
 from headless.celeryapp import app
@@ -115,7 +111,7 @@ def run_analysis(hazard, exposure, function, aggregation=None,
 @app.task
 def read_keywords_iso_metadata(metadata_url, keyword=None):
     """Read xml metadata of a layer"""
-    filename, _ = urllib.urlretrieve(metadata_url)
+    filename = download_layer(metadata_url)
     # add xml extension
     new_filename = filename+'.xml'
     shutil.move(filename, new_filename)

@@ -1,13 +1,26 @@
 # coding=utf-8
 import os
-import urllib
+import tempfile
 from zipfile import ZipFile
+
+import requests
 
 from safe.utilities.styling import set_vector_categorized_style, \
     set_vector_graduated_style, setRasterStyle
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '1/27/16'
+
+
+def download_file(url):
+    tmpfile = tempfile.mktemp()
+    # NOTE the stream=True parameter
+    r = requests.get(url, stream=True)
+    with open(tmpfile, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
+    return tmpfile
 
 
 def download_layer(url):
@@ -20,7 +33,7 @@ def download_layer(url):
     :rtype: str
     """
     # download archive file
-    filename, _ = urllib.urlretrieve(url)
+    filename = download_file(url)
     base_name, _ = os.path.splitext(filename)
     dir_name = os.path.dirname(filename)
     layer_base_name = None
