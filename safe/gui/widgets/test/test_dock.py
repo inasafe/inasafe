@@ -1132,7 +1132,7 @@ class TestDockRegressions(TestCase):
 
         """
         hazard_path = test_data_path(
-            'hazard', 'continuous_flood_unaligned.tif')
+            'hazard', 'continuous_flood_unaligned_big_size.tif')
         exposure_path = test_data_path(
             'exposure', 'people_allow_resampling_false.tif')
 
@@ -1214,7 +1214,7 @@ class TestDockRegressions(TestCase):
 
         """
         hazard_path = test_data_path(
-            'hazard', 'continuous_flood_unaligned.tif')
+            'hazard', 'continuous_flood_unaligned_big_size.tif')
         exposure_path = test_data_path(
             'exposure', 'people_allow_resampling_true.tif')
         hazard_layer, hazard_layer_purpose = load_layer(hazard_path)
