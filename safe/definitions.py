@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from safe.utilities.i18n import tr
 
 inasafe_keyword_version_key = 'keyword_version'
-inasafe_keyword_version = 3.2
+inasafe_keyword_version = '3.3'
 
 # constants
 small_number = 2 ** -53  # I think this is small enough
@@ -356,12 +356,22 @@ exposure_structure = {
         'bridge.')
 }
 
+exposure_area = {
+    'key': 'area',
+    'name': tr('Area'),
+    'description': tr(
+        'The <b>area</b> exposure data describes features on '
+        'the surface of the earth that might be exposed to a particular '
+        'hazard. This currently include urban areas. ')
+}
+
 exposure_all = [
     exposure_land_cover,
     exposure_people_in_building,
     exposure_population,
     exposure_road,
-    exposure_structure
+    exposure_structure,
+    exposure_area
 ]
 
 # Renamed key from exposure to exposures in 3.2 because key was not unique TS
@@ -488,7 +498,7 @@ generic_vector_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'name': tr('high'),
+            'name': tr('High Hazard Zone'),
             'description': tr('The location that has highest impact.'),
             'string_defaults': ['high'],
             'numeric_default_min': 5,
@@ -497,7 +507,7 @@ generic_vector_hazard_classes = {
         },
         {
             'key': 'medium',
-            'name': tr('medium'),
+            'name': tr('Medium Hazard Zone'),
             'description': tr('The location that has medium impact.'),
             'string_defaults': ['medium'],
             'numeric_default_min': 3,
@@ -506,7 +516,7 @@ generic_vector_hazard_classes = {
         },
         {
             'key': 'low',
-            'name': tr('low'),
+            'name': tr('Low Hazard Zone'),
             'description': tr('The location that has lowest impact.'),
             'string_defaults': ['low'],
             'numeric_default_min': 0,
@@ -527,7 +537,7 @@ volcano_vector_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'name': tr('high'),
+            'name': tr('High Hazard Zone'),
             'description': tr('The highest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
             'numeric_default_min': 0,
@@ -536,7 +546,7 @@ volcano_vector_hazard_classes = {
         },
         {
             'key': 'medium',
-            'name': tr('medium'),
+            'name': tr('Medium Hazard Zone'),
             'description': tr('The medium hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
             'numeric_default_min': 3,
@@ -545,7 +555,7 @@ volcano_vector_hazard_classes = {
         },
         {
             'key': 'low',
-            'name': tr('low'),
+            'name': tr('Low Hazard Zone'),
             'description': tr('The lowest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
             'numeric_default_min': 5,
@@ -756,6 +766,26 @@ volcano_name_field = {
     'description': tr('Attribute where the volcano name is located.')
 }
 
+area_name_field = {
+    'key': 'area_name_field',
+    'name': tr('Name field'),
+    'type': 'field',
+    'description': tr('Attribute for the area name ')
+}
+area_type = {
+    'key': 'area_type_field',
+    'name': tr('Type field'),
+    'type': 'field',
+    'description': tr('Attribute for the type of the area')
+}
+
+area_population_field = {
+    'key': 'area_population_field',
+    'name': tr('Population field'),
+    'type': 'field',
+    'description': tr('Attribute for the population on the area')
+}
+
 # General terminology and descriptive terms
 
 field = {
@@ -784,3 +814,6 @@ value_map = {
         ', "YES", "1" and "Flooded" might all be grouped together as '
         '"FLOODPRONE".')
 }
+
+
+multipart_polygon_key = 'multipart_polygon'

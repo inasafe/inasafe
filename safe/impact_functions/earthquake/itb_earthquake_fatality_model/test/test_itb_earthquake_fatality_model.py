@@ -15,6 +15,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import numpy
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
@@ -34,6 +35,22 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         registry = ImpactFunctionManager().registry
         registry.clear()
         registry.register(ITBFatalityFunction)
+
+    def test_compute_fatality_rate(self):
+        impact_function = ITBFatalityFunction.instance()
+        expected_result = {2: 0,
+                           3: 0,
+                           4: 2.869e-6,
+                           5: 1.203e-5,
+                           6: 5.048e-5,
+                           7: 2.117e-4,
+                           8: 8.883e-4,
+                           9: 3.726e-3,
+                           10: 1.563e-2}
+        result = impact_function.compute_fatality_rate()
+        for item in expected_result.keys():
+            self.assertAlmostEqual(
+                expected_result[item], result[item], places=4)
 
     def test_run(self):
         """TestITEarthquakeFatalityFunction: Test running the IF."""
@@ -60,22 +77,19 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of earthquake how many '
-                             'population might die or be displaced')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+        expected_question = (
+            'In the event of earthquake how many population might die or be '
+            'displaced')
+        self.assertEqual(expected_question, impact_function.question)
 
         expected_result = {
             'total_population': 200,
             'total_fatalities': 0,  # should be zero FIXME
             'total_displaced': 200
         }
-        for key_ in expected_result.keys():
-            result = impact_layer.get_keywords(key_)
-            message = 'Expecting %s, but it returns %s' % (
-                expected_result[key_], result)
-            self.assertEqual(expected_result[key_], result, message)
+        for key in expected_result.keys():
+            result = impact_layer.get_keywords(key)
+            self.assertEqual(expected_result[key], result)
 
         expected_result = {}
         expected_result['fatalities_per_mmi'] = {
@@ -112,14 +126,17 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             10: 0
         }
 
-        for key_ in expected_result.keys():
-            result = impact_layer.get_keywords(key_)
-            for item in expected_result[key_].keys():
-                message = 'Expecting %s, but it returns %s' % (
-                    expected_result[key_][item], result[item])
+        for key in expected_result.keys():
+            result = impact_layer.get_keywords(key)
+            for item in expected_result[key].keys():
                 self.assertAlmostEqual(
-                    expected_result[key_][item],
-                    result[item], places=4, msg=message)
+                    expected_result[key][item], result[item], places=4)
+
+        expected_result = None
+        result = impact_layer.get_keywords('prob_fatality_mag')
+        self.assertEqual(expected_result, result)
+
+        self.assertEqual(numpy.nansum(impact_layer.data), 200)
 
     def test_filter(self):
         """TestITBEarthquakeFatalityFunction: Test filtering IF"""
@@ -148,9 +165,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         retrieved_if = impact_functions[0].metadata().as_dict()['id']
         expected = ImpactFunctionManager().get_function_id(
             ITBFatalityFunction)
-        message = 'Expecting %s, but getting %s instead' % (
-            expected, retrieved_if)
-        self.assertEqual(expected, retrieved_if, message)
+        self.assertEqual(expected, retrieved_if)
 
 if __name__ == '__main__':
     unittest.main()

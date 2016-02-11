@@ -368,3 +368,8 @@ class MetadataCastError(InaSAFEError):
 class InvalidProvenanceDataError(InaSAFEError):
     """When a path for a metadata xml is not correct"""
     suggestion = 'Check that the IF produced all the required data'
+
+
+class MissingMetadata(InaSAFEError):
+    """When old version of metadata is not properly read."""
+    pass

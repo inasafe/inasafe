@@ -39,7 +39,8 @@ import qgis
 from qgis.core import (
     QgsVectorLayer,
     QgsFeatureRequest,
-    QgsRectangle)
+    QgsRectangle,
+    QgsRasterLayer)
 
 from safe.common.utilities import which, romanise
 from safe.common.exceptions import (
@@ -49,6 +50,7 @@ from safe.common.exceptions import (
     InvalidLayerError)
 from safe.utilities.styling import mmi_colour
 from safe.utilities.unicode import get_string
+from safe.utilities.keyword_io import KeywordIO
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -842,23 +844,40 @@ class ShakeGrid(object):
             be replaced with 'nearest'.
         :type algorithm: str
         """
+        keyword_io = KeywordIO()
+
+        keywords = {
+            'hazard': 'earthquake',
+            'hazard_category': 'single_event',
+            'keyword_version': '3.3',
+            'layer_geometry': 'raster',
+            'layer_mode': 'continuous',
+            'layer_purpose': 'hazard',
+            'continuous_hazard_unit': 'mmi',
+        }
+
         if self.algorithm_name:
-            keyword_path = os.path.join(
-                self.output_dir, '%s-%s.keywords' % (
-                    self.output_basename, algorithm))
+            layer_path = os.path.join(
+                self.output_dir, '%s-%s.tif' % (
+                        self.output_basename, algorithm))
         else:
-            keyword_path = os.path.join(
-                self.output_dir, '%s.keywords' % self.output_basename)
-        mmi_keywords = os.path.join(data_dir(), 'mmi.keywords')
-        shutil.copyfile(mmi_keywords, keyword_path)
+            layer_path = os.path.join(
+                self.output_dir, '%s.tif' % self.output_basename)
+
         # append title and source to the keywords file
         if len(self.title.strip()) == 0:
             keyword_title = self.output_basename
         else:
             keyword_title = self.title
-        with open(keyword_path, 'a') as keyword_file:
-            keyword_file.write(get_string('title: %s \n' % keyword_title))
-            keyword_file.write(get_string('source: %s ' % self.source))
+
+        keywords['title'] = keyword_title
+
+        hazard_layer = QgsRasterLayer(layer_path, keyword_title)
+
+        if not hazard_layer.isValid():
+            raise InvalidLayerError()
+
+        keyword_io.write_keywords(hazard_layer, keywords)
 
 
 def convert_mmi_data(

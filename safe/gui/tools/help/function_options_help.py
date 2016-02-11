@@ -71,12 +71,12 @@ def content():
         tr(
             '- Depending in the Impact function you selected, you can '
             'influence the result of your question here (the Impact Function) '
-            'by setting different values to the defaults that will be loaded.  '
+            'by setting different values to the defaults that will be loaded. '
             'The options available will depend on the impact function you '
             'choose (some Impact functions do not allow users to change the '
             'default parameters).')))
     bullets.add(m.Text(
-        m.ImportantText(tr('Postprocessors')),
+        m.ImportantText(tr('Post-processors')),
         tr(
             '- Takes the results from the impact function and calculates '
             'derivative indicators, for example if you have an affected '
@@ -96,6 +96,6 @@ def content():
             **SMALL_ICON_STYLE),
         tr(
             ' This panel will let you override global defaults for a specific '
-           'analysis run.')))
+            'analysis run.')))
     message.add(bullets)
     return message

@@ -14,9 +14,16 @@ from safe.common.utilities import verify, unique_filename
 from safe.gis.numerics import (
     nan_allclose,
     geotransform_to_axes,
-    grid_to_points)
-from safe.common.exceptions import ReadLayerError, WriteLayerError
-from safe.common.exceptions import GetDataError, InaSAFEError
+    grid_to_points
+)
+from safe.common.exceptions import (
+    GetDataError,
+    InaSAFEError,
+    MetadataReadError,
+    ReadLayerError,
+    WriteLayerError,
+    NoKeywordsFoundError
+)
 
 from layer import Layer
 from vector import Vector
@@ -25,10 +32,18 @@ from projection import Projection
 from utilities import DRIVER_MAP
 from utilities import read_keywords
 from utilities import write_keywords
-from utilities import (geotransform_to_bbox, geotransform_to_resolution,
-                       check_geotransform)
+from utilities import (
+    geotransform_to_bbox,
+    geotransform_to_resolution,
+    check_geotransform)
+
 from utilities import safe_to_qgis_layer
 from safe.utilities.unicode import get_string
+from safe.utilities.metadata import (
+    write_iso19115_metadata,
+    read_iso19115_metadata,
+    write_read_iso_19115_metadata
+)
 
 
 class Raster(Layer):
@@ -196,7 +211,11 @@ class Raster(Layer):
                 raise ReadLayerError(msg)
 
         # Look for any keywords
-        self.keywords = read_keywords(basename + '.keywords')
+        try:
+            self.keywords = read_iso19115_metadata(filename)
+        except (MetadataReadError, NoKeywordsFoundError):
+            keywords = read_keywords(basename + '.keywords')
+            self.keywords = write_read_iso_19115_metadata(filename, keywords)
 
         # Determine name
         if 'title' in self.keywords:
@@ -307,7 +326,8 @@ class Raster(Layer):
         fid = None  # Close
 
         # Write keywords if any
-        write_keywords(self.keywords, basename + '.keywords')
+        write_iso19115_metadata(filename, self.keywords)
+        # write_keywords(self.keywords, basename + '.keywords')
 
     def read_from_qgis_native(self, qgis_layer):
         """Read raster data from qgis layer QgsRasterLayer.
@@ -340,7 +360,8 @@ class Raster(Layer):
             provider.crs())
 
         # Write keywords if any
-        write_keywords(self.keywords, base_name + '.keywords')
+        # write_keywords(self.keywords, base_name + '.keywords')
+        write_iso19115_metadata(file_name, self.keywords)
         self.read_from_file(file_name)
 
     def as_qgis_native(self):
@@ -425,8 +446,10 @@ class Raster(Layer):
         # Take care of possible scaling
         if scaling is None:
             # Redefine scaling from density keyword if possible
-            kw = self.get_keywords()
-            if 'datatype' in kw and kw['datatype'].lower() == 'density':
+            keywords = self.get_keywords()
+            if ('datatype' in keywords and
+                    keywords['datatype'] and
+                        keywords['datatype'].lower() == 'density'):
                 scaling = True
             else:
                 scaling = False

@@ -197,18 +197,20 @@ class TestDock(TestCase):
     # disabled this test until further coding
     def xtest_print_map(self):
         """Test print map, especially on Windows."""
-
+        settings = QtCore.QSettings()
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
         result, message = setup_scenario(
             self.dock,
-            hazard='Flood in Jakarta',
-            exposure='Essential buildings',
-            function='Be affected',
-            function_id='Categorised Hazard Building Impact Function')
-        self.assertTrue(result, message)
+            hazard='Classified Flood',
+            exposure='Buildings',
+            function='Be impacted in each hazard class',
+            function_id='ClassifiedRasterHazardBuildingFunction')
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
         set_jakarta_extent(self.dock)
+
+        self.assertTrue(result, message)
 
         # Press RUN
         button = self.dock.pbnRunStop
@@ -228,10 +230,8 @@ class TestDock(TestCase):
     def test_result_styling(self):
         """Test that colours and opacity from a model are correctly styled."""
 
-        # Push OK with the left mouse button
-
-        print '--------------------'
-        print combos_to_string(self.dock)
+        settings = QtCore.QSettings()
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
 
         result, message = setup_scenario(
             self.dock,
@@ -254,8 +254,8 @@ class TestDock(TestCase):
         # simple test for now - we could test explicity for style state
         # later if needed.
         message = (
-            'Raster layer was not assigned a Singleband pseudocolor'
-            ' renderer as expected.')
+            'Raster layer was not assigned a Singleband pseudocolor '
+            'renderer as expected.')
         self.assertTrue(
             qgis_layer.renderer().type() == 'singlebandpseudocolor', message)
 
@@ -272,7 +272,11 @@ class TestDock(TestCase):
     def test_issue47(self):
         """Issue47: Hazard & exposure data are in different proj to viewport.
 
-        See https://github.com/AIFDR/inasafe/issues/47"""
+        See https://github.com/AIFDR/inasafe/issues/47
+        """
+
+        settings = QtCore.QSettings()
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
 
         result, message = setup_scenario(
             self.dock,
@@ -298,7 +302,11 @@ class TestDock(TestCase):
     def test_issue306(self):
         """Issue306: CANVAS doesnt add generated layers in tests.
 
-        See https://github.com/AIFDR/inasafe/issues/306"""
+        See https://github.com/AIFDR/inasafe/issues/306
+        """
+
+        settings = QtCore.QSettings()
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
 
         result, message = setup_scenario(
             self.dock,
@@ -312,7 +320,6 @@ class TestDock(TestCase):
         set_canvas_crs(GOOGLECRS, True)
         set_jakarta_google_extent(self.dock)
         before_count = len(CANVAS.layers())
-        # print 'Before count %s' % before_count
 
         # Press RUN
         self.dock.accept()
@@ -323,7 +330,7 @@ class TestDock(TestCase):
         message = ('Layer was not added to canvas (%s before, %s after)' % (
             before_count, after_count))
         # print 'After count %s' % after_count
-        self.assertTrue(before_count == after_count - 1, message)
+        self.assertEqual(before_count, after_count - 1, message)
 
     def test_layer_legend_index(self):
         """Test we can get the legend index for a layer.
@@ -340,7 +347,7 @@ class TestDock(TestCase):
             function_id='FloodEvacuationRasterHazardFunction')
         layer = self.dock.get_exposure_layer()
         index = self.dock.layer_legend_index(layer)
-        self.assertTrue(index == 8)
+        self.assertEqual(index, 10)
 
     def test_add_above_layer(self):
         """Test we can add one layer above another - see #2322
@@ -363,7 +370,7 @@ class TestDock(TestCase):
         self.assertIn(new_layer.id(), id_list)
         new_layer_position = id_list.index(new_layer.id())
         existing_layer_position = id_list.index(exposure_layer.id())
-        self.assertTrue(new_layer_position, existing_layer_position)
+        self.assertEqual(new_layer_position, existing_layer_position - 1)
 
     def test_load_layers(self):
         """Layers can be loaded and list widget was updated appropriately
@@ -373,28 +380,26 @@ class TestDock(TestCase):
         message = 'Expect %s layer(s) in hazard list widget but got %s' % (
             hazard_layer_count, self.dock.cboHazard.count())
         # pylint: disable=W0106
-        self.assertEqual(self.dock.cboHazard.count(),
-                         hazard_layer_count), message
+        self.assertEqual(
+                self.dock.cboHazard.count(), hazard_layer_count, message)
         message = 'Expect %s layer(s) in exposure list widget but got %s' % (
             exposure_layer_count, self.dock.cboExposure.count())
-        self.assertEqual(self.dock.cboExposure.count(),
-                         exposure_layer_count), message
+        self.assertEqual(
+                self.dock.cboExposure.count(), exposure_layer_count, message)
         # pylint: disable=W0106
 
     def test_issue71(self):
         """Test issue #71 in github - cbo changes should update ok button."""
         # See https://github.com/AIFDR/inasafe/issues/71
-        # Push OK with the left mouse button
-        print 'Using QGIS: %s' % qgis_version()
         settings = QtCore.QSettings()
-        settings.setValue(
-            'inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
         self.tearDown()
         button = self.dock.pbnRunStop
         # First part of scenario should have enabled run
         file_list = [
             test_data_path('hazard', 'continuous_flood_20_20.asc'),
-            test_data_path('exposure', 'pop_binary_raster_20_20.asc')]
+            test_data_path('exposure', 'pop_binary_raster_20_20.asc')
+        ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
         message = (
@@ -419,7 +424,7 @@ class TestDock(TestCase):
         # set exposure to : Population Count (5kmx5km)
         # by moving one down
         self.dock.cboExposure.setCurrentIndex(
-            self.dock.cboExposure.currentIndex() + 1)
+                self.dock.cboExposure.currentIndex() + 1)
         actual_dict = get_ui_state(self.dock)
         expected_dict = {
             'Run Button Enabled': False,
@@ -462,9 +467,6 @@ class TestDock(TestCase):
         exposure_path = exposure_layer.source()
         hazard_path = hazard_layer.source()
 
-        # See https://github.com/AIFDR/inasafe/issues/71
-        # Push OK with the left mouse button
-        # print 'Using QGIS: %s' % qgis_version()
         self.tearDown()
         button = self.dock.pbnRunStop
         # First part of scenario should have enabled run
@@ -733,12 +735,12 @@ class TestDock(TestCase):
         See also https://github.com/AIFDR/inasafe/issues/58
         """
         layer_path = os.path.join(TESTDATA, 'issue58.tif')
-        layer, layer_type = load_layer(layer_path)
+        layer, layer_purpose = load_layer(layer_path)
         message = (
             'Unexpected category for issue58.tif.\nGot:'
-            ' %s\nExpected: undefined' % layer_type)
+            ' %s\nExpected: undefined' % layer_purpose)
 
-        self.assertTrue(layer_type == 'undefined', message)
+        self.assertTrue(layer_purpose == 'impact', message)
         self.dock.layer_changed(layer)
         self.dock.save_state()
         html = self.dock.state['report']
@@ -762,13 +764,10 @@ class TestDock(TestCase):
             prefix='tsunami_building_assessment_saved_as_')
         self.dock.save_auxiliary_files(
             layer, join(TESTDATA, '%s.shp' % new_name))
-        new_keywords_filepath = os.path.join(
-            TESTDATA, '%s.keywords' % new_name)
+
         new_xml_filepath = os.path.join(TESTDATA, '%s.xml' % new_name)
 
         message = 'New auxiliary file does not exist : '
-        self.assertTrue(
-            os.path.isfile(new_keywords_filepath), '%s keywords' % message)
         self.assertTrue(os.path.isfile(new_xml_filepath), '%s xml' % message)
 
     def test_layer_saved_as_without_keywords_and_xml(self):
@@ -791,7 +790,8 @@ class TestDock(TestCase):
         message = 'New auxiliary file exist : '
         self.assertFalse(
             os.path.isfile(new_keywords_file_path), '%s keywords' % message)
-        self.assertFalse(os.path.isfile(new_xml_file_path), '%s xml' % message)
+        # Will automatically add xml file for the metadata.
+        self.assertTrue(os.path.isfile(new_xml_file_path), '%s xml' % message)
 
     def test_new_layers_show_in_canvas(self):
         """Check that when we add a layer we can see it in the canvas list."""
@@ -945,6 +945,9 @@ class TestDock(TestCase):
 
     def test_rubber_bands(self):
         """Test that the rubber bands get updated."""
+        settings = QtCore.QSettings()
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+
         setup_scenario(
             self.dock,
             hazard='Continuous Flood',
@@ -1046,8 +1049,7 @@ class TestDock(TestCase):
     def test_issue1191(self):
         """Test setting a layer's title in the kw directly from qgis api"""
         settings = QtCore.QSettings()
-        settings.setValue(
-            'inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
         self.dock.set_layer_from_title_flag = True
         set_canvas_crs(GEOCRS, True)
         set_yogya_extent(self.dock)

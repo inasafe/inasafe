@@ -43,9 +43,16 @@ from safe.common.exceptions import (
     CallGDALError,
     AlignRastersError,
     InvalidProjectionError,
-    InvalidClipGeometryError)
-from safe.utilities.utilities import read_file_keywords
-
+    InvalidClipGeometryError,
+    MetadataReadError,
+    NoKeywordsFoundError
+)
+from safe.storage.utilities import read_keywords
+from safe.utilities.metadata import (
+    read_iso19115_metadata,
+    write_read_iso_19115_metadata
+)
+from safe.definitions import multipart_polygon_key
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
@@ -310,7 +317,7 @@ def _clip_vector_layer(
     keyword_io = KeywordIO()
     if extra_keywords is None:
         extra_keywords = {}
-    extra_keywords['had multipart polygon'] = has_multipart
+    extra_keywords[multipart_polygon_key] = has_multipart
     keyword_io.copy_keywords(
         layer, file_name, extra_keywords=extra_keywords)
     base_name = '%s clipped' % layer.name()
@@ -446,7 +453,7 @@ def _clip_raster_layer(
 
     # Check for existence of keywords file
     base, _ = os.path.splitext(working_layer)
-    keywords_path = base + '.keywords'
+    keywords_path = base + '.xml'
     message = tr(
         'Input file to be clipped "%s" does not have the '
         'expected keywords file %s' % (
@@ -459,7 +466,11 @@ def _clip_raster_layer(
     # FIXME (Ole): Need to deal with it - e.g. by automatically reprojecting
     # the layer at this point and setting the native resolution accordingly
     # in its keywords.
-    keywords = read_file_keywords(keywords_path)
+    try:
+        keywords = read_iso19115_metadata(working_layer)
+    except (MetadataReadError, NoKeywordsFoundError):
+        keywords = read_keywords(base + '.keywords')
+        keywords = write_read_iso_19115_metadata(working_layer, keywords)
     if 'datatype' in keywords and keywords['datatype'] == 'count':
         if str(layer.crs().authid()) != 'EPSG:4326':
 

@@ -122,6 +122,10 @@ class FloodEvacuationVectorHazardFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
@@ -207,6 +211,8 @@ class FloodEvacuationVectorHazardFunction(
 
         self.total_population = int(
             numpy.nansum(self.exposure.layer.get_data(scaling=False)))
+        self.unaffected_population = (
+            self.total_population - self.total_affected_population)
 
         self.minimum_needs = [
             parameter.serialize() for parameter in
@@ -247,15 +253,10 @@ class FloodEvacuationVectorHazardFunction(
             else:
                 label = create_label(interval_classes[i])
 
-            if i == 0:
-                transparency = 100
-            else:
-                transparency = 0
-
             style_class['label'] = label
             style_class['quantity'] = classes[i]
             style_class['colour'] = colours[i]
-            style_class['transparency'] = transparency
+            style_class['transparency'] = 0
             style_classes.append(style_class)
 
         # Override style info with new classes and name
@@ -272,23 +273,30 @@ class FloodEvacuationVectorHazardFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.target_field,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'affected_population': total_affected_population,
+            'total_population': self.total_population,
+            'total_needs': self.total_needs
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Create vector layer and return
         impact_layer = Raster(
             data=new_covered_exposure_data,
             projection=covered_exposure.get_projection(),
             geotransform=covered_exposure.get_geotransform(),
             name=tr('People affected by flood prone areas'),
-            keywords={
-                'impact_summary': impact_summary,
-                'impact_table': impact_table,
-                'target_field': self.target_field,
-                'map_title': map_title,
-                'legend_notes': legend_notes,
-                'legend_units': legend_units,
-                'legend_title': legend_title,
-                'affected_population': total_affected_population,
-                'total_population': self.total_population,
-                'total_needs': self.total_needs},
+            keywords=impact_layer_keywords,
             style_info=style_info)
         self._impact = impact_layer
         return impact_layer

@@ -187,7 +187,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         :type scenario_directory: QString
         """
 
-        LOGGER.info("populate_table from %s" % scenario_directory)
+        # LOGGER.info("populate_table from %s" % scenario_directory)
         parsed_files = []
         unparsed_files = []
         self.table.clearContents()
@@ -198,7 +198,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         path = str(scenario_directory)
 
         if not os.path.exists(path):
-            LOGGER.info('Scenario directory does not exist: %s' % path)
+            # LOGGER.info('Scenario directory does not exist: %s' % path)
             return
 
         # only support .py and .txt files
@@ -218,7 +218,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 except ParsingError:
                     unparsed_files.append(current_path)
 
-        LOGGER.info(self.show_parser_results(parsed_files, unparsed_files))
+        # LOGGER.info(self.show_parser_results(parsed_files, unparsed_files))
 
     def run_script(self, filename):
         """ Run a python script in QGIS to exercise InaSAFE functionality.
@@ -235,7 +235,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         """
 
         # import script module
-        LOGGER.info('Run script task' + filename)
+        # LOGGER.info('Run script task' + filename)
         module, _ = os.path.splitext(filename)
         if module in sys.modules:
             script = reload(sys.modules[module])
@@ -262,7 +262,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         :returns: True if success, otherwise return False.
         :rtype: bool
         """
-        LOGGER.info('Run simple task' + str(items))
+        # LOGGER.info('Run simple task' + str(items))
         scenario_directory = str(self.source_directory.text())
 
         paths = []
@@ -320,7 +320,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             self.dock.define_user_analysis_extent(extent, crs)
 
             message = 'set layer extent to %s ' % extent.asWktCoordinates()
-            LOGGER.info(message)
+            # LOGGER.info(message)
 
             self.iface.mapCanvas().setExtent(extent)
 
@@ -418,7 +418,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             report_file.write(separator)
             report_file.close()
 
-            LOGGER.info('Log written to %s' % path)
+            # LOGGER.info('Log written to %s' % path)
             return path
         except IOError:
             raise IOError
@@ -438,7 +438,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             QtGui.QDesktopServices.openUrl(url)
         else:
             report = open(report_path).read()
-            LOGGER.info(report)
+            # LOGGER.info(report)
 
     def run_task(self, task_item, status_item, count=0, index=''):
         """Run a single task.

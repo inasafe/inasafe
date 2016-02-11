@@ -34,7 +34,32 @@ class TestProvenance(TestCase):
         title2 = 'Calculated third random impact'
         description2 = 'In this step we calculated a third random impact'
         provenance.append_step(title2, description2)
+        title3 = 'Calculated fourth random impact'
+        description3 = 'In this step we calculated a fourth random impact'
+        data = {
+            'start_time': '20140714_060955',
+            'finish_time': '20140714_061255',
+            'hazard_layer': 'path/to/hazard/layer',
+            'exposure_layer': 'path/to/exposure/layer',
+            'impact_function_id': 'IF_id',
+            'impact_function_version': '2.1',
+            'host_name': 'my_computer',
+            'user': 'my_user',
+            'qgis_version': '2.4',
+            'gdal_version': '1.9.1',
+            'qt_version': '4.5',
+            'pyqt_version': '5.1',
+            'os': 'ubuntu 12.04',
+            'inasafe_version': '2.1',
+            'exposure_pixel_size': '0.1',
+            'hazard_pixel_size': '0.2',
+            'impact_pixel_size': '0.1',
+            'analysis_extent': [0, 1, 2, 2],
+            'parameter': {}
+        }
+        provenance.append_step(title3, description3, data=data)
 
-        self.assertEqual(provenance.count, 3)
+        self.assertEqual(provenance.count, 4)
         self.assertEqual(provenance.get(1).title, title1)
-        self.assertEqual(provenance.last.title, title2)
+        self.assertEqual(provenance.last.title, title3)
+        self.assertEqual(provenance.last.data(), data)

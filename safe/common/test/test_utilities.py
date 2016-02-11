@@ -71,17 +71,17 @@ class TestUtilities(unittest.TestCase):
         First class interval < 1
         Interval > 1
         """
-        my_array = [0.1, 1.2, 2.3, 3.4, 4.5]
-        my_result_class = humanize_class(my_array)
-        my_expected_class = [('0', '0.1'),
-                             ('0.1', '1.2'),
-                             ('1.2', '2.3'),
-                             ('2.3', '3.4'),
-                             ('3.4', '4.5')]
-        print_class(my_array, my_result_class, my_expected_class)
-        my_msg = 'got: ' + str(my_result_class)
-        my_msg += ' expect: ' + str(my_expected_class)
-        assert my_result_class == my_expected_class, my_msg
+        array = [0.1, 1.2, 2.3, 3.4, 4.5]
+        result_class = humanize_class(array)
+        expected_class = [
+            ('0', '0.1'),
+            ('0.1', '1.2'),
+            ('1.2', '2.3'),
+            ('2.3', '3.4'),
+            ('3.4', '4.5')
+        ]
+        print_class(array, result_class, expected_class)
+        self.assertEqual(result_class, expected_class)
 
     def test_humanize_class2(self):
         """Test humanize class 2
@@ -244,54 +244,47 @@ class TestUtilities(unittest.TestCase):
         num_classes = 2
         expected_classes = [1.0, 9.0]
         result = create_classes(class_list, num_classes)
-        message = '%s is not same with %s' % (result, expected_classes)
-        self.assertEqual(result, expected_classes, message)
+        self.assertEqual(result, expected_classes)
 
         # There's only 1 value
         class_list = numpy.array([6])
         num_classes = 3
         expected_classes = [2.0, 4.0, 6.0]
         result = create_classes(class_list, num_classes)
-        message = '%s is not same with %s' % (result, expected_classes)
-        self.assertEqual(result, expected_classes, message)
+        self.assertEqual(result, expected_classes)
 
         # Max value <= 1.0
         class_list = numpy.array([0.1, 0.3, 0.9])
         num_classes = 3
         expected_classes = [0.3, 0.6, 0.9]
         result = create_classes(class_list, num_classes)
-        message = '%s is not same with %s' % (result, expected_classes)
-        self.assertEqual(result, expected_classes, message)
+        self.assertEqual(result, expected_classes)
 
         # There are only 2 values
         class_list = numpy.array([2, 6])
         num_classes = 3
         expected_classes = [1.0, 3.5, 6.0]
         result = create_classes(class_list, num_classes)
-        message = '%s is not same with %s' % (result, expected_classes)
-        self.assertEqual(result, expected_classes, message)
+        self.assertEqual(result, expected_classes)
 
         # Another 2 values
         class_list = numpy.array([2.5, 6])
         num_classes = 3
         expected_classes = [2.0, 4.0, 6.0]
         result = create_classes(class_list, num_classes)
-        message = '%s is not same with %s' % (result, expected_classes)
-        self.assertEqual(result, expected_classes, message)
+        self.assertEqual(result, expected_classes)
 
     def test_create_label(self):
         """Test create label.
         """
-        my_tuple = ('1', '2')
-        my_extra_label = 'Low damage'
-        my_result = create_label(my_tuple)
-        my_expected = '[1 - 2]'
-        assert my_result == my_expected, ' %s is not same with %s' % (
-            my_result, my_expected)
-        my_result = create_label(my_tuple, my_extra_label)
-        my_expected = '[1 - 2] Low damage'
-        assert my_result == my_expected, ' %s is not same with %s' % (
-            my_result, my_expected)
+        the_tuple = ('1', '2')
+        extra_label = 'Low damage'
+        result = create_label(the_tuple)
+        expected = '[1 - 2]'
+        self.assertEqual(result, expected)
+        result = create_label(the_tuple, extra_label)
+        expected = '[1 - 2] Low damage'
+        self.assertEqual(result, expected)
 
     def test_get_utm_epsg(self):
         """Test we can get correct epsg code"""
@@ -311,18 +304,13 @@ class TestUtilities(unittest.TestCase):
         non_conflicting_attribute_name = get_non_conflicting_attribute_name(
             default_name, attribute_names)
         expected_result = 'populati_1'
-        message = 'The expected result should be %s, but it gives %s' % (
-            expected_result, non_conflicting_attribute_name)
-        self.assertEqual(
-            expected_result, non_conflicting_attribute_name, message)
+        self.assertEqual(expected_result, non_conflicting_attribute_name)
 
     def test_log_file_path(self):
         """Test the log_file_path returns correct path."""
         log_temp_dir = temp_dir('logs')
         actual_path = os.path.join(log_temp_dir, 'inasafe.log')
-        message = 'Actual log path: %s, I got %s' % (
-            actual_path, log_file_path())
-        self.assertEqual(actual_path, log_file_path(), message)
+        self.assertEqual(actual_path, log_file_path())
 
     def test_romanise(self):
         """Test we can convert MMI values to float."""
@@ -331,8 +319,7 @@ class TestUtilities(unittest.TestCase):
         result = []
         for value in values:
             result.append(romanise(value))
-        message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
-        self.assertEqual(result, expected_result, message)
+        self.assertEqual(result, expected_result)
 
     def test_humanize_size(self):
         """Test we can convert size values to human readable size."""
@@ -343,8 +330,7 @@ class TestUtilities(unittest.TestCase):
         result = []
         for value in values:
             result.append(humanize_file_size(value))
-        message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_result)
-        self.assertEqual(result, expected_result, message)
+        self.assertEqual(result, expected_result, )
 
     def test_add_to_list(self):
         """Test for add_to_list function
@@ -370,14 +356,12 @@ class TestUtilities(unittest.TestCase):
         number_of_colours = 1
         expected_colors = ['#ff0000']
         colors = color_ramp(number_of_colours)
-        message = 'Expecting %s, but it returns %s' % (expected_colors, colors)
-        self.assertEqual(colors, expected_colors, message)
+        self.assertEqual(colors, expected_colors)
 
         number_of_colours = 2
         expected_colors = ['#ff0000', '#00ffff']
         colors = color_ramp(number_of_colours)
-        message = 'Expecting %s, but it returns %s' % (expected_colors, colors)
-        self.assertEqual(colors, expected_colors, message)
+        self.assertEqual(colors, expected_colors)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestUtilities)
