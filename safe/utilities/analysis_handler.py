@@ -344,8 +344,9 @@ class AnalysisHandler(QObject):
         self.analysis.viewport_extent = viewport
 
         # Extent
-        self.analysis.user_extent = self.extent.user_extent
-        self.analysis.user_extent_crs = self.extent.user_extent_crs
+        if self.analysis.user_extent:
+            self.analysis.user_extent = self.extent.user_extent
+            self.analysis.user_extent_crs = self.extent.user_extent_crs
 
     # noinspection PyUnresolvedReferences
     def completed(self):
