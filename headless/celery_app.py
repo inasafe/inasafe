@@ -1,5 +1,4 @@
 # coding=utf-8
-import sys
 from celery import Celery
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
@@ -12,9 +11,6 @@ app.config_from_object('headless.celeryconfig')
 packages = (
     'headless',
 )
-
-# import all tasks package
-import headless.tasks.inasafe_wrapper
 
 app.autodiscover_tasks(packages)
 

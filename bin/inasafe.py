@@ -365,13 +365,9 @@ def build_report(cli_arguments):
         map_path = report.print_map_to_pdf(
             os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
         print "Impact Map : " + map_path
-        # TODO: Error in celery. FixMe
-        # try:
-        #     table_path = report.print_impact_table(
-        #         os.path.splitext(cli_arguments.output_file)[0] + '_table.pdf')
-        # except Exception as e:
-        #     LOGGER.exception(e)
-        # print "Impact Summary Table : " + table_path
+        table_path = report.print_impact_table(
+            os.path.splitext(cli_arguments.output_file)[0] + '_table.pdf')
+        print "Impact Summary Table : " + table_path
         layer_registry.removeAllMapLayers()
 
     except Exception as exception:
@@ -405,7 +401,6 @@ def write_results(cli_arguments, impact_layer):
             else:
                 ext = '.shp'
             abs_path += ext
-        LOGGER.info(abs_path)
         impact_layer.write_to_file(abs_path)
     except Exception as exception:
         print exception.message

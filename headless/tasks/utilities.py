@@ -1,9 +1,11 @@
 # coding=utf-8
 import os
 import tempfile
+import urlparse
 from zipfile import ZipFile
 
 import requests
+import shutil
 
 from safe.utilities.styling import set_vector_categorized_style, \
     set_vector_graduated_style, setRasterStyle
@@ -13,14 +15,25 @@ __date__ = '1/27/16'
 
 
 def download_file(url):
-    tmpfile = tempfile.mktemp()
-    # NOTE the stream=True parameter
-    r = requests.get(url, stream=True)
-    with open(tmpfile, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
-            if chunk:
-                f.write(chunk)
-    return tmpfile
+    parsed_uri = urlparse.urlparse(url)
+    if parsed_uri.scheme == 'http' or parsed_uri.scheme == 'https':
+        tmpfile = tempfile.mktemp()
+        # NOTE the stream=True parameter
+        # Assign User-Agent to emulate browser
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686) '
+                          'Gecko/20071127 Firefox/2.0.0.11'
+        }
+        r = requests.get(url, headers=headers, stream=True)
+        with open(tmpfile, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+        return tmpfile
+    elif parsed_uri.scheme == 'file' or not parsed_uri.scheme:
+        tmpfile = tempfile.mktemp()
+        shutil.copy(parsed_uri.path, tmpfile)
+        return tmpfile
 
 
 def download_layer(url):

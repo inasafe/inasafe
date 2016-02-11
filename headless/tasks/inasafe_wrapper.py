@@ -6,10 +6,10 @@ import shutil
 import tempfile
 import urlparse
 
-from headless.celeryapp import app
+from headless.celery_app import app
 from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
 from headless.tasks.utilities import download_layer, archive_layer, \
-    generate_styles
+    generate_styles, download_file
 from bin.inasafe import CommandLineArguments, get_impact_function_list, \
     run_impact_function, build_report
 from safe.storage.utilities import safe_to_qgis_layer
@@ -21,7 +21,7 @@ __date__ = '1/19/16'
 LOGGER = logging.getLogger('InaSAFE')
 
 
-@app.task
+@app.task(queue='inasafe-headless')
 def filter_impact_function(hazard=None, exposure=None):
     """Filter impact functions
 
@@ -51,7 +51,7 @@ def filter_impact_function(hazard=None, exposure=None):
     return result
 
 
-@app.task
+@app.task(queue='inasafe-headless')
 def run_analysis(hazard, exposure, function, aggregation=None,
                  generate_report=False):
     """Run analysis"""
@@ -104,14 +104,13 @@ def run_analysis(hazard, exposure, function, aggregation=None,
         DEPLOY_OUTPUT_URL,
         '%s/%s' % (date_folder, new_basename)
     )
-    print DEPLOY_OUTPUT_URL
     return output_url
 
 
-@app.task
+@app.task(queue='inasafe-headless')
 def read_keywords_iso_metadata(metadata_url, keyword=None):
     """Read xml metadata of a layer"""
-    filename = download_layer(metadata_url)
+    filename = download_file(metadata_url)
     # add xml extension
     new_filename = filename+'.xml'
     shutil.move(filename, new_filename)

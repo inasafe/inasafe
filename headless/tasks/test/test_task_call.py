@@ -4,10 +4,14 @@ import os
 import shutil
 import tempfile
 import unittest
+import urlparse
 
+from headless.celery_app import app
 from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
 from headless.tasks.inasafe_wrapper import filter_impact_function, \
     run_analysis, read_keywords_iso_metadata
+from headless.tasks.celery_test_setup import \
+    update_celery_configuration
 from headless.tasks.utilities import archive_layer
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
@@ -21,6 +25,9 @@ LOGGER.setLevel(logging.DEBUG)
 class TestTaskCall(unittest.TestCase):
 
     def setUp(self):
+        # Modify test behavior of celery based on environment settings
+        update_celery_configuration(app)
+
         self.inasafe_work_dir = os.environ['InaSAFEQGIS']
         # generate tempfile
         hazard = os.path.join(
@@ -35,44 +42,55 @@ class TestTaskCall(unittest.TestCase):
         hazard = archive_layer(hazard)
         exposure = archive_layer(exposure)
         aggregation = archive_layer(aggregation)
-        hazard_temp = tempfile.mktemp(suffix='.zip')
-        exposure_temp = tempfile.mktemp(suffix='.zip')
-        aggregation_temp = tempfile.mktemp(suffix='.zip')
+
+        test_deploy_dir = os.path.join(DEPLOY_OUTPUT_DIR, 'test_deploy')
+        self.test_deploy_dir = test_deploy_dir
+
+        def convert_dir_to_url(deploy_dir):
+            tail_name = deploy_dir.replace(DEPLOY_OUTPUT_DIR, '')
+            return urlparse.urljoin(DEPLOY_OUTPUT_URL, tail_name)
+
+        if not os.path.exists(test_deploy_dir):
+            os.makedirs(test_deploy_dir)
+
+        hazard_temp = tempfile.mktemp(suffix='.zip', dir=test_deploy_dir)
+        exposure_temp = tempfile.mktemp(suffix='.zip', dir=test_deploy_dir)
+        aggregation_temp = tempfile.mktemp(suffix='.zip', dir=test_deploy_dir)
         shutil.move(hazard, hazard_temp)
         shutil.move(exposure, exposure_temp)
         shutil.move(aggregation, aggregation_temp)
-        self.hazard_temp = hazard_temp
-        self.exposure_temp = exposure_temp
-        self.aggregation_temp = aggregation_temp
+        self.hazard_temp = convert_dir_to_url(hazard_temp)
+        self.exposure_temp = convert_dir_to_url(exposure_temp)
+        self.aggregation_temp = convert_dir_to_url(aggregation_temp)
 
         self.keywords_file = os.path.join(
             self.inasafe_work_dir,
             'safe/test/data/hazard/continuous_flood_20_20.xml')
 
+    def tearDown(self):
+        shutil.rmtree(self.test_deploy_dir)
+
     def test_filter_impact_function(self):
 
-        celery_result = filter_impact_function.apply(
-            args=[self.hazard_temp, self.exposure_temp])
+        celery_result = filter_impact_function.delay(
+            self.hazard_temp, self.exposure_temp)
 
         ifs = celery_result.get()
 
         self.assertEqual(len(ifs), 1)
 
-        actual_id = ifs[0]['id']
+        actual_id = ifs[0]
         expected_id = 'FloodEvacuationRasterHazardFunction'
 
         self.assertEqual(actual_id, expected_id)
 
     def test_run_analysis(self):
-        celery_result = run_analysis.apply(
-            args=[
+        celery_result = run_analysis.delay(
                 self.hazard_temp,
                 self.exposure_temp,
-                'FloodEvacuationRasterHazardFunction'],
-            kwargs={
-                'generate_report': True,
-                'aggregation': self.aggregation_temp
-            })
+                'FloodEvacuationRasterHazardFunction',
+                aggregation=self.aggregation_temp,
+                generate_report=True)
 
         url_name = celery_result.get()
 
@@ -81,7 +99,7 @@ class TestTaskCall(unittest.TestCase):
         # check the file is generated in /home/web directory
         relative_name = url_name.replace(DEPLOY_OUTPUT_URL, '')
         absolute_name = os.path.join(DEPLOY_OUTPUT_DIR, relative_name)
-        self.assertTrue(os.path.exists(absolute_name))
+        self.assertTrue(os.path.exists(absolute_name), absolute_name)
         # check  pdf report is generated
         basename, _ = os.path.splitext(absolute_name)
         self.assertTrue(os.path.exists(basename + '.pdf'),
@@ -97,7 +115,7 @@ class TestTaskCall(unittest.TestCase):
         shutil.rmtree(folder_name)
 
     def test_read_keywords(self):
-        result = read_keywords_iso_metadata.apply(args=[self.keywords_file])
+        result = read_keywords_iso_metadata.delay(self.keywords_file)
         expected = {
             'hazard_category': u'single_event',
             'keyword_version': u'3.3',
