@@ -38,13 +38,15 @@ from PyQt4.QtCore import (
     Qt,
     QSettings)
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QAction, QIcon, QApplication
+from PyQt4.QtGui import QAction, QIcon, QApplication, QWidget
+from processing.core.Processing import Processing
 
 from safe.common.version import release_status
 from safe.common.exceptions import TranslationLoadError
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
 from safe.impact_functions import register_impact_functions
+from safe.inasafe_processing.provider import InaSafeProvider
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -80,6 +82,7 @@ class Plugin(object):
         self.action_minimum_needs = None
         self.action_minimum_needs_config = None
         self.action_impact_merge_dlg = None
+        self.action_routing_analysis = None
         self.key_action = None
         self.action_options = None
         self.action_keywords_wizard = None
@@ -92,6 +95,7 @@ class Plugin(object):
         self.action_dock = None
         self.action_toggle_rubberbands = None
         self.message_bar_item = None
+        self.provider = None
         # Flag indicating if toolbar should show only common icons or not
         self.full_toolbar = False
         # print self.tr('InaSAFE')
@@ -404,6 +408,27 @@ class Plugin(object):
 
             self.add_action(self.action_add_layers)
 
+    def _create_routing_analysis_action(self):
+        """Action about routing analysis (developer mode, non final only)."""
+        final_release = release_status() == 'final'
+        settings = QSettings()
+        self.developer_mode = settings.value(
+            'inasafe/developer_mode', False, type=bool)
+        if not final_release and self.developer_mode:
+            icon = resources_path('img', 'icons', 'show-routing-analysis.svg')
+            self.action_routing_analysis = QAction(
+                QIcon(icon),
+                self.tr('Routing Analysis'),
+                self.iface.mainWindow())
+            self.action_routing_analysis.setStatusTip(self.tr(
+                'Show the Routing Analysis'))
+            self.action_routing_analysis.setWhatsThis(self.tr(
+                'Show the Routing Analysis'))
+            self.action_routing_analysis.triggered.connect(
+                self.show_routing_analysis)
+
+            self.add_action(self.action_routing_analysis)
+
     def _create_dock(self):
         """Create dockwidget and tabify it with the legend."""
         # Import dock here as it needs to be imported AFTER i18n is set up
@@ -452,6 +477,10 @@ class Plugin(object):
         self._create_batch_runner_action()
         self._create_impact_merge_action()
         self._create_save_scenario_action()
+        self._add_spacer_to_menu()
+        self._create_routing_analysis_action()
+
+        self.inasafe_processing()
 
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
@@ -466,6 +495,11 @@ class Plugin(object):
         separator = QAction(self.iface.mainWindow())
         separator.setSeparator(True)
         self.iface.addPluginToMenu(self.tr('InaSAFE'), separator)
+
+    def inasafe_processing(self):
+        """Add InaSAFE to the Processing framework."""
+        self.provider = InaSafeProvider()
+        Processing.addProvider(self.provider, True)
 
     def clear_modules(self):
         """Unload inasafe functions and try to return QGIS to before InaSAFE.
@@ -522,6 +556,7 @@ class Plugin(object):
         self.dock_widget.setVisible(False)
         self.dock_widget.destroy()
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
+        Processing.removeProvider(self.provider)
 
     def toggle_inasafe_action(self, checked):
         """Check or un-check the toggle inaSAFE toolbar button.
@@ -631,6 +666,16 @@ class Plugin(object):
                 self.dock_widget)
         self.wizard.set_keywords_creation_mode()
         self.wizard.exec_()  # modal
+
+    def show_routing_analysis(self):
+        """Show the routing analysis wizard."""
+        # import here only so that it is AFTER i18n set up
+        from safe.routing.gui.routing_dialog import RoutingDialog
+
+        dialog = RoutingDialog(
+            self.iface.mainWindow(),
+            self.iface)
+        dialog.exec_()  # modal
 
     def show_function_centric_wizard(self):
         """Show the function centric wizard."""

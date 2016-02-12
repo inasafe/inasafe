@@ -16,12 +16,12 @@ export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python:${QGIS_PREFIX_PATH}/shar
 echo "QGIS PATH: $QGIS_PREFIX_PATH"
 echo "PYTHONPATH: $PYTHONPATH"
 export QGIS_DEBUG=0
-export QGIS_LOG_FILE=/home/realtime/logs/qgis.log
-export QGIS_DEBUG_FILE=/home/realtime/logs/qgis-debug.log
+export QGIS_LOG_FILE=/tmp/realtime/logs/qgis.log
+export QGIS_DEBUG_FILE=/tmp/realtime/logs/qgis-debug.log
 
 export PATH=${QGIS_PREFIX_PATH}/bin:$PATH
 
-export INASAFE_WORK_DIR=/home/realtime
+export INASAFE_WORK_DIR=/tmp/realtime
 export INASAFE_LOCALE=id
 # if the parameter is set in production mode, do not overwrite the variable
 # if it is not, we can put test variable here
