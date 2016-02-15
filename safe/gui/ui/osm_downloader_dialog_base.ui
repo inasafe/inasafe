@@ -6,24 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>627</width>
-    <height>440</height>
+    <width>642</width>
+    <height>494</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>OSM Downloader</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_5">
-   <property name="leftMargin">
-    <number>12</number>
-   </property>
-   <property name="topMargin">
-    <number>12</number>
-   </property>
-   <property name="rightMargin">
-    <number>12</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>12</number>
    </property>
    <item row="0" column="0">
@@ -33,20 +24,11 @@
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_8">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view">
+        <widget class="QWebView" name="help_web_view" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
@@ -59,6 +41,7 @@
            <height>100</height>
           </size>
          </property>
+         <property name="url" stdset="0">
           <url>
            <string>about:blank</string>
           </url>
@@ -69,16 +52,7 @@
      </widget>
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_2">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item row="0" column="0">
@@ -129,20 +103,27 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QCheckBox" name="potential_idp_flag">
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="evacuation_centers_flag">
             <property name="text">
-             <string extracomment="Internally displaced person">Potential internally displaced person camps</string>
+             <string extracomment="Internally displaced person">Evacuation centers</string>
             </property>
             <property name="checked">
              <bool>false</bool>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
+          <item row="5" column="0">
            <widget class="QCheckBox" name="boundary_flag">
             <property name="text">
              <string>Political boundaries</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="flood_prone_flag">
+            <property name="text">
+             <string>Flood prone areas</string>
             </property>
            </widget>
           </item>
@@ -266,16 +247,7 @@
             <property name="sizeConstraint">
              <enum>QLayout::SetDefaultConstraint</enum>
             </property>
-            <property name="leftMargin">
-             <number>1</number>
-            </property>
-            <property name="topMargin">
-             <number>1</number>
-            </property>
-            <property name="rightMargin">
-             <number>1</number>
-            </property>
-            <property name="bottomMargin">
+            <property name="margin">
              <number>1</number>
             </property>
             <property name="spacing">
@@ -309,7 +281,7 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QDoubleSpinBox" name="x_maximum">
+             <widget class="QDoubleSpinBox" name="x_minimum">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -343,7 +315,7 @@
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QDoubleSpinBox" name="x_minimum">
+             <widget class="QDoubleSpinBox" name="x_maximum">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -509,12 +481,12 @@
   <tabstop>roads_flag</tabstop>
   <tabstop>buildings_flag</tabstop>
   <tabstop>building_points_flag</tabstop>
-  <tabstop>potential_idp_flag</tabstop>
+  <tabstop>evacuation_centers_flag</tabstop>
   <tabstop>boundary_flag</tabstop>
   <tabstop>admin_level_comboBox</tabstop>
   <tabstop>country_comboBox</tabstop>
-  <tabstop>x_maximum</tabstop>
   <tabstop>x_minimum</tabstop>
+  <tabstop>x_maximum</tabstop>
   <tabstop>y_maximum</tabstop>
   <tabstop>y_minimum</tabstop>
   <tabstop>capture_button</tabstop>

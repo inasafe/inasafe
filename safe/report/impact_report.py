@@ -78,7 +78,8 @@ class ImpactReport(object):
         """
         LOGGER.debug('InaSAFE Impact Report class initialised')
         self._iface = iface
-        self._template = template
+        self._template = None
+        self.template = template
         self._layer = layer
         self._extent = self._iface.mapCanvas().extent()
         self._page_dpi = 300.0
@@ -494,7 +495,7 @@ class ImpactReport(object):
         :param output_path: Path on the file system to which the pdf should
             be saved. If None, a generated file name will be used. Note that
             the table will be prefixed with '_table'.
-        :type output_path: str
+        :type output_path: str, unicode
 
         :returns: The map path and the table path to the pdfs generated.
         :rtype: tuple

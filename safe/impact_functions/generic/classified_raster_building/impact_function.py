@@ -46,6 +46,9 @@ class ClassifiedRasterHazardBuildingFunction(
         super(ClassifiedRasterHazardBuildingFunction, self).__init__()
         self.affected_field = 'affected'
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
     def notes(self):
         """Return the notes section of the report.
 
@@ -65,6 +68,10 @@ class ClassifiedRasterHazardBuildingFunction(
         """
         self.validate()
         self.prepare()
+
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
 
         # Value from layer's keywords
         # Try to get the value from keyword, if not exist, it will not fail,
@@ -149,6 +156,10 @@ class ClassifiedRasterHazardBuildingFunction(
                 tr('Buildings Affected')] += 1
 
         # Consolidate the small building usage groups < 25 to other
+        # Building threshold #2468
+        postprocessors = self.parameters['postprocessors']
+        building_postprocessors = postprocessors['BuildingType'][0]
+        self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
         # Create style
@@ -191,21 +202,28 @@ class ClassifiedRasterHazardBuildingFunction(
         legend_title = tr('Structure inundated status')
         legend_units = tr('(Low, Medium, High)')
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.affected_field,
+            'map_title': map_title,
+            'legend_units': legend_units,
+            'legend_title': legend_title,
+            'buildings_total': buildings_total,
+            'buildings_affected': self.total_affected_buildings
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Create vector layer and return
         vector_layer = Vector(
             data=attributes,
             projection=self.exposure.layer.get_projection(),
             geometry=self.exposure.layer.get_geometry(),
             name=tr('Estimated buildings affected'),
-            keywords={
-                'impact_summary': impact_summary,
-                'impact_table': impact_table,
-                'target_field': self.affected_field,
-                'map_title': map_title,
-                'legend_units': legend_units,
-                'legend_title': legend_title,
-                'buildings_total': buildings_total,
-                'buildings_affected': self.total_affected_buildings},
+            keywords=impact_layer_keywords,
             style_info=style_info)
         self._impact = vector_layer
         return vector_layer

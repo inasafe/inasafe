@@ -26,7 +26,6 @@ def get_user_name():
     else:
         user = os.getenv('LOGNAME')
 
-
     return user
 
 def get_host_name():

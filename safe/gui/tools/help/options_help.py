@@ -248,7 +248,8 @@ def content():
            'database using this option.')))
     bullets.add(m.Text(
         m.ImportantText(tr(
-            'Help to improve InaSAFE by submitting errors to a remote server')),
+            'Help to improve InaSAFE by submitting errors to a '
+            'remote server')),
         tr(' - With this option enabled, InaSAFE will post any errors that '
            'occur to an online server for analysis by our development team. '
            'This option is disabled by default as some may consider some of '

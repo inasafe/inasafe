@@ -17,35 +17,39 @@ __date__ = '2/08/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import difflib
+import logging
 import os
 import shutil
-import requests
 import unittest
-import logging
-import difflib
+import datetime
+import pytz
 
+import requests
 from qgis.core import QgsFeatureRequest
 
-from safe.common.utilities import temp_dir, unique_filename
-from safe.common.version import get_version
-from safe.test.utilities import test_data_path, get_qgis_app
+from realtime.push_rest import InaSAFEDjangoREST
+from realtime.earthquake.push_shake import \
+    push_shake_event_to_rest
+from realtime.earthquake.shake_event import ShakeEvent
+from realtime.earthquake.make_map import process_event
+from realtime.utilities import base_data_dir
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
     realtime_logger_name)
-from realtime.shake_event import ShakeEvent
-from realtime.utilities import base_data_dir
-from realtime.push_shake import INASAFE_REALTIME_REST_URL, \
-    push_shake_event_to_rest, \
-    generate_earthquake_detail_url, get_realtime_session, \
-    is_realtime_rest_configured, INASAFE_REALTIME_DATETIME_FORMAT
+from safe.common.utilities import temp_dir, unique_filename
+from safe.common.version import get_version
+from safe.test.utilities import test_data_path, get_qgis_app
 
 # The logger is initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 # Shake ID for this test
-SHAKE_ID = '20131105060809'
+shakes_id = ['20131105060809', '20150918201057']
+SHAKE_ID = shakes_id[0]
+SHAKE_ID_2 = shakes_id[1]
 
 
 class TestShakeEvent(unittest.TestCase):
@@ -57,21 +61,25 @@ class TestShakeEvent(unittest.TestCase):
         # file inside 20131105060809 folder to
         # shakemap_extract_dir/20131105060809/grid.xml
         shake_path = test_data_path('hazard', 'shake_data')
-        input_path = os.path.abspath(
-            os.path.join(shake_path, SHAKE_ID, 'output/grid.xml'))
-        target_folder = os.path.join(
-            shakemap_extract_dir(), SHAKE_ID)
-        if not os.path.exists(target_folder):
-            os.makedirs(target_folder)
 
-        target_path = os.path.abspath(os.path.join(target_folder, 'grid.xml'))
-        shutil.copyfile(input_path, target_path)
+        for shake_id in shakes_id:
+            input_path = os.path.abspath(
+                os.path.join(shake_path, shake_id, 'output/grid.xml'))
+            target_folder = os.path.join(
+                shakemap_extract_dir(), shake_id)
+            if not os.path.exists(target_folder):
+                os.makedirs(target_folder)
+
+            target_path = os.path.abspath(
+                    os.path.join(target_folder, 'grid.xml'))
+            shutil.copyfile(input_path, target_path)
 
     # noinspection PyPep8Naming
     def tearDown(self):
         """Delete the cached data."""
-        target_path = os.path.join(shakemap_extract_dir(), SHAKE_ID)
-        shutil.rmtree(target_path)
+        for shake_id in shakes_id:
+            target_path = os.path.join(shakemap_extract_dir(), shake_id)
+            shutil.rmtree(target_path)
 
     def test_grid_file_path(self):
         """Test grid_file_path works using cached data."""
@@ -243,15 +251,16 @@ class TestShakeEvent(unittest.TestCase):
 
         expected_fatalities = {2: 0.0,
                                3: 0.0,
-                               4: 3.6387775168847936e-05,
+                               4: 0.0,
                                5: 0.0,
                                6: 0.0,
                                7: 0.0,
                                8: 0.0,
-                               9: 0.0}
+                               9: 0.0,
+                               10: 0.0}
         message = 'Got: %s, Expected: %s' % (
             shake_event.fatality_counts, expected_fatalities)
-        self.assertEqual(
+        self.assertDictEqual(
             shake_event.fatality_counts, expected_fatalities, message)
 
     def test_sorted_impacted_cities(self):
@@ -292,12 +301,26 @@ class TestShakeEvent(unittest.TestCase):
             event_id=SHAKE_ID,
             data_is_local_flag=True)
         table, path = shake_event.impacted_cities_table()
+        table_dict = table.to_dict()
         expected_string = [
-            '<td>Jayapura</td><td>134</td><td>I</td>',
-            '<td>Abepura</td><td>62</td><td>I</td>']
-        table = table.toNewlineFreeString().replace('   ', '')
-        for string in expected_string:
-            self.assertIn(string, table)
+            {
+                'name': 'Jayapura',
+                'population': '134'
+            },
+            {
+                'name': 'Abepura',
+                'population': '62'
+            }
+        ]
+        for i in range(1, len(table.rows)):
+            self.assertEqual(
+                table_dict['rows'][i]['cells'][1]
+                ['content']['text'][0]['text'],
+                expected_string[i - 1].get('name'))
+            self.assertEqual(
+                table_dict['rows'][i]['cells'][2]
+                ['content']['text'][0]['text'],
+                expected_string[i - 1].get('population'))
 
         self.max_diff = None
 
@@ -344,6 +367,7 @@ class TestShakeEvent(unittest.TestCase):
         # noinspection PyUnresolvedReferences
         expected_dict = {
             'place-name': u'n/a',
+            'shake-grid-location': u'Papua',
             'depth-name': u'Depth',
             'fatalities-name': u'Estimated fatalities',
             'fatalities-count': u'0',  # 44 only after render
@@ -357,7 +381,7 @@ class TestShakeEvent(unittest.TestCase):
             'elapsed-time-name': u'Elapsed time since event',
             'exposure-table-name': u'Estimated number of people '
                                    u'affected by each MMI level',
-            'longitude-value': u'140\xb037\u203212.00\u2033E',
+            'longitude-value': u'140\xb037\'12.00"E',
             'city-table-name': u'Nearby Places',
             'bearing-text': u'bearing',
             'limitations': (
@@ -365,38 +389,39 @@ class TestShakeEvent(unittest.TestCase):
                 u'takes into account the population and cities affected by '
                 u'different levels of ground shaking. The estimate is based '
                 u'on ground shaking data from BMKG, population count data '
-                u'derived by AIFDR from worldpop.org.uk, place information '
-                u'from geonames.org and software developed by BNPB. '
-                u'Limitations in the estimates of ground shaking, population '
-                u'and place names datasets may result in significant '
-                u'misrepresentation of the on-the-ground situation in the '
-                u'figures shown here. Consequently decisions should not be '
-                u'made solely on the information presented here and should '
-                u'always be verified by ground truthing and other reliable '
-                u'information sources. The fatality calculation assumes that '
-                u'no fatalities occur for shake levels below MMI 4. Fatality '
-                u'counts of less than 50 are disregarded.'),
+                u'derived by Australian Government from worldpop.org.uk, '
+                u'place information from geonames.org and software developed '
+                u'by BNPB. Limitations in the estimates of ground shaking, '
+                u'population and place names datasets may result in '
+                u'significant misrepresentation of the on-the-ground '
+                u'situation in the figures shown here. Consequently '
+                u'decisions should not be made solely on the information '
+                u'presented here and should always be verified by ground '
+                u'truthing and other reliable information sources. The '
+                u'fatality calculation assumes that no fatalities occur '
+                u'for shake levels below MMI 4. Fatality counts of less than '
+                u'50 are disregarded.'),
             'depth-unit': u'km',
             'latitude-name': u'Latitude',
             'mmi': '3.6',
             'map-name': u'Estimated Earthquake Impact',
             'date': '5-11-2013',
             'bearing-degrees': '0.00\xb0',
-            'formatted-date-time': '05-Nov-13 06:08:09 LMT',
+            'formatted-date-time': '05-Nov-13 06:08:09 +0707',
             'distance': '0.00',
             'direction-relation': u'of',
             'software-tag': software_tag,
             'credits': (
-                u'Supported by the Australia-Indonesia Facility for Disaster '
-                u'Reduction, Geoscience Australia and the World Bank-GFDRR.'),
-            'latitude-value': u'2\xb025\u203248.00\u2033S',
+                u'Supported by the Australian Government, Geoscience '
+                u'Australia and the World Bank-GFDRR.'),
+            'latitude-value': u'2\xb025\'48.00"S',
             'time': '6:8:9',
             'depth-value': '10.0'}
         result['elapsed-time'] = u''
         message = 'Got:\n%s\nExpected:\n%s\n' % (result, expected_dict)
         self.max_diff = None
         difference = DictDiffer(result, expected_dict)
-        print difference.all()
+        LOGGER.debug(difference.all())
         self.assertDictEqual(expected_dict, result, message)
 
     def test_event_info_string(self):
@@ -407,10 +432,10 @@ class TestShakeEvent(unittest.TestCase):
             event_id=SHAKE_ID,
             data_is_local_flag=True)
         expected_result = (
-            u"M 3.6 5-11-2013 6:8:9 Latitude: 2°25′48.00"
-            u'″S Longitude: 140°37'
-            u"′"
-            u'12.00″E Depth: 10.0km Located 0.00km n/a of n/a')
+            u"M 3.6 5-11-2013 6:8:9 Latitude: 2°25'48.00"
+            u'"S Longitude: 140°37'
+            u"'"
+            u'12.00"E Depth: 10.0km Located 0.00km n/a of Papua')
         result = shake_event.event_info()
         message = ('Got:\n%s\nExpected:\n%s\n' %
                    (result, expected_result))
@@ -538,14 +563,13 @@ class TestShakeEvent(unittest.TestCase):
 
     def test_login_to_realtime(self):
         # get logged in session
-        session = get_realtime_session()
-        r = session.get(INASAFE_REALTIME_REST_URL + '?format=api')
-        # find text called Log out
-        self.assertIn('Log out', r.text)
+        inasafe_django = InaSAFEDjangoREST()
+        self.assertTrue(inasafe_django.is_logged_in)
 
     def test_push_to_realtime(self):
         # only do the test if realtime test server is configured
-        if is_realtime_rest_configured():
+        inasafe_django = InaSAFEDjangoREST()
+        if inasafe_django.is_configured():
 
             working_dir = shakemap_extract_dir()
             shake_event = ShakeEvent(
@@ -558,9 +582,8 @@ class TestShakeEvent(unittest.TestCase):
             # push to realtime django
             push_shake_event_to_rest(shake_event)
             # check shake event exists
-            session = get_realtime_session()
-            earthquake_url = generate_earthquake_detail_url(SHAKE_ID)
-            response = session.get(earthquake_url)
+            session = inasafe_django.rest
+            response = session.earthquake(SHAKE_ID).GET()
             self.assertEqual(response.status_code, requests.codes.ok)
 
             event_dict = shake_event.event_dict()
@@ -568,8 +591,7 @@ class TestShakeEvent(unittest.TestCase):
                 'shake_id': shake_event.event_id,
                 'magnitude': float(event_dict.get('mmi')),
                 'depth': float(event_dict.get('depth-value')),
-                'time': shake_event.shake_grid.time.strftime(
-                    INASAFE_REALTIME_DATETIME_FORMAT),
+                'time': shake_event.shake_grid.time,
                 'location': {
                     'type': 'Point',
                     'coordinates': [
@@ -577,11 +599,53 @@ class TestShakeEvent(unittest.TestCase):
                         shake_event.shake_grid.latitude
                     ]
                 },
-                'location_description': event_dict.get('place-name')
+                'location_description': event_dict.get('shake-grid-location')
             }
 
             for key, value in earthquake_data.iteritems():
-                self.assertEqual(response.json()[key], value)
+                if isinstance(value, datetime.datetime):
+                    self.assertEqual(
+                        datetime.datetime.strptime(
+                                response.json()[key], '%Y-%m-%dT%H:%M:%SZ'
+                        ).replace(tzinfo=pytz.utc),
+                        value
+                    )
+                else:
+                    self.assertEqual(response.json()[key], value)
+
+    def test_uses_grid_location(self):
+        """Test regarding issue #2438
+        """
+        working_dir = shakemap_extract_dir()
+        # population_path =
+        shake_event = ShakeEvent(
+            working_dir=working_dir,
+            event_id=SHAKE_ID_2,
+            locale='en',
+            force_flag=True,
+            data_is_local_flag=True,
+            # population_raster_path=population_path
+        )
+        expected_location = 'Yogyakarta'
+        self.assertEqual(
+            shake_event.event_dict()['shake-grid-location'],
+            expected_location)
+
+        inasafe_django = InaSAFEDjangoREST()
+
+        if inasafe_django.is_configured():
+            # generate report
+            shake_event.render_map()
+            # push to realtime django
+            push_shake_event_to_rest(shake_event)
+            # check shake event exists
+            session = inasafe_django.rest
+            response = session.earthquake(SHAKE_ID_2).GET()
+            self.assertEqual(response.status_code, requests.codes.ok)
+
+            self.assertEqual(
+                response.json()['location_description'],
+                shake_event.event_dict()['shake-grid-location'])
 
 
 class DictDiffer(object):

@@ -42,7 +42,49 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'exposure_unit/'
-            'gco:CharacterString')
+            'gco:CharacterString'),
+        'structure_class_field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'structure_class_field/'
+            'gco:CharacterString'),
+        'road_class_field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'road_class_field/'
+            'gco:CharacterString'),
+        'field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'field/'
+            'gco:CharacterString'),
+        'area_population_field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'area_population_field/'
+            'gco:CharacterString'),
+        'area_name_field': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'area_name_field/'
+            'gco:CharacterString'),
+        'allow_resampling': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'allow_resampling/'
+            'gco:CharacterString'),
     }
     _standard_properties = merge_dictionaries(
-        GenericLayerMetadata._standard_properties, _standard_properties)
+            GenericLayerMetadata._standard_properties, _standard_properties)

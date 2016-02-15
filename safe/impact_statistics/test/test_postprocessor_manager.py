@@ -38,7 +38,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gui.widgets.dock import Dock
 
-DOCK = Dock(IFACE)
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -46,21 +45,25 @@ LOGGER = logging.getLogger('InaSAFE')
 class PostprocessorManagerTest(unittest.TestCase):
     """Test the postprocessor manager"""
 
+    @classmethod
+    def setUpClass(cls):
+        cls.DOCK = Dock(IFACE)
+
     # noinspection PyPep8Naming
     def setUp(self):
         """Fixture run before all tests"""
         os.environ['LANG'] = 'en'
-        DOCK.show_only_visible_layers_flag = True
-        load_standard_layers(DOCK)
-        DOCK.cboHazard.setCurrentIndex(0)
-        DOCK.cboExposure.setCurrentIndex(0)
-        DOCK.cboFunction.setCurrentIndex(0)
-        DOCK.run_in_thread_flag = False
-        DOCK.show_only_visible_layers_flag = False
-        DOCK.set_layer_from_title_flag = False
-        DOCK.zoom_to_impact_flag = False
-        DOCK.hide_exposure_flag = False
-        DOCK.show_intermediate_layers = False
+        self.DOCK.show_only_visible_layers_flag = True
+        load_standard_layers(self.DOCK)
+        self.DOCK.cboHazard.setCurrentIndex(0)
+        self.DOCK.cboExposure.setCurrentIndex(0)
+        self.DOCK.cboFunction.setCurrentIndex(0)
+        self.DOCK.run_in_thread_flag = False
+        self.DOCK.show_only_visible_layers_flag = False
+        self.DOCK.set_layer_from_title_flag = False
+        self.DOCK.zoom_to_impact_flag = False
+        self.DOCK.hide_exposure_flag = False
+        self.DOCK.show_intermediate_layers = False
         set_jakarta_extent()
 
         register_impact_functions()
@@ -69,23 +72,23 @@ class PostprocessorManagerTest(unittest.TestCase):
         """Run after each test."""
         # Let's use a fresh registry, canvas, and dock for each test!
         QgsMapLayerRegistry.instance().removeAllMapLayers()
-        DOCK.cboHazard.clear()
-        DOCK.cboExposure.clear()
+        self.DOCK.cboHazard.clear()
+        self.DOCK.cboExposure.clear()
 
     # noinspection PyMethodMayBeStatic
     def test_check_postprocessing_layers_visibility(self):
         """Generated layers are not added to the map registry."""
         # Explicitly disable showing intermediate layers
-        DOCK.show_intermediate_layers = False
+        self.DOCK.show_intermediate_layers = False
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         result, message = setup_scenario(
-            DOCK,
+            self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer=u"Dístríct's of Jakarta")
-        set_jakarta_extent(dock=DOCK)
+        set_jakarta_extent(dock=self.DOCK)
         assert result, message
 
         # LOGGER.info("Registry list before:\n%s" %
@@ -95,7 +98,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         expected_count = len(CANVAS.layers()) + 1
         #
         # Press RUN
-        DOCK.accept()
+        self.DOCK.accept()
         # no KW dialog will popuo due to complete keywords
         after_count = len(CANVAS.layers())
         # LOGGER.info("Registry list after:\n%s" %
@@ -106,15 +109,15 @@ class PostprocessorManagerTest(unittest.TestCase):
         assert expected_count == after_count, message
 
         # Now run again showing intermediate layers
-        DOCK.show_intermediate_layers = True
+        self.DOCK.show_intermediate_layers = True
         # Press RUN
-        DOCK.accept()
+        self.DOCK.accept()
         # no KW dialog will popup due to complete keywords
         # one layer (the impact) should have been added
         expected_count += 2
         after_count = len(CANVAS.layers())
 
-        LOGGER.info("Canvas list after:\n %s" % canvas_list())
+        # LOGGER.info("Canvas list after:\n %s" % canvas_list())
         message = (
             'Expected %s items in canvas, got %s' %
             (expected_count, after_count))
@@ -128,7 +131,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         # with KAB_NAME aggregation attribute defined in .keyword using
         # kabupaten_jakarta_singlepart.shp
         result, message = setup_scenario(
-            DOCK,
+            self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
             function_id='FloodEvacuationRasterHazardFunction')
@@ -140,9 +143,9 @@ class PostprocessorManagerTest(unittest.TestCase):
         assert result, message
 
         # Press RUN
-        DOCK.accept()
+        self.DOCK.accept()
         message = 'Spurious 0 filled rows added to post processing report.'
-        result = DOCK.wvResults.page().currentFrame().toPlainText()
+        result = self.DOCK.wvResults.page().currentFrame().toPlainText()
         for line in result.split('\n'):
             if 'Entire area' in line:
                 tokens = str(line).split('\t')

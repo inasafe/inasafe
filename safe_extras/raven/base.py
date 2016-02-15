@@ -163,8 +163,8 @@ class Client(object):
         if dsn:
             # TODO: should we validate other options werent sent?
             urlparts = urlparse(dsn)
-            msg = "Configuring Raven for host: %s://%s:%s" % (urlparts.scheme,
-                    urlparts.netloc, urlparts.path)
+            msg = "Configuring Raven for host: %s://%s:%s" % (
+                urlparts.scheme, urlparts.netloc, urlparts.path)
             self.logger.info(msg)
             options = raven.load(dsn, transport_registry=self._registry)
             servers = options['SENTRY_SERVERS']

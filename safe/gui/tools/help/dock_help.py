@@ -136,11 +136,11 @@ def content():
         'selected, the Impact Function list (shown in the combo box under '
         '"Might" in the InaSAFE dock panel)  will be updated. Each impact '
         'function can only work with specific combinations of hazard and '
-        'exposure types, so the options shown here will be limited accordingly.'
-        ' The chosen impact function can be configured (if applicable) by '
-        'pressing the small ellipses (...) button next to the chosen impact '
-        'function. This is explained in more detail below under the heading '
-        '"Setting Analysis Parameters".')))
+        'exposure types, so the options shown here will be limited '
+        'accordingly. The chosen impact function can be configured (if '
+        'applicable) by pressing the small ellipses (...) button next to '
+        'the chosen impact function. This is explained in more detail below '
+        'under the heading "Setting Analysis Parameters".')))
     message.add(m.Paragraph(tr(
         'Aggregation is the process whereby we group the analysis results '
         'by district so that you can see how many people, roads or '

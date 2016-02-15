@@ -33,19 +33,24 @@ from safe.common.exceptions import MetadataReadError
 from safe.common.utilities import unique_filename
 
 from safe.metadata import ImpactLayerMetadata
+from safe.metadata.provenance import Provenance
 from safe.metadata.test import (
     TEMP_DIR,
     EXISTING_IMPACT_JSON,
-    EXISTING_IMPACT_FILE, INVALID_IMPACT_JSON,
-    INCOMPLETE_IMPACT_JSON, EXISTING_IMPACT_XML, TEST_XML_BASEPATH)
+    EXISTING_IMPACT_FILE,
+    INVALID_IMPACT_JSON,
+    INCOMPLETE_IMPACT_JSON,
+    EXISTING_IMPACT_XML,
+    TEST_XML_BASEPATH
+)
 
 
 class TestImpactMetadata(TestCase):
 
     def test_metadata_provenance(self):
         metadata = self.generate_test_metadata()
-        self.assertEqual(metadata.provenance.count, 3)
-        self.assertEqual(metadata.provenance.last.title, 'Title 3')
+        self.assertEqual(metadata.provenance.count, 4)
+        self.assertEqual(metadata.provenance.last.title, 'IF Provenance')
 
     def test_metadata_date(self):
         metadata = ImpactLayerMetadata('random_layer_id')
@@ -154,21 +159,42 @@ class TestImpactMetadata(TestCase):
 
     def test_xml_to_json_to_xml(self):
         generated_metadata = ImpactLayerMetadata(
-            EXISTING_IMPACT_FILE,
-            xml_uri=EXISTING_IMPACT_XML)
+            EXISTING_IMPACT_FILE, xml_uri=EXISTING_IMPACT_XML
+        )
         with open(EXISTING_IMPACT_XML) as f:
             expected_metadata = f.read()
 
         json_tmp_file = unique_filename(suffix='.json', dir=TEMP_DIR)
         generated_metadata.write_to_file(json_tmp_file)
-        read_tmp_metadata = ImpactLayerMetadata(EXISTING_IMPACT_FILE,
-                                                json_uri=json_tmp_file)
+        read_tmp_metadata = ImpactLayerMetadata(
+                EXISTING_IMPACT_FILE, json_uri=json_tmp_file
+        )
         self.assertEquals(expected_metadata, read_tmp_metadata.xml)
 
     def generate_test_metadata(self):
         # if you change this you need to update IMPACT_TEST_FILE_JSON
+        good_data = {
+            'start_time': '20140714_060955',
+            'finish_time': '20140714_061255',
+            'hazard_layer': 'path/to/hazard/layer',
+            'exposure_layer': 'path/to/exposure/layer',
+            'impact_function_id': 'IF_id',
+            'impact_function_version': '2.1',
+            'host_name': 'my_computer',
+            'user': 'my_user',
+            'qgis_version': '2.4',
+            'gdal_version': '1.9.1',
+            'qt_version': '4.5',
+            'pyqt_version': '5.1',
+            'os': 'ubuntu 12.04',
+            'inasafe_version': '2.1',
+            'exposure_pixel_size': '0.1',
+            'hazard_pixel_size': '0.2',
+            'impact_pixel_size': '0.1',
+            'analysis_extent': [0, 1, 2, 2],
+            'parameter': {},
+        }
         metadata = ImpactLayerMetadata('random_layer_id')
-        path = 'gmd:MD_Metadata/gmd:dateStamp/'
         path = TEST_XML_BASEPATH + 'gco:CharacterString'
         # using str
         test_value = 'Random string'
@@ -187,5 +213,60 @@ class TestImpactMetadata(TestCase):
             'Title 2', 'Description of step 2', '2015-06-25T13:14:24.508980')
         metadata.append_provenance_step(
             'Title 3', 'Description of step 3', '2015-06-25T13:14:24.508984')
+        metadata.append_if_provenance_step(
+            'IF Provenance',
+            'IF Provenance',
+            '2015-06-25T13:14:24.510000',
+            good_data
+        )
 
         return metadata
+
+    def test_update_from_dict(self):
+        """Test update_from_dict method."""
+        good_data = {
+            'start_time': '20140714_060955',
+            'finish_time': '20140714_061255',
+            'hazard_layer': 'path/to/hazard/layer',
+            'exposure_layer': 'path/to/exposure/layer',
+            'impact_function_id': 'IF_id',
+            'impact_function_version': '2.1',
+            'host_name': 'my_computer',
+            'user': 'my_user',
+            'qgis_version': '2.4',
+            'gdal_version': '1.9.1',
+            'qt_version': '4.5',
+            'pyqt_version': '5.1',
+            'os': 'ubuntu 12.04',
+            'inasafe_version': '2.1',
+            'exposure_pixel_size': '0.1',
+            'hazard_pixel_size': '0.2',
+            'impact_pixel_size': '0.1',
+            'analysis_extent': [0, 1, 2, 2],
+            'parameter': {},
+        }
+
+        metadata = ImpactLayerMetadata('random_layer_id')
+        provenance = Provenance()
+        provenance.append_step(
+            'Title 1', 'Description of step 1', '2015-06-25T13:14:24.508974')
+        provenance.append_step(
+            'Title 2', 'Description of step 2', '2015-06-25T13:14:24.508980')
+        provenance.append_if_provenance_step(
+            'Title 3',
+            'Description of step 3',
+            '2015-06-25T13:14:24.508984',
+            data=good_data
+        )
+        keywords = {
+            'layer_purpose': 'impact_layer',
+            'layer_geometry': 'raster',
+            'if_provenance': provenance,
+        }
+        metadata.update_from_dict(keywords)
+        self.assertEqual(metadata.layer_purpose, 'impact_layer')
+        self.assertEqual(metadata.layer_geometry, 'raster')
+        self.assertNotEqual(metadata.layer_mode, 'raster')
+        self.assertEqual(len(metadata.provenance.steps), 3)
+        self.assertEqual(metadata.provenance.get(2), provenance.get(2))
+        self.assertEqual(metadata.provenance.get(2).user, 'my_user')
