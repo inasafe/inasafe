@@ -56,6 +56,8 @@ class TsunamiRasterBuildingFunction(
             tr('High Hazard Zone'),
             tr('Very High Hazard Zone'),
         ]
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
 
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
@@ -77,8 +79,8 @@ class TsunamiRasterBuildingFunction(
         high_max = self.parameters['high_threshold']
 
         checklist.add(tr(
-            'Dry zone is defined as non-inundated area or has inundation depth '
-            'is 0 %s') % (low_max.unit.abbreviation)
+            'Dry zone is defined as non-inundated area or has inundation '
+            'depth is 0 %s') % (low_max.unit.abbreviation)
         )
 
         checklist.add(tr(
@@ -130,6 +132,10 @@ class TsunamiRasterBuildingFunction(
         """Tsunami raster impact to buildings (e.g. from Open Street Map)."""
         self.validate()
         self.prepare()
+
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
 
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold'].value
@@ -223,28 +229,30 @@ class TsunamiRasterBuildingFunction(
 
         style_classes = [
             dict(
-                label=self.hazard_classes[0],
+                label=self.hazard_classes[0] + ': 0 m',
                 value=0,
                 colour='#00FF00',
                 transparency=0,
                 size=1
             ),
             dict(
-                label=self.hazard_classes[1],
+                label=self.hazard_classes[1] + ': 0.1 - %.1f m' % low_max,
                 value=1,
                 colour='#FFFF00',
                 transparency=0,
                 size=1
             ),
             dict(
-                label=self.hazard_classes[2],
+                label=self.hazard_classes[2] + ': %.1f - %.1f m' % (
+                    low_max + 0.1, medium_max),
                 value=2,
                 colour='#FFB700',
                 transparency=0,
                 size=1
             ),
             dict(
-                label=self.hazard_classes[3],
+                label=self.hazard_classes[3] + ': %.1f - %.1f m' % (
+                    medium_max + 0.1, high_max),
                 value=3,
                 colour='#FF6F00',
                 transparency=0,
@@ -252,7 +260,7 @@ class TsunamiRasterBuildingFunction(
             ),
 
             dict(
-                label=self.hazard_classes[4],
+                label=self.hazard_classes[4] + ' > %.1f m' % high_max,
                 value=4,
                 colour='#FF0000',
                 transparency=0,
@@ -265,20 +273,27 @@ class TsunamiRasterBuildingFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.target_field,
+            'map_title': map_title,
+            'legend_title': legend_title,
+            'legend_units': legend_units,
+            'buildings_total': total_features,
+            'buildings_affected': self.total_affected_buildings
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         vector_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
             name=tr('Estimated buildings affected'),
-            keywords={
-                'impact_summary': impact_summary,
-                'impact_table': impact_table,
-                'target_field': self.target_field,
-                'map_title': map_title,
-                'legend_title': legend_title,
-                'legend_units': legend_units,
-                'buildings_total': total_features,
-                'buildings_affected': self.total_affected_buildings},
+            keywords=impact_layer_keywords,
             style_info=style_info)
         # Create vector layer and return
         self._impact = vector_layer

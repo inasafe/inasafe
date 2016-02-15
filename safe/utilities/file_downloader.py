@@ -29,6 +29,7 @@ from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 from safe.common.utilities import humanize_file_size
 from safe.utilities.i18n import tr
+from safe.utilities.gis import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -83,6 +84,7 @@ class FileDownloader(object):
         self.reply = self.manager.get(request)
         self.reply.readyRead.connect(self.get_buffer)
         self.reply.finished.connect(self.write_data)
+        self.manager.requestTimedOut.connect(self.request_timeout)
 
         if self.progress_dialog:
             # progress bar
@@ -113,7 +115,7 @@ class FileDownloader(object):
             # cancel
             def cancel_action():
                 """Cancel download."""
-                self.reply.abort()
+                self.manager.deleteReply(self.reply)
 
             self.reply.downloadProgress.connect(progress_event)
             self.progress_dialog.canceled.connect(cancel_action)
@@ -127,6 +129,10 @@ class FileDownloader(object):
             QCoreApplication.processEvents()
 
         result = self.reply.error()
+
+        if qgis_version() >= 21100:
+            self.manager.deleteReply(self.reply)
+
         if result == QNetworkReply.NoError:
             return True, None
 
@@ -159,3 +165,8 @@ class FileDownloader(object):
         self.output_file.write(self.downloaded_file_buffer)
         self.output_file.close()
         self.finished_flag = True
+
+    def request_timeout(self):
+        """The request timed out."""
+        if self.progress_dialog:
+            self.progress_dialog.hide()

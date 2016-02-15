@@ -303,8 +303,11 @@ class BaseMetadata(object):
         :return: json representation of the metadata
         :rtype: str
         """
-        return json.dumps(
+        json_dumps = json.dumps(
             self.dict, indent=2, sort_keys=True, separators=(',', ': '))
+        if not json_dumps.endswith('\n'):
+            json_dumps += '\n'
+        return json_dumps
 
     @abc.abstractmethod
     def read_json(self):

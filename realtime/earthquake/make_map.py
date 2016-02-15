@@ -18,17 +18,18 @@ __date__ = '30/07/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import logging
 import os
 import sys
-import logging
 from urllib2 import URLError
 from zipfile import BadZipfile
 
-from realtime.utilities import data_dir, is_event_id, realtime_logger_name
-from realtime.shake_event import ShakeEvent
+from realtime.earthquake.shake_event import ShakeEvent
+
+from realtime.earthquake.push_shake import push_shake_event_to_rest
+from realtime.earthquake.shake_data import ShakeData
 from realtime.exceptions import EmptyShakeDirectoryError
-from realtime.push_shake import push_shake_event_to_rest
-from realtime.shake_data import ShakeData
+from realtime.utilities import data_dir, is_event_id, realtime_logger_name
 
 # Initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
@@ -43,6 +44,9 @@ def process_event(working_dir=None, event_id=None, locale='en'):
 
     :param locale: The locale that will be used. Default to en.
     :type locale: str
+
+    :return: Return True if succeeded
+    :rtype: bool
     """
     population_path = os.path.join(
         data_dir(),
@@ -95,7 +99,10 @@ def process_event(working_dir=None, event_id=None, locale='en'):
         for shake_event in shake_events:
             shake_event.render_map(force_flag)
             # push the shakemap to realtime server
-            push_shake_event_to_rest(shake_event)
+            ret = push_shake_event_to_rest(shake_event)
+            LOGGER.info('Is Push successful? %s' % bool(ret))
+
+    return True
 
 
 def create_shake_events(
@@ -210,5 +217,8 @@ if __name__ == '__main__':
         # noinspection PyBroadException
         try:
             process_event(working_dir=working_directory, locale=locale_option)
-        except:  # pylint: disable=W0702
+            LOGGER.info('Process event end.')
+            sys.exit(0)
+        except Exception as e:  # pylint: disable=W0702
             LOGGER.info('Process event failed')
+            LOGGER.exception(e)

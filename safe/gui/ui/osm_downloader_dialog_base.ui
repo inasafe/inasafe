@@ -281,7 +281,7 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QDoubleSpinBox" name="x_maximum">
+             <widget class="QDoubleSpinBox" name="x_minimum">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -315,7 +315,7 @@
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QDoubleSpinBox" name="x_minimum">
+             <widget class="QDoubleSpinBox" name="x_maximum">
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -485,8 +485,8 @@
   <tabstop>boundary_flag</tabstop>
   <tabstop>admin_level_comboBox</tabstop>
   <tabstop>country_comboBox</tabstop>
-  <tabstop>x_maximum</tabstop>
   <tabstop>x_minimum</tabstop>
+  <tabstop>x_maximum</tabstop>
   <tabstop>y_maximum</tabstop>
   <tabstop>y_minimum</tabstop>
   <tabstop>capture_button</tabstop>
