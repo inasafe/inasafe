@@ -154,15 +154,15 @@ class FloodEvent(QObject):
         keyword_io = KeywordIO()
 
         keywords = {
-            'field': 'flooded',
-            'hazard': 'flood',
+            'field': 'state',
+            'hazard': 'generic',
             'hazard_category': 'single_event',
             'keyword_version': '3.3',
             'layer_geometry': 'polygon',
             'layer_mode': 'classified',
             'layer_purpose': 'hazard',
             'title': 'Flood',
-            'value_map': '{"wet": [1], "dry": [0]}',
+            'value_map': '{"wet": [2], "dry": [0]}',
             'vector_hazard_classification': 'flood_vector_hazard_classes'
         }
 
