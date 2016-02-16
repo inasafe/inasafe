@@ -1270,8 +1270,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         analysis.show_intermediate_layers = self.show_intermediate_layers
         viewport = viewport_geo_array(self.iface.mapCanvas())
         analysis.viewport_extent = viewport
-        analysis.user_extent = self.extent.user_extent
-        analysis.user_extent_crs = self.extent.user_extent_crs
+        if self.extent.user_extent:
+            analysis.user_extent = self.extent.user_extent
+            analysis.user_extent_crs = self.extent.user_extent_crs
 
         return analysis
 
