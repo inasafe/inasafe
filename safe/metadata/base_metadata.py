@@ -25,6 +25,8 @@ from datetime import datetime
 import json
 import os
 from xml.etree import ElementTree
+from PyQt4.QtCore import QUrl
+
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
 from safe.metadata.metadata_db_io import MetadataDbIO
 from safe.metadata.utils import (METADATA_XML_TEMPLATE,
@@ -36,6 +38,15 @@ from safe.metadata.utils import (METADATA_XML_TEMPLATE,
 from safe.utilities.i18n import tr
 from safe.definitions import multipart_polygon_key
 
+
+class MetadataEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.date().isoformat()
+        elif isinstance(obj, QUrl):
+            return obj.toString()
+
+        return json.JSONEncoder.default(self, obj)
 
 class BaseMetadata(object):
     """
@@ -304,7 +315,8 @@ class BaseMetadata(object):
         :rtype: str
         """
         json_dumps = json.dumps(
-            self.dict, indent=2, sort_keys=True, separators=(',', ': '))
+            self.dict, indent=2, sort_keys=True, separators=(',', ': '),
+                cls=MetadataEncoder)
         if not json_dumps.endswith('\n'):
             json_dumps += '\n'
         return json_dumps
