@@ -21,11 +21,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # http://eli.thegreenplace.net/2009/02/06/getters-and-setters-in-python
 
 import abc
-from datetime import datetime
+from datetime import datetime, date
 import json
 import os
 from xml.etree import ElementTree
-from PyQt4.QtCore import QUrl
+from PyQt4.QtCore import QUrl, QDate, QDateTime, Qt
 
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
 from safe.metadata.metadata_db_io import MetadataDbIO
@@ -43,6 +43,12 @@ class MetadataEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
             return obj.date().isoformat()
+        elif isinstance(obj, QDate):
+            return obj.toString(Qt.ISODate)
+        elif isinstance(obj, QDateTime):
+            return obj.toString(Qt.ISODate)
+        elif isinstance(obj, date):
+            return obj.isoformat()
         elif isinstance(obj, QUrl):
             return obj.toString()
 
