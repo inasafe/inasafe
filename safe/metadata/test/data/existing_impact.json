@@ -462,8 +462,8 @@
         "NoneType"
       ],
       "name": "url",
-      "python_type": "NoneType",
-      "value": null,
+      "python_type": "QUrl",
+      "value": "http://inasafe.org",
       "xml_path": "gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL"
     },
     "user": {
