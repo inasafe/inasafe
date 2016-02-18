@@ -74,8 +74,8 @@
         "QDateTime"
       ],
       "name": "date",
-      "python_type": "NoneType",
-      "value": null,
+      "python_type": "datetime",
+      "value": "2016-02-18",
       "xml_path": "gmd:dateStamp/gco:Date"
     },
     "elapsed_time": {
@@ -462,8 +462,8 @@
         "NoneType"
       ],
       "name": "url",
-      "python_type": "NoneType",
-      "value": null,
+      "python_type": "QUrl",
+      "value": "http://inasafe.org",
       "xml_path": "gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL"
     },
     "user": {

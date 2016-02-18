@@ -25,12 +25,40 @@ status=alpha
 # Optional items:
 
 changelog=
-        3.2.4
+        3.3.0
         Working implementation of on-the-fly-projection for polygon flood on building points/polys. fix #2475
         Add new impact function Classified polygon hazard on polygon people
         Add new impact function Earthquake ITB Bayesian Fatality
         Add flood prone areas download support for the OSM downloader
-        Use Date Picker in Keywords Wizard
+        Use date Picker in Keywords Wizard
+        083c2b9 (ismail/tsunami_raster_building_if) Merge branch 'develop' of github.com:inasafe/inasafe into tsunami_raster_building_if
+        c403903 Fix order by using Vector Classification in classified polygon population IF.
+        13de436 Use Vector Classification to sort the hazard level in report.
+        4cafeaf Add low, moderate, high threshold for tsunami raster building IF.
+        281a8fb Add tsunami raster building IF based on flood one.
+        f70155c [Wizard] Use standard QDateTimeEdit instead of QgsDateTimeEdit. Fixes #2515
+        22b6cc8 (charlotte/develop) Update default road action checklist
+        42e920d Update default population action checklist
+        f906ec5 Update default buildings action checklist
+        8687961 Update keywords for datatest.
+        503fd98 Use read_iso19115_metadata to read metadata.
+        2c2022e inform the user about the network status in the OSM downloader
+        d80a5e7 [KeywordWizard] Use QDateTimeEdit for date keyword. Fixes #2499
+        543b887 Add target_field to impact layer metadata.
+        1f7122f Add volcano_name_field to hazard layer metadata.
+        75e1819 Add road_class_field to exposure metadata.
+        5914bb7 add flood prone to the OSM downloader
+        31eb225 Migrate to use ISO 19115 metadata.
+        cd29284 Add changelog: add new IF Classified polygon hazard on polygon people
+        797aec1 [IFCW] After registering keywords in the KW sub-thread, don't display again the step from where it was called. Fixes #2347
+        fced60c Use wrap_slash for filename cells
+        964917d Working implementation of on the fly projection for polygon flood on building points/polys. fix #2475
+        922bc87 fix #2464 - support point buildings when doing polygon flood analysis
+        36296e7 created new color symbology
+        c671446 (rizky/update-raven) Update sentry dsn for InaSAFE desktop and Realtime
+        adcff11 added % symbol to all percentages in report
+        00bd2e6 Added option to add OSM tile layer
+
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards

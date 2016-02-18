@@ -19,12 +19,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
-import unittest
 import shutil
+import unittest
 
+from realtime.earthquake.shake_data import ShakeData
 from safe.common.utilities import temp_dir
 from safe.test.utilities import test_data_path
-from realtime.shake_data import ShakeData
 
 # Shake ID for this test
 SHAKE_ID = '20131105060809'

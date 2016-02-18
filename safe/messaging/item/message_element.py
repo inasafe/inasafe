@@ -9,6 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+import json
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -98,13 +99,27 @@ class MessageElement(object):
         """
         raise NotImplementedError('Please Implement this method')
 
+    def to_dict(self):
+        """Render a MessageElement as python dict
+
+        :return: Python dict representation
+        :rtype: dict
+        """
+        return {
+            'type': self.__class__.__name__,
+            'element_id': self.element_id,
+            'style_class': self.style_class,
+            'icon': self.icon,
+            'attributes': self.attributes
+        }
+
     def to_json(self):
         """Render a MessageElement queue as JSON
 
         :returns: Json representation of the Text MessageElement.
         :rtype: str
         """
-        raise NotImplementedError('Please Implement this method')
+        return json.dumps(self.to_dict())
 
     def html_attributes(self):
         """Get extra html attributes such as id and class."""

@@ -6,6 +6,7 @@
    library.
 
 """
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -21,7 +22,8 @@ import sqlite3 as sqlite
 from sqlite3 import OperationalError
 from cPickle import loads, dumps, HIGHEST_PROTOCOL
 from ast import literal_eval
-from PyQt4.QtCore import QUrl
+from PyQt4.QtCore import QUrl, QDateTime
+from datetime import datetime
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -33,6 +35,8 @@ from PyQt4.QtCore import QObject, QSettings
 import safe.definitions
 from safe import messaging as m
 from safe.messaging import styles
+from safe.storage.utilities import read_keywords
+from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_string
 from safe.utilities.utilities import read_file_keywords
 from safe.common.utilities import verify
@@ -115,6 +119,65 @@ class KeywordIO(QObject):
         :type path: str
         """
         self.keyword_db_path = str(path)
+
+    @classmethod
+    def read_keywords_file(cls, filename, keyword=None):
+        """Read keywords from a keywords file and return as dictionary
+
+        This serves as a wrapper function that should be provided by Keyword
+        IO. Use this if you are sure that the filename is a keyword file.
+
+        :param filename: The filename of the keyword, typically with .xml or
+            .keywords extension. If not, will raise exceptions
+        :type filename: str
+
+        :param keyword: If set, will extract only the specified keyword
+              from the keywords dict.
+        :type keyword: str
+
+        :returns: A dict if keyword is omitted, otherwise the value for the
+            given key if it is present.
+        :rtype: dict, str
+
+        :raises: KeywordNotFoundError, InvalidParameterError
+        """
+
+        # Try to read from ISO metadata first.
+        _, ext = os.path.splitext(filename)
+
+        dictionary = {}
+        if ext == '.xml':
+            try:
+                dictionary = read_iso19115_metadata(filename)
+            except (MetadataReadError, NoKeywordsFoundError):
+                pass
+        elif ext == '.keywords':
+            try:
+                dictionary = read_file_keywords(filename)
+                # update to xml based metadata
+                write_read_iso_19115_metadata(filename, dictionary)
+
+            except (HashNotFoundError,
+                    Exception,
+                    OperationalError,
+                    NoKeywordsFoundError,
+                    KeywordNotFoundError,
+                    InvalidParameterError,
+                    UnsupportedProviderError):
+                raise
+        else:
+            raise InvalidParameterError(
+                'Keywords file have .xml or .keywords extension')
+
+        # if no keyword was supplied, just return the dict
+        if keyword is None:
+            return dictionary
+        if keyword not in dictionary:
+            message = tr('No value was found in file %s for keyword %s' % (
+                filename, keyword))
+            raise KeywordNotFoundError(message)
+
+        return dictionary[keyword]
 
     def read_keywords(self, layer, keyword=None):
         """Read keywords for a datasource and return them as a dictionary.
@@ -772,6 +835,11 @@ class KeywordIO(QObject):
         if keyword == 'url':
             if isinstance(value, QUrl):
                 value = value.toString()
+        if keyword == 'date':
+            if isinstance(value, QDateTime):
+                value = value.toString('d MMM yyyy')
+            elif isinstance(value, datetime):
+                value = value.strftime('%d %b %Y')
         # we want to show the user the concept name rather than its key
         # if possible. TS
         keyword_definition = definition(keyword)

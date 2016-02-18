@@ -231,11 +231,11 @@ def load_layer(layer_path):
     layer_purpose = 'undefined'
     try:
         try:
-            keywords = read_file_keywords(layer_path)
-            keywords = write_read_iso_19115_metadata(layer_path, keywords)
+            keywords = read_iso19115_metadata(layer_path)
         except:
             try:
-                keywords = read_iso19115_metadata(layer_path)
+                keywords = read_file_keywords(layer_path)
+                keywords = write_read_iso_19115_metadata(layer_path, keywords)
             except NoKeywordsFoundError:
                 keywords = {}
         if 'layer_purpose' in keywords:
@@ -961,12 +961,14 @@ def load_standard_layers(dock=None):
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
     # potiential-idp not being either hazard nor exposure layer
 
-    if hazard_layer_count + exposure_layer_count != len(file_list) - 2:
+    number_exposure_hazard = hazard_layer_count + exposure_layer_count
+    expected_number_exposure_hazard = len(file_list) - 2
+    if number_exposure_hazard != expected_number_exposure_hazard:
         message = (
             'Loading standard layers failed. Expecting layer the number of '
             'hazard_layer and exposure_layer is equals to %d but got %d' % (
-                (len(file_list) - 1),
-                hazard_layer_count + exposure_layer_count))
+                (expected_number_exposure_hazard),
+                number_exposure_hazard))
         raise Exception(message)
 
     return hazard_layer_count, exposure_layer_count

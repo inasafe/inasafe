@@ -23,16 +23,7 @@
     <normaloff>:/plugins/inasafe/icon.svg</normaloff>:/plugins/inasafe/icon.svg</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <property name="leftMargin">
-    <number>12</number>
-   </property>
-   <property name="topMargin">
-    <number>12</number>
-   </property>
-   <property name="rightMargin">
-    <number>12</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>12</number>
    </property>
    <item row="0" column="0">
@@ -43,14 +34,14 @@
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view">
+        <widget class="QWebView" name="help_web_view" native="true">
          <property name="minimumSize">
           <size>
            <width>200</width>
            <height>200</height>
           </size>
          </property>
-         <property name="url">
+         <property name="url" stdset="0">
           <url>
            <string>about:blank</string>
           </url>
@@ -61,16 +52,7 @@
      </widget>
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
+       <property name="margin">
         <number>0</number>
        </property>
        <item row="0" column="0">
@@ -123,21 +105,39 @@
          <property name="sizeConstraint">
           <enum>QLayout::SetDefaultConstraint</enum>
          </property>
-         <property name="leftMargin">
-          <number>1</number>
-         </property>
-         <property name="topMargin">
-          <number>1</number>
-         </property>
-         <property name="rightMargin">
-          <number>1</number>
-         </property>
-         <property name="bottomMargin">
+         <property name="margin">
           <number>1</number>
          </property>
          <property name="spacing">
           <number>1</number>
          </property>
+         <item row="1" column="0">
+          <widget class="QDoubleSpinBox" name="x_minimum">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="prefix">
+            <string>West: </string>
+           </property>
+           <property name="decimals">
+            <number>7</number>
+           </property>
+           <property name="minimum">
+            <double>-999999999.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999999999.000000000000000</double>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="1">
           <widget class="QDoubleSpinBox" name="y_maximum">
            <property name="font">
@@ -165,64 +165,10 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QDoubleSpinBox" name="x_maximum">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="prefix">
-            <string>West: </string>
-           </property>
-           <property name="decimals">
-            <number>7</number>
-           </property>
-           <property name="minimum">
-            <double>-999999999.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>999999999.000000000000000</double>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="1">
           <widget class="QPushButton" name="capture_button">
            <property name="text">
             <string>Drag on map</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QDoubleSpinBox" name="x_minimum">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="buttonSymbols">
-            <enum>QAbstractSpinBox::NoButtons</enum>
-           </property>
-           <property name="prefix">
-            <string>East: </string>
-           </property>
-           <property name="decimals">
-            <number>7</number>
-           </property>
-           <property name="minimum">
-            <double>-999999999.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>999999999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -241,6 +187,33 @@
            </property>
            <property name="prefix">
             <string>South: </string>
+           </property>
+           <property name="decimals">
+            <number>7</number>
+           </property>
+           <property name="minimum">
+            <double>-999999999.000000000000000</double>
+           </property>
+           <property name="maximum">
+            <double>999999999.000000000000000</double>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QDoubleSpinBox" name="x_maximum">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="prefix">
+            <string>East: </string>
            </property>
            <property name="decimals">
             <number>7</number>
@@ -306,8 +279,8 @@
   <tabstop>bookmarks_list</tabstop>
   <tabstop>hazard_exposure_user_extent</tabstop>
   <tabstop>y_maximum</tabstop>
-  <tabstop>x_maximum</tabstop>
   <tabstop>x_minimum</tabstop>
+  <tabstop>x_maximum</tabstop>
   <tabstop>y_minimum</tabstop>
   <tabstop>capture_button</tabstop>
   <tabstop>show_warnings</tabstop>
@@ -335,7 +308,7 @@
   <connection>
    <sender>hazard_exposure_user_extent</sender>
    <signal>toggled(bool)</signal>
-   <receiver>x_maximum</receiver>
+   <receiver>x_minimum</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -367,7 +340,7 @@
   <connection>
    <sender>hazard_exposure_user_extent</sender>
    <signal>toggled(bool)</signal>
-   <receiver>x_minimum</receiver>
+   <receiver>x_maximum</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">

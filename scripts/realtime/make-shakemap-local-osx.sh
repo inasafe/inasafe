@@ -23,6 +23,6 @@ export INASAFE_LOCALE=id
 
 echo "PYTHON PATH: $PYTHONPATH"
 
-python realtime/make_local_map.py
+python realtime/earthquake/make_local_map.py
 
 
