@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.metadata.encoder import MetadataEncoder
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -21,38 +22,24 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # http://eli.thegreenplace.net/2009/02/06/getters-and-setters-in-python
 
 import abc
-from datetime import datetime, date
+from datetime import datetime
 import json
 import os
 from xml.etree import ElementTree
-from PyQt4.QtCore import QUrl, QDate, QDateTime, Qt
 
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
 from safe.metadata.metadata_db_io import MetadataDbIO
-from safe.metadata.utils import (METADATA_XML_TEMPLATE,
-                                 TYPE_CONVERSIONS,
-                                 XML_NS,
-                                 insert_xml_element,
-                                 read_property_from_xml,
-                                 reading_ancillary_files)
+from safe.metadata.utils import (
+    METADATA_XML_TEMPLATE,
+    TYPE_CONVERSIONS,
+    XML_NS,
+    insert_xml_element,
+    read_property_from_xml,
+    reading_ancillary_files
+)
 from safe.utilities.i18n import tr
 from safe.definitions import multipart_polygon_key
 
-
-class MetadataEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime):
-            return obj.date().isoformat()
-        elif isinstance(obj, QDate):
-            return obj.toString(Qt.ISODate)
-        elif isinstance(obj, QDateTime):
-            return obj.toString(Qt.ISODate)
-        elif isinstance(obj, date):
-            return obj.isoformat()
-        elif isinstance(obj, QUrl):
-            return obj.toString()
-
-        return json.JSONEncoder.default(self, obj)
 
 class BaseMetadata(object):
     """
@@ -321,8 +308,12 @@ class BaseMetadata(object):
         :rtype: str
         """
         json_dumps = json.dumps(
-            self.dict, indent=2, sort_keys=True, separators=(',', ': '),
-                cls=MetadataEncoder)
+                self.dict,
+                indent=2,
+                sort_keys=True,
+                separators=(',', ': '),
+                cls=MetadataEncoder
+        )
         if not json_dumps.endswith('\n'):
             json_dumps += '\n'
         return json_dumps
@@ -345,9 +336,11 @@ class BaseMetadata(object):
             if 'properties' in metadata:
                 for name, prop in metadata['properties'].iteritems():
                     try:
-                        if prop['value'].__class__.__name__ != prop['python_type']:
+                        class_name = prop['value'].__class__.__name__
+                        if class_name != prop['python_type']:
                             if prop['python_type'] == 'datetime':
-                                prop['value'] = datetime.strptime(prop['value'], '%Y-%m-%d')
+                                prop['value'] = datetime.strptime(
+                                        prop['value'], '%Y-%m-%d')
                             else:
                                 pass
                         self.set(prop['name'], prop['value'], prop['xml_path'])

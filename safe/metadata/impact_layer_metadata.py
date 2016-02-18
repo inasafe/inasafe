@@ -24,7 +24,7 @@ from safe.metadata.provenance import Provenance
 from safe.metadata.utils import reading_ancillary_files, XML_NS, prettify_xml
 from safe.metadata.utils import merge_dictionaries
 
-from safe.metadata.base_metadata import MetadataEncoder
+from safe.metadata.encoder import MetadataEncoder
 
 
 class ImpactLayerMetadata(BaseMetadata):
