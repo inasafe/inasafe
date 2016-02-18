@@ -10,33 +10,33 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
 from collections import OrderedDict
+
+from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsField,
     QgsSpatialIndex,
     QgsVectorLayer,
     QgsFeature,
-    QgsRectangle,
-    QgsFeatureRequest,
     QgsCoordinateTransform,
-    QgsCoordinateReferenceSystem,
     QgsGeometry)
 
-from PyQt4.QtCore import QVariant
-
+import safe.messaging as m
+from safe.common.exceptions import GetDataError, ZeroImpactException
+from safe.common.utilities import unique_filename
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.impact_functions.inundation.flood_vector_building_impact.\
     metadata_definitions import FloodPolygonBuildingFunctionMetadata
-from safe.utilities.i18n import tr
-from safe.utilities.gis import is_point_layer
-from safe.storage.vector import Vector
-from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-import safe.messaging as m
 from safe.messaging import styles
+from safe.storage.vector import Vector
+from safe.utilities.gis import is_point_layer
+from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.processing_model import ModelExecutor
+from safe.utilities.resources import resources_path
 
 
 class FloodPolygonBuildingFunction(
@@ -80,6 +80,47 @@ class FloodPolygonBuildingFunction(
         """Experimental impact function."""
         self.validate()
         self.prepare()
+
+        if self.aggregation is not None:
+            # To be sure we are not using the user extent anymore.
+            # (without using the setter):
+            self._requested_extent = None
+
+            model_path = resources_path(
+                'models', 'inasafe-building-flood-aggr.model')
+            model = ModelExecutor(model_path)
+
+            flood_result = unique_filename(suffix='-clipped-flood.shp')
+            building_result = unique_filename(suffix='-clipped-buildings.shp')
+
+            parameters = (
+                self.aggregation.qgis_layer().source(),
+                self.hazard.qgis_layer().source(),
+                self.exposure.qgis_layer().source(),
+                building_result,
+                flood_result
+            )
+            model.set_parameters(parameters)
+
+            status, msg = model.validate_parameters()
+            if not status:
+                #TODO, improve exception
+                raise Exception(msg)
+
+            result, msg = model.run()
+            if not result:
+                raise Exception(msg)
+
+            keyword_io = KeywordIO()
+            keyword_io.copy_keywords(
+                self.hazard.qgis_layer(), flood_result)
+            keyword_io.copy_keywords(
+                self.exposure.qgis_layer(), building_result)
+
+            self.hazard = QgsVectorLayer(
+                flood_result, self.hazard.name, 'ogr')
+            self.exposure = QgsVectorLayer(
+                building_result, self.exposure.name, 'ogr')
 
         self.provenance.append_step(
             'Calculating Step',
@@ -142,29 +183,19 @@ class FloodPolygonBuildingFunction(
         building_layer.startEditing()
         building_layer.commitChanges()
 
-        # Filter geometry and data using the requested extent
-        requested_extent = QgsRectangle(*self.requested_extent)
-
-        # This is a hack - we should be setting the extent CRS
-        # in the IF base class via safe/engine/core.py:calculate_impact
-        # for now we assume the extent is in 4326 because it
-        # is set to that from geo_extent
-        # See issue #1857
-        transform = QgsCoordinateTransform(
-            self.requested_extent_crs, self.hazard.crs())
-        projected_extent = transform.transformBoundingBox(requested_extent)
-        request = QgsFeatureRequest()
-        request.setFilterRect(projected_extent)
-
         # Split building_layer by H and save as result:
         #   1) Filter from H inundated features
         #   2) Mark buildings as inundated (1) or not inundated (0)
+
+        request = None
+        if not self.aggregation:
+            request = self.hazard_filter_request()
 
         # make spatial index of affected polygons
         hazard_index = QgsSpatialIndex()
         hazard_geometries = {}  # key = feature id, value = geometry
         has_hazard_objects = False
-        for feature in self.hazard.layer.getFeatures(request):
+        for feature in self.hazard.get_features(request):
             value = feature[affected_field_index]
             if value not in self.hazard_class_mapping[self.wet]:
                 continue
@@ -181,19 +212,15 @@ class FloodPolygonBuildingFunction(
                     ', '.join(self.hazard_class_mapping[self.wet]))
             raise GetDataError(message)
 
-        # Filter out just those EXPOSURE features in the analysis extents
-        transform = QgsCoordinateTransform(
-            self.requested_extent_crs, self.exposure.layer.crs())
-        projected_extent = transform.transformBoundingBox(requested_extent)
-        request = QgsFeatureRequest()
-        request.setFilterRect(projected_extent)
-
+        request = None
+        if not self.aggregation:
+            request = self.exposure_filter_request()
         # We will use this transform to project each exposure feature into
         # the CRS of the Hazard.
         transform = QgsCoordinateTransform(
             self.exposure.crs(), self.hazard.crs())
         features = []
-        for feature in self.exposure.layer.getFeatures(request):
+        for feature in self.exposure.get_features(request):
             # Make a deep copy as the geometry is passed by reference
             # If we don't do this, subsequent operations will affect the
             # original feature geometry as well as the copy TS

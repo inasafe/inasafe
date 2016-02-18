@@ -1,0 +1,198 @@
+{
+    "values": {
+        "inputs": {
+            "VECTORLAYER_AGGREGATION": {
+                "values": {
+                    "pos": {
+                        "values": {
+                            "y": 61.0, 
+                            "x": 531.0
+                        }, 
+                        "class": "point"
+                    }, 
+                    "param": {
+                        "values": {
+                            "isAdvanced": false, 
+                            "name": "VECTORLAYER_AGGREGATION", 
+                            "shapetype": [
+                                2
+                            ], 
+                            "default": null, 
+                            "value": null, 
+                            "exported": null, 
+                            "hidden": false, 
+                            "optional": false, 
+                            "description": "Aggregation"
+                        }, 
+                        "class": "processing.core.parameters.ParameterVector"
+                    }
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.ModelerParameter"
+            }, 
+            "VECTORLAYER_FLOODS": {
+                "values": {
+                    "pos": {
+                        "values": {
+                            "y": 63.0, 
+                            "x": 875.0
+                        }, 
+                        "class": "point"
+                    }, 
+                    "param": {
+                        "values": {
+                            "isAdvanced": false, 
+                            "name": "VECTORLAYER_FLOODS", 
+                            "shapetype": [
+                                2
+                            ], 
+                            "default": null, 
+                            "value": null, 
+                            "exported": null, 
+                            "hidden": false, 
+                            "optional": false, 
+                            "description": "Floods"
+                        }, 
+                        "class": "processing.core.parameters.ParameterVector"
+                    }
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.ModelerParameter"
+            }, 
+            "VECTORLAYER_BUILDINGS": {
+                "values": {
+                    "pos": {
+                        "values": {
+                            "y": 59.0, 
+                            "x": 222.0
+                        }, 
+                        "class": "point"
+                    }, 
+                    "param": {
+                        "values": {
+                            "isAdvanced": false, 
+                            "name": "VECTORLAYER_BUILDINGS", 
+                            "shapetype": [
+                                2
+                            ], 
+                            "default": null, 
+                            "value": null, 
+                            "exported": null, 
+                            "hidden": false, 
+                            "optional": false, 
+                            "description": "Buildings"
+                        }, 
+                        "class": "processing.core.parameters.ParameterVector"
+                    }
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.ModelerParameter"
+            }
+        }, 
+        "helpContent": {}, 
+        "group": "InaSAFE", 
+        "name": "Flood on buildings with aggregation", 
+        "algs": {
+            "QGISEXTRACTBYLOCATION_1": {
+                "values": {
+                    "name": "QGISEXTRACTBYLOCATION_1", 
+                    "paramsFolded": true, 
+                    "outputs": {
+                        "OUTPUT": {
+                            "values": {
+                                "description": "buildings-in-aggregation", 
+                                "pos": {
+                                    "values": {
+                                        "y": 405.0, 
+                                        "x": 688.0
+                                    }, 
+                                    "class": "point"
+                                }
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ModelerOutput"
+                        }
+                    }, 
+                    "pos": {
+                        "values": {
+                            "y": 360.0, 
+                            "x": 488.0
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": true, 
+                    "dependencies": [], 
+                    "params": {
+                        "INPUT": {
+                            "values": {
+                                "name": "VECTORLAYER_BUILDINGS"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromInput"
+                        }, 
+                        "PREDICATE": [
+                            "intersects", 
+                            "touches", 
+                            "overlaps"
+                        ], 
+                        "PRECISION": 0.0, 
+                        "INTERSECT": {
+                            "values": {
+                                "name": "VECTORLAYER_AGGREGATION"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromInput"
+                        }
+                    }, 
+                    "active": true, 
+                    "consoleName": "qgis:extractbylocation", 
+                    "description": "Extract by location"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }, 
+            "QGISINTERSECTION_2": {
+                "values": {
+                    "name": "QGISINTERSECTION_2", 
+                    "paramsFolded": true, 
+                    "outputs": {
+                        "OUTPUT": {
+                            "values": {
+                                "description": "flood-agg-intersect", 
+                                "pos": {
+                                    "values": {
+                                        "y": 359.0, 
+                                        "x": 872.0
+                                    }, 
+                                    "class": "point"
+                                }
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ModelerOutput"
+                        }
+                    }, 
+                    "pos": {
+                        "values": {
+                            "y": 194.0, 
+                            "x": 818.0
+                        }, 
+                        "class": "point"
+                    }, 
+                    "outputsFolded": true, 
+                    "dependencies": [], 
+                    "params": {
+                        "INPUT2": {
+                            "values": {
+                                "name": "VECTORLAYER_AGGREGATION"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromInput"
+                        }, 
+                        "INPUT": {
+                            "values": {
+                                "name": "VECTORLAYER_FLOODS"
+                            }, 
+                            "class": "processing.modeler.ModelerAlgorithm.ValueFromInput"
+                        }
+                    }, 
+                    "active": true, 
+                    "consoleName": "qgis:intersection", 
+                    "description": "Intersect flood with aggregation"
+                }, 
+                "class": "processing.modeler.ModelerAlgorithm.Algorithm"
+            }
+        }
+    }, 
+    "class": "processing.modeler.ModelerAlgorithm.ModelerAlgorithm"
+}

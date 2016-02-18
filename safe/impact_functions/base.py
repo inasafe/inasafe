@@ -24,7 +24,12 @@ import getpass
 import platform
 from datetime import datetime
 from qgis.utils import QGis
-from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem
+from qgis.core import (
+    QgsMapLayer,
+    QgsRectangle,
+    QgsCoordinateReferenceSystem,
+    QgsFeatureRequest,
+    QgsCoordinateTransform)
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR, QSettings
 from PyQt4.Qt import PYQT_VERSION_STR
@@ -595,6 +600,39 @@ class ImpactFunction(object):
         if message is not None:
             print message
         print 'Task progress: %i of %i' % (current, maximum)
+
+    def exposure_filter_request(self):
+        """Get the exposure filter request specific to the requested extent.
+
+        :return: The qgis feature request for the exposure layer.
+        :rtype: QgsFeatureRequest
+        """
+        transform = QgsCoordinateTransform(
+            self.requested_extent_crs, self.exposure.layer.crs())
+        requested_extent = QgsRectangle(*self.requested_extent)
+        projected_extent = transform.transformBoundingBox(requested_extent)
+        request = QgsFeatureRequest()
+        request.setFilterRect(projected_extent)
+        return request
+
+    def hazard_filter_request(self):
+        """Get the hazard filter request specific to the requested extent.
+
+        :return: The qgis feature request for the hazard layer.
+        :rtype: QgsFeatureRequest
+        """
+        # This is a hack - we should be setting the extent CRS
+        # in the IF base class via safe/engine/core.py:calculate_impact
+        # for now we assume the extent is in 4326 because it
+        # is set to that from geo_extent
+        # See issue #1857
+        transform = QgsCoordinateTransform(
+            self.requested_extent_crs, self.exposure.layer.crs())
+        requested_extent = QgsRectangle(*self.requested_extent)
+        projected_extent = transform.transformBoundingBox(requested_extent)
+        request = QgsFeatureRequest()
+        request.setFilterRect(projected_extent)
+        return request
 
     def validate(self):
         """Validate things needed before running the analysis."""
