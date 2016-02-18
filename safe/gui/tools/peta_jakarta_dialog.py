@@ -192,27 +192,12 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
 
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
-        if self.three_hours.isChecked():
-            interval = 3
-        elif self.one_hour.isChecked():
-            interval = 1
-        else:
-            interval = 6
-
-        if self.sub_districts.isChecked():
-            area = 'subdistrict'
-        elif self.villages.isChecked():
-            area = 'village'
-        else:
-            area = 'rw'
-
         source = (
-            'https://petajakarta.org/banjir/data/api/v1/aggregates/live?'
-            'level=%s&hours=%i&format=geojson') % (area, interval)
+            'https://rem.petajakarta.org/banjir/data/api/v2/rem/flooded')
         layer = QgsVectorLayer(source, 'flood', 'ogr', False)
         self.time_stamp = time.strftime('%d-%b-%G %H:%M:%S')
         # Now save as shp
-        name = '%s-jakarta_flood.shp' % area
+        name = 'jakarta_flood.shp'
         output_directory = self.output_directory.text()
         output_prefix = self.filename_prefix.text()
         overwrite = self.overwrite_flag.isChecked()
@@ -265,7 +250,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         layer.commitChanges()
         layer.startEditing()
         idx = layer.fieldNameIndex('flooded')
-        expression = QgsExpression('count > 0')
+        expression = QgsExpression('state > 0')
         expression.prepare(layer.pendingFields())
         for feature in layer.getFeatures():
             feature[idx] = expression.evaluate(feature)

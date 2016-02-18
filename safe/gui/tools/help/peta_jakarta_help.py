@@ -56,12 +56,6 @@ def content():
         'This tool will fetch current flood data for Jakarta from '), link)
     tips = m.BulletedList()
     tips.add(tr(
-        'Choose the reporting period - either 6, 3 or 1 hours.'))
-    tips.add(tr(
-        'Choose the reporting area type - either subdistrict, village '
-        'or RW boundaries. The area type will be prefixed into the '
-        'output filename e.g. \'rw-jakarta-flood\'.'))
-    tips.add(tr(
         'Check the output directory is correct. Note that the saved '
         'dataset will be called jakarta_flood.shp (and '
         'associated files).'
@@ -90,7 +84,7 @@ def content():
     tips.add(m.Link(
         'https://petajakarta.org/banjir/en/data/',
         text=tr(
-            'Downloaded data is copyright the PetaJarta contributors'
+            'Downloaded data is copyright the PetaJakarta contributors'
             ' (click for more info).')
     ))
     message.add(body)
