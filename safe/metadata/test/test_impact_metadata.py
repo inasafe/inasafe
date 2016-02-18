@@ -206,6 +206,7 @@ class TestImpactMetadata(TestCase):
 
         metadata.report = 'My super report'
         metadata.summary_data = {'res1': 1234, 'res2': 4321}
+        metadata.date = datetime.strptime('2016-02-18', '%Y-%m-%d')
 
         metadata.append_provenance_step(
             'Title 1', 'Description of step 1', '2015-06-25T13:14:24.508974')
