@@ -72,7 +72,7 @@ class TestImpactMetadata(TestCase):
         self.assertEqual(metadata.get_xml_value('ISO19115_TEST'), '2015-06-07')
 
         # using str should fail
-        test_value = '2015-06-07'
+        test_value = 'String'
         with self.assertRaises(TypeError):
             metadata.update('ISO19115_TEST', test_value)
 
@@ -166,6 +166,7 @@ class TestImpactMetadata(TestCase):
 
         json_tmp_file = unique_filename(suffix='.json', dir=TEMP_DIR)
         generated_metadata.write_to_file(json_tmp_file)
+        print json_tmp_file
         read_tmp_metadata = ImpactLayerMetadata(
                 EXISTING_IMPACT_FILE, json_uri=json_tmp_file
         )
