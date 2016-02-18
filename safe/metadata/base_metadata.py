@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.metadata.encoder import MetadataEncoder
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -25,14 +26,17 @@ from datetime import datetime
 import json
 import os
 from xml.etree import ElementTree
+
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
 from safe.metadata.metadata_db_io import MetadataDbIO
-from safe.metadata.utils import (METADATA_XML_TEMPLATE,
-                                 TYPE_CONVERSIONS,
-                                 XML_NS,
-                                 insert_xml_element,
-                                 read_property_from_xml,
-                                 reading_ancillary_files)
+from safe.metadata.utils import (
+    METADATA_XML_TEMPLATE,
+    TYPE_CONVERSIONS,
+    XML_NS,
+    insert_xml_element,
+    read_property_from_xml,
+    reading_ancillary_files
+)
 from safe.utilities.i18n import tr
 from safe.definitions import multipart_polygon_key
 
@@ -304,7 +308,12 @@ class BaseMetadata(object):
         :rtype: str
         """
         json_dumps = json.dumps(
-            self.dict, indent=2, sort_keys=True, separators=(',', ': '))
+                self.dict,
+                indent=2,
+                sort_keys=True,
+                separators=(',', ': '),
+                cls=MetadataEncoder
+        )
         if not json_dumps.endswith('\n'):
             json_dumps += '\n'
         return json_dumps
