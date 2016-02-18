@@ -74,7 +74,7 @@ class TestImpactFunctionProvenanceStep(TestCase):
 
     def test_invalid_data(self):
         with self.assertRaises(InvalidProvenanceDataError):
-            IFProvenanceStep('TEST title', 'TEST description', {})
+            IFProvenanceStep('TEST title', 'TEST description', data={})
 
         partial_data = {
             'start_time': '20140714_060955',
@@ -85,14 +85,15 @@ class TestImpactFunctionProvenanceStep(TestCase):
         }
 
         with self.assertRaises(InvalidProvenanceDataError):
-            IFProvenanceStep('TEST title', 'TEST description', partial_data)
+            IFProvenanceStep(
+                'TEST title', 'TEST description', data=partial_data)
 
-        IFProvenanceStep('TEST title', 'TEST description', self.good_data)
+        IFProvenanceStep('TEST title', 'TEST description', data=self.good_data)
 
     def test_xml(self):
         step = IFProvenanceStep(
             'TEST title',
             'TEST description',
-            self.good_data,
-            '2015-08-13T20:20:48.178268')
+            data=self.good_data,
+            timestamp='2015-08-13T20:20:48.178268')
         self.assertEquals(self.good_data_xml, step.xml)

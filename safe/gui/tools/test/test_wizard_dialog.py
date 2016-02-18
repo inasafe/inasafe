@@ -68,7 +68,7 @@ from safe.gui.tools.wizard_dialog import (
     step_fc_agglayer_origin,
     step_fc_extent,
     step_fc_params)
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.gui.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
@@ -217,10 +217,7 @@ class WizardDialogTest(unittest.TestCase):
         categories = []
         hazard_index = -1
         for i in range(expected_category_count):
-            # pylint: disable=eval-used
-            category_name = eval(
-                dialog.lstCategories.item(i).data(Qt.UserRole))['key']
-            # pylint: enable=eval-used
+            category_name = dialog.lstCategories.item(i).data(Qt.UserRole)
             categories.append(category_name)
             if category_name == chosen_category:
                 hazard_index = i
@@ -255,10 +252,8 @@ class WizardDialogTest(unittest.TestCase):
         subcategories = []
         tsunami_index = -1
         for i in range(expected_subcategory_count):
-            # pylint: disable=eval-used
-            subcategory_name = eval(
-                dialog.lstSubcategories.item(i).data(Qt.UserRole))['key']
-            # pylint: enable=eval-used
+            subcategory_name = dialog.lstSubcategories.item(i).data(
+                    Qt.UserRole)
             subcategories.append(subcategory_name)
             if subcategory_name == chosen_subcategory:
                 tsunami_index = i
@@ -291,10 +286,8 @@ class WizardDialogTest(unittest.TestCase):
         hazard_categories = []
         scenario_index = -1
         for i in range(expected_hazard_category_count):
-            # pylint: disable=eval-used
-            hazard_category_name = eval(
-                dialog.lstHazardCategories.item(i).data(Qt.UserRole))['name']
-            # pylint: enable=eval-used
+            key = dialog.lstHazardCategories.item(i).data(Qt.UserRole)
+            hazard_category_name = definition(key)['name']
             hazard_categories.append(hazard_category_name)
             if hazard_category_name == chosen_hazard_category:
                 scenario_index = i
@@ -329,10 +322,7 @@ class WizardDialogTest(unittest.TestCase):
         # Get all the modes given and save the classified index
         modes = []
         for i in range(expected_mode_count):
-            # pylint: disable=eval-used
-            mode_name = eval(
-                dialog.lstLayerModes.item(i).data(Qt.UserRole))['key']
-            # pylint: enable=eval-used
+            mode_name = dialog.lstLayerModes.item(i).data(Qt.UserRole)
             modes.append(mode_name)
         # Check if units is the same with expected_units
         message = ('Invalid modes! It should be "%s" while it was '
@@ -393,16 +383,14 @@ class WizardDialogTest(unittest.TestCase):
                    'after a text entered')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
         dialog.pbnNext.click()
+        dialog.pbnNext.click()
 
         # test the resulting keywords
         keyword_io = KeywordIO()
         # noinspection PyTypeChecker
         keywords = keyword_io.read_keywords(layer)
 
-        message = 'Invalid metadata!\n Was: %s\n Should be: %s' % (
-            unicode(keywords), unicode(expected_keywords))
-
-        self.assertEqual(keywords, expected_keywords, message)
+        self.assertEqual(keywords, expected_keywords)
 
     def test_existing_keywords(self):
         """Test if keywords already exist."""
@@ -497,8 +485,8 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(dialog.leSource.text(), '', message)
         message = 'Source Url should be empty'
         self.assertEqual(dialog.leSource_url.text(), '', message)
-        message = 'Source Date should be empty'
-        self.assertEqual(dialog.leSource_date.text(), '', message)
+        message = 'Source Date checkbox should be toggled off'
+        self.assertFalse(dialog.ckbSource_date.isChecked(), message)
         message = 'Source Scale should be empty'
         self.assertEqual(dialog.leSource_scale.text(), '', message)
         dialog.pbnNext.click()
@@ -581,14 +569,18 @@ class WizardDialogTest(unittest.TestCase):
         source = 'Source'
         source_scale = 'Source Scale'
         source_url = 'Source Url'
-        source_date = 'Source Date'
+        source_date = QtCore.QDateTime.fromString(
+            '06-12-2015 12:30',
+            'dd-MM-yyyy HH:mm')
         source_license = 'Source License'
 
         dialog.leSource.setText(source)
         dialog.leSource_scale.setText(source_scale)
         dialog.leSource_url.setText(source_url)
-        dialog.leSource_date.setText(source_date)
+        dialog.ckbSource_date.setChecked(True)
+        dialog.dtSource_date.setDateTime(source_date)
         dialog.leSource_license.setText(source_license)
+        dialog.pbnNext.click()  # next
         dialog.pbnNext.click()  # next
         dialog.pbnNext.click()  # finish
 
@@ -662,17 +654,11 @@ class WizardDialogTest(unittest.TestCase):
                    'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
-        message = 'Source should be %s' % source
-        self.assertEqual(dialog.leSource.text(), source, message)
-        message = 'Source Url should be %s' % source_url
-        self.assertEqual(dialog.leSource_url.text(), source_url, message)
-        message = 'Source Scale should be %s' % source_scale
-        self.assertEqual(dialog.leSource_scale.text(), source_scale, message)
-        message = 'Source Date should be %s' % source_date
-        self.assertEqual(dialog.leSource_date.text(), source_date, message)
-        message = 'Source License should be %s' % source_license
-        self.assertEqual(dialog.leSource_license.text(),
-                         source_license, message)
+        self.assertEqual(dialog.leSource.text(), source)
+        self.assertEqual(dialog.leSource_url.text(), source_url)
+        self.assertEqual(dialog.leSource_scale.text(), source_scale)
+        self.assertEqual(dialog.dtSource_date.dateTime(), source_date)
+        self.assertEqual(dialog.leSource_license.text(), source_license)
         dialog.pbnNext.click()
 
         dialog.pbnCancel.click()
@@ -876,8 +862,8 @@ class WizardDialogTest(unittest.TestCase):
         message = 'It should auto select, but it does not.'
         self.assertTrue(dialog.lstSubcategories.currentRow() == 0, message)
         num_item = dialog.lstSubcategories.count()
-        message = 'There is should be only one item, I got %s' % num_item
-        self.assertTrue(num_item == 1, message)
+        message = 'There are should be only two items, I got %s' % num_item
+        self.assertTrue(num_item == 2, message)
 
     def test_integrated_point(self):
         """Test for point layer and all possibilities."""
@@ -1003,12 +989,12 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_layermode_index = 0
-        layermode_index = dialog.lstLayerModes.currentRow()
+        expected_layer_mode = 'Continuous'
+        layer_mode = dialog.lstLayerModes.currentItem().text()
         message = ('Expected %s, but I got %s' %
-                   (expected_layermode_index, layermode_index))
+                   (expected_layer_mode, layer_mode))
         self.assertEqual(
-            expected_layermode_index, layermode_index, message)
+            expected_layer_mode, layer_mode, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -1062,12 +1048,12 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_layermode_index = 1
-        layermode_index = dialog.lstLayerModes.currentRow()
+        expected_layer_mode = 'Continuous'
+        layer_mode = dialog.lstLayerModes.currentItem().text()
         message = ('Expected %s, but I got %s' %
-                   (expected_layermode_index, layermode_index))
+                   (expected_layer_mode, layer_mode))
         self.assertEqual(
-            expected_layermode_index, layermode_index, message)
+            expected_layer_mode, layer_mode, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -1155,12 +1141,14 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure']
+        expected_subcategories = ['Structure', 'Area']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if automatically select the only option
-        self.check_current_text(
-            expected_subcategories[0], dialog.lstSubcategories)
+
+        self.select_from_list_widget('Structure', dialog.lstSubcategories)
+
+        self.check_current_text('Structure', dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to layer mode
 
@@ -1331,7 +1319,11 @@ class WizardDialogTest(unittest.TestCase):
 
         # check classified
         root = dialog.treeClasses.invisibleRootItem()
-        expected_classes = ['low', 'medium', 'high']
+        expected_classes = [
+            'Low Hazard Zone',
+            'Medium Hazard Zone',
+            'High Hazard Zone'
+        ]
         child_count = root.childCount()
         message = 'Child count must be %s' % len(expected_classes)
         self.assertEqual(len(expected_classes), child_count, message)
@@ -1408,7 +1400,8 @@ class WizardDialogTest(unittest.TestCase):
         expected_test_layer_count = 2
 
         expected_hazards_count = 5
-        expected_exposures_count = 3
+        # expected_exposures_count = 3
+        expected_exposures_count = 4
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 2
         expected_functions_count = 2
@@ -1470,7 +1463,7 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(row_count, expected_exposures_count, message)
 
         # step_fc_function_1: test number of functions for flood x structure
-        dialog.tblFunctions1.setCurrentCell(2, 1)
+        dialog.tblFunctions1.setCurrentCell(3, 1)
         count = len(dialog.selected_functions_1())
         message = ('Invalid functions count in the IF matrix 1! For flood '
                    'and structure there should be %d while there were: '

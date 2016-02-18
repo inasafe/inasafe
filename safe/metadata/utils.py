@@ -26,14 +26,26 @@ from xml.etree import ElementTree
 from safe.metadata.property import (
     CharacterStringProperty,
     DateProperty,
-    UrlProperty)
-
+    UrlProperty,
+    DictionaryProperty,
+    IntegerProperty,
+    BooleanProperty,
+    FloatProperty,
+    ListProperty,
+    TupleProperty,
+)
 
 # XML to python types conversions
 TYPE_CONVERSIONS = {
     'gco:CharacterString': CharacterStringProperty,
     'gco:Date': DateProperty,
-    'gmd:URL': UrlProperty
+    'gmd:URL': UrlProperty,
+    'gco:Dictionary': DictionaryProperty,
+    'gco:Integer': IntegerProperty,
+    'gco:Boolean': BooleanProperty,
+    'gco:Float': FloatProperty,
+    'gco:List': ListProperty,
+    'gco:Tuple': TupleProperty,
 }
 
 # XML Namespaces
@@ -145,4 +157,6 @@ def prettify_xml(xml_str):
         [line for line in parsed_xml.toprettyxml(
             indent=' ' * 2,
             encoding='UTF-8').split('\n') if line.strip()])
+    if not pretty_xml.endswith('\n'):
+        pretty_xml += '\n'
     return pretty_xml

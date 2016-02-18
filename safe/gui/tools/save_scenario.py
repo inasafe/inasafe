@@ -207,6 +207,6 @@ class SaveScenarioDialog(QDialog):
         try:
             relative_path = os.path.relpath(input_path, start_path)
         except ValueError, e:
-            LOGGER.info(e.message)
+            # LOGGER.info(e.message)
             relative_path = input_path
         return relative_path

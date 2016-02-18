@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.metadata.encoder import MetadataEncoder
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -28,13 +29,16 @@ from xml.etree import ElementTree
 
 from safe.common.exceptions import MetadataReadError, HashNotFoundError
 from safe.metadata.metadata_db_io import MetadataDbIO
-from safe.metadata.utils import (METADATA_XML_TEMPLATE,
-                                 TYPE_CONVERSIONS,
-                                 XML_NS,
-                                 insert_xml_element,
-                                 read_property_from_xml,
-                                 reading_ancillary_files)
+from safe.metadata.utils import (
+    METADATA_XML_TEMPLATE,
+    TYPE_CONVERSIONS,
+    XML_NS,
+    insert_xml_element,
+    read_property_from_xml,
+    reading_ancillary_files
+)
 from safe.utilities.i18n import tr
+from safe.definitions import multipart_polygon_key
 
 
 class BaseMetadata(object):
@@ -74,7 +78,7 @@ class BaseMetadata(object):
             'gmd:CI_Address/'
             'gmd:electronicMailAddress/'
             'gco:CharacterString'),
-        'document_date': (
+        'date': (
             'gmd:dateStamp/'
             'gco:Date'),
         'abstract': (
@@ -153,7 +157,28 @@ class BaseMetadata(object):
             'gmd:supplementalInformation/'
             'inasafe/'
             'source/'
-            'gco:CharacterString')
+            'gco:CharacterString'),
+        'datatype': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'datatype/'
+            'gco:CharacterString'),
+        'multipart_polygon': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            '%s/'
+            'gco:Boolean' % multipart_polygon_key),
+        'resolution': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'resolution/'
+            'gco:Tuple')
     }
 
     def __getattr__(self, name):
@@ -233,8 +258,10 @@ class BaseMetadata(object):
 
         self._last_update = datetime.now()
 
-        # check if metadata already exist on disk
-        self.read_from_ancillary_file(xml_uri)
+        try:
+            self.read_from_ancillary_file(xml_uri)
+        except IOError:
+            pass
 
     @abc.abstractproperty
     def dict(self):
@@ -280,7 +307,16 @@ class BaseMetadata(object):
         :return: json representation of the metadata
         :rtype: str
         """
-        return json.dumps(self.dict, indent=2, sort_keys=True)
+        json_dumps = json.dumps(
+                self.dict,
+                indent=2,
+                sort_keys=True,
+                separators=(',', ': '),
+                cls=MetadataEncoder
+        )
+        if not json_dumps.endswith('\n'):
+            json_dumps += '\n'
+        return json_dumps
 
     @abc.abstractmethod
     def read_json(self):
@@ -647,3 +683,13 @@ class BaseMetadata(object):
         :rtype: bool
         """
         return self._layer_is_file_based
+
+    def update_from_dict(self, keywords):
+        """Set properties of metadata using key and value from keywords
+
+        :param keywords: A dictionary of keywords (key, value).
+        :type keywords: dict
+
+        """
+        for key, value in keywords.iteritems():
+            setattr(self, key, value)

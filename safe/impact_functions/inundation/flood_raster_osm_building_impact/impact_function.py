@@ -44,6 +44,9 @@ class FloodRasterBuildingFunction(
         """Constructor (calls ctor of base class)."""
         super(FloodRasterBuildingFunction, self).__init__()
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
     def notes(self):
         """Return the notes section of the report.
 
@@ -82,6 +85,10 @@ class FloodRasterBuildingFunction(
         """Flood impact to buildings (e.g. from Open Street Map)."""
         self.validate()
         self.prepare()
+
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
 
         threshold = self.parameters['threshold'].value  # Flood threshold [m]
 
@@ -156,6 +163,10 @@ class FloodRasterBuildingFunction(
                 tr('Buildings Affected')] += 1
 
         # Lump small entries and 'unknown' into 'other' category
+        # Building threshold #2468
+        postprocessors = self.parameters['postprocessors']
+        building_postprocessors = postprocessors['BuildingType'][0]
+        self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
         # Generate simple impact report
         impact_table = impact_summary = self.html_report()
@@ -193,20 +204,27 @@ class FloodRasterBuildingFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': self.target_field,
+            'map_title': map_title,
+            'legend_title': legend_title,
+            'legend_units': legend_units,
+            'buildings_total': total_features,
+            'buildings_affected': self.total_affected_buildings
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         vector_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
             name=tr('Estimated buildings affected'),
-            keywords={
-                'impact_summary': impact_summary,
-                'impact_table': impact_table,
-                'target_field': self.target_field,
-                'map_title': map_title,
-                'legend_title': legend_title,
-                'legend_units': legend_units,
-                'buildings_total': total_features,
-                'buildings_affected': self.total_affected_buildings},
+            keywords=impact_layer_keywords,
             style_info=style_info)
         # Create vector layer and return
         self._impact = vector_layer

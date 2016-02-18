@@ -21,24 +21,18 @@ import unittest
 import inspect
 
 from safe.impact_functions import register_impact_functions
-from safe.impact_functions.earthquake.earthquake_building.impact_function \
-    import EarthquakeBuildingFunction
-from safe.impact_functions.earthquake.itb_earthquake_fatality_model \
-    .impact_function import ITBFatalityFunction
-from safe.impact_functions.earthquake.pager_earthquake_fatality_model \
-    .impact_function import PAGFatalityFunction
-from safe.impact_functions.inundation.flood_raster_osm_building_impact \
-    .impact_function import FloodRasterBuildingFunction
-from safe.impact_functions.generic.classified_polygon_building\
-    .impact_function import ClassifiedPolygonHazardBuildingFunction
-from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
-    import VolcanoPolygonBuildingFunction
-from safe.impact_functions.volcanic.volcano_point_building.impact_function \
-    import VolcanoPointBuildingFunction
-from safe.impact_functions.inundation.flood_vector_building_impact\
-    .impact_function import FloodPolygonBuildingFunction
-from safe.impact_functions.generic.classified_raster_building.impact_function\
-    import ClassifiedRasterHazardBuildingFunction
+from safe.impact_functions import EarthquakeBuildingFunction
+from safe.impact_functions import ITBFatalityFunction
+from safe.impact_functions import PAGFatalityFunction
+from safe.impact_functions import ITBBayesianFatalityFunction
+from safe.impact_functions import FloodRasterBuildingFunction
+from safe.impact_functions import TsunamiRasterBuildingFunction
+from safe.impact_functions import ClassifiedPolygonHazardBuildingFunction
+from safe.impact_functions import VolcanoPolygonBuildingFunction
+from safe.impact_functions import VolcanoPointBuildingFunction
+from safe.impact_functions import FloodPolygonBuildingFunction
+from safe.impact_functions import ClassifiedRasterHazardBuildingFunction
+
 from safe.impact_functions.registry import Registry
 from safe.definitions import (
     layer_mode_continuous,
@@ -90,19 +84,21 @@ class TestRegistry(unittest.TestCase):
             'Raster flood on buildings',
             'Raster flood on roads',
             'Tsunami evacuation',
+            'Raster tsunami on buildings',
             'Classified raster hazard on buildings',
             'Classified raster hazard on population',
             'Continuous raster hazard on population',
             'Classified polygon hazard on population',
             'Classified polygon hazard on buildings',
+            'Classified polygon hazard on polygon people',
             'Earthquake on buildings',
             'Earthquake ITB fatality function',
             'Earthquake PAGER fatality function',
+            'Earthquake ITB fatality function based on a Bayesian approach',
             'Point volcano on buildings',
             'Polygon volcano on buildings',
             'Point volcano on population',
             'Polygon volcano on population']
-        self.assertTrue(len(impact_functions) == len(expected))
         self.assertItemsEqual(expected, impact_functions)
 
     def test_get_impact_function_instance(self):
@@ -166,7 +162,9 @@ class TestRegistry(unittest.TestCase):
             ITBFatalityFunction,
             EarthquakeBuildingFunction,
             PAGFatalityFunction,
+            ITBBayesianFatalityFunction
         ]
+
         message = 'Expecting \n%s.\n\nGot \n%s instead' % (
             '\n'.join([x.__name__ for x in expected]),
             '\n'.join([x.__name__ for x in impact_functions]))
@@ -206,6 +204,7 @@ class TestRegistry(unittest.TestCase):
         expected = [
             FloodPolygonBuildingFunction,
             FloodRasterBuildingFunction,
+            TsunamiRasterBuildingFunction,
             ClassifiedRasterHazardBuildingFunction,
             ClassifiedPolygonHazardBuildingFunction,
             EarthquakeBuildingFunction,
@@ -230,6 +229,7 @@ class TestRegistry(unittest.TestCase):
         expected = [
             FloodPolygonBuildingFunction,
             FloodRasterBuildingFunction,
+            TsunamiRasterBuildingFunction,
             ClassifiedRasterHazardBuildingFunction,
             ClassifiedPolygonHazardBuildingFunction,
             EarthquakeBuildingFunction,

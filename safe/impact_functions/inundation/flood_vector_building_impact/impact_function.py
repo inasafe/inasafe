@@ -52,6 +52,9 @@ class FloodPolygonBuildingFunction(
         # The 'wet' variable
         self.wet = 'wet'
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
     def notes(self):
         """Return the notes section of the report.
 
@@ -77,6 +80,10 @@ class FloodPolygonBuildingFunction(
         """Experimental impact function."""
         self.validate()
         self.prepare()
+
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
 
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
@@ -121,7 +128,8 @@ class FloodPolygonBuildingFunction(
         exposure_fields = exposure_provider.fields()
 
         # Create layer to store the buildings from E and extent
-        if is_point_layer(self.exposure.layer):
+        buildings_are_points = is_point_layer(self.exposure.layer)
+        if buildings_are_points:
             building_layer = QgsVectorLayer(
                 'Point?crs=' + srs, 'impact_buildings', 'memory')
         else:
@@ -143,10 +151,7 @@ class FloodPolygonBuildingFunction(
         # is set to that from geo_extent
         # See issue #1857
         transform = QgsCoordinateTransform(
-            QgsCoordinateReferenceSystem(
-                'EPSG:%i' % self._requested_extent_crs),
-            self.hazard.layer.crs()
-        )
+            self.requested_extent_crs, self.hazard.crs())
         projected_extent = transform.transformBoundingBox(requested_extent)
         request = QgsFeatureRequest()
         request.setFilterRect(projected_extent)
@@ -176,23 +181,41 @@ class FloodPolygonBuildingFunction(
                     ', '.join(self.hazard_class_mapping[self.wet]))
             raise GetDataError(message)
 
+        # Filter out just those EXPOSURE features in the analysis extents
+        transform = QgsCoordinateTransform(
+            self.requested_extent_crs, self.exposure.layer.crs())
+        projected_extent = transform.transformBoundingBox(requested_extent)
+        request = QgsFeatureRequest()
+        request.setFilterRect(projected_extent)
+
+        # We will use this transform to project each exposure feature into
+        # the CRS of the Hazard.
+        transform = QgsCoordinateTransform(
+            self.exposure.crs(), self.hazard.crs())
         features = []
         for feature in self.exposure.layer.getFeatures(request):
-            building_geom = feature.geometry()
+            # Make a deep copy as the geometry is passed by reference
+            # If we don't do this, subsequent operations will affect the
+            # original feature geometry as well as the copy TS
+            building_geom = QgsGeometry(feature.geometry())
+            # Project the building geometry to hazard CRS
+            building_bounds = transform.transform(building_geom.boundingBox())
             affected = False
             # get tentative list of intersecting hazard features
             # only based on intersection of bounding boxes
-            ids = hazard_index.intersects(building_geom.boundingBox())
+            ids = hazard_index.intersects(building_bounds)
             for fid in ids:
                 # run (slow) exact intersection test
+                building_geom.transform(transform)
                 if hazard_geometries[fid].intersects(building_geom):
                     affected = True
                     break
-            f = QgsFeature()
-            f.setGeometry(building_geom)
-            f.setAttributes(feature.attributes())
-            f[target_field_index] = 1 if affected else 0
-            features.append(f)
+            new_feature = QgsFeature()
+            # We write out the original feature geom, not the projected one
+            new_feature.setGeometry(feature.geometry())
+            new_feature.setAttributes(feature.attributes())
+            new_feature[target_field_index] = 1 if affected else 0
+            features.append(new_feature)
 
             # every once in a while commit the created features
             # to the output layer
@@ -229,6 +252,10 @@ class FloodPolygonBuildingFunction(
                     tr('Buildings Affected')] += 1
 
         # Lump small entries and 'unknown' into 'other' category
+        # Building threshold #2468
+        postprocessors = self.parameters['postprocessors']
+        building_postprocessors = postprocessors['BuildingType'][0]
+        self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
         impact_summary = self.html_report()
@@ -251,16 +278,24 @@ class FloodPolygonBuildingFunction(
         if building_layer.featureCount() < 1:
             raise ZeroImpactException(tr(
                 'No buildings were impacted by this flood.'))
+
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'map_title': map_title,
+            'legend_title': legend_title,
+            'target_field': self.target_field,
+            'buildings_total': self.total_buildings,
+            'buildings_affected': self.total_affected_buildings
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         building_layer = Vector(
             data=building_layer,
             name=tr('Flooded buildings'),
-            keywords={
-                'impact_summary': impact_summary,
-                'map_title': map_title,
-                'legend_title': legend_title,
-                'target_field': self.target_field,
-                'buildings_total': self.total_buildings,
-                'buildings_affected': self.total_affected_buildings},
+            keywords=impact_layer_keywords,
             style_info=style_info)
         self._impact = building_layer
         return building_layer
