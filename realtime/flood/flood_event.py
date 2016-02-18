@@ -6,6 +6,8 @@ from zipfile import ZipFile
 
 import pytz
 import datetime
+
+import re
 from PyQt4.QtCore import QObject, QFileInfo, QVariant, QTranslator, \
     QCoreApplication
 from qgis.core import QgsMapLayerRegistry
@@ -16,6 +18,7 @@ from qgis.core import (
     QgsField,
     QgsExpression)
 from realtime.exceptions import PetaJakartaAPIError
+from realtime.flood.dummy_source_api import DummySourceAPI
 from realtime.flood.peta_jakarta_api import PetaJakartaAPI
 from realtime.utilities import realtime_logger_name
 from safe.common.exceptions import ZeroImpactException, TranslationLoadError
@@ -51,12 +54,30 @@ class FloodEvent(QObject):
             day,
             hour,
             duration,
-            level):
+            level,
+            dummy_report_folder=None):
 
         QObject.__init__(self)
+        self.dummy_report_folder = dummy_report_folder
         self.working_dir = working_dir
         self.duration = duration
         self.level = level
+        if self.dummy_report_folder:
+            pattern = r'^(?P<year>\d{4})' \
+                      r'(?P<month>\d{2})' \
+                      r'(?P<day>\d{2})' \
+                      r'(?P<hour>\d{2})-' \
+                      r'(?P<duration>\d{1})-' \
+                      r'(?P<level>\w+)$'
+            prog = re.compile(pattern)
+            result = prog.match(self.dummy_report_folder)
+            year = int(result.group('year'))
+            month = int(result.group('month'))
+            day = int(result.group('day'))
+            hour = int(result.group('hour'))
+            duration = int(result.group('duration'))
+            level = result.group('level')
+
         self.report_id = '%d%02d%02d%02d-%d-%s' % (
             year,
             month,
@@ -65,6 +86,7 @@ class FloodEvent(QObject):
             duration,
             level
         )
+
         self.time = datetime.datetime(year, month, day, hour, tzinfo=pytz.utc)
         self.source = 'PetaJakarta - Jakarta'
         self.region = 'Jakarta'
@@ -81,7 +103,7 @@ class FloodEvent(QObject):
         self.population_path = population_raster_path
         self.exposure_layer = None
 
-        if not os.path.exists(self.hazard_path):
+        if not os.path.exists(self.hazard_path) or self.dummy_report_folder:
             self.save_hazard_data()
 
         self.load_hazard_data()
@@ -108,8 +130,13 @@ class FloodEvent(QObject):
         return os.path.exists(self.impact_path)
 
     def save_hazard_data(self):
-        hazard_geojson = PetaJakartaAPI.get_aggregate_report(
-            self.duration, self.level)
+        if self.dummy_report_folder:
+            filename = os.path.join(
+                self.working_dir, self.dummy_report_folder, 'flood_data.json')
+            hazard_geojson = DummySourceAPI.get_aggregate_report(filename)
+        else:
+            hazard_geojson = PetaJakartaAPI.get_aggregate_report(
+                self.duration, self.level)
 
         if not hazard_geojson:
             raise PetaJakartaAPIError("Can't access PetaJakarta REST API")

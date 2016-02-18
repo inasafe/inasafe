@@ -20,10 +20,14 @@ __date__ = '11/24/15'
 LOGGER = logging.getLogger(realtime_logger_name())
 
 
-def process_event(working_directory, locale_option='en'):
+def process_event(working_directory, locale_option='en', dummy_folder=None):
     """Process floodmap event
 
-    :param working_dir:
+    :param working_dir: The working directory of floodmaps report
+    :param locale_option: the locale of the report
+    :param dummy_folder: the location of dummy_folder in the working dir.
+        this dummy folder should have flood_data.json on it, and the folder
+        should be named like the id of the event.
     :return:
     """
     population_path = os.environ['INASAFE_FLOOD_POPULATION_PATH']
@@ -81,7 +85,8 @@ def process_event(working_directory, locale_option='en'):
             year=now.year,
             month=now.month,
             day=now.day,
-            hour=now.hour)
+            hour=now.hour,
+            dummy_report_folder=dummy_folder)
 
         event.calculate_impact()
         event.generate_report()
@@ -92,18 +97,24 @@ def process_event(working_directory, locale_option='en'):
 if __name__ == '__main__':
     LOGGER.info('-------------------------------------------')
 
+    print sys.argv
+
     if 'INASAFE_LOCALE' in os.environ:
         locale_option = os.environ['INASAFE_LOCALE']
     else:
         locale_option = 'en'
 
-    if len(sys.argv) > 2:
+    if len(sys.argv) > 3:
         sys.exit(
-            'Usage:\n%s [working_dir]'
+            'Usage:\n%s [working_dir] [dummy_folder]'
         )
     working_directory = sys.argv[1]
+    dummy_folder = None
+    if len(sys.argv) == 3:
+        dummy_folder = sys.argv[2]
     try:
-        process_event(working_directory, locale_option)
+        process_event(
+            working_directory, locale_option, dummy_folder=dummy_folder)
         LOGGER.info('Process event end.')
     except Exception as e:
         LOGGER.exception(e)
