@@ -336,13 +336,6 @@ class BaseMetadata(object):
             if 'properties' in metadata:
                 for name, prop in metadata['properties'].iteritems():
                     try:
-                        class_name = prop['value'].__class__.__name__
-                        if class_name != prop['python_type']:
-                            if prop['python_type'] == 'datetime':
-                                prop['value'] = datetime.strptime(
-                                        prop['value'], '%Y-%m-%d')
-                            else:
-                                pass
                         self.set(prop['name'], prop['value'], prop['xml_path'])
                     except KeyError:
                         # we just skip if we don't have something, we want

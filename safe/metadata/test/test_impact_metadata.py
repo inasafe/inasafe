@@ -166,7 +166,6 @@ class TestImpactMetadata(TestCase):
 
         json_tmp_file = unique_filename(suffix='.json', dir=TEMP_DIR)
         generated_metadata.write_to_file(json_tmp_file)
-        print json_tmp_file
         read_tmp_metadata = ImpactLayerMetadata(
                 EXISTING_IMPACT_FILE, json_uri=json_tmp_file
         )
