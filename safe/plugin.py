@@ -347,7 +347,9 @@ class Plugin(object):
             'It needs internet access to function.'))
         self.action_add_petajakarta_layer.triggered.connect(
             self.add_petajakarta_layer)
-        self.add_action(self.action_add_petajakarta_layer)
+        self.add_action(
+            self.action_add_petajakarta_layer,
+            add_to_toolbar=False)
 
     def _create_impact_merge_action(self):
         """Create action for impact layer merge Dialog."""

@@ -172,17 +172,17 @@
             </gmd:extent>
             <gmd:supplementalInformation>
                 <inasafe_keywords>
-<![CDATA[date: dd-mm-yyyy
+<![CDATA[date: [DATE]
 field: flooded
 hazard: flood
 hazard_category: single_event
-keyword_version: 3.2
+keyword_version: 3.3
 layer_geometry: polygon
 layer_mode: classified
 layer_purpose: hazard
 license: ODBL
 source: PetaJakarta.org
-title: Jakarta Floods
+title: [TITLE]
 url: http://petajakarta.org
 value_map: {"wet": [1]}
 vector_hazard_classification: flood_vector_hazard_classes
