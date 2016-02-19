@@ -49,8 +49,11 @@ class DateProperty(BaseProperty):
         except ValueError:
             try:
                 return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
-            except ValueError as e:
-                raise MetadataCastError(e)
+            except ValueError:
+                try:
+                    return datetime.strptime(value, "%Y-%m-%d")
+                except ValueError as e:
+                    raise MetadataCastError(e)
 
     @property
     def xml_value(self):
