@@ -245,7 +245,7 @@
             <gco:CharacterString/>
           </impact_table>
           <resolution>
-            <gco:Tuple/>
+            <gco:Float/>
           </resolution>
           <layer_mode>
             <gco:CharacterString/>
