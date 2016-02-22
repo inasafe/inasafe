@@ -1141,10 +1141,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = [
-            'Area',
-            'Structure',
-            'Landcover']
+        expected_subcategories = ['Structure', 'Population']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if automatically select the only option
@@ -1404,7 +1401,7 @@ class WizardDialogTest(unittest.TestCase):
 
         expected_hazards_count = 5
         # expected_exposures_count = 3
-        expected_exposures_count = 5
+        expected_exposures_count = 3
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 2
         expected_functions_count = 2
@@ -1456,19 +1453,17 @@ class WizardDialogTest(unittest.TestCase):
         # step_fc_function_1: test function matrix dimensions
         col_count = dialog.tblFunctions1.columnCount()
         message = ('Invalid hazard count in the IF matrix! There should be '
-                   '%d while there were: %d') % (
-            expected_hazards_count,
-            col_count)
+                   '%d while there were: %d') % (expected_hazards_count,
+                                                 col_count)
         self.assertEqual(col_count, expected_hazards_count, message)
         row_count = dialog.tblFunctions1.rowCount()
         message = ('Invalid exposures count in the IF matrix! There should be '
-                   '%d while there were: %d') % (
-            expected_exposures_count,
-            row_count)
+                   '%d while there were: %d') % (expected_exposures_count,
+                                                 row_count)
         self.assertEqual(row_count, expected_exposures_count, message)
 
         # step_fc_function_1: test number of functions for flood x structure
-        dialog.tblFunctions1.setCurrentCell(3, 1)
+        dialog.tblFunctions1.setCurrentCell(2, 1)
         count = len(dialog.selected_functions_1())
         message = ('Invalid functions count in the IF matrix 1! For flood '
                    'and structure there should be %d while there were: '
