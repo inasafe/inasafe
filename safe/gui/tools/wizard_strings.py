@@ -53,16 +53,25 @@ exposure_question = tr(
     'For example, if you choose <b>population</b> you will be able to use '
     'this exposure layer with impact functions such as <b>flood impact on '
     'population</b>.</p>')
-layermode_raster_question = tr(
+layer_mode_raster_question = tr(
     'You have selected <b>%s %s</b> for this raster layer. '
-    '<p>We need to know whether each cell '
-    'in this raster represents <b>continuous</b> data or if the data have '
-    'been <b>classified</b>.</p>')  # (subcategory, category)
-layermode_vector_question = tr(
+    '<p>We need to know whether each cell in this raster represents '
+    '<b>continuous</b> data or if the data have been <b>classified</b>.</p>'
+    )  # (subcategory, category)
+layer_mode_vector_question = tr(
+    'You have selected <b>%s</b> for this <b>%s</b> layer. '
+    '<p>We need to confirm that attribute values represents <b>continuous</b> '
+    'data or if the data have been <b>classified</b>.</p>'
+    )  # (subcategory, category)
+layer_mode_vector_classified_confirm = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values in this vector layer have '
-    'been <b>classified</b> and are represented by a '
-    'code.</p>')  # (subcategory, category)
+    'been <b>classified</b> and are represented by a code.</p>'
+    )  # (subcategory, category)
+layer_mode_vector_continuous_confirm = tr(
+    'You have selected <b>%s</b> for this <b>%s</b> layer. '
+    '<p>We need to confirm that attribute values represents '
+    '<b>continuous</b> data.</p>')  # (subcategory, category)
 unit_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer type. '
     '<p>We need to know what units the continuous data are in. For example in '
@@ -92,7 +101,7 @@ tephra_kgm2_question = tr(
     'tephra intensity in kg/m<sup>2</sup>')
 volcano_volcano_categorical_question = tr(
     'volcano hazard categorical level')
-population_number_question = tr(
+population_count_question = tr(
     'the number of people')
 population_density_question = tr(
     'people density in people/km<sup>2</sup>')

@@ -33,6 +33,7 @@ from safe.metadata.property import (
     FloatProperty,
     ListProperty,
     TupleProperty,
+    FloatTupleProperty
 )
 
 # XML to python types conversions
@@ -46,6 +47,7 @@ TYPE_CONVERSIONS = {
     'gco:Float': FloatProperty,
     'gco:List': ListProperty,
     'gco:Tuple': TupleProperty,
+    'gco:FloatTuple': FloatTupleProperty,
 }
 
 # XML Namespaces
@@ -157,4 +159,6 @@ def prettify_xml(xml_str):
         [line for line in parsed_xml.toprettyxml(
             indent=' ' * 2,
             encoding='UTF-8').split('\n') if line.strip()])
+    if not pretty_xml.endswith('\n'):
+        pretty_xml += '\n'
     return pretty_xml

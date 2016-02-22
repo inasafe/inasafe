@@ -34,6 +34,7 @@ import safe.messaging as m
 from safe.messaging import styles
 from safe.impact_functions.core import get_key_for_value
 from safe.utilities.keyword_io import definition
+from safe.utilities.unicode import get_unicode
 
 
 class ClassifiedPolygonHazardBuildingFunction(
@@ -131,8 +132,10 @@ class ClassifiedPolygonHazardBuildingFunction(
             raise InaSAFEError(message)
 
         # Hazard zone categories from hazard layer
-        self.hazard_zones = self.hazard.layer.uniqueValues(
+        unique_values = self.hazard.layer.uniqueValues(
             hazard_zone_attribute_index)
+        # Values might be integer or float, we should have unicode. #2626
+        self.hazard_zones = [get_unicode(val) for val in unique_values]
 
         self.buildings = {}
 

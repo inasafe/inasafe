@@ -1,54 +1,134 @@
 # coding=utf-8
-import unittest
-
+import logging
 import os
-from zipfile import ZipFile
+import shutil
+import tempfile
+import unittest
+import urlparse
 
-from headless.tasks.inasafe_wrapper import filter_impact_function
-from safe.common.utilities import temp_dir
+from headless.celery_app import app
+from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
+from headless.tasks.inasafe_wrapper import filter_impact_function, \
+    run_analysis, read_keywords_iso_metadata
+from headless.tasks.celery_test_setup import \
+    update_celery_configuration
+from headless.tasks.utilities import archive_layer
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '1/29/16'
 
 
+LOGGER = logging.getLogger('InaSAFE')
+LOGGER.setLevel(logging.DEBUG)
+
+
 class TestTaskCall(unittest.TestCase):
 
     def setUp(self):
-        self.inasafe_work_dir = os.environ['INASAFE_SOURCE_DIR']
+        # Modify test behavior of celery based on environment settings
+        update_celery_configuration(app)
 
-    def zip_layer(self, layer_path, zip_folder):
-        base_name = os.path.basename(layer_path)
-        base_name, _ = os.path.splitext(base_name)
-        dir_name = os.path.dirname(layer_path)
-        zip_path = os.path.join(
-            zip_folder,
-            '%s.zip' % base_name
-        )
-        with ZipFile(zip_path, 'w') as zipf:
-            for root, dirs, files in os.walk(dir_name):
-                for f in files:
-                    f_name, ext = os.path.splitext(f)
-                    if f_name.startswith(base_name):
-                        filename = os.path.join(root, f)
-                        zipf.write(filename, arcname=f)
+        self.inasafe_work_dir = os.environ['InaSAFEQGIS']
+        # generate tempfile
+        hazard = os.path.join(
+            self.inasafe_work_dir,
+            'safe/test/data/hazard/continuous_flood_20_20.asc')
+        exposure = os.path.join(
+            self.inasafe_work_dir,
+            'safe/test/data/exposure/pop_binary_raster_20_20.asc')
+        aggregation = os.path.join(
+            self.inasafe_work_dir,
+            'safe/test/data/boundaries/district_osm_jakarta.shp')
+        hazard = archive_layer(hazard)
+        exposure = archive_layer(exposure)
+        aggregation = archive_layer(aggregation)
 
-        return zip_path
+        test_deploy_dir = os.path.join(DEPLOY_OUTPUT_DIR, 'test_deploy')
+        self.test_deploy_dir = test_deploy_dir
+
+        def convert_dir_to_url(deploy_dir):
+            tail_name = deploy_dir.replace(DEPLOY_OUTPUT_DIR, '')
+            return urlparse.urljoin(DEPLOY_OUTPUT_URL, tail_name)
+
+        if not os.path.exists(test_deploy_dir):
+            os.makedirs(test_deploy_dir)
+
+        hazard_temp = tempfile.mktemp(suffix='.zip', dir=test_deploy_dir)
+        exposure_temp = tempfile.mktemp(suffix='.zip', dir=test_deploy_dir)
+        aggregation_temp = tempfile.mktemp(suffix='.zip', dir=test_deploy_dir)
+        shutil.move(hazard, hazard_temp)
+        shutil.move(exposure, exposure_temp)
+        shutil.move(aggregation, aggregation_temp)
+        self.hazard_temp = convert_dir_to_url(hazard_temp)
+        self.exposure_temp = convert_dir_to_url(exposure_temp)
+        self.aggregation_temp = convert_dir_to_url(aggregation_temp)
+
+        self.keywords_file = os.path.join(
+            self.inasafe_work_dir,
+            'safe/test/data/hazard/continuous_flood_20_20.xml')
+
+    def tearDown(self):
+        shutil.rmtree(self.test_deploy_dir)
 
     def test_filter_impact_function(self):
-        zip_folder = temp_dir()
-        hazard_path = os.path.join(
-            self.inasafe_work_dir,
-            'safe/test/data/hazard/continuous_flood_20_20.asc'
-        )
-        hazard_path = self.zip_layer(hazard_path, zip_folder)
-        exposure_path = os.path.join(
-            self.inasafe_work_dir,
-            'safe/test/data/exposure/pop_binary_raster_20_20.asc'
-        )
-        exposure_path = self.zip_layer(exposure_path, zip_folder)
-        result = filter_impact_function.delay(hazard_path, exposure_path)
-        ifs = result.get()
-        self.assertTrue(len(ifs) > 0)
+
+        celery_result = filter_impact_function.delay(
+            self.hazard_temp, self.exposure_temp)
+
+        ifs = celery_result.get()
+
+        self.assertEqual(len(ifs), 1)
+
+        actual_id = ifs[0]
+        expected_id = 'FloodEvacuationRasterHazardFunction'
+
+        self.assertEqual(actual_id, expected_id)
+
+    def test_run_analysis(self):
+        celery_result = run_analysis.delay(
+                self.hazard_temp,
+                self.exposure_temp,
+                'FloodEvacuationRasterHazardFunction',
+                aggregation=self.aggregation_temp,
+                generate_report=True)
+
+        url_name = celery_result.get()
+
+        self.assertTrue(url_name)
+
+        # check the file is generated in /home/web directory
+        relative_name = url_name.replace(DEPLOY_OUTPUT_URL, '')
+        absolute_name = os.path.join(DEPLOY_OUTPUT_DIR, relative_name)
+        self.assertTrue(os.path.exists(absolute_name), absolute_name)
+        # check  pdf report is generated
+        basename, _ = os.path.splitext(absolute_name)
+        self.assertTrue(os.path.exists(basename + '.pdf'),
+                        'Report file not exist')
+        self.assertTrue(os.path.exists(basename + '_table.pdf'),
+                        'Table report file not exist')
+        self.assertTrue(os.path.exists(basename + '.qml'),
+                        'QML style file not exist')
+        self.assertTrue(os.path.exists(basename + '.xml'),
+                        'XML Metadata file not exist')
+
+        folder_name, _ = os.path.split(absolute_name)
+        shutil.rmtree(folder_name)
+
+    def test_read_keywords(self):
+        result = read_keywords_iso_metadata.delay(self.keywords_file)
+        expected = {
+            'hazard_category': u'single_event',
+            'keyword_version': u'3.3',
+            'title': u'Continuous Flood',
+            'hazard': u'flood',
+            'continuous_hazard_unit': u'metres',
+            'source': u'Akbar Gumbira',
+            'layer_geometry': u'raster',
+            'layer_purpose': u'hazard',
+            'layer_mode': u'continuous'
+        }
+        actual = result.get()
+        self.assertDictEqual(actual, expected)
 
 
 if __name__ == '__main__':
