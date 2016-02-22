@@ -1144,7 +1144,7 @@
         <translation>Nivel de impacto</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="286"/>
+        <location filename="impact_function.py" line="288"/>
         <source>Estimated buildings affected</source>
         <translation>Estimado de edificios afectados</translation>
     </message>
@@ -5706,11 +5706,6 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="parameter_definitions.py" line="91"/>
-        <source>The threshold of hazard categorized as Moderate Hazard Zone in meter. A zone is categorized as High Hazard Zone if the depth of tsunami inundation is more than Medium Hazard Zone Threshold and less than High Hazard Zone Threshold.A zone that has more than High Hazard Zone Threshold is categorized as Very High Hazard Zone.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="population_exposure_report_mixin.py" line="92"/>
         <source>What are people&apos;s likely movements?</source>
         <translation type="unfinished"/>
@@ -5718,6 +5713,11 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="population_exposure_report_mixin.py" line="164"/>
         <source>Total population</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="91"/>
+        <source>The threshold of hazard categorized as High Hazard Zone in meter. A zone is categorized as High Hazard Zone if the depth of tsunami inundation is more than Medium Hazard Zone Threshold and less than High Hazard Zone Threshold.A zone that has more than High Hazard Zone Threshold is categorized as Very High Hazard Zone.</source>
         <translation type="unfinished"/>
     </message>
 </context>
