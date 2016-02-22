@@ -39,7 +39,6 @@ class IntegerProperty(BaseProperty):
 
     @classmethod
     def is_valid(cls, value):
-        # the date types constructors already complain if a date is not valid.
         return True
 
     def cast_from_str(self, value):
