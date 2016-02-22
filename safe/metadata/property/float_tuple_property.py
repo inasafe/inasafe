@@ -27,8 +27,7 @@ from safe.metadata.property import BaseProperty
 
 
 class FloatTupleProperty(BaseProperty):
-    """
-    A property that accepts date input
+    """A property that accepts float or tuple input
     """
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [float, tuple, NoneType]
