@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
-__date__ = '08/12/15'
+__date__ = '02/20/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
@@ -26,14 +26,14 @@ from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty
 
 
-class BooleanProperty(BaseProperty):
-    """A property that accepts boolean
+class FloatTupleProperty(BaseProperty):
+    """A property that accepts float or tuple input
     """
     # if you edit this you need to adapt accordingly xml_value and is_valid
-    _allowed_python_types = [bool, NoneType]
+    _allowed_python_types = [float, tuple, NoneType]
 
     def __init__(self, name, value, xml_path):
-        super(BooleanProperty, self).__init__(
+        super(FloatTupleProperty, self).__init__(
             name, value, xml_path, self._allowed_python_types)
 
     @classmethod
@@ -42,14 +42,19 @@ class BooleanProperty(BaseProperty):
 
     def cast_from_str(self, value):
         try:
-            return bool(int(value))
-        except ValueError as e:
-            raise MetadataCastError(e)
+            return float(value)
+        except ValueError:
+            try:
+                return tuple(json.loads(value))
+            except ValueError as e:
+                raise MetadataCastError(e)
 
     @property
     def xml_value(self):
-        if self.python_type is bool:
-            return str(int(self.value))
+        if self.python_type is float:
+            return str(self.value)
+        elif self.python_type is tuple:
+            return json.dumps(self.value)
         elif self.python_type is NoneType:
             return ''
         else:

@@ -178,7 +178,7 @@ class BaseMetadata(object):
             'gmd:supplementalInformation/'
             'inasafe/'
             'resolution/'
-            'gco:Tuple')
+            'gco:FloatTuple')
     }
 
     def __getattr__(self, name):

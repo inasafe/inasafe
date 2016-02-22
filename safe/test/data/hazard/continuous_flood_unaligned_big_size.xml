@@ -4,7 +4,7 @@
     <gco:CharacterString>None</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
-    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
+    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
   </gmd:language>
   <gmd:characterSet>
     <gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</gmd:MD_CharacterSetCode>
@@ -34,7 +34,7 @@
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
   <gmd:dateStamp>
-    <gco:Date>2016-02-18</gco:Date>
+    <gco:Date/>
   </gmd:dateStamp>
   <gmd:metadataStandardName>
     <gco:CharacterString>ISO 19115:2003 - Geographic information - Metadata</gco:CharacterString>
@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString/>
+            <gco:CharacterString>flood unaligned</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -155,12 +155,12 @@
       <gmd:resourceConstraints>
         <gmd:MD_Constraints>
           <gmd:useLimitation>
-            <gco:CharacterString>GPLv2</gco:CharacterString>
+            <gco:CharacterString/>
           </gmd:useLimitation>
         </gmd:MD_Constraints>
       </gmd:resourceConstraints>
       <gmd:language>
-        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
       </gmd:language>
       <gmd:topicCategory>
         <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
@@ -172,128 +172,64 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <statistics_type>
+          <hazard_category>
+            <gco:CharacterString>single_event</gco:CharacterString>
+          </hazard_category>
+          <raster_hazard_classification>
             <gco:CharacterString/>
-          </statistics_type>
+          </raster_hazard_classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <map_title>
+          <prob_fatality_mag>
+            <gco:Tuple/>
+          </prob_fatality_mag>
+          <volcano_name_field>
             <gco:CharacterString/>
-          </map_title>
-          <statistics_classes>
-            <gco:List/>
-          </statistics_classes>
+          </volcano_name_field>
+          <field>
+            <gco:CharacterString/>
+          </field>
+          <value_map>
+            <gco:Dictionary/>
+          </value_map>
+          <vector_hazard_classification>
+            <gco:CharacterString/>
+          </vector_hazard_classification>
+          <layer_geometry>
+            <gco:CharacterString>raster</gco:CharacterString>
+          </layer_geometry>
+          <hazard>
+            <gco:CharacterString>flood</gco:CharacterString>
+          </hazard>
           <scale>
             <gco:CharacterString/>
           </scale>
-          <exposure_title>
-            <gco:CharacterString/>
-          </exposure_title>
-          <elapsed_time>
-            <gco:Integer/>
-          </elapsed_time>
-          <source>
-            <gco:CharacterString/>
-          </source>
-          <layer_geometry>
-            <gco:CharacterString/>
-          </layer_geometry>
-          <time_stamp>
-            <gco:CharacterString/>
-          </time_stamp>
-          <hazard_source>
-            <gco:CharacterString/>
-          </hazard_source>
-          <postprocessing_report>
-            <gco:CharacterString/>
-          </postprocessing_report>
-          <legend_units>
-            <gco:CharacterString/>
-          </legend_units>
-          <user>
-            <gco:CharacterString/>
-          </user>
           <report>
             <gco:CharacterString/>
           </report>
-          <hazard_title>
-            <gco:CharacterString/>
-          </hazard_title>
+          <continuous_hazard_unit>
+            <gco:CharacterString>metres</gco:CharacterString>
+          </continuous_hazard_unit>
           <keyword_version>
-            <gco:CharacterString/>
+            <gco:CharacterString>3.3</gco:CharacterString>
           </keyword_version>
-          <legend_title>
-            <gco:CharacterString/>
-          </legend_title>
-          <legend_notes>
-            <gco:CharacterString/>
-          </legend_notes>
-          <exposure_source>
-            <gco:CharacterString/>
-          </exposure_source>
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <host_name>
-            <gco:CharacterString/>
-          </host_name>
+          <source>
+            <gco:CharacterString>HKV</gco:CharacterString>
+          </source>
           <layer_purpose>
-            <gco:CharacterString/>
+            <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>
-          <impact_table>
-            <gco:CharacterString/>
-          </impact_table>
           <resolution>
-            <gco:FloatTuple/>
+            <gco:Tuple/>
           </resolution>
           <layer_mode>
-            <gco:CharacterString/>
+            <gco:CharacterString>continuous</gco:CharacterString>
           </layer_mode>
-          <target_field>
-            <gco:CharacterString/>
-          </target_field>
-          <impact_summary>
-            <gco:CharacterString/>
-          </impact_summary>
         </inasafe>
-        <inasafe_provenance>
-          <provenance_step timestamp="2015-06-25T13:07:13.100000">
-            <title>Test provenance title</title>
-            <description>Test provenance description</description>
-          </provenance_step>
-          <provenance_step timestamp="2015-06-25T13:07:15.100000">
-            <title>Test provenance title 2</title>
-            <description>Test provenance description 2</description>
-          </provenance_step>
-          <provenance_step timestamp="2015-06-25T13:07:17.100000">
-            <title>Test provenance title 3</title>
-            <description>Test provenance description 3</description>
-          </provenance_step>
-          <provenance_step timestamp="2015-06-25T13:07:17.100000">
-            <title>IF Provenance</title>
-            <description>IF Provenance</description>
-            <start_time>20140714_060955</start_time>
-            <finish_time>20140714_061255</finish_time>
-            <hazard_layer>path/to/hazard/layer</hazard_layer>
-            <exposure_layer>path/to/exposure/layer</exposure_layer>
-            <impact_function_id>IF_id</impact_function_id>
-            <impact_function_version>2.1</impact_function_version>
-            <host_name>my_computer</host_name>
-            <user>my_user</user>
-            <qgis_version>2.4</qgis_version>
-            <gdal_version>1.9.1</gdal_version>
-            <qt_version>4.5</qt_version>
-            <pyqt_version>5.1</pyqt_version>
-            <os>ubuntu 12.04</os>
-            <inasafe_version>2.1</inasafe_version>
-            <exposure_pixel_size>0.1</exposure_pixel_size>
-            <hazard_pixel_size>0.2</hazard_pixel_size>
-            <impact_pixel_size>0.1</impact_pixel_size>
-            <analysis_extent>[0, 1, 2, 2]</analysis_extent>
-            <parameter>{}</parameter>
-          </provenance_step>
-        </inasafe_provenance>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
   </gmd:identificationInfo>
@@ -314,7 +250,7 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL>http://www.inasafe.org</gmd:URL>
+                <gmd:URL/>
               </gmd:linkage>
             </gmd:CI_OnlineResource>
           </gmd:onLine>
