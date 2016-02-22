@@ -17,7 +17,7 @@
       <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
     </edittype>
   </edittypes>
-  <renderer-v2 attr="state" forceraster="0" symbollevels="0" type="graduatedSymbol" graduatedMethod="GraduatedColor" enableorderby="0">
+  <renderer-v2 attr="state" forceraster="0" symbollevels="0" type="graduatedSymbol" graduatedMethod="GraduatedColor">
     <ranges>
       <range render="true" symbol="0" lower="0.000000000000000" upper="1.000000000000000" label="No Flooding"/>
       <range render="true" symbol="1" lower="1.000000000000000" upper="2.000000000000000" label="Use caution"/>
@@ -218,7 +218,7 @@
     <property key="labeling/bufferSizeMapUnitMaxScale" value="0"/>
     <property key="labeling/bufferSizeMapUnitMinScale" value="0"/>
     <property key="labeling/bufferTransp" value="0"/>
-    <property key="labeling/centroidInside" value="false"/>
+    <property key="labeling/centroidInside" value="true"/>
     <property key="labeling/centroidWhole" value="false"/>
     <property key="labeling/decimals" value="3"/>
     <property key="labeling/displayAll" value="false"/>
@@ -248,7 +248,7 @@
     <property key="labeling/fontWordSpacing" value="0"/>
     <property key="labeling/formatNumbers" value="false"/>
     <property key="labeling/isExpression" value="false"/>
-    <property key="labeling/labelOffsetInMapUnits" value="true"/>
+    <property key="labeling/labelOffsetInMapUnits" value="false"/>
     <property key="labeling/labelOffsetMapUnitMaxScale" value="0"/>
     <property key="labeling/labelOffsetMapUnitMinScale" value="0"/>
     <property key="labeling/labelPerPart" value="false"/>
@@ -312,11 +312,11 @@
     <property key="labeling/shapeBorderWidthMapUnitMaxScale" value="0"/>
     <property key="labeling/shapeBorderWidthMapUnitMinScale" value="0"/>
     <property key="labeling/shapeBorderWidthUnits" value="1"/>
-    <property key="labeling/shapeDraw" value="false"/>
-    <property key="labeling/shapeFillColorA" value="255"/>
+    <property key="labeling/shapeDraw" value="true"/>
+    <property key="labeling/shapeFillColorA" value="140"/>
     <property key="labeling/shapeFillColorB" value="255"/>
-    <property key="labeling/shapeFillColorG" value="255"/>
-    <property key="labeling/shapeFillColorR" value="255"/>
+    <property key="labeling/shapeFillColorG" value="149"/>
+    <property key="labeling/shapeFillColorR" value="1"/>
     <property key="labeling/shapeJoinStyle" value="64"/>
     <property key="labeling/shapeOffsetMapUnitMaxScale" value="0"/>
     <property key="labeling/shapeOffsetMapUnitMinScale" value="0"/>
@@ -326,8 +326,8 @@
     <property key="labeling/shapeRadiiMapUnitMaxScale" value="0"/>
     <property key="labeling/shapeRadiiMapUnitMinScale" value="0"/>
     <property key="labeling/shapeRadiiUnits" value="1"/>
-    <property key="labeling/shapeRadiiX" value="0"/>
-    <property key="labeling/shapeRadiiY" value="0"/>
+    <property key="labeling/shapeRadiiX" value="1"/>
+    <property key="labeling/shapeRadiiY" value="1"/>
     <property key="labeling/shapeRotation" value="0"/>
     <property key="labeling/shapeRotationType" value="0"/>
     <property key="labeling/shapeSVGFile" value=""/>
@@ -335,18 +335,18 @@
     <property key="labeling/shapeSizeMapUnitMinScale" value="0"/>
     <property key="labeling/shapeSizeType" value="0"/>
     <property key="labeling/shapeSizeUnits" value="1"/>
-    <property key="labeling/shapeSizeX" value="0"/>
-    <property key="labeling/shapeSizeY" value="0"/>
+    <property key="labeling/shapeSizeX" value="1"/>
+    <property key="labeling/shapeSizeY" value="1"/>
     <property key="labeling/shapeTransparency" value="0"/>
     <property key="labeling/shapeType" value="0"/>
     <property key="labeling/textColorA" value="255"/>
-    <property key="labeling/textColorB" value="0"/>
-    <property key="labeling/textColorG" value="0"/>
-    <property key="labeling/textColorR" value="0"/>
+    <property key="labeling/textColorB" value="255"/>
+    <property key="labeling/textColorG" value="255"/>
+    <property key="labeling/textColorR" value="255"/>
     <property key="labeling/textTransp" value="0"/>
     <property key="labeling/upsidedownLabels" value="0"/>
     <property key="labeling/wrapChar" value=""/>
-    <property key="labeling/xOffset" value="0"/>
+    <property key="labeling/xOffset" value="-2"/>
     <property key="labeling/yOffset" value="0"/>
     <property key="labeling/zIndex" value="0"/>
     <property key="variableNames" value="_fields_"/>

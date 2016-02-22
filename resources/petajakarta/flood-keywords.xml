@@ -34,7 +34,7 @@
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
   <gmd:dateStamp>
-    <gco:Date>2000-01-01T00:00:00</gco:Date>
+    <gco:Date>[DATE]</gco:Date>
   </gmd:dateStamp>
   <gmd:metadataStandardName>
     <gco:CharacterString>ISO 19115:2003 - Geographic information - Metadata</gco:CharacterString>
@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Jakarta Floods</gco:CharacterString>
+            <gco:CharacterString>[TITLE]</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
