@@ -30,6 +30,7 @@ changelog=
         Add new impact function Classified polygon hazard on polygon people
         Add new impact function Earthquake ITB Bayesian Fatality
         Add flood prone areas download support for the OSM downloader
+        Added support for downloading flood aggregates from PetaJakarta
         Use date Picker in Keywords Wizard
         083c2b9 (ismail/tsunami_raster_building_if) Merge branch 'develop' of github.com:inasafe/inasafe into tsunami_raster_building_if
         c403903 Fix order by using Vector Classification in classified polygon population IF.

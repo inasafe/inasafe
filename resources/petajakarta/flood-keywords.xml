@@ -34,7 +34,7 @@
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
   <gmd:dateStamp>
-    <gco:Date/>
+    <gco:Date>[DATE]</gco:Date>
   </gmd:dateStamp>
   <gmd:metadataStandardName>
     <gco:CharacterString>ISO 19115:2003 - Geographic information - Metadata</gco:CharacterString>
@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>OpenStreetMap</gco:CharacterString>
+            <gco:CharacterString>[TITLE]</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -155,7 +155,7 @@
       <gmd:resourceConstraints>
         <gmd:MD_Constraints>
           <gmd:useLimitation>
-            <gco:CharacterString/>
+            <gco:CharacterString>ODBL</gco:CharacterString>
           </gmd:useLimitation>
         </gmd:MD_Constraints>
       </gmd:resourceConstraints>
@@ -172,36 +172,63 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <scale>
+          <hazard_category>
+            <gco:CharacterString>single_event</gco:CharacterString>
+          </hazard_category>
+          <raster_hazard_classification>
             <gco:CharacterString/>
-          </scale>
+          </raster_hazard_classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <datatype>
+          <prob_fatality_mag>
+            <gco:Tuple/>
+          </prob_fatality_mag>
+          <volcano_name_field>
             <gco:CharacterString/>
-          </datatype>
-          <keyword_version>
-            <gco:CharacterString>3.3</gco:CharacterString>
-          </keyword_version>
-          <layer_mode>
-            <gco:CharacterString/>
-          </layer_mode>
+          </volcano_name_field>
+          <field>
+            <gco:CharacterString>state</gco:CharacterString>
+          </field>
+          <value_map>
+            <gco:Dictionary>{&quot;high&quot;: [4], &quot;medium&quot;: [3], &quot;low&quot;: [1, 0, 2]}</gco:Dictionary>
+          </value_map>
+          <vector_hazard_classification>
+            <gco:CharacterString>generic_vector_hazard_classes</gco:CharacterString>
+          </vector_hazard_classification>
           <layer_geometry>
-            <gco:CharacterString/>
+            <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
-          <source>
+          <hazard>
+            <gco:CharacterString>flood</gco:CharacterString>
+          </hazard>
+          <scale>
             <gco:CharacterString/>
-          </source>
+          </scale>
           <report>
             <gco:CharacterString/>
           </report>
-          <layer_purpose>
+          <continuous_hazard_unit>
             <gco:CharacterString/>
+          </continuous_hazard_unit>
+          <keyword_version>
+            <gco:CharacterString>3.3</gco:CharacterString>
+          </keyword_version>
+          <datatype>
+            <gco:CharacterString/>
+          </datatype>
+          <source>
+            <gco:CharacterString> PetaJakarta</gco:CharacterString>
+          </source>
+          <layer_purpose>
+            <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>
           <resolution>
             <gco:Tuple/>
           </resolution>
+          <layer_mode>
+            <gco:CharacterString>classified</gco:CharacterString>
+          </layer_mode>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
@@ -223,7 +250,7 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL/>
+                <gmd:URL>http://petajakarta.org</gmd:URL>
               </gmd:linkage>
             </gmd:CI_OnlineResource>
           </gmd:onLine>
