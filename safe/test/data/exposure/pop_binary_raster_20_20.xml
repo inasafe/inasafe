@@ -212,7 +212,7 @@
             <gco:CharacterString/>
           </datatype>
           <resolution>
-            <gco:Tuple/>
+            <gco:FloatTuple/>
           </resolution>
           <structure_class_field>
             <gco:CharacterString/>
