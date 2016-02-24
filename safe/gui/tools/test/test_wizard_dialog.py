@@ -862,8 +862,15 @@ class WizardDialogTest(unittest.TestCase):
         message = 'It should auto select, but it does not.'
         self.assertTrue(dialog.lstSubcategories.currentRow() == 0, message)
         num_item = dialog.lstSubcategories.count()
-        message = 'There are should be only two items, I got %s' % num_item
-        self.assertTrue(num_item == 2, message)
+        message = 'There are should be only three items, I got %s' % num_item
+        self.assertTrue(num_item == 3, message)
+
+        dialog.pbnNext.click()  # choose structure
+        message = 'It should auto select, but it does not.'
+        self.assertTrue(dialog.lstLayerModes.currentRow() == 0, message)
+        num_item = dialog.lstLayerModes.count()
+        message = 'There are should be only 1 items, I got %s' % num_item
+        self.assertTrue(num_item == 1, message)
 
     def test_integrated_point(self):
         """Test for point layer and all possibilities."""
@@ -1141,7 +1148,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure', 'Population']
+        expected_subcategories = ['Structure', 'Land cover', 'Population']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if automatically select the only option
@@ -1400,8 +1407,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_test_layer_count = 2
 
         expected_hazards_count = 5
-        # expected_exposures_count = 3
-        expected_exposures_count = 3
+        expected_exposures_count = 4
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 2
         expected_functions_count = 2
@@ -1452,24 +1458,26 @@ class WizardDialogTest(unittest.TestCase):
 
         # step_fc_function_1: test function matrix dimensions
         col_count = dialog.tblFunctions1.columnCount()
-        message = ('Invalid hazard count in the IF matrix! There should be '
-                   '%d while there were: %d') % (expected_hazards_count,
-                                                 col_count)
+        message = (
+            'Invalid hazard count in the IF matrix! There should be '
+            '%d while there were: %d') % (expected_hazards_count, col_count)
         self.assertEqual(col_count, expected_hazards_count, message)
+
         row_count = dialog.tblFunctions1.rowCount()
-        message = ('Invalid exposures count in the IF matrix! There should be '
-                   '%d while there were: %d') % (expected_exposures_count,
-                                                 row_count)
+        message = (
+            'Invalid exposures count in the IF matrix! There should be '
+            '%d while there were: %d') % (expected_exposures_count, row_count)
         self.assertEqual(row_count, expected_exposures_count, message)
 
         # step_fc_function_1: test number of functions for flood x structure
-        dialog.tblFunctions1.setCurrentCell(2, 1)
+        dialog.tblFunctions1.setCurrentCell(3, 1)
         count = len(dialog.selected_functions_1())
-        message = ('Invalid functions count in the IF matrix 1! For flood '
-                   'and structure there should be %d while there were: '
-                   '%d') % (expected_flood_structure_functions_count, count)
-        self.assertEqual(count, expected_flood_structure_functions_count,
-                         message)
+        message = (
+            'Invalid functions count in the IF matrix 1! For flood and '
+            'structure there should be %d while there were: %d') % (
+            expected_flood_structure_functions_count, count)
+        self.assertEqual(
+            count, expected_flood_structure_functions_count, message)
 
         # step_fc_function_1: press ok
         dialog.pbnNext.click()
@@ -1480,12 +1488,12 @@ class WizardDialogTest(unittest.TestCase):
         dialog.tblFunctions2.setCurrentCell(3, 0)
 
         count = len(dialog.selected_functions_2())
-        message = ('Invalid functions count in the IF matrix 2! For '
-                   ' raster and polygon there should be %d while there'
-                   ' were: %d') % (expected_raster_polygon_functions_count,
-                                   count)
-        self.assertEqual(count, expected_raster_polygon_functions_count,
-                         message)
+        message = (
+            'Invalid functions count in the IF matrix 2! For raster and '
+            'polygon there should be %d while there were: %d') % (
+            expected_raster_polygon_functions_count, count)
+        self.assertEqual(
+            count, expected_raster_polygon_functions_count, message)
 
         # step_fc_function_2: press ok
         dialog.pbnNext.click()
