@@ -341,26 +341,6 @@ def read_file_keywords(layer_path, keyword=None):
     return value
 
 
-def write_keywords_to_file(filename, keywords):
-    """Thin wrapper around the safe write_keywords function.
-
-    :param filename:  Path to layer that must be written.
-          If the file does not end in .keywords, its extension will be
-          stripped off and the basename + .keywords will be used as the file.
-    :type filename: str
-
-    :param keywords: A dictionary of keywords to be written
-    :type keywords: dict
-    """
-    basename, extension = os.path.splitext(filename)
-    if 'keywords' not in extension:
-        filename = basename + '.keywords'
-    try:
-        write_keywords(keywords, filename)
-    except:
-        raise
-
-
 def replace_accentuated_characters(message):
     """Normalize unicode data in Python to remove umlauts, accents etc.
 

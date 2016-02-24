@@ -70,7 +70,7 @@ def content():
     ))
     tips.add(tr(
         'If a dataset already exists in the output directory it will be '
-        'overwritten it the "overwrite existing files" checkbox is ticked.'
+        'overwritten if the "overwrite existing files" checkbox is ticked.'
     ))
     tips.add(tr(
         'If the "include date/time in output filename" option is ticked, '

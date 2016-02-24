@@ -224,7 +224,7 @@
             <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>
           <resolution>
-            <gco:Tuple/>
+            <gco:FloatTuple/>
           </resolution>
           <layer_mode>
             <gco:CharacterString>continuous</gco:CharacterString>
