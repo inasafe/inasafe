@@ -86,7 +86,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
         hazard = self.hazard.layer
         exposure = self.exposure.layer
 
-        type_attr = self.parameters['land_cover_type_field'].value
+        type_attr = self.exposure.keyword('field')
 
         # prepare objects for re-projection of geometries
         crs_wgs84 = QgsCoordinateReferenceSystem("EPSG:4326")
