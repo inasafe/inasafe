@@ -32,7 +32,7 @@ style_classes = [
     dict(label=tr('Medium'), colour='#FFCC00', quantity=50, transparency=0),
     dict(colour='#FF6600', quantity=100, transparency=0),
     dict(colour='#FF0000', quantity=200, transparency=0),
-    dict(label=tr('High'), colour='#7A0000', quantity=1100,transparency=0)]
+    dict(label=tr('High'), colour='#7A0000', quantity=1100, transparency=0)]
 flood_population_style = dict(
     target_field=None, legend_title=None, style_classes=style_classes)
 

@@ -28,6 +28,7 @@ LOGGER = logging.getLogger('InaSAFE')
 from safe.routing.gui.routing_dialog import RoutingDialog
 from safe.common.utilities import unique_filename
 
+
 @unittest.skipIf(
     QGis.QGIS_VERSION_INT < 20900, 'Need QGIS 2.9 for running the unit tests')
 class RoutingDialogTest(unittest.TestCase):

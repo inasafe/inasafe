@@ -160,7 +160,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
                 # write the impacted geometry
                 f_impact = QgsFeature(impact_fields)
                 f_impact.setGeometry(impact_geometry)
-                f_impact.setAttributes(f.attributes()+[1])
+                f_impact.setAttributes(f.attributes() + [1])
                 writer.addFeature(f_impact)
 
                 impacted_geometries.append(impact_geometry)
