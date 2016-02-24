@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" sourcelanguage="" version="2.0">
 <context>
     <name>@default</name>
     <message>
@@ -5684,142 +5683,142 @@ Unsur-unsur tersebut adalah:</translation>
     <message>
         <location filename="definitions.py" line="715"/>
         <source>Number of people (or any other object) per pixel, building or area.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jumlah orang (atau objek lain) per pixel, bangunan, atau wilayah.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="764"/>
         <source>Attribute for the area name. We will show the name for each area by using this attribute.</source>
-        <translation type="unfinished"></translation>
+        <translation>Atribut untuk nama wilayah. Kami akan menampilkan nama dari setiap wilayah dengan menggunakan atribut ini.</translation>
     </message>
     <message>
         <location filename="definitions.py" line="771"/>
         <source>Id field</source>
-        <translation type="unfinished"></translation>
+        <translation>Field ID</translation>
     </message>
     <message>
         <location filename="definitions.py" line="773"/>
         <source>Attribute for the id on the area. We will group the result by this attribute</source>
-        <translation type="unfinished"></translation>
+        <translation>Atribut untuk ID pada wilayah. Kami akan mengelompokan hasil berdasarkan atribut ini.</translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="61"/>
         <source>You have selected &lt;b&gt;%s&lt;/b&gt; for this &lt;b&gt;%s&lt;/b&gt; layer. &lt;p&gt;We need to confirm that attribute values represents &lt;b&gt;continuous&lt;/b&gt; data or if the data have been &lt;b&gt;classified&lt;/b&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda telah memilih &lt;b&gt;%s&lt;/b&gt; untuk lapisan &lt;b&gt;%s&lt;/b&gt; ini. &lt;p&gt;Kami perlu mengkonfirmasi bahwa nilai atribut yang merepresentasikan data &lt;b&gt;kontinyu&lt;/b&gt; atau jika data telah &lt;b&gt;terklasifikasi&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="71"/>
         <source>You have selected &lt;b&gt;%s&lt;/b&gt; for this &lt;b&gt;%s&lt;/b&gt; layer. &lt;p&gt;We need to confirm that attribute values represents &lt;b&gt;continuous&lt;/b&gt; data.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Anda telah memilih &lt;b&gt;%s&lt;/b&gt; untuk lapisan &lt;b&gt;%s&lt;/b&gt; ini. &lt;p&gt;Kami perlu mengkonfirmasi bahwa nilai atribut yang merepresentasikan data &lt;b&gt;kontinyu&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="68"/>
         <source>In each of the hazard zones which areas might be affected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Di setiap wilayah ancaman dimana wilayah mungkin terdampak.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="94"/>
         <source>The total people in the area is %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Total penduduk di wilayah tersebut adalah %s</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="99"/>
         <source>People rounding is applied to all population values, which may cause discrepancies when adding values.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pembulatan penduduk diterapkan untuk semua nilai populasi, yang dapat menyebabkan ketidakcocokan saat penambahan nilai.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="102"/>
         <source>Null value will be considered as zero.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nilai null akan dianggap sebagai nol.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="264"/>
         <source>People affected by each hazard zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Penduduk yang terkena dampak dari setiap daerah ancaman</translation>
     </message>
     <message>
         <location filename="polygon_population_exposure_report_mixin.py" line="84"/>
         <source>Which group or people is most affected?</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelompok atau penduduk manakah yang paling terdampak?</translation>
     </message>
     <message>
         <location filename="polygon_population_exposure_report_mixin.py" line="89"/>
         <source>What are the security factors for the affected people?</source>
-        <translation type="unfinished"></translation>
+        <translation>Apa saja faktor keamanan untuk penduduk terdampak?</translation>
     </message>
     <message>
         <location filename="polygon_population_exposure_report_mixin.py" line="94"/>
         <source>What kind of food does the people normally consume?</source>
-        <translation type="unfinished"></translation>
+        <translation>Makanan seperti apa yang biasa dikonsumsi penduduk?</translation>
     </message>
     <message>
         <location filename="polygon_population_exposure_report_mixin.py" line="96"/>
         <source>What are the critical non-food items required by the affected people?</source>
-        <translation type="unfinished"></translation>
+        <translation>Apa saja benda selain makanan yang penting yang dibutuhkan penduduk terdampak?</translation>
     </message>
     <message>
         <location filename="polygon_population_exposure_report_mixin.py" line="123"/>
         <source>Evacuated people minimum needs</source>
-        <translation type="unfinished"></translation>
+        <translation>Kebutuhan minimal penduduk terevakuasi</translation>
     </message>
     <message>
         <location filename="polygon_population_exposure_report_mixin.py" line="272"/>
         <source>Area Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nama Wilayah</translation>
     </message>
     <message>
         <location filename="polygon_population_exposure_report_mixin.py" line="660"/>
         <source>Total affected people</source>
-        <translation type="unfinished"></translation>
+        <translation>Total penduduk terdampak</translation>
     </message>
     <message>
         <location filename="polygon_population_exposure_report_mixin.py" line="672"/>
         <source>Unaffected people</source>
-        <translation type="unfinished"></translation>
+        <translation>Penduduk tidak terdampak</translation>
     </message>
     <message>
         <location filename="polygon_population_exposure_report_mixin.py" line="680"/>
         <source>Total people</source>
-        <translation type="unfinished"></translation>
+        <translation>Total penduduk</translation>
     </message>
     <message>
         <location filename="peta_jakarta_help.py" line="38"/>
         <source>Peta Jakarta downloader help</source>
-        <translation type="unfinished"></translation>
+        <translation>Bantuan pengunduh Peta Jakarta</translation>
     </message>
     <message>
         <location filename="peta_jakarta_help.py" line="55"/>
         <source>This tool will fetch current flood data for Jakarta from </source>
-        <translation type="unfinished"></translation>
+        <translation>Tool ini akan mengambil data banjir sekarang untuk Jakarta dari</translation>
     </message>
     <message>
         <location filename="peta_jakarta_help.py" line="58"/>
         <source>Check the output directory is correct. Note that the saved dataset will be called jakarta_flood.shp (and associated files).</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="peta_jakarta_help.py" line="63"/>
         <source>If you wish you can specify a prefix to add in front of this default name. For example using a prefix of &apos;foo-&apos; will cause the downloaded files to be saved as e.g. &apos;foo-rw-jakarta-flood.shp&apos;. Note that the only allowed prefix characters are A-Z, a-z, 0-9 and the characters &apos;-&apos; and &apos;_&apos;. You can leave this blank if you prefer.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="peta_jakarta_help.py" line="71"/>
         <source>If a dataset already exists in the output directory it will be overwritten it the &quot;overwrite existing files&quot; checkbox is ticked.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="peta_jakarta_help.py" line="75"/>
         <source>If the &quot;include date/time in output filename&quot; option is ticked, the filename will be prefixed with a time stamp e.g. &apos;foo-22-Mar-2015-08-01-2015-rw-jakarta-flood.shp&apos; where the date timestamp is in the form DD-MMM-YYYY.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="peta_jakarta_help.py" line="81"/>
         <source>This tool requires a working internet connection and fetching data will consume your bandwidth.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tool ini memerlukan koneksi internet dan men-download data akan mengkonsumsi bandwidth Anda.</translation>
     </message>
     <message>
         <location filename="peta_jakarta_help.py" line="84"/>
         <source>Downloaded data is copyright the PetaJakarta contributors (click for more info).</source>
-        <translation type="unfinished"></translation>
+        <translation>Data yang didownload adalah hak cipta kontributor PetaJakarta  (klik untuk info lebih lanjut).</translation>
     </message>
 </context>
 <context>
@@ -5831,7 +5830,7 @@ Unsur-unsur tersebut adalah:</translation>
     </message>
     <message>
         <location filename="about_dialog.py" line="76"/>
-        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
+        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
         <translation>Tombol Edit oleh Hugo GarduÃ±o dari The Noun Project</translation>
     </message>
     <message>
@@ -5892,8 +5891,8 @@ Unsur-unsur tersebut adalah:</translation>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif'; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -5907,12 +5906,12 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -5930,7 +5929,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -5943,7 +5942,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -5956,7 +5955,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.bnpb.go.id/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Indonesia’s National Disaster Management Agency (BNPB)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://dfat.gov.au/geo/indonesia/development-assistance/Pages/disaster-risk-management-in-indonesia.aspx&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australian Government – Disaster Risk Management in Indonesia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -7666,7 +7665,7 @@ ke
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.Helvetica Neue DeskInterface&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.Helvetica Neue DeskInterface'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -7906,67 +7905,67 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="peta_jakarta_dialog.py" line="92"/>
         <source>PetaJakarta Downloader</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengunduh PetaJakarta</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="120"/>
         <source>Hide Help</source>
-        <translation type="unfinished">Sembunyikan Bantuan</translation>
+        <translation>Sembunyikan Bantuan</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="123"/>
         <source>Show Help</source>
-        <translation type="unfinished">Tampilkan Bantuan</translation>
+        <translation>Tampilkan Bantuan</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="179"/>
         <source>Select download directory</source>
-        <translation type="unfinished">Pilih direktori download</translation>
+        <translation>Pilih direktori download</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="244"/>
         <source>Jakarta Floods</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjir Jakarta</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="279"/>
         <source>Jakarta Floods - %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Banjir Jakarta - %s</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="423"/>
         <source>Directory %s not exist</source>
-        <translation type="unfinished">Direktori %s tidak ada</translation>
+        <translation>Direktori %s tidak ada</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="424"/>
         <source>Directory %s not exist. Do you want to create it?</source>
-        <translation type="unfinished">Directory %s tidak ada. Apakah Anda ingin membuatnya?</translation>
+        <translation>Directory %s tidak ada. Apakah Anda ingin membuatnya?</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="435"/>
         <source>InaSAFE error</source>
-        <translation type="unfinished">Kesalahan InaSAFE</translation>
+        <translation>Kesalahan InaSAFE</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="435"/>
         <source>Output directory can not be empty.</source>
-        <translation type="unfinished">Direktori output tidak boleh kosong.</translation>
+        <translation>Direktori output tidak boleh kosong.</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="461"/>
         <source>%s does not exist. The server does not have any data for this extent.</source>
-        <translation type="unfinished">%s tidak ditemukan. Server tidak memiliki data untuk luasan ini.</translation>
+        <translation>%s tidak ditemukan. Server tidak memiliki data untuk luasan ini.</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="474"/>
         <source>Enable &apos;on the fly&apos;</source>
-        <translation type="unfinished">Izinkan &apos;on the fly&apos;</translation>
+        <translation>Izinkan &apos;on the fly&apos;</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog.py" line="474"/>
         <source>Your current projection is different than EPSG:4326. You should enable &apos;on the fly&apos; to display correctly your layers</source>
-        <translation type="unfinished">Proyeksi Anda sekarang bukan EPSG:4326. Anda harus mengizinkan pengaturan &apos;on the fly&apos; untuk menampilkan lapisan dengan benar</translation>
+        <translation>Proyeksi Anda sekarang bukan EPSG:4326. Anda harus mengizinkan pengaturan &apos;on the fly&apos; untuk menampilkan lapisan dengan benar</translation>
     </message>
 </context>
 <context>
@@ -7974,42 +7973,42 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="peta_jakarta_dialog_base.ui" line="14"/>
         <source>PetaJakarta Downloader</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengunduh PetaJakarta</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog_base.ui" line="46"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
+        <translation>perihal:kosong</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog_base.ui" line="67"/>
         <source>Output to</source>
-        <translation type="unfinished">Dikeluarkan ke</translation>
+        <translation>Dikeluarkan ke</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog_base.ui" line="79"/>
         <source>File name prefix</source>
-        <translation type="unfinished">Prefix dari nama file</translation>
+        <translation>Prefix dari nama file</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog_base.ui" line="112"/>
         <source>Output directory</source>
-        <translation type="unfinished">Direktori hasil</translation>
+        <translation>Direktori hasil</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog_base.ui" line="122"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog_base.ui" line="129"/>
         <source>Include date/time in output filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikutkan tangga/waktu di berkas keluaran</translation>
     </message>
     <message>
         <location filename="peta_jakarta_dialog_base.ui" line="139"/>
         <source>Overwrite existing files</source>
-        <translation type="unfinished">Tulis ulang apabila file ada</translation>
+        <translation>Tulis ulang apabila file ada</translation>
     </message>
 </context>
 <context>
@@ -8167,12 +8166,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="plugin.py" line="343"/>
         <source>Add PetaJakarta Flood Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambahkan Lapisan Banjir PetaJakarta</translation>
     </message>
     <message>
         <location filename="plugin.py" line="345"/>
         <source>Use this to add a PetaJakarta layer to your map. It needs internet access to function.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gunakan ini untuk menambahkan lapisan PetaJakarta ke dalam peta Anda. Ini membutuhkan akses internet supaya berfungsi.</translation>
     </message>
 </context>
 <context>
@@ -9009,7 +9008,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3111"/>
-        <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
+        <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation>Lapisan ancaman dan keterpaparan tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -9145,14 +9144,14 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3563"/>
-        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
+        <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
 Please step back and select another layer.</source>
         <translation>Lapisan agregasi dan ancaman tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     </message>
     <message>
         <location filename="wizard_dialog_base.ui" line="3644"/>
-        <source>The selected extent doesn&apos;t intersect input layers.
+        <source>The selected extent doesn't intersect input layers.
 Please step back and select another layer.</source>
         <translation>Luasan yang dipilih tidak berpotongan dengan lapisan-lapisan masukan.
 Silahkan mundur ke langkah sebelumnya dan pilih lapisan lainnya.</translation>
@@ -9269,7 +9268,7 @@ Silahkan mundur ke langkah sebelumnya dan pilih lapisan lainnya.</translation>
     </message>
     <message>
         <location filename="test_aggregator.py" line="104"/>
-        <source>D&#xed;str&#xdc;t&apos;s of Jakarta</source>
+        <source>DístrÜt&apos;s of Jakarta</source>
         <translation>DístrÜt&apos;s Jakarta</translation>
     </message>
 </context>
