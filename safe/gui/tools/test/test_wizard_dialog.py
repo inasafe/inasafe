@@ -1141,7 +1141,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure', 'Area']
+        expected_subcategories = ['Structure', 'Population']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if automatically select the only option
@@ -1401,7 +1401,7 @@ class WizardDialogTest(unittest.TestCase):
 
         expected_hazards_count = 5
         # expected_exposures_count = 3
-        expected_exposures_count = 4
+        expected_exposures_count = 3
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 2
         expected_functions_count = 2
@@ -1463,7 +1463,7 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(row_count, expected_exposures_count, message)
 
         # step_fc_function_1: test number of functions for flood x structure
-        dialog.tblFunctions1.setCurrentCell(3, 1)
+        dialog.tblFunctions1.setCurrentCell(2, 1)
         count = len(dialog.selected_functions_1())
         message = ('Invalid functions count in the IF matrix 1! For flood '
                    'and structure there should be %d while there were: '

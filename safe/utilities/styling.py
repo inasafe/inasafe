@@ -239,7 +239,7 @@ def set_vector_categorized_style(vector_layer, style):
 
         value = style_class['value']
         colour = style_class['colour']
-        label = style_class['label']
+        label = unicode(style_class['label'])
         colour = QtGui.QColor(colour)
         try:
             border_color = QtGui.QColor(style_class['border_color'])

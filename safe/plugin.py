@@ -337,6 +337,24 @@ class Plugin(object):
         self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
         self.add_action(self.action_add_osm_layer)
 
+    def _create_add_petajakarta_layer_action(self):
+        """Create action for import OSM Dialog."""
+        icon = resources_path('img', 'icons', 'add-petajakarta-layer.svg')
+        self.action_add_petajakarta_layer = QAction(
+            QIcon(icon),
+            self.tr('Add PetaJakarta Flood Layer'),
+            self.iface.mainWindow())
+        self.action_add_petajakarta_layer.setStatusTip(self.tr(
+            'Add PetaJakarta Flood Layer'))
+        self.action_add_petajakarta_layer.setWhatsThis(self.tr(
+            'Use this to add a PetaJakarta layer to your map. '
+            'It needs internet access to function.'))
+        self.action_add_petajakarta_layer.triggered.connect(
+            self.add_petajakarta_layer)
+        self.add_action(
+            self.action_add_petajakarta_layer,
+            add_to_toolbar=False)
+
     def _create_impact_merge_action(self):
         """Create action for impact layer merge Dialog."""
         icon = resources_path('img', 'icons', 'show-impact-merge.svg')
@@ -470,6 +488,7 @@ class Plugin(object):
         self._add_spacer_to_menu()
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
+        self._create_add_petajakarta_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
@@ -743,6 +762,16 @@ class Plugin(object):
         #    layer.source(), index))
         root.insertLayer(index, layer)
         QgsMapLayerRegistry.instance().addMapLayer(layer)
+
+    def add_petajakarta_layer(self):
+        """Add petajakarta layer to the map.
+
+        This uses the PetaJakarta API to fetch the latest floods in JK. See
+        https://petajakarta.org/banjir/en/data/api/#aggregates
+        """
+        from safe.gui.tools.peta_jakarta_dialog import PetaJakartaDialog
+        dialog = PetaJakartaDialog(self.iface.mainWindow(), self.iface)
+        dialog.show()  # non modal
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""

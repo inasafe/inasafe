@@ -218,7 +218,7 @@
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
           <resolution>
-            <gco:Tuple/>
+            <gco:FloatTuple/>
           </resolution>
           <layer_mode>
             <gco:CharacterString>classified</gco:CharacterString>

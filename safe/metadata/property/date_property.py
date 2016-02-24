@@ -28,8 +28,7 @@ from safe.metadata.property import BaseProperty
 
 
 class DateProperty(BaseProperty):
-    """
-    A property that accepts date input
+    """A property that accepts date input
     """
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [QDate, datetime, date, NoneType, QDateTime]
@@ -49,8 +48,11 @@ class DateProperty(BaseProperty):
         except ValueError:
             try:
                 return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
-            except ValueError as e:
-                raise MetadataCastError(e)
+            except ValueError:
+                try:
+                    return datetime.strptime(value, "%Y-%m-%d")
+                except ValueError as e:
+                    raise MetadataCastError(e)
 
     @property
     def xml_value(self):

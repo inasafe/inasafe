@@ -184,6 +184,9 @@
           <exposure_unit>
             <gco:CharacterString>count</gco:CharacterString>
           </exposure_unit>
+          <area_id_field>
+            <gco:CharacterString/>
+          </area_id_field>
           <source>
             <gco:CharacterString/>
           </source>
@@ -208,6 +211,9 @@
           <datatype>
             <gco:CharacterString/>
           </datatype>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
           <structure_class_field>
             <gco:CharacterString/>
           </structure_class_field>
@@ -217,9 +223,9 @@
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
-          <resolution>
-            <gco:Tuple/>
-          </resolution>
+          <area_type_field>
+            <gco:CharacterString/>
+          </area_type_field>
           <layer_mode>
             <gco:CharacterString>continuous</gco:CharacterString>
           </layer_mode>
