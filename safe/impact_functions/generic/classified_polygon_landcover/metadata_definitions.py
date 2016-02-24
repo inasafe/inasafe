@@ -26,19 +26,6 @@ from safe.utilities.i18n import tr
 from safe_extras.parameters.string_parameter import StringParameter
 
 
-def landcover_type_field():
-    """Generate land cover type field parameter
-
-    :return: list of StringParameter
-    :rtype: list[StringParameter]
-    """
-    field = StringParameter()
-    field.name = 'Land Cover Type Field'
-    field.is_required = True
-    field.value = 'FCODE'
-    return field
-
-
 class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
 
     @staticmethod
@@ -101,8 +88,6 @@ class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 }
             },
-            'parameters': OrderedDict([
-                ('land_cover_type_field', landcover_type_field())
-            ])
+            'parameters': OrderedDict([])
         }
         return dict_meta

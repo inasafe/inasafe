@@ -84,8 +84,12 @@ class LandCoverExposureReportMixin(ReportMixin):
         row = m.Row()
         row.add(m.Cell(tr('All')))
         row.add(m.Cell(self.total_affected_area))
-        row.add(m.Cell(
-            "%.0f%%" % (self.total_affected_area / self.total_area * 100)))
+        if self.total_area == 0:
+            percentage_affected_area = 0.0
+        else:
+            percentage_affected_area = (
+                self.total_affected_area / self.total_area * 100.0)
+        row.add(m.Cell("%.0f%%" % percentage_affected_area))
         row.add(m.Cell(self.total_area))
         table.add(row)
 
