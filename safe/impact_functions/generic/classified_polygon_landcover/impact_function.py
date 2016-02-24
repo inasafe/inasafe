@@ -78,6 +78,10 @@ class ClassifiedPolygonHazardLandCoverFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Identify hazard and exposure layers
         hazard = self.hazard.layer
         exposure = self.exposure.layer
@@ -201,15 +205,21 @@ class ClassifiedPolygonHazardLandCoverFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'map_title': tr('Affected Land Cover'),
+            'target_field': self.target_field
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
             name=tr('Land cover affected by each hazard zone'),
-            keywords={
-                'impact_summary': impact_summary,
-                'map_title': tr('Affected Land Cover'),
-                'target_field': self.target_field
-            },
+            keywords=impact_layer_keywords,
             style_info=style_info)
 
         self._impact = impact_layer
