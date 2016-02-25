@@ -938,7 +938,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="styles.py" line="127"/>
+        <location filename="styles.py" line="126"/>
         <source>Category</source>
         <translation type="unfinished"/>
     </message>
@@ -1073,7 +1073,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="styles.py" line="72"/>
+        <location filename="styles.py" line="70"/>
         <source>Low</source>
         <translation type="unfinished"/>
     </message>
@@ -1083,7 +1083,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="styles.py" line="82"/>
+        <location filename="styles.py" line="79"/>
         <source>High</source>
         <translation type="unfinished"/>
     </message>
@@ -1148,7 +1148,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="styles.py" line="77"/>
+        <location filename="styles.py" line="74"/>
         <source>Mid</source>
         <translation type="unfinished"/>
     </message>
@@ -5779,11 +5779,6 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="71"/>
-        <source>If a dataset already exists in the output directory it will be overwritten it the &quot;overwrite existing files&quot; checkbox is ticked.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="peta_jakarta_help.py" line="75"/>
         <source>If the &quot;include date/time in output filename&quot; option is ticked, the filename will be prefixed with a time stamp e.g. &apos;foo-22-Mar-2015-08-01-2015-rw-jakarta-flood.shp&apos; where the date timestamp is in the form DD-MMM-YYYY.</source>
         <translation type="unfinished"/>
@@ -5796,6 +5791,11 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="peta_jakarta_help.py" line="84"/>
         <source>Downloaded data is copyright the PetaJakarta contributors (click for more info).</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="peta_jakarta_help.py" line="71"/>
+        <source>If a dataset already exists in the output directory it will be overwritten if the &quot;overwrite existing files&quot; checkbox is ticked.</source>
         <translation type="unfinished"/>
     </message>
 </context>
